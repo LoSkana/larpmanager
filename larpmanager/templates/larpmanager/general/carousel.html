@@ -1,8 +1,8 @@
 {% extends "main.html" %}
 {% load i18n static %}
 {% block maintitle %}
-    {{ assoc.name }}
-    {% if assoc.id > 0 %}- {{ assoc.platform }}{% endif %}
+    {{ association.name }}
+    {% if association.id > 0 %}- {{ association.platform }}{% endif %}
 {% endblock maintitle %}
 {% block robots %}
     {% include "elements/robots_show.html" %}

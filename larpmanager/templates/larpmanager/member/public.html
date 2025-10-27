@@ -21,7 +21,7 @@
                     <b>Nick: </b> {{ member_public.nick }}
                 </p>
             {% endif %}
-            {% if 'chat' in assoc.features %}
+            {% if 'chat' in association.features %}
                 <p>
                     <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.id %}">Chat</a>
                 </p>
@@ -67,7 +67,7 @@
                     {% endfor %}
                 </table>
             {% endif %}
-            {% if 'badge' in assoc.features %}
+            {% if 'badge' in association.features %}
                 <hr />
                 <h2>Achievements</h2>
                 <p class="c">

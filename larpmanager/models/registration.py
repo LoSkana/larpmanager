@@ -116,7 +116,7 @@ class RegistrationTicket(BaseModel):
         # noinspection PyUnresolvedReferences
         return (
             f"{self.event.name} ({self.get_tier_display()}) {self.name} "
-            f"({self.price}{self.event.assoc.get_currency_symbol()})"
+            f"({self.price}{self.event.association.get_currency_symbol()})"
         )
 
     def show(self, run: Run | None = None) -> dict[str, Any]:
@@ -152,7 +152,7 @@ class RegistrationTicket(BaseModel):
         if ticket_data["price"]:
             if not currency_symbol:
                 # noinspection PyUnresolvedReferences
-                currency_symbol = self.event.assoc.get_currency_symbol()
+                currency_symbol = self.event.association.get_currency_symbol()
             formatted_text += f" - {decimal_to_str(ticket_data['price'])}{currency_symbol}"
 
         # Add availability count if ticket has available attribute

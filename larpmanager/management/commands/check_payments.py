@@ -82,8 +82,8 @@ class Command(BaseCommand):
         for payment_invoice in pending_satispay_invoices:
             try:
                 # Create mock request object for satispay_verify function
-                # The function only uses request.assoc_id for logging context
-                mock_request = type("MockRequest", (), {"assoc": {"id": payment_invoice.assoc_id}})()
+                # The function only uses request.association_id for logging context
+                mock_request = type("MockRequest", (), {"association": {"id": payment_invoice.association_id}})()
 
                 # Verify payment status with Satispay API
                 satispay_verify(mock_request, payment_invoice.cod)

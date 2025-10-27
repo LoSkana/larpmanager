@@ -27,7 +27,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
-from larpmanager.cache.feature import get_assoc_features, reset_assoc_features
+from larpmanager.cache.feature import get_association_features, reset_assoc_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -38,8 +38,8 @@ from larpmanager.forms.utils import (
     remove_choice,
     save_permissions_role,
 )
-from larpmanager.models.access import AssocPermission, AssocRole
-from larpmanager.models.association import Association, AssocText, AssocTextType
+from larpmanager.models.access import AssociationPermission, AssociationRole
+from larpmanager.models.association import Association, AssociationText, AssociationTextType
 from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
@@ -108,7 +108,7 @@ class ExeAssocTextForm(MyForm):
 
     class Meta:
         abstract = True
-        model = AssocText
+        model = AssociationText
         exclude = ("number",)
 
     def __init__(self, *args: object, **kwargs: object) -> None:
@@ -127,31 +127,31 @@ class ExeAssocTextForm(MyForm):
             - Adds comprehensive help text to typ field
         """
         super().__init__(*args, **kwargs)
-        ch = AssocTextType.choices
-        delete_choice = [AssocTextType.PRIVACY]
+        ch = AssociationTextType.choices
+        delete_choice = [AssociationTextType.PRIVACY]
 
         if "legal_notice" not in self.params["features"]:
-            delete_choice.append(AssocTextType.LEGAL)
+            delete_choice.append(AssociationTextType.LEGAL)
 
         if "receipts" not in self.params["features"]:
-            delete_choice.append(AssocTextType.RECEIPT)
+            delete_choice.append(AssociationTextType.RECEIPT)
 
         if "membership" not in self.params["features"]:
-            delete_choice.extend([AssocTextType.MEMBERSHIP, AssocTextType.STATUTE])
+            delete_choice.extend([AssociationTextType.MEMBERSHIP, AssociationTextType.STATUTE])
 
         if "remind" not in self.params["features"]:
             delete_choice.extend(
                 [
-                    AssocTextType.REMINDER_MEMBERSHIP,
-                    AssocTextType.REMINDER_MEMBERSHIP_FEE,
-                    AssocTextType.REMINDER_PAY,
-                    AssocTextType.REMINDER_PROFILE,
+                    AssociationTextType.REMINDER_MEMBERSHIP,
+                    AssociationTextType.REMINDER_MEMBERSHIP_FEE,
+                    AssociationTextType.REMINDER_PAY,
+                    AssociationTextType.REMINDER_PROFILE,
                 ]
             )
         elif "membership" not in self.params["features"]:
-            delete_choice.extend([AssocTextType.REMINDER_MEMBERSHIP, AssocTextType.REMINDER_MEMBERSHIP_FEE])
+            delete_choice.extend([AssociationTextType.REMINDER_MEMBERSHIP, AssociationTextType.REMINDER_MEMBERSHIP_FEE])
         else:
-            delete_choice.extend([AssocTextType.REMINDER_PROFILE])
+            delete_choice.extend([AssociationTextType.REMINDER_PROFILE])
 
         for tp in delete_choice:
             ch = remove_choice(ch, tp)
@@ -159,25 +159,27 @@ class ExeAssocTextForm(MyForm):
         self.fields["typ"].choices = ch
 
         help_texts = {
-            AssocTextType.PROFILE: _("Added at the top of the user profile page"),
-            AssocTextType.HOME: _("Added at the top of the main calendar page"),
-            AssocTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to participants"),
-            AssocTextType.MEMBERSHIP: _("Content of the membership request filled with user data"),
-            AssocTextType.STATUTE: _("Added to the membership page as the paragraph for statute info"),
-            AssocTextType.LEGAL: _("Content of legal notice page linked at the bottom of all pages"),
-            AssocTextType.FOOTER: _("Added to the bottom of all pages"),
-            AssocTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
-            AssocTextType.RECEIPT: _("Content of the receipt created for each payment and sent to participants"),
-            AssocTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
-            AssocTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),
-            AssocTextType.REMINDER_MEMBERSHIP: _(
+            AssociationTextType.PROFILE: _("Added at the top of the user profile page"),
+            AssociationTextType.HOME: _("Added at the top of the main calendar page"),
+            AssociationTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to participants"),
+            AssociationTextType.MEMBERSHIP: _("Content of the membership request filled with user data"),
+            AssociationTextType.STATUTE: _("Added to the membership page as the paragraph for statute info"),
+            AssociationTextType.LEGAL: _("Content of legal notice page linked at the bottom of all pages"),
+            AssociationTextType.FOOTER: _("Added to the bottom of all pages"),
+            AssociationTextType.TOC: _(
+                "Terms and conditions of signup, shown in a page linked in the registration form"
+            ),
+            AssociationTextType.RECEIPT: _("Content of the receipt created for each payment and sent to participants"),
+            AssociationTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
+            AssociationTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),
+            AssociationTextType.REMINDER_MEMBERSHIP: _(
                 "Content of mail reminding participants to fill their membership request"
             ),
-            AssocTextType.REMINDER_MEMBERSHIP_FEE: _(
+            AssociationTextType.REMINDER_MEMBERSHIP_FEE: _(
                 "Content of mail reminding participants to pay the membership fee"
             ),
-            AssocTextType.REMINDER_PAY: _("Content of mail reminding participants to pay their signup fee"),
-            AssocTextType.REMINDER_PROFILE: _("Content of mail reminding participants to fill their profile"),
+            AssociationTextType.REMINDER_PAY: _("Content of mail reminding participants to pay their signup fee"),
+            AssociationTextType.REMINDER_PROFILE: _("Content of mail reminding participants to fill their profile"),
         }
         help_text = []
         for choice_typ, text in help_texts.items():
@@ -209,13 +211,13 @@ class ExeAssocTextForm(MyForm):
 
         # Check for duplicate default text of the same type
         if default:
-            res = AssocText.objects.filter(assoc_id=self.params["association_id"], default=True, typ=typ)
+            res = AssociationText.objects.filter(association_id=self.params["association_id"], default=True, typ=typ)
             # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
-        res = AssocText.objects.filter(assoc_id=self.params["association_id"], language=language, typ=typ)
+        res = AssociationText.objects.filter(association_id=self.params["association_id"], language=language, typ=typ)
         if res.count() > 0:
             first = res.first()
             # Ensure we're not comparing against the current instance
@@ -239,8 +241,8 @@ class ExeAssocRoleForm(MyForm):
     load_templates = ["share"]
 
     class Meta:
-        model = AssocRole
-        fields = ("name", "members", "assoc")
+        model = AssociationRole
+        fields = ("name", "members", "association")
         widgets = {"members": AssocMemberS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -249,7 +251,7 @@ class ExeAssocRoleForm(MyForm):
         # Configure member widget with association context
         self.fields["members"].widget.set_assoc(self.params["association_id"])
         # Prepare role-based permissions for association
-        prepare_permissions_role(self, AssocPermission)
+        prepare_permissions_role(self, AssociationPermission)
 
     def save(self, commit: bool = True) -> Any:
         """Save form instance and update related role permissions."""
@@ -910,7 +912,7 @@ class ExeQuickSetupForm(QuickSetupForm):
             }
         )
 
-        self.init_fields(get_assoc_features(self.instance.pk))
+        self.init_fields(get_association_features(self.instance.pk))
 
 
 class ExePreferencesForm(ConfigForm):

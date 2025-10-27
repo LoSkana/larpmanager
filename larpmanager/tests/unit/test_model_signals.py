@@ -27,7 +27,7 @@ from unittest.mock import patch
 from django.contrib.auth.models import User
 from django.db import models
 
-from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemPayment,
@@ -85,18 +85,18 @@ class TestModelSignals(BaseTestCase):
 
     def test_association_pre_save_generates_encryption_key(self):
         """Test that Association pre_save signal generates Fernet key"""
-        assoc = Association(name="Test Association Name", email="test@example.com")
-        assoc.save()
+        association = Association(name="Test Association Name", email="test@example.com")
+        association.save()
 
         # Should have generated encryption key
-        self.assertIsNotNone(assoc.key)
-        self.assertGreater(len(assoc.key), 0)
+        self.assertIsNotNone(association.key)
+        self.assertGreater(len(association.key), 0)
 
     @patch("larpmanager.models.signals.replace_character_names")
     def test_assoc_permission_can_be_queried(self, mock_replace):
         """Test that AssocPermission can be queried"""
         # Just verify that we can query AssocPermission model
-        count = AssocPermission.objects.count()
+        count = AssociationPermission.objects.count()
         self.assertGreaterEqual(count, 0)
 
     @patch("larpmanager.models.signals.replace_character_names")
@@ -166,7 +166,7 @@ class TestModelSignals(BaseTestCase):
         mock_update.assert_called_once()
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_accounting_item_payment_post_save_calls_update_token_credit(self, mock_get_features, mock_update):
         """Test that AccountingItemPayment post_save signal calls update_token_credit when updating"""
         # Enable token_credit feature
@@ -178,7 +178,7 @@ class TestModelSignals(BaseTestCase):
         payment = AccountingItemPayment.objects.create(
             member=member,
             value=Decimal("10.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=self.get_registration(),
             pay=PaymentChoices.TOKEN,
         )
@@ -198,7 +198,7 @@ class TestModelSignals(BaseTestCase):
         registration = self.get_registration()
 
         payment = AccountingItemPayment(
-            value=Decimal("50.00"), assoc=self.get_association(), reg=registration, pay=PaymentChoices.MONEY  # Changed from AccountingItemPayment.MONEY
+            value=Decimal("50.00"), association=self.get_association(), reg=registration, pay=PaymentChoices.MONEY  # Changed from AccountingItemPayment.MONEY
         )
         payment.save()
 
@@ -206,10 +206,10 @@ class TestModelSignals(BaseTestCase):
 
     def test_collection_pre_save_creates_slug(self):
         """Test that Collection pre_save signal creates unique codes"""
-        assoc = self.get_association()
+        association = self.get_association()
         organizer = self.organizer()
 
-        collection = Collection(name="Test Collection Name", assoc=assoc, organizer=organizer)
+        collection = Collection(name="Test Collection Name", association=association, organizer=organizer)
         collection.save()
 
         # Should have created unique codes
@@ -222,7 +222,7 @@ class TestModelSignals(BaseTestCase):
         member = self.get_member()
 
         item = AccountingItemCollection(
-            member=member, value=Decimal("25.00"), assoc=self.get_association(), collection=collection
+            member=member, value=Decimal("25.00"), association=self.get_association(), collection=collection
         )
         item.save()
 
@@ -285,7 +285,7 @@ class TestModelSignals(BaseTestCase):
             user = User.objects.create_user(username="testmember2", email="test2@example.com")
             from larpmanager.models.member import Member
             new_member = Member.objects.create(user=user, name="Test", surname="Member2")
-            membership = Membership(member=new_member, assoc=self.get_association(), credit=Decimal("0.00"), tokens=Decimal("0.00"), status=MembershipStatus.ACCEPTED)
+            membership = Membership(member=new_member, association=self.get_association(), credit=Decimal("0.00"), tokens=Decimal("0.00"), status=MembershipStatus.ACCEPTED)
             membership.save()
 
         # Update status to trigger signal
@@ -321,9 +321,9 @@ class TestModelSignals(BaseTestCase):
     @patch("larpmanager.models.signals.replace_character_names")
     def test_event_pre_save_creates_slug(self, mock_replace):
         """Test that Event pre_save signal prepares campaign data"""
-        assoc = self.get_association()
+        association = self.get_association()
 
-        event = Event(name="Test Event Name", assoc=assoc)
+        event = Event(name="Test Event Name", association=association)
         event.save()
 
         # The event should be created successfully
@@ -333,9 +333,9 @@ class TestModelSignals(BaseTestCase):
     @patch("larpmanager.utils.event.clear_event_fields_cache")
     def test_event_post_save_resets_caches(self, mock_reset_fields, mock_reset_features):
         """Test that Event post_save signal resets various caches"""
-        assoc = self.get_association()
+        association = self.get_association()
 
-        event = Event(name="Test Event", assoc=assoc)
+        event = Event(name="Test Event", association=association)
         event.save()
 
         # Should reset both caches
@@ -380,9 +380,9 @@ class TestModelSignals(BaseTestCase):
     @patch("larpmanager.models.signals.clear_config_cache")
     def test_association_config_post_save_resets_configs(self, mock_reset):
         """Test that AssociationConfig post_save signal resets configs cache"""
-        assoc = self.get_association()
+        association = self.get_association()
 
-        config = AssociationConfig(assoc=assoc, name="test_key", value="test_value")
+        config = AssociationConfig(association=association, name="test_key", value="test_value")
         config.save()
 
         mock_reset.assert_called_once()
@@ -390,9 +390,9 @@ class TestModelSignals(BaseTestCase):
     @patch("larpmanager.models.signals.clear_config_cache")
     def test_association_config_post_delete_resets_configs(self, mock_reset):
         """Test that AssociationConfig post_delete signal resets configs cache"""
-        assoc = self.get_association()
+        association = self.get_association()
 
-        config = AssociationConfig.objects.create(assoc=assoc, name="test_key", value="test_value")
+        config = AssociationConfig.objects.create(association=association, name="test_key", value="test_value")
         mock_reset.reset_mock()  # Reset after creation
         config.delete()
 
@@ -463,24 +463,24 @@ class TestModelSignals(BaseTestCase):
 
     def test_association_pre_save_creates_default_values(self):
         """Test that Association pre_save signal creates default values like encryption key"""
-        assoc = Association(name="New Association", email="new@example.com")
-        assoc.save()
+        association = Association(name="New Association", email="new@example.com")
+        association.save()
 
         # Should have created encryption key
-        self.assertIsNotNone(assoc.key)
-        self.assertGreater(len(assoc.key), 0)
+        self.assertIsNotNone(association.key)
+        self.assertGreater(len(association.key), 0)
 
-    @patch("larpmanager.cache.feature.get_assoc_features")
+    @patch("larpmanager.cache.feature.get_association_features")
     def test_association_post_save_updates_features(self, mock_get_features):
         """Test that Association post_save signal updates features"""
         mock_get_features.return_value = {}
 
-        assoc = Association(name="Test Association", email="test@example.com")
-        assoc.save()
+        association = Association(name="Test Association", email="test@example.com")
+        association.save()
 
-        # Should call get_assoc_features to update features
+        # Should call get_association_features to update features
         # Just verify the association was created successfully
-        self.assertIsNotNone(assoc.id)
+        self.assertIsNotNone(association.id)
 
     @patch("larpmanager.models.signals.reset_tutorials_cache")
     def test_larp_manager_tutorial_post_save_indexes_tutorial(self, mock_reset_cache):
@@ -551,10 +551,10 @@ class TestModelSignals(BaseTestCase):
     def test_larp_manager_ticket_post_save_sends_notification(self, mock_mail):
         """Test that LarpManagerTicket post_save signal sends notification"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
         ticket = LarpManagerTicket(
-            member=member, assoc=assoc, reason="Test Ticket", content="Test message"
+            member=member, association=association, reason="Test Ticket", content="Test message"
         )
         ticket.save()
 
@@ -569,9 +569,9 @@ class TestModelSignals(BaseTestCase):
         # Mock _check_new to return True (skip rotation)
         mock_check_new.return_value = True
 
-        assoc = self.get_association()
-        container = WarehouseContainer.objects.create(name="Test Container", assoc=assoc)
-        item = WarehouseItem(name="Test Item", assoc=assoc, container=container)
+        association = self.get_association()
+        container = WarehouseContainer.objects.create(name="Test Container", association=association)
+        item = WarehouseItem(name="Test Item", association=association, container=container)
 
         # Mock the photo field
         from django.core.files.uploadedfile import SimpleUploadedFile

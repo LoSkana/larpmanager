@@ -38,7 +38,7 @@ translation.activate("en")
 def manual_sitemap_view(request: HttpRequest) -> HttpResponse:
     """Generate XML sitemap for organization or global site."""
     # Check if this is the global site (id=0) or organization-specific
-    if request.assoc["id"] == 0:
+    if request.association["id"] == 0:
         urls = larpmanager_sitemap()
     else:
         urls = _organization_sitemap(request)
@@ -84,7 +84,7 @@ def _organization_sitemap(request) -> list[str]:
     """Generate sitemap URLs for an organization's events and runs.
 
     Args:
-        request: HTTP request object containing organization context with assoc dict
+        request: HTTP request object containing organization context with association dict
 
     Returns:
         List of fully qualified URLs for the organization's public pages.
@@ -95,7 +95,7 @@ def _organization_sitemap(request) -> list[str]:
         and have end dates in the future.
     """
     # Get organization and check if it's a demo instance
-    organization = Association.objects.get(pk=request.assoc["id"])
+    organization = Association.objects.get(pk=request.association["id"])
     organization_cache = get_cache_assoc(organization.slug)
     if organization_cache.get("demo", False):
         return []
@@ -110,9 +110,9 @@ def _organization_sitemap(request) -> list[str]:
     # Query active runs for future events
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
-        .filter(event__assoc_id=request.assoc["id"])
+        .filter(event__association_id=request.association["id"])
         .filter(end__gte=datetime.now())
-        .select_related("event", "event__assoc")
+        .select_related("event", "event__association")
         .order_by("-end")
     )
 
@@ -124,7 +124,7 @@ def _organization_sitemap(request) -> list[str]:
         processed_event_ids[run.event_id] = 1
 
         # Build event-specific URL
-        event_organization = run.event.assoc
+        event_organization = run.event.association
         domain = event_organization.skin.domain if event_organization.skin else "larpmanager.com"
         urls.append(f"https://{event_organization.slug}.{domain}/{run.get_slug()}/event/")
 

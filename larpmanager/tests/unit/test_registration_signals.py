@@ -255,7 +255,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         payment = AccountingItemPayment.objects.create(
             member=registration.member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -282,14 +282,14 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         AccountingItemPayment.objects.create(
             member=registration.member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
         AccountingItemPayment.objects.create(
             member=registration.member,
             value=Decimal("30.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -328,7 +328,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
         # Apply discount to member
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), assoc=self.get_association()
+            member=member, run=run, disc=discount, value=Decimal("20.00"), association=self.get_association()
         )
 
         registration = Registration(member=member, run=run, ticket=ticket, quotas=1)
@@ -434,7 +434,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         payment = AccountingItemPayment.objects.create(
             member=registration.member,
             value=Decimal("100.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -462,7 +462,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         AccountingItemPayment.objects.create(
             member=registration.member,
             value=Decimal("100.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -471,7 +471,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         transaction = AccountingItemTransaction.objects.create(
             member=registration.member,
             value=Decimal("5.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             user_burden=True,
         )
@@ -507,7 +507,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         discount.runs.add(run)
 
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("100.00"), assoc=self.get_association()
+            member=member, run=run, disc=discount, value=Decimal("100.00"), association=self.get_association()
         )
 
         registration = Registration(member=member, run=run, ticket=ticket, quotas=1)
@@ -570,7 +570,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         discount.runs.add(run)
 
         discount_item = AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("25.00"), assoc=self.get_association()
+            member=member, run=run, disc=discount, value=Decimal("25.00"), association=self.get_association()
         )
 
         # Get updated registration from database

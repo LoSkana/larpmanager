@@ -17,7 +17,7 @@
 {% endblock old %}
 {% block content %}
     <div class="login">
-        {% if assoc.id == 0 %}
+        {% if association.id == 0 %}
             <p>
                 <i>(We ask you to login only to link the new organization to your account, as you will be assigned an administrator role)</i>
             </p>
@@ -75,18 +75,18 @@ function isMobileNonChrome() {
 window.addEventListener('DOMContentLoaded', function() {
     $(function(){
 
-    {% if assoc.id != 0 %}
+    {% if association.id != 0 %}
 
        $('.allauth_signin a').each(function(index) {
             var href = $(this).attr('href');
             // console.log(href);
 
-            const domain = '{{ assoc.slug }}';
-            let url = new URL(href || window.location.pathname, 'https://{{ assoc.main_domain }}');
+            const domain = '{{ association.slug }}';
+            let url = new URL(href || window.location.pathname, 'https://{{ association.main_domain }}');
 
             // build the “next” target, appending any existing next-path if present
             const existingNext = url.searchParams.get('next');
-            const nextTarget = `https://{{ assoc.main_domain }}/after_login/${domain}`
+            const nextTarget = `https://{{ association.main_domain }}/after_login/${domain}`
                              + (existingNext ? `/${existingNext}` : '');
 
             url.searchParams.set('next', nextTarget);

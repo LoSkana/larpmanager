@@ -79,7 +79,7 @@ def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
 
     # Get the run object or raise 404 if not found
     try:
-        context["run"] = Run.objects.get(pk=n, event__assoc_id=context["association_id"])
+        context["run"] = Run.objects.get(pk=n, event__association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
 
@@ -118,7 +118,7 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
             # Associate question with organization if context is available
             if context["association_id"] != 0:
-                hp.assoc_id = context["association_id"]
+                hp.association_id = context["association_id"]
 
             # Save question and redirect to prevent form resubmission
             hp.save()
@@ -134,9 +134,9 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
     # Filter questions by association context
     if context["association_id"] != 0:
-        context["list"] = context["list"].filter(assoc_id=context["association_id"])
+        context["list"] = context["list"].filter(association_id=context["association_id"])
     else:
-        context["list"] = context["list"].filter(assoc=None)
+        context["list"] = context["list"].filter(association=None)
 
     return render(request, "larpmanager/member/help.html", context)
 
@@ -397,13 +397,13 @@ def shuttle(request):
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
-            .filter(assoc_id=context["association_id"])
+            .filter(association_id=context["association_id"])
             .order_by("status", "date", "time"),
             "is_shuttle": is_shuttle(request),
             "past": ShuttleService.objects.filter(
                 created__gt=ref.date(),
                 status=ShuttleStatus.DONE,
-                assoc_id=context["association_id"],
+                association_id=context["association_id"],
             ).order_by("status", "date", "time"),
         }
     )

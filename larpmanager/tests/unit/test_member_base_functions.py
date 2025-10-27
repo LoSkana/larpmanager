@@ -94,8 +94,8 @@ class TestMemberAccountingFunctions(BaseTestCase):
     def test_info_token_credit_no_items(self):
         """Test _info_token_credit with no tokens or credits"""
         member = self.get_member()
-        assoc = self.get_association()
-        context = {"association_id": assoc.id}
+        association = self.get_association()
+        context = {"association_id": association.id}
 
         _info_token_credit(context, member)
 
@@ -105,12 +105,12 @@ class TestMemberAccountingFunctions(BaseTestCase):
     def test_info_token_credit_with_tokens(self):
         """Test _info_token_credit with tokens"""
         member = self.get_member()
-        assoc = self.get_association()
-        context = {"association_id": assoc.id}
+        association = self.get_association()
+        context = {"association_id": association.id}
 
         # Create token items
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.TOKEN, value=Decimal("50.00"), descr="Test token"
+            member=member, association=association, oth=OtherChoices.TOKEN, value=Decimal("50.00"), descr="Test token"
         )
 
         _info_token_credit(context, member)
@@ -120,16 +120,16 @@ class TestMemberAccountingFunctions(BaseTestCase):
     def test_info_token_credit_with_credits(self):
         """Test _info_token_credit with credits"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
-        context = {"association_id": assoc.id}
+        context = {"association_id": association.id}
 
         # Create credit items
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.CREDIT, value=Decimal("30.00"), descr="Test credit"
+            member=member, association=association, oth=OtherChoices.CREDIT, value=Decimal("30.00"), descr="Test credit"
         )
         AccountingItemExpense.objects.create(
-            member=member, assoc=assoc, run=run, value=Decimal("20.00"), is_approved=True
+            member=member, association=association, run=run, value=Decimal("20.00"), is_approved=True
         )
 
         _info_token_credit(context, member)
@@ -139,16 +139,16 @@ class TestMemberAccountingFunctions(BaseTestCase):
     def test_info_token_credit_with_both(self):
         """Test _info_token_credit with both tokens and credits"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
-        context = {"association_id": assoc.id}
+        context = {"association_id": association.id}
 
         # Create both tokens and credits
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.TOKEN, value=Decimal("50.00"), descr="Test token"
+            member=member, association=association, oth=OtherChoices.TOKEN, value=Decimal("50.00"), descr="Test token"
         )
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.CREDIT, value=Decimal("30.00"), descr="Test credit"
+            member=member, association=association, oth=OtherChoices.CREDIT, value=Decimal("30.00"), descr="Test credit"
         )
 
         _info_token_credit(context, member)

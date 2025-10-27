@@ -38,7 +38,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django_ratelimit.decorators import ratelimit
 
-from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
 from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.forms.association import FirstAssociationForm
@@ -47,8 +47,8 @@ from larpmanager.forms.miscellanea import SendMailForm
 from larpmanager.forms.utils import RedirectForm
 from larpmanager.mail.base import join_email
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
-from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.models.association import Association, AssociationPlan, AssocTextType
+from larpmanager.models.access import AssociationRole, EventRole
+from larpmanager.models.association import Association, AssociationPlan, AssociationTextType
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
@@ -63,7 +63,7 @@ from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.base import get_context, get_event_context
 from larpmanager.utils.exceptions import PermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.utils.text import get_association_text
 from larpmanager.views.user.member import get_user_backend
 
 
@@ -205,7 +205,7 @@ def go_redirect_run(run, path):
     Returns:
         HttpResponseRedirect: Redirect to the run's URL
     """
-    full_url = f"https://{run.event.assoc.slug}.{run.event.assoc.skin.domain}/{run.get_slug()}/{path}"
+    full_url = f"https://{run.event.association.slug}.{run.event.association.skin.domain}/{run.get_slug()}/{path}"
     return redirect(full_url)
 
 
@@ -225,7 +225,7 @@ def choose_run(request, redirect_path, event_ids):
 
     for run in Run.objects.filter(event_id__in=event_ids, end__gte=datetime.now()):
         available_runs.append(run)
-        run_display_names.append(f"{run.search} - {run.event.assoc.slug}")
+        run_display_names.append(f"{run.search} - {run.event.association.slug}")
 
     if len(run_display_names) == 0:
         return render(request, "larpmanager/larpmanager/na_event.html")
@@ -265,9 +265,9 @@ def redr(request, p):
     """
     if not p.startswith("event/"):
         slugs = set()
-        for ar in AssocRole.objects.filter(members=request.user.member).select_related("assoc"):
-            slugs.add(ar.assoc.slug)
-        # get all events where they have assoc role
+        for ar in AssociationRole.objects.filter(members=request.user.member).select_related("association"):
+            slugs.add(ar.association.slug)
+        # get all events where they have association role
         return choose_assoc(request, p, list(slugs))
 
     p = p.replace("event/", "")
@@ -311,9 +311,9 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         raise PermissionError()
 
     # Get the association from request context and activate the feature
-    assoc = get_object_or_404(Association, pk=context["association_id"])
-    assoc.features.add(feature)
-    assoc.save()
+    association = get_object_or_404(Association, pk=context["association_id"])
+    association.features.add(feature)
+    association.save()
 
     # Display success message to user
     messages.success(request, _("Feature activated") + ":" + feature.name)
@@ -461,7 +461,7 @@ def ticket(request, reason=""):
         form = LarpManagerTicketForm(request.POST, request.FILES, request=request, context=context)
         if form.is_valid():
             lm_ticket = form.save(commit=False)
-            lm_ticket.assoc_id = context["association_id"]
+            lm_ticket.association_id = context["association_id"]
             if reason:
                 lm_ticket.reason = reason
             if context["member"]:
@@ -536,9 +536,9 @@ def join(request):
     joined_association = _join_form(context, request)
     if joined_association:
         # send message
-        messages.success(request, _("Welcome to %(name)s!") % {"name": request.assoc["name"]})
+        messages.success(request, _("Welcome to %(name)s!") % {"name": request.association["name"]})
         # send email
-        if request.assoc["skin_id"] == 1:
+        if request.association["skin_id"] == 1:
             join_email(joined_association)
         # redirect
         return redirect("after_login", subdomain=joined_association.slug, path="manage")
@@ -570,11 +570,13 @@ def _join_form(context: dict, request) -> Association | None:
         if form.is_valid():
             # Create association with inherited skin from request context
             new_association = form.save(commit=False)
-            new_association.skin_id = request.assoc["skin_id"]
+            new_association.skin_id = request.association["skin_id"]
             new_association.save()
 
             # Create admin role for the new association and assign creator
-            (admin_role, created) = AssocRole.objects.get_or_create(assoc=new_association, number=1, name="Admin")
+            (admin_role, created) = AssociationRole.objects.get_or_create(
+                association=new_association, number=1, name="Admin"
+            )
             admin_role.members.add(context["member"])
             admin_role.save()
 
@@ -594,7 +596,7 @@ def _join_form(context: dict, request) -> Association | None:
                 }
                 my_send_mail(subject, body, admin_email)
 
-            # return redirect('first', assoc=new_association.slug)
+            # return redirect('first', association=new_association.slug)
             return new_association
     else:
         # Initialize empty form for GET requests
@@ -739,7 +741,7 @@ def privacy(request):
         HttpResponse: Rendered privacy policy page
     """
     context = get_lm_contact(request)
-    context.update({"text": get_assoc_text(context["association_id"], AssocTextType.PRIVACY)})
+    context.update({"text": get_association_text(context["association_id"], AssociationTextType.PRIVACY)})
     return render(request, "larpmanager/larpmanager/privacy.html", context)
 
 
@@ -890,7 +892,7 @@ def get_run_lm_payment(run):
     Side effects:
         Modifies run object with features, active_registrations, and total attributes
     """
-    run.features = len(get_assoc_features(run.event.assoc_id)) + len(get_event_features(run.event_id))
+    run.features = len(get_association_features(run.event.association_id)) + len(get_event_features(run.event_id))
     run.active_registrations = (
         Registration.objects.filter(run__id=run.id, cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
@@ -1098,7 +1100,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     # Create demo association with unique slug and inherited skin
     demo_association = Association.objects.create(
-        slug=f"test{new_primary_key}", name="Demo Organization", skin_id=request.assoc["skin_id"], demo=True
+        slug=f"test{new_primary_key}", name="Demo Organization", skin_id=request.association["skin_id"], demo=True
     )
 
     # Create test admin user with demo credentials
@@ -1115,7 +1117,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     demo_member.save()
 
     # Create admin role and assign member with full permissions
-    (admin_role, created) = AssocRole.objects.get_or_create(assoc=demo_association, number=1, name="Admin")
+    (admin_role, created) = AssociationRole.objects.get_or_create(association=demo_association, number=1, name="Admin")
     admin_role.members.add(demo_member)
     admin_role.save()
 

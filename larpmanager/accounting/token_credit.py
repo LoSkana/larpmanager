@@ -23,7 +23,7 @@ from django.db import transaction
 from django.db.models import Case, F, IntegerField, Q, QuerySet, Value, When
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.feature import get_assoc_features
+from larpmanager.cache.feature import get_association_features
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
@@ -38,7 +38,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 
 
-def registration_tokens_credits_use(reg, remaining: float, assoc_id: int) -> None:
+def registration_tokens_credits_use(reg, remaining: float, association_id: int) -> None:
     """Apply available tokens and credits to a registration payment.
 
     Automatically uses member's available tokens first, then credits
@@ -47,7 +47,7 @@ def registration_tokens_credits_use(reg, remaining: float, assoc_id: int) -> Non
     Args:
         reg: Registration instance to apply payments to
         remaining: Outstanding balance amount
-        assoc_id: Association ID for membership lookup
+        association_id: Association ID for membership lookup
 
     Side Effects:
         Creates AccountingItemPayment records and updates membership balances.
@@ -60,7 +60,7 @@ def registration_tokens_credits_use(reg, remaining: float, assoc_id: int) -> Non
     with transaction.atomic():
         # Get member and their membership for the association
         member = reg.member
-        membership = get_user_membership(member, assoc_id)
+        membership = get_user_membership(member, association_id)
 
         # Apply tokens first if available
         if membership.tokens > 0:
@@ -75,7 +75,7 @@ def registration_tokens_credits_use(reg, remaining: float, assoc_id: int) -> Non
                 value=tk_use,
                 member_id=reg.member_id,
                 reg=reg,
-                assoc_id=assoc_id,
+                association_id=association_id,
             )
             remaining -= tk_use
 
@@ -92,11 +92,11 @@ def registration_tokens_credits_use(reg, remaining: float, assoc_id: int) -> Non
                 value=cr_use,
                 member_id=reg.member_id,
                 reg=reg,
-                assoc_id=assoc_id,
+                association_id=association_id,
             )
 
 
-def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, assoc_id: int) -> None:
+def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, association_id: int) -> None:
     """
     Offsets an overpayment by reducing or deleting AccountingItemPayment rows.
 
@@ -107,7 +107,7 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
     Args:
         reg: Registration instance to adjust payments for.
         overpay: Positive decimal amount representing the overpayment to reverse.
-        assoc_id: Association ID used to filter relevant payment records.
+        association_id: Association ID used to filter relevant payment records.
 
     Note:
         Payments are processed in priority order: CREDIT first, then TOKEN,
@@ -123,7 +123,7 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
         # Build queryset with payment priority annotation and locking
         qs = (
             AccountingItemPayment.objects.select_for_update()
-            .filter(reg=reg, assoc_id=assoc_id, pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
+            .filter(reg=reg, association_id=association_id, pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
             .annotate(
                 pay_priority=Case(
                     When(pay=PaymentChoices.CREDIT, then=Value(0)),
@@ -159,7 +159,7 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
             remaining -= cut
 
 
-def get_regs_paying_incomplete(assoc: Association = None) -> QuerySet[Registration]:
+def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Registration]:
     """Get registrations with incomplete payments (excluding small differences).
 
     This function identifies registrations where the total amount paid differs
@@ -168,7 +168,7 @@ def get_regs_paying_incomplete(assoc: Association = None) -> QuerySet[Registrati
     to account for rounding errors or minor discrepancies.
 
     Args:
-        assoc (Optional[Association]): Association to filter registrations by.
+        association (Optional[Association]): Association to filter registrations by.
             If None, returns registrations from all associations.
 
     Returns:
@@ -181,7 +181,7 @@ def get_regs_paying_incomplete(assoc: Association = None) -> QuerySet[Registrati
         >>> assoc_incomplete = get_regs_paying_incomplete(my_association)
     """
     # Get base registration queryset, optionally filtered by association
-    registration_queryset = get_regs(assoc)
+    registration_queryset = get_regs(association)
 
     # Calculate payment difference: total_paid - total_registration_amount
     registration_queryset = registration_queryset.annotate(diff=F("tot_payed") - F("tot_iscr"))
@@ -193,14 +193,14 @@ def get_regs_paying_incomplete(assoc: Association = None) -> QuerySet[Registrati
     return registration_queryset
 
 
-def get_regs(assoc: Association) -> QuerySet[Registration]:
+def get_regs(association: Association) -> QuerySet[Registration]:
     """Get active registrations (not cancelled, not from completed events).
 
     Retrieves all registrations that are still active by filtering out cancelled
     registrations and registrations from events that are cancelled or completed.
 
     Args:
-        assoc: Optional association to filter registrations by. If provided,
+        association: Optional association to filter registrations by. If provided,
             only returns registrations for events belonging to this association.
 
     Returns:
@@ -220,8 +220,8 @@ def get_regs(assoc: Association) -> QuerySet[Registration]:
     )
 
     # Filter by association if provided
-    if assoc:
-        registrations_queryset = registrations_queryset.filter(run__event__assoc=assoc)
+    if association:
+        registrations_queryset = registrations_queryset.filter(run__event__association=association)
 
     return registrations_queryset
 
@@ -288,10 +288,10 @@ def update_token_credit(instance, token: bool = True) -> None:
         - Updates membership.tokens or membership.credit
         - Triggers accounting updates on affected registrations
     """
-    association_id = instance.assoc_id
+    association_id = instance.association_id
 
     # Skip processing if token_credit feature is not active for this association
-    if "token_credit" not in get_assoc_features(association_id):
+    if "token_credit" not in get_association_features(association_id):
         return
 
     # Get the user's membership for this association
@@ -301,12 +301,12 @@ def update_token_credit(instance, token: bool = True) -> None:
     if token:
         # Get all tokens given to the member
         tokens_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.TOKEN, assoc_id=association_id
+            member_id=instance.member_id, oth=OtherChoices.TOKEN, association_id=association_id
         )
 
         # Get all tokens used by the member
         tokens_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id, pay=PaymentChoices.TOKEN, assoc_id=association_id
+            member_id=instance.member_id, pay=PaymentChoices.TOKEN, association_id=association_id
         )
 
         # Calculate and save new token balance
@@ -317,22 +317,22 @@ def update_token_credit(instance, token: bool = True) -> None:
     else:
         # Get all approved expenses for the member
         credit_expenses = AccountingItemExpense.objects.filter(
-            member_id=instance.member_id, is_approved=True, assoc_id=association_id
+            member_id=instance.member_id, is_approved=True, association_id=association_id
         )
 
         # Get all credits given to the member
         credits_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.CREDIT, assoc_id=association_id
+            member_id=instance.member_id, oth=OtherChoices.CREDIT, association_id=association_id
         )
 
         # Get all credits used by the member
         credits_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id, pay=PaymentChoices.CREDIT, assoc_id=association_id
+            member_id=instance.member_id, pay=PaymentChoices.CREDIT, association_id=association_id
         )
 
         # Get all refunds given to the member
         credits_refunded = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.REFUND, assoc_id=association_id
+            member_id=instance.member_id, oth=OtherChoices.REFUND, association_id=association_id
         )
 
         # Calculate and save new credit balance (expenses + credits - used - refunds)
@@ -342,12 +342,12 @@ def update_token_credit(instance, token: bool = True) -> None:
         membership.save()
 
     # Trigger accounting updates on registrations with incomplete payments
-    for registration in get_regs_paying_incomplete(instance.assoc).filter(member_id=instance.member_id):
+    for registration in get_regs_paying_incomplete(instance.association).filter(member_id=instance.member_id):
         registration.save()
 
 
 def handle_tokes_credits(
-    assoc_id: int,
+    association_id: int,
     features: list[str],
     reg: Registration,
     remaining: Decimal,
@@ -355,7 +355,7 @@ def handle_tokes_credits(
     """Handle token credits for a registration based on remaining balance.
 
     Args:
-        assoc_id: Association ID for token credit operations
+        association_id: Association ID for token credit operations
         features: List of enabled feature names
         reg: Registration object to process
         remaining: Remaining balance (positive = use credits, negative = add credits)
@@ -366,7 +366,7 @@ def handle_tokes_credits(
 
     # Handle positive balance by using available token credits
     if remaining > 0:
-        registration_tokens_credits_use(reg, remaining, assoc_id)
+        registration_tokens_credits_use(reg, remaining, association_id)
     # Handle negative balance (overpayment) by adding token credits
     else:
-        registration_tokens_credits_overpay(reg, -remaining, assoc_id)
+        registration_tokens_credits_overpay(reg, -remaining, association_id)

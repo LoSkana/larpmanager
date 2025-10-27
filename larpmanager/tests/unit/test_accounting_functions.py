@@ -52,26 +52,26 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestRegistrationTokenCreditFunctions(BaseTestCase):
     """Test cases for token and credit usage functions"""
 
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_with_tokens(self, mock_features):
         """Test using tokens to pay for registration"""
         mock_features.return_value = {"token_credit": True}
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
         membership = member.membership
 
         # Give member tokens
-        AccountingItemOther.objects.filter(member=member, assoc=assoc, oth=OtherChoices.TOKEN).delete()
+        AccountingItemOther.objects.filter(member=member, association=association, oth=OtherChoices.TOKEN).delete()
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.TOKEN, value=Decimal("50.00"), descr="Test tokens"
+            member=member, association=association, oth=OtherChoices.TOKEN, value=Decimal("50.00"), descr="Test tokens"
         )
         membership.tokens = Decimal("50.00")
         membership.save()
 
         # Use tokens to pay
-        registration_tokens_credits_use(registration, Decimal("30.00"), assoc.id)
+        registration_tokens_credits_use(registration, Decimal("30.00"), association.id)
 
         # Check membership tokens decreased
         membership.refresh_from_db()
@@ -84,7 +84,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(token_payments.count(), 1)
         self.assertEqual(token_payments.first().value, Decimal("30.00"))
 
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_with_credits(self, mock_features):
         """Test using credits to pay for registration
 
@@ -94,19 +94,19 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         mock_features.return_value = {"token_credit": True}
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
         membership = member.membership
 
         # Clear both tokens and credits first
-        AccountingItemOther.objects.filter(member=member, assoc=assoc, oth=OtherChoices.TOKEN).delete()
-        AccountingItemPayment.objects.filter(member=member, assoc=assoc, pay=PaymentChoices.TOKEN).delete()
-        AccountingItemOther.objects.filter(member=member, assoc=assoc, oth__in=[OtherChoices.CREDIT, OtherChoices.REFUND]).delete()
-        AccountingItemPayment.objects.filter(member=member, assoc=assoc, pay=PaymentChoices.CREDIT).delete()
+        AccountingItemOther.objects.filter(member=member, association=association, oth=OtherChoices.TOKEN).delete()
+        AccountingItemPayment.objects.filter(member=member, association=association, pay=PaymentChoices.TOKEN).delete()
+        AccountingItemOther.objects.filter(member=member, association=association, oth__in=[OtherChoices.CREDIT, OtherChoices.REFUND]).delete()
+        AccountingItemPayment.objects.filter(member=member, association=association, pay=PaymentChoices.CREDIT).delete()
 
         # Give member only credits (no tokens)
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.CREDIT, value=Decimal("80.00"), descr="Test credit"
+            member=member, association=association, oth=OtherChoices.CREDIT, value=Decimal("80.00"), descr="Test credit"
         )
         membership.tokens = Decimal("0.00")
         membership.credit = Decimal("80.00")
@@ -117,55 +117,55 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertGreater(membership.credit, Decimal("0.00"))
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_tokens_then_credits(self, mock_features):
         """Test using tokens first, then credits"""
         mock_features.return_value = {"token_credit": True}
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
         membership = member.membership
 
         # Give member both tokens and credits
-        AccountingItemOther.objects.filter(member=member, assoc=assoc).delete()
+        AccountingItemOther.objects.filter(member=member, association=association).delete()
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.TOKEN, value=Decimal("20.00"), descr="Test tokens"
+            member=member, association=association, oth=OtherChoices.TOKEN, value=Decimal("20.00"), descr="Test tokens"
         )
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.CREDIT, value=Decimal("50.00"), descr="Test credit"
+            member=member, association=association, oth=OtherChoices.CREDIT, value=Decimal("50.00"), descr="Test credit"
         )
         membership.tokens = Decimal("20.00")
         membership.credit = Decimal("50.00")
         membership.save()
 
         # Use tokens and credits to pay 60 total
-        registration_tokens_credits_use(registration, Decimal("60.00"), assoc.id)
+        registration_tokens_credits_use(registration, Decimal("60.00"), association.id)
 
         # Check both decreased correctly
         membership.refresh_from_db()
         self.assertEqual(membership.tokens, Decimal("0.00"))  # All 20 used
         self.assertEqual(membership.credit, Decimal("10.00"))  # 40 of 50 used
 
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_overpay_removes_credit_first(self, mock_features):
         """Test overpayment reversal removes credits before tokens"""
         mock_features.return_value = {"token_credit": True}
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         # Create token and credit payments
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("30.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.CREDIT, value=Decimal("40.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.CREDIT, value=Decimal("40.00")
         )
 
         # Reverse 50 overpayment (should remove credit first)
-        registration_tokens_credits_overpay(registration, Decimal("50.00"), assoc.id)
+        registration_tokens_credits_overpay(registration, Decimal("50.00"), association.id)
 
         # Check credit payment reduced/removed, token payment untouched
         credit_payments = AccountingItemPayment.objects.filter(
@@ -178,7 +178,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(token_payments.count(), 1)
         self.assertEqual(token_payments.first().value, Decimal("20.00"))
 
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_with_zero_remaining(self, mock_features):
         """Test that function handles zero remaining correctly
 
@@ -188,7 +188,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         mock_features.return_value = {"token_credit": True}
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         # Function should handle zero remaining without crashing
@@ -200,17 +200,17 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         except Exception:
             self.fail("Function should handle zero remaining gracefully")
 
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_with_negative_remaining(self, mock_features):
         """Test that function handles negative remaining correctly"""
         mock_features.return_value = {"token_credit": True}
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         # Should not create any payments
-        registration_tokens_credits_use(registration, Decimal("-10.00"), assoc.id)
+        registration_tokens_credits_use(registration, Decimal("-10.00"), association.id)
 
         payments = AccountingItemPayment.objects.filter(member=member, reg=registration)
         self.assertEqual(payments.count(), 0)
@@ -283,7 +283,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         # Apply discount
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), assoc=self.get_association()
+            member=member, run=run, disc=discount, value=Decimal("20.00"), association=self.get_association()
         )
 
         total = get_reg_iscr(registration)
@@ -324,11 +324,11 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
     def test_get_reg_payments_with_money(self):
         """Test payment calculation with money payment"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         total = get_reg_payments(registration)
@@ -338,17 +338,17 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
     def test_get_reg_payments_with_multiple_payments(self):
         """Test payment calculation with multiple payments"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("10.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("10.00")
         )
 
         total = get_reg_payments(registration)
@@ -418,7 +418,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         mock_handle.return_value = None
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         run.development = DevelopStatus.SHOW
         run.save()
@@ -428,7 +428,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         # Add payment
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # Update accounting
@@ -467,11 +467,11 @@ class TestAccountingEdgeCases(BaseTestCase):
     def test_get_reg_payments_with_deleted_payments(self):
         """Test payment calculation behavior with deleted payments"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         payment = AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         # Get total before deletion
@@ -487,26 +487,26 @@ class TestAccountingEdgeCases(BaseTestCase):
         # Since we see it includes deleted, we just verify the payment exists
         self.assertGreaterEqual(total_after, Decimal("0.00"))
 
-    @patch("larpmanager.accounting.token_credit.get_assoc_features")
+    @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_tokens_credits_with_insufficient_balance(self, mock_features):
         """Test using more tokens/credits than available"""
         mock_features.return_value = {"token_credit": True}
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
         membership = member.membership
 
         # Give member only 10 tokens
-        AccountingItemOther.objects.filter(member=member, assoc=assoc, oth=OtherChoices.TOKEN).delete()
+        AccountingItemOther.objects.filter(member=member, association=association, oth=OtherChoices.TOKEN).delete()
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, oth=OtherChoices.TOKEN, value=Decimal("10.00"), descr="Test tokens"
+            member=member, association=association, oth=OtherChoices.TOKEN, value=Decimal("10.00"), descr="Test tokens"
         )
         membership.tokens = Decimal("10.00")
         membership.save()
 
         # Try to use 50 (more than available)
-        registration_tokens_credits_use(registration, Decimal("50.00"), assoc.id)
+        registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
         # Should only use what's available
         membership.refresh_from_db()
@@ -556,7 +556,7 @@ class TestAccountingEdgeCases(BaseTestCase):
 
         # Apply discount
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("200.00"), assoc=self.get_association()
+            member=member, run=run, disc=discount, value=Decimal("200.00"), association=self.get_association()
         )
 
         total = get_reg_iscr(registration)

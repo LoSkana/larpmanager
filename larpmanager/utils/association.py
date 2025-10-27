@@ -22,7 +22,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Max
 
-from larpmanager.models.access import AssocPermission
+from larpmanager.models.access import AssociationPermission
 from larpmanager.models.association import Association
 
 
@@ -43,7 +43,7 @@ def auto_assign_association_permission_number(assoc_permission):
         assoc_permission: AssocPermission instance to assign number to
     """
     if not assoc_permission.number:
-        max_number = AssocPermission.objects.filter(feature__module=assoc_permission.feature.module).aggregate(
+        max_number = AssociationPermission.objects.filter(feature__module=assoc_permission.feature.module).aggregate(
             Max("number")
         )["number__max"]
         if not max_number:

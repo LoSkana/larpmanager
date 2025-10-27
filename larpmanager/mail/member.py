@@ -27,7 +27,7 @@ from django.core import signing
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
@@ -71,12 +71,12 @@ def send_membership_confirm(request, membership) -> None:
     )
 
     # Check if membership fee is required and add fee information
-    amount = int(get_assoc_config(membership.assoc_id, "membership_fee", "0"))
+    amount = int(get_association_config(membership.association_id, "membership_fee", "0"))
     if amount:
         body += " " + _(
             "Please also note that payment of the annual membership fee (%(amount)d "
             "%(currency)s) is required to participate in events."
-        ) % {"amount": amount, "currency": request.assoc["currency_symbol"]}
+        ) % {"amount": amount, "currency": request.association["currency_symbol"]}
 
     # Add closing message and send email
     body += "<br /><br />" + _("Thank you for choosing to be part of our community") + "!"
@@ -172,8 +172,8 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
         body += " " + _("More details") + f": {resp}"
 
     # Check for pending payments across member's registrations
-    assoc_id = member.membership.assoc_id
-    regs = member.registrations.filter(run__event__assoc_id=assoc_id, run__start__gte=datetime.now().date())
+    association_id = member.membership.association_id
+    regs = member.registrations.filter(run__event__association_id=association_id, run__start__gte=datetime.now().date())
     membership_fee = False
     registration_list = []
 
@@ -205,7 +205,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
         )
 
     # Add membership fee payment instructions if required
-    if membership_fee and get_assoc_config(assoc_id, "membership_fee", 0):
+    if membership_fee and get_association_config(association_id, "membership_fee", 0):
         url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
             "In addition, you must be up to date with the payment of your membership fee in "
@@ -264,8 +264,8 @@ def send_help_question_notification_email(instance):
                 body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
                 my_send_mail(subj, body, organizer, instance.run)
 
-        elif instance.assoc:
-            notify_organization_exe(get_help_email, instance.assoc, instance)
+        elif instance.association:
+            notify_organization_exe(get_help_email, instance.association, instance)
         else:
             subj, body = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
@@ -373,12 +373,12 @@ def send_password_reset_remainder(mb):
     Side effects:
         Sends reminder emails to association executives and system admins
     """
-    assoc = mb.assoc
-    notify_organization_exe(get_password_reminder_email, assoc, mb)
+    association = mb.association
+    notify_organization_exe(get_password_reminder_email, association, mb)
 
     for _name, email in conf_settings.ADMINS:
         (subject, body) = get_password_reminder_email(mb)
-        my_send_mail(subject, body, email, assoc)
+        my_send_mail(subject, body, email, association)
 
 
 def get_password_reminder_email(mb):
@@ -390,10 +390,10 @@ def get_password_reminder_email(mb):
     Returns:
         tuple: (subject, body) for the reminder email
     """
-    assoc = mb.assoc
+    association = mb.association
     memb = mb.member
     aux = mb.password_reset.split("#")
-    url = get_url(f"reset/{aux[0]}/{aux[1]}/", assoc)
+    url = get_url(f"reset/{aux[0]}/{aux[1]}/", association)
     subj = _("Password reset of user %(user)s") % {"user": memb}
     body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
         "url": url

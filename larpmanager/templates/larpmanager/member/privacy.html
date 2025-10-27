@@ -21,10 +21,10 @@
         </tr>
         {% for el in joined %}
             <tr>
-                <th>{{ el.assoc }}</th>
+                <th>{{ el.association }}</th>
                 <td>{{ el.get_newsletter_display }}</td>
                 <td>
-                    <a href="{% url 'profile_privacy_rewoke' el.assoc.slug %}"
+                    <a href="{% url 'profile_privacy_rewoke' el.association.slug %}"
                        class="delete">{% trans "Remove consent" %}</a>
                 </td>
             </tr>

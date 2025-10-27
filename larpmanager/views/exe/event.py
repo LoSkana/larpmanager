@@ -24,7 +24,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_assoc_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.registration import get_reg_counts
@@ -59,7 +59,7 @@ def exe_events(request: HttpRequest) -> HttpResponse:
 
     # Get all runs for the association, ordered by end date
     context["list"] = (
-        Run.objects.filter(event__assoc_id=context["association_id"]).select_related("event").order_by("end")
+        Run.objects.filter(event__association_id=context["association_id"]).select_related("event").order_by("end")
     )
 
     # Add registration status and counts to each run
@@ -158,7 +158,7 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_templates")
 
     # Get all template events for the organization, ordered by last update
-    context["list"] = Event.objects.filter(assoc_id=context["association_id"], template=True).order_by("-updated")
+    context["list"] = Event.objects.filter(association_id=context["association_id"], template=True).order_by("-updated")
 
     # Ensure each template has at least one role (organizer by default)
     for el in context["list"]:
@@ -218,10 +218,10 @@ def exe_pre_registrations(request) -> HttpResponse:
     context["seen"] = []
 
     # Get preference configuration for the association
-    context["preferences"] = get_assoc_config(context["association_id"], "pre_reg_preferences", False)
+    context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences", False)
 
     # Iterate through all non-template events for this association
-    for event in Event.objects.filter(assoc_id=context["association_id"], template=False):
+    for event in Event.objects.filter(association_id=context["association_id"], template=False):
         # Skip events that don't have pre-registration active
         if not get_event_config(event.id, "pre_register_active", False):
             continue

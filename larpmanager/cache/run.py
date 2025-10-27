@@ -64,7 +64,7 @@ def init_cache_run(a, s):
         except ValueError:
             n = 1
 
-        run = Run.objects.select_related("event").get(event__assoc_id=a, event__slug=s, number=n)
+        run = Run.objects.select_related("event").get(event__association_id=a, event__slug=s, number=n)
         return run.id
     except ObjectDoesNotExist:
         return None
@@ -77,7 +77,7 @@ def on_run_pre_save_invalidate_cache(instance):
         instance: Run instance being saved
     """
     if instance.pk:
-        reset_cache_run(instance.event.assoc_id, instance.get_slug())
+        reset_cache_run(instance.event.association_id, instance.get_slug())
 
 
 def on_event_pre_save_invalidate_cache(instance):
@@ -88,7 +88,7 @@ def on_event_pre_save_invalidate_cache(instance):
     """
     if instance.pk:
         for run in instance.runs.all():
-            reset_cache_run(instance.assoc_id, run.get_slug())
+            reset_cache_run(instance.association_id, run.get_slug())
 
 
 def reset_cache_config_run(run):

@@ -107,7 +107,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     for run in Run.objects.filter(event=context["event"], end__gte=datetime.now()):
         # Generate PDF for each character in each run
         for ch in chs:
-            print_character_bkg(context["event"].assoc.slug, run.get_slug(), ch.number)
+            print_character_bkg(context["event"].association.slug, run.get_slug(), ch.number)
 
     # Show success message and redirect
     messages.success(request, _("Regeneration pdf started") + "!")

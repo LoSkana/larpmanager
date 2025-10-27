@@ -128,11 +128,11 @@ def update_leaderboard(a_id: int) -> list[dict]:
     res = []
 
     # Iterate through all memberships for the association
-    for mb in Membership.objects.filter(assoc_id=a_id):
+    for mb in Membership.objects.filter(association_id=a_id):
         # Build member data with badge count and basic info
         el = {
             "id": mb.member_id,
-            "count": mb.member.badges.filter(assoc_id=a_id).count(),
+            "count": mb.member.badges.filter(association_id=a_id).count(),
             "created": mb.created,
             "name": mb.member.display_member(),
         }
@@ -194,8 +194,8 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
         raise Http404("not found") from err
 
     # Verify email belongs to the requesting association
-    if email.assoc_id != context["association_id"]:
-        raise Http404("not your assoc")
+    if email.association_id != context["association_id"]:
+        raise Http404("not your association")
 
     # Check run-specific authorization if run context is provided
     run = context.get("run")
@@ -237,7 +237,7 @@ def process_membership_status_updates(membership: Membership) -> None:
 
     Args:
         membership: The Membership instance being processed. Must have
-            status, card_number, date, and assoc attributes.
+            status, card_number, date, and association attributes.
 
     Returns:
         None: Modifies the membership instance in-place.
@@ -250,7 +250,9 @@ def process_membership_status_updates(membership: Membership) -> None:
     if membership.status == MembershipStatus.ACCEPTED:
         # Assign next available card number if not already set
         if not membership.card_number:
-            n = Membership.objects.filter(assoc=membership.assoc).aggregate(Max("card_number"))["card_number__max"]
+            n = Membership.objects.filter(association=membership.association).aggregate(Max("card_number"))[
+                "card_number__max"
+            ]
             if not n:
                 n = 0
             membership.card_number = n + 1

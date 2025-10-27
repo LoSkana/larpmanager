@@ -29,7 +29,7 @@ from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
 
-from larpmanager.models.access import AssocRole
+from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationSkin
 
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
@@ -197,6 +197,6 @@ def _ensure_association_skin(db):
         AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
 
     # Ensure AssocRole with number=1 exists for all associations
-    for assoc in Association.objects.all():
-        if not AssocRole.objects.filter(assoc=assoc, number=1).exists():
-            AssocRole.objects.create(assoc=assoc, number=1, name="Executive")
+    for association in Association.objects.all():
+        if not AssociationRole.objects.filter(association=association, number=1).exists():
+            AssociationRole.objects.create(association=association, number=1, name="Executive")

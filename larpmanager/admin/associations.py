@@ -21,7 +21,7 @@
 from django.contrib import admin
 
 from larpmanager.admin.base import AssocFilter, DefModelAdmin
-from larpmanager.models.association import Association, AssociationConfig, AssociationSkin, AssocText
+from larpmanager.models.association import Association, AssociationConfig, AssociationSkin, AssociationText
 
 
 @admin.register(Association)
@@ -37,17 +37,17 @@ class AssociationAdmin(DefModelAdmin):
 
 @admin.register(AssociationConfig)
 class AssociationConfigAdmin(DefModelAdmin):
-    list_display = ("assoc", "name", "value")
+    list_display = ("association", "name", "value")
     search_fields = ("name",)
     list_filter = (AssocFilter,)
-    autocomplete_fields = ["assoc"]
+    autocomplete_fields = ["association"]
 
 
-@admin.register(AssocText)
+@admin.register(AssociationText)
 class AssocTextAdmin(DefModelAdmin):
-    list_display = ("assoc", "typ", "language", "default")
+    list_display = ("association", "typ", "language", "default")
     list_filter = (AssocFilter, "typ", "language")
-    autocomplete_fields = ["assoc"]
+    autocomplete_fields = ["association"]
 
 
 @admin.register(AssociationSkin)

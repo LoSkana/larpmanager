@@ -218,11 +218,11 @@ def check_assoc(element: object, context: dict, attribute_field: str = None) -> 
         element = getattr(element, attribute_field)
 
     # Skip check if object has no association
-    if not hasattr(element, "assoc"):
+    if not hasattr(element, "association"):
         return
 
     # Verify object belongs to current association
-    if element.assoc_id != context["association_id"]:
+    if element.association_id != context["association_id"]:
         raise Http404("not your association")
 
 

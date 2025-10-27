@@ -81,7 +81,7 @@ class TestBasicSignals(BaseTestCase):
         payment = AccountingItemPayment(
             member=member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -101,7 +101,7 @@ class TestBasicSignals(BaseTestCase):
         payment = AccountingItemPayment.objects.create(
             member=member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -121,7 +121,7 @@ class TestBasicSignals(BaseTestCase):
         item = AccountingItemDiscount(
             member=member,
             value=Decimal("10.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             disc=discount,  # Changed from 'discount' to 'disc'
             run=self.get_run(),
         )
@@ -140,7 +140,7 @@ class TestBasicSignals(BaseTestCase):
         item = AccountingItemOther(
             member=member,
             value=Decimal("25.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             run=self.get_run(),
             oth=OtherChoices.CREDIT,  # Changed from AccountingItemOther.CREDIT to OtherChoices.CREDIT
             descr="Test credit",  # Added required descr field
@@ -189,7 +189,7 @@ class TestBasicSignals(BaseTestCase):
         payment = AccountingItemPayment(
             member=member,
             value=Decimal("100.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )

@@ -37,8 +37,8 @@ from larpmanager.accounting.gateway import (
     get_stripe_form,
     get_sumup_form,
 )
-from larpmanager.cache.config import get_assoc_config, get_event_config
-from larpmanager.cache.feature import get_assoc_features
+from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -72,17 +72,17 @@ from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
 
 
-def get_payment_fee(assoc_id, slug):
+def get_payment_fee(association_id, slug):
     """Get payment processing fee for a specific payment method.
 
     Args:
-        assoc_id: Association instance ID
+        association_id: Association instance ID
         slug (str): Payment method slug
 
     Returns:
         float: Payment fee amount, 0.0 if not configured
     """
-    payment_details = fetch_payment_details(assoc_id)
+    payment_details = fetch_payment_details(association_id)
     fee_key = slug + "_fee"
     if fee_key not in payment_details or not payment_details[fee_key]:
         return 0.0
@@ -110,7 +110,9 @@ def unique_invoice_cod(length=16):
     raise ValueError("Too many attempts to generate the code")
 
 
-def set_data_invoice(request: HttpRequest, context: dict, invoice: PaymentInvoice, form: Form, assoc_id: int) -> None:
+def set_data_invoice(
+    request: HttpRequest, context: dict, invoice: PaymentInvoice, form: Form, association_id: int
+) -> None:
     """Set invoice data from form submission.
 
     Updates the invoice object with appropriate causal text based on payment type
@@ -121,7 +123,7 @@ def set_data_invoice(request: HttpRequest, context: dict, invoice: PaymentInvoic
         context: Context dictionary with registration, year, or collection data
         invoice: PaymentInvoice instance to update with causal information
         form: Form containing cleaned invoice data (used for donations)
-        assoc_id: Association instance ID for configuration lookup
+        association_id: Association instance ID for configuration lookup
 
     Returns:
         None: Function modifies the invoice object in place
@@ -163,7 +165,7 @@ def set_data_invoice(request: HttpRequest, context: dict, invoice: PaymentInvoic
         }
 
     # Apply special code prefix if configured for this association
-    if get_assoc_config(assoc_id, "payment_special_code", False):
+    if get_association_config(association_id, "payment_special_code", False):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
@@ -254,22 +256,22 @@ def round_up_to_two_decimals(value_to_round):
     return math.ceil(value_to_round * 100) / 100
 
 
-def update_invoice_gross_fee(request, invoice, amount, assoc_id, pay_method):
+def update_invoice_gross_fee(request, invoice, amount, association_id, pay_method):
     """Update invoice with gross amount including payment processing fees.
 
     Args:
         request: Django HTTP request object
         invoice: PaymentInvoice instance to update
         amount (Decimal): Base amount before fees
-        assoc_id: Association instance ID
+        association_id: Association instance ID
         pay_method (str): Payment method slug
     """
     # add fee for paymentmethod
     amount = float(amount)
-    fee = get_payment_fee(assoc_id, pay_method.slug)
+    fee = get_payment_fee(association_id, pay_method.slug)
 
     if fee is not None:
-        if get_assoc_config(assoc_id, "payment_fees_user", False):
+        if get_association_config(association_id, "payment_fees_user", False):
             amount = (amount * 100) / (100 - fee)
             amount = round_up_to_two_decimals(amount)
 
@@ -333,7 +335,7 @@ def get_payment_form(
         invoice.method = payment_method
         invoice.typ = payment_type
         invoice.member = context["member"]
-        invoice.assoc_id = association_id
+        invoice.association_id = association_id
     else:
         # Update existing invoice with current payment method and type
         invoice.method = payment_method
@@ -348,7 +350,7 @@ def get_payment_form(
     context["invoice"] = invoice
 
     # Check if receipt is required for manual payments (applies to all payment types)
-    require_receipt = get_assoc_config(association_id, "payment_require_receipt", False)
+    require_receipt = get_association_config(association_id, "payment_require_receipt", False)
     context["require_receipt"] = require_receipt
 
     # Prepare gateway-specific forms based on selected payment method
@@ -386,8 +388,8 @@ def payment_received(invoice):
     Side effects:
         Creates accounting records, processes collections/donations
     """
-    features = get_assoc_features(invoice.assoc_id)
-    fee = get_payment_fee(invoice.assoc_id, invoice.method.slug)
+    features = get_association_features(invoice.association_id)
+    fee = get_payment_fee(invoice.association_id, invoice.method.slug)
 
     if fee > 0 and not AccountingItemTransaction.objects.filter(inv=invoice).exists():
         _process_fee(features, fee, invoice)
@@ -413,7 +415,7 @@ def _process_collection(features, invoice):
         collection_item.member_id = invoice.member_id
         collection_item.inv = invoice
         collection_item.value = invoice.mc_gross
-        collection_item.assoc_id = invoice.assoc_id
+        collection_item.association_id = invoice.association_id
         collection_item.collection_id = invoice.idx
         collection_item.save()
 
@@ -427,7 +429,7 @@ def _process_donate(features, invoice):
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
-        accounting_item.assoc_id = invoice.assoc_id
+        accounting_item.association_id = invoice.association_id
         accounting_item.inv = invoice
         accounting_item.descr = invoice.causal
         accounting_item.save()
@@ -443,7 +445,7 @@ def _process_membership(invoice):
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
-        accounting_item.assoc_id = invoice.assoc_id
+        accounting_item.association_id = invoice.association_id
         accounting_item.save()
 
 
@@ -462,14 +464,14 @@ def _process_payment(invoice):
         accounting_item.reg = registration
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
-        accounting_item.assoc_id = invoice.assoc_id
+        accounting_item.association_id = invoice.association_id
         accounting_item.save()
 
         Registration.objects.filter(pk=registration.pk).update(num_payments=F("num_payments") + 1)
         registration.refresh_from_db()
 
         # e-invoice emission
-        if "e-invoice" in get_assoc_features(invoice.assoc_id):
+        if "e-invoice" in get_association_features(invoice.association_id):
             process_payment(invoice.id)
 
 
@@ -493,10 +495,10 @@ def _process_fee(features, fee_percentage: float, invoice) -> None:
 
     # Calculate fee amount as percentage of gross invoice value
     accounting_transaction.value = (float(invoice.mc_gross) * fee_percentage) / 100
-    accounting_transaction.assoc_id = invoice.assoc_id
+    accounting_transaction.association_id = invoice.association_id
 
     # Check if payment fees should be charged to user instead of organization
-    if get_assoc_config(invoice.assoc_id, "payment_fees_user", False):
+    if get_association_config(invoice.association_id, "payment_fees_user", False):
         accounting_transaction.user_burden = True
     accounting_transaction.save()
 
@@ -558,7 +560,7 @@ def process_refund_request_status_change(refund_request):
     acc.value = refund_request.value
     acc.oth = OtherChoices.REFUND
     acc.descr = f"Delivered refund of {refund_request.value:.2f}"
-    acc.assoc_id = refund_request.assoc_id
+    acc.association_id = refund_request.association_id
     acc.save()
 
 
@@ -571,7 +573,7 @@ def process_collection_status_change(collection: Collection) -> None:
 
     Args:
         collection (Collection): Collection instance being updated. Must have
-            pk, status, assoc_id, member_id, run_id, total, and organizer attributes.
+            pk, status, association_id, member_id, run_id, total, and organizer attributes.
 
     Returns:
         None
@@ -605,7 +607,7 @@ def process_collection_status_change(collection: Collection) -> None:
 
     # Create accounting credit item for the newly paid collection
     acc = AccountingItemOther()
-    acc.assoc_id = collection.assoc_id
+    acc.association_id = collection.association_id
     acc.member_id = collection.member_id
     acc.run_id = collection.run_id
     acc.value = collection.total

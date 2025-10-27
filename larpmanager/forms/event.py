@@ -154,7 +154,7 @@ class OrgaEventForm(MyForm):
             "website",
             "register_link",
             "parent",
-            "assoc",
+            "association",
         )
 
         widgets = {"slug": SlugInput, "parent": CampaignS2Widget}
@@ -978,7 +978,7 @@ class OrgaAppearanceForm(MyCssForm):
         Returns:
             str: Path to CSS file
         """
-        return f"css/{event_instance.assoc.slug}_{event_instance.slug}_{event_instance.css_code}.css"
+        return f"css/{event_instance.association.slug}_{event_instance.slug}_{event_instance.css_code}.css"
 
 
 class OrgaEventTextForm(MyForm):
@@ -1155,7 +1155,7 @@ class OrgaRunForm(ConfigForm):
                 required=True,
                 choices=[
                     (el.id, el.name)
-                    for el in Event.objects.filter(assoc_id=self.params["association_id"], template=False)
+                    for el in Event.objects.filter(association_id=self.params["association_id"], template=False)
                 ],
             )
             self.fields = {"event": event_field} | self.fields
@@ -1318,7 +1318,7 @@ class ExeEventForm(OrgaEventForm):
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:
-            qs = Event.objects.filter(assoc_id=self.params["association_id"], template=True)
+            qs = Event.objects.filter(association_id=self.params["association_id"], template=True)
             self.fields["template_event"] = forms.ModelChoiceField(
                 required=False,
                 queryset=qs,
@@ -1396,8 +1396,8 @@ class ExeTemplateForm(FeatureForm):
             instance.template = True
 
         # Set association from params if not already set
-        if not instance.assoc_id:
-            instance.assoc_id = self.params["association_id"]
+        if not instance.association_id:
+            instance.association_id = self.params["association_id"]
 
         # Save instance before processing features
         if not instance.pk:
@@ -1444,7 +1444,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
         self.setup = {}
 
-        if self.instance.assoc.skin_id == 1:
+        if self.instance.association.skin_id == 1:
             self.setup.update(
                 {
                     "character": (

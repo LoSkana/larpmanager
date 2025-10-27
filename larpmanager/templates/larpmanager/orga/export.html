@@ -14,13 +14,13 @@
                 background: white;
             }
         </style>
-        {% if assoc.css_code %}
+        {% if association.css_code %}
             <link rel="stylesheet"
-                  href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ assoc.css_code }}.css" />
+                  href="{% get_media_prefix %}/css/{{ association.slug }}_{{ association.css_code }}.css" />
         {% endif %}
         {% if event and event.css_code %}
             <link rel="stylesheet"
-                  href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
+                  href="{% get_media_prefix %}/css/{{ association.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
         {% endif %}
     </head>
     <body>

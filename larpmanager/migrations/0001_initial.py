@@ -2540,7 +2540,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "permissions",
-                    models.ManyToManyField(blank=True, related_name="assoc_roles", to="larpmanager.assocpermission"),
+                    models.ManyToManyField(
+                        blank=True, related_name="assoc_roles", to="larpmanager.associationpermission"
+                    ),
                 ),
                 ("members", models.ManyToManyField(related_name="assoc_roles", to="larpmanager.member")),
             ],

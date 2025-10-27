@@ -44,9 +44,9 @@ class TestPaymentFunctions(BaseTestCase):
 
     def test_get_payment_fee_no_fee(self):
         """Test get_payment_fee when no fee is configured"""
-        assoc = self.get_association()
+        association = self.get_association()
 
-        result = get_payment_fee(assoc.id, "paypal")
+        result = get_payment_fee(association.id, "paypal")
 
         self.assertEqual(result, 0.0)
 
@@ -55,8 +55,8 @@ class TestPaymentFunctions(BaseTestCase):
         """Test get_payment_fee with configured fee"""
         mock_get_details.return_value = {"paypal_fee": "2.5"}
 
-        assoc = self.get_association()
-        result = get_payment_fee(assoc.id, "paypal")
+        association = self.get_association()
+        result = get_payment_fee(association.id, "paypal")
 
         self.assertEqual(result, 2.5)
 
@@ -65,8 +65,8 @@ class TestPaymentFunctions(BaseTestCase):
         """Test get_payment_fee handles comma as decimal separator"""
         mock_get_details.return_value = {"stripe_fee": "3,75"}
 
-        assoc = self.get_association()
-        result = get_payment_fee(assoc.id, "stripe")
+        association = self.get_association()
+        result = get_payment_fee(association.id, "stripe")
 
         self.assertEqual(result, 3.75)
 
@@ -184,11 +184,11 @@ class TestVATFunctions(BaseTestCase):
     def test_compute_vat_no_vat(self):
         """Test calculate_payment_vat when no VAT configured"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member)
 
         payment = AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # calculate_payment_vat doesn't return a value, it updates DB
@@ -201,12 +201,12 @@ class TestVATFunctions(BaseTestCase):
     def test_compute_vat_with_vat_config(self):
         """Test calculate_payment_vat with VAT configured"""
         member = self.get_member()
-        assoc = self.get_association()
-        assoc.config = {"vat_ticket": "22", "vat_options": "22"}
-        assoc.save()
+        association = self.get_association()
+        association.config = {"vat_ticket": "22", "vat_options": "22"}
+        association.save()
 
         event = self.get_event()
-        event.assoc = assoc
+        event.association = association
         event.save()
 
         ticket = self.ticket(event=event, price=Decimal("100.00"))
@@ -215,11 +215,11 @@ class TestVATFunctions(BaseTestCase):
         run.save()
 
         registration = self.create_registration(member=member, ticket=ticket, run=run, tot_iscr=Decimal("100.00"))
-        registration.assoc = assoc
+        registration.association = association
         registration.save()
 
         payment = AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # calculate_payment_vat doesn't return value, updates DB
@@ -235,11 +235,11 @@ class TestVATFunctions(BaseTestCase):
         from larpmanager.models.accounting import AccountingItemPayment
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member)
 
         payment = AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # Pass the MODEL class, not the Choice
@@ -252,12 +252,12 @@ class TestVATFunctions(BaseTestCase):
         from larpmanager.models.accounting import AccountingItemPayment
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member)
 
         # Create earlier payment
         payment1 = AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         # Wait a moment to ensure different timestamps
@@ -267,7 +267,7 @@ class TestVATFunctions(BaseTestCase):
 
         # Create another payment
         payment2 = AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
 
         result = get_previous_sum(payment2, AccountingItemPayment)

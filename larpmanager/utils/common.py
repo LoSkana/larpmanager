@@ -193,7 +193,7 @@ def get_event_template(context, template_id):
         template_id: Event template ID
     """
     try:
-        context["event"] = Event.objects.get(pk=template_id, template=True, assoc_id=context["association_id"])
+        context["event"] = Event.objects.get(pk=template_id, template=True, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise NotFoundError() from err
 
@@ -349,21 +349,21 @@ def get_speedlarp(context, speedlarp_id):
 
 def get_badge(badge_id, context):
     try:
-        return Badge.objects.get(pk=badge_id, assoc_id=context["association_id"])
+        return Badge.objects.get(pk=badge_id, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Badge does not exist") from err
 
 
 def get_collection_partecipate(context, contribution_code):
     try:
-        return Collection.objects.get(contribute_code=contribution_code, assoc_id=context["association_id"])
+        return Collection.objects.get(contribute_code=contribution_code, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Collection does not exist") from err
 
 
 def get_collection_redeem(context, cod):
     try:
-        return Collection.objects.get(redeem_code=cod, assoc_id=context["association_id"])
+        return Collection.objects.get(redeem_code=cod, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Collection does not exist") from err
 
@@ -879,7 +879,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
         - open_questions: List of open user-originated questions
     """
     # Filter questions by association ID
-    base_queryset = HelpQuestion.objects.filter(assoc_id=context["association_id"])
+    base_queryset = HelpQuestion.objects.filter(association_id=context["association_id"])
 
     # Add run filter if run context exists
     if "run" in context:
@@ -919,7 +919,7 @@ def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
     keys are stored as comma-separated pairs in format "skin_id:key".
 
     Args:
-        request: Django request object with assoc data containing skin_id
+        request: Django request object with association data containing skin_id
 
     Returns:
         Tuple of (public_key, private_key) or (None, None) if not found
@@ -931,7 +931,7 @@ def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
     # Handle multi-site configuration with comma-separated values
     if "," in public_key:
         # Extract skin_id from request association data
-        current_skin_id = request.assoc["skin_id"]
+        current_skin_id = request.association["skin_id"]
 
         # Parse public key pairs and find matching skin_id
         public_key_pairs = dict(entry.split(":") for entry in public_key.split(",") if ":" in entry)

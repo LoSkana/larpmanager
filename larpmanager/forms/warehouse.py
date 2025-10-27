@@ -104,7 +104,7 @@ class ExeWarehouseTagForm(MyForm):
 
         # Create dynamic items field filtered by association
         self.fields["items"] = forms.ModelMultipleChoiceField(
-            queryset=WarehouseItem.objects.filter(assoc_id=self.params["association_id"]),
+            queryset=WarehouseItem.objects.filter(association_id=self.params["association_id"]),
             label=_("Items"),
             widget=WarehouseItemS2WidgetMulti,
             required=False,

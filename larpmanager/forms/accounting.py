@@ -26,7 +26,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
@@ -117,7 +117,7 @@ class OrgaExpenseForm(MyFormRun):
             self.delete_field("balance")
 
         # Remove approval field if organization has disabled expense approval
-        if get_assoc_config(self.params["event"].assoc_id, "expense_disable_orga", False):
+        if get_association_config(self.params["event"].association_id, "expense_disable_orga", False):
             self.delete_field("is_approved")
 
 

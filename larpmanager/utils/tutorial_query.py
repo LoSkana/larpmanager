@@ -13,7 +13,7 @@ from whoosh.fields import ID, TEXT, Schema
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 
-from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
 from larpmanager.utils.tasks import background_auto, notify_admins
@@ -257,7 +257,7 @@ def query_index(request: HttpRequest) -> JsonResponse:
     if run_id:
         # Event-specific permissions and links
         try:
-            run = Run.objects.select_related("event").get(pk=run_id, event__assoc_id=request.assoc["id"])
+            run = Run.objects.select_related("event").get(pk=run_id, event__association_id=request.association["id"])
         except ObjectDoesNotExist:
             return JsonResponse({})
 
@@ -272,7 +272,7 @@ def query_index(request: HttpRequest) -> JsonResponse:
         ]
     else:
         # Organization-wide permissions and links
-        sorted_permissions = get_sorted_permissions(AssocPermission, query_string)
+        sorted_permissions = get_sorted_permissions(AssociationPermission, query_string)
         links = [
             {"name": perm["name"], "descr": perm["descr"], "href": reverse(perm["slug"])} for perm in sorted_permissions
         ]

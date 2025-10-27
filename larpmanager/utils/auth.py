@@ -205,7 +205,7 @@ def check_lm_admin(request: HttpRequest) -> dict[str, int]:
         raise Http404("Not lm admin")
 
     # Return admin context with association ID and admin flag
-    return {"association_id": request.assoc["id"], "lm_admin": 1}
+    return {"association_id": request.association["id"], "lm_admin": 1}
 
 
 def get_allowed_managed() -> list[str]:

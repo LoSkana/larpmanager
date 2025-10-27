@@ -23,13 +23,13 @@ from django.core.cache import cache
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.permission import (
-    get_assoc_permission_feature,
+    get_association_permission_feature,
     get_cache_index_permission,
     get_event_permission_feature,
 )
-from larpmanager.models.access import AssocRole, EventRole
+from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import PermissionError
 
@@ -38,7 +38,7 @@ def cache_assoc_role_key(assoc_role_id):
     return f"assoc_role_{assoc_role_id}"
 
 
-def get_assoc_role(ar: AssocRole) -> tuple[str, list[str]]:
+def get_assoc_role(ar: AssociationRole) -> tuple[str, list[str]]:
     """Get association role name and available permission slugs.
 
     Args:
@@ -48,7 +48,7 @@ def get_assoc_role(ar: AssocRole) -> tuple[str, list[str]]:
         Tuple containing role name and list of permission slugs
     """
     permission_slugs = []
-    features = get_assoc_features(ar.assoc_id)
+    features = get_association_features(ar.association_id)
 
     # Filter permissions based on feature availability and placeholders
     for permission_slug, feature_slug, is_placeholder in ar.permissions.values_list(
@@ -85,7 +85,7 @@ def get_cache_assoc_role(ar_id: int) -> dict:
     if cached_result is None:
         # Cache miss - fetch from database
         try:
-            assoc_role = AssocRole.objects.get(pk=ar_id)
+            assoc_role = AssociationRole.objects.get(pk=ar_id)
         except Exception as err:
             # Convert any database error to permission error
             raise PermissionError() from err
@@ -182,7 +182,9 @@ def has_assoc_permission(request: HttpRequest, context: dict, permission: str) -
     return permission in user_permissions
 
 
-def get_index_assoc_permissions(context: dict, request: HttpRequest, association_id: int, check: bool = True) -> None:
+def get_index_association_permissions(
+    context: dict, request: HttpRequest, association_id: int, check: bool = True
+) -> None:
     """Get and set association permissions for index pages.
 
     Retrieves user roles and permissions for an association, then populates
@@ -211,10 +213,12 @@ def get_index_assoc_permissions(context: dict, request: HttpRequest, association
     context["role_names"] = role_names
 
     # Retrieve available features for the association
-    features = get_assoc_features(association_id)
+    features = get_association_features(association_id)
 
     # Generate permission data for index display
-    context["assoc_pms"] = get_index_permissions(context, features, is_admin, user_association_permissions, "assoc")
+    context["assoc_pms"] = get_index_permissions(
+        context, features, is_admin, user_association_permissions, "association"
+    )
 
     # Set sidebar state from user session
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
@@ -440,7 +444,7 @@ def check_managed(context: dict, permission: str, is_association: bool = True) -
     # Get permission feature information based on association or event context
     # This determines the permission's configuration and restrictions
     if is_association:
-        placeholder, _, _ = get_assoc_permission_feature(permission)
+        placeholder, _, _ = get_association_permission_feature(permission)
     else:
         placeholder, _, _ = get_event_permission_feature(permission)
 

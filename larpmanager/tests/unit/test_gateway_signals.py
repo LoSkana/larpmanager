@@ -53,7 +53,7 @@ class TestGatewaySignals(BaseTestCase):
         payment = AccountingItemPayment(
             member=member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -145,7 +145,7 @@ class TestGatewaySignals(BaseTestCase):
         payment = AccountingItemPayment(
             member=registration.member,
             value=Decimal("100.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )
@@ -192,7 +192,7 @@ class TestGatewaySignals(BaseTestCase):
         credit_payment = AccountingItemPayment(
             member=member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=self.get_registration(),
             pay=PaymentChoices.CREDIT,
         )

@@ -100,7 +100,7 @@ class LMReviewAdmin(DefModelAdmin):
 
 @admin.register(LarpManagerTicket)
 class LarpManagerTicketAdmin(DefModelAdmin):
-    list_display = ("id", "reason", "assoc", "email", "member", "content_red", "show_thumb")
+    list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb")
 
     @staticmethod
     def content_red(instance):

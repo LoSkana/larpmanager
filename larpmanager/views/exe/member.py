@@ -31,7 +31,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.member import (
     ExeBadgeForm,
     ExeMemberForm,
@@ -112,13 +112,13 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     # Get set of member IDs who have paid membership fees for current year
     fees = set(
         AccountingItemMembership.objects.filter(
-            assoc_id=context["association_id"], year=datetime.now().year
+            association_id=context["association_id"], year=datetime.now().year
         ).values_list("member_id", flat=True)
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
-        Run.objects.filter(event__assoc_id=context["association_id"], end__gt=datetime.today()).values_list(
+        Run.objects.filter(event__association_id=context["association_id"], end__gt=datetime.today()).values_list(
             "pk", "search"
         )
     )
@@ -133,7 +133,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
 
     # Query memberships excluding certain statuses, with priority sorting
     que = (
-        Membership.objects.filter(assoc_id=context["association_id"])
+        Membership.objects.filter(association_id=context["association_id"])
         .select_related("member")
         .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED])
         .annotate(
@@ -243,7 +243,7 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 
     # Check for existing members with same normalized name/surname
     context["member_exists"] = False
-    que = Membership.objects.select_related("member").filter(assoc_id=context["association_id"])
+    que = Membership.objects.select_related("member").filter(association_id=context["association_id"])
     que = que.exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED]).exclude(member_id=member.id)
 
     # Compare normalized names to detect potential duplicates
@@ -285,7 +285,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
 
     # Get all members with active memberships (excluding empty/joined status)
     member_ids = set(
-        Membership.objects.filter(assoc_id=context["association_id"])
+        Membership.objects.filter(association_id=context["association_id"])
         .select_related("member")
         .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED])
         .values_list("member_id", flat=True)
@@ -348,7 +348,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
     # Get member registrations for current association events
     context["regs"] = Registration.objects.filter(
-        member=member_edit, run__event__assoc=context["association_id"]
+        member=member_edit, run__event__association=context["association_id"]
     ).select_related("run")
 
     # Add accounting payment items to context
@@ -359,7 +359,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=member_edit, hide=False, assoc_id=context["association_id"]
+        member=member_edit, hide=False, association_id=context["association_id"]
     )
 
     # Process membership data and document paths
@@ -386,7 +386,7 @@ def member_add_accountingitempayment(context: dict, member: Member) -> dict:
     """
     # Fetch visible payments for the member in the current association
     context["pays"] = AccountingItemPayment.objects.filter(
-        member=member, hide=False, assoc_id=context["association_id"]
+        member=member, hide=False, association_id=context["association_id"]
     ).select_related("reg")
 
     # Set display type based on payment method
@@ -403,7 +403,7 @@ def member_add_accountingitemother(context: dict, member: Member) -> None:
     """Add accounting other items to member context with localized type labels."""
     # Query non-hidden accounting items for the member in current association
     context["others"] = AccountingItemOther.objects.filter(
-        member=member, hide=False, assoc_id=context["association_id"]
+        member=member, hide=False, association_id=context["association_id"]
     ).select_related("run")
 
     # Set localized type labels based on item category
@@ -429,7 +429,9 @@ def exe_membership_status(request, num):
     """
     context = check_association_context(request, "exe_membership")
     member_edit = get_member(num)
-    context["membership"] = get_object_or_404(Membership, member_id=member_edit.id, assoc_id=context["association_id"])
+    context["membership"] = get_object_or_404(
+        Membership, member_id=member_edit.id, association_id=context["association_id"]
+    )
 
     if request.method == "POST":
         form = ExeMembershipForm(request.POST, request.FILES, instance=context["membership"], request=request)
@@ -470,7 +472,7 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
     context["list"] = []
 
     # Query memberships with card numbers for current association
-    que = Membership.objects.filter(assoc_id=context["association_id"], card_number__isnull=False)
+    que = Membership.objects.filter(association_id=context["association_id"], card_number__isnull=False)
 
     # Process each membership and format member data
     for mb in que.select_related("member").order_by("card_number"):
@@ -527,10 +529,10 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Extract validated form data
             member = form.cleaned_data["member"]
-            assoc_id = context["association_id"]
+            association_id = context["association_id"]
 
             # Get membership fee amount from association configuration
-            fee = get_assoc_config(assoc_id, "membership_fee", "0")
+            fee = get_association_config(association_id, "membership_fee", "0")
 
             # Create payment invoice record with confirmed status
             payment = PaymentInvoice.objects.create(
@@ -540,7 +542,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
                 method_id=form.cleaned_data["method"],
                 mc_gross=fee,
                 causal=_("Membership fee of") + f" {member}",
-                assoc_id=assoc_id,
+                association_id=association_id,
                 cod=unique_invoice_cod(),
             )
 
@@ -576,7 +578,7 @@ def exe_membership_document(request):
         form = ExeMembershipDocumentForm(request.POST, request.FILES, context=context)
         if form.is_valid():
             member = form.cleaned_data["member"]
-            membership = Membership.objects.get(assoc_id=context["association_id"], member=member)
+            membership = Membership.objects.get(association_id=context["association_id"], member=member)
             membership.document = form.cleaned_data["document"]
             membership.request = form.cleaned_data["request"]
             membership.card_number = form.cleaned_data["card_number"]
@@ -622,14 +624,14 @@ def exe_enrolment(request) -> HttpResponse:
     # Build cache of member enrollment dates from accounting items
     cache = {}
     for el in AccountingItemMembership.objects.filter(
-        assoc_id=context["association_id"], year=context["year"]
+        association_id=context["association_id"], year=context["year"]
     ).values_list("member_id", "created"):
         cache[el[0]] = el[1]
 
     # Query memberships with card numbers for enrolled members
     context["list"] = []
     que = Membership.objects.filter(
-        member_id__in=cache.keys(), assoc_id=context["association_id"], card_number__isnull=False
+        member_id__in=cache.keys(), association_id=context["association_id"], card_number__isnull=False
     )
     que = que.select_related("member").order_by("card_number")
 
@@ -674,7 +676,7 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 
     # Fetch volunteer registries with member info, ordered by start date and surname
     context["list"] = (
-        VolunteerRegistry.objects.filter(assoc_id=context["association_id"])
+        VolunteerRegistry.objects.filter(association_id=context["association_id"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
@@ -705,11 +707,11 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_volunteer_registry")
 
     # Retrieve the association object for the current context
-    context["assoc"] = Association.objects.get(pk=context["association_id"])
+    context["association"] = Association.objects.get(pk=context["association_id"])
 
     # Query volunteer registry entries with member data, ordered by start date and surname
     context["list"] = (
-        VolunteerRegistry.objects.filter(assoc=context["assoc"])
+        VolunteerRegistry.objects.filter(association=context["association"])
         .select_related("member")
         .order_by("start", "member__surname")
     )
@@ -721,7 +723,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
     fp = print_volunteer_registry(context)
 
     # Return the PDF as an HTTP response with descriptive filename
-    return return_pdf(fp, f"Registro_Volontari_{context['assoc'].name}_{context['date']}")
+    return return_pdf(fp, f"Registro_Volontari_{context['association'].name}_{context['date']}")
 
 
 @login_required
@@ -745,11 +747,11 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     # Check user permissions and get association context
     context = check_association_context(request, "exe_vote")
     context["year"] = datetime.today().year
-    assoc_id = context["association_id"]
+    association_id = context["association_id"]
 
     # Parse candidate IDs from association configuration
     idxs = []
-    for el in get_assoc_config(assoc_id, "vote_candidates", "").split(","):
+    for el in get_association_config(association_id, "vote_candidates", "").split(","):
         if el.strip():
             idxs.append(el.strip())
 
@@ -760,7 +762,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 
     # Query vote counts grouped by candidate for current year and association
     votes = (
-        Vote.objects.filter(year=context["year"], assoc_id=context["association_id"])
+        Vote.objects.filter(year=context["year"], association_id=context["association_id"])
         .values("candidate_id")
         .annotate(total=Count("candidate_id"))
     )
@@ -773,7 +775,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 
     # Get list of members who have already voted this year
     context["voters"] = Member.objects.filter(
-        votes_given__year=context["year"], votes_given__assoc_id=context["association_id"]
+        votes_given__year=context["year"], votes_given__association_id=context["association_id"]
     ).distinct()
 
     return render(request, "larpmanager/exe/users/vote.html", context)
@@ -786,7 +788,7 @@ def exe_badges(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_badges")
 
     # Load all badges for the association with member relationships
-    context["list"] = Badge.objects.filter(assoc_id=context["association_id"]).prefetch_related("members")
+    context["list"] = Badge.objects.filter(association_id=context["association_id"]).prefetch_related("members")
 
     return render(request, "larpmanager/exe/users/badges.html", context)
 
@@ -818,7 +820,7 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
         form = SendMailForm(request.POST)
         if form.is_valid():
             # Queue mail for batch processing
-            send_mail_batch(request, assoc_id=context["association_id"])
+            send_mail_batch(request, association_id=context["association_id"])
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
@@ -943,9 +945,9 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 
     # Retrieve the member and their question history
     member_edit = get_member(r)
-    context["list"] = HelpQuestion.objects.filter(member=member_edit, assoc_id=context["association_id"]).order_by(
-        "-created"
-    )
+    context["list"] = HelpQuestion.objects.filter(
+        member=member_edit, association_id=context["association_id"]
+    ).order_by("-created")
 
     # Get the most recent question from this member
     last = context["list"].first()
@@ -964,7 +966,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
             # Set answer metadata and save to database
             hp.member = member_edit
             hp.is_user = False
-            hp.assoc_id = context["association_id"]
+            hp.association_id = context["association_id"]
             hp.save()
 
             # Notify user of successful submission and redirect
@@ -987,7 +989,11 @@ def exe_questions_close(request: HttpRequest, r: int) -> HttpResponse:
 
     # Get the member and their most recent help question
     member = Member.objects.get(pk=r)
-    h = HelpQuestion.objects.filter(member=member, assoc_id=context["association_id"]).order_by("-created").first()
+    h = (
+        HelpQuestion.objects.filter(member=member, association_id=context["association_id"])
+        .order_by("-created")
+        .first()
+    )
 
     # Mark the question as closed and save
     h.closed = True
@@ -1010,7 +1016,7 @@ def exe_newsletter(request):
 
     context["lst"] = {}
     for el in (
-        Membership.objects.filter(assoc_id=context["association_id"])
+        Membership.objects.filter(association_id=context["association_id"])
         .select_related("member")
         .values_list("member__email", "member__language", "newsletter")
     ):
@@ -1053,7 +1059,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
     writer = csv.writer(response)
 
     # Iterate through all memberships for the current association
-    for el in Membership.objects.filter(assoc_id=context["association_id"]):
+    for el in Membership.objects.filter(association_id=context["association_id"]):
         m = el.member
 
         # Skip members who don't match the requested language

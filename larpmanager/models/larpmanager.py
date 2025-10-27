@@ -275,7 +275,7 @@ class LarpManagerTicket(BaseModel):
     content, and optional screenshots for issue tracking.
     """
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     reason = models.CharField(max_length=100, null=True)
 

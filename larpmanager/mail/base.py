@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.links import reset_event_links
-from larpmanager.models.access import AssocRole, EventRole, get_assoc_executives, get_event_organizers
+from larpmanager.models.access import AssociationRole, EventRole, get_assoc_executives, get_event_organizers
 from larpmanager.models.association import Association, get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
@@ -64,24 +64,24 @@ def check_holiday() -> bool:
     return False
 
 
-def join_email(assoc):
+def join_email(association):
     """Send welcome emails to association executives when they join.
 
     Args:
-        assoc: Association instance that was just created
+        association: Association instance that was just created
 
     Side effects:
         Sends welcome and feedback request emails to association executives
     """
-    for member in get_assoc_executives(assoc):
+    for member in get_assoc_executives(association):
         activate(member.language)
         subj = _("Welcome to LarpManager") + "!"
-        body = render_to_string("mails/join_assoc.html", {"member": member, "assoc": assoc})
+        body = render_to_string("mails/join_assoc.html", {"member": member, "association": association})
         my_send_mail(subj, body, member)
 
         activate(member.language)
         subj = "We'd love your feedback on LarpManager"
-        body = render_to_string("mails/help_assoc.html", {"member": member, "assoc": assoc})
+        body = render_to_string("mails/help_assoc.html", {"member": member, "association": association})
         my_send_mail(subj, body, member, schedule=3600 * 24 * 2)
 
 
@@ -112,7 +112,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
     model = kwargs.pop("model", None)
     if model == Member:
         action = kwargs.pop("action", None)
-        instance: Optional[AssocRole] = kwargs.pop("instance", None)
+        instance: Optional[AssociationRole] = kwargs.pop("instance", None)
         if not instance:
             return
         pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
@@ -124,7 +124,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
                 for mid in pk_set:
                     mb = Member.objects.get(pk=mid)
                     # Reset cached event links to reflect permission changes
-                    reset_event_links(mb.user.id, instance.assoc_id)
+                    reset_event_links(mb.user.id, instance.association_id)
             return
 
         # Only process role additions from this point forward
@@ -134,7 +134,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
         # Get association executives for notification purposes
         # Handle case where association might not have executives yet
         try:
-            exes = get_assoc_executives(instance.assoc)
+            exes = get_assoc_executives(instance.association)
         except ObjectDoesNotExist:
             exes = []
 
@@ -142,17 +142,17 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
         for mid in pk_set:
             mb = Member.objects.get(pk=mid)
             # Trigger member association join process
-            mb.join(instance.assoc)
+            mb.join(instance.association)
             # Invalidate cached permissions for this member
-            reset_event_links(mb.user.id, instance.assoc_id)
+            reset_event_links(mb.user.id, instance.association_id)
 
             # Send role approval notification to the member
             # Set language context for proper localization
             activate(mb.language)
-            subj = hdr(instance.assoc) + _("Role approval %(role)s") % {"role": instance.name}
-            url = get_url("manage", instance.assoc)
+            subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
+            url = get_url("manage", instance.association)
             body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
-            my_send_mail(subj, body, mb, instance.assoc)
+            my_send_mail(subj, body, mb, instance.association)
 
             # Notify existing executives about the new role assignment
             # Skip notification to the member who just received the role
@@ -161,12 +161,12 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
                     continue
                 # Set language context for each executive
                 activate(m.language)
-                subj = hdr(instance.assoc) + _("Approval %(user)s as %(role)s") % {
+                subj = hdr(instance.association) + _("Approval %(user)s as %(role)s") % {
                     "user": mb,
                     "role": instance.name,
                 }
                 body = _("The user has been assigned the specified role") + "."
-                my_send_mail(subj, body, m, instance.assoc)
+                my_send_mail(subj, body, m, instance.association)
 
 
 def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
@@ -202,7 +202,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
             if pk_set:
                 for mid in pk_set:
                     mb = Member.objects.get(pk=mid)
-                    reset_event_links(mb.user.id, instance.event.assoc_id)
+                    reset_event_links(mb.user.id, instance.event.association_id)
             return
 
         # Only process role additions from this point
@@ -220,18 +220,18 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
         for mid in pk_set:
             mb = Member.objects.get(pk=mid)
             # Ensure member is part of the association
-            mb.join(instance.event.assoc)
+            mb.join(instance.event.association)
             # Invalidate cached permissions for the member
-            reset_event_links(mb.user.id, instance.event.assoc_id)
+            reset_event_links(mb.user.id, instance.event.association_id)
 
             # Send approval notification to the member
             # Use member's preferred language for personalized communication
             activate(mb.language)
-            subj = hdr(instance.event.assoc) + _("Role approval %(role)s per %(event)s") % {
+            subj = hdr(instance.event.association) + _("Role approval %(role)s per %(event)s") % {
                 "role": instance.name,
                 "event": instance.event,
             }
-            url = get_url(f"{instance.event.slug}/1/manage/", instance.event.assoc)
+            url = get_url(f"{instance.event.slug}/1/manage/", instance.event.association)
             body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 
@@ -242,7 +242,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
                     continue
                 # Use organizer's preferred language for notification
                 activate(m.language)
-                subj = hdr(instance.event.assoc) + _("Approval %(user)s as %(role)s for %(event)s") % {
+                subj = hdr(instance.event.association) + _("Approval %(user)s as %(role)s for %(event)s") % {
                     "user": mb,
                     "role": instance.name,
                     "event": instance.event,
@@ -290,14 +290,14 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
         )
         % {
             "amount_to": context["bring_friend_discount_to"],
-            "currency": reg.run.event.assoc.get_currency_symbol(),
+            "currency": reg.run.event.association.get_currency_symbol(),
         }
         + ". "
         # Add information about the user's own discount benefit
         + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
         % {
             "amount_from": context["bring_friend_discount_from"],
-            "currency": reg.run.event.assoc.get_currency_symbol(),
+            "currency": reg.run.event.association.get_currency_symbol(),
         }
         + "."
     )
@@ -524,7 +524,7 @@ def notify_organization_exe(
         my_send_mail(subject, body, executive.email, context_instance)
 
 
-def get_exec_language(assoc: Association) -> str:
+def get_exec_language(association: Association) -> str:
     """Determine the most common language among association executives.
 
     Analyzes the language preferences of all association executives and returns
@@ -532,22 +532,22 @@ def get_exec_language(assoc: Association) -> str:
     language preferences are set, defaults to English.
 
     Args:
-        assoc: Association instance containing executives to analyze
+        association: Association instance containing executives to analyze
 
     Returns:
         str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
              of executives, or 'en' if no executives found or no preferences set
 
     Example:
-        >>> assoc = Association.objects.get(slug='myorg')
-        >>> lang = get_exec_language(assoc)
+        >>> association = Association.objects.get(slug='myorg')
+        >>> lang = get_exec_language(association)
         >>> print(lang)  # 'it' if most executives prefer Italian
     """
     # Initialize dictionary to count language occurrences
     langs = {}
 
     # Iterate through all association executives
-    for orga in get_assoc_executives(assoc):
+    for orga in get_assoc_executives(association):
         lang = orga.language
 
         # Count each language preference
@@ -567,7 +567,7 @@ def get_exec_language(assoc: Association) -> str:
 
 def send_support_ticket_email(instance):
     for _name, email in conf_settings.ADMINS:
-        subj = f"LarpManager ticket - {instance.assoc.name}"
+        subj = f"LarpManager ticket - {instance.association.name}"
         if instance.reason:
             subj += f" [{instance.reason}]"
         body = f"Email: {instance.email} <br /><br />"

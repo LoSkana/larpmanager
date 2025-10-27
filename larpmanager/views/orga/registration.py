@@ -40,7 +40,7 @@ from larpmanager.accounting.registration import (
     get_reg_payments,
 )
 from larpmanager.cache.character import clear_run_cache_and_media, get_event_cache_all
-from larpmanager.cache.config import get_assoc_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import clear_event_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
@@ -520,7 +520,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         for r in context["registration_list"]:
             members_id.append(r.member_id)
         # Create lookup dictionary for efficient membership access
-        for el in Membership.objects.filter(assoc_id=context["association_id"], member_id__in=members_id):
+        for el in Membership.objects.filter(association_id=context["association_id"], member_id__in=members_id):
             context["memberships"][el.member_id] = el
 
     # Process each registration to add computed fields
@@ -878,7 +878,7 @@ def orga_registration_discount_add(request, event_slug, num, dis):
         member=context["registration"].member,
         disc=context["discount"],
         run=context["run"],
-        assoc_id=context["association_id"],
+        association_id=context["association_id"],
     )
     context["registration"].save()
     return redirect(
@@ -1002,7 +1002,7 @@ def orga_cancellation_refund(request, event_slug: str, num: str) -> HttpResponse
                 run=context["run"],
                 descr="Refund",
                 member=context["registration"].member,
-                assoc_id=context["association_id"],
+                association_id=context["association_id"],
                 value=ref_token,
                 cancellation=True,
             )
@@ -1014,7 +1014,7 @@ def orga_cancellation_refund(request, event_slug: str, num: str) -> HttpResponse
                 run=context["run"],
                 descr="Refund",
                 member=context["registration"].member,
-                assoc_id=context["association_id"],
+                association_id=context["association_id"],
                 value=ref_credit,
                 cancellation=True,
             )
@@ -1082,7 +1082,7 @@ def orga_pre_registrations(request: HttpRequest, event_slug: str) -> HttpRespons
     context["dc"] = get_pre_registration(context["event"])
 
     # Retrieve pre-registration preferences from association config
-    context["preferences"] = get_assoc_config(context["association_id"], "pre_reg_preferences", False)
+    context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences", False)
 
     return render(request, "larpmanager/orga/registration/pre_registrations.html", context)
 
@@ -1106,7 +1106,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Clear run-specific cache and associated media files
     clear_run_cache_and_media(context["run"])
-    reset_cache_run(context["event"].assoc_id, context["run"].get_slug())
+    reset_cache_run(context["event"].association_id, context["run"].get_slug())
 
     # Clear event-level feature and configuration caches
     clear_event_features_cache(context["event"].id)

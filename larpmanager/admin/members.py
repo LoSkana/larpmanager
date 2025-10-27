@@ -102,23 +102,23 @@ class MemberConfigAdmin(DefModelAdmin):
 
 @admin.register(Membership)
 class MembershipAdmin(DefModelAdmin):
-    list_display = ("member", "assoc", "status", "card_number", "date", "created")
+    list_display = ("member", "association", "status", "card_number", "date", "created")
     list_filter = (AssocFilter, MemberFilter)
-    autocomplete_fields = ["member", "assoc"]
+    autocomplete_fields = ["member", "association"]
 
 
 @admin.register(VolunteerRegistry)
 class VolunteerRegistryAdmin(DefModelAdmin):
-    list_display = ("member", "assoc", "start", "end")
+    list_display = ("member", "association", "start", "end")
     list_filter = (MemberFilter, AssocFilter)
-    autocomplete_fields = ["member", "assoc"]
+    autocomplete_fields = ["member", "association"]
 
 
 @admin.register(Vote)
 class VoteAdmin(DefModelAdmin):
-    list_display = ("member", "assoc", "year", "number", "candidate")
+    list_display = ("member", "association", "year", "number", "candidate")
     list_filter = (MemberFilter, AssocFilter, "year")
-    autocomplete_fields = ["member", "assoc", "candidate"]
+    autocomplete_fields = ["member", "association", "candidate"]
 
 
 @admin.register(Badge)

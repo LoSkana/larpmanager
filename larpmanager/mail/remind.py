@@ -23,10 +23,10 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssocTextType, get_url, hdr
+from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.utils.text import get_association_text
 
 
 def remember_membership(registration):
@@ -44,8 +44,8 @@ def remember_membership(registration):
         "event": registration.run
     }
 
-    body = get_assoc_text(
-        registration.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP
+    body = get_association_text(
+        registration.run.event.association_id, AssociationTextType.REMINDER_MEMBERSHIP
     ) or get_remember_membership_body(registration)
 
     my_send_mail(subject, body, registration.member, registration.run)
@@ -122,9 +122,9 @@ def remember_pay(registration):
     else:
         email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
 
-    email_body = get_assoc_text(registration.run.event.assoc_id, AssocTextType.REMINDER_PAY) or get_remember_pay_body(
-        email_context, is_provisional_registration, registration
-    )
+    email_body = get_association_text(
+        registration.run.event.association_id, AssociationTextType.REMINDER_PAY
+    ) or get_remember_pay_body(email_context, is_provisional_registration, registration)
 
     my_send_mail(email_subject, email_body, registration.member, registration.run)
 
@@ -150,7 +150,7 @@ def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
         >>> print(body)  # Returns formatted HTML email body
     """
     # Extract payment information and build payment URL
-    symbol = reg.run.event.assoc.get_currency_symbol()
+    symbol = reg.run.event.association.get_currency_symbol()
     amount = f"{reg.quota:.2f}{symbol}"
     deadline = reg.deadline
     url = get_url("accounting/pay", reg.run.event)
@@ -211,9 +211,9 @@ def remember_profile(registration):
 
     subject = hdr(registration.run.event) + _("Profile compilation reminder for %(event)s") % context
 
-    body = get_assoc_text(registration.run.event.assoc_id, AssocTextType.REMINDER_PROFILE) or get_remember_profile_body(
-        context
-    )
+    body = get_association_text(
+        registration.run.event.association_id, AssociationTextType.REMINDER_PROFILE
+    ) or get_remember_profile_body(context)
 
     my_send_mail(subject, body, registration.member, registration.run)
 
@@ -249,8 +249,8 @@ def remember_membership_fee(registration):
 
     subject = hdr(registration.run.event) + _("Reminder payment of membership fees for %(event)s") % context
 
-    body = get_assoc_text(
-        registration.run.event.assoc_id, AssocTextType.REMINDER_MEMBERSHIP_FEE
+    body = get_association_text(
+        registration.run.event.association_id, AssociationTextType.REMINDER_MEMBERSHIP_FEE
     ) or get_remember_membership_fee_body(context, registration)
 
     my_send_mail(subject, body, registration.member, registration.run)

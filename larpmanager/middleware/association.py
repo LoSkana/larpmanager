@@ -29,8 +29,8 @@ from django.utils.translation import get_language
 
 from larpmanager.cache.association import get_cache_assoc
 from larpmanager.cache.skin import get_cache_skin
-from larpmanager.models.association import AssocTextType
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.models.association import AssociationTextType
+from larpmanager.utils.text import get_association_text
 
 
 class AssociationIdentifyMiddleware:
@@ -153,7 +153,7 @@ class AssociationIdentifyMiddleware:
             return
 
         # No valid association found - render error page
-        return render(request, "exception/assoc.html", {})
+        return render(request, "exception/association.html", {})
 
     @staticmethod
     def load_assoc(request: HttpRequest, association_data: dict) -> None:
@@ -170,14 +170,16 @@ class AssociationIdentifyMiddleware:
             None
 
         Side Effects:
-            - Sets request.assoc with the provided association data
-            - Adds localized footer text to request.assoc["footer"]
+            - Sets request.association with the provided association data
+            - Adds localized footer text to request.association["footer"]
         """
         # Attach association data to request for template access
-        request.assoc = association_data
+        request.association = association_data
 
         # Get current language for localization
         current_language = get_language()
 
         # Load and attach localized footer text for the association
-        request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, current_language)
+        request.association["footer"] = get_association_text(
+            request.association["id"], AssociationTextType.FOOTER, current_language
+        )

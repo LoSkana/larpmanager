@@ -43,7 +43,7 @@ from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import BaseAccForm, MyForm
 from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
 from larpmanager.models.accounting import AccountingItemMembership
@@ -278,27 +278,27 @@ class MyPasswordResetForm(PasswordResetForm):
 
         # Extract association slug from domain and find association
         assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
-        assoc = None
+        association = None
 
         # If association slug exists, try to find association and update membership
         if assoc_slug:
             try:
-                assoc = Association.objects.get(slug=assoc_slug)
+                association = Association.objects.get(slug=assoc_slug)
                 user = context["user"]
 
                 # Store password reset token in user membership
-                mb = get_user_membership(user.member, assoc.id)
+                mb = get_user_membership(user.member, association.id)
                 mb.password_reset = f"{context['uid']}#{context['token']}"
                 mb.save()
             except ObjectDoesNotExist:
-                # Invalid association slug - continue with None assoc
+                # Invalid association slug - continue with None association
                 pass
 
         # Log password reset attempt for debugging
         logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
 
         # Send the email using custom mail function
-        my_send_mail(subject, body, to_email, assoc)
+        my_send_mail(subject, body, to_email, association)
 
     # ~ email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
     # ~ if html_email_template_name is not None:
@@ -464,11 +464,11 @@ class BaseProfileForm(MyForm):
         self.allowed = self.params["members_fields"]
 
         # Use cached association data
-        assoc = Association.objects.get(pk=self.params["association_id"])
+        association = Association.objects.get(pk=self.params["association_id"])
 
         # Pre-split and cache field sets
-        self.mandatory = set(assoc.mandatory_fields.split(","))
-        self.optional = set(assoc.optional_fields.split(","))
+        self.mandatory = set(association.mandatory_fields.split(","))
+        self.optional = set(association.optional_fields.split(","))
 
         # Field filtering
         always_allowed = {"name", "surname", "language"}
@@ -571,7 +571,7 @@ class ProfileForm(BaseProfileForm):
 
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            vote_cands = get_assoc_config(self.params["association_id"], "vote_candidates", "").split(",")
+            vote_cands = get_association_config(self.params["association_id"], "vote_candidates", "").split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
@@ -610,13 +610,13 @@ class ProfileForm(BaseProfileForm):
         logger.debug(f"Validating birth date: {data}")
 
         # Use cached association
-        assoc_id = self.params["association_id"]
+        association_id = self.params["association_id"]
 
         # Use cached features
         features = self.params["features"]
 
         if "membership" in features:
-            min_age = get_assoc_config(assoc_id, "membership_age", "")
+            min_age = get_association_config(association_id, "membership_age", "")
             if min_age:
                 try:
                     min_age = int(min_age)
@@ -714,7 +714,7 @@ class ExeVolunteerRegistryForm(MyForm):
         member = self.cleaned_data["member"]
 
         # Check for existing volunteer entries for this member and association
-        lst = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["association_id"])
+        lst = VolunteerRegistry.objects.filter(member=member, association_id=self.params["association_id"])
         if lst.count() > 1:
             raise ValidationError("Volunteer entry already existing!")
 
@@ -789,15 +789,15 @@ class ExeMembershipFeeForm(forms.Form):
         # Extract association context and initialize parent form
         self.params = kwargs.pop("context", {})
         super().__init__(*args, **kwargs)
-        assoc_id = self.params.get("association_id", None)
+        association_id = self.params.get("association_id", None)
 
         # Configure member field widget and queryset for the association
-        self.fields["member"].widget.set_assoc(assoc_id)
-        self.fields["member"].queryset = get_members_queryset(assoc_id)
+        self.fields["member"].widget.set_assoc(association_id)
+        self.fields["member"].queryset = get_members_queryset(association_id)
 
         # Build payment method choices from association's available methods
-        assoc = Association.objects.get(pk=assoc_id)
-        choices = [(method.id, method.name) for method in assoc.payment_methods.all()]
+        association = Association.objects.get(pk=association_id)
+        choices = [(method.id, method.name) for method in association.payment_methods.all()]
         self.fields["method"] = forms.ChoiceField(
             required=True,
             choices=choices,
@@ -856,14 +856,16 @@ class ExeMembershipDocumentForm(forms.Form):
         # Extract association context and initialize parent form
         self.params = kwargs.pop("context", {})
         super().__init__(*args, **kwargs)
-        self.assoc_id = self.params.get("association_id", None)
+        self.association_id = self.params.get("association_id", None)
 
         # Configure member field with association-specific queryset and widget
-        self.fields["member"].widget.set_assoc(self.assoc_id)
-        self.fields["member"].queryset = get_members_queryset(self.assoc_id)
+        self.fields["member"].widget.set_assoc(self.association_id)
+        self.fields["member"].queryset = get_members_queryset(self.association_id)
 
         # Calculate next available card number for the association
-        number = Membership.objects.filter(assoc_id=self.assoc_id).aggregate(Max("card_number"))["card_number__max"]
+        number = Membership.objects.filter(association_id=self.association_id).aggregate(Max("card_number"))[
+            "card_number__max"
+        ]
         if not number:
             number = 1
         else:
@@ -877,7 +879,7 @@ class ExeMembershipDocumentForm(forms.Form):
             ValidationError: If member already has an active membership.
         """
         member = self.cleaned_data["member"]
-        membership = Membership.objects.get(member=member, assoc_id=self.assoc_id)
+        membership = Membership.objects.get(member=member, association_id=self.association_id)
 
         # Check if membership status allows joining
         if membership.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
@@ -890,7 +892,7 @@ class ExeMembershipDocumentForm(forms.Form):
         card_number = self.cleaned_data["card_number"]
 
         # Check if another member already has this card number in the same association
-        if Membership.objects.filter(assoc_id=self.params["association_id"], card_number=card_number).exists():
+        if Membership.objects.filter(association_id=self.params["association_id"], card_number=card_number).exists():
             self.add_error("card_number", _("There is already a member with this number"))
 
         return card_number

@@ -471,7 +471,7 @@ def _casting_prepare(context: dict, request, typ: str) -> tuple[int, dict[int, s
 
     # Build cache of member statuses for the association
     member_id_to_status = {}
-    membership_query = Membership.objects.filter(assoc_id=context["association_id"])
+    membership_query = Membership.objects.filter(association_id=context["association_id"])
     for membership in membership_query.values("member_id", "status"):
         member_id_to_status[membership["member_id"]] = membership["status"]
 

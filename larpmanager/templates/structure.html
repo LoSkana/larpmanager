@@ -8,12 +8,12 @@
             {% block maintitle %}
                 {% block title %}
                 {% endblock title %}
-                - {{ assoc.name }}
+                - {{ association.name }}
             {% endblock maintitle %}
         </title>
         {% block meta %}
-            <meta name="keywords" content="{{ assoc.platform }}">
-            <meta name="description" content="{{ assoc.platform }}">
+            <meta name="keywords" content="{{ association.platform }}">
+            <meta name="description" content="{{ association.platform }}">
         {% endblock meta %}
         <meta property="og:url" content="{{ request.path }}">
         <meta property="og:type" content="website">
@@ -23,10 +23,10 @@
                 display: none;
             }
         </style>
-        {% if assoc.id == 0 %}
+        {% if association.id == 0 %}
             <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
             <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
-            <meta property="og:site_name" content="{{ assoc.platform }}">
+            <meta property="og:site_name" content="{{ association.platform }}">
             {% if og_title %}<meta property="og:title" content="{{ og_title }}">{% endif %}
             {% if og_image %}
                 <meta property="og:image" content="{{ og_image }}">
@@ -48,16 +48,16 @@
               </PageMap>
               -->
         {% else %}
-            <link rel="icon" type="image/png" href="{{ assoc.favicon }}">
-            <link rel="apple-touch-icon" href="{{ assoc.favicon }}">
-            <meta name="thumbnail" content="{{ assoc.logo }}">
+            <link rel="icon" type="image/png" href="{{ association.favicon }}">
+            <link rel="apple-touch-icon" href="{{ association.favicon }}">
+            <meta name="thumbnail" content="{{ association.logo }}">
             <meta property="og:site_name"
-                  content="{{ assoc.name }} - {{ assoc.platform }}">
-            <meta property="og:image" content="{{ assoc.favicon }}">
+                  content="{{ association.name }} - {{ association.platform }}">
+            <meta property="og:image" content="{{ association.favicon }}">
             <!--
              <PageMap>
                 <DataObject type="thumbnail">
-                  <Attribute name="src" value="{{ assoc.logo }}" />
+                  <Attribute name="src" value="{{ association.logo }}" />
                   <Attribute name="width" value="200" />
                   <Attribute name="height" value="200" />
                 </DataObject>
@@ -78,7 +78,7 @@
         {{ form.media }}
         {% block css %}
         {% endblock css %}
-        {% if assoc.id == 0 %}
+        {% if association.id == 0 %}
             {% compress css %}
                 <link rel="stylesheet" href="{% static 'alpha/assets/css/main.css' %}" />
                 <link rel="stylesheet"
@@ -95,14 +95,14 @@
                       href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
                 <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
             {% endcompress %}
-            {% if assoc.skin_css %}<style>{{ assoc.skin_css }}</style>{% endif %}
-            {% if assoc.css_code %}
+            {% if association.skin_css %}<style>{{ association.skin_css }}</style>{% endif %}
+            {% if association.css_code %}
                 <link rel="stylesheet"
-                      href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ assoc.css_code }}.css" />
+                      href="{% get_media_prefix %}/css/{{ association.slug }}_{{ association.css_code }}.css" />
             {% endif %}
             {% if event and event.css_code %}
                 <link rel="stylesheet"
-                      href="{% get_media_prefix %}/css/{{ assoc.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
+                      href="{% get_media_prefix %}/css/{{ association.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
             {% endif %}
         {% endif %}
         <noscript>
@@ -110,10 +110,10 @@
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
-    <body class="is-preload" id="{{ assoc.name | slugify }}">
+    <body class="is-preload" id="{{ association.name | slugify }}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
-            {% if not frame and assoc.id != 0 %}
+            {% if not frame and association.id != 0 %}
                 {% if user.is_authenticated %}
                     {% if topbar %}
                         {% include "elements/structure/topbar-admin.html" %}
@@ -127,7 +127,7 @@
             {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and assoc.id != 0 %}topbar{% endif %}">
+                 class="{% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
                 {% block main %}
                 {% endblock main %}
             </div>
@@ -156,7 +156,7 @@
             let url_feature_description = "{% url 'feature_description' %}";
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
-        {% if assoc.id == 0 %}
+        {% if association.id == 0 %}
             {% compress js %}
                 <script defer src="{% static 'alpha/assets/js/jquery.dropotron.min.js' %}"></script>
                 <script defer src="{% static 'alpha/assets/js/util.js' %}"></script>

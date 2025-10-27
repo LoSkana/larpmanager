@@ -184,7 +184,7 @@ def get_accounting_refund(registration):
         registration.refunds[accounting_item_other.oth] += accounting_item_other.value
 
 
-def quota_check(reg, start, alert, assoc_id):
+def quota_check(reg, start, alert, association_id):
     """Check payment quotas and deadlines for a registration.
 
     Calculates payment quotas based on event start date and registration timing.
@@ -194,7 +194,7 @@ def quota_check(reg, start, alert, assoc_id):
         reg: Registration instance to check quotas for
         start: Event start date
         alert: Alert threshold in days
-        assoc_id: Association ID for payment deadline calculation
+        association_id: Association ID for payment deadline calculation
 
     Side effects:
         Sets reg.quota, reg.deadline, and reg.qsr attributes
@@ -215,7 +215,7 @@ def quota_check(reg, start, alert, assoc_id):
 
         # if first, deadline is immediately
         if cnt == 1:
-            deadline = get_payment_deadline(reg, 8, assoc_id)
+            deadline = get_payment_deadline(reg, 8, association_id)
         # else, deadline is computed in days to the event
         else:
             left = reg.tot_days * 1.0 * (reg.quotas - (cnt - 1)) / reg.quotas
@@ -247,7 +247,7 @@ def quota_check(reg, start, alert, assoc_id):
         return
 
 
-def installment_check(reg: "Registration", alert: int, assoc_id: int) -> None:
+def installment_check(reg: "Registration", alert: int, association_id: int) -> None:
     """Check installment payment schedule for a registration.
 
     Processes configured installments for the event and determines
@@ -257,7 +257,7 @@ def installment_check(reg: "Registration", alert: int, assoc_id: int) -> None:
     Args:
         reg: Registration instance to check installments for
         alert: Alert threshold in days for deadline filtering
-        assoc_id: Association ID used for payment deadline calculation
+        association_id: Association ID used for payment deadline calculation
 
     Returns:
         None
@@ -286,7 +286,7 @@ def installment_check(reg: "Registration", alert: int, assoc_id: int) -> None:
             continue
 
         # Calculate deadline for this installment
-        deadline = _get_deadline_installment(assoc_id, i, reg)
+        deadline = _get_deadline_installment(association_id, i, reg)
 
         # Skip installments that are still within alert threshold
         if deadline and deadline >= alert:
@@ -447,7 +447,7 @@ def cancel_reg(registration):
     AccountingItemOther.objects.filter(ref_addit=registration.id).delete()
 
     # Reset event links
-    reset_event_links(registration.member_id, registration.run.event.assoc_id)
+    reset_event_links(registration.member_id, registration.run.event.association_id)
 
 
 def get_display_choice(choices, key):
@@ -489,7 +489,7 @@ def process_registration_pre_save(registration):
         registration: Registration instance being saved
     """
     registration.surcharge = get_date_surcharge(registration, registration.run.event)
-    registration.member.join(registration.run.event.assoc)
+    registration.member.join(registration.run.event.association)
 
 
 def get_date_surcharge(registration, event):
@@ -707,7 +707,7 @@ def update_registration_accounting(reg: Registration) -> None:
     # Extract basic event information
     start = reg.run.start
     features = get_event_features(reg.run.event_id)
-    assoc_id = reg.run.event.assoc_id
+    association_id = reg.run.event.association_id
 
     # Calculate total inscription fee and payments
     reg.tot_iscr = get_reg_iscr(reg)
@@ -737,21 +737,21 @@ def update_registration_accounting(reg: Registration) -> None:
     # Handle membership requirements for non-LAOG events
     if "membership" in features and "laog" not in features:
         if not hasattr(reg, "membership"):
-            reg.membership = get_user_membership(reg.member, assoc_id)
+            reg.membership = get_user_membership(reg.member, association_id)
         if reg.membership.status != MembershipStatus.ACCEPTED:
             return
 
     # Process tokens and credits
-    handle_tokes_credits(assoc_id, features, reg, remaining)
+    handle_tokes_credits(association_id, features, reg, remaining)
 
     # Get payment alert threshold from event configuration
     alert = int(get_event_config(reg.run.event_id, "payment_alert", 30, bypass_cache=True))
 
     # Calculate payment schedule based on feature flags
     if "reg_installments" in features:
-        installment_check(reg, alert, assoc_id)
+        installment_check(reg, alert, association_id)
     else:
-        quota_check(reg, start, alert, assoc_id)
+        quota_check(reg, start, alert, association_id)
 
     # Skip alert setting if quota is negligible
     if reg.quota <= max_rounding:

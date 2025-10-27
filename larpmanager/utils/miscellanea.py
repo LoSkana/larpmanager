@@ -35,7 +35,7 @@ from django.shortcuts import render
 from PIL import Image as PILImage
 from PIL import ImageOps
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
 
@@ -248,10 +248,12 @@ def check_centauri(request: HttpRequest, context: dict) -> Optional[HttpResponse
     # Build template context with association-specific Centauri content
     template_context = {}
     for config_key in ["centauri_descr", "centauri_content"]:
-        template_context[config_key] = get_assoc_config(context["association_id"], config_key, None, template_context)
+        template_context[config_key] = get_association_config(
+            context["association_id"], config_key, None, template_context
+        )
 
     # Award badge to user if configured for this association
-    badge_code = get_assoc_config(context["association_id"], "centauri_badge", None, template_context)
+    badge_code = get_association_config(context["association_id"], "centauri_badge", None, template_context)
     if badge_code:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(context["member"])
@@ -303,7 +305,7 @@ def get_warehouse_optionals(context, default_columns):
     optionals = {}
     has_active_optional = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_assoc_config(context["association_id"], f"warehouse_{field}", False, context)
+        optionals[field] = get_association_config(context["association_id"], f"warehouse_{field}", False, context)
         if optionals[field]:
             has_active_optional = 1
     context["optionals"] = optionals

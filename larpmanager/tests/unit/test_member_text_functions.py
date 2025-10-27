@@ -28,7 +28,7 @@ from larpmanager.utils.text import (
     assoc_text_key_def,
     event_text_key,
     event_text_key_def,
-    get_assoc_text,
+    get_association_text,
     get_event_text,
 )
 from larpmanager.tests.unit.base import BaseTestCase
@@ -172,11 +172,11 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.utils.text.get_assoc_text_cache_def")
     @patch("larpmanager.utils.text.get_language")
     def test_get_assoc_text_with_lang(self, mock_lang, mock_def, mock_cache):
-        """Test get_assoc_text with language"""
+        """Test get_association_text with language"""
         mock_lang.return_value = "en"
         mock_cache.return_value = "Terms text"
 
-        result = get_assoc_text(456, "terms", "en")
+        result = get_association_text(456, "terms", "en")
 
         self.assertEqual(result, "Terms text")
         mock_cache.assert_called_once_with(456, "terms", "en")
@@ -186,12 +186,12 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.utils.text.get_assoc_text_cache_def")
     @patch("larpmanager.utils.text.get_language")
     def test_get_assoc_text_fallback_to_default(self, mock_lang, mock_def, mock_cache):
-        """Test get_assoc_text falls back to default"""
+        """Test get_association_text falls back to default"""
         mock_lang.return_value = "en"
         mock_cache.return_value = None
         mock_def.return_value = "Default terms"
 
-        result = get_assoc_text(456, "terms", "en")
+        result = get_association_text(456, "terms", "en")
 
         self.assertEqual(result, "Default terms")
         mock_cache.assert_called_once_with(456, "terms", "en")

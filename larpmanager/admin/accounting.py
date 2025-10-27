@@ -50,7 +50,7 @@ class InvoiceFilter(AutocompleteFilter):
 class AccountingItemAdmin(DefModelAdmin):
     exclude = ("search",)
     list_display = ("id", "member", "value")
-    autocomplete_fields = ["member", "inv", "assoc"]
+    autocomplete_fields = ["member", "inv", "association"]
     search_fields = ("search",)
 
     @admin.display(ordering="reg__run", description="Run")
@@ -61,14 +61,14 @@ class AccountingItemAdmin(DefModelAdmin):
 @admin.register(AccountingItemTransaction)
 class AccountingItemTransactionAdmin(AccountingItemAdmin):
     list_display = ("id", "inv", "member", "value", "created", "updated")
-    autocomplete_fields = ["member", "inv", "assoc", "reg"]
+    autocomplete_fields = ["member", "inv", "association", "reg"]
     list_filter = (MemberFilter, AssocFilter, RegistrationFilter)
 
 
 @admin.register(AccountingItemDiscount)
 class AccountingItemDiscountAdmin(AccountingItemAdmin):
     list_display = ("id", "disc", "run", "member", "value", "created", "updated")
-    autocomplete_fields = ["member", "inv", "assoc", "run", "disc"]
+    autocomplete_fields = ["member", "inv", "association", "run", "disc"]
     list_filter = (MemberFilter, AssocFilter, RunFilter)
 
 
@@ -76,14 +76,14 @@ class AccountingItemDiscountAdmin(AccountingItemAdmin):
 class AccountingItemDonationAdmin(AccountingItemAdmin):
     list_display = ("id", "member", "value", "descr", "created", "updated")
     list_filter = (MemberFilter, AssocFilter)
-    autocomplete_fields = ["member", "inv", "assoc"]
+    autocomplete_fields = ["member", "inv", "association"]
 
 
 @admin.register(AccountingItemCollection)
 class AccountingItemCollectionAdmin(AccountingItemAdmin):
     list_display = ("id", "member", "value", "created", "updated")
     list_filter = (MemberFilter, AssocFilter)
-    autocomplete_fields = ["member", "inv", "assoc"]
+    autocomplete_fields = ["member", "inv", "association"]
 
 
 @admin.register(AccountingItemExpense)
@@ -98,7 +98,7 @@ class AccountingItemExpenseAdmin(AccountingItemAdmin):
         "created",
         "updated",
     )
-    autocomplete_fields = ("run", "member", "inv", "assoc")
+    autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, MemberFilter, AssocFilter)
     search_fields = ("search", "descr")
 
@@ -115,7 +115,7 @@ class AccountingItemOutflowAdmin(AccountingItemAdmin):
         "created",
         "updated",
     )
-    autocomplete_fields = ("run", "member", "inv", "assoc")
+    autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, AssocFilter)
     search_fields = ("search", "descr")
 
@@ -131,7 +131,7 @@ class AccountingItemInflowAdmin(AccountingItemAdmin):
         "created",
         "updated",
     )
-    autocomplete_fields = ["member", "inv", "assoc", "run"]
+    autocomplete_fields = ["member", "inv", "association", "run"]
     list_filter = (RunFilter, AssocFilter)
     search_fields = ("search", "descr")
 
@@ -148,7 +148,7 @@ class AccountingItemPaymentAdmin(AccountingItemAdmin):
         "updated",
         "inv",
     )
-    autocomplete_fields = ["member", "inv", "assoc", "reg"]
+    autocomplete_fields = ["member", "inv", "association", "reg"]
     list_filter = (MemberFilter, AssocFilter, RegistrationFilter, "pay", "created")
 
 
@@ -165,7 +165,7 @@ class AccountingItemMembershipAdmin(AccountingItemAdmin):
         "updated",
     )
     list_filter = (MemberFilter, AssocFilter)
-    autocomplete_fields = ["member", "inv", "assoc"]
+    autocomplete_fields = ["member", "inv", "association"]
 
 
 @admin.register(AccountingItemOther)
@@ -181,7 +181,7 @@ class AccountingItemOtherAdmin(AccountingItemAdmin):
         "created",
         "updated",
     )
-    autocomplete_fields = ("run", "member", "inv", "assoc")
+    autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, MemberFilter, AssocFilter)
 
 
@@ -201,13 +201,13 @@ class PaymentInvoiceAdmin(DefModelAdmin):
         "created",
         "updated",
     )
-    autocomplete_fields = ("member", "method", "assoc", "reg")
+    autocomplete_fields = ("member", "method", "association", "reg")
     list_filter = ("status", "method", "typ", AssocFilter, MemberFilter)
 
 
 @admin.register(ElectronicInvoice)
 class ElectronicInvoiceAdmin(DefModelAdmin):
-    autocomplete_fields = ("inv", "assoc")
+    autocomplete_fields = ("inv", "association")
     list_filter = (AssocFilter, InvoiceFilter)
 
 
@@ -221,20 +221,20 @@ class DiscountAdmin(DefModelAdmin):
 
 @admin.register(RecordAccounting)
 class RecordAccountingAdmin(DefModelAdmin):
-    list_display = ("run", "assoc", "global_sum", "bank_sum")
+    list_display = ("run", "association", "global_sum", "bank_sum")
     list_filter = (RunFilter, AssocFilter)
-    autocomplete_fields = ["run", "assoc"]
+    autocomplete_fields = ["run", "association"]
 
 
 @admin.register(RefundRequest)
 class RefundRequestAdmin(DefModelAdmin):
     list_display = ("member", "value", "status", "details")
     list_filter = (MemberFilter,)
-    autocomplete_fields = ("member", "assoc")
+    autocomplete_fields = ("member", "association")
 
 
 @admin.register(Collection)
 class CollectionAdmin(DefModelAdmin):
     list_display = ("id", "member", "organizer", "total")
-    autocomplete_fields = ["member", "run", "organizer", "assoc"]
+    autocomplete_fields = ["member", "run", "organizer", "association"]
     search_fields = ["name"]

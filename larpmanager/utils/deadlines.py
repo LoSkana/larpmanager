@@ -22,8 +22,8 @@ from datetime import datetime, timedelta
 
 from django.db.models import Count
 
-from larpmanager.cache.config import get_assoc_config, get_event_config
-from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
 from larpmanager.models.member import Member, Membership, MembershipStatus
@@ -45,11 +45,11 @@ def get_users_data(ids):
     ]
 
 
-def get_membership_fee_year(assoc_id, year=None):
+def get_membership_fee_year(association_id, year=None):
     """Get set of member IDs who paid membership fee for given year.
 
     Args:
-        assoc_id (int): Association ID
+        association_id (int): Association ID
         year (int, optional): Year to check, defaults to current year
 
     Returns:
@@ -58,7 +58,9 @@ def get_membership_fee_year(assoc_id, year=None):
     if not year:
         year = datetime.now().year
     return set(
-        AccountingItemMembership.objects.filter(assoc_id=assoc_id, year=year).values_list("member_id", flat=True)
+        AccountingItemMembership.objects.filter(association_id=association_id, year=year).values_list(
+            "member_id", flat=True
+        )
     )
 
 
@@ -93,17 +95,17 @@ def check_run_deadlines(runs: list) -> list:
         registrations_by_run[registration.run_id].append(registration)
 
     # Get tolerance setting
-    tolerance = int(get_assoc_config(runs[0].event.assoc_id, "deadlines_tolerance", "30"))
+    tolerance = int(get_association_config(runs[0].event.association_id, "deadlines_tolerance", "30"))
 
     # Check membership feature
-    association_id = runs[0].event.assoc_id
+    association_id = runs[0].event.association_id
     now = datetime.now()
-    uses_membership = "membership" in get_assoc_features(association_id)
+    uses_membership = "membership" in get_association_features(association_id)
 
     # Load memberships and fees
     memberships = {
         membership.member_id: membership
-        for membership in Membership.objects.filter(assoc_id=association_id, member_id__in=member_ids)
+        for membership in Membership.objects.filter(association_id=association_id, member_id__in=member_ids)
     }
     fees = {}
     if uses_membership:

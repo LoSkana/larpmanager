@@ -77,7 +77,7 @@ class TestMailSignals(BaseTestCase):
         from datetime import datetime
 
         item = AccountingItemMembership(
-            member=member, value=Decimal("100.00"), assoc=self.get_association(), year=datetime.now().year
+            member=member, value=Decimal("100.00"), association=self.get_association(), year=datetime.now().year
         )
         item.save()
 
@@ -93,7 +93,7 @@ class TestMailSignals(BaseTestCase):
 
         question = HelpQuestion(
             member=member,
-            assoc=self.get_association(),
+            association=self.get_association(),
             text="Need help with something",
         )
         question.save()
@@ -106,9 +106,9 @@ class TestMailSignals(BaseTestCase):
         """Test that ChatMessage can be created"""
         sender = self.get_member()
         receiver = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
-        message = ChatMessage(sender=sender, receiver=receiver, assoc=assoc, message="Test chat message", channel=1)
+        message = ChatMessage(sender=sender, receiver=receiver, association=association, message="Test chat message", channel=1)
         message.save()
 
         # Should be created successfully
@@ -173,7 +173,7 @@ class TestMailSignals(BaseTestCase):
         member = self.get_member()
 
         expense = AccountingItemExpense(
-            member=member, value=Decimal("50.00"), assoc=self.get_association(), descr="Test expense",
+            member=member, value=Decimal("50.00"), association=self.get_association(), descr="Test expense",
             exp=ExpenseChoices.OTHER
         )
         expense.save()
@@ -190,7 +190,7 @@ class TestMailSignals(BaseTestCase):
         expense = AccountingItemExpense.objects.create(
             member=member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             descr="Test expense",
             exp=ExpenseChoices.OTHER,
         )
@@ -211,7 +211,7 @@ class TestMailSignals(BaseTestCase):
         payment = AccountingItemPayment.objects.create(
             member=member,
             value=Decimal("100.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=self.get_registration(),
             pay=PaymentChoices.MONEY,
         )
@@ -232,7 +232,7 @@ class TestMailSignals(BaseTestCase):
         other = AccountingItemOther.objects.create(
             member=member,
             value=Decimal("25.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             run=self.get_run(),
             oth=OtherChoices.CREDIT,
             descr="Test credit",
@@ -253,7 +253,7 @@ class TestMailSignals(BaseTestCase):
         member = self.get_member()
 
         donation = AccountingItemDonation(
-            member=member, value=Decimal("50.00"), assoc=self.get_association(), descr="Test donation"
+            member=member, value=Decimal("50.00"), association=self.get_association(), descr="Test donation"
         )
         donation.save()
 
@@ -263,10 +263,10 @@ class TestMailSignals(BaseTestCase):
     @patch("larpmanager.mail.accounting.my_send_mail")
     def test_collection_post_save_sends_mail(self, mock_mail):
         """Test that Collection post_save signal sends mail"""
-        assoc = self.get_association()
+        association = self.get_association()
         organizer = self.organizer()
 
-        collection = Collection(name="Test Collection", assoc=assoc, organizer=organizer)
+        collection = Collection(name="Test Collection", association=association, organizer=organizer)
         collection.save()
 
         # Should send mail notification
@@ -283,7 +283,7 @@ class TestMailSignals(BaseTestCase):
         item = AccountingItemCollection.objects.create(
             member=member,
             value=Decimal("30.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             collection=collection,
         )
 
@@ -339,7 +339,7 @@ class TestMailSignals(BaseTestCase):
             payment = AccountingItemPayment(
                 member=member,
                 value=Decimal("50.00"),
-                assoc=self.get_association(),
+                association=self.get_association(),
                 reg=self.get_registration(),
                 pay=payment_type,
             )
@@ -358,7 +358,7 @@ class TestMailSignals(BaseTestCase):
         # Create a help question
         question = HelpQuestion(
             member=member,
-            assoc=self.get_association(),
+            association=self.get_association(),
             text="Test question",
         )
         question.save()
@@ -371,13 +371,13 @@ class TestMailSignals(BaseTestCase):
         """Test that chat messages with different channels can be created"""
         sender = self.get_member()
         receiver = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
         # Test different channels
         channels = [1, 2, 3]
 
         for channel in channels:
-            message = ChatMessage(sender=sender, receiver=receiver, assoc=assoc, message=f"Test {channel} message", channel=channel)
+            message = ChatMessage(sender=sender, receiver=receiver, association=association, message=f"Test {channel} message", channel=channel)
             message.save()
 
             # Should be created successfully

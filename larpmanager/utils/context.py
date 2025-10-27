@@ -34,7 +34,7 @@ def cache_association(request: HttpRequest) -> dict:
 
     Returns:
         dict: Context dictionary containing:
-            - assoc: Association object if present in request
+            - association: Association object if present in request
             - staging: Flag (1) if environment is staging
             - languages: Available language options if user has no member
             - google_tag: Google Analytics tag ID from settings
@@ -43,8 +43,8 @@ def cache_association(request: HttpRequest) -> dict:
     context = {}
 
     # Add association object if available in request
-    if hasattr(request, "assoc"):
-        context["assoc"] = request.assoc
+    if hasattr(request, "association"):
+        context["association"] = request.association
 
     # Set staging flag for staging environment
     if request.enviro == "staging":

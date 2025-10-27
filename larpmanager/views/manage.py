@@ -12,17 +12,17 @@ from django_select2.forms import Select2Widget
 from slugify import slugify
 
 from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
-from larpmanager.cache.config import get_assoc_config, get_event_config
-from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import (
-    get_index_assoc_permissions,
+    get_index_association_permissions,
     get_index_event_permissions,
     has_assoc_permission,
     has_event_permission,
 )
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
-from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     PaymentInvoice,
@@ -30,7 +30,7 @@ from larpmanager.models.accounting import (
     RefundRequest,
     RefundStatus,
 )
-from larpmanager.models.association import AssocTextType
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
@@ -43,7 +43,7 @@ from larpmanager.utils.common import _get_help_questions, format_datetime
 from larpmanager.utils.edit import set_suggestion
 from larpmanager.utils.exceptions import RedirectError
 from larpmanager.utils.registration import registration_available
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.utils.text import get_association_text
 
 
 @login_required
@@ -60,7 +60,7 @@ def manage(request, event_slug=None):
     Returns:
         HttpResponse: Redirect to home or appropriate management view
     """
-    if request.assoc["id"] == 0:
+    if request.association["id"] == 0:
         return redirect("home")
 
     if event_slug:
@@ -179,7 +179,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     """
     # Initialize context and permissions for the current user and association
     context = get_context(request)
-    get_index_assoc_permissions(context, request, context["association_id"])
+    get_index_association_permissions(context, request, context["association_id"])
     context["exe_page"] = 1
     context["manage"] = 1
 
@@ -187,10 +187,10 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     what_would_you_like(context, request)
 
     # Get available features for this association
-    features = get_assoc_features(context["association_id"])
+    features = get_association_features(context["association_id"])
 
     # Check if association has any events
-    context["event_counts"] = Event.objects.filter(assoc_id=context["association_id"]).count()
+    context["event_counts"] = Event.objects.filter(association_id=context["association_id"]).count()
 
     # Redirect to event creation if no events exist and feature is available
     if not context["event_counts"] and "exe_events" in features:
@@ -206,7 +206,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         return redirect("exe_events_edit", num=0)
 
     # Redirect to quick setup if not completed
-    if not get_assoc_config(context["association_id"], "exe_quick_suggestion", False, context=context):
+    if not get_association_config(context["association_id"], "exe_quick_suggestion", False, context=context):
         setup_message = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
             "the features most useful for your organization"
@@ -216,7 +216,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
     # Get ongoing runs (events in START or SHOW development status)
     ongoing_runs_queryset = Run.objects.filter(
-        event__assoc_id=context["association_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW]
+        event__association_id=context["association_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW]
     )
     context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("end")
 
@@ -268,7 +268,7 @@ def _exe_suggestions(context):
     }
 
     for permission_key, suggestion_text in suggestions.items():
-        if get_assoc_config(context["association_id"], f"{permission_key}_suggestion", context=context):
+        if get_association_config(context["association_id"], f"{permission_key}_suggestion", context=context):
             continue
         _add_suggestion(context, suggestion_text, permission_key)
 
@@ -289,11 +289,11 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
     """
     # Get association features if not provided
     if not association_features:
-        association_features = get_assoc_features(context["association_id"])
+        association_features = get_association_features(context["association_id"])
 
     # Check for runs that should be concluded
     runs_to_conclude = Run.objects.filter(
-        event__assoc_id=context["association_id"],
+        event__association_id=context["association_id"],
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
         end__lt=datetime.today(),
     ).values_list("search", flat=True)
@@ -311,7 +311,7 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending expense approvals
     pending_expenses_count = AccountingItemExpense.objects.filter(
-        run__event__assoc_id=context["association_id"], is_approved=False
+        run__event__association_id=context["association_id"], is_approved=False
     ).count()
     if pending_expenses_count:
         _add_action(
@@ -322,7 +322,7 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending payment approvals
     pending_payments_count = PaymentInvoice.objects.filter(
-        assoc_id=context["association_id"], status=PaymentStatus.SUBMITTED
+        association_id=context["association_id"], status=PaymentStatus.SUBMITTED
     ).count()
     if pending_payments_count:
         _add_action(
@@ -333,7 +333,7 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending refund approvals
     pending_refunds_count = RefundRequest.objects.filter(
-        assoc_id=context["association_id"], status=RefundStatus.REQUEST
+        association_id=context["association_id"], status=RefundStatus.REQUEST
     ).count()
     if pending_refunds_count:
         _add_action(
@@ -344,7 +344,7 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending member approvals
     pending_members_count = Membership.objects.filter(
-        assoc_id=context["association_id"], status=MembershipStatus.SUBMITTED
+        association_id=context["association_id"], status=MembershipStatus.SUBMITTED
     ).count()
     if pending_members_count:
         _add_action(
@@ -366,19 +366,19 @@ def _exe_users_actions(request, context, enabled_features):
 
     Args:
         request: HTTP request object
-        assoc: Association instance
+        association: Association instance
         context: Context dictionary to populate with actions
         enabled_features: Set of enabled features
     """
     if "membership" in enabled_features:
-        if not get_assoc_text(context["association_id"], AssocTextType.MEMBERSHIP):
+        if not get_association_text(context["association_id"], AssociationTextType.MEMBERSHIP):
             _add_priority(context, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if len(get_assoc_config(context["association_id"], "membership_fee", "", context=context)) == 0:
+        if len(get_association_config(context["association_id"], "membership_fee", "", context=context)) == 0:
             _add_priority(context, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
     if "vote" in enabled_features:
-        if not get_assoc_config(context["association_id"], "vote_candidates", "", context=context):
+        if not get_association_config(context["association_id"], "vote_candidates", "", context=context):
             _add_priority(
                 context,
                 _("Set up the voting configuration"),
@@ -413,7 +413,7 @@ def _exe_accounting_actions(request, context, enabled_features):
             )
 
     if "organization_tax" in enabled_features:
-        if not get_assoc_config(context["association_id"], "organization_tax_perc", "", context=context):
+        if not get_association_config(context["association_id"], "organization_tax_perc", "", context=context):
             _add_priority(
                 context,
                 _("Set up the organization tax configuration"),
@@ -422,8 +422,8 @@ def _exe_accounting_actions(request, context, enabled_features):
             )
 
     if "vat" in enabled_features:
-        vat_ticket = get_assoc_config(context["association_id"], "vat_ticket", "", context=context)
-        vat_options = get_assoc_config(context["association_id"], "vat_options", "", context=context)
+        vat_ticket = get_association_config(context["association_id"], "vat_ticket", "", context=context)
+        vat_options = get_association_config(context["association_id"], "vat_options", "", context=context)
         if not vat_ticket or not vat_options:
             _add_priority(
                 context,
@@ -469,8 +469,8 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Load permissions and navigation
     get_index_event_permissions(context, request, event_slug)
-    if get_assoc_config(context["association_id"], "interface_admin_links", False, context=context):
-        get_index_assoc_permissions(context, request, context["association_id"], check=False)
+    if get_association_config(context["association_id"], "interface_admin_links", False, context=context):
+        get_index_association_permissions(context, request, context["association_id"], check=False)
 
     # Load registration status
     context["registration_status"] = _get_registration_status(context["run"])
@@ -584,7 +584,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
         )
 
     # Check for pending expense approvals (if not disabled for organizers)
-    if not get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False, context=context):
+    if not get_association_config(context["event"].association_id, "expense_disable_orga", False, context=context):
         pending_expenses_count = AccountingItemExpense.objects.filter(run=context["run"], is_approved=False).count()
         if pending_expenses_count:
             _add_action(
@@ -1033,7 +1033,7 @@ def _compile(request, context):
             [slug for _name, slug, _url in context[f"{section_name}_list"] if _has_permission(request, context, slug)]
         )
 
-    for permission_model in (EventPermission, AssocPermission):
+    for permission_model in (EventPermission, AssociationPermission):
         permission_queryset = permission_model.objects.filter(slug__in=permission_slug_list).select_related("feature")
         for slug, permission_name, tutorial in permission_queryset.values_list("slug", "name", "feature__tutorial"):
             permission_cache[slug] = (permission_name, tutorial)

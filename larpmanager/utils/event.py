@@ -154,7 +154,7 @@ def update_run_plan_on_event_change(instance):
         instance: Run instance that was saved
     """
     if not instance.plan and instance.event:
-        updates = {"plan": instance.event.assoc.plan}
+        updates = {"plan": instance.event.association.plan}
         Run.objects.filter(pk=instance.pk).update(**updates)
 
 

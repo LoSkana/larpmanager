@@ -86,7 +86,7 @@ class ExceptionHandlingMiddleware:
                         "runs": Run.objects.filter(development=DevelopStatus.SHOW)
                         .exclude(event__visible=False)
                         .select_related("event")
-                        .filter(event__assoc_id=request.assoc["id"])
+                        .filter(event__association_id=request.association["id"])
                         .order_by("-end")
                     },
                 ),

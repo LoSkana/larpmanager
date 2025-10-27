@@ -20,8 +20,8 @@
 
 from django.db.models import Sum
 
-from larpmanager.cache.config import get_assoc_config
-from larpmanager.cache.feature import get_assoc_features
+from larpmanager.cache.config import get_association_config
+from larpmanager.cache.feature import get_association_features
 from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction, PaymentChoices
 
 
@@ -40,7 +40,7 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
 
     Args:
         instance: AccountingItemPayment instance to compute VAT for.
-                 Must have valid assoc_id, pay type, reg, and inv attributes.
+                 Must have valid association_id, pay type, reg, and inv attributes.
 
     Returns:
         None: Function modifies the instance's VAT fields in the database as a side effect.
@@ -49,7 +49,7 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
         Updates the instance's vat_ticket and vat_options fields in the database.
     """
     # Early return if VAT feature is not enabled for this association
-    if "vat" not in get_assoc_features(instance.assoc_id):
+    if "vat" not in get_association_features(instance.association_id):
         return
 
     # Early return if payment is not in money (no VAT calculation needed)
@@ -65,8 +65,12 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
     # Retrieve VAT rates from association configuration
     # Convert percentage values (e.g., 22) to decimal rates (e.g., 0.22)
     config_context = {}
-    _vat_rate_ticket = int(get_assoc_config(instance.assoc_id, "vat_ticket", 0, context=config_context)) / 100.0
-    _vat_rate_options = int(get_assoc_config(instance.assoc_id, "vat_options", 0, context=config_context)) / 100.0
+    _vat_rate_ticket = (
+        int(get_association_config(instance.association_id, "vat_ticket", 0, context=config_context)) / 100.0
+    )
+    _vat_rate_options = (
+        int(get_association_config(instance.association_id, "vat_options", 0, context=config_context)) / 100.0
+    )
 
     # Calculate total ticket cost including both base price and custom amounts
     ticket_total_cost = 0

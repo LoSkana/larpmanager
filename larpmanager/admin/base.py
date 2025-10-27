@@ -70,7 +70,7 @@ def reduced(value: str | None) -> str:
 
 class AssocFilter(AutocompleteFilter):
     title = "Association"
-    field_name = "assoc"
+    field_name = "association"
 
 
 class CharacterFilter(AutocompleteFilter):

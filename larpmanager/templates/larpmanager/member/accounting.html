@@ -65,7 +65,7 @@
             {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
             {% if member.membership.credit > 0 %}
                 <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
-                {% if 'refund' in assoc.features %}
+                {% if 'refund' in association.features %}
                     <br />
                     {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'acc_refund' %}">{% trans "refund request" %}</a>.
                     {% if refunds %}
@@ -90,10 +90,10 @@
         </p>
         <hr />
     {% endif %}
-    {% if 'membership' in assoc.features %}
+    {% if 'membership' in association.features %}
         {% if member.membership.status == 'a' %}
             {% if year_membership_fee %}
-                {% if 'vote' in assoc.features and assoc.voting_open %}
+                {% if 'vote' in association.features and association.voting_open %}
                     <h2>{% trans "Executive Vote" %} {{ year }}</h2>
                     <p>
                         <a href="{% url 'vote' %}">{% trans "Cast your vote for the new Executive" %}!</a>
@@ -113,7 +113,7 @@
                         {% trans "You are registered for an event to be held in this calendar year, but we are not aware of your dues payment. Be careful: if you don't complete it, <b>you won't be able to attend events</b>, nor vote at the Membership Meeting" %}! <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                     </p>
                     <hr />
-                {% elif 'vote' in assoc.features and assoc.voting_open %}
+                {% elif 'vote' in association.features and association.voting_open %}
                     <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
                     <p>
                         {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
@@ -145,7 +145,7 @@
             <hr />
         {% endif %}
     {% endif %}
-    {% if 'membership_fee' in assoc.features %}
+    {% if 'membership_fee' in association.features %}
         {% if membership_fee %}
             <h2>{% trans "Membership fee" %}</h2>
             <p>
@@ -158,7 +158,7 @@
         {% endif %}
         <hr />
     {% endif %}
-    {% if 'collection' in assoc.features %}
+    {% if 'collection' in association.features %}
         <h2>{% trans "Collection" %}</h2>
         <p>
             {% trans "Want to help one of your friends play with us? Organize a collection: you and anyone who wants to contribute will be able to donate part of their registration fees" %}! <a href="{% url 'acc_collection' %}">{% trans "Create a new collection" %}</a>.
@@ -195,7 +195,7 @@
             <hr />
         {% endif %}
     {% endif %}
-    {% if 'donate' in assoc.features %}
+    {% if 'donate' in association.features %}
         <h2>{% trans "Donation" %}</h2>
         <p>
             {% trans "If you would like to make a donation to the Organization" %}, <a href="{% url 'acc_donate' %}">{% trans "follow this link" %}</a>. {% trans "You will have our eternal thanks for believing in us" %}!

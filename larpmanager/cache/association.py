@@ -24,17 +24,17 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.feature import get_assoc_features
+from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.registration import Registration
 
 
 def clear_association_cache(association_slug):
-    key = cache_assoc_key(association_slug)
+    key = cache_association_key(association_slug)
     cache.delete(key)
 
 
-def cache_assoc_key(association_slug):
+def cache_association_key(association_slug):
     return f"assoc_{association_slug}"
 
 
@@ -48,7 +48,7 @@ def get_cache_assoc(association_slug: str) -> dict | None:
         Association data dictionary or None if initialization fails.
     """
     # Generate cache key for the association
-    cache_key = cache_assoc_key(association_slug)
+    cache_key = cache_association_key(association_slug)
     cached_data = cache.get(cache_key)
 
     # Initialize cache if not found
@@ -80,23 +80,23 @@ def init_cache_assoc(a_slug: str) -> dict | None:
     """
     # Retrieve association object or return None if not found
     try:
-        assoc = Association.objects.get(slug=a_slug)
+        association = Association.objects.get(slug=a_slug)
     except ObjectDoesNotExist:
         return None
 
     # Convert association to dictionary for cache storage
-    assoc_dict = assoc.as_dict()
+    assoc_dict = association.as_dict()
 
     # Initialize payment configuration and member field settings
-    _init_payments(assoc, assoc_dict)
-    _init_member_fields(assoc, assoc_dict)
+    _init_payments(association, assoc_dict)
+    _init_member_fields(association, assoc_dict)
 
     # Add profile images (favicon, logo, main image) if available
-    if assoc.profile:
+    if association.profile:
         try:
-            assoc_dict["favicon"] = assoc.profile_fav.url
-            assoc_dict["logo"] = assoc.profile_thumb.url
-            assoc_dict["image"] = assoc.profile.url
+            assoc_dict["favicon"] = association.profile_fav.url
+            assoc_dict["logo"] = association.profile_thumb.url
+            assoc_dict["image"] = association.profile.url
         except FileNotFoundError:
             pass
 
@@ -115,29 +115,29 @@ def init_cache_assoc(a_slug: str) -> dict | None:
             del assoc_dict[m]
 
     # Initialize feature flags and skin configuration
-    _init_features(assoc, assoc_dict)
-    _init_skin(assoc, assoc_dict)
+    _init_features(association, assoc_dict)
+    _init_skin(association, assoc_dict)
 
     # Determine if association qualifies for demo mode (< 10 registrations)
     max_demo = 10
-    assoc_dict["demo"] = Registration.objects.filter(run__event__assoc_id=assoc.id).count() < max_demo
+    assoc_dict["demo"] = Registration.objects.filter(run__event__association_id=association.id).count() < max_demo
 
     return assoc_dict
 
 
-def _init_skin(assoc, element_context: dict) -> None:
+def _init_skin(association, element_context: dict) -> None:
     """Initialize skin-related properties in the element dictionary."""
     # Set CSS and domain configuration from association skin
-    element_context["skin_css"] = assoc.skin.default_css
-    element_context["main_domain"] = assoc.skin.domain
-    element_context["platform"] = assoc.skin.name
+    element_context["skin_css"] = association.skin.default_css
+    element_context["main_domain"] = association.skin.domain
+    element_context["platform"] = association.skin.name
 
     # Set skin identification and management status
-    element_context["skin_id"] = assoc.skin.id
-    element_context["skin_managed"] = assoc.skin.managed
+    element_context["skin_id"] = association.skin.id
+    element_context["skin_managed"] = association.skin.managed
 
 
-def _init_features(assoc: Association, cache_element: dict) -> None:
+def _init_features(association: Association, cache_element: dict) -> None:
     """Initialize association features and related configuration in cache element.
 
     Populates the cache element with association features and their corresponding
@@ -145,65 +145,65 @@ def _init_features(assoc: Association, cache_element: dict) -> None:
     configurations, and Centauri probability settings based on enabled features.
 
     Args:
-        assoc: Association object to get features from
+        association: Association object to get features from
         cache_element: Cache element dictionary to populate with features and configs
 
     Returns:
         None: Modifies the cache_element dictionary in-place
     """
     # Get all features for this association
-    cache_element["features"] = get_assoc_features(assoc.id)
+    cache_element["features"] = get_association_features(association.id)
 
     # Configure custom mail server settings if feature is enabled
     if "custom_mail" in cache_element["features"]:
         config_key = "mail_server_use_tls"
-        cache_element[config_key] = assoc.get_config(config_key, False)
+        cache_element[config_key] = association.get_config(config_key, False)
 
         # Add mail server connection parameters
         for setting in ["host", "port", "host_user", "host_password"]:
             config_key = "mail_server_" + setting
-            cache_element[config_key] = assoc.get_config(config_key)
+            cache_element[config_key] = association.get_config(config_key)
 
     # Configure token and credit naming if feature is enabled
     if "token_credit" in cache_element["features"]:
         for setting in ["token_name", "credit_name"]:
-            cache_element[setting] = assoc.get_config("token_credit_" + setting, None)
+            cache_element[setting] = association.get_config("token_credit_" + setting, None)
 
     # Configure Centauri probability settings if feature is enabled
     if "centauri" in cache_element["features"]:
-        probability = assoc.get_config("centauri_prob")
+        probability = association.get_config("centauri_prob")
         if probability:
             cache_element["centauri_prob"] = probability
 
 
-def _init_member_fields(assoc: Association, el: dict[str, Any]) -> None:
+def _init_member_fields(association: Association, el: dict[str, Any]) -> None:
     """Initialize member fields set from association's mandatory and optional fields."""
     el["members_fields"] = set()
     # Collect mandatory fields
-    for field in assoc.mandatory_fields.split(","):
+    for field in association.mandatory_fields.split(","):
         el["members_fields"].add(field)
     # Collect optional fields
-    for field in assoc.optional_fields.split(","):
+    for field in association.optional_fields.split(","):
         el["members_fields"].add(field)
 
 
-def _init_payments(assoc, payment_info: dict) -> None:
+def _init_payments(association, payment_info: dict) -> None:
     """Initialize payment information for the given association element.
 
     Args:
-        assoc: Association object containing payment configuration
+        association: Association object containing payment configuration
         payment_info: Dictionary to populate with payment information
     """
     # Set currency display information
-    payment_info["payment_currency"] = assoc.get_payment_currency_display()
-    payment_info["currency_symbol"] = assoc.get_currency_symbol()
+    payment_info["payment_currency"] = association.get_payment_currency_display()
+    payment_info["currency_symbol"] = association.get_currency_symbol()
     payment_info["methods"] = {}
 
     # Get payment details configuration
-    payment_details = get_payment_details(assoc)
+    payment_details = get_payment_details(association)
 
     # Process each payment method for the association
-    for payment_method in assoc.payment_methods.all():
+    for payment_method in association.payment_methods.all():
         method_element = payment_method.as_dict()
         # Add fee and description from payment details
         for setting_key in ["fee", "descr"]:

@@ -102,18 +102,18 @@ class TestTextFieldSignals(BaseTestCase):
     @patch("larpmanager.models.signals.clear_larpmanager_home_cache")
     def test_association_post_save_resets_larpmanager_cache(self, mock_reset):
         """Test that Association post_save signal resets larpmanager cache"""
-        assoc = Association(name="Test Association", email="test@example.com")
-        assoc.save()
+        association = Association(name="Test Association", email="test@example.com")
+        association.save()
 
         mock_reset.assert_called_once()
 
     @patch("larpmanager.models.signals.clear_association_cache")
     def test_association_post_save_resets_association_cache(self, mock_reset):
         """Test that Association post_save signal resets association cache"""
-        assoc = Association(name="Test Association", email="test@example.com")
-        assoc.save()
+        association = Association(name="Test Association", email="test@example.com")
+        association.save()
 
-        mock_reset.assert_called_once_with(assoc.slug)
+        mock_reset.assert_called_once_with(association.slug)
 
     @patch("larpmanager.cache.run.reset_cache_run")
     def test_run_pre_save_resets_run_cache(self, mock_reset):
@@ -121,7 +121,7 @@ class TestTextFieldSignals(BaseTestCase):
         run = self.get_run()
         run.save()
 
-        mock_reset.assert_called_once_with(run.event.assoc_id, run.get_slug())
+        mock_reset.assert_called_once_with(run.event.association_id, run.get_slug())
 
     @patch("larpmanager.cache.run.reset_cache_run")
     def test_event_pre_save_resets_event_cache(self, mock_reset):
@@ -156,7 +156,7 @@ class TestTextFieldSignals(BaseTestCase):
         feature = Feature(name="Test Feature", slug="test-feature", order=1)
         feature.save()
 
-        # Feature post_save resets both event and assoc permissions
+        # Feature post_save resets both event and association permissions
         self.assertEqual(mock_reset.call_count, 2)
 
     @patch("larpmanager.models.signals.clear_index_permission_cache")
@@ -166,7 +166,7 @@ class TestTextFieldSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after the create call
         feature.delete()
 
-        # Feature post_delete resets both event and assoc permissions
+        # Feature post_delete resets both event and association permissions
         self.assertEqual(mock_reset.call_count, 2)
 
     @patch("larpmanager.models.signals.clear_index_permission_cache")
@@ -178,7 +178,7 @@ class TestTextFieldSignals(BaseTestCase):
         module = FeatureModule(id=max_id + 1, name="Test Module Post Save", icon="test-icon", order=max_order + 1)
         module.save()
 
-        # FeatureModule post_save resets both event and assoc permissions
+        # FeatureModule post_save resets both event and association permissions
         self.assertEqual(mock_reset.call_count, 2)
 
     @patch("larpmanager.models.signals.clear_index_permission_cache")
@@ -191,16 +191,16 @@ class TestTextFieldSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after the create call
         module.delete()
 
-        # FeatureModule post_delete resets both event and assoc permissions
+        # FeatureModule post_delete resets both event and association permissions
         self.assertEqual(mock_reset.call_count, 2)
 
     @patch("larpmanager.cache.feature.reset_assoc_features")
     def test_association_post_save_resets_features_cache(self, mock_reset):
         """Test that Association post_save signal resets features cache"""
-        assoc = Association(name="Test Association", email="test@example.com")
-        assoc.save()
+        association = Association(name="Test Association", email="test@example.com")
+        association.save()
 
-        mock_reset.assert_called_once_with(assoc.id)
+        mock_reset.assert_called_once_with(association.id)
 
     @patch("larpmanager.models.signals.clear_event_features_cache")
     def test_event_post_save_resets_features_cache(self, mock_reset):
@@ -223,11 +223,11 @@ class TestTextFieldSignals(BaseTestCase):
         self.assertIsNotNone(character.id)
 
         # Test with minimal association
-        assoc = Association(name="", email="test@example.com")
-        assoc.save()
+        association = Association(name="", email="test@example.com")
+        association.save()
 
         # Should not raise errors even with empty name
-        self.assertIsNotNone(assoc.id)
+        self.assertIsNotNone(association.id)
 
     def test_text_field_signals_handle_special_characters(self):
         """Test that text field signals handle special characters correctly"""

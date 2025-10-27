@@ -195,7 +195,7 @@ class MainPageError(Exception):
         """Initialize with request path and base domain from association."""
         super().__init__()
         self.path = request.path
-        self.base_domain = request.assoc["main_domain"]
+        self.base_domain = request.association["main_domain"]
 
 
 # For when you want to just return a json value

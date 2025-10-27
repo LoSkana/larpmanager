@@ -286,7 +286,7 @@ def _key_id(fernet_key):
     return hashlib.sha256(decoded_key).hexdigest()[:12]
 
 
-def get_payment_details_path(assoc: "Association") -> str:
+def get_payment_details_path(association: "Association") -> str:
     """
     Get encrypted payment details file path for association.
 
@@ -296,14 +296,14 @@ def get_payment_details_path(assoc: "Association") -> str:
     slug and encryption key identifier.
 
     Args:
-        assoc: Association instance containing slug and key attributes
+        association: Association instance containing slug and key attributes
 
     Returns:
         str: Full path to the encrypted payment details file
 
     Example:
-        >>> assoc = Association(slug='my-org', key='secret123')
-        >>> path = get_payment_details_path(assoc)
+        >>> association = Association(slug='my-org', key='secret123')
+        >>> path = get_payment_details_path(association)
         >>> path
         '/path/to/payment/settings/my-org.abc123.enc'
     """
@@ -311,21 +311,21 @@ def get_payment_details_path(assoc: "Association") -> str:
     os.makedirs(conf_settings.PAYMENT_SETTING_FOLDER, exist_ok=True)
 
     # Generate key identifier for filename security
-    key_identifier = _key_id(assoc.key)
+    key_identifier = _key_id(association.key)
 
     # Create secure filename with association slug and key ID
-    filename = f"{os.path.basename(assoc.slug)}.{key_identifier}.enc"
+    filename = f"{os.path.basename(association.slug)}.{key_identifier}.enc"
 
     # Return full path to encrypted payment file
     return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, filename)
 
 
-def save_payment_details(assoc: "Association", payment_details: dict) -> None:
+def save_payment_details(association: "Association", payment_details: dict) -> None:
     """
     Encrypt and save payment details for association.
 
     Args:
-        assoc: Association instance with encryption key
+        association: Association instance with encryption key
         payment_details: Dictionary of payment details to encrypt
 
     Returns:
@@ -337,7 +337,7 @@ def save_payment_details(assoc: "Association", payment_details: dict) -> None:
         PermissionError: If insufficient permissions to write the file
     """
     # Create cipher using association's encryption key
-    cipher = Fernet(assoc.key)
+    cipher = Fernet(association.key)
 
     # Convert payment details dictionary to JSON bytes
     data_bytes = json.dumps(payment_details).encode("utf-8")
@@ -346,7 +346,7 @@ def save_payment_details(assoc: "Association", payment_details: dict) -> None:
     encrypted_data = cipher.encrypt(data_bytes)
 
     # Get the file path for storing encrypted payment details
-    encrypted_file_path = get_payment_details_path(assoc)
+    encrypted_file_path = get_payment_details_path(association)
 
     # Write encrypted data to file
     with open(encrypted_file_path, "wb") as f:

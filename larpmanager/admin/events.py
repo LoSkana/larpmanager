@@ -32,10 +32,10 @@ class ProgressStepAdmin(DefModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(DefModelAdmin):
-    list_display = ("name", "thumb", "slug", "assoc")
+    list_display = ("name", "thumb", "slug", "association")
     search_fields = ("name",)
     list_filter = (AssocFilter,)
-    autocomplete_fields = ["assoc", "parent", "features"]
+    autocomplete_fields = ["association", "parent", "features"]
 
 
 @admin.register(EventConfig)

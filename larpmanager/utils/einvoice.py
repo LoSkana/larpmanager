@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from typing import IO
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.models.member import Member
 from larpmanager.utils.tasks import background_auto
@@ -47,7 +47,7 @@ def process_payment(invoice_id: int) -> None:
         e_invoice = inv.electronicinvoice
     except Exception:
         # Create new electronic invoice if none exists
-        e_invoice = ElectronicInvoice(inv=inv, year=datetime.now().year, assoc=inv.assoc)
+        e_invoice = ElectronicInvoice(inv=inv, year=datetime.now().year, association=inv.association)
         e_invoice.save()
 
     # Generate XML content for the electronic invoice
@@ -133,15 +133,15 @@ def _einvoice_header(
     transmitter_id = ET.SubElement(transmission_data, "IdTrasmittente")
     # Set Italy as default country code for electronic invoicing
     ET.SubElement(transmitter_id, "IdPaese").text = "IT"
-    ET.SubElement(transmitter_id, "IdCodice").text = get_assoc_config(
-        inv.assoc_id, "einvoice_idcodice", None, config_holder
+    ET.SubElement(transmitter_id, "IdCodice").text = get_association_config(
+        inv.association_id, "einvoice_idcodice", None, config_holder
     )
     # Progressive invoice number padded to 10 digits
     ET.SubElement(transmission_data, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
     # Standard format for private entities
     ET.SubElement(transmission_data, "FormatoTrasmissione").text = "FPR12"
-    ET.SubElement(transmission_data, "CodiceDestinatario").text = get_assoc_config(
-        inv.assoc_id, "einvoice_codicedestinatario", None, config_holder
+    ET.SubElement(transmission_data, "CodiceDestinatario").text = get_association_config(
+        inv.association_id, "einvoice_codicedestinatario", None, config_holder
     )
 
     # Build supplier section - association information as service provider
@@ -150,34 +150,36 @@ def _einvoice_header(
     # Add VAT identification details
     vat_fiscal_id = ET.SubElement(supplier_registry_data, "IdFiscaleIVA")
     ET.SubElement(vat_fiscal_id, "IdPaese").text = "IT"
-    ET.SubElement(vat_fiscal_id, "IdCodice").text = get_assoc_config(
-        inv.assoc_id, "einvoice_partitaiva", None, config_holder
+    ET.SubElement(vat_fiscal_id, "IdCodice").text = get_association_config(
+        inv.association_id, "einvoice_partitaiva", None, config_holder
     )
     # Add association name and tax regime
     supplier_registry = ET.SubElement(supplier_registry_data, "Anagrafica")
-    ET.SubElement(supplier_registry, "Denominazione").text = get_assoc_config(
-        inv.assoc_id, "einvoice_denominazione", None, config_holder
+    ET.SubElement(supplier_registry, "Denominazione").text = get_association_config(
+        inv.association_id, "einvoice_denominazione", None, config_holder
     )
-    ET.SubElement(supplier_registry_data, "RegimeFiscale").text = get_assoc_config(
-        inv.assoc_id, "einvoice_regimefiscale", None, config_holder
+    ET.SubElement(supplier_registry_data, "RegimeFiscale").text = get_association_config(
+        inv.association_id, "einvoice_regimefiscale", None, config_holder
     )
     # Add association registered address
     supplier_address = ET.SubElement(supplier_provider, "Sede")
-    ET.SubElement(supplier_address, "Indirizzo").text = get_assoc_config(
-        inv.assoc_id, "einvoice_indirizzo", None, config_holder
+    ET.SubElement(supplier_address, "Indirizzo").text = get_association_config(
+        inv.association_id, "einvoice_indirizzo", None, config_holder
     )
-    ET.SubElement(supplier_address, "NumeroCivico").text = get_assoc_config(
-        inv.assoc_id, "einvoice_numerocivico", None, config_holder
+    ET.SubElement(supplier_address, "NumeroCivico").text = get_association_config(
+        inv.association_id, "einvoice_numerocivico", None, config_holder
     )
-    ET.SubElement(supplier_address, "Cap").text = get_assoc_config(inv.assoc_id, "einvoice_cap", None, config_holder)
-    ET.SubElement(supplier_address, "Comune").text = get_assoc_config(
-        inv.assoc_id, "einvoice_comune", None, config_holder
+    ET.SubElement(supplier_address, "Cap").text = get_association_config(
+        inv.association_id, "einvoice_cap", None, config_holder
     )
-    ET.SubElement(supplier_address, "Provincia").text = get_assoc_config(
-        inv.assoc_id, "einvoice_provincia", None, config_holder
+    ET.SubElement(supplier_address, "Comune").text = get_association_config(
+        inv.association_id, "einvoice_comune", None, config_holder
     )
-    ET.SubElement(supplier_address, "Nazione").text = get_assoc_config(
-        inv.assoc_id, "einvoice_nazione", None, config_holder
+    ET.SubElement(supplier_address, "Provincia").text = get_association_config(
+        inv.association_id, "einvoice_provincia", None, config_holder
+    )
+    ET.SubElement(supplier_address, "Nazione").text = get_association_config(
+        inv.association_id, "einvoice_nazione", None, config_holder
     )
 
     # Build customer section - member receiving the invoice
@@ -219,7 +221,7 @@ def _einvoice_body(einvoice, invoice, xml_root) -> None:
 
     Args:
         einvoice: Electronic invoice instance containing creation date and number
-        invoice: Invoice data object with causal, mc_gross, and assoc_id attributes
+        invoice: Invoice data object with causal, mc_gross, and association_id attributes
         xml_root: XML root element to append body to
 
     Returns:
@@ -250,9 +252,9 @@ def _einvoice_body(einvoice, invoice, xml_root) -> None:
     config_holder = {}
 
     # Get VAT rate and nature configuration from association settings
-    vat_rate = get_assoc_config(invoice.assoc_id, "einvoice_aliquotaiva", "", config_holder)
+    vat_rate = get_association_config(invoice.association_id, "einvoice_aliquotaiva", "", config_holder)
     ET.SubElement(line_details, "AliquotaIVA").text = vat_rate
-    vat_nature = get_assoc_config(invoice.assoc_id, "einvoice_natura", "", config_holder)
+    vat_nature = get_association_config(invoice.association_id, "einvoice_natura", "", config_holder)
     if vat_nature:
         ET.SubElement(line_details, "Natura").text = vat_nature
 

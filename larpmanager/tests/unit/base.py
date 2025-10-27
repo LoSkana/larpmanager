@@ -71,7 +71,7 @@ class BaseTestCase(TestCase):
             association = self.get_association()
             membership, _ = Membership.objects.get_or_create(
                 member=member,
-                assoc=association,
+                association=association,
                 defaults={
                     "credit": Decimal("100.00"),
                     "tokens": Decimal("50.00"),
@@ -112,7 +112,7 @@ class BaseTestCase(TestCase):
     # Helper methods for creating specific test objects when needed
     def create_association(self, **kwargs):
         """Create a new association with defaults"""
-        defaults = {"name": "Test Association", "slug": "test-assoc", "email": "test@example.com"}
+        defaults = {"name": "Test Association", "slug": "test-association", "email": "test@example.com"}
         defaults.update(kwargs)
         return Association.objects.create(**defaults)
 
@@ -138,7 +138,7 @@ class BaseTestCase(TestCase):
         association = self.get_association()
         membership, _ = Membership.objects.get_or_create(
             member=member,
-            assoc=association,
+            association=association,
             defaults={
                 "credit": Decimal("100.00"),
                 "tokens": Decimal("50.00"),
@@ -154,7 +154,7 @@ class BaseTestCase(TestCase):
         """Create a new event with defaults"""
         if association is None:
             association = self.get_association()
-        defaults = {"name": "Test Event", "assoc": association}
+        defaults = {"name": "Test Event", "association": association}
         defaults.update(kwargs)
         return Event.objects.create(**defaults)
 
@@ -194,7 +194,7 @@ class BaseTestCase(TestCase):
 
         defaults = {
             "member": self.get_member(),
-            "assoc": self.get_association(),
+            "association": self.get_association(),
             "method": self.payment_method(),
             "typ": PaymentType.REGISTRATION,
             "status": PaymentStatus.CREATED,
@@ -218,7 +218,7 @@ class BaseTestCase(TestCase):
         defaults = {
             "member": self.get_member(),
             "value": Decimal("100.00"),
-            "assoc": self.get_association(),
+            "association": self.get_association(),
             "reg": self.get_registration(),
             "pay": PaymentChoices.MONEY,
             "created": datetime.now(),
@@ -235,7 +235,7 @@ class BaseTestCase(TestCase):
         defaults = {
             "member": self.get_member(),
             "value": Decimal("5"),
-            "assoc": self.get_association(),
+            "association": self.get_association(),
             "run": self.get_run(),
             "oth": OtherChoices.TOKEN,
             "descr": "Test tokens",
@@ -252,7 +252,7 @@ class BaseTestCase(TestCase):
         defaults = {
             "member": self.get_member(),
             "value": Decimal("50.00"),
-            "assoc": self.get_association(),
+            "association": self.get_association(),
             "run": self.get_run(),
             "oth": OtherChoices.CREDIT,
             "descr": "Test credits",
@@ -369,7 +369,7 @@ class BaseTestCase(TestCase):
         item = AccountingItemExpense.objects.first()
         if not item:
             item = AccountingItemExpense.objects.create(
-                member=self.get_member(), value=Decimal("50.00"), assoc=self.get_association(), descr="Test expense"
+                member=self.get_member(), value=Decimal("50.00"), association=self.get_association(), descr="Test expense"
             )
         return item
 
@@ -380,7 +380,7 @@ class BaseTestCase(TestCase):
         collection = Collection.objects.first()
         if not collection:
             collection = Collection.objects.create(
-                name="Test Collection", assoc=self.get_association(), organizer=self.organizer()
+                name="Test Collection", association=self.get_association(), organizer=self.organizer()
             )
         return collection
 
@@ -395,7 +395,7 @@ class BaseTestCase(TestCase):
             item = AccountingItemCollection.objects.create(
                 member=self.get_member(),
                 value=Decimal("25.00"),
-                assoc=self.get_association(),
+                association=self.get_association(),
                 collection=self.collection(),
             )
         return item
@@ -430,7 +430,7 @@ class BaseTestCase(TestCase):
                 member=self.get_member(),
                 value=Decimal("30.00"),
                 details="Test refund request",
-                assoc=self.get_association(),
+                association=self.get_association(),
             )
         return refund
 
@@ -443,7 +443,7 @@ class BaseTestCase(TestCase):
         return AccountingItemOther(
             member=self.get_member(),
             value=Decimal("30.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             run=self.get_run(),
             oth=OtherChoices.REFUND,
             descr="Test refund",

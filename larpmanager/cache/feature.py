@@ -32,10 +32,10 @@ def reset_assoc_features(association_id):
     Args:
         association_id (int): Association ID to clear cache for
     """
-    cache.delete(cache_assoc_features(association_id))
+    cache.delete(cache_association_features_key(association_id))
 
 
-def cache_assoc_features(association_id):
+def cache_association_features_key(association_id):
     """Generate cache key for association features.
 
     Args:
@@ -47,7 +47,7 @@ def cache_assoc_features(association_id):
     return f"assoc_features_{association_id}"
 
 
-def get_assoc_features(association_id):
+def get_association_features(association_id):
     """Get cached association features, updating cache if needed.
 
     Args:
@@ -56,7 +56,7 @@ def get_assoc_features(association_id):
     Returns:
         dict: Dictionary of enabled features {feature_slug: 1}
     """
-    cache_key = cache_assoc_features(association_id)
+    cache_key = cache_association_features_key(association_id)
     cached_features = cache.get(cache_key)
     if cached_features is None:
         cached_features = update_assoc_features(association_id)
@@ -64,14 +64,14 @@ def get_assoc_features(association_id):
     return cached_features
 
 
-def update_assoc_features(assoc_id: int) -> dict[str, int]:
+def update_assoc_features(association_id: int) -> dict[str, int]:
     """Update association feature cache from database.
 
     Retrieves enabled features for an association and builds a cache dictionary
     containing both database-stored features and configuration-based features.
 
     Args:
-        assoc_id: Association ID to update cache for
+        association_id: Association ID to update cache for
 
     Returns:
         Dictionary mapping feature slugs to enabled status (1 if enabled)
@@ -82,10 +82,10 @@ def update_assoc_features(assoc_id: int) -> dict[str, int]:
     res = {}
     try:
         # Get association object from database
-        assoc = Association.objects.get(pk=assoc_id)
+        association = Association.objects.get(pk=association_id)
 
         # Add all database-stored features to result
-        for s in assoc.features.values_list("slug", flat=True):
+        for s in association.features.values_list("slug", flat=True):
             res[s] = 1
 
         # Check calendar-related configuration features
@@ -101,13 +101,13 @@ def update_assoc_features(assoc_id: int) -> dict[str, int]:
             "tagline",
         ]:
             # Add calendar features based on configuration
-            if assoc.get_config("calendar_" + sl, False):
+            if association.get_config("calendar_" + sl, False):
                 res[sl] = 1
 
         # Check field-based features (safety and diet)
         for slug in ["safety", "diet"]:
             # Enable if field is either mandatory or optional
-            if slug in assoc.mandatory_fields or slug in assoc.optional_fields:
+            if slug in association.mandatory_fields or slug in association.optional_fields:
                 res[slug] = 1
 
     except ObjectDoesNotExist:
@@ -152,7 +152,7 @@ def update_event_features(ev_id):
     """
     try:
         ev = Event.objects.get(pk=ev_id)
-        res = get_assoc_features(ev.assoc_id)
+        res = get_association_features(ev.association_id)
         for slug in ev.features.values_list("slug", flat=True):
             res[slug] = 1
         ex_features = {

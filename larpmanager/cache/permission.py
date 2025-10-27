@@ -24,7 +24,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.access import AssociationPermission, EventPermission
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def assoc_permission_feature_key(permission_slug):
     return f"assoc_permission_feature_{permission_slug}"
 
 
-def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
+def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
     """Update cached association permission feature data.
 
     Retrieves association permission data by slug, processes the feature information,
@@ -57,7 +57,7 @@ def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
             - config: Permission config text or empty string
     """
     # Fetch permission with related feature data to minimize queries
-    perm = AssocPermission.objects.select_related("feature").get(slug=slug)
+    perm = AssociationPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
 
     # Use default slug for placeholder features, otherwise use actual feature slug
@@ -75,7 +75,7 @@ def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
     return slug, tutorial, config
 
 
-def get_assoc_permission_feature(slug: str) -> tuple[str, str | None, dict | None]:
+def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict | None]:
     """Get cached association permission feature data.
 
     Retrieves feature data for an association permission from cache first,
@@ -99,7 +99,7 @@ def get_assoc_permission_feature(slug: str) -> tuple[str, str | None, dict | Non
 
     # If cache miss, update cache and return fresh data
     if cached_feature_data is None:
-        cached_feature_data = update_assoc_permission_feature(slug)
+        cached_feature_data = update_association_permission_feature(slug)
 
     return cached_feature_data
 
@@ -196,16 +196,16 @@ def update_index_permission(typ: str) -> list[dict]:
     then caches the result for efficient access.
 
     Args:
-        typ: Permission type, either 'event' or 'assoc'
+        typ: Permission type, either 'event' or 'association'
 
     Returns:
         List of permission dictionaries with feature and module information
 
     Raises:
-        KeyError: If typ is not 'event' or 'assoc'
+        KeyError: If typ is not 'event' or 'association'
     """
     # Map permission type to corresponding model class
-    mapping = {"event": EventPermission, "assoc": AssocPermission}
+    mapping = {"event": EventPermission, "association": AssociationPermission}
 
     # Get queryset with related feature and module data
     que = mapping[typ].objects.select_related("feature", "module")
