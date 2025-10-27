@@ -263,8 +263,8 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 def exe_membership_request(request: HttpRequest, num: int) -> HttpResponse:
     """Handle membership request display for organization executives."""
     context = check_association_context(request, "exe_membership")
-    context.update(get_member(num))
-    return get_membership_request(context)
+    member_request = get_member(num)
+    return get_membership_request(context, member_request)
 
 
 @login_required
@@ -332,62 +332,61 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    context.update(get_member(num))
+    member_edit = get_member(num)
 
     # Handle form submission for member profile updates
     if request.method == "POST":
-        form = ExeMemberForm(request.POST, request.FILES, instance=context["member"], request=request)
+        form = ExeMemberForm(request.POST, request.FILES, instance=member_edit, request=request)
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
         # Initialize empty form for GET requests
-        form = ExeMemberForm(instance=context["member"], request=request)
+        form = ExeMemberForm(instance=member_edit, request=request)
     context["form"] = form
 
     # Get member registrations for current association events
     context["regs"] = Registration.objects.filter(
-        member=context["member"], run__event__assoc=context["association_id"]
+        member=member_edit, run__event__assoc=context["association_id"]
     ).select_related("run")
 
     # Add accounting payment items to context
-    member_add_accountingitempayment(context, request)
+    member_add_accountingitempayment(context, member_edit)
 
     # Add other accounting items to context
-    member_add_accountingitemother(context, request)
+    member_add_accountingitemother(context, member_edit)
 
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=context["member"], hide=False, assoc_id=context["association_id"]
+        member=member_edit, hide=False, assoc_id=context["association_id"]
     )
 
     # Process membership data and document paths
-    member = context["member"]
-    get_user_membership(member, context["association_id"])
+    get_user_membership(member_edit, context["association_id"])
 
     # Set document file paths if they exist
-    if member.membership.document:
-        context["doc_path"] = member.membership.get_document_filepath().lower()
+    if member_edit.membership.document:
+        context["doc_path"] = member_edit.membership.get_document_filepath().lower()
 
-    if member.membership.request:
-        context["req_path"] = member.membership.get_request_filepath().lower()
+    if member_edit.membership.request:
+        context["req_path"] = member_edit.membership.get_request_filepath().lower()
 
     # Add fiscal code validation if feature is enabled
     if "fiscal_code_check" in context["features"]:
-        context.update(calculate_fiscal_code(context["member"]))
+        context.update(calculate_fiscal_code(member_edit))
 
     return render(request, "larpmanager/exe/users/member.html", context)
 
 
-def member_add_accountingitempayment(context: dict, request: HttpRequest) -> dict:
+def member_add_accountingitempayment(context: dict, member: Member) -> dict:
     """Add accounting item payment information to context for a member.
 
     Retrieves non-hidden payments for the member and sets display type based on payment method.
     """
     # Fetch visible payments for the member in the current association
     context["pays"] = AccountingItemPayment.objects.filter(
-        member=context["member"], hide=False, assoc_id=context["association_id"]
+        member=member, hide=False, assoc_id=context["association_id"]
     ).select_related("reg")
 
     # Set display type based on payment method
@@ -400,11 +399,11 @@ def member_add_accountingitempayment(context: dict, request: HttpRequest) -> dic
             el.typ = el.get_pay_display()
 
 
-def member_add_accountingitemother(context: dict, request: HttpRequest) -> None:
+def member_add_accountingitemother(context: dict, member: Member) -> None:
     """Add accounting other items to member context with localized type labels."""
     # Query non-hidden accounting items for the member in current association
     context["others"] = AccountingItemOther.objects.filter(
-        member=context["member"], hide=False, assoc_id=context["association_id"]
+        member=member, hide=False, assoc_id=context["association_id"]
     ).select_related("run")
 
     # Set localized type labels based on item category
@@ -429,10 +428,8 @@ def exe_membership_status(request, num):
         Rendered membership editing form or redirect after successful update
     """
     context = check_association_context(request, "exe_membership")
-    context.update(get_member(num))
-    context["membership"] = get_object_or_404(
-        Membership, member_id=context["member"].id, assoc_id=context["association_id"]
-    )
+    member_edit = get_member(num)
+    context["membership"] = get_object_or_404(Membership, member_id=member_edit.id, assoc_id=context["association_id"])
 
     if request.method == "POST":
         form = ExeMembershipForm(request.POST, request.FILES, instance=context["membership"], request=request)
@@ -446,7 +443,7 @@ def exe_membership_status(request, num):
 
     context["num"] = num
 
-    context["form"].page_title = str(context["member"]) + " - " + _("Membership")
+    context["form"].page_title = str(member_edit) + " - " + _("Membership")
 
     return render(request, "larpmanager/exe/edit.html", context)
 
@@ -945,9 +942,8 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
     context = check_association_context(request, "exe_questions")
 
     # Retrieve the member and their question history
-    member = Member.objects.get(pk=r)
-    context["member"] = member
-    context["list"] = HelpQuestion.objects.filter(member=member, assoc_id=context["association_id"]).order_by(
+    member_edit = get_member(r)
+    context["list"] = HelpQuestion.objects.filter(member=member_edit, assoc_id=context["association_id"]).order_by(
         "-created"
     )
 
@@ -966,7 +962,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
                 hp.run = last.run
 
             # Set answer metadata and save to database
-            hp.member = member
+            hp.member = member_edit
             hp.is_user = False
             hp.assoc_id = context["association_id"]
             hp.save()

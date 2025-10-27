@@ -706,7 +706,7 @@ def acc_collection_close(request: HttpRequest, collection_code: str) -> HttpResp
 
     # Notify user of successful closure and redirect to management page
     messages.success(request, _("Collection closed"))
-    return redirect("acc_collection_manage", event_slug=collection_code)
+    return redirect("acc_collection_manage", collection_code=collection_code)
 
 
 @login_required

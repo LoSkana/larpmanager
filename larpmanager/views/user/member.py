@@ -456,7 +456,7 @@ def membership(request: HttpRequest) -> HttpResponse:
         form = MembershipRequestForm(instance=el)
 
     # Add core membership data to context
-    context.update({"member": request.user.member, "membership": el, "form": form})
+    context.update({"form": form})
 
     # Add fiscal code calculation if feature is enabled
     if "fiscal_code_check" in context["features"]:
@@ -466,7 +466,7 @@ def membership(request: HttpRequest) -> HttpResponse:
     context["fee_payed"] = AccountingItemMembership.objects.filter(
         assoc_id=context["association_id"],
         year=datetime.now().year,
-        member_id=request.user.member.id,
+        member_id=context["member"].id,
     ).exists()
 
     # Add statute text for accepted memberships
@@ -483,15 +483,13 @@ def membership(request: HttpRequest) -> HttpResponse:
 def membership_request(request: HttpRequest) -> HttpResponse:
     """Handle membership request display for the current user."""
     context = get_context(request)
-    context["member"] = request.user.member
-    return get_membership_request(context)
+    return get_membership_request(context, context["member"])
 
 
 @login_required
 def membership_request_test(request: HttpRequest) -> HttpResponse:
     """Render membership request test PDF template."""
     context = get_context(request)
-    context.update({"member": request.user.member})
     return render(request, "pdf/membership/request.html", context)
 
 
@@ -515,16 +513,16 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
-    context.update(get_member(n))
+    context["member_public"] = get_member(n)
 
     # Verify member has membership in current association
-    if not Membership.objects.filter(member=context["member"], assoc_id=context["association_id"]).exists():
+    if not Membership.objects.filter(member=context["member_public"], assoc_id=context["association_id"]).exists():
         raise Http404("no membership")
 
     # Add badges if badge feature is enabled for association
     if "badge" in context["features"]:
         context["badges"] = []
-        for badge in context["member"].badges.filter(assoc_id=context["association_id"]).order_by("number"):
+        for badge in context["member_public"].badges.filter(assoc_id=context["association_id"]).order_by("number"):
             context["badges"].append(badge.show(request.LANGUAGE_CODE))
 
     # Add LARP history if enabled in association configuration
@@ -534,7 +532,7 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
         context["regs"] = (
             Registration.objects.filter(
                 cancellation_date__isnull=True,
-                member=context["member"],
+                member=context["member_public"],
                 run__event__assoc_id=context["association_id"],
             )
             .order_by("-run__end")
@@ -557,10 +555,10 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
 
     # Validate and mark social contact as URL if valid
     validate = URLValidator()
-    if context["member"].social_contact:
+    if context["member_public"].social_contact:
         try:
-            validate(context["member"].social_contact)
-            context["member"].contact_url = True
+            validate(context["member_public"].social_contact)
+            context["member_public"].contact_url = True
         except Exception:
             pass
 
@@ -599,8 +597,8 @@ def chat(request, n):
     if n == mid:
         messages.success(request, _("You can't send messages to yourself") + "!")
         return redirect("home")
-    context = get_member(n)
-    yid = context["member"].id
+    other_member = get_member(n)
+    yid = other_member.id
     channel = get_channel(yid, mid)
     if request.method == "POST":
         tx = request.POST["text"]
@@ -745,7 +743,6 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
     """
     # Build context with user and association information
     context = get_context(request)
-    context.update({"member": request.user.member, "association_id": context["association_id"]})
 
     # Get user membership and update newsletter preference
     mb = get_user_membership(context["member"], context["association_id"])

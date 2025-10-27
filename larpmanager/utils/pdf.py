@@ -43,6 +43,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import Association, AssocTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
+from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
@@ -306,20 +307,20 @@ def pdf_template(context: dict, template_path: str, output_path: str, small: boo
 # ##print
 
 
-def get_membership_request(context: dict) -> HttpResponse:
+def get_membership_request(context: dict, member: Member) -> HttpResponse:
     """Generate and return a PDF membership registration document."""
     # Get the file path for the member's request document
-    file_path = context["member"].get_request_filepath()
+    file_path = member.get_request_filepath()
 
     # Prepare template context with member data
-    template_context = {"member": context["member"]}
+    template_context = {"member": member}
 
     # Retrieve association-specific membership template text
     template = get_assoc_text(context["association_id"], AssocTextType.MEMBERSHIP)
 
     # Generate PDF from template and return as HTTP response
     pdf_template(template_context, template, file_path, html=True)
-    return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": context["member"]})
+    return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": member})
 
 
 def print_character(context: dict, force: bool = False) -> dict:

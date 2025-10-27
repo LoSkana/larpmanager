@@ -151,7 +151,7 @@ def check_diff(self, old_text, new_text):
     self.diff = diff_engine.diff_prettyHtml(self.diff)
 
 
-def get_member(member_id):
+def get_member(member_id: int) -> Member:
     """Get member by ID with proper error handling.
 
     Args:
@@ -164,7 +164,7 @@ def get_member(member_id):
         Http404: If member does not exist
     """
     try:
-        return {"member": Member.objects.get(pk=member_id)}
+        return Member.objects.get(pk=member_id)
     except ObjectDoesNotExist as err:
         raise Http404("Member does not exist") from err
 
