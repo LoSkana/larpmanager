@@ -132,7 +132,7 @@ class MembershipError(Exception):
         self.assocs = assocs
 
 
-def check_assoc_feature(request: HttpRequest, context: dict, feature_slug: str) -> dict:
+def check_association_feature(request: HttpRequest, context: dict, feature_slug: str) -> dict:
     """Check if association has required feature enabled.
 
     Validates that the specified feature is enabled for the association
@@ -150,7 +150,7 @@ def check_assoc_feature(request: HttpRequest, context: dict, feature_slug: str) 
             association, includes feature slug, error code 0, and request path
 
     Example:
-        check_assoc_feature(request, 'advanced_registration')
+        check_association_feature(request, 'advanced_registration')
     """
     # Check if the requested feature slug exists in the association's enabled features
     if feature_slug not in context["features"]:

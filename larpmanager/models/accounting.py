@@ -309,7 +309,7 @@ class AccountingItemMembership(AccountingItem):
     class Meta:
         indexes = [
             models.Index(
-                fields=["association", "year"], condition=Q(deleted__isnull=True), name="acctmem_assoc_year_act"
+                fields=["association", "year"], condition=Q(deleted__isnull=True), name="acctmem_association_year_act"
             ),
         ]
 

@@ -178,7 +178,7 @@ def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Regi
 
     Examples:
         >>> incomplete_regs = get_regs_paying_incomplete()
-        >>> assoc_incomplete = get_regs_paying_incomplete(my_association)
+        >>> association_incomplete = get_regs_paying_incomplete(my_association)
     """
     # Get base registration queryset, optionally filtered by association
     registration_queryset = get_regs(association)

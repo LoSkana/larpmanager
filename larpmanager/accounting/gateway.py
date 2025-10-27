@@ -43,7 +43,7 @@ from paypal.standard.models import ST_PP_COMPLETED
 from satispaython.utils import load_key
 
 from larpmanager.accounting.invoice import invoice_received_money
-from larpmanager.models.access import get_assoc_executives
+from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
@@ -850,7 +850,7 @@ class RedSysClient:
             subj = "Ds_Response not found"
             body = str(merchant_parameters)
             # Notify executives about missing response code
-            for member in get_assoc_executives(association):
+            for member in get_association_executives(association):
                 my_send_mail(subj, body, member, association)
             return None
 
@@ -863,7 +863,7 @@ class RedSysClient:
             subj = "Failed redsys payment"
             body = str(merchant_parameters)
             # Notify executives about failed payment
-            for member in get_assoc_executives(association):
+            for member in get_association_executives(association):
                 my_send_mail(subj, body, member, association)
             return None
 

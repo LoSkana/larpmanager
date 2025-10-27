@@ -40,7 +40,7 @@ from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
-from larpmanager.cache.role import has_assoc_permission, has_event_permission
+from larpmanager.cache.role import has_association_permission, has_event_permission
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
@@ -99,7 +99,7 @@ def ludomanager(context, request):
     Returns:
         HttpResponse: Rendered LudoManager template
     """
-    context["assoc_skin"] = "LudoManager"
+    context["association_skin"] = "LudoManager"
     context["platform"] = "LudoManager"
     return render(request, "larpmanager/larpmanager/skin/ludomanager.html", context)
 
@@ -307,7 +307,7 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         raise Http404("feature not overall")
 
     # Verify user has permission to manage association features
-    if not has_assoc_permission(request, context, "exe_features"):
+    if not has_association_permission(request, context, "exe_features"):
         raise PermissionError()
 
     # Get the association from request context and activate the feature
@@ -323,7 +323,7 @@ def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = No
         return redirect("/" + p)
 
     # Use the first associated permission's slug as the default view
-    view_name = feature.assoc_permissions.first().slug
+    view_name = feature.association_permissions.first().slug
     return redirect(reverse(view_name))
 
 
@@ -419,7 +419,7 @@ def debug_mail(request):
     return redirect("home")
 
 
-def debug_slug(request, assoc_slug=""):
+def debug_slug(request, association_slug=""):
     """Set debug slug in session for development testing.
 
     Only available in development and test environments.
@@ -427,7 +427,7 @@ def debug_slug(request, assoc_slug=""):
 
     Args:
         request: Django HTTP request object
-        assoc_slug: Debug slug to set in session
+        association_slug: Debug slug to set in session
 
     Returns:
         HttpResponseRedirect: Redirect to home page
@@ -438,7 +438,7 @@ def debug_slug(request, assoc_slug=""):
     if request.enviro not in ["dev", "test"]:
         raise Http404()
 
-    request.session["debug_slug"] = assoc_slug
+    request.session["debug_slug"] = association_slug
     return redirect("home")
 
 

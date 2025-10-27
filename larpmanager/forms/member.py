@@ -277,13 +277,13 @@ class MyPasswordResetForm(PasswordResetForm):
         body = loader.render_to_string(email_template_name, context)
 
         # Extract association slug from domain and find association
-        assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
+        association_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
         association = None
 
         # If association slug exists, try to find association and update membership
-        if assoc_slug:
+        if association_slug:
             try:
-                association = Association.objects.get(slug=assoc_slug)
+                association = Association.objects.get(slug=association_slug)
                 user = context["user"]
 
                 # Store password reset token in user membership

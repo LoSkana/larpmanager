@@ -35,7 +35,7 @@ def clear_association_cache(association_slug):
 
 
 def cache_association_key(association_slug):
-    return f"assoc_{association_slug}"
+    return f"association_{association_slug}"
 
 
 def get_cache_assoc(association_slug: str) -> dict | None:
@@ -85,18 +85,18 @@ def init_cache_assoc(a_slug: str) -> dict | None:
         return None
 
     # Convert association to dictionary for cache storage
-    assoc_dict = association.as_dict()
+    association_dict = association.as_dict()
 
     # Initialize payment configuration and member field settings
-    _init_payments(association, assoc_dict)
-    _init_member_fields(association, assoc_dict)
+    _init_payments(association, association_dict)
+    _init_member_fields(association, association_dict)
 
     # Add profile images (favicon, logo, main image) if available
     if association.profile:
         try:
-            assoc_dict["favicon"] = association.profile_fav.url
-            assoc_dict["logo"] = association.profile_thumb.url
-            assoc_dict["image"] = association.profile.url
+            association_dict["favicon"] = association.profile_fav.url
+            association_dict["logo"] = association.profile_thumb.url
+            association_dict["image"] = association.profile.url
         except FileNotFoundError:
             pass
 
@@ -111,18 +111,18 @@ def init_cache_assoc(a_slug: str) -> dict | None:
         "activated",
         "key",
     ]:
-        if m in assoc_dict:
-            del assoc_dict[m]
+        if m in association_dict:
+            del association_dict[m]
 
     # Initialize feature flags and skin configuration
-    _init_features(association, assoc_dict)
-    _init_skin(association, assoc_dict)
+    _init_features(association, association_dict)
+    _init_skin(association, association_dict)
 
     # Determine if association qualifies for demo mode (< 10 registrations)
     max_demo = 10
-    assoc_dict["demo"] = Registration.objects.filter(run__event__association_id=association.id).count() < max_demo
+    association_dict["demo"] = Registration.objects.filter(run__event__association_id=association.id).count() < max_demo
 
-    return assoc_dict
+    return association_dict
 
 
 def _init_skin(association, element_context: dict) -> None:

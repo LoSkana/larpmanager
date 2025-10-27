@@ -29,7 +29,7 @@ from larpmanager.models.access import AssociationPermission, EventPermission
 logger = logging.getLogger(__name__)
 
 
-def assoc_permission_feature_key(permission_slug):
+def association_permission_feature_key(permission_slug):
     """Generate cache key for association permission features.
 
     Args:
@@ -38,7 +38,7 @@ def assoc_permission_feature_key(permission_slug):
     Returns:
         str: Cache key for association permission feature
     """
-    return f"assoc_permission_feature_{permission_slug}"
+    return f"association_permission_feature_{permission_slug}"
 
 
 def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
@@ -71,7 +71,9 @@ def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
     config = perm.config or ""
 
     # Cache the processed data for future requests
-    cache.set(assoc_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(
+        association_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+    )
     return slug, tutorial, config
 
 
@@ -95,7 +97,7 @@ def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict
         return "def", None, None
 
     # Attempt to retrieve from cache first
-    cached_feature_data = cache.get(assoc_permission_feature_key(slug))
+    cached_feature_data = cache.get(association_permission_feature_key(slug))
 
     # If cache miss, update cache and return fresh data
     if cached_feature_data is None:
@@ -105,7 +107,7 @@ def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict
 
 
 def clear_association_permission_cache(association):
-    cache.delete(assoc_permission_feature_key(association.slug))
+    cache.delete(association_permission_feature_key(association.slug))
 
 
 def event_permission_feature_key(permission_slug):

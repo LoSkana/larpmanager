@@ -46,7 +46,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         context: Dict for context information
 
     Returns:
-        Dict with keys: reg_menu, assoc_role, event_role, all_runs, open_runs, topbar
+        Dict with keys: reg_menu, association_role, event_role, all_runs, open_runs, topbar
     """
     # Skip if not authenticated or no association
     if not context["member"] or context["association_id"] == 0:
@@ -88,24 +88,24 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     ]
 
     # Collect roles
-    navigation_context["assoc_role"] = _get_assoc_roles(member, association_id, request)
+    navigation_context["association_role"] = _get_association_roles(member, association_id, request)
     navigation_context["event_role"] = _get_event_roles(member, association_id)
 
     # Build accessible runs
     navigation_context.update(
-        _get_accessible_runs(association_id, navigation_context["assoc_role"], navigation_context["event_role"])
+        _get_accessible_runs(association_id, navigation_context["association_role"], navigation_context["event_role"])
     )
 
     # Determine if topbar should be shown
-    navigation_context["topbar"] = bool(navigation_context["event_role"] or navigation_context["assoc_role"])
+    navigation_context["topbar"] = bool(navigation_context["event_role"] or navigation_context["association_role"])
 
     return navigation_context
 
 
-def _get_assoc_roles(member, association_id: int, request: HttpRequest) -> dict:
+def _get_association_roles(member, association_id: int, request: HttpRequest) -> dict:
     """Get association-level roles for the member."""
     association_roles = {}
-    for association_role in member.assoc_roles.filter(association_id=association_id):
+    for association_role in member.association_roles.filter(association_id=association_id):
         association_roles[association_role.number] = association_role.id
 
     # Grant admin role to LarpManager admins
@@ -124,11 +124,11 @@ def _get_event_roles(member, association_id: int) -> dict:
     return event_roles
 
 
-def _get_accessible_runs(association_id: int, assoc_roles: dict, event_roles: dict) -> dict:
+def _get_accessible_runs(association_id: int, association_roles: dict, event_roles: dict) -> dict:
     """Get runs accessible to the user based on their roles."""
     result = {"all_runs": {}, "open_runs": {}, "past_runs": {}}
     all_runs = Run.objects.filter(event__association_id=association_id).select_related("event").order_by("end")
-    is_admin = 1 in assoc_roles
+    is_admin = 1 in association_roles
 
     for run in all_runs:
         if run.event.deleted:
@@ -189,10 +189,10 @@ def clear_run_event_links_cache(event: Event) -> None:
     # Clear cache for association executives (role number 1)
     # These users typically have access to all events in the association
     try:
-        assoc_role = AssociationRole.objects.prefetch_related("members").get(
+        association_role = AssociationRole.objects.prefetch_related("members").get(
             association_id=event.association_id, number=1
         )
-        for member in assoc_role.members.all():
+        for member in association_role.members.all():
             reset_event_links(member.id, event.association_id)
     except ObjectDoesNotExist:
         pass

@@ -426,32 +426,32 @@ def post_delete_assignment_trait_reset(sender, instance, **kwargs):
 
 # AssocPermission signals
 @receiver(pre_save, sender=AssociationPermission)
-def pre_save_assoc_permission(sender, instance, **kwargs):
+def pre_save_association_permission(sender, instance, **kwargs):
     auto_assign_association_permission_number(instance)
 
 
 @receiver(post_save, sender=AssociationPermission)
-def post_save_assoc_permission_index_permission(sender, instance, **kwargs):
+def post_save_association_permission_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("association")
     clear_association_permission_cache(instance)
 
 
 @receiver(post_delete, sender=AssociationPermission)
-def post_delete_assoc_permission_index_permission(sender, instance, **kwargs):
+def post_delete_association_permission_index_permission(sender, instance, **kwargs):
     clear_index_permission_cache("association")
     clear_association_permission_cache(instance)
 
 
 # AssocRole signals
 @receiver(pre_delete, sender=AssociationRole)
-def pre_delete_assoc_role_reset(sender, instance, **kwargs):
+def pre_delete_association_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
     for member in instance.members.all():
         reset_event_links(member.user.id, instance.association_id)
 
 
 @receiver(post_save, sender=AssociationRole)
-def post_save_assoc_role_reset(sender, instance, **kwargs):
+def post_save_association_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
     for member in instance.members.all():
         reset_event_links(member.user.id, instance.association_id)
@@ -459,12 +459,12 @@ def post_save_assoc_role_reset(sender, instance, **kwargs):
 
 # AssocText signals
 @receiver(pre_delete, sender=AssociationText)
-def pre_delete_assoc_text(sender, instance, **kwargs):
+def pre_delete_association_text(sender, instance, **kwargs):
     clear_association_text_cache_on_delete(instance)
 
 
 @receiver(post_save, sender=AssociationText)
-def post_save_assoc_text(sender, instance, created, **kwargs):
+def post_save_association_text(sender, instance, created, **kwargs):
     update_association_text_cache_on_save(instance)
 
 
@@ -493,12 +493,12 @@ def post_save_association_reset_lm_home(sender, instance, **kwargs) -> None:
 
 # AssociationConfig signals
 @receiver(post_save, sender=AssociationConfig)
-def post_save_reset_assoc_config(sender, instance, **kwargs):
+def post_save_reset_association_config(sender, instance, **kwargs):
     clear_config_cache(instance.association)
 
 
 @receiver(post_delete, sender=AssociationConfig)
-def post_delete_reset_assoc_config(sender, instance, **kwargs):
+def post_delete_reset_association_config(sender, instance, **kwargs):
     clear_config_cache(instance.association)
 
 

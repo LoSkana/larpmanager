@@ -27,7 +27,7 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
-from larpmanager.cache.feature import get_association_features, reset_assoc_features
+from larpmanager.cache.feature import get_association_features, reset_association_features
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
@@ -269,7 +269,7 @@ class ExeAppearanceForm(MyCssForm):
         model = Association
         fields = ("background", "font", "pri_rgb", "sec_rgb", "ter_rgb")
 
-    assoc_css = forms.CharField(
+    association_css = forms.CharField(
         widget=Textarea(attrs={"rows": 15}),
         required=False,
         help_text=_(
@@ -282,7 +282,7 @@ class ExeAppearanceForm(MyCssForm):
         """Initialize form with cancel prevention and CSS link visibility."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
-        self.show_link = ["id_assoc_css"]
+        self.show_link = ["id_association_css"]
 
     @staticmethod
     def get_css_path(instance) -> str:
@@ -292,7 +292,7 @@ class ExeAppearanceForm(MyCssForm):
 
     @staticmethod
     def get_input_css():
-        return "assoc_css"
+        return "association_css"
 
 
 class ExeFeatureForm(FeatureForm):
@@ -320,7 +320,7 @@ class ExeFeatureForm(FeatureForm):
 
         # Update related features and reset cache
         self._save_features(instance)
-        reset_assoc_features(instance.id)
+        reset_association_features(instance.id)
 
         return instance
 

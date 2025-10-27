@@ -431,7 +431,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return f"{obj.display_real()} - {obj.email}"
 
 
-def get_assoc_people(association_id):
+def get_association_people(association_id):
     """Get list of people associated with an association for form choices.
 
     Args:

@@ -33,7 +33,7 @@ from larpmanager.cache.permission import get_association_permission_feature, get
 from larpmanager.cache.role import (
     get_index_association_permissions,
     get_index_event_permissions,
-    has_assoc_permission,
+    has_association_permission,
     has_event_permission,
 )
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
@@ -79,8 +79,8 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
     context = {"association_id": request.association["id"]}
 
     # Copy all association data to context
-    for assoc_key in request.association:
-        context[assoc_key] = request.association[assoc_key]
+    for association_key in request.association:
+        context[association_key] = request.association[association_key]
 
     # Add member data
     context["member"] = None
@@ -187,7 +187,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     """
     # Get base user context and validate permission
     context = get_context(request)
-    if not has_assoc_permission(request, context, permission_slug):
+    if not has_association_permission(request, context, permission_slug):
         raise PermissionError()
 
     # Retrieve feature configuration for this permission
@@ -210,7 +210,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
         context["tutorial"] = tutorial_identifier
 
     # Add configuration URL if user has config permissions
-    if config_slug and has_assoc_permission(request, context, "exe_config"):
+    if config_slug and has_association_permission(request, context, "exe_config"):
         context["config"] = reverse("exe_config", args=[config_slug])
 
     return context
@@ -372,9 +372,9 @@ def get_event_context(
 
     # Set association slug from request or event object
     if hasattr(request, "association"):
-        context["assoc_slug"] = request.association["slug"]
+        context["association_slug"] = request.association["slug"]
     else:
-        context["assoc_slug"] = context["event"].association.slug
+        context["association_slug"] = context["event"].association.slug
 
     # Configure staff permissions for character management access
     if has_event_permission(request, context, event_slug, "orga_characters"):

@@ -34,11 +34,11 @@ from larpmanager.utils.auth import get_allowed_managed
 from larpmanager.utils.exceptions import PermissionError
 
 
-def cache_assoc_role_key(assoc_role_id):
-    return f"assoc_role_{assoc_role_id}"
+def cache_association_role_key(association_role_id):
+    return f"association_role_{association_role_id}"
 
 
-def get_assoc_role(ar: AssociationRole) -> tuple[str, list[str]]:
+def get_association_role(ar: AssociationRole) -> tuple[str, list[str]]:
     """Get association role name and available permission slugs.
 
     Args:
@@ -61,7 +61,7 @@ def get_assoc_role(ar: AssociationRole) -> tuple[str, list[str]]:
     return ar.name, permission_slugs
 
 
-def get_cache_assoc_role(ar_id: int) -> dict:
+def get_cache_association_role(ar_id: int) -> dict:
     """Get cached association role data by ID.
 
     Retrieves association role data from cache if available, otherwise
@@ -77,7 +77,7 @@ def get_cache_assoc_role(ar_id: int) -> dict:
         PermissionError: If the association role cannot be found or accessed.
     """
     # Generate cache key for this association role
-    cache_key = cache_assoc_role_key(ar_id)
+    cache_key = cache_association_role_key(ar_id)
 
     # Try to get cached result first
     cached_result = cache.get(cache_key)
@@ -85,13 +85,13 @@ def get_cache_assoc_role(ar_id: int) -> dict:
     if cached_result is None:
         # Cache miss - fetch from database
         try:
-            assoc_role = AssociationRole.objects.get(pk=ar_id)
+            association_role = AssociationRole.objects.get(pk=ar_id)
         except Exception as err:
             # Convert any database error to permission error
             raise PermissionError() from err
 
         # Process the association role data
-        cached_result = get_assoc_role(assoc_role)
+        cached_result = get_association_role(association_role)
 
         # Cache the result for future requests
         cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -100,11 +100,11 @@ def get_cache_assoc_role(ar_id: int) -> dict:
 
 
 def remove_association_role_cache(association_role_id):
-    key = cache_assoc_role_key(association_role_id)
+    key = cache_association_role_key(association_role_id)
     cache.delete(key)
 
 
-def get_assoc_roles(request: HttpRequest, context: dict) -> tuple[bool, dict[str, int], list[str]]:
+def get_association_roles(request: HttpRequest, context: dict) -> tuple[bool, dict[str, int], list[str]]:
     """Get association roles and permissions for the current user.
 
     Args:
@@ -128,13 +128,13 @@ def get_assoc_roles(request: HttpRequest, context: dict) -> tuple[bool, dict[str
     role_names = []
 
     # Process each association role assigned to the user
-    for role_number, role_data in context["assoc_role"].items():
+    for role_number, role_data in context["association_role"].items():
         # Role number 1 indicates admin privileges
         if role_number == 1:
             is_admin = True
 
         # Extract role name and associated permission slugs
-        (role_name, permission_slugs) = get_cache_assoc_role(role_data)
+        (role_name, permission_slugs) = get_cache_association_role(role_data)
         role_names.append(role_name)
 
         # Grant all permissions associated with this role
@@ -144,7 +144,7 @@ def get_assoc_roles(request: HttpRequest, context: dict) -> tuple[bool, dict[str
     return is_admin, permissions, role_names
 
 
-def has_assoc_permission(request: HttpRequest, context: dict, permission: str) -> bool:
+def has_association_permission(request: HttpRequest, context: dict, permission: str) -> bool:
     """Check if the user has the specified association permission.
 
     Args:
@@ -168,7 +168,7 @@ def has_assoc_permission(request: HttpRequest, context: dict, permission: str) -
         return False
 
     # Get user's association roles and permissions
-    (is_admin, user_permissions, role_names) = get_assoc_roles(request, context)
+    (is_admin, user_permissions, role_names) = get_association_roles(request, context)
 
     # Admin users have all permissions
     if is_admin:
@@ -200,7 +200,7 @@ def get_index_association_permissions(
         PermissionError: When user lacks permissions and check=True
     """
     # Get user role information and admin status
-    (is_admin, user_association_permissions, role_names) = get_assoc_roles(request, context)
+    (is_admin, user_association_permissions, role_names) = get_association_roles(request, context)
 
     # Check if user has any roles or admin privileges
     if not role_names and not is_admin:
@@ -216,7 +216,7 @@ def get_index_association_permissions(
     features = get_association_features(association_id)
 
     # Generate permission data for index display
-    context["assoc_pms"] = get_index_permissions(
+    context["association_pms"] = get_index_permissions(
         context, features, is_admin, user_association_permissions, "association"
     )
 
@@ -364,7 +364,7 @@ def has_event_permission(request: HttpRequest, context: dict, event_slug: str, p
         return False
 
     # Check if user has admin role in association (role 1)
-    if "assoc_role" in context and 1 in context["assoc_role"]:
+    if "association_role" in context and 1 in context["association_role"]:
         return True
 
     # Get event-specific roles and permissions for the user
@@ -402,7 +402,7 @@ def get_index_event_permissions(context, request, event_slug, enforce_check=True
         PermissionError: If enforce_check=True and user has no permissions
     """
     (is_organizer, user_event_permissions, role_names) = get_event_roles(request, context, event_slug)
-    if "assoc_role" in context and 1 in context["assoc_role"]:
+    if "association_role" in context and 1 in context["association_role"]:
         is_organizer = True
     if enforce_check and not role_names and not is_organizer:
         raise PermissionError()

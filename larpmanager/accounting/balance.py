@@ -425,7 +425,7 @@ def check_accounting(association_id: int) -> None:
     context = {"association_id": association_id}
 
     # Execute association accounting calculation, populating context with financial sums
-    assoc_accounting(context)
+    association_accounting(context)
 
     # Persist accounting results to database via RecordAccounting model
     RecordAccounting.objects.create(
@@ -460,7 +460,7 @@ def check_run_accounting(run: Run) -> None:
     RecordAccounting.objects.create(association=run.event.association, run=run, global_sum=run.balance, bank_sum=0)
 
 
-def assoc_accounting_data(context: dict, year: int | None = None) -> None:
+def association_accounting_data(context: dict, year: int | None = None) -> None:
     """Gather association accounting data for a specific year or all time.
 
     Aggregates all monetary flows (inflows, outflows, memberships, donations, etc.)
@@ -577,7 +577,7 @@ def assoc_accounting_data(context: dict, year: int | None = None) -> None:
     context["out_sum"] = context["outflow_sum"] + context["refund_sum"]
 
 
-def assoc_accounting(context: dict) -> None:
+def association_accounting(context: dict) -> None:
     """Generate comprehensive association accounting summary.
 
     Calculates member balances, run balances, and overall financial position
@@ -597,7 +597,7 @@ def assoc_accounting(context: dict) -> None:
         - global_sum: Overall financial position
         - bank_sum: Bank account balance based on recorded transactions
         - sum_year: Dictionary mapping years to 1 (for year range)
-        Plus all fields from assoc_accounting_data()
+        Plus all fields from association_accounting_data()
     """
     # Initialize member balance tracking
     context.update({"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0})
@@ -634,7 +634,7 @@ def assoc_accounting(context: dict) -> None:
             context["balance_sum"] += run.balance
 
     # Fetch detailed accounting data (inflows, outflows, memberships, etc.)
-    assoc_accounting_data(context)
+    association_accounting_data(context)
 
     # Calculate global financial position
     # Global sum = (run balances + memberships + donations + exec inflows) - (exec outflows + tokens issued)

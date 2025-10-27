@@ -291,7 +291,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(run)
 
 
-    def test_assoc_permission_post_save_resets_permission_cache(self):
+    def test_association_permission_post_save_resets_permission_cache(self):
         """Test that AssocPermission post_save signal resets permission cache"""
         # This test verifies the signal receiver is connected
         # The actual cache behavior is tested in integration tests
@@ -307,7 +307,7 @@ class TestCacheSignals(BaseTestCase):
         permission.refresh_from_db()
         self.assertEqual(permission.descr, "Updated description")
 
-    def test_assoc_permission_post_delete_resets_permission_cache(self):
+    def test_association_permission_post_delete_resets_permission_cache(self):
         """Test that AssocPermission post_delete signal resets permission cache"""
         # This test verifies the signal receiver is connected
         permission = AssociationPermission.objects.first()
@@ -357,7 +357,7 @@ class TestCacheSignals(BaseTestCase):
 
 
     @patch("larpmanager.models.signals.remove_association_role_cache")
-    def test_assoc_role_post_save_resets_role_cache(self, mock_reset):
+    def test_association_role_post_save_resets_role_cache(self, mock_reset):
         """Test that AssocRole post_save signal resets role cache"""
         association = self.get_association()
         role = AssociationRole(name="Test Role", association=association, number=10)
@@ -366,7 +366,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(role.pk)
 
     @patch("larpmanager.models.signals.remove_association_role_cache")
-    def test_assoc_role_pre_delete_resets_role_cache(self, mock_reset):
+    def test_association_role_pre_delete_resets_role_cache(self, mock_reset):
         """Test that AssocRole pre_delete signal resets role cache"""
         association = self.get_association()
         role = AssociationRole.objects.create(name="Test Role", association=association, number=11)
@@ -698,7 +698,7 @@ class TestCacheSignals(BaseTestCase):
         self.assertTrue(mock_reset.called or True)
 
     @patch("larpmanager.mail.base.reset_event_links")
-    def test_assoc_role_m2m_add_member_resets_cache(self, mock_reset):
+    def test_association_role_m2m_add_member_resets_cache(self, mock_reset):
         """Test that adding a member to AssocRole resets event links cache"""
         association = self.get_association()
         member = self.get_member()
@@ -712,7 +712,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(member.user.id, association.id)
 
     @patch("larpmanager.mail.base.reset_event_links")
-    def test_assoc_role_m2m_remove_member_resets_cache(self, mock_reset):
+    def test_association_role_m2m_remove_member_resets_cache(self, mock_reset):
         """Test that removing a member from AssocRole resets event links cache"""
         association = self.get_association()
         member = self.get_member()
@@ -727,7 +727,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(member.user.id, association.id)
 
     @patch("larpmanager.models.signals.reset_event_links")
-    def test_assoc_role_m2m_clear_members_resets_cache(self, mock_reset):
+    def test_association_role_m2m_clear_members_resets_cache(self, mock_reset):
         """Test that clearing members from AssocRole resets event links cache via signals"""
         from django.contrib.auth.models import User
 
@@ -806,7 +806,7 @@ class TestCacheSignals(BaseTestCase):
         self.assertTrue(mock_reset.call_count >= 2)
 
     @patch("larpmanager.models.signals.reset_event_links")
-    def test_assoc_role_post_save_resets_member_caches(self, mock_reset):
+    def test_association_role_post_save_resets_member_caches(self, mock_reset):
         """Test that saving AssocRole resets cache for all its members"""
         from django.contrib.auth.models import User
 
@@ -854,7 +854,7 @@ class TestCacheSignals(BaseTestCase):
         self.assertTrue(mock_reset.call_count >= 2)
 
     @patch("larpmanager.models.signals.reset_event_links")
-    def test_assoc_role_pre_delete_resets_member_caches(self, mock_reset):
+    def test_association_role_pre_delete_resets_member_caches(self, mock_reset):
         """Test that deleting AssocRole resets cache for all its members"""
         from django.contrib.auth.models import User
 

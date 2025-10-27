@@ -36,19 +36,19 @@ def generate_association_encryption_key(association):
         association.key = Fernet.generate_key()
 
 
-def auto_assign_association_permission_number(assoc_permission):
+def auto_assign_association_permission_number(association_permission):
     """Assign number to association permission if not set.
 
     Args:
-        assoc_permission: AssocPermission instance to assign number to
+        association_permission: AssocPermission instance to assign number to
     """
-    if not assoc_permission.number:
-        max_number = AssociationPermission.objects.filter(feature__module=assoc_permission.feature.module).aggregate(
-            Max("number")
-        )["number__max"]
+    if not association_permission.number:
+        max_number = AssociationPermission.objects.filter(
+            feature__module=association_permission.feature.module
+        ).aggregate(Max("number"))["number__max"]
         if not max_number:
             max_number = 1
-        assoc_permission.number = max_number + 10
+        association_permission.number = max_number + 10
 
 
 def prepare_association_skin_features(instance: Association) -> None:

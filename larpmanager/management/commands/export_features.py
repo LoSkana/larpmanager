@@ -49,7 +49,7 @@ class Command(BaseCommand):
             - module.yaml: FeatureModule definitions
             - feature.yaml: Feature configurations
             - permission_module.yaml: PermissionModule definitions
-            - assoc_permission.yaml: AssocPermission configurations
+            - association_permission.yaml: AssocPermission configurations
             - event_permission.yaml: EventPermission configurations
             - payment_methods.yaml: PaymentMethod configurations
         """
@@ -85,7 +85,7 @@ class Command(BaseCommand):
                 ),
             ),
             "permission_module": (PermissionModule, ("name", "slug", "order", "icon")),
-            "assoc_permission": (
+            "association_permission": (
                 AssociationPermission,
                 ("name", "descr", "slug", "number", "feature", "config", "hidden", "module"),
             ),

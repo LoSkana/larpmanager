@@ -481,7 +481,7 @@ def register_info(request, context, form, reg, dis):
     context["discount_apply"] = dis
     context["custom_text"] = get_event_text(context["event"].id, EventTextType.REGISTER)
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
-    context["assoc_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
+    context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
     context["hide_unavailable"] = get_event_config(context["event"].id, "registration_hide_unavailable", False, context)
     context["no_provisional"] = get_event_config(context["event"].id, "payment_no_provisional", False, context)
 
@@ -752,7 +752,7 @@ def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpRes
         context["event_text"] = get_event_text(context["event"].id, EventTextType.TOC)
 
     # Add association terms and conditions
-    context["assoc_text"] = get_association_text(context["association_id"], AssociationTextType.TOC)
+    context["association_text"] = get_association_text(context["association_id"], AssociationTextType.TOC)
 
     return render(request, "larpmanager/event/register_conditions.html", context)
 
@@ -1033,7 +1033,7 @@ def unregister(request, event_slug):
 
     context["reg"] = reg
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
-    context["assoc_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
+    context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
     return render(request, "larpmanager/event/unregister.html", context)
 
 

@@ -52,10 +52,10 @@ class AssociationIdentifyMiddleware:
         Returns:
             HttpResponse: Either a redirect or the normal response
         """
-        return self.get_assoc_info(request) or self.get_response(request)
+        return self.get_association_info(request) or self.get_response(request)
 
     @classmethod
-    def get_assoc_info(cls, request) -> Optional[HttpResponse]:
+    def get_association_info(cls, request) -> Optional[HttpResponse]:
         """Extract association information from request domain.
 
         Determines the environment based on host domain, extracts subdomain to identify

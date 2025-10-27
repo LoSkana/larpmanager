@@ -11,14 +11,14 @@ from django.utils.translation import gettext_lazy as _
 from django_select2.forms import Select2Widget
 from slugify import slugify
 
-from larpmanager.accounting.balance import assoc_accounting, get_run_accounting
+from larpmanager.accounting.balance import association_accounting, get_run_accounting
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.cache.role import (
     get_index_association_permissions,
     get_index_event_permissions,
-    has_assoc_permission,
+    has_association_permission,
     has_event_permission,
 )
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
@@ -226,8 +226,8 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         run.counts = get_reg_counts(run)
 
     # Add accounting information if user has permission
-    if has_assoc_permission(request, context, "exe_accounting"):
-        assoc_accounting(context)
+    if has_association_permission(request, context, "exe_accounting"):
+        association_accounting(context)
 
     # Suggest creating an event if no runs are active
     if not context["ongoing_runs"]:
@@ -978,7 +978,7 @@ def _has_permission(request, context, permission):
         bool: True if user has permission
     """
     if permission.startswith("exe"):
-        return has_assoc_permission(request, context, permission)
+        return has_association_permission(request, context, permission)
     return has_event_permission(request, context, context["event"].slug, permission)
 
 
@@ -1194,7 +1194,7 @@ class WhatWouldYouLikeForm(Form):
             choices.append((f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard")))
 
         # Add association dashboard choice if user has association role
-        if self.context.get("assoc_role", None):
+        if self.context.get("association_role", None):
             choices.append(("manage_exe|", self.context.get("name") + " - " + _("Dashboard")))
 
     def _add_function_choices(self, choices: list[tuple[str, str]]) -> None:
@@ -1212,7 +1212,7 @@ class WhatWouldYouLikeForm(Form):
         regular_choices = []
 
         # Add to choices all links in the current interface
-        for permission_type in ["event_pms", "assoc_pms"]:
+        for permission_type in ["event_pms", "association_pms"]:
             all_permissions = self.context.get(permission_type, {})
 
             # Iterate through modules and their permission lists
@@ -1301,7 +1301,7 @@ def _get_choice_redirect_url(choice, context):
     # Define redirect mapping
     redirect_handlers = {
         "event_pms": lambda: _handle_event_pms_redirect(choice_value, context),
-        "assoc_pms": lambda: reverse(choice_value),
+        "association_pms": lambda: reverse(choice_value),
         "manage_orga": lambda: reverse("manage", args=[choice_value]),
         "tutorial": lambda: _handle_tutorial_redirect(choice_value),
         "guide": lambda: reverse("guide", args=[choice_value]),

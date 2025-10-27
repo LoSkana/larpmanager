@@ -28,7 +28,12 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.balance import assoc_accounting, assoc_accounting_data, check_accounting, get_run_accounting
+from larpmanager.accounting.balance import (
+    association_accounting,
+    association_accounting_data,
+    check_accounting,
+    get_run_accounting,
+)
 from larpmanager.accounting.invoice import invoice_verify
 from larpmanager.forms.accounting import (
     ExeCollectionForm,
@@ -723,7 +728,7 @@ def exe_accounting(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_accounting")
 
     # Populate context with accounting data
-    assoc_accounting(context)
+    association_accounting(context)
 
     return render(request, "larpmanager/exe/accounting/accounting.html", context)
 
@@ -742,7 +747,7 @@ def exe_year_accounting(request: HttpRequest) -> JsonResponse:
 
     # Build response with association ID and accounting data
     res = {"association_id": context["association_id"]}
-    assoc_accounting_data(res, year)
+    association_accounting_data(res, year)
     return JsonResponse({"res": res})
 
 

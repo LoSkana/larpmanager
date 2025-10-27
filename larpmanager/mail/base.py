@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.links import reset_event_links
-from larpmanager.models.access import AssociationRole, EventRole, get_assoc_executives, get_event_organizers
+from larpmanager.models.access import AssociationRole, EventRole, get_association_executives, get_event_organizers
 from larpmanager.models.association import Association, get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
@@ -73,7 +73,7 @@ def join_email(association):
     Side effects:
         Sends welcome and feedback request emails to association executives
     """
-    for member in get_assoc_executives(association):
+    for member in get_association_executives(association):
         activate(member.language)
         subj = _("Welcome to LarpManager") + "!"
         body = render_to_string("mails/join_assoc.html", {"member": member, "association": association})
@@ -134,7 +134,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
         # Get association executives for notification purposes
         # Handle case where association might not have executives yet
         try:
-            exes = get_assoc_executives(instance.association)
+            exes = get_association_executives(instance.association)
         except ObjectDoesNotExist:
             exes = []
 
@@ -513,7 +513,7 @@ def notify_organization_exe(
         return
 
     # Send individual notifications to each executive
-    for executive in get_assoc_executives(association):
+    for executive in get_association_executives(association):
         # Activate recipient's preferred language
         activate(executive.language)
 
@@ -547,7 +547,7 @@ def get_exec_language(association: Association) -> str:
     langs = {}
 
     # Iterate through all association executives
-    for orga in get_assoc_executives(association):
+    for orga in get_association_executives(association):
         lang = orga.language
 
         # Count each language preference

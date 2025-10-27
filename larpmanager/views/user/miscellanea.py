@@ -50,7 +50,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.writing import Handout
 from larpmanager.utils.base import get_context, get_event_context, is_shuttle
 from larpmanager.utils.common import get_album, get_workshop
-from larpmanager.utils.exceptions import check_assoc_feature
+from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.pdf import (
     print_handout,
     return_pdf,
@@ -169,7 +169,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         raise Http404("HelpQuestion does not exist") from err
 
     # Check access permissions: owner or association role required
-    if hp.member != context["member"] and not context["assoc_role"]:
+    if hp.member != context["member"] and not context["association_role"]:
         raise Http404("illegal access")
 
     # Redirect to attachment URL for authorized users
@@ -391,7 +391,7 @@ def shuttle(request):
         Rendered shuttle template with active and recent requests
     """
     context = get_context(request)
-    check_assoc_feature(request, context, "shuttle")
+    check_association_feature(request, context, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
     context.update(
@@ -421,7 +421,7 @@ def shuttle_new(request):
         Redirect to shuttle list on success or form template on GET/invalid POST
     """
     context = get_context(request)
-    check_assoc_feature(request, context, "shuttle")
+    check_association_feature(request, context, "shuttle")
 
     if request.method == "POST":
         form = ShuttleServiceForm(request.POST, request=request, context=context)
@@ -451,7 +451,7 @@ def shuttle_edit(request, n):
         HttpResponse: Rendered edit form or redirect after successful update
     """
     context = get_context(request)
-    check_assoc_feature(request, context, "shuttle")
+    check_association_feature(request, context, "shuttle")
 
     shuttle = ShuttleService.objects.get(pk=n)
     if request.method == "POST":

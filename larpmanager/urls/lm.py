@@ -164,7 +164,7 @@ urlpatterns = [
         name="debug_slug",
     ),
     path(
-        "debug/<slug:assoc_slug>/",
+        "debug/<slug:association_slug>/",
         views_lm.debug_slug,
         name="debug_slug",
     ),

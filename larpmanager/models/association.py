@@ -164,7 +164,7 @@ class Association(BaseModel):
 
     background = models.ImageField(
         max_length=500,
-        upload_to="assoc_background/",
+        upload_to="association_background/",
         verbose_name=_("Background image"),
         blank=True,
         help_text=_("Background of web pages"),
@@ -178,7 +178,7 @@ class Association(BaseModel):
     )
 
     font = models.FileField(
-        upload_to=UploadToPathAndRename("assoc_font/"),
+        upload_to=UploadToPathAndRename("association_font/"),
         verbose_name=_("Title font"),
         help_text=_("Font to be used in page titles"),
         blank=True,
@@ -289,12 +289,12 @@ class AssociationConfig(BaseModel):
         constraints = [
             UniqueConstraint(
                 fields=["association", "name", "deleted"],
-                name="unique_assoc_config_with_optional",
+                name="unique_association_config_with_optional",
             ),
             UniqueConstraint(
                 fields=["association", "name"],
                 condition=Q(deleted=None),
-                name="unique_assoc_config_without_optional",
+                name="unique_association_config_without_optional",
             ),
         ]
 
@@ -348,12 +348,12 @@ class AssociationText(BaseModel):
         constraints = [
             UniqueConstraint(
                 fields=["association", "typ", "language", "deleted"],
-                name="unique_assoc_text_with_optional",
+                name="unique_association_text_with_optional",
             ),
             UniqueConstraint(
                 fields=["association", "typ", "language"],
                 condition=Q(deleted=None),
-                name="nique_assoc_text_without_optional",
+                name="nique_association_text_without_optional",
             ),
         ]
 

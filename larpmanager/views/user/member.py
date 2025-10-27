@@ -67,7 +67,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import get_context
 from larpmanager.utils.common import get_badge, get_channel, get_contact, get_member
-from larpmanager.utils.exceptions import check_assoc_feature
+from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.member import get_leaderboard
 from larpmanager.utils.pdf import get_membership_request
@@ -574,7 +574,7 @@ def chats(request: HttpRequest) -> HttpResponse:
     """Render chat list page for the current user."""
     # Check if user has access to chat feature
     context = get_context(request)
-    check_assoc_feature(request, context, "chat")
+    check_association_feature(request, context, "chat")
 
     # Add user's contacts ordered by last message timestamp
     context.update(
@@ -596,7 +596,7 @@ def chat(request, n):
     within the association context for member-to-member communication.
     """
     context = get_context(request)
-    check_assoc_feature(request, context, "chat")
+    check_association_feature(request, context, "chat")
     mid = request.user.member.id
     if n == mid:
         messages.success(request, _("You can't send messages to yourself") + "!")
@@ -653,7 +653,7 @@ def badges(request: HttpRequest) -> HttpResponse:
     """Display list of badges for the current association."""
     # Verify user has permission to view badges feature
     context = get_context(request)
-    check_assoc_feature(request, context, "badge")
+    check_association_feature(request, context, "badge")
     context.update({"badges": []})
 
     # Fetch and add badges to context, ordered by number
@@ -669,7 +669,7 @@ def badges(request: HttpRequest) -> HttpResponse:
 def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
     """Display a badge with shuffled member list."""
     context = get_context(request)
-    check_assoc_feature(request, context, "badge")
+    check_association_feature(request, context, "badge")
     badge = get_badge(n, context)
 
     # Initialize context with badge data
@@ -705,7 +705,7 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     """
     # Check if badge feature is enabled for the association
     context = get_context(request)
-    check_assoc_feature(request, context, "badge")
+    check_association_feature(request, context, "badge")
 
     # Get sorted list of members with their badge scores
     member_list = get_leaderboard(context["association_id"])
@@ -777,7 +777,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     """
     # Verify user has access to voting feature
     context = get_context(request)
-    check_assoc_feature(request, context, "vote")
+    check_association_feature(request, context, "vote")
 
     # Set current year for membership and voting validation
     context["year"] = datetime.now().year
@@ -863,7 +863,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
     """
     # Ensure delegated members feature is enabled
     context = get_context(request)
-    check_assoc_feature(request, context, "delegated_members")
+    check_association_feature(request, context, "delegated_members")
 
     # Disable last login update to avoid tracking when switching accounts
     user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")

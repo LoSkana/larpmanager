@@ -93,7 +93,7 @@ class TestModelSignals(BaseTestCase):
         self.assertGreater(len(association.key), 0)
 
     @patch("larpmanager.models.signals.replace_character_names")
-    def test_assoc_permission_can_be_queried(self, mock_replace):
+    def test_association_permission_can_be_queried(self, mock_replace):
         """Test that AssocPermission can be queried"""
         # Just verify that we can query AssocPermission model
         count = AssociationPermission.objects.count()

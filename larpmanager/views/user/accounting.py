@@ -74,7 +74,7 @@ from larpmanager.utils.common import (
     get_collection_partecipate,
     get_collection_redeem,
 )
-from larpmanager.utils.exceptions import check_assoc_feature
+from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.text import get_association_text
 
@@ -130,7 +130,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
             context["delegated_todo"] = context["delegated_todo"] or del_ctx["payments_todo"]
 
     # Load organization terms and conditions for display
-    context["assoc_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
+    context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
 
     return render(request, "larpmanager/member/accounting.html", context)
 
@@ -258,7 +258,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
     """
     # Check user has permission to access refund functionality
     context = get_context(request)
-    check_assoc_feature(request, context, "refund")
+    check_association_feature(request, context, "refund")
     context["show_accounting"] = True
 
     # Verify user membership in current association
@@ -314,7 +314,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
         Http404: If event or registration not found
     """
     # Check if user has permission to access payment features
-    check_assoc_feature(request, "payment")
+    check_association_feature(request, "payment")
 
     # Get event context and validate user registration status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -367,7 +367,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     """
     # Ensure payment feature is enabled for this association
     context = get_context(request)
-    check_assoc_feature(request, context, "payment")
+    check_association_feature(request, context, "payment")
 
     # Retrieve registration with related run and event data
     try:
@@ -464,7 +464,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     """
     # Check if user has access to membership feature
     context = get_context(request)
-    check_assoc_feature(request, context, "membership")
+    check_association_feature(request, context, "membership")
     context["show_accounting"] = True
 
     # Validate user membership status - must be accepted to pay dues
@@ -526,7 +526,7 @@ def acc_donate(request: HttpRequest) -> HttpResponse:
     """
     # Check if user has permission to access donation feature
     context = get_context(request)
-    check_assoc_feature(request, context, "donate")
+    check_association_feature(request, context, "donate")
     context["show_accounting"] = True
 
     # Process form submission for donation payment

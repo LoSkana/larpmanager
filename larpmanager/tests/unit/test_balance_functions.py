@@ -24,8 +24,8 @@ from decimal import Decimal
 from unittest.mock import patch
 
 from larpmanager.accounting.balance import (
-    assoc_accounting,
-    assoc_accounting_data,
+    association_accounting,
+    association_accounting_data,
     get_acc_detail,
     get_acc_reg_detail,
     get_acc_reg_type,
@@ -342,12 +342,12 @@ class TestRunAccountingFunctions(BaseTestCase):
 class TestAssocAccountingFunctions(BaseTestCase):
     """Test cases for association accounting functions"""
 
-    def test_assoc_accounting_data_basic(self):
+    def test_association_accounting_data_basic(self):
         """Test basic association accounting data gathering"""
         association = self.get_association()
         context = {"association_id": association.id}
 
-        assoc_accounting_data(context)
+        association_accounting_data(context)
 
         self.assertIn("outflow_exec_sum", context)
         self.assertIn("inflow_exec_sum", context)
@@ -356,22 +356,22 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertIn("in_sum", context)
         self.assertIn("out_sum", context)
 
-    def test_assoc_accounting_data_with_year_filter(self):
+    def test_association_accounting_data_with_year_filter(self):
         """Test association accounting data with year filter"""
         association = self.get_association()
         context = {"association_id": association.id}
 
-        assoc_accounting_data(context, year=2024)
+        association_accounting_data(context, year=2024)
 
         self.assertIn("membership_sum", context)
         # Should only include items from 2024
 
-    def test_assoc_accounting_calculates_totals(self):
+    def test_association_accounting_calculates_totals(self):
         """Test association accounting calculates correct totals"""
         association = self.get_association()
         context = {"association_id": association.id}
 
-        assoc_accounting(context)
+        association_accounting(context)
 
         self.assertIn("list", context)
         self.assertIn("tokens_sum", context)
@@ -380,7 +380,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertIn("global_sum", context)
         self.assertIn("bank_sum", context)
 
-    def test_assoc_accounting_includes_member_balances(self):
+    def test_association_accounting_includes_member_balances(self):
         """Test association accounting includes member token/credit balances"""
         association = self.get_association()
         member = self.get_member()
@@ -391,12 +391,12 @@ class TestAssocAccountingFunctions(BaseTestCase):
         membership.save()
 
         context = {"association_id": association.id}
-        assoc_accounting(context)
+        association_accounting(context)
 
         self.assertGreaterEqual(context["tokens_sum"], Decimal("50.00"))
         self.assertGreaterEqual(context["credits_sum"], Decimal("30.00"))
 
-    def test_assoc_accounting_includes_run_balances(self):
+    def test_association_accounting_includes_run_balances(self):
         """Test association accounting includes completed run balances"""
         association = self.get_association()
         run = self.get_run()
@@ -405,7 +405,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         run.save()
 
         context = {"association_id": association.id}
-        assoc_accounting(context)
+        association_accounting(context)
 
         self.assertIn("runs", context)
         self.assertGreaterEqual(context["balance_sum"], Decimal("100.00"))

@@ -26,7 +26,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.role import has_assoc_permission, has_event_permission
+from larpmanager.cache.role import has_association_permission, has_event_permission
 from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.utils.base import get_context
@@ -174,7 +174,7 @@ class ExceptionHandlingMiddleware:
         # Handle permission checking based on feature scope
         if feature.overall:
             # For organization-wide features, check association permissions
-            context["permission"] = has_assoc_permission(request, context, "exe_features")
+            context["permission"] = has_association_permission(request, context, "exe_features")
         else:
             # For event-specific features, retrieve run and check event permissions
             try:

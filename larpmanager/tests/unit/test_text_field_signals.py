@@ -194,7 +194,7 @@ class TestTextFieldSignals(BaseTestCase):
         # FeatureModule post_delete resets both event and association permissions
         self.assertEqual(mock_reset.call_count, 2)
 
-    @patch("larpmanager.cache.feature.reset_assoc_features")
+    @patch("larpmanager.cache.feature.reset_association_features")
     def test_association_post_save_resets_features_cache(self, mock_reset):
         """Test that Association post_save signal resets features cache"""
         association = Association(name="Test Association", email="test@example.com")

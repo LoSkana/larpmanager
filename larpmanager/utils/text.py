@@ -153,19 +153,19 @@ def get_event_text(event_id: int, text_type: str, language_code: str = None) -> 
 
 def update_association_text_cache_on_save(instance: AssociationText) -> None:
     """Update association text cache and default cache if needed."""
-    update_assoc_text(instance.association_id, instance.typ, instance.language)
+    update_association_text(instance.association_id, instance.typ, instance.language)
     if instance.default:
-        update_assoc_text_def(instance.association_id, instance.typ)
+        update_association_text_def(instance.association_id, instance.typ)
 
 
 def clear_association_text_cache_on_delete(instance: AssociationText) -> None:
     """Clear association text cache entries when an instance is deleted."""
     # Clear language-specific cache entry
-    cache.delete(assoc_text_key(instance.association_id, instance.typ, instance.language))
+    cache.delete(association_text_key(instance.association_id, instance.typ, instance.language))
 
     # Clear default language cache if this was the default text
     if instance.default:
-        cache.delete(assoc_text_key_def(instance.association_id, instance.typ))
+        cache.delete(association_text_key_def(instance.association_id, instance.typ))
 
 
 # ## EVENT TEXT
@@ -194,11 +194,11 @@ def clear_event_text_cache_on_delete(instance: EventText) -> None:
 # Text cache
 
 
-def assoc_text_key(association_id, text_type, language):
-    return f"assoc_text_{association_id}_{text_type}_{language}"
+def association_text_key(association_id, text_type, language):
+    return f"association_text_{association_id}_{text_type}_{language}"
 
 
-def update_assoc_text(association_id: int, typ: str, lang: str) -> str:
+def update_association_text(association_id: int, typ: str, lang: str) -> str:
     """Updates and caches association text for given ID, type and language.
 
     Args:
@@ -218,11 +218,11 @@ def update_assoc_text(association_id: int, typ: str, lang: str) -> str:
         pass
 
     # Cache the result for one day
-    cache.set(assoc_text_key(association_id, typ, lang), text_content, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(association_text_key(association_id, typ, lang), text_content, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return text_content
 
 
-def get_assoc_text_cache(association_id: int, typ: str, lang: str) -> str:
+def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
     """Get cached association text or update cache if missing.
 
     Args:
@@ -234,11 +234,11 @@ def get_assoc_text_cache(association_id: int, typ: str, lang: str) -> str:
         Cached or freshly updated association text
     """
     # Try to get cached text
-    cached_text = cache.get(assoc_text_key(association_id, typ, lang))
+    cached_text = cache.get(association_text_key(association_id, typ, lang))
 
     # Update cache if not found
     if cached_text is None:
-        cached_text = update_assoc_text(association_id, typ, lang)
+        cached_text = update_association_text(association_id, typ, lang)
 
     return cached_text
 
@@ -246,11 +246,11 @@ def get_assoc_text_cache(association_id: int, typ: str, lang: str) -> str:
 # default it
 
 
-def assoc_text_key_def(association_id, text_type):
-    return f"assoc_text_def_{association_id}_{text_type}"
+def association_text_key_def(association_id, text_type):
+    return f"association_text_def_{association_id}_{text_type}"
 
 
-def update_assoc_text_def(association_id: int, text_type: str) -> str:
+def update_association_text_def(association_id: int, text_type: str) -> str:
     """Updates and caches the default association text for given type.
 
     Args:
@@ -270,11 +270,13 @@ def update_assoc_text_def(association_id: int, text_type: str) -> str:
         pass
 
     # Cache the result for one day
-    cache.set(assoc_text_key_def(association_id, text_type), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(
+        association_text_key_def(association_id, text_type), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+    )
     return default_text
 
 
-def get_assoc_text_cache_def(association_id: int, typ: str) -> str:
+def get_association_text_cache_def(association_id: int, typ: str) -> str:
     """Get association text from cache or update if not found.
 
     Args:
@@ -285,11 +287,11 @@ def get_assoc_text_cache_def(association_id: int, typ: str) -> str:
         Association text content
     """
     # Try to retrieve from cache first
-    cached_text = cache.get(assoc_text_key_def(association_id, typ))
+    cached_text = cache.get(association_text_key_def(association_id, typ))
 
     # Update cache if not found
     if cached_text is None:
-        cached_text = update_assoc_text_def(association_id, typ)
+        cached_text = update_association_text_def(association_id, typ)
 
     return cached_text
 
@@ -312,10 +314,10 @@ def get_association_text(association_id: int, text_type: str, language_code: str
     if not language_code:
         language_code = get_language()
 
-    # Check if there is an assoc_text with the requested characteristics
-    cached_text = get_assoc_text_cache(association_id, text_type, language_code)
+    # Check if there is an association_text with the requested characteristics
+    cached_text = get_association_text_cache(association_id, text_type, language_code)
     if cached_text:
         return cached_text
 
     # Fall back to default language text if requested language not found
-    return get_assoc_text_cache_def(association_id, text_type)
+    return get_association_text_cache_def(association_id, text_type)

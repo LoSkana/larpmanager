@@ -27,7 +27,7 @@
                                     <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
                                 {% endif %}
                             {% endfor %}
-                            {% if assoc_role %}
+                            {% if association_role %}
                                 {% if run %}
                                     <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building"></i> {{ association.name }}</a>
                                 {% endif %}

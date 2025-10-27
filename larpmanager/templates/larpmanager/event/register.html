@@ -49,7 +49,7 @@
                 <p>
                     <a href="{% url 'register_conditions' event.slug %}">{% trans "Terms and Conditions of registration" %}</a>
                 </p>
-            {% elif assoc_terms_conditions %}
+            {% elif association_terms_conditions %}
                 <hr />
                 <p>
                     <a href="{% url 'register_conditions' %}">{% trans "Terms and Conditions of registration" %}</a>

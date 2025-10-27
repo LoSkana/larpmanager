@@ -458,10 +458,10 @@ class Membership(BaseModel):
     class Meta:
         indexes = [
             models.Index(
-                fields=["association", "member"], condition=Q(deleted__isnull=True), name="memb_assoc_mem_act"
+                fields=["association", "member"], condition=Q(deleted__isnull=True), name="memb_association_mem_act"
             ),
             models.Index(
-                fields=["association", "status"], condition=Q(deleted__isnull=True), name="memb_assoc_stat_act"
+                fields=["association", "status"], condition=Q(deleted__isnull=True), name="memb_association_stat_act"
             ),
         ]
         constraints = [
