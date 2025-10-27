@@ -582,7 +582,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
 
             # Show success message and redirect to collection management
             messages.success(request, _("The collection has been activated!"))
-            return redirect("acc_collection_manage", event_slug=p.contribute_code)
+            return redirect("acc_collection_manage", collection_code=p.contribute_code)
     else:
         # Initialize empty form for GET request
         form = CollectionNewForm()

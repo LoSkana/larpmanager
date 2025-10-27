@@ -790,9 +790,10 @@ def get_lm_contact(request, check_main_site=True):
     Raises:
         MainPageError: If check_main_site=True and user is on association site
     """
-    if check_main_site and request.assoc["id"] > 0:
+    context = get_context(request)
+    if check_main_site and context["association_id"] > 0:
         raise MainPageError(request)
-    context = {"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"}
+    context.update({"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"})
     return context
 
 
