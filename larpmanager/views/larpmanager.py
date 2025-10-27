@@ -61,7 +61,7 @@ from larpmanager.models.member import Member, MembershipStatus, get_user_members
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.base import get_context, get_event_context
-from larpmanager.utils.exceptions import MainPageError, PermissionError
+from larpmanager.utils.exceptions import PermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.utils.text import get_assoc_text
 from larpmanager.views.user.member import get_user_backend
@@ -464,8 +464,8 @@ def ticket(request, reason=""):
             lm_ticket.assoc_id = context["association_id"]
             if reason:
                 lm_ticket.reason = reason
-            if request.user.is_authenticated:
-                lm_ticket.member = request.user.member
+            if context["member"]:
+                lm_ticket.member = context["member"]
             lm_ticket.save()
             messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
@@ -579,7 +579,7 @@ def _join_form(context: dict, request) -> Association | None:
             admin_role.save()
 
             # Update membership status to joined for the creator
-            membership = get_user_membership(request.user.member, new_association.id)
+            membership = get_user_membership(context["member"], new_association.id)
             membership.status = MembershipStatus.JOINED
             membership.save()
 
@@ -790,9 +790,7 @@ def get_lm_contact(request, check_main_site=True):
     Raises:
         MainPageError: If check_main_site=True and user is on association site
     """
-    context = get_context(request)
-    if check_main_site and context["association_id"] > 0:
-        raise MainPageError(request)
+    context = get_context(request, check_main_site=True)
     context.update({"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"})
     return context
 

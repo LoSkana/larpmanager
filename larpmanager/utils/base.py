@@ -42,6 +42,7 @@ from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
 from larpmanager.utils.exceptions import (
     FeatureError,
+    MainPageError,
     MembershipError,
     PermissionError,
     UnknowRunError,
@@ -50,7 +51,7 @@ from larpmanager.utils.exceptions import (
 from larpmanager.utils.registration import check_signup, registration_status
 
 
-def get_context(request: HttpRequest) -> dict:
+def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
     """Build context with commonly used elements.
 
     Constructs a comprehensive context dictionary containing user information,
@@ -60,6 +61,7 @@ def get_context(request: HttpRequest) -> dict:
     Args:
         request: HTTP request object containing user and association information.
                 Must have 'assoc' attribute with association data including 'id'.
+        check_main_site: If this page is supposed to be accessible only on the main site
 
     Returns:
         dict: Context dictionary containing:
@@ -85,19 +87,25 @@ def get_context(request: HttpRequest) -> dict:
     context["membership"] = None
     if hasattr(request, "user") and hasattr(request.user, "member"):
         context["member"] = request.user.member
-        context["membership"] = get_user_membership(request.user.member, context["association_id"])
 
-    # Check if home page reached without valid association, redirect appropriately
     if context["association_id"] == 0:
-        if context["member"]:
-            user_associations = [membership.assoc for membership in context["member"].memberships.all()]
-            raise MembershipError(user_associations)
-        raise MembershipError()
+        if not check_main_site:
+            if context["member"]:
+                user_associations = [membership.assoc for membership in context["member"].memberships.all()]
+                raise MembershipError(user_associations)
+            raise MembershipError()
+        return context
+
+    if check_main_site:
+        raise MainPageError(request)
 
     # Add cached event links to context
     cache_event_links(request, context)
 
     if context["member"]:
+        # Get membership info
+        context["membership"] = get_user_membership(context["member"], context["association_id"])
+
         # Get association permissions for the user
         get_index_assoc_permissions(context, request, context["association_id"], check=False)
 

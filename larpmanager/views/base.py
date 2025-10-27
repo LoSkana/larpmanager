@@ -87,11 +87,11 @@ def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:
         Association ID 0 is reserved for the main/default organization.
     """
     # Check if this is the default/main association (ID 0)
-    context = get_context(request)
-    if context["association_id"] == 0:
+    if request.assoc["id"] == 0:
         return lm_home(request)
 
     # For other associations, check Centauri handling or fallback to calendar
+    context = get_context(request)
     return check_centauri(request, context) or calendar(request, context, lang)
 
 
