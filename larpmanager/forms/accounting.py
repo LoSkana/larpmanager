@@ -30,7 +30,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
-    AssocMemberS2Widget,
+    AssociationMemberS2Widget,
     AssocRegS2Widget,
     DatePickerInput,
     EventRegS2Widget,
@@ -205,7 +205,7 @@ class ExeOutflowForm(MyForm):
 
         # Configure run widget with association context if not auto-populated
         if not hasattr(self, "auto_run"):
-            self.fields["run"].widget.set_assoc(self.params["association_id"])
+            self.fields["run"].widget.set_association_id(self.params["association_id"])
 
         # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -245,7 +245,7 @@ class ExeInflowForm(MyForm):
 
         # Set association for run field if not auto-run mode
         if not hasattr(self, "auto_run"):
-            self.fields["run"].widget.set_assoc(self.params["association_id"])
+            self.fields["run"].widget.set_association_id(self.params["association_id"])
 
         # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -268,12 +268,12 @@ class ExeDonationForm(MyForm):
     class Meta:
         model = AccountingItemDonation
         exclude = ("inv", "hide")
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set association for member field widget."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
 class ExePaymentForm(MyForm):
@@ -291,7 +291,7 @@ class ExePaymentForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Configure registration field widget with association context
-        self.fields["reg"].widget.set_assoc(self.params["association_id"])
+        self.fields["reg"].widget.set_association_id(self.params["association_id"])
 
         # Remove VAT field if feature is not enabled
         if "vat" not in self.params["features"]:
@@ -306,12 +306,12 @@ class ExeInvoiceForm(MyForm):
     class Meta:
         model = PaymentInvoice
         exclude = ("hide", "reg", "key", "idx", "txn_id")
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
 class ExeCreditForm(MyForm):
@@ -320,7 +320,7 @@ class ExeCreditForm(MyForm):
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
-        widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
+        widgets = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with credit assignment configuration."""
@@ -331,8 +331,8 @@ class ExeCreditForm(MyForm):
 
         # Configure run choices and association widgets
         get_run_choices(self)
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
-        self.fields["run"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.fields["run"].widget.set_association_id(self.params["association_id"])
 
         # Set other field as hidden with credit value
         self.fields["oth"].widget = forms.HiddenInput()
@@ -343,7 +343,7 @@ class ExeTokenForm(MyForm):
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
-        widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
+        widgets = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with page title, info, and field configurations."""
@@ -355,8 +355,8 @@ class ExeTokenForm(MyForm):
 
         # Configure run choices and association filtering
         get_run_choices(self)
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
-        self.fields["run"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.fields["run"].widget.set_association_id(self.params["association_id"])
 
         # Hide 'oth' field and set default value
         self.fields["oth"].widget = forms.HiddenInput()
@@ -371,7 +371,7 @@ class ExeExpenseForm(MyForm):
     class Meta:
         model = AccountingItemExpense
         exclude = ("inv", "hide")
-        widgets = {"member": AssocMemberS2Widget, "run": RunS2Widget}
+        widgets = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with run choices and association-specific widget configuration."""
@@ -379,8 +379,8 @@ class ExeExpenseForm(MyForm):
 
         # Configure run choices and set association context for widgets
         get_run_choices(self)
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
-        self.fields["run"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.fields["run"].widget.set_association_id(self.params["association_id"])
 
         # Remove balance field if feature not enabled
         if "ita_balance" not in self.params["features"]:
@@ -430,13 +430,13 @@ class ExeCollectionForm(CollectionNewForm):
     class Meta:
         model = Collection
         fields = ("name", "member", "status", "contribute_code", "redeem_code")
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member field widget with association."""
         super().__init__(*args, **kwargs)
         # Set association for member widget filtering
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
 class OrgaDiscountForm(MyForm):
@@ -563,12 +563,12 @@ class ExeRefundRequestForm(MyForm):
     class Meta:
         model = RefundRequest
         exclude = ("status", "hide")
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
 class ExePaymentSettingsForm(MyForm):

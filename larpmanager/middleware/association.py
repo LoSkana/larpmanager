@@ -27,7 +27,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
-from larpmanager.cache.association import get_cache_assoc
+from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.skin import get_cache_skin
 from larpmanager.models.association import AssociationTextType
 from larpmanager.utils.text import get_association_text
@@ -99,7 +99,7 @@ class AssociationIdentifyMiddleware:
         )
 
         # Attempt to load association data from cache
-        association_data = get_cache_assoc(association_slug)
+        association_data = get_cache_association(association_slug)
         if association_data:
             # Check for domain mismatch requiring redirect
             if "main_domain" in association_data and association_data["main_domain"] != base_domain:
@@ -107,7 +107,7 @@ class AssociationIdentifyMiddleware:
                     association_slug = association_data["slug"]
                     association_domain = association_data["main_domain"]
                     return redirect(f"https://{association_slug}.{association_domain}{request.get_full_path()}")
-            return cls.load_assoc(request, association_data)
+            return cls.load_association(request, association_data)
 
         # Fallback to main domain handling
         return cls.get_main_info(request, base_domain)
@@ -142,7 +142,7 @@ class AssociationIdentifyMiddleware:
         skin = get_cache_skin(base_domain)
         if skin:
             # Skin found - load the associated organization
-            return cls.load_assoc(request, skin)
+            return cls.load_association(request, skin)
 
         # Handle larpmanager.com domain redirects to ensure HTTPS
         if request.get_host().endswith("larpmanager.com"):
@@ -156,7 +156,7 @@ class AssociationIdentifyMiddleware:
         return render(request, "exception/association.html", {})
 
     @staticmethod
-    def load_assoc(request: HttpRequest, association_data: dict) -> None:
+    def load_association(request: HttpRequest, association_data: dict) -> None:
         """Load association data into request context.
 
         This function enriches the request object with association data and

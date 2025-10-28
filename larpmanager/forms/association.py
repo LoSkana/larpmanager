@@ -32,7 +32,7 @@ from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
-    AssocMemberS2WidgetMulti,
+    AssociationMemberS2WidgetMulti,
     SlugInput,
     prepare_permissions_role,
     remove_choice,
@@ -95,7 +95,7 @@ class ExeAssociationForm(MyForm):
             del self.fields[field_name]
 
 
-class ExeAssocTextForm(MyForm):
+class ExeAssociationTextForm(MyForm):
     """Form for managing association text content.
 
     Handles custom text snippets used throughout the
@@ -112,7 +112,7 @@ class ExeAssocTextForm(MyForm):
         exclude = ("number",)
 
     def __init__(self, *args: object, **kwargs: object) -> None:
-        """Initialize AssocTextForm with feature-based field configuration.
+        """Initialize AssociationTextForm with feature-based field configuration.
 
         Configures text type choices based on activated features, removing
         options for disabled features like membership, reminders, and legal notices.
@@ -227,7 +227,7 @@ class ExeAssocTextForm(MyForm):
         return cleaned_data
 
 
-class ExeAssocRoleForm(MyForm):
+class ExeAssociationRoleForm(MyForm):
     """Form for managing association roles and permissions.
 
     Allows configuration of role-based access control
@@ -243,13 +243,13 @@ class ExeAssocRoleForm(MyForm):
     class Meta:
         model = AssociationRole
         fields = ("name", "members", "association")
-        widgets = {"members": AssocMemberS2WidgetMulti}
+        widgets = {"members": AssociationMemberS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure member widget with association context
-        self.fields["members"].widget.set_assoc(self.params["association_id"])
+        self.fields["members"].widget.set_association_id(self.params["association_id"])
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
 

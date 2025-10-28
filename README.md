@@ -286,7 +286,7 @@ Thanks in advance for contributing! Here's the steps:
 If you want to develop a new feature, usually you follow this steps:
 - Create a new `Feature` object that encapsulates the new functionalities. Set `overall` if it applies to whole organization.
 - Create new views. Follow the standard of the prefix `orga_` if it applies to the single event, and the prefix `exe_` if it applies to the whole organization;
-- To add sidebar links, create `AssocPermission` (for organization dashboard) and/or `EventPermission` (for event dashboard). Put the name of the views as `slug`, the feature object as `feature`, and the module object as `module`.
+- To add sidebar links, create `AssociationPermission` (for organization dashboard) and/or `EventPermission` (for event dashboard). Put the name of the views as `slug`, the feature object as `feature`, and the module object as `module`.
 
 Before pushing your changes, run `python manage.py export_features` to update the fixtures with your new elements.
 

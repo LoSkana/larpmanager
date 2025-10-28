@@ -95,7 +95,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
         sender: The model class that sent the signal
         **kwargs: Signal arguments containing:
             - model: The model class involved in the m2m change
-            - instance: The AssocRole instance being modified
+            - instance: The AssociationRole instance being modified
             - action: The type of change (post_add, post_remove, post_clear)
             - pk_set: Set of primary keys of affected Member instances
 

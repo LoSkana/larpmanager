@@ -33,7 +33,7 @@ from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
-    AssocMemberS2Widget,
+    AssociationMemberS2Widget,
     DatePickerInput,
     FactionS2WidgetMulti,
     TicketS2WidgetMulti,
@@ -646,7 +646,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             "payment_date",
         )
 
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssociationMemberS2Widget}
 
     def get_automatic_field(self) -> set[str]:
         """Get automatic field names, excluding 'run' from parent's set."""
@@ -672,7 +672,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.event = self.params["run"].event
 
         # Configure member widget with association
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
         self.allow_run_choice()
 

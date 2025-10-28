@@ -22,7 +22,7 @@ from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from django.utils.html import format_html
 
-from larpmanager.admin.base import AssocFilter, DefModelAdmin, RunFilter, reduced
+from larpmanager.admin.base import AssociationFilter, DefModelAdmin, RunFilter, reduced
 from larpmanager.admin.character import TargetFilter
 from larpmanager.models.miscellanea import (
     Album,
@@ -201,7 +201,7 @@ class PlayerRelationshipAdmin(DefModelAdmin):
 @admin.register(Email)
 class EmailAdmin(DefModelAdmin):
     list_display = ("id", "association", "run", "recipient", "sent", "subj", "body_red")
-    list_filter = (AssocFilter, RunFilter)
+    list_filter = (AssociationFilter, RunFilter)
     autocomplete_fields = ["association", "run"]
     search_fields = ["subj", "body", "recipient"]
 

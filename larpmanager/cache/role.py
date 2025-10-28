@@ -42,7 +42,7 @@ def get_association_role(ar: AssociationRole) -> tuple[str, list[str]]:
     """Get association role name and available permission slugs.
 
     Args:
-        ar: AssocRole instance to extract permissions from
+        ar: AssociationRole instance to extract permissions from
 
     Returns:
         Tuple containing role name and list of permission slugs

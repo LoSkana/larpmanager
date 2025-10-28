@@ -249,7 +249,7 @@ class TestUtilitySignals(BaseTestCase):
 
     @patch("larpmanager.utils.text.update_association_text")
     def test_association_text_post_save_updates_cache(self, mock_update):
-        """Test that AssocText post_save signal updates text cache"""
+        """Test that AssociationText post_save signal updates text cache"""
         from larpmanager.models.association import AssociationTextType
         association = self.get_association()
         text = AssociationText(association=association, typ=AssociationTextType.HOME, text="Test Value")
@@ -260,7 +260,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     def test_association_text_pre_delete_clears_cache(self):
-        """Test that AssocText pre_delete signal clears text cache"""
+        """Test that AssociationText pre_delete signal clears text cache"""
         from larpmanager.models.association import AssociationTextType
         association = self.get_association()
         text = AssociationText.objects.create(association=association, typ=AssociationTextType.HOME, text="Test Value")

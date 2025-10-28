@@ -197,7 +197,7 @@ def prepare_permissions_role(form, typ) -> None:
     Args:
         form: Form instance to add permission fields to. Must have instance, params,
               fields, and modules attributes.
-        typ: Permission model type (AssocPermission or EventPermission class).
+        typ: Permission model type (AssociationPermission or EventPermission class).
              Must have objects manager with filter, select_related methods.
 
     Returns:
@@ -305,7 +305,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def set_exclude(self, exclude_value):
@@ -331,7 +331,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
     def label_from_instance(self, obj):
         return str(obj)
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def set_exclude(self, exclude):
@@ -354,7 +354,7 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def get_queryset(self):
@@ -369,7 +369,7 @@ class AssocMS2:
         "user__email__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def get_queryset(self):
@@ -380,11 +380,11 @@ class AssocMS2:
         return f"{obj.display_real()} - {obj.email}"
 
 
-class AssocMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
+class AssociationMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
     pass
 
 
-class AssocMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
+class AssociationMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
     pass
 
 
@@ -502,7 +502,7 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def get_queryset(self):
@@ -525,7 +525,7 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def get_queryset(self):
@@ -686,7 +686,7 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def get_queryset(self):
@@ -712,7 +712,7 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def get_queryset(self):
@@ -733,7 +733,7 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_assoc(self, association_id):
+    def set_association_id(self, association_id):
         self.association_id = association_id
 
     def get_queryset(self):

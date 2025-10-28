@@ -26,7 +26,7 @@ from django.utils import translation
 from django.utils.xmlutils import SimplerXMLGenerator
 from django.views.decorators.cache import cache_page
 
-from larpmanager.cache.association import get_cache_assoc
+from larpmanager.cache.association import get_cache_association
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.larpmanager import LarpManagerGuide
@@ -96,7 +96,7 @@ def _organization_sitemap(request) -> list[str]:
     """
     # Get organization and check if it's a demo instance
     organization = Association.objects.get(pk=request.association["id"])
-    organization_cache = get_cache_assoc(organization.slug)
+    organization_cache = get_cache_association(organization.slug)
     if organization_cache.get("demo", False):
         return []
 

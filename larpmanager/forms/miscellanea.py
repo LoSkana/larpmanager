@@ -30,7 +30,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
-    AssocMemberS2Widget,
+    AssociationMemberS2Widget,
     DatePickerInput,
     EventS2Widget,
     TimePickerInput,
@@ -396,7 +396,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
         widgets = {
             "date": DatePickerInput,
             "time": TimePickerInput,
-            "working": AssocMemberS2Widget,
+            "working": AssociationMemberS2Widget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -408,7 +408,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
             self.initial["working"] = self.params["member"]
 
         # Configure widget with association context
-        self.fields["working"].widget.set_assoc(self.params["association_id"])
+        self.fields["working"].widget.set_association_id(self.params["association_id"])
 
 
 class OrgaCopyForm(forms.Form):
@@ -431,7 +431,7 @@ class OrgaCopyForm(forms.Form):
             help_text="The event from which you will copy the elements",
         )
         self.fields["parent"].widget = EventS2Widget()
-        self.fields["parent"].widget.set_assoc(self.params["association_id"])
+        self.fields["parent"].widget.set_association_id(self.params["association_id"])
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [

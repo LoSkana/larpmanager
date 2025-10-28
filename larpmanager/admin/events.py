@@ -20,7 +20,7 @@
 
 from django.contrib import admin
 
-from larpmanager.admin.base import AssocFilter, DefModelAdmin, EventFilter, RunFilter
+from larpmanager.admin.base import AssociationFilter, DefModelAdmin, EventFilter, RunFilter
 from larpmanager.models.event import Event, EventConfig, EventText, PreRegistration, ProgressStep, Run, RunConfig
 
 
@@ -34,7 +34,7 @@ class ProgressStepAdmin(DefModelAdmin):
 class EventAdmin(DefModelAdmin):
     list_display = ("name", "thumb", "slug", "association")
     search_fields = ("name",)
-    list_filter = (AssocFilter,)
+    list_filter = (AssociationFilter,)
     autocomplete_fields = ["association", "parent", "features"]
 
 

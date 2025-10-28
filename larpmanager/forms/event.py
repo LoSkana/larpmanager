@@ -35,7 +35,7 @@ from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
-    AssocMemberS2WidgetMulti,
+    AssociationMemberS2WidgetMulti,
     CampaignS2Widget,
     DatePickerInput,
     DateTimePickerInput,
@@ -216,7 +216,7 @@ class OrgaEventForm(MyForm):
     def init_campaign(self, dl: list) -> None:
         """Initialize campaign field by setting association and exclusions."""
         # Set association for parent widget and exclude current instance if editing
-        self.fields["parent"].widget.set_assoc(self.params["association_id"])
+        self.fields["parent"].widget.set_association_id(self.params["association_id"])
         if self.instance and self.instance.pk:
             self.fields["parent"].widget.set_exclude(self.instance.pk)
 
@@ -1090,13 +1090,13 @@ class OrgaEventRoleForm(MyForm):
     class Meta:
         model = EventRole
         fields = ("name", "members", "event")
-        widgets = {"members": AssocMemberS2WidgetMulti}
+        widgets = {"members": AssociationMemberS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure members widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure members widget with association ID from params
-        self.fields["members"].widget.set_assoc(self.params["association_id"])
+        self.fields["members"].widget.set_association_id(self.params["association_id"])
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
@@ -1160,7 +1160,7 @@ class OrgaRunForm(ConfigForm):
             )
             self.fields = {"event": event_field} | self.fields
             self.fields["event"].widget = EventS2Widget()
-            self.fields["event"].widget.set_assoc(self.params["association_id"])
+            self.fields["event"].widget.set_association_id(self.params["association_id"])
             self.fields["event"].help_text = _("Select the event of this new session")
             self.choose_event = True
             self.page_info = _("Manage new session for an existing event")
@@ -1329,7 +1329,7 @@ class ExeEventForm(OrgaEventForm):
                 widget=TemplateS2Widget(),
             )
 
-            self.fields["template_event"].widget.set_assoc(self.params["association_id"])
+            self.fields["template_event"].widget.set_association_id(self.params["association_id"])
 
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()

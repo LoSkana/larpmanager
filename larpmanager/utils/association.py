@@ -40,7 +40,7 @@ def auto_assign_association_permission_number(association_permission):
     """Assign number to association permission if not set.
 
     Args:
-        association_permission: AssocPermission instance to assign number to
+        association_permission: AssociationPermission instance to assign number to
     """
     if not association_permission.number:
         max_number = AssociationPermission.objects.filter(

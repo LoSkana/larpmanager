@@ -205,7 +205,7 @@ class MyForm(forms.ModelForm):
         typ = self.params["elementTyp"]
         return self.params["event"].get_class_parent(typ)
 
-    def clean_assoc(self):
+    def clean_association(self):
         return Association.objects.get(pk=self.params["association_id"])
 
     def clean_name(self):

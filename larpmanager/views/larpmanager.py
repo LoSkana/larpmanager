@@ -163,7 +163,7 @@ def go_redirect(request, slug, path, base_domain="larpmanager.com"):
     return redirect(new_path)
 
 
-def choose_assoc(request, redirect_path, association_slugs):
+def choose_association(request, redirect_path, association_slugs):
     """Handle association selection when multiple associations are available.
 
     Args:
@@ -268,7 +268,7 @@ def redr(request, p):
         for ar in AssociationRole.objects.filter(members=request.user.member).select_related("association"):
             slugs.add(ar.association.slug)
         # get all events where they have association role
-        return choose_assoc(request, p, list(slugs))
+        return choose_association(request, p, list(slugs))
 
     p = p.replace("event/", "")
     ids = set()
@@ -279,7 +279,7 @@ def redr(request, p):
     return choose_run(request, p, list(ids))
 
 
-def activate_feature_assoc(request: HttpRequest, cod: str, p: Optional[str] = None) -> HttpResponseRedirect:
+def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str] = None) -> HttpResponseRedirect:
     """Activate a feature for an association.
 
     Activates a feature by adding it to the association's features and redirects

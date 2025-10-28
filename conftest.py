@@ -192,11 +192,11 @@ def _e2e_db_setup(request, django_db_blocker):
 
 @pytest.fixture(autouse=True)
 def _ensure_association_skin(db):
-    """Ensure default AssociationSkin and AssocRole exist for tests."""
+    """Ensure default AssociationSkin and AssociationRole exist for tests."""
     if not AssociationSkin.objects.filter(pk=1).exists():
         AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
 
-    # Ensure AssocRole with number=1 exists for all associations
+    # Ensure AssociationRole with number=1 exists for all associations
     for association in Association.objects.all():
         if not AssociationRole.objects.filter(association=association, number=1).exists():
             AssociationRole.objects.create(association=association, number=1, name="Executive")

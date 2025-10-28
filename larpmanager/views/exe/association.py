@@ -34,8 +34,8 @@ from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
     ExeAppearanceForm,
     ExeAssociationForm,
-    ExeAssocRoleForm,
-    ExeAssocTextForm,
+    ExeAssociationRoleForm,
+    ExeAssociationTextForm,
     ExeConfigForm,
     ExeFeatureForm,
     ExePreferencesForm,
@@ -90,7 +90,7 @@ def exe_roles(request) -> HttpResponse:
 
 @login_required
 def exe_roles_edit(request, num):
-    return exe_edit(request, ExeAssocRoleForm, num, "exe_roles")
+    return exe_edit(request, ExeAssociationRoleForm, num, "exe_roles")
 
 
 @login_required
@@ -124,7 +124,7 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_texts_edit(request, num):
-    return exe_edit(request, ExeAssocTextForm, num, "exe_texts")
+    return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
 
 
 @login_required

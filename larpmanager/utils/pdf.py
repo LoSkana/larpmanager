@@ -38,7 +38,7 @@ from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
-from larpmanager.cache.association import get_cache_assoc
+from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import Association, AssociationTextType
@@ -681,7 +681,7 @@ def get_fake_request(association_slug: str) -> HttpRequest:
     """
     request = HttpRequest()
     # Attach association from cache
-    request.association = get_cache_assoc(association_slug)
+    request.association = get_cache_association(association_slug)
     # Set anonymous user for the request
     request.user = AnonymousUser()
     return request

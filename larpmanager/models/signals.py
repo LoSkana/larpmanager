@@ -424,7 +424,7 @@ def post_delete_assignment_trait_reset(sender, instance, **kwargs):
     clear_run_cache_and_media(instance.run)
 
 
-# AssocPermission signals
+# AssociationPermission signals
 @receiver(pre_save, sender=AssociationPermission)
 def pre_save_association_permission(sender, instance, **kwargs):
     auto_assign_association_permission_number(instance)
@@ -442,7 +442,7 @@ def post_delete_association_permission_index_permission(sender, instance, **kwar
     clear_association_permission_cache(instance)
 
 
-# AssocRole signals
+# AssociationRole signals
 @receiver(pre_delete, sender=AssociationRole)
 def pre_delete_association_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)

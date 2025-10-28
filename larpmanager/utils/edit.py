@@ -202,7 +202,7 @@ def check_run(element, context, accessor_field=None):
             raise Http404("not your event")
 
 
-def check_assoc(element: object, context: dict, attribute_field: str = None) -> None:
+def check_association(element: object, context: dict, attribute_field: str = None) -> None:
     """Check if object belongs to the correct association.
 
     Args:
@@ -309,7 +309,7 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
     # Store object in context and perform security validations
     context["el"] = element
     check_run(element, context, association_field)
-    check_assoc(element, context, association_field)
+    check_association(element, context, association_field)
 
     # Set display name for the object
     context["name"] = str(element)

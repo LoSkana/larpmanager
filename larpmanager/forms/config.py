@@ -10,7 +10,7 @@ from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
 from larpmanager.forms.base import MyForm
-from larpmanager.forms.utils import AssocMemberS2WidgetMulti, get_members_queryset
+from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, get_members_queryset
 
 
 class ConfigType(IntEnum):
@@ -230,7 +230,7 @@ class ConfigForm(MyForm):
             ConfigType.MEMBERS: lambda: forms.ModelMultipleChoiceField(
                 label=label,
                 queryset=get_members_queryset(extra),
-                widget=AssocMemberS2WidgetMulti,
+                widget=AssociationMemberS2WidgetMulti,
                 required=False,
                 help_text=help_text,
             ),
@@ -282,7 +282,7 @@ class ConfigForm(MyForm):
 
         # Configure widget for MEMBERS field type
         if field_type == ConfigType.MEMBERS:
-            self.fields[field_key].widget.set_assoc(config["extra"])
+            self.fields[field_key].widget.set_association_id(config["extra"])
             if initial_value:
                 initial_value = [s.strip() for s in initial_value.split(",")]
 

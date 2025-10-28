@@ -38,7 +38,7 @@ def cache_association_key(association_slug):
     return f"association_{association_slug}"
 
 
-def get_cache_assoc(association_slug: str) -> dict | None:
+def get_cache_association(association_slug: str) -> dict | None:
     """Get cached association data or initialize if not found.
 
     Args:
@@ -53,7 +53,7 @@ def get_cache_assoc(association_slug: str) -> dict | None:
 
     # Initialize cache if not found
     if cached_data is None:
-        cached_data = init_cache_assoc(association_slug)
+        cached_data = init_cache_association(association_slug)
         if not cached_data:
             return None
         # Cache the result for one day
@@ -61,7 +61,7 @@ def get_cache_assoc(association_slug: str) -> dict | None:
     return cached_data
 
 
-def init_cache_assoc(a_slug: str) -> dict | None:
+def init_cache_association(a_slug: str) -> dict | None:
     """Initialize association cache with configuration data.
 
     Retrieves association data and builds a comprehensive cache dictionary

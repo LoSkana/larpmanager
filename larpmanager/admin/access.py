@@ -45,20 +45,20 @@ class PermissionModuleAdmin(ImportExportModelAdmin):
 
 
 @admin.register(AssociationRole)
-class AssocRoleAdmin(DefModelAdmin):
+class AssociationRoleAdmin(DefModelAdmin):
     list_display = ("name", "association", "number")
     autocomplete_fields = ["members", "association", "permissions"]
     search_fields = ("name",)
 
 
-class AssocPermissionResource(resources.ModelResource):
+class AssociationPermissionResource(resources.ModelResource):
     class Meta:
         model = AssociationPermission
 
 
 @admin.register(AssociationPermission)
-class AssocPermissionAdmin(ImportExportModelAdmin):
-    resource_classes = [AssocPermissionResource]
+class AssociationPermissionAdmin(ImportExportModelAdmin):
+    resource_classes = [AssociationPermissionResource]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)
     autocomplete_fields = ["feature", "module"]

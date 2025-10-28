@@ -45,7 +45,12 @@ from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import BaseAccForm, MyForm
-from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
+from larpmanager.forms.utils import (
+    AssociationMemberS2Widget,
+    AssociationMemberS2WidgetMulti,
+    DatePickerInput,
+    get_members_queryset,
+)
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.base import BaseModel, FeatureNationality
@@ -699,7 +704,7 @@ class ExeVolunteerRegistryForm(MyForm):
         exclude = []
 
         widgets = {
-            "member": AssocMemberS2Widget,
+            "member": AssociationMemberS2Widget,
             "start": DatePickerInput,
             "end": DatePickerInput,
         }
@@ -707,7 +712,7 @@ class ExeVolunteerRegistryForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association ID."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
     def clean_member(self) -> Member:
         """Validates member is not already registered as volunteer for this association."""
@@ -771,7 +776,7 @@ class ExeMembershipFeeForm(forms.Form):
         label=_("Member"),
         queryset=Member.objects.none(),
         required=False,
-        widget=AssocMemberS2Widget,
+        widget=AssociationMemberS2Widget,
     )
 
     invoice = forms.FileField(
@@ -792,7 +797,7 @@ class ExeMembershipFeeForm(forms.Form):
         association_id = self.params.get("association_id", None)
 
         # Configure member field widget and queryset for the association
-        self.fields["member"].widget.set_assoc(association_id)
+        self.fields["member"].widget.set_association_id(association_id)
         self.fields["member"].queryset = get_members_queryset(association_id)
 
         # Build payment method choices from association's available methods
@@ -829,7 +834,7 @@ class ExeMembershipDocumentForm(forms.Form):
         label=_("Member"),
         queryset=Member.objects.none(),
         required=False,
-        widget=AssocMemberS2Widget,
+        widget=AssociationMemberS2Widget,
     )
 
     request = forms.FileField(
@@ -859,7 +864,7 @@ class ExeMembershipDocumentForm(forms.Form):
         self.association_id = self.params.get("association_id", None)
 
         # Configure member field with association-specific queryset and widget
-        self.fields["member"].widget.set_assoc(self.association_id)
+        self.fields["member"].widget.set_association_id(self.association_id)
         self.fields["member"].queryset = get_members_queryset(self.association_id)
 
         # Calculate next available card number for the association
@@ -908,13 +913,13 @@ class ExeBadgeForm(MyForm):
         exclude = ("number",)
 
         widgets = {
-            "members": AssocMemberS2WidgetMulti,
+            "members": AssociationMemberS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
-        self.fields["members"].widget.set_assoc(self.params["association_id"])
+        self.fields["members"].widget.set_association_id(self.params["association_id"])
 
 
 class ExeProfileForm(MyForm):

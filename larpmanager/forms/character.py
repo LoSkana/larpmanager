@@ -32,7 +32,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
-    AssocMemberS2Widget,
+    AssociationMemberS2Widget,
     EventCharacterS2WidgetMulti,
     EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
@@ -90,7 +90,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         widgets = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
-            "player": AssocMemberS2Widget,
+            "player": AssociationMemberS2Widget,
             "characters": EventCharacterS2WidgetMulti,
         }
 
@@ -357,7 +357,7 @@ class OrgaCharacterForm(CharacterForm):
         self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
-            self.fields["player"].widget.set_assoc(self.params["association_id"])
+            self.fields["player"].widget.set_association_id(self.params["association_id"])
         else:
             self.delete_field("player")
 
