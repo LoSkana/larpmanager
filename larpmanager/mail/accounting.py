@@ -21,8 +21,8 @@
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_assoc_config
-from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.config import get_association_config
+from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
@@ -161,7 +161,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     )
 
     # Get token and credit names for the association
-    token_name, credit_name = get_token_credit_name(expense_item.assoc_id)
+    token_name, credit_name = get_token_credit_name(expense_item.association_id)
 
     # Add credit information if run has token_credit feature enabled
     if expense_item.run and "token_credit" in get_event_features(expense_item.run.event_id):
@@ -200,8 +200,8 @@ def get_token_credit_name(association_id: int) -> tuple[str, str]:
     association_config_cache = {}
 
     # Retrieve custom token and credit names from association config
-    token_name = get_assoc_config(association_id, "token_credit_token_name", None, association_config_cache)
-    credit_name = get_assoc_config(association_id, "token_credit_credit_name", None, association_config_cache)
+    token_name = get_association_config(association_id, "token_credit_token_name", None, association_config_cache)
+    credit_name = get_association_config(association_id, "token_credit_credit_name", None, association_config_cache)
 
     # Apply default translated names if custom names not configured
     if not token_name:
@@ -221,7 +221,7 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
 
     Args:
         payment_item: AccountingItemPayment instance being saved. Must have
-            reg (registration), pay (payment type), and assoc_id attributes.
+            reg (registration), pay (payment type), and association_id attributes.
 
     Returns:
         None
@@ -241,14 +241,14 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
     member = payment_item.reg.member
 
     # Check if payment notifications are enabled for this association
-    if not get_assoc_config(run.event.assoc_id, "mail_payment", False):
+    if not get_association_config(run.event.association_id, "mail_payment", False):
         return
 
     # Get localized names for tokens and credits
-    token_name, credit_name = get_token_credit_name(payment_item.assoc_id)
+    token_name, credit_name = get_token_credit_name(payment_item.association_id)
 
     # Get currency symbol for money payments
-    curr_sym = run.event.assoc.get_currency_symbol()
+    curr_sym = run.event.association.get_currency_symbol()
 
     # Only send notification for new payment items (not updates)
     if not payment_item.pk:
@@ -480,7 +480,7 @@ def send_token_credit_notification_email(instance: AccountingItemOther) -> None:
             - hide: Boolean indicating if item should be hidden
             - pk: Primary key (None for new instances)
             - oth: Type of accounting item (TOKEN, CREDIT, or REFUND)
-            - assoc_id: Associated organization ID
+            - association_id: Associated organization ID
 
     Returns:
         None
@@ -490,7 +490,7 @@ def send_token_credit_notification_email(instance: AccountingItemOther) -> None:
         return
 
     # Get organization-specific names for tokens and credits
-    token_name, credit_name = get_token_credit_name(instance.assoc_id)
+    token_name, credit_name = get_token_credit_name(instance.association_id)
 
     # Only send notifications for new items (pk is None)
     if not instance.pk:
@@ -718,7 +718,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
     body = _(
         "We confirm we received the donation of %(amount)d %(currency)s. We thank you for your "
         "support, and for believing in us!"
-    ) % {"amount": instance.value, "currency": instance.assoc.get_currency_symbol()}
+    ) % {"amount": instance.value, "currency": instance.association.get_currency_symbol()}
 
     # Send the confirmation email to the donor
     my_send_mail(subj, body, instance.member, instance)
@@ -796,22 +796,22 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     treasurer appointees, event organizers (for registrations), or main organization email.
 
     Args:
-        inv: Invoice object to send notifications for. Must have assoc_id, typ, and reg attributes.
+        inv: Invoice object to send notifications for. Must have association_id, typ, and reg attributes.
 
     Returns:
         None
     """
     # Check if payment notifications are enabled for this organization
-    if not get_assoc_config(inv.assoc_id, "mail_payment", False):
+    if not get_association_config(inv.association_id, "mail_payment", False):
         return
 
     # Get organization features to determine notification recipients
-    features = get_assoc_features(inv.assoc_id)
+    features = get_association_features(inv.association_id)
 
     # If treasurer feature is enabled, send notifications to treasurer appointees
     if "treasurer" in features:
         # Parse comma-separated list of treasurer member IDs
-        treasurer_list = get_assoc_config(inv.assoc_id, "treasurer_appointees", "").split(", ")
+        treasurer_list = get_association_config(inv.association_id, "treasurer_appointees", "").split(", ")
         for treasurer_member_id in treasurer_list:
             member_id = int(treasurer_member_id)
             organizer = Member.objects.get(pk=member_id)
@@ -832,11 +832,11 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
 
     # Fallback: send to main organization email for all other cases
     else:
-        notify_organization_exe(get_invoice_email, inv.assoc, inv)
+        notify_organization_exe(get_invoice_email, inv.association, inv)
 
 
 def notify_refund_request(p):
-    notify_organization_exe(get_notify_refund_email, p.assoc, p)
+    notify_organization_exe(get_notify_refund_email, p.association, p)
 
 
 def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:

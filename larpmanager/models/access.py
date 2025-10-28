@@ -37,16 +37,16 @@ class PermissionModule(BaseModel):
     order = models.IntegerField()
 
 
-class AssocPermission(BaseModel):
+class AssociationPermission(BaseModel):
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True, unique=True)
 
     number = models.IntegerField(blank=True)
 
-    feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="assoc_permissions")
+    feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name="association_permissions")
 
-    module = models.ForeignKey(PermissionModule, on_delete=models.CASCADE, related_name="assoc_permissions")
+    module = models.ForeignKey(PermissionModule, on_delete=models.CASCADE, related_name="association_permissions")
 
     descr = models.CharField(max_length=1000)
 
@@ -63,32 +63,32 @@ class AssocPermission(BaseModel):
         ]
 
 
-class AssocRole(BaseModel):
+class AssociationRole(BaseModel):
     name = models.CharField(max_length=100)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="roles", null=True)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="roles", null=True)
 
     number = models.IntegerField()
 
-    members = models.ManyToManyField(Member, related_name="assoc_roles")
+    members = models.ManyToManyField(Member, related_name="association_roles")
 
-    permissions = models.ManyToManyField(AssocPermission, related_name="assoc_roles", blank=True)
+    permissions = models.ManyToManyField(AssociationPermission, related_name="association_roles", blank=True)
 
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["assoc", "number", "deleted"],
-                name="unique_assoc_role_with_optional",
+                fields=["association", "number", "deleted"],
+                name="unique_association_role_with_optional",
             ),
             UniqueConstraint(
-                fields=["assoc", "number"],
+                fields=["association", "number"],
                 condition=Q(deleted=None),
-                name="unique_assoc_role_without_optional",
+                name="unique_association_role_without_optional",
             ),
         ]
 
 
-def get_assoc_executives(association: Association) -> QuerySet[Member]:
+def get_association_executives(association: Association) -> QuerySet[Member]:
     """Get all executive members of an association.
 
     Args:
@@ -99,16 +99,16 @@ def get_assoc_executives(association: Association) -> QuerySet[Member]:
             (role number 1) for the specified association.
 
     Raises:
-        AssocRole.DoesNotExist: If no executive role (number=1) exists for the association.
+        AssociationRole.DoesNotExist: If no executive role (number=1) exists for the association.
     """
     # Get the executive role (number 1) for the association
-    executive_role = AssocRole.objects.get(assoc=association, number=1)
+    executive_role = AssociationRole.objects.get(association=association, number=1)
 
     # Return all members assigned to the executive role
     return executive_role.members.all()
 
 
-def get_assoc_inners(assoc: Association) -> list[Member]:
+def get_association_inners(association: Association) -> list[Member]:
     """Get all non-executive members with association roles.
 
     Retrieves all members that have roles in the given association, excluding
@@ -116,15 +116,15 @@ def get_assoc_inners(assoc: Association) -> list[Member]:
     in the returned list, even if they have multiple roles.
 
     Args:
-        assoc (Association): The association instance to get members from.
+        association (Association): The association instance to get members from.
 
     Returns:
         list[Member]: List of unique Member instances with non-executive roles
             in the association. Returns empty list if no qualifying members found.
 
     Example:
-        >>> assoc = Association.objects.get(name="My Association")
-        >>> members = get_assoc_inners(assoc)
+        >>> association = Association.objects.get(name="My Association")
+        >>> members = get_association_inners(association)
         >>> len(members)
         5
     """
@@ -132,7 +132,7 @@ def get_assoc_inners(assoc: Association) -> list[Member]:
     already = {}
 
     # Get all non-executive roles (exclude role number 1) for this association
-    for role in AssocRole.objects.filter(assoc=assoc).exclude(number=1):
+    for role in AssociationRole.objects.filter(association=association).exclude(number=1):
         # Iterate through all members assigned to this role
         for mb in role.members.all():
             # Skip if member already processed to avoid duplicates

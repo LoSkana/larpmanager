@@ -110,7 +110,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
     def test_get_reg_iscr_with_discount(self):
         """Test registration fee with discount"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         ticket = self.ticket(event=run.event, price=Decimal("100.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket)
@@ -119,7 +119,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
             name="Test Discount", value=Decimal("20.00"), max_redeem=10, typ=Discount.STANDARD, event=run.event, number=1
         )
         discount.runs.add(run)
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), assoc=assoc)
+        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), association=association)
 
         result = get_reg_iscr(registration)
 
@@ -144,7 +144,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
     def test_get_reg_iscr_gifted_no_discount(self):
         """Test registration fee for gifted (no discount applied)"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         ticket = self.ticket(event=run.event, price=Decimal("100.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket, redeem_code="GIFT123")
@@ -153,7 +153,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
             name="Test Discount", value=Decimal("20.00"), max_redeem=10, typ=Discount.STANDARD, event=run.event, number=1
         )
         discount.runs.add(run)
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), assoc=assoc)
+        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), association=association)
 
         result = get_reg_iscr(registration)
 
@@ -163,7 +163,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
     def test_get_reg_iscr_minimum_zero(self):
         """Test registration fee has minimum of zero"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         ticket = self.ticket(event=run.event, price=Decimal("50.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket)
@@ -172,7 +172,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
             name="Large Discount", value=Decimal("100.00"), max_redeem=10, typ=Discount.STANDARD, event=run.event, number=1
         )
         discount.runs.add(run)
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("100.00"), assoc=assoc)
+        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("100.00"), association=association)
 
         result = get_reg_iscr(registration)
 
@@ -186,12 +186,12 @@ class TestPaymentCalculationFunctions(BaseTestCase):
     def test_get_reg_payments_basic(self):
         """Test basic payment calculation"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         result = get_reg_payments(registration)
@@ -201,15 +201,15 @@ class TestPaymentCalculationFunctions(BaseTestCase):
     def test_get_reg_payments_multiple(self):
         """Test payment calculation with multiple payments"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
         )
 
         result = get_reg_payments(registration)
@@ -219,15 +219,15 @@ class TestPaymentCalculationFunctions(BaseTestCase):
     def test_get_reg_payments_excludes_hidden(self):
         """Test payment calculation excludes hidden payments"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00"), hide=True
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00"), hide=True
         )
 
         result = get_reg_payments(registration)
@@ -238,15 +238,15 @@ class TestPaymentCalculationFunctions(BaseTestCase):
     def test_get_reg_payments_sets_dictionary(self):
         """Test payment calculation sets payments dictionary"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("20.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("20.00")
         )
 
         get_reg_payments(registration)
@@ -259,12 +259,12 @@ class TestPaymentCalculationFunctions(BaseTestCase):
     def test_get_reg_transactions_basic(self):
         """Test transaction fee calculation"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemTransaction.objects.create(
-            member=member, assoc=assoc, reg=registration, value=Decimal("2.50"), user_burden=True
+            member=member, association=association, reg=registration, value=Decimal("2.50"), user_burden=True
         )
 
         result = get_reg_transactions(registration)
@@ -274,15 +274,15 @@ class TestPaymentCalculationFunctions(BaseTestCase):
     def test_get_reg_transactions_excludes_non_user_burden(self):
         """Test transaction calculation excludes non-user-burden fees"""
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemTransaction.objects.create(
-            member=member, assoc=assoc, reg=registration, value=Decimal("2.50"), user_burden=True
+            member=member, association=association, reg=registration, value=Decimal("2.50"), user_burden=True
         )
         AccountingItemTransaction.objects.create(
-            member=member, assoc=assoc, reg=registration, value=Decimal("3.00"), user_burden=False
+            member=member, association=association, reg=registration, value=Decimal("3.00"), user_burden=False
         )
 
         result = get_reg_transactions(registration)

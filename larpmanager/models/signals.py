@@ -132,7 +132,7 @@ from larpmanager.mail.registration import (
     send_registration_cancellation_email,
     send_registration_deletion_email,
 )
-from larpmanager.models.access import AssocPermission, AssocRole, EventPermission, EventRole
+from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemDiscount,
@@ -145,7 +145,7 @@ from larpmanager.models.accounting import (
     PaymentInvoice,
     RefundRequest,
 )
-from larpmanager.models.association import Association, AssociationConfig, AssociationSkin, AssocText
+from larpmanager.models.association import Association, AssociationConfig, AssociationSkin, AssociationText
 from larpmanager.models.base import Feature, FeatureModule, auto_assign_sequential_numbers, update_model_search_field
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
 from larpmanager.models.event import (
@@ -424,47 +424,47 @@ def post_delete_assignment_trait_reset(sender, instance, **kwargs):
     clear_run_cache_and_media(instance.run)
 
 
-# AssocPermission signals
-@receiver(pre_save, sender=AssocPermission)
-def pre_save_assoc_permission(sender, instance, **kwargs):
+# AssociationPermission signals
+@receiver(pre_save, sender=AssociationPermission)
+def pre_save_association_permission(sender, instance, **kwargs):
     auto_assign_association_permission_number(instance)
 
 
-@receiver(post_save, sender=AssocPermission)
-def post_save_assoc_permission_index_permission(sender, instance, **kwargs):
-    clear_index_permission_cache("assoc")
+@receiver(post_save, sender=AssociationPermission)
+def post_save_association_permission_index_permission(sender, instance, **kwargs):
+    clear_index_permission_cache("association")
     clear_association_permission_cache(instance)
 
 
-@receiver(post_delete, sender=AssocPermission)
-def post_delete_assoc_permission_index_permission(sender, instance, **kwargs):
-    clear_index_permission_cache("assoc")
+@receiver(post_delete, sender=AssociationPermission)
+def post_delete_association_permission_index_permission(sender, instance, **kwargs):
+    clear_index_permission_cache("association")
     clear_association_permission_cache(instance)
 
 
-# AssocRole signals
-@receiver(pre_delete, sender=AssocRole)
-def pre_delete_assoc_role_reset(sender, instance, **kwargs):
+# AssociationRole signals
+@receiver(pre_delete, sender=AssociationRole)
+def pre_delete_association_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.assoc_id)
+        reset_event_links(member.user.id, instance.association_id)
 
 
-@receiver(post_save, sender=AssocRole)
-def post_save_assoc_role_reset(sender, instance, **kwargs):
+@receiver(post_save, sender=AssociationRole)
+def post_save_association_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.assoc_id)
+        reset_event_links(member.user.id, instance.association_id)
 
 
 # AssocText signals
-@receiver(pre_delete, sender=AssocText)
-def pre_delete_assoc_text(sender, instance, **kwargs):
+@receiver(pre_delete, sender=AssociationText)
+def pre_delete_association_text(sender, instance, **kwargs):
     clear_association_text_cache_on_delete(instance)
 
 
-@receiver(post_save, sender=AssocText)
-def post_save_assoc_text(sender, instance, created, **kwargs):
+@receiver(post_save, sender=AssociationText)
+def post_save_association_text(sender, instance, created, **kwargs):
     update_association_text_cache_on_save(instance)
 
 
@@ -493,13 +493,13 @@ def post_save_association_reset_lm_home(sender, instance, **kwargs) -> None:
 
 # AssociationConfig signals
 @receiver(post_save, sender=AssociationConfig)
-def post_save_reset_assoc_config(sender, instance, **kwargs):
-    clear_config_cache(instance.assoc)
+def post_save_reset_association_config(sender, instance, **kwargs):
+    clear_config_cache(instance.association)
 
 
 @receiver(post_delete, sender=AssociationConfig)
-def post_delete_reset_assoc_config(sender, instance, **kwargs):
-    clear_config_cache(instance.assoc)
+def post_delete_reset_association_config(sender, instance, **kwargs):
+    clear_config_cache(instance.association)
 
 
 # AssociationSkin signals
@@ -718,14 +718,14 @@ def post_delete_event_permission_reset(sender, instance, **kwargs):
 def pre_delete_event_role_reset(sender, instance, **kwargs):
     remove_event_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.event.assoc_id)
+        reset_event_links(member.user.id, instance.event.association_id)
 
 
 @receiver(post_save, sender=EventRole)
 def post_save_event_role_reset(sender, instance, **kwargs):
     remove_event_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.event.assoc_id)
+        reset_event_links(member.user.id, instance.event.association_id)
 
 
 # EventText signals
@@ -788,7 +788,7 @@ def post_delete_faction_reset_rels(sender, instance, **kwargs) -> None:
 def post_save_feature_index_permission(sender: type, instance: object, **kwargs: dict) -> None:
     """Clear permission and feature caches after feature/permission save."""
     clear_index_permission_cache("event")
-    clear_index_permission_cache("assoc")
+    clear_index_permission_cache("association")
     reset_features_cache()
 
 
@@ -797,7 +797,7 @@ def post_delete_feature_index_permission(sender: type, instance: Any, **kwargs: 
     """Clear permission and feature caches after deleting feature index permission."""
     # Clear both event and association permission caches
     clear_index_permission_cache("event")
-    clear_index_permission_cache("assoc")
+    clear_index_permission_cache("association")
 
     # Reset global features cache
     reset_features_cache()
@@ -809,7 +809,7 @@ def post_save_feature_module_index_permission(sender: type, instance: object, **
     """Clear cached permissions and features after feature/module/permission changes."""
     # Clear cached index permissions for event and organization contexts
     clear_index_permission_cache("event")
-    clear_index_permission_cache("assoc")
+    clear_index_permission_cache("association")
 
     # Invalidate the global features cache
     reset_features_cache()
@@ -823,7 +823,7 @@ def post_delete_feature_module_index_permission(
 ) -> None:
     """Clear permission and feature caches after deletion."""
     clear_index_permission_cache("event")
-    clear_index_permission_cache("assoc")
+    clear_index_permission_cache("association")
     reset_features_cache()
 
 
@@ -1385,7 +1385,7 @@ m2m_changed.connect(on_plot_characters_m2m_changed, sender=Plot.characters.throu
 m2m_changed.connect(on_speedlarp_characters_m2m_changed, sender=SpeedLarp.characters.through)
 m2m_changed.connect(on_prologue_characters_m2m_changed, sender=Prologue.characters.through)
 
-m2m_changed.connect(on_association_roles_m2m_changed, sender=AssocRole.members.through)
+m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.members.through)
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)

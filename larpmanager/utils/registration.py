@@ -240,7 +240,7 @@ def registration_status_signed(
     registration_status_characters(run, features, context)
 
     # Get user membership for the event's association
-    mb = get_user_membership(member, run.event.assoc_id)
+    mb = get_user_membership(member, run.event.association_id)
 
     # Build base registration message with ticket info if available
     register_msg = _("Registration confirmed")

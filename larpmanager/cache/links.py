@@ -27,7 +27,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 
-from larpmanager.models.access import AssocRole, EventRole
+from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth import is_lm_admin
@@ -46,7 +46,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         context: Dict for context information
 
     Returns:
-        Dict with keys: reg_menu, assoc_role, event_role, all_runs, open_runs, topbar
+        Dict with keys: reg_menu, association_role, event_role, all_runs, open_runs, topbar
     """
     # Skip if not authenticated or no association
     if not context["member"] or context["association_id"] == 0:
@@ -78,31 +78,34 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
 
     # Get user's active registrations for upcoming events
     active_registrations = Registration.objects.filter(
-        member=member, run__end__gte=cutoff_date, cancellation_date__isnull=True, run__event__assoc_id=association_id
+        member=member,
+        run__end__gte=cutoff_date,
+        cancellation_date__isnull=True,
+        run__event__association_id=association_id,
     ).select_related("run", "run__event")
     navigation_context["reg_menu"] = [
         (registration.run.get_slug(), str(registration.run)) for registration in active_registrations
     ]
 
     # Collect roles
-    navigation_context["assoc_role"] = _get_assoc_roles(member, association_id, request)
+    navigation_context["association_role"] = _get_association_roles(member, association_id, request)
     navigation_context["event_role"] = _get_event_roles(member, association_id)
 
     # Build accessible runs
     navigation_context.update(
-        _get_accessible_runs(association_id, navigation_context["assoc_role"], navigation_context["event_role"])
+        _get_accessible_runs(association_id, navigation_context["association_role"], navigation_context["event_role"])
     )
 
     # Determine if topbar should be shown
-    navigation_context["topbar"] = bool(navigation_context["event_role"] or navigation_context["assoc_role"])
+    navigation_context["topbar"] = bool(navigation_context["event_role"] or navigation_context["association_role"])
 
     return navigation_context
 
 
-def _get_assoc_roles(member, assoc_id: int, request: HttpRequest) -> dict:
+def _get_association_roles(member, association_id: int, request: HttpRequest) -> dict:
     """Get association-level roles for the member."""
     association_roles = {}
-    for association_role in member.assoc_roles.filter(assoc_id=assoc_id):
+    for association_role in member.association_roles.filter(association_id=association_id):
         association_roles[association_role.number] = association_role.id
 
     # Grant admin role to LarpManager admins
@@ -112,20 +115,20 @@ def _get_assoc_roles(member, assoc_id: int, request: HttpRequest) -> dict:
     return association_roles
 
 
-def _get_event_roles(member, assoc_id: int) -> dict:
+def _get_event_roles(member, association_id: int) -> dict:
     """Get event-level roles for the member."""
     event_roles = {}
-    for event_role in member.event_roles.filter(event__assoc_id=assoc_id).select_related("event"):
+    for event_role in member.event_roles.filter(event__association_id=association_id).select_related("event"):
         event_slug = event_role.event.slug
         event_roles.setdefault(event_slug, {})[event_role.number] = event_role.id
     return event_roles
 
 
-def _get_accessible_runs(assoc_id: int, assoc_roles: dict, event_roles: dict) -> dict:
+def _get_accessible_runs(association_id: int, association_roles: dict, event_roles: dict) -> dict:
     """Get runs accessible to the user based on their roles."""
     result = {"all_runs": {}, "open_runs": {}, "past_runs": {}}
-    all_runs = Run.objects.filter(event__assoc_id=assoc_id).select_related("event").order_by("end")
-    is_admin = 1 in assoc_roles
+    all_runs = Run.objects.filter(event__association_id=association_id).select_related("event").order_by("end")
+    is_admin = 1 in association_roles
 
     for run in all_runs:
         if run.event.deleted:
@@ -169,7 +172,7 @@ def clear_run_event_links_cache(event: Event) -> None:
     3. All superusers in the system
 
     Args:
-        event: Event instance to reset links for. Must have assoc_id attribute.
+        event: Event instance to reset links for. Must have association_id attribute.
 
     Returns:
         None
@@ -181,21 +184,23 @@ def clear_run_event_links_cache(event: Event) -> None:
     # Clear cache for all members with roles in this specific event
     for event_role in EventRole.objects.filter(event=event).prefetch_related("members"):
         for member in event_role.members.all():
-            reset_event_links(member.id, event.assoc_id)
+            reset_event_links(member.id, event.association_id)
 
     # Clear cache for association executives (role number 1)
     # These users typically have access to all events in the association
     try:
-        assoc_role = AssocRole.objects.prefetch_related("members").get(assoc_id=event.assoc_id, number=1)
-        for member in assoc_role.members.all():
-            reset_event_links(member.id, event.assoc_id)
+        association_role = AssociationRole.objects.prefetch_related("members").get(
+            association_id=event.association_id, number=1
+        )
+        for member in association_role.members.all():
+            reset_event_links(member.id, event.association_id)
     except ObjectDoesNotExist:
         pass
 
     # Clear cache for all superusers since they have global access
     superusers = User.objects.filter(is_superuser=True)
     for superuser in superusers:
-        reset_event_links(superuser.member.id, event.assoc_id)
+        reset_event_links(superuser.member.id, event.association_id)
 
 
 def on_registration_post_save_reset_event_links(instance: Registration) -> None:
@@ -219,7 +224,7 @@ def on_registration_post_save_reset_event_links(instance: Registration) -> None:
         return
 
     # Reset cached event links for the member's user and event association
-    reset_event_links(instance.member.user.id, instance.run.event.assoc_id)
+    reset_event_links(instance.member.user.id, instance.run.event.association_id)
 
 
 def reset_event_links(user_id: int, association_id: int) -> None:

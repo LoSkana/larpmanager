@@ -87,7 +87,7 @@ def init_cache_skin(domain: str) -> dict | None:
         "id": 0,
         "name": skin.name,
         "shuttle": [],
-        "features": ["assoc_css"],
+        "features": [],
         # Default CSS configuration
         "css_code": "main",
         "slug": "lm",

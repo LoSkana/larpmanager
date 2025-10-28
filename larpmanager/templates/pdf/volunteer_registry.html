@@ -50,53 +50,53 @@
                 }
             }
         </style>
-</head>
-<body>
-<!--
+    </head>
+    <body>
+        <!--
     <div id="header_content"></div>
 -->
-<div id="footer_content">
-<table id="footer">
-<tr>
-<td>Registro Volontari {{ assoc.name }}</td>
-<td>{{ date }}</td>
-<td>
-Pagina <pdf:pagenumber> di <pdf:pagecount>
-</td>
-</tr>
-</table>
-</div>
-<p style="text-align: center;">
-<img width="100px" src="{{ assoc.profile_thumb.url }}" />
-</p>
-<h1>Registro Volontari {{ assoc.name }} - {{ date }}</h1>
-<table>
-<tr>
-<th>Nome e Cognome</th>
-<th>Data e luogo di nascita</th>
-<th style="width: 20%">Codice fiscale</th>
-<th style="width: 20%">Indirizzo</th>
-<th>Data inizio</th>
-<th>Data fine</th>
-</tr>
-{% for el in list %}
-<tr>
-<td>
-{% if el.member.legal_name %}
-{{ el.member.legal_name }}
-{% else %}
-{{ el.member.name }}
-{% endif %}
-{{ el.member.surname }}
-</td>
-<td>{{ el.member.birth_date | date:"d/m/Y" }} - {{ el.member.birth_place }}</td>
-<td>{{ el.member.fiscal_code }}</td>
-<td>{{ el.member.get_residence }}</td>
-<td>{{ el.start | date:"d/m/Y" }}</td>
-<td>
-{% if el.end %}{{ el.end | date:"d/m/Y" }}{% endif %}
-</td>
-</tr>
-{% endfor %}
-</table>
-</html>
+        <div id="footer_content">
+            <table id="footer">
+                <tr>
+                    <td>Registro Volontari {{ association.name }}</td>
+                    <td>{{ date }}</td>
+                    <td>
+                        Pagina <pdf:pagenumber> di <pdf:pagecount>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p style="text-align: center;">
+            <img width="100px" src="{{ association.profile_thumb.url }}" />
+        </p>
+        <h1>Registro Volontari {{ association.name }} - {{ date }}</h1>
+        <table>
+            <tr>
+                <th>Nome e Cognome</th>
+                <th>Data e luogo di nascita</th>
+                <th style="width: 20%">Codice fiscale</th>
+                <th style="width: 20%">Indirizzo</th>
+                <th>Data inizio</th>
+                <th>Data fine</th>
+            </tr>
+            {% for el in list %}
+                <tr>
+                    <td>
+                        {% if el.member.legal_name %}
+                            {{ el.member.legal_name }}
+                        {% else %}
+                            {{ el.member.name }}
+                        {% endif %}
+                        {{ el.member.surname }}
+                    </td>
+                    <td>{{ el.member.birth_date | date:"d/m/Y" }} - {{ el.member.birth_place }}</td>
+                    <td>{{ el.member.fiscal_code }}</td>
+                    <td>{{ el.member.get_residence }}</td>
+                    <td>{{ el.start | date:"d/m/Y" }}</td>
+                    <td>
+                        {% if el.end %}{{ el.end | date:"d/m/Y" }}{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </html>

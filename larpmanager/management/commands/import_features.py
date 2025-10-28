@@ -42,7 +42,7 @@ class Command(BaseCommand):
             "module",
             "feature",
             "permission_module",
-            "assoc_permission",
+            "association_permission",
             "event_permission",
             "payment_methods",
             "skin",

@@ -58,7 +58,7 @@ class Event(BaseModel):
         help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
 
     name = models.CharField(max_length=100)
 

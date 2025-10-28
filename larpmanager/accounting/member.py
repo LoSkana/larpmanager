@@ -24,7 +24,7 @@ from typing import Any
 from dateutil.relativedelta import relativedelta
 from django.http import HttpRequest
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemDonation,
@@ -96,7 +96,9 @@ def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
 
     # Query all registrations for this member in the current association
     # Exclude cancelled events from the development status
-    registration_query = Registration.objects.filter(member=member, run__event__assoc_id=context["association_id"])
+    registration_query = Registration.objects.filter(
+        member=member, run__event__association_id=context["association_id"]
+    )
     registration_query = registration_query.exclude(run__development__in=[DevelopStatus.CANC])
 
     # Process each registration to populate payment and status information
@@ -105,7 +107,7 @@ def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
 
     # Retrieve open refund requests for this member and association
     context["refunds"] = context["member"].refund_requests.filter(
-        status=RefundStatus.REQUEST, assoc_id=context["association_id"]
+        status=RefundStatus.REQUEST, association_id=context["association_id"]
     )
 
     # Calculate and add token/credit balance information
@@ -204,18 +206,18 @@ def _info_token_credit(context, member):
     token_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.TOKEN,
-        assoc_id=context["association_id"],
+        association_id=context["association_id"],
     )
     context["acc_tokens"] = token_queryset.count()
 
     # check if it had any credits
     expense_queryset = AccountingItemExpense.objects.filter(
-        member=member, is_approved=True, assoc_id=context["association_id"]
+        member=member, is_approved=True, association_id=context["association_id"]
     )
     credit_queryset = AccountingItemOther.objects.filter(
         member=member,
         oth=OtherChoices.CREDIT,
-        assoc_id=context["association_id"],
+        association_id=context["association_id"],
     )
     context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
 
@@ -234,9 +236,9 @@ def _info_collections(context, member, request):
     if "collection" not in context["features"]:
         return
 
-    context["collections"] = Collection.objects.filter(organizer=member, assoc_id=context["association_id"])
+    context["collections"] = Collection.objects.filter(organizer=member, association_id=context["association_id"])
     context["collection_gifts"] = AccountingItemCollection.objects.filter(
-        member=member, collection__assoc_id=context["association_id"]
+        member=member, collection__association_id=context["association_id"]
     )
 
 
@@ -254,7 +256,7 @@ def _info_donations(context, member, request):
     if "donate" not in context["features"]:
         return
 
-    donation_queryset = AccountingItemDonation.objects.filter(member=member, assoc_id=context["association_id"])
+    donation_queryset = AccountingItemDonation.objects.filter(member=member, association_id=context["association_id"])
     context["donations"] = donation_queryset.order_by("-created")
 
 
@@ -292,7 +294,7 @@ def _info_membership(context: dict, member, request) -> None:
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
     for membership_item in AccountingItemMembership.objects.filter(
-        member=member, assoc_id=context["association_id"]
+        member=member, association_id=context["association_id"]
     ).order_by("year"):
         context["membership_fee"].append(membership_item.year)
 
@@ -312,11 +314,11 @@ def _info_membership(context: dict, member, request) -> None:
     context["year"] = current_year
 
     # Get membership day configuration (default: January 1st)
-    membership_day = get_assoc_config(context["association_id"], "membership_day", "01-01", context)
+    membership_day = get_association_config(context["association_id"], "membership_day", "01-01", context)
     if membership_day:
         # Get grace period in months (default: 0 months)
         membership_grace_period_months = int(
-            get_assoc_config(context["association_id"], "membership_grazing", "0", context)
+            get_association_config(context["association_id"], "membership_grazing", "0", context)
         )
 
         # Build full date string with current year

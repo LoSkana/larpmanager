@@ -90,7 +90,7 @@ class HelpQuestion(BaseModel):
         ],
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"{self.member} {self.text}"
@@ -109,7 +109,7 @@ class Contact(BaseModel):
 
     num_unread = models.IntegerField(default=0)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["me", "you"]
@@ -135,7 +135,7 @@ class ChatMessage(BaseModel):
 
     receiver = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="RECEIVER_MSG")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"CM - {self.sender} {self.message[:20]}"
@@ -179,7 +179,7 @@ class UrlShortner(BaseModel):
 
     url = models.URLField(max_length=300)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"U{self.number} {self.name}"
@@ -211,7 +211,7 @@ class Album(BaseModel):
 
     run = models.ForeignKey(Run, on_delete=models.PROTECT, blank=True, null=True, related_name="albums")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __unicode__(self):
         # noinspection PyUnresolvedReferences
@@ -285,7 +285,7 @@ class Competence(BaseModel):
 
     descr = models.CharField(max_length=5000, help_text=_("A description of the skills / abilities involved"))
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     members = models.ManyToManyField(Member, related_name="competences", through="CompetenceMemberRel")
 
@@ -415,7 +415,7 @@ class WarehouseContainer(BaseModel):
 
     description = models.CharField(max_length=1000, blank=True, default="")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
 
 class WarehouseTag(BaseModel):
@@ -423,7 +423,7 @@ class WarehouseTag(BaseModel):
 
     description = models.CharField(max_length=1000, blank=True, default="")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
 
 
 class WarehouseItem(BaseModel):
@@ -453,7 +453,7 @@ class WarehouseItem(BaseModel):
         options={"quality": 80},
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
 
     @classmethod
     def get_optional_fields(cls):
@@ -472,7 +472,7 @@ class WarehouseMovement(BaseModel):
         help_text=_("Where it has been placed? When it is expected to come back?"),
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="movements")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="movements")
 
     completed = models.BooleanField(default=False)
 
@@ -572,7 +572,7 @@ class ShuttleService(BaseModel):
 
     status = models.CharField(max_length=1, choices=ShuttleStatus.choices, default=ShuttleStatus.OPEN, db_index=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
 
     def __str__(self):
         return f"{self.member} ({self.date} {self.time}) {self.status}"
@@ -709,7 +709,7 @@ class PlayerRelationship(BaseModel):
 
 
 class Email(BaseModel):
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
 

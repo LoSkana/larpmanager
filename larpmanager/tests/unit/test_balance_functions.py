@@ -24,8 +24,8 @@ from decimal import Decimal
 from unittest.mock import patch
 
 from larpmanager.accounting.balance import (
-    assoc_accounting,
-    assoc_accounting_data,
+    association_accounting,
+    association_accounting_data,
     get_acc_detail,
     get_acc_reg_detail,
     get_acc_reg_type,
@@ -54,15 +54,15 @@ class TestAccDetailFunctions(BaseTestCase):
         """Test getting detailed accounting breakdown for payments"""
         run = self.get_run()
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, run=run)
 
         # Create payments
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         result = get_acc_detail(
@@ -79,14 +79,14 @@ class TestAccDetailFunctions(BaseTestCase):
         """Test getting detailed accounting breakdown for expenses"""
         run = self.get_run()
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
         # Create expenses
         AccountingItemExpense.objects.create(
-            member=member, assoc=assoc, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("200.00"), is_approved=True
+            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("200.00"), is_approved=True
         )
         AccountingItemExpense.objects.create(
-            member=member, assoc=assoc, run=run, exp=ExpenseChoices.COST, value=Decimal("150.00"), is_approved=True
+            member=member, association=association, run=run, exp=ExpenseChoices.COST, value=Decimal("150.00"), is_approved=True
         )
 
         result = get_acc_detail(
@@ -102,14 +102,14 @@ class TestAccDetailFunctions(BaseTestCase):
         """Test get_acc_detail with additional filters"""
         run = self.get_run()
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
         # Create other items with different types
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, run=run, oth=OtherChoices.TOKEN, value=Decimal("50.00"), cancellation=False
+            member=member, association=association, run=run, oth=OtherChoices.TOKEN, value=Decimal("50.00"), cancellation=False
         )
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, run=run, oth=OtherChoices.CREDIT, value=Decimal("30.00"), cancellation=True
+            member=member, association=association, run=run, oth=OtherChoices.CREDIT, value=Decimal("30.00"), cancellation=True
         )
 
         # Filter only non-cancelled
@@ -214,12 +214,12 @@ class TestRunAccountingFunctions(BaseTestCase):
         run.save()
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"))
 
         # Create payment
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         result = get_run_accounting(run, {})
@@ -240,11 +240,11 @@ class TestRunAccountingFunctions(BaseTestCase):
         run.save()
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
         # Create expense
         AccountingItemExpense.objects.create(
-            member=member, assoc=assoc, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("50.00"), is_approved=True
+            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("50.00"), is_approved=True
         )
 
         result = get_run_accounting(run, {})
@@ -265,14 +265,14 @@ class TestRunAccountingFunctions(BaseTestCase):
         run.save()
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
         # Create tokens and credits
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, run=run, oth=OtherChoices.TOKEN, value=Decimal("20.00"), cancellation=False
+            member=member, association=association, run=run, oth=OtherChoices.TOKEN, value=Decimal("20.00"), cancellation=False
         )
         AccountingItemOther.objects.create(
-            member=member, assoc=assoc, run=run, oth=OtherChoices.CREDIT, value=Decimal("30.00"), cancellation=False
+            member=member, association=association, run=run, oth=OtherChoices.CREDIT, value=Decimal("30.00"), cancellation=False
         )
 
         result = get_run_accounting(run, {"token_name": "Tokens", "credit_name": "Credits"})
@@ -295,7 +295,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         run.save()
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
 
         # Create discount
         discount = Discount.objects.create(
@@ -303,7 +303,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         )
         discount.runs.add(run)
 
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), assoc=assoc)
+        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), association=association)
 
         result = get_run_accounting(run, {})
 
@@ -320,15 +320,15 @@ class TestRunAccountingFunctions(BaseTestCase):
         run.save()
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("200.00"))
 
         # Create payment and expense
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("200.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("200.00")
         )
         AccountingItemExpense.objects.create(
-            member=member, assoc=assoc, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("80.00"), is_approved=True
+            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("80.00"), is_approved=True
         )
 
         result = get_run_accounting(run, {})
@@ -342,12 +342,12 @@ class TestRunAccountingFunctions(BaseTestCase):
 class TestAssocAccountingFunctions(BaseTestCase):
     """Test cases for association accounting functions"""
 
-    def test_assoc_accounting_data_basic(self):
+    def test_association_accounting_data_basic(self):
         """Test basic association accounting data gathering"""
-        assoc = self.get_association()
-        context = {"association_id": assoc.id}
+        association = self.get_association()
+        context = {"association_id": association.id}
 
-        assoc_accounting_data(context)
+        association_accounting_data(context)
 
         self.assertIn("outflow_exec_sum", context)
         self.assertIn("inflow_exec_sum", context)
@@ -356,22 +356,22 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertIn("in_sum", context)
         self.assertIn("out_sum", context)
 
-    def test_assoc_accounting_data_with_year_filter(self):
+    def test_association_accounting_data_with_year_filter(self):
         """Test association accounting data with year filter"""
-        assoc = self.get_association()
-        context = {"association_id": assoc.id}
+        association = self.get_association()
+        context = {"association_id": association.id}
 
-        assoc_accounting_data(context, year=2024)
+        association_accounting_data(context, year=2024)
 
         self.assertIn("membership_sum", context)
         # Should only include items from 2024
 
-    def test_assoc_accounting_calculates_totals(self):
+    def test_association_accounting_calculates_totals(self):
         """Test association accounting calculates correct totals"""
-        assoc = self.get_association()
-        context = {"association_id": assoc.id}
+        association = self.get_association()
+        context = {"association_id": association.id}
 
-        assoc_accounting(context)
+        association_accounting(context)
 
         self.assertIn("list", context)
         self.assertIn("tokens_sum", context)
@@ -380,9 +380,9 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertIn("global_sum", context)
         self.assertIn("bank_sum", context)
 
-    def test_assoc_accounting_includes_member_balances(self):
+    def test_association_accounting_includes_member_balances(self):
         """Test association accounting includes member token/credit balances"""
-        assoc = self.get_association()
+        association = self.get_association()
         member = self.get_member()
         membership = member.membership
 
@@ -390,22 +390,22 @@ class TestAssocAccountingFunctions(BaseTestCase):
         membership.credit = Decimal("30.00")
         membership.save()
 
-        context = {"association_id": assoc.id}
-        assoc_accounting(context)
+        context = {"association_id": association.id}
+        association_accounting(context)
 
         self.assertGreaterEqual(context["tokens_sum"], Decimal("50.00"))
         self.assertGreaterEqual(context["credits_sum"], Decimal("30.00"))
 
-    def test_assoc_accounting_includes_run_balances(self):
+    def test_association_accounting_includes_run_balances(self):
         """Test association accounting includes completed run balances"""
-        assoc = self.get_association()
+        association = self.get_association()
         run = self.get_run()
         run.development = DevelopStatus.DONE
         run.balance = Decimal("100.00")
         run.save()
 
-        context = {"association_id": assoc.id}
-        assoc_accounting(context)
+        context = {"association_id": association.id}
+        association_accounting(context)
 
         self.assertIn("runs", context)
         self.assertGreaterEqual(context["balance_sum"], Decimal("100.00"))

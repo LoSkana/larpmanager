@@ -24,16 +24,16 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
-from larpmanager.cache.config import get_assoc_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssocTextType, get_url, hdr
+from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
-from larpmanager.utils.text import get_assoc_text, get_event_text
+from larpmanager.utils.text import get_association_text, get_event_text
 
 
 @background_auto(queue="acc")
@@ -96,7 +96,7 @@ def update_registration_status(instance) -> None:
     # Add custom messages from event and association configurations
     for custom_mesg in [
         get_event_text(instance.run.event_id, EventTextType.SIGNUP),
-        get_assoc_text(instance.run.event.assoc_id, AssocTextType.SIGNUP),
+        get_association_text(instance.run.event.association_id, AssociationTextType.SIGNUP),
     ]:
         if custom_mesg:
             body += "<br />" + custom_mesg
@@ -105,10 +105,10 @@ def update_registration_status(instance) -> None:
     my_send_mail(subj, body, instance.member, instance.run)
 
     # Send notifications to event organizers based on configuration
-    assoc_id = instance.run.event.assoc_id
+    association_id = instance.run.event.association_id
 
     # Handle new registration notifications to organizers
-    if instance.modified == 1 and get_assoc_config(assoc_id, "mail_signup_new", False):
+    if instance.modified == 1 and get_association_config(association_id, "mail_signup_new", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % context
@@ -117,7 +117,7 @@ def update_registration_status(instance) -> None:
             my_send_mail(subj, body, orga, instance.run)
 
     # Handle registration update notifications to organizers
-    elif get_assoc_config(assoc_id, "mail_signup_update", False):
+    elif get_association_config(association_id, "mail_signup_update", False):
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
             subj = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % context
@@ -148,11 +148,11 @@ def registration_options(registration_instance) -> str:
             email_body += f" - {registration_instance.ticket.description}"
 
     # Get user membership and event features for permission checks
-    get_user_membership(registration_instance.member, registration_instance.run.event.assoc_id)
+    get_user_membership(registration_instance.member, registration_instance.run.event.association_id)
     event_features = get_event_features(registration_instance.run.event_id)
 
     # Get currency symbol for formatting monetary amounts
-    currency_symbol = registration_instance.run.event.assoc.get_currency_symbol()
+    currency_symbol = registration_instance.run.event.association.get_currency_symbol()
 
     # Display total registration fee if greater than zero
     if registration_instance.tot_iscr > 0:
@@ -335,7 +335,7 @@ def update_registration_cancellation(instance: Registration) -> None:
     my_send_mail(subj, body, instance.member, instance.run)
 
     # Send notification emails to organizers if feature is enabled
-    if get_assoc_config(instance.run.event.assoc_id, "mail_signup_del", False):
+    if get_association_config(instance.run.event.association_id, "mail_signup_del", False):
         # Iterate through all organizers for this event
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)
@@ -406,7 +406,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
     my_send_mail(subj, body, instance.member, instance.run)
 
     # Check if organization wants to receive deletion notifications
-    if get_assoc_config(instance.run.event.assoc_id, "mail_signup_del", False):
+    if get_association_config(instance.run.event.association_id, "mail_signup_del", False):
         # Send notification to all event organizers
         for orga in get_event_organizers(instance.run.event):
             activate(orga.language)

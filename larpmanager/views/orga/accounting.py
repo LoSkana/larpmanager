@@ -26,7 +26,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import get_run_accounting
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.accounting import (
     OrgaCreditForm,
     OrgaDiscountForm,
@@ -114,7 +114,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
             # Set required relationship fields from context and user
             exp.run = context["run"]
             exp.member = context["member"]
-            exp.assoc_id = context["association_id"]
+            exp.association_id = context["association_id"]
             exp.save()
 
             # Show success message to user
@@ -507,7 +507,9 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_expenses")
 
     # Determine if approval functionality should be disabled for this organization
-    context["disable_approval"] = get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False, context)
+    context["disable_approval"] = get_association_config(
+        context["event"].association_id, "expense_disable_orga", False, context
+    )
 
     # Cache the translated approval text for callback usage
     approve = _("Approve")
@@ -576,7 +578,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
     context = check_event_context(request, event_slug, "orga_expenses")
 
     # Verify that expense functionality is enabled for this association
-    if get_assoc_config(context["event"].assoc_id, "expense_disable_orga", False):
+    if get_association_config(context["event"].association_id, "expense_disable_orga", False):
         raise Http404("eh no caro mio")
 
     # Retrieve the expense object or raise 404 if not found

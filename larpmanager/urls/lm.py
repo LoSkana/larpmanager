@@ -110,12 +110,12 @@ urlpatterns = [
     ),
     path(
         "activate/<slug:cod>/next/<path:p>",
-        views_lm.activate_feature_assoc,
+        views_lm.activate_feature_association,
         name="activate_feature_assoc",
     ),
     path(
         "activate/<slug:cod>/",
-        views_lm.activate_feature_assoc,
+        views_lm.activate_feature_association,
         name="activate_feature_assoc",
     ),
     path(
@@ -164,7 +164,7 @@ urlpatterns = [
         name="debug_slug",
     ),
     path(
-        "debug/<slug:assoc_slug>/",
+        "debug/<slug:association_slug>/",
         views_lm.debug_slug,
         name="debug_slug",
     ),

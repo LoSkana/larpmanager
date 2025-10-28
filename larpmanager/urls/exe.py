@@ -23,7 +23,7 @@ from django.urls import path
 from larpmanager.utils import edit as views_ed
 from larpmanager.views import manage as views_mg
 from larpmanager.views.exe import accounting as views_ea
-from larpmanager.views.exe import assoc as views_eas
+from larpmanager.views.exe import association as views_eas
 from larpmanager.views.exe import event as views_ee
 from larpmanager.views.exe import member as views_em
 from larpmanager.views.exe import miscellanea as views_ems

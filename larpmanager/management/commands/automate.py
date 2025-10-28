@@ -27,8 +27,8 @@ from django.db import connection
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
-from larpmanager.cache.config import get_assoc_config
-from larpmanager.cache.feature import get_assoc_features, get_event_features
+from larpmanager.cache.config import get_association_config
+from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
 from larpmanager.mail.member import send_password_reset_remainder
@@ -110,20 +110,20 @@ class Command(BaseCommand):
 
         # Process feature-specific checks for each association
         # Only run checks if the association has the required features enabled
-        for assoc in Association.objects.all():
-            features = get_assoc_features(assoc.id)
+        for association in Association.objects.all():
+            features = get_association_features(association.id)
 
             # Check if reminder notifications need to be sent
             if "remind" in features:
-                self.check_remind(assoc)
+                self.check_remind(association)
 
             # Process achievement/badge updates for members
             if "badge" in features:
-                self.check_achievements(assoc)
+                self.check_achievements(association)
 
             # Validate and update accounting records
             if "record_acc" in features:
-                check_accounting(assoc.id)
+                check_accounting(association.id)
 
         # Perform standard system-wide maintenance checks
         # These checks run regardless of feature flags
@@ -146,7 +146,7 @@ class Command(BaseCommand):
 
             # Generate background PDF documents for the run
             if "print_pdf" in ev_features:
-                print_run_bkg(run.event.assoc.slug, run.get_slug())
+                print_run_bkg(run.event.association.slug, run.get_slug())
 
     @staticmethod
     def check_old_payments():
@@ -202,7 +202,7 @@ class Command(BaseCommand):
             for cleanup_sql_query in conf_settings.CLEAN_DB:
                 database_cursor.execute(cleanup_sql_query)
 
-    def check_achievements(self, assoc: Association) -> None:
+    def check_achievements(self, association: Association) -> None:
         """Process badge achievements for association members.
 
         Analyzes past and future event registrations to award badges
@@ -211,7 +211,7 @@ class Command(BaseCommand):
         for friend referral tracking.
 
         Args:
-            assoc: Association instance to process badges for
+            association: Association instance to process badges for
 
         Returns:
             None: Function performs side effects by updating badge cache
@@ -221,7 +221,7 @@ class Command(BaseCommand):
         events_by_id = {}
 
         # Process past events for participation badges
-        for run in Run.objects.filter(end__lt=datetime.today(), event__assoc=assoc):
+        for run in Run.objects.filter(end__lt=datetime.today(), event__association=association):
             # Get all non-cancelled registrations
             registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
 
@@ -556,7 +556,7 @@ class Command(BaseCommand):
             k = f"organizzatore-{tp[i]}"
             self.add_member_badge(k, m, cache)
 
-    def check_remind(self, assoc: Association) -> None:
+    def check_remind(self, association: Association) -> None:
         """Check and send reminder emails for association registrations.
 
         This function processes reminders for upcoming event registrations based on
@@ -564,7 +564,7 @@ class Command(BaseCommand):
         preferences while filtering for future events.
 
         Args:
-            assoc (Association): Association instance to process reminders for.
+            association (Association): Association instance to process reminders for.
                 Must have get_config method for accessing configuration values.
 
         Returns:
@@ -575,17 +575,17 @@ class Command(BaseCommand):
             or have already started, and only processes events with valid start dates.
         """
         # Check if reminders should be sent during holidays
-        send_reminders_during_holidays = assoc.get_config("remind_holidays", True)
+        send_reminders_during_holidays = association.get_config("remind_holidays", True)
 
         # Skip processing if it's a holiday and holiday reminders are disabled
         if not send_reminders_during_holidays and check_holiday():
             return
 
         # Get the number of days before event to send reminders
-        reminder_days_before_event = int(assoc.get_config("remind_days", 5))
+        reminder_days_before_event = int(association.get_config("remind_days", 5))
 
         # Get all registrations for this association
-        registrations_queryset = get_regs(assoc)
+        registrations_queryset = get_regs(association)
 
         # Calculate reference date (3 days from now) to filter out immediate events
         minimum_start_date = datetime.now() + timedelta(days=3)
@@ -597,9 +597,9 @@ class Command(BaseCommand):
 
         # Process each qualifying registration for reminder emails
         for registration in registrations_queryset.select_related("run", "ticket"):
-            self.remind_reg(registration, assoc, reminder_days_before_event)
+            self.remind_reg(registration, association, reminder_days_before_event)
 
-    def remind_reg(self, reg: Registration, assoc: Association, remind_days: int) -> None:
+    def remind_reg(self, reg: Registration, association: Association, remind_days: int) -> None:
         """Process reminder logic for a specific registration.
 
         Handles various reminder scenarios based on registration status, membership state,
@@ -608,7 +608,7 @@ class Command(BaseCommand):
 
         Args:
             reg: Registration instance to check reminders for
-            assoc: Association instance containing the registration
+            association: Association instance containing the registration
             remind_days: Interval in days for sending reminders
 
         Returns:
@@ -616,7 +616,7 @@ class Command(BaseCommand):
         """
         # Get event features and user membership for this registration
         ev_features = get_event_features(reg.run.event_id)
-        get_user_membership(reg.member, assoc.id)
+        get_user_membership(reg.member, association.id)
 
         # Check if today is the scheduled day to send reminder emails
         # Only send reminders on specific intervals based on registration creation date
@@ -752,7 +752,7 @@ class Command(BaseCommand):
             return
 
         # Get deadline interval configuration for the association
-        deadline_interval_days = int(get_assoc_config(run.event.assoc_id, "deadline_days", 0))
+        deadline_interval_days = int(get_association_config(run.event.association_id, "deadline_days", 0))
         if not deadline_interval_days:
             return
 

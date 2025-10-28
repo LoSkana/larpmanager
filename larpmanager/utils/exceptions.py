@@ -132,7 +132,7 @@ class MembershipError(Exception):
         self.assocs = assocs
 
 
-def check_assoc_feature(request: HttpRequest, context: dict, feature_slug: str) -> None:
+def check_association_feature(request: HttpRequest, context: dict, feature_slug: str) -> None:
     """Check if association has required feature enabled.
 
     Validates that the specified feature is enabled for the association
@@ -150,7 +150,7 @@ def check_assoc_feature(request: HttpRequest, context: dict, feature_slug: str) 
             association, includes feature slug, error code 0, and request path
 
     Example:
-        check_assoc_feature(request, 'advanced_registration')
+        check_association_feature(request, 'advanced_registration')
     """
     # Check if the requested feature slug exists in the association's enabled features
     if feature_slug not in context["features"]:
@@ -195,7 +195,7 @@ class MainPageError(Exception):
         """Initialize with request path and base domain from association."""
         super().__init__()
         self.path = request.path
-        self.base_domain = request.assoc["main_domain"]
+        self.base_domain = request.association["main_domain"]
 
 
 # For when you want to just return a json value

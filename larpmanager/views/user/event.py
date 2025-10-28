@@ -38,7 +38,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
-from larpmanager.models.association import AssocTextType
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
     DevelopStatus,
@@ -70,7 +70,7 @@ from larpmanager.utils.base import get_context, get_event, get_event_context
 from larpmanager.utils.common import get_element
 from larpmanager.utils.exceptions import HiddenError
 from larpmanager.utils.registration import registration_status
-from larpmanager.utils.text import get_assoc_text, get_event_text
+from larpmanager.utils.text import get_association_text, get_event_text
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
@@ -82,7 +82,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
     Args:
         request: HTTP request object containing user and association data. Must include
-                'assoc' key with association information and authenticated user data.
+                'association' key with association information and authenticated user data.
         context: Dict context informations.
         lang: Language code for filtering events by language preference.
 
@@ -118,7 +118,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
         # Fetch user's active registrations for upcoming runs
         user_registrations = Registration.objects.filter(
-            run__event__assoc_id=association_id,
+            run__event__association_id=association_id,
             cancellation_date__isnull=True,  # Exclude cancelled registrations
             redeem_code__isnull=True,  # Exclude redeemed registrations
             member=member,
@@ -169,7 +169,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
             context["future"].append(run)  # Future runs (not yet open, not already registered)
 
     # Add association-specific homepage text to context
-    context["custom_text"] = get_assoc_text(context["association_id"], AssocTextType.HOME)
+    context["custom_text"] = get_association_text(context["association_id"], AssociationTextType.HOME)
 
     return render(request, "larpmanager/general/calendar.html", context)
 
@@ -276,7 +276,7 @@ def get_pre_registrations_dict(association_id: int, member) -> dict:
         # Get all pre-registrations for user's events in one query
         # Filter by association, member, and exclude deleted records
         member_pre_registrations = PreRegistration.objects.filter(
-            event__assoc_id=association_id, member=member, deleted__isnull=True
+            event__association_id=association_id, member=member, deleted__isnull=True
         ).select_related("event")
 
         # Group pre-registrations by event ID for fast lookup
@@ -287,11 +287,11 @@ def get_pre_registrations_dict(association_id: int, member) -> dict:
     return event_id_to_pre_registration
 
 
-def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
+def get_coming_runs(association_id: int | None, future: bool = True) -> QuerySet[Run]:
     """Get upcoming or past runs for an association with optimized queries.
 
     Args:
-        assoc_id: Association ID to filter by. If None, returns runs for all associations.
+        association_id: Association ID to filter by. If None, returns runs for all associations.
         future: If True, get future runs; if False, get past runs. Defaults to True.
 
     Returns:
@@ -302,8 +302,8 @@ def get_coming_runs(assoc_id: int | None, future: bool = True) -> QuerySet[Run]:
     runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
 
     # Filter by association if specified
-    if assoc_id:
-        runs = runs.filter(event__assoc_id=assoc_id)
+    if association_id:
+        runs = runs.filter(event__association_id=association_id)
 
     # Apply date filtering and ordering based on future/past requirement
     if future:
@@ -380,7 +380,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
     # Query runs from current association, excluding development/cancelled events
     # Order by end date descending to show most recent first
     for run in (
-        Run.objects.filter(event__assoc_id=context["association_id"])
+        Run.objects.filter(event__association_id=context["association_id"])
         .exclude(development=DevelopStatus.START)
         .exclude(development=DevelopStatus.CANC)
         .order_by("-end")
@@ -439,7 +439,7 @@ def legal_notice(request: HttpRequest) -> HttpResponse:
     """Render legal notice page with association-specific text."""
     # Build context with user data and legal notice text
     context = get_context(request)
-    context.update({"text": get_assoc_text(context["association_id"], AssocTextType.LEGAL)})
+    context.update({"text": get_association_text(context["association_id"], AssociationTextType.LEGAL)})
     return render(request, "larpmanager/general/legal.html", context)
 
 
@@ -484,7 +484,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
 
     Args:
         request: HTTP request object containing user authentication and association data.
-                Must include 'assoc' key with association ID in request context.
+                Must include 'association' key with association ID in request context.
 
     Returns:
         HttpResponse: Rendered template response with past events calendar data.
@@ -508,7 +508,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
         member = context["member"]
         # Get all non-cancelled registrations for this user and association
         my_regs = Registration.objects.filter(
-            run__event__assoc_id=aid,
+            run__event__association_id=aid,
             cancellation_date__isnull=True,
             redeem_code__isnull=True,
             member=member,

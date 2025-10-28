@@ -258,7 +258,7 @@ def go_character(
     # Generate character URL using run slug and character number
     character_url = get_url(
         reverse("character", args=[run.get_slug(), character_data["number"]]),
-        context["assoc_slug"],
+        context["association_slug"],
     ).replace('"', "")
 
     # Create either simple bold name or full link based on simple flag

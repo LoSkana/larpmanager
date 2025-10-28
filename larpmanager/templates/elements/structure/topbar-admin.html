@@ -14,7 +14,7 @@
                         {% if run %}
                             <span class="no_mobile"><i class="fa-solid fa-calendar-days"></i> {{ run }}</span>
                         {% else %}
-                            <span class="no_mobile"><i class="fa-solid fa-building"></i> {{ assoc.name }}</span>
+                            <span class="no_mobile"><i class="fa-solid fa-building"></i> {{ association.name }}</span>
                         {% endif %}
                         <div class="dropdown-button">
                             <a href="#" class="switch"><i class="fa-solid fa-circle-chevron-down"></i></a>
@@ -27,9 +27,9 @@
                                     <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days"></i> {{ v.s }}</a>
                                 {% endif %}
                             {% endfor %}
-                            {% if assoc_role %}
+                            {% if association_role %}
                                 {% if run %}
-                                    <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building"></i> {{ assoc.name }}</a>
+                                    <a href="{% url 'manage' %}" class="origin"><i class="fa-solid fa-building"></i> {{ association.name }}</a>
                                 {% endif %}
                             {% endif %}
                         </div>

@@ -69,8 +69,8 @@ class MyRegistrationView(RegistrationView):
         messages.success(self.request, _("Registration completed successfully!"))
 
         # Set membership status to JOINED for non-default associations
-        if self.request.assoc["id"] > 1:
-            mb = get_user_membership(self.request.user.member, self.request.assoc["id"])
+        if self.request.association["id"] > 1:
+            mb = get_user_membership(self.request.user.member, self.request.association["id"])
             mb.status = MembershipStatus.JOINED
             mb.save()
 

@@ -38,10 +38,10 @@ from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
-from larpmanager.cache.association import get_cache_assoc
+from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
-from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
@@ -55,7 +55,7 @@ from larpmanager.utils.character import get_char_check, get_character_relationsh
 from larpmanager.utils.common import get_handout
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.utils.text import get_association_text
 
 logger = logging.getLogger(__name__)
 
@@ -183,7 +183,7 @@ def add_pdf_instructions(context: dict) -> None:
 
     # Build replacement codes dictionary with event and character data
     replacement_codes = {
-        "<pdf:organization>": context["event"].assoc.name,
+        "<pdf:organization>": context["event"].association.name,
         "<pdf:event>": context["event"].name,
     }
 
@@ -316,7 +316,7 @@ def get_membership_request(context: dict, member: Member) -> HttpResponse:
     template_context = {"member": member}
 
     # Retrieve association-specific membership template text
-    template = get_assoc_text(context["association_id"], AssocTextType.MEMBERSHIP)
+    template = get_association_text(context["association_id"], AssociationTextType.MEMBERSHIP)
 
     # Generate PDF from template and return as HTTP response
     pdf_template(template_context, template, file_path, html=True)
@@ -488,7 +488,7 @@ def print_handout(context: dict, force: bool = True) -> Any:
 def print_volunteer_registry(context: dict) -> str:
     """Generate volunteer registry PDF and return file path."""
     # Build file path for volunteer registry PDF
-    fp = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{context['assoc'].slug}.pdf")
+    fp = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{context['association'].slug}.pdf")
 
     # Generate PDF from template
     xhtml_pdf(context, "pdf/volunteer_registry.html", fp)
@@ -664,7 +664,7 @@ def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created
 # ## TASKS
 
 
-def print_handout_go(context: HttpRequest, character: Character) -> HttpResponse:
+def print_handout_go(context: dict, character: Character) -> HttpResponse:
     """Retrieve character handout and generate printable version."""
     get_handout(context, character)
     return print_handout(context)
@@ -677,11 +677,11 @@ def get_fake_request(association_slug: str) -> HttpRequest:
         association_slug: The association slug to attach to the request.
 
     Returns:
-        HttpRequest object with assoc and user attributes set.
+        HttpRequest object with association and user attributes set.
     """
     request = HttpRequest()
     # Attach association from cache
-    request.assoc = get_cache_assoc(association_slug)
+    request.association = get_cache_association(association_slug)
     # Set anonymous user for the request
     request.user = AnonymousUser()
     return request

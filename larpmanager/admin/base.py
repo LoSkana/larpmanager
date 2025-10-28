@@ -68,9 +68,9 @@ def reduced(value: str | None) -> str:
     return value[:max_length] + "[...]"
 
 
-class AssocFilter(AutocompleteFilter):
+class AssociationFilter(AutocompleteFilter):
     title = "Association"
-    field_name = "assoc"
+    field_name = "association"
 
 
 class CharacterFilter(AutocompleteFilter):

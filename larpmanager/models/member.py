@@ -425,7 +425,7 @@ class MembershipStatus(models.TextChoices):
 class Membership(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="memberships")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="memberships")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="memberships")
 
     compiled = models.BooleanField(default=False)
 
@@ -457,23 +457,27 @@ class Membership(BaseModel):
 
     class Meta:
         indexes = [
-            models.Index(fields=["assoc", "member"], condition=Q(deleted__isnull=True), name="memb_assoc_mem_act"),
-            models.Index(fields=["assoc", "status"], condition=Q(deleted__isnull=True), name="memb_assoc_stat_act"),
+            models.Index(
+                fields=["association", "member"], condition=Q(deleted__isnull=True), name="memb_association_mem_act"
+            ),
+            models.Index(
+                fields=["association", "status"], condition=Q(deleted__isnull=True), name="memb_association_stat_act"
+            ),
         ]
         constraints = [
             UniqueConstraint(
-                fields=["member", "assoc", "deleted"],
+                fields=["member", "association", "deleted"],
                 name="unique_membership_number_with_optional",
             ),
             UniqueConstraint(
-                fields=["member", "assoc"],
+                fields=["member", "association"],
                 condition=Q(deleted=None),
                 name="unique_membership_number_without_optional",
             ),
         ]
 
     def __str__(self):
-        return f"{self.member} - {self.assoc}"
+        return f"{self.member} - {self.association}"
 
     def get_request_filepath(self):
         try:
@@ -495,7 +499,7 @@ class Membership(BaseModel):
 class VolunteerRegistry(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="volunteer")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="volunteers")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="volunteers")
 
     start = models.DateField(null=True)
 
@@ -504,11 +508,11 @@ class VolunteerRegistry(BaseModel):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["member", "assoc", "deleted"],
+                fields=["member", "association", "deleted"],
                 name="unique_volunteer_registry_with_optional",
             ),
             UniqueConstraint(
-                fields=["member", "assoc"],
+                fields=["member", "association"],
                 condition=Q(deleted=None),
                 name="unique_volunteer_registry_without_optional",
             ),
@@ -551,7 +555,7 @@ class Badge(BaseModel):
 
     members = models.ManyToManyField(Member, related_name="badges", blank=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def thumb(self) -> str:
         """Return HTML for thumbnail image if available, otherwise empty string."""
@@ -601,7 +605,7 @@ class Log(BaseModel):
 class Vote(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="votes_given")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="votes")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="votes")
 
     year = models.IntegerField()
 
@@ -612,18 +616,18 @@ class Vote(BaseModel):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["member", "assoc", "year", "number", "deleted"],
+                fields=["member", "association", "year", "number", "deleted"],
                 name="unique_vote_number_with_optional",
             ),
             UniqueConstraint(
-                fields=["member", "assoc", "year", "number"],
+                fields=["member", "association", "year", "number"],
                 condition=Q(deleted=None),
                 name="unique_vote_number_without_optional",
             ),
         ]
 
     def __str__(self):
-        return f"V{self.number} {self.member} ({self.assoc} - {self.year})"
+        return f"V{self.number} {self.member} ({self.association} - {self.year})"
 
 
 def get_user_membership(user: Member, association: Union[Association, int]) -> Membership:
@@ -656,7 +660,7 @@ def get_user_membership(user: Member, association: Union[Association, int]) -> M
         raise Http404("Association not found")
 
     # Get existing membership or create a new one for this user/association pair
-    membership, _ = Membership.objects.get_or_create(member=user, assoc_id=association_id)
+    membership, _ = Membership.objects.get_or_create(member=user, association_id=association_id)
 
     # Cache the membership on the user object for future access
     user.membership = membership

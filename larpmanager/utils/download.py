@@ -1169,7 +1169,7 @@ def export_event(context):
     """
     column_names = ["name", "value"]
     configuration_values = []
-    association = Association.objects.get(pk=context["event"].assoc_id)
+    association = Association.objects.get(pk=context["event"].association_id)
     for element in [context["event"], context["run"], association]:
         for config_name, config_value in get_configs(element).items():
             configuration_values.append((config_name, config_value))

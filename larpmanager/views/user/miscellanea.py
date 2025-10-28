@@ -50,7 +50,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.writing import Handout
 from larpmanager.utils.base import get_context, get_event_context, is_shuttle
 from larpmanager.utils.common import get_album, get_workshop
-from larpmanager.utils.exceptions import check_assoc_feature
+from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.pdf import (
     print_handout,
     return_pdf,
@@ -79,7 +79,7 @@ def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
 
     # Get the run object or raise 404 if not found
     try:
-        context["run"] = Run.objects.get(pk=n, event__assoc_id=context["association_id"])
+        context["run"] = Run.objects.get(pk=n, event__association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
 
@@ -118,7 +118,7 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
             # Associate question with organization if context is available
             if context["association_id"] != 0:
-                hp.assoc_id = context["association_id"]
+                hp.association_id = context["association_id"]
 
             # Save question and redirect to prevent form resubmission
             hp.save()
@@ -134,9 +134,9 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
     # Filter questions by association context
     if context["association_id"] != 0:
-        context["list"] = context["list"].filter(assoc_id=context["association_id"])
+        context["list"] = context["list"].filter(association_id=context["association_id"])
     else:
-        context["list"] = context["list"].filter(assoc=None)
+        context["list"] = context["list"].filter(association=None)
 
     return render(request, "larpmanager/member/help.html", context)
 
@@ -169,7 +169,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
         raise Http404("HelpQuestion does not exist") from err
 
     # Check access permissions: owner or association role required
-    if hp.member != context["member"] and not context["assoc_role"]:
+    if hp.member != context["member"] and not context["association_role"]:
         raise Http404("illegal access")
 
     # Redirect to attachment URL for authorized users
@@ -391,19 +391,19 @@ def shuttle(request):
         Rendered shuttle template with active and recent requests
     """
     context = get_context(request)
-    check_assoc_feature(request, context, "shuttle")
+    check_association_feature(request, context, "shuttle")
     # get last shuttle requests
     ref = datetime.now() - timedelta(days=5)
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
-            .filter(assoc_id=context["association_id"])
+            .filter(association_id=context["association_id"])
             .order_by("status", "date", "time"),
             "is_shuttle": is_shuttle(request),
             "past": ShuttleService.objects.filter(
                 created__gt=ref.date(),
                 status=ShuttleStatus.DONE,
-                assoc_id=context["association_id"],
+                association_id=context["association_id"],
             ).order_by("status", "date", "time"),
         }
     )
@@ -421,7 +421,7 @@ def shuttle_new(request):
         Redirect to shuttle list on success or form template on GET/invalid POST
     """
     context = get_context(request)
-    check_assoc_feature(request, context, "shuttle")
+    check_association_feature(request, context, "shuttle")
 
     if request.method == "POST":
         form = ShuttleServiceForm(request.POST, request=request, context=context)
@@ -451,7 +451,7 @@ def shuttle_edit(request, n):
         HttpResponse: Rendered edit form or redirect after successful update
     """
     context = get_context(request)
-    check_assoc_feature(request, context, "shuttle")
+    check_association_feature(request, context, "shuttle")
 
     shuttle = ShuttleService.objects.get(pk=n)
     if request.method == "POST":

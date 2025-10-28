@@ -27,7 +27,7 @@ from django.core.files.storage import default_storage
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
@@ -123,7 +123,7 @@ class MyForm(forms.ModelForm):
         Returns:
             list: Field names that are automatically set and hidden from user
         """
-        automatic_fields = ["event", "assoc"]
+        automatic_fields = ["event", "association"]
         if hasattr(self, "auto_run"):
             automatic_fields.extend(["run"])
         return automatic_fields
@@ -145,7 +145,7 @@ class MyForm(forms.ModelForm):
         available_runs = Run.objects.filter(event=self.params["event"])
 
         # If campaign switch is active, expand to include related events
-        if get_assoc_config(self.params["event"].assoc_id, "campaign_switch", False):
+        if get_association_config(self.params["event"].association_id, "campaign_switch", False):
             # Start with current event ID
             related_event_ids = {self.params["event"].id}
 
@@ -205,7 +205,7 @@ class MyForm(forms.ModelForm):
         typ = self.params["elementTyp"]
         return self.params["event"].get_class_parent(typ)
 
-    def clean_assoc(self):
+    def clean_association(self):
         return Association.objects.get(pk=self.params["association_id"])
 
     def clean_name(self):
@@ -249,7 +249,7 @@ class MyForm(forms.ModelForm):
             model = self._meta.model
             if model == Event:
                 # For Event model, filter by association ID
-                queryset = model.objects.filter(**{field_name: field_value}, assoc_id=event.assoc_id)
+                queryset = model.objects.filter(**{field_name: field_value}, association_id=event.association_id)
             else:
                 # For other models, filter by event ID
                 queryset = model.objects.filter(**{field_name: field_value}, event_id=parent_event_id)
@@ -1289,6 +1289,6 @@ class BaseAccForm(forms.Form):
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
         # Load payment fees configuration for the association
-        self.context["user_fees"] = get_assoc_config(
+        self.context["user_fees"] = get_association_config(
             self.context["association_id"], "payment_fees_user", False, self.context
         )

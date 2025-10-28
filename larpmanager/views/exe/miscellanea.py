@@ -49,7 +49,7 @@ def exe_urlshortner(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_urlshortner")
 
     # Get all URL shorteners for the current association
-    context["list"] = UrlShortner.objects.filter(assoc_id=context["association_id"])
+    context["list"] = UrlShortner.objects.filter(association_id=context["association_id"])
 
     return render(request, "larpmanager/exe/url_shortner.html", context)
 
@@ -66,7 +66,7 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_warehouse_containers")
 
     # Fetch all containers belonging to the current association
-    context["list"] = WarehouseContainer.objects.filter(assoc_id=context["association_id"])
+    context["list"] = WarehouseContainer.objects.filter(association_id=context["association_id"])
 
     return render(request, "larpmanager/exe/warehouse/containers.html", context)
 
@@ -83,7 +83,7 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_warehouse_tags")
 
     # Fetch all tags for the organization with related items
-    context["list"] = WarehouseTag.objects.filter(assoc_id=context["association_id"]).prefetch_related("items")
+    context["list"] = WarehouseTag.objects.filter(association_id=context["association_id"]).prefetch_related("items")
 
     return render(request, "larpmanager/exe/warehouse/tags.html", context)
 
@@ -103,7 +103,7 @@ def exe_warehouse_items(request) -> HttpResponse:
     handle_bulk_items(request, context)
 
     # Get warehouse items for current association with related data
-    context["list"] = WarehouseItem.objects.filter(assoc_id=context["association_id"])
+    context["list"] = WarehouseItem.objects.filter(association_id=context["association_id"])
     context["list"] = context["list"].select_related("container").prefetch_related("tags")
 
     # Add optional warehouse context data
@@ -124,7 +124,7 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_warehouse_movements")
 
     # Fetch movements with item details
-    context["list"] = WarehouseMovement.objects.filter(assoc_id=context["association_id"]).select_related("item")
+    context["list"] = WarehouseMovement.objects.filter(association_id=context["association_id"]).select_related("item")
 
     # Add optional warehouse fields
     get_warehouse_optionals(context, [3])

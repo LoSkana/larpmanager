@@ -83,7 +83,7 @@ def update_configs(element_id: int, model_name: str) -> dict[str, str]:
     # Define mapping between model names and their corresponding config models
     model_map = {
         "event": ("EventConfig", "event_id"),
-        "association": ("AssociationConfig", "assoc_id"),
+        "association": ("AssociationConfig", "association_id"),
         "run": ("RunConfig", "run_id"),
         "member": ("MemberConfig", "member_id"),
         "character": ("CharacterConfig", "character_id"),
@@ -205,7 +205,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
     foreign_key_field_map = {
         "Event": "event",
         "Run": "run",
-        "Association": "assoc",
+        "Association": "association",
         "Character": "character",
         "Member": "member",
     }
@@ -275,7 +275,7 @@ def _get_cached_config(element_id, element_type, config_name, default_value=None
     return evaluate_config(element_configs, config_name, default_value)
 
 
-def get_assoc_config(association_id, config_name, default_value=None, context=None, bypass_cache=False):
+def get_association_config(association_id, config_name, default_value=None, context=None, bypass_cache=False):
     return _get_cached_config(association_id, "association", config_name, default_value, context, bypass_cache)
 
 

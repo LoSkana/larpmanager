@@ -710,7 +710,7 @@ class RegistrationOption(BaseModel):
         if display_data["price"] and int(display_data["price"]) > 0:
             if not currency_symbol:
                 # noinspection PyUnresolvedReferences
-                currency_symbol = self.event.assoc.get_currency_symbol()
+                currency_symbol = self.event.association.get_currency_symbol()
             formatted_text += f" ({decimal_to_str(display_data['price'])}{currency_symbol})"
 
         return formatted_text

@@ -70,8 +70,8 @@ class Command(BaseCommand):
 
         # Add exe_events feature to all existing associations
         # Ensures all test organizations have event management enabled
-        for assoc in Association.objects.all():
-            assoc.features.add(feature)
-            assoc.save()
+        for association in Association.objects.all():
+            association.features.add(feature)
+            association.save()
 
         self.stdout.write("All done.")

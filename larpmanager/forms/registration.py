@@ -27,13 +27,13 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.accounting.registration import get_date_surcharge
-from larpmanager.cache.config import get_assoc_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.base import BaseRegistrationForm, MyForm
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
-    AssocMemberS2Widget,
+    AssociationMemberS2Widget,
     DatePickerInput,
     FactionS2WidgetMulti,
     TicketS2WidgetMulti,
@@ -646,7 +646,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             "payment_date",
         )
 
-        widgets = {"member": AssocMemberS2Widget}
+        widgets = {"member": AssociationMemberS2Widget}
 
     def get_automatic_field(self) -> set[str]:
         """Get automatic field names, excluding 'run' from parent's set."""
@@ -672,7 +672,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.event = self.params["run"].event
 
         # Configure member widget with association
-        self.fields["member"].widget.set_assoc(self.params["association_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
         self.allow_run_choice()
 
@@ -1260,8 +1260,8 @@ class PreRegistrationForm(forms.Form):
         cho_pref = [(r, r) for r in prefs]
 
         # Check if preference editing is disabled via config
-        if self.context.get("event") and get_assoc_config(
-            self.context["event"].assoc_id, "pre_reg_preferences", False, self.context
+        if self.context.get("event") and get_association_config(
+            self.context["event"].association_id, "pre_reg_preferences", False, self.context
         ):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,

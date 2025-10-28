@@ -164,7 +164,7 @@ class Association(BaseModel):
 
     background = models.ImageField(
         max_length=500,
-        upload_to="assoc_background/",
+        upload_to="association_background/",
         verbose_name=_("Background image"),
         blank=True,
         help_text=_("Background of web pages"),
@@ -178,7 +178,7 @@ class Association(BaseModel):
     )
 
     font = models.FileField(
-        upload_to=UploadToPathAndRename("assoc_font/"),
+        upload_to=UploadToPathAndRename("association_font/"),
         verbose_name=_("Title font"),
         help_text=_("Font to be used in page titles"),
         blank=True,
@@ -277,29 +277,29 @@ class AssociationConfig(BaseModel):
 
     value = models.CharField(max_length=1000)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self):
-        return f"{self.assoc} {self.name}"
+        return f"{self.association} {self.name}"
 
     class Meta:
         indexes = [
-            models.Index(fields=["assoc", "name"]),
+            models.Index(fields=["association", "name"]),
         ]
         constraints = [
             UniqueConstraint(
-                fields=["assoc", "name", "deleted"],
-                name="unique_assoc_config_with_optional",
+                fields=["association", "name", "deleted"],
+                name="unique_association_config_with_optional",
             ),
             UniqueConstraint(
-                fields=["assoc", "name"],
+                fields=["association", "name"],
                 condition=Q(deleted=None),
-                name="unique_assoc_config_without_optional",
+                name="unique_association_config_without_optional",
             ),
         ]
 
 
-class AssocTextType(models.TextChoices):
+class AssociationTextType(models.TextChoices):
     PROFILE = "p", _("Profile")
     HOME = "h", _("Home")
     SIGNUP = "u", _("Registration mail")
@@ -318,13 +318,13 @@ class AssocTextType(models.TextChoices):
     REMINDER_PROFILE = "rr", _("Reminder profile")
 
 
-class AssocText(BaseModel):
+class AssociationText(BaseModel):
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
 
     typ = models.CharField(
-        max_length=2, choices=AssocTextType.choices, verbose_name=_("Type"), help_text=_("Type of text")
+        max_length=2, choices=AssociationTextType.choices, verbose_name=_("Type"), help_text=_("Type of text")
     )
 
     language = models.CharField(
@@ -338,7 +338,7 @@ class AssocText(BaseModel):
 
     default = models.BooleanField(default=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="texts")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="texts")
 
     def __str__(self):
         # noinspection PyUnresolvedReferences
@@ -347,13 +347,13 @@ class AssocText(BaseModel):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["assoc", "typ", "language", "deleted"],
-                name="unique_assoc_text_with_optional",
+                fields=["association", "typ", "language", "deleted"],
+                name="unique_association_text_with_optional",
             ),
             UniqueConstraint(
-                fields=["assoc", "typ", "language"],
+                fields=["association", "typ", "language"],
                 condition=Q(deleted=None),
-                name="nique_assoc_text_without_optional",
+                name="nique_association_text_without_optional",
             ),
         ]
 
@@ -363,9 +363,9 @@ def hdr(association_or_related_object: Association | Any) -> str:
     # Check if object is an Association instance directly
     if isinstance(association_or_related_object, Association):
         return f"[{association_or_related_object.name}] "
-    # Check if object has an associated Association via assoc attribute
-    if association_or_related_object.assoc:
-        return f"[{association_or_related_object.assoc.name}] "
+    # Check if object has an associated Association via association attribute
+    if association_or_related_object.association:
+        return f"[{association_or_related_object.association.name}] "
     else:
         return "[LarpManager] "
 
@@ -374,14 +374,14 @@ def get_url(path: str, obj: object = None) -> str:
     """Generate a URL for the given path and object.
 
     Constructs URLs based on the type of object provided. For Association objects,
-    uses the association's slug and domain. For objects with an 'assoc' attribute,
+    uses the association's slug and domain. For objects with an 'association' attribute,
     uses the associated organization's slug and domain. Falls back to default
     larpmanager.com domain when no object is provided.
 
     Args:
         path: The path/route to append to the base URL
         obj: Optional object to determine the base URL. Can be Association,
-             an object with 'assoc' attribute, or a string slug
+             an object with 'association' attribute, or a string slug
 
     Returns:
         Complete URL string with proper protocol formatting
@@ -391,8 +391,8 @@ def get_url(path: str, obj: object = None) -> str:
         if isinstance(obj, Association):
             url = f"https://{obj.slug}.{obj.skin.domain}/{path}"
         # Handle objects that belong to an association
-        elif hasattr(obj, "assoc"):
-            url = f"https://{obj.assoc.slug}.{obj.assoc.skin.domain}/{path}"
+        elif hasattr(obj, "association"):
+            url = f"https://{obj.association.slug}.{obj.association.skin.domain}/{path}"
         # Handle string slugs or other objects
         else:
             url = f"https://{obj}.larpmanager.com/{path}"

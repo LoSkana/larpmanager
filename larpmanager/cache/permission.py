@@ -24,12 +24,12 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.models.access import AssocPermission, EventPermission
+from larpmanager.models.access import AssociationPermission, EventPermission
 
 logger = logging.getLogger(__name__)
 
 
-def assoc_permission_feature_key(permission_slug):
+def association_permission_feature_key(permission_slug):
     """Generate cache key for association permission features.
 
     Args:
@@ -38,10 +38,10 @@ def assoc_permission_feature_key(permission_slug):
     Returns:
         str: Cache key for association permission feature
     """
-    return f"assoc_permission_feature_{permission_slug}"
+    return f"association_permission_feature_{permission_slug}"
 
 
-def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
+def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
     """Update cached association permission feature data.
 
     Retrieves association permission data by slug, processes the feature information,
@@ -57,7 +57,7 @@ def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
             - config: Permission config text or empty string
     """
     # Fetch permission with related feature data to minimize queries
-    perm = AssocPermission.objects.select_related("feature").get(slug=slug)
+    perm = AssociationPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
 
     # Use default slug for placeholder features, otherwise use actual feature slug
@@ -71,11 +71,13 @@ def update_assoc_permission_feature(slug: str) -> tuple[str, str, str]:
     config = perm.config or ""
 
     # Cache the processed data for future requests
-    cache.set(assoc_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(
+        association_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+    )
     return slug, tutorial, config
 
 
-def get_assoc_permission_feature(slug: str) -> tuple[str, str | None, dict | None]:
+def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict | None]:
     """Get cached association permission feature data.
 
     Retrieves feature data for an association permission from cache first,
@@ -95,17 +97,17 @@ def get_assoc_permission_feature(slug: str) -> tuple[str, str | None, dict | Non
         return "def", None, None
 
     # Attempt to retrieve from cache first
-    cached_feature_data = cache.get(assoc_permission_feature_key(slug))
+    cached_feature_data = cache.get(association_permission_feature_key(slug))
 
     # If cache miss, update cache and return fresh data
     if cached_feature_data is None:
-        cached_feature_data = update_assoc_permission_feature(slug)
+        cached_feature_data = update_association_permission_feature(slug)
 
     return cached_feature_data
 
 
 def clear_association_permission_cache(association):
-    cache.delete(assoc_permission_feature_key(association.slug))
+    cache.delete(association_permission_feature_key(association.slug))
 
 
 def event_permission_feature_key(permission_slug):
@@ -196,16 +198,16 @@ def update_index_permission(typ: str) -> list[dict]:
     then caches the result for efficient access.
 
     Args:
-        typ: Permission type, either 'event' or 'assoc'
+        typ: Permission type, either 'event' or 'association'
 
     Returns:
         List of permission dictionaries with feature and module information
 
     Raises:
-        KeyError: If typ is not 'event' or 'assoc'
+        KeyError: If typ is not 'event' or 'association'
     """
     # Map permission type to corresponding model class
-    mapping = {"event": EventPermission, "assoc": AssocPermission}
+    mapping = {"event": EventPermission, "association": AssociationPermission}
 
     # Get queryset with related feature and module data
     que = mapping[typ].objects.select_related("feature", "module")

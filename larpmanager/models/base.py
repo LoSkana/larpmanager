@@ -285,8 +285,8 @@ def auto_assign_sequential_numbers(instance):
             queryset = None
             if hasattr(instance, "event") and instance.event:
                 queryset = instance.__class__.objects.filter(event=instance.event)
-            if hasattr(instance, "assoc") and instance.assoc:
-                queryset = instance.__class__.objects.filter(assoc=instance.assoc)
+            if hasattr(instance, "association") and instance.association:
+                queryset = instance.__class__.objects.filter(association=instance.association)
             if hasattr(instance, "character") and instance.character:
                 queryset = instance.__class__.objects.filter(character=instance.character)
             if queryset is not None:

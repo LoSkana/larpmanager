@@ -190,11 +190,11 @@ class TestDataAggregationFunctions(BaseTestCase):
         from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member)
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         queryset = AccountingItemPayment.objects.filter(member=member)
@@ -207,17 +207,17 @@ class TestDataAggregationFunctions(BaseTestCase):
         from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 
         member = self.get_member()
-        assoc = self.get_association()
+        association = self.get_association()
         registration = self.create_registration(member=member)
 
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, assoc=assoc, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
         )
 
         queryset = AccountingItemPayment.objects.filter(member=member)

@@ -57,7 +57,7 @@ Models are organized in `larpmanager/models/` by domain:
 - **IMPORTANT**: Only add new fields to models if they are used by EVERY instance. Otherwise use `EventConfig`, `RunConfig`, or `AssocConfig`
 
 ### Core Features Architecture
-- **Feature System**: Modular feature flags with `Feature`, `AssocPermission`, `EventPermission` models
+- **Feature System**: Modular feature flags with `Feature`, `AssociationPermission`, `EventPermission` models
   - New features should set `overall=True` if they apply to entire organization
   - Use `python manage.py export_features` to update fixtures after creating features
 - **Multi-tenancy**: Organization-based with URL slugs (`SLUG_ASSOC` setting in dev/prod settings)
@@ -104,7 +104,7 @@ Models are organized in `larpmanager/models/` by domain:
 - **Role-based**: Organization and event-level permissions
 - **URL access**: Middleware handles URL-based access control (`larpmanager/middleware/`)
 - **API tokens**: Token-based authentication for external integrations
-- **Sidebar links**: Created via `AssocPermission` (org dashboard) and `EventPermission` (event dashboard)
+- **Sidebar links**: Created via `AssociationPermission` (org dashboard) and `EventPermission` (event dashboard)
   - Set `slug` to view name, `feature` to Feature object, `module` to module object
 
 ## Contributing Workflow
@@ -115,7 +115,7 @@ When developing new features, follow this workflow:
 2. If adding a new feature with permissions:
    - Create `Feature` object (set `overall=True` if organization-wide)
    - Create views with `orga_*` (event) or `exe_*` (organization) prefix
-   - Add `AssocPermission` and/or `EventPermission` for sidebar links
+   - Add `AssociationPermission` and/or `EventPermission` for sidebar links
    - Run `python manage.py export_features` to update fixtures
 3. If modifying models or fixtures, run `python manage.py dump_test`
 4. If creating new functionality, write playwright tests in `larpmanager/tests/`

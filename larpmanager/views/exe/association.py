@@ -29,21 +29,21 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.cache.role import get_index_assoc_permissions
+from larpmanager.cache.role import get_index_association_permissions
 from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
     ExeAppearanceForm,
     ExeAssociationForm,
-    ExeAssocRoleForm,
-    ExeAssocTextForm,
+    ExeAssociationRoleForm,
+    ExeAssociationTextForm,
     ExeConfigForm,
     ExeFeatureForm,
     ExePreferencesForm,
     ExeQuickSetupForm,
 )
 from larpmanager.forms.member import ExeProfileForm
-from larpmanager.models.access import AssocPermission, AssocRole
-from larpmanager.models.association import Association, AssocText
+from larpmanager.models.access import AssociationPermission, AssociationRole
+from larpmanager.models.association import Association, AssociationText
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.base import check_association_context
@@ -75,11 +75,14 @@ def exe_roles(request) -> HttpResponse:
 
     def def_callback(context):
         # Create default admin role for association
-        return AssocRole.objects.create(assoc_id=context["association_id"], number=1, name="Admin")
+        return AssociationRole.objects.create(association_id=context["association_id"], number=1, name="Admin")
 
     # Prepare roles list with existing association roles
     prepare_roles_list(
-        context, AssocPermission, AssocRole.objects.filter(assoc_id=context["association_id"]), def_callback
+        context,
+        AssociationPermission,
+        AssociationRole.objects.filter(association_id=context["association_id"]),
+        def_callback,
     )
 
     return render(request, "larpmanager/exe/roles.html", context)
@@ -87,7 +90,7 @@ def exe_roles(request) -> HttpResponse:
 
 @login_required
 def exe_roles_edit(request, num):
-    return exe_edit(request, ExeAssocRoleForm, num, "exe_roles")
+    return exe_edit(request, ExeAssociationRoleForm, num, "exe_roles")
 
 
 @login_required
@@ -112,7 +115,7 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_texts")
 
     # Fetch and order association texts for display
-    context["list"] = AssocText.objects.filter(assoc_id=context["association_id"]).order_by(
+    context["list"] = AssociationText.objects.filter(association_id=context["association_id"]).order_by(
         "typ", "default", "language"
     )
 
@@ -121,7 +124,7 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_texts_edit(request, num):
-    return exe_edit(request, ExeAssocTextForm, num, "exe_texts")
+    return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
 
 
 @login_required
@@ -185,7 +188,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
             return redirect(feature.follow_link)
 
         # Handle multiple features - show management page
-        get_index_assoc_permissions(context, request, context["association_id"])
+        get_index_association_permissions(context, request, context["association_id"])
         return render(request, "larpmanager/manage/features.html", context)
 
     # Render edit form for feature selection
@@ -283,7 +286,7 @@ def exe_larpmanager(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_association")
 
     # Get all runs for the current association
-    que = Run.objects.filter(event__assoc_id=context["association_id"])
+    que = Run.objects.filter(event__association_id=context["association_id"])
     context["list"] = que.select_related("event").order_by("start")
 
     # Add payment information to each run

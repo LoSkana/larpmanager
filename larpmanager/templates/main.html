@@ -1,7 +1,7 @@
 {% extends "structure.html" %}
 {% load i18n static %}
 {% block main %}
-    {% if assoc.id == 0 %}
+    {% if association.id == 0 %}
         {% block header %}
             <!-- Header -->
             <header id="header"
@@ -121,15 +121,15 @@
             <div id="footer"
                  class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
                 <div class="inner">
-                    {% if assoc.footer %}
+                    {% if association.footer %}
                         <div class="footer-text">
                             <hr />
-                            {{ assoc.footer | safe }}
+                            {{ association.footer | safe }}
                         </div>
                     {% endif %}
                     <table class="mob ">
                         <tr>
-                            {% if 'help' in assoc.features %}
+                            {% if 'help' in association.features %}
                                 <td>
                                     <p>
                                         <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
@@ -141,7 +141,7 @@
                                     <a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
                                 </p>
                             </td>
-                            {% if 'legal_notice' in assoc.features %}
+                            {% if 'legal_notice' in association.features %}
                                 <td>
                                     <a href="{% url 'legal_notice' %}">{% trans "Legal Notice" %}</a>
                                 </td>
@@ -153,7 +153,7 @@
                     </table>
                     <p>
                         <!-- Please, do not remove! -->
-                        Powered by <a href="https://{{ assoc.main_domain }}">{{ assoc.platform }}</a>
+                        Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
                     </p>
                 </div>
             </div>
@@ -199,7 +199,7 @@
           referrerpolicy="no-referrer" />
     <link rel="stylesheet"
           href="//cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" />
-    {% if assoc.id == 0 %}
+    {% if association.id == 0 %}
         <style>
             @font-face {
                 font-family: 'future_light';
@@ -236,10 +236,10 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
             defer></script>
-    {% if assoc.id == 0 %}
+    {% if association.id == 0 %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
                 defer></script>
-        {% if assoc.skin_id == 1 and google_tag %}
+        {% if association.skin_id == 1 and google_tag %}
             <!-- Google tag (gtag.js) -->
             <script async
                     src="https://www.googletagmanager.com/gtag/js?id={{ google_tag }}"></script>
@@ -254,7 +254,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
                 defer></script>
     {% endif %}
-    {% if assoc.id == 0 or assoc.demo %}
+    {% if association.id == 0 or association.demo %}
         <!-- Hotjar -->
         <script>
         (function(h,o,t,j,a,r){

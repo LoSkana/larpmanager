@@ -28,7 +28,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
 )
-from larpmanager.models.association import AssocText
+from larpmanager.models.association import AssociationText
 from larpmanager.models.event import EventText
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
@@ -247,28 +247,28 @@ class TestUtilitySignals(BaseTestCase):
 
         mock_update.assert_called_once_with(registration)
 
-    @patch("larpmanager.utils.text.update_assoc_text")
-    def test_assoc_text_post_save_updates_cache(self, mock_update):
-        """Test that AssocText post_save signal updates text cache"""
-        from larpmanager.models.association import AssocTextType
-        assoc = self.get_association()
-        text = AssocText(assoc=assoc, typ=AssocTextType.HOME, text="Test Value")
+    @patch("larpmanager.utils.text.update_association_text")
+    def test_association_text_post_save_updates_cache(self, mock_update):
+        """Test that AssociationText post_save signal updates text cache"""
+        from larpmanager.models.association import AssociationTextType
+        association = self.get_association()
+        text = AssociationText(association=association, typ=AssociationTextType.HOME, text="Test Value")
         mock_update.reset_mock()
         text.save()
 
-        # Signal calls update_assoc_text with assoc_id, typ, language
+        # Signal calls update_association_text with association_id, typ, language
         self.assertTrue(mock_update.called)
 
-    def test_assoc_text_pre_delete_clears_cache(self):
-        """Test that AssocText pre_delete signal clears text cache"""
-        from larpmanager.models.association import AssocTextType
-        assoc = self.get_association()
-        text = AssocText.objects.create(assoc=assoc, typ=AssocTextType.HOME, text="Test Value")
+    def test_association_text_pre_delete_clears_cache(self):
+        """Test that AssociationText pre_delete signal clears text cache"""
+        from larpmanager.models.association import AssociationTextType
+        association = self.get_association()
+        text = AssociationText.objects.create(association=association, typ=AssociationTextType.HOME, text="Test Value")
         text_id = text.id
         text.delete()
 
         # Verify text was deleted
-        self.assertFalse(AssocText.objects.filter(id=text_id).exists())
+        self.assertFalse(AssociationText.objects.filter(id=text_id).exists())
 
     @patch("larpmanager.utils.text.update_event_text")
     def test_event_text_post_save_updates_cache(self, mock_update):
@@ -301,7 +301,7 @@ class TestUtilitySignals(BaseTestCase):
         payment = AccountingItemPayment.objects.create(
             member=member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=self.get_registration(),
             pay=PaymentChoices.TOKEN,
         )
@@ -321,7 +321,7 @@ class TestUtilitySignals(BaseTestCase):
         payment = AccountingItemPayment.objects.create(
             member=member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=self.get_registration(),
             pay=PaymentChoices.TOKEN,
         )
@@ -339,7 +339,7 @@ class TestUtilitySignals(BaseTestCase):
         item = AccountingItemOther(
             member=member,
             value=Decimal("25.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             run=self.get_run(),
             oth=OtherChoices.TOKEN,
             descr="Test tokens",
@@ -357,7 +357,7 @@ class TestUtilitySignals(BaseTestCase):
         expense = AccountingItemExpense(
             member=member,
             value=Decimal("30.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             descr="Test expense",
             is_approved=True  # Required for signal to trigger
         )
@@ -427,7 +427,7 @@ class TestUtilitySignals(BaseTestCase):
         item = AccountingItemDiscount(
             member=member,
             value=Decimal("10.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             run=self.get_run(),
             disc=discount,
         )
@@ -455,7 +455,7 @@ class TestUtilitySignals(BaseTestCase):
         payment = AccountingItemPayment(
             member=member,
             value=Decimal("0.00"),  # Zero value
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=self.get_registration(),
             pay=PaymentChoices.MONEY,
         )
@@ -484,7 +484,7 @@ class TestUtilitySignals(BaseTestCase):
     def test_signal_receivers_are_properly_connected(self):
         """Test that all signal receivers are properly connected to their signals"""
         from larpmanager.models.accounting import PaymentChoices
-        from larpmanager.models.association import AssocTextType
+        from larpmanager.models.association import AssociationTextType
 
         # This test ensures that creating and saving objects triggers the expected signals
 
@@ -498,7 +498,7 @@ class TestUtilitySignals(BaseTestCase):
         payment = AccountingItemPayment(
             member=member,
             value=Decimal("100.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=self.get_registration(),
             pay=PaymentChoices.MONEY,
         )
@@ -506,8 +506,8 @@ class TestUtilitySignals(BaseTestCase):
         # Should not raise any errors
 
         # Test cache updates
-        assoc = self.get_association()
-        text = AssocText(assoc=assoc, typ=AssocTextType.HOME, text="test")
+        association = self.get_association()
+        text = AssociationText(association=association, typ=AssociationTextType.HOME, text="test")
         text.save()
 
         # Verify all objects were created successfully without errors
@@ -528,7 +528,7 @@ class TestUtilitySignals(BaseTestCase):
         payment = AccountingItemPayment(
             member=registration.member,
             value=Decimal("50.00"),
-            assoc=self.get_association(),
+            association=self.get_association(),
             reg=registration,
             pay=PaymentChoices.MONEY,
         )

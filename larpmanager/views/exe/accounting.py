@@ -28,7 +28,12 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.balance import assoc_accounting, assoc_accounting_data, check_accounting, get_run_accounting
+from larpmanager.accounting.balance import (
+    association_accounting,
+    association_accounting_data,
+    check_accounting,
+    get_run_accounting,
+)
 from larpmanager.accounting.invoice import invoice_verify
 from larpmanager.forms.accounting import (
     ExeCollectionForm,
@@ -423,7 +428,7 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
         raise Http404("no id expense") from err
 
     # Verify expense belongs to current organization
-    if exp.assoc_id != context["association_id"]:
+    if exp.association_id != context["association_id"]:
         raise Http404("not your orga")
 
     # Mark expense as approved and save changes
@@ -612,7 +617,7 @@ def exe_collections(request: HttpRequest) -> HttpResponse:
 
     # Fetch collections with related data, ordered by creation date
     context["list"] = (
-        Collection.objects.filter(assoc_id=context["association_id"])
+        Collection.objects.filter(association_id=context["association_id"])
         .select_related("member", "organizer")
         .order_by("-created")
     )
@@ -723,7 +728,7 @@ def exe_accounting(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_accounting")
 
     # Populate context with accounting data
-    assoc_accounting(context)
+    association_accounting(context)
 
     return render(request, "larpmanager/exe/accounting/accounting.html", context)
 
@@ -742,7 +747,7 @@ def exe_year_accounting(request: HttpRequest) -> JsonResponse:
 
     # Build response with association ID and accounting data
     res = {"association_id": context["association_id"]}
-    assoc_accounting_data(res, year)
+    association_accounting_data(res, year)
     return JsonResponse({"res": res})
 
 
@@ -765,7 +770,7 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
 
     # Get the run and verify ownership
     context["run"] = Run.objects.get(pk=num)
-    if context["run"].event.assoc_id != context["association_id"]:
+    if context["run"].event.association_id != context["association_id"]:
         raise Http404("not your run")
 
     # Get accounting data for this run
@@ -779,9 +784,9 @@ def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_accounting_rec")
 
     # Get accounting records for the organization (not tied to specific runs)
-    context["list"] = RecordAccounting.objects.filter(assoc_id=context["association_id"], run__isnull=True).order_by(
-        "created"
-    )
+    context["list"] = RecordAccounting.objects.filter(
+        association_id=context["association_id"], run__isnull=True
+    ).order_by("created")
 
     # If no records exist, create them and redirect
     if len(context["list"]) == 0:
@@ -866,32 +871,34 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
     # Calculate total membership fees for the year
     context["memberships"] = get_sum(
-        AccountingItemMembership.objects.filter(assoc_id=context["association_id"], year=year)
+        AccountingItemMembership.objects.filter(association_id=context["association_id"], year=year)
     )
 
     # Calculate total donations received in the year
     context["donations"] = get_sum(
-        AccountingItemDonation.objects.filter(assoc_id=context["association_id"], created__gte=start, created__lt=end)
+        AccountingItemDonation.objects.filter(
+            association_id=context["association_id"], created__gte=start, created__lt=end
+        )
     )
 
     # Calculate net ticket revenue (cash payments minus transaction fees)
     context["tickets"] = get_sum(
         AccountingItemPayment.objects.filter(
-            assoc_id=context["association_id"],
+            association_id=context["association_id"],
             pay=PaymentChoices.MONEY,
             created__gte=start,
             created__lt=end,
         )
     ) - get_sum(
         AccountingItemTransaction.objects.filter(
-            assoc_id=context["association_id"], created__gte=start, created__lt=end
+            association_id=context["association_id"], created__gte=start, created__lt=end
         )
     )
 
     # Calculate total inflows for the year
     context["inflows"] = get_sum(
         AccountingItemInflow.objects.filter(
-            assoc_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
+            association_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
         )
     )
 
@@ -905,7 +912,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Calculate total refunds/reimbursements for proportional distribution
     context["rimb"] = get_sum(
         AccountingItemOther.objects.filter(
-            assoc_id=context["association_id"],
+            association_id=context["association_id"],
             created__gte=start,
             created__lt=end,
             oth=OtherChoices.REFUND,
@@ -919,7 +926,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Aggregate approved personal expenses by balance category
     for el in (
         AccountingItemExpense.objects.filter(
-            assoc_id=context["association_id"], created__gte=start, created__lt=end, is_approved=True
+            association_id=context["association_id"], created__gte=start, created__lt=end, is_approved=True
         )
         .values("balance")
         .annotate(Sum("value"))
@@ -944,7 +951,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Add association-level outflows to expenditure categories
     for el in (
         AccountingItemOutflow.objects.filter(
-            assoc_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
+            association_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
         )
         .values("balance")
         .annotate(Sum("value"))
@@ -985,7 +992,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     # Query pending payment invoices excluding automated payment methods
     # Filter out created status and electronic payment methods that auto-verify
     context["todo"] = (
-        PaymentInvoice.objects.filter(assoc_id=context["association_id"], verified=False)
+        PaymentInvoice.objects.filter(association_id=context["association_id"], verified=False)
         .exclude(status=PaymentStatus.CREATED)
         .exclude(method__slug__in=["redsys", "satispay", "paypal", "stripe", "sumup"])
         .select_related("method")
@@ -1057,8 +1064,8 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
     invoice = PaymentInvoice.objects.get(pk=num)
 
     # Ensure invoice belongs to user's organization
-    if invoice.assoc_id != context["association_id"]:
-        raise Http404("not your assoc!")
+    if invoice.association_id != context["association_id"]:
+        raise Http404("not your association!")
 
     # Check if payment is already verified to prevent duplicates
     if invoice.verified:

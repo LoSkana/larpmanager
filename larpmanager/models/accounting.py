@@ -91,7 +91,7 @@ class PaymentInvoice(BaseModel):
 
     cod = models.CharField(max_length=50, unique=True, db_index=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     reg = models.ForeignKey(
         Registration,
@@ -110,7 +110,7 @@ class PaymentInvoice(BaseModel):
     class Meta:
         indexes = [
             models.Index(fields=["key", "status"]),
-            models.Index(fields=["assoc", "cod"]),
+            models.Index(fields=["association", "cod"]),
             models.Index(fields=["reg", "status", "-created"]),
             models.Index(fields=["status", "-created"]),
         ]
@@ -177,7 +177,7 @@ class ElectronicInvoice(BaseModel):
 
     year = models.IntegerField()
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     xml = models.TextField(blank=True, null=True)
 
@@ -186,11 +186,11 @@ class ElectronicInvoice(BaseModel):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["number", "year", "assoc", "deleted"],
+                fields=["number", "year", "association", "deleted"],
                 name="unique_number_with_optional",
             ),
             UniqueConstraint(
-                fields=["number", "year", "assoc"],
+                fields=["number", "year", "association"],
                 condition=Q(deleted=None),
                 name="unique_number_without_optional",
             ),
@@ -223,7 +223,7 @@ class ElectronicInvoice(BaseModel):
 
         # Auto-generate invoice number if not set (per year/association counter)
         if not self.number:
-            que = ElectronicInvoice.objects.filter(year=self.year, assoc=self.assoc)
+            que = ElectronicInvoice.objects.filter(year=self.year, association=self.association)
             highest_number = que.aggregate(models.Max("number"))["number__max"]
             self.number = highest_number + 1 if highest_number else 1
 
@@ -261,7 +261,7 @@ class AccountingItem(BaseModel):
 
     inv = models.OneToOneField(PaymentInvoice, on_delete=models.SET_NULL, null=True, blank=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     hide = models.BooleanField(default=False)
 
@@ -308,7 +308,9 @@ class AccountingItemMembership(AccountingItem):
 
     class Meta:
         indexes = [
-            models.Index(fields=["assoc", "year"], condition=Q(deleted__isnull=True), name="acctmem_assoc_year_act"),
+            models.Index(
+                fields=["association", "year"], condition=Q(deleted__isnull=True), name="acctmem_association_year_act"
+            ),
         ]
 
 
@@ -539,7 +541,7 @@ class Discount(BaseModel):
         # Append currency symbol if associated with an event
         if self.event:
             # noinspection PyUnresolvedReferences
-            s += self.event.assoc.get_currency_symbol()
+            s += self.event.association.get_currency_symbol()
         return s
 
     def show(self, run=None) -> dict:
@@ -616,7 +618,7 @@ class Collection(BaseModel):
 
     total = models.IntegerField(default=0)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self):
         if self.member:
@@ -694,7 +696,7 @@ class RefundRequest(BaseModel):
 
     hide = models.BooleanField(default=False)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Refund request of {self.member}"
@@ -705,7 +707,7 @@ class RefundRequest(BaseModel):
 class RecordAccounting(BaseModel):
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="rec_accs", null=True, blank=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="rec_accs")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="rec_accs")
 
     global_sum = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name=_("Global balance"))
 

@@ -202,7 +202,7 @@ def check_run(element, context, accessor_field=None):
             raise Http404("not your event")
 
 
-def check_assoc(element: object, context: dict, attribute_field: str = None) -> None:
+def check_association(element: object, context: dict, attribute_field: str = None) -> None:
     """Check if object belongs to the correct association.
 
     Args:
@@ -218,11 +218,11 @@ def check_assoc(element: object, context: dict, attribute_field: str = None) -> 
         element = getattr(element, attribute_field)
 
     # Skip check if object has no association
-    if not hasattr(element, "assoc"):
+    if not hasattr(element, "association"):
         return
 
     # Verify object belongs to current association
-    if element.assoc_id != context["association_id"]:
+    if element.association_id != context["association_id"]:
         raise Http404("not your association")
 
 
@@ -309,7 +309,7 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
     # Store object in context and perform security validations
     context["el"] = element
     check_run(element, context, association_field)
-    check_assoc(element, context, association_field)
+    check_association(element, context, association_field)
 
     # Set display name for the object
     context["name"] = str(element)

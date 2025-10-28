@@ -127,7 +127,7 @@ def published_events(request: HttpRequest) -> JsonResponse:
                      or internal server errors (status codes: 403, 401, 500)
     """
     # Restrict access to primary domain only in production environments
-    if not settings.DEBUG and hasattr(request, "assoc") and request.assoc.get("id", 0) != 0:
+    if not settings.DEBUG and hasattr(request, "association") and request.association.get("id", 0) != 0:
         return JsonResponse({"error": "This endpoint is only available on the primary domain"}, status=403)
 
     # Validate the provided API key and return early if invalid
@@ -144,8 +144,8 @@ def published_events(request: HttpRequest) -> JsonResponse:
         # Get all upcoming runs from publisher associations, ordered by start date
         now = timezone.now()
         runs = (
-            Run.objects.filter(event__assoc__in=publisher_associations, start__gte=now)
-            .select_related("event", "event__assoc", "event__assoc__skin")
+            Run.objects.filter(event__association__in=publisher_associations, start__gte=now)
+            .select_related("event", "event__association", "event__association__skin")
             .order_by("start")
         )
 
@@ -155,7 +155,7 @@ def published_events(request: HttpRequest) -> JsonResponse:
         # Process each run to build the response data
         for run in runs:
             event = run.event
-            assoc = run.event.assoc
+            association = run.event.association
 
             # Get registration status information for this run
             run_status = _get_registration_status_code(run)
@@ -166,8 +166,8 @@ def published_events(request: HttpRequest) -> JsonResponse:
                 "name": str(run),
                 "date_start": run.start.isoformat() if run.start else None,
                 "date_end": run.end.isoformat() if run.end else None,
-                "association": assoc.name,
-                "signup_url": f"https://{assoc.slug}.{assoc.skin.domain}/{run.get_slug()}/register/",
+                "association": association.name,
+                "signup_url": f"https://{association.slug}.{association.skin.domain}/{run.get_slug()}/register/",
                 "status": run_status[0],
                 "additional": run_status[1],
             }

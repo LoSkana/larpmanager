@@ -26,11 +26,11 @@ from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from tinymce.widgets import TinyMCE
 
-from larpmanager.cache.config import get_assoc_config
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
-    AssocMemberS2Widget,
+    AssociationMemberS2Widget,
     DatePickerInput,
     EventS2Widget,
     TimePickerInput,
@@ -263,7 +263,9 @@ def _delete_optionals_warehouse(warehouse_form):
         Deletes form fields for warehouse options not enabled in config
     """
     for optional_field_name in WarehouseItem.get_optional_fields():
-        if not get_assoc_config(warehouse_form.params["association_id"], f"warehouse_{optional_field_name}", False):
+        if not get_association_config(
+            warehouse_form.params["association_id"], f"warehouse_{optional_field_name}", False
+        ):
             warehouse_form.delete_field(optional_field_name)
 
 
@@ -394,7 +396,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
         widgets = {
             "date": DatePickerInput,
             "time": TimePickerInput,
-            "working": AssocMemberS2Widget,
+            "working": AssociationMemberS2Widget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -406,7 +408,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
             self.initial["working"] = self.params["member"]
 
         # Configure widget with association context
-        self.fields["working"].widget.set_assoc(self.params["association_id"])
+        self.fields["working"].widget.set_association_id(self.params["association_id"])
 
 
 class OrgaCopyForm(forms.Form):
@@ -423,12 +425,13 @@ class OrgaCopyForm(forms.Form):
         self.fields["parent"] = forms.ChoiceField(
             required=True,
             choices=[
-                (el.id, el.name) for el in Event.objects.filter(assoc_id=self.params["association_id"], template=False)
+                (el.id, el.name)
+                for el in Event.objects.filter(association_id=self.params["association_id"], template=False)
             ],
             help_text="The event from which you will copy the elements",
         )
         self.fields["parent"].widget = EventS2Widget()
-        self.fields["parent"].widget.set_assoc(self.params["association_id"])
+        self.fields["parent"].widget.set_association_id(self.params["association_id"])
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [

@@ -542,7 +542,7 @@ def orga_copy(request, event_slug):
         if form.is_valid():
             pt = form.cleaned_data["parent"]
             targets = form.cleaned_data["target"]
-            parent = Event.objects.get(pk=pt, assoc_id=context["association_id"])
+            parent = Event.objects.get(pk=pt, association_id=context["association_id"])
             event = context["event"]
             copy(request, context, parent, event, targets)
 

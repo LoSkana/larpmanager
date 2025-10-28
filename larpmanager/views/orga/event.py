@@ -209,7 +209,7 @@ def orga_appearance(request, event_slug):
 
 @login_required
 def orga_run(request, event_slug):
-    run = get_cache_run(request.assoc["id"], event_slug)
+    run = get_cache_run(request.association["id"], event_slug)
     return orga_edit(
         request, event_slug, "orga_event", OrgaRunForm, run, "manage", additional_context={"add_another": False}
     )

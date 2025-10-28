@@ -26,7 +26,7 @@ trans_path = "larpmanager/templates/trans.html"
 with open(trans_path, "w") as f:
     f.writelines("{% load i18n %}\n")
 
-    for fixture_file in ["module", "feature", "assoc_permission", "event_permission", "permission_module"]:
+    for fixture_file in ["module", "feature", "association_permission", "event_permission", "permission_module"]:
         with open(f"larpmanager/fixtures/{fixture_file}.yaml", encoding="utf-8") as fixture:
             data = yaml.safe_load(fixture)
 

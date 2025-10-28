@@ -5,15 +5,15 @@
             <tr>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Cover" %}</th>
-                {% if assoc.id == 0 %}
+                {% if association.id == 0 %}
                     <th>{% trans "Organization" %}</th>
                 {% endif %}
-                {% if 'genre' in assoc.features %}
+                {% if 'genre' in association.features %}
                     <th>{% trans "Genre" context "event" %}</th>
                 {% endif %}
-                {% if 'website' in assoc.features %}<th></th>{% endif %}
+                {% if 'website' in association.features %}<th></th>{% endif %}
                 <th>{% trans "Date" %}</th>
-                {% if 'where' in assoc.features %}
+                {% if 'where' in association.features %}
                     <th>{% trans "Location" %}</th>
                 {% endif %}
                 <th>{% trans "Registrations" %}</th>
@@ -34,17 +34,17 @@
                 {% else %}
                     <td></td>
                 {% endif %}
-                {% if assoc.id == 0 %}
+                {% if association.id == 0 %}
                     <td data-title="{% trans "Organization" %}">
-                        <b>{{ run.event.assoc.name }} </b>
+                        <b>{{ run.event.association.name }} </b>
                     </td>
                 {% endif %}
-                {% if 'genre' in assoc.features %}
+                {% if 'genre' in association.features %}
                     <td data-title="{% trans "Genre" context "event" %}">
                         <i>{{ run.event.genre }} </i>
                     </td>
                 {% endif %}
-                {% if 'website' in assoc.features %}
+                {% if 'website' in association.features %}
                     <td>
                         {% if run.event.website %}
                             <a href="{{ run.event.website }}"><i class="fa-solid fa-globe"></i> {% trans "Website" %}</a>
@@ -54,7 +54,7 @@
                 <td data-title="{% trans "Date" %}">
                     <i>{{ run.pretty_dates }}</i>
                 </td>
-                {% if 'where' in assoc.features %}
+                {% if 'where' in association.features %}
                     <td data-title="{% trans "Location" %}">
                         {% if run.event.where %}<i>{{ run.event.where }} </i>{% endif %}
                     </td>

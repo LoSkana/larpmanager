@@ -87,7 +87,7 @@ def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:
         Association ID 0 is reserved for the main/default organization.
     """
     # Check if this is the default/main association (ID 0)
-    if request.assoc["id"] == 0:
+    if request.association["id"] == 0:
         return lm_home(request)
 
     # For other associations, check Centauri handling or fallback to calendar
@@ -205,7 +205,7 @@ def upload_media(request: HttpRequest) -> JsonResponse:
         filename = f"{timestamp}_{uuid.uuid4().hex}{file.name[file.name.rfind('.') :]}"
 
         # Save file to association-specific directory
-        path = default_storage.save(f"tinymce_uploads/{request.assoc['id']}/{filename}", file)
+        path = default_storage.save(f"tinymce_uploads/{request.association['id']}/{filename}", file)
 
         return JsonResponse({"location": default_storage.url(path)})
     return JsonResponse({"error": "Invalid request"}, status=400)

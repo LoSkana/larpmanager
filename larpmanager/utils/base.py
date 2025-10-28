@@ -29,11 +29,11 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.links import cache_event_links
-from larpmanager.cache.permission import get_assoc_permission_feature, get_event_permission_feature
+from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
 from larpmanager.cache.role import (
-    get_index_assoc_permissions,
+    get_index_association_permissions,
     get_index_event_permissions,
-    has_assoc_permission,
+    has_association_permission,
     has_event_permission,
 )
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
@@ -60,7 +60,7 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
 
     Args:
         request: HTTP request object containing user and association information.
-                Must have 'assoc' attribute with association data including 'id'.
+                Must have 'association' attribute with association data including 'id'.
         check_main_site: If this page is supposed to be accessible only on the main site
 
     Returns:
@@ -76,11 +76,11 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
                         when accessing home page without valid association.
     """
     # Initialize result dictionary with association ID
-    context = {"association_id": request.assoc["id"]}
+    context = {"association_id": request.association["id"]}
 
     # Copy all association data to context
-    for assoc_key in request.assoc:
-        context[assoc_key] = request.assoc[assoc_key]
+    for association_key in request.association:
+        context[association_key] = request.association[association_key]
 
     # Add member data
     context["member"] = None
@@ -91,7 +91,7 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
     if context["association_id"] == 0:
         if not check_main_site:
             if context["member"]:
-                user_associations = [membership.assoc for membership in context["member"].memberships.all()]
+                user_associations = [membership.association for membership in context["member"].memberships.all()]
                 raise MembershipError(user_associations)
             raise MembershipError()
         return context
@@ -107,7 +107,7 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
         context["membership"] = get_user_membership(context["member"], context["association_id"])
 
         # Get association permissions for the user
-        get_index_assoc_permissions(context, request, context["association_id"], check=False)
+        get_index_association_permissions(context, request, context["association_id"], check=False)
 
         # Add user interface preferences and staff status
         context["interface_collapse_sidebar"] = context["member"].get_config("interface_collapse_sidebar", False)
@@ -138,7 +138,7 @@ def is_shuttle(request: HttpRequest) -> bool:
         return False
 
     # Verify user is in association's shuttle operators list
-    return "shuttle" in request.assoc and request.user.member.id in request.assoc["shuttle"]
+    return "shuttle" in request.association and request.user.member.id in request.association["shuttle"]
 
 
 def update_payment_details(context: dict) -> None:
@@ -187,11 +187,11 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     """
     # Get base user context and validate permission
     context = get_context(request)
-    if not has_assoc_permission(request, context, permission_slug):
+    if not has_association_permission(request, context, permission_slug):
         raise PermissionError()
 
     # Retrieve feature configuration for this permission
-    (required_feature, tutorial_identifier, config_slug) = get_assoc_permission_feature(permission_slug)
+    (required_feature, tutorial_identifier, config_slug) = get_association_permission_feature(permission_slug)
 
     # Check if required feature is enabled for this association
     if required_feature != "def" and required_feature not in context["features"]:
@@ -202,7 +202,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     context["exe_page"] = 1
 
     # Load association permissions and sidebar state
-    get_index_assoc_permissions(context, request, context["association_id"])
+    get_index_association_permissions(context, request, context["association_id"])
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Add tutorial information if not already present
@@ -210,7 +210,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
         context["tutorial"] = tutorial_identifier
 
     # Add configuration URL if user has config permissions
-    if config_slug and has_assoc_permission(request, context, "exe_config"):
+    if config_slug and has_association_permission(request, context, "exe_config"):
         context["config"] = reverse("exe_config", args=[config_slug])
 
     return context
@@ -304,10 +304,10 @@ def get_event(request, event_slug, run_number=None):
         get_run(context, event_slug)
 
         if "association_id" in context:
-            if context["event"].assoc_id != context["association_id"]:
-                raise Http404("wrong assoc")
+            if context["event"].association_id != context["association_id"]:
+                raise Http404("wrong association")
         else:
-            context["association_id"] = context["event"].assoc_id
+            context["association_id"] = context["event"].association_id
 
         context["features"] = get_event_features(context["event"].id)
 
@@ -371,10 +371,10 @@ def get_event_context(
         context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Set association slug from request or event object
-    if hasattr(request, "assoc"):
-        context["assoc_slug"] = request.assoc["slug"]
+    if hasattr(request, "association"):
+        context["association_slug"] = request.association["slug"]
     else:
-        context["assoc_slug"] = context["event"].assoc.slug
+        context["association_slug"] = context["event"].association.slug
 
     # Configure staff permissions for character management access
     if has_event_permission(request, context, event_slug, "orga_characters"):

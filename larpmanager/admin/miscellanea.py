@@ -20,8 +20,9 @@
 
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
+from django.utils.html import format_html
 
-from larpmanager.admin.base import AssocFilter, DefModelAdmin, RunFilter, reduced
+from larpmanager.admin.base import AssociationFilter, DefModelAdmin, RunFilter, reduced
 from larpmanager.admin.character import TargetFilter
 from larpmanager.models.miscellanea import (
     Album,
@@ -51,19 +52,19 @@ from larpmanager.models.miscellanea import (
 @admin.register(Contact)
 class ContactAdmin(DefModelAdmin):
     list_display = ("me", "you", "channel")
-    autocomplete_fields = ["me", "you", "assoc"]
+    autocomplete_fields = ["me", "you", "association"]
 
 
 @admin.register(ChatMessage)
 class ChatMessageAdmin(DefModelAdmin):
     list_display = ("id", "sender", "receiver")
-    autocomplete_fields = ("sender", "receiver", "assoc")
+    autocomplete_fields = ("sender", "receiver", "association")
 
 
 @admin.register(Album)
 class AlbumAdmin(DefModelAdmin):
     list_display = ("name", "parent", "run", "show_thumb")
-    autocomplete_fields = ["parent", "run", "assoc"]
+    autocomplete_fields = ["parent", "run", "association"]
     search_fields = ["name"]
 
 
@@ -135,13 +136,13 @@ class WorkshopMemberRelAdmin(DefModelAdmin):
 @admin.register(HelpQuestion)
 class HelpQuestionAdmin(DefModelAdmin):
     list_display = ("member", "is_user", "small_text")
-    autocomplete_fields = ["member", "run", "assoc"]
+    autocomplete_fields = ["member", "run", "association"]
 
 
 @admin.register(WarehouseContainer)
 class WarehouseContainerAdmin(DefModelAdmin):
     list_display = ("name", "position")
-    autocomplete_fields = ["assoc"]
+    autocomplete_fields = ["association"]
     search_fields = ["name"]
 
 
@@ -154,7 +155,7 @@ class WarehouseTagAdmin(DefModelAdmin):
 @admin.register(WarehouseItem)
 class WarehouseItemAdmin(DefModelAdmin):
     list_display = ("name", "quantity", "container", "description")
-    autocomplete_fields = ["assoc", "container", "tags"]
+    autocomplete_fields = ["association", "container", "tags"]
     search_fields = ["name"]
 
 
@@ -173,7 +174,7 @@ class WarehouseItemAssignmentAdmin(DefModelAdmin):
 @admin.register(ShuttleService)
 class ShuttleServiceAdmin(DefModelAdmin):
     list_display = ("member", "passengers", "address", "info", "working")
-    autocomplete_fields = ["member", "working", "assoc"]
+    autocomplete_fields = ["member", "working", "association"]
 
 
 @admin.register(Util)
@@ -199,9 +200,9 @@ class PlayerRelationshipAdmin(DefModelAdmin):
 
 @admin.register(Email)
 class EmailAdmin(DefModelAdmin):
-    list_display = ("id", "assoc", "run", "recipient", "sent", "subj", "body_red")
-    list_filter = (AssocFilter, RunFilter)
-    autocomplete_fields = ["assoc", "run"]
+    list_display = ("id", "association", "run", "recipient", "sent", "subj", "body_red")
+    list_filter = (AssociationFilter, RunFilter)
+    autocomplete_fields = ["association", "run"]
     search_fields = ["subj", "body", "recipient"]
 
     @staticmethod
@@ -278,17 +279,16 @@ class OneTimeContentAdmin(DefModelAdmin):
             return "-"
         size = obj.file_size
         for unit in ["B", "KB", "MB", "GB"]:
-            if size < 1024.0:
+            max_size = 1024.0
+            if size < max_size:
                 return f"{size:.1f} {unit}"
-            size /= 1024.0
+            size /= max_size
         return f"{size:.1f} TB"
 
     file_size_display.short_description = "File size"
 
     def token_count(self, obj):
         """Display token statistics."""
-        from django.utils.html import format_html
-
         stats = obj.get_token_stats()
         return format_html(
             '<span style="color: green;">{}</span> / <span style="color: gray;">{}</span>',

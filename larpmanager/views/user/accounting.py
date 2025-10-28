@@ -40,8 +40,8 @@ from larpmanager.accounting.gateway import (
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.payment import get_payment_form
-from larpmanager.cache.config import get_assoc_config
-from larpmanager.cache.feature import get_assoc_features
+from larpmanager.cache.config import get_association_config
+from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.accounting import (
     AnyInvoiceSubmitForm,
     CollectionForm,
@@ -66,7 +66,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import Association, AssocTextType
+from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.base import check_event_context, get_context, get_event_context
@@ -74,9 +74,9 @@ from larpmanager.utils.common import (
     get_collection_partecipate,
     get_collection_redeem,
 )
-from larpmanager.utils.exceptions import check_assoc_feature
+from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.utils.text import get_association_text
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +130,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
             context["delegated_todo"] = context["delegated_todo"] or del_ctx["payments_todo"]
 
     # Load organization terms and conditions for display
-    context["assoc_terms_conditions"] = get_assoc_text(context["association_id"], AssocTextType.TOC)
+    context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
 
     return render(request, "larpmanager/member/accounting.html", context)
 
@@ -160,7 +160,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         member=context["member"],
         hide=False,
         oth=OtherChoices.TOKEN,
-        assoc_id=context["association_id"],
+        association_id=context["association_id"],
     )
 
     # Query for tokens used by the user (non-hidden, within current association)
@@ -168,7 +168,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         member=context["member"],
         hide=False,
         pay=PaymentChoices.TOKEN,
-        assoc_id=context["association_id"],
+        association_id=context["association_id"],
     )
 
     # Update context with token data
@@ -208,28 +208,28 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
         {
             # Approved expenses for the user in current association
             "exp": AccountingItemExpense.objects.filter(
-                member=context["member"], hide=False, is_approved=True, assoc_id=context["association_id"]
+                member=context["member"], hide=False, is_approved=True, association_id=context["association_id"]
             ),
             # Credits given to the user in current association
             "given": AccountingItemOther.objects.filter(
                 member=context["member"],
                 hide=False,
                 oth=OtherChoices.CREDIT,
-                assoc_id=context["association_id"],
+                association_id=context["association_id"],
             ),
             # Payments made using credits by the user in current association
             "used": AccountingItemPayment.objects.filter(
                 member=context["member"],
                 hide=False,
                 pay=PaymentChoices.CREDIT,
-                assoc_id=context["association_id"],
+                association_id=context["association_id"],
             ),
             # Refunds issued to the user in current association
             "ref": AccountingItemOther.objects.filter(
                 member=context["member"],
                 hide=False,
                 oth=OtherChoices.REFUND,
-                assoc_id=context["association_id"],
+                association_id=context["association_id"],
             ),
         }
     )
@@ -258,7 +258,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
     """
     # Check user has permission to access refund functionality
     context = get_context(request)
-    check_assoc_feature(request, context, "refund")
+    check_association_feature(request, context, "refund")
     context["show_accounting"] = True
 
     # Verify user membership in current association
@@ -273,7 +273,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
             with transaction.atomic():
                 p = form.save(commit=False)
                 p.member = context["member"]
-                p.assoc_id = context["association_id"]
+                p.association_id = context["association_id"]
                 p.save()
 
             # Send notification to administrators about new refund request
@@ -317,7 +317,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
     context = get_event_context(request, event_slug, signup=True, include_status=True)
 
     # Check if user has permission to access payment features
-    check_assoc_feature(request, context, "payment")
+    check_association_feature(request, context, "payment")
 
     # Verify user has valid registration for this event
     if not context["run"].reg:
@@ -367,7 +367,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     """
     # Ensure payment feature is enabled for this association
     context = get_context(request)
-    check_assoc_feature(request, context, "payment")
+    check_association_feature(request, context, "payment")
 
     # Retrieve registration with related run and event data
     try:
@@ -375,7 +375,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
             id=reg_id,
             member=context["member"],
             cancellation_date__isnull=True,
-            run__event__assoc_id=context["association_id"],
+            run__event__association_id=context["association_id"],
         )
     except Exception as err:
         raise Http404(f"registration not found {err}") from err
@@ -464,7 +464,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     """
     # Check if user has access to membership feature
     context = get_context(request)
-    check_assoc_feature(request, context, "membership")
+    check_association_feature(request, context, "membership")
     context["show_accounting"] = True
 
     # Validate user membership status - must be accepted to pay dues
@@ -476,7 +476,9 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     # Check if membership fee already paid for current year
     year = datetime.now().year
     try:
-        AccountingItemMembership.objects.get(year=year, member=context["member"], assoc_id=context["association_id"])
+        AccountingItemMembership.objects.get(
+            year=year, member=context["member"], association_id=context["association_id"]
+        )
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
     except Exception:
@@ -501,7 +503,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
 
     # Add form and membership fee to context for template
     context["form"] = form
-    context["membership_fee"] = get_assoc_config(context["association_id"], "membership_fee", 0)
+    context["membership_fee"] = get_association_config(context["association_id"], "membership_fee", 0)
 
     return render(request, "larpmanager/member/acc_membership.html", context)
 
@@ -524,7 +526,7 @@ def acc_donate(request: HttpRequest) -> HttpResponse:
     """
     # Check if user has permission to access donation feature
     context = get_context(request)
-    check_assoc_feature(request, context, "donate")
+    check_association_feature(request, context, "donate")
     context["show_accounting"] = True
 
     # Process form submission for donation payment
@@ -577,7 +579,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
             with transaction.atomic():
                 p = form.save(commit=False)
                 p.organizer = context["member"]
-                p.assoc_id = context["association_id"]
+                p.association_id = context["association_id"]
                 p.save()
 
             # Show success message and redirect to collection management
@@ -623,7 +625,7 @@ def acc_collection_manage(request: HttpRequest, collection_code: str) -> HttpRes
         {
             "coll": c,
             "list": AccountingItemCollection.objects.filter(
-                collection=c, collection__assoc_id=context["association_id"]
+                collection=c, collection__association_id=context["association_id"]
             ),
         }
     )
@@ -753,7 +755,7 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[H
 
     # For GET requests, prepare collection items list for display
     context["list"] = AccountingItemCollection.objects.filter(
-        collection=c, collection__assoc_id=context["association_id"]
+        collection=c, collection__association_id=context["association_id"]
     ).select_related("member", "collection")
 
     # Render the redemption template with collection data
@@ -875,7 +877,7 @@ def acc_payed(request: HttpRequest, p: int = 0) -> HttpResponse:
     if p:
         try:
             # Retrieve the payment invoice for the current user and association
-            inv = PaymentInvoice.objects.get(pk=p, member=context["member"], assoc_id=context["association_id"])
+            inv = PaymentInvoice.objects.get(pk=p, member=context["member"], association_id=context["association_id"])
         except Exception as err:
             # Raise 404 if invoice not found or access denied
             raise Http404("eeeehm") from err
@@ -915,7 +917,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
         return redirect("accounting")
 
     # Check if receipt is required for manual payments
-    require_receipt = get_assoc_config(context["association_id"], "payment_require_receipt", False)
+    require_receipt = get_association_config(context["association_id"], "payment_require_receipt", False)
 
     # Select appropriate form based on payment type
     if payment_method in {"wire", "paypal_nf"}:
@@ -934,7 +936,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
     # Retrieve the payment invoice using form data
     try:
-        inv = PaymentInvoice.objects.get(cod=form.cleaned_data["cod"], assoc_id=context["association_id"])
+        inv = PaymentInvoice.objects.get(cod=form.cleaned_data["cod"], association_id=context["association_id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Error processing payment, contact us"))
         return redirect("/" + redirect_path)
@@ -980,7 +982,7 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     # Retrieve invoice by confirmation code and association ID
     context = get_context(request)
     try:
-        inv = PaymentInvoice.objects.get(cod=invoice_cod, assoc_id=context["association_id"])
+        inv = PaymentInvoice.objects.get(cod=invoice_cod, association_id=context["association_id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Invoice not found"))
         return redirect("home")
@@ -992,11 +994,11 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
 
     # Authorization check: verify user permissions
     found = False
-    assoc_id = context["association_id"]
+    association_id = context["association_id"]
 
     # Check if user is appointed treasurer
-    if "treasurer" in get_assoc_features(assoc_id):
-        for mb in get_assoc_config(assoc_id, "treasurer_appointees", "").split(", "):
+    if "treasurer" in get_association_features(association_id):
+        for mb in get_association_config(association_id, "treasurer_appointees", "").split(", "):
             if not mb:
                 continue
             if context["member"].id == int(mb):

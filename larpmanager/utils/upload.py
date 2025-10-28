@@ -262,7 +262,7 @@ def _reg_load(request, context: dict, csv_row: dict, registration_questions: lis
 
     # Check if user has valid membership for this association
     try:
-        membership = Membership.objects.get(member=member, assoc_id=context["event"].assoc_id)
+        membership = Membership.objects.get(member=member, association_id=context["event"].association_id)
     except ObjectDoesNotExist:
         return "ERR - Sharing data not found"
 

@@ -32,11 +32,11 @@ from django.utils import timezone
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
-from larpmanager.models.association import Association, AssocTextType, get_url
+from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Email
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.utils.text import get_association_text
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +122,7 @@ def send_mail_exec(
     players: str,
     subj: str,
     body: str,
-    assoc_id: int | None = None,
+    association_id: int | None = None,
     run_id: int | None = None,
     reply_to: str | None = None,
 ) -> None:
@@ -136,8 +136,8 @@ def send_mail_exec(
         players: Comma-separated list of email addresses to send to
         subj: Email subject line (will be prefixed with org/run name)
         body: Email body content in HTML or plain text
-        assoc_id: Association ID for determining sender context
-        run_id: Run ID for determining sender context (alternative to assoc_id)
+        association_id: Association ID for determining sender context
+        run_id: Run ID for determining sender context (alternative to association_id)
         reply_to: Custom reply-to email address
 
     Returns:
@@ -146,14 +146,14 @@ def send_mail_exec(
     Side Effects:
         - Schedules individual emails with 10-second delays via background tasks
         - Sends notification to admins about bulk email operation
-        - Logs warning if neither assoc_id nor run_id are provided
+        - Logs warning if neither association_id nor run_id are provided
     """
     seen_emails = {}
 
     sender_context = None
     # Determine sender context (Association or Run object, or LM )
-    if assoc_id:
-        sender_context = Association.objects.filter(pk=assoc_id).first()
+    if association_id:
+        sender_context = Association.objects.filter(pk=association_id).first()
     elif run_id:
         sender_context = Run.objects.filter(pk=run_id).first()
 
@@ -201,7 +201,7 @@ def my_send_mail_bkg(email_pk):
         logger.info("Email already sent!")
         return
 
-    my_send_simple_mail(email.subj, email.body, email.recipient, email.assoc_id, email.run_id, email.reply_to)
+    my_send_simple_mail(email.subj, email.body, email.recipient, email.association_id, email.run_id, email.reply_to)
 
     email.sent = timezone.now()
     email.save()
@@ -227,7 +227,7 @@ def my_send_simple_mail(
     subj: str,
     body: str,
     m_email: str,
-    assoc_id: int | None = None,
+    association_id: int | None = None,
     run_id: int | None = None,
     reply_to: str | None = None,
 ) -> None:
@@ -241,7 +241,7 @@ def my_send_simple_mail(
         subj: Email subject line
         body: Email body content (HTML format)
         m_email: Recipient email address
-        assoc_id: Association ID for custom SMTP settings and sender configuration
+        association_id: Association ID for custom SMTP settings and sender configuration
         run_id: Run ID for event-specific SMTP settings (overrides association settings)
         reply_to: Custom Reply-To email address header
 
@@ -296,9 +296,9 @@ def my_send_simple_mail(
                 )
                 event_settings_applied = True
 
-        # Apply association-level configuration if assoc_id is provided
-        if assoc_id:
-            association = Association.objects.get(pk=assoc_id)
+        # Apply association-level configuration if association_id is provided
+        if association_id:
+            association = Association.objects.get(pk=association_id)
 
             # Add association main email to BCC if configured
             if association.get_config("mail_cc", False, bypass_cache=True) and association.main_mail:
@@ -369,17 +369,17 @@ def my_send_simple_mail(
         raise email_sending_exception
 
 
-def add_unsubscribe_body(assoc):
+def add_unsubscribe_body(association):
     """Add unsubscribe footer to email body.
 
     Args:
-        assoc: Association instance for unsubscribe URL
+        association: Association instance for unsubscribe URL
 
     Returns:
         str: HTML footer with unsubscribe link
     """
     html_footer = "<br /><br />-<br />"
-    html_footer += f"<a href='{get_url('unsubscribe', assoc)}'>Unsubscribe</a>"
+    html_footer += f"<a href='{get_url('unsubscribe', association)}'>Unsubscribe</a>"
     return html_footer
 
 
@@ -401,7 +401,7 @@ def my_send_mail(
         body: Email body content (HTML or plain text)
         recipient: Email recipient address or Member instance
         context_object: Context object for extracting association/run information.
-             Supports Run, Event, Association, or objects with run_id/assoc_id/event_id
+             Supports Run, Event, Association, or objects with run_id/association_id/event_id
         reply_to: Custom reply-to email address
         schedule: Delay in seconds before sending email
 
@@ -425,23 +425,23 @@ def my_send_mail(
         # Handle direct model instances
         if isinstance(context_object, Run):
             run_id = context_object.id  # type: ignore[attr-defined]
-            association_id = context_object.event.assoc_id  # type: ignore[attr-defined]
+            association_id = context_object.event.association_id  # type: ignore[attr-defined]
         elif isinstance(context_object, Event):
-            association_id = context_object.assoc_id  # type: ignore[attr-defined]
+            association_id = context_object.association_id  # type: ignore[attr-defined]
         elif isinstance(context_object, Association):
             association_id = context_object.id  # type: ignore[attr-defined]
         # Handle objects with foreign key relationships
         elif hasattr(context_object, "run_id") and context_object.run_id:
             run_id = context_object.run_id
-            association_id = context_object.run.event.assoc_id
-        elif hasattr(context_object, "assoc_id") and context_object.assoc_id:
-            association_id = context_object.assoc_id
+            association_id = context_object.run.event.association_id
+        elif hasattr(context_object, "association_id") and context_object.association_id:
+            association_id = context_object.association_id
         elif hasattr(context_object, "event_id") and context_object.event_id:
-            association_id = context_object.event.assoc_id
+            association_id = context_object.event.association_id
 
         # Add organization signature if available
         if association_id:
-            signature = get_assoc_text(association_id, AssocTextType.SIGNATURE)
+            signature = get_association_text(association_id, AssociationTextType.SIGNATURE)
             if signature:
                 body += signature
 
@@ -458,7 +458,7 @@ def my_send_mail(
 
     # Create email record for tracking and delivery
     email = Email.objects.create(
-        assoc_id=association_id,
+        association_id=association_id,
         run_id=run_id,
         recipient=recipient,
         subj=subject_string,
