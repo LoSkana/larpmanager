@@ -2902,6 +2902,39 @@ msgstr ""
 msgid "Text language"
 msgstr ""
 
+msgid "Association"
+msgstr ""
+
+msgid "Language code for this translation"
+msgstr ""
+
+msgid "Original text"
+msgstr ""
+
+msgid "The original text to translate (usually in English)"
+msgstr ""
+
+msgid "Translated text"
+msgstr ""
+
+msgid "The custom translation for this association"
+msgstr ""
+
+msgid "Context"
+msgstr ""
+
+msgid "Optional context for disambiguation (msgctxt in gettext)"
+msgstr ""
+
+msgid "Whether this translation is currently active"
+msgstr ""
+
+msgid "Association Translation"
+msgstr ""
+
+msgid "Association Translations"
+msgstr ""
+
 msgid "Italy"
 msgstr ""
 

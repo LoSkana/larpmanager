@@ -59,9 +59,6 @@ def update_event_button(event_id: int) -> list[tuple[str, str, str]]:
         # Extract button data as tuple
         res.append((el.name, el.tooltip, el.link))
 
-    # Cache the result with 1-day timeout
-    cache.set(event_button_key(event_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-
     return res
 
 
@@ -78,10 +75,17 @@ def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
         List of (name, tooltip, link) tuples for event buttons.
     """
     # Check if buttons are already cached for this event
-    res = cache.get(event_button_key(event_id))
+    key = event_button_key(event_id)
+    res = cache.get(key)
 
     # If not in cache, update and get fresh data
     if res is None:
         res = update_event_button(event_id)
+        # Cache the result with 1-day timeout
+        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return res
+
+
+def clear_event_button_cache(event_id):
+    cache.delete(event_button_key(event_id))

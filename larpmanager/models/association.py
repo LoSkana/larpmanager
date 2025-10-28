@@ -358,6 +358,69 @@ class AssociationText(BaseModel):
         ]
 
 
+class AssociationTranslation(BaseModel):
+    """Custom translations for specific associations.
+
+    Allows associations to override default Django translations with custom ones.
+    These translations take precedence over the default .po file translations.
+    """
+
+    association = models.ForeignKey(
+        Association, on_delete=models.CASCADE, related_name="custom_translations", verbose_name=_("Association")
+    )
+
+    language = models.CharField(
+        max_length=3,
+        choices=conf_settings.LANGUAGES,
+        verbose_name=_("Language"),
+        help_text=_("Language code for this translation"),
+    )
+
+    msgid = models.TextField(
+        verbose_name=_("Original text"),
+        help_text=_("The original text to translate (usually in English)"),
+        db_index=True,
+    )
+
+    msgstr = models.TextField(
+        verbose_name=_("Translated text"), help_text=_("The custom translation for this association")
+    )
+
+    context = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name=_("Context"),
+        help_text=_("Optional context for disambiguation (msgctxt in gettext)"),
+    )
+
+    active = models.BooleanField(
+        default=True, verbose_name=_("Active"), help_text=_("Whether this translation is currently active")
+    )
+
+    def __str__(self):
+        return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["association", "language", "msgid", "context", "deleted"],
+                name="unique_assoc_translation_with_deleted",
+            ),
+            UniqueConstraint(
+                fields=["association", "language", "msgid", "context"],
+                condition=Q(deleted=None),
+                name="unique_assoc_translation_without_deleted",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["association", "language", "msgid"]),
+            models.Index(fields=["active"]),
+        ]
+        verbose_name = _("Association Translation")
+        verbose_name_plural = _("Association Translations")
+
+
 def hdr(association_or_related_object: Association | Any) -> str:
     """Return a formatted header string with the association name in brackets."""
     # Check if object is an Association instance directly

@@ -12,6 +12,7 @@ from django_select2.forms import Select2Widget
 from slugify import slugify
 
 from larpmanager.accounting.balance import association_accounting, get_run_accounting
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
@@ -43,7 +44,6 @@ from larpmanager.utils.common import _get_help_questions, format_datetime
 from larpmanager.utils.edit import set_suggestion
 from larpmanager.utils.exceptions import RedirectError
 from larpmanager.utils.registration import registration_available
-from larpmanager.utils.text import get_association_text
 
 
 @login_required

@@ -42,6 +42,7 @@ from PIL import Image
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.cache.config import get_event_config, save_single_config
+from larpmanager.cache.event_text import get_event_text
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
@@ -75,7 +76,6 @@ from larpmanager.utils.registration import (
     get_player_characters,
     registration_find,
 )
-from larpmanager.utils.text import get_event_text
 from larpmanager.utils.writing import char_add_addit
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted

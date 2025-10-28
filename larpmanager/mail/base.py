@@ -28,6 +28,7 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssociationRole, EventRole, get_association_executives, get_event_organizers
 from larpmanager.models.association import Association, get_url, hdr
@@ -37,7 +38,6 @@ from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.text import get_event_text
 
 
 def check_holiday() -> bool:

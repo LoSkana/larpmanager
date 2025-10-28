@@ -23,14 +23,8 @@
 from unittest.mock import patch
 
 from larpmanager.utils.member import almost_equal, count_differences
-from larpmanager.utils.text import (
-    association_text_key,
-    association_text_key_def,
-    event_text_key,
-    event_text_key_def,
-    get_association_text,
-    get_event_text,
-)
+from larpmanager.cache.association_text import association_text_key, association_text_key_def, get_association_text
+from larpmanager.cache.event_text import event_text_key, event_text_key_def, get_event_text
 from larpmanager.tests.unit.base import BaseTestCase
 
 

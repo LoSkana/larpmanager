@@ -21,7 +21,13 @@
 from django.contrib import admin
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin
-from larpmanager.models.association import Association, AssociationConfig, AssociationSkin, AssociationText
+from larpmanager.models.association import (
+    Association,
+    AssociationConfig,
+    AssociationSkin,
+    AssociationText,
+    AssociationTranslation,
+)
 
 
 @admin.register(Association)
@@ -48,6 +54,25 @@ class AssociationTextAdmin(DefModelAdmin):
     list_display = ("association", "typ", "language", "default")
     list_filter = (AssociationFilter, "typ", "language")
     autocomplete_fields = ["association"]
+
+
+@admin.register(AssociationTranslation)
+class AssociationTranslationAdmin(DefModelAdmin):
+    list_display = ("association", "language", "msgid_preview", "msgstr_preview", "active")
+    list_filter = (AssociationFilter, "language", "active")
+    search_fields = ("msgid", "msgstr")
+    autocomplete_fields = ["association"]
+    list_editable = ("active",)
+
+    def msgid_preview(self, obj):
+        return obj.msgid[:50] + "..." if len(obj.msgid) > 50 else obj.msgid
+
+    msgid_preview.short_description = "Original text"
+
+    def msgstr_preview(self, obj):
+        return obj.msgstr[:50] + "..." if len(obj.msgstr) > 50 else obj.msgstr
+
+    msgstr_preview.short_description = "Translation"
 
 
 @admin.register(AssociationSkin)

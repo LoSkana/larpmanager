@@ -40,6 +40,7 @@ from larpmanager.accounting.gateway import (
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.payment import get_payment_form
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.accounting import (
@@ -76,7 +77,6 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.text import get_association_text
 
 logger = logging.getLogger(__name__)
 
