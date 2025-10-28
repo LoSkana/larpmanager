@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{ sheet_char.name }}</title>
+        <title>{{ faction.name }}</title>
         <meta charset="utf-8">
         <meta name="keywords" content="none">
         <meta name="description" content="none">
@@ -10,6 +10,18 @@
             @font-face {
                 font-family: 'easyreading';
                 src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
+            }
+
+            @page {
+                size: A4;
+                margin-top: 1cm;
+                margin-right: 0.5cm;
+                margin-bottom: 1cm;
+                margin-left: 0.5cm;
+            }
+
+            body {
+                margin: 0;
             }
 
             html {
@@ -31,6 +43,7 @@
             h1 {
                 text-align: center;
                 font-size: 150%;
+                margin-bottom: 0.5em;
             }
 
             h2 {
@@ -56,48 +69,41 @@
                 margin: 1px 0;
             }
 
-            #char_title {
+            .faction-type {
                 text-align: center;
                 margin: 0.5em;
                 font-style: italic;
             }
 
-            table {
-                width: 100%;
+            .faction-content {
+                margin: 2em;
             }
 
-            td,
-            th {
+            .faction-cover {
                 text-align: center;
+                margin: 1em;
             }
 
-            .clear {
-                clear: both;
-            }
-
-            #char_name,
-            #char_player,
-            .c {
-                text-align: center;
-            }
-
-            .show_char {
-                display: none;
+            .faction-cover img {
+                max-width: 300px;
+                max-height: 300px;
             }
         </style>
         <style>{{ event.sheet_css | safe }}</style>
     </head>
     <body>
         <div>
-            <div class="intro"></div>
             <div class="head">{{ event.association }} - {{ event }}</div>
             <br />
-            {% include "elements/sheet/main.html" %}
-            {% include "elements/sheet/plots.html" %}
-            {% include "elements/sheet/quests.html" %}
-            {% include "elements/sheet/speedlarp.html" %}
-            {% include "elements/sheet/prologue.html" %}
-            <div class="outro"></div>
+            <h1>{{ faction.name }}</h1>
+            {% if faction.get_typ_display %}<div class="faction-type">{{ faction.get_typ_display }}</div>{% endif %}
+            {% if faction.cover %}
+                <div class="faction-cover">
+                    <img src="{{ faction.cover.url }}" alt="{{ faction.name }}">
+                </div>
+            {% endif %}
+            {% if faction.teaser %}<div class="faction-content">{{ faction.teaser | safe }}</div>{% endif %}
+            {% if faction.data %}<div class="faction-content">{{ faction.data | safe }}</div>{% endif %}
         </div>
     </body>
 </html>

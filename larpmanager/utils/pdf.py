@@ -370,6 +370,28 @@ def print_character_friendly(context: dict, force: bool = False) -> HttpResponse
     return return_pdf(file_path, f"{context['character']} - " + _("Lightweight"))
 
 
+def print_faction(context: dict, force: bool = False) -> HttpResponse:
+    """Generate and return a faction sheet PDF.
+
+    Args:
+        context: Context dictionary containing faction and run data
+        force: Whether to force regeneration of the PDF file
+
+    Returns:
+        HTTP response containing the PDF file
+    """
+    # Get the file path for the faction sheet
+    file_path = context["faction"].get_sheet_filepath(context["run"])
+    context["pdf"] = True
+
+    # Generate PDF if forced or if file needs reprinting
+    if force or reprint(file_path):
+        pdf_template(context, "pdf/sheets/faction.html", file_path, True)
+
+    # Return the PDF file as HTTP response
+    return return_pdf(file_path, f"{context['faction']}")
+
+
 def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
     """Generate and return character relationships PDF.
 

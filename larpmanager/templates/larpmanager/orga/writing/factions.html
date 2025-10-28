@@ -42,6 +42,10 @@
                    qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
                 <a href="{% url 'orga_factions_versions' run.get_slug el.id %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
+                {% if features.print_pdf %}
+                    <a href="{% url 'orga_factions_sheet_pdf' run.get_slug el.id %}"
+                       qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
+                {% endif %}
             </td>
             <td>{{ el.get_typ_display }}</td>
             {% if features.user_character %}

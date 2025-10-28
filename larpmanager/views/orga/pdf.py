@@ -28,15 +28,17 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
-from larpmanager.models.writing import Character
+from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.base import check_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
+from larpmanager.utils.common import get_element
 from larpmanager.utils.pdf import (
     add_pdf_instructions,
     print_character,
     print_character_bkg,
     print_character_friendly,
     print_character_rel,
+    print_faction,
     print_gallery,
     print_profiles,
 )
@@ -253,3 +255,25 @@ def orga_gallery_test(request, event_slug):
 def orga_profiles_pdf(request, event_slug):
     context = check_event_context(request, event_slug, "orga_characters_pdf")
     return print_profiles(context, True)
+
+
+@login_required
+def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Generate PDF faction sheet for organizers.
+
+    Args:
+        request: HTTP request object
+        event_slug: Event slug identifier
+        num: Faction number/ID
+
+    Returns:
+        HTTP response containing the generated PDF
+    """
+    # Check organizer permissions for PDF access
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
+
+    # Retrieve and validate faction data
+    get_element(context, num, "faction", Faction)
+
+    # Generate and return the faction sheet PDF
+    return print_faction(context, True)

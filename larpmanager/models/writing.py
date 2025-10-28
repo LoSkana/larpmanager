@@ -516,6 +516,33 @@ class Faction(Writing):
         help_text=_("Indicates whether it can be selected by participants"),
     )
 
+    @staticmethod
+    def get_faction_filepath(run: "Run") -> str:
+        """Get the directory path for storing faction files for a given run.
+
+        Args:
+            run: The run instance for which to get the faction filepath.
+
+        Returns:
+            The absolute path to the faction files directory.
+        """
+        directory_path = os.path.join(run.event.get_media_filepath(), "factions", f"{run.number}/")
+        os.makedirs(directory_path, exist_ok=True)
+        return directory_path
+
+    def get_sheet_filepath(self, run):
+        """Get the file path for the faction sheet PDF.
+
+        Args:
+            run: The run instance for which to get the sheet filepath.
+
+        Returns:
+            The absolute path to the faction sheet PDF file.
+        """
+        faction_directory = self.get_faction_filepath(run)
+        sheet_filename = f"#{self.number}.pdf"
+        return os.path.join(faction_directory, sheet_filename)
+
     def show_red(self) -> dict:
         """Update JavaScript response with 'typ' and 'teaser' attributes."""
         js = super().show_red()

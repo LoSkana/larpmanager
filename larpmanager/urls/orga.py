@@ -511,6 +511,11 @@ urlpatterns = [
         name="orga_factions_versions",
     ),
     path(
+        "<slug:event_slug>/manage/factions/<int:num>/pdf/sheet/",
+        views_op.orga_factions_sheet_pdf,
+        name="orga_factions_sheet_pdf",
+    ),
+    path(
         "<slug:event_slug>/manage/quest_types/",
         views_ow.orga_quest_types,
         name="orga_quest_types",
