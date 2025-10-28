@@ -81,12 +81,8 @@ class Command(BaseCommand):
         # Iterate through each pending payment invoice
         for payment_invoice in pending_satispay_invoices:
             try:
-                # Create mock request object for satispay_verify function
-                # The function only uses request.assoc_id for logging context
-                mock_request = type("MockRequest", (), {"assoc": {"id": payment_invoice.assoc_id}})()
-
                 # Verify payment status with Satispay API
-                satispay_verify(mock_request, payment_invoice.cod)
+                satispay_verify({"association_id": payment_invoice.assoc_id}, payment_invoice.cod)
                 successfully_verified_count += 1
 
             except Exception as verification_error:
