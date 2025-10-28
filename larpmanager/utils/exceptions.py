@@ -132,7 +132,7 @@ class MembershipError(Exception):
         self.assocs = assocs
 
 
-def check_assoc_feature(request: HttpRequest, context: dict, feature_slug: str) -> dict:
+def check_assoc_feature(request: HttpRequest, context: dict, feature_slug: str) -> None:
     """Check if association has required feature enabled.
 
     Validates that the specified feature is enabled for the association
