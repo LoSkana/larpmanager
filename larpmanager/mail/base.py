@@ -76,12 +76,12 @@ def join_email(association):
     for member in get_association_executives(association):
         activate(member.language)
         subj = _("Welcome to LarpManager") + "!"
-        body = render_to_string("mails/join_assoc.html", {"member": member, "association": association})
+        body = render_to_string("mails/join_association.html", {"member": member, "association": association})
         my_send_mail(subj, body, member)
 
         activate(member.language)
         subj = "We'd love your feedback on LarpManager"
-        body = render_to_string("mails/help_assoc.html", {"member": member, "association": association})
+        body = render_to_string("mails/help_association.html", {"member": member, "association": association})
         my_send_mail(subj, body, member, schedule=3600 * 24 * 2)
 
 
