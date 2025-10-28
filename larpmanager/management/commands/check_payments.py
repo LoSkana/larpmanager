@@ -82,7 +82,7 @@ class Command(BaseCommand):
         for payment_invoice in pending_satispay_invoices:
             try:
                 # Verify payment status with Satispay API
-                satispay_verify({"association_id": payment_invoice.assoc_id}, payment_invoice.cod)
+                satispay_verify({"association_id": payment_invoice.association_id}, payment_invoice.cod)
                 successfully_verified_count += 1
 
             except Exception as verification_error:
