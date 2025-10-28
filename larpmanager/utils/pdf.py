@@ -41,7 +41,7 @@ from xhtml2pdf import pisa
 from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
-from larpmanager.models.association import Association, AssociationTextType
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
@@ -323,7 +323,7 @@ def get_membership_request(context: dict, member: Member) -> HttpResponse:
     return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": member})
 
 
-def print_character(context: dict, force: bool = False) -> dict:
+def print_character(context: dict, force: bool = False) -> HttpResponse:
     """Generate character sheet PDF with optional force regeneration.
 
     Args:
@@ -439,7 +439,7 @@ def print_gallery(context: dict, force: bool = False) -> object:
     return return_pdf(filepath, str(context["run"]) + " - " + _("Portraits"))
 
 
-def print_profiles(context: dict, force: bool = False) -> tuple:
+def print_profiles(context: dict, force: bool = False) -> HttpResponse:
     """Generate and return PDF profiles for the event run.
 
     Args:
@@ -688,9 +688,9 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 
 
 @background_auto(queue="pdf")
-def print_handout_bkg(a: Association, event_slug: str, c: Character) -> None:
+def print_handout_bkg(association_slug: str, event_slug: str, c: Character) -> None:
     """Prints character handout by creating a fake request and delegating to print_handout_go."""
-    request = get_fake_request(a)
+    request = get_fake_request(association_slug)
     context = get_event_context(request, event_slug)
     print_handout_go(context, c)
 
@@ -708,26 +708,26 @@ def print_character_go(context, character):
 
 
 @background_auto(queue="pdf")
-def print_character_bkg(a: Association, event_slug: str, c: Character) -> None:
+def print_character_bkg(association_slug: str, event_slug: str, c: Character) -> None:
     """Print character background for a given association, event slug, and character."""
-    request = get_fake_request(a)
+    request = get_fake_request(association_slug)
     context = get_event_context(request, event_slug)
     print_character_go(context, c)
 
 
 @background_auto(queue="pdf")
-def print_run_bkg(a: Association, event_slug: str) -> None:
+def print_run_bkg(association_slug: str, event_slug: str) -> None:
     """Print all background materials for a run including gallery, profiles, characters, and handouts.
 
     Args:
-        a: The association object containing event data
+        association_slug: The association object containing event data
         event_slug: String identifier for the specific run
 
     Returns:
         None
     """
     # Create fake request context and get event run data
-    request = get_fake_request(a)
+    request = get_fake_request(association_slug)
     context = get_event_context(request, event_slug)
 
     # Print gallery and character profiles
@@ -746,7 +746,7 @@ def print_run_bkg(a: Association, event_slug: str) -> None:
 # ## OLD PRINTING
 
 
-def odt_template(context: dict, char: object, fp: str, template: str, aux_template: str) -> None:
+def odt_template(context: dict, char: dict, fp: str, template: str, aux_template: str) -> None:
     """Execute ODT template generation with retry mechanism.
 
     Attempts to execute ODT template generation with automatic retry
@@ -754,7 +754,7 @@ def odt_template(context: dict, char: object, fp: str, template: str, aux_templa
 
     Args:
         context: Context dictionary for template rendering
-        char: Character object for template processing
+        char: Character dict data for template processing
         fp: File path for output generation
         template: Primary template identifier
         aux_template: Auxiliary template identifier

@@ -106,6 +106,10 @@
                     <a href="{% url 'character_external' run.get_slug el.access_token %}"
                        qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                 {% endif %}
+                {% if features.print_pdf %}
+                    <a href="{% url 'orga_characters_sheet_pdf' run.get_slug el.id %}"
+                       qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
+                {% endif %}
             </td>
             {% if user_character_max %}<td class="player">{{ el.player.show_nick }}</td>{% endif %}
             {% if features.campaign and event.parent %}
