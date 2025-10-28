@@ -99,7 +99,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
             str: URL for the event view using model slug
         """
         # noinspection PyUnresolvedReferences
-        return reverse("event", kwargs={"s": self.slug})
+        return reverse("event", kwargs={"event_slug": self.slug})
 
     def small_text(self):
         """Get truncated text preview.

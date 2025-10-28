@@ -313,11 +313,11 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
         PermissionDenied: If user lacks payment feature access
         Http404: If event or registration not found
     """
-    # Check if user has permission to access payment features
-    check_association_feature(request, "payment")
-
     # Get event context and validate user registration status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
+
+    # Check if user has permission to access payment features
+    check_association_feature(request, context, "payment")
 
     # Verify user has valid registration for this event
     if not context["run"].reg:

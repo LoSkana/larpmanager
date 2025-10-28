@@ -216,7 +216,7 @@ def character_your_link(context: dict, character, path: str = None) -> str:
     url = reverse(
         "character",
         kwargs={
-            "s": context["run"].get_slug(),
+            "event_slug": context["run"].get_slug(),
             "num": character.number,
         },
     )

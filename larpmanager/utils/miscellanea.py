@@ -272,7 +272,7 @@ def _go_centauri(context: dict) -> bool:
     Returns:
         bool: True if Centauri should be displayed
     """
-    if "member" not in context:
+    if not context["member"]:
         return False
 
     if context["member"].language == "en":

@@ -141,7 +141,7 @@ def is_shuttle(request: HttpRequest) -> bool:
     return "shuttle" in request.association and request.user.member.id in request.association["shuttle"]
 
 
-def update_payment_details(request, context: dict) -> None:
+def update_payment_details(context: dict) -> None:
     """Update context with payment details for the association."""
     payment_details = fetch_payment_details(context["association_id"])
     context.update(payment_details)
