@@ -664,7 +664,7 @@ def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created
 # ## TASKS
 
 
-def print_handout_go(context: HttpRequest, character: Character) -> HttpResponse:
+def print_handout_go(context: dict, character: Character) -> HttpResponse:
     """Retrieve character handout and generate printable version."""
     get_handout(context, character)
     return print_handout(context)
