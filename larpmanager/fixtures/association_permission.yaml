@@ -430,3 +430,13 @@
     hidden: false
     feature: warehouse
     module: warehouse
+- model: larpmanager.associationpermission
+  fields:
+    name: Translations
+    descr: Customize translations of words and phrases in the organization interface
+    slug: exe_translations
+    number: 31
+    config: null
+    hidden: false
+    feature: translation
+    module: appearance

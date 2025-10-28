@@ -36,6 +36,7 @@ from larpmanager.forms.association import (
     ExeAssociationForm,
     ExeAssociationRoleForm,
     ExeAssociationTextForm,
+    ExeAssociationTranslationForm,
     ExeConfigForm,
     ExeFeatureForm,
     ExePreferencesForm,
@@ -43,7 +44,7 @@ from larpmanager.forms.association import (
 )
 from larpmanager.forms.member import ExeProfileForm
 from larpmanager.models.access import AssociationPermission, AssociationRole
-from larpmanager.models.association import Association, AssociationText
+from larpmanager.models.association import Association, AssociationText, AssociationTranslation
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.base import check_association_context
@@ -125,6 +126,23 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_texts_edit(request, num):
     return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
+
+
+@login_required
+def exe_translations(request: HttpRequest) -> HttpResponse:
+    """Display list of association translations."""
+    # Check permission and get base context
+    context = check_association_context(request, "exe_translations")
+
+    # Fetch and order association translations for display
+    context["list"] = AssociationTranslation.objects.filter(association_id=context["association_id"])
+
+    return render(request, "larpmanager/exe/translations.html", context)
+
+
+@login_required
+def exe_translations_edit(request, num):
+    return exe_edit(request, ExeAssociationTranslationForm, num, "exe_translations")
 
 
 @login_required

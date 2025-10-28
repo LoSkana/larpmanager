@@ -185,6 +185,16 @@ urlpatterns = [
         name="exe_texts_edit",
     ),
     path(
+        "manage/translations/",
+        views_eas.exe_translations,
+        name="exe_translations",
+    ),
+    path(
+        "manage/translations/edit/<int:num>/",
+        views_eas.exe_translations_edit,
+        name="exe_translations_edit",
+    ),
+    path(
         "manage/roles/",
         views_eas.exe_roles,
         name="exe_roles",

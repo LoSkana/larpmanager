@@ -365,6 +365,8 @@ class AssociationTranslation(BaseModel):
     These translations take precedence over the default .po file translations.
     """
 
+    number = models.IntegerField(null=True, blank=True)
+
     association = models.ForeignKey(
         Association, on_delete=models.CASCADE, related_name="custom_translations", verbose_name=_("Association")
     )
@@ -378,12 +380,12 @@ class AssociationTranslation(BaseModel):
 
     msgid = models.TextField(
         verbose_name=_("Original text"),
-        help_text=_("The original text to translate (usually in English)"),
+        help_text=_("The original text to translate (in English)"),
         db_index=True,
     )
 
     msgstr = models.TextField(
-        verbose_name=_("Translated text"), help_text=_("The custom translation for this association")
+        verbose_name=_("Translated text"), help_text=_("The custom translation for this organization")
     )
 
     context = models.CharField(

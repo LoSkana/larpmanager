@@ -39,7 +39,7 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import AssociationPermission, AssociationRole
-from larpmanager.models.association import Association, AssociationText, AssociationTextType
+from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
 from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
@@ -225,6 +225,19 @@ class ExeAssociationTextForm(MyForm):
                 self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data
+
+
+class ExeAssociationTranslationForm(MyForm):
+    """Form for managing custom association translations."""
+
+    page_title = _("Translations")
+
+    page_info = _("Manage organization-specific translations")
+
+    class Meta:
+        abstract = True
+        model = AssociationTranslation
+        exclude = ("number",)
 
 
 class ExeAssociationRoleForm(MyForm):

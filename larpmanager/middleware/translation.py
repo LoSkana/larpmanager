@@ -18,117 +18,53 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.utils import translation
-from django.utils.functional import lazy
+from gettext import GNUTranslations
 
-from larpmanager.cache.association_translation import get_association_translation
+from django.utils import translation as dj_translation
+from django.utils.deprecation import MiddlewareMixin
+from django.utils.translation import trans_real
+
+from larpmanager.cache.association_translation import get_association_translation_cache
 
 
-class AssociationTranslationMiddleware:
-    """Middleware to apply association-specific translations.
+class AssociationTranslationMiddleware(MiddlewareMixin):
+    """Middleware that injects association-specific translation overrides."""
 
-    This middleware intercepts Django's translation system and overrides
-    translations with association-specific ones when available. It works
-    transparently with existing {% trans %} tags and _() calls.
-    """
+    def process_request(self, request):
+        association_id = getattr(request, "association", {}).get("id", None)
+        if not association_id:
+            return
 
-    def __init__(self, get_response):
-        self.get_response = get_response
+        language = getattr(request, "LANGUAGE_CODE", dj_translation.get_language())
+        base_translation = trans_real.translation(language)
 
-    def __call__(self, request):
-        """Process request and inject association translation override.
+        overrides = get_association_translation_cache(association_id, language) or {}
+        assoc_trans = AssociationTranslations(base_translation, overrides)
 
-        Args:
-            request: Django HTTP request object
+        # Replace only thread-local active translation
+        trans_real._active.value = assoc_trans
 
-        Returns:
-            HttpResponse: Response with association translations applied
-        """
-        # Check if association context is available
-        if hasattr(request, "assoc") and request.assoc:
-            association_id = request.assoc.get("id")
-            language = getattr(request, "LANGUAGE_CODE", None)
-            if association_id:
-                # Store association ID in thread-local storage for translation lookup
-                _translation_override.value = get_association_translation(association_id, language)
-        else:
-            # Clear any previous association ID
-            _translation_override.value = None
-
-        response = self.get_response(request)
-
-        # Clean up thread-local storage
-        _translation_override.value = None
-
+    def process_response(self, request, response):
+        # Restore normal translation object
+        trans_real._active.value = None
+        dj_translation.deactivate_all()
         return response
 
 
-# Thread-local storage for current association ID
-class ThreadLocalAssociationTranslations:
-    """Thread-local storage for association ID during request processing."""
+class AssociationTranslations(GNUTranslations):
+    """Custom Translations object that supports per-association overrides."""
 
-    def __init__(self):
-        import threading
+    def __init__(self, base_translation, overrides):
+        self._base = base_translation
+        self._overrides = overrides or {}
 
-        self._local = threading.local()
+    def gettext(self, message):
+        if message in self._overrides:
+            return self._overrides[message]
+        return self._base.gettext(message)
 
-    @property
-    def value(self):
-        return getattr(self._local, "association_id", None)
-
-    @value.setter
-    def value(self, association_id):
-        self._local.association_id = association_id
-
-
-_translation_override = ThreadLocalAssociationTranslationsco()
-
-
-# Monkey-patch Django's gettext to support association overrides
-_original_gettext = translation.gettext
-_original_gettext_lazy = translation.gettext_lazy
-
-
-def _association_aware_gettext(message):
-    """Get translation with association override support.
-
-    Args:
-        message: The message to translate
-
-    Returns:
-        str: Translated message, using association override if available
-    """
-    # Get standard translation first
-    standard_translation = _original_gettext(message)
-
-    # Check if we have an association context
-    association_id = _translation_override.value
-    if association_id:
-        # Try to get association-specific translation
-        custom_translation = get_association_translation(association_id, message)
-        if custom_translation:
-            return custom_translation
-
-    # Return standard translation if no override found
-    return standard_translation
-
-
-def _association_aware_gettext_lazy(message):
-    """Lazy version of association-aware gettext.
-
-    Args:
-        message: The message to translate
-
-    Returns:
-        Promise: Lazy translation promise
-    """
-    return lazy(_association_aware_gettext, str)(message)
-
-
-# Apply the monkey patch
-translation.gettext = _association_aware_gettext
-translation.gettext_lazy = _association_aware_gettext_lazy
-
-# Also patch ugettext variants (deprecated but still used)
-translation.ugettext = _association_aware_gettext
-translation.ugettext_lazy = _association_aware_gettext_lazy
+    def ngettext(self, singular, plural, n):
+        key = singular if n == 1 else plural
+        if key in self._overrides:
+            return self._overrides[key]
+        return self._base.ngettext(singular, plural, n)

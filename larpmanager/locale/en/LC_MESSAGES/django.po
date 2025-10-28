@@ -237,6 +237,12 @@ msgstr ""
 msgid "Content of mail reminding participants to fill their profile"
 msgstr ""
 
+msgid "Translations"
+msgstr ""
+
+msgid "Manage organization-specific translations"
+msgstr ""
+
 msgid "Roles"
 msgstr ""
 
@@ -2911,13 +2917,13 @@ msgstr ""
 msgid "Original text"
 msgstr ""
 
-msgid "The original text to translate (usually in English)"
+msgid "The original text to translate (in English)"
 msgstr ""
 
 msgid "Translated text"
 msgstr ""
 
-msgid "The custom translation for this association"
+msgid "The custom translation for this organization"
 msgstr ""
 
 msgid "Context"
@@ -5320,7 +5326,13 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-msgid "This page summarizes the association's custom texts"
+msgid "This page summarizes the organizations's custom texts"
+msgstr ""
+
+msgid "This page summarizes the organization's custom translations"
+msgstr ""
+
+msgid "Translation"
 msgstr ""
 
 msgid "Url Shortner"
@@ -8130,6 +8142,14 @@ msgstr ""
 msgid "Now you can upload content and generate access tokens"
 msgstr ""
 
+msgid ""
+"Allows to fine-tune how words and phrases are translated in the "
+"organization's space"
+msgstr ""
+
+msgid "Now you can define custom organization translations"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -8282,6 +8302,10 @@ msgid "Manage warehouse movements"
 msgstr ""
 
 msgid "Manage warehouse tags"
+msgstr ""
+
+msgid ""
+"Customize translations of words and phrases in the organization interface"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"
