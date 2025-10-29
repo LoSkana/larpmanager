@@ -390,9 +390,6 @@ msgstr "Tomter"
 msgid "Price"
 msgstr "Pris"
 
-msgid "Print"
-msgstr "Skriv ut"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -1040,9 +1037,6 @@ msgstr "Förväntad"
 
 msgid "Expenses"
 msgstr "Kostnader"
-
-msgid "External"
-msgstr "Extern"
 
 msgid "Factions"
 msgstr "Fraktioner"

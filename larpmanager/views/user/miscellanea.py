@@ -53,7 +53,6 @@ from larpmanager.utils.common import get_album, get_workshop
 from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.pdf import (
     print_handout,
-    return_pdf,
 )
 
 logger = logging.getLogger(__name__)
@@ -191,9 +190,8 @@ def handout_ext(request: HttpRequest, event_slug: str, cod: str) -> HttpResponse
     context = get_event_context(request, event_slug)
     context["handout"] = get_object_or_404(Handout, event=context["event"], cod=cod)
 
-    # Generate PDF and return as downloadable response
-    fp = print_handout(context)
-    return return_pdf(fp, str(context["handout"]))
+    # Generate PDF response
+    return print_handout(context)
 
 
 def album_aux(request, context, parent_album):

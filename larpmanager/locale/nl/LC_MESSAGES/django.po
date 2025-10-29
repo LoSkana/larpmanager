@@ -390,9 +390,6 @@ msgstr "Percelen"
 msgid "Price"
 msgstr "Prijs"
 
-msgid "Print"
-msgstr "Afdrukken"
-
 msgid "Quest"
 msgstr "Zoektocht"
 
@@ -1040,9 +1037,6 @@ msgstr "Verwacht"
 
 msgid "Expenses"
 msgstr "Uitgaven"
-
-msgid "External"
-msgstr "Extern"
 
 msgid "Factions"
 msgstr "Facties"

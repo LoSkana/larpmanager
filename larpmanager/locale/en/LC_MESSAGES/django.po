@@ -7352,12 +7352,6 @@ msgid ""
 "This page shows the handouts (information dissemination tools) of the event"
 msgstr ""
 
-msgid "Print"
-msgstr ""
-
-msgid "External"
-msgstr ""
-
 msgid "This page shows the plots of the event"
 msgstr ""
 

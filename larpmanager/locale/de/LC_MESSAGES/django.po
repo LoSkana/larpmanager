@@ -390,9 +390,6 @@ msgstr "Grundstücke"
 msgid "Price"
 msgstr "Preis"
 
-msgid "Print"
-msgstr "Drucken"
-
 msgid "Quest"
 msgstr "Suche"
 
@@ -1040,9 +1037,6 @@ msgstr "Erwartet"
 
 msgid "Expenses"
 msgstr "Ausgaben"
-
-msgid "External"
-msgstr "Extern"
 
 msgid "Factions"
 msgstr "Fraktionen"

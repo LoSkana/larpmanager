@@ -390,9 +390,6 @@ msgstr "Tramas"
 msgid "Price"
 msgstr "Precio"
 
-msgid "Print"
-msgstr "Imprimir"
-
 msgid "Quest"
 msgstr "Misiones"
 
@@ -1040,9 +1037,6 @@ msgstr "Previsto"
 
 msgid "Expenses"
 msgstr "Gastos"
-
-msgid "External"
-msgstr "Exterior"
 
 msgid "Factions"
 msgstr "Facciones"

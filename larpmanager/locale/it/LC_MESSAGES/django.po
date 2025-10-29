@@ -390,9 +390,6 @@ msgstr "Trame"
 msgid "Price"
 msgstr "Prezzo"
 
-msgid "Print"
-msgstr "Stampa"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -1040,9 +1037,6 @@ msgstr "Atteso"
 
 msgid "Expenses"
 msgstr "Spese"
-
-msgid "External"
-msgstr "External"
 
 msgid "Factions"
 msgstr "Fazioni"

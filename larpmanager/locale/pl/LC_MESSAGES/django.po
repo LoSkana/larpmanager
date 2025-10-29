@@ -390,9 +390,6 @@ msgstr "Działki"
 msgid "Price"
 msgstr "Cena"
 
-msgid "Print"
-msgstr "Drukuj"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -1040,9 +1037,6 @@ msgstr "Oczekiwany"
 
 msgid "Expenses"
 msgstr "Wydatki"
-
-msgid "External"
-msgstr "Zewnętrzne"
 
 msgid "Factions"
 msgstr "Frakcje"

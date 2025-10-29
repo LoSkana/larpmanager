@@ -44,6 +44,7 @@
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
                 {% if features.print_pdf %}
                     <a href="{% url 'orga_factions_sheet_pdf' run.get_slug el.id %}"
+                       download
                        qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
                 {% endif %}
             </td>

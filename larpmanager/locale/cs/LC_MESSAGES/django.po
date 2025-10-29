@@ -390,9 +390,6 @@ msgstr "Pozemky"
 msgid "Price"
 msgstr "Cena"
 
-msgid "Print"
-msgstr "Tisk"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -1040,9 +1037,6 @@ msgstr "Očekávané"
 
 msgid "Expenses"
 msgstr "Výdaje"
-
-msgid "External"
-msgstr "Externí"
 
 msgid "Factions"
 msgstr "Frakce"

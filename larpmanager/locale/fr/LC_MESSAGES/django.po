@@ -390,9 +390,6 @@ msgstr "Parcelles"
 msgid "Price"
 msgstr "Prix"
 
-msgid "Print"
-msgstr "Imprimer"
-
 msgid "Quest"
 msgstr "Quête"
 
@@ -1040,9 +1037,6 @@ msgstr "Attendu"
 
 msgid "Expenses"
 msgstr "Dépenses"
-
-msgid "External"
-msgstr "Externe"
 
 msgid "Factions"
 msgstr "Factions"

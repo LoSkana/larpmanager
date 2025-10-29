@@ -108,6 +108,7 @@
                 {% endif %}
                 {% if features.print_pdf %}
                     <a href="{% url 'orga_characters_friendly_pdf' run.get_slug el.id %}"
+                       download
                        qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
                 {% endif %}
             </td>
