@@ -1,0 +1,25 @@
+{% load i18n %}
+<p>Hi {{ member.name }},</p>
+<p>Thanks for joining LarpManager!</p>
+<p>
+    Here’s your organization’s LarpManager page: <a href="https://{{ association.slug }}.larpmanager.com">{{ association.name }}</a>
+</p>
+<p>
+    And here’s the link to manage your organization: <a href="https://{{ association.slug }}.larpmanager.com/manage">Management {{ association.name }}</a>
+</p>
+<p>(You might want to keep this email handy.)</p>
+<p>To get started, check these out:</p>
+<ul>
+    <li>
+        <a href="https://{{ association.slug }}.larpmanager.com/tutorials">Tutorials</a>: Short guides to help you set up your events
+    </li>
+    <li>
+        <a href="https://discord.gg/C4KuyQbuft">Discord</a>: Join our Discord for help, ideas, or to report bugs
+    </li>
+</ul>
+<p>Got questions? Just reply to this email.</p>
+<p>Glad to have you with us!</p>
+<br />
+<p>
+    <i>The LarpManager team</i>
+</p>

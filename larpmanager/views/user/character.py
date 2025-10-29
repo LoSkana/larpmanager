@@ -937,7 +937,7 @@ def character_relationships_edit(request, event_slug, num, oth):
 
 
 @require_POST
-def show_char(request: HttpRequest, event_run_slug: str) -> JsonResponse:
+def show_char(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Show character information in a tooltip format.
 
     Retrieves character data based on a search parameter and returns
@@ -945,7 +945,7 @@ def show_char(request: HttpRequest, event_run_slug: str) -> JsonResponse:
 
     Args:
         request: The HTTP request object containing POST data
-        event_run_slug: String identifier for the event/run context
+        event_slug: String identifier for the event/run context
 
     Returns:
         JsonResponse containing character tooltip HTML content
@@ -954,7 +954,7 @@ def show_char(request: HttpRequest, event_run_slug: str) -> JsonResponse:
         Http404: If search parameter is malformed, invalid, or character not found
     """
     # Get event context and populate character cache
-    context = get_event_context(request, event_run_slug)
+    context = get_event_context(request, event_slug)
     get_event_cache_all(context)
 
     # Extract and validate search parameter from POST data
