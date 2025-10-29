@@ -6613,6 +6613,9 @@ msgstr ""
 msgid "PDF Profiles"
 msgstr ""
 
+msgid "Bulk download"
+msgstr ""
+
 msgid "Try the sheet generation"
 msgstr ""
 
@@ -6641,6 +6644,12 @@ msgid "download"
 msgstr ""
 
 msgid "Regenerate (recreates all pdf: slow)"
+msgstr ""
+
+msgid "Pdf bulk"
+msgstr ""
+
+msgid "This page allows you to select items to bulk download"
 msgstr ""
 
 msgid "Copy"
@@ -8723,6 +8732,21 @@ msgid "Portraits"
 msgstr ""
 
 msgid "Profiles"
+msgstr ""
+
+msgid "Failed to add handout"
+msgstr ""
+
+msgid "Failed to add faction"
+msgstr ""
+
+msgid "Failed to add character"
+msgstr ""
+
+msgid "Failed to add profiles"
+msgstr ""
+
+msgid "Failed to add gallery"
 msgstr ""
 
 #, python-format

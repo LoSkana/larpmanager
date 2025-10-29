@@ -30,12 +30,13 @@ from larpmanager.cache.character import get_event_cache_all, get_writing_element
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, Faction, Handout
 from larpmanager.utils.base import check_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
 from larpmanager.utils.common import get_element
 from larpmanager.utils.pdf import (
     add_pdf_instructions,
+    print_bulk,
     print_character,
     print_character_bkg,
     print_character_friendly,
@@ -88,6 +89,32 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Render the PDF configuration template with character data
     return render(request, "larpmanager/orga/characters/pdf.html", context)
+
+
+@login_required
+def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Check user permissions and get event context
+    context = check_event_context(request, event_slug, "orga_characters_pdf")
+
+    if request.method == "POST":
+        return print_bulk(context, request)
+
+    # Select all characters, factions, handouts
+    context["list"] = {
+        "gallery": {"name": _("Gallery")},
+        "profiles": {"name": _("Profiles")},
+    }
+
+    mappings = {
+        "character": Character,
+        "faction": Faction,
+        "handout": Handout,
+    }
+    for key_name, value_type in mappings.items():
+        for element in context["event"].get_elements(value_type):
+            context["list"][f"{key_name}_{element.id}"] = {"name": element.name, "type": value_type._meta.model_name}
+
+    return render(request, "larpmanager/orga/characters/pdf_bulk.html", context)
 
 
 @login_required

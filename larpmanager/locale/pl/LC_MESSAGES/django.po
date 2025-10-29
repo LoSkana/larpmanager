@@ -1104,6 +1104,9 @@ msgstr "Paszport"
 msgid "Payments"
 msgstr "Płatności"
 
+msgid "Pdf bulk"
+msgstr "Pdf luzem"
+
 msgid "Personal"
 msgstr "Osobiste"
 
@@ -2103,6 +2106,9 @@ msgstr "Autoryzacja"
 
 msgid "Average value"
 msgstr "Wartość średnia"
+
+msgid "Bulk download"
+msgstr "Pobieranie zbiorcze"
 
 msgid "Cancellations"
 msgstr "Anulowanie"
@@ -3463,6 +3469,15 @@ msgstr "Rejestracja zewnętrzna"
 msgid "Failed password reset"
 msgstr "Nieudany reset hasła"
 
+msgid "Failed to add faction"
+msgstr "Nie udało się dodać frakcji"
+
+msgid "Failed to add gallery"
+msgstr "Nie udało się dodać galerii"
+
+msgid "Failed to add handout"
+msgstr "Nie udało się dodać ulotki"
+
 msgid "Go to the casting for"
 msgstr "Przejdź do castingu na"
 
@@ -3611,6 +3626,9 @@ msgstr "Współpracownicy ds. wydatków"
 msgid "External register link"
 msgstr "Link do rejestru zewnętrznego"
 
+msgid "Failed to add profiles"
+msgstr "Nie udało się dodać profili"
+
 msgid "Follow the steps below"
 msgstr "Wykonaj poniższe czynności"
 
@@ -3747,6 +3765,9 @@ msgstr "Pobierz pełny arkusz"
 
 msgid "Early registration link"
 msgstr "Link do wczesnej rejestracji"
+
+msgid "Failed to add character"
+msgstr "Nie udało się dodać znaku"
 
 msgid "Indicate only if rate 0"
 msgstr "Wskazać tylko, jeśli stawka 0"
@@ -6141,6 +6162,9 @@ msgstr "Znak ma brakujące wartości w polach obowiązkowych"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Podano całkowitą liczbę losów do rozlosowania"
+
+msgid "This page allows you to select items to bulk download"
+msgstr "Ta strona umożliwia wybranie elementów do pobrania zbiorczego"
 
 msgid "This page shows all invoices registered in the system"
 msgstr ""

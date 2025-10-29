@@ -1104,6 +1104,9 @@ msgstr "Pas"
 msgid "Payments"
 msgstr "Platby"
 
+msgid "Pdf bulk"
+msgstr "Pdf ve velkém"
+
 msgid "Personal"
 msgstr "Zaměstnanci"
 
@@ -2103,6 +2106,9 @@ msgstr "Autorizace"
 
 msgid "Average value"
 msgstr "Průměrná hodnota"
+
+msgid "Bulk download"
+msgstr "Hromadné stahování"
 
 msgid "Cancellations"
 msgstr "Storna"
@@ -3463,6 +3469,15 @@ msgstr "Externí registrace"
 msgid "Failed password reset"
 msgstr "Obnovení hesla se nezdařilo"
 
+msgid "Failed to add faction"
+msgstr "Nepodařilo se přidat frakci"
+
+msgid "Failed to add gallery"
+msgstr "Nepodařilo se přidat galerii"
+
+msgid "Failed to add handout"
+msgstr "Nepodařilo se přidat leták"
+
 msgid "Go to the casting for"
 msgstr "Přejděte na casting"
 
@@ -3611,6 +3626,9 @@ msgstr "Výdaje na zaměstnance"
 msgid "External register link"
 msgstr "Odkaz na externí registr"
 
+msgid "Failed to add profiles"
+msgstr "Nepodařilo se přidat profily"
+
 msgid "Follow the steps below"
 msgstr "Postupujte podle následujících kroků"
 
@@ -3747,6 +3765,9 @@ msgstr "Stáhněte si kompletní list"
 
 msgid "Early registration link"
 msgstr "Odkaz pro včasnou registraci"
+
+msgid "Failed to add character"
+msgstr "Nepodařilo se přidat znak"
 
 msgid "Indicate only if rate 0"
 msgstr "Uveďte pouze v případě sazby 0"
@@ -6138,6 +6159,9 @@ msgstr "Znak má chybějící hodnoty v povinných polích"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
+
+msgid "This page allows you to select items to bulk download"
+msgstr "Na této stránce můžete vybrat položky k hromadnému stažení"
 
 msgid "This page shows all invoices registered in the system"
 msgstr "Na této stránce jsou zobrazeny všechny faktury zapsané v systému"

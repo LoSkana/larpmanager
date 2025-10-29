@@ -1104,6 +1104,9 @@ msgstr "Paspoort"
 msgid "Payments"
 msgstr "Betalingen"
 
+msgid "Pdf bulk"
+msgstr "Pdf bulk"
+
 msgid "Personal"
 msgstr "Personeel"
 
@@ -2103,6 +2106,9 @@ msgstr "Autorisatie"
 
 msgid "Average value"
 msgstr "Gemiddelde waarde"
+
+msgid "Bulk download"
+msgstr "Bulk downloaden"
 
 msgid "Cancellations"
 msgstr "Annuleringen"
@@ -3463,6 +3469,15 @@ msgstr "Externe registratie"
 msgid "Failed password reset"
 msgstr "Wachtwoord resetten mislukt"
 
+msgid "Failed to add faction"
+msgstr "Factie niet toegevoegd"
+
+msgid "Failed to add gallery"
+msgstr "Galerij niet toegevoegd"
+
+msgid "Failed to add handout"
+msgstr "Hand-out niet toegevoegd"
+
 msgid "Go to the casting for"
 msgstr "Ga naar casting voor"
 
@@ -3611,6 +3626,9 @@ msgstr "Personeelskosten"
 msgid "External register link"
 msgstr "Link naar extern register"
 
+msgid "Failed to add profiles"
+msgstr "Het is niet gelukt om profielen toe te voegen"
+
 msgid "Follow the steps below"
 msgstr "Volg de onderstaande stappen"
 
@@ -3747,6 +3765,9 @@ msgstr "Volledig blad downloaden"
 
 msgid "Early registration link"
 msgstr "Link voor vroege registratie"
+
+msgid "Failed to add character"
+msgstr "Geen teken toegevoegd"
 
 msgid "Indicate only if rate 0"
 msgstr "Alleen aangeven als tarief 0"
@@ -6146,6 +6167,9 @@ msgstr "Het teken heeft ontbrekende waarden in verplichte velden"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
+
+msgid "This page allows you to select items to bulk download"
+msgstr "Op deze pagina kunt u items selecteren die u in bulk wilt downloaden"
 
 msgid "This page shows all invoices registered in the system"
 msgstr "Deze pagina toont alle facturen die in het systeem zijn geregistreerd"

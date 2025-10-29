@@ -1104,6 +1104,9 @@ msgstr "Pass"
 msgid "Payments"
 msgstr "Betalningar"
 
+msgid "Pdf bulk"
+msgstr "Pdf bulk"
+
 msgid "Personal"
 msgstr "Personal"
 
@@ -2103,6 +2106,9 @@ msgstr "Auktorisation"
 
 msgid "Average value"
 msgstr "Genomsnittligt värde"
+
+msgid "Bulk download"
+msgstr "Bulk nedladdning"
 
 msgid "Cancellations"
 msgstr "Avbokningar"
@@ -3463,6 +3469,15 @@ msgstr "Extern registrering"
 msgid "Failed password reset"
 msgstr "Återställning av lösenord misslyckades"
 
+msgid "Failed to add faction"
+msgstr "Misslyckades med att lägga till fraktion"
+
+msgid "Failed to add gallery"
+msgstr "Misslyckades med att lägga till galleri"
+
+msgid "Failed to add handout"
+msgstr "Misslyckades med att lägga till handout"
+
 msgid "Go to the casting for"
 msgstr "Gå till casting för"
 
@@ -3611,6 +3626,9 @@ msgstr "Kostnader för anställda"
 msgid "External register link"
 msgstr "Extern registerlänk"
 
+msgid "Failed to add profiles"
+msgstr "Misslyckades med att lägga till profiler"
+
 msgid "Follow the steps below"
 msgstr "Följ stegen nedan"
 
@@ -3747,6 +3765,9 @@ msgstr "Ladda ner fullständigt blad"
 
 msgid "Early registration link"
 msgstr "Länk för tidig registrering"
+
+msgid "Failed to add character"
+msgstr "Misslyckades med att lägga till karaktär"
 
 msgid "Indicate only if rate 0"
 msgstr "Ange endast om hastighet 0"
@@ -6137,6 +6158,9 @@ msgstr "Tecknet har saknade värden i obligatoriska fält"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
+
+msgid "This page allows you to select items to bulk download"
+msgstr "På den här sidan kan du välja objekt att ladda ner i bulk"
 
 msgid "This page shows all invoices registered in the system"
 msgstr "Denna sida visar alla fakturor som finns registrerade i systemet"

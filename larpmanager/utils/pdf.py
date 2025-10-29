@@ -17,17 +17,20 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import io
 import logging
+import os
 import os.path
 import re
 import shutil
 import time
+import zipfile
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import lxml.etree
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, HttpResponse
@@ -38,20 +41,22 @@ from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
 from larpmanager.cache.association import get_cache_association
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
+from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
+    Faction,
     Handout,
 )
 from larpmanager.utils.base import get_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import get_handout
+from larpmanager.utils.common import get_element, get_handout
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 from larpmanager.utils.text import get_association_text
@@ -1023,3 +1028,112 @@ def get_trait_character(run, number):
         return registration_character_rels.first().character
     except ObjectDoesNotExist:
         return None
+
+
+def print_bulk(context, request):
+    # Create in-memory zip file
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        _bulk_gallery(context, request, zip_file)
+
+        _bulk_profiles(context, request, zip_file)
+
+        _bulk_characters(context, request, zip_file)
+
+        _bulk_factions(context, request, zip_file)
+
+        _handle_handouts(context, request, zip_file)
+
+    # Return zip file as download
+    zip_buffer.seek(0)
+    response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_pdfs_{timestamp}.zip"'
+    return response
+
+
+def _handle_handouts(context, request, zip_file):
+    # Handle handouts
+    for handout in context["event"].get_elements(Handout):
+        if request.POST.get(f"handout_{handout.id}"):
+            try:
+                get_handout(context, handout.number)
+                filepath = context["handout"].get_filepath(context["run"])
+                # Generate if doesn't exist or force regenerate
+                if not os.path.exists(filepath) or reprint(filepath):
+                    print_handout(context, True)
+                if os.path.exists(filepath):
+                    zip_file.write(filepath, f"handout_{handout.number}_{handout.name}.pdf")
+            except Exception as e:
+                messages.warning(request, _("Failed to add handout") + f" #{handout.number}: {e}")
+
+
+def _bulk_factions(context, request, zip_file):
+    # Handle factions
+    for faction in context["event"].get_elements(Faction):
+        if request.POST.get(f"faction_{faction.id}"):
+            try:
+                get_element(context, faction.number, "faction", Faction)
+                get_event_cache_all(context)
+
+                if faction.number in context["factions"]:
+                    context["sheet_faction"] = context["factions"][faction.number]
+                else:
+                    continue
+
+                context["fact"] = get_writing_element_fields(
+                    context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
+                )
+
+                filepath = context["faction"].get_sheet_filepath(context["run"])
+                # Generate if doesn't exist or force regenerate
+                if not os.path.exists(filepath) or reprint(filepath):
+                    print_faction(context, True)
+                if os.path.exists(filepath):
+                    zip_file.write(filepath, f"faction_{faction.number}_{faction.name}.pdf")
+            except Exception as e:
+                messages.warning(request, _("Failed to add faction") + f" #{faction.number}: {e}")
+
+
+def _bulk_characters(context, request, zip_file):
+    # Handle characters
+    for character in context["event"].get_elements(Character):
+        if request.POST.get(f"character_{character.id}"):
+            try:
+                get_char_check(request, context, character.number, True)
+                filepath = context["character"].get_sheet_filepath(context["run"])
+                # Generate if doesn't exist or force regenerate
+                if not os.path.exists(filepath) or reprint(filepath):
+                    print_character(context, True)
+                if os.path.exists(filepath):
+                    zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
+            except Exception as e:
+                messages.warning(request, _("Failed to add character") + f" #{character.number}: {e}")
+
+
+def _bulk_profiles(context, request, zip_file):
+    # Handle profiles
+    if request.POST.get("profiles"):
+        try:
+            filepath = context["run"].get_profiles_filepath()
+            # Generate if doesn't exist or force regenerate
+            if not os.path.exists(filepath) or reprint(filepath):
+                print_profiles(context, True)
+            if os.path.exists(filepath):
+                zip_file.write(filepath, "profiles.pdf")
+        except Exception as e:
+            messages.warning(request, _("Failed to add profiles") + f": {e}")
+
+
+def _bulk_gallery(context, request, zip_file):
+    # Handle gallery
+    if request.POST.get("gallery"):
+        try:
+            filepath = context["run"].get_gallery_filepath()
+            # Generate if doesn't exist or force regenerate
+            if not os.path.exists(filepath) or reprint(filepath):
+                print_gallery(context, True)
+            if os.path.exists(filepath):
+                zip_file.write(filepath, "gallery.pdf")
+        except Exception as e:
+            messages.warning(request, _("Failed to add gallery") + f": {e}")

@@ -1104,6 +1104,9 @@ msgstr "Pasaporte"
 msgid "Payments"
 msgstr "Pagos"
 
+msgid "Pdf bulk"
+msgstr "Pdf a granel"
+
 msgid "Personal"
 msgstr "Personal"
 
@@ -2103,6 +2106,9 @@ msgstr "Autorización"
 
 msgid "Average value"
 msgstr "Valor medio"
+
+msgid "Bulk download"
+msgstr "Descarga masiva"
 
 msgid "Cancellations"
 msgstr "Cancelaciones"
@@ -3463,6 +3469,15 @@ msgstr "Registro externo"
 msgid "Failed password reset"
 msgstr "Error al restablecer la contraseña"
 
+msgid "Failed to add faction"
+msgstr "Fallo al añadir facción"
+
+msgid "Failed to add gallery"
+msgstr "Fallo al añadir galería"
+
+msgid "Failed to add handout"
+msgstr "No se ha podido añadir el folleto"
+
 msgid "Go to the casting for"
 msgstr "Ir a la asignación para"
 
@@ -3611,6 +3626,9 @@ msgstr "Gastos de colaboradores"
 msgid "External register link"
 msgstr "Enlace de registro externo"
 
+msgid "Failed to add profiles"
+msgstr "Error al añadir perfiles"
+
 msgid "Follow the steps below"
 msgstr "Sigue los pasos a continuación"
 
@@ -3747,6 +3765,9 @@ msgstr "Descargar la ficha completa"
 
 msgid "Early registration link"
 msgstr "Enlace de inscripción anticipada"
+
+msgid "Failed to add character"
+msgstr "Fallo al añadir carácter"
 
 msgid "Indicate only if rate 0"
 msgstr "Indicar sólo si tasa 0"
@@ -6145,6 +6166,11 @@ msgstr "Faltan valores en los campos obligatorios"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Se ha indicado el número total de entradas que se sortearán"
+
+msgid "This page allows you to select items to bulk download"
+msgstr ""
+"Esta página le permite seleccionar los elementos que desea descargar de "
+"forma masiva"
 
 msgid "This page shows all invoices registered in the system"
 msgstr "Esta página muestra todas las facturas registradas en el sistema"

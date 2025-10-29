@@ -271,6 +271,11 @@ urlpatterns = [
         name="orga_characters_pdf",
     ),
     path(
+        "<slug:event_slug>/manage/pdf/bulk/",
+        views_op.orga_characters_pdf_bulk,
+        name="orga_characters_pdf_bulk",
+    ),
+    path(
         "<slug:event_slug>/manage/cache/",
         views_or.orga_reload_cache,
         name="orga_reload_cache",

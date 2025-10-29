@@ -1104,6 +1104,9 @@ msgstr "Passeport"
 msgid "Payments"
 msgstr "Paiements"
 
+msgid "Pdf bulk"
+msgstr "Pdf en vrac"
+
 msgid "Personal"
 msgstr "Personnel"
 
@@ -2103,6 +2106,9 @@ msgstr "Autorisation"
 
 msgid "Average value"
 msgstr "Valeur moyenne"
+
+msgid "Bulk download"
+msgstr "Téléchargement en masse"
 
 msgid "Cancellations"
 msgstr "Annulations"
@@ -3463,6 +3469,15 @@ msgstr "Inscription externe"
 msgid "Failed password reset"
 msgstr "La réinitialisation du mot de passe a échoué"
 
+msgid "Failed to add faction"
+msgstr "Échec de l'ajout d'une faction"
+
+msgid "Failed to add gallery"
+msgstr "Échec de l'ajout de la galerie"
+
+msgid "Failed to add handout"
+msgstr "N'a pas ajouté de document"
+
 msgid "Go to the casting for"
 msgstr "Aller au casting pour"
 
@@ -3611,6 +3626,9 @@ msgstr "Frais de personnel"
 msgid "External register link"
 msgstr "Lien vers le registre externe"
 
+msgid "Failed to add profiles"
+msgstr "Échec de l'ajout de profils"
+
 msgid "Follow the steps below"
 msgstr "Suivez les étapes ci-dessous "
 
@@ -3747,6 +3765,9 @@ msgstr "Télécharger la fiche complète"
 
 msgid "Early registration link"
 msgstr "Lien pour l'inscription anticipée"
+
+msgid "Failed to add character"
+msgstr "Échec de l'ajout d'un caractère"
 
 msgid "Indicate only if rate 0"
 msgstr "N'indiquer que si le taux est de 0"
@@ -6166,6 +6187,10 @@ msgstr "Le caractère a des valeurs manquantes dans les champs obligatoires"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Le nombre total de billets à tirer a été indiqué"
+
+msgid "This page allows you to select items to bulk download"
+msgstr ""
+"Cette page vous permet de sélectionner les éléments à télécharger en masse"
 
 msgid "This page shows all invoices registered in the system"
 msgstr "Cette page présente toutes les factures enregistrées dans le système"
