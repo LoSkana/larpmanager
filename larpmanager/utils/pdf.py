@@ -27,7 +27,6 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import lxml.etree
-import pdfkit
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
@@ -213,98 +212,37 @@ def add_pdf_instructions(context: dict) -> None:
         logger.debug(f"Processed PDF context for key '{section_key}': {len(context[section_key])} characters")
 
 
-def xhtml_pdf(context, template_path, output_filename):
+def xhtml_pdf(context, template_path, output_filename, html=False):
     """Generate PDF from Django template using xhtml2pdf.
 
     Args:
         context (dict): Template context dictionary
         template_path (str): Path to Django template file
         output_filename (str): Output PDF file path
+        html (bool): If True, treat template_path as HTML string; if False, as template path.
+              Defaults to False.
 
     Raises:
         Http404: If PDF generation fails with errors
     """
-    template = get_template(template_path)
-
-    rendered_html = template.render(context)
+    # Render HTML content based on input type
+    if html:
+        # Treat template_path as HTML string and render with context
+        template = Template(template_path)
+        django_context = Context(context)
+        html_content = template.render(django_context)
+    else:
+        # Treat template_path as template path and load template
+        template = get_template(template_path)
+        html_content = template.render(context)
 
     with open(output_filename, "wb") as pdf_file:
         # create a pdf
-        pdf_result = pisa.CreatePDF(rendered_html, dest=pdf_file, link_callback=link_callback)
+        pdf_result = pisa.CreatePDF(html_content, dest=pdf_file, link_callback=link_callback)
 
         # check result
         if pdf_result.err:
-            raise Http404("We had some errors <pre>" + rendered_html + "</pre>")
-
-
-def pdf_template(context: dict, template_path: str, output_path: str, small: bool = False, html: bool = False) -> None:
-    """Generate PDF from template using pdfkit with configurable options.
-
-    Args:
-        context: Template context dictionary containing variables for rendering.
-        template_path: Template path or HTML string depending on html parameter.
-        output_path: Output PDF file path where the generated PDF will be saved.
-        small: Use minimal margins for compact layout. Defaults to False.
-        html: If True, treat template_path as HTML string; if False, as template path.
-              Defaults to False.
-
-    Raises:
-        Exception: PDF generation errors are logged but not re-raised.
-
-    Side Effects:
-        Creates PDF file at specified output path.
-    """
-    # Configure PDF options based on layout preference
-    if small:
-        # Minimal margins for compact layout
-        options = {
-            "page-size": "A4",
-            "margin-top": "0.1in",
-            "margin-right": "0.1in",
-            "margin-bottom": "0.1in",
-            "margin-left": "0.1in",
-            "encoding": "UTF-8",
-            "custom-header": [("Accept-Encoding", "gzip")],
-            # 'no-outline': None,
-            "quiet": "",
-        }
-    else:
-        # Standard margins for normal layout
-        options = {
-            "page-size": "A4",
-            "margin-top": "0.6in",
-            "margin-right": "0.6in",
-            "margin-bottom": "0.4in",
-            "margin-left": "0.4in",
-            "encoding": "UTF-8",
-            "custom-header": [("Accept-Encoding", "gzip")],
-            # 'no-outline': None,
-            "quiet": "",
-        }
-
-    try:
-        # Render HTML content based on input type
-        if html:
-            # Treat template_path as HTML string and render with context
-            template = Template(template_path)
-            django_context = Context(context)
-            html_content = template.render(django_context)
-        else:
-            # Treat template_path as template path and load template
-            template = get_template(template_path)
-            html_content = template.render(context)
-            logger.debug(f"Generated HTML for PDF: {len(html_content)} characters")
-
-        # Generate PDF from rendered HTML string
-        # html_content = html_content.replace(conf_settings.STATIC_URL, request.build_absolute_uri(conf_settings.STATIC_URL))
-        # html_content = html_content.replace(conf_settings.MEDIA_URL, request.build_absolute_uri(conf_settings.MEDIA_URL))
-        pdfkit.from_string(html_content, output_path, options)
-    except Exception as e:
-        # Log PDF generation errors without re-raising
-        logger.error(f"PDF generation error: {e}")
-
-
-# ##print
+            raise Http404("We had some errors <pre>" + html_content + "</pre>")
 
 
 def get_membership_request(context: dict, member: Member) -> HttpResponse:
@@ -319,7 +257,7 @@ def get_membership_request(context: dict, member: Member) -> HttpResponse:
     template = get_association_text(context["association_id"], AssociationTextType.MEMBERSHIP)
 
     # Generate PDF from template and return as HTTP response
-    pdf_template(template_context, template, file_path, html=True)
+    xhtml_pdf(template_context, template, file_path, html=True)
     return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": member})
 
 
@@ -364,7 +302,7 @@ def print_character_friendly(context: dict, force: bool = False) -> HttpResponse
     # Generate PDF if forced or if file needs reprinting
     if force or reprint(file_path):
         get_character_sheet(context)
-        pdf_template(context, "pdf/sheets/friendly.html", file_path, True)
+        xhtml_pdf(context, "pdf/sheets/friendly.html", file_path)
 
     # Return the PDF file as HTTP response
     return return_pdf(file_path, f"{context['character']} - " + _("Lightweight"))
@@ -386,7 +324,7 @@ def print_faction(context: dict, force: bool = False) -> HttpResponse:
 
     # Generate PDF if forced or if file needs reprinting
     if force or reprint(file_path):
-        pdf_template(context, "pdf/sheets/faction.html", file_path, True)
+        xhtml_pdf(context, "pdf/sheets/faction.html", file_path)
 
     # Return the PDF file as HTTP response
     return return_pdf(file_path, f"{context['faction']}")
@@ -409,7 +347,7 @@ def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
     if force or reprint(filepath):
         get_event_cache_all(context)
         get_character_relationships(context)
-        pdf_template(context, "pdf/sheets/relationships.html", filepath, True)
+        xhtml_pdf(context, "pdf/sheets/relationships.html", filepath)
 
     # Return the PDF response with localized filename
     return return_pdf(filepath, f"{context['character']} - " + _("Relationships"))

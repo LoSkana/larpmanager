@@ -22,12 +22,14 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
+from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.base import check_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
@@ -274,6 +276,17 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> 
 
     # Retrieve and validate faction data
     get_element(context, num, "faction", Faction)
+
+    get_event_cache_all(context)
+
+    if num in context["factions"]:
+        context["sheet_faction"] = context["factions"][num]
+    else:
+        raise Http404("Faction does not exist")
+
+    context["fact"] = get_writing_element_fields(
+        context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
+    )
 
     # Generate and return the faction sheet PDF
     return print_faction(context, True)

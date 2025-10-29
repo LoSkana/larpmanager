@@ -14,9 +14,9 @@
 
             @page {
                 size: A4;
-                margin-top: 1cm;
+                margin-top: 0.5cm;
                 margin-right: 0.5cm;
-                margin-bottom: 1cm;
+                margin-bottom: 0.5cm;
                 margin-left: 0.5cm;
             }
 
@@ -94,16 +94,7 @@
     <body>
         <div>
             <div class="head">{{ event.association }} - {{ event }}</div>
-            <br />
-            <h1>{{ faction.name }}</h1>
-            {% if faction.get_typ_display %}<div class="faction-type">{{ faction.get_typ_display }}</div>{% endif %}
-            {% if faction.cover %}
-                <div class="faction-cover">
-                    <img src="{{ faction.cover.url }}" alt="{{ faction.name }}">
-                </div>
-            {% endif %}
-            {% if faction.teaser %}<div class="faction-content">{{ faction.teaser | safe }}</div>{% endif %}
-            {% if faction.data %}<div class="faction-content">{{ faction.data | safe }}</div>{% endif %}
+            {% include "elements/sheet/faction.html" with faction=sheet_faction %}
         </div>
     </body>
 </html>
