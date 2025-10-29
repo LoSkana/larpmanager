@@ -8,6 +8,21 @@
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
+    {% if optionals.quantity and not warehouse_committed %}
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i>
+            {% trans "When you're ready to permanently update warehouse quantities based on this event's assignments" %},
+            <a href="{% url 'orga_warehouse_commit_preview' run.get_slug %}"
+               class="btn btn-warning btn-sm">
+                <i class="fas fa-database"></i> {% trans "commit quantities to warehouse" %}
+            </a>
+        </div>
+    {% elif warehouse_committed %}
+        <div class="alert alert-success" role="alert">
+            <i class="fas fa-check-circle"></i>
+            {% trans "Warehouse quantities have been committed for this event" %}
+        </div>
+    {% endif %}
     {% for area_id, area in area_list.items %}
         <h2>{{ area }}</h2>
         {% if area.position %}

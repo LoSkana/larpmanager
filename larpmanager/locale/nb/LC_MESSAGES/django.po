@@ -921,6 +921,9 @@ msgstr "Synlig"
 msgid "Waiting"
 msgstr "Venter"
 
+msgid "Warning"
+msgstr "Advarsel"
+
 msgid "Website"
 msgstr "Nettsted"
 
@@ -2288,6 +2291,12 @@ msgstr "Dine meldinger"
 msgid "for %(event)s"
 msgstr "for %(event)s"
 
+msgid "items deleted"
+msgstr "elementer slettet"
+
+msgid "items updated"
+msgstr "elementer oppdatert"
+
 msgid "personal data"
 msgstr "personopplysninger"
 
@@ -2347,6 +2356,9 @@ msgstr "Avstemning i ledelsen"
 
 msgid "File not found"
 msgstr "Filen ble ikke funnet"
+
+msgid "Final quantity"
+msgstr "Endelig mengde"
 
 msgid "Form questions"
 msgstr "Skjema for spørsmål"
@@ -2612,6 +2624,12 @@ msgstr "Last opp utgifter"
 msgid "Volounteer data"
 msgstr "Frivillige opplysninger"
 
+msgid "WILL BE DELETED"
+msgstr "VIL BLI SLETTET"
+
+msgid "WILL BE UPDATED"
+msgstr "VIL BLI OPPDATERT"
+
 msgid "Warehouse items"
 msgstr "Lagervarer"
 
@@ -2633,6 +2651,9 @@ msgstr "Ervervet evne"
 msgid "Activate feature"
 msgstr "Aktiver funksjonen"
 
+msgid "Back to manifest"
+msgstr "Tilbake til manifest"
+
 msgid "Background image"
 msgstr "Bakgrunnsbilde"
 
@@ -2653,6 +2674,9 @@ msgstr "Total innsamling"
 
 msgid "Color background"
 msgstr "Tekstbakgrunn"
+
+msgid "Current quantity"
+msgstr "Nåværende mengde"
 
 msgid "Current template"
 msgstr "Gjeldende mal"
@@ -2839,6 +2863,9 @@ msgstr "All kommunikasjon"
 
 msgid "Answer submitted!"
 msgstr "Underdanig svar!"
+
+msgid "Assigned quantity"
+msgstr "Tildelt mengde"
 
 msgid "Cancellation date"
 msgstr "Dato for avmelding"
@@ -4129,6 +4156,9 @@ msgstr "Ekstra gebyr for gratis betaling"
 msgid "Bring a friend to %(event)s"
 msgstr "Ta med en venn til %(event)s"
 
+msgid "Commit warehouse quantities"
+msgstr "Forplikte lagermengder"
+
 msgid "Confirmation of expenditure"
 msgstr "Bekreftelse av utgifter"
 
@@ -4146,6 +4176,9 @@ msgstr "Angi dine preferanser her"
 
 msgid "Event context not available"
 msgstr "Hendelseskontekst ikke tilgjengelig"
+
+msgid "Items that will be modified"
+msgstr "Elementer som vil bli endret"
 
 msgid "Loading performed, see logs"
 msgstr "Lasting utført, se logger"
@@ -4263,6 +4296,9 @@ msgstr "Godkjenning %(user)s som %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Kjøp ferdigheter til karakteren din"
+
+msgid "Confirm and commit quantities"
+msgstr "Bekreft og forplikt mengder"
 
 msgid "Create and manage events here"
 msgstr "Opprett og administrer arrangementer her"
@@ -4403,6 +4439,9 @@ msgstr "Vi behandler betalingen din"
 
 msgid "Your friend code has been used"
 msgstr "Din vennekode har blitt brukt"
+
+msgid "commit quantities to warehouse"
+msgstr "forplikte mengder til lageret"
 
 msgid "Activate features for the event"
 msgstr "Aktiver funksjoner for arrangementet"
@@ -5467,6 +5506,9 @@ msgstr "Denne siden oppsummerer de ulike typene arrangementsprologer"
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Last opp en PDF-fil eller et bilde (JPG, PNG osv.)"
 
+msgid "Warehouse quantities committed successfully"
+msgstr "Registreringen er fullført"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din begavede registrering har blitt innløst!"
 
@@ -6160,6 +6202,9 @@ msgstr "Denne siden viser brukere som kan overtales til å registrere seg"
 msgid "This page summarises the assignments in this event of"
 msgstr "Denne siden oppsummerer oppgavene i dette arrangementet av"
 
+msgid "Warehouse quantities already committed for this event"
+msgstr "Lagermengder som allerede er forpliktet for dette arrangementet"
+
 msgid "You have been gifted a registration to this event, by"
 msgstr "Du har fått en inngangsbillett til dette arrangementet av"
 
@@ -6195,6 +6240,9 @@ msgstr "Ingen påmeldinger er mottatt til dette arrangementet ennå"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nå kan du legge til relasjoner når du redigerer et tegn"
+
+msgid "Quantity tracking is not enabled for this organization"
+msgstr "Mengdesporing er ikke aktivert for denne organisasjonen"
 
 msgid "The registration request will be updated automatically"
 msgstr "Søknaden oppdateres automatisk"
@@ -6274,6 +6322,9 @@ msgstr "Denne siden viser spørsmålene som deltakerne har sendt inn"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summen av det som allerede er betalt på gjeldende dato"
+
+msgid "Warehouse quantities have been committed for this event"
+msgstr "Lagermengder har blitt forpliktet for dette arrangementet"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi har støtt på et problem med skattekoden du oppga"
@@ -8009,6 +8060,13 @@ msgid ""
 msgstr "Årlig avgift som kreves av medlemmene, fra begynnelsen av medlemsåret"
 
 msgid ""
+"Are you sure you want to commit these quantities? This operation cannot be "
+"undone!"
+msgstr ""
+"Er du sikker på at du vil overføre disse mengdene? Denne operasjonen kan "
+"ikke gjøres ugjort!"
+
+msgid ""
 "Click here if after submitting the form, you want to move on to edit the "
 "next item"
 msgstr ""
@@ -8476,6 +8534,13 @@ msgstr ""
 "Angi maksimalt antall slike rabatter som kan kreves (0 for uendelig bruk)"
 
 msgid ""
+"Items marked in red will be deleted because their final quantity will be "
+"zero or negative"
+msgstr ""
+"Varer merket med rødt vil bli slettet fordi deres endelige antall vil være "
+"null eller negativt"
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data"
 msgstr ""
@@ -8835,6 +8900,13 @@ msgstr ""
 "registreringer (0 = ubegrenset)"
 
 msgid ""
+"The following items will have their quantities reduced based on the "
+"assignments for this event"
+msgstr ""
+"Følgende varer vil få redusert antall basert på oppdragene for dette "
+"arrangementet"
+
+msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
 "every management page)"
 msgstr ""
@@ -8854,6 +8926,13 @@ msgid ""
 msgstr ""
 "Hvis du vil endre e-postadressen din, må du oppgi både den gamle og den nye "
 "adressen"
+
+msgid ""
+"When you're ready to permanently update warehouse quantities based on this "
+"event's assignments"
+msgstr ""
+"Når du er klar til å oppdatere lagerantallene permanent basert på denne "
+"hendelsens oppgaver"
 
 msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
@@ -9321,6 +9400,13 @@ msgstr ""
 "deretter bli fjernet"
 
 msgid ""
+"This operation is permanent and cannot be undone. Please review the changes "
+"carefully before confirming."
+msgstr ""
+"Denne operasjonen er permanent og kan ikke gjøres ugjort. Gå nøye gjennom "
+"endringene før du bekrefter."
+
+msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -9405,6 +9491,13 @@ msgstr ""
 " skjemaet nedenfor for å varsle oss om betalingen"
 
 msgid ""
+"This page shows what will happen when you commit the warehouse quantities "
+"based on the current assignments"
+msgstr ""
+"Denne siden viser hva som vil skje når du forplikter lagermengdene basert på"
+" de gjeldende tilordningene"
+
+msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
 "recover spent XP (default is 0)"
 msgstr ""
@@ -9417,6 +9510,13 @@ msgid ""
 msgstr ""
 "Hvis du velger et annet arrangement, vil det bli regnet som en del av samme "
 "kampanje, og de vil dele tegnene"
+
+msgid ""
+"No items will be modified. Either no items have assigned quantities, or all "
+"assignments have zero quantity."
+msgstr ""
+"Ingen varer vil bli endret. Enten har ingen varer tilordnet antall, eller så"
+" har alle tilordningene null antall."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

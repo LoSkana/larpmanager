@@ -70,9 +70,8 @@ def log_api_access(api_key, request, response_status, events_count=0):
         api_key.usage_count += 1
         api_key.save()
 
-    except Exception:
-        # Don't let logging errors break the API
-        pass
+    except Exception as err:
+        notify_admins("log_api_access", "something went wrong", err)
 
 
 def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, JsonResponse | None]:
