@@ -2721,7 +2721,10 @@ msgstr ""
 msgid "Name of the discount - internal use"
 msgstr ""
 
-msgid "Indicate the runs for which the discount is active"
+msgid "Indicate the sessions for which the discount is active"
+msgstr ""
+
+msgid "Sessions"
 msgstr ""
 
 msgid ""
@@ -6671,6 +6674,9 @@ msgstr ""
 msgid "PDF Profiles"
 msgstr ""
 
+msgid "Bulk download"
+msgstr ""
+
 msgid "Try the sheet generation"
 msgstr ""
 
@@ -6699,6 +6705,12 @@ msgid "download"
 msgstr ""
 
 msgid "Regenerate (recreates all pdf: slow)"
+msgstr ""
+
+msgid "Pdf bulk"
+msgstr ""
+
+msgid "This page allows you to select items to bulk download"
 msgstr ""
 
 msgid "Copy"
@@ -7408,12 +7420,6 @@ msgstr ""
 
 msgid ""
 "This page shows the handouts (information dissemination tools) of the event"
-msgstr ""
-
-msgid "Print"
-msgstr ""
-
-msgid "External"
 msgstr ""
 
 msgid "This page shows the plots of the event"
@@ -8799,6 +8805,21 @@ msgid "Portraits"
 msgstr ""
 
 msgid "Profiles"
+msgstr ""
+
+msgid "Failed to add handout"
+msgstr ""
+
+msgid "Failed to add faction"
+msgstr ""
+
+msgid "Failed to add character"
+msgstr ""
+
+msgid "Failed to add profiles"
+msgstr ""
+
+msgid "Failed to add gallery"
 msgstr ""
 
 #, python-format

@@ -390,9 +390,6 @@ msgstr "Percelen"
 msgid "Price"
 msgstr "Prijs"
 
-msgid "Print"
-msgstr "Afdrukken"
-
 msgid "Quest"
 msgstr "Zoektocht"
 
@@ -1044,9 +1041,6 @@ msgstr "Verwacht"
 msgid "Expenses"
 msgstr "Uitgaven"
 
-msgid "External"
-msgstr "Extern"
-
 msgid "Factions"
 msgstr "Facties"
 
@@ -1112,6 +1106,9 @@ msgstr "Paspoort"
 
 msgid "Payments"
 msgstr "Betalingen"
+
+msgid "Pdf bulk"
+msgstr "Pdf bulk"
 
 msgid "Personal"
 msgstr "Personeel"
@@ -1181,6 +1178,9 @@ msgstr "Geselecteerd"
 
 msgid "Services"
 msgstr "Diensten"
+
+msgid "Sessions"
+msgstr "Sessies"
 
 msgid "Settings"
 msgstr "Instellingen"
@@ -2121,6 +2121,9 @@ msgstr "Autorisatie"
 
 msgid "Average value"
 msgstr "Gemiddelde waarde"
+
+msgid "Bulk download"
+msgstr "Bulk downloaden"
 
 msgid "Cancellations"
 msgstr "Annuleringen"
@@ -3487,6 +3490,15 @@ msgstr "Externe registratie"
 msgid "Failed password reset"
 msgstr "Wachtwoord resetten mislukt"
 
+msgid "Failed to add faction"
+msgstr "Factie niet toegevoegd"
+
+msgid "Failed to add gallery"
+msgstr "Galerij niet toegevoegd"
+
+msgid "Failed to add handout"
+msgstr "Hand-out niet toegevoegd"
+
 msgid "Go to the casting for"
 msgstr "Ga naar casting voor"
 
@@ -3635,6 +3647,9 @@ msgstr "Personeelskosten"
 msgid "External register link"
 msgstr "Link naar extern register"
 
+msgid "Failed to add profiles"
+msgstr "Het is niet gelukt om profielen toe te voegen"
+
 msgid "Follow the steps below"
 msgstr "Volg de onderstaande stappen"
 
@@ -3774,6 +3789,9 @@ msgstr "Volledig blad downloaden"
 
 msgid "Early registration link"
 msgstr "Link voor vroege registratie"
+
+msgid "Failed to add character"
+msgstr "Geen teken toegevoegd"
 
 msgid "Indicate only if rate 0"
 msgstr "Alleen aangeven als tarief 0"
@@ -5959,9 +5977,6 @@ msgstr "Geeft de kleur aan die wordt gebruikt voor links"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Geeft de kleur aan die wordt gebruikt voor de teksten"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Geef aan voor welke runs de korting actief is"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Vaste betalingstermijnen voor deelnemers beheren"
 
@@ -6186,6 +6201,9 @@ msgstr "Het teken heeft ontbrekende waarden in verplichte velden"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
 
+msgid "This page allows you to select items to bulk download"
+msgstr "Op deze pagina kunt u items selecteren die u in bulk wilt downloaden"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Deze pagina toont alle facturen die in het systeem zijn geregistreerd"
 
@@ -6229,6 +6247,9 @@ msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Geef aan voor welke sessies de korting actief is"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Geeft aan dat de betaling wordt verzonden 'naar vrienden en familie'"

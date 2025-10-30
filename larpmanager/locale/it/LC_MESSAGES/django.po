@@ -390,9 +390,6 @@ msgstr "Trame"
 msgid "Price"
 msgstr "Prezzo"
 
-msgid "Print"
-msgstr "Stampa"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -1044,9 +1041,6 @@ msgstr "Atteso"
 msgid "Expenses"
 msgstr "Spese"
 
-msgid "External"
-msgstr "External"
-
 msgid "Factions"
 msgstr "Fazioni"
 
@@ -1112,6 +1106,9 @@ msgstr "Passaporto"
 
 msgid "Payments"
 msgstr "Pagamenti"
+
+msgid "Pdf bulk"
+msgstr "Pdf massivo"
 
 msgid "Personal"
 msgstr "Personale"
@@ -1181,6 +1178,9 @@ msgstr "Selezionato"
 
 msgid "Services"
 msgstr "Servizi"
+
+msgid "Sessions"
+msgstr "Sessioni"
 
 msgid "Settings"
 msgstr "Impostazioni"
@@ -2121,6 +2121,9 @@ msgstr "Autorizzazione"
 
 msgid "Average value"
 msgstr "Valore medio"
+
+msgid "Bulk download"
+msgstr "Download di massa"
 
 msgid "Cancellations"
 msgstr "Disdette"
@@ -3487,6 +3490,15 @@ msgstr "Registrazione esterna"
 msgid "Failed password reset"
 msgstr "Password reset fallito"
 
+msgid "Failed to add faction"
+msgstr "Impossibile aggiungere la fazione"
+
+msgid "Failed to add gallery"
+msgstr "Impossibile aggiungere la galleria"
+
+msgid "Failed to add handout"
+msgstr "Non è stato possibile aggiungere la dispensa"
+
 msgid "Go to the casting for"
 msgstr "Vai al casting per"
 
@@ -3635,6 +3647,9 @@ msgstr "Spese collaboratori"
 msgid "External register link"
 msgstr "Link di registrazione esterno"
 
+msgid "Failed to add profiles"
+msgstr "Impossibile aggiungere profili"
+
 msgid "Follow the steps below"
 msgstr "Segui i seguenti passaggi"
 
@@ -3774,6 +3789,9 @@ msgstr "Scarica scheda completa"
 
 msgid "Early registration link"
 msgstr "Link per la registrazione anticipata"
+
+msgid "Failed to add character"
+msgstr "Impossibile aggiungere il personaggio"
 
 msgid "Indicate only if rate 0"
 msgstr "Indicare solo se aliquota 0"
@@ -5954,9 +5972,6 @@ msgstr "Indica il colore che verrà usato per i link"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Indica il colore che verrà usato per i testi"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Indicare le run per cui lo sconto è attivo"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Gestisci le rate fisse per i partecipanti"
 
@@ -6183,6 +6198,10 @@ msgstr "Il personaggio ha valori mancanti nei campi obbligatori"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "E' stato indicato il numero di biglietti totali da estrarre"
 
+msgid "This page allows you to select items to bulk download"
+msgstr ""
+"In questa pagina è possibile selezionare gli elementi da scaricare in blocco"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Questa pagina mostra tutte le fatture registrate nel sistema"
 
@@ -6224,6 +6243,9 @@ msgstr ""
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Indicare come viene configurata la spesa a livello di bilancio"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Indicare le sessioni per le quali è attivo lo sconto"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Indica che il pagamento viene inviato 'ad amici e parenti'"

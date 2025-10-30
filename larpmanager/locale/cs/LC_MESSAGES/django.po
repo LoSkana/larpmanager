@@ -390,9 +390,6 @@ msgstr "Pozemky"
 msgid "Price"
 msgstr "Cena"
 
-msgid "Print"
-msgstr "Tisk"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -1044,9 +1041,6 @@ msgstr "Očekávané"
 msgid "Expenses"
 msgstr "Výdaje"
 
-msgid "External"
-msgstr "Externí"
-
 msgid "Factions"
 msgstr "Frakce"
 
@@ -1112,6 +1106,9 @@ msgstr "Pas"
 
 msgid "Payments"
 msgstr "Platby"
+
+msgid "Pdf bulk"
+msgstr "Pdf ve velkém"
 
 msgid "Personal"
 msgstr "Zaměstnanci"
@@ -1181,6 +1178,9 @@ msgstr "Vybrané stránky"
 
 msgid "Services"
 msgstr "Služby"
+
+msgid "Sessions"
+msgstr "Relace"
 
 msgid "Settings"
 msgstr "Nastavení"
@@ -2121,6 +2121,9 @@ msgstr "Autorizace"
 
 msgid "Average value"
 msgstr "Průměrná hodnota"
+
+msgid "Bulk download"
+msgstr "Hromadné stahování"
 
 msgid "Cancellations"
 msgstr "Storna"
@@ -3487,6 +3490,15 @@ msgstr "Externí registrace"
 msgid "Failed password reset"
 msgstr "Obnovení hesla se nezdařilo"
 
+msgid "Failed to add faction"
+msgstr "Nepodařilo se přidat frakci"
+
+msgid "Failed to add gallery"
+msgstr "Nepodařilo se přidat galerii"
+
+msgid "Failed to add handout"
+msgstr "Nepodařilo se přidat leták"
+
 msgid "Go to the casting for"
 msgstr "Přejděte na casting"
 
@@ -3635,6 +3647,9 @@ msgstr "Výdaje na zaměstnance"
 msgid "External register link"
 msgstr "Odkaz na externí registr"
 
+msgid "Failed to add profiles"
+msgstr "Nepodařilo se přidat profily"
+
 msgid "Follow the steps below"
 msgstr "Postupujte podle následujících kroků"
 
@@ -3774,6 +3789,9 @@ msgstr "Stáhněte si kompletní list"
 
 msgid "Early registration link"
 msgstr "Odkaz pro včasnou registraci"
+
+msgid "Failed to add character"
+msgstr "Nepodařilo se přidat znak"
 
 msgid "Indicate only if rate 0"
 msgstr "Uveďte pouze v případě sazby 0"
@@ -5951,9 +5969,6 @@ msgstr "Označuje barvu, která bude použita pro odkazy"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Označuje barvu, která bude použita pro texty"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Uveďte běhy, pro které je sleva aktivní"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Správa pevných splátek pro účastníky"
 
@@ -6178,6 +6193,9 @@ msgstr "Znak má chybějící hodnoty v povinných polích"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
 
+msgid "This page allows you to select items to bulk download"
+msgstr "Na této stránce můžete vybrat položky k hromadnému stažení"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Na této stránce jsou zobrazeny všechny faktury zapsané v systému"
 
@@ -6218,6 +6236,9 @@ msgstr "Co nejpřesněji uveďte, kde vás vyzvednout"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Uveďte relace, pro které je sleva aktivní"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Označuje, že platba je zasílána 'přátelům a rodině'"

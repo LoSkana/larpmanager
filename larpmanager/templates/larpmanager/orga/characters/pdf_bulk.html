@@ -1,0 +1,40 @@
+{% extends "utils.html" %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Pdf bulk" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page allows you to select items to bulk download" %}
+{% endblock info %}
+{% block content %}
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if list %}
+            <table class="go_datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Type" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, element in list.items %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="{{ key }}" name="{{ key }}">
+                            </td>
+                            <td>{{ element.name }}</td>
+                            <td>
+                                {% if element.type %}{{ element.type }}{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="submit" value="{% trans "Confirm" %}">
+        </form>
+    {% endif %}
+{% endblock content %}

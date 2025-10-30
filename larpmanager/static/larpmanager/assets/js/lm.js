@@ -476,6 +476,21 @@ function data_tables() {
             }
         });
 
+        table.on('draw.dt', function() {
+            $('a[qtip]').each(function() {
+                if (!$(this).data('qtip-initialized')) {
+                    $(this).qtip({
+                        content: { text: $(this).attr('qtip') },
+                        style: { classes: 'qtip-dark qtip-rounded qtip-shadow' },
+                        hide: { effect: function(offset) { $(this).fadeOut(500); } },
+                        show: { effect: function(offset) { $(this).fadeIn(500); } },
+                        position: { my: 'top center', at: 'bottom center' }
+                    });
+                    $(this).data('qtip-initialized', true);
+                }
+            });
+        });
+
         for (const index of hide_columns) {
             var column = table.column(index);
             column.visible(false);

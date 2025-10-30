@@ -390,9 +390,6 @@ msgstr "Tomter"
 msgid "Price"
 msgstr "Pris"
 
-msgid "Print"
-msgstr "Skriv ut"
-
 msgid "Quest"
 msgstr "Søken"
 
@@ -1044,9 +1041,6 @@ msgstr "Forventet"
 msgid "Expenses"
 msgstr "Utgifter"
 
-msgid "External"
-msgstr "Eksternt"
-
 msgid "Factions"
 msgstr "Fraksjoner"
 
@@ -1112,6 +1106,9 @@ msgstr "Pass"
 
 msgid "Payments"
 msgstr "Betalinger"
+
+msgid "Pdf bulk"
+msgstr "Pdf bulk"
 
 msgid "Personal"
 msgstr "Ansatte"
@@ -1181,6 +1178,9 @@ msgstr "Utvalgte"
 
 msgid "Services"
 msgstr "Tjenester"
+
+msgid "Sessions"
+msgstr "Sesjoner"
 
 msgid "Settings"
 msgstr "Innstillinger"
@@ -2121,6 +2121,9 @@ msgstr "Autorisasjon"
 
 msgid "Average value"
 msgstr "Gjennomsnittlig verdi"
+
+msgid "Bulk download"
+msgstr "Last ned i bulk"
 
 msgid "Cancellations"
 msgstr "Avbestillinger"
@@ -3487,6 +3490,15 @@ msgstr "Ekstern registrering"
 msgid "Failed password reset"
 msgstr "Tilbakestilling av passord mislyktes"
 
+msgid "Failed to add faction"
+msgstr "Kunne ikke legge til fraksjon"
+
+msgid "Failed to add gallery"
+msgstr "Kunne ikke legge til galleri"
+
+msgid "Failed to add handout"
+msgstr "Kunne ikke legge til utdeling"
+
 msgid "Go to the casting for"
 msgstr "Gå til casting for"
 
@@ -3635,6 +3647,9 @@ msgstr "Utgifter til ansatte"
 msgid "External register link"
 msgstr "Ekstern registerlenke"
 
+msgid "Failed to add profiles"
+msgstr "Kunne ikke legge til profiler"
+
 msgid "Follow the steps below"
 msgstr "Følg trinnene nedenfor"
 
@@ -3774,6 +3789,9 @@ msgstr "Last ned hele arket"
 
 msgid "Early registration link"
 msgstr "Lenke til tidlig registrering"
+
+msgid "Failed to add character"
+msgstr "Kunne ikke legge til tegn"
 
 msgid "Indicate only if rate 0"
 msgstr "Angi kun hvis sats 0"
@@ -5953,9 +5971,6 @@ msgstr "Angir fargen som skal brukes for lenker"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Angir fargen som skal brukes til tekstene"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Angi kjøringene som rabatten er aktiv for"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Administrere faste betalingsrater for deltakerne"
 
@@ -6181,6 +6196,9 @@ msgstr "Tegnet har manglende verdier i obligatoriske felt"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totale antallet billetter som skal trekkes ut er angitt"
 
+msgid "This page allows you to select items to bulk download"
+msgstr "På denne siden kan du velge elementer som skal lastes ned i bulk"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Denne siden viser alle fakturaer som er registrert i systemet"
 
@@ -6219,6 +6237,9 @@ msgstr "Angi så nøyaktig som mulig hvor du skal hentes"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Angi hvordan utgiftene er konfigurert på budsjettnivå"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Angi hvilke økter rabatten er aktiv for"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Angir at betalingen er sendt 'til venner og familie"

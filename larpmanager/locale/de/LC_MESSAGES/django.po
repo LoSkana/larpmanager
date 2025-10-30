@@ -390,9 +390,6 @@ msgstr "Grundstücke"
 msgid "Price"
 msgstr "Preis"
 
-msgid "Print"
-msgstr "Drucken"
-
 msgid "Quest"
 msgstr "Suche"
 
@@ -1044,9 +1041,6 @@ msgstr "Erwartet"
 msgid "Expenses"
 msgstr "Ausgaben"
 
-msgid "External"
-msgstr "Extern"
-
 msgid "Factions"
 msgstr "Fraktionen"
 
@@ -1112,6 +1106,9 @@ msgstr "Reisepass"
 
 msgid "Payments"
 msgstr "Zahlungen"
+
+msgid "Pdf bulk"
+msgstr "Pdf-Masse"
 
 msgid "Personal"
 msgstr "Personal"
@@ -1181,6 +1178,9 @@ msgstr "Ausgewählte"
 
 msgid "Services"
 msgstr "Dienstleistungen"
+
+msgid "Sessions"
+msgstr "Sitzungen"
 
 msgid "Settings"
 msgstr "Einstellungen"
@@ -2121,6 +2121,9 @@ msgstr "Autorisierung"
 
 msgid "Average value"
 msgstr "Durchschnittlicher Wert"
+
+msgid "Bulk download"
+msgstr "Bulk-Download"
 
 msgid "Cancellations"
 msgstr "Annullierungen"
@@ -3487,6 +3490,15 @@ msgstr "Externe Registrierung"
 msgid "Failed password reset"
 msgstr "Passwort zurücksetzen fehlgeschlagen"
 
+msgid "Failed to add faction"
+msgstr "Fraktion kann nicht hinzugefügt werden"
+
+msgid "Failed to add gallery"
+msgstr "Galerie kann nicht hinzugefügt werden"
+
+msgid "Failed to add handout"
+msgstr "Handout wurde nicht hinzugefügt"
+
 msgid "Go to the casting for"
 msgstr "Gehen Sie zum Casting für"
 
@@ -3635,6 +3647,9 @@ msgstr "Ausgaben für Mitarbeiter"
 msgid "External register link"
 msgstr "Link zum externen Register"
 
+msgid "Failed to add profiles"
+msgstr "Profile können nicht hinzugefügt werden"
+
 msgid "Follow the steps below"
 msgstr "Folgen Sie den nachstehenden Schritten"
 
@@ -3774,6 +3789,9 @@ msgstr "Komplettes Blatt herunterladen"
 
 msgid "Early registration link"
 msgstr "Link zur frühzeitigen Anmeldung"
+
+msgid "Failed to add character"
+msgstr "Zeichen kann nicht hinzugefügt werden"
 
 msgid "Indicate only if rate 0"
 msgstr "Nur angeben, wenn Satz 0"
@@ -5981,9 +5999,6 @@ msgstr "Gibt die Farbe an, die für Links verwendet werden soll"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Gibt die Farbe an, die für die Texte verwendet werden soll"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Geben Sie die Läufe an, für die der Rabatt aktiv ist"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Verwaltung fester Ratenzahlungen für Teilnehmer"
 
@@ -6224,6 +6239,9 @@ msgstr "Das Zeichen hat fehlende Werte in Pflichtfeldern"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Die Gesamtzahl der zu verlosenden Lose ist angegeben"
 
+msgid "This page allows you to select items to bulk download"
+msgstr "Auf dieser Seite können Sie Artikel für den Massendownload auswählen"
+
 msgid "This page shows all invoices registered in the system"
 msgstr ""
 "Auf dieser Seite werden alle im System registrierten Rechnungen angezeigt"
@@ -6268,6 +6286,9 @@ msgstr "Geben Sie so genau wie möglich an, wo Sie abgeholt werden sollen"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Geben Sie an, wie die Ausgaben auf Haushaltsebene gestaltet sind"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Geben Sie die Sitzungen an, für die der Rabatt aktiv ist"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Zeigt an, dass die Zahlung 'an Freunde und Familie' gesendet wird"

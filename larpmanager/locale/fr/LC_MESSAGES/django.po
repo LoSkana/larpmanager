@@ -390,9 +390,6 @@ msgstr "Parcelles"
 msgid "Price"
 msgstr "Prix"
 
-msgid "Print"
-msgstr "Imprimer"
-
 msgid "Quest"
 msgstr "Quête"
 
@@ -1044,9 +1041,6 @@ msgstr "Attendu"
 msgid "Expenses"
 msgstr "Dépenses"
 
-msgid "External"
-msgstr "Externe"
-
 msgid "Factions"
 msgstr "Factions"
 
@@ -1112,6 +1106,9 @@ msgstr "Passeport"
 
 msgid "Payments"
 msgstr "Paiements"
+
+msgid "Pdf bulk"
+msgstr "Pdf en vrac"
 
 msgid "Personal"
 msgstr "Personnel"
@@ -1181,6 +1178,9 @@ msgstr "Sélectionné"
 
 msgid "Services"
 msgstr "Services"
+
+msgid "Sessions"
+msgstr "Sessions"
 
 msgid "Settings"
 msgstr "Paramètres"
@@ -2121,6 +2121,9 @@ msgstr "Autorisation"
 
 msgid "Average value"
 msgstr "Valeur moyenne"
+
+msgid "Bulk download"
+msgstr "Téléchargement en masse"
 
 msgid "Cancellations"
 msgstr "Annulations"
@@ -3487,6 +3490,15 @@ msgstr "Inscription externe"
 msgid "Failed password reset"
 msgstr "La réinitialisation du mot de passe a échoué"
 
+msgid "Failed to add faction"
+msgstr "Échec de l'ajout d'une faction"
+
+msgid "Failed to add gallery"
+msgstr "Échec de l'ajout de la galerie"
+
+msgid "Failed to add handout"
+msgstr "N'a pas ajouté de document"
+
 msgid "Go to the casting for"
 msgstr "Aller au casting pour"
 
@@ -3635,6 +3647,9 @@ msgstr "Frais de personnel"
 msgid "External register link"
 msgstr "Lien vers le registre externe"
 
+msgid "Failed to add profiles"
+msgstr "Échec de l'ajout de profils"
+
 msgid "Follow the steps below"
 msgstr "Suivez les étapes ci-dessous "
 
@@ -3774,6 +3789,9 @@ msgstr "Télécharger la fiche complète"
 
 msgid "Early registration link"
 msgstr "Lien pour l'inscription anticipée"
+
+msgid "Failed to add character"
+msgstr "Échec de l'ajout d'un caractère"
 
 msgid "Indicate only if rate 0"
 msgstr "N'indiquer que si le taux est de 0"
@@ -5972,9 +5990,6 @@ msgstr "Indique la couleur qui sera utilisée pour les liens"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Indique la couleur qui sera utilisée pour les textes"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Indiquer les courses pour lesquelles la réduction est active"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Gérer les versements fixes pour les participants"
 
@@ -6207,6 +6222,10 @@ msgstr "Le caractère a des valeurs manquantes dans les champs obligatoires"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Le nombre total de billets à tirer a été indiqué"
 
+msgid "This page allows you to select items to bulk download"
+msgstr ""
+"Cette page vous permet de sélectionner les éléments à télécharger en masse"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Cette page présente toutes les factures enregistrées dans le système"
 
@@ -6249,6 +6268,9 @@ msgstr ""
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Indiquer comment les dépenses sont configurées au niveau du budget"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Indiquer les sessions pour lesquelles la réduction est active"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Indique que le paiement est envoyé 'aux amis et à la famille'"

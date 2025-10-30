@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{ sheet_char.name }}</title>
+        <title>{{ faction.name }}</title>
         <meta charset="utf-8">
         <meta name="keywords" content="none">
         <meta name="description" content="none">
@@ -20,19 +20,30 @@
                 margin-left: 0.5cm;
             }
 
+            body {
+                margin: 0;
+            }
+
             html {
                 font-family: easyreading;
+                height: 100%;
                 line-height: 1.3;
             }
 
-           p {
+            p {
                 margin: 0.3em;
                 padding: 0;
+            }
+
+            body {
+                background: white;
+                height: 100%;
             }
 
             h1 {
                 text-align: center;
                 font-size: 150%;
+                margin-bottom: 0.5em;
             }
 
             h2 {
@@ -41,7 +52,7 @@
                 margin-bottom: 1em;
             }
 
-    a {
+            a {
                 color: inherit;
                 font-weight: bold;
                 text-decoration: none;
@@ -58,50 +69,32 @@
                 margin: 1px 0;
             }
 
-            #char_title {
+            .faction-type {
                 text-align: center;
                 margin: 0.5em;
                 font-style: italic;
             }
 
-            table {
-                width: 540pt;
+            .faction-content {
+                margin: 2em;
             }
 
-            td,
-            th {
+            .faction-cover {
                 text-align: center;
+                margin: 1em;
             }
 
-            .clear {
-                clear: both;
+            .faction-cover img {
+                max-width: 300px;
+                max-height: 300px;
             }
-
-            #char_name,
-            #char_player,
-            .c {
-                text-align: center;
-            }
-
-            .show_char {
-                display: none;
-            }
-
-
         </style>
         <style>{{ event.sheet_css | safe }}</style>
     </head>
     <body>
         <div>
-            <div class="intro"></div>
             <div class="head">{{ event.association }} - {{ event }}</div>
-            <br />
-            {% include "elements/sheet/main.html" %}
-            {% include "elements/sheet/plots.html" %}
-            {% include "elements/sheet/quests.html" %}
-            {% include "elements/sheet/speedlarp.html" %}
-            {% include "elements/sheet/prologue.html" %}
-            <div class="outro"></div>
+            {% include "elements/sheet/faction.html" with faction=sheet_faction %}
         </div>
     </body>
 </html>

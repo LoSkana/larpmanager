@@ -11,16 +11,17 @@
         <table>
             <tr>
                 <td>
-                    <a href="{% url 'orga_gallery_pdf' run.get_slug %}"
-                       download>{% trans "Gallery Pdf" %}</a>
+                    <a href="{% url 'orga_gallery_pdf' run.get_slug %}" download>{% trans "Gallery Pdf" %}</a>
                 </td>
                 <td>
-                    <a href="{% url 'orga_gallery_test' run.get_slug %}"
-                       target="_blank">{% trans "Test gallery" %}</a>
+                    <a href="{% url 'orga_gallery_test' run.get_slug %}" target="_blank">{% trans "Test gallery" %}</a>
                 </td>
                 <td>
-                    <a href="{% url 'orga_profiles_pdf' run.get_slug %}"
-                       download>{% trans "PDF Profiles" %}</a>
+                    <a href="{% url 'orga_profiles_pdf' run.get_slug %}" download>{% trans "PDF Profiles" %}</a>
+                </td>
+                <td>
+                    <a href="{% url 'orga_characters_pdf_bulk' run.get_slug %}"
+                       target="_blank">{% trans "Bulk download" %}</a>
                 </td>
             </tr>
         </table>
