@@ -516,6 +516,62 @@ class Faction(Writing):
         help_text=_("Indicates whether it can be selected by participants"),
     )
 
+    @staticmethod
+    def get_faction_filepath(run: "Run") -> str:
+        """Get the directory path for storing faction PDF files for a specific run.
+
+        Creates the faction directory structure within the event's media directory
+        if it doesn't already exist. The directory structure follows the pattern:
+        {event_media}/factions/{run_number}/
+
+        This static method can be called without a faction instance, useful for
+        batch operations or directory initialization.
+
+        Args:
+            run: The Run model instance for which to get the faction files directory
+
+        Returns:
+            Absolute filesystem path to the faction files directory for this run.
+            The directory is guaranteed to exist after this call.
+
+        Side Effects:
+            Creates the faction directory structure if it doesn't exist
+        """
+        # Build directory path: event_media/factions/run_number/
+        directory_path = os.path.join(run.event.get_media_filepath(), "factions", f"{run.number}/")
+
+        # Ensure directory exists, creating parent directories as needed
+        os.makedirs(directory_path, exist_ok=True)
+
+        return directory_path
+
+    def get_sheet_filepath(self, run: "Run") -> str:
+        """Get the complete file path for this faction's PDF sheet.
+
+        Constructs the full filesystem path where the faction sheet PDF should be
+        stored or retrieved from. The filename includes the faction number for
+        easy identification: #{faction_number}.pdf
+
+        Args:
+            run: The Run model instance for which to get the sheet file path
+
+        Returns:
+            Absolute filesystem path to the faction sheet PDF file, in the format:
+            {event_media}/factions/{run_number}/#{faction_number}.pdf
+
+        Example:
+            For faction #5 in run #2:
+            /path/to/media/event_123/factions/2/#5.pdf
+        """
+        # Get the faction directory for this run
+        faction_directory = self.get_faction_filepath(run)
+
+        # Construct filename with faction number
+        sheet_filename = f"#{self.number}.pdf"
+
+        # Return complete path to faction sheet PDF
+        return os.path.join(faction_directory, sheet_filename)
+
     def show_red(self) -> dict:
         """Update JavaScript response with 'typ' and 'teaser' attributes."""
         js = super().show_red()

@@ -390,9 +390,6 @@ msgstr "Parcelles"
 msgid "Price"
 msgstr "Prix"
 
-msgid "Print"
-msgstr "Imprimer"
-
 msgid "Quest"
 msgstr "Quête"
 
@@ -738,6 +735,9 @@ msgstr "Contact"
 msgid "Content"
 msgstr "Contenu"
 
+msgid "Context"
+msgstr "Contexte"
+
 msgid "Correct"
 msgstr "Correct"
 
@@ -1044,9 +1044,6 @@ msgstr "Attendu"
 msgid "Expenses"
 msgstr "Dépenses"
 
-msgid "External"
-msgstr "Externe"
-
 msgid "Factions"
 msgstr "Factions"
 
@@ -1112,6 +1109,9 @@ msgstr "Passeport"
 
 msgid "Payments"
 msgstr "Paiements"
+
+msgid "Pdf bulk"
+msgstr "Pdf en vrac"
 
 msgid "Personal"
 msgstr "Personnel"
@@ -1181,6 +1181,9 @@ msgstr "Sélectionné"
 
 msgid "Services"
 msgstr "Services"
+
+msgid "Sessions"
+msgstr "Sessions"
 
 msgid "Settings"
 msgstr "Paramètres"
@@ -1686,6 +1689,9 @@ msgstr "Ajouter à la parcelle"
 msgid "Assignments"
 msgstr "Missions"
 
+msgid "Association"
+msgstr "Association"
+
 msgid "Beneficiary"
 msgstr "Bénéficiaire"
 
@@ -1841,6 +1847,9 @@ msgstr "Coûts totaux"
 
 msgid "Transaction"
 msgstr "Transaction"
+
+msgid "Translation"
+msgstr "Traduction"
 
 msgid "Transversal"
 msgstr "Transversale"
@@ -2061,6 +2070,9 @@ msgstr "Nombre total"
 msgid "Transactions"
 msgstr "Transactions"
 
+msgid "Translations"
+msgstr "Traductions"
+
 msgid "Type of text"
 msgstr "Type de texte"
 
@@ -2112,6 +2124,9 @@ msgstr "Autorisation"
 
 msgid "Average value"
 msgstr "Valeur moyenne"
+
+msgid "Bulk download"
+msgstr "Téléchargement en masse"
 
 msgid "Cancellations"
 msgstr "Annulations"
@@ -2196,6 +2211,9 @@ msgstr "Pas terminé"
 
 msgid "Number events"
 msgstr "Nombre d'événements"
+
+msgid "Original text"
+msgstr "Texte original"
 
 msgid "Passages made"
 msgstr "Mesures prises"
@@ -2617,6 +2635,9 @@ msgstr "Algorithme de démarrage"
 
 msgid "Ticket selected"
 msgstr "Billet sélectionné"
+
+msgid "Translated text"
+msgstr "Texte traduit"
 
 msgid "Upload Expenses"
 msgstr "Télécharger les dépenses"
@@ -3496,6 +3517,15 @@ msgstr "Inscription externe"
 msgid "Failed password reset"
 msgstr "La réinitialisation du mot de passe a échoué"
 
+msgid "Failed to add faction"
+msgstr "Échec de l'ajout d'une faction"
+
+msgid "Failed to add gallery"
+msgstr "Échec de l'ajout de la galerie"
+
+msgid "Failed to add handout"
+msgstr "N'a pas ajouté de document"
+
 msgid "Go to the casting for"
 msgstr "Aller au casting pour"
 
@@ -3644,6 +3674,9 @@ msgstr "Frais de personnel"
 msgid "External register link"
 msgstr "Lien vers le registre externe"
 
+msgid "Failed to add profiles"
+msgstr "Échec de l'ajout de profils"
+
 msgid "Follow the steps below"
 msgstr "Suivez les étapes ci-dessous "
 
@@ -3751,6 +3784,9 @@ msgstr "Une courte phrase d'accroche, un slogan"
 msgid "Assignment %(elements)s"
 msgstr "Affectation %(elements)s"
 
+msgid "Association Translation"
+msgstr "Traduction de l'association"
+
 msgid "Background of web pages"
 msgstr "Fond de page web"
 
@@ -3780,6 +3816,9 @@ msgstr "Télécharger la fiche complète"
 
 msgid "Early registration link"
 msgstr "Lien pour l'inscription anticipée"
+
+msgid "Failed to add character"
+msgstr "Échec de l'ajout d'un caractère"
 
 msgid "Indicate only if rate 0"
 msgstr "N'indiquer que si le taux est de 0"
@@ -3860,6 +3899,9 @@ msgstr "Que faites-vous encore ici"
 msgid "You have made a mistake"
 msgstr "Vous vous trompez"
 
+msgid "Association Translations"
+msgstr "Traductions de l'association"
+
 msgid "Cancel your registration"
 msgstr "Se désabonner"
 
@@ -3920,6 +3962,9 @@ msgstr "Nouvelle question posée par %(user)s"
 
 msgid "No, I don't want updates"
 msgstr "Non, je ne veux pas de mises à jour"
+
+msgid "Optional ordering number"
+msgstr "Numéro de commande optionnel"
 
 msgid "Participant cancellation"
 msgstr "Annulation du participant"
@@ -5358,6 +5403,9 @@ msgstr "Pour quel jour avez-vous besoin d'un transport"
 msgid "Here is a list of critical problems to fix"
 msgstr "Voici une liste de problèmes critiques à résoudre"
 
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr "Code ISO de la langue (par exemple, \"en\", \"it\", \"de\")"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Si coché : affiche le genre pour chaque événement"
@@ -5582,6 +5630,9 @@ msgstr "Définir une valeur pour la date d'ouverture de l'enregistrement"
 
 msgid "Set up character customization configuration"
 msgstr "Configuration de la personnalisation des personnages"
+
+msgid "The organization this translation belongs to"
+msgstr "L'organisation à laquelle appartient cette traduction"
 
 msgid "This page shows your personal spending items"
 msgstr "Cette page récapitule vos postes de dépenses personnelles"
@@ -5981,9 +6032,6 @@ msgstr "Indique la couleur qui sera utilisée pour les liens"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Indique la couleur qui sera utilisée pour les textes"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Indiquer les courses pour lesquelles la réduction est active"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Gérer les versements fixes pour les participants"
 
@@ -6068,6 +6116,10 @@ msgstr ""
 "Gérer les mouvements, les prêts et les réparations des articles de "
 "l'entrepôt"
 
+msgid "Now you can define custom organization translations"
+msgstr ""
+"Vous pouvez désormais définir des traductions d'organisations personnalisées"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Choisissez une photo claire et facilement reconnaissable"
 
@@ -6085,9 +6137,6 @@ msgstr "Il existe des types de capacités sans capacités : %(list)s"
 
 msgid "This page shows all inflows received for this event"
 msgstr "Cette page présente tous les flux reçus pour cet événement"
-
-msgid "This page summarizes the association's custom texts"
-msgstr "Cette page résume les textes de la coutume de l'association"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr " voici les conditions pour se désinscrire de cet événement"
@@ -6215,6 +6264,10 @@ msgstr "Le caractère a des valeurs manquantes dans les champs obligatoires"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Le nombre total de billets à tirer a été indiqué"
 
+msgid "This page allows you to select items to bulk download"
+msgstr ""
+"Cette page vous permet de sélectionner les éléments à télécharger en masse"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Cette page présente toutes les factures enregistrées dans le système"
 
@@ -6227,6 +6280,9 @@ msgstr ""
 
 msgid "This page summarises the assignments in this event of"
 msgstr "Cette page résume les missions de cet événement de"
+
+msgid "This page summarizes the organizations's custom texts"
+msgstr "Cette page résume les textes de la coutume de l'organisation"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Quantités d'entrepôt déjà engagées pour cet événement"
@@ -6257,6 +6313,9 @@ msgstr ""
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Indiquer comment les dépenses sont configurées au niveau du budget"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Indiquer les sessions pour lesquelles la réduction est active"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Indique que le paiement est envoyé 'aux amis et à la famille'"
@@ -6556,6 +6615,9 @@ msgstr "Cette page résume les délais de paiement pour l'événement"
 msgid "This page shows the sections of the event registration form"
 msgstr ""
 "Cette page résume les sections du formulaire d'inscription à l'événement"
+
+msgid "This page summarizes the organization's custom translations"
+msgstr "Cette page résume les traductions personnalisées de l'organisation"
 
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Où a-t-il été placé ? Quand est-il prévu qu'il revienne ?"
@@ -7369,6 +7431,11 @@ msgstr ""
 "La première ligne du fichier contient les noms des champs que vous souhaitez"
 " télécharger"
 
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr ""
+"Le texte original en anglais tel qu'il apparaît dans le code (msgid in "
+"gettext)"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Il s'agit des inscriptions à des événements pour lesquels vous devez "
@@ -7549,6 +7616,12 @@ msgstr ""
 "si le caractère n'appartient PAS à cet élément, mais est seulement référencé"
 
 msgid ""
+"Customize translations of words and phrases in the organization interface"
+msgstr ""
+"Personnaliser les traductions des mots et des phrases dans l'interface de "
+"l'organisation"
+
+msgid ""
 "Do you want to split the registration fee into fixed payment installments"
 msgstr ""
 "Souhaitez-vous fractionner les frais d'inscription en plusieurs versements "
@@ -7712,6 +7785,12 @@ msgid ""
 msgstr ""
 "Texte visible uniquement par le participant assigné, lorsque la case "
 "'afficher le texte' est cochée"
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr ""
+"La traduction personnalisée qui remplacera la traduction par défaut pour "
+"cette organisation"
 
 msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
@@ -8494,6 +8573,13 @@ msgstr ""
 "approuvé) aux principaux éléments d'écriture"
 
 msgid ""
+"Allows to fine-tune how words and phrases are translated in the "
+"organization's space"
+msgstr ""
+"Permet d'affiner la façon dont les mots et les phrases sont traduits dans "
+"l'espace de l'organisation"
+
+msgid ""
 "Do you want to open registrations at a specific date and time instead of "
 "immediately"
 msgstr ""
@@ -8691,6 +8777,20 @@ msgstr ""
 "<b>%(event)s</b>"
 
 msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+"Gérer les dérogations de traduction propres à l'organisation pour "
+"personnaliser la terminologie et le texte"
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+"Contexte facultatif pour la désambiguïsation lorsqu'un même texte a des "
+"significations différentes (msgctxt)"
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -8855,6 +8955,13 @@ msgid ""
 msgstr ""
 "Cette page résume les problèmes signalés par les contributeurs, en vue d'une"
 " prise en charge directe pendant l'événement"
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations"
+" are ignored."
+msgstr ""
+"Indique si cette surcharge de traduction est actuellement active. Les "
+"traductions inactives sont ignorées."
 
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "

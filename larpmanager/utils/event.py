@@ -18,13 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.button import event_button_key
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.role import has_event_permission
@@ -156,10 +154,6 @@ def update_run_plan_on_event_change(instance):
     if not instance.plan and instance.event:
         updates = {"plan": instance.event.association.plan}
         Run.objects.filter(pk=instance.pk).update(**updates)
-
-
-def clear_event_button_cache(event_instance):
-    cache.delete(event_button_key(event_instance.event_id))
 
 
 def prepare_campaign_event_data(instance):

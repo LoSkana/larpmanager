@@ -469,7 +469,8 @@ class Discount(BaseModel):
         Run,
         related_name="discounts",
         blank=True,
-        help_text=_("Indicate the runs for which the discount is active"),
+        help_text=_("Indicate the sessions for which the discount is active"),
+        verbose_name=_("Sessions"),
     )
 
     value = models.DecimalField(

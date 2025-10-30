@@ -390,9 +390,6 @@ msgstr "Tomter"
 msgid "Price"
 msgstr "Pris"
 
-msgid "Print"
-msgstr "Skriv ut"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -738,6 +735,9 @@ msgstr "Kontakt"
 msgid "Content"
 msgstr "Innehåll"
 
+msgid "Context"
+msgstr "Sammanhang"
+
 msgid "Correct"
 msgstr "Korrekt"
 
@@ -1044,9 +1044,6 @@ msgstr "Förväntad"
 msgid "Expenses"
 msgstr "Kostnader"
 
-msgid "External"
-msgstr "Extern"
-
 msgid "Factions"
 msgstr "Fraktioner"
 
@@ -1112,6 +1109,9 @@ msgstr "Pass"
 
 msgid "Payments"
 msgstr "Betalningar"
+
+msgid "Pdf bulk"
+msgstr "Pdf bulk"
 
 msgid "Personal"
 msgstr "Personal"
@@ -1181,6 +1181,9 @@ msgstr "Utvalda"
 
 msgid "Services"
 msgstr "Tjänster"
+
+msgid "Sessions"
+msgstr "Sessioner"
 
 msgid "Settings"
 msgstr "Inställningar"
@@ -1686,6 +1689,9 @@ msgstr "Lägg till tomt"
 msgid "Assignments"
 msgstr "Uppdrag"
 
+msgid "Association"
+msgstr "Förening"
+
 msgid "Beneficiary"
 msgstr "Förmånstagare"
 
@@ -1841,6 +1847,9 @@ msgstr "Totala kostnader"
 
 msgid "Transaction"
 msgstr "Transaktion"
+
+msgid "Translation"
+msgstr "Översättning"
 
 msgid "Transversal"
 msgstr "Transversal"
@@ -2061,6 +2070,9 @@ msgstr "Totalt antal"
 msgid "Transactions"
 msgstr "Transaktioner"
 
+msgid "Translations"
+msgstr "Översättningar"
+
 msgid "Type of text"
 msgstr "Typ av text"
 
@@ -2112,6 +2124,9 @@ msgstr "Auktorisation"
 
 msgid "Average value"
 msgstr "Genomsnittligt värde"
+
+msgid "Bulk download"
+msgstr "Bulk nedladdning"
 
 msgid "Cancellations"
 msgstr "Avbokningar"
@@ -2196,6 +2211,9 @@ msgstr "Ej slutfört"
 
 msgid "Number events"
 msgstr "Antal evenemang"
+
+msgid "Original text"
+msgstr "Originaltext"
 
 msgid "Passages made"
 msgstr "Åtgärder som vidtagits"
@@ -2617,6 +2635,9 @@ msgstr "Starta algoritmen"
 
 msgid "Ticket selected"
 msgstr "Biljett vald"
+
+msgid "Translated text"
+msgstr "Översatt text"
 
 msgid "Upload Expenses"
 msgstr "Ladda upp kostnader"
@@ -3496,6 +3517,15 @@ msgstr "Extern registrering"
 msgid "Failed password reset"
 msgstr "Återställning av lösenord misslyckades"
 
+msgid "Failed to add faction"
+msgstr "Misslyckades med att lägga till fraktion"
+
+msgid "Failed to add gallery"
+msgstr "Misslyckades med att lägga till galleri"
+
+msgid "Failed to add handout"
+msgstr "Misslyckades med att lägga till handout"
+
 msgid "Go to the casting for"
 msgstr "Gå till casting för"
 
@@ -3644,6 +3674,9 @@ msgstr "Kostnader för anställda"
 msgid "External register link"
 msgstr "Extern registerlänk"
 
+msgid "Failed to add profiles"
+msgstr "Misslyckades med att lägga till profiler"
+
 msgid "Follow the steps below"
 msgstr "Följ stegen nedan"
 
@@ -3751,6 +3784,9 @@ msgstr "En kort tagline, slogan eller liknande"
 msgid "Assignment %(elements)s"
 msgstr "Tilldelning %(elements)s"
 
+msgid "Association Translation"
+msgstr "Förening Översättning"
+
 msgid "Background of web pages"
 msgstr "Bakgrund för webbsida"
 
@@ -3780,6 +3816,9 @@ msgstr "Ladda ner fullständigt blad"
 
 msgid "Early registration link"
 msgstr "Länk för tidig registrering"
+
+msgid "Failed to add character"
+msgstr "Misslyckades med att lägga till karaktär"
 
 msgid "Indicate only if rate 0"
 msgstr "Ange endast om hastighet 0"
@@ -3860,6 +3899,9 @@ msgstr "Vad gör du fortfarande här"
 msgid "You have made a mistake"
 msgstr "Du har fått det om bakfoten"
 
+msgid "Association Translations"
+msgstr "Översättningar av föreningar"
+
 msgid "Cancel your registration"
 msgstr "Avsluta prenumeration"
 
@@ -3920,6 +3962,9 @@ msgstr "Ny fråga av %(user)s"
 
 msgid "No, I don't want updates"
 msgstr "Nej, jag vill inte ha uppdateringar"
+
+msgid "Optional ordering number"
+msgstr "Valfritt beställningsnummer"
 
 msgid "Participant cancellation"
 msgstr "Avbokning av deltagare"
@@ -5356,6 +5401,9 @@ msgstr "För vilken dag behöver du transport"
 msgid "Here is a list of critical problems to fix"
 msgstr "Här är en lista över kritiska problem som måste åtgärdas"
 
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr "ISO-språkkod (t.ex. \"en\", \"it\", \"de\")"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Om markerat: visar genren för varje evenemang"
@@ -5576,6 +5624,9 @@ msgstr "Ange ett värde för öppningsdatum för registrering"
 
 msgid "Set up character customization configuration"
 msgstr "Ställ in konfiguration för karaktärsanpassning"
+
+msgid "The organization this translation belongs to"
+msgstr "Den organisation som denna översättning tillhör"
 
 msgid "This page shows your personal spending items"
 msgstr "På denna sida sammanfattas dina personliga utgiftsposter"
@@ -5961,9 +6012,6 @@ msgstr "Anger vilken färg som ska användas för länkar"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Anger den färg som ska användas för texterna"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Ange de körningar för vilka rabatten är aktiv"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Hantera fasta utbetalningar för deltagare"
 
@@ -6044,6 +6092,9 @@ msgstr "Hantera profilfält som deltagarna kan fylla i"
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Hantera förflyttningar, lån och reparationer av artiklar i lagret"
 
+msgid "Now you can define custom organization translations"
+msgstr "Nu kan du definiera anpassade organisationsöversättningar"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Välj ett tydligt och lätt igenkännligt foto"
 
@@ -6059,9 +6110,6 @@ msgstr "Det finns förmågetyper utan förmågor: %(list)s"
 
 msgid "This page shows all inflows received for this event"
 msgstr "Denna sida visar alla inflöden som mottagits för detta evenemang"
-
-msgid "This page summarizes the association's custom texts"
-msgstr "Denna sida sammanfattar föreningens anpassade texter"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr "här är villkoren för att avregistrera sig från detta evenemang"
@@ -6186,6 +6234,9 @@ msgstr "Tecknet har saknade värden i obligatoriska fält"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
 
+msgid "This page allows you to select items to bulk download"
+msgstr "På den här sidan kan du välja objekt att ladda ner i bulk"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Denna sida visar alla fakturor som finns registrerade i systemet"
 
@@ -6197,6 +6248,9 @@ msgstr "Den här sidan visar användare som kan övertalas att registrera sig"
 
 msgid "This page summarises the assignments in this event of"
 msgstr "På denna sida sammanfattas uppdragen i detta event av"
+
+msgid "This page summarizes the organizations's custom texts"
+msgstr "Denna sida sammanfattar organisationernas anpassade texter"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Lagerkvantiteter som redan åtagits för detta evenemang"
@@ -6224,6 +6278,9 @@ msgstr "Ange så exakt som möjligt var du ska hämtas"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Ange hur utgifterna är utformade på budgetnivå"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Ange de sessioner för vilka rabatten är aktiv"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Anger att betalningen är skickad 'till vänner och familj"
@@ -6491,6 +6548,9 @@ msgid "This page shows the sections of the event registration form"
 msgstr ""
 "På denna sida sammanfattas avsnitten i formuläret för registrering av "
 "evenemang"
+
+msgid "This page summarizes the organization's custom translations"
+msgstr "På denna sida sammanfattas organisationens anpassade översättningar"
 
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Var har den placerats? När förväntas den komma tillbaka?"
@@ -7179,6 +7239,10 @@ msgstr ""
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Den första raden i filen är de fältnamn som du vill ladda upp"
 
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr ""
+"Den engelska originaltexten så som den visas i koden (msgid in gettext)"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Detta är de evenemangsregistreringar för vilka du måste göra en betalning"
@@ -7347,6 +7411,10 @@ msgid ""
 msgstr "om tecknet INTE tillhör detta element, utan endast refereras till"
 
 msgid ""
+"Customize translations of words and phrases in the organization interface"
+msgstr "Anpassa översättningar av ord och fraser i organisationsgränssnittet"
+
+msgid ""
 "Do you want to split the registration fee into fixed payment installments"
 msgstr "Vill du dela upp registreringsavgiften i fasta delbetalningar"
 
@@ -7493,6 +7561,12 @@ msgid ""
 msgstr ""
 "Text som endast är synlig för den tilldelade deltagaren, när 'visa text' är "
 "markerat"
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr ""
+"Den anpassade översättning som ska ersätta standardöversättningen för den "
+"här organisationen"
 
 msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
@@ -8236,6 +8310,13 @@ msgstr ""
 "till viktiga skrivelement"
 
 msgid ""
+"Allows to fine-tune how words and phrases are translated in the "
+"organization's space"
+msgstr ""
+"Gör det möjligt att finjustera hur ord och fraser översätts i "
+"organisationens utrymme"
+
+msgid ""
 "Do you want to open registrations at a specific date and time instead of "
 "immediately"
 msgstr ""
@@ -8432,6 +8513,20 @@ msgstr ""
 "<b>%(event)s</b>"
 
 msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+"Hantera organisationsspecifika översättningar för att anpassa terminologi "
+"och text"
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+"Valfri kontext för disambiguering när samma text har olika betydelser "
+"(msgctxt)"
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -8596,6 +8691,13 @@ msgid ""
 msgstr ""
 "På denna sida sammanfattas de problem som rapporterats av bidragsgivare, för"
 " direkt hantering under evenemanget"
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations"
+" are ignored."
+msgstr ""
+"Om den här översättningen är aktiv för närvarande. Inaktiva översättningar "
+"ignoreras."
 
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "

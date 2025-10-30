@@ -458,7 +458,7 @@ def orga_edit(
 
 def exe_edit(
     request: HttpRequest,
-    form_type: str,
+    form_type: type[MyForm],
     entity_id: int,
     permission: str,
     redirect_view: str = None,

@@ -271,6 +271,11 @@ urlpatterns = [
         name="orga_characters_pdf",
     ),
     path(
+        "<slug:event_slug>/manage/pdf/bulk/",
+        views_op.orga_characters_pdf_bulk,
+        name="orga_characters_pdf_bulk",
+    ),
+    path(
         "<slug:event_slug>/manage/cache/",
         views_or.orga_reload_cache,
         name="orga_reload_cache",
@@ -509,6 +514,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/factions/<int:num>/versions/",
         views_ow.orga_factions_versions,
         name="orga_factions_versions",
+    ),
+    path(
+        "<slug:event_slug>/manage/factions/<int:num>/pdf/sheet/",
+        views_op.orga_factions_sheet_pdf,
+        name="orga_factions_sheet_pdf",
     ),
     path(
         "<slug:event_slug>/manage/quest_types/",

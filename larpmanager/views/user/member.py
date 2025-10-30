@@ -39,6 +39,7 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image
 
 from larpmanager.accounting.member import info_accounting
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.member import (
     AvatarForm,
@@ -72,7 +73,6 @@ from larpmanager.utils.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.member import get_leaderboard
 from larpmanager.utils.pdf import get_membership_request
 from larpmanager.utils.registration import registration_status
-from larpmanager.utils.text import get_association_text
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
 
 

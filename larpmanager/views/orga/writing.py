@@ -75,7 +75,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import export_data
 from larpmanager.utils.edit import orga_edit, writing_edit
-from larpmanager.utils.pdf import print_handout, return_pdf
+from larpmanager.utils.pdf import print_handout
 from larpmanager.utils.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 
@@ -482,11 +482,8 @@ def orga_handouts_print(request: HttpRequest, event_slug: str, num: int) -> Http
     # Retrieve handout data and add to context
     get_handout(context, num)
 
-    # Generate PDF file path
-    fp = print_handout(context)
-
     # Return PDF response
-    return return_pdf(fp, str(context["handout"]))
+    return print_handout(context)
 
 
 @login_required

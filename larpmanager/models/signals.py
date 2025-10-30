@@ -52,6 +52,12 @@ from larpmanager.accounting.token_credit import (
 from larpmanager.accounting.vat import calculate_payment_vat
 from larpmanager.cache.accounting import clear_registration_accounting_cache, refresh_member_accounting_cache
 from larpmanager.cache.association import clear_association_cache
+from larpmanager.cache.association_text import (
+    clear_association_text_cache_on_delete,
+    update_association_text_cache_on_save,
+)
+from larpmanager.cache.association_translation import clear_association_translation_cache
+from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import (
     clear_event_cache_all_runs,
     clear_run_cache_and_media,
@@ -64,6 +70,7 @@ from larpmanager.cache.character import (
     update_member_event_character_cache,
 )
 from larpmanager.cache.config import clear_config_cache
+from larpmanager.cache.event_text import clear_event_text_cache_on_delete, update_event_text_cache_on_save
 from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
@@ -145,7 +152,13 @@ from larpmanager.models.accounting import (
     PaymentInvoice,
     RefundRequest,
 )
-from larpmanager.models.association import Association, AssociationConfig, AssociationSkin, AssociationText
+from larpmanager.models.association import (
+    Association,
+    AssociationConfig,
+    AssociationSkin,
+    AssociationText,
+    AssociationTranslation,
+)
 from larpmanager.models.base import Feature, FeatureModule, auto_assign_sequential_numbers, update_model_search_field
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
 from larpmanager.models.event import (
@@ -188,7 +201,6 @@ from larpmanager.utils.association import (
 from larpmanager.utils.auth import auto_assign_event_permission_number
 from larpmanager.utils.event import (
     assign_previous_campaign_character,
-    clear_event_button_cache,
     copy_parent_event_to_campaign,
     create_default_event_setup,
     prepare_campaign_event_data,
@@ -223,12 +235,6 @@ from larpmanager.utils.pdf import (
     delete_character_pdf_files,
 )
 from larpmanager.utils.registration import process_character_ticket_options, process_registration_event_change
-from larpmanager.utils.text import (
-    clear_association_text_cache_on_delete,
-    clear_event_text_cache_on_delete,
-    update_association_text_cache_on_save,
-    update_event_text_cache_on_save,
-)
 from larpmanager.utils.writing import replace_character_names_before_save
 
 log = logging.getLogger(__name__)
@@ -468,6 +474,19 @@ def post_save_association_text(sender, instance, created, **kwargs):
     update_association_text_cache_on_save(instance)
 
 
+# AssociationTranslation signals
+@receiver(post_save, sender=AssociationTranslation)
+def post_save_association_translation(sender, instance, created, **kwargs):
+    """Clear cache when association translation is saved."""
+    clear_association_translation_cache(instance.association_id, instance.language)
+
+
+@receiver(pre_delete, sender=AssociationTranslation)
+def pre_delete_association_translation(sender, instance, **kwargs):
+    """Clear cache when association translation is deleted."""
+    clear_association_translation_cache(instance.association_id, instance.language)
+
+
 # Association signals
 @receiver(pre_save, sender=Association)
 def pre_save_association_set_skin_features(sender, instance, **kwargs):
@@ -676,12 +695,12 @@ def post_delete_event_links(sender, instance, **kwargs):
 # EventButton signals
 @receiver(post_save, sender=EventButton)
 def post_save_event_button(sender, instance, created, **kwargs):
-    clear_event_button_cache(instance)
+    clear_event_button_cache(instance.event_id)
 
 
 @receiver(pre_delete, sender=EventButton)
 def pre_delete_event_button(sender, instance, **kwargs):
-    clear_event_button_cache(instance)
+    clear_event_button_cache(instance.event_id)
 
 
 # EventConfig signals

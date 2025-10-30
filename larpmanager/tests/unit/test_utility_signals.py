@@ -247,7 +247,7 @@ class TestUtilitySignals(BaseTestCase):
 
         mock_update.assert_called_once_with(registration)
 
-    @patch("larpmanager.utils.text.update_association_text")
+    @patch("larpmanager.cache.association_text.update_association_text")
     def test_association_text_post_save_updates_cache(self, mock_update):
         """Test that AssociationText post_save signal updates text cache"""
         from larpmanager.models.association import AssociationTextType
@@ -270,7 +270,7 @@ class TestUtilitySignals(BaseTestCase):
         # Verify text was deleted
         self.assertFalse(AssociationText.objects.filter(id=text_id).exists())
 
-    @patch("larpmanager.utils.text.update_event_text")
+    @patch("larpmanager.cache.event_text.update_event_text")
     def test_event_text_post_save_updates_cache(self, mock_update):
         """Test that EventText post_save signal updates text cache"""
         from larpmanager.models.event import EventTextType

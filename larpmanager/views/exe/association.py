@@ -36,6 +36,7 @@ from larpmanager.forms.association import (
     ExeAssociationForm,
     ExeAssociationRoleForm,
     ExeAssociationTextForm,
+    ExeAssociationTranslationForm,
     ExeConfigForm,
     ExeFeatureForm,
     ExePreferencesForm,
@@ -43,7 +44,7 @@ from larpmanager.forms.association import (
 )
 from larpmanager.forms.member import ExeProfileForm
 from larpmanager.models.access import AssociationPermission, AssociationRole
-from larpmanager.models.association import Association, AssociationText
+from larpmanager.models.association import Association, AssociationText, AssociationTranslation
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.base import check_association_context
@@ -125,6 +126,57 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_texts_edit(request, num):
     return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
+
+
+@login_required
+def exe_translations(request: HttpRequest) -> HttpResponse:
+    """Display the list of custom translation overrides for an association.
+
+    This view renders the management interface for organization-specific translation
+    overrides. It shows all custom translations (active and inactive) that have been
+    configured for the association, allowing administrators to review, edit, and
+    manage their translation customizations.
+
+    Args:
+        request: HTTP request object containing user authentication and session data
+
+    Returns:
+        HttpResponse: Rendered template showing the list of translation overrides
+            with options to add, edit, or delete translations
+
+    Raises:
+        PermissionDenied: If user lacks exe_translations permission for the association
+    """
+    # Verify user has permission to manage translations for this association
+    context = check_association_context(request, "exe_translations")
+
+    # Fetch all custom translations for this association
+    # Results include both active and inactive translations for full visibility
+    context["list"] = AssociationTranslation.objects.filter(association_id=context["association_id"])
+
+    return render(request, "larpmanager/exe/translations.html", context)
+
+
+@login_required
+def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Handle creation and editing of association translation overrides.
+
+    This view provides the form interface for creating new translation overrides
+    or editing existing ones. It delegates to the standard exe_edit utility which
+    handles both GET (display form) and POST (process submission) requests.
+
+    Args:
+        request: HTTP request object
+        num: Translation ID for editing, or 0 for creating new translation
+
+    Returns:
+        HttpResponse: Rendered form for editing or redirect after successful save
+
+    Raises:
+        PermissionDenied: If user lacks exe_translations permission
+        Http404: If translation with given ID doesn't exist
+    """
+    return exe_edit(request, ExeAssociationTranslationForm, num, "exe_translations")
 
 
 @login_required

@@ -390,9 +390,6 @@ msgstr "Pozemky"
 msgid "Price"
 msgstr "Cena"
 
-msgid "Print"
-msgstr "Tisk"
-
 msgid "Quest"
 msgstr "Quest"
 
@@ -738,6 +735,9 @@ msgstr "Kontakt"
 msgid "Content"
 msgstr "Obsah"
 
+msgid "Context"
+msgstr "Kontext"
+
 msgid "Correct"
 msgstr "Správně"
 
@@ -1044,9 +1044,6 @@ msgstr "Očekávané"
 msgid "Expenses"
 msgstr "Výdaje"
 
-msgid "External"
-msgstr "Externí"
-
 msgid "Factions"
 msgstr "Frakce"
 
@@ -1112,6 +1109,9 @@ msgstr "Pas"
 
 msgid "Payments"
 msgstr "Platby"
+
+msgid "Pdf bulk"
+msgstr "Pdf ve velkém"
 
 msgid "Personal"
 msgstr "Zaměstnanci"
@@ -1181,6 +1181,9 @@ msgstr "Vybrané stránky"
 
 msgid "Services"
 msgstr "Služby"
+
+msgid "Sessions"
+msgstr "Relace"
 
 msgid "Settings"
 msgstr "Nastavení"
@@ -1686,6 +1689,9 @@ msgstr "Přidat do pozemku"
 msgid "Assignments"
 msgstr "Zadání"
 
+msgid "Association"
+msgstr "Sdružení"
+
 msgid "Beneficiary"
 msgstr "Příjemce"
 
@@ -1841,6 +1847,9 @@ msgstr "Celkové náklady"
 
 msgid "Transaction"
 msgstr "Transakce"
+
+msgid "Translation"
+msgstr "Překlad"
 
 msgid "Transversal"
 msgstr "Příčná"
@@ -2061,6 +2070,9 @@ msgstr "Celkový počet"
 msgid "Transactions"
 msgstr "Transakce"
 
+msgid "Translations"
+msgstr "Překlady"
+
 msgid "Type of text"
 msgstr "Typ textu"
 
@@ -2112,6 +2124,9 @@ msgstr "Autorizace"
 
 msgid "Average value"
 msgstr "Průměrná hodnota"
+
+msgid "Bulk download"
+msgstr "Hromadné stahování"
 
 msgid "Cancellations"
 msgstr "Storna"
@@ -2196,6 +2211,9 @@ msgstr "Není dokončeno"
 
 msgid "Number events"
 msgstr "Počet událostí"
+
+msgid "Original text"
+msgstr "Původní text"
 
 msgid "Passages made"
 msgstr "Přijaté kroky"
@@ -2617,6 +2635,9 @@ msgstr "Algoritmus spuštění"
 
 msgid "Ticket selected"
 msgstr "Vybraná vstupenka"
+
+msgid "Translated text"
+msgstr "Přeložený text"
 
 msgid "Upload Expenses"
 msgstr "Nahrávání výdajů"
@@ -3496,6 +3517,15 @@ msgstr "Externí registrace"
 msgid "Failed password reset"
 msgstr "Obnovení hesla se nezdařilo"
 
+msgid "Failed to add faction"
+msgstr "Nepodařilo se přidat frakci"
+
+msgid "Failed to add gallery"
+msgstr "Nepodařilo se přidat galerii"
+
+msgid "Failed to add handout"
+msgstr "Nepodařilo se přidat leták"
+
 msgid "Go to the casting for"
 msgstr "Přejděte na casting"
 
@@ -3644,6 +3674,9 @@ msgstr "Výdaje na zaměstnance"
 msgid "External register link"
 msgstr "Odkaz na externí registr"
 
+msgid "Failed to add profiles"
+msgstr "Nepodařilo se přidat profily"
+
 msgid "Follow the steps below"
 msgstr "Postupujte podle následujících kroků"
 
@@ -3751,6 +3784,9 @@ msgstr "Krátký slogan, heslo"
 msgid "Assignment %(elements)s"
 msgstr "Přiřazení %(elements)s"
 
+msgid "Association Translation"
+msgstr "Překlad asociace"
+
 msgid "Background of web pages"
 msgstr "Pozadí webové stránky"
 
@@ -3780,6 +3816,9 @@ msgstr "Stáhněte si kompletní list"
 
 msgid "Early registration link"
 msgstr "Odkaz pro včasnou registraci"
+
+msgid "Failed to add character"
+msgstr "Nepodařilo se přidat znak"
 
 msgid "Indicate only if rate 0"
 msgstr "Uveďte pouze v případě sazby 0"
@@ -3860,6 +3899,9 @@ msgstr "Co tady ještě děláš"
 msgid "You have made a mistake"
 msgstr "Špatně jste to pochopili"
 
+msgid "Association Translations"
+msgstr "Překlady asociace"
+
 msgid "Cancel your registration"
 msgstr "Odhlásit se z odběru"
 
@@ -3920,6 +3962,9 @@ msgstr "Nová otázka od %(user)s"
 
 msgid "No, I don't want updates"
 msgstr "Ne, nechci aktualizace"
+
+msgid "Optional ordering number"
+msgstr "Volitelné objednací číslo"
 
 msgid "Participant cancellation"
 msgstr "Zrušení účasti"
@@ -5354,6 +5399,9 @@ msgstr "Na který den budete potřebovat dopravu"
 msgid "Here is a list of critical problems to fix"
 msgstr "Zde je seznam kritických problémů, které je třeba odstranit"
 
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr "kód jazyka ISO (např. \"en\", \"it\", \"de\")"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí žánr pro každou událost"
@@ -5574,6 +5622,9 @@ msgstr "Nastavení hodnoty pro datum zahájení registrace"
 
 msgid "Set up character customization configuration"
 msgstr "Nastavení konfigurace přizpůsobení postavy"
+
+msgid "The organization this translation belongs to"
+msgstr "Organizace, které tento překlad patří"
 
 msgid "This page shows your personal spending items"
 msgstr "Tato stránka shrnuje položky vašich osobních výdajů"
@@ -5960,9 +6011,6 @@ msgstr "Označuje barvu, která bude použita pro odkazy"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Označuje barvu, která bude použita pro texty"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Uveďte běhy, pro které je sleva aktivní"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Správa pevných splátek pro účastníky"
 
@@ -6044,6 +6092,9 @@ msgstr "Správa profilových polí, která mohou účastníci vyplnit"
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Správa pohybu skladových položek, výpůjček a oprav"
 
+msgid "Now you can define custom organization translations"
+msgstr "Nyní můžete definovat vlastní překlady organizací"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Vyberte prosím jasnou a snadno rozpoznatelnou fotografii"
 
@@ -6059,9 +6110,6 @@ msgstr "Existují typy schopností bez schopností: %(list)s"
 
 msgid "This page shows all inflows received for this event"
 msgstr "Tato stránka zobrazuje všechny přítoky přijaté pro tuto událost"
-
-msgid "This page summarizes the association's custom texts"
-msgstr "Tato stránka shrnuje vlastní texty sdružení"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr "zde jsou uvedeny podmínky pro odhlášení z této akce"
@@ -6187,6 +6235,9 @@ msgstr "Znak má chybějící hodnoty v povinných polích"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
 
+msgid "This page allows you to select items to bulk download"
+msgstr "Na této stránce můžete vybrat položky k hromadnému stažení"
+
 msgid "This page shows all invoices registered in the system"
 msgstr "Na této stránce jsou zobrazeny všechny faktury zapsané v systému"
 
@@ -6200,6 +6251,9 @@ msgstr ""
 
 msgid "This page summarises the assignments in this event of"
 msgstr "Na této stránce jsou shrnuty úkoly v rámci této akce"
+
+msgid "This page summarizes the organizations's custom texts"
+msgstr "Tato stránka shrnuje vlastní texty organizací"
 
 msgid "Warehouse quantities already committed for this event"
 msgstr "Množství skladových zásob, které již bylo pro tuto akci přiděleno"
@@ -6227,6 +6281,9 @@ msgstr "Co nejpřesněji uveďte, kde vás vyzvednout"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Uveďte relace, pro které je sleva aktivní"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Označuje, že platba je zasílána 'přátelům a rodině'"
@@ -6490,6 +6547,9 @@ msgstr "Na této stránce je shrnuto nastavení termínu platby pro danou událo
 
 msgid "This page shows the sections of the event registration form"
 msgstr "Na této stránce jsou shrnuty jednotlivé části registračního formuláře"
+
+msgid "This page summarizes the organization's custom translations"
+msgstr "Tato stránka shrnuje vlastní překlady organizace"
 
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Kde byl umístěn? Kdy se očekává jeho návrat?"
@@ -7144,6 +7204,9 @@ msgstr ""
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Na prvním řádku souboru jsou názvy polí, které chcete nahrát"
 
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
 
@@ -7301,6 +7364,10 @@ msgid ""
 msgstr "pokud znak NENÍ součástí tohoto prvku, ale pouze se na něj odkazuje"
 
 msgid ""
+"Customize translations of words and phrases in the organization interface"
+msgstr "Přizpůsobení překladů slov a frází v rozhraní organizace"
+
+msgid ""
 "Do you want to split the registration fee into fixed payment installments"
 msgstr "Chcete rozdělit registrační poplatek do pevných splátek"
 
@@ -7442,6 +7509,10 @@ msgid ""
 msgstr ""
 "Text viditelný pouze přiřazeným účastníkem, pokud je zaškrtnuto 'zobrazit "
 "text'"
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr "Vlastní překlad, který nahradí výchozí překlad pro tuto organizaci"
 
 msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
@@ -8157,6 +8228,11 @@ msgstr ""
 "připraveno, schváleno)"
 
 msgid ""
+"Allows to fine-tune how words and phrases are translated in the "
+"organization's space"
+msgstr "Umožňuje vyladit způsob překladu slov a frází v prostoru organizace"
+
+msgid ""
 "Do you want to open registrations at a specific date and time instead of "
 "immediately"
 msgstr "Chcete otevřít registrace v určitý den a čas, nikoli okamžitě"
@@ -8336,6 +8412,20 @@ msgstr ""
 "<b>%(event)s</b>"
 
 msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+"Správa překladů specifických pro organizaci pro přizpůsobení terminologie a "
+"textu"
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+"Nepovinný kontext pro disambiguaci, když má stejný text různé významy "
+"(msgctxt)"
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -8499,6 +8589,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty problémy nahlášené přispěvateli k přímému "
 "řešení během akce"
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations"
+" are ignored."
+msgstr ""
+"Zda je toto přepsání překladu aktuálně aktivní. Neaktivní překlady jsou "
+"ignorovány."
 
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "
