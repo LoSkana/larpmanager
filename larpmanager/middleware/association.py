@@ -28,9 +28,9 @@ from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
 from larpmanager.cache.association import get_cache_association
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.skin import get_cache_skin
 from larpmanager.models.association import AssociationTextType
-from larpmanager.utils.text import get_association_text
 
 
 class AssociationIdentifyMiddleware:

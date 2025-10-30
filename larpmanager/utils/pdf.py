@@ -41,6 +41,7 @@ from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
 from larpmanager.cache.association import get_cache_association
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import AssociationTextType
@@ -59,7 +60,6 @@ from larpmanager.utils.character import get_char_check, get_character_relationsh
 from larpmanager.utils.common import get_element, get_handout
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
-from larpmanager.utils.text import get_association_text
 
 logger = logging.getLogger(__name__)
 

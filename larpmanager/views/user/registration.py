@@ -36,7 +36,9 @@ from django.views.decorators.http import require_POST
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.registration import (
     PreRegistrationForm,
@@ -76,7 +78,6 @@ from larpmanager.utils.exceptions import (
     check_event_feature,
 )
 from larpmanager.utils.registration import check_assign_character, get_reduced_available_count
-from larpmanager.utils.text import get_association_text, get_event_text
 
 logger = logging.getLogger(__name__)
 

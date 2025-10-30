@@ -735,6 +735,9 @@ msgstr "Kontakt"
 msgid "Content"
 msgstr "Innhold"
 
+msgid "Context"
+msgstr "Sammenheng"
+
 msgid "Correct"
 msgstr "Korrekt"
 
@@ -1683,6 +1686,9 @@ msgstr "Legg til i plottet"
 msgid "Assignments"
 msgstr "Oppgaver"
 
+msgid "Association"
+msgstr "Foreningen"
+
 msgid "Beneficiary"
 msgstr "Mottaker"
 
@@ -1838,6 +1844,9 @@ msgstr "Totale kostnader"
 
 msgid "Transaction"
 msgstr "Transaksjon"
+
+msgid "Translation"
+msgstr "Oversettelse"
 
 msgid "Transversal"
 msgstr "Tverrgående"
@@ -2058,6 +2067,9 @@ msgstr "Totalt antall"
 msgid "Transactions"
 msgstr "Transaksjoner"
 
+msgid "Translations"
+msgstr "Oversettelser"
+
 msgid "Type of text"
 msgstr "Type tekst"
 
@@ -2196,6 +2208,9 @@ msgstr "Ikke fullført"
 
 msgid "Number events"
 msgstr "Antall hendelser"
+
+msgid "Original text"
+msgstr "Opprinnelig tekst"
 
 msgid "Passages made"
 msgstr "Tiltak som er iverksatt"
@@ -2608,6 +2623,9 @@ msgstr "Start-algoritme"
 
 msgid "Ticket selected"
 msgstr "Billett valgt"
+
+msgid "Translated text"
+msgstr "Oversatt tekst"
 
 msgid "Upload Expenses"
 msgstr "Last opp utgifter"
@@ -3739,6 +3757,9 @@ msgstr "En kort tagline, et slagord"
 msgid "Assignment %(elements)s"
 msgstr "Tildeling %(elements)s"
 
+msgid "Association Translation"
+msgstr "Assosiasjon Oversettelse"
+
 msgid "Background of web pages"
 msgstr "Bakgrunn på nettsiden"
 
@@ -3851,6 +3872,9 @@ msgstr "Hva gjør du fortsatt her"
 msgid "You have made a mistake"
 msgstr "Du tar feil"
 
+msgid "Association Translations"
+msgstr "Foreningsoversettelser"
+
 msgid "Cancel your registration"
 msgstr "Avslutt abonnementet"
 
@@ -3911,6 +3935,9 @@ msgstr "Nytt spørsmål fra %(user)s"
 
 msgid "No, I don't want updates"
 msgstr "Nei, jeg vil ikke ha oppdateringer"
+
+msgid "Optional ordering number"
+msgstr "Valgfritt bestillingsnummer"
 
 msgid "Participant cancellation"
 msgstr "Avbestilling av deltakere"
@@ -5335,6 +5362,9 @@ msgstr "For hvilken dag trenger du transport"
 msgid "Here is a list of critical problems to fix"
 msgstr "Her er en liste over kritiske problemer som må løses"
 
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr "ISO-språkkode (f.eks. \"en\", \"it\", \"de\")"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Hvis avkrysset: viser sjangeren for hvert arrangement"
@@ -5553,6 +5583,9 @@ msgstr "Sett opp en verdi for åpningsdato for registrering"
 
 msgid "Set up character customization configuration"
 msgstr "Konfigurer konfigurasjon av tegntilpasning"
+
+msgid "The organization this translation belongs to"
+msgstr "Organisasjonen denne oversettelsen tilhører"
 
 msgid "This page shows your personal spending items"
 msgstr "Denne siden oppsummerer dine personlige utgiftsposter"
@@ -6018,6 +6051,9 @@ msgstr "Administrer profilfelt som deltakerne kan fylle ut"
 msgid "Manage warehouse item movements, loans, and repairs"
 msgstr "Administrere lagerbevegelser, lån og reparasjoner"
 
+msgid "Now you can define custom organization translations"
+msgstr "Nå kan du definere egendefinerte organisasjonsoversettelser"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Velg et tydelig og lett gjenkjennelig bilde"
 
@@ -6035,9 +6071,6 @@ msgstr "Det finnes evnetyper uten evner: %(list)s"
 msgid "This page shows all inflows received for this event"
 msgstr ""
 "Denne siden viser alle innstrømminger som er mottatt for denne hendelsen"
-
-msgid "This page summarizes the association's custom texts"
-msgstr "Denne siden oppsummerer foreningens egne tekster"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr "her er vilkårene for å melde deg av dette arrangementet"
@@ -6177,6 +6210,9 @@ msgstr "Denne siden viser brukere som kan overtales til å registrere seg"
 
 msgid "This page summarises the assignments in this event of"
 msgstr "Denne siden oppsummerer oppgavene i dette arrangementet av"
+
+msgid "This page summarizes the organizations's custom texts"
+msgstr "Denne siden oppsummerer organisasjonens tilpassede tekster"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Du har fått en inngangsbillett til dette arrangementet av"
@@ -6467,6 +6503,9 @@ msgstr "Denne siden oppsummerer betalingsfristene for arrangementet"
 msgid "This page shows the sections of the event registration form"
 msgstr ""
 "Denne siden oppsummerer delene av registreringsskjemaet for arrangementet"
+
+msgid "This page summarizes the organization's custom translations"
+msgstr "Denne siden oppsummerer organisasjonens tilpassede oversettelser"
 
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Hvor har den blitt plassert? Når forventes den å komme tilbake?"
@@ -7156,6 +7195,9 @@ msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "Den første linjen i filen inneholder feltnavnene du ønsker å laste opp"
 
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr "Den engelske originalteksten slik den vises i koden (msgid i gettext)"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dette er de arrangementspåmeldingene som du må betale for"
 
@@ -7321,6 +7363,10 @@ msgid ""
 msgstr "hvis tegnet IKKE tilhører dette elementet, men bare er referert til"
 
 msgid ""
+"Customize translations of words and phrases in the organization interface"
+msgstr "Tilpass oversettelser av ord og uttrykk i organisasjonsgrensesnittet"
+
+msgid ""
 "Do you want to split the registration fee into fixed payment installments"
 msgstr "Ønsker du å dele opp registreringsavgiften i faste avdrag"
 
@@ -7462,6 +7508,12 @@ msgid ""
 msgstr ""
 "Tekst som bare er synlig for den tildelte deltakeren, når 'vis tekst' er "
 "merket av"
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr ""
+"Den egendefinerte oversettelsen som skal erstatte standardoversettelsen for "
+"denne organisasjonen"
 
 msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
@@ -8190,6 +8242,13 @@ msgstr ""
 "viktige skriveelementer"
 
 msgid ""
+"Allows to fine-tune how words and phrases are translated in the "
+"organization's space"
+msgstr ""
+"Gjør det mulig å finjustere hvordan ord og uttrykk oversettes i "
+"organisasjonens rom"
+
+msgid ""
 "Do you want to open registrations at a specific date and time instead of "
 "immediately"
 msgstr ""
@@ -8381,6 +8440,20 @@ msgstr ""
 "Hei! Vi tar kontakt angående din foreløpige påmelding til <b>%(event)s</b>"
 
 msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+"Administrer organisasjonsspesifikke oversettelsesoverstyringer for å "
+"tilpasse terminologi og tekst"
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+"Valgfri kontekst for disambiguering når samme tekst har forskjellige "
+"betydninger (msgctxt)"
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -8537,6 +8610,13 @@ msgid ""
 msgstr ""
 "Denne siden oppsummerer problemene som er rapportert av bidragsyterne, for "
 "direkte håndtering under arrangementet"
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations"
+" are ignored."
+msgstr ""
+"Om denne oversettelsesoverstyringen er aktiv for øyeblikket. Inaktive "
+"oversettelser ignoreres."
 
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "

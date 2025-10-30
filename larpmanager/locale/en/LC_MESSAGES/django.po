@@ -237,6 +237,14 @@ msgstr ""
 msgid "Content of mail reminding participants to fill their profile"
 msgstr ""
 
+msgid "Translations"
+msgstr ""
+
+msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+
 msgid "Roles"
 msgstr ""
 
@@ -2905,6 +2913,53 @@ msgstr ""
 msgid "Text language"
 msgstr ""
 
+msgid "Number"
+msgstr ""
+
+msgid "Optional ordering number"
+msgstr ""
+
+msgid "Association"
+msgstr ""
+
+msgid "The organization this translation belongs to"
+msgstr ""
+
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr ""
+
+msgid "Original text"
+msgstr ""
+
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr ""
+
+msgid "Translated text"
+msgstr ""
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr ""
+
+msgid "Context"
+msgstr ""
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations "
+"are ignored."
+msgstr ""
+
+msgid "Association Translation"
+msgstr ""
+
+msgid "Association Translations"
+msgstr ""
+
 msgid "Italy"
 msgstr ""
 
@@ -3945,9 +4000,6 @@ msgid "Problem"
 msgstr ""
 
 msgid "Action"
-msgstr ""
-
-msgid "Number"
 msgstr ""
 
 msgid "Names"
@@ -5290,7 +5342,13 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-msgid "This page summarizes the association's custom texts"
+msgid "This page summarizes the organizations's custom texts"
+msgstr ""
+
+msgid "This page summarizes the organization's custom translations"
+msgstr ""
+
+msgid "Translation"
 msgstr ""
 
 msgid "Url Shortner"
@@ -8103,6 +8161,14 @@ msgstr ""
 msgid "Now you can upload content and generate access tokens"
 msgstr ""
 
+msgid ""
+"Allows to fine-tune how words and phrases are translated in the "
+"organization's space"
+msgstr ""
+
+msgid "Now you can define custom organization translations"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -8255,6 +8321,10 @@ msgid "Manage warehouse movements"
 msgstr ""
 
 msgid "Manage warehouse tags"
+msgstr ""
+
+msgid ""
+"Customize translations of words and phrases in the organization interface"
 msgstr ""
 
 msgid "Manage the event settings: name, description, dates, and other data"

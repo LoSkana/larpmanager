@@ -25,7 +25,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.character import reset_event_cache_all
+from larpmanager.cache.character import update_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -174,32 +174,40 @@ def update_m2m_related_characters(instance, character_ids, action: str, update_f
         update_func: Function to update the instance cache
     """
     if action in ("post_add", "post_remove", "post_clear"):
-        # Update the instance cache
+        # Update the instance cache (relationship cache)
         update_func(instance)
 
-        # Reset event char for any run of event and child events
-        event = instance.event
-        events_id = list(Event.objects.filter(parent=event).values_list("pk", flat=True))
-        events_id.append(event.id)
-        for run in Run.objects.filter(event_id__in=events_id):
-            reset_event_cache_all(run)
-
-        # Update cache for all affected characters
+        # Collect all affected characters
+        affected_characters = []
         if character_ids:
+            # Get characters from provided IDs
             for character_id in character_ids:
                 try:
                     character = Character.objects.get(id=character_id)
-                    refresh_character_relationships(character)
+                    affected_characters.append(character)
                 except ObjectDoesNotExist:
                     logger.warning(f"Character {character_id} not found during relationship update")
         elif action == "post_clear":
-            # For post_clear, we need to update all characters that were related
+            # For post_clear, get all characters that were related
             if hasattr(instance, "characters"):
-                for character in instance.characters.all():
-                    refresh_character_relationships(character)
+                affected_characters = list(instance.characters.all())
             elif hasattr(instance, "get_plot_characters"):
-                for character_relationship in instance.get_plot_characters():
-                    refresh_character_relationships(character_relationship.character)
+                affected_characters = [rel.character for rel in instance.get_plot_characters()]
+
+        # Get all runs to update (event and child events)
+        event = instance.event
+        events_id = list(Event.objects.filter(parent=event).values_list("pk", flat=True))
+        events_id.append(event.id)
+        runs = Run.objects.filter(event_id__in=events_id)
+
+        # Update event cache selectively for each affected character
+        for character in affected_characters:
+            # Update relationship cache
+            refresh_character_relationships(character)
+
+            # Update event cache for all runs
+            for run in runs:
+                update_event_cache_all(run, character)
 
 
 def get_event_rels_cache(event: Event) -> dict[str, Any]:

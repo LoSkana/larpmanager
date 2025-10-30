@@ -24,7 +24,9 @@ from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
@@ -33,7 +35,6 @@ from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
-from larpmanager.utils.text import get_association_text, get_event_text
 
 
 @background_auto(queue="acc")

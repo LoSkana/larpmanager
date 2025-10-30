@@ -729,10 +729,18 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         """Initialize pay-what-you-want donation field configuration."""
         # Skip initialization if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
+            # Remove field from form to prevent NULL constraint violations
+            self.delete_field("pay_what")
             return
 
         # Register section and configure field label/help text from event config
         self.sections["id_pay_what"] = registration_section
+
+        # Ensure field is not required and has proper initial value
+        self.fields["pay_what"].required = False
+        if not self.initial.get("pay_what"):
+            self.initial["pay_what"] = 0
+
         self.fields["pay_what"].label = get_event_config(
             self.params["run"].event_id, "pay_what_you_want_label", _("Free donation")
         )
@@ -865,6 +873,16 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 raise ValidationError("User already has a registration for this event!")
 
         return data
+
+    def clean_pay_what(self):
+        """Ensure pay_what has a valid integer value, defaulting to 0 if None or empty.
+
+        Returns:
+            int: Validated pay_what value (0 if None or empty)
+        """
+        data = self.cleaned_data.get("pay_what")
+        # Convert None or empty string to 0 to prevent NULL constraint violations
+        return data if data is not None else 0
 
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""

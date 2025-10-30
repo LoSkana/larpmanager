@@ -1329,3 +1329,15 @@
     after_link: orga_onetimes
     hidden: false
     module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Translations
+    descr: Allows to fine-tune how words and phrases are translated in the organization's space
+    slug: translation
+    overall: true
+    placeholder: false
+    order: 30
+    after_text: Now you can define custom organization translations
+    after_link: exe_translations
+    hidden: false
+    module: appearance

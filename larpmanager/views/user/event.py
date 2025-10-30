@@ -29,11 +29,13 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import (
     get_event_cache_all,
     get_writing_element_fields,
 )
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import get_reg_counts
@@ -70,7 +72,6 @@ from larpmanager.utils.base import get_context, get_event, get_event_context
 from larpmanager.utils.common import get_element
 from larpmanager.utils.exceptions import HiddenError
 from larpmanager.utils.registration import registration_status
-from larpmanager.utils.text import get_association_text, get_event_text
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:

@@ -358,6 +358,105 @@ class AssociationText(BaseModel):
         ]
 
 
+class AssociationTranslation(BaseModel):
+    """Per-organization custom translation overrides for Django i18n strings.
+
+    This model enables multi-tenant translation customization, allowing each
+    association/organization to override specific Django translation strings
+    without modifying the global .po files. These custom translations are
+    injected at request time via the AssociationTranslationMiddleware.
+
+    The model follows the gettext convention:
+    - msgid: The original English text that appears in the code
+    - msgstr: The custom translation for this organization
+    - context: Optional msgctxt for disambiguating identical strings
+
+    Use cases:
+    - Organizations wanting different terminology (e.g., "Character" vs "Hero")
+    - Regional variations within the same language
+    - Brand-specific vocabulary customization
+
+    The active flag allows temporarily disabling translations without deletion,
+    and the unique constraints ensure no duplicate translations exist for the
+    same msgid/context/language combination within an association.
+    """
+
+    number = models.IntegerField(
+        null=True, blank=True, verbose_name=_("Number"), help_text=_("Optional ordering number")
+    )
+
+    association = models.ForeignKey(
+        Association,
+        on_delete=models.CASCADE,
+        related_name="custom_translations",
+        verbose_name=_("Association"),
+        help_text=_("The organization this translation belongs to"),
+    )
+
+    language = models.CharField(
+        max_length=3,
+        choices=conf_settings.LANGUAGES,
+        verbose_name=_("Language"),
+        help_text=_("ISO language code (e.g., 'en', 'it', 'de')"),
+    )
+
+    msgid = models.TextField(
+        verbose_name=_("Original text"),
+        help_text=_("The original English text as it appears in the code (msgid in gettext)"),
+        db_index=True,
+    )
+
+    msgstr = models.TextField(
+        verbose_name=_("Translated text"),
+        help_text=_("The custom translation that will replace the default for this organization"),
+    )
+
+    context = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name=_("Context"),
+        help_text=_("Optional context for disambiguation when the same text has different meanings (msgctxt)"),
+    )
+
+    active = models.BooleanField(
+        default=True,
+        verbose_name=_("Active"),
+        help_text=_("Whether this translation override is currently active. Inactive translations are ignored."),
+    )
+
+    def __str__(self) -> str:
+        """Return a human-readable string representation of the translation.
+
+        Returns:
+            A formatted string showing association, language, and truncated original text
+        """
+        return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
+
+    class Meta:
+        constraints = [
+            # Ensure unique translations including soft-deleted records
+            UniqueConstraint(
+                fields=["association", "language", "msgid", "context", "deleted"],
+                name="unique_assoc_translation_with_deleted",
+            ),
+            # Ensure unique translations for active records only
+            UniqueConstraint(
+                fields=["association", "language", "msgid", "context"],
+                condition=Q(deleted=None),
+                name="unique_assoc_translation_without_deleted",
+            ),
+        ]
+        indexes = [
+            # Composite index for fast translation lookups
+            models.Index(fields=["association", "language", "msgid"]),
+            # Index for filtering active/inactive translations
+            models.Index(fields=["active"]),
+        ]
+        verbose_name = _("Association Translation")
+        verbose_name_plural = _("Association Translations")
+
+
 def hdr(association_or_related_object: Association | Any) -> str:
     """Return a formatted header string with the association name in brackets."""
     # Check if object is an Association instance directly

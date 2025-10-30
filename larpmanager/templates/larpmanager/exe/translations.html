@@ -1,10 +1,10 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Texts" %} - {% trans "Organization" %}
+    {% trans "Translations" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarizes the organizations's custom texts" %}
+    {% trans "This page summarizes the organization's custom translations" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
@@ -12,10 +12,10 @@
         <thead>
             <tr>
                 <th></th>
-                <th>{% trans "Type" %}</th>
                 <th>{% trans "Language" %}</th>
-                <th>{% trans "Default" %}</th>
-                <th>{% trans "Text" %}</th>
+                <th>{% trans "Original" %}</th>
+                <th>{% trans "Translation" %}</th>
+                <th>{% trans "Active" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -24,12 +24,12 @@
                     <td>
                         <a href="{% url 'exe_texts_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td>{{ el.get_typ_display }}</td>
                     <td>{{ el.language }}</td>
+                    <td>{{ el.msgid }}</td>
+                    <td>{{ el.msgstr }}</td>
                     <td>
-                        {% if el.default %}<i class="fa-solid fa-check"></i>{% endif %}
+                        {% if el.active %}<i class="fa-solid fa-check"></i>{% endif %}
                     </td>
-                    <td>{{ el.text | safe | striptags | truncatechars:300 }}</td>
                 </tr>
             {% endfor %}
         </tbody>
