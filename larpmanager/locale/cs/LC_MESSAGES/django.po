@@ -921,6 +921,9 @@ msgstr "Viditelné"
 msgid "Waiting"
 msgstr "Čekání"
 
+msgid "Warning"
+msgstr "Varování"
+
 msgid "Website"
 msgstr "Webové stránky"
 
@@ -2306,6 +2309,12 @@ msgstr "Vaše zprávy"
 msgid "for %(event)s"
 msgstr "pro %(event)s"
 
+msgid "items deleted"
+msgstr "odstraněné položky"
+
+msgid "items updated"
+msgstr "aktualizované položky"
+
 msgid "personal data"
 msgstr "osobní údaje"
 
@@ -2365,6 +2374,9 @@ msgstr "Hlasování vedení"
 
 msgid "File not found"
 msgstr "Soubor nebyl nalezen"
+
+msgid "Final quantity"
+msgstr "Konečné množství"
 
 msgid "Form questions"
 msgstr "Formulářové otázky"
@@ -2633,6 +2645,12 @@ msgstr "Nahrávání výdajů"
 msgid "Volounteer data"
 msgstr "Dobrovolné údaje"
 
+msgid "WILL BE DELETED"
+msgstr "BUDOU VYMAZÁNY"
+
+msgid "WILL BE UPDATED"
+msgstr "BUDE AKTUALIZOVÁN"
+
 msgid "Warehouse items"
 msgstr "Skladové položky"
 
@@ -2654,6 +2672,9 @@ msgstr "Získané schopnosti"
 msgid "Activate feature"
 msgstr "Aktivace funkce"
 
+msgid "Back to manifest"
+msgstr "Zpět na seznam projevů"
+
 msgid "Background image"
 msgstr "Obrázek na pozadí"
 
@@ -2674,6 +2695,9 @@ msgstr "Celková sbírka"
 
 msgid "Color background"
 msgstr "Textové pozadí"
+
+msgid "Current quantity"
+msgstr "Aktuální množství"
 
 msgid "Current template"
 msgstr "Aktuální šablona"
@@ -2860,6 +2884,9 @@ msgstr "Veškerá komunikace"
 
 msgid "Answer submitted!"
 msgstr "Submisivní odpověď!"
+
+msgid "Assigned quantity"
+msgstr "Přiřazené množství"
 
 msgid "Cancellation date"
 msgstr "Datum zrušení předplatného"
@@ -4174,6 +4201,9 @@ msgstr "Dodatečný poplatek za bezplatnou platbu"
 msgid "Bring a friend to %(event)s"
 msgstr "Přiveďte na %(event)s kamaráda"
 
+msgid "Commit warehouse quantities"
+msgstr "Závazné skladové množství"
+
 msgid "Confirmation of expenditure"
 msgstr "Potvrzení výdajů"
 
@@ -4191,6 +4221,9 @@ msgstr "Zde uveďte své preference"
 
 msgid "Event context not available"
 msgstr "Kontext události není k dispozici"
+
+msgid "Items that will be modified"
+msgstr "Položky, které budou upraveny"
 
 msgid "Loading performed, see logs"
 msgstr "Provedeno načítání, viz protokoly"
@@ -4308,6 +4341,9 @@ msgstr "Schválení %(user)s jako %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Kupte si dovednosti pro svou postavu"
+
+msgid "Confirm and commit quantities"
+msgstr "Potvrzení a odevzdání množství"
 
 msgid "Create and manage events here"
 msgstr "Zde můžete vytvářet a spravovat události"
@@ -4448,6 +4484,9 @@ msgstr "Zpracováváme vaši platbu"
 
 msgid "Your friend code has been used"
 msgstr "Váš kód přítele byl použit"
+
+msgid "commit quantities to warehouse"
+msgstr "odevzdat množství na sklad"
 
 msgid "Activate features for the event"
 msgstr "Aktivace funkcí pro událost"
@@ -5512,6 +5551,9 @@ msgstr "Tato stránka shrnuje typy prologů událostí"
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Nahrajte soubor PDF nebo obrázek (JPG, PNG atd.)"
 
+msgid "Warehouse quantities committed successfully"
+msgstr "Registrace byla úspěšně dokončena"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Vaše darovaná registrace byla uplatněna!"
 
@@ -6213,6 +6255,9 @@ msgstr "Na této stránce jsou shrnuty úkoly v rámci této akce"
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Tato stránka shrnuje vlastní texty organizací"
 
+msgid "Warehouse quantities already committed for this event"
+msgstr "Množství skladových zásob, které již bylo pro tuto akci přiděleno"
+
 msgid "You have been gifted a registration to this event, by"
 msgstr "Vstup na tuto událost vám darovali"
 
@@ -6251,6 +6296,9 @@ msgstr "Na tuto akci zatím nebyly přijaty žádné registrace"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyní můžete při úpravě postavy přidávat vztahy"
+
+msgid "Quantity tracking is not enabled for this organization"
+msgstr "Sledování množství není pro tuto organizaci povoleno"
 
 msgid "The registration request will be updated automatically"
 msgstr "Aplikace se automaticky aktualizuje"
@@ -6327,6 +6375,9 @@ msgstr "Na této stránce jsou uvedeny otázky, které účastníci zaslali"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Součet toho, co již bylo vyplaceno k aktuálnímu datu"
+
+msgid "Warehouse quantities have been committed for this event"
+msgstr "Pro tuto událost bylo přiděleno skladové množství"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Narazili jsme na problém s daňovým kódem, který jste nám poskytli"
@@ -8015,6 +8066,13 @@ msgid ""
 msgstr "Roční poplatek požadovaný od členů, počínaje začátkem členského roku"
 
 msgid ""
+"Are you sure you want to commit these quantities? This operation cannot be "
+"undone!"
+msgstr ""
+"Jste si jisti, že chcete tato množství odevzdat? Tuto operaci nelze vzít "
+"zpět!"
+
+msgid ""
 "Click here if after submitting the form, you want to move on to edit the "
 "next item"
 msgstr "Pokud chcete po odeslání formuláře upravit další prvek, klikněte zde"
@@ -8484,6 +8542,13 @@ msgstr ""
 "použití)"
 
 msgid ""
+"Items marked in red will be deleted because their final quantity will be "
+"zero or negative"
+msgstr ""
+"Červeně označené položky budou vymazány, protože jejich konečné množství "
+"bude nulové nebo záporné"
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data"
 msgstr ""
@@ -8840,6 +8905,13 @@ msgstr ""
 "Nepovinné - maximální počet výběrů ve všech registracích (0 = neomezeně)"
 
 msgid ""
+"The following items will have their quantities reduced based on the "
+"assignments for this event"
+msgstr ""
+"Následující položky budou mít snížené množství na základě zadání pro tuto "
+"akci"
+
+msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
 "every management page)"
 msgstr ""
@@ -8859,6 +8931,13 @@ msgid ""
 msgstr ""
 "Chcete-li požádat o změnu své e-mailové adresy, uveďte svou starou i novou "
 "adresu"
+
+msgid ""
+"When you're ready to permanently update warehouse quantities based on this "
+"event's assignments"
+msgstr ""
+"Až budete připraveni trvale aktualizovat skladová množství na základě "
+"přiřazení této události"
 
 msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
@@ -9323,6 +9402,13 @@ msgstr ""
 "odstraněno"
 
 msgid ""
+"This operation is permanent and cannot be undone. Please review the changes "
+"carefully before confirming."
+msgstr ""
+"Tato operace je trvalá a nelze ji vrátit zpět. Před potvrzením si změny "
+"pečlivě zkontrolujte."
+
+msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -9407,6 +9493,13 @@ msgstr ""
 "formulář, abyste nás informovali o své platbě"
 
 msgid ""
+"This page shows what will happen when you commit the warehouse quantities "
+"based on the current assignments"
+msgstr ""
+"Tato stránka ukazuje, co se stane, když odevzdáte skladová množství na "
+"základě aktuálních přiřazení"
+
+msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
 "recover spent XP (default is 0)"
 msgstr ""
@@ -9419,6 +9512,13 @@ msgid ""
 msgstr ""
 "Pokud vyberete jinou událost, bude považována za součást stejné kampaně a "
 "bude mít společné postavy"
+
+msgid ""
+"No items will be modified. Either no items have assigned quantities, or all "
+"assignments have zero quantity."
+msgstr ""
+"Žádné položky nebudou upraveny. Žádné položky nemají přiřazené množství nebo"
+" všechna přiřazení mají nulové množství."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

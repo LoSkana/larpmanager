@@ -7244,11 +7244,82 @@ msgstr ""
 msgid "Area"
 msgstr ""
 
+msgid "Commit warehouse quantities"
+msgstr ""
+
+msgid ""
+"This page shows what will happen when you commit the warehouse quantities "
+"based on the current assignments"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"This operation is permanent and cannot be undone. Please review the changes "
+"carefully before confirming."
+msgstr ""
+
+msgid "Items that will be modified"
+msgstr ""
+
+msgid ""
+"The following items will have their quantities reduced based on the "
+"assignments for this event"
+msgstr ""
+
+msgid ""
+"Items marked in red will be deleted because their final quantity will be "
+"zero or negative"
+msgstr ""
+
+msgid "Current quantity"
+msgstr ""
+
+msgid "Assigned quantity"
+msgstr ""
+
+msgid "Final quantity"
+msgstr ""
+
+msgid "WILL BE DELETED"
+msgstr ""
+
+msgid "WILL BE UPDATED"
+msgstr ""
+
+msgid ""
+"Are you sure you want to commit these quantities? This operation cannot be "
+"undone!"
+msgstr ""
+
+msgid "Confirm and commit quantities"
+msgstr ""
+
+msgid ""
+"No items will be modified. Either no items have assigned quantities, or all "
+"assignments have zero quantity."
+msgstr ""
+
+msgid "Back to manifest"
+msgstr ""
+
 msgid "Cargo manifest"
 msgstr ""
 
 msgid ""
 "This page shows the cargo manifest, and the status of each item assignment"
+msgstr ""
+
+msgid ""
+"When you're ready to permanently update warehouse quantities based on this "
+"event's assignments"
+msgstr ""
+
+msgid "commit quantities to warehouse"
+msgstr ""
+
+msgid "Warehouse quantities have been committed for this event"
 msgstr ""
 
 msgid "Loaded"
@@ -9299,6 +9370,21 @@ msgid ""
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"
+msgstr ""
+
+msgid "Warehouse quantities already committed for this event"
+msgstr ""
+
+msgid "Quantity tracking is not enabled for this organization"
+msgstr ""
+
+msgid "Warehouse quantities committed successfully"
+msgstr ""
+
+msgid "items updated"
+msgstr ""
+
+msgid "items deleted"
 msgstr ""
 
 msgid "Updated"

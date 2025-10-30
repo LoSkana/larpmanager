@@ -1121,6 +1121,16 @@ urlpatterns = [
         name="orga_warehouse_assignment_item_edit",
     ),
     path(
+        "<slug:event_slug>/manage/warehouse/commit/preview/",
+        views_oms.orga_warehouse_commit_preview,
+        name="orga_warehouse_commit_preview",
+    ),
+    path(
+        "<slug:event_slug>/manage/warehouse/commit/quantities/",
+        views_oms.orga_warehouse_commit_quantities,
+        name="orga_warehouse_commit_quantities",
+    ),
+    path(
         "<slug:event_slug>/<int:n>/",
         views_mg.orga_redirect,
         name="orga_redirect",

@@ -921,6 +921,9 @@ msgstr "Zichtbaar"
 msgid "Waiting"
 msgstr "Wachten"
 
+msgid "Warning"
+msgstr "Waarschuwing"
+
 msgid "Website"
 msgstr "Website"
 
@@ -2306,6 +2309,12 @@ msgstr "Uw berichten"
 msgid "for %(event)s"
 msgstr "voor %(event)s"
 
+msgid "items deleted"
+msgstr "verwijderde items"
+
+msgid "items updated"
+msgstr "items bijgewerkt"
+
 msgid "personal data"
 msgstr "persoonlijke gegevens"
 
@@ -2365,6 +2374,9 @@ msgstr "Stemming management"
 
 msgid "File not found"
 msgstr "Bestand niet gevonden"
+
+msgid "Final quantity"
+msgstr "Definitieve hoeveelheid"
 
 msgid "Form questions"
 msgstr "Formulier vragen"
@@ -2633,6 +2645,12 @@ msgstr "Uitgaven uploaden"
 msgid "Volounteer data"
 msgstr "Vrijwillige gegevens"
 
+msgid "WILL BE DELETED"
+msgstr "ZAL WORDEN VERWIJDERD"
+
+msgid "WILL BE UPDATED"
+msgstr "ZAL WORDEN BIJGEWERKT"
+
 msgid "Warehouse items"
 msgstr "Magazijnartikelen"
 
@@ -2654,6 +2672,9 @@ msgstr "Verworven vermogen"
 msgid "Activate feature"
 msgstr "Functie activeren"
 
+msgid "Back to manifest"
+msgstr "Terug naar manifest"
+
 msgid "Background image"
 msgstr "Achtergrondafbeelding"
 
@@ -2674,6 +2695,9 @@ msgstr "Totale collectie"
 
 msgid "Color background"
 msgstr "Tekst achtergrond"
+
+msgid "Current quantity"
+msgstr "Huidige hoeveelheid"
 
 msgid "Current template"
 msgstr "Huidige sjabloon"
@@ -2860,6 +2884,9 @@ msgstr "Alle communicatie"
 
 msgid "Answer submitted!"
 msgstr "Onderdanig antwoord!"
+
+msgid "Assigned quantity"
+msgstr "Toegewezen hoeveelheid"
 
 msgid "Cancellation date"
 msgstr "Uitschrijfdatum"
@@ -4174,6 +4201,9 @@ msgstr "Extra gratis betaling"
 msgid "Bring a friend to %(event)s"
 msgstr "Neem een vriend(in) mee naar %(event)s"
 
+msgid "Commit warehouse quantities"
+msgstr "Vastleggen van magazijnhoeveelheden"
+
 msgid "Confirmation of expenditure"
 msgstr "Bevestiging van uitgaven"
 
@@ -4191,6 +4221,9 @@ msgstr "Geef hier je voorkeuren aan"
 
 msgid "Event context not available"
 msgstr "Gebeurteniscontext niet beschikbaar"
+
+msgid "Items that will be modified"
+msgstr "Items die worden gewijzigd"
 
 msgid "Loading performed, see logs"
 msgstr "Laden uitgevoerd, zie logboeken"
@@ -4308,6 +4341,9 @@ msgstr "Goedkeuring %(user)s als %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Koop vaardigheden voor je personage"
+
+msgid "Confirm and commit quantities"
+msgstr "Hoeveelheden bevestigen en vastleggen"
 
 msgid "Create and manage events here"
 msgstr "Hier evenementen maken en beheren"
@@ -4448,6 +4484,9 @@ msgstr "We verwerken je betaling"
 
 msgid "Your friend code has been used"
 msgstr "Uw vriendencode is gebruikt"
+
+msgid "commit quantities to warehouse"
+msgstr "hoeveelheden vastleggen in magazijn"
 
 msgid "Activate features for the event"
 msgstr "Functies voor het evenement activeren"
@@ -5515,6 +5554,9 @@ msgstr "Deze pagina geeft een overzicht van de soorten proloog"
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Upload een PDF-bestand of afbeelding (JPG, PNG, enz.)"
 
+msgid "Warehouse quantities committed successfully"
+msgstr "Registratie succesvol afgerond"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Je geschonken registratie is verzilverd!"
 
@@ -6222,6 +6264,9 @@ msgstr ""
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Deze pagina vat de aangepaste teksten van de organisaties samen"
 
+msgid "Warehouse quantities already committed for this event"
+msgstr "Reeds vastgelegde magazijnhoeveelheden voor dit evenement"
+
 msgid "You have been gifted a registration to this event, by"
 msgstr "Je hebt toegang gekregen tot dit evenement, door"
 
@@ -6263,6 +6308,10 @@ msgstr "Er zijn nog geen inschrijvingen ontvangen voor dit evenement"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kun je relaties toevoegen wanneer je een personage bewerkt"
+
+msgid "Quantity tracking is not enabled for this organization"
+msgstr ""
+"Het bijhouden van hoeveelheden is niet ingeschakeld voor deze organisatie"
 
 msgid "The registration request will be updated automatically"
 msgstr "De toepassing wordt automatisch bijgewerkt"
@@ -6342,6 +6391,9 @@ msgstr "Deze pagina toont de vragen die zijn ingediend door deelnemers"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Totaal van wat al is betaald op de huidige datum"
+
+msgid "Warehouse quantities have been committed for this event"
+msgstr "Magazijnhoeveelheden zijn vastgelegd voor dit evenement"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
@@ -8235,6 +8287,13 @@ msgstr ""
 "lidmaatschapsjaar"
 
 msgid ""
+"Are you sure you want to commit these quantities? This operation cannot be "
+"undone!"
+msgstr ""
+"Weet je zeker dat je deze hoeveelheden wilt vastleggen? Deze bewerking kan "
+"niet ongedaan worden gemaakt!"
+
+msgid ""
 "Click here if after submitting the form, you want to move on to edit the "
 "next item"
 msgstr ""
@@ -8740,6 +8799,13 @@ msgstr ""
 "(0 voor oneindig gebruik)"
 
 msgid ""
+"Items marked in red will be deleted because their final quantity will be "
+"zero or negative"
+msgstr ""
+"Items met een rode markering worden verwijderd omdat hun uiteindelijke "
+"hoeveelheid nul of negatief is"
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data"
 msgstr ""
@@ -9107,6 +9173,13 @@ msgstr ""
 "registraties (0 = onbeperkt)"
 
 msgid ""
+"The following items will have their quantities reduced based on the "
+"assignments for this event"
+msgstr ""
+"Van de volgende artikelen worden de hoeveelheden verlaagd op basis van de "
+"opdrachten voor dit evenement"
+
+msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
 "every management page)"
 msgstr ""
@@ -9126,6 +9199,13 @@ msgid ""
 msgstr ""
 "Om een wijziging van je e-mailadres aan te vragen, moet je zowel je oude als"
 " je nieuwe adres opgeven"
+
+msgid ""
+"When you're ready to permanently update warehouse quantities based on this "
+"event's assignments"
+msgstr ""
+"Als u klaar bent om magazijnhoeveelheden permanent bij te werken op basis "
+"van de toewijzingen van deze gebeurtenis"
 
 msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
@@ -9593,6 +9673,13 @@ msgstr ""
 "wordt hij verwijderd"
 
 msgid ""
+"This operation is permanent and cannot be undone. Please review the changes "
+"carefully before confirming."
+msgstr ""
+"Deze operatie is permanent en kan niet ongedaan worden gemaakt. Controleer "
+"de wijzigingen zorgvuldig voordat u bevestigt."
+
+msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -9678,6 +9765,13 @@ msgstr ""
 "formulier om ons op de hoogte te stellen van je betaling"
 
 msgid ""
+"This page shows what will happen when you commit the warehouse quantities "
+"based on the current assignments"
+msgstr ""
+"Deze pagina laat zien wat er gebeurt als je de magazijnhoeveelheden vastlegt"
+" op basis van de huidige toewijzingen"
+
+msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
 "recover spent XP (default is 0)"
 msgstr ""
@@ -9690,6 +9784,13 @@ msgid ""
 msgstr ""
 "Als je een ander evenement selecteert, wordt dit beschouwd als onderdeel van"
 " dezelfde campagne en delen ze de personages"
+
+msgid ""
+"No items will be modified. Either no items have assigned quantities, or all "
+"assignments have zero quantity."
+msgstr ""
+"Er worden geen items gewijzigd. Of er zijn geen items toegewezen aan "
+"hoeveelheden, of alle toewijzingen hebben nul hoeveelheden."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

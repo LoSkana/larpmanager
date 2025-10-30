@@ -34,24 +34,54 @@ from larpmanager.utils.tasks import notify_admins
 from larpmanager.views.manage import _get_registration_status_code
 
 
-def get_client_ip(request):
-    """Get client IP address from request."""
+def get_client_ip(request: HttpRequest) -> str:
+    """Extract the client IP address from the HTTP request.
+
+    Handles proxy forwarding by checking X-Forwarded-For header first,
+    falling back to REMOTE_ADDR if not present.
+
+    Args:
+        request: The HTTP request object containing client metadata
+
+    Returns:
+        The client's IP address as a string
+    """
     x_forwarded_for_header = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for_header:
+        # X-Forwarded-For may contain multiple IPs (client, proxy1, proxy2...)
+        # The first IP is the original client
         client_ip = x_forwarded_for_header.split(",")[0]
     else:
+        # Direct connection without proxy
         client_ip = request.META.get("REMOTE_ADDR")
     return client_ip
 
 
-def log_api_access(api_key, request, response_status, events_count=0):
-    """Log API access using the existing Log model."""
+def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_status: int, events_count: int = 0) -> None:
+    """Log API access details to the system log and update API key usage statistics.
+
+    Creates a log entry with comprehensive API request metadata including IP address,
+    user agent, and response status. Also updates the API key's last_used timestamp
+    and usage counter. If logging fails for any reason, admins are notified but the
+    error does not propagate to avoid breaking the API response.
+
+    Args:
+        api_key: The PublisherApiKey instance used for this API request
+        request: The HTTP request object containing client metadata
+        response_status: HTTP response status code (e.g., 200, 404, 500)
+        events_count: Number of events returned in the API response (default: 0)
+
+    Returns:
+        None. Errors are logged and admins are notified, but exceptions are suppressed.
+    """
     try:
-        # Use a system member or create a placeholder for API access
+        # Get or create a system member for API logging
+        # This ensures all API logs are associated with a consistent system user
         system_member, created = Member.objects.get_or_create(
             username="api_system", defaults={"email": "api@larpmanager.com", "first_name": "API", "last_name": "System"}
         )
 
+        # Build comprehensive log data dictionary
         log_data = {
             "api_key_id": api_key.id,
             "api_key_name": api_key.name,
@@ -63,16 +93,18 @@ def log_api_access(api_key, request, response_status, events_count=0):
             "timestamp": timezone.now().isoformat(),
         }
 
+        # Create log entry in database
         Log.objects.create(member=system_member, eid=api_key.id, cls="PublisherAPI", dct=json.dumps(log_data), dl=False)
 
-        # Update API key usage
+        # Update API key usage statistics
         api_key.last_used = timezone.now()
         api_key.usage_count += 1
         api_key.save()
 
-    except Exception:
-        # Don't let logging errors break the API
-        pass
+    except Exception as err:
+        # Log errors to admin notification system but don't break API functionality
+        # This prevents logging failures from affecting the actual API response
+        notify_admins("log_api_access", "Failed to log API access", err)
 
 
 def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, JsonResponse | None]:

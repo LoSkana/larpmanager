@@ -921,6 +921,9 @@ msgstr "Synlig"
 msgid "Waiting"
 msgstr "Väntar"
 
+msgid "Warning"
+msgstr "Varning"
+
 msgid "Website"
 msgstr "Webbplats"
 
@@ -2306,6 +2309,12 @@ msgstr "Dina meddelanden"
 msgid "for %(event)s"
 msgstr "för %(event)s"
 
+msgid "items deleted"
+msgstr "objekt raderade"
+
+msgid "items updated"
+msgstr "artiklar uppdaterade"
+
 msgid "personal data"
 msgstr "Personuppgifter"
 
@@ -2365,6 +2374,9 @@ msgstr "Ledningens omröstning"
 
 msgid "File not found"
 msgstr "Filen hittades inte"
+
+msgid "Final quantity"
+msgstr "Slutlig kvantitet"
 
 msgid "Form questions"
 msgstr "Formulärfrågor"
@@ -2633,6 +2645,12 @@ msgstr "Ladda upp kostnader"
 msgid "Volounteer data"
 msgstr "Frivilliga uppgifter"
 
+msgid "WILL BE DELETED"
+msgstr "KOMMER ATT RADERAS"
+
+msgid "WILL BE UPDATED"
+msgstr "KOMMER ATT UPPDATERAS"
+
 msgid "Warehouse items"
 msgstr "Lagervaror"
 
@@ -2654,6 +2672,9 @@ msgstr "Förmåga förvärvad"
 msgid "Activate feature"
 msgstr "Aktivera funktion"
 
+msgid "Back to manifest"
+msgstr "Tillbaka till manifest"
+
 msgid "Background image"
 msgstr "Bakgrundsbild"
 
@@ -2674,6 +2695,9 @@ msgstr "Total samling"
 
 msgid "Color background"
 msgstr "Text bakgrund"
+
+msgid "Current quantity"
+msgstr "Aktuell kvantitet"
 
 msgid "Current template"
 msgstr "Nuvarande mall"
@@ -2860,6 +2884,9 @@ msgstr "Alla meddelanden"
 
 msgid "Answer submitted!"
 msgstr "Underkastande svar!"
+
+msgid "Assigned quantity"
+msgstr "Tilldelad kvantitet"
 
 msgid "Cancellation date"
 msgstr "Datum för avregistrering"
@@ -4174,6 +4201,9 @@ msgstr "Ytterligare avgift för fri betalning"
 msgid "Bring a friend to %(event)s"
 msgstr "Ta med en vän till %(event)s"
 
+msgid "Commit warehouse quantities"
+msgstr "Binda lagerkvantiteter"
+
 msgid "Confirmation of expenditure"
 msgstr "Bekräftelse av utgifter"
 
@@ -4191,6 +4221,9 @@ msgstr "Ange dina preferenser här"
 
 msgid "Event context not available"
 msgstr "Händelsekontext inte tillgänglig"
+
+msgid "Items that will be modified"
+msgstr "Objekt som kommer att modifieras"
 
 msgid "Loading performed, see logs"
 msgstr "Lastning utförd, se loggar"
@@ -4308,6 +4341,9 @@ msgstr "Godkännande av %(user)s som %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Köp färdigheter till din karaktär"
+
+msgid "Confirm and commit quantities"
+msgstr "Bekräftelse och åtagande av kvantiteter"
 
 msgid "Create and manage events here"
 msgstr "Skapa och hantera evenemang här"
@@ -4448,6 +4484,9 @@ msgstr "Vi behandlar din betalning"
 
 msgid "Your friend code has been used"
 msgstr "Din vänkod har använts"
+
+msgid "commit quantities to warehouse"
+msgstr "överföra kvantiteter till lagret"
 
 msgid "Activate features for the event"
 msgstr "Aktivera funktioner för evenemanget"
@@ -5514,6 +5553,9 @@ msgstr "Denna sida sammanfattar de olika typerna av händelseprolog"
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Ladda upp en PDF-fil eller bild (JPG, PNG, etc.)"
 
+msgid "Warehouse quantities committed successfully"
+msgstr "Registreringen har slutförts framgångsrikt"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Din förmånliga registrering har lösts in!"
 
@@ -6210,6 +6252,9 @@ msgstr "På denna sida sammanfattas uppdragen i detta event av"
 msgid "This page summarizes the organizations's custom texts"
 msgstr "Denna sida sammanfattar organisationernas anpassade texter"
 
+msgid "Warehouse quantities already committed for this event"
+msgstr "Lagerkvantiteter som redan åtagits för detta evenemang"
+
 msgid "You have been gifted a registration to this event, by"
 msgstr "Du har begåvats med ett inträde till detta evenemang, av"
 
@@ -6248,6 +6293,9 @@ msgstr "Inga anmälningar har ännu mottagits för detta evenemang"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kan du lägga till relationer när du redigerar en karaktär"
+
+msgid "Quantity tracking is not enabled for this organization"
+msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 
 msgid "The registration request will be updated automatically"
 msgstr "Ansökan kommer att uppdateras automatiskt"
@@ -6326,6 +6374,9 @@ msgstr "På denna sida visas de frågor som deltagarna har skickat in"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summan av vad som redan har betalats på det aktuella datumet"
+
+msgid "Warehouse quantities have been committed for this event"
+msgstr "Lagerkvantiteter har åtagits för denna händelse"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr "Vi stötte på ett problem med den skattekod du angav"
@@ -8089,6 +8140,13 @@ msgstr ""
 "Årlig avgift som krävs av medlemmarna, med början från början av medlemsåret"
 
 msgid ""
+"Are you sure you want to commit these quantities? This operation cannot be "
+"undone!"
+msgstr ""
+"Är du säker på att du vill överföra dessa kvantiteter? Denna operation kan "
+"inte ångras!"
+
+msgid ""
 "Click here if after submitting the form, you want to move on to edit the "
 "next item"
 msgstr ""
@@ -8586,6 +8644,13 @@ msgstr ""
 "användning)"
 
 msgid ""
+"Items marked in red will be deleted because their final quantity will be "
+"zero or negative"
+msgstr ""
+"Rödmarkerade artiklar kommer att strykas eftersom deras slutliga kvantitet "
+"kommer att vara noll eller negativ"
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data"
 msgstr ""
@@ -8952,6 +9017,13 @@ msgstr ""
 " obegränsat)"
 
 msgid ""
+"The following items will have their quantities reduced based on the "
+"assignments for this event"
+msgstr ""
+"Följande artiklar kommer att få sina kvantiteter reducerade baserat på "
+"uppdragen för detta evenemang"
+
+msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
 "every management page)"
 msgstr ""
@@ -8971,6 +9043,13 @@ msgid ""
 msgstr ""
 "För att begära ändring av din e-postadress, vänligen ange både din gamla och"
 " din nya adress"
+
+msgid ""
+"When you're ready to permanently update warehouse quantities based on this "
+"event's assignments"
+msgstr ""
+"När du är redo att permanent uppdatera lagerkvantiteterna baserat på den här"
+" händelsens tilldelningar"
 
 msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
@@ -9438,6 +9517,13 @@ msgstr ""
 "därefter kommer den att tas bort"
 
 msgid ""
+"This operation is permanent and cannot be undone. Please review the changes "
+"carefully before confirming."
+msgstr ""
+"Denna åtgärd är permanent och kan inte ångras. Läs igenom ändringarna "
+"noggrant innan du bekräftar."
+
+msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -9522,6 +9608,13 @@ msgstr ""
 "formuläret nedan för att meddela oss om din betalning"
 
 msgid ""
+"This page shows what will happen when you commit the warehouse quantities "
+"based on the current assignments"
+msgstr ""
+"På den här sidan visas vad som händer när du fastställer lagerkvantiteterna "
+"baserat på de aktuella uppdragen"
+
+msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
 "recover spent XP (default is 0)"
 msgstr ""
@@ -9534,6 +9627,13 @@ msgid ""
 msgstr ""
 "Om du väljer ett annat evenemang kommer det att betraktas som en del av "
 "samma kampanj och de kommer att dela karaktärer"
+
+msgid ""
+"No items will be modified. Either no items have assigned quantities, or all "
+"assignments have zero quantity."
+msgstr ""
+"Inga artiklar kommer att modifieras. Antingen har inga artiklar tilldelade "
+"kvantiteter, eller så har alla tilldelningar noll kvantitet."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

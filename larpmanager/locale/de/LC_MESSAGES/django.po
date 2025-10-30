@@ -921,6 +921,9 @@ msgstr "Sichtbar"
 msgid "Waiting"
 msgstr "Warten"
 
+msgid "Warning"
+msgstr "Warnung"
+
 msgid "Website"
 msgstr "Website"
 
@@ -2306,6 +2309,12 @@ msgstr "Ihre Nachrichten"
 msgid "for %(event)s"
 msgstr "für %(event)s"
 
+msgid "items deleted"
+msgstr "Elemente gelöscht"
+
+msgid "items updated"
+msgstr "Artikel aktualisiert"
+
 msgid "personal data"
 msgstr "persönliche Daten"
 
@@ -2365,6 +2374,9 @@ msgstr "Abstimmung der Verwaltung"
 
 msgid "File not found"
 msgstr "Datei nicht gefunden"
+
+msgid "Final quantity"
+msgstr "Endgültige Menge"
 
 msgid "Form questions"
 msgstr "Fragen zum Formular"
@@ -2633,6 +2645,12 @@ msgstr "Ausgaben hochladen"
 msgid "Volounteer data"
 msgstr "Freiwillige Angaben"
 
+msgid "WILL BE DELETED"
+msgstr "WIRD GELÖSCHT"
+
+msgid "WILL BE UPDATED"
+msgstr "WIRD AKTUALISIERT"
+
 msgid "Warehouse items"
 msgstr "Lagerartikel"
 
@@ -2654,6 +2672,9 @@ msgstr "Erworbene Fähigkeit"
 msgid "Activate feature"
 msgstr "Funktion aktivieren"
 
+msgid "Back to manifest"
+msgstr "Zurück zu Manifest"
+
 msgid "Background image"
 msgstr "Hintergrundbild"
 
@@ -2674,6 +2695,9 @@ msgstr "Gesamte Sammlung"
 
 msgid "Color background"
 msgstr "Text-Hintergrund"
+
+msgid "Current quantity"
+msgstr "Aktuelle Menge"
 
 msgid "Current template"
 msgstr "Aktuelle Vorlage"
@@ -2860,6 +2884,9 @@ msgstr "Alle Mitteilungen"
 
 msgid "Answer submitted!"
 msgstr "Unterwürfige Antwort!"
+
+msgid "Assigned quantity"
+msgstr "Zugewiesene Menge"
 
 msgid "Cancellation date"
 msgstr "Datum der Abmeldung"
@@ -4174,6 +4201,9 @@ msgstr "Zusätzliche kostenlose Zahlungsgebühr"
 msgid "Bring a friend to %(event)s"
 msgstr "Bringen Sie einen Freund zu %(event)s mit"
 
+msgid "Commit warehouse quantities"
+msgstr "Lagermengen binden"
+
 msgid "Confirmation of expenditure"
 msgstr "Bestätigung der Ausgaben"
 
@@ -4191,6 +4221,9 @@ msgstr "Geben Sie hier Ihre Präferenzen an"
 
 msgid "Event context not available"
 msgstr "Ereigniskontext nicht verfügbar"
+
+msgid "Items that will be modified"
+msgstr "Elemente, die geändert werden sollen"
 
 msgid "Loading performed, see logs"
 msgstr "Laden durchgeführt, siehe Protokolle"
@@ -4308,6 +4341,9 @@ msgstr "Genehmigung %(user)s als %(role)s"
 
 msgid "Buy skills for your character"
 msgstr "Kaufe Fähigkeiten für deinen Charakter"
+
+msgid "Confirm and commit quantities"
+msgstr "Bestätigen und Festlegen von Mengen"
 
 msgid "Create and manage events here"
 msgstr "Hier können Sie Veranstaltungen erstellen und verwalten"
@@ -4448,6 +4484,9 @@ msgstr "Wir bearbeiten Ihre Zahlung"
 
 msgid "Your friend code has been used"
 msgstr "Ihr Freundschaftscode wurde bereits verwendet"
+
+msgid "commit quantities to warehouse"
+msgstr "Mengen an das Lager binden"
 
 msgid "Activate features for the event"
 msgstr "Aktivieren Sie Funktionen für das Ereignis"
@@ -5525,6 +5564,9 @@ msgstr ""
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Hochladen einer PDF-Datei oder eines Bildes (JPG, PNG, usw.)"
 
+msgid "Warehouse quantities committed successfully"
+msgstr "Registrierung erfolgreich abgeschlossen"
+
 msgid "Your gifted registration has been redeemed!"
 msgstr "Ihre geschenkte Registrierung wurde eingelöst!"
 
@@ -6260,6 +6302,9 @@ msgid "This page summarizes the organizations's custom texts"
 msgstr ""
 "Diese Seite fasst die benutzerdefinierten Texte der Organisationen zusammen"
 
+msgid "Warehouse quantities already committed for this event"
+msgstr "Bereits gebundene Lagermengen für diese Veranstaltung"
+
 msgid "You have been gifted a registration to this event, by"
 msgstr ""
 "Sie haben eine Teilnahme an dieser Veranstaltung geschenkt bekommen, und "
@@ -6303,6 +6348,9 @@ msgstr "Für diese Veranstaltung liegen noch keine Anmeldungen vor"
 msgid "Now you can add relationships when editing a character"
 msgstr ""
 "Jetzt können Sie beim Bearbeiten eines Charakters Beziehungen hinzufügen"
+
+msgid "Quantity tracking is not enabled for this organization"
+msgstr "Die Mengenverfolgung ist für diese Organisation nicht aktiviert"
 
 msgid "The registration request will be updated automatically"
 msgstr "Die Anwendung wird automatisch aktualisiert"
@@ -6397,6 +6445,9 @@ msgstr "Diese Seite zeigt die von den Teilnehmern eingereichten Fragen"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summe der zum aktuellen Datum bereits gezahlten Beträge"
+
+msgid "Warehouse quantities have been committed for this event"
+msgstr "Für diese Veranstaltung sind Lagermengen zugesagt worden"
 
 msgid "We encountered a problem with the tax code you provided"
 msgstr ""
@@ -8409,6 +8460,13 @@ msgstr ""
 "entrichten ist"
 
 msgid ""
+"Are you sure you want to commit these quantities? This operation cannot be "
+"undone!"
+msgstr ""
+"Sind Sie sicher, dass Sie diese Mengen festlegen wollen? Dieser Vorgang kann"
+" nicht rückgängig gemacht werden!"
+
+msgid ""
 "Click here if after submitting the form, you want to move on to edit the "
 "next item"
 msgstr ""
@@ -8916,6 +8974,13 @@ msgstr ""
 "werden können (0 für unendliche Nutzung)"
 
 msgid ""
+"Items marked in red will be deleted because their final quantity will be "
+"zero or negative"
+msgstr ""
+"Rot markierte Positionen werden gestrichen, da ihre endgültige Menge Null "
+"oder negativ sein wird"
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data"
 msgstr ""
@@ -9284,6 +9349,13 @@ msgstr ""
 " (0 = unbegrenzt)"
 
 msgid ""
+"The following items will have their quantities reduced based on the "
+"assignments for this event"
+msgstr ""
+"Die Mengen der folgenden Artikel werden auf der Grundlage der Zuweisungen "
+"für diese Veranstaltung reduziert"
+
+msgid ""
 "This is the sidebar containing all the functions (it remains visible on "
 "every management page)"
 msgstr ""
@@ -9303,6 +9375,13 @@ msgid ""
 msgstr ""
 "Um eine Änderung Ihrer E-Mail-Adresse zu beantragen, geben Sie bitte sowohl "
 "Ihre alte als auch Ihre neue Adresse an"
+
+msgid ""
+"When you're ready to permanently update warehouse quantities based on this "
+"event's assignments"
+msgstr ""
+"Wenn Sie bereit sind, die Lagermengen auf der Grundlage der Zuweisungen "
+"dieses Ereignisses dauerhaft zu aktualisieren"
 
 msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
@@ -9772,6 +9851,13 @@ msgstr ""
 "reserviert, danach wird sie wieder entfernt"
 
 msgid ""
+"This operation is permanent and cannot be undone. Please review the changes "
+"carefully before confirming."
+msgstr ""
+"Dieser Vorgang ist dauerhaft und kann nicht rückgängig gemacht werden. Bitte"
+" überprüfen Sie die Änderungen sorgfältig, bevor Sie sie bestätigen."
+
+msgid ""
 "This page shows the list of members, divided by type: applicants, approved, "
 "renewed for the current year"
 msgstr ""
@@ -9858,6 +9944,13 @@ msgstr ""
 "informieren"
 
 msgid ""
+"This page shows what will happen when you commit the warehouse quantities "
+"based on the current assignments"
+msgstr ""
+"Diese Seite zeigt, was passiert, wenn Sie die Lagermengen auf der Grundlage "
+"der aktuellen Zuordnungen festlegen"
+
+msgid ""
 "Time window (in hours) during which the user can revoke a chosen skill and "
 "recover spent XP (default is 0)"
 msgstr ""
@@ -9870,6 +9963,13 @@ msgid ""
 msgstr ""
 "Wenn Sie ein anderes Ereignis auswählen, wird es in der gleichen Kampagne "
 "berücksichtigt, und die Charaktere werden gemeinsam verwendet"
+
+msgid ""
+"No items will be modified. Either no items have assigned quantities, or all "
+"assignments have zero quantity."
+msgstr ""
+"Es werden keine Artikel geändert. Entweder haben keine Positionen Mengen "
+"zugewiesen, oder alle Zuweisungen haben die Menge Null."
 
 msgid ""
 "Occasionally shows a special page to users, based on a defined probability, "

@@ -1,0 +1,97 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Commit warehouse quantities" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows what will happen when you commit the warehouse quantities based on the current assignments" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/edit.html" %}
+    {% if preview_items %}
+        <div class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>{% trans "Warning" %}:</strong>
+            {% trans "This operation is permanent and cannot be undone. Please review the changes carefully before confirming." %}
+        </div>
+        <h3>{% trans "Items that will be modified" %}</h3>
+        <p>
+            {% trans "The following items will have their quantities reduced based on the assignments for this event" %}.
+            {% trans "Items marked in red will be deleted because their final quantity will be zero or negative" %}.
+        </p>
+        <table class="go_datatable" id="preview_table">
+            <thead>
+                <tr>
+                    <th>{% trans "Item" %}</th>
+                    <th>{% trans "Container" %}</th>
+                    <th>{% trans "Current quantity" %}</th>
+                    <th>{% trans "Assigned quantity" %}</th>
+                    <th>{% trans "Final quantity" %}</th>
+                    <th>{% trans "Status" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item_data in preview_items %}
+                    <tr {% if item_data.will_delete %}class="table-danger"{% endif %}>
+                        <td>{{ item_data.item.name }}</td>
+                        <td>
+                            {{ item_data.item.container }}
+                            {% if item_data.item.container.position %}- {{ item_data.item.container.position | truncatechars:50 }}{% endif %}
+                        </td>
+                        <td>{{ item_data.current_quantity }}</td>
+                        <td>{{ item_data.assigned_quantity }}</td>
+                        <td>
+                            {% if item_data.will_delete %}
+                                <span class="text-danger"><strong>{{ item_data.final_quantity }}</strong></span>
+                            {% else %}
+                                {{ item_data.final_quantity }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item_data.will_delete %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-trash"></i> {% trans "WILL BE DELETED" %}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning">
+                                    <i class="fas fa-edit"></i> {% trans "WILL BE UPDATED" %}
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <form method="post"
+                  action="{% url 'orga_warehouse_commit_quantities' run.get_slug %}"
+                  onsubmit="return confirm('{% trans "Are you sure you want to commit these quantities? This operation cannot be undone!" %}');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="fas fa-check"></i> {% trans "Confirm and commit quantities" %}
+                </button>
+                <a href="{% url 'orga_warehouse_manifest' run.get_slug %}"
+                   class="btn btn-secondary btn-lg">
+                    <i class="fas fa-times"></i> {% trans "Cancel" %}
+                </a>
+            </form>
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle"></i>
+            {% trans "No items will be modified. Either no items have assigned quantities, or all assignments have zero quantity." %}
+        </div>
+        <a href="{% url 'orga_warehouse_manifest' run.get_slug %}"
+           class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> {% trans "Back to manifest" %}
+        </a>
+    {% endif %}
+{% endblock content %}
+{% block js %}
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Highlight rows that will be deleted
+            $('.table-danger').css('background-color', '#f8d7da');
+        });
+    </script>
+{% endblock js %}
