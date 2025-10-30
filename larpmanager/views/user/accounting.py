@@ -266,7 +266,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
     if request.method == "POST":
         # Process refund request form submission
-        form = RefundRequestForm(request.POST, member=context["member"])
+        form = RefundRequestForm(request.POST, context=context)
 
         if form.is_valid():
             # Save refund request with transaction safety
@@ -286,7 +286,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
             return redirect("accounting")
     else:
         # Display empty form for GET request
-        form = RefundRequestForm(member=context["member"])
+        form = RefundRequestForm(context=context)
 
     # Add form to context and render template
     context["form"] = form
