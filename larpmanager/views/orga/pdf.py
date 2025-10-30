@@ -93,18 +93,45 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpResponse:
-    # Check user permissions and get event context
+    """Generate and download a bulk ZIP file of selected PDFs for an event.
+
+    This view provides both a selection interface (GET) and bulk PDF generation (POST).
+    On GET requests, displays a form where organizers can select which PDFs to include
+    in the bulk download. On POST requests, generates all selected PDFs and returns them
+    as a timestamped ZIP file.
+
+    Available PDF types:
+    - Gallery: Character portraits
+    - Profiles: Character profile sheets
+    - Character sheets: Individual character sheets
+    - Faction sheets: Individual faction sheets
+    - Handouts: Event handouts
+
+    Args:
+        request: HTTP request object (GET for form, POST for generation)
+        event_slug: Event slug identifier
+
+    Returns:
+        GET: Rendered selection form with list of available PDFs
+        POST: ZIP file download containing all selected PDFs
+
+    Raises:
+        PermissionDenied: If user lacks orga_characters_pdf permission
+    """
+    # Verify organizer permissions for PDF access
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
+    # Handle POST request - generate and return bulk ZIP file
     if request.method == "POST":
         return print_bulk(context, request)
 
-    # Select all characters, factions, handouts
+    # Build list of available PDF options for selection form
     context["list"] = {
         "gallery": {"name": _("Gallery")},
         "profiles": {"name": _("Profiles")},
     }
 
+    # Add all characters, factions, and handouts to selection list
     mappings = {
         "character": Character,
         "faction": Faction,
@@ -112,8 +139,10 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
     }
     for key_name, value_type in mappings.items():
         for element in context["event"].get_elements(value_type):
+            # Create dict entry with name and type for template rendering
             context["list"][f"{key_name}_{element.id}"] = {"name": element.name, "type": value_type._meta.model_name}
 
+    # Render selection form
     return render(request, "larpmanager/orga/characters/pdf_bulk.html", context)
 
 
@@ -288,32 +317,48 @@ def orga_profiles_pdf(request, event_slug):
 
 @login_required
 def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    """Generate PDF faction sheet for organizers.
+    """Generate and download a faction sheet PDF for organizers.
+
+    This view generates a comprehensive PDF document for a specific faction, including
+    faction details, custom fields configured for the event, and all relevant faction
+    information formatted for organizer use or distribution to players.
+
+    The PDF is always force-generated (not cached) to ensure the most up-to-date
+    information is included.
 
     Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        num: Faction number/ID
+        request: HTTP request object containing user authentication
+        event_slug: Event slug identifier for the specific event
+        num: Faction number (not database ID) to generate the sheet for
 
     Returns:
-        HTTP response containing the generated PDF
+        HttpResponse: PDF file download response with the faction sheet
+
+    Raises:
+        PermissionDenied: If user lacks orga_characters_pdf permission
+        Http404: If faction with the specified number doesn't exist or isn't in cache
     """
-    # Check organizer permissions for PDF access
+    # Verify organizer permissions for PDF generation
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
-    # Retrieve and validate faction data
+    # Load faction data into context by faction number
     get_element(context, num, "faction", Faction)
 
+    # Load all event cache data for faction sheet rendering
     get_event_cache_all(context)
 
+    # Verify faction exists in the cache and set up sheet data
     if num in context["factions"]:
         context["sheet_faction"] = context["factions"][num]
     else:
+        # Faction number not found in cache
         raise Http404("Faction does not exist")
 
+    # Load custom faction fields configured for this event
+    # Only visible fields are included in the PDF
     context["fact"] = get_writing_element_fields(
         context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
     )
 
-    # Generate and return the faction sheet PDF
+    # Generate and return the faction sheet PDF (force=True for fresh generation)
     return print_faction(context, True)

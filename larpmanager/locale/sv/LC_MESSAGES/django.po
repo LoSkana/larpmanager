@@ -1176,6 +1176,9 @@ msgstr "Utvalda"
 msgid "Services"
 msgstr "Tjänster"
 
+msgid "Sessions"
+msgstr "Sessioner"
+
 msgid "Settings"
 msgstr "Inställningar"
 
@@ -5934,9 +5937,6 @@ msgstr "Anger vilken färg som ska användas för länkar"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Anger den färg som ska användas för texterna"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Ange de körningar för vilka rabatten är aktiv"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Hantera fasta utbetalningar för deltagare"
 
@@ -6197,6 +6197,9 @@ msgstr "Ange så exakt som möjligt var du ska hämtas"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Ange hur utgifterna är utformade på budgetnivå"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Ange de sessioner för vilka rabatten är aktiv"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Anger att betalningen är skickad 'till vänner och familj"

@@ -2713,7 +2713,10 @@ msgstr ""
 msgid "Name of the discount - internal use"
 msgstr ""
 
-msgid "Indicate the runs for which the discount is active"
+msgid "Indicate the sessions for which the discount is active"
+msgstr ""
+
+msgid "Sessions"
 msgstr ""
 
 msgid ""

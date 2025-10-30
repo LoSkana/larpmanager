@@ -1176,6 +1176,9 @@ msgstr "Vybrané stránky"
 msgid "Services"
 msgstr "Služby"
 
+msgid "Sessions"
+msgstr "Relace"
+
 msgid "Settings"
 msgstr "Nastavení"
 
@@ -5933,9 +5936,6 @@ msgstr "Označuje barvu, která bude použita pro odkazy"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Označuje barvu, která bude použita pro texty"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Uveďte běhy, pro které je sleva aktivní"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Správa pevných splátek pro účastníky"
 
@@ -6200,6 +6200,9 @@ msgstr "Co nejpřesněji uveďte, kde vás vyzvednout"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Uveďte relace, pro které je sleva aktivní"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Označuje, že platba je zasílána 'přátelům a rodině'"

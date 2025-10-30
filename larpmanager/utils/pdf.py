@@ -217,35 +217,47 @@ def add_pdf_instructions(context: dict) -> None:
         logger.debug(f"Processed PDF context for key '{section_key}': {len(context[section_key])} characters")
 
 
-def xhtml_pdf(context, template_path, output_filename, html=False):
-    """Generate PDF from Django template using xhtml2pdf.
+def xhtml_pdf(context: dict, template_path: str, output_filename: str, html: bool = False) -> None:
+    """Generate PDF from Django template using xhtml2pdf library.
+
+    This function renders a Django template (or raw HTML string) with the provided
+    context and converts it to a PDF file using xhtml2pdf (pisa). It supports both
+    template file paths and raw HTML strings as input.
+
+    The generated PDF uses the link_callback for resolving static/media URLs to
+    absolute filesystem paths for proper resource embedding.
 
     Args:
-        context (dict): Template context dictionary
-        template_path (str): Path to Django template file
-        output_filename (str): Output PDF file path
-        html (bool): If True, treat template_path as HTML string; if False, as template path.
-              Defaults to False.
+        context: Template context dictionary containing variables for rendering
+        template_path: Either a Django template file path (e.g., 'pdf/sheets/character.html')
+            or a raw HTML string, depending on the 'html' parameter
+        output_filename: Absolute filesystem path where the PDF file will be saved
+        html: If True, treat template_path as raw HTML string to render with context;
+            if False, treat as Django template path to load. Defaults to False.
 
     Raises:
-        Http404: If PDF generation fails with errors
+        Http404: If PDF generation encounters errors (includes rendered HTML in error)
+
+    Side Effects:
+        Creates a PDF file at the specified output_filename path
     """
     # Render HTML content based on input type
     if html:
-        # Treat template_path as HTML string and render with context
+        # Treat template_path as raw HTML string and render with Django context
         template = Template(template_path)
         django_context = Context(context)
         html_content = template.render(django_context)
     else:
-        # Treat template_path as template path and load template
+        # Treat template_path as Django template path and load template file
         template = get_template(template_path)
         html_content = template.render(context)
 
+    # Generate PDF file from rendered HTML
     with open(output_filename, "wb") as pdf_file:
-        # create a pdf
+        # Convert HTML to PDF using xhtml2pdf library
         pdf_result = pisa.CreatePDF(html_content, dest=pdf_file, link_callback=link_callback)
 
-        # check result
+        # Check for PDF generation errors and raise with diagnostic information
         if pdf_result.err:
             raise Http404("We had some errors <pre>" + html_content + "</pre>")
 
@@ -314,24 +326,40 @@ def print_character_friendly(context: dict, force: bool = False) -> HttpResponse
 
 
 def print_faction(context: dict, force: bool = False) -> HttpResponse:
-    """Generate and return a faction sheet PDF.
+    """Generate and return a faction sheet PDF with optional force regeneration.
+
+    Creates a PDF document containing the faction sheet using the xhtml2pdf engine.
+    The PDF includes faction details, custom fields, and formatting specified in the
+    faction template. The generated PDF is cached and only regenerated when forced
+    or when the cache is outdated.
 
     Args:
-        context: Context dictionary containing faction and run data
-        force: Whether to force regeneration of the PDF file
+        context: Context dictionary that must contain:
+            - 'faction': The Faction model instance
+            - 'run': The Run model instance for file path generation
+            - Additional faction-specific data for template rendering
+        force: If True, regenerate the PDF even if a cached version exists;
+            if False, use cached version if available and up-to-date. Defaults to False.
 
     Returns:
-        HTTP response containing the PDF file
+        HttpResponse: PDF file response configured for download with the faction name
+            as the filename
+
+    Side Effects:
+        - Sets context["pdf"] = True for template rendering flags
+        - Creates/updates faction PDF file in the media directory
     """
-    # Get the file path for the faction sheet
+    # Get the file path for the faction sheet PDF
     file_path = context["faction"].get_sheet_filepath(context["run"])
+
+    # Set PDF flag for template conditional rendering
     context["pdf"] = True
 
-    # Generate PDF if forced or if file needs reprinting
+    # Generate PDF if forced or if file needs reprinting (outdated/missing)
     if force or reprint(file_path):
         xhtml_pdf(context, "pdf/sheets/faction.html", file_path)
 
-    # Return the PDF file as HTTP response
+    # Return the PDF file as HTTP response with faction name in filename
     return return_pdf(file_path, f"{context['faction']}")
 
 
@@ -1030,110 +1058,243 @@ def get_trait_character(run, number):
         return None
 
 
-def print_bulk(context, request):
-    # Create in-memory zip file
+def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
+    """Generate and return a ZIP file containing multiple PDFs based on user selection.
+
+    This function creates an in-memory ZIP archive containing selected PDF files for
+    an event run. Users can select from gallery, profiles, character sheets, faction
+    sheets, and handouts via POST parameters. Each selected item is generated (if needed)
+    and added to the ZIP file.
+
+    The function delegates to specialized helper functions for each PDF type, each of
+    which handles generation, caching, and error reporting independently.
+
+    Args:
+        context: Context dictionary containing:
+            - 'run': The Run model instance
+            - 'event': The Event model instance
+            - Other data required by individual PDF generators
+        request: HTTP request object with POST data indicating which PDFs to include.
+            Expected POST parameters: 'gallery', 'profiles', 'character_{id}',
+            'faction_{id}', 'handout_{id}'
+
+    Returns:
+        HttpResponse: ZIP file download response with timestamped filename in format:
+            {run_slug}_pdfs_{YYYYMMDD_HHMMSS}.zip
+
+    Side Effects:
+        - Generates PDF files in the media directory as needed
+        - Displays warning messages to user for any failed PDF generations
+    """
+    # Create in-memory zip file buffer for PDF collection
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        # Process each PDF type via specialized helper functions
         _bulk_gallery(context, request, zip_file)
-
         _bulk_profiles(context, request, zip_file)
-
         _bulk_characters(context, request, zip_file)
-
         _bulk_factions(context, request, zip_file)
-
         _handle_handouts(context, request, zip_file)
 
-    # Return zip file as download
+    # Prepare ZIP file for download
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+
+    # Generate timestamped filename for download
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_pdfs_{timestamp}.zip"'
+
     return response
 
 
-def _handle_handouts(context, request, zip_file):
-    # Handle handouts
+def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile) -> None:
+    """Process and add handout PDFs to bulk ZIP file based on user selection.
+
+    Iterates through all handouts for the event, generating PDFs for those selected
+    in the POST request, and adding them to the ZIP archive with descriptive filenames.
+
+    Args:
+        context: Context dictionary with 'event' and 'run' data
+        request: HTTP request with POST parameters like 'handout_{id}'
+        zip_file: Open ZipFile object to write PDFs into
+
+    Side Effects:
+        - Generates handout PDF files if needed
+        - Adds PDFs to zip_file
+        - Displays warning messages for failed generations
+    """
+    # Iterate through all handouts in the event
     for handout in context["event"].get_elements(Handout):
+        # Check if this handout was selected by user
         if request.POST.get(f"handout_{handout.id}"):
             try:
+                # Load handout data into context
                 get_handout(context, handout.number)
                 filepath = context["handout"].get_filepath(context["run"])
-                # Generate if doesn't exist or force regenerate
+
+                # Generate PDF if it doesn't exist or is outdated
                 if not os.path.exists(filepath) or reprint(filepath):
                     print_handout(context, True)
+
+                # Add to ZIP if generation succeeded
                 if os.path.exists(filepath):
                     zip_file.write(filepath, f"handout_{handout.number}_{handout.name}.pdf")
             except Exception as e:
+                # Notify user of failure but continue processing other handouts
                 messages.warning(request, _("Failed to add handout") + f" #{handout.number}: {e}")
 
 
-def _bulk_factions(context, request, zip_file):
-    # Handle factions
+def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile) -> None:
+    """Process and add faction sheet PDFs to bulk ZIP file based on user selection.
+
+    Iterates through all factions for the event, generating faction sheets for those
+    selected in the POST request, and adding them to the ZIP archive.
+
+    Args:
+        context: Context dictionary with 'event', 'run', and cache data
+        request: HTTP request with POST parameters like 'faction_{id}'
+        zip_file: Open ZipFile object to write PDFs into
+
+    Side Effects:
+        - Loads event cache and faction field data into context
+        - Generates faction PDF files if needed
+        - Adds PDFs to zip_file
+        - Displays warning messages for failed generations
+    """
+    # Iterate through all factions in the event
     for faction in context["event"].get_elements(Faction):
+        # Check if this faction was selected by user
         if request.POST.get(f"faction_{faction.id}"):
             try:
+                # Load faction data into context
                 get_element(context, faction.number, "faction", Faction)
                 get_event_cache_all(context)
 
+                # Verify faction exists in cache
                 if faction.number in context["factions"]:
                     context["sheet_faction"] = context["factions"][faction.number]
                 else:
+                    # Skip if faction not found in cache
                     continue
 
+                # Load custom faction fields for the sheet
                 context["fact"] = get_writing_element_fields(
                     context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
                 )
 
                 filepath = context["faction"].get_sheet_filepath(context["run"])
-                # Generate if doesn't exist or force regenerate
+
+                # Generate PDF if it doesn't exist or is outdated
                 if not os.path.exists(filepath) or reprint(filepath):
                     print_faction(context, True)
+
+                # Add to ZIP if generation succeeded
                 if os.path.exists(filepath):
                     zip_file.write(filepath, f"faction_{faction.number}_{faction.name}.pdf")
             except Exception as e:
+                # Notify user of failure but continue processing other factions
                 messages.warning(request, _("Failed to add faction") + f" #{faction.number}: {e}")
 
 
-def _bulk_characters(context, request, zip_file):
-    # Handle characters
+def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile) -> None:
+    """Process and add character sheet PDFs to bulk ZIP file based on user selection.
+
+    Iterates through all characters for the event, generating character sheets for
+    those selected in the POST request, and adding them to the ZIP archive.
+
+    Args:
+        context: Context dictionary with 'event' and 'run' data
+        request: HTTP request with POST parameters like 'character_{id}'
+        zip_file: Open ZipFile object to write PDFs into
+
+    Side Effects:
+        - Loads character data into context
+        - Generates character PDF files if needed
+        - Adds PDFs to zip_file
+        - Displays warning messages for failed generations
+    """
+    # Iterate through all characters in the event
     for character in context["event"].get_elements(Character):
+        # Check if this character was selected by user
         if request.POST.get(f"character_{character.id}"):
             try:
+                # Load and validate character data
                 get_char_check(request, context, character.number, True)
                 filepath = context["character"].get_sheet_filepath(context["run"])
-                # Generate if doesn't exist or force regenerate
+
+                # Generate PDF if it doesn't exist or is outdated
                 if not os.path.exists(filepath) or reprint(filepath):
                     print_character(context, True)
+
+                # Add to ZIP if generation succeeded
                 if os.path.exists(filepath):
                     zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
             except Exception as e:
+                # Notify user of failure but continue processing other characters
                 messages.warning(request, _("Failed to add character") + f" #{character.number}: {e}")
 
 
-def _bulk_profiles(context, request, zip_file):
-    # Handle profiles
+def _bulk_profiles(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile) -> None:
+    """Add profiles PDF to bulk ZIP file if selected by user.
+
+    Generates a profiles PDF containing information for all characters in the run
+    if the 'profiles' POST parameter is present.
+
+    Args:
+        context: Context dictionary with 'run' data
+        request: HTTP request with 'profiles' POST parameter
+        zip_file: Open ZipFile object to write PDF into
+
+    Side Effects:
+        - Generates profiles PDF file if needed
+        - Adds PDF to zip_file
+        - Displays warning message if generation fails
+    """
+    # Check if profiles PDF was requested
     if request.POST.get("profiles"):
         try:
             filepath = context["run"].get_profiles_filepath()
-            # Generate if doesn't exist or force regenerate
+
+            # Generate PDF if it doesn't exist or is outdated
             if not os.path.exists(filepath) or reprint(filepath):
                 print_profiles(context, True)
+
+            # Add to ZIP if generation succeeded
             if os.path.exists(filepath):
                 zip_file.write(filepath, "profiles.pdf")
         except Exception as e:
+            # Notify user of failure
             messages.warning(request, _("Failed to add profiles") + f": {e}")
 
 
-def _bulk_gallery(context, request, zip_file):
-    # Handle gallery
+def _bulk_gallery(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile) -> None:
+    """Add gallery PDF to bulk ZIP file if selected by user.
+
+    Generates a gallery PDF containing character portraits if the 'gallery'
+    POST parameter is present.
+
+    Args:
+        context: Context dictionary with 'run' data
+        request: HTTP request with 'gallery' POST parameter
+        zip_file: Open ZipFile object to write PDF into
+
+    Side Effects:
+        - Generates gallery PDF file if needed
+        - Adds PDF to zip_file
+        - Displays warning message if generation fails
+    """
+    # Check if gallery PDF was requested
     if request.POST.get("gallery"):
         try:
             filepath = context["run"].get_gallery_filepath()
-            # Generate if doesn't exist or force regenerate
+
+            # Generate PDF if it doesn't exist or is outdated
             if not os.path.exists(filepath) or reprint(filepath):
                 print_gallery(context, True)
+
+            # Add to ZIP if generation succeeded
             if os.path.exists(filepath):
                 zip_file.write(filepath, "gallery.pdf")
         except Exception as e:
+            # Notify user of failure
             messages.warning(request, _("Failed to add gallery") + f": {e}")

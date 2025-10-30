@@ -1176,6 +1176,9 @@ msgstr "Geselecteerd"
 msgid "Services"
 msgstr "Diensten"
 
+msgid "Sessions"
+msgstr "Sessies"
+
 msgid "Settings"
 msgstr "Instellingen"
 
@@ -5941,9 +5944,6 @@ msgstr "Geeft de kleur aan die wordt gebruikt voor links"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Geeft de kleur aan die wordt gebruikt voor de teksten"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Geef aan voor welke runs de korting actief is"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Vaste betalingstermijnen voor deelnemers beheren"
 
@@ -6211,6 +6211,9 @@ msgstr "Geef zo nauwkeurig mogelijk aan waar je opgehaald kunt worden"
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Geef aan hoe de uitgaven zijn geconfigureerd op budgetniveau"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Geef aan voor welke sessies de korting actief is"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Geeft aan dat de betaling wordt verzonden 'naar vrienden en familie'"

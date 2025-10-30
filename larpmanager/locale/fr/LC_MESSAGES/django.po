@@ -1176,6 +1176,9 @@ msgstr "Sélectionné"
 msgid "Services"
 msgstr "Services"
 
+msgid "Sessions"
+msgstr "Sessions"
+
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -5954,9 +5957,6 @@ msgstr "Indique la couleur qui sera utilisée pour les liens"
 msgid "Indicate the color that will be used for the texts"
 msgstr "Indique la couleur qui sera utilisée pour les textes"
 
-msgid "Indicate the runs for which the discount is active"
-msgstr "Indiquer les courses pour lesquelles la réduction est active"
-
 msgid "Manage fixed payment installments for participants"
 msgstr "Gérer les versements fixes pour les participants"
 
@@ -6231,6 +6231,9 @@ msgstr ""
 
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Indiquer comment les dépenses sont configurées au niveau du budget"
+
+msgid "Indicate the sessions for which the discount is active"
+msgstr "Indiquer les sessions pour lesquelles la réduction est active"
 
 msgid "Indicates that payment is sent 'to friends and family'"
 msgstr "Indique que le paiement est envoyé 'aux amis et à la famille'"
