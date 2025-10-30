@@ -28,42 +28,116 @@ from larpmanager.cache.association_translation import get_association_translatio
 
 
 class AssociationTranslationMiddleware(MiddlewareMixin):
-    """Middleware that injects association-specific translation overrides."""
+    """Django middleware that enables per-association custom translation overrides.
 
-    def process_request(self, request):
+    This middleware intercepts each request and injects association-specific
+    translations that override the default Django i18n translations. It allows
+    each organization to customize specific translation strings without modifying
+    the global .po files.
+
+    The middleware:
+    1. Checks if the request is associated with a specific organization
+    2. Loads custom translations for that organization from cache
+    3. Wraps the standard Django translation with custom overrides
+    4. Cleans up after the response is sent
+
+    This enables multi-tenant translation customization where different
+    organizations can see different text for the same UI elements.
+    """
+
+    def process_request(self, request) -> None:
+        """Inject association-specific translations into the request context.
+
+        Args:
+            request: The incoming HTTP request object
+        """
+        # Extract association ID from request context (set by earlier middleware)
         association_id = getattr(request, "association", {}).get("id", None)
         if not association_id:
+            # No association context, use default translations
             return
 
+        # Determine the active language for this request
         language = getattr(request, "LANGUAGE_CODE", dj_translation.get_language())
+
+        # Get the base Django translation object for this language
         base_translation = trans_real.translation(language)
 
+        # Load custom translation overrides for this association from cache
         overrides = get_association_translation_cache(association_id, language) or {}
+
+        # Create a custom translation wrapper that applies overrides
         assoc_trans = AssociationTranslations(base_translation, overrides)
 
-        # Replace only thread-local active translation
+        # Replace the thread-local active translation with our custom one
         trans_real._active.value = assoc_trans
 
     def process_response(self, request, response):
-        # Restore normal translation object
+        """Clean up translation overrides after processing the request.
+
+        Args:
+            request: The HTTP request object
+            response: The HTTP response object
+
+        Returns:
+            The unmodified response object
+        """
+        # Restore default translation behavior for the next request
         trans_real._active.value = None
         dj_translation.deactivate_all()
         return response
 
 
 class AssociationTranslations(GNUTranslations):
-    """Custom Translations object that supports per-association overrides."""
+    """Custom translation class that wraps Django translations with per-association overrides.
 
-    def __init__(self, base_translation, overrides):
+    This class extends the standard gettext GNUTranslations to support custom
+    translation overrides. It checks the overrides dictionary first, and falls
+    back to the base Django translation if no custom translation is found.
+
+    This implements the Decorator pattern, wrapping the base translation object
+    and selectively overriding specific strings.
+
+    Attributes:
+        _base: The underlying Django translation object
+        _overrides: Dictionary mapping msgid strings to custom translations
+    """
+
+    def __init__(self, base_translation, overrides: dict[str, str]):
+        """Initialize the translation wrapper with base translations and overrides.
+
+        Args:
+            base_translation: Django's standard translation object for the language
+            overrides: Dictionary mapping original strings to custom translations
+        """
         self._base = base_translation
         self._overrides = overrides or {}
 
-    def gettext(self, message):
+    def gettext(self, message: str) -> str:
+        """Translate a message, using custom override if available.
+
+        Args:
+            message: The original message string to translate
+
+        Returns:
+            The custom translation if available, otherwise the default translation
+        """
         if message in self._overrides:
             return self._overrides[message]
         return self._base.gettext(message)
 
-    def ngettext(self, singular, plural, n):
+    def ngettext(self, singular: str, plural: str, n: int) -> str:
+        """Translate a message with plural forms, using custom override if available.
+
+        Args:
+            singular: The singular form of the message
+            plural: The plural form of the message
+            n: The count determining which form to use
+
+        Returns:
+            The custom translation if available, otherwise the default translation
+        """
+        # Determine which form to check for override based on count
         key = singular if n == 1 else plural
         if key in self._overrides:
             return self._overrides[key]

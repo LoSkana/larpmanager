@@ -58,19 +58,45 @@ class AssociationTextAdmin(DefModelAdmin):
 
 @admin.register(AssociationTranslation)
 class AssociationTranslationAdmin(DefModelAdmin):
+    """Django admin interface for managing association-specific translation overrides.
+
+    Provides a user-friendly interface for administrators to create and manage
+    custom translations that override the default Django i18n strings on a
+    per-organization basis. The list view includes preview columns that truncate
+    long text for better readability, and allows quick activation/deactivation.
+    """
+
     list_display = ("association", "language", "msgid_preview", "msgstr_preview", "active")
     list_filter = (AssociationFilter, "language", "active")
     search_fields = ("msgid", "msgstr")
     autocomplete_fields = ["association"]
     list_editable = ("active",)
 
-    def msgid_preview(self, obj):
-        return obj.msgid[:50] + "..." if len(obj.msgid) > 50 else obj.msgid
+    def msgid_preview(self, obj: AssociationTranslation) -> str:
+        """Display a truncated preview of the original text for list view.
+
+        Args:
+            obj: The AssociationTranslation instance
+
+        Returns:
+            The original text truncated to 50 characters with ellipsis if needed
+        """
+        max_length = 50
+        return obj.msgid[:max_length] + "..." if len(obj.msgid) > max_length else obj.msgid
 
     msgid_preview.short_description = "Original text"
 
-    def msgstr_preview(self, obj):
-        return obj.msgstr[:50] + "..." if len(obj.msgstr) > 50 else obj.msgstr
+    def msgstr_preview(self, obj: AssociationTranslation) -> str:
+        """Display a truncated preview of the translated text for list view.
+
+        Args:
+            obj: The AssociationTranslation instance
+
+        Returns:
+            The translated text truncated to 50 characters with ellipsis if needed
+        """
+        max_length = 50
+        return obj.msgstr[:max_length] + "..." if len(obj.msgstr) > max_length else obj.msgstr
 
     msgstr_preview.short_description = "Translation"
 

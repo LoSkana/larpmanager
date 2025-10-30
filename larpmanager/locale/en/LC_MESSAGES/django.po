@@ -240,7 +240,9 @@ msgstr ""
 msgid "Translations"
 msgstr ""
 
-msgid "Manage organization-specific translations"
+msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
 msgstr ""
 
 msgid "Roles"
@@ -2908,31 +2910,45 @@ msgstr ""
 msgid "Text language"
 msgstr ""
 
+msgid "Number"
+msgstr ""
+
+msgid "Optional ordering number"
+msgstr ""
+
 msgid "Association"
 msgstr ""
 
-msgid "Language code for this translation"
+msgid "The organization this translation belongs to"
+msgstr ""
+
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr ""
 
 msgid "Original text"
 msgstr ""
 
-msgid "The original text to translate (in English)"
+msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr ""
 
 msgid "Translated text"
 msgstr ""
 
-msgid "The custom translation for this organization"
+msgid ""
+"The custom translation that will replace the default for this organization"
 msgstr ""
 
 msgid "Context"
 msgstr ""
 
-msgid "Optional context for disambiguation (msgctxt in gettext)"
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
 msgstr ""
 
-msgid "Whether this translation is currently active"
+msgid ""
+"Whether this translation override is currently active. Inactive translations "
+"are ignored."
 msgstr ""
 
 msgid "Association Translation"
@@ -3981,9 +3997,6 @@ msgid "Problem"
 msgstr ""
 
 msgid "Action"
-msgstr ""
-
-msgid "Number"
 msgstr ""
 
 msgid "Names"

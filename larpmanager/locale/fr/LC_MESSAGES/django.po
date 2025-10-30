@@ -3918,6 +3918,9 @@ msgstr "Nouvelle question posée par %(user)s"
 msgid "No, I don't want updates"
 msgstr "Non, je ne veux pas de mises à jour"
 
+msgid "Optional ordering number"
+msgstr "Numéro de commande optionnel"
+
 msgid "Participant cancellation"
 msgstr "Annulation du participant"
 
@@ -4712,9 +4715,6 @@ msgstr "Découvrez les quêtes disponibles"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Si cette case est cochée, le niveau de ticket est autorisé : PNJ"
 
-msgid "Language code for this translation"
-msgstr "Code langue pour cette traduction"
-
 msgid "Manage badges and user assignments"
 msgstr "Gérer les badges et les affectations d'utilisateurs"
 
@@ -5288,9 +5288,6 @@ msgstr "Décrire exactement l'endroit où elle se produit"
 msgid "I do it routinely, I have good experience"
 msgstr "Je le fais régulièrement, j'ai une bonne expérience"
 
-msgid "Manage organization-specific translations"
-msgstr "Gérer les traductions spécifiques à l'organisation"
-
 msgid "Manage the pre-registration of all events"
 msgstr "Gérer la préinscription de tous les événements"
 
@@ -5348,6 +5345,9 @@ msgstr "Pour quel jour avez-vous besoin d'un transport"
 
 msgid "Here is a list of critical problems to fix"
 msgstr "Voici une liste de problèmes critiques à résoudre"
+
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr "Code ISO de la langue (par exemple, \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5477,9 +5477,6 @@ msgstr "Vous pouvez maintenant définir les paramètres d'édition du lecteur"
 msgid "Set up a value for registration secret link"
 msgstr "Définir une valeur pour le lien secret d'enregistrement"
 
-msgid "The original text to translate (in English)"
-msgstr "Le texte original à traduire (en anglais)"
-
 msgid "This access link is invalid or has expired."
 msgstr "Ce lien d'accès n'est pas valide ou a expiré."
 
@@ -5574,17 +5571,14 @@ msgstr "Définir une valeur pour la date d'ouverture de l'enregistrement"
 msgid "Set up character customization configuration"
 msgstr "Configuration de la personnalisation des personnages"
 
-msgid "The custom translation for this organization"
-msgstr "La traduction sur mesure pour cette organisation"
+msgid "The organization this translation belongs to"
+msgstr "L'organisation à laquelle appartient cette traduction"
 
 msgid "This page shows your personal spending items"
 msgstr "Cette page récapitule vos postes de dépenses personnelles"
 
 msgid "View the list of characters and participants"
 msgstr "Voir la liste des personnages et des participants"
-
-msgid "Whether this translation is currently active"
-msgstr "Si cette traduction est actuellement active"
 
 msgid "You are not yet a Member of the Organization"
 msgstr "Vous n'êtes pas encore membre de l'Association"
@@ -6385,9 +6379,6 @@ msgstr "Indiquer si le champ est imprimé en générations PDF"
 
 msgid "Manage registrations discounts available to participants"
 msgstr "Gérer les inscriptions et les réductions offertes aux participants"
-
-msgid "Optional context for disambiguation (msgctxt in gettext)"
-msgstr "Contexte facultatif pour la désambiguïsation (msgctxt dans gettext)"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Veuillez vérifier à nouveau l'adresse, en particulier son début"
@@ -7367,6 +7358,11 @@ msgstr ""
 "La première ligne du fichier contient les noms des champs que vous souhaitez"
 " télécharger"
 
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr ""
+"Le texte original en anglais tel qu'il apparaît dans le code (msgid in "
+"gettext)"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Il s'agit des inscriptions à des événements pour lesquels vous devez "
@@ -7716,6 +7712,12 @@ msgid ""
 msgstr ""
 "Texte visible uniquement par le participant assigné, lorsque la case "
 "'afficher le texte' est cochée"
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr ""
+"La traduction personnalisée qui remplacera la traduction par défaut pour "
+"cette organisation"
 
 msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
@@ -8695,6 +8697,20 @@ msgstr ""
 "<b>%(event)s</b>"
 
 msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+"Gérer les dérogations de traduction propres à l'organisation pour "
+"personnaliser la terminologie et le texte"
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+"Contexte facultatif pour la désambiguïsation lorsqu'un même texte a des "
+"significations différentes (msgctxt)"
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -8852,6 +8868,13 @@ msgid ""
 msgstr ""
 "Cette page résume les problèmes signalés par les contributeurs, en vue d'une"
 " prise en charge directe pendant l'événement"
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations"
+" are ignored."
+msgstr ""
+"Indique si cette surcharge de traduction est actuellement active. Les "
+"traductions inactives sont ignorées."
 
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "

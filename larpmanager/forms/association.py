@@ -228,11 +228,23 @@ class ExeAssociationTextForm(MyForm):
 
 
 class ExeAssociationTranslationForm(MyForm):
-    """Form for managing custom association translations."""
+    """Django form for creating and editing association-specific translation overrides.
+
+    This form provides the interface for organization administrators to create custom
+    translations that override the default Django i18n strings. It allows specifying:
+    - The original text (msgid) to override
+    - The custom translation (msgstr)
+    - The target language
+    - Optional context for disambiguation
+    - Active/inactive status
+
+    The form is used in the executive (exe) dashboard for managing organization-wide
+    translation customizations. The number field is excluded as it's auto-managed.
+    """
 
     page_title = _("Translations")
 
-    page_info = _("Manage organization-specific translations")
+    page_info = _("Manage organization-specific translation overrides for customizing terminology and text")
 
     class Meta:
         abstract = True

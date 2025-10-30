@@ -3918,6 +3918,9 @@ msgstr "Nová otázka od %(user)s"
 msgid "No, I don't want updates"
 msgstr "Ne, nechci aktualizace"
 
+msgid "Optional ordering number"
+msgstr "Volitelné objednací číslo"
+
 msgid "Participant cancellation"
 msgstr "Zrušení účasti"
 
@@ -4711,9 +4714,6 @@ msgstr "Objevte dostupné úkoly"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: NPC"
 
-msgid "Language code for this translation"
-msgstr "Kód jazyka pro tento překlad"
-
 msgid "Manage badges and user assignments"
 msgstr "Správa odznaků a přiřazení uživatelů"
 
@@ -5285,9 +5285,6 @@ msgstr "Popište, kde přesně se vyskytuje"
 msgid "I do it routinely, I have good experience"
 msgstr "Dělám to pravidelně, mám dobré zkušenosti"
 
-msgid "Manage organization-specific translations"
-msgstr "Správa překladů specifických pro organizaci"
-
 msgid "Manage the pre-registration of all events"
 msgstr "Správa předběžné registrace všech událostí"
 
@@ -5344,6 +5341,9 @@ msgstr "Na který den budete potřebovat dopravu"
 
 msgid "Here is a list of critical problems to fix"
 msgstr "Zde je seznam kritických problémů, které je třeba odstranit"
+
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr "kód jazyka ISO (např. \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5470,9 +5470,6 @@ msgstr "Nyní můžete nastavit úpravy přehrávače"
 msgid "Set up a value for registration secret link"
 msgstr "Nastavení hodnoty pro tajný odkaz registrace"
 
-msgid "The original text to translate (in English)"
-msgstr "Původní text k překladu (v angličtině)"
-
 msgid "This access link is invalid or has expired."
 msgstr "Tento přístupový odkaz je neplatný nebo jeho platnost vypršela."
 
@@ -5566,17 +5563,14 @@ msgstr "Nastavení hodnoty pro datum zahájení registrace"
 msgid "Set up character customization configuration"
 msgstr "Nastavení konfigurace přizpůsobení postavy"
 
-msgid "The custom translation for this organization"
-msgstr "Vlastní překlad pro tuto organizaci"
+msgid "The organization this translation belongs to"
+msgstr "Organizace, které tento překlad patří"
 
 msgid "This page shows your personal spending items"
 msgstr "Tato stránka shrnuje položky vašich osobních výdajů"
 
 msgid "View the list of characters and participants"
 msgstr "Zobrazit seznam postav a účastníků"
-
-msgid "Whether this translation is currently active"
-msgstr "Zda je tento překlad aktuálně aktivní"
 
 msgid "You are not yet a Member of the Organization"
 msgstr "Ještě nejste členem asociace"
@@ -6339,9 +6333,6 @@ msgstr "Uveďte, zda se pole tiskne v generacích PDF"
 
 msgid "Manage registrations discounts available to participants"
 msgstr "Správa slev pro účastníky při registraci"
-
-msgid "Optional context for disambiguation (msgctxt in gettext)"
-msgstr "Nepovinný kontext pro disambiguaci (msgctxt v gettextu)"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Zkontrolujte prosím znovu adresu, zejména její začátek"
@@ -7141,6 +7132,9 @@ msgstr ""
 msgid "The first line of the file are the field names that you want to upload"
 msgstr "Na prvním řádku souboru jsou názvy polí, které chcete nahrát"
 
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
 
@@ -7443,6 +7437,10 @@ msgid ""
 msgstr ""
 "Text viditelný pouze přiřazeným účastníkem, pokud je zaškrtnuto 'zobrazit "
 "text'"
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr "Vlastní překlad, který nahradí výchozí překlad pro tuto organizaci"
 
 msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
@@ -8335,6 +8333,20 @@ msgstr ""
 "<b>%(event)s</b>"
 
 msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+"Správa překladů specifických pro organizaci pro přizpůsobení terminologie a "
+"textu"
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+"Nepovinný kontext pro disambiguaci, když má stejný text různé významy "
+"(msgctxt)"
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -8491,6 +8503,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou shrnuty problémy nahlášené přispěvateli k přímému "
 "řešení během akce"
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations"
+" are ignored."
+msgstr ""
+"Zda je toto přepsání překladu aktuálně aktivní. Neaktivní překlady jsou "
+"ignorovány."
 
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "
