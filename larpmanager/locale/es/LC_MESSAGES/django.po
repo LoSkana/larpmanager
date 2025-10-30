@@ -738,6 +738,9 @@ msgstr "Contacto"
 msgid "Content"
 msgstr "Contenido"
 
+msgid "Context"
+msgstr "Contexto"
+
 msgid "Correct"
 msgstr "Correcto"
 
@@ -1683,6 +1686,9 @@ msgstr "Añadir a la parcela"
 msgid "Assignments"
 msgstr "Asignaciones"
 
+msgid "Association"
+msgstr "Asociación"
+
 msgid "Beneficiary"
 msgstr "Beneficiario"
 
@@ -1838,6 +1844,9 @@ msgstr "Costes totales"
 
 msgid "Transaction"
 msgstr "Transacción"
+
+msgid "Translation"
+msgstr "Traducción"
 
 msgid "Transversal"
 msgstr "Transversal"
@@ -2058,6 +2067,9 @@ msgstr "Número total"
 msgid "Transactions"
 msgstr "Transacciones"
 
+msgid "Translations"
+msgstr "Traducciones"
+
 msgid "Type of text"
 msgstr "Tipo de texto"
 
@@ -2193,6 +2205,9 @@ msgstr "No completado"
 
 msgid "Number events"
 msgstr "Número de eventos"
+
+msgid "Original text"
+msgstr "Texto original"
 
 msgid "Passages made"
 msgstr "Medidas adoptadas"
@@ -2605,6 +2620,9 @@ msgstr "Iniciar algoritmo"
 
 msgid "Ticket selected"
 msgstr "Billete seleccionado"
+
+msgid "Translated text"
+msgstr "Texto traducido"
 
 msgid "Upload Expenses"
 msgstr "Cargar gastos"
@@ -3724,6 +3742,9 @@ msgstr "Un eslogan corto"
 msgid "Assignment %(elements)s"
 msgstr "Asignación %(elements)s"
 
+msgid "Association Translation"
+msgstr "Asociación Traducción"
+
 msgid "Background of web pages"
 msgstr "Fondo de las páginas web"
 
@@ -3833,6 +3854,9 @@ msgstr "¿Qué haces aquí todavía"
 msgid "You have made a mistake"
 msgstr "¡Has cometido un error"
 
+msgid "Association Translations"
+msgstr "Traducciones de asociaciones"
+
 msgid "Cancel your registration"
 msgstr "Cancelar inscripción"
 
@@ -3893,6 +3917,9 @@ msgstr "Nueva pregunta de %(user)s"
 
 msgid "No, I don't want updates"
 msgstr "No, no quiero actualizaciones"
+
+msgid "Optional ordering number"
+msgstr "Referencia opcional"
 
 msgid "Participant cancellation"
 msgstr "Cancelación de participantes"
@@ -5315,6 +5342,9 @@ msgstr "¿Para qué día necesitas transporte"
 msgid "Here is a list of critical problems to fix"
 msgstr "He aquí una lista de problemas críticos que hay que solucionar"
 
+msgid "ISO language code (e.g., 'en', 'it', 'de')"
+msgstr "Código de idioma ISO (por ejemplo, \"en\", \"it\", \"de\")"
+
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
 msgstr "Si está marcada: muestra el género de cada evento"
@@ -5532,6 +5562,9 @@ msgstr "Establecer un valor para la fecha de apertura del registro"
 
 msgid "Set up character customization configuration"
 msgstr "Establecer la configuración de personalización de caracteres"
+
+msgid "The organization this translation belongs to"
+msgstr "Organización a la que pertenece esta traducción"
 
 msgid "This page shows your personal spending items"
 msgstr "Esta página muestra tus partidas de gastos personales"
@@ -6006,6 +6039,9 @@ msgstr ""
 "Gestionar los movimientos de artículos del almacén, los préstamos y las "
 "reparaciones"
 
+msgid "Now you can define custom organization translations"
+msgstr "Ahora puede definir traducciones personalizadas de la organización"
+
 msgid "Please choose a clear and easily recognizable photo"
 msgstr "Elija una foto clara y fácilmente reconocible"
 
@@ -6021,9 +6057,6 @@ msgstr "Hay tipos de habilidades sin habilidades: %(list)s"
 
 msgid "This page shows all inflows received for this event"
 msgstr "Esta página muestra todas las entradas recibidas para este evento"
-
-msgid "This page summarizes the association's custom texts"
-msgstr "Esta página resume los textos habituales de la asociación"
 
 msgid " here the conditions of disenrollment for this event"
 msgstr " estas son las condiciones para darse de baja de este evento"
@@ -6166,6 +6199,9 @@ msgstr ""
 
 msgid "This page summarises the assignments in this event of"
 msgstr "En esta página se resumen las asignaciones en este evento de"
+
+msgid "This page summarizes the organizations's custom texts"
+msgstr "Esta página resume los textos personalizados de las organizaciones"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr "Se le ha regalado una entrada a este evento, por"
@@ -6463,6 +6499,9 @@ msgstr "En esta página muestra los ajustes de pago a plazos del evento"
 msgid "This page shows the sections of the event registration form"
 msgstr ""
 "Esta página muestra las secciones del formulario de inscripción al evento"
+
+msgid "This page summarizes the organization's custom translations"
+msgstr "Esta página resume las traducciones personalizadas de la organización"
 
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "¿Dónde se ha colocado? ¿Cuándo se espera que vuelva?"
@@ -7216,6 +7255,10 @@ msgid "The first line of the file are the field names that you want to upload"
 msgstr ""
 "La primera línea del archivo son los nombres de los campos que desea cargar"
 
+msgid "The original English text as it appears in the code (msgid in gettext)"
+msgstr ""
+"El texto original en inglés tal como aparece en el código (msgid en gettext)"
+
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Estas son las inscripciones a eventos por las que tiene que efectuar un pago"
@@ -7395,6 +7438,12 @@ msgstr ""
 "referencia a él"
 
 msgid ""
+"Customize translations of words and phrases in the organization interface"
+msgstr ""
+"Personalizar las traducciones de palabras y frases en la interfaz de la "
+"organización"
+
+msgid ""
 "Do you want to split the registration fee into fixed payment installments"
 msgstr "¿Desea fraccionar la cuota de inscripción en plazos fijos"
 
@@ -7550,6 +7599,12 @@ msgid ""
 msgstr ""
 "Texto visible sólo por el participante asignado, cuando 'mostrar texto' está"
 " marcado"
+
+msgid ""
+"The custom translation that will replace the default for this organization"
+msgstr ""
+"La traducción personalizada que sustituirá a la predeterminada para esta "
+"organización"
 
 msgid ""
 "This page shows all event templates; you can edit them, or create new ones"
@@ -8312,6 +8367,13 @@ msgstr ""
 "aprobado) a los elementos clave de la redacción"
 
 msgid ""
+"Allows to fine-tune how words and phrases are translated in the "
+"organization's space"
+msgstr ""
+"Permite afinar cómo se traducen las palabras y frases en el espacio de la "
+"organización"
+
+msgid ""
 "Do you want to open registrations at a specific date and time instead of "
 "immediately"
 msgstr ""
@@ -8507,6 +8569,20 @@ msgstr ""
 "provisional para <b>%(event)s</b>"
 
 msgid ""
+"Manage organization-specific translation overrides for customizing "
+"terminology and text"
+msgstr ""
+"Gestión de anulaciones de traducción específicas de la organización para "
+"personalizar la terminología y el texto"
+
+msgid ""
+"Optional context for disambiguation when the same text has different "
+"meanings (msgctxt)"
+msgstr ""
+"Contexto opcional para la desambiguación cuando el mismo texto tiene "
+"significados diferentes (msgctxt)"
+
+msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
 "registration"
 msgstr ""
@@ -8665,6 +8741,13 @@ msgid ""
 msgstr ""
 "Esta página muestra los problemas comunicados por los colaboradores, para su"
 " gestión durante el evento"
+
+msgid ""
+"Whether this translation override is currently active. Inactive translations"
+" are ignored."
+msgstr ""
+"Si esta anulación de traducción está actualmente activa. Las traducciones "
+"inactivas se ignoran."
 
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "

@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'larpmanager.middleware.broken.BrokenLinkEmailsMiddleware',
     'larpmanager.middleware.locale.LocaleAdvMiddleware',
     'larpmanager.middleware.association.AssociationIdentifyMiddleware',
+    'larpmanager.middleware.translation.AssociationTranslationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
