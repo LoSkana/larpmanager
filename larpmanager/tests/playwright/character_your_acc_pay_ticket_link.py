@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+import re
 
 import pytest
 from playwright.sync_api import expect
@@ -39,6 +39,8 @@ def test_character_your_acc_pay_ticket_link(pw_page):
     check_acc_pay_link(page, live_server)
 
     check_factions_indep_campaign(page, live_server)
+
+    acc_refund(page, live_server)
 
 def check_direct_ticket_link(page, live_server):
     go_to(page, live_server, "/test/manage")
@@ -236,3 +238,39 @@ def check_factions_indep_campaign(page, live_server):
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text primaaa tranver")
+
+def acc_refund(page, live_server):
+    # activate features
+    go_to(page, live_server, "/manage")
+    page.get_by_role("link", name="Features").click()
+    page.get_by_role("checkbox", name=re.compile(r"^Tokens")).check()
+    page.get_by_role("checkbox", name="Refunds").check()
+    page.get_by_role("button", name="Confirm").click()
+
+    # give out credits
+    page.get_by_role("link", name="Credits", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#select2-id_member-container").click()
+    page.get_by_role("searchbox").fill("org")
+    page.locator(".select2-results__option").first.click()
+    page.locator("#id_value").click()
+    page.locator("#id_value").fill("300")
+    page.locator("#id_descr").click()
+    page.locator("#id_descr").fill("teer")
+    submit_confirm(page)
+
+    # open request
+    page.get_by_role("link", name=" Accounting").click()
+    page.get_by_role("link", name="refund request").click()
+    page.get_by_role("textbox", name="Details").click()
+    page.get_by_role("textbox", name="Details").fill("asdsadsadsa")
+    page.get_by_role("spinbutton", name="Value").click()
+    page.get_by_role("spinbutton", name="Value").fill("20")
+    page.get_by_role("button", name="Submit").click()
+    expect(page.locator("#one")).to_contain_text("Requests open: asdsadsadsa (20.00)")
+
+    go_to(page, live_server, "/manage")
+    page.get_by_role("link", name="Refunds").click()
+    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test2030RequestDone")
+    page.get_by_role("link", name="Done").click()
+    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test2010Delivered")
