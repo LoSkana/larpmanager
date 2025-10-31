@@ -271,6 +271,6 @@ def acc_refund(page, live_server):
 
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Refunds").click()
-    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test2030RequestDone")
+    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test20200RequestDone")
     page.get_by_role("link", name="Done").click()
-    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test2010Delivered")
+    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test20180Delivered")

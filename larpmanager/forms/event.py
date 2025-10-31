@@ -482,15 +482,15 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Maximum available")
             help_text = _("If checked, an option can be chosen a maximum number of times")
-            self.add_configs("character_form_writing_question_max", ConfigType.BOOL, label, help_text)
+            self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
 
             label = _("Ticket selection")
             help_text = _("If checked, allows a option to be visible only to participants with selected ticket")
-            self.add_configs("character_form_writing_question_tickets", ConfigType.BOOL, label, help_text)
+            self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
 
             label = _("Requirements")
             help_text = _("If checked, allows a option to be visible only if other options are selected")
-            self.add_configs("character_form_writing_question_requirements", ConfigType.BOOL, label, help_text)
+            self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self):
         """
