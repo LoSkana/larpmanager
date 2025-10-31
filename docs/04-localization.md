@@ -357,13 +357,27 @@ AssociationText allows organizations to customize **long, complex texts** like l
 - Button text (use translations)
 - Single words or phrases (use AssociationTranslation)
 
-### Example Text Types
+### Available Text Types
 
-Defined in `AssociationTextType` enum:
+Defined in `AssociationTextType` enum in `larpmanager/models/association.py`:
 
-- `HOME` ("h") - Homepage content
-- `SIGNUP` ("u") - Registration email template
-- `SIGNATURE` ("g") - Email signature
+**Core types (always available):**
+- `PROFILE` - Content added at the top of user profile page
+- `HOME` - Content added at the top of main calendar page
+- `SIGNUP` - Text added at bottom of signup confirmation emails
+- `MEMBERSHIP` - Membership request form content filled with user data
+- `STATUTE` - Statute information shown on membership page
+- `LEGAL` - Legal notice page content
+- `FOOTER` - Content added to bottom of all pages
+- `TOC` - Terms and conditions shown in registration form
+- `RECEIPT` - Receipt content for payments
+- `SIGNATURE` - Signature added to all emails sent
+- `PRIVACY` - Privacy policy page content
+
+**Reminder types (require "remind" feature):**
+- `REMINDER_MEMBERSHIP` - Email reminding participants to fill membership request
+- `REMINDER_MEMBERSHIP_FEE` - Email reminding participants to pay membership fee
+- `REMINDER_PAY` - Email reminding participants to pay signup fee
 
 ### Adding New Text Types
 
@@ -382,12 +396,18 @@ class AssociationTextType(models.TextChoices):
 **Step 2:** Use in code
 
 ```python
-# In a view
+# In a view or email function
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.models.association import AssociationTextType
 
-def get_welcome_email(association, language="en"):
-    """Get welcome email text for association."""
-     email_body = get_association_text(association.id, AssociationTextType.WELCOME, language)
+def send_welcome_email(association_id, member_email, language="en"):
+    """Send welcome email using cached association text."""
+    email_body = get_association_text(
+        association_id,
+        AssociationTextType.WELCOME,
+        language
+    )
+    # Use email_body to send email
 ```
 
 ### Managing AssociationTexts
@@ -666,13 +686,20 @@ In Italian:
 **Step 4:** Code retrieves the text:
 
 ```python
+from larpmanager.cache.association_text import get_association_text
+from larpmanager.models.association import AssociationTextType
+from larpmanager.utils.base import get_context
+
 def privacy_policy(request):
     context = get_context(request)
 
-    # Try to get organization's custom text, otherwise default text
+    # Try to get organization's custom text, otherwise use default
     context["privacy_content"] = (
-         get_association_text(association.id, AssociationTextType.PRIVACY, request.LANGUAGE_CODE)
-         or _("Default privacy policy text")
+        get_association_text(
+            context["association_id"],
+            AssociationTextType.PRIVACY,
+            request.LANGUAGE_CODE
+        ) or _("Default privacy policy text")
     )
 
     return render(request, "privacy.html", context)
