@@ -219,26 +219,26 @@ def update_traits_text(instance: AssignmentTrait) -> list:
         Invalid trait references are logged as warnings but don't raise exceptions.
     """
     # Extract all #number patterns from text and find corresponding traits
-    trait_search = re.findall(r"#([\d]+)", instance.text, re.IGNORECASE)
+    trait_numbers_to_return = re.findall(r"#([\d]+)", instance.text, re.IGNORECASE)
     traits = []
 
     # Process each unique trait number found with # prefix
-    for pid in set(trait_search):
+    for trait_number in set(trait_numbers_to_return):
         try:
-            trait = Trait.objects.get(event_id=instance.event_id, number=pid)
+            trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
             traits.append(trait)
-        except Exception as e:
-            logger.warning(f"Error getting trait {pid}: {e}")
+        except Exception as error:
+            logger.warning(f"Error getting trait {trait_number}: {error}")
 
     # Extract all @number patterns for validation (not added to return list)
-    trait_search = re.findall(r"@([\d]+)", instance.text, re.IGNORECASE)
+    trait_numbers_to_validate = re.findall(r"@([\d]+)", instance.text, re.IGNORECASE)
 
     # Validate each unique trait number found with @ prefix
-    for pid in set(trait_search):
+    for trait_number in set(trait_numbers_to_validate):
         try:
-            trait = Trait.objects.get(event_id=instance.event_id, number=pid)
-        except Exception as e:
-            logger.warning(f"Error getting trait {pid} in assignment: {e}")
+            trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
+        except Exception as error:
+            logger.warning(f"Error getting trait {trait_number} in assignment: {error}")
 
     return traits
 
@@ -252,12 +252,12 @@ def refresh_all_instance_traits(instance) -> None:
         return
 
     # Calculate updated traits for the instance
-    pgs = update_traits_text(instance)
+    calculated_traits = update_traits_text(instance)
 
     # Synchronize instance traits with calculated traits
     if hasattr(instance, "traits"):
-        for el in instance.traits.all():
-            if el not in pgs:
-                instance.traits.remove(el)
-        for ch in pgs:
-            instance.traits.add(ch)
+        for existing_trait in instance.traits.all():
+            if existing_trait not in calculated_traits:
+                instance.traits.remove(existing_trait)
+        for calculated_trait in calculated_traits:
+            instance.traits.add(calculated_trait)

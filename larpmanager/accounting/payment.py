@@ -129,38 +129,38 @@ def set_data_invoice(
         None: Function modifies the invoice object in place
     """
     # Get the real display name of the current user
-    member_real = context["member"].display_real()
+    member_real_display_name = context["member"].display_real()
 
     # Handle registration payment type
     if invoice.typ == PaymentType.REGISTRATION:
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
-            "user": member_real,
+            "user": member_real_display_name,
             "event": str(context["reg"].run),
             "number": context["reg"].num_payments,
         }
         # Apply custom registration reason if applicable
-        _custom_reason_reg(context, invoice, member_real)
+        _custom_reason_reg(context, invoice, member_real_display_name)
 
     # Handle membership payment type
     elif invoice.typ == PaymentType.MEMBERSHIP:
         invoice.causal = _("Membership fee of %(user)s for %(year)s") % {
-            "user": member_real,
+            "user": member_real_display_name,
             "year": context["year"],
         }
 
     # Handle donation payment type
     elif invoice.typ == PaymentType.DONATE:
-        descr = form.cleaned_data["descr"]
+        donation_description = form.cleaned_data["descr"]
         invoice.causal = _("Donation of %(user)s, with reason: '%(reason)s'") % {
-            "user": member_real,
-            "reason": descr,
+            "user": member_real_display_name,
+            "reason": donation_description,
         }
 
     # Handle collection payment type
     elif invoice.typ == PaymentType.COLLECTION:
         invoice.idx = context["coll"].id
         invoice.causal = _("Collected contribution of %(user)s for %(recipient)s") % {
-            "user": member_real,
+            "user": member_real_display_name,
             "recipient": context["coll"].display_member(),
         }
 
@@ -256,7 +256,7 @@ def round_up_to_two_decimals(value_to_round):
     return math.ceil(value_to_round * 100) / 100
 
 
-def update_invoice_gross_fee(request, invoice, amount, association_id, pay_method):
+def update_invoice_gross_fee(request, invoice, amount, association_id, payment_method):
     """Update invoice with gross amount including payment processing fees.
 
     Args:
@@ -264,18 +264,18 @@ def update_invoice_gross_fee(request, invoice, amount, association_id, pay_metho
         invoice: PaymentInvoice instance to update
         amount (Decimal): Base amount before fees
         association_id: Association instance ID
-        pay_method (str): Payment method slug
+        payment_method (str): Payment method slug
     """
     # add fee for paymentmethod
     amount = float(amount)
-    fee = get_payment_fee(association_id, pay_method.slug)
+    payment_fee_percentage = get_payment_fee(association_id, payment_method.slug)
 
-    if fee is not None:
+    if payment_fee_percentage is not None:
         if get_association_config(association_id, "payment_fees_user", False):
-            amount = (amount * 100) / (100 - fee)
+            amount = (amount * 100) / (100 - payment_fee_percentage)
             amount = round_up_to_two_decimals(amount)
 
-        invoice.mc_fee = round_up_to_two_decimals(amount * fee / 100.0)
+        invoice.mc_fee = round_up_to_two_decimals(amount * payment_fee_percentage / 100.0)
 
     invoice.mc_gross = amount
     invoice.save()
@@ -388,11 +388,11 @@ def payment_received(invoice):
     Side effects:
         Creates accounting records, processes collections/donations
     """
-    features = get_association_features(invoice.association_id)
-    fee = get_payment_fee(invoice.association_id, invoice.method.slug)
+    association_features = get_association_features(invoice.association_id)
+    payment_fee = get_payment_fee(invoice.association_id, invoice.method.slug)
 
-    if fee > 0 and not AccountingItemTransaction.objects.filter(inv=invoice).exists():
-        _process_fee(features, fee, invoice)
+    if payment_fee > 0 and not AccountingItemTransaction.objects.filter(inv=invoice).exists():
+        _process_fee(association_features, payment_fee, invoice)
 
     if invoice.typ == PaymentType.REGISTRATION:
         _process_payment(invoice)
@@ -401,10 +401,10 @@ def payment_received(invoice):
         _process_membership(invoice)
 
     elif invoice.typ == PaymentType.DONATE:
-        _process_donate(features, invoice)
+        _process_donate(association_features, invoice)
 
     elif invoice.typ == PaymentType.COLLECTION:
-        _process_collection(features, invoice)
+        _process_collection(association_features, invoice)
 
     return True
 
@@ -519,11 +519,11 @@ def process_payment_invoice_status_change(invoice):
         return
 
     try:
-        prev = PaymentInvoice.objects.get(pk=invoice.pk)
+        previous_invoice = PaymentInvoice.objects.get(pk=invoice.pk)
     except Exception:
         return
 
-    if prev.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+    if previous_invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return
 
     if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
@@ -545,23 +545,23 @@ def process_refund_request_status_change(refund_request):
         return
 
     try:
-        prev = RefundRequest.objects.get(pk=refund_request.pk)
+        previous_refund_request = RefundRequest.objects.get(pk=refund_request.pk)
     except Exception:
         return
 
-    if prev.status == RefundStatus.PAYED:
+    if previous_refund_request.status == RefundStatus.PAYED:
         return
 
     if refund_request.status != RefundStatus.PAYED:
         return
 
-    acc = AccountingItemOther()
-    acc.member_id = refund_request.member_id
-    acc.value = refund_request.value
-    acc.oth = OtherChoices.REFUND
-    acc.descr = f"Delivered refund of {refund_request.value:.2f}"
-    acc.association_id = refund_request.association_id
-    acc.save()
+    accounting_item = AccountingItemOther()
+    accounting_item.member_id = refund_request.member_id
+    accounting_item.value = refund_request.value
+    accounting_item.oth = OtherChoices.REFUND
+    accounting_item.descr = f"Delivered refund of {refund_request.value:.2f}"
+    accounting_item.association_id = refund_request.association_id
+    accounting_item.save()
 
 
 def process_collection_status_change(collection: Collection) -> None:
@@ -592,13 +592,13 @@ def process_collection_status_change(collection: Collection) -> None:
 
     # Attempt to fetch the previous state of the collection
     try:
-        prev = Collection.objects.get(pk=collection.pk)
+        previous_collection = Collection.objects.get(pk=collection.pk)
     except Exception:
         # If we can't fetch previous state, safely return to avoid errors
         return
 
     # Skip processing if collection was already marked as PAYED
-    if prev.status == CollectionStatus.PAYED:
+    if previous_collection.status == CollectionStatus.PAYED:
         return
 
     # Only proceed if current status is PAYED (status change occurred)
@@ -606,13 +606,13 @@ def process_collection_status_change(collection: Collection) -> None:
         return
 
     # Create accounting credit item for the newly paid collection
-    acc = AccountingItemOther()
-    acc.association_id = collection.association_id
-    acc.member_id = collection.member_id
-    acc.run_id = collection.run_id
-    acc.value = collection.total
+    accounting_item = AccountingItemOther()
+    accounting_item.association_id = collection.association_id
+    accounting_item.member_id = collection.member_id
+    accounting_item.run_id = collection.run_id
+    accounting_item.value = collection.total
 
     # Set the accounting item type to credit and add descriptive text
-    acc.oth = OtherChoices.CREDIT
-    acc.descr = f"Collection of {collection.organizer}"
-    acc.save()
+    accounting_item.oth = OtherChoices.CREDIT
+    accounting_item.descr = f"Collection of {collection.organizer}"
+    accounting_item.save()

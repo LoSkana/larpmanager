@@ -76,14 +76,14 @@ def update_cache_lm_home() -> dict[str, int | list]:
     context = {}
 
     # Count objects for main models and round to two significant digits
-    for el in [Event, Character, Registration, Member, PaymentInvoice]:
-        nm = str(el.__name__).lower()
-        cnt = el.objects.count()
-        context[f"cnt_{nm}"] = int(round_to_two_significant_digits(cnt))
+    for model_class in [Event, Character, Registration, Member, PaymentInvoice]:
+        model_name = str(model_class.__name__).lower()
+        model_count = model_class.objects.count()
+        context[f"cnt_{model_name}"] = int(round_to_two_significant_digits(model_count))
 
     # Count runs that have more than 5 registrations
-    que_run = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
-    context["cnt_run"] = int(round_to_two_significant_digits(que_run.count()))
+    runs_query = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
+    context["cnt_run"] = int(round_to_two_significant_digits(runs_query.count()))
 
     # Gather additional display data
     context["promoters"] = _get_promoters()

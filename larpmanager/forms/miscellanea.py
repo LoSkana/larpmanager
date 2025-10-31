@@ -479,13 +479,14 @@ def unique_util_cod() -> str:
         ValueError: If unable to generate a unique code after 5 attempts.
     """
     # Attempt to generate a unique code up to 5 times
-    for _idx in range(5):
+    max_attempts = 5
+    for _attempt_number in range(max_attempts):
         # Generate a new 16-character code
-        cod = generate_id(16)
+        generated_code = generate_id(16)
 
         # Check if this code already exists in the database
-        if not Util.objects.filter(cod=cod).exists():
-            return cod
+        if not Util.objects.filter(cod=generated_code).exists():
+            return generated_code
 
     # If all attempts failed, raise an error
     raise ValueError("Too many attempts to generate the code")

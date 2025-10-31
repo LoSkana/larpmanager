@@ -766,8 +766,8 @@ def _extract_values(field_names: list, queryset: object, field_mappings: dict) -
     return all_values
 
 
-def orga_character_form_download(context):
-    return zip_exports(context, export_character_form(context), "Character form")
+def orga_character_form_download(request_context):
+    return zip_exports(request_context, export_character_form(request_context), "Character form")
 
 
 def export_character_form(context: dict) -> list[tuple[str, list, list]]:
@@ -1128,8 +1128,8 @@ def _get_writing_names(context: dict) -> None:
     context["allowed"].extend(context["fields"].keys())
 
 
-def orga_tickets_download(context):
-    return zip_exports(context, export_tickets(context), "Tickets")
+def orga_tickets_download(request_context):
+    return zip_exports(request_context, export_tickets(request_context), "Tickets")
 
 
 def export_tickets(context: dict) -> list[tuple[str, list[str], list]]:

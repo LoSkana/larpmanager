@@ -298,28 +298,28 @@ class Character(Writing):
 
         # Determine which event to use for faction lookup
         if event:
-            fac_event = event.get_class_parent("faction")
+            faction_event = event.get_class_parent("faction")
         else:
-            fac_event = self.event.get_class_parent("faction")
+            faction_event = self.event.get_class_parent("faction")
 
         # Track if we find a primary faction
-        primary = False
+        has_primary_faction = False
 
         # Process all factions for this event
         # noinspection PyUnresolvedReferences
-        for g in self.factions_list.filter(event=fac_event):
+        for faction in self.factions_list.filter(event=faction_event):
             # Check if this is a primary faction
-            if g.typ == FactionType.PRIM:
-                primary = True
+            if faction.typ == FactionType.PRIM:
+                has_primary_faction = True
                 # Set thumbnail if cover image exists
-                if g.cover:
-                    js["thumb"] = g.thumb.url
+                if faction.cover:
+                    js["thumb"] = faction.thumb.url
 
             # Add faction number to the list
-            js["factions"].append(g.number)
+            js["factions"].append(faction.number)
 
         # Add default faction if no primary found
-        if not primary:
+        if not has_primary_faction:
             js["factions"].append(0)
 
     @staticmethod

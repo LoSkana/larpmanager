@@ -51,14 +51,14 @@ def remember_membership(registration):
     my_send_mail(subject, body, registration.member, registration.run)
 
 
-def get_remember_membership_body(reg) -> str:
+def get_remember_membership_body(registration) -> str:
     """Generate default membership reminder email body text.
 
     Creates an HTML-formatted email body for reminding users to complete their
     membership application to confirm their provisional event registration.
 
     Args:
-        reg: Registration instance containing event and user information
+        registration: Registration instance containing event and user information
 
     Returns:
         HTML formatted email body text for membership reminder notification
@@ -71,19 +71,19 @@ def get_remember_membership_body(reg) -> str:
         - Warning about registration cancellation
     """
     # Generate main instruction message with event name and membership link
-    body = (
+    email_body = (
         _(
             "Hello! To confirm your provisional registration for %(event)s, "
             "you must apply for membership in the association"
         )
-        % {"event": reg.run}
+        % {"event": registration.run}
         + ". "
         + _("To complete the process, simply <a href='%(url)s'>click here</a>") % {"url": get_url("membership")}
         + ". "
     )
 
     # Add helpful support message for users who need assistance
-    body += (
+    email_body += (
         "<br /><br />("
         + _("If you need a hand, feel free to let us know")
         + ". "
@@ -92,7 +92,7 @@ def get_remember_membership_body(reg) -> str:
     )
 
     # Include warning about registration cancellation for inactive users
-    body += (
+    email_body += (
         "<br /><br />"
         + _("If we don't hear from you, we'll assume you're no longer interested in the event")
         + ". "
@@ -100,7 +100,7 @@ def get_remember_membership_body(reg) -> str:
         + "."
     )
 
-    return body
+    return email_body
 
 
 def remember_pay(registration):
@@ -129,7 +129,7 @@ def remember_pay(registration):
     my_send_mail(email_subject, email_body, registration.member, registration.run)
 
 
-def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
+def get_remember_pay_body(context: dict, is_provisional_registration: bool, registration) -> str:
     """Generate default payment reminder email body text.
 
     Creates an HTML-formatted email body for payment reminders, handling both
@@ -138,8 +138,8 @@ def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
 
     Args:
         context: Email context dictionary containing event information
-        provisional: Whether the registration is provisional or confirmed
-        reg: Registration instance containing payment details and run information
+        is_provisional_registration: Whether the registration is provisional or confirmed
+        registration: Registration instance containing payment details and run information
 
     Returns:
         HTML formatted string containing the complete email body for payment reminder
@@ -150,33 +150,33 @@ def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
         >>> print(body)  # Returns formatted HTML email body
     """
     # Extract payment information and build payment URL
-    symbol = reg.run.event.association.get_currency_symbol()
-    amount = f"{reg.quota:.2f}{symbol}"
-    deadline = reg.deadline
-    url = get_url("accounting/pay", reg.run.event)
-    payment_url = f"{url}/{reg.run.event.slug}/{reg.id}"
+    currency_symbol = registration.run.event.association.get_currency_symbol()
+    amount_to_pay = f"{registration.quota:.2f}{currency_symbol}"
+    days_until_deadline = registration.deadline
+    base_payment_url = get_url("accounting/pay", registration.run.event)
+    payment_url = f"{base_payment_url}/{registration.run.event.slug}/{registration.id}"
 
     # Generate appropriate greeting based on registration type
-    if provisional:
-        intro = _("Hello! We are reaching out regarding your provisional registration for <b>%(event)s</b>")
+    if is_provisional_registration:
+        intro_message = _("Hello! We are reaching out regarding your provisional registration for <b>%(event)s</b>")
     else:
-        intro = _("Hello! We are reaching out regarding your registration for <b>%(event)s</b>")
+        intro_message = _("Hello! We are reaching out regarding your registration for <b>%(event)s</b>")
 
-    body = intro % context + "."
+    email_body = intro_message % context + "."
 
     # Add payment instruction based on deadline status
-    if deadline <= 0:
-        middle = _("To confirm it, please pay the following amount as soon as possible: %(amount)s")
+    if days_until_deadline <= 0:
+        payment_instruction = _("To confirm it, please pay the following amount as soon as possible: %(amount)s")
     else:
-        middle = _("To confirm it, please pay %(amount)s within %(days)s days")
+        payment_instruction = _("To confirm it, please pay %(amount)s within %(days)s days")
 
-    body += "<br /><br />" + middle % {"amount": amount, "days": deadline} + "."
+    email_body += "<br /><br />" + payment_instruction % {"amount": amount_to_pay, "days": days_until_deadline} + "."
 
     # Add disclaimer for existing agreements
-    body += "<br /><br />(" + _("If you have a separate agreement with us, you may disregard this email") + ")"
+    email_body += "<br /><br />(" + _("If you have a separate agreement with us, you may disregard this email") + ")"
 
     # Include payment link and support contact information
-    body += (
+    email_body += (
         "<br /><br />"
         + _("You can make the payment <a href='%(url)s'>on this page</a>") % {"url": payment_url}
         + ". "
@@ -185,7 +185,7 @@ def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
     )
 
     # Add cancellation warning for non-responsive registrants
-    body += (
+    email_body += (
         "<br /><br />"
         + _(
             "If we don't hear from you, we'll assume you're no longer interested in the event and "
@@ -194,7 +194,7 @@ def get_remember_pay_body(context: dict, provisional: bool, reg) -> str:
         + "."
     )
 
-    return body
+    return email_body
 
 
 def remember_profile(registration):
@@ -218,19 +218,19 @@ def remember_profile(registration):
     my_send_mail(subject, body, registration.member, registration.run)
 
 
-def get_remember_profile_body(context):
+def get_remember_profile_body(email_context):
     """Generate default profile completion reminder email body text.
 
     Args:
-        context (dict): Email context with event and URL information
+        email_context (dict): Email context with event and URL information
 
     Returns:
         str: HTML formatted email body for profile reminder
     """
     return (
-        _("Hello! You signed up for %(event)s but haven't completed your profile yet") % context
+        _("Hello! You signed up for %(event)s but haven't completed your profile yet") % email_context
         + ". "
-        + _("It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out the form") % context
+        + _("It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out the form") % email_context
         + "."
     )
 
@@ -256,7 +256,7 @@ def remember_membership_fee(registration):
     my_send_mail(subject, body, registration.member, registration.run)
 
 
-def get_remember_membership_fee_body(context: dict, reg) -> str:
+def get_remember_membership_fee_body(context: dict, registration) -> str:
     """Generate default membership fee reminder email body text.
 
     Creates an HTML-formatted email body for reminding users about unpaid
@@ -264,43 +264,43 @@ def get_remember_membership_fee_body(context: dict, reg) -> str:
 
     Args:
         context: Email context containing event information and template variables
-        reg: Registration instance containing fee payment details and event data
+        registration: Registration instance containing fee payment details and event data
 
     Returns:
         HTML formatted string containing the complete email body with membership
         fee reminder message and payment link
     """
     # Create main greeting and issue description
-    body = (
+    email_body = (
         _("Hello! You have registered for %(event)s, but we have not yet received your annual membership payment")
         % context
         + "."
     )
 
     # Add explanation about membership fee purpose
-    body += (
+    email_body += (
         "<br /><br />"
         + _("It is required for participation in all our live events, as it also covers the insurance fee")
         + "."
     )
 
     # Emphasize participation requirements
-    body += (
+    email_body += (
         "<br /><br />"
         + _("Unfortunately, without full payment of the fee, participation in the event is not permitted")
         + "."
     )
 
     # Provide payment link and support information
-    body += (
+    email_body += (
         "<br /><br />"
         + _("You can complete the payment in just a few minutes <a href='%(url)s'>here</a>")
-        % {"url": get_url("accounting", reg.run.event)}
+        % {"url": get_url("accounting", registration.run.event)}
         + ". "
         + _("Let us know if you encounter any issues or need assistance")
         + "!"
     )
-    return body
+    return email_body
 
 
 def notify_deadlines(run):
@@ -312,14 +312,14 @@ def notify_deadlines(run):
     Side effects:
         Sends deadline reminder emails to all event organizers
     """
-    result = check_run_deadlines([run])
-    if not result:
+    deadline_results = check_run_deadlines([run])
+    if not deadline_results:
         return
-    res = result[0]
-    if all(not v for k, v in res.items() if k != "run"):
+    run_deadlines = deadline_results[0]
+    if all(not value for key, value in run_deadlines.items() if key != "run"):
         return
 
-    elements = {
+    deadline_elements = {
         "memb_del": "Cancellation for missing organization registration",
         "fee_del": "Cancellation for missing yearly membership fee",
         "pay_del": "Cancellation for missing payment",
@@ -331,19 +331,19 @@ def notify_deadlines(run):
         "cast": "Missing casting preferences",
     }
 
-    for orga in get_event_organizers(run.event):
-        activate(orga.language)
-        subj = hdr(run.event) + _("Deadlines") + f" {run}"
+    for organizer in get_event_organizers(run.event):
+        activate(organizer.language)
+        subject = hdr(run.event) + _("Deadlines") + f" {run}"
         body = _("Review the users that are missing the event's deadlines")
-        for key, descr in elements.items():
-            if key not in res or not res[key]:
+        for deadline_key, description in deadline_elements.items():
+            if deadline_key not in run_deadlines or not run_deadlines[deadline_key]:
                 continue
 
             # add description
-            body += "<br /><br /><h2>" + _(descr) + "</h2>"
+            body += "<br /><br /><h2>" + _(description) + "</h2>"
             # Add names
-            body += f"<p>{', '.join([el[0] for el in res[key]])}</p>"
+            body += f"<p>{', '.join([user_data[0] for user_data in run_deadlines[deadline_key]])}</p>"
             # Add emails
-            body += f"<p>{', '.join([el[1] for el in res[key]])}</p>"
+            body += f"<p>{', '.join([user_data[1] for user_data in run_deadlines[deadline_key]])}</p>"
 
-        my_send_mail(subj, body, orga, run)
+        my_send_mail(subject, body, organizer, run)

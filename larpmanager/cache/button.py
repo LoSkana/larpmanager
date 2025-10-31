@@ -52,14 +52,14 @@ def update_event_button(event_id: int) -> list[tuple[str, str, str]]:
     Side effects:
         Updates the cache with current button data using a 1-day timeout.
     """
-    res = []
+    buttons_data = []
 
     # Query event buttons ordered by number field
-    for el in EventButton.objects.filter(event_id=event_id).order_by("number"):
+    for button in EventButton.objects.filter(event_id=event_id).order_by("number"):
         # Extract button data as tuple
-        res.append((el.name, el.tooltip, el.link))
+        buttons_data.append((button.name, button.tooltip, button.link))
 
-    return res
+    return buttons_data
 
 
 def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
@@ -75,16 +75,16 @@ def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
         List of (name, tooltip, link) tuples for event buttons.
     """
     # Check if buttons are already cached for this event
-    key = event_button_key(event_id)
-    res = cache.get(key)
+    cache_key = event_button_key(event_id)
+    cached_buttons = cache.get(cache_key)
 
     # If not in cache, update and get fresh data
-    if res is None:
-        res = update_event_button(event_id)
+    if cached_buttons is None:
+        cached_buttons = update_event_button(event_id)
         # Cache the result with 1-day timeout
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, cached_buttons, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_buttons
 
 
 def clear_event_button_cache(event_id):

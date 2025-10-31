@@ -30,18 +30,20 @@ from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
 
 
-def get_users_data(ids):
+def get_users_data(member_ids):
     """Get user display names and emails for deadline notifications.
 
     Args:
-        ids (list): List of member IDs
+        member_ids (list): List of member IDs
 
     Returns:
         list: List of (display_name, email) tuples
     """
     return [
-        (str(mb), mb.email)
-        for mb in Member.objects.filter(pk__in=ids).order_by("surname").only("name", "surname", "email", "nickname")
+        (str(member), member.email)
+        for member in Member.objects.filter(pk__in=member_ids)
+        .order_by("surname")
+        .only("name", "surname", "email", "nickname")
     ]
 
 

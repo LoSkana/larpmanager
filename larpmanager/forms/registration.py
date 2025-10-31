@@ -190,15 +190,15 @@ class RegistrationForm(BaseRegistrationForm):
         if self.instance.pk and self.initial["modified"] > 0:
             return
 
-        mes = _(
-            "Enter the “bring a friend” code provided by a registered participant "
+        help_text_message = _(
+            "Enter the 'bring a friend' code provided by a registered participant "
             "to receive a %(amount)d discount on your registration fee"
         )
         self.fields["bring_friend"] = forms.CharField(
             required=False,
             max_length=100,
             label=_("Code 'Bring a friend'"),
-            help_text=mes % {"amount": self.params.get("bring_friend_discount_from", 0)},
+            help_text=help_text_message % {"amount": self.params.get("bring_friend_discount_from", 0)},
         )
 
     def init_questions(self, event, reg_counts):
@@ -394,8 +394,8 @@ class RegistrationForm(BaseRegistrationForm):
         Returns:
             bool: True if registration has primary ticket
         """
-        not_primary_tiers = [TicketTier.WAITING, TicketTier.FILLER]
-        return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in not_primary_tiers
+        excluded_ticket_tiers = [TicketTier.WAITING, TicketTier.FILLER]
+        return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in excluded_ticket_tiers
 
     def check_ticket_visibility(self, registration_ticket):
         """Check if ticket should be visible to current user.

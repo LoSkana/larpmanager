@@ -98,21 +98,21 @@ def update_reg_counts(run) -> dict[str, int]:
         option_{option_id}, and option_char_{option_id}.
     """
     # Initialize base counters
-    s = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
+    counts = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
 
     # Get all non-cancelled registrations for this run
-    que = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+    registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
 
     # Get event features
     features = get_event_features(run.event_id)
 
     # Process each registration to count by ticket tier
-    for reg in que.select_related("ticket"):
-        num_tickets = 1 + reg.additionals
+    for registration in registrations.select_related("ticket"):
+        num_tickets = 1 + registration.additionals
 
         # Handle registrations without ticket assignment
-        if not reg.ticket:
-            add_count(s, "count_unknown", num_tickets)
+        if not registration.ticket:
+            add_count(counts, "count_unknown", num_tickets)
         else:
             # Map ticket tiers to counter keys
             tier_map = {
@@ -126,35 +126,35 @@ def update_reg_counts(run) -> dict[str, int]:
             }
 
             # Count by specific tier or default to player
-            key = tier_map.get(reg.ticket.tier)
-            if key:
-                add_count(s, f"count_{key}", num_tickets)
+            tier_key = tier_map.get(registration.ticket.tier)
+            if tier_key:
+                add_count(counts, f"count_{tier_key}", num_tickets)
             else:
-                add_count(s, "count_player", num_tickets)
+                add_count(counts, "count_player", num_tickets)
 
             # Track provisional registrations separately
-            if is_reg_provisional(reg, event=run.event, features=features):
-                add_count(s, "count_provisional", num_tickets)
+            if is_reg_provisional(registration, event=run.event, features=features):
+                add_count(counts, "count_provisional", num_tickets)
 
         # Add to total registration count
-        add_count(s, "count_reg", num_tickets)
+        add_count(counts, "count_reg", num_tickets)
 
         # Track count by specific ticket ID
-        add_count(s, f"tk_{reg.ticket_id}", num_tickets)
+        add_count(counts, f"tk_{registration.ticket_id}", num_tickets)
 
     # Count registration choices (form options selected)
-    que = RegistrationChoice.objects.filter(reg__run=run, reg__cancellation_date__isnull=True)
-    for el in que.values("option_id").annotate(total=Count("option_id")):
-        s[f"option_{el['option_id']}"] = el["total"]
+    registration_choices = RegistrationChoice.objects.filter(reg__run=run, reg__cancellation_date__isnull=True)
+    for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):
+        counts[f"option_{choice_data['option_id']}"] = choice_data["total"]
 
     # Count character writing choices for this event
     character_ids = Character.objects.filter(event_id=run.event_id).values_list("id", flat=True)
 
-    que = WritingChoice.objects.filter(element_id__in=character_ids)
-    for el in que.values("option_id").annotate(total=Count("option_id")):
-        s[f"option_char_{el['option_id']}"] = el["total"]
+    writing_choices = WritingChoice.objects.filter(element_id__in=character_ids)
+    for choice_data in writing_choices.values("option_id").annotate(total=Count("option_id")):
+        counts[f"option_char_{choice_data['option_id']}"] = choice_data["total"]
 
-    return s
+    return counts
 
 
 def on_character_update_registration_cache(instance: Character) -> None:
@@ -165,8 +165,8 @@ def on_character_update_registration_cache(instance: Character) -> None:
 
     # Trigger registration updates if character approval is enabled
     if get_event_config(instance.event_id, "user_character_approval", False):
-        for rcr in RegistrationCharacterRel.objects.filter(character=instance):
-            rcr.reg.save()
+        for registration_character_relation in RegistrationCharacterRel.objects.filter(character=instance):
+            registration_character_relation.reg.save()
 
 
 def search_player(character, json_output: dict, context: dict) -> None:

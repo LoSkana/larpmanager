@@ -57,11 +57,11 @@ class BrokenLinkEmailsMiddleware:
         return response
 
     @staticmethod
-    def is_ignorable_404(uri):
+    def is_ignorable_404(request_uri):
         """
         Returns True if a 404 at the given URL *shouldn't* notify the site managers.
         """
-        return any(pattern.search(uri) for pattern in conf_settings.IGNORABLE_404_URLS)
+        return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
     def check(self, request, response) -> Optional[HttpResponseRedirect]:
         """Middleware for detecting and logging broken links.

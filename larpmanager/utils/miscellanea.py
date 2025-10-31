@@ -59,39 +59,39 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
         - Updates cache_subs dictionary with newly created albums
     """
     # Extract directory path, removing filename component
-    name = os.path.dirname(name)
+    directory_path = os.path.dirname(name)
 
     # Check if this directory path is already cached
-    if name not in cache_subs:
+    if directory_path not in cache_subs:
         # Determine parent directory for hierarchy creation
-        parent = os.path.dirname(name)
-        if not parent or parent == "":
-            parent = main
+        parent_directory_path = os.path.dirname(directory_path)
+        if not parent_directory_path or parent_directory_path == "":
+            parent_album = main
         else:
-            parent = cache_subs[parent]
+            parent_album = cache_subs[parent_directory_path]
 
         # Search for existing sub-album with matching name
-        album = None
-        a_name = os.path.basename(name)
+        existing_album = None
+        album_name = os.path.basename(directory_path)
 
         # Query existing sub-albums to avoid duplicates
-        for a in parent.sub_albums.all():
-            if a.name == a_name:
-                album = a
+        for sub_album in parent_album.sub_albums.all():
+            if sub_album.name == album_name:
+                existing_album = sub_album
 
         # Create new album if none exists
-        if not album:
-            album = Album()
-            album.cod = uuid4().hex
-            album.name = a_name
-            album.parent = parent
-            album.run = main.run
-            album.save()
+        if not existing_album:
+            existing_album = Album()
+            existing_album.cod = uuid4().hex
+            existing_album.name = album_name
+            existing_album.parent = parent_album
+            existing_album.run = main.run
+            existing_album.save()
 
         # Cache the album for future lookups
-        cache_subs[name] = album
+        cache_subs[directory_path] = existing_album
 
-    return cache_subs[name]
+    return cache_subs[directory_path]
 
 
 def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Model, o_path: str) -> None:
@@ -117,58 +117,58 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
         None
     """
     # Check if file already exists in album to avoid duplicates
-    u_name = os.path.basename(name)
-    for u in alb.uploads.all():
-        if u.name == u_name:
+    upload_name = os.path.basename(name)
+    for existing_upload in alb.uploads.all():
+        if existing_upload.name == upload_name:
             return
 
     # Create album upload record for the file
-    upl = AlbumUpload()
-    upl.album = alb
-    upl.name = u_name
-    upl.typ = AlbumUpload.PHOTO
-    upl.save()
+    album_upload = AlbumUpload()
+    album_upload.album = alb
+    album_upload.name = upload_name
+    album_upload.typ = AlbumUpload.PHOTO
+    album_upload.save()
 
     # Create associated album image record
-    img = AlbumImage()
-    img.upload = upl
+    album_image = AlbumImage()
+    album_image.upload = album_upload
 
     # Generate unique filename preserving original extension
-    parts = u_name.split(".")
-    ext = parts[-1] if len(parts) > 1 and parts[-1] else "tmp"
-    filename = f"{uuid4().hex}.{ext}"
+    filename_parts = upload_name.split(".")
+    file_extension = filename_parts[-1] if len(filename_parts) > 1 and filename_parts[-1] else "tmp"
+    unique_filename = f"{uuid4().hex}.{file_extension}"
 
     # Build destination path starting from media root
-    fpath = os.path.join(conf_settings.MEDIA_ROOT, "albums")
-    fpath = os.path.join(fpath, main.run.event.slug)
-    fpath = os.path.join(fpath, str(main.run.number))
+    destination_path = os.path.join(conf_settings.MEDIA_ROOT, "albums")
+    destination_path = os.path.join(destination_path, main.run.event.slug)
+    destination_path = os.path.join(destination_path, str(main.run.number))
 
     # Traverse album hierarchy to build nested directory structure
-    par = alb.parent
-    dirs = []
-    while par is not None:
-        dirs.append(par.id)
-        par = par.parent
-    dirs.reverse()
+    parent_album = alb.parent
+    parent_directories = []
+    while parent_album is not None:
+        parent_directories.append(parent_album.id)
+        parent_album = parent_album.parent
+    parent_directories.reverse()
 
     # Create directory structure for nested albums
-    for el in dirs:
-        fpath = os.path.join(fpath, str(el))
-        if not os.path.exists(fpath):
-            os.makedirs(fpath)
+    for directory_id in parent_directories:
+        destination_path = os.path.join(destination_path, str(directory_id))
+        if not os.path.exists(destination_path):
+            os.makedirs(destination_path)
 
     # Complete the file path with unique filename
-    fpath = os.path.join(fpath, filename)
-    print(fpath)
+    destination_path = os.path.join(destination_path, unique_filename)
+    print(destination_path)
 
     # Move file from extraction path to final destination
-    os.rename(os.path.join(o_path, name), fpath)
+    os.rename(os.path.join(o_path, name), destination_path)
 
     # Store file path and extract image dimensions
-    img.original = fpath
-    with PILImage.open(fpath) as i:
-        img.width, img.height = i.size
-    img.save()
+    album_image.original = destination_path
+    with PILImage.open(destination_path) as image_file:
+        album_image.width, album_image.height = image_file.size
+    album_image.save()
 
 
 def upload_albums(main, el):
@@ -181,22 +181,22 @@ def upload_albums(main, el):
     Side effects:
         Extracts zip file, creates album structure, uploads all images
     """
-    cache_subs = {}
+    cache_subalbums = {}
 
-    o_path = os.path.join(conf_settings.MEDIA_ROOT, "zip")
-    o_path = os.path.join(o_path, uuid4().hex)
+    extraction_path = os.path.join(conf_settings.MEDIA_ROOT, "zip")
+    extraction_path = os.path.join(extraction_path, uuid4().hex)
 
-    with zipfile.ZipFile(el, "r") as f:
-        f.extractall(o_path)
+    with zipfile.ZipFile(el, "r") as zip_file:
+        zip_file.extractall(extraction_path)
 
-        for name in f.namelist():
-            info = f.getinfo(name)
-            alb = upload_albums_dir(main, cache_subs, name)
-            if info.is_dir():
+        for filename in zip_file.namelist():
+            file_info = zip_file.getinfo(filename)
+            album = upload_albums_dir(main, cache_subalbums, filename)
+            if file_info.is_dir():
                 continue
-            upload_albums_el(f, alb, name, main, o_path)
+            upload_albums_el(zip_file, album, filename, main, extraction_path)
 
-    shutil.rmtree(o_path)
+    shutil.rmtree(extraction_path)
 
 
 def zipdir(path, ziph):

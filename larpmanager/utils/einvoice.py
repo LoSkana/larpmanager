@@ -40,34 +40,36 @@ def process_payment(invoice_id: int) -> None:
         Creates ElectronicInvoice if it doesn't exist, then generates and saves XML.
     """
     # Retrieve the payment invoice by ID
-    inv = PaymentInvoice.objects.get(pk=invoice_id)
+    payment_invoice = PaymentInvoice.objects.get(pk=invoice_id)
 
     # Get or create electronic invoice record
     try:
-        e_invoice = inv.electronicinvoice
+        electronic_invoice = payment_invoice.electronicinvoice
     except Exception:
         # Create new electronic invoice if none exists
-        e_invoice = ElectronicInvoice(inv=inv, year=datetime.now().year, association=inv.association)
-        e_invoice.save()
+        electronic_invoice = ElectronicInvoice(
+            inv=payment_invoice, year=datetime.now().year, association=payment_invoice.association
+        )
+        electronic_invoice.save()
 
     # Generate XML content for the electronic invoice
-    xml = prepare_xml(inv, e_invoice)
+    xml_content = prepare_xml(payment_invoice, electronic_invoice)
 
     # Save the generated XML to the electronic invoice
-    e_invoice.xml = xml
-    e_invoice.save()
+    electronic_invoice.xml = xml_content
+    electronic_invoice.save()
     # Todo sends XML and track track
 
 
-def prepare_xml(inv, einvoice) -> str:
+def prepare_xml(invoice, electronic_invoice_config) -> str:
     """Generate XML structure for Italian electronic invoice.
 
     This function creates a compliant XML structure according to the Italian
     Sistema di Interscambio (SDI) standards for electronic invoicing.
 
     Args:
-        inv: Invoice instance containing billing data and member information
-        einvoice: Electronic invoice configuration object with header settings
+        invoice: Invoice instance containing billing data and member information
+        electronic_invoice_config: Electronic invoice configuration object with header settings
 
     Returns:
         str: XML string formatted according to Italian e-invoice standards
@@ -78,29 +80,29 @@ def prepare_xml(inv, einvoice) -> str:
         for Italian electronic invoice submission to the SDI system.
     """
     # Extract member data from invoice
-    member = inv.member
+    member = invoice.member
     name_number = 2
 
     # Create root XML element with namespace declaration
-    root = ET.Element("FatturaElettronica", xmlns="http://www.fatturapa.gov.it/sdi/fatturapa/v1.2.2")
+    root_element = ET.Element("FatturaElettronica", xmlns="http://www.fatturapa.gov.it/sdi/fatturapa/v1.2.2")
 
     # Generate invoice header section with sender/receiver data
-    _einvoice_header(einvoice, inv, member, name_number, root)
+    _einvoice_header(electronic_invoice_config, invoice, member, name_number, root_element)
 
     # Generate invoice body section with line items and totals
-    _einvoice_body(einvoice, inv, root)
+    _einvoice_body(electronic_invoice_config, invoice, root_element)
 
     # Convert XML tree to string representation
-    tree = ET.ElementTree(root)
-    xml_bytes: IO[bytes] = io.BytesIO()
+    xml_tree = ET.ElementTree(root_element)
+    xml_bytes_buffer: IO[bytes] = io.BytesIO()
 
     # Write XML with UTF-8 encoding and declaration
-    tree.write(xml_bytes, encoding="utf-8", xml_declaration=True)
+    xml_tree.write(xml_bytes_buffer, encoding="utf-8", xml_declaration=True)
 
     # Decode bytes to string for return
     # noinspection PyUnresolvedReferences
-    xml_str = xml_bytes.getvalue().decode("utf-8")
-    return xml_str
+    xml_string = xml_bytes_buffer.getvalue().decode("utf-8")
+    return xml_string
 
 
 def _einvoice_header(

@@ -297,12 +297,12 @@ def auto_assign_sequential_numbers(instance):
                     setattr(instance, field_name, max_value + 1)
 
 
-def update_model_search_field(instance):
+def update_model_search_field(model_instance):
     """Update search field for model instances that have one.
 
     Args:
-        instance: Model instance to update search field for
+        model_instance: Model instance to update search field for
     """
-    if hasattr(instance, "search"):
-        instance.search = None
-        instance.search = str(instance)
+    if hasattr(model_instance, "search"):
+        model_instance.search = None
+        model_instance.search = str(model_instance)

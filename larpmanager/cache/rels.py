@@ -414,32 +414,32 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
     try:
         # Handle plot relationships if plot feature is enabled
         if "plot" in features:
-            rel_plots = char.get_plot_characters()
-            plot_list = [(rel.plot_id, rel.plot.name) for rel in rel_plots]
+            related_plots = char.get_plot_characters()
+            plot_list = [(plot_rel.plot_id, plot_rel.plot.name) for plot_rel in related_plots]
             relations["plot_rels"] = build_relationship_dict(plot_list)
 
             # Calculate important plot count (excluding $unimportant entries)
-            unimportant_count = 0
+            unimportant_plot_count = 0
             if get_event_config(char.event_id, "writing_unimportant", False):
-                unimportant_count = sum(
-                    1 for rel in rel_plots if strip_tags(rel.text).lstrip().startswith("$unimportant")
+                unimportant_plot_count = sum(
+                    1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
                 )
-            relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_count
+            relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_plot_count
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
             cache_event_id = event.id if event else char.event_id
             if get_event_config(cache_event_id, "campaign_faction_indep", False):
                 # Use the cache event for independent faction lookup
-                fac_event_id = cache_event_id
+                faction_event_id = cache_event_id
             else:
                 # Use the parent event for inherited faction lookup
-                fac_event_id = char.event.get_class_parent("faction").id
+                faction_event_id = char.event.get_class_parent("faction").id
 
             # Build faction list based on determined event
-            if fac_event_id:
-                factions = char.factions_list.filter(event_id=fac_event_id)
-                faction_list = [(faction.id, faction.name) for faction in factions]
+            if faction_event_id:
+                character_factions = char.factions_list.filter(event_id=faction_event_id)
+                faction_list = [(faction.id, faction.name) for faction in character_factions]
             else:
                 faction_list = []
 
@@ -447,33 +447,39 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
         # Handle character-to-character relationships if relationships feature is enabled
         if "relationships" in features:
-            relationships = Relationship.objects.filter(deleted=None, source=char)
-            rel_list = [(rel.target.id, rel.target.name) for rel in relationships]
-            relations["relationships_rels"] = build_relationship_dict(rel_list)
+            character_relationships = Relationship.objects.filter(deleted=None, source=char)
+            relationship_list = [
+                (relationship.target.id, relationship.target.name) for relationship in character_relationships
+            ]
+            relations["relationships_rels"] = build_relationship_dict(relationship_list)
 
             # Calculate important relationship count (excluding $unimportant entries)
-            unimportant_count = 0
+            unimportant_relationship_count = 0
             if get_event_config(char.event_id, "writing_unimportant", False):
-                unimportant_count = sum(
-                    1 for rel in relationships if strip_tags(rel.text).lstrip().startswith("$unimportant")
+                unimportant_relationship_count = sum(
+                    1
+                    for relationship in character_relationships
+                    if strip_tags(relationship.text).lstrip().startswith("$unimportant")
                 )
-            relations["relationships_rels"]["important"] = relations["relationships_rels"]["count"] - unimportant_count
+            relations["relationships_rels"]["important"] = (
+                relations["relationships_rels"]["count"] - unimportant_relationship_count
+            )
 
         # Handle speedlarp relationships if speedlarp feature is enabled
         if "speedlarp" in features:
-            speedlarps = char.speedlarps_list.all()
-            speedlarp_list = [(speedlarp.id, speedlarp.name) for speedlarp in speedlarps]
+            character_speedlarps = char.speedlarps_list.all()
+            speedlarp_list = [(speedlarp.id, speedlarp.name) for speedlarp in character_speedlarps]
             relations["speedlarp_rels"] = build_relationship_dict(speedlarp_list)
 
         # Handle prologue relationships if prologue feature is enabled
         if "prologue" in features:
-            prologues = char.prologues_list.all()
-            prologue_list = [(prologue.id, prologue.name) for prologue in prologues]
+            character_prologues = char.prologues_list.all()
+            prologue_list = [(prologue.id, prologue.name) for prologue in character_prologues]
             relations["prologue_rels"] = build_relationship_dict(prologue_list)
 
-    except Exception as e:
+    except Exception as error:
         # Log the error with full traceback and return empty dict as fallback
-        logger.error(f"Error getting relationships for character {char.id}: {e}", exc_info=True)
+        logger.error(f"Error getting relationships for character {char.id}: {error}", exc_info=True)
         relations = {}
 
     return relations
@@ -508,26 +514,26 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
         >>> print(rels['character_rels']['count'])
         5
     """
-    relations = {}
+    faction_relations = {}
 
     try:
         # Get all characters associated with this faction
-        characters = faction.characters.all()
+        faction_characters = faction.characters.all()
 
         # Build list of character ID and name tuples
-        char_list = [(char.id, char.name) for char in characters]
+        character_id_name_tuples = [(character.id, character.name) for character in faction_characters]
 
         # Structure the relationship data using helper function
-        relations["character_rels"] = build_relationship_dict(char_list)
+        faction_relations["character_rels"] = build_relationship_dict(character_id_name_tuples)
 
-    except Exception as e:
+    except Exception as error:
         # Log error with full traceback for debugging
-        logger.error(f"Error getting relationships for faction {faction.id}: {e}", exc_info=True)
+        logger.error(f"Error getting relationships for faction {faction.id}: {error}", exc_info=True)
 
         # Return empty dict on error to prevent downstream issues
-        relations = {}
+        faction_relations = {}
 
-    return relations
+    return faction_relations
 
 
 def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
@@ -552,26 +558,28 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
     Raises:
         Logs errors but does not raise exceptions, returns empty dict instead.
     """
-    relations = {}
+    relationships = {}
 
     try:
         # Get all character relationships for this plot
-        char_rels = plot.get_plot_characters()
+        character_relationships = plot.get_plot_characters()
 
         # Extract character ID and name tuples from relationships
-        char_list = [(rel.character_id, rel.character.name) for rel in char_rels]
+        character_id_name_pairs = [
+            (relationship.character_id, relationship.character.name) for relationship in character_relationships
+        ]
 
         # Build structured relationship dictionary with list and count
-        relations["character_rels"] = build_relationship_dict(char_list)
+        relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
 
-    except Exception as e:
+    except Exception as error:
         # Log error with full traceback for debugging
-        logger.error(f"Error getting relationships for plot {plot.id}: {e}", exc_info=True)
+        logger.error(f"Error getting relationships for plot {plot.id}: {error}", exc_info=True)
 
         # Return empty dict on any error to maintain consistent return type
-        relations = {}
+        relationships = {}
 
-    return relations
+    return relationships
 
 
 def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
@@ -596,24 +604,24 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
     Raises:
         Logs errors but does not raise exceptions.
     """
-    relations = {}
+    relationships = {}
 
     try:
         # Fetch all characters associated with the speedlarp
-        characters = speedlarp.characters.all()
+        speedlarp_characters = speedlarp.characters.all()
 
         # Build list of tuples containing character ID and name
-        char_list = [(char.id, char.name) for char in characters]
+        character_id_name_pairs = [(character.id, character.name) for character in speedlarp_characters]
 
         # Structure the character data using helper function
-        relations["character_rels"] = build_relationship_dict(char_list)
+        relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
 
-    except Exception as e:
+    except Exception as error:
         # Log the error with full traceback for debugging
-        logger.error(f"Error getting relationships for speedlarp {speedlarp.id}: {e}", exc_info=True)
-        relations = {}
+        logger.error(f"Error getting relationships for speedlarp {speedlarp.id}: {error}", exc_info=True)
+        relationships = {}
 
-    return relations
+    return relationships
 
 
 def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
@@ -647,24 +655,24 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
         >>> print(rels['character_rels']['count'])
         3
     """
-    relations = {}
+    relationships = {}
 
     try:
         # Fetch all characters associated with this prologue
-        characters = prologue.characters.all()
+        prologue_characters = prologue.characters.all()
 
         # Build list of character ID and name tuples for template rendering
-        char_list = [(char.id, char.name) for char in characters]
+        character_id_name_list = [(character.id, character.name) for character in prologue_characters]
 
         # Format character data using helper function to create standardized structure
-        relations["character_rels"] = build_relationship_dict(char_list)
+        relationships["character_rels"] = build_relationship_dict(character_id_name_list)
 
-    except Exception as e:
+    except Exception as error:
         # Log error with full traceback for debugging while preventing crashes
-        logger.error(f"Error getting relationships for prologue {prologue.id}: {e}", exc_info=True)
-        relations = {}
+        logger.error(f"Error getting relationships for prologue {prologue.id}: {error}", exc_info=True)
+        relationships = {}
 
-    return relations
+    return relationships
 
 
 def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
@@ -689,24 +697,24 @@ def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
     Raises:
         Logs errors but does not raise exceptions - returns empty dict instead.
     """
-    relations = {}
+    relationships = {}
 
     try:
         # Query for all non-deleted traits associated with this quest
-        traits = Trait.objects.filter(quest=quest, deleted=None)
+        associated_traits = Trait.objects.filter(quest=quest, deleted=None)
 
         # Build list of tuples containing trait ID and name pairs
-        trait_list = [(trait.id, trait.name) for trait in traits]
+        trait_id_name_pairs = [(trait.id, trait.name) for trait in associated_traits]
 
         # Format trait data into standardized relationship dictionary structure
-        relations["trait_rels"] = build_relationship_dict(trait_list)
+        relationships["trait_rels"] = build_relationship_dict(trait_id_name_pairs)
 
-    except Exception as e:
+    except Exception as error:
         # Log error details for debugging while maintaining function stability
-        logger.error(f"Error getting relationships for quest {quest.id}: {e}")
-        relations = {}
+        logger.error(f"Error getting relationships for quest {quest.id}: {error}")
+        relationships = {}
 
-    return relations
+    return relationships
 
 
 def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
@@ -730,24 +738,24 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
     Raises:
         Exception: Logs error if relationship retrieval fails and returns empty dict.
     """
-    relations = {}
+    relationships = {}
 
     try:
         # Retrieve all related quests for the questtype
-        quests = questtype.quests.all()
+        related_quests = questtype.quests.all()
 
         # Build list of tuples containing quest ID and name
-        quest_list = [(quest.id, quest.name) for quest in quests]
+        quest_id_name_pairs = [(quest.id, quest.name) for quest in related_quests]
 
         # Format quest relationships using helper function
-        relations["quest_rels"] = build_relationship_dict(quest_list)
+        relationships["quest_rels"] = build_relationship_dict(quest_id_name_pairs)
 
-    except Exception as e:
+    except Exception as exception:
         # Log error and return empty dict on failure
-        logger.error(f"Error getting relationships for questtype {questtype.id}: {e}")
-        relations = {}
+        logger.error(f"Error getting relationships for questtype {questtype.id}: {exception}")
+        relationships = {}
 
-    return relations
+    return relationships
 
 
 def refresh_event_faction_relationships(faction: Faction) -> None:

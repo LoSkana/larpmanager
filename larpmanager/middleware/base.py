@@ -20,16 +20,16 @@
 from django.conf import settings as conf_settings
 
 
-def is_ajax(request):
+def is_ajax(http_request):
     """Check if request is an AJAX request.
 
     Args:
-        request: HTTP request object
+        http_request: HTTP request object
 
     Returns:
         bool: True if request is AJAX, False otherwise
     """
-    return request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
+    return http_request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
 
 
 def show_toolbar(request):

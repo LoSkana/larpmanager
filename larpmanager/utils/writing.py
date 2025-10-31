@@ -96,37 +96,39 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
     # Initialize progress tracking if feature is enabled
     if "progress" in features:
         context["progress_steps"] = {
-            el.id: str(el) for el in ProgressStep.objects.filter(event=event).order_by("order")
+            step.id: str(step) for step in ProgressStep.objects.filter(event=event).order_by("order")
         }
-        context["progress_steps_map"] = {el_id: 0 for el_id in context["progress_steps"]}
+        context["progress_steps_map"] = {step_id: 0 for step_id in context["progress_steps"]}
 
     # Initialize assignment tracking if feature is enabled
     if "assigned" in features:
-        context["assigned"] = {m.id: m.show_nick() for m in get_event_staffers(event)}
-        context["assigned_map"] = {m_id: 0 for m_id in context["assigned"]}
+        context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event)}
+        context["assigned_map"] = {member_id: 0 for member_id in context["assigned"]}
 
     # Initialize combined progress/assignment tracking if both features enabled
     if "progress" in features and "assigned" in features:
         context["progress_assigned_map"] = {
-            f"{p}_{a}": 0 for p in context["progress_steps"] for a in context["assigned"]
+            f"{progress_id}_{assigned_id}": 0
+            for progress_id in context["progress_steps"]
+            for assigned_id in context["assigned"]
         }
 
     # Count occurrences of progress steps and assignments in the list
-    for el in context["list"]:
-        pid = el.progress_id
-        aid = el.assigned_id
+    for element in context["list"]:
+        progress_id = element.progress_id
+        assigned_id = element.assigned_id
 
         # Increment progress step counter
-        if "progress" in features and pid in context.get("progress_steps_map", {}):
-            context["progress_steps_map"][pid] += 1
+        if "progress" in features and progress_id in context.get("progress_steps_map", {}):
+            context["progress_steps_map"][progress_id] += 1
 
         # Increment assignment counter
-        if "assigned" in features and aid in context.get("assigned_map", {}):
-            context["assigned_map"][aid] += 1
+        if "assigned" in features and assigned_id in context.get("assigned_map", {}):
+            context["assigned_map"][assigned_id] += 1
 
         # Increment combined progress/assignment counter
         if "progress" in features and "assigned" in features:
-            key = f"{pid}_{aid}"
+            key = f"{progress_id}_{assigned_id}"
             if key in context.get("progress_assigned_map", {}):
                 context["progress_assigned_map"][key] += 1
 
@@ -146,13 +148,13 @@ def writing_popup_question(context, idx, question_idx):
         dict: Question data for popup rendering
     """
     try:
-        char = Character.objects.get(pk=idx, event=context["event"].get_class_parent(Character))
+        character = Character.objects.get(pk=idx, event=context["event"].get_class_parent(Character))
         question = WritingQuestion.objects.get(
             pk=question_idx, event=context["event"].get_class_parent(WritingQuestion)
         )
-        el = WritingAnswer.objects.get(element_id=char.id, question=question)
-        tx = f"<h2>{char} - {question.name}</h2>" + el.text
-        return JsonResponse({"k": 1, "v": tx})
+        writing_answer = WritingAnswer.objects.get(element_id=character.id, question=question)
+        html_text = f"<h2>{character} - {question.name}</h2>" + writing_answer.text
+        return JsonResponse({"k": 1, "v": html_text})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -179,41 +181,41 @@ def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model
 
     # Parse and validate the index parameter from POST data
     try:
-        idx = int(request.POST.get("idx", ""))
+        element_id = int(request.POST.get("idx", ""))
     except (ValueError, TypeError):
         return JsonResponse({"error": "Invalid idx parameter"}, status=400)
 
     # Extract the type parameter for attribute lookup
-    tp = request.POST.get("tp", "")
+    attribute_type = request.POST.get("tp", "")
 
     # Check if this is a character question request (numeric tp indicates question)
     try:
-        question_idx = int(tp)
-        return writing_popup_question(context, idx, question_idx)
+        question_id = int(attribute_type)
+        return writing_popup_question(context, element_id, question_id)
     except ValueError:
         # Not a question, continue with regular element handling
         pass
 
     # Retrieve the writing element from database using parent event context
     try:
-        el = typ.objects.get(pk=idx, event=context["event"].get_class_parent(typ))
+        writing_element = typ.objects.get(pk=element_id, event=context["event"].get_class_parent(typ))
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
     # Verify the requested attribute exists on the element
-    if not hasattr(el, tp):
+    if not hasattr(writing_element, attribute_type):
         return JsonResponse({"k": 0})
 
     # Build HTML response with element title and content
-    tx = f"<h2>{el} - {tp}</h2>"
+    html_content = f"<h2>{writing_element} - {attribute_type}</h2>"
 
     # Render content based on element type (traits/quests vs characters)
     if typ in [Trait, Quest]:
-        tx += show_trait(context, getattr(el, tp), context["run"], 1)
+        html_content += show_trait(context, getattr(writing_element, attribute_type), context["run"], 1)
     else:
-        tx += show_char(context, getattr(el, tp), context["run"], 1)
+        html_content += show_char(context, getattr(writing_element, attribute_type), context["run"], 1)
 
-    return JsonResponse({"k": 1, "v": tx})
+    return JsonResponse({"k": 1, "v": html_content})
 
 
 def writing_example(context, typ):
@@ -226,14 +228,14 @@ def writing_example(context, typ):
     Returns:
         dict: Example content and structure for the writing type
     """
-    file_rows = typ.get_example_csv(context["features"])
+    example_csv_rows = typ.get_example_csv(context["features"])
 
-    buffer = io.StringIO()
-    wr = csv.writer(buffer, quoting=csv.QUOTE_ALL)
-    wr.writerows(file_rows)
+    csv_buffer = io.StringIO()
+    csv_writer = csv.writer(csv_buffer, quoting=csv.QUOTE_ALL)
+    csv_writer.writerows(example_csv_rows)
 
-    buffer.seek(0)
-    response = HttpResponse(buffer, content_type="text/csv")
+    csv_buffer.seek(0)
+    response = HttpResponse(csv_buffer, content_type="text/csv")
     response["Content-Disposition"] = "attachment; filename=example.csv"
 
     return response
@@ -361,10 +363,10 @@ def writing_bulk(context, request, typ):
     Side effects:
         Executes bulk operations through type-specific handlers
     """
-    bulks = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
+    type_to_bulk_handler = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
 
-    if typ in bulks:
-        bulks[typ](request, context)
+    if typ in type_to_bulk_handler:
+        type_to_bulk_handler[typ](request, context)
 
 
 def _get_custom_form(context):
@@ -393,7 +395,7 @@ def _get_custom_form(context):
             context["form_questions"][question.id] = question
 
 
-def writing_list_query(context: dict, ev, typ) -> tuple[list[str], bool]:
+def writing_list_query(context: dict, event, model_type) -> tuple[list[str], bool]:
     """
     Build optimized database query for writing element lists.
 
@@ -403,8 +405,8 @@ def writing_list_query(context: dict, ev, typ) -> tuple[list[str], bool]:
 
     Args:
         context: Context dictionary to store query results under 'list' key.
-        ev: Event instance used to determine the parent event for filtering.
-        typ: Writing element model class to query against.
+        event: Event instance used to determine the parent event for filtering.
+        model_type: Writing element model class to query against.
 
     Returns:
         A tuple containing:
@@ -412,45 +414,45 @@ def writing_list_query(context: dict, ev, typ) -> tuple[list[str], bool]:
             - bool: Whether the model is a Writing subclass
     """
     # Determine if this is a Writing model and set up basic query structure
-    writing = issubclass(typ, Writing)
-    text_fields = ["teaser", "text"]
-    context["list"] = typ.objects.filter(event=ev.get_class_parent(typ))
+    is_writing_model = issubclass(model_type, Writing)
+    deferred_text_fields = ["teaser", "text"]
+    context["list"] = model_type.objects.filter(event=event.get_class_parent(model_type))
 
     # Optimize query with select_related for Writing models with progress tracking
-    if writing and hasattr(typ, "progress"):
+    if is_writing_model and hasattr(model_type, "progress"):
         context["list"] = context["list"].select_related("progress", "assigned")
 
     # Defer large text fields for Writing models to improve performance
-    if writing:
-        for f in text_fields:
-            context["list"] = context["list"].defer(f)
+    if is_writing_model:
+        for field_name in deferred_text_fields:
+            context["list"] = context["list"].defer(field_name)
 
     # Apply ordering based on available fields: order > number > updated (newest first)
-    if check_field(typ, "order"):
+    if check_field(model_type, "order"):
         context["list"] = context["list"].order_by("order")
-    elif check_field(typ, "number"):
+    elif check_field(model_type, "number"):
         context["list"] = context["list"].order_by("number")
     else:
         context["list"] = context["list"].order_by("-updated")
 
-    return text_fields, writing
+    return deferred_text_fields, is_writing_model
 
 
-def writing_list_text_fields(context, text_fields, typ):
+def writing_list_text_fields(context, text_fields, writing_element_type):
     """
     Add editor-type question fields to text fields list and retrieve cached data.
 
     Args:
         context: Context dictionary with event and writing type information
         text_fields: List of text field names to extend
-        typ: Writing element model class
+        writing_element_type: Writing element model class
     """
     # add editor type questions
-    que = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
-    for que_id in que.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        text_fields.append(str(que_id))
+    writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
+    for question_id in writing_questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
+        text_fields.append(str(question_id))
 
-    retrieve_cache_text_field(context, text_fields, typ)
+    retrieve_cache_text_field(context, text_fields, writing_element_type)
 
 
 def retrieve_cache_text_field(context, text_fields, element_type):
@@ -514,60 +516,60 @@ def writing_list_plot(context):
     Side effects:
         Adds chars dictionary to context and attaches character lists to plot objects
     """
-    rels = get_event_rels_cache(context["event"]).get("plots", {})
+    event_relationships = get_event_rels_cache(context["event"]).get("plots", {})
 
-    for el in context["list"]:
-        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+    for plot in context["list"]:
+        plot.character_rels = event_relationships.get(plot.id, {}).get("character_rels", [])
 
 
 def writing_list_faction(context: dict) -> None:
     """Enriches faction objects with their character relationships from event cache."""
     # Retrieve cached faction relationships for the event
-    rels = get_event_rels_cache(context["event"]).get("factions", {})
+    faction_relationships = get_event_rels_cache(context["event"]).get("factions", {})
 
     # Attach character relationships to each faction in the list
-    for el in context["list"]:
-        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+    for faction in context["list"]:
+        faction.character_rels = faction_relationships.get(faction.id, {}).get("character_rels", [])
 
 
 def writing_list_speedlarp(context: dict) -> None:
     """Enriches speedlarp list items with their character relationships from event cache."""
     # Retrieve speedlarp relationships from cached event data
-    rels = get_event_rels_cache(context["event"]).get("speedlarps", {})
+    speedlarp_relationships = get_event_rels_cache(context["event"]).get("speedlarps", {})
 
     # Attach character relationships to each speedlarp item
-    for el in context["list"]:
-        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+    for speedlarp_item in context["list"]:
+        speedlarp_item.character_rels = speedlarp_relationships.get(speedlarp_item.id, {}).get("character_rels", [])
 
 
 def writing_list_prologue(context: dict) -> None:
     """Enrich prologue list items with character relationships from cache."""
     # Retrieve cached prologue relationships for the event
-    rels = get_event_rels_cache(context["event"]).get("prologues", {})
+    prologue_relationships = get_event_rels_cache(context["event"]).get("prologues", {})
 
     # Attach character relationships to each prologue in the list
-    for el in context["list"]:
-        el.character_rels = rels.get(el.id, {}).get("character_rels", [])
+    for prologue in context["list"]:
+        prologue.character_rels = prologue_relationships.get(prologue.id, {}).get("character_rels", [])
 
 
 def writing_list_quest(context: dict) -> None:
     """Enrich quest list with trait relationships from cache."""
     # Retrieve cached quest relationships for the event
-    rels = get_event_rels_cache(context["event"]).get("quests", {})
+    quest_relationships = get_event_rels_cache(context["event"]).get("quests", {})
 
     # Attach trait relationships to each quest in the list
-    for el in context["list"]:
-        el.trait_rels = rels.get(el.id, {}).get("trait_rels", [])
+    for quest in context["list"]:
+        quest.trait_rels = quest_relationships.get(quest.id, {}).get("trait_rels", [])
 
 
 def writing_list_questtype(context: dict) -> None:
     """Add quest relationships to each quest type in the context list."""
     # Retrieve cached quest type relationships for the event
-    rels = get_event_rels_cache(context["event"]).get("questtypes", {})
+    quest_type_relationships = get_event_rels_cache(context["event"]).get("questtypes", {})
 
     # Attach quest relationships to each quest type element
-    for el in context["list"]:
-        el.quest_rels = rels.get(el.id, {}).get("quest_rels", [])
+    for quest_type in context["list"]:
+        quest_type.quest_rels = quest_type_relationships.get(quest_type.id, {}).get("quest_rels", [])
 
 
 def writing_list_char(context: dict) -> None:
@@ -603,32 +605,32 @@ def writing_list_char(context: dict) -> None:
         )
 
     # Get cached relationship data for the event
-    rels = get_event_rels_cache(context["event"]).get("characters", {})
+    event_relationships = get_event_rels_cache(context["event"]).get("characters", {})
 
     # Add relationship data based on enabled features
     if "relationships" in context["features"]:
-        for el in context["list"]:
-            el.relationships_rels = rels.get(el.id, {}).get("relationships_rels", [])
+        for character in context["list"]:
+            character.relationships_rels = event_relationships.get(character.id, {}).get("relationships_rels", [])
 
     # Add plot relationship data
     if "plot" in context["features"]:
-        for el in context["list"]:
-            el.plot_rels = rels.get(el.id, {}).get("plot_rels", [])
+        for character in context["list"]:
+            character.plot_rels = event_relationships.get(character.id, {}).get("plot_rels", [])
 
     # Add faction relationship data
     if "faction" in context["features"]:
-        for el in context["list"]:
-            el.faction_rels = rels.get(el.id, {}).get("faction_rels", [])
+        for character in context["list"]:
+            character.faction_rels = event_relationships.get(character.id, {}).get("faction_rels", [])
 
     # Add speedlarp relationship data
     if "speedlarp" in context["features"]:
-        for el in context["list"]:
-            el.speedlarp_rels = rels.get(el.id, {}).get("speedlarp_rels", [])
+        for character in context["list"]:
+            character.speedlarp_rels = event_relationships.get(character.id, {}).get("speedlarp_rels", [])
 
     # Add prologue relationship data
     if "prologue" in context["features"]:
-        for el in context["list"]:
-            el.prologue_rels = rels.get(el.id, {}).get("prologue_rels", [])
+        for character in context["list"]:
+            character.prologue_rels = event_relationships.get(character.id, {}).get("prologue_rels", [])
 
     # add character configs
     char_add_addit(context)

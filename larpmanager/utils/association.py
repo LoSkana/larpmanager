@@ -72,11 +72,11 @@ def prepare_association_skin_features(instance: Association) -> None:
     # Only proceed if skin is new or different from previous value
     if instance.pk:
         try:
-            prev = Association.objects.get(pk=instance.pk)
+            previous_association = Association.objects.get(pk=instance.pk)
         except ObjectDoesNotExist:
             return
         # Skip if skin hasn't changed
-        if instance.skin_id == prev.skin_id:
+        if instance.skin_id == previous_association.skin_id:
             return
 
     # Retrieve the skin object, return early if not found

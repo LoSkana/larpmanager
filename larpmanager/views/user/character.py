@@ -631,16 +631,16 @@ def get_options_dependencies(context: dict) -> None:
         return
 
     # Get all character-applicable writing questions ordered by their sequence
-    que = context["event"].get_elements(WritingQuestion).order_by("order")
-    que = que.filter(applicable=QuestionApplicable.CHARACTER)
-    question_idxs = que.values_list("id", flat=True)
+    character_questions = context["event"].get_elements(WritingQuestion).order_by("order")
+    character_questions = character_questions.filter(applicable=QuestionApplicable.CHARACTER)
+    question_ids = character_questions.values_list("id", flat=True)
 
     # Find all writing options belonging to character questions
-    que = context["event"].get_elements(WritingOption).filter(question_id__in=question_idxs)
+    writing_options = context["event"].get_elements(WritingOption).filter(question_id__in=question_ids)
 
     # Build dependency mapping for options that have requirements
-    for el in que.filter(requirements__isnull=False).distinct():
-        context["dependencies"][el.id] = list(el.requirements.values_list("id", flat=True))
+    for option in writing_options.filter(requirements__isnull=False).distinct():
+        context["dependencies"][option.id] = list(option.requirements.values_list("id", flat=True))
 
 
 @login_required

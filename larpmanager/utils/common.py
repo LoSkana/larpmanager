@@ -226,18 +226,18 @@ def get_registration(context, registration_id):
         raise Http404("Registration does not exist") from err
 
 
-def get_discount(context, n):
+def get_discount(context, discount_id):
     """Get discount by ID and add to context.
 
     Args:
         context: Template context dictionary
-        n: Discount ID
+        discount_id: Discount ID
 
     Raises:
         Http404: If discount does not exist
     """
     try:
-        context["discount"] = Discount.objects.get(pk=n)
+        context["discount"] = Discount.objects.get(pk=discount_id)
         context["name"] = str(context["discount"])
     except ObjectDoesNotExist as err:
         raise Http404("Discount does not exist") from err
@@ -313,9 +313,9 @@ def get_handout(context, handout_id):
         raise Http404("handout does not exist") from err
 
 
-def get_handout_template(context, n):
+def get_handout_template(context, handout_template_id):
     try:
-        context["handout_template"] = HandoutTemplate.objects.get(event=context["event"], pk=n)
+        context["handout_template"] = HandoutTemplate.objects.get(event=context["event"], pk=handout_template_id)
         context["name"] = context["handout_template"].name
     except ObjectDoesNotExist as err:
         raise Http404("handout_template does not exist") from err
@@ -325,12 +325,12 @@ def get_prologue(context, prologue_number):
     get_element(context, prologue_number, "prologue", Prologue)
 
 
-def get_prologue_type(context, n):
+def get_prologue_type(context, prologue_type_id):
     try:
-        context["prologue_type"] = PrologueType.objects.get(event=context["event"], pk=n)
+        context["prologue_type"] = PrologueType.objects.get(event=context["event"], pk=prologue_type_id)
         context["name"] = str(context["prologue_type"])
-    except ObjectDoesNotExist as err:
-        raise Http404("prologue_type does not exist") from err
+    except ObjectDoesNotExist as error:
+        raise Http404("prologue_type does not exist") from error
 
 
 def get_speedlarp(context, speedlarp_id):
@@ -361,18 +361,18 @@ def get_collection_partecipate(context, contribution_code):
         raise Http404("Collection does not exist") from err
 
 
-def get_collection_redeem(context, cod):
+def get_collection_redeem(context, redeem_code):
     try:
-        return Collection.objects.get(redeem_code=cod, association_id=context["association_id"])
-    except ObjectDoesNotExist as err:
-        raise Http404("Collection does not exist") from err
+        return Collection.objects.get(redeem_code=redeem_code, association_id=context["association_id"])
+    except ObjectDoesNotExist as error:
+        raise Http404("Collection does not exist") from error
 
 
-def get_workshop(context, n):
+def get_workshop(context, workshop_id):
     try:
-        context["workshop"] = WorkshopModule.objects.get(event=context["event"], pk=n)
-    except ObjectDoesNotExist as err:
-        raise Http404("WorkshopModule does not exist") from err
+        context["workshop"] = WorkshopModule.objects.get(event=context["event"], pk=workshop_id)
+    except ObjectDoesNotExist as error:
+        raise Http404("WorkshopModule does not exist") from error
 
 
 def get_workshop_question(context, n, mod):
@@ -475,9 +475,11 @@ def get_relationship(context: dict, num: int) -> None:
         raise Http404("wrong event")
 
 
-def get_player_relationship(context, oth):
+def get_player_relationship(context, other_player_number):
     try:
-        context["relationship"] = PlayerRelationship.objects.get(reg=context["run"].reg, target__number=oth)
+        context["relationship"] = PlayerRelationship.objects.get(
+            reg=context["run"].reg, target__number=other_player_number
+        )
     except ObjectDoesNotExist as err:
         raise Http404("relationship does not exist") from err
 

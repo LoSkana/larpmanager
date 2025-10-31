@@ -226,7 +226,7 @@ def check_association(element: object, context: dict, attribute_field: str = Non
         raise Http404("not your association")
 
 
-def user_edit(request: HttpRequest, context: dict, form_type: type, nm: str, eid: int) -> bool:
+def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: str, entity_id: int) -> bool:
     """Generic user data editing with validation.
 
     Handles both GET and POST requests for editing user data. On POST, validates
@@ -237,8 +237,8 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, nm: str, eid
         request: HTTP request object containing method and POST data
         context: Context dictionary containing model data and form instance
         form_type: Django form class to use for data validation and editing
-        nm: Name key for accessing the model instance in context dictionary
-        eid: Entity ID for editing, used for form numbering (0 for new instances)
+        model_name: Name key for accessing the model instance in context dictionary
+        entity_id: Entity ID for editing, used for form numbering (0 for new instances)
 
     Returns:
         True if form was successfully processed and saved, False if form
@@ -252,38 +252,38 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, nm: str, eid
     """
     if request.method == "POST":
         # Initialize form with POST data and files, bind to existing instance
-        form = form_type(request.POST, request.FILES, instance=context[nm], context=context)
+        form = form_type(request.POST, request.FILES, instance=context[model_name], context=context)
 
         if form.is_valid():
             # Save the form and get the updated instance
-            p = form.save()
+            saved_instance = form.save()
             messages.success(request, _("Operation completed") + "!")
 
             # Check if delete operation was requested
-            dl = "delete" in request.POST and request.POST["delete"] == "1"
+            should_delete = "delete" in request.POST and request.POST["delete"] == "1"
 
             # Log the operation (save or delete)
-            save_log(context["member"], form_type, p, dl)
+            save_log(context["member"], form_type, saved_instance, should_delete)
 
             # Delete the instance if deletion was requested
-            if dl:
-                p.delete()
+            if should_delete:
+                saved_instance.delete()
 
             # Store saved instance in context for template access
-            context["saved"] = p
+            context["saved"] = saved_instance
 
             return True
     else:
         # Initialize empty form for GET request, bind to existing instance
-        form = form_type(instance=context[nm], context=context)
+        form = form_type(instance=context[model_name], context=context)
 
     # Add form and entity ID to context for template rendering
     context["form"] = form
-    context["num"] = eid
+    context["num"] = entity_id
 
     # Add string representation of instance name for existing entities
-    if eid != 0:
-        context["name"] = str(context[nm])
+    if entity_id != 0:
+        context["name"] = str(context[model_name])
 
     return False
 
@@ -725,8 +725,8 @@ def _writing_save(
     return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
 
 
-def writing_edit_cache_key(eid, typ):
-    return f"orga_edit_{eid}_{typ}"
+def writing_edit_cache_key(event_id, writing_type):
+    return f"orga_edit_{event_id}_{writing_type}"
 
 
 def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "JsonResponse":

@@ -463,69 +463,69 @@ class ExeConfigForm(ConfigForm):
         # Configure custom mail server settings if feature is enabled
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
-            help_text = ""
+            empty_help_text = ""
 
             # SMTP connection settings
-            label = _("Use TLD")
-            self.add_configs("mail_server_use_tls", ConfigType.BOOL, label, help_text)
+            use_tls_label = _("Use TLD")
+            self.add_configs("mail_server_use_tls", ConfigType.BOOL, use_tls_label, empty_help_text)
 
-            label = _("Host Address")
-            self.add_configs("mail_server_host", ConfigType.CHAR, label, help_text)
+            host_address_label = _("Host Address")
+            self.add_configs("mail_server_host", ConfigType.CHAR, host_address_label, empty_help_text)
 
-            label = _("Port")
-            self.add_configs("mail_server_port", ConfigType.INT, label, help_text)
+            port_label = _("Port")
+            self.add_configs("mail_server_port", ConfigType.INT, port_label, empty_help_text)
 
             # Authentication credentials
-            label = _("Username of account")
-            self.add_configs("mail_server_host_user", ConfigType.CHAR, label, help_text)
+            username_label = _("Username of account")
+            self.add_configs("mail_server_host_user", ConfigType.CHAR, username_label, empty_help_text)
 
-            label = _("Password of account")
-            self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
+            password_label = _("Password of account")
+            self.add_configs("mail_server_host_password", ConfigType.CHAR, password_label, empty_help_text)
 
         # Configure pre-registration preferences
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
-            label = _("Enable preferences")
-            help_text = _("If checked, participants give a preference value when adding pre-registrations")
-            self.add_configs("pre_reg_preferences", ConfigType.BOOL, label, help_text)
+            preferences_label = _("Enable preferences")
+            preferences_help_text = _("If checked, participants give a preference value when adding pre-registrations")
+            self.add_configs("pre_reg_preferences", ConfigType.BOOL, preferences_label, preferences_help_text)
 
         # Configure easter egg feature (centauri)
         if "centauri" in self.params["features"]:
             self.set_section("centauri", _("Easter egg"))
 
             # Probability and badge settings
-            label = _("Probability")
-            help_text = _("Probability of showing the special page (out of thousands)")
-            self.add_configs("centauri_prob", ConfigType.INT, label, help_text)
+            probability_label = _("Probability")
+            probability_help_text = _("Probability of showing the special page (out of thousands)")
+            self.add_configs("centauri_prob", ConfigType.INT, probability_label, probability_help_text)
 
-            label = _("Badge")
-            help_text = _("Name of badge to be awarded")
-            self.add_configs("centauri_badge", ConfigType.CHAR, label, help_text)
+            badge_label = _("Badge")
+            badge_help_text = _("Name of badge to be awarded")
+            self.add_configs("centauri_badge", ConfigType.CHAR, badge_label, badge_help_text)
 
             # Content configuration
-            label = _("Description")
-            help_text = _("Description to be shown on the special page")
-            self.add_configs("centauri_descr", ConfigType.CHAR, label, help_text)
+            description_label = _("Description")
+            description_help_text = _("Description to be shown on the special page")
+            self.add_configs("centauri_descr", ConfigType.CHAR, description_label, description_help_text)
 
-            label = _("Page")
-            help_text = _("Contents of the special page")
-            self.add_configs("centauri_content", ConfigType.HTML, label, help_text)
+            page_label = _("Page")
+            page_help_text = _("Contents of the special page")
+            self.add_configs("centauri_content", ConfigType.HTML, page_label, page_help_text)
 
         # Configure campaign-specific settings
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
 
-            label = _("Move registration event")
-            help_text = _("Allow to switch registration between events")
-            self.add_configs("campaign_switch", ConfigType.BOOL, label, help_text)
+            move_registration_label = _("Move registration event")
+            move_registration_help_text = _("Allow to switch registration between events")
+            self.add_configs("campaign_switch", ConfigType.BOOL, move_registration_label, move_registration_help_text)
 
         # Configure warehouse management options
         if "warehouse" in self.params["features"]:
             self.set_section("warehouse", _("Warehouse"))
 
-            label = _("Quantity")
-            help_text = _("If checked: Add a field to track items quantity")
-            self.add_configs("warehouse_quantity", ConfigType.BOOL, label, help_text)
+            quantity_label = _("Quantity")
+            quantity_help_text = _("If checked: Add a field to track items quantity")
+            self.add_configs("warehouse_quantity", ConfigType.BOOL, quantity_label, quantity_help_text)
 
     def set_config_members(self) -> None:
         """Configure member-related form fields and sections in association settings.
@@ -541,89 +541,89 @@ class ExeConfigForm(ConfigForm):
         # Configure user profile and history display settings
         self.set_section("users", _("Users"))
 
-        label = _("Event history")
-        help_text = _("If checked: in the public page of an user shows a list of all events attended")
-        self.add_configs("player_larp_history", ConfigType.BOOL, label, help_text)
+        field_label = _("Event history")
+        field_help_text = _("If checked: in the public page of an user shows a list of all events attended")
+        self.add_configs("player_larp_history", ConfigType.BOOL, field_label, field_help_text)
 
         # Configure deadline management if feature is enabled
         if "deadlines" in self.params["features"]:
             self.set_section("deadlines", _("Deadline"))
 
             # Tolerance period before automatic cancellation
-            label = _("Tolerance")
-            help_text = _(
+            field_label = _("Tolerance")
+            field_help_text = _(
                 "Number of days past the deadline beyond which registrations are marked to be cancelled (default 30 days)"
             )
-            self.add_configs("deadline_tolerance", ConfigType.INT, label, help_text)
+            self.add_configs("deadline_tolerance", ConfigType.INT, field_label, field_help_text)
 
             # Reminder email frequency
-            label = _("Frequency")
-            help_text = _("Sets how often reminder emails are sent, in days (if not set, no emails are sent)")
-            self.add_configs("deadline_days", ConfigType.INT, label, help_text)
+            field_label = _("Frequency")
+            field_help_text = _("Sets how often reminder emails are sent, in days (if not set, no emails are sent)")
+            self.add_configs("deadline_days", ConfigType.INT, field_label, field_help_text)
 
         # Configure membership fee and requirements if feature is enabled
         if "membership" in self.params["features"]:
             self.set_section("membership", _("Members"))
 
             # Minimum age requirement for membership
-            label = _("Age")
-            help_text = _("Minimum age of members (leave empty for no limit)")
-            self.add_configs("membership_age", ConfigType.INT, label, help_text)
+            field_label = _("Age")
+            field_help_text = _("Minimum age of members (leave empty for no limit)")
+            self.add_configs("membership_age", ConfigType.INT, field_label, field_help_text)
 
             # Annual membership fee amount
-            label = _("Annual fee")
-            help_text = _("Annual fee required of members, starting from the beginning of the membership year")
-            self.add_configs("membership_fee", ConfigType.INT, label, help_text)
+            field_label = _("Annual fee")
+            field_help_text = _("Annual fee required of members, starting from the beginning of the membership year")
+            self.add_configs("membership_fee", ConfigType.INT, field_label, field_help_text)
 
             # Membership year start date configuration
-            label = _("Start day")
-            help_text = _("Day of the year from which the membership year begins, in DD-MM format")
-            self.add_configs("membership_day", ConfigType.CHAR, label, help_text)
+            field_label = _("Start day")
+            field_help_text = _("Day of the year from which the membership year begins, in DD-MM format")
+            self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text)
 
             # Grace period for membership fee payment
-            label = _("Months free quota")
-            help_text = _(
+            field_label = _("Months free quota")
+            field_help_text = _(
                 "Number of months, starting from the beginning of the membership year, for which "
                 "to make free membership fee payment"
             )
-            self.add_configs("membership_grazing", ConfigType.INT, label, help_text)
+            self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
 
         # Configure voting system if feature is enabled
         if "vote" in self.params["features"]:
             self.set_section("vote", _("Voting"))
 
             # Toggle voting availability
-            label = _("Active")
-            help_text = _("If checked: members can vote")
-            self.add_configs("vote_open", ConfigType.BOOL, label, help_text)
+            field_label = _("Active")
+            field_help_text = _("If checked: members can vote")
+            self.add_configs("vote_open", ConfigType.BOOL, field_label, field_help_text)
 
             # List of candidates for election
-            label = _("Candidates")
-            help_text = _("Candidates at the polls")
-            self.add_configs("vote_candidates", ConfigType.MEMBERS, label, help_text, self.instance.id)
+            field_label = _("Candidates")
+            field_help_text = _("Candidates at the polls")
+            self.add_configs("vote_candidates", ConfigType.MEMBERS, field_label, field_help_text, self.instance.id)
 
             # Voting constraints: minimum and maximum votes per member
-            label = _("Minimum votes")
-            help_text = _("Minimum number of votes")
-            self.add_configs("vote_min", ConfigType.INT, label, help_text)
+            field_label = _("Minimum votes")
+            field_help_text = _("Minimum number of votes")
+            self.add_configs("vote_min", ConfigType.INT, field_label, field_help_text)
 
-            label = _("Maximum votes")
-            help_text = _("Maximum number of votes")
-            self.add_configs("vote_max", ConfigType.INT, label, help_text)
+            field_label = _("Maximum votes")
+            field_help_text = _("Maximum number of votes")
+            self.add_configs("vote_max", ConfigType.INT, field_label, field_help_text)
 
         # Configure reminder email system if feature is enabled
         if "remind" in self.params["features"]:
             self.set_section("remind", _("Reminder"))
 
             # Frequency of automated reminder emails
-            label = _("Frequency")
-            help_text = _("Sets how often reminder emails are sent, in days (default: 5)")
-            self.add_configs("remind_days", ConfigType.INT, label, help_text)
+            field_label = _("Frequency")
+            field_help_text = _("Sets how often reminder emails are sent, in days (default: 5)")
+            self.add_configs("remind_days", ConfigType.INT, field_label, field_help_text)
 
             # Holiday scheduling for reminder emails
-            label = _("Holidays")
-            help_text = _("If checked: the system will send reminds the days on which holidays fall")
-            self.add_configs("remind_holidays", ConfigType.BOOL, label, help_text)
+            field_label = _("Holidays")
+            field_help_text = _("If checked: the system will send reminds the days on which holidays fall")
+            self.add_configs("remind_holidays", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_accounting(self) -> None:
         """Configure accounting-related form fields for association settings.
@@ -770,61 +770,61 @@ class ExeConfigForm(ConfigForm):
         self.set_section("einvoice", _("Electronic invoice"))
 
         # Basic company information fields
-        label = _("Name")
-        help_text = ""
-        self.add_configs("einvoice_denominazione", ConfigType.CHAR, label, help_text)
+        field_label = _("Name")
+        field_help_text = ""
+        self.add_configs("einvoice_denominazione", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("Fiscal code")
-        help_text = ""
-        self.add_configs("einvoice_idcodice", ConfigType.CHAR, label, help_text)
+        field_label = _("Fiscal code")
+        field_help_text = ""
+        self.add_configs("einvoice_idcodice", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("VAT No")
-        help_text = ""
-        self.add_configs("einvoice_partitaiva", ConfigType.CHAR, label, help_text)
+        field_label = _("VAT No")
+        field_help_text = ""
+        self.add_configs("einvoice_partitaiva", ConfigType.CHAR, field_label, field_help_text)
 
         # Tax regime and VAT configuration
-        label = _("Tax regime")
-        help_text = "RF19: forfettario, RF01: ordinario, RF05: agevolato, RF07: commerciale"
-        self.add_configs("einvoice_regimefiscale", ConfigType.CHAR, label, help_text)
+        field_label = _("Tax regime")
+        field_help_text = "RF19: forfettario, RF01: ordinario, RF05: agevolato, RF07: commerciale"
+        self.add_configs("einvoice_regimefiscale", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("VAT rate")
-        help_text = _("If absent, indicate 0")
-        self.add_configs("einvoice_aliquotaiva", ConfigType.CHAR, label, help_text)
+        field_label = _("VAT rate")
+        field_help_text = _("If absent, indicate 0")
+        self.add_configs("einvoice_aliquotaiva", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("Nature")
-        help_text = _("Indicate only if rate 0")
-        self.add_configs("einvoice_natura", ConfigType.CHAR, label, help_text)
+        field_label = _("Nature")
+        field_help_text = _("Indicate only if rate 0")
+        self.add_configs("einvoice_natura", ConfigType.CHAR, field_label, field_help_text)
 
         # Company address information
-        label = _("Address")
-        help_text = ""
-        self.add_configs("einvoice_indirizzo", ConfigType.CHAR, label, help_text)
+        field_label = _("Address")
+        field_help_text = ""
+        self.add_configs("einvoice_indirizzo", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("House number")
-        help_text = ""
-        self.add_configs("einvoice_numerocivico", ConfigType.CHAR, label, help_text)
+        field_label = _("House number")
+        field_help_text = ""
+        self.add_configs("einvoice_numerocivico", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("Cap")
-        help_text = ""
-        self.add_configs("einvoice_cap", ConfigType.CHAR, label, help_text)
+        field_label = _("Cap")
+        field_help_text = ""
+        self.add_configs("einvoice_cap", ConfigType.CHAR, field_label, field_help_text)
 
         # Geographic location fields
-        label = _("Municipality")
-        help_text = ""
-        self.add_configs("einvoice_comune", ConfigType.CHAR, label, help_text)
+        field_label = _("Municipality")
+        field_help_text = ""
+        self.add_configs("einvoice_comune", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("Province")
-        help_text = _("Code two capital letters")
-        self.add_configs("einvoice_provincia", ConfigType.CHAR, label, help_text)
+        field_label = _("Province")
+        field_help_text = _("Code two capital letters")
+        self.add_configs("einvoice_provincia", ConfigType.CHAR, field_label, field_help_text)
 
-        label = _("Nation")
-        help_text = _("Code two capital letters")
-        self.add_configs("einvoice_nazione", ConfigType.CHAR, label, help_text)
+        field_label = _("Nation")
+        field_help_text = _("Code two capital letters")
+        self.add_configs("einvoice_nazione", ConfigType.CHAR, field_label, field_help_text)
 
         # Electronic invoice routing configuration
-        label = _("Recipient Code")
-        help_text = _("Intermediary channel code")
-        self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, label, help_text)
+        field_label = _("Recipient Code")
+        field_help_text = _("Intermediary channel code")
+        self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, field_label, field_help_text)
 
 
 class FirstAssociationForm(MyForm):

@@ -131,18 +131,18 @@ class AssociationIdentifyMiddleware:
             visiting the main page, except for post-login flows.
         """
         # Check for demo user logout requirement - skip if already in post-login flow
-        user = request.user
+        current_user = request.user
         if not request.path.startswith("/after_login/"):
             # Demo users should be logged out when visiting main domain
-            if user.is_authenticated and user.email.lower().endswith("demo.it"):
+            if current_user.is_authenticated and current_user.email.lower().endswith("demo.it"):
                 logout(request)
                 return redirect(request.path)
 
         # Attempt to load association skin for the base domain
-        skin = get_cache_skin(base_domain)
-        if skin:
+        association_skin = get_cache_skin(base_domain)
+        if association_skin:
             # Skin found - load the associated organization
-            return cls.load_association(request, skin)
+            return cls.load_association(request, association_skin)
 
         # Handle larpmanager.com domain redirects to ensure HTTPS
         if request.get_host().endswith("larpmanager.com"):

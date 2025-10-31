@@ -240,61 +240,61 @@ def registration_status_signed(
     registration_status_characters(run, features, context)
 
     # Get user membership for the event's association
-    mb = get_user_membership(member, run.event.association_id)
+    user_membership = get_user_membership(member, run.event.association_id)
 
     # Build base registration message with ticket info if available
-    register_msg = _("Registration confirmed")
-    provisional = is_reg_provisional(reg, features=features, event=run.event, context=context)
+    registration_message = _("Registration confirmed")
+    is_provisional = is_reg_provisional(reg, features=features, event=run.event, context=context)
 
     # Update message for provisional registrations
-    if provisional:
-        register_msg = _("Provisional registration")
+    if is_provisional:
+        registration_message = _("Provisional registration")
 
     # Append ticket name if ticket exists
     if reg.ticket:
-        register_msg += f" ({reg.ticket.name})"
-    register_text = f"<a href='{register_url}'>{register_msg}</a>"
+        registration_message += f" ({reg.ticket.name})"
+    registration_text = f"<a href='{register_url}'>{registration_message}</a>"
 
     # Handle membership feature requirements and status checks
     if "membership" in features:
         # Check for revoked membership status and raise error
-        if mb.status in [MembershipStatus.REWOKED]:
+        if user_membership.status in [MembershipStatus.REWOKED]:
             raise RewokedMembershipError()
 
         # Handle incomplete membership applications (empty, joined, uploaded)
-        if mb.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
+        if user_membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             membership_url = reverse("membership")
-            mes = _("please upload your membership application to proceed") + "."
-            text_url = f", <a href='{membership_url}'>{mes}</a>"
-            run.status["text"] = register_text + text_url
+            completion_message = _("please upload your membership application to proceed") + "."
+            text_url = f", <a href='{membership_url}'>{completion_message}</a>"
+            run.status["text"] = registration_text + text_url
             return
 
         # Handle pending membership approval (submitted but not approved)
-        if mb.status in [MembershipStatus.SUBMITTED]:
-            run.status["text"] = register_text + ", " + _("awaiting member approval to proceed with payment")
+        if user_membership.status in [MembershipStatus.SUBMITTED]:
+            run.status["text"] = registration_text + ", " + _("awaiting member approval to proceed with payment")
             return
 
     # Handle payment feature processing and related status updates
     if "payment" in features:
         # Process payment status and return if payment handling is complete
-        if _status_payment(register_text, run, context):
+        if _status_payment(registration_text, run, context):
             return
 
     # Check for incomplete user profile and prompt completion
-    if not mb.compiled:
+    if not user_membership.compiled:
         profile_url = reverse("profile")
-        mes = _("please fill in your profile") + "."
-        text_url = f", <a href='{profile_url}'>{mes}</a>"
-        run.status["text"] = register_text + text_url
+        completion_message = _("please fill in your profile") + "."
+        text_url = f", <a href='{profile_url}'>{completion_message}</a>"
+        run.status["text"] = registration_text + text_url
         return
 
     # Handle provisional registration status (no further action needed)
-    if provisional:
-        run.status["text"] = register_text
+    if is_provisional:
+        run.status["text"] = registration_text
         return
 
     # Set final confirmed registration status for completed registrations
-    run.status["text"] = register_text
+    run.status["text"] = registration_text
 
     # Add patron appreciation message for patron tier tickets
     if reg.ticket and reg.ticket.tier == TicketTier.PATRON:
@@ -626,39 +626,39 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
 
     # Get character relationships either from provided dict or database query
     if character_rels_dict is not None:
-        rcrs = character_rels_dict.get(run.reg.id, [])
+        registration_character_rels = character_rels_dict.get(run.reg.id, [])
     else:
-        que = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
-        rcrs = que.order_by("character__number").select_related("character")
+        query = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
+        registration_character_rels = query.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
-    approval = get_event_config(run.event_id, "user_character_approval", False, context=context)
+    approval_required = get_event_config(run.event_id, "user_character_approval", False, context=context)
 
     # Build list of character links with names and approval status
-    aux = []
-    for el in rcrs:
-        url = reverse("character", args=[run.get_slug(), el.character.number])
-        name = el.character.name
+    character_links = []
+    for character_rel in registration_character_rels:
+        character_url = reverse("character", args=[run.get_slug(), character_rel.character.number])
+        character_name = character_rel.character.name
 
         # Use custom name if provided
-        if el.custom_name:
-            name = el.custom_name
+        if character_rel.custom_name:
+            character_name = character_rel.custom_name
 
         # Add approval status if character approval is enabled and not approved
-        if approval and el.character.status != CharacterStatus.APPROVED:
-            name += f" ({_(el.character.get_status_display())})"
+        if approval_required and character_rel.character.status != CharacterStatus.APPROVED:
+            character_name += f" ({_(character_rel.character.get_status_display())})"
 
         # Create clickable link for character
-        url = f"<a href='{url}'>{name}</a>"
-        aux.append(url)
+        character_url = f"<a href='{character_url}'>{character_name}</a>"
+        character_links.append(character_url)
 
     # Add character information to status details based on number of characters
-    if len(aux) == 1:
-        run.status["details"] += _("Your character is") + " " + aux[0]
-    elif len(aux) > 1:
-        run.status["details"] += _("Your characters are") + ": " + ", ".join(aux)
+    if len(character_links) == 1:
+        run.status["details"] += _("Your character is") + " " + character_links[0]
+    elif len(character_links) > 1:
+        run.status["details"] += _("Your characters are") + ": " + ", ".join(character_links)
 
-    _status_approval(aux, features, run)
+    _status_approval(character_links, features, run)
 
 
 def _status_approval(is_character_assigned: bool, features: dict, run: Any) -> None:
@@ -723,43 +723,45 @@ def get_registration_options(instance) -> list[tuple[str, str]]:
         Questions are filtered based on event features and individual skip conditions.
         Choice questions are formatted as comma-separated option names.
     """
-    res = []
-    rqs = []
-    cache = []
+    formatted_results = []
+    applicable_questions = []
+    question_ids_cache = []
 
     # Get event features and filter applicable questions
-    features = get_event_features(instance.run.event_id)
-    for q in RegistrationQuestion.get_instance_questions(instance.run.event, features):
-        if q.skip(instance, features):
+    event_features = get_event_features(instance.run.event_id)
+    for question in RegistrationQuestion.get_instance_questions(instance.run.event, event_features):
+        if question.skip(instance, event_features):
             continue
-        rqs.append(q)
-        cache.append(q.id)
+        applicable_questions.append(question)
+        question_ids_cache.append(question.id)
 
     # Fetch text answers for all relevant questions
-    answers = {}
-    for el in RegistrationAnswer.objects.filter(question_id__in=cache, reg=instance):
-        answers[el.question_id] = el.text
+    text_answers_by_question = {}
+    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids_cache, reg=instance):
+        text_answers_by_question[answer.question_id] = answer.text
 
     # Fetch choice answers and group by question
-    choices = {}
-    for c in RegistrationChoice.objects.filter(question_id__in=cache, reg=instance).select_related("option"):
-        if c.question_id not in choices:
-            choices[c.question_id] = []
-        choices[c.question_id].append(c.option)
+    choice_options_by_question = {}
+    for choice in RegistrationChoice.objects.filter(question_id__in=question_ids_cache, reg=instance).select_related(
+        "option"
+    ):
+        if choice.question_id not in choice_options_by_question:
+            choice_options_by_question[choice.question_id] = []
+        choice_options_by_question[choice.question_id].append(choice.option)
 
     # Build result list with question names and formatted answers
-    if len(rqs) > 0:
-        for q in rqs:
+    if len(applicable_questions) > 0:
+        for question in applicable_questions:
             # Handle multiple choice questions
-            if q.id in choices:
-                txt = ",".join([opt.name for opt in choices[q.id]])
-                res.append((q.name, txt))
+            if question.id in choice_options_by_question:
+                formatted_choices = ",".join([option.name for option in choice_options_by_question[question.id]])
+                formatted_results.append((question.name, formatted_choices))
 
             # Handle text answer questions
-            if q.id in answers:
-                res.append((q.name, answers[q.id]))
+            if question.id in text_answers_by_question:
+                formatted_results.append((question.name, text_answers_by_question[question.id]))
 
-    return res
+    return formatted_results
 
 
 def get_player_characters(member, event):
@@ -884,12 +886,12 @@ def process_registration_event_change(registration: Registration) -> None:
 
     try:
         # Fetch the previous state to compare event changes
-        prev = Registration.objects.get(pk=registration.pk)
+        previous_registration = Registration.objects.get(pk=registration.pk)
     except ObjectDoesNotExist:
         return
 
     # Skip processing if the event hasn't actually changed
-    if prev.run.event_id == registration.run.event_id:
+    if previous_registration.run.event_id == registration.run.event_id:
         return
 
     # Attempt to find a matching ticket in the new event by name
@@ -902,34 +904,38 @@ def process_registration_event_change(registration: Registration) -> None:
 
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event
-    for choice in RegistrationChoice.objects.filter(reg=registration):
-        question_name = choice.question.name
-        option_name = choice.option.name
+    for registration_choice in RegistrationChoice.objects.filter(reg=registration):
+        question_name = registration_choice.question.name
+        option_name = registration_choice.option.name
 
         try:
             # Find matching question and option in the new event
-            choice.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
-            choice.option = registration.run.event.get_elements(RegistrationOption).get(
-                question=choice.question, name__iexact=option_name
+            registration_choice.question = registration.run.event.get_elements(RegistrationQuestion).get(
+                name__iexact=question_name
             )
-            choice.save()
+            registration_choice.option = registration.run.event.get_elements(RegistrationOption).get(
+                question=registration_choice.question, name__iexact=option_name
+            )
+            registration_choice.save()
         except ObjectDoesNotExist:
             # Clear the choice if no matching question/option found
-            choice.question = None
-            choice.option = None
+            registration_choice.question = None
+            registration_choice.option = None
 
     # Process all registration answers (free-form question responses)
     # Attempt to preserve answers by finding matching questions
-    for answer in RegistrationAnswer.objects.filter(reg=registration):
-        question_name = answer.question.name
+    for registration_answer in RegistrationAnswer.objects.filter(reg=registration):
+        question_name = registration_answer.question.name
 
         try:
             # Find matching question in the new event to preserve the answer
-            answer.question = registration.run.event.get_elements(RegistrationQuestion).get(name__iexact=question_name)
-            answer.save()
+            registration_answer.question = registration.run.event.get_elements(RegistrationQuestion).get(
+                name__iexact=question_name
+            )
+            registration_answer.save()
         except ObjectDoesNotExist:
             # Clear the answer if no matching question found
-            answer.question = None
+            registration_answer.question = None
 
 
 def check_character_ticket_options(registration: Registration, character: Character) -> None:
@@ -987,9 +993,9 @@ def process_character_ticket_options(instance: Registration) -> None:
     event = instance.run.event
 
     # Process ticket options for characters directly linked to this registration
-    for char in instance.characters.all():
-        check_character_ticket_options(instance, char)
+    for character in instance.characters.all():
+        check_character_ticket_options(instance, character)
 
     # Process ticket options for all characters owned by the member in this event
-    for char in event.get_elements(Character).filter(player=instance.member):
-        check_character_ticket_options(instance, char)
+    for character in event.get_elements(Character).filter(player=instance.member):
+        check_character_ticket_options(instance, character)

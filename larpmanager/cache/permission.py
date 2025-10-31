@@ -122,11 +122,11 @@ def event_permission_feature_key(permission_slug):
     return f"event_permission_feature_{permission_slug}"
 
 
-def update_event_permission_feature(slug: str) -> tuple[str, str, str]:
+def update_event_permission_feature(permission_slug: str) -> tuple[str, str, str]:
     """Update event permission feature cache with slug, tutorial, and config data.
 
     Args:
-        slug: The permission slug to look up
+        permission_slug: The permission slug to look up
 
     Returns:
         A tuple containing (feature_slug, tutorial, config):
@@ -136,28 +136,32 @@ def update_event_permission_feature(slug: str) -> tuple[str, str, str]:
     """
     try:
         # Fetch permission with related feature to avoid additional queries
-        perm = EventPermission.objects.select_related("feature").get(slug=slug)
+        event_permission = EventPermission.objects.select_related("feature").get(slug=permission_slug)
     except ObjectDoesNotExist:
-        logger.warning(f"Permission slug does not exist: {slug}")
+        logger.warning(f"Permission slug does not exist: {permission_slug}")
         return "", "", ""
 
     # Extract feature from permission
-    feature = perm.feature
+    permission_feature = event_permission.feature
 
     # Determine the appropriate slug based on feature type
-    if feature.placeholder:
-        slug = "def"
+    if permission_feature.placeholder:
+        feature_slug = "def"
     else:
-        slug = feature.slug
+        feature_slug = permission_feature.slug
 
     # Extract tutorial and config with fallback to empty strings
-    tutorial = feature.tutorial or ""
-    config = perm.config or ""
+    feature_tutorial = permission_feature.tutorial or ""
+    permission_config = event_permission.config or ""
 
     # Cache the result for 1 day to improve performance
-    cache.set(event_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(
+        event_permission_feature_key(permission_slug),
+        (feature_slug, feature_tutorial, permission_config),
+        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
+    )
 
-    return slug, tutorial, config
+    return feature_slug, feature_tutorial, permission_config
 
 
 def get_event_permission_feature(slug: str | None) -> tuple[str, None, None]:
@@ -191,32 +195,32 @@ def index_permission_key(permission_type):
     return f"index_permission_key_{permission_type}"
 
 
-def update_index_permission(typ: str) -> list[dict]:
+def update_index_permission(permission_type: str) -> list[dict]:
     """Update and cache permission index for given type.
 
     Retrieves permissions from database, orders them by module and number,
     then caches the result for efficient access.
 
     Args:
-        typ: Permission type, either 'event' or 'association'
+        permission_type: Permission type, either 'event' or 'association'
 
     Returns:
         List of permission dictionaries with feature and module information
 
     Raises:
-        KeyError: If typ is not 'event' or 'association'
+        KeyError: If permission_type is not 'event' or 'association'
     """
     # Map permission type to corresponding model class
-    mapping = {"event": EventPermission, "association": AssociationPermission}
+    type_to_model_mapping = {"event": EventPermission, "association": AssociationPermission}
 
     # Get queryset with related feature and module data
-    que = mapping[typ].objects.select_related("feature", "module")
+    permission_queryset = type_to_model_mapping[permission_type].objects.select_related("feature", "module")
 
     # Order by module priority and permission number
-    que = que.order_by("module__order", "number")
+    permission_queryset = permission_queryset.order_by("module__order", "number")
 
     # Extract required fields for caching
-    res = que.values(
+    permission_data = permission_queryset.values(
         "name",
         "descr",
         "slug",
@@ -228,9 +232,9 @@ def update_index_permission(typ: str) -> list[dict]:
     )
 
     # Cache result with 1-day timeout
-    cache.set(index_permission_key(typ), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    cache.set(index_permission_key(permission_type), permission_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return permission_data
 
 
 def get_cache_index_permission(permission_type: str) -> list:

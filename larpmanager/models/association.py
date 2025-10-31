@@ -263,13 +263,13 @@ class Association(BaseModel):
 
     def promoter_dict(self) -> dict[str, str]:
         """Return a dictionary with promoter information including slug, name, and optional thumbnail URL."""
-        res = {"slug": self.slug, "name": self.name}
+        promoter_data = {"slug": self.slug, "name": self.name}
 
         # Add thumbnail URL if available
         if self.promoter_thumb:
             # noinspection PyUnresolvedReferences
-            res["promoter_url"] = self.promoter_thumb.url
-        return res
+            promoter_data["promoter_url"] = self.promoter_thumb.url
+        return promoter_data
 
 
 class AssociationConfig(BaseModel):

@@ -134,42 +134,42 @@ def has_access_character(request, context):
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 
-    member_id = context["member"].id
+    current_member_id = context["member"].id
 
-    if "owner_id" in context["char"] and context["char"]["owner_id"] == member_id:
+    if "owner_id" in context["char"] and context["char"]["owner_id"] == current_member_id:
         return True
 
-    if "player_id" in context["char"] and context["char"]["player_id"] == member_id:
+    if "player_id" in context["char"] and context["char"]["player_id"] == current_member_id:
         return True
 
     return False
 
 
-def update_run_plan_on_event_change(instance):
+def update_run_plan_on_event_change(run_instance):
     """Set run plan from association default if not already set.
 
     Args:
-        instance: Run instance that was saved
+        run_instance: Run instance that was saved
     """
-    if not instance.plan and instance.event:
-        updates = {"plan": instance.event.association.plan}
-        Run.objects.filter(pk=instance.pk).update(**updates)
+    if not run_instance.plan and run_instance.event:
+        plan_updates = {"plan": run_instance.event.association.plan}
+        Run.objects.filter(pk=run_instance.pk).update(**plan_updates)
 
 
-def prepare_campaign_event_data(instance):
+def prepare_campaign_event_data(event_instance):
     """Prepare campaign event data before saving.
 
     Args:
-        instance: Event instance being saved
+        event_instance: Event instance being saved
     """
-    if instance.pk:
+    if event_instance.pk:
         try:
-            old_instance = Event.objects.get(pk=instance.pk)
-            instance._old_parent_id = old_instance.parent_id
+            previous_event_instance = Event.objects.get(pk=event_instance.pk)
+            event_instance._old_parent_id = previous_event_instance.parent_id
         except ObjectDoesNotExist:
-            instance._old_parent_id = None
+            event_instance._old_parent_id = None
     else:
-        instance._old_parent_id = None
+        event_instance._old_parent_id = None
 
 
 def copy_parent_event_to_campaign(event):

@@ -151,22 +151,22 @@ def update_event_features(ev_id):
         dict: Feature dictionary with enabled features marked as 1
     """
     try:
-        ev = Event.objects.get(pk=ev_id)
-        res = get_association_features(ev.association_id)
-        for slug in ev.features.values_list("slug", flat=True):
-            res[slug] = 1
-        ex_features = {
+        event = Event.objects.get(pk=ev_id)
+        features_dict = get_association_features(event.association_id)
+        for feature_slug in event.features.values_list("slug", flat=True):
+            features_dict[feature_slug] = 1
+        extra_features_mapping = {
             "writing": ["paste_text", "title", "cover", "hide", "assigned"],
             "registration": ["reg_que_age", "reg_que_faction", "reg_que_tickets", "unique_code", "reg_que_allowed"],
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_requirements"],
             "casting": ["mirror"],
             "user_character": ["player_relationships"],
         }
-        for config_type, config_names in ex_features.items():
-            for slug in config_names:
-                if ev.get_config(f"{config_type}_{slug}", False):
-                    res[slug] = 1
-        return res
+        for config_type, config_feature_slugs in extra_features_mapping.items():
+            for feature_slug in config_feature_slugs:
+                if event.get_config(f"{config_type}_{feature_slug}", False):
+                    features_dict[feature_slug] = 1
+        return features_dict
     except ObjectDoesNotExist:
         return {}
 
