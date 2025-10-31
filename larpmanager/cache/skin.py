@@ -76,7 +76,7 @@ def init_cache_skin(domain: str) -> dict | None:
     """
     try:
         # Lookup skin configuration by domain
-        skin = AssociationSkin.objects.get(domain=domain)
+        association_skin = AssociationSkin.objects.get(domain=domain)
     except ObjectDoesNotExist:
         # Return None if no skin configuration exists for this domain
         return None
@@ -85,7 +85,7 @@ def init_cache_skin(domain: str) -> dict | None:
     # with default LarpManager branding and skin-specific data
     return {
         "id": 0,
-        "name": skin.name,
+        "name": association_skin.name,
         "shuttle": [],
         "features": [],
         # Default CSS configuration
@@ -97,5 +97,5 @@ def init_cache_skin(domain: str) -> dict | None:
         "favicon": "https://larpmanager.com/static/lm_fav.png",
         # Domain and skin identification
         "base_domain": domain,
-        "skin_id": skin.id,
+        "skin_id": association_skin.id,
     }

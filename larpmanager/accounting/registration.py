@@ -60,7 +60,7 @@ from larpmanager.utils.tasks import background_auto
 logger = logging.getLogger(__name__)
 
 
-def get_reg_iscr(instance) -> int:
+def get_reg_iscr(registration) -> int:
     """Calculate total registration signup fee including discounts.
 
     Computes the total registration fee by summing base ticket price, additional
@@ -68,7 +68,7 @@ def get_reg_iscr(instance) -> int:
     then applying any applicable discounts (except for gifted registrations).
 
     Args:
-        instance: Registration instance to calculate fee for. Must have attributes:
+        registration: Registration instance to calculate fee for. Must have attributes:
             ticket, additionals, pay_what, member_id, run_id, redeem_code, surcharge
 
     Returns:
@@ -78,36 +78,38 @@ def get_reg_iscr(instance) -> int:
         Discounts are not applied to registrations with redeem codes (gifted registrations).
     """
     # Initialize total registration fee
-    tot_iscr = 0
+    total_registration_fee = 0
 
     # Add base ticket price and additional tickets
-    if instance.ticket:
-        tot_iscr += instance.ticket.price
+    if registration.ticket:
+        total_registration_fee += registration.ticket.price
 
-        if instance.additionals:
-            tot_iscr += instance.ticket.price * instance.additionals
+        if registration.additionals:
+            total_registration_fee += registration.ticket.price * registration.additionals
 
     # Add pay-what-you-want amount
-    if instance.pay_what:
-        tot_iscr += instance.pay_what
+    if registration.pay_what:
+        total_registration_fee += registration.pay_what
 
     # Add registration choice options (extras, meals, etc.)
-    for c in RegistrationChoice.objects.filter(reg=instance).select_related("option"):
-        tot_iscr += c.option.price
+    for choice in RegistrationChoice.objects.filter(reg=registration).select_related("option"):
+        total_registration_fee += choice.option.price
 
     # Apply discounts only for non-gifted registrations
-    if not instance.redeem_code:
-        que = AccountingItemDiscount.objects.filter(member_id=instance.member_id, run_id=instance.run_id)
-        for el in que.select_related("disc"):
-            tot_iscr -= el.disc.value
+    if not registration.redeem_code:
+        discount_items = AccountingItemDiscount.objects.filter(
+            member_id=registration.member_id, run_id=registration.run_id
+        )
+        for discount_item in discount_items.select_related("disc"):
+            total_registration_fee -= discount_item.disc.value
 
     # Add any surcharges
-    tot_iscr += instance.surcharge
+    total_registration_fee += registration.surcharge
 
     # Ensure fee is never negative
-    tot_iscr = max(0, tot_iscr)
+    total_registration_fee = max(0, total_registration_fee)
 
-    return tot_iscr
+    return total_registration_fee
 
 
 def get_reg_payments(registration, accounting_payments=None):
@@ -140,23 +142,23 @@ def get_reg_payments(registration, accounting_payments=None):
     return total_paid
 
 
-def get_reg_transactions(reg):
+def get_reg_transactions(registration):
     """Calculate total transaction fees for a registration.
 
     Args:
-        reg: Registration instance to calculate fees for
+        registration: Registration instance to calculate fees for
 
     Returns:
         int: Total transaction fees that are user burden
     """
-    tot_trans = 0
+    total_transaction_fees = 0
 
-    acc_transactions = AccountingItemTransaction.objects.filter(reg=reg, user_burden=True)
+    accounting_transactions = AccountingItemTransaction.objects.filter(reg=registration, user_burden=True)
 
-    for ait in acc_transactions:
-        tot_trans += ait.value
+    for accounting_item_transaction in accounting_transactions:
+        total_transaction_fees += accounting_item_transaction.value
 
-    return tot_trans
+    return total_transaction_fees
 
 
 def get_accounting_refund(registration):
@@ -205,32 +207,32 @@ def quota_check(reg, start, alert, association_id):
     reg.days_event = get_time_diff_today(start)
     reg.tot_days = get_time_diff(start, reg.created.date())
 
-    qs = Decimal(1.0 / reg.quotas)
-    cnt = 0
-    qsr = 0
+    quota_share = Decimal(1.0 / reg.quotas)
+    quota_count = 0
+    quota_share_ratio = 0
     first_deadline = True
     for _i in range(0, reg.quotas):
-        qsr += qs
-        cnt += 1
+        quota_share_ratio += quota_share
+        quota_count += 1
 
         # if first, deadline is immediately
-        if cnt == 1:
+        if quota_count == 1:
             deadline = get_payment_deadline(reg, 8, association_id)
         # else, deadline is computed in days to the event
         else:
-            left = reg.tot_days * 1.0 * (reg.quotas - (cnt - 1)) / reg.quotas
-            deadline = math.floor(reg.days_event - left)
+            days_left = reg.tot_days * 1.0 * (reg.quotas - (quota_count - 1)) / reg.quotas
+            deadline = math.floor(reg.days_event - days_left)
 
         if deadline >= alert:
             continue
 
-        reg.qsr = qsr
+        reg.qsr = quota_share_ratio
 
         # if last quota
-        if cnt == reg.quotas:
+        if quota_count == reg.quotas:
             reg.quota = reg.tot_iscr - reg.tot_payed
         else:
-            reg.quota = reg.tot_iscr * qsr - reg.tot_payed
+            reg.quota = reg.tot_iscr * quota_share_ratio - reg.tot_payed
             reg.quota = math.floor(reg.quota)
 
         if reg.quota <= 0:
@@ -270,39 +272,39 @@ def installment_check(reg: "Registration", alert: int, association_id: int) -> N
     if not reg.ticket:
         return
 
-    tot = 0
+    cumulative_amount = 0
 
     # Get all installments for this event, ordered by sequence
-    que = RegistrationInstallment.objects.filter(event_id=reg.run.event_id)
-    que = que.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
+    installments_query = RegistrationInstallment.objects.filter(event_id=reg.run.event_id)
+    installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
 
-    first_deadline = True
+    is_first_deadline = True
 
     # Process each installment in order
-    for i in que:
+    for installment in installments_query:
         # Filter installments that apply to this ticket type
-        tickets_id = [ticket_id for ticket_id in i.tickets_map if ticket_id is not None]
-        if tickets_id and reg.ticket_id not in tickets_id:
+        applicable_ticket_ids = [ticket_id for ticket_id in installment.tickets_map if ticket_id is not None]
+        if applicable_ticket_ids and reg.ticket_id not in applicable_ticket_ids:
             continue
 
         # Calculate deadline for this installment
-        deadline = _get_deadline_installment(association_id, i, reg)
+        deadline_days = _get_deadline_installment(association_id, installment, reg)
 
         # Skip installments that are still within alert threshold
-        if deadline and deadline >= alert:
+        if deadline_days and deadline_days >= alert:
             continue
 
         # Calculate cumulative amount due up to this installment
-        if i.amount:
-            tot += i.amount
+        if installment.amount:
+            cumulative_amount += installment.amount
         else:
-            tot = reg.tot_iscr
+            cumulative_amount = reg.tot_iscr
 
         # Ensure total doesn't exceed registration total
-        tot = min(tot, reg.tot_iscr)
+        cumulative_amount = min(cumulative_amount, reg.tot_iscr)
 
         # Calculate outstanding amount for this installment
-        reg.quota = max(tot - reg.tot_payed, 0)
+        reg.quota = max(cumulative_amount - reg.tot_payed, 0)
 
         logger.debug(f"Registration {reg.id} installment quota calculated: {reg.quota}")
 
@@ -311,18 +313,18 @@ def installment_check(reg: "Registration", alert: int, association_id: int) -> N
             continue
 
         # Set deadline for the first applicable installment
-        if first_deadline and deadline:
-            first_deadline = False
-            reg.deadline = deadline
+        if is_first_deadline and deadline_days:
+            is_first_deadline = False
+            reg.deadline = deadline_days
 
         # Skip to next installment if deadline has passed
-        if not deadline or deadline < 0:
+        if not deadline_days or deadline_days < 0:
             continue
 
         return
 
     # Fallback: if no installments found, use registration date and full amount
-    if not tot:
+    if not cumulative_amount:
         reg.deadline = get_time_diff_today(reg.created.date())
         reg.quota = reg.tot_iscr - reg.tot_payed
 
@@ -366,25 +368,25 @@ def get_payment_deadline(registration, days_to_add, association_id):
     return days_since_registration + days_to_add
 
 
-def registration_payments_status(reg):
+def registration_payments_status(registration):
     """Determine registration payment status and balance.
 
     Args:
-        reg: Registration instance to check status for
+        registration: Registration instance to check status for
 
     Returns:
         tuple: (is_paid, balance) where is_paid is boolean and balance is amount owed
     """
-    reg.payment_status = ""
-    if reg.tot_iscr > 0:
-        if reg.tot_payed == reg.tot_iscr:
-            reg.payment_status = "c"
-        elif reg.tot_payed == 0:
-            reg.payment_status = "n"
-        elif reg.tot_payed < reg.tot_iscr:
-            reg.payment_status = "p"
+    registration.payment_status = ""
+    if registration.tot_iscr > 0:
+        if registration.tot_payed == registration.tot_iscr:
+            registration.payment_status = "c"
+        elif registration.tot_payed == 0:
+            registration.payment_status = "n"
+        elif registration.tot_payed < registration.tot_iscr:
+            registration.payment_status = "p"
         else:
-            reg.payment_status = "t"
+            registration.payment_status = "t"
 
 
 def cancel_run(instance):
@@ -547,32 +549,32 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
     # Transfer payments from cancelled registrations to this active one
     if not registration.cancellation_date:
         # Find all cancelled registrations for same run and member
-        cancelled = Registration.objects.filter(
+        cancelled_registrations = Registration.objects.filter(
             run_id=registration.run_id, member_id=registration.member_id, cancellation_date__isnull=False
         )
-        cancelled = list(cancelled.values_list("pk", flat=True))
+        cancelled_registration_ids = list(cancelled_registrations.values_list("pk", flat=True))
 
         # Transfer both payments and transactions from cancelled registrations
-        if cancelled:
-            for typ in [AccountingItemPayment, AccountingItemTransaction]:
-                for el in typ.objects.filter(reg__id__in=cancelled):
-                    el.reg = registration
-                    el.save()
+        if cancelled_registration_ids:
+            for accounting_item_type in [AccountingItemPayment, AccountingItemTransaction]:
+                for accounting_item in accounting_item_type.objects.filter(reg__id__in=cancelled_registration_ids):
+                    accounting_item.reg = registration
+                    accounting_item.save()
 
     # Store provisional status before accounting updates
-    old_provisional = is_reg_provisional(registration)
+    was_provisional_before_update = is_reg_provisional(registration)
 
     # Recalculate all accounting fields for this registration
     update_registration_accounting(registration)
 
     # Bulk update accounting fields without triggering model save signals
-    updates = {}
-    for field in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
-        updates[field] = getattr(registration, field)
-    Registration.objects.filter(pk=registration.pk).update(**updates)
+    updated_fields = {}
+    for field_name in ["tot_payed", "tot_iscr", "quota", "alert", "deadline", "payment_date"]:
+        updated_fields[field_name] = getattr(registration, field_name)
+    Registration.objects.filter(pk=registration.pk).update(**updated_fields)
 
     # Send confirmation email if registration status changed from provisional to confirmed
-    if old_provisional and not is_reg_provisional(registration):
+    if was_provisional_before_update and not is_reg_provisional(registration):
         update_registration_status_bkg(registration.id)
 
 
@@ -698,24 +700,24 @@ def update_registration_accounting(reg: Registration) -> None:
         - reg.payment_date: Date when payment was completed (if applicable)
     """
     # Skip processing for cancelled or completed runs
-    for s in [DevelopStatus.CANC, DevelopStatus.DONE]:
-        if reg.run.development == s:
+    for cancelled_or_done_status in [DevelopStatus.CANC, DevelopStatus.DONE]:
+        if reg.run.development == cancelled_or_done_status:
             return
 
-    max_rounding = 0.05
+    max_rounding_tolerance = 0.05
 
     # Extract basic event information
-    start = reg.run.start
-    features = get_event_features(reg.run.event_id)
+    event_start_date = reg.run.start
+    event_features = get_event_features(reg.run.event_id)
     association_id = reg.run.event.association_id
 
     # Calculate total inscription fee and payments
     reg.tot_iscr = get_reg_iscr(reg)
-    tot_trans = get_reg_transactions(reg)
+    total_transactions = get_reg_transactions(reg)
     reg.tot_payed = get_reg_payments(reg)
 
     # Adjust for transactions and round to nearest cent
-    reg.tot_payed -= tot_trans
+    reg.tot_payed -= total_transactions
     reg.tot_payed = Decimal(round_to_nearest_cent(reg.tot_payed))
 
     # Initialize payment tracking fields
@@ -724,8 +726,8 @@ def update_registration_accounting(reg: Registration) -> None:
     reg.alert = False
 
     # Check if payment is complete (within rounding tolerance)
-    remaining = reg.tot_iscr - reg.tot_payed
-    if -max_rounding < remaining <= max_rounding:
+    remaining_balance = reg.tot_iscr - reg.tot_payed
+    if -max_rounding_tolerance < remaining_balance <= max_rounding_tolerance:
         if not reg.payment_date:
             reg.payment_date = datetime.now()
         return
@@ -735,30 +737,30 @@ def update_registration_accounting(reg: Registration) -> None:
         return
 
     # Handle membership requirements for non-LAOG events
-    if "membership" in features and "laog" not in features:
+    if "membership" in event_features and "laog" not in event_features:
         if not hasattr(reg, "membership"):
             reg.membership = get_user_membership(reg.member, association_id)
         if reg.membership.status != MembershipStatus.ACCEPTED:
             return
 
     # Process tokens and credits
-    handle_tokes_credits(association_id, features, reg, remaining)
+    handle_tokes_credits(association_id, event_features, reg, remaining_balance)
 
     # Get payment alert threshold from event configuration
-    alert = int(get_event_config(reg.run.event_id, "payment_alert", 30, bypass_cache=True))
+    alert_days_threshold = int(get_event_config(reg.run.event_id, "payment_alert", 30, bypass_cache=True))
 
     # Calculate payment schedule based on feature flags
-    if "reg_installments" in features:
-        installment_check(reg, alert, association_id)
+    if "reg_installments" in event_features:
+        installment_check(reg, alert_days_threshold, association_id)
     else:
-        quota_check(reg, start, alert, association_id)
+        quota_check(reg, event_start_date, alert_days_threshold, association_id)
 
     # Skip alert setting if quota is negligible
-    if reg.quota <= max_rounding:
+    if reg.quota <= max_rounding_tolerance:
         return
 
     # Set alert flag based on deadline proximity
-    reg.alert = reg.deadline < alert
+    reg.alert = reg.deadline < alert_days_threshold
 
 
 def update_member_registrations(member):
@@ -770,5 +772,5 @@ def update_member_registrations(member):
     Side effects:
         Saves all registrations to trigger accounting recalculation
     """
-    for reg in Registration.objects.filter(member=member):
-        reg.save()
+    for registration in Registration.objects.filter(member=member):
+        registration.save()

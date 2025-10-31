@@ -54,8 +54,8 @@ class AccountingItemAdmin(DefModelAdmin):
     search_fields = ("search",)
 
     @admin.display(ordering="reg__run", description="Run")
-    def get_run(self, obj):
-        return obj.reg.run
+    def get_run(self, registration):
+        return registration.reg.run
 
 
 @admin.register(AccountingItemTransaction)

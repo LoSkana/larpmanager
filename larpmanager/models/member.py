@@ -353,13 +353,13 @@ class Member(BaseModel):
             The absolute path to the member's PDF directory.
         """
         # Build base PDF members directory path
-        fp = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
+        member_pdf_directory = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
         # noinspection PyUnresolvedReferences
         # Add member-specific subdirectory using ID
-        fp = os.path.join(fp, str(self.id))
+        member_pdf_directory = os.path.join(member_pdf_directory, str(self.id))
         # Ensure directory exists
-        os.makedirs(fp, exist_ok=True)
-        return fp
+        os.makedirs(member_pdf_directory, exist_ok=True)
+        return member_pdf_directory
 
     def get_request_filepath(self):
         return os.path.join(self.get_member_filepath(), "request.pdf")
@@ -377,10 +377,10 @@ class Member(BaseModel):
 
         # Split address components by pipe delimiter
         # noinspection PyUnresolvedReferences
-        aux = self.residence_address.split("|")
+        address_components = self.residence_address.split("|")
 
         # Format: street number, city (province), country_code (country)
-        return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
+        return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 
     def get_config(self, name, default_value=None, bypass_cache=False):
         return get_element_config(self, name, default_value, bypass_cache)

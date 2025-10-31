@@ -76,32 +76,32 @@ def lm_home(request):
     Returns:
         HttpResponse: Rendered home page template with context data
     """
-    context = get_lm_contact(request)
-    context["index"] = True
+    template_context = get_lm_contact(request)
+    template_context["index"] = True
 
-    if context["base_domain"] == "ludomanager.it":
-        return ludomanager(context, request)
+    if template_context["base_domain"] == "ludomanager.it":
+        return ludomanager(template_context, request)
 
-    context.update(get_cache_lm_home())
-    random.shuffle(context["promoters"])
-    random.shuffle(context["reviews"])
+    template_context.update(get_cache_lm_home())
+    random.shuffle(template_context["promoters"])
+    random.shuffle(template_context["reviews"])
 
-    return render(request, "larpmanager/larpmanager/home.html", context)
+    return render(request, "larpmanager/larpmanager/home.html", template_context)
 
 
-def ludomanager(context, request):
+def ludomanager(template_context, http_request):
     """Render the LudoManager skin version of the home page.
 
     Args:
-        context: Context dictionary to update
-        request: Django HTTP request object
+        template_context: Context dictionary to update
+        http_request: Django HTTP request object
 
     Returns:
         HttpResponse: Rendered LudoManager template
     """
-    context["association_skin"] = "LudoManager"
-    context["platform"] = "LudoManager"
-    return render(request, "larpmanager/larpmanager/skin/ludomanager.html", context)
+    template_context["association_skin"] = "LudoManager"
+    template_context["platform"] = "LudoManager"
+    return render(http_request, "larpmanager/larpmanager/skin/ludomanager.html", template_context)
 
 
 @csrf_exempt
@@ -250,7 +250,7 @@ def choose_run(request, redirect_path, event_ids):
 
 
 @login_required
-def redr(request, p):
+def redr(request, path):
     """Handle redirects based on user roles and permissions.
 
     Redirects users to appropriate associations or events based on their
@@ -258,25 +258,27 @@ def redr(request, p):
 
     Args:
         request: Django HTTP request object (must be authenticated)
-        p: URL path to redirect to
+        path: URL path to redirect to
 
     Returns:
         HttpResponse: Redirect to appropriate association or event selection
     """
-    if not p.startswith("event/"):
-        slugs = set()
-        for ar in AssociationRole.objects.filter(members=request.user.member).select_related("association"):
-            slugs.add(ar.association.slug)
+    if not path.startswith("event/"):
+        association_slugs = set()
+        for association_role in AssociationRole.objects.filter(members=request.user.member).select_related(
+            "association"
+        ):
+            association_slugs.add(association_role.association.slug)
         # get all events where they have association role
-        return choose_association(request, p, list(slugs))
+        return choose_association(request, path, list(association_slugs))
 
-    p = p.replace("event/", "")
-    ids = set()
-    for er in EventRole.objects.filter(members=request.user.member):
-        ids.add(er.event_id)
+    path = path.replace("event/", "")
+    event_ids = set()
+    for event_role in EventRole.objects.filter(members=request.user.member):
+        event_ids.add(event_role.event_id)
 
     # get all events where they have event role
-    return choose_run(request, p, list(ids))
+    return choose_run(request, path, list(event_ids))
 
 
 def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str] = None) -> HttpResponseRedirect:

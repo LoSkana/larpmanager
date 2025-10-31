@@ -481,12 +481,12 @@ def print_handout(context: dict, force: bool = True) -> Any:
 def print_volunteer_registry(context: dict) -> str:
     """Generate volunteer registry PDF and return file path."""
     # Build file path for volunteer registry PDF
-    fp = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{context['association'].slug}.pdf")
+    file_path = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{context['association'].slug}.pdf")
 
     # Generate PDF from template
-    xhtml_pdf(context, "pdf/volunteer_registry.html", fp)
+    xhtml_pdf(context, "pdf/volunteer_registry.html", file_path)
 
-    return fp
+    return file_path
 
 
 # ## HANDLE - DELETE FILES WHEN UPDATED
@@ -728,12 +728,12 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
     print_profiles(context)
 
     # Print individual character sheets for all characters in the event
-    for ch in context["run"].event.get_elements(Character).values_list("number", flat=True):
-        print_character_go(context, ch)
+    for character_number in context["run"].event.get_elements(Character).values_list("number", flat=True):
+        print_character_go(context, character_number)
 
     # Print all handouts associated with the event
-    for h in context["run"].event.get_elements(Handout).values_list("number", flat=True):
-        print_handout_go(context, h)
+    for handout_number in context["run"].event.get_elements(Handout).values_list("number", flat=True):
+        print_handout_go(context, handout_number)
 
 
 # ## OLD PRINTING
@@ -866,53 +866,53 @@ def get_odt_content(context: dict, working_dir: str, aux_template) -> dict:
         ValueError: If required XML elements are not found in the ODT files
     """
     # Render the Django template with provided context
-    html = aux_template.render(context)
+    rendered_html = aux_template.render(context)
 
     # Write rendered HTML to temporary file for LibreOffice conversion
-    o_html = os.path.join(working_dir, "auxiliary.html")
-    f = open(o_html, "w")
-    f.write(html)
-    f.close()
+    output_html_path = os.path.join(working_dir, "auxiliary.html")
+    html_file = open(output_html_path, "w")
+    html_file.write(rendered_html)
+    html_file.close()
 
     # Convert HTML to ODT format using LibreOffice headless mode
     os.chdir(working_dir)
     os.system("soffice --headless --convert-to odt auxiliary.html")
 
     # Prepare extraction directory and clean up any existing content
-    aux_dir = os.path.join(working_dir, "aux")
-    if os.path.exists(aux_dir):
-        shutil.rmtree(aux_dir)
-    os.makedirs(aux_dir)
+    auxiliary_extraction_dir = os.path.join(working_dir, "aux")
+    if os.path.exists(auxiliary_extraction_dir):
+        shutil.rmtree(auxiliary_extraction_dir)
+    os.makedirs(auxiliary_extraction_dir)
 
     # Extract ODT file contents (ODT is essentially a ZIP archive)
-    os.chdir(aux_dir)
+    os.chdir(auxiliary_extraction_dir)
     os.system("unzip -q ../aux.odt")
 
     # Parse content.xml to extract text and automatic style elements
-    doc = lxml.etree.parse("content.xml")
-    txt_elements = doc.xpath('//*[local-name()="text"]')
-    auto_elements = doc.xpath('//*[local-name()="automatic-styles"]')
+    content_document = lxml.etree.parse("content.xml")
+    text_elements = content_document.xpath('//*[local-name()="text"]')
+    automatic_style_elements = content_document.xpath('//*[local-name()="automatic-styles"]')
 
     # Validate that required elements exist in content.xml
-    if not txt_elements or not auto_elements:
+    if not text_elements or not automatic_style_elements:
         raise ValueError("Required XML elements not found in content.xml")
-    txt = txt_elements[0]
-    auto = auto_elements[0]
+    text_root = text_elements[0]
+    automatic_styles_root = automatic_style_elements[0]
 
     # Parse styles.xml to extract document style definitions
-    doc = lxml.etree.parse("styles.xml")
-    styles_elements = doc.xpath('//*[local-name()="styles"]')
+    styles_document = lxml.etree.parse("styles.xml")
+    style_elements = styles_document.xpath('//*[local-name()="styles"]')
 
     # Validate that required elements exist in styles.xml
-    if not styles_elements:
+    if not style_elements:
         raise ValueError("Required XML elements not found in styles.xml")
-    styles = styles_elements[0]
+    styles_root = style_elements[0]
 
     # Return extracted content as dictionary with child elements
     return {
-        "txt": txt.getchildren(),
-        "auto": auto.getchildren(),
-        "styles": styles.getchildren(),
+        "txt": text_root.getchildren(),
+        "auto": automatic_styles_root.getchildren(),
+        "styles": styles_root.getchildren(),
     }
 
 
@@ -970,66 +970,66 @@ def update_content(context: Any, working_dir: str, zip_dir: str, char: Any, aux_
         ValueError: If required XML elements are not found in document
     """
     # Update content.xml with character data
-    content = os.path.join(zip_dir, "content.xml")
-    replace_data(content, char)
+    content_xml_path = os.path.join(zip_dir, "content.xml")
+    replace_data(content_xml_path, char)
 
     # Parse content document and get template elements
-    doc = lxml.etree.parse(content)
-    elements = get_odt_content(context, working_dir, aux_template)
+    content_document = lxml.etree.parse(content_xml_path)
+    template_elements = get_odt_content(context, working_dir, aux_template)
 
     # Find and clear automatic styles section
-    styles_elements = doc.xpath('//*[local-name()="automatic-styles"]')
-    if not styles_elements:
+    automatic_styles_elements = content_document.xpath('//*[local-name()="automatic-styles"]')
+    if not automatic_styles_elements:
         raise ValueError("automatic-styles element not found in content.xml")
 
-    styles = styles_elements[0]
+    automatic_styles = automatic_styles_elements[0]
     # Remove existing child elements from styles
-    for ch in styles.getchildren():
-        styles.remove(ch)
+    for child_element in automatic_styles.getchildren():
+        automatic_styles.remove(child_element)
 
     # Add new automatic styles, removing master-page-name attributes
-    for ch in elements["auto"]:
-        master_page = None
-        for k in ch.attrib.keys():
-            if clean_tag(k) == "master-page-name":
-                master_page = k
+    for child_element in template_elements["auto"]:
+        master_page_attribute = None
+        for attribute_key in child_element.attrib.keys():
+            if clean_tag(attribute_key) == "master-page-name":
+                master_page_attribute = attribute_key
 
         # Remove master-page attribute if found
-        if master_page is not None:
-            del ch.attrib[master_page]
-        styles.append(ch)
+        if master_page_attribute is not None:
+            del child_element.attrib[master_page_attribute]
+        automatic_styles.append(child_element)
 
     # Find and replace content placeholder with actual content
-    cnt = doc.xpath('//*[text()="@content@"]')
-    if cnt:
-        cnt = cnt[0]
-        prnt = cnt.getparent()
-        prnt.remove(cnt)
+    content_placeholder = content_document.xpath('//*[text()="@content@"]')
+    if content_placeholder:
+        content_placeholder = content_placeholder[0]
+        parent_element = content_placeholder.getparent()
+        parent_element.remove(content_placeholder)
 
         # Append text elements, skipping sequence declarations
-        for e in elements["txt"]:
-            if clean_tag(e.tag) == "sequence-decls":
+        for element in template_elements["txt"]:
+            if clean_tag(element.tag) == "sequence-decls":
                 continue
-            prnt.append(e)
+            parent_element.append(element)
 
     # Write updated content back to file
-    doc.write(content, pretty_print=True)
+    content_document.write(content_xml_path, pretty_print=True)
 
     # Update styles.xml with character data
-    content = os.path.join(zip_dir, "styles.xml")
-    replace_data(content, char)
+    styles_xml_path = os.path.join(zip_dir, "styles.xml")
+    replace_data(styles_xml_path, char)
 
     # Parse styles document and find styles section
-    doc = lxml.etree.parse(content)
-    styles_elements = doc.xpath('//*[local-name()="styles"]')
+    styles_document = lxml.etree.parse(styles_xml_path)
+    styles_elements = styles_document.xpath('//*[local-name()="styles"]')
     if not styles_elements:
         raise ValueError("styles element not found in styles.xml")
 
-    styles = styles_elements[0]
+    styles_section = styles_elements[0]
 
     # Add style elements from template
     # Note: Commented code shows previous filtering logic for specific styles
-    for ch in elements["styles"]:
+    for child_element in template_elements["styles"]:
         # ~ Skip = false
         # ~ if ch.tag.endswith("default-style"):
         # ~ skip = True
@@ -1038,10 +1038,10 @@ def update_content(context: Any, working_dir: str, zip_dir: str, char: Any, aux_
         # ~ skip = True
         # ~ if skip:
         # ~ continue
-        styles.append(ch)
+        styles_section.append(child_element)
 
     # Write updated styles back to file
-    doc.write(content, pretty_print=True)
+    styles_document.write(styles_xml_path, pretty_print=True)
 
 
 def get_trait_character(run, number):

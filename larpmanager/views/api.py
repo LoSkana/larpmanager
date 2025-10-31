@@ -122,19 +122,19 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
         None: All exceptions are handled internally and returned as error responses
     """
     # Extract API key from GET parameters
-    api_key_value = request.GET.get("api_key")
-    if not api_key_value:
+    api_key_string = request.GET.get("api_key")
+    if not api_key_string:
         return None, JsonResponse({"error": "API key required"}, status=401)
 
     # Attempt to retrieve and validate the API key from database
     try:
-        api_key = PublisherApiKey.objects.get(key=api_key_value, active=True)
+        publisher_api_key = PublisherApiKey.objects.get(key=api_key_string, active=True)
     except ObjectDoesNotExist:
         # Return error response for invalid or inactive API keys
         return None, JsonResponse({"error": "Invalid API key"}, status=401)
 
     # Return valid API key object with no error
-    return api_key, None
+    return publisher_api_key, None
 
 
 @require_GET

@@ -390,13 +390,13 @@ def member_add_accountingitempayment(context: dict, member: Member) -> dict:
     ).select_related("reg")
 
     # Set display type based on payment method
-    for el in context["pays"]:
-        if el.pay == PaymentChoices.TOKEN:
-            el.typ = context.get("token_name", _("Credits"))
-        elif el.pay == PaymentChoices.CREDIT:
-            el.typ = context.get("credit_name", _("Credits"))
+    for payment in context["pays"]:
+        if payment.pay == PaymentChoices.TOKEN:
+            payment.typ = context.get("token_name", _("Credits"))
+        elif payment.pay == PaymentChoices.CREDIT:
+            payment.typ = context.get("credit_name", _("Credits"))
         else:
-            el.typ = el.get_pay_display()
+            payment.typ = payment.get_pay_display()
 
 
 def member_add_accountingitemother(context: dict, member: Member) -> None:
@@ -407,13 +407,13 @@ def member_add_accountingitemother(context: dict, member: Member) -> None:
     ).select_related("run")
 
     # Set localized type labels based on item category
-    for el in context["others"]:
-        if el.oth == OtherChoices.TOKEN:
-            el.typ = context.get("token_name", _("Credits"))
-        elif el.oth == OtherChoices.CREDIT:
-            el.typ = context.get("credit_name", _("Credits"))
+    for accounting_item in context["others"]:
+        if accounting_item.oth == OtherChoices.TOKEN:
+            accounting_item.typ = context.get("token_name", _("Credits"))
+        elif accounting_item.oth == OtherChoices.CREDIT:
+            accounting_item.typ = context.get("credit_name", _("Credits"))
         else:
-            el.typ = el.get_oth_display()
+            accounting_item.typ = accounting_item.get_oth_display()
 
 
 @login_required

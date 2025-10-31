@@ -214,28 +214,30 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
     """
     if request.POST:
         # Define mapping of operation types to their execution functions
-        mapping = {
+        operation_type_to_handler = {
             Operations.ADD_ITEM_TAG: exec_add_item_tag,
             Operations.DEL_ITEM_TAG: exec_del_item_tag,
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
         # Execute the bulk operation and raise ReturnNowError with results
-        raise ReturnNowError(exec_bulk(request, context, mapping))
+        raise ReturnNowError(exec_bulk(request, context, operation_type_to_handler))
 
     # Fetch available containers for the current association
-    containers = (
+    available_containers = (
         WarehouseContainer.objects.filter(association_id=context["association_id"])
         .values("id", "name")
         .order_by("name")
     )
     # Fetch available tags for the current association
-    tags = WarehouseTag.objects.filter(association_id=context["association_id"]).values("id", "name").order_by("name")
+    available_tags = (
+        WarehouseTag.objects.filter(association_id=context["association_id"]).values("id", "name").order_by("name")
+    )
 
     # Populate context with bulk operation choices and their associated objects
     context["bulk"] = [
-        {"idx": Operations.MOVE_ITEM_BOX, "label": _("Move to container"), "objs": containers},
-        {"idx": Operations.ADD_ITEM_TAG, "label": _("Add tag"), "objs": tags},
-        {"idx": Operations.DEL_ITEM_TAG, "label": _("Remove tag"), "objs": tags},
+        {"idx": Operations.MOVE_ITEM_BOX, "label": _("Move to container"), "objs": available_containers},
+        {"idx": Operations.ADD_ITEM_TAG, "label": _("Add tag"), "objs": available_tags},
+        {"idx": Operations.DEL_ITEM_TAG, "label": _("Remove tag"), "objs": available_tags},
     ]
 
 
@@ -509,9 +511,9 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
         raise ReturnNowError(exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
 
     # Get ability types for the event, ordered by name
-    quests = context["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
+    ability_types = context["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
 
     # Setup bulk operations context
     context["bulk"] = [
-        {"idx": Operations.SET_ABILITY_TYPE, "label": _("Set ability type"), "objs": quests},
+        {"idx": Operations.SET_ABILITY_TYPE, "label": _("Set ability type"), "objs": ability_types},
     ]

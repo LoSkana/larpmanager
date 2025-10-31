@@ -56,15 +56,17 @@ def get_cache_run(association: Association, slug: str) -> dict:
     return cached_result
 
 
-def init_cache_run(a, s):
+def init_cache_run(association_id, event_slug):
     try:
         try:
-            s, n = s.split("-")
-            n = int(n)
+            event_slug, run_number = event_slug.split("-")
+            run_number = int(run_number)
         except ValueError:
-            n = 1
+            run_number = 1
 
-        run = Run.objects.select_related("event").get(event__association_id=a, event__slug=s, number=n)
+        run = Run.objects.select_related("event").get(
+            event__association_id=association_id, event__slug=event_slug, number=run_number
+        )
         return run.id
     except ObjectDoesNotExist:
         return None
@@ -145,7 +147,7 @@ def init_cache_config_run(run) -> dict:
             - show_addit: Additional display configuration
     """
     # Get event features to determine what functionality is available
-    ev_features = get_event_features(run.event_id)
+    event_features = get_event_features(run.event_id)
 
     # Initialize base context with buttons and core display settings
     context = {
@@ -164,22 +166,22 @@ def init_cache_config_run(run) -> dict:
     mapping = _get_writing_mapping()
     for config_name in ["character", "faction", "quest", "trait"]:
         # Skip if this writing feature is not enabled for the event
-        if mapping[config_name] not in ev_features:
+        if mapping[config_name] not in event_features:
             continue
 
         # Parse and convert list configuration to dictionary lookup
-        res = {}
-        val = run.get_config("show_" + config_name, "[]")
-        for el in ast.literal_eval(val):
-            res[el] = 1
-        context["show_" + config_name] = res
+        config_display_dict = {}
+        config_value = run.get_config("show_" + config_name, "[]")
+        for element in ast.literal_eval(config_value):
+            config_display_dict[element] = 1
+        context["show_" + config_name] = config_display_dict
 
     # Process additional display configurations
-    res = {}
-    val = run.get_config("show_addit", "[]")
-    for el in ast.literal_eval(val):
-        res[el] = 1
-    context["show_addit"] = res
+    additional_display_dict = {}
+    additional_config_value = run.get_config("show_addit", "[]")
+    for element in ast.literal_eval(additional_config_value):
+        additional_display_dict[element] = 1
+    context["show_addit"] = additional_display_dict
 
     return context
 

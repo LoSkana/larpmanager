@@ -94,27 +94,27 @@ def background_auto(schedule=0, **background_kwargs):
 # MAIL
 
 
-def mail_error(subj, body, e=None):
+def mail_error(subject, email_body, exception=None):
     """Handle email sending errors and notify administrators.
 
     Args:
-        subj (str): Email subject that failed
-        body (str): Email body that failed
-        e (Exception, optional): Exception that caused the failure
+        subject (str): Email subject that failed
+        email_body (str): Email body that failed
+        exception (Exception, optional): Exception that caused the failure
 
     Side effects:
         Prints error details and sends error notification to admins
     """
-    logger.error(f"Mail error: {e}")
-    logger.error(f"Subject: {subj}")
-    logger.error(f"Body: {body}")
-    if e:
-        body = f"{traceback.format_exc()} <br /><br /> {subj} <br /><br /> {body}"
+    logger.error(f"Mail error: {exception}")
+    logger.error(f"Subject: {subject}")
+    logger.error(f"Body: {email_body}")
+    if exception:
+        error_notification_body = f"{traceback.format_exc()} <br /><br /> {subject} <br /><br /> {email_body}"
     else:
-        body = f"{subj} <br /><br /> {body}"
-    subj = "[LarpManager] Mail error"
-    for _name, email in conf_settings.ADMINS:
-        my_send_simple_mail(subj, body, email)
+        error_notification_body = f"{subject} <br /><br /> {email_body}"
+    error_notification_subject = "[LarpManager] Mail error"
+    for _admin_name, admin_email in conf_settings.ADMINS:
+        my_send_simple_mail(error_notification_subject, error_notification_body, admin_email)
 
 
 @background_auto()

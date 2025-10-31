@@ -70,13 +70,13 @@ from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
 
 
-def go_upload(request, context, form):
+def go_upload(request, context, upload_form_data):
     """Route uploaded files to appropriate processing functions.
 
     Args:
         request: Django HTTP request object
         context: Context dictionary with upload type and settings
-        form: Uploaded file form data
+        upload_form_data: Uploaded file form data
 
     Returns:
         list: Result messages from processing function
@@ -84,24 +84,26 @@ def go_upload(request, context, form):
     # FIX
     # if request.POST.get("upload") == "cover":
     #     # check extension
-    #     if zipfile.is_zipfile(form[0]):
-    #         with zipfile.ZipFile(form[0]) as z_obj:
+    #     if zipfile.is_zipfile(upload_form_data[0]):
+    #         with zipfile.ZipFile(upload_form_data[0]) as z_obj:
     #             cover_load(context, z_obj)
     #         z_obj.close()
     #         return ""
 
-    if context["typ"] == "registration_form":
-        return form_load(request, context, form, is_registration=True)
-    elif context["typ"] == "character_form":
-        return form_load(request, context, form, is_registration=False)
-    elif context["typ"] == "registration":
-        return registrations_load(request, context, form)
-    elif context["typ"] == "px_abilitie":
-        return abilities_load(request, context, form)
-    elif context["typ"] == "registration_ticket":
-        return tickets_load(request, context, form)
+    upload_type = context["typ"]
+
+    if upload_type == "registration_form":
+        return form_load(request, context, upload_form_data, is_registration=True)
+    elif upload_type == "character_form":
+        return form_load(request, context, upload_form_data, is_registration=False)
+    elif upload_type == "registration":
+        return registrations_load(request, context, upload_form_data)
+    elif upload_type == "px_abilitie":
+        return abilities_load(request, context, upload_form_data)
+    elif upload_type == "registration_ticket":
+        return tickets_load(request, context, upload_form_data)
     else:
-        return writing_load(request, context, form)
+        return writing_load(request, context, upload_form_data)
 
 
 def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
@@ -208,26 +210,26 @@ def _get_file(context: dict, file, column_id: str = None) -> tuple[any, list[str
     return input_dataframe, []
 
 
-def registrations_load(request, context, form):
+def registrations_load(request, context, uploaded_file_form):
     """Load registration data from uploaded CSV file.
 
     Args:
         request: Django HTTP request object
         context: Context dictionary with event and form settings
-        form: Form data containing uploaded CSV file
+        uploaded_file_form: Form data containing uploaded CSV file
 
     Returns:
         str: HTML formatted result message with processing statistics
     """
-    (input_df, logs) = _get_file(context, form.cleaned_data["first"], 0)
+    (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
 
-    que = context["event"].get_elements(RegistrationQuestion).prefetch_related("options")
-    questions = _get_questions(que)
+    registration_questions = context["event"].get_elements(RegistrationQuestion).prefetch_related("options")
+    questions_mapping = _get_questions(registration_questions)
 
-    if input_df is not None:
-        for row in input_df.to_dict(orient="records"):
-            logs.append(_reg_load(request, context, row, questions))
-    return logs
+    if input_dataframe is not None:
+        for registration_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_reg_load(request, context, registration_row, questions_mapping))
+    return processing_logs
 
 
 def _reg_load(request, context: dict, csv_row: dict, registration_questions: list) -> str:
@@ -423,36 +425,37 @@ def writing_load(request, context: dict, form) -> list[str]:
     # Process main writing data file
     uploaded_file = form.cleaned_data.get("first", None)
     if uploaded_file:
-        (input_df, logs) = _get_file(context, uploaded_file, 0)
+        (input_dataframe, logs) = _get_file(context, uploaded_file, 0)
 
         # Get questions for the writing type with their options
-        que = (
+        writing_questions = (
             context["event"]
             .get_elements(WritingQuestion)
             .filter(applicable=context["writing_typ"])
             .prefetch_related("options")
         )
-        questions = _get_questions(que)
+        questions_dict = _get_questions(writing_questions)
 
         # Process each row of writing data
-        if input_df is not None:
-            for row in input_df.to_dict(orient="records"):
-                logs.append(element_load(request, context, row, questions))
+        if input_dataframe is not None:
+            for row in input_dataframe.to_dict(orient="records"):
+                logs.append(element_load(request, context, row, questions_dict))
 
     # Process character relationships if type is character
     if context["typ"] == "character":
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
             # Load relationships file and get character mapping
-            (input_df, new_logs) = _get_file(context, uploaded_file, 1)
-            chars = {
-                el["name"].lower(): el["id"] for el in context["event"].get_elements(Character).values("id", "name")
+            (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
+            character_name_to_id = {
+                element["name"].lower(): element["id"]
+                for element in context["event"].get_elements(Character).values("id", "name")
             }
 
             # Process each relationship row
-            if input_df is not None:
-                for row in input_df.to_dict(orient="records"):
-                    new_logs.append(_relationships_load(row, chars))
+            if input_dataframe is not None:
+                for row in input_dataframe.to_dict(orient="records"):
+                    new_logs.append(_relationships_load(row, character_name_to_id))
             logs.extend(new_logs)
 
     # Process plot relationships if type is plot
@@ -460,16 +463,20 @@ def writing_load(request, context: dict, form) -> list[str]:
         uploaded_file = form.cleaned_data.get("second", None)
         if uploaded_file:
             # Load plot relationships file and get character/plot mappings
-            (input_df, new_logs) = _get_file(context, uploaded_file, 1)
-            chars = {
-                el["name"].lower(): el["id"] for el in context["event"].get_elements(Character).values("id", "name")
+            (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
+            character_name_to_id = {
+                element["name"].lower(): element["id"]
+                for element in context["event"].get_elements(Character).values("id", "name")
             }
-            plots = {el["name"].lower(): el["id"] for el in context["event"].get_elements(Plot).values("id", "name")}
+            plot_name_to_id = {
+                element["name"].lower(): element["id"]
+                for element in context["event"].get_elements(Plot).values("id", "name")
+            }
 
             # Process each plot relationship row
-            if input_df is not None:
-                for row in input_df.to_dict(orient="records"):
-                    new_logs.append(_plot_rels_load(row, chars, plots))
+            if input_dataframe is not None:
+                for row in input_dataframe.to_dict(orient="records"):
+                    new_logs.append(_plot_rels_load(row, character_name_to_id, plot_name_to_id))
             logs.extend(new_logs)
 
     return logs
@@ -1142,14 +1149,14 @@ def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:
         List of log messages from the loading process
     """
     # Extract and validate file data from form
-    (input_df, logs) = _get_file(context, form.cleaned_data["first"], 0)
+    (uploaded_dataframe, log_messages) = _get_file(context, form.cleaned_data["first"], 0)
 
     # Process each row if data frame is valid
-    if input_df is not None:
+    if uploaded_dataframe is not None:
         # Convert dataframe to dictionary records and process each ticket
-        for row in input_df.to_dict(orient="records"):
-            logs.append(_ticket_load(request, context, row))
-    return logs
+        for ticket_row in uploaded_dataframe.to_dict(orient="records"):
+            log_messages.append(_ticket_load(request, context, ticket_row))
+    return log_messages
 
 
 def _ticket_load(request, context: dict, csv_row: dict) -> str:

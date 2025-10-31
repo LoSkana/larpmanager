@@ -228,25 +228,27 @@ def cache_event_role_key(assignment_role_id):
     return f"event_role_{assignment_role_id}"
 
 
-def get_event_role(ar) -> tuple[str, list[str]]:
+def get_event_role(assignment_role) -> tuple[str, list[str]]:
     """Get event role name and available permission slugs.
 
     Args:
-        ar: Assignment role object with permissions and event access.
+        assignment_role: Assignment role object with permissions and event access.
 
     Returns:
         Tuple of role name and list of available permission slugs.
     """
-    ls = []
-    features = get_event_features(ar.event_id)
+    available_permission_slugs = []
+    event_features = get_event_features(assignment_role.event_id)
 
     # Filter permissions based on feature availability and placeholder status
-    for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
-        if not el[2] and el[1] not in features:
+    for permission_slug, feature_slug, is_placeholder in assignment_role.permissions.values_list(
+        "slug", "feature__slug", "feature__placeholder"
+    ):
+        if not is_placeholder and feature_slug not in event_features:
             continue
-        ls.append(el[0])
+        available_permission_slugs.append(permission_slug)
 
-    return ar.name, ls
+    return assignment_role.name, available_permission_slugs
 
 
 def get_cache_event_role(ev_id: int) -> dict:

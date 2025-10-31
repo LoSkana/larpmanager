@@ -128,84 +128,84 @@ def get_tooltip(context, character):
     return tooltip
 
 
-def tooltip_fields(ch, tooltip):
+def tooltip_fields(character, tooltip):
     """Add character name, title, and player information to tooltip.
 
     Args:
-        ch (dict): Character data dictionary
+        character (dict): Character data dictionary
         tooltip (str): Current tooltip HTML string
 
     Returns:
         str: Updated tooltip HTML with character fields
     """
-    tooltip += f"<span><b class='name'>{ch['name']}</b>"
+    tooltip += f"<span><b class='name'>{character['name']}</b>"
 
-    if ch["title"]:
-        tooltip += " - <b class='title'>" + ch["title"] + "</b>"
+    if character["title"]:
+        tooltip += " - <b class='title'>" + character["title"] + "</b>"
 
-    if "pronoun" in ch and ch["pronoun"]:
-        tooltip += " (" + ch["pronoun"] + ")"
+    if "pronoun" in character and character["pronoun"]:
+        tooltip += " (" + character["pronoun"] + ")"
 
     tooltip += "</span>"
 
-    if "player_id" in ch and ch["player_id"] > 0:
-        tooltip += "<span>" + _("Player") + ": <b>" + ch["player_full"] + "</b></span>"
+    if "player_id" in character and character["player_id"] > 0:
+        tooltip += "<span>" + _("Player") + ": <b>" + character["player_full"] + "</b></span>"
 
     return tooltip
 
 
-def tooltip_factions(ch, context, tooltip):
+def tooltip_factions(character, context, tooltip):
     """Add faction information to character tooltip.
 
     Args:
-        ch (dict): Character data dictionary
+        character (dict): Character data dictionary
         context: Template context with faction data
         tooltip (str): Current tooltip HTML string
 
     Returns:
         str: Updated tooltip HTML with faction information
     """
-    factions = ""
-    for fnum in context["factions"]:
-        el = context["factions"][fnum]
-        if el["typ"] == FactionType.SECRET:
+    faction_names = ""
+    for faction_number in context["factions"]:
+        faction_element = context["factions"][faction_number]
+        if faction_element["typ"] == FactionType.SECRET:
             continue
-        if fnum in ch["factions"]:
-            if factions:
-                factions += ", "
-            factions += el["name"]
-    if factions:
-        tooltip += "<span>" + _("Factions") + ": " + factions + "</span>"
+        if faction_number in character["factions"]:
+            if faction_names:
+                faction_names += ", "
+            faction_names += faction_element["name"]
+    if faction_names:
+        tooltip += "<span>" + _("Factions") + ": " + faction_names + "</span>"
     return tooltip
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context, el, limit=200):
+def replace_chars(context, text, limit=200):
     """Template tag to replace character number references with names.
 
     Replaces #XX, @XX, and ^XX patterns with character names in text.
 
     Args:
         context: Template context containing character data
-        el (str): Text containing character references
+        text (str): Text containing character references
         limit (int): Maximum length of returned text
 
     Returns:
         str: Text with character references replaced by names
     """
-    el = html_clean(el)
-    for number in range(context["max_ch_number"], 0, -1):
-        if number not in context["chars"]:
+    text = html_clean(text)
+    for character_number in range(context["max_ch_number"], 0, -1):
+        if character_number not in context["chars"]:
             continue
-        lk = context["chars"][number]["name"]
-        el = el.replace(f"#{number}", lk)
-        el = el.replace(f"@{number}", lk)
+        character_name = context["chars"][character_number]["name"]
+        text = text.replace(f"#{character_number}", character_name)
+        text = text.replace(f"@{character_number}", character_name)
 
-        lk = lk.split()
-        if lk:
-            lk = lk[0]
-            el = el.replace(f"^{number}", lk)
-    return el[:limit]
+        first_name_parts = character_name.split()
+        if first_name_parts:
+            first_name = first_name_parts[0]
+            text = text.replace(f"^{character_number}", first_name)
+    return text[:limit]
 
 
 def go_character(
@@ -452,12 +452,12 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context, tx, run, tooltip):
+def show_trait(context, text, run, tooltip):
     """Template tag to process text and convert trait references to character links.
 
     Args:
         context: Template context
-        tx (str): Text containing trait references
+        text (str): Text containing trait references
         run: Run instance for trait lookup
         tooltip (bool): Whether to include character tooltips
 
@@ -471,12 +471,12 @@ def show_trait(context, tx, run, tooltip):
         context["max_trait"] = 0
 
     # replace #XX (create relationships / count as character in faction / plot)
-    for number in range(context["max_trait"], 0, -1):
-        tx = go_trait(context, f"#{number}", number, tx, run, tooltip)
-        tx = go_trait(context, f"@{number}", number, tx, run, tooltip)
-        tx = go_trait(context, f"^{number}", number, tx, run, tooltip, simple=True)
+    for trait_number in range(context["max_trait"], 0, -1):
+        text = go_trait(context, f"#{trait_number}", trait_number, text, run, tooltip)
+        text = go_trait(context, f"@{trait_number}", trait_number, text, run, tooltip)
+        text = go_trait(context, f"^{trait_number}", trait_number, text, run, tooltip, simple=True)
 
-    return mark_safe(tx)
+    return mark_safe(text)
 
 
 @register.simple_tag

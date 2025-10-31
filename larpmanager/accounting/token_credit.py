@@ -64,32 +64,32 @@ def registration_tokens_credits_use(reg, remaining: float, association_id: int) 
 
         # Apply tokens first if available
         if membership.tokens > 0:
-            tk_use = min(remaining, membership.tokens)
-            reg.tot_payed += tk_use
-            membership.tokens -= tk_use
+            tokens_to_use = min(remaining, membership.tokens)
+            reg.tot_payed += tokens_to_use
+            membership.tokens -= tokens_to_use
             membership.save()
 
             # Create payment record for token usage
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.TOKEN,
-                value=tk_use,
+                value=tokens_to_use,
                 member_id=reg.member_id,
                 reg=reg,
                 association_id=association_id,
             )
-            remaining -= tk_use
+            remaining -= tokens_to_use
 
         # Apply credits if still have remaining balance and credits available
         if membership.credit > 0:
-            cr_use = min(remaining, membership.credit)
-            reg.tot_payed += cr_use
-            membership.credit -= cr_use
+            credits_to_use = min(remaining, membership.credit)
+            reg.tot_payed += credits_to_use
+            membership.credit -= credits_to_use
             membership.save()
 
             # Create payment record for credit usage
             AccountingItemPayment.objects.create(
                 pay=PaymentChoices.CREDIT,
-                value=cr_use,
+                value=credits_to_use,
                 member_id=reg.member_id,
                 reg=reg,
                 association_id=association_id,
@@ -121,7 +121,7 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
 
     with transaction.atomic():
         # Build queryset with payment priority annotation and locking
-        qs = (
+        payment_items_queryset = (
             AccountingItemPayment.objects.select_for_update()
             .filter(reg=reg, association_id=association_id, pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT])
             .annotate(
@@ -136,27 +136,27 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
 
         # Initialize tracking variables
         reversed_total = 0
-        remaining = overpay
+        remaining_overpay = overpay
 
         # Process each payment item in priority order
-        for item in qs:
-            if remaining <= 0:
+        for payment_item in payment_items_queryset:
+            if remaining_overpay <= 0:
                 break
 
             # Calculate how much to cut from this payment
-            cut = min(remaining, item.value)
-            new_val = item.value - cut
+            amount_to_cut = min(remaining_overpay, payment_item.value)
+            new_payment_value = payment_item.value - amount_to_cut
 
             # Delete item if value becomes zero or negative, otherwise update
-            if new_val <= 0:
-                item.delete()
+            if new_payment_value <= 0:
+                payment_item.delete()
             else:
-                item.value = new_val
-                item.save(update_fields=["value"])
+                payment_item.value = new_payment_value
+                payment_item.save(update_fields=["value"])
 
             # Update tracking counters
-            reversed_total += cut
-            remaining -= cut
+            reversed_total += amount_to_cut
+            remaining_overpay -= amount_to_cut
 
 
 def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Registration]:
@@ -349,24 +349,24 @@ def update_token_credit(instance, token: bool = True) -> None:
 def handle_tokes_credits(
     association_id: int,
     features: list[str],
-    reg: Registration,
-    remaining: Decimal,
+    registration: Registration,
+    remaining_balance: Decimal,
 ) -> None:
     """Handle token credits for a registration based on remaining balance.
 
     Args:
         association_id: Association ID for token credit operations
         features: List of enabled feature names
-        reg: Registration object to process
-        remaining: Remaining balance (positive = use credits, negative = add credits)
+        registration: Registration object to process
+        remaining_balance: Remaining balance (positive = use credits, negative = add credits)
     """
     # Skip if token credits are disabled globally or for this event
-    if "token_credit" not in features or get_event_config(reg.run.event_id, "token_credit_disable_t", False):
+    if "token_credit" not in features or get_event_config(registration.run.event_id, "token_credit_disable_t", False):
         return
 
     # Handle positive balance by using available token credits
-    if remaining > 0:
-        registration_tokens_credits_use(reg, remaining, association_id)
+    if remaining_balance > 0:
+        registration_tokens_credits_use(registration, remaining_balance, association_id)
     # Handle negative balance (overpayment) by adding token credits
     else:
-        registration_tokens_credits_overpay(reg, -remaining, association_id)
+        registration_tokens_credits_overpay(registration, -remaining_balance, association_id)

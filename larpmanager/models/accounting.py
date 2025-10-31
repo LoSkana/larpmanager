@@ -145,25 +145,25 @@ class PaymentInvoice(BaseModel):
             str: HTML formatted string containing download link, text description,
                  and payment code if available. Returns empty string if no method.
         """
-        s = ""
+        details_html = ""
 
         # Return empty string if no payment method is set
         if not self.method:
-            return s
+            return details_html
 
         # Add download link if invoice is available
         if self.invoice:
-            s += f" <a href='{self.download()}'>Download</a>"
+            details_html += f" <a href='{self.download()}'>Download</a>"
 
         # Append payment method text description
         if self.text:
-            s += f" {self.text}"
+            details_html += f" {self.text}"
 
         # Append payment code if available
         if self.cod:
-            s += f" {self.cod}"
+            details_html += f" {self.cod}"
 
-        return s
+        return details_html
 
 
 class ElectronicInvoice(BaseModel):
@@ -638,12 +638,12 @@ class Collection(BaseModel):
     def unique_contribute_code(self) -> None:
         """Generate a unique contribute code for the collection."""
         # Try up to 5 times to generate a unique code
-        for _idx in range(5):
-            cod = generate_id(16)
+        for _attempt in range(5):
+            generated_code = generate_id(16)
 
             # Check if the generated code is already in use
-            if not Collection.objects.filter(contribute_code=cod).exists():
-                self.contribute_code = cod
+            if not Collection.objects.filter(contribute_code=generated_code).exists():
+                self.contribute_code = generated_code
                 return
 
         # If all attempts failed, raise an error
@@ -652,11 +652,12 @@ class Collection(BaseModel):
     def unique_redeem_code(self) -> None:
         """Generate a unique redeem code for the collection."""
         # Try up to 5 attempts to generate a unique code
-        for _idx in range(5):
-            cod = generate_id(16)
+        max_attempts = 5
+        for _attempt_number in range(max_attempts):
+            generated_code = generate_id(16)
             # Check if the generated code is already in use
-            if not Collection.objects.filter(redeem_code=cod).exists():
-                self.redeem_code = cod
+            if not Collection.objects.filter(redeem_code=generated_code).exists():
+                self.redeem_code = generated_code
                 return
         # Raise error if unable to generate unique code after max attempts
         raise ValueError("Too many attempts to generate the code")

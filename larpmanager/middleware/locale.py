@@ -71,29 +71,31 @@ class LocaleAdvMiddleware:
         """
         # Force English in test environment to ensure consistent test results
         if os.getenv("PYTEST_CURRENT_TEST"):
-            language = "en"
+            selected_language = "en"
         # Check if user is authenticated and has a language preference
         elif hasattr(request, "user") and hasattr(request.user, "member"):
             if request.user.member.language:
                 # Use the user's explicitly set language preference
-                language = request.user.member.language
+                selected_language = request.user.member.language
             else:
                 # Fall back to browser language detection
-                language = translation.get_language_from_request(request)
-                found = False
+                browser_language = translation.get_language_from_request(request)
+                is_language_supported = False
                 # Validate that the detected language is supported
-                for code, _lang in conf_settings.LANGUAGES:
-                    if language == code:
-                        found = True
+                for language_code, _language_name in conf_settings.LANGUAGES:
+                    if browser_language == language_code:
+                        is_language_supported = True
                 # Default to English if detected language is not supported
-                if not found:
-                    language = "en"
+                if not is_language_supported:
+                    selected_language = "en"
+                else:
+                    selected_language = browser_language
         else:
             # For anonymous users, rely on browser language detection
-            language = translation.get_language_from_request(request)
+            selected_language = translation.get_language_from_request(request)
 
         # Activate the selected language globally and update request metadata
-        translation.activate(language)
-        request.META["HTTP_ACCEPT_LANGUAGE"] = language
+        translation.activate(selected_language)
+        request.META["HTTP_ACCEPT_LANGUAGE"] = selected_language
 
         return translation.get_language()

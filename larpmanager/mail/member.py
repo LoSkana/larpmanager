@@ -47,60 +47,60 @@ def send_membership_confirm(request, membership) -> None:
         Sends confirmation email to member about application status
     """
     # Get user profile and set language context
-    profile = request.user.member
-    activate(profile.language)
+    member_profile = request.user.member
+    activate(member_profile.language)
 
     # Prepare email subject and initial body content
-    subj = hdr(membership) + _("Request of membership to the Organization")
-    body = _(
+    email_subject = hdr(membership) + _("Request of membership to the Organization")
+    email_body = _(
         "You have completed your application for association membership: therefore, your "
         "event registrations are temporarily confirmed."
     )
 
     # Add review process information
-    body += "<br /><br />" + _(
+    email_body += "<br /><br />" + _(
         "As per the statutes, we will review your request at the next board meeting and "
         "send you an update e-mail as soon as possible (you should receive a reply within "
         "a few weeks at the latest)."
     )
 
     # Add payment information for approved membership
-    body += "<br /><br />" + _(
+    email_body += "<br /><br />" + _(
         "Once your admission is approved, you will be able to pay for the tickets for the "
         "events you have registered for."
     )
 
     # Check if membership fee is required and add fee information
-    amount = int(get_association_config(membership.association_id, "membership_fee", "0"))
-    if amount:
-        body += " " + _(
+    membership_fee_amount = int(get_association_config(membership.association_id, "membership_fee", "0"))
+    if membership_fee_amount:
+        email_body += " " + _(
             "Please also note that payment of the annual membership fee (%(amount)d "
             "%(currency)s) is required to participate in events."
-        ) % {"amount": amount, "currency": request.association["currency_symbol"]}
+        ) % {"amount": membership_fee_amount, "currency": request.association["currency_symbol"]}
 
     # Add closing message and send email
-    body += "<br /><br />" + _("Thank you for choosing to be part of our community") + "!"
-    my_send_mail(subj, body, profile, membership)
+    email_body += "<br /><br />" + _("Thank you for choosing to be part of our community") + "!"
+    my_send_mail(email_subject, email_body, member_profile, membership)
 
 
-def send_membership_payment_notification_email(instance):
+def send_membership_payment_notification_email(membership_item):
     """Send notification when membership fee payment is received.
 
     Args:
-        instance: AccountingItemMembership instance being saved
+        membership_item: AccountingItemMembership instance being saved
 
     Side effects:
         Sends payment confirmation email to member
     """
-    if instance.hide:
+    if membership_item.hide:
         return
-    if instance.pk:
+    if membership_item.pk:
         return
     # to user
-    activate(instance.member.language)
-    subj = hdr(instance) + _("Membership fee payment %(year)s") % {"year": instance.year}
+    activate(membership_item.member.language)
+    subject = hdr(membership_item) + _("Membership fee payment %(year)s") % {"year": membership_item.year}
     body = _("The payment of your membership fee for this year has been received") + "!"
-    my_send_mail(subj, body, instance.member, instance)
+    my_send_mail(subject, body, membership_item.member, membership_item)
 
 
 def handle_badge_assignment_notifications(instance, pk_set):
@@ -113,16 +113,16 @@ def handle_badge_assignment_notifications(instance, pk_set):
     Side effects:
         Sends badge achievement notification emails to members
     """
-    for pk in pk_set:
-        m = Member.objects.get(pk=pk)
-        activate(m.language)
-        badge = instance.show(m.language)
-        subj = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
+    for member_id in pk_set:
+        member = Member.objects.get(pk=member_id)
+        activate(member.language)
+        badge = instance.show(member.language)
+        subject = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
         body = _("You have been awarded an achievement") + "!" + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
-        url = get_url(f"public/{m.id}/", instance)
-        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": url} + "."
-        my_send_mail(subj, body, m, instance)
+        profile_url = get_url(f"public/{member.id}/", instance)
+        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": profile_url} + "."
+        my_send_mail(subject, body, member, instance)
 
 
 def on_member_badges_m2m_changed(sender, **kwargs):
@@ -159,7 +159,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
     activate(member.language)
 
     # Build notification subject and body
-    subj = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
+    subject = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
     body = _("We confirm that your membership has been accepted by the board. We welcome you to our community") + "!"
 
     # Add card number to notification
@@ -173,48 +173,50 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
 
     # Check for pending payments across member's registrations
     association_id = member.membership.association_id
-    regs = member.registrations.filter(run__event__association_id=association_id, run__start__gte=datetime.now().date())
-    membership_fee = False
-    registration_list = []
+    member_registrations = member.registrations.filter(
+        run__event__association_id=association_id, run__start__gte=datetime.now().date()
+    )
+    requires_membership_fee = False
+    unpaid_registration_links = []
 
     # Process each registration for payment requirements
-    for registration in regs:
+    for registration in member_registrations:
         features = get_event_features(registration.run.event_id)
-        run_start = registration.run.start and registration.run.start.year == datetime.today().year
+        run_starts_this_year = registration.run.start and registration.run.start.year == datetime.today().year
 
         # Check if membership fee is required for this event
-        if run_start and "laog" not in features:
-            membership_fee = True
+        if run_starts_this_year and "laog" not in features:
+            requires_membership_fee = True
 
         # Skip registrations with no payment due
         if not registration.tot_iscr:
             continue
 
         # Build payment link for unpaid registrations
-        url = get_url("accounting/pay", member.membership)
-        href = f"{url}/{registration.run.get_slug()}"
-        registration_list.append(f" <a href='{href}'><b>{registration.run.search}</b></a>")
+        payment_url = get_url("accounting/pay", member.membership)
+        payment_link = f"{payment_url}/{registration.run.get_slug()}"
+        unpaid_registration_links.append(f" <a href='{payment_link}'><b>{registration.run.search}</b></a>")
 
     # Add registration payment instructions if needed
-    if registration_list:
+    if unpaid_registration_links:
         body += (
             "<br /><br />"
             + _("To confirm your event registration, please complete your payment within one week. You can do so here")
             + ": "
-            + ", ".join(registration_list)
+            + ", ".join(unpaid_registration_links)
         )
 
     # Add membership fee payment instructions if required
-    if membership_fee and get_association_config(association_id, "membership_fee", 0):
-        url = get_url("accounting/membership", member.membership)
+    if requires_membership_fee and get_association_config(association_id, "membership_fee", 0):
+        membership_fee_url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
             "In addition, you must be up to date with the payment of your membership fee in "
             "order to participate in events. Make your payment <a href='%(url)s'>on this "
             "page</a>."
-        ) % {"url": url}
+        ) % {"url": membership_fee_url}
 
     # Send the notification email
-    my_send_mail(subj, body, member, member.membership)
+    my_send_mail(subject, body, member, member.membership)
 
 
 def notify_membership_reject(member, resp):
@@ -229,12 +231,12 @@ def notify_membership_reject(member, resp):
     """
     # Manda Mail
     activate(member.language)
-    subj = hdr(member.membership) + _("Membership of the Organization refused") + "!"
+    subject = hdr(member.membership) + _("Membership of the Organization refused") + "!"
     body = _("We inform you that your membership of the Association has not been accepted by the board") + "."
     if resp:
         body += " " + _("Motivation") + f": {resp}"
     body += _("For more information, write to us") + "!"
-    my_send_mail(subj, body, member, member.membership)
+    my_send_mail(subject, body, member, member.membership)
 
 
 def send_help_question_notification_email(instance):
@@ -249,32 +251,32 @@ def send_help_question_notification_email(instance):
     if instance.pk:
         return
 
-    mb = instance.member
+    member = instance.member
 
     if instance.is_user:
         if instance.run:
             for organizer in get_event_organizers(instance.run.event):
                 activate(organizer.language)
-                subj, body = get_help_email(instance)
-                subj += " " + _("for %(event)s") % {"event": instance.run}
+                subject, body = get_help_email(instance)
+                subject += " " + _("for %(event)s") % {"event": instance.run}
                 url = get_url(
                     f"{instance.run.get_slug()}/manage/questions/",
                     instance,
                 )
                 body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
-                my_send_mail(subj, body, organizer, instance.run)
+                my_send_mail(subject, body, organizer, instance.run)
 
         elif instance.association:
             notify_organization_exe(get_help_email, instance.association, instance)
         else:
-            subj, body = get_help_email(instance)
+            subject, body = get_help_email(instance)
             for _name, email in conf_settings.ADMINS:
-                my_send_mail(subj, body, email, instance)
+                my_send_mail(subject, body, email, instance)
 
     else:
         # new answer
-        activate(mb.language)
-        subj = hdr(instance) + _("New answer") + "!"
+        activate(member.language)
+        subject = hdr(instance) + _("New answer") + "!"
         body = _("Your question has been answered") + f": {instance.text}"
 
         if instance.run:
@@ -287,7 +289,7 @@ def send_help_question_notification_email(instance):
 
         body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
 
-        my_send_mail(subj, body, mb, instance)
+        my_send_mail(subject, body, member, instance)
 
 
 def get_help_email(help_question):
@@ -317,10 +319,10 @@ def send_chat_message_notification_email(instance):
     if instance.pk:
         return
     activate(instance.receiver.language)
-    subj = hdr(instance) + _("New message from %(user)s") % {"user": instance.sender.display_member()}
-    url = get_url(f"chat/{instance.sender.id}/", instance)
-    body = f"<br /><br />{instance.message} (<a href='{url}'>" + _("reply here") + "</a>)"
-    my_send_mail(subj, body, instance.receiver, instance)
+    subject = hdr(instance) + _("New message from %(user)s") % {"user": instance.sender.display_member()}
+    chat_url = get_url(f"chat/{instance.sender.id}/", instance)
+    email_body = f"<br /><br />{instance.message} (<a href='{chat_url}'>" + _("reply here") + "</a>)"
+    my_send_mail(subject, email_body, instance.receiver, instance)
 
 
 # ACTIVATION ACCOUNT
@@ -364,38 +366,38 @@ def get_email_context(activation_key, request):
     }
 
 
-def send_password_reset_remainder(mb):
+def send_password_reset_remainder(membership):
     """Send password reset reminder to association executives and admins.
 
     Args:
-        mb: Membership instance with pending password reset
+        membership: Membership instance with pending password reset
 
     Side effects:
         Sends reminder emails to association executives and system admins
     """
-    association = mb.association
-    notify_organization_exe(get_password_reminder_email, association, mb)
+    association = membership.association
+    notify_organization_exe(get_password_reminder_email, association, membership)
 
-    for _name, email in conf_settings.ADMINS:
-        (subject, body) = get_password_reminder_email(mb)
-        my_send_mail(subject, body, email, association)
+    for _admin_name, admin_email in conf_settings.ADMINS:
+        (subject, body) = get_password_reminder_email(membership)
+        my_send_mail(subject, body, admin_email, association)
 
 
-def get_password_reminder_email(mb):
+def get_password_reminder_email(membership):
     """Generate subject and body for password reset reminder.
 
     Args:
-        mb: Membership instance with password reset request
+        membership: Membership instance with password reset request
 
     Returns:
         tuple: (subject, body) for the reminder email
     """
-    association = mb.association
-    memb = mb.member
-    aux = mb.password_reset.split("#")
-    url = get_url(f"reset/{aux[0]}/{aux[1]}/", association)
-    subj = _("Password reset of user %(user)s") % {"user": memb}
+    association = membership.association
+    member = membership.member
+    reset_token_parts = membership.password_reset.split("#")
+    reset_url = get_url(f"reset/{reset_token_parts[0]}/{reset_token_parts[1]}/", association)
+    subject = _("Password reset of user %(user)s") % {"user": member}
     body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
-        "url": url
+        "url": reset_url
     }
-    return subj, body
+    return subject, body

@@ -94,71 +94,71 @@ class Command(BaseCommand):
         # Get the M2M field from the model metadata
         try:
             # noinspection PyUnresolvedReferences, PyProtectedMember
-            m2m_field = model._meta.get_field(field_name)
+            many_to_many_field = model._meta.get_field(field_name)
         except FieldDoesNotExist as err:
             raise ValueError(f"{field_name} not found on {model_label}") from err
 
         # Validate that the field is actually a many-to-many field
-        if not isinstance(m2m_field, ManyToManyField):
+        if not isinstance(many_to_many_field, ManyToManyField):
             raise ValueError(f"{field_name} not m2m on {model_label}")
 
         # Get the related model and separate integer IDs from string slugs
-        rel_model = m2m_field.remote_field.model
-        int_ids = [v for v in values if isinstance(v, int)]
-        slug_vals = [v for v in values if not isinstance(v, int)]
+        related_model = many_to_many_field.remote_field.model
+        integer_ids = [value for value in values if isinstance(value, int)]
+        slug_values = [value for value in values if not isinstance(value, int)]
 
         # Resolve slug values to primary keys if any slugs were provided
-        if slug_vals:
-            qs = rel_model.objects.filter(slug__in=slug_vals).values_list("slug", "pk")
-            slug_to_pk = dict(qs)
+        if slug_values:
+            queryset = related_model.objects.filter(slug__in=slug_values).values_list("slug", "pk")
+            slug_to_primary_key = dict(queryset)
 
             # Check for missing slugs and raise error if any are not found
-            missing = sorted(set(slug_vals) - set(slug_to_pk.keys()))
-            if missing:
-                raise ValueError(f"missing slugs for {model_label}.{field_name}: {', '.join(missing)}")
-            resolved_from_slugs = [slug_to_pk[s] for s in slug_vals]
+            missing_slugs = sorted(set(slug_values) - set(slug_to_primary_key.keys()))
+            if missing_slugs:
+                raise ValueError(f"missing slugs for {model_label}.{field_name}: {', '.join(missing_slugs)}")
+            primary_keys_from_slugs = [slug_to_primary_key[slug] for slug in slug_values]
         else:
-            resolved_from_slugs = []
+            primary_keys_from_slugs = []
 
         # Combine all resolved IDs and set the M2M field
-        resolved_ids = int_ids + resolved_from_slugs
-        getattr(instance, field_name).set(resolved_ids)
+        all_primary_keys = integer_ids + primary_keys_from_slugs
+        getattr(instance, field_name).set(all_primary_keys)
 
     @staticmethod
-    def prepare_m2m(fields: dict) -> dict:
+    def prepare_m2m(field_definitions: dict) -> dict:
         """Extract many-to-many fields from the fields dictionary.
 
         Args:
-            fields: Dictionary of field names and values
+            field_definitions: Dictionary of field names and values
 
         Returns:
             Dictionary containing only the many-to-many fields (list values)
         """
-        m2m_fields = {}
+        many_to_many_fields = {}
         # Iterate through a copy of keys to safely modify the original dict
-        for key in list(fields.keys()):
-            value = fields[key]
+        for field_name in list(field_definitions.keys()):
+            field_value = field_definitions[field_name]
             # Check if value is a list (indicates m2m field)
-            if isinstance(value, list):
-                m2m_fields[key] = value
-                fields.pop(key)
-        return m2m_fields
+            if isinstance(field_value, list):
+                many_to_many_fields[field_name] = field_value
+                field_definitions.pop(field_name)
+        return many_to_many_fields
 
     @staticmethod
     def prepare_foreign(model, fields):
-        for key in list(fields.keys()):
+        for field_name in list(fields.keys()):
             try:
                 # noinspection PyUnresolvedReferences, PyProtectedMember
-                f = model._meta.get_field(key)
+                field_object = model._meta.get_field(field_name)
             except FieldDoesNotExist:
                 continue
-            if isinstance(f, ForeignKey):
-                val = fields.pop(key)
-                if val is None:
-                    fields[f"{key}_id"] = None
-                elif isinstance(val, int):
-                    fields[f"{key}_id"] = val
+            if isinstance(field_object, ForeignKey):
+                field_value = fields.pop(field_name)
+                if field_value is None:
+                    fields[f"{field_name}_id"] = None
+                elif isinstance(field_value, int):
+                    fields[f"{field_name}_id"] = field_value
                 else:
-                    rel_model = f.remote_field.model
-                    rel_obj = rel_model.objects.get(slug=val)
-                    fields[f"{key}_id"] = rel_obj.pk
+                    related_model = field_object.remote_field.model
+                    related_object = related_model.objects.get(slug=field_value)
+                    fields[f"{field_name}_id"] = related_object.pk
