@@ -64,15 +64,15 @@ def send_expense_notification_email(instance: AccountingItemExpense, created: bo
     # that are associated with a run and event
     if created and instance.run and instance.run.event:
         # Iterate through all organizers for the event
-        for orga in get_event_organizers(instance.run.event):
+        for organizer in get_event_organizers(instance.run.event):
             # Set the language context for the organizer
-            activate(orga.language)
+            activate(organizer.language)
 
             # Generate email subject and body content
-            subj, body = get_expense_mail(instance)
+            subject, body = get_expense_mail(instance)
 
             # Send the notification email to the organizer
-            my_send_mail(subj, body, orga, instance.run)
+            my_send_mail(subject, body, organizer, instance.run)
 
 
 def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
@@ -88,16 +88,16 @@ def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
         Tuple containing email subject and HTML body as strings
     """
     # Generate email subject with event context
-    subj = hdr(instance) + _("Reimbursement request for %(event)s") % {"event": instance.run}
+    email_subject = hdr(instance) + _("Reimbursement request for %(event)s") % {"event": instance.run}
 
     # Create initial body with staff member and event information
-    body = _("Staff member %(user)s added a new reimbursement request for %(event)s") % {
+    email_body = _("Staff member %(user)s added a new reimbursement request for %(event)s") % {
         "user": instance.member,
         "event": instance.run,
     }
 
     # Add expense amount and reason details
-    body += (
+    email_body += (
         "<br /><br />"
         + _("The sum is %(amount).2f, with reason '%(reason)s'")
         % {
@@ -108,15 +108,15 @@ def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
     )
 
     # Add document download link if available
-    url = get_url(instance.download(), instance)
-    body += f"<br /><br /><a href='{url}'>" + _("download document") + "</a>"
+    document_download_url = get_url(instance.download(), instance)
+    email_body += f"<br /><br /><a href='{document_download_url}'>" + _("download document") + "</a>"
 
     # Add approval prompt and confirmation link
-    body += "<br /><br />" + _("Did you check and is it correct") + "?"
-    url = f"{instance.run.get_slug()}/manage/expenses/approve/{instance.pk}"
-    body += f"<a href='{url}'>" + _("Confirmation of expenditure") + "</a>"
+    email_body += "<br /><br />" + _("Did you check and is it correct") + "?"
+    approval_url = f"{instance.run.get_slug()}/manage/expenses/approve/{instance.pk}"
+    email_body += f"<a href='{approval_url}'>" + _("Confirmation of expenditure") + "</a>"
 
-    return subj, body
+    return email_subject, email_body
 
 
 def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
@@ -139,19 +139,19 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         return
 
     # Get previous approval status to detect state change
-    previous_appr = AccountingItemExpense.objects.get(pk=expense_item.pk).is_approved
+    previous_approval_status = AccountingItemExpense.objects.get(pk=expense_item.pk).is_approved
 
     # Only send email when item is newly approved and has an associated member
-    if not (expense_item.member and expense_item.is_approved and not previous_appr):
+    if not (expense_item.member and expense_item.is_approved and not previous_approval_status):
         return
 
     # Build email subject with optional run information
-    subj = hdr(expense_item) + _("Reimbursement approved")
+    email_subject = hdr(expense_item) + _("Reimbursement approved")
     if expense_item.run:
-        subj += " " + _("for") + f" {expense_item.run}"
+        email_subject += " " + _("for") + f" {expense_item.run}"
 
     # Create base email body with approval details
-    body = (
+    email_body = (
         _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved")
         % {
             "amount": expense_item.value,
@@ -165,11 +165,13 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
 
     # Add credit information if run has token_credit feature enabled
     if expense_item.run and "token_credit" in get_event_features(expense_item.run.event_id):
-        body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
-        body += " " + _("This is automatically deducted from the registration of a future event") + "."
+        email_body += (
+            "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credit_name} + "."
+        )
+        email_body += " " + _("This is automatically deducted from the registration of a future event") + "."
 
         # Add link to accounting page for formal request option
-        body += (
+        email_body += (
             " "
             + _(
                 "Alternatively, you can request to receive it with a formal request in the <a "
@@ -180,7 +182,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         )
 
     # Send the notification email
-    my_send_mail(subj, body, expense_item.member, expense_item.run)
+    my_send_mail(email_subject, email_body, expense_item.member, expense_item.run)
 
 
 def get_token_credit_name(association_id: int) -> tuple[str, str]:
@@ -237,28 +239,28 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
         return
 
     # Extract related objects for email context
-    run = payment_item.reg.run
-    member = payment_item.reg.member
+    event_run = payment_item.reg.run
+    registered_member = payment_item.reg.member
 
     # Check if payment notifications are enabled for this association
-    if not get_association_config(run.event.association_id, "mail_payment", False):
+    if not get_association_config(event_run.event.association_id, "mail_payment", False):
         return
 
     # Get localized names for tokens and credits
     token_name, credit_name = get_token_credit_name(payment_item.association_id)
 
     # Get currency symbol for money payments
-    curr_sym = run.event.association.get_currency_symbol()
+    currency_symbol = event_run.event.association.get_currency_symbol()
 
     # Only send notification for new payment items (not updates)
     if not payment_item.pk:
         # Send appropriate notification based on payment type
         if payment_item.pay == PaymentChoices.MONEY:
-            notify_pay_money(curr_sym, payment_item, member, run)
+            notify_pay_money(currency_symbol, payment_item, registered_member, event_run)
         elif payment_item.pay == PaymentChoices.CREDIT:
-            notify_pay_credit(credit_name, payment_item, member, run)
+            notify_pay_credit(credit_name, payment_item, registered_member, event_run)
         elif payment_item.pay == PaymentChoices.TOKEN:
-            notify_pay_token(payment_item, member, run, token_name)
+            notify_pay_token(payment_item, registered_member, event_run, token_name)
 
 
 def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, token_name: str) -> None:
@@ -278,18 +280,18 @@ def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, 
     """
     # Send notification to the paying user
     activate(member.language)
-    subj, body = get_pay_token_email(instance, run, token_name)
-    my_send_mail(subj, body, member, run)
+    subject, body = get_pay_token_email(instance, run, token_name)
+    my_send_mail(subject, body, member, run)
 
     # Send notifications to all event organizers
-    for orga in get_event_organizers(run.event):
+    for organizer in get_event_organizers(run.event):
         # Set organizer's preferred language for localized email
-        activate(orga.language)
-        subj, body = get_pay_token_email(instance, run, token_name)
+        activate(organizer.language)
+        subject, body = get_pay_token_email(instance, run, token_name)
 
         # Add member identification to organizer's subject line
-        subj += _(" for %(user)s") % {"user": member}
-        my_send_mail(subj, body, orga, run)
+        subject += _(" for %(user)s") % {"user": member}
+        my_send_mail(subject, body, organizer, run)
 
 
 def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: str) -> tuple[str, str]:
@@ -349,18 +351,18 @@ def notify_pay_credit(credit_name: str, instance: AccountingItemPayment, member:
     """
     # Send notification to the member who made the payment
     activate(member.language)
-    subj, body = get_pay_credit_email(credit_name, instance, run)
-    my_send_mail(subj, body, member, run)
+    email_subject, email_body = get_pay_credit_email(credit_name, instance, run)
+    my_send_mail(email_subject, email_body, member, run)
 
     # Send notifications to all event organizers
-    for orga in get_event_organizers(run.event):
+    for organizer in get_event_organizers(run.event):
         # Activate organizer's preferred language for localized content
-        activate(orga.language)
-        subj, body = get_pay_credit_email(credit_name, instance, run)
+        activate(organizer.language)
+        email_subject, email_body = get_pay_credit_email(credit_name, instance, run)
 
         # Add member identification to subject line for organizers
-        subj += _(" for %(user)s") % {"user": member}
-        my_send_mail(subj, body, orga, run)
+        email_subject += _(" for %(user)s") % {"user": member}
+        my_send_mail(email_subject, email_body, organizer, run)
 
 
 def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run: Run) -> tuple[str, str]:
@@ -399,7 +401,9 @@ def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run:
     return email_subject, email_body
 
 
-def notify_pay_money(curr_sym: str, instance: AccountingItemPayment, member: Member, run: Run) -> None:
+def notify_pay_money(
+    currency_symbol: str, payment_instance: AccountingItemPayment, paying_member: Member, event_run: Run
+) -> None:
     """Send money payment notifications to user and organizers.
 
     Sends payment confirmation emails to both the member who made the payment
@@ -407,28 +411,28 @@ def notify_pay_money(curr_sym: str, instance: AccountingItemPayment, member: Mem
     recipient's language preference.
 
     Args:
-        curr_sym: Currency symbol to display in the notification
-        instance: Payment accounting item instance containing payment details
-        member: Member object who made the payment
-        run: Event run object associated with the payment
+        currency_symbol: Currency symbol to display in the notification
+        payment_instance: Payment accounting item instance containing payment details
+        paying_member: Member object who made the payment
+        event_run: Event run object associated with the payment
 
     Returns:
         None
     """
     # Send notification email to the member who made the payment
-    activate(member.language)
-    subj, body = get_pay_money_email(curr_sym, instance, run)
-    my_send_mail(subj, body, member, run)
+    activate(paying_member.language)
+    subject, body = get_pay_money_email(currency_symbol, payment_instance, event_run)
+    my_send_mail(subject, body, paying_member, event_run)
 
     # Send notification emails to all event organizers
-    for orga in get_event_organizers(run.event):
+    for organizer in get_event_organizers(event_run.event):
         # Activate organizer's language for localized email content
-        activate(orga.language)
-        subj, body = get_pay_money_email(curr_sym, instance, run)
+        activate(organizer.language)
+        subject, body = get_pay_money_email(currency_symbol, payment_instance, event_run)
 
         # Add member identification to subject line for organizers
-        subj += _(" for %(user)s") % {"user": member}
-        my_send_mail(subj, body, orga, run)
+        subject += _(" for %(user)s") % {"user": paying_member}
+        my_send_mail(subject, body, organizer, event_run)
 
 
 def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run) -> tuple[str, str]:
@@ -469,14 +473,14 @@ def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run
     return subject, body
 
 
-def send_token_credit_notification_email(instance: AccountingItemOther) -> None:
+def send_token_credit_notification_email(accounting_item: AccountingItemOther) -> None:
     """Send notification emails for token, credit, or refund accounting items.
 
     Handles email notifications when new accounting items are created (not updated).
     Skips hidden items and only processes tokens, credits, and refunds.
 
     Args:
-        instance: AccountingItemOther instance being saved. Must have attributes:
+        accounting_item: AccountingItemOther instance being saved. Must have attributes:
             - hide: Boolean indicating if item should be hidden
             - pk: Primary key (None for new instances)
             - oth: Type of accounting item (TOKEN, CREDIT, or REFUND)
@@ -486,21 +490,21 @@ def send_token_credit_notification_email(instance: AccountingItemOther) -> None:
         None
     """
     # Skip processing if item is marked as hidden
-    if instance.hide:
+    if accounting_item.hide:
         return
 
     # Get organization-specific names for tokens and credits
-    token_name, credit_name = get_token_credit_name(instance.association_id)
+    token_name, credit_name = get_token_credit_name(accounting_item.association_id)
 
     # Only send notifications for new items (pk is None)
-    if not instance.pk:
+    if not accounting_item.pk:
         # Send appropriate notification based on item type
-        if instance.oth == OtherChoices.TOKEN:
-            notify_token(instance, token_name)
-        elif instance.oth == OtherChoices.CREDIT:
-            notify_credit(credit_name, instance)
-        elif instance.oth == OtherChoices.REFUND:
-            notify_refund(credit_name, instance)
+        if accounting_item.oth == OtherChoices.TOKEN:
+            notify_token(accounting_item, token_name)
+        elif accounting_item.oth == OtherChoices.CREDIT:
+            notify_credit(credit_name, accounting_item)
+        elif accounting_item.oth == OtherChoices.REFUND:
+            notify_refund(credit_name, accounting_item)
 
 
 def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
@@ -521,10 +525,10 @@ def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
     activate(instance.member.language)
 
     # Build email subject with header and refund notice
-    subj = hdr(instance) + _("Issued Reimbursement")
+    email_subject = hdr(instance) + _("Issued Reimbursement")
 
     # Construct notification body with refund details
-    body = (
+    email_body = (
         _(
             "A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f %(elements)s have been marked as used"
         )
@@ -537,7 +541,7 @@ def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
     )
 
     # Send notification email to the member
-    my_send_mail(subj, body, instance.member, instance)
+    my_send_mail(email_subject, email_body, instance.member, instance)
 
 
 def notify_credit(credit_name: str, instance: AccountingItemOther) -> None:
@@ -562,32 +566,32 @@ def notify_credit(credit_name: str, instance: AccountingItemOther) -> None:
     """
     # Send notification email to the credit recipient
     activate(instance.member.language)
-    subj, body = get_credit_email(credit_name, instance)
+    email_subject, email_body = get_credit_email(credit_name, instance)
 
     # Build URL for user's accounting page and add usage instructions
-    url = get_url("accounting", instance)
-    add_body = (
+    accounting_url = get_url("accounting", instance)
+    additional_body_text = (
         " <br /><br /><i>"
         + _("They will be used automatically when you sign up for a new event")
         + "!"
         + "<br /><br />"
         + _("Alternatively, you can request a reimbursement in <a href='%(url)s'>your accounting</a>.</i>")
-        % {"url": url}
+        % {"url": accounting_url}
     )
 
     # Send email to the member with additional instructions
-    my_send_mail(subj, body + add_body, instance.member, instance)
+    my_send_mail(email_subject, email_body + additional_body_text, instance.member, instance)
 
     # Send notification emails to event organizers if credit is run-specific
     if instance.run:
-        for orga in get_event_organizers(instance.run.event):
+        for event_organizer in get_event_organizers(instance.run.event):
             # Localize email content for each organizer
-            activate(orga.language)
-            subj, body = get_credit_email(credit_name, instance)
+            activate(event_organizer.language)
+            email_subject, email_body = get_credit_email(credit_name, instance)
 
             # Add member information to subject for organizer context
-            subj += _(" for %(user)s") % {"user": instance.member}
-            my_send_mail(subj, body, orga, instance)
+            email_subject += _(" for %(user)s") % {"user": instance.member}
+            my_send_mail(email_subject, email_body, event_organizer, instance)
 
 
 def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[str, str]:
@@ -633,17 +637,19 @@ def notify_token(instance, token_name: str) -> None:
     """Send token notification emails to user and event organizers."""
     # Send notification to the token recipient
     activate(instance.member.language)
-    subj, body = get_token_email(instance, token_name)
-    add_body = "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
-    my_send_mail(subj, body + add_body, instance.member, instance)
+    email_subject, email_body = get_token_email(instance, token_name)
+    additional_body = (
+        "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
+    )
+    my_send_mail(email_subject, email_body + additional_body, instance.member, instance)
 
     # Send notification to event organizers if run exists
     if instance.run:
-        for orga in get_event_organizers(instance.run.event):
-            activate(orga.language)
-            subj, body = get_token_email(instance, token_name)
-            subj += _(" for %(user)s") % {"user": instance.member}
-            my_send_mail(subj, body, orga, instance)
+        for organizer in get_event_organizers(instance.run.event):
+            activate(organizer.language)
+            email_subject, email_body = get_token_email(instance, token_name)
+            email_subject += _(" for %(user)s") % {"user": instance.member}
+            my_send_mail(email_subject, email_body, organizer, instance)
 
 
 def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str, str]:
@@ -712,16 +718,16 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
     activate(instance.member.language)
 
     # Construct email subject with donation header and confirmation text
-    subj = hdr(instance) + _("Donation given")
+    email_subject = hdr(instance) + _("Donation given")
 
     # Build email body with donation amount and currency information
-    body = _(
+    email_body = _(
         "We confirm we received the donation of %(amount)d %(currency)s. We thank you for your "
         "support, and for believing in us!"
     ) % {"amount": instance.value, "currency": instance.association.get_currency_symbol()}
 
     # Send the confirmation email to the donor
-    my_send_mail(subj, body, instance.member, instance)
+    my_send_mail(email_subject, email_body, instance.member, instance)
 
 
 def send_collection_activation_email(instance: AccountingItemCollection, created: bool) -> None:
@@ -742,7 +748,7 @@ def send_collection_activation_email(instance: AccountingItemCollection, created
         return
 
     # Prepare email context with recipient and management URL
-    context = {
+    email_context = {
         "recipient": instance.display_member(),
         "url": get_url(f"accounting/collection/{instance.contribute_code}/", instance),
     }
@@ -751,17 +757,17 @@ def send_collection_activation_email(instance: AccountingItemCollection, created
     activate(instance.organizer.language)
 
     # Build localized email subject and body
-    subj = hdr(instance) + _("Activate collection for: %(recipient)s") % context
-    body = (
+    email_subject = hdr(instance) + _("Activate collection for: %(recipient)s") % email_context
+    email_body = (
         _(
             "We confirm that the collection for '%(recipient)s' has been activated. <a "
             "href='%(url)s'>Manage it here!</a>"
         )
-        % context
+        % email_context
     )
 
     # Send the activation email to the organizer
-    my_send_mail(subj, body, instance.organizer, instance)
+    my_send_mail(email_subject, email_body, instance.organizer, instance)
 
 
 def send_gift_collection_notification_email(instance: AccountingItemCollection):
@@ -773,19 +779,19 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection):
     """
     if not instance.pk:
         activate(instance.member.language)
-        subj = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
+        subject = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
             "recipient": instance.collection.display_member()
         }
-        body = _("Thank you for participating") + "!"
-        my_send_mail(subj, body, instance.member, instance.collection)
+        email_body = _("Thank you for participating") + "!"
+        my_send_mail(subject, email_body, instance.member, instance.collection)
 
         activate(instance.collection.organizer.language)
-        subj = hdr(instance.collection) + _("New participation in the collection for %(recipient)s by %(user)s") % {
+        subject = hdr(instance.collection) + _("New participation in the collection for %(recipient)s by %(user)s") % {
             "recipient": instance.collection.display_member(),
             "user": instance.member.display_member(),
         }
-        body = _("The collection grows") + "!"
-        my_send_mail(subj, body, instance.collection.organizer, instance.collection)
+        email_body = _("The collection grows") + "!"
+        my_send_mail(subject, email_body, instance.collection.organizer, instance.collection)
 
 
 def notify_invoice_check(inv: PaymentInvoice) -> None:
@@ -835,8 +841,8 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
         notify_organization_exe(get_invoice_email, inv.association, inv)
 
 
-def notify_refund_request(p):
-    notify_organization_exe(get_notify_refund_email, p.association, p)
+def notify_refund_request(payment):
+    notify_organization_exe(get_notify_refund_email, payment.association, payment)
 
 
 def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:

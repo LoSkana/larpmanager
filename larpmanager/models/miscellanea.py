@@ -834,11 +834,11 @@ class OneTimeContent(BaseModel):
         Returns:
             dict: Dictionary with token statistics
         """
-        tokens = self.access_tokens.all()
+        access_tokens = self.access_tokens.all()
         return {
-            "total": tokens.count(),
-            "used": tokens.filter(used=True).count(),
-            "unused": tokens.filter(used=False).count(),
+            "total": access_tokens.count(),
+            "used": access_tokens.filter(used=True).count(),
+            "unused": access_tokens.filter(used=False).count(),
         }
 
 
@@ -922,27 +922,27 @@ class OneTimeAccessToken(BaseModel):
             self.token = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)
 
-    def mark_as_used(self, request=None, member=None):
+    def mark_as_used(self, http_request=None, authenticated_member=None):
         """
         Mark this token as used and record access information.
 
         Args:
-            request: Django HttpRequest object to extract metadata
-            member: Member object if user is authenticated
+            http_request: Django HttpRequest object to extract metadata
+            authenticated_member: Member object if user is authenticated
         """
         self.used = True
         self.used_at = timezone.now()
-        self.used_by = member
+        self.used_by = authenticated_member
 
-        if request:
+        if http_request:
             # Extract IP address
-            x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-            if x_forwarded_for:
-                self.ip_address = x_forwarded_for.split(",")[0].strip()
+            forwarded_for_header = http_request.META.get("HTTP_X_FORWARDED_FOR")
+            if forwarded_for_header:
+                self.ip_address = forwarded_for_header.split(",")[0].strip()
             else:
-                self.ip_address = request.META.get("REMOTE_ADDR")
+                self.ip_address = http_request.META.get("REMOTE_ADDR")
 
             # Extract user agent
-            self.user_agent = request.META.get("HTTP_USER_AGENT", "")[:500]
+            self.user_agent = http_request.META.get("HTTP_USER_AGENT", "")[:500]
 
         self.save()

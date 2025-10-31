@@ -70,9 +70,9 @@ class MyRegistrationView(RegistrationView):
 
         # Set membership status to JOINED for non-default associations
         if self.request.association["id"] > 1:
-            mb = get_user_membership(self.request.user.member, self.request.association["id"])
-            mb.status = MembershipStatus.JOINED
-            mb.save()
+            user_membership = get_user_membership(self.request.user.member, self.request.association["id"])
+            user_membership.status = MembershipStatus.JOINED
+            user_membership.save()
 
         return new_user
 
@@ -111,9 +111,9 @@ class MyRegistrationView(RegistrationView):
         Returns:
             dict: Form kwargs including request object
         """
-        kwargs = super().get_form_kwargs()
-        kwargs["request"] = self.request
-        return kwargs
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs["request"] = self.request
+        return form_kwargs
 
 
 class MyPasswordResetConfirmView(PasswordResetConfirmView):

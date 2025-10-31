@@ -140,12 +140,12 @@ def larpmanager_sitemap() -> list[str]:
     urls = []
 
     # Static pages
-    for el in ["", "usage", "about-us"]:
-        urls.append(f"https://larpmanager.com/{el}/")
+    for page_path in ["", "usage", "about-us"]:
+        urls.append(f"https://larpmanager.com/{page_path}/")
 
     # Blog posts from guides
-    for el in LarpManagerGuide.objects.all():
-        urls.append(f"https://larpmanager.com/guide/{el.slug}/")
+    for guide in LarpManagerGuide.objects.all():
+        urls.append(f"https://larpmanager.com/guide/{guide.slug}/")
 
     return urls
 

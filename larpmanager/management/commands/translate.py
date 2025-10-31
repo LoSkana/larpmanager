@@ -90,50 +90,50 @@ class Command(BaseCommand):
         Iterates through all locale directories and translates untranslated
         msgid entries using the DeepL translation service.
         """
-        loc_path = "larpmanager/locale"
-        locales = [f for f in listdir(loc_path) if isdir(join(loc_path, f))]
+        locale_path = "larpmanager/locale"
+        locale_directories = [directory for directory in listdir(locale_path) if isdir(join(locale_path, directory))]
 
-        for loc in locales:
-            if loc.lower() == "en":
+        for locale_code in locale_directories:
+            if locale_code.lower() == "en":
                 continue
 
-            po_path = join(loc_path, loc, "LC_MESSAGES", "django.po")
+            po_file_path = join(locale_path, locale_code, "LC_MESSAGES", "django.po")
 
-            with open(po_path) as fin:
-                data = fin.read().splitlines(True)
-            lm = data.index("\n")
-            data = data[lm:]
-            data = ['msgid ""\n', 'msgstr ""\n', '"Content-Type: text/plain; charset=UTF-8"\n'] + data
-            with open(po_path, "w") as fout:
-                fout.writelines(data)
+            with open(po_file_path) as file_input:
+                file_lines = file_input.read().splitlines(True)
+            first_empty_line_index = file_lines.index("\n")
+            file_lines = file_lines[first_empty_line_index:]
+            file_lines = ['msgid ""\n', 'msgstr ""\n', '"Content-Type: text/plain; charset=UTF-8"\n'] + file_lines
+            with open(po_file_path, "w") as file_output:
+                file_output.writelines(file_lines)
 
-            self.stdout.write(f"### LOCALE: {loc} ### ")
+            self.stdout.write(f"### LOCALE: {locale_code} ### ")
 
-            po = polib.pofile(po_path)
+            po_file = polib.pofile(po_file_path)
 
-            symbols = (".", "?", "!", ",")
-            changed = False
-            for entry in po:
+            punctuation_symbols = (".", "?", "!", ",")
+            has_changed = False
+            for entry in po_file:
                 if entry.msgstr:
-                    if entry.msgstr.endswith(symbols):
-                        if not entry.msgid.endswith(symbols):
+                    if entry.msgstr.endswith(punctuation_symbols):
+                        if not entry.msgid.endswith(punctuation_symbols):
                             if "fuzzy" in entry.flags:
                                 entry.flags.remove("fuzzy")
                             entry.msgstr = entry.msgstr.rstrip(".?!,")
-                            changed = True
+                            has_changed = True
 
-            if changed:
-                self.save_po(po, po_path)
-                po = polib.pofile(po_path)
+            if has_changed:
+                self.save_po(po_file, po_file_path)
+                po_file = polib.pofile(po_file_path)
 
-            for entry in po.untranslated_entries():
-                self.translate_entry(entry, loc)
+            for entry in po_file.untranslated_entries():
+                self.translate_entry(entry, locale_code)
 
-            for entry in po.fuzzy_entries():
+            for entry in po_file.fuzzy_entries():
                 entry.flags.remove("fuzzy")
-                self.translate_entry(entry, loc)
+                self.translate_entry(entry, locale_code)
 
-            self.save_po(po, po_path)
+            self.save_po(po_file, po_file_path)
 
     def save_po(self, po: polib.POFile, po_path: str) -> None:
         """Save a PO file with sorted and deduplicated entries.

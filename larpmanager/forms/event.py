@@ -213,7 +213,7 @@ class OrgaEventForm(MyForm):
         for m in dl:
             self.delete_field(m)
 
-    def init_campaign(self, dl: list) -> None:
+    def init_campaign(self, disabled_fields: list) -> None:
         """Initialize campaign field by setting association and exclusions."""
         # Set association for parent widget and exclude current instance if editing
         self.fields["parent"].widget.set_association_id(self.params["association_id"])
@@ -222,7 +222,7 @@ class OrgaEventForm(MyForm):
 
         # Remove parent field if campaign feature disabled or no parent options available
         if "campaign" not in self.params["features"] or not self.fields["parent"].widget.get_queryset().count():
-            dl.append("parent")
+            disabled_fields.append("parent")
             return
 
     def clean_slug(self) -> str:
@@ -411,51 +411,59 @@ class OrgaConfigForm(ConfigForm):
         self.set_section("reg_form", _("Registrations"))
 
         # Configure table grouping behavior
-        label = _("Disable grouping")
-        help_text = _(
+        grouping_label = _("Disable grouping")
+        grouping_help_text = _(
             "If checked, all registrations are displayed in a single table rather than being separated by type"
         )
-        self.add_configs("registration_no_grouping", ConfigType.BOOL, label, help_text)
+        self.add_configs("registration_no_grouping", ConfigType.BOOL, grouping_label, grouping_help_text)
 
         # Add unique code generation for registrations
-        label = _("Unique code")
-        help_text = _("If checked, adds to all registrations an unique code to reference them")
-        self.add_configs("registration_unique_code", ConfigType.BOOL, label, help_text)
+        unique_code_label = _("Unique code")
+        unique_code_help_text = _("If checked, adds to all registrations an unique code to reference them")
+        self.add_configs("registration_unique_code", ConfigType.BOOL, unique_code_label, unique_code_help_text)
 
         # Configure staff visibility permissions for registration questions
-        label = _("Allowed")
-        help_text = _(
+        allowed_label = _("Allowed")
+        allowed_help_text = _(
             "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the participants"
         )
-        self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, label, help_text)
+        self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, allowed_label, allowed_help_text)
 
         # Control visibility of unavailable registration options
-        label = _("Hide not available")
-        help_text = _(
+        hide_unavailable_label = _("Hide not available")
+        hide_unavailable_help_text = _(
             "If checked, options no longer available in the registration form are hidden, "
             "instead of being displayed disabled"
         )
-        self.add_configs("registration_hide_unavailable", ConfigType.BOOL, label, help_text)
+        self.add_configs(
+            "registration_hide_unavailable", ConfigType.BOOL, hide_unavailable_label, hide_unavailable_help_text
+        )
 
         # Enable faction-based question visibility
-        label = _("Faction selection")
-        help_text = _(
+        faction_selection_label = _("Faction selection")
+        faction_selection_help_text = _(
             "If checked, allows a registration form question to be visible only if the participant is "
             "assigned to certain factions."
         )
-        self.add_configs("registration_reg_que_faction", ConfigType.BOOL, label, help_text)
+        self.add_configs(
+            "registration_reg_que_faction", ConfigType.BOOL, faction_selection_label, faction_selection_help_text
+        )
 
         # Enable ticket-based question visibility
-        label = _("Ticket selection")
-        help_text = _(
+        ticket_selection_label = _("Ticket selection")
+        ticket_selection_help_text = _(
             "If checked, allows a registration form question to be visible based on the selected registration ticket."
         )
-        self.add_configs("registration_reg_que_tickets", ConfigType.BOOL, label, help_text)
+        self.add_configs(
+            "registration_reg_que_tickets", ConfigType.BOOL, ticket_selection_label, ticket_selection_help_text
+        )
 
         # Enable age-based question visibility
-        label = _("Age selection")
-        help_text = _("If checked, allows a registration form question to be visible based on the participant's age")
-        self.add_configs("registration_reg_que_age", ConfigType.BOOL, label, help_text)
+        age_selection_label = _("Age selection")
+        age_selection_help_text = _(
+            "If checked, allows a registration form question to be visible based on the participant's age"
+        )
+        self.add_configs("registration_reg_que_age", ConfigType.BOOL, age_selection_label, age_selection_help_text)
 
     def set_config_char_form(self):
         """Configure character form options for events with character feature enabled.
@@ -490,34 +498,34 @@ class OrgaConfigForm(ConfigForm):
         """
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
-            label = _("Active")
-            help_text = _("If checked, makes pre-registration for this event available")
-            self.add_configs("pre_register_active", ConfigType.BOOL, label, help_text)
+            field_label = _("Active")
+            field_help_text = _("If checked, makes pre-registration for this event available")
+            self.add_configs("pre_register_active", ConfigType.BOOL, field_label, field_help_text)
 
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
-            help_text = ""
+            field_help_text = ""
 
-            label = _("Use TLD")
-            self.add_configs("mail_server_use_tls", ConfigType.BOOL, label, help_text)
+            field_label = _("Use TLD")
+            self.add_configs("mail_server_use_tls", ConfigType.BOOL, field_label, field_help_text)
 
-            label = _("Host Address")
-            self.add_configs("mail_server_host", ConfigType.CHAR, label, help_text)
+            field_label = _("Host Address")
+            self.add_configs("mail_server_host", ConfigType.CHAR, field_label, field_help_text)
 
-            label = _("Port")
-            self.add_configs("mail_server_port", ConfigType.INT, label, help_text)
+            field_label = _("Port")
+            self.add_configs("mail_server_port", ConfigType.INT, field_label, field_help_text)
 
-            label = _("Username of account")
-            self.add_configs("mail_server_host_user", ConfigType.CHAR, label, help_text)
+            field_label = _("Username of account")
+            self.add_configs("mail_server_host_user", ConfigType.CHAR, field_label, field_help_text)
 
-            label = _("Password of account")
-            self.add_configs("mail_server_host_password", ConfigType.CHAR, label, help_text)
+            field_label = _("Password of account")
+            self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
 
         if "cover" in self.params["features"]:
             self.set_section("cover", _("Character cover"))
-            label = _("Desalt thumbnail")
-            help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
-            self.add_configs("cover_orig", ConfigType.BOOL, label, help_text)
+            field_label = _("Desalt thumbnail")
+            field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
+            self.add_configs("cover_orig", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_writing(self):
         """Configure writing system settings for events.
@@ -528,67 +536,69 @@ class OrgaConfigForm(ConfigForm):
         if "character" in self.params["features"]:
             self.set_section("writing", _("Writing"))
 
-            label = _("Title")
-            help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
-            self.add_configs("writing_title", ConfigType.BOOL, label, help_text)
+            config_label = _("Title")
+            config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
+            self.add_configs("writing_title", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Cover")
-            help_text = _(
+            config_label = _("Cover")
+            config_help_text = _(
                 "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant"
             )
-            self.add_configs("writing_cover", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_cover", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Hide")
-            help_text = _("Enables field 'hide', to be able to hide writing element from participants")
-            self.add_configs("writing_hide", ConfigType.BOOL, label, help_text)
+            config_label = _("Hide")
+            config_help_text = _("Enables field 'hide', to be able to hide writing element from participants")
+            self.add_configs("writing_hide", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Assigned")
-            help_text = _(
+            config_label = _("Assigned")
+            config_help_text = _(
                 "Enables field 'assigned', to track which staff member is responsible for each writing element"
             )
-            self.add_configs("writing_assigned", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_assigned", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Field visibility")
-            help_text = _(
+            config_label = _("Field visibility")
+            config_help_text = _(
                 "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time"
             )
-            self.add_configs("writing_field_visibility", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
             if "relationships" in self.params["features"]:
-                label = _("Relationships max length")
-                help_text = _("Set maximum length on character relationships (default 10000 characters)")
-                self.add_configs("writing_relationship_length", ConfigType.INT, label, help_text)
+                config_label = _("Relationships max length")
+                config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
+                self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
 
-            label = _("Disable character finder")
-            help_text = (
+            config_label = _("Disable character finder")
+            config_help_text = (
                 _("Disable the system that finds the character number when a special reference symbol is written")
                 + " (#, @, ^)"
             )
-            self.add_configs("writing_disable_char_finder", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_disable_char_finder", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Replacing names")
-            help_text = _("If checked, character names will be automatically replaced by a reference")
-            self.add_configs("writing_substitute", ConfigType.BOOL, label, help_text)
+            config_label = _("Replacing names")
+            config_help_text = _("If checked, character names will be automatically replaced by a reference")
+            self.add_configs("writing_substitute", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Paste as text")
-            help_text = _("If checked, automatically removes formatting when pasting text into the WYSIWYG editor")
-            self.add_configs("writing_paste_text", ConfigType.BOOL, label, help_text)
+            config_label = _("Paste as text")
+            config_help_text = _(
+                "If checked, automatically removes formatting when pasting text into the WYSIWYG editor"
+            )
+            self.add_configs("writing_paste_text", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Disable Auto save")
-            help_text = _("If checked, automatic saving during editing will be disable for writing elements")
-            self.add_configs("writing_disable_auto", ConfigType.BOOL, label, help_text)
+            config_label = _("Disable Auto save")
+            config_help_text = _("If checked, automatic saving during editing will be disable for writing elements")
+            self.add_configs("writing_disable_auto", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("External access")
-            help_text = _(
+            config_label = _("External access")
+            config_help_text = _(
                 "If checked, generates secret urls to share the full character sheet with a not signed up user"
             )
-            self.add_configs("writing_external_access", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_external_access", ConfigType.BOOL, config_label, config_help_text)
 
-            label = _("Unimportant")
-            help_text = _(
+            config_label = _("Unimportant")
+            config_help_text = _(
                 "If checked, allows to track the plots or relationships not really important for the character"
             )
-            self.add_configs("writing_unimportant", ConfigType.BOOL, label, help_text)
+            self.add_configs("writing_unimportant", ConfigType.BOOL, config_label, config_help_text)
 
     def set_config_character(self) -> None:
         """Configure character-related settings including campaign and faction options.
@@ -608,52 +618,65 @@ class OrgaConfigForm(ConfigForm):
         # Configure campaign-related settings if campaign feature is enabled
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
-            label = _("Independent factions")
-            help_text = _("If checked, do not use the parent event's factions")
-            self.add_configs("campaign_faction_indep", ConfigType.BOOL, label, help_text)
+            independent_factions_label = _("Independent factions")
+            independent_factions_help_text = _("If checked, do not use the parent event's factions")
+            self.add_configs(
+                "campaign_faction_indep", ConfigType.BOOL, independent_factions_label, independent_factions_help_text
+            )
 
         # Configure experience points system if px feature is enabled
         if "px" in self.params["features"]:
             self.set_section("px", _("Experience points"))
 
             # Player selection configuration - allows participants to choose abilities
-            label = _("Player selection")
-            help_text = _(
+            player_selection_label = _("Player selection")
+            player_selection_help_text = _(
                 "If checked, participants may add abilities themselves, by selecting from those that "
                 "are visible, and whose pre-requisites they meet."
             )
-            self.add_configs("px_user", ConfigType.BOOL, label, help_text)
+            self.add_configs("px_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
 
             # Undo period configuration - time window for skill revocation
-            label = _("Undo period")
-            help_text = _(
+            undo_period_label = _("Undo period")
+            undo_period_help_text = _(
                 "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)"
             )
-            self.add_configs("px_undo", ConfigType.INT, label, help_text)
+            self.add_configs("px_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
 
             # Initial experience points configuration
-            label = _("Initial experience points")
-            help_text = _("Initial value of experience points for all characters")
-            self.add_configs("px_start", ConfigType.INT, label, help_text)
+            initial_experience_points_label = _("Initial experience points")
+            initial_experience_points_help_text = _("Initial value of experience points for all characters")
+            self.add_configs(
+                "px_start", ConfigType.INT, initial_experience_points_label, initial_experience_points_help_text
+            )
 
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
             self.set_section("user_character", _("Player editor"))
 
             # Maximum character limit configuration
-            label = _("Maximum number")
-            help_text = _("Maximum number of characters the player can create")
-            self.add_configs("user_character_max", ConfigType.INT, label, help_text)
+            max_characters_label = _("Maximum number")
+            max_characters_help_text = _("Maximum number of characters the player can create")
+            self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
 
             # Character approval process configuration
-            label = _("Approval")
-            help_text = _("If checked, activates a staff-managed approval process for characters")
-            self.add_configs("user_character_approval", ConfigType.BOOL, label, help_text)
+            character_approval_label = _("Approval")
+            character_approval_help_text = _("If checked, activates a staff-managed approval process for characters")
+            self.add_configs(
+                "user_character_approval", ConfigType.BOOL, character_approval_label, character_approval_help_text
+            )
 
             # Player relationships configuration
-            label = _("Relationships")
-            help_text = _("If checked, enables participants to write their own list of character relationships")
-            self.add_configs("user_character_player_relationships", ConfigType.BOOL, label, help_text)
+            player_relationships_label = _("Relationships")
+            player_relationships_help_text = _(
+                "If checked, enables participants to write their own list of character relationships"
+            )
+            self.add_configs(
+                "user_character_player_relationships",
+                ConfigType.BOOL,
+                player_relationships_label,
+                player_relationships_help_text,
+            )
 
     def set_config_custom(self):
         """
@@ -662,34 +685,48 @@ class OrgaConfigForm(ConfigForm):
         if "custom_character" in self.params["features"]:
             self.set_section("custom_character", _("Character customisation"))
 
-            label = _("Name")
-            help_text = _("If checked, it allows participants to customise the names of their characters")
-            self.add_configs("custom_character_name", ConfigType.BOOL, label, help_text)
+            character_name_label = _("Name")
+            character_name_help_text = _(
+                "If checked, it allows participants to customise the names of their characters"
+            )
+            self.add_configs("custom_character_name", ConfigType.BOOL, character_name_label, character_name_help_text)
 
-            label = _("Profile")
-            help_text = _("If checked, allows participants to customise their characters' profile picture")
-            self.add_configs("custom_character_profile", ConfigType.BOOL, label, help_text)
+            character_profile_label = _("Profile")
+            character_profile_help_text = _(
+                "If checked, allows participants to customise their characters' profile picture"
+            )
+            self.add_configs(
+                "custom_character_profile", ConfigType.BOOL, character_profile_label, character_profile_help_text
+            )
 
-            label = _("Pronoun")
-            help_text = _("If checked, it allows participants to customise their characters' pronouns")
-            self.add_configs("custom_character_pronoun", ConfigType.BOOL, label, help_text)
+            character_pronoun_label = _("Pronoun")
+            character_pronoun_help_text = _(
+                "If checked, it allows participants to customise their characters' pronouns"
+            )
+            self.add_configs(
+                "custom_character_pronoun", ConfigType.BOOL, character_pronoun_label, character_pronoun_help_text
+            )
 
-            label = _("Song")
-            help_text = _("If checked, it allows participants to indicate the song of their characters")
-            self.add_configs("custom_character_song", ConfigType.BOOL, label, help_text)
+            character_song_label = _("Song")
+            character_song_help_text = _("If checked, it allows participants to indicate the song of their characters")
+            self.add_configs("custom_character_song", ConfigType.BOOL, character_song_label, character_song_help_text)
 
-            label = _("Private")
-            help_text = _(
+            character_private_label = _("Private")
+            character_private_help_text = _(
                 "If checked, it allows participants to enter private information on their characters, "
                 "visible only to them and the staff"
             )
-            self.add_configs("custom_character_private", ConfigType.BOOL, label, help_text)
+            self.add_configs(
+                "custom_character_private", ConfigType.BOOL, character_private_label, character_private_help_text
+            )
 
-            label = _("Public")
-            help_text = _(
+            character_public_label = _("Public")
+            character_public_help_text = _(
                 "If checked, it allows participants to enter public information on their characters, visible to all"
             )
-            self.add_configs("custom_character_public", ConfigType.BOOL, label, help_text)
+            self.add_configs(
+                "custom_character_public", ConfigType.BOOL, character_public_label, character_public_help_text
+            )
 
     def set_config_casting(self):
         """Configure casting-related form fields for event settings.
@@ -847,59 +884,65 @@ class OrgaConfigForm(ConfigForm):
         self.set_section("tickets", _("Tickets"))
 
         # Configure staff ticket tier
-        label = "Staff"
-        help_text = _("If checked, allow ticket tier: Staff")
-        self.add_configs("ticket_staff", ConfigType.BOOL, label, help_text)
+        staff_ticket_label = "Staff"
+        staff_ticket_help_text = _("If checked, allow ticket tier: Staff")
+        self.add_configs("ticket_staff", ConfigType.BOOL, staff_ticket_label, staff_ticket_help_text)
 
         # Configure NPC ticket tier
-        label = "NPC"
-        help_text = _("If checked, allow ticket tier: NPC")
-        self.add_configs("ticket_npc", ConfigType.BOOL, label, help_text)
+        npc_ticket_label = "NPC"
+        npc_ticket_help_text = _("If checked, allow ticket tier: NPC")
+        self.add_configs("ticket_npc", ConfigType.BOOL, npc_ticket_label, npc_ticket_help_text)
 
         # Configure collaborator ticket tier
-        label = "Collaborator"
-        help_text = _("If checked, allow ticket tier: Collaborator")
-        self.add_configs("ticket_collaborator", ConfigType.BOOL, label, help_text)
+        collaborator_ticket_label = "Collaborator"
+        collaborator_ticket_help_text = _("If checked, allow ticket tier: Collaborator")
+        self.add_configs(
+            "ticket_collaborator", ConfigType.BOOL, collaborator_ticket_label, collaborator_ticket_help_text
+        )
 
         # Configure seller ticket tier
-        label = "Seller"
-        help_text = _("If checked, allow ticket tier: Seller")
-        self.add_configs("ticket_seller", ConfigType.BOOL, label, help_text)
+        seller_ticket_label = "Seller"
+        seller_ticket_help_text = _("If checked, allow ticket tier: Seller")
+        self.add_configs("ticket_seller", ConfigType.BOOL, seller_ticket_label, seller_ticket_help_text)
 
         # Configure reduced/patron tickets if feature is enabled
         if "reduced" in self.params["features"]:
             self.set_section("reduced", _("Patron / Reduced"))
-            label = "Ratio"
-            help_text = _(
+            reduced_ratio_label = "Ratio"
+            reduced_ratio_help_text = _(
                 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
                 "Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for "
                 "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
             )
-            self.add_configs("reduced_ratio", ConfigType.INT, label, help_text)
+            self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
 
         # Configure filler ticket options if feature is enabled
         if "filler" in self.params["features"]:
             self.set_section("filler", _("Ticket Filler"))
-            label = _("Free registration")
-            help_text = _(
+            filler_free_registration_label = _("Free registration")
+            filler_free_registration_help_text = _(
                 "If checked, participants may sign up as fillers at any time; otherwise, they may only "
                 "do so if the stipulated number of characters has been reached"
             )
-            self.add_configs("filler_always", ConfigType.BOOL, label, help_text)
+            self.add_configs(
+                "filler_always", ConfigType.BOOL, filler_free_registration_label, filler_free_registration_help_text
+            )
 
         # Configure lottery system if feature is enabled
         if "lottery" in self.params["features"]:
             self.set_section("lottery", _("Lottery"))
 
             # Set number of lottery draws
-            label = _("Number of extractions")
-            help_text = _("Number of tickets to be drawn")
-            self.add_configs("lottery_num_draws", ConfigType.INT, label, help_text)
+            lottery_num_draws_label = _("Number of extractions")
+            lottery_num_draws_help_text = _("Number of tickets to be drawn")
+            self.add_configs("lottery_num_draws", ConfigType.INT, lottery_num_draws_label, lottery_num_draws_help_text)
 
             # Set conversion ticket type for lottery winners
-            label = _("Conversion ticket")
-            help_text = _("Name of the ticket into which to convert")
-            self.add_configs("lottery_ticket", ConfigType.CHAR, label, help_text)
+            lottery_conversion_ticket_label = _("Conversion ticket")
+            lottery_conversion_ticket_help_text = _("Name of the ticket into which to convert")
+            self.add_configs(
+                "lottery_ticket", ConfigType.CHAR, lottery_conversion_ticket_label, lottery_conversion_ticket_help_text
+            )
 
 
 class OrgaAppearanceForm(MyCssForm):

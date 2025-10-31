@@ -73,16 +73,21 @@ def join_email(association):
     Side effects:
         Sends welcome and feedback request emails to association executives
     """
-    for member in get_association_executives(association):
-        activate(member.language)
-        subj = _("Welcome to LarpManager") + "!"
-        body = render_to_string("mails/join_association.html", {"member": member, "association": association})
-        my_send_mail(subj, body, member)
+    for executive_member in get_association_executives(association):
+        activate(executive_member.language)
+        welcome_subject = _("Welcome to LarpManager") + "!"
+        welcome_body = render_to_string(
+            "mails/join_association.html", {"member": executive_member, "association": association}
+        )
+        my_send_mail(welcome_subject, welcome_body, executive_member)
 
-        activate(member.language)
-        subj = "We'd love your feedback on LarpManager"
-        body = render_to_string("mails/help_association.html", {"member": member, "association": association})
-        my_send_mail(subj, body, member, schedule=3600 * 24 * 2)
+        activate(executive_member.language)
+        feedback_subject = "We'd love your feedback on LarpManager"
+        feedback_body = render_to_string(
+            "mails/help_association.html", {"member": executive_member, "association": association}
+        )
+        feedback_delay_seconds = 3600 * 24 * 2
+        my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
 def on_association_roles_m2m_changed(sender, **kwargs) -> None:
@@ -338,10 +343,10 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
         return
 
     # Deactivate related casting preferences for this member and run
-    que = Casting.objects.filter(member_id=instance.member_id, run_id=instance.run_id, typ=instance.typ)
-    for c in que:
-        c.active = False
-        c.save()
+    casting_preferences = Casting.objects.filter(member_id=instance.member_id, run_id=instance.run_id, typ=instance.typ)
+    for casting in casting_preferences:
+        casting.active = False
+        casting.save()
 
     # Set language context to member's preferred language
     activate(instance.member.language)
@@ -351,35 +356,37 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
         return
 
     # Get trait and quest display information for the current run
-    t = instance.trait.show(instance.run)
-    q = instance.trait.quest.show(instance.run)
+    trait_display = instance.trait.show(instance.run)
+    quest_display = instance.trait.quest.show(instance.run)
 
     # Build email subject with event header and localized text
-    subj = hdr(instance.run.event) + _("Trait assigned for %(event)s") % {"event": instance.run}
+    subject = hdr(instance.run.event) + _("Trait assigned for %(event)s") % {"event": instance.run}
 
     # Create main email body with trait assignment details
     body = _(
         "In the event <b>%(event)s</b> to which you are enrolled, you have been assigned the "
         "trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
-    ) % {"event": instance.run, "trait": t["name"], "quest": q["name"]}
+    ) % {"event": instance.run, "trait": trait_display["name"], "quest": quest_display["name"]}
 
     # Add character access link to the email body
-    url = get_url(
+    character_url = get_url(
         f"{instance.run.get_slug()}/character/your",
         instance.run.event,
     )
-    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": url} + "!"
+    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": character_url} + "!"
 
     # Append custom assignment message if configured for this event
-    custom_message_ass = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)
-    if custom_message_ass:
-        body += "<br />" + custom_message_ass
+    custom_assignment_message = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)
+    if custom_assignment_message:
+        body += "<br />" + custom_assignment_message
 
     # Send the notification email to the member
-    my_send_mail(subj, body, instance.member, instance.run)
+    my_send_mail(subject, body, instance.member, instance.run)
 
 
-def mail_confirm_casting(member, run, gl_name: str, lst: list, avoid: str) -> None:
+def mail_confirm_casting(
+    member, run, preference_category_name: str, selected_preferences: list, elements_to_avoid: str
+) -> None:
     """Send casting preference confirmation email to member.
 
     Sends a confirmation email to a member after they submit their casting
@@ -389,9 +396,9 @@ def mail_confirm_casting(member, run, gl_name: str, lst: list, avoid: str) -> No
     Args:
         member: Member instance who submitted the casting preferences.
         run: Run instance for the event the preferences are for.
-        gl_name: Category name for the casting preferences (e.g., "Character Type").
-        lst: List of selected preference items chosen by the member.
-        avoid: Items or elements the member wants to avoid in their assignment.
+        preference_category_name: Category name for the casting preferences (e.g., "Character Type").
+        selected_preferences: List of selected preference items chosen by the member.
+        elements_to_avoid: Items or elements the member wants to avoid in their assignment.
 
     Returns:
         None
@@ -404,25 +411,25 @@ def mail_confirm_casting(member, run, gl_name: str, lst: list, avoid: str) -> No
     activate(member.language)
 
     # Build email subject with event header and casting confirmation message
-    subj = hdr(run.event) + _("Casting preferences saved on '%(type)s' for %(event)s") % {
-        "type": gl_name,
+    email_subject = hdr(run.event) + _("Casting preferences saved on '%(type)s' for %(event)s") % {
+        "type": preference_category_name,
         "event": run,
     }
 
     # Start email body with confirmation message
-    body = _("Your preferences have been saved in the system") + ":"
+    email_body = _("Your preferences have been saved in the system") + ":"
 
     # Add selected preferences list to email body
-    body += "<br /><br />" + "<br />".join(lst)
+    email_body += "<br /><br />" + "<br />".join(selected_preferences)
 
     # Append avoidance preferences if any were specified
-    if avoid:
-        body += "<br/><br />"
-        body += _("Elements you wish to avoid in the assignment") + ":"
-        body += f" {avoid}"
+    if elements_to_avoid:
+        email_body += "<br/><br />"
+        email_body += _("Elements you wish to avoid in the assignment") + ":"
+        email_body += f" {elements_to_avoid}"
 
     # Send the confirmation email to the member
-    my_send_mail(subj, body, member, run)
+    my_send_mail(email_subject, email_body, member, run)
 
 
 def send_character_status_update_email(instance: Character) -> None:
@@ -454,26 +461,26 @@ def send_character_status_update_email(instance: Character) -> None:
         activate(instance.player.language)
 
         # Fetch previous state to detect status changes
-        prev = Character.objects.get(pk=instance.pk)
-        if prev.status != instance.status:
+        previous_character = Character.objects.get(pk=instance.pk)
+        if previous_character.status != instance.status:
             # Determine appropriate email body based on new status
-            body = None
+            email_body = None
             if instance.status == CharacterStatus.PROPOSED:
-                body = get_event_text(instance.event_id, EventTextType.CHARACTER_PROPOSED)
+                email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_PROPOSED)
             if instance.status == CharacterStatus.REVIEW:
-                body = get_event_text(instance.event_id, EventTextType.CHARACTER_REVIEW)
+                email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_REVIEW)
             if instance.status == CharacterStatus.APPROVED:
-                body = get_event_text(instance.event_id, EventTextType.CHARACTER_APPROVED)
+                email_body = get_event_text(instance.event_id, EventTextType.CHARACTER_APPROVED)
 
             # Skip email if no template content found for this status
-            if not body:
+            if not email_body:
                 return
 
             # Construct email subject with event, character, and status info
-            subj = f"{hdr(instance.event)} - {str(instance)} - {instance.get_status_display()}"
+            email_subject = f"{hdr(instance.event)} - {str(instance)} - {instance.get_status_display()}"
 
             # Send the notification email to the player
-            my_send_mail(subj, body, instance.player, instance.event)
+            my_send_mail(email_subject, email_body, instance.player, instance.event)
 
 
 def notify_organization_exe(
@@ -544,36 +551,36 @@ def get_exec_language(association: Association) -> str:
         >>> print(lang)  # 'it' if most executives prefer Italian
     """
     # Initialize dictionary to count language occurrences
-    langs = {}
+    language_counts = {}
 
     # Iterate through all association executives
-    for orga in get_association_executives(association):
-        lang = orga.language
+    for executive in get_association_executives(association):
+        executive_language = executive.language
 
         # Count each language preference
-        if lang not in langs:
-            langs[lang] = 1
+        if executive_language not in language_counts:
+            language_counts[executive_language] = 1
         else:
-            langs[lang] += 1
+            language_counts[executive_language] += 1
 
     # Determine the most common language or default to English
-    if langs:
-        max_lang = max(langs, key=langs.get)
+    if language_counts:
+        most_common_language = max(language_counts, key=language_counts.get)
     else:
-        max_lang = "en"
+        most_common_language = "en"
 
-    return max_lang
+    return most_common_language
 
 
 def send_support_ticket_email(instance):
-    for _name, email in conf_settings.ADMINS:
-        subj = f"LarpManager ticket - {instance.association.name}"
+    for _admin_name, admin_email in conf_settings.ADMINS:
+        subject = f"LarpManager ticket - {instance.association.name}"
         if instance.reason:
-            subj += f" [{instance.reason}]"
+            subject += f" [{instance.reason}]"
         body = f"Email: {instance.email} <br /><br />"
         if instance.member:
             body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
         body += instance.content
         if instance.screenshot:
             body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
-        my_send_mail(subj, body, email)
+        my_send_mail(subject, body, admin_email)

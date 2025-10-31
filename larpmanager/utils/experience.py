@@ -134,8 +134,8 @@ def _apply_modifier_cost(
 def get_free_abilities(char: Character) -> list:
     """Return the list of free abilities for a character."""
     config_name = _free_abilities_cache_key()
-    val = char.get_config(config_name, "[]")
-    return ast.literal_eval(val)
+    config_value = char.get_config(config_name, "[]")
+    return ast.literal_eval(config_value)
 
 
 def _free_abilities_cache_key():

@@ -380,9 +380,9 @@ def max_selections_validator(max_choices: int) -> callable:
         >>> validator(['option1', 'option2', 'option3', 'option4'])  # Raises ValidationError
     """
 
-    def validator(value):
+    def validator(selected_values):
         # Check if the number of selected values exceeds the maximum allowed
-        if len(value) > max_choices:
+        if len(selected_values) > max_choices:
             # Raise validation error with localized message
             raise ValidationError(_("You have exceeded the maximum number of selectable options"))
 
@@ -679,14 +679,14 @@ class BaseRegistrationForm(MyFormRun):
         Examples
         --------
         >>> option = Option(id=123)
-        >>> key = self.get_option_key_count(option)
-        >>> print(key)
+        >>> tracking_key = self.get_option_key_count(option)
+        >>> print(tracking_key)
         'option_123'
         """
         # Generate unique key using option ID for tracking purposes
-        key = f"option_{option.id}"
+        tracking_key = f"option_{option.id}"
 
-        return key
+        return tracking_key
 
     def init_orga_fields(self, registration_section: str | None = None) -> list[str]:
         """
@@ -808,7 +808,14 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_key
 
-    def init_type(self, key: str, orga: bool, question: BaseModel, reg_counts: dict, required: bool) -> str:
+    def init_type(
+        self,
+        field_key: str,
+        is_organization_level: bool,
+        question: BaseModel,
+        registration_counts: dict,
+        is_required: bool,
+    ) -> str:
         """Initialize form field based on question type.
 
         Creates and configures the appropriate form field type based on the question's
@@ -816,11 +823,11 @@ class BaseRegistrationForm(MyFormRun):
         editor, and special question types.
 
         Args:
-            key: Field key identifier used to reference the form field
-            orga: Organization context flag indicating organizational scope
+            field_key: Field key identifier used to reference the form field
+            is_organization_level: Organization context flag indicating organizational scope
             question: Question object containing type and configuration information
-            reg_counts: Dictionary containing registration count data for choices
-            required: Whether the field should be marked as required
+            registration_counts: Dictionary containing registration count data for choices
+            is_required: Whether the field should be marked as required
 
         Returns:
             The field key identifier, potentially modified for special question types
@@ -831,33 +838,33 @@ class BaseRegistrationForm(MyFormRun):
         """
         # Handle multiple choice questions (checkboxes, multi-select)
         if question.typ == BaseQuestionType.MULTIPLE:
-            self.init_multiple(key, orga, question, reg_counts, required)
+            self.init_multiple(field_key, is_organization_level, question, registration_counts, is_required)
 
         # Handle single choice questions (radio buttons, dropdowns)
         elif question.typ == BaseQuestionType.SINGLE:
-            self.init_single(key, orga, question, reg_counts, required)
+            self.init_single(field_key, is_organization_level, question, registration_counts, is_required)
 
         # Handle simple text input fields
         elif question.typ == BaseQuestionType.TEXT:
-            self.init_text(key, question, required)
+            self.init_text(field_key, question, is_required)
 
         # Handle multi-line text areas
         elif question.typ == BaseQuestionType.PARAGRAPH:
-            self.init_paragraph(key, question, required)
+            self.init_paragraph(field_key, question, is_required)
 
         # Handle rich text editor fields
         elif question.typ == BaseQuestionType.EDITOR:
-            self.init_editor(key, question, required)
+            self.init_editor(field_key, question, is_required)
 
         # Handle special question types (custom implementations)
         else:
-            key = self.init_special(question, required)
+            field_key = self.init_special(question, is_required)
 
         # Assign the key attribute to the created field for reference
-        if key:
-            self.fields[key].key = key
+        if field_key:
+            self.fields[field_key].key = field_key
 
-        return key
+        return field_key
 
     def init_special(self, question: BaseModel, required: bool) -> str | None:
         """Initialize special form field configurations.
@@ -876,8 +883,8 @@ class BaseRegistrationForm(MyFormRun):
             doesn't exist in the form
         """
         # Get the field key, either directly from question type or mapped
-        key = question.typ
-        mapping = {
+        field_key = question.typ
+        question_type_to_field_mapping = {
             "faction": "factions_list",
             "additional_tickets": "additionals",
             "pay_what_you_want": "pay_what",
@@ -886,133 +893,149 @@ class BaseRegistrationForm(MyFormRun):
         }
 
         # Use mapped key if available, otherwise use original type
-        if key in mapping:
-            key = mapping[key]
+        if field_key in question_type_to_field_mapping:
+            field_key = question_type_to_field_mapping[field_key]
 
         # Early return if field doesn't exist in form
-        if key not in self.fields:
+        if field_key not in self.fields:
             return None
 
         # Configure basic field properties from question data
-        self.fields[key].label = question.name
-        self.fields[key].help_text = question.description
-        self.reorder_field(key)
-        self.fields[key].required = required
+        self.fields[field_key].label = question.name
+        self.fields[field_key].help_text = question.description
+        self.reorder_field(field_key)
+        self.fields[field_key].required = required
 
         # Apply length validation for text-based fields
-        if key in ["name", "teaser", "text"]:
-            self.fields[key].validators = [max_length_validator(question.max_length)] if question.max_length else []
+        if field_key in ["name", "teaser", "text"]:
+            self.fields[field_key].validators = (
+                [max_length_validator(question.max_length)] if question.max_length else []
+            )
 
-        return key
+        return field_key
 
-    def init_editor(self, key: str, question: BaseModel, required: bool) -> None:
+    def init_editor(self, field_key: str, question: BaseModel, is_required: bool) -> None:
         """Initialize a TinyMCE editor field for a form question.
 
         Args:
-            key: The field key/name to use in the form
+            field_key: The field key/name to use in the form
             question: Question object containing field configuration
-            required: Whether the field is required
+            is_required: Whether the field is required
         """
         # Set up validators based on question configuration
-        validators = [max_length_validator(question.max_length)] if question.max_length else []
+        length_validators = [max_length_validator(question.max_length)] if question.max_length else []
 
         # Create the CharField with TinyMCE widget
-        self.fields[key] = forms.CharField(
-            required=required,
+        self.fields[field_key] = forms.CharField(
+            required=is_required,
             widget=WritingTinyMCE(),
             label=question.name,
             help_text=question.description,
-            validators=validators,
+            validators=length_validators,
         )
 
         # Set initial value if answer exists
         if question.id in self.answers:
-            self.initial[key] = self.answers[question.id].text
+            self.initial[field_key] = self.answers[question.id].text
 
         # Add field to show_link list for frontend handling
-        self.show_link.append(f"id_{key}")
+        self.show_link.append(f"id_{field_key}")
 
-    def init_paragraph(self, key: str, question, required: bool) -> None:
+    def init_paragraph(self, field_key: str, question_config, is_required: bool) -> None:
         """Initialize a paragraph text field for the form.
 
         Args:
-            key: Form field key
-            question: Question object with configuration
-            required: Whether field is required
+            field_key: Form field key
+            question_config: Question object with configuration
+            is_required: Whether field is required
         """
         # Configure validators based on question settings
-        validators = [max_length_validator(question.max_length)] if question.max_length else []
+        length_validators = [max_length_validator(question_config.max_length)] if question_config.max_length else []
 
         # Create textarea field with question properties
-        self.fields[key] = forms.CharField(
-            required=required,
+        self.fields[field_key] = forms.CharField(
+            required=is_required,
             widget=forms.Textarea(attrs={"rows": 4}),
-            label=question.name,
-            help_text=question.description,
-            validators=validators,
+            label=question_config.name,
+            help_text=question_config.description,
+            validators=length_validators,
         )
 
         # Set initial value if answer exists
-        if question.id in self.answers:
-            self.initial[key] = self.answers[question.id].text
+        if question_config.id in self.answers:
+            self.initial[field_key] = self.answers[question_config.id].text
 
-    def init_text(self, key: str, question, required: bool) -> None:
+    def init_text(self, field_key: str, form_question, is_required: bool) -> None:
         """Initialize a text field with validators and initial values."""
         # Create validators based on max_length constraint
-        validators = [max_length_validator(question.max_length)] if question.max_length else []
+        field_validators = [max_length_validator(form_question.max_length)] if form_question.max_length else []
 
         # Create the form field with proper configuration
-        self.fields[key] = forms.CharField(
-            required=required, label=question.name, help_text=question.description, validators=validators
+        self.fields[field_key] = forms.CharField(
+            required=is_required,
+            label=form_question.name,
+            help_text=form_question.description,
+            validators=field_validators,
         )
 
         # Set initial value if answer exists
-        if question.id in self.answers:
-            self.initial[key] = self.answers[question.id].text
+        if form_question.id in self.answers:
+            self.initial[field_key] = self.answers[form_question.id].text
 
-    def init_single(self, key: str, orga: bool, question: Any, reg_counts: dict, required: bool) -> None:
+    def init_single(
+        self,
+        field_key: str,
+        is_organizational_context: bool,
+        question: Any,
+        registration_counts: dict,
+        is_required: bool,
+    ) -> None:
         """Initialize single choice form field.
 
         Args:
-            key: Form field key for the choice field
-            orga: Whether this is an organizational form context
+            field_key: Form field key for the choice field
+            is_organizational_context: Whether this is an organizational form context
             question: Question object containing choices configuration and metadata
-            reg_counts: Registration counts dictionary for quota tracking
-            required: Whether the field is required for form validation
+            registration_counts: Registration counts dictionary for quota tracking
+            is_required: Whether the field is required for form validation
 
         Side Effects:
             - Creates and adds a single choice field to self.fields
             - Sets initial value in self.initial if a previous selection exists
         """
-        if orga:
+        if is_organizational_context:
             # Get choice options for organizational context
-            (choices, help_text) = self.get_choice_options(self.choices, question)
+            (available_choices, help_text) = self.get_choice_options(self.choices, question)
 
             # Add default "Not selected" option if no previous selection exists
             if question.id not in self.singles:
-                choices.insert(0, (0, "--- " + _("Not selected")))
+                available_choices.insert(0, (0, "--- " + _("Not selected")))
         else:
             # Prepare list of previously chosen options for user context
-            chosen = []
+            previously_chosen_options = []
             if question.id in self.singles:
-                chosen.append(self.singles[question.id])
+                previously_chosen_options.append(self.singles[question.id])
 
             # Get choice options with quota tracking for user registration
-            (choices, help_text) = self.get_choice_options(self.choices, question, chosen, reg_counts)
+            (available_choices, help_text) = self.get_choice_options(
+                self.choices, question, previously_chosen_options, registration_counts
+            )
 
         # Create the choice field with determined options and configuration
-        self.fields[key] = forms.ChoiceField(
-            required=required,
-            choices=choices,
+        self.fields[field_key] = forms.ChoiceField(
+            required=is_required,
+            choices=available_choices,
             label=question.name,
             help_text=help_text,
         )
 
         # Set initial value from previous selection if it exists
         if question.id in self.singles:
-            self.initial[key] = self.singles[question.id].option_id
+            self.initial[field_key] = self.singles[question.id].option_id
 
-    def init_multiple(self, key: str, orga: bool, question: Any, reg_counts: dict, required: bool) -> None:
+    def init_multiple(
+        self, field_key: str, is_organizational_form: bool, question: Any, registration_counts: dict, is_required: bool
+    ) -> None:
         """Set up multiple choice form field handling.
 
         Creates a multiple choice field with checkboxes for form questions that allow
@@ -1020,45 +1043,47 @@ class BaseRegistrationForm(MyFormRun):
         different choice option processing.
 
         Args:
-            key: Form field identifier used as the field name
-            orga: True if this is an organizational form, False for regular forms
+            field_key: Form field identifier used as the field name
+            is_organizational_form: True if this is an organizational form, False for regular forms
             question: Question object containing choices configuration and metadata
-            reg_counts: Dictionary mapping registration types to their current counts
+            registration_counts: Dictionary mapping registration types to their current counts
                        for quota tracking purposes
-            required: True if the field must be filled, False if optional
+            is_required: True if the field must be filled, False if optional
 
         Side Effects:
-            - Creates a MultipleChoiceField in self.fields[key]
-            - Sets initial values in self.initial[key] if previous selections exist
+            - Creates a MultipleChoiceField in self.fields[field_key]
+            - Sets initial values in self.initial[field_key] if previous selections exist
             - Applies max_selections_validator if question has max_length limit
         """
         # Process choice options differently for organizational vs regular forms
-        if orga:
-            (choices, help_text) = self.get_choice_options(self.choices, question)
+        if is_organizational_form:
+            (available_choices, help_text) = self.get_choice_options(self.choices, question)
         else:
-            chosen = []
+            previously_selected_choices = []
             # Retrieve previously selected choices if they exist
             if question.id in self.multiples:
-                chosen = self.multiples[question.id]
-            (choices, help_text) = self.get_choice_options(self.choices, question, chosen, reg_counts)
+                previously_selected_choices = self.multiples[question.id]
+            (available_choices, help_text) = self.get_choice_options(
+                self.choices, question, previously_selected_choices, registration_counts
+            )
 
         # Add validator for maximum selection limit if specified
-        validators = [max_selections_validator(question.max_length)] if question.max_length else []
+        field_validators = [max_selections_validator(question.max_length)] if question.max_length else []
 
         # Create the multiple choice field with checkbox widget
-        self.fields[key] = forms.MultipleChoiceField(
-            required=required,
-            choices=choices,
+        self.fields[field_key] = forms.MultipleChoiceField(
+            required=is_required,
+            choices=available_choices,
             widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
             label=question.name,
             help_text=help_text,
-            validators=validators,
+            validators=field_validators,
         )
 
         # Set initial values from previously selected options
         if question.id in self.multiples:
-            init = list([el.option_id for el in self.multiples[question.id]])
-            self.initial[key] = init
+            initial_option_ids = list([selected_choice.option_id for selected_choice in self.multiples[question.id]])
+            self.initial[field_key] = initial_option_ids
 
     def reorder_field(self, field_name: str) -> None:
         """Move field to end of fields dictionary."""

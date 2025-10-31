@@ -291,22 +291,22 @@ def valid_workshop_answer(request, context):
     Returns:
         bool: True if all answers are correct, False otherwise
     """
-    res = True
-    for el in context["list"]:
-        el["correct"] = []
-        el["answer"] = []
-        for o in el["opt"]:
-            if o["is_correct"]:
-                el["correct"].append(o["id"])
-            ix = f"{el['id']}_{o['id']}"
-            if request.POST.get(ix, "") == "on":
-                el["answer"].append(o["id"])
-        el["correct"].sort()
-        el["answer"].sort()
-        el["failed"] = el["correct"] != el["answer"]
-        if el["failed"]:
-            res = False
-    return res
+    all_answers_correct = True
+    for question in context["list"]:
+        question["correct"] = []
+        question["answer"] = []
+        for option in question["opt"]:
+            if option["is_correct"]:
+                question["correct"].append(option["id"])
+            form_field_key = f"{question['id']}_{option['id']}"
+            if request.POST.get(form_field_key, "") == "on":
+                question["answer"].append(option["id"])
+        question["correct"].sort()
+        question["answer"].sort()
+        question["failed"] = question["correct"] != question["answer"]
+        if question["failed"]:
+            all_answers_correct = False
+    return all_answers_correct
 
 
 @login_required

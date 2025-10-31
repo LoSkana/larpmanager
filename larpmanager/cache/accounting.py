@@ -214,17 +214,17 @@ def get_registration_accounting_cache(run: Run) -> dict:
               registration statistics, and financial information.
     """
     # Generate the cache key for this specific run
-    key = get_registration_accounting_cache_key(run.id)
+    cache_key = get_registration_accounting_cache_key(run.id)
 
     # Attempt to retrieve cached data
-    res = cache.get(key)
+    cached_data = cache.get(cache_key)
 
     # If cache miss, regenerate and store the data
-    if res is None:
-        res = update_registration_accounting_cache(run)
-        cache.set(key, res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    if cached_data is None:
+        cached_data = update_registration_accounting_cache(run)
+        cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
-    return res
+    return cached_data
 
 
 def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:

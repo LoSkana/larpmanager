@@ -107,7 +107,7 @@ def leaderboard_key(association_id):
     return f"leaderboard_{association_id}"
 
 
-def update_leaderboard(a_id: int) -> list[dict]:
+def update_leaderboard(association_id: int) -> list[dict]:
     """Generate leaderboard data for members with badges.
 
     Retrieves all memberships for a given association and creates a leaderboard
@@ -115,7 +115,7 @@ def update_leaderboard(a_id: int) -> list[dict]:
     Results are sorted by badge count (descending) and creation date (descending).
 
     Args:
-        a_id: Association ID to generate leaderboard for
+        association_id: Association ID to generate leaderboard for
 
     Returns:
         List of member dictionaries containing:
@@ -125,43 +125,43 @@ def update_leaderboard(a_id: int) -> list[dict]:
             - name: Member display name
             - profile: Profile thumbnail URL (if available)
     """
-    res = []
+    leaderboard_entries = []
 
     # Iterate through all memberships for the association
-    for mb in Membership.objects.filter(association_id=a_id):
+    for membership in Membership.objects.filter(association_id=association_id):
         # Build member data with badge count and basic info
-        el = {
-            "id": mb.member_id,
-            "count": mb.member.badges.filter(association_id=a_id).count(),
-            "created": mb.created,
-            "name": mb.member.display_member(),
+        member_entry = {
+            "id": membership.member_id,
+            "count": membership.member.badges.filter(association_id=association_id).count(),
+            "created": membership.created,
+            "name": membership.member.display_member(),
         }
 
         # Add profile thumbnail if available
-        if mb.member.profile:
-            el["profile"] = mb.member.profile_thumb.url
+        if membership.member.profile:
+            member_entry["profile"] = membership.member.profile_thumb.url
 
         # Only include members with at least one badge
-        if el["count"] > 0:
-            res.append(el)
+        if member_entry["count"] > 0:
+            leaderboard_entries.append(member_entry)
 
     # Sort by badge count (desc) then by creation date (desc)
-    res = sorted(res, key=lambda x: (x["count"], x["created"]), reverse=True)
+    leaderboard_entries = sorted(leaderboard_entries, key=lambda x: (x["count"], x["created"]), reverse=True)
 
     # Cache the results for one day
-    cache.set(leaderboard_key(a_id), res, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-    return res
+    cache.set(leaderboard_key(association_id), leaderboard_entries, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return leaderboard_entries
 
 
-def get_leaderboard(a_id: int) -> dict:
+def get_leaderboard(association_id: int) -> dict:
     """Get leaderboard data for an association, using cache when available."""
     # Try to retrieve cached leaderboard data
-    res = cache.get(leaderboard_key(a_id))
+    cached_leaderboard = cache.get(leaderboard_key(association_id))
 
     # If not cached, compute and cache the leaderboard
-    if not res:
-        res = update_leaderboard(a_id)
-    return res
+    if not cached_leaderboard:
+        cached_leaderboard = update_leaderboard(association_id)
+    return cached_leaderboard
 
 
 def assign_badge(member, badge_code):
@@ -250,12 +250,12 @@ def process_membership_status_updates(membership: Membership) -> None:
     if membership.status == MembershipStatus.ACCEPTED:
         # Assign next available card number if not already set
         if not membership.card_number:
-            n = Membership.objects.filter(association=membership.association).aggregate(Max("card_number"))[
-                "card_number__max"
-            ]
-            if not n:
-                n = 0
-            membership.card_number = n + 1
+            max_card_number = Membership.objects.filter(association=membership.association).aggregate(
+                Max("card_number")
+            )["card_number__max"]
+            if not max_card_number:
+                max_card_number = 0
+            membership.card_number = max_card_number + 1
 
         # Set current date if not already set
         if not membership.date:

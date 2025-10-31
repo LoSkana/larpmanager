@@ -260,12 +260,12 @@ urlpatterns = [
         name="register",
     ),
     path(
-        "<slug:event_slug>/register/discount/<slug:dis>/",
+        "<slug:event_slug>/register/discount/<slug:discount_code>/",
         views_ur.register,
         name="register",
     ),
     path(
-        "<slug:event_slug>/register/ticket/<int:tk>/",
+        "<slug:event_slug>/register/ticket/<int:ticket_id>/",
         views_ur.register,
         name="register",
     ),
@@ -275,12 +275,12 @@ urlpatterns = [
         name="register_reduced",
     ),
     path(
-        "<slug:event_slug>/register/<slug:sc>/",
+        "<slug:event_slug>/register/<slug:secret_code>/",
         views_ur.register_exclusive,
         name="register_exclusive",
     ),
     path(
-        "<slug:event_slug>/register/<slug:sc>/discount/<slug:dis>/",
+        "<slug:event_slug>/register/<slug:secret_code>/discount/<slug:discount_code>/",
         views_ur.register_exclusive,
         name="register_exclusive",
     ),

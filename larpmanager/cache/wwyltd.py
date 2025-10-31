@@ -62,17 +62,17 @@ def get_guides_cache() -> list[dict]:
         List of guide items with: slug, title, content_preview
     """
     cache_key = get_guides_cache_key()
-    cached_data = cache.get(cache_key)
+    cached_guides = cache.get(cache_key)
 
-    if cached_data is not None:
-        return cached_data
+    if cached_guides is not None:
+        return cached_guides
 
     # Build cache data
-    data = _build_guides_cache()
+    guides_data = _build_guides_cache()
 
     # Cache for 1 day (86400 seconds)
-    cache.set(cache_key, data, timeout=86400)
-    return data
+    cache.set(cache_key, guides_data, timeout=86400)
+    return guides_data
 
 
 def get_tutorials_cache() -> list[dict]:
@@ -82,17 +82,17 @@ def get_tutorials_cache() -> list[dict]:
         List of tutorial items with: slug, title, content_preview, section_slug, section_title
     """
     cache_key = get_tutorials_cache_key()
-    cached_data = cache.get(cache_key)
+    cached_tutorials = cache.get(cache_key)
 
-    if cached_data is not None:
-        return cached_data
+    if cached_tutorials is not None:
+        return cached_tutorials
 
     # Build cache data
-    data = _build_tutorials_cache()
+    tutorials_data = _build_tutorials_cache()
 
     # Cache for 1 day (86400 seconds)
-    cache.set(cache_key, data, timeout=86400)
-    return data
+    cache.set(cache_key, tutorials_data, timeout=86400)
+    return tutorials_data
 
 
 def get_features_cache() -> list[dict]:
@@ -102,17 +102,17 @@ def get_features_cache() -> list[dict]:
         List of feature items with: tutorial, name, module_name, descr
     """
     cache_key = get_features_cache_key()
-    cached_data = cache.get(cache_key)
+    cached_features = cache.get(cache_key)
 
-    if cached_data is not None:
-        return cached_data
+    if cached_features is not None:
+        return cached_features
 
     # Build cache data
-    data = _build_features_cache()
+    features_list = _build_features_cache()
 
     # Cache for 1 day (86400 seconds)
-    cache.set(cache_key, data, timeout=86400)
-    return data
+    cache.set(cache_key, features_list, timeout=86400)
+    return features_list
 
 
 def reset_guides_cache():

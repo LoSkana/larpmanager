@@ -5400,7 +5400,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Zde je seznam kritických problémů, které je třeba odstranit"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "kód jazyka ISO (např. \"en\", \"it\", \"de\")"
+msgstr "kód jazyka ISO (např. 'en', 'it', 'de')"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -10009,7 +10009,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Enter the “bring a friend” code provided by a registered participant to "
+"Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
 "Zadejte kód 'přiveďte kamaráda', který vám poskytl registrovaný účastník, a "

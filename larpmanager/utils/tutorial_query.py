@@ -194,8 +194,8 @@ def remove_guide_from_search_index(guide_id: int) -> None:
     writer.commit()
 
 
-def similarity(a, b):
-    return SequenceMatcher(None, a.lower(), b.lower()).ratio()
+def similarity(first_string, second_string):
+    return SequenceMatcher(None, first_string.lower(), second_string.lower()).ratio()
 
 
 def get_sorted_permissions(model: type, query: str) -> list[dict[str, str]]:
@@ -239,7 +239,7 @@ def query_index(request: HttpRequest) -> JsonResponse:
         ObjectDoesNotExist: If specified run doesn't exist (handled internally)
     """
     # Extract and validate input parameters
-    orig_string: str = request.POST.get("q", "")
+    original_search_query: str = request.POST.get("q", "")
     try:
         run_id: int = int(request.POST.get("r", "0"))
     except (ValueError, TypeError):
@@ -247,13 +247,13 @@ def query_index(request: HttpRequest) -> JsonResponse:
 
     # Translate query string to English for consistent search
     translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
-    query_string: str = str(translator.translate_text(orig_string, target_lang="EN-US"))
+    translated_query: str = str(translator.translate_text(original_search_query, target_lang="EN-US"))
 
     # Log search activity for admin monitoring
-    notify_admins(f"query_index: {query_string}", f"{orig_string} - {request.user}")
+    notify_admins(f"query_index: {translated_query}", f"{original_search_query} - {request.user}")
 
     # Build permission-based navigation links
-    links: list[dict[str, str]] = []
+    permission_links: list[dict[str, str]] = []
     if run_id:
         # Event-specific permissions and links
         try:
@@ -261,40 +261,49 @@ def query_index(request: HttpRequest) -> JsonResponse:
         except ObjectDoesNotExist:
             return JsonResponse({})
 
-        sorted_permissions: list[dict[str, Any]] = get_sorted_permissions(EventPermission, query_string)
-        links = [
+        sorted_permissions: list[dict[str, Any]] = get_sorted_permissions(EventPermission, translated_query)
+        permission_links = [
             {
-                "name": perm["name"],
-                "descr": perm["descr"],
-                "href": reverse(perm["slug"], args=[run.get_slug()]),
+                "name": permission["name"],
+                "descr": permission["descr"],
+                "href": reverse(permission["slug"], args=[run.get_slug()]),
             }
-            for perm in sorted_permissions
+            for permission in sorted_permissions
         ]
     else:
         # Organization-wide permissions and links
-        sorted_permissions = get_sorted_permissions(AssociationPermission, query_string)
-        links = [
-            {"name": perm["name"], "descr": perm["descr"], "href": reverse(perm["slug"])} for perm in sorted_permissions
+        sorted_permissions = get_sorted_permissions(AssociationPermission, translated_query)
+        permission_links = [
+            {"name": permission["name"], "descr": permission["descr"], "href": reverse(permission["slug"])}
+            for permission in sorted_permissions
         ]
 
     # Search through guide content using Whoosh index
-    ix = get_or_create_index_tutorial(GUIDE_INDEX)
-    with ix.searcher() as searcher:
-        query = QueryParser("content", ix.schema).parse(query_string)
-        results = searcher.search(query, limit=5)
-        guides: list[dict[str, str]] = [
-            {"slug": r["slug"], "title": r["title"], "snippet": r["content"][:300]} for r in results
+    guide_index = get_or_create_index_tutorial(GUIDE_INDEX)
+    with guide_index.searcher() as searcher:
+        query = QueryParser("content", guide_index.schema).parse(translated_query)
+        search_results = searcher.search(query, limit=5)
+        matching_guides: list[dict[str, str]] = [
+            {"slug": result["slug"], "title": result["title"], "snippet": result["content"][:300]}
+            for result in search_results
         ]
 
     # Search through tutorial content using Whoosh index
-    ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
-    with ix.searcher() as searcher:
-        query = QueryParser("content", ix.schema).parse(query_string)
-        results = searcher.search(query, limit=10)
-        tutorials: list[dict[str, str]] = [
-            {"slug": r["slug"], "title": r["title"], "section": r["section_title"], "snippet": r["content"][:300]}
-            for r in results
+    tutorial_index = get_or_create_index_tutorial(TUTORIAL_INDEX)
+    with tutorial_index.searcher() as searcher:
+        query = QueryParser("content", tutorial_index.schema).parse(translated_query)
+        search_results = searcher.search(query, limit=10)
+        matching_tutorials: list[dict[str, str]] = [
+            {
+                "slug": result["slug"],
+                "title": result["title"],
+                "section": result["section_title"],
+                "snippet": result["content"][:300],
+            }
+            for result in search_results
         ]
 
     # Return consolidated search results
-    return JsonResponse({"guides": guides, "tutorials": tutorials, "links": links}, safe=False)
+    return JsonResponse(
+        {"guides": matching_guides, "tutorials": matching_tutorials, "links": permission_links}, safe=False
+    )

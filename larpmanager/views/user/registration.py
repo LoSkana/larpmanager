@@ -181,19 +181,19 @@ def pre_register_remove(request, event_slug):
 
 
 @login_required
-def register_exclusive(request, event_slug, sc="", dis=""):
+def register_exclusive(request, event_slug, secret_code="", discount_code=""):
     """Handle exclusive event registration (delegates to main register function).
 
     Args:
         request: Django HTTP request object
         event_slug: Event slug
-        sc: Secret code (optional)
-        dis: Discount code (optional)
+        secret_code: Secret code (optional)
+        discount_code: Discount code (optional)
 
     Returns:
         HttpResponse: Result from register function
     """
-    return register(request, event_slug, sc, dis)
+    return register(request, event_slug, secret_code, discount_code)
 
 
 def save_registration(
@@ -332,7 +332,7 @@ def save_registration_standard(
 
 
 def registration_redirect(
-    request: HttpRequest, context: dict, reg: Registration, new_reg: bool, run: Run
+    request: HttpRequest, context: dict, registration: Registration, is_new_registration: bool, run: Run
 ) -> HttpResponse:
     """Handle post-registration redirect logic.
 
@@ -343,8 +343,8 @@ def registration_redirect(
     Args:
         request: Django HTTP request object containing user and association data
         context: Dict context data
-        reg: Registration instance for the current user's registration
-        new_reg: Whether this is a new registration (True) or an update (False)
+        registration: Registration instance for the current user's registration
+        is_new_registration: Whether this is a new registration (True) or an update (False)
         run: Run instance representing the event run being registered for
 
     Returns:
@@ -362,36 +362,39 @@ def registration_redirect(
     if "membership" in context["features"]:
         # Redirect to profile if membership data not compiled
         if not context["membership"].compiled:
-            mes = _("To confirm your registration, please fill in your personal profile") + "."
-            messages.success(request, mes)
+            message = _("To confirm your registration, please fill in your personal profile") + "."
+            messages.success(request, message)
             return redirect("profile")
 
         # Check membership status for non-waiting registrations
-        memb_status = context["membership"].status
-        if memb_status in [MembershipStatus.EMPTY, MembershipStatus.JOINED] and reg.ticket.tier != TicketTier.WAITING:
-            mes = _("To confirm your registration, apply to become a member of the Association") + "."
-            messages.success(request, mes)
+        membership_status = context["membership"].status
+        if (
+            membership_status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]
+            and registration.ticket.tier != TicketTier.WAITING
+        ):
+            message = _("To confirm your registration, apply to become a member of the Association") + "."
+            messages.success(request, message)
             return redirect("membership")
 
     # Check if payment feature is enabled and payment is required
     if "payment" in context["features"]:
         # Redirect to payment page if registration has outstanding payment alert
-        if reg.alert:
-            mes = _("To confirm your registration, please pay the amount indicated") + "."
-            messages.success(request, mes)
-            return redirect("acc_reg", reg_id=reg.id)
+        if registration.alert:
+            message = _("To confirm your registration, please pay the amount indicated") + "."
+            messages.success(request, message)
+            return redirect("acc_reg", reg_id=registration.id)
 
     # All requirements satisfied - show success message and redirect to event gallery
     context = {"event": run}
-    if new_reg:
+    if is_new_registration:
         # Success message for new registration
-        mes = _("Registration confirmed at %(event)s!") % context
+        message = _("Registration confirmed at %(event)s!") % context
     else:
         # Success message for registration update
-        mes = _("Registration updated to %(event)s!") % context
+        message = _("Registration updated to %(event)s!") % context
 
-    messages.success(request, mes)
-    return redirect("gallery", event_slug=reg.run.get_slug())
+    messages.success(request, message)
+    return redirect("gallery", event_slug=registration.run.get_slug())
 
 
 def save_registration_bring_friend(context: dict, form, reg: Registration, request) -> None:
@@ -464,36 +467,38 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
         friend.save()
 
 
-def register_info(request, context, form, reg, dis):
+def register_info(request, context, form, registration, discount_info):
     """Display registration information and status.
 
     Args:
         request: HTTP request object
         context: Context dictionary to populate with registration data
         form: Registration form instance
-        reg: Registration object if exists
-        dis: Discount information
+        registration: Registration object if exists
+        discount_info: Discount information
 
     Side effects:
         Updates context with form data, terms, conditions, and membership status
     """
     context["form"] = form
     context["lang"] = context["member"].language
-    context["discount_apply"] = dis
+    context["discount_apply"] = discount_info
     context["custom_text"] = get_event_text(context["event"].id, EventTextType.REGISTER)
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
     context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
     context["hide_unavailable"] = get_event_config(context["event"].id, "registration_hide_unavailable", False, context)
     context["no_provisional"] = get_event_config(context["event"].id, "payment_no_provisional", False, context)
 
-    init_form_submitted(context, form, request, reg)
+    init_form_submitted(context, form, request, registration)
 
-    if reg:
-        reg.provisional = is_reg_provisional(reg)
+    if registration:
+        registration.provisional = is_reg_provisional(registration)
 
     if context["run"].start and "membership" in context["features"]:
-        que = AccountingItemMembership.objects.filter(year=context["run"].start.year, member=context["member"])
-        if que.count() > 0:
+        membership_query = AccountingItemMembership.objects.filter(
+            year=context["run"].start.year, member=context["member"]
+        )
+        if membership_query.count() > 0:
             context["membership_fee"] = "done"
         elif datetime.today().year != context["run"].start.year:
             context["membership_fee"] = "future"
@@ -531,7 +536,9 @@ def init_form_submitted(context, form, request, registration=None):
 
 
 @login_required
-def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "", tk: int = 0) -> HttpResponse:
+def register(
+    request: HttpRequest, event_slug: str, secret_code: str = "", discount_code: str = "", ticket_id: int = 0
+) -> HttpResponse:
     """Handle event registration form display and submission.
 
     Manages the complete registration process including ticket selection,
@@ -540,9 +547,9 @@ def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "",
     Args:
         request: Django HTTP request object
         event_slug: Event slug identifier
-        sc: Optional scenario code for registration context
-        dis: Optional discount code to apply
-        tk: Ticket ID to pre-select (default: 0)
+        secret_code: Optional scenario code for registration context
+        discount_code: Optional discount code to apply
+        ticket_id: Ticket ID to pre-select (default: 0)
 
     Returns:
         HttpResponse: Rendered registration page or redirect response
@@ -552,36 +559,36 @@ def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "",
     """
     # Get event and run context with status validation
     context = get_event_context(request, event_slug, include_status=True)
-    run = context["run"]
-    event = context["event"]
+    current_run = context["run"]
+    current_event = context["event"]
 
     # Set up registration context for the current run
-    if hasattr(run, "reg"):
-        context["run_reg"] = run.reg
+    if hasattr(current_run, "reg"):
+        context["run_reg"] = current_run.reg
     else:
         context["run_reg"] = None
 
     # Apply ticket selection if provided
-    _apply_ticket(context, tk)
+    _apply_ticket(context, ticket_id)
 
     # Check if payment features are enabled for this association
     context["payment_feature"] = "payment" in get_association_features(context["association_id"])
 
     # Prepare new registration or load existing one
-    new_reg = _register_prepare(context, context["run_reg"])
+    is_new_registration = _register_prepare(context, context["run_reg"])
 
     # Handle registration redirects for new registrations
-    if new_reg:
-        res = _check_redirect_registration(request, context, event, sc)
-        if res:
-            return res
+    if is_new_registration:
+        redirect_response = _check_redirect_registration(request, context, current_event, secret_code)
+        if redirect_response:
+            return redirect_response
 
     # Add any available bring-a-friend discounts
     _add_bring_friend_discounts(context)
 
     # Verify user membership status and permissions
-    mb = context["membership"]
-    if mb.status in [MembershipStatus.REWOKED]:
+    current_membership = context["membership"]
+    if current_membership.status in [MembershipStatus.REWOKED]:
         raise RewokedMembershipError()
 
     # Process form submission or display registration form
@@ -590,14 +597,16 @@ def register(request: HttpRequest, event_slug: str, sc: str = "", dis: str = "",
         form.sel_ticket_map(request.POST.get("ticket", ""))
         # Validate form and save registration if valid
         if form.is_valid():
-            reg = save_registration(request, context, form, run, event, context["run_reg"])
-            return registration_redirect(request, context, reg, new_reg, run)
+            saved_registration = save_registration(
+                request, context, form, current_run, current_event, context["run_reg"]
+            )
+            return registration_redirect(request, context, saved_registration, is_new_registration, current_run)
     else:
         # Display empty form for GET requests
         form = RegistrationForm(context=context, instance=context["run_reg"])
 
     # Prepare additional registration information and render page
-    register_info(request, context, form, context["run_reg"], dis)
+    register_info(request, context, form, context["run_reg"], discount_code)
     return render(request, "larpmanager/event/register.html", context)
 
 
@@ -1156,12 +1165,12 @@ def gift_edit(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
     return render(request, "larpmanager/event/gift_edit.html", context)
 
 
-def get_registration_gift(context: dict, r: int | None, request) -> Registration | None:
+def get_registration_gift(context: dict, registration_id: int | None, request) -> Registration | None:
     """Get a registration with gift redeem code for the current user.
 
     Args:
         context: Context dictionary containing run information
-        r: Registration primary key to lookup
+        registration_id: Registration primary key to lookup
         request: HTTP request object with authenticated user
 
     Returns:
@@ -1170,24 +1179,24 @@ def get_registration_gift(context: dict, r: int | None, request) -> Registration
     Raises:
         Http404: If registration lookup fails or invalid parameters provided
     """
-    reg = None
+    registration = None
 
     # Early return if no registration ID provided
-    if r:
+    if registration_id:
         try:
             # Query for valid gift registration matching all criteria
-            reg = Registration.objects.get(
-                pk=r,
+            registration = Registration.objects.get(
+                pk=registration_id,
                 run=context["run"],
                 member=context["member"],
                 redeem_code__isnull=False,  # Must have a redeem code (gift)
                 cancellation_date__isnull=True,  # Must not be cancelled
             )
-        except Exception as err:
+        except Exception as error:
             # Convert any lookup error to 404 for security
-            raise Http404("what are you trying to do?") from err
+            raise Http404("what are you trying to do?") from error
 
-    return reg
+    return registration
 
 
 @login_required

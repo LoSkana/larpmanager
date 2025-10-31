@@ -104,25 +104,25 @@ class Command(BaseCommand):
 
         # Update accounting for all registrations with incomplete payments
         # Process each registration to recalculate totals and payment status
-        reg_que = get_regs_paying_incomplete()
-        for reg in reg_que.select_related("run"):
-            reg.save()
+        registrations_with_incomplete_payments = get_regs_paying_incomplete()
+        for registration in registrations_with_incomplete_payments.select_related("run"):
+            registration.save()
 
         # Process feature-specific checks for each association
         # Only run checks if the association has the required features enabled
         for association in Association.objects.all():
-            features = get_association_features(association.id)
+            enabled_features = get_association_features(association.id)
 
             # Check if reminder notifications need to be sent
-            if "remind" in features:
+            if "remind" in enabled_features:
                 self.check_remind(association)
 
             # Process achievement/badge updates for members
-            if "badge" in features:
+            if "badge" in enabled_features:
                 self.check_achievements(association)
 
             # Validate and update accounting records
-            if "record_acc" in features:
+            if "record_acc" in enabled_features:
                 check_accounting(association.id)
 
         # Perform standard system-wide maintenance checks
@@ -134,18 +134,18 @@ class Command(BaseCommand):
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
-            ev_features = get_event_features(run.event_id)
+            event_features = get_event_features(run.event_id)
 
             # Check and process deadline notifications
-            if "deadlines" in ev_features:
+            if "deadlines" in event_features:
                 self.check_deadline(run)
 
             # Update run-specific accounting records
-            if "record_acc" in ev_features:
+            if "record_acc" in event_features:
                 check_run_accounting(run)
 
             # Generate background PDF documents for the run
-            if "print_pdf" in ev_features:
+            if "print_pdf" in event_features:
                 print_run_bkg(run.event.association.slug, run.get_slug())
 
     @staticmethod
@@ -615,7 +615,7 @@ class Command(BaseCommand):
             None
         """
         # Get event features and user membership for this registration
-        ev_features = get_event_features(reg.run.event_id)
+        event_features = get_event_features(reg.run.event_id)
         get_user_membership(reg.member, association.id)
 
         # Check if today is the scheduled day to send reminder emails
@@ -625,22 +625,22 @@ class Command(BaseCommand):
 
         # Process reminders only for non-waiting registrations
         if reg.ticket and reg.ticket.tier != TicketTier.WAITING:
-            m = reg.member.membership
-            handled = False
+            membership = reg.member.membership
+            reminder_sent = False
 
             # Handle membership-related reminders if membership feature is enabled
-            if "membership" in ev_features:
+            if "membership" in event_features:
                 # Send membership reminder for empty or joined members
-                if m.status in (MembershipStatus.EMPTY, MembershipStatus.JOINED):
+                if membership.status in (MembershipStatus.EMPTY, MembershipStatus.JOINED):
                     remember_membership(reg)
-                    handled = True
+                    reminder_sent = True
                 # Check membership fee payment for accepted members (except LAOG events)
-                elif "laog" not in ev_features and m.status == MembershipStatus.ACCEPTED:
+                elif "laog" not in event_features and membership.status == MembershipStatus.ACCEPTED:
                     self.check_membership_fee(reg)
-                    handled = True
+                    reminder_sent = True
 
             # Send profile completion reminder if membership wasn't handled and profile incomplete
-            if not handled and not m.compiled:
+            if not reminder_sent and not membership.compiled:
                 remember_profile(reg)
 
         # Check payment status and send payment reminders if registration has alerts

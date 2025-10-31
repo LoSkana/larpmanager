@@ -201,21 +201,21 @@ def _orga_registrations_tickets(registration, context: dict) -> None:
     context["reg_all"][registration_type[0]]["list"].append(registration)
 
 
-def orga_registrations_membership(r, context):
+def orga_registrations_membership(registration, context):
     """Process membership status for registration display.
 
     Args:
-        r: Registration instance
+        registration: Registration instance
         context: Context dictionary with membership data
     """
-    member = r.member
+    member = registration.member
     if member.id in context["memberships"]:
         member.membership = context["memberships"][member.id]
     else:
         get_user_membership(member, context["association_id"])
-    nm = member.membership.get_status_display()
-    regs_list_add(context, "list_membership", nm, r.member)
-    r.membership = member.membership.get_status_display
+    membership_status_display = member.membership.get_status_display()
+    regs_list_add(context, "list_membership", membership_status_display, registration.member)
+    registration.membership = member.membership.get_status_display
 
 
 def regs_list_add(context_dict, category_list_key, category_name, member):
@@ -293,27 +293,27 @@ def _orga_registration_character(context, registration):
             registration.custom[section] = ", ".join(registration.custom[section])
 
 
-def orga_registrations_custom(r, context, char):
+def orga_registrations_custom(registration, context, character_data):
     """Process custom character information for registration.
 
     Args:
-        r: Registration instance
+        registration: Registration instance
         context: Context dictionary with custom field info
-        char: Character data dictionary
+        character_data: Character data dictionary
     """
-    if not hasattr(r, "custom"):
-        r.custom = {}
+    if not hasattr(registration, "custom"):
+        registration.custom = {}
 
-    for s in context["custom_info"]:
-        if s not in r.custom:
-            r.custom[s] = []
-        v = ""
-        if s in char:
-            v = char[s]
-        if s == "profile" and v:
-            v = f"<img src='{v}' class='reg_profile' />"
-        if v:
-            r.custom[s].append(v)
+    for custom_field_slug in context["custom_info"]:
+        if custom_field_slug not in registration.custom:
+            registration.custom[custom_field_slug] = []
+        field_value = ""
+        if custom_field_slug in character_data:
+            field_value = character_data[custom_field_slug]
+        if custom_field_slug == "profile" and field_value:
+            field_value = f"<img src='{field_value}' class='reg_profile' />"
+        if field_value:
+            registration.custom[custom_field_slug].append(field_value)
 
 
 def registrations_popup(request, context):
@@ -326,17 +326,17 @@ def registrations_popup(request, context):
     Returns:
         dict: Response data for popup
     """
-    idx = int(request.POST.get("idx", ""))
-    tp = request.POST.get("tp", "")
+    registration_id = int(request.POST.get("idx", ""))
+    question_id = request.POST.get("tp", "")
 
     try:
-        reg = Registration.objects.get(pk=idx, run=context["run"])
+        registration = Registration.objects.get(pk=registration_id, run=context["run"])
         question = RegistrationQuestion.objects.get(
-            pk=tp, event=context["event"].get_class_parent(RegistrationQuestion)
+            pk=question_id, event=context["event"].get_class_parent(RegistrationQuestion)
         )
-        el = RegistrationAnswer.objects.get(reg=reg, question=question)
-        tx = f"<h2>{reg} - {question.name}</h2>" + el.text
-        return JsonResponse({"k": 1, "v": tx})
+        answer = RegistrationAnswer.objects.get(reg=registration, question=question)
+        html_text = f"<h2>{registration} - {question.name}</h2>" + answer.text
+        return JsonResponse({"k": 1, "v": html_text})
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 

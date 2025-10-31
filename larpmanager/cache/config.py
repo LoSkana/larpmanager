@@ -28,7 +28,8 @@ def clear_config_cache(config_element):
 
 
 def reset_element_configs(element):
-    cache.delete(cache_configs_key(element.id, element._meta.model_name.lower()))
+    cache_key = cache_configs_key(element.id, element._meta.model_name.lower())
+    cache.delete(cache_key)
 
 
 def cache_configs_key(config_owner_id, config_model_name):
