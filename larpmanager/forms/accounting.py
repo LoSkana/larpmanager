@@ -54,7 +54,6 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import Run
-from larpmanager.models.member import Member
 from larpmanager.models.utils import save_payment_details
 from larpmanager.utils.validators import FileTypeValidator
 
@@ -541,7 +540,7 @@ class RefundRequestForm(MyForm):
         model = RefundRequest
         fields = ("details", "value")
 
-    def __init__(self, member: Member, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with member-specific credit validation.
 
         Args:
@@ -550,11 +549,10 @@ class RefundRequestForm(MyForm):
             **kwargs: Arbitrary keyword arguments passed to parent
         """
         # Extract member from kwargs and initialize parent form
-        self.member = kwargs.pop("member")
         super().__init__(*args, **kwargs)
 
         # Set value field with max value constraint from member's credit
-        self.fields["value"] = forms.DecimalField(max_value=self.member.membership.credit, decimal_places=2)
+        self.fields["value"] = forms.DecimalField(max_value=self.params["membership"].credit, decimal_places=2)
 
 
 class ExeRefundRequestForm(MyForm):
