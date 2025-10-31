@@ -181,19 +181,19 @@ def pre_register_remove(request, event_slug):
 
 
 @login_required
-def register_exclusive(request, event_slug, sc="", dis=""):
+def register_exclusive(request, event_slug, secret_code="", discount_code=""):
     """Handle exclusive event registration (delegates to main register function).
 
     Args:
         request: Django HTTP request object
         event_slug: Event slug
-        sc: Secret code (optional)
-        dis: Discount code (optional)
+        secret_code: Secret code (optional)
+        discount_code: Discount code (optional)
 
     Returns:
         HttpResponse: Result from register function
     """
-    return register(request, event_slug, sc, dis)
+    return register(request, event_slug, secret_code, discount_code)
 
 
 def save_registration(
@@ -537,7 +537,7 @@ def init_form_submitted(context, form, request, registration=None):
 
 @login_required
 def register(
-    request: HttpRequest, event_slug: str, scenario_code: str = "", discount_code: str = "", ticket_id: int = 0
+    request: HttpRequest, event_slug: str, secret_code: str = "", discount_code: str = "", ticket_id: int = 0
 ) -> HttpResponse:
     """Handle event registration form display and submission.
 
@@ -547,7 +547,7 @@ def register(
     Args:
         request: Django HTTP request object
         event_slug: Event slug identifier
-        scenario_code: Optional scenario code for registration context
+        secret_code: Optional scenario code for registration context
         discount_code: Optional discount code to apply
         ticket_id: Ticket ID to pre-select (default: 0)
 
@@ -579,7 +579,7 @@ def register(
 
     # Handle registration redirects for new registrations
     if is_new_registration:
-        redirect_response = _check_redirect_registration(request, context, current_event, scenario_code)
+        redirect_response = _check_redirect_registration(request, context, current_event, secret_code)
         if redirect_response:
             return redirect_response
 
