@@ -6,6 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **LarpManager** is a Django-based web application for managing LARP (Live Action Role-Playing) events. It provides comprehensive functionality for event organization, character management, registrations, accounting, and more.
 
+## Documentation
+
+- **[Features and Permissions Guide](docs/01-features-and-permissions.md)** - Comprehensive guide for creating features, views, and permissions
+- **[Roles and Context Guide](docs/02-roles-and-context.md)** - How to structure views with context and understand role-based permissions
+- **[Configuration System Guide](docs/03-configuration-system.md)** - How to add customizable settings without modifying models
+- **[Localization Guide](docs/04-localization.md)** - How to write translatable code and manage translations
+- **[README.md](README.md)** - Installation, deployment, and contribution guidelines
+
 ## Development Commands
 
 ### Common Development Tasks
@@ -57,11 +65,12 @@ Models are organized in `larpmanager/models/` by domain:
 - **IMPORTANT**: Only add new fields to models if they are used by EVERY instance. Otherwise use `EventConfig`, `RunConfig`, or `AssocConfig`
 
 ### Core Features Architecture
-- **Feature System**: Modular feature flags with `Feature`, `AssociationPermission`, `EventPermission` models
-  - New features should set `overall=True` if they apply to entire organization
-  - Use `python manage.py export_features` to update fixtures after creating features
-- **Multi-tenancy**: Organization-based with URL slugs (`SLUG_ASSOC` setting in dev/prod settings)
-- **View naming conventions**: `orga_*` prefix for event-specific views, `exe_*` prefix for organization-wide views
+- **Feature System**: Modular feature flags system (see [Features and Permissions Guide](docs/01-features-and-permissions.md))
+  - `Feature`, `AssociationPermission`, `EventPermission` models control functionality
+  - `overall=True` for organization-wide, `overall=False` for event-specific
+  - View naming: `orga_*` (event-specific), `exe_*` (organization-wide)
+  - Always run `python manage.py export_features` after creating/modifying features
+- **Multi-tenancy**: Organization-based with URL slugs (`SLUG_ASSOC` setting)
 - **Caching**: Redis-based caching for performance
 - **Internationalization**: Full i18n support with DeepL API integration
 - **Payment Processing**: PayPal, Stripe, and Redsys gateway integrations
@@ -92,37 +101,66 @@ Models are organized in `larpmanager/models/` by domain:
 - **File storage**: Local media files with proper permissions
 
 ### Development Workflow
-- **Pre-commit hooks**: Installed via `pre-commit install` (includes ruff, djlint, translate, gitleaks, and prevent-main-commit)
-- **Git LFS**: Required for handling test fixtures (`git lfs pull`)
-- **Branch naming**: `prefix/feature-name` (hotfix, fix, feature, refactor, locale)
-- **Translation workflow**: DeepL API integration requires `DEEPL_API_KEY` in dev settings
-- **Upgrade script**: `./scripts/upgrade.sh` - Merges main, runs migrations, translations, and pushes branch (never run on main)
-- **Pull request guidelines**: Include only minimal changes necessary - avoid refactoring unless approved beforehand
+- **Pre-commit hooks**: Installed via `pre-commit install`
+  - Includes: ruff, djlint, translate, gitleaks, prevent-main-commit
+- **Git LFS**: Required for test fixtures (`git lfs install && git lfs pull`)
+- **Branch naming**: `prefix/feature-name`
+  - Prefixes: `hotfix`, `fix`, `feature`, `refactor`, `locale`
+- **Translations**: DeepL API integration requires `DEEPL_API_KEY` in dev settings
+  - Run `./scripts/translate.sh` to update translations
+- **Upgrade script**: `./scripts/upgrade.sh`
+  - Merges main, runs migrations, translations, pushes branch
+  - **Never run on main branch**
+- **Pull requests**: Include only minimal changes necessary
+  - Avoid refactoring unless approved beforehand
+  - Keep commits focused and atomic
 
 ### Permission System
-- **Feature-based**: Features control availability of functionality
-- **Role-based**: Organization and event-level permissions
+- **Feature-based**: Features control availability of functionality (see [Features Guide](docs/01-features-and-permissions.md))
+- **Role-based**: Organization and event-level roles with assigned permissions
 - **URL access**: Middleware handles URL-based access control (`larpmanager/middleware/`)
 - **API tokens**: Token-based authentication for external integrations
-- **Sidebar links**: Created via `AssociationPermission` (org dashboard) and `EventPermission` (event dashboard)
-  - Set `slug` to view name, `feature` to Feature object, `module` to module object
+- **Sidebar links**:
+  - `AssociationPermission` for organization dashboard
+  - `EventPermission` for event dashboard
+  - Both link to views via `slug` field
 
 ## Contributing Workflow
 
-When developing new features, follow this workflow:
+### General Workflow
 
-1. Create a new branch with appropriate prefix: `git checkout -b feature/your-feature-name`
-2. If adding a new feature with permissions:
-   - Create `Feature` object (set `overall=True` if organization-wide)
-   - Create views with `orga_*` (event) or `exe_*` (organization) prefix
-   - Add `AssociationPermission` and/or `EventPermission` for sidebar links
-   - Run `python manage.py export_features` to update fixtures
-3. If modifying models or fixtures, run `python manage.py dump_test`
-4. If creating new functionality, write playwright tests in `larpmanager/tests/`
-5. Before pushing:
-   - Run `./scripts/upgrade.sh` (handles main merge, migrations, translations, push)
-   - Ensure all tests pass with `pytest`
-6. Open a pull request with minimal, focused changes
+1. **Create branch**: `git checkout -b prefix/feature-name`
+   - Prefixes: `feature`, `fix`, `hotfix`, `refactor`, `locale`
+
+2. **Develop your changes**:
+   - For new features with UI, see [Features and Permissions Guide](docs/01-features-and-permissions.md)
+   - Follow naming conventions: `orga_*` for event views, `exe_*` for organization views
+   - Only add model fields if used by EVERY instance (otherwise use Config models)
+
+3. **Update fixtures if needed**:
+   - Models/fixtures changed: `python manage.py dump_test`
+   - Features/permissions changed: `python manage.py export_features`
+
+4. **Write tests**:
+   - New functionality requires playwright tests in `larpmanager/tests/`
+   - Run tests: `pytest`
+
+5. **Before pushing**:
+   - Run `./scripts/upgrade.sh` (merges main, migrations, translations, push)
+   - Ensure all tests pass
+
+6. **Create pull request** with minimal, focused changes
+
+### Feature Development Quick Reference
+
+For adding new features with views and permissions, follow the [Features and Permissions Guide](docs/01-features-and-permissions.md). Summary:
+
+1. Determine scope: organization-wide (`overall=True`) or event-specific (`overall=False`)
+2. Create `Feature` object with appropriate `overall` setting
+3. Create views: `exe_*` for organization, `orga_*` for events
+4. Create permissions: `AssociationPermission` and/or `EventPermission`
+5. Run `python manage.py export_features`
+6. Test thoroughly
 
 ## Environment Setup
 
