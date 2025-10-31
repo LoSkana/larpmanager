@@ -800,5 +800,6 @@ LarpManager's localization system provides three levels of customization:
 **Related guides:**
 - [Features and Permissions Guide](01-features-and-permissions.md) - Adding translatable features
 - [Configuration System Guide](03-configuration-system.md) - Feature-specific settings
+- [Playwright Testing Guide](05-playwright-testing.md) - Testing translated interfaces
 
 By following these guidelines, you ensure LarpManager remains accessible to users worldwide while allowing organizations to customize their experience.

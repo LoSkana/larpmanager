@@ -14,6 +14,7 @@
 - **[Roles and Context Guide](docs/02-roles-and-context.md)** - How to structure views with context and understand role-based permissions
 - **[Configuration System Guide](docs/03-configuration-system.md)** - How to add customizable settings without modifying models
 - **[Localization Guide](docs/04-localization.md)** - How to write translatable code and manage translations
+- **[Playwright Testing Guide](docs/05-playwright-testing.md)** - How to write and run end-to-end tests
 - **[Developer Instructions](CLAUDE.md)** - Project architecture, development commands, and best practices
 - **[Contributing](#contributing)** - How to contribute to the project
 - **[Deployment](#deploy)** - Production deployment instructions

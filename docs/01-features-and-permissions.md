@@ -537,6 +537,7 @@ EventPermission.objects.create(
 - **[Roles and Context Guide](02-roles-and-context.md)** - How to structure views with context and permissions
 - **[Configuration System Guide](03-configuration-system.md)** - How to add settings without model fields
 - **[Localization Guide](04-localization.md)** - How to write translatable code
+- **[Playwright Testing Guide](05-playwright-testing.md)** - How to write E2E tests for new features
 - [Contributing Guide](../README.md#contributing) - General contribution workflow
 - [Architecture Overview](../CLAUDE.md#architecture-overview) - System architecture
 - [Testing Guide](../CLAUDE.md#testing-strategy) - Testing approaches

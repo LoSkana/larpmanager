@@ -729,3 +729,4 @@ The context system in LarpManager:
 - [Features and Permissions Guide](01-features-and-permissions.md) - Creating features and permissions
 - [Configuration System Guide](03-configuration-system.md) - Adding customizable settings
 - [Localization Guide](04-localization.md) - Writing translatable code
+- [Playwright Testing Guide](05-playwright-testing.md) - Writing E2E tests for views

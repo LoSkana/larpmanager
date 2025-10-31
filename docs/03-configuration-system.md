@@ -8,6 +8,7 @@ This guide explains how to use the configuration system to add customizable sett
 - [Features and Permissions Guide](01-features-and-permissions.md) - When to use configs vs model fields
 - [Roles and Context Guide](02-roles-and-context.md) - How to access configuration in views
 - [Localization Guide](04-localization.md) - Writing translatable configuration labels
+- [Playwright Testing Guide](05-playwright-testing.md) - Testing configuration options
 
 ## Table of Contents
 
@@ -747,5 +748,6 @@ The configuration system in LarpManager provides flexible, cached key-value stor
 **Related guides:**
 - [Features and Permissions Guide](01-features-and-permissions.md) - When to use configs vs model fields
 - [Roles and Context Guide](02-roles-and-context.md) - How to access config in views
+- [Playwright Testing Guide](05-playwright-testing.md) - Testing configuration options
 
 By using the configuration system appropriately, you keep models clean while maintaining flexibility for optional features and user customization.
