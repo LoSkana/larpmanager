@@ -30,7 +30,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
-from larpmanager.models.association import Association, get_association_maintainers
+from larpmanager.models.association import Association
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.tasks import background_auto, my_send_mail
 
@@ -108,11 +108,11 @@ def _analyze_ticket(ticket):
         cwd=str(analysis_dir),  # Execute in the analysis directory
     )
 
-    if result.returncode != 0:
-        raise Exception(f"Claude Error: {result.stderr}")
-
     # Parse output
     output = result.stdout.strip()
+
+    if result.returncode != 0:
+        raise Exception(f"Claude Error: {result.stderr} - {output}")
 
     # Extract JSON from response
     json_match = re.search(r"\{.*\}", output, re.DOTALL)
@@ -180,9 +180,10 @@ def _send_analysis_result_email(ticket):
     for _admin_name, admin_email in conf_settings.ADMINS:
         my_send_mail(subject, body, admin_email)
 
+    # Disable for now
     # Send to association maintainers
-    for maintainer in get_association_maintainers(ticket.association):
-        my_send_mail(subject, body, maintainer.email)
+    # for maintainer in get_association_maintainers(ticket.association):
+    #     my_send_mail(subject, body, maintainer.email)
 
 
 def create_error_ticket(request):
