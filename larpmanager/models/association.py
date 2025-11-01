@@ -185,7 +185,15 @@ class Association(BaseModel):
         null=True,
         validators=[
             FileTypeValidator(
-                ["font/ttf", "font/otf", "application/font-woff", "application/font-woff2", "font/woff", "font/woff2"]
+                [
+                    "font/ttf",
+                    "font/otf",
+                    "application/font-woff",
+                    "application/font-woff2",
+                    "font/woff",
+                    "font/woff2",
+                    "font/sfnt",
+                ]
             )
         ],
     )
