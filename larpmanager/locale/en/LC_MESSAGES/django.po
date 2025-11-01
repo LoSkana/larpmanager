@@ -3327,6 +3327,12 @@ msgstr ""
 msgid "Optional - A screenshot of the error / bug / problem"
 msgstr ""
 
+msgid "Priority"
+msgstr ""
+
+msgid "Analysis"
+msgstr ""
+
 msgid "Male"
 msgstr ""
 
@@ -6630,9 +6636,6 @@ msgid ""
 msgstr ""
 
 msgid "Seniority"
-msgstr ""
-
-msgid "Priority"
 msgstr ""
 
 msgid "Avoid"

@@ -954,6 +954,9 @@ msgstr "Aktivace"
 msgid "Addition"
 msgstr "Dodatek"
 
+msgid "Analysis"
+msgstr "Analýza"
+
 msgid "Approval"
 msgstr "Schválení"
 

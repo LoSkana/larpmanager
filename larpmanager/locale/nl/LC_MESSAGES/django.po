@@ -954,6 +954,9 @@ msgstr "Activeer"
 msgid "Addition"
 msgstr "Toevoeging"
 
+msgid "Analysis"
+msgstr "Analyse"
+
 msgid "Approval"
 msgstr "Goedkeuring"
 

@@ -192,6 +192,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
     replace_character_names,
 )
+from larpmanager.utils.analyze_ticket import analyze_ticket_bgk
 from larpmanager.utils.association import (
     apply_skin_features_to_association,
     auto_assign_association_permission_number,
@@ -895,6 +896,10 @@ def post_delete_reset_guides_cache(sender, instance, **kwargs):
 @receiver(post_save, sender=LarpManagerTicket)
 def save_larpmanager_ticket(sender, instance, created, **kwargs):
     send_support_ticket_email(instance)
+
+    # Trigger background ticket analysis for new tickets
+    if created:
+        analyze_ticket_bgk(instance.id)
 
 
 # LarpManagerTutorial signals
