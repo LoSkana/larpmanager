@@ -108,11 +108,11 @@ def _analyze_ticket(ticket):
         cwd=str(analysis_dir),  # Execute in the analysis directory
     )
 
-    if result.returncode != 0:
-        raise Exception(f"Claude Error: {result.stderr}")
-
     # Parse output
     output = result.stdout.strip()
+
+    if result.returncode != 0:
+        raise Exception(f"Claude Error: {result.stderr} - {output}")
 
     # Extract JSON from response
     json_match = re.search(r"\{.*\}", output, re.DOTALL)
