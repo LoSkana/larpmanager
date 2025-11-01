@@ -1758,6 +1758,9 @@ msgstr "Lättvikt"
 msgid "Limitations"
 msgstr "Begränsningar"
 
+msgid "Maintainers"
+msgstr "Underhållsansvariga"
+
 msgid "Max fillers"
 msgstr "Max fyllmedel"
 
@@ -5405,7 +5408,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Här är en lista över kritiska problem som måste åtgärdas"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "ISO-språkkod (t.ex. 'en', 'it', 'de')"
+msgstr "ISO-språkkod (t.ex. \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5926,6 +5929,9 @@ msgstr "Denna sida sammanfattar de olika typerna av uppdrag i evenemanget"
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Du kan ladda upp en fil i pdf-format eller en bild"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "Du har inte tillåtelse att analysera den här biljetten"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Du har redan betalat årets medlemsavgift"
@@ -7189,10 +7195,19 @@ msgstr "Denna sida utför olika kontroller av teckenkortens korrekthet"
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Denna sida visar informationen för att utföra lotteridragningen"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+"Biljettanalys påbörjad. Du kommer att få ett e-postmeddelande när den är "
+"klar"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "För att ladda upp relationer lägger du till en andra fil med följande "
 "kolumner"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Användare som kan hantera supportärenden och ta emot meddelanden om ärenden"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Du har nått det maximala antalet tecken som kan skapas"
@@ -10135,8 +10150,8 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Ange koden för 'ta med en vän' som tillhandahålls av en registrerad "
-"deltagare för att få en rabatt på %(amount)d på din registreringsavgift"
+"Ange koden för \"ta med en vän\" som tillhandahålls av en registrerad "
+"deltagare för att få en %(amount)d rabatt på din registreringsavgift"
 
 msgid ""
 "Indicate the special discount code, to be communicated to the participants, "

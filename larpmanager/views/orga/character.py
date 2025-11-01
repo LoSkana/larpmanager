@@ -63,6 +63,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersionChoices,
 )
+from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import check_event_context
 from larpmanager.utils.character import get_chars_relations
 from larpmanager.utils.common import (
@@ -1108,7 +1109,7 @@ def orga_writing_excel_submit(request, event_slug, typ):
 
     context["auto"] = int(request.POST.get("auto"))
     if context["auto"]:
-        if request.user.is_superuser:
+        if is_lm_admin(request):
             return JsonResponse({"k": 1})
         msg = _check_working_ticket(request, context, request.POST["token"])
         if msg:

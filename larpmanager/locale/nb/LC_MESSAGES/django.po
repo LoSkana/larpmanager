@@ -1758,6 +1758,9 @@ msgstr "Lettvekt"
 msgid "Limitations"
 msgstr "Begrensninger"
 
+msgid "Maintainers"
+msgstr "Vedlikeholdere"
+
 msgid "Max fillers"
 msgstr "Maks fyllstoffer"
 
@@ -5405,7 +5408,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Her er en liste over kritiske problemer som må løses"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "ISO-språkkode (f.eks. 'en', 'it', 'de')"
+msgstr "ISO-språkkode (f.eks. \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5928,6 +5931,9 @@ msgstr ""
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Du kan laste opp en fil i pdf-format eller et bilde"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "Du har ikke tillatelse til å analysere denne billetten"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Du har allerede betalt årets medlemskontingent"
@@ -7197,9 +7203,18 @@ msgstr "Denne siden utfører ulike kontroller av tegnkortenes korrekthet"
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Denne siden viser informasjonen for å utføre loddtrekningen"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+"Billettanalysen er påbegynt. Du vil motta en e-post når den er fullført"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "For å laste opp relasjoner legger du til en ny fil med følgende kolonner"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Brukere som kan administrere supporthenvendelser og motta varsler om "
+"henvendelser"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Du har nådd det maksimale antallet tegn som kan opprettes"
@@ -10118,7 +10133,7 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Oppgi koden 'ta med en venn' fra en registrert deltaker for å få en "
+"Oppgi koden \"ta med en venn\" fra en registrert deltaker for å få en "
 "%(amount)d rabatt på registreringsavgiften din"
 
 msgid ""

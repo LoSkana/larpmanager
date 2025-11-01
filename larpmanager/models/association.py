@@ -244,6 +244,14 @@ class Association(BaseModel):
 
     demo = models.BooleanField(default=False)
 
+    maintainers = models.ManyToManyField(
+        "larpmanager.Member",
+        related_name="maintained_associations",
+        blank=True,
+        verbose_name=_("Maintainers"),
+        help_text=_("Users who can manage support tickets and receive ticket notifications"),
+    )
+
     class Meta:
         constraints = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_association_with_optional"),
@@ -467,6 +475,18 @@ def hdr(association_or_related_object: Association | Any) -> str:
         return f"[{association_or_related_object.association.name}] "
     else:
         return "[LarpManager] "
+
+
+def get_association_maintainers(association: Association):
+    """Get all maintainers for an association.
+
+    Args:
+        association: Association instance
+
+    Returns:
+        QuerySet of Member instances who are maintainers for this association
+    """
+    return association.maintainers.all()
 
 
 def get_url(path: str, obj: object = None) -> str:
