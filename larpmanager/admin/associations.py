@@ -35,10 +35,7 @@ class AssociationAdmin(DefModelAdmin):
     list_display = ("name", "slug", "created")
     search_fields = ("name",)
 
-    autocomplete_fields = [
-        "payment_methods",
-        "features",
-    ]
+    autocomplete_fields = ["payment_methods", "features", "maintainers"]
 
 
 @admin.register(AssociationConfig)

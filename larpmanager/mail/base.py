@@ -593,7 +593,11 @@ def send_support_ticket_email(instance):
     if instance.screenshot:
         body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
 
-    # Add analyze button for superusers and maintainers
+    # Send to association maintainers
+    for maintainer in get_association_maintainers(instance.association):
+        my_send_mail(subject, body, maintainer.email)
+
+    # Add analyze button for superusers
     analyze_path = reverse("exe_ticket_analyze", kwargs={"ticket_id": instance.id})
     analyze_url = get_url(analyze_path.lstrip("/"), instance.association)
     body += "<br /><br /><hr /><br />"
@@ -604,7 +608,3 @@ def send_support_ticket_email(instance):
     # Send to admins
     for _admin_name, admin_email in conf_settings.ADMINS:
         my_send_mail(subject, body, admin_email)
-
-    # Send to association maintainers
-    for maintainer in get_association_maintainers(instance.association):
-        my_send_mail(subject, body, maintainer.email)

@@ -31,7 +31,6 @@ from larpmanager.forms.warehouse import (
     ExeWarehouseMovementForm,
     ExeWarehouseTagForm,
 )
-from larpmanager.models.association import get_association_maintainers
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.models.miscellanea import (
     UrlShortner,
@@ -41,7 +40,7 @@ from larpmanager.models.miscellanea import (
     WarehouseTag,
 )
 from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import check_association_context, get_context
+from larpmanager.utils.base import check_association_context
 from larpmanager.utils.bulk import handle_bulk_items
 from larpmanager.utils.edit import exe_edit
 from larpmanager.utils.miscellanea import get_warehouse_optionals
@@ -157,7 +156,6 @@ def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
         HttpResponse: Redirect to home with success/error message
         HttpResponseForbidden: If user lacks permissions
     """
-    context = get_context(request)
     # Get the ticket
     ticket = get_object_or_404(LarpManagerTicket, pk=ticket_id)
 
@@ -165,9 +163,10 @@ def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
     is_superuser = is_lm_admin(request)
     is_maintainer = False
 
-    if context["member"]:
-        maintainers = get_association_maintainers(ticket.association)
-        is_maintainer = context["member"] in maintainers
+    # Disable for now access to maintainers
+    # if context["member"]:
+    #     maintainers = get_association_maintainers(ticket.association)
+    #     is_maintainer = context["member"] in maintainers
 
     # Deny access if neither superuser nor maintainer
     if not (is_superuser or is_maintainer):
