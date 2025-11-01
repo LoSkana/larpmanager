@@ -954,6 +954,9 @@ msgstr "Attiva"
 msgid "Addition"
 msgstr "Aggiunta"
 
+msgid "Analysis"
+msgstr "Analisi"
+
 msgid "Approval"
 msgstr "Approvazione"
 
@@ -1754,6 +1757,9 @@ msgstr "Leggero"
 
 msgid "Limitations"
 msgstr "Limitazioni"
+
+msgid "Maintainers"
+msgstr "Manutentori"
 
 msgid "Max fillers"
 msgstr "Filler massimi"
@@ -5400,7 +5406,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Ecco un elenco di problemi critici da risolvere"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "Codice lingua ISO (ad esempio, 'en', 'it', 'de')"
+msgstr "Codice lingua ISO (ad esempio, \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5923,6 +5929,9 @@ msgstr "Questa pagina riepiloga i tipi di quest dell'evento"
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Puoi caricare un file in formato pdf o un'immagine"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "Non hai il permesso di analizzare questo biglietto"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Hai già versato la quota sociale di quest'anno"
@@ -7289,10 +7298,20 @@ msgstr ""
 "Questa pagina mostra le informazioni per eseguire l'estrazione della "
 "lotteria"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+"L'analisi dei biglietti è iniziata. Riceverete un'e-mail al termine "
+"dell'analisi"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Per caricare le relazioni, aggiungere un secondo file con le seguenti "
 "colonne"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Utenti che possono gestire i ticket di assistenza e ricevere notifiche di "
+"ticket"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr ""
@@ -10305,8 +10324,8 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Inserisci il codice 'porta un amico' fornito da un partecipante iscritto per"
-" ricevere uno sconto di %(amount)d sulla tua quota di iscrizione"
+"Inserite il codice \"porta un amico\" fornito da un partecipante registrato "
+"per ricevere uno sconto di %(amount)d sulla vostra quota di iscrizione"
 
 msgid ""
 "Indicate the special discount code, to be communicated to the participants, "

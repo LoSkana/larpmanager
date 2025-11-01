@@ -954,6 +954,9 @@ msgstr "Activer"
 msgid "Addition"
 msgstr "Ajout"
 
+msgid "Analysis"
+msgstr "Analyse"
+
 msgid "Approval"
 msgstr "Approbation"
 
@@ -1754,6 +1757,9 @@ msgstr "Léger"
 
 msgid "Limitations"
 msgstr "Limites"
+
+msgid "Maintainers"
+msgstr "Mainteneurs"
 
 msgid "Max fillers"
 msgstr "Remplissage maximal"
@@ -5404,7 +5410,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Voici une liste de problèmes critiques à résoudre"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "Code ISO de la langue (par exemple, 'en', 'it', 'de')"
+msgstr "Code ISO de la langue (par exemple, \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5939,6 +5945,9 @@ msgstr "Cette page résume les types de quêtes de l'événement"
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Vous pouvez télécharger un fichier au format pdf ou une image"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "Vous n'avez pas la permission d'analyser ce ticket"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Vous avez déjà payé la cotisation de cette année"
@@ -7370,10 +7379,20 @@ msgstr ""
 "Cette page présente les informations nécessaires pour effectuer le tirage de"
 " la loterie"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+"L'analyse des billets a commencé. Vous recevrez un courriel lorsque "
+"l'analyse sera terminée"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Pour télécharger les relations, ajoutez un deuxième fichier contenant les "
 "colonnes suivantes"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Utilisateurs qui peuvent gérer les tickets d'assistance et recevoir des "
+"notifications de tickets"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Vous avez atteint le nombre maximum de caractères pouvant être créés"
@@ -10411,7 +10430,7 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Saisissez le code 'Amenez un ami' fourni par un participant inscrit pour "
+"Saisissez le code \"Amenez un ami\" fourni par un participant inscrit pour "
 "bénéficier d'une réduction de %(amount)d sur vos frais d'inscription"
 
 msgid ""

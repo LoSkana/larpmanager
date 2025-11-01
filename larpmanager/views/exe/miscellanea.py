@@ -18,9 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.http import HttpRequest, HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.miscellanea import ExeUrlShortnerForm
 from larpmanager.forms.warehouse import (
@@ -29,6 +31,8 @@ from larpmanager.forms.warehouse import (
     ExeWarehouseMovementForm,
     ExeWarehouseTagForm,
 )
+from larpmanager.models.association import get_association_maintainers
+from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.models.miscellanea import (
     UrlShortner,
     WarehouseContainer,
@@ -36,10 +40,12 @@ from larpmanager.models.miscellanea import (
     WarehouseMovement,
     WarehouseTag,
 )
-from larpmanager.utils.base import check_association_context
+from larpmanager.utils.auth import is_lm_admin
+from larpmanager.utils.base import check_association_context, get_context
 from larpmanager.utils.bulk import handle_bulk_items
 from larpmanager.utils.edit import exe_edit
 from larpmanager.utils.miscellanea import get_warehouse_optionals
+from larpmanager.utils.ticket import analyze_ticket_bgk
 
 
 @login_required
@@ -135,3 +141,42 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_warehouse_movements_edit(request, num):
     return exe_edit(request, ExeWarehouseMovementForm, num, "exe_warehouse_movements")
+
+
+@login_required
+def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
+    """Trigger automatic analysis for a support ticket.
+
+    Only superusers and association (maintainers) can trigger analysis.
+
+    Args:
+        request: Django HTTP request object (must be authenticated)
+        ticket_id: ID of the ticket to analyze
+
+    Returns:
+        HttpResponse: Redirect to home with success/error message
+        HttpResponseForbidden: If user lacks permissions
+    """
+    context = get_context(request)
+    # Get the ticket
+    ticket = get_object_or_404(LarpManagerTicket, pk=ticket_id)
+
+    # Check if user is superuser or maintainer of the ticket's association
+    is_superuser = is_lm_admin(request)
+    is_maintainer = False
+
+    if context["member"]:
+        maintainers = get_association_maintainers(ticket.association)
+        is_maintainer = context["member"] in maintainers
+
+    # Deny access if neither superuser nor maintainer
+    if not (is_superuser or is_maintainer):
+        message = _("You don't have permission to analyze this ticket")
+        messages.error(request, message)
+        return HttpResponseForbidden(message)
+
+    # Trigger the background analysis task
+    analyze_ticket_bgk(ticket.id)
+
+    messages.success(request, _("Ticket analysis started. You will receive an email when it's complete"))
+    return redirect("home")

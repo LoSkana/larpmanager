@@ -284,7 +284,7 @@ def orga_features(request, event_slug):
             messages.success(request, msg)
             return redirect(feature.follow_link)
 
-        get_index_event_permissions(context, request, event_slug)
+        get_index_event_permissions(request, context, event_slug)
         return render(request, "larpmanager/manage/features.html", context)
     return render(request, "larpmanager/orga/edit.html", context)
 

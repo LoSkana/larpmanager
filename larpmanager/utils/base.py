@@ -269,7 +269,7 @@ def check_event_context(request, event_slug: str, permission_slug: str | list[st
             raise FeatureError(path=request.path, feature=feature_name, run=context["run"].id)
 
     # Load additional event permissions and management context
-    get_index_event_permissions(context, request, event_slug)
+    get_index_event_permissions(request, context, event_slug)
 
     # Set management page flags
     context["orga_page"] = 1
@@ -367,7 +367,7 @@ def get_event_context(
 
     # Configure user permissions and sidebar for authorized users
     if has_event_permission(request, context, event_slug):
-        get_index_event_permissions(context, request, event_slug)
+        get_index_event_permissions(request, context, event_slug)
         context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Set association slug from request or event object

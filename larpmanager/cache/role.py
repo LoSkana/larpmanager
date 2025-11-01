@@ -30,7 +30,7 @@ from larpmanager.cache.permission import (
     get_event_permission_feature,
 )
 from larpmanager.models.access import AssociationRole, EventRole
-from larpmanager.utils.auth import get_allowed_managed
+from larpmanager.utils.auth import get_allowed_managed, is_lm_admin
 from larpmanager.utils.exceptions import PermissionError
 
 
@@ -120,8 +120,8 @@ def get_association_roles(request: HttpRequest, context: dict) -> tuple[bool, di
     permissions = {}
 
     # Superusers have all permissions automatically
-    if request.user.is_superuser:
-        return True, [], ["superuser"]
+    if is_lm_admin(request):
+        return True, {}, ["superuser"]
 
     # Get cached event context and role information
     is_admin = False
@@ -313,12 +313,12 @@ def get_event_roles(request: HttpRequest, context, slug: str) -> tuple[bool, dic
     slug = slug.split("-", 1)[0]
 
     # Superusers have full access to all events
-    if request.user.is_superuser:
-        return True, [], ["superuser"]
+    if is_lm_admin(request):
+        return True, {}, ["superuser"]
 
     # Get cached event context and check if user has roles for this event
     if slug not in context["event_role"]:
-        return False, [], []
+        return False, {}, []
 
     # Initialize tracking variables for user's roles in this event
     is_organizer = False
@@ -388,7 +388,7 @@ def has_event_permission(request: HttpRequest, context: dict, event_slug: str, p
     return permission_name in user_permissions
 
 
-def get_index_event_permissions(context, request, event_slug, enforce_check=True):
+def get_index_event_permissions(request: HttpRequest, context: dict, event_slug: str, enforce_check: bool = True):
     """Load event permissions and roles for management interface.
 
     Args:
@@ -460,7 +460,7 @@ def check_managed(context: dict, permission: str, is_association: bool = True) -
 
 
 def get_index_permissions(
-    context: dict, features: list[str], has_default: bool, permissions: list[str], permission_type: str
+    context: dict, features: dict, has_default: bool, permissions: dict, permission_type: str
 ) -> dict[tuple[str, str], list[dict]]:
     """Build index permissions structure based on user access and features.
 
@@ -470,9 +470,9 @@ def get_index_permissions(
 
     Args:
         context: Context dictionary containing association information
-        features: List of available feature slugs for the user
+        features: Dict of available feature slugs for the user
         has_default: Whether user has default permissions (bypasses specific checks)
-        permissions: List of specific permission slugs the user has
+        permissions: Dict of specific permission slugs the user has
         permission_type: Permission type to filter (e.g., 'association', 'event')
 
     Returns:

@@ -304,6 +304,12 @@ class LarpManagerTicket(BaseModel):
         options={"quality": 80},
     )
 
+    status = models.BooleanField(default=False)
+
+    priority = models.CharField(max_length=100, verbose_name=_("Priority"), default="")
+
+    analysis = models.CharField(max_length=10000, verbose_name=_("Analysis"), default="")
+
     def show_thumb(self):
         """Generate HTML for displaying screenshot thumbnail.
 
