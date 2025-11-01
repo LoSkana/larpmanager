@@ -3,22 +3,6 @@
 echo "Git pull main repository..."
 git pull
 
-# Get the parent directory and project name
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-PROJECT_NAME="$(basename "$PROJECT_DIR")"
-ANALYSIS_DIR="$(dirname "$PROJECT_DIR")/analysis"
-
-# If analysis directory exists, pull there too
-if [ -d "$ANALYSIS_DIR" ]; then
-    echo "Git pull analysis repository..."
-    cd "$ANALYSIS_DIR"
-    git pull
-    cd "$PROJECT_DIR"
-else
-    echo "Analysis directory not found at $ANALYSIS_DIR, skipping..."
-fi
-
 echo "Stop tasks..."
 pkill -f process_tasks
 
