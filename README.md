@@ -8,6 +8,19 @@
 
 ---
 
+## Documentation
+
+- **[Features and Permissions Guide](docs/01-features-and-permissions.md)** - How to create new features, views, and permissions
+- **[Roles and Context Guide](docs/02-roles-and-context.md)** - How to structure views with context and understand role-based permissions
+- **[Configuration System Guide](docs/03-configuration-system.md)** - How to add customizable settings without modifying models
+- **[Localization Guide](docs/04-localization.md)** - How to write translatable code and manage translations
+- **[Playwright Testing Guide](docs/05-playwright-testing.md)** - How to write and run end-to-end tests
+- **[Developer Instructions](CLAUDE.md)** - Project architecture, development commands, and best practices
+- **[Contributing](#contributing)** - How to contribute to the project
+- **[Deployment](#deploy)** - Production deployment instructions
+
+---
+
 ## Licensing
 
 LarpManager is distributed under a **dual license** model:
@@ -280,20 +293,6 @@ Thanks in advance for contributing! Here's the steps:
    This will execute some helpful activities like making sure you're updated with main branch, deleting old local branches, and other small things like that.
 
 10. Go and open [a new pull request](https://github.com/loskana/larpmanager/pulls). Make sure to explain clearly in the description what's happening.
-
-### New features
-
-If you want to develop a new feature, usually you follow this steps:
-- Create a new `Feature` object that encapsulates the new functionalities. Set `overall` if it applies to whole organization.
-- Create new views. Follow the standard of the prefix `orga_` if it applies to the single event, and the prefix `exe_` if it applies to the whole organization;
-- To add sidebar links, create `AssociationPermission` (for organization dashboard) and/or `EventPermission` (for event dashboard). Put the name of the views as `slug`, the feature object as `feature`, and the module object as `module`.
-
-Before pushing your changes, run `python manage.py export_features` to update the fixtures with your new elements.
-
-Please note that adding new fields to the existing models can be added only if they are fields used by *every* instance on that model.
-If some instance of that model would not use the new field, it's best to think of an alternative solution (like using `EventConfig`, `RunConfig` or `AssocConfig`).
-
-*Note that the corresponding `python manage.py import_features`, that reloads features and permissions from the fixtures, is run during the deploy script*
 
 
 ### Guidelines

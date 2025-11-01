@@ -216,7 +216,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     return context
 
 
-def check_event_context(request, event_slug: str, required_permission: str | list[str] | None = None) -> dict:
+def check_event_context(request, event_slug: str, permission_slug: str | list[str] | None = None) -> dict:
     """Check event permissions and prepare management context.
 
     Validates user permissions for event management operations and prepares
@@ -225,7 +225,7 @@ def check_event_context(request, event_slug: str, required_permission: str | lis
     Args:
         request: Django HTTP request object containing user and session data
         event_slug: Event slug identifier for the target event
-        required_permission: Required permission(s). Can be a single permission string or list of permissions.
+        permission_slug: Required permission(s). Can be a single permission slug or list of permission slugs.
             If None, only basic event access is checked.
 
     Returns:
@@ -244,17 +244,17 @@ def check_event_context(request, event_slug: str, required_permission: str | lis
     context = get_event_context(request, event_slug)
 
     # Verify user has the required permissions for this event
-    if not has_event_permission(request, context, event_slug, required_permission):
+    if not has_event_permission(request, context, event_slug, permission_slug):
         raise PermissionError()
 
     # Process permission-specific features and configuration
-    if required_permission:
+    if permission_slug:
         # Handle permission lists by taking the first permission
-        if isinstance(required_permission, list):
-            required_permission = required_permission[0]
+        if isinstance(permission_slug, list):
+            permission_slug = permission_slug[0]
 
         # Get feature configuration for this permission
-        (feature_name, tutorial_key, config_section) = get_event_permission_feature(required_permission)
+        (feature_name, tutorial_key, config_section) = get_event_permission_feature(permission_slug)
 
         # Add tutorial information if not already present
         if "tutorial" not in context:
