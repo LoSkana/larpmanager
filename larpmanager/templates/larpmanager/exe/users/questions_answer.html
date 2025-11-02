@@ -1,13 +1,13 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Questions" %} - {{ member }}
+    {% trans "Questions" %} - {{ member_edit }}
 {% endblock title %}
 {% block info %}
     {% trans "This page displays the conversation with a participant regarding their expressed need" %}
 {% endblock info %}
 {% block content %}
-    <h2>{{ member }}</h2>
+    <h2>{{ member_edit }}</h2>
     <h2>{% trans "Give a new answer" %}</h2>
     <br />
     <form action="{{ request.path }}"
