@@ -459,7 +459,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, num: int) ->
 
     # Get event context and validate user permissions
     context = get_event_context(request, event_slug, signup=True)
-    registration_find(context["run"], request.user, None)
+    registration_find(context["run"], context["member"], None)
     get_char_check(request, context, num, True)
 
     # Retrieve character registration relationship
