@@ -124,7 +124,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             True if question is editable, False otherwise
         """
         # If character approval is disabled, all questions are editable
-        character_approval_enabled = get_event_config(self.params["event"].id, "user_character_approval", False)
+        character_approval_enabled = get_event_config(
+            self.params["event"].id, "user_character_approval", False, context=self.params
+        )
         if not character_approval_enabled:
             return True
 
@@ -189,7 +191,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 self.reorder_field(field_key)
 
             # Add access token field for external writing access
-            if get_event_config(event.id, "writing_external_access", False) and self.instance.pk:
+            if get_event_config(event.id, "writing_external_access", False, context=self.params) and self.instance.pk:
                 fields_default.add("access_token")
                 self.reorder_field("access_token")
 
@@ -199,7 +201,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             del self.fields[field_label]
 
         # Add character completion proposal field for user approval workflow
-        if not self.orga and get_event_config(event.id, "user_character_approval", False):
+        if not self.orga and get_event_config(event.id, "user_character_approval", False, context=self.params):
             if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
                 self.fields["propose"] = forms.BooleanField(
                     required=False,
@@ -333,7 +335,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
-            get_event_config(self.params["event"].id, "writing_relationship_length", 10000)
+            get_event_config(self.params["event"].id, "writing_relationship_length", 10000, context=self.params)
         )
 
         # Skip additional initialization for new instances
@@ -361,7 +363,7 @@ class OrgaCharacterForm(CharacterForm):
         else:
             self.delete_field("player")
 
-        if not get_event_config(self.params["event"].id, "user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False, context=self.params):
             self.delete_field("status")
 
         if "mirror" in self.fields:
@@ -756,7 +758,7 @@ class OrgaWritingQuestionForm(MyForm):
         self.fields["typ"].choices = filtered_choices
 
     def _init_editable(self):
-        if not get_event_config(self.params["event"].id, "user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False, context=self.params):
             self.delete_field("editable")
         else:
             self.fields["editable"] = forms.MultipleChoiceField(

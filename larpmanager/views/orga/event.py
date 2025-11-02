@@ -29,6 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import clear_run_cache_and_media
+from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.role import get_index_event_permissions
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
@@ -284,6 +285,7 @@ def orga_features(request, event_slug):
             messages.success(request, msg)
             return redirect(feature.follow_link)
 
+        context["features"] = get_event_features(context["event"].id)
         get_index_event_permissions(request, context, event_slug)
         return render(request, "larpmanager/manage/features.html", context)
     return render(request, "larpmanager/orga/edit.html", context)

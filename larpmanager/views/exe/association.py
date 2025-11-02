@@ -29,6 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.feature import get_association_features
 from larpmanager.cache.role import get_index_association_permissions
 from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
@@ -240,6 +241,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
             return redirect(feature.follow_link)
 
         # Handle multiple features - show management page
+        context["features"] = get_association_features(context["association_id"])
         get_index_association_permissions(context, request, context["association_id"])
         return render(request, "larpmanager/manage/features.html", context)
 
