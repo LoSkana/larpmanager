@@ -410,7 +410,7 @@ def get_index_event_permissions(request: HttpRequest, context: dict, event_slug:
         raise PermissionError()
     if role_names:
         context["role_names"] = role_names
-    event_features = get_event_features(context["event"].id)
+    event_features = context.get("features", get_event_features(context["event"].id))
     context["event_pms"] = get_index_permissions(context, event_features, is_organizer, user_event_permissions, "event")
 
 
