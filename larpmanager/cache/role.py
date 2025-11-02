@@ -213,7 +213,7 @@ def get_index_association_permissions(
     context["role_names"] = role_names
 
     # Retrieve available features for the association
-    features = get_association_features(association_id)
+    features = context.get("features", get_association_features(association_id))
 
     # Generate permission data for index display
     context["association_pms"] = get_index_permissions(
