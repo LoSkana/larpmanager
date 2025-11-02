@@ -202,8 +202,11 @@ def upload_membership(page, live_server):
     page.locator("#id_date").click()
     page.get_by_role("button", name="Confirm").click()
 
-    # Check result
+    # Try accessing member form
     expect(page.locator("#one")).to_contain_text("Test Admin orga@test.it Accepted 1")
+    page.get_by_role("link", name="").click()
+
+    # Check result
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
     page.get_by_role("button", name="Submit").click()
@@ -245,4 +248,4 @@ def upload_membership_fee(page, live_server):
     # check
     expect(page.locator("#one")).to_contain_text("Test Admin orga@test.it Payed 1")
     page.get_by_role("link", name="Invoices").click()
-    expect(page.locator("#one")).to_contain_text("Admin Test Wire membership Confirmed 10 Membership fee of Admin Test")
+    expect(page.locator("#one")).to_contain_text("Admin TestWiremembershipConfirmed10Membership fee of Admin Test")
