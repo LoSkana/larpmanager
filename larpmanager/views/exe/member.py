@@ -336,14 +336,14 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
     # Handle form submission for member profile updates
     if request.method == "POST":
-        form = ExeMemberForm(request.POST, request.FILES, instance=member_edit, request=request)
+        form = ExeMemberForm(request.POST, request.FILES, instance=member_edit, context=context)
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
         # Initialize empty form for GET requests
-        form = ExeMemberForm(instance=member_edit, request=request)
+        form = ExeMemberForm(instance=member_edit, context=context)
     context["form"] = form
 
     # Get member registrations for current association events
