@@ -106,6 +106,8 @@ def update_reg_counts(run) -> dict[str, int]:
     # Get event features
     features = get_event_features(run.event_id)
 
+    context = {}
+
     # Process each registration to count by ticket tier
     for registration in registrations.select_related("ticket"):
         num_tickets = 1 + registration.additionals
@@ -133,7 +135,7 @@ def update_reg_counts(run) -> dict[str, int]:
                 add_count(counts, "count_player", num_tickets)
 
             # Track provisional registrations separately
-            if is_reg_provisional(registration, event=run.event, features=features):
+            if is_reg_provisional(registration, event=run.event, features=features, context=context):
                 add_count(counts, "count_provisional", num_tickets)
 
         # Add to total registration count
