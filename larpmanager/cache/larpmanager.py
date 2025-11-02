@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db.models import Count
 
@@ -53,7 +52,7 @@ def get_cache_lm_home() -> dict:
     # If cache miss, compute fresh data and cache it
     if cached_data is None:
         cached_data = update_cache_lm_home()
-        cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+        cache.set(cache_key, cached_data, timeout=300)
 
     return cached_data
 

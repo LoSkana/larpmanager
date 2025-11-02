@@ -4703,6 +4703,15 @@ msgstr ""
 msgid "Select the new photo to upload"
 msgstr ""
 
+msgid "Uploading..."
+msgstr ""
+
+msgid "Uploading image, please wait..."
+msgstr ""
+
+msgid "Error uploading image. Please try again."
+msgstr ""
+
 msgid "Your characters"
 msgstr ""
 

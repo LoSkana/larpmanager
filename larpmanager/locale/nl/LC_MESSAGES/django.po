@@ -2082,6 +2082,9 @@ msgstr "Vertalingen"
 msgid "Type of text"
 msgstr "Type tekst"
 
+msgid "Uploading..."
+msgstr "Uploaden..."
+
 msgid "Url Shortner"
 msgstr "Url Verkorter"
 
@@ -4571,6 +4574,9 @@ msgstr "Om weer in te loggen met het account"
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstroom"
 
+msgid "Uploading image, please wait..."
+msgstr "Afbeelding wordt geüpload, even geduld..."
+
 msgid "You have completed the payment!"
 msgstr "Je hebt de storting voltooid!"
 
@@ -5264,6 +5270,9 @@ msgstr "Beschrijf precies onder welke omstandigheden het optreedt"
 
 msgid "Did you check the required data properly"
 msgstr "Heb je de vereiste gegevens goed gecontroleerd"
+
+msgid "Error uploading image. Please try again."
+msgstr "Fout bij het uploaden van de afbeelding. Probeer het opnieuw."
 
 msgid "IP address from which the token was used"
 msgstr "IP-adres van waaruit het token is gebruikt"

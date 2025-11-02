@@ -2082,6 +2082,9 @@ msgstr "Traducciones"
 msgid "Type of text"
 msgstr "Tipo de texto"
 
+msgid "Uploading..."
+msgstr "Cargando..."
+
 msgid "Url Shortner"
 msgstr "Acortador de Url"
 
@@ -4571,6 +4574,9 @@ msgstr "Para volver a conectarse con la cuenta"
 msgid "Total of recorded money inflows"
 msgstr "Total de entradas de dinero registradas"
 
+msgid "Uploading image, please wait..."
+msgstr "Cargando imagen, por favor espere..."
+
 msgid "You have completed the payment!"
 msgstr "¡Has completado el pago!"
 
@@ -5262,6 +5268,9 @@ msgstr "Describe exactamente en qué condiciones se encuentra"
 
 msgid "Did you check the required data properly"
 msgstr "¿Has comprobado correctamente los datos requeridos"
+
+msgid "Error uploading image. Please try again."
+msgstr "Error al cargar la imagen. Por favor, inténtelo de nuevo."
 
 msgid "IP address from which the token was used"
 msgstr "Dirección IP desde la que se utilizó el token"

@@ -2082,6 +2082,9 @@ msgstr "Översättningar"
 msgid "Type of text"
 msgstr "Typ av text"
 
+msgid "Uploading..."
+msgstr "Uppladdning..."
+
 msgid "Url Shortner"
 msgstr "Kortare URL"
 
@@ -4571,6 +4574,9 @@ msgstr "För att logga in igen med kontot"
 msgid "Total of recorded money inflows"
 msgstr "Totalt antal registrerade penninginflöden"
 
+msgid "Uploading image, please wait..."
+msgstr "Laddar upp bild, vänligen vänta..."
+
 msgid "You have completed the payment!"
 msgstr "Du har slutfört insättningen!"
 
@@ -5264,6 +5270,9 @@ msgstr "Beskriv exakt under vilka förhållanden den förekommer"
 
 msgid "Did you check the required data properly"
 msgstr "Har du kontrollerat de nödvändiga uppgifterna på rätt sätt"
+
+msgid "Error uploading image. Please try again."
+msgstr "Fel vid uppladdning av bild. Vänligen försök igen."
 
 msgid "IP address from which the token was used"
 msgstr "IP-adress från vilken token användes"
