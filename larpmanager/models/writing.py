@@ -242,6 +242,16 @@ class Character(Writing):
     def get_config(self, name, default_value=None, bypass_cache=False):
         return get_element_config(self, name, default_value, bypass_cache)
 
+    @property
+    def is_active(self) -> bool:
+        """Check if character is active (not marked as inactive in CharacterConfig).
+
+        Returns:
+            True if character is active (no inactive config), False otherwise.
+        """
+        is_inactive = self.get_config("inactive", False)
+        return not (is_inactive == "True" or is_inactive is True)
+
     def show(self, run=None):
         """Generate display dictionary with character information and media URLs.
 

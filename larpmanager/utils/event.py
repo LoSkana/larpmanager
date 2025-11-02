@@ -537,16 +537,11 @@ def assign_previous_campaign_character(registration) -> None:
         - Does nothing if character already assigned to current run
     """
     # Skip if registration has no member or is cancelled
-    if not registration.member:
-        return
-
-    if registration.cancellation_date:
+    if not registration.member or registration.cancellation_date:
         return
 
     # Only proceed if this is a campaign event with parent
-    if "campaign" not in get_event_features(registration.run.event_id):
-        return
-    if not registration.run.event.parent:
+    if "campaign" not in get_event_features(registration.run.event_id) or not registration.run.event.parent:
         return
 
     # Skip if member already has a character assigned to this run
@@ -569,14 +564,18 @@ def assign_previous_campaign_character(registration) -> None:
     previous_character_relation = RegistrationCharacterRel.objects.filter(
         reg__member=registration.member, reg__run=previous_campaign_run
     ).first()
-    if previous_character_relation:
-        new_character_relation = RegistrationCharacterRel.objects.create(
-            reg=registration, character=previous_character_relation.character
-        )
 
-        # Copy custom character attributes from previous run
-        for custom_attribute_name in ["name", "pronoun", "song", "public", "private"]:
-            if hasattr(previous_character_relation, "custom_" + custom_attribute_name):
-                attribute_value = getattr(previous_character_relation, "custom_" + custom_attribute_name)
-                setattr(new_character_relation, "custom_" + custom_attribute_name, attribute_value)
-        new_character_relation.save()
+    # Only proceed if previous character exists and is active
+    if not previous_character_relation or not previous_character_relation.character.is_active:
+        return
+
+    new_character_relation = RegistrationCharacterRel.objects.create(
+        reg=registration, character=previous_character_relation.character
+    )
+
+    # Copy custom character attributes from previous run
+    for custom_attribute_name in ["name", "pronoun", "song", "public", "private"]:
+        if hasattr(previous_character_relation, "custom_" + custom_attribute_name):
+            attribute_value = getattr(previous_character_relation, "custom_" + custom_attribute_name)
+            setattr(new_character_relation, "custom_" + custom_attribute_name, attribute_value)
+    new_character_relation.save()

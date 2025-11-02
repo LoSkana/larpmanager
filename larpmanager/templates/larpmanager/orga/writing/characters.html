@@ -13,6 +13,9 @@
     {% if features.campaign and event.parent %}
         <a href="#" class="table_toggle" tog='attended'>{% trans "Attended" %}</a>
     {% endif %}
+    {% if features.campaign %}
+        <a href="#" class="table_toggle" tog='active'>{% trans "Active" %}</a>
+    {% endif %}
     {% if user_character_approval %}
         <a href="#" class="table_toggle" tog='status'>{% trans "Status" %}</a>
     {% endif %}
@@ -42,6 +45,9 @@
     {% endif %}
     {% if features.campaign and event.parent %}
         <th class="attended">{% trans "Attended" %}</th>
+    {% endif %}
+    {% if features.campaign %}
+        <th class="active">{% trans "Active" %}</th>
     {% endif %}
     {% if user_character_approval %}
         <th class="status">{% trans "Status" %}</th>
@@ -116,6 +122,11 @@
             {% if features.campaign and event.parent %}
                 <td class="attended">
                     {% if el.has_registration %}<i class="fa fa-check"></i>{% endif %}
+                </td>
+            {% endif %}
+            {% if features.campaign %}
+                <td class="active">
+                    {% if el.addit.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
                 </td>
             {% endif %}
             {% if user_character_approval %}<td class="status">{{ el.get_status_display }}</td>{% endif %}
