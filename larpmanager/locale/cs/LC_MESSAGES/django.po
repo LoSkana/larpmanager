@@ -2082,6 +2082,9 @@ msgstr "Překlady"
 msgid "Type of text"
 msgstr "Typ textu"
 
+msgid "Uploading..."
+msgstr "Nahrávání..."
+
 msgid "Url Shortner"
 msgstr "Zkracovač URL"
 
@@ -4571,6 +4574,9 @@ msgstr "Opětovné přihlášení pomocí účtu"
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
 
+msgid "Uploading image, please wait..."
+msgstr "Nahrávání obrázku, počkejte prosím..."
+
 msgid "You have completed the payment!"
 msgstr "Vklad jste dokončili!"
 
@@ -5262,6 +5268,9 @@ msgstr "Popište přesně, za jakých podmínek k tomu dochází"
 
 msgid "Did you check the required data properly"
 msgstr "Zkontrolovali jste správně požadované údaje"
+
+msgid "Error uploading image. Please try again."
+msgstr "Chyba při nahrávání obrázku. Zkuste to prosím znovu."
 
 msgid "IP address from which the token was used"
 msgstr "IP adresa, ze které byl token použit"
