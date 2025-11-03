@@ -794,6 +794,9 @@ msgstr ""
 msgid "--- NOT ASSIGNED ---"
 msgstr ""
 
+msgid "Inactive characters can't be assigned to players"
+msgstr ""
+
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr ""
@@ -9554,6 +9557,9 @@ msgid "You have reached the maximum number of characters that can be created"
 msgstr ""
 
 msgid "You already have an assigned character"
+msgstr ""
+
+msgid "This character is inactive and cannot be assigned to players"
 msgstr ""
 
 msgid "Assigned character!"

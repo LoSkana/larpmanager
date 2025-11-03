@@ -53,6 +53,7 @@ from larpmanager.models.form import (
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
+    CharacterConfig,
     CharacterStatus,
     Faction,
     FactionType,
@@ -371,6 +372,21 @@ class OrgaCharacterForm(CharacterForm):
             character_choices = [(character.id, character.name) for character in characters_query]
             self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + character_choices
 
+        # Add active field for campaign feature
+        if "campaign" in self.params["features"]:
+            self.fields["active"] = forms.BooleanField(
+                required=False,
+                label=_("Active"),
+                help_text=_("Inactive characters can't be assigned to players"),
+                widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
+            )
+            # Set initial value - default to True unless character has inactive config
+            if self.instance.pk:
+                is_inactive = self.instance.get_config("inactive", False)
+                self.initial["active"] = not (is_inactive == "True" or is_inactive is True)
+            else:
+                self.initial["active"] = True
+
         self._init_special_fields()
 
     def _init_plots(self):
@@ -625,8 +641,34 @@ class OrgaCharacterForm(CharacterForm):
             self._save_plot(instance)
             self._save_px(instance)
             self._save_relationships(instance)
+            self._save_active(instance)
 
         return instance
+
+    def _save_active(self, instance: Any) -> None:
+        """Save active status to CharacterConfig if campaign feature is enabled."""
+        # Check if campaign feature is available
+        if "campaign" not in self.params["features"]:
+            return
+
+        # Only process if active field is present in cleaned data
+        if "active" not in self.cleaned_data:
+            return
+
+        # Get the active field value
+        is_active = self.cleaned_data["active"]
+
+        # Handle inactive status - create/update CharacterConfig if inactive
+        if not is_active:
+            # Character is inactive - ensure CharacterConfig exists with inactive=True
+            CharacterConfig.objects.update_or_create(
+                character=instance,
+                name="inactive",
+                defaults={"value": "True"},
+            )
+        else:
+            # Character is active - remove CharacterConfig if it exists
+            CharacterConfig.objects.filter(character=instance, name="inactive").delete()
 
 
 class OrgaWritingQuestionForm(MyForm):

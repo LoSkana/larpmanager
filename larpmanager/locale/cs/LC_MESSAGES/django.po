@@ -5893,6 +5893,9 @@ msgstr "Zde je omezený počet možností vstupu"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Mám zájem, ale nemám mnoho zkušeností"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Neaktivní postavy nelze přiřadit k hráčům"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "Chcete nám ještě něco říct"
 
@@ -6611,6 +6614,9 @@ msgstr ""
 
 msgid "Set up the tickets that users can select during registration"
 msgstr "Nastavení tipů, které si uživatelé mohou vybrat při registraci"
+
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
 
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""

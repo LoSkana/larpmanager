@@ -5907,6 +5907,9 @@ msgstr "Voici le nombre limité d'options de participation"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Je suis intéressé, mais je n'ai pas beaucoup d'expérience"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Les personnages inactifs ne peuvent pas être assignés à des joueurs"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "Y a-t-il autre chose que vous aimeriez nous dire"
 
@@ -6689,6 +6692,9 @@ msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Configurer les tickets que les utilisateurs peuvent sélectionner lors de "
 "l'inscription"
+
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Ce personnage est inactif et ne peut pas être assigné à des joueurs"
 
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""

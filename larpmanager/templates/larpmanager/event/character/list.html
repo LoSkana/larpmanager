@@ -5,8 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% if not char_maximum %}
-        <a href="{% url 'character_create' run.get_slug %}"
-           class="add-new">{% trans "Create new character" %}</a>
+        <a href="{% url 'character_create' run.get_slug %}" class="add-new">{% trans "Create new character" %}</a>
         <br />
     {% endif %}
     <table id="characters" class="tablesorter mob">
@@ -22,6 +21,9 @@
                 {% endfor %}
                 {% if approval %}
                     <th>{% trans "Status" %}</th>
+                {% endif %}
+                {% if features.campaign %}
+                    <th>{% trans "Active" %}</th>
                 {% endif %}
                 {% if features.px %}
                     <th>{% trans "XP tot" %}</th>
@@ -43,6 +45,7 @@
                         </td>
                     {% endif %}
                     <td>{{ el.name }}</td>
+                    {% if features.title %}<td>{{ el.title }}</td>{% endif %}
                     <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>
                     {% for idx, _ in searchable.items %}
                         {% with el.fields|get:idx as field %}
@@ -54,6 +57,11 @@
                         {% endwith %}
                     {% endfor %}
                     {% if approval %}<td>{{ el.get_status_display }}</td>{% endif %}
+                    {% if features.campaign %}
+                        <td>
+                            {% if el.addit.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
+                        </td>
+                    {% endif %}
                     {% if features.px %}
                         <td>{{ el.addit | get:'px_tot' }}</td>
                         <td>{{ el.addit | get:'px_used' }}</td>

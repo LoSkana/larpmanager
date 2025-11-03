@@ -5901,6 +5901,9 @@ msgstr "Dit zijn de beperkte toegangsmogelijkheden"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Ik ben geïnteresseerd, maar heb niet veel ervaring"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Inactieve personages kunnen niet worden toegewezen aan spelers"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "Is er nog iets dat je ons wilt vertellen"
 
@@ -6644,6 +6647,9 @@ msgstr "Beheer eenmalige toegangstokens voor beveiligde video/audio-inhoud"
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Stel de tickets in die gebruikers kunnen selecteren tijdens de registratie"
+
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Dit personage is inactief en kan niet worden toegewezen aan spelers"
 
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""

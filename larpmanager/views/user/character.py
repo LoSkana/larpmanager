@@ -559,10 +559,9 @@ def character_list(request, event_slug):
     # add character configs
     char_add_addit(context)
     for el in context["list"]:
-        if "character" in context["features"]:
-            res = get_character_element_fields(context, el.id, only_visible=True)
-            el.fields = res["fields"]
-            context.update(res)
+        res = get_character_element_fields(context, el.id, only_visible=True)
+        el.fields = res["fields"]
+        context.update(res)
 
     check, _max_chars = check_character_maximum(context["event"], context["member"])
     context["char_maximum"] = check
@@ -660,6 +659,8 @@ def character_assign(request, event_slug, num):
     get_char_check(request, context, num, True)
     if RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).exists():
         messages.warning(request, _("You already have an assigned character"))
+    elif not context["character"].is_active:
+        messages.error(request, _("This character is inactive and cannot be assigned to players"))
     else:
         RegistrationCharacterRel.objects.create(reg_id=context["run"].reg.id, character_id=context["character"].id)
         messages.success(request, _("Assigned character!"))

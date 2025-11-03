@@ -5896,6 +5896,9 @@ msgstr "Her er det begrensede antallet påmeldingsalternativer"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Jeg er interessert, men har ikke mye erfaring"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Inaktive karakterer kan ikke tildeles spillere"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "Er det noe annet du vil fortelle oss"
 
@@ -6619,6 +6622,9 @@ msgstr "Administrer engangskoder for sikker tilgang til video-/lydinnhold"
 
 msgid "Set up the tickets that users can select during registration"
 msgstr "Konfigurer billettene som brukerne kan velge under registreringen"
+
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Denne karakteren er inaktiv og kan ikke tildeles spillere"
 
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""
