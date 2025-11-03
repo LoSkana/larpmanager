@@ -259,6 +259,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Returns:
             None
         """
+        # Skip plots field - it's handled separately in _save_plot()
+        if s == "plots":
+            return
+
         # Handle non-faction fields using parent implementation
         if s != "factions_list":
             return super()._save_multi(s, instance)
