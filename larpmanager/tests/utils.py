@@ -211,7 +211,7 @@ def add_links_to_visit(links_to_visit, page, visited_links):
     for link in new_links:
         if "logout" in link:
             continue
-        if link.endswith(("#", "#menu", "#sidebar", "print")):
+        if link.endswith(("#", "#menu", "#sidebar", "print", ".jpg")):
             continue
         if any(s in link for s in ["features", "pdf", "backup", "upload/template"]):
             continue

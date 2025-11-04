@@ -468,7 +468,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
         return redirect("orga_quick", event_slug=event_slug)
 
     # Load permissions and navigation
-    get_index_event_permissions(context, request, event_slug)
+    get_index_event_permissions(request, context, event_slug)
     if get_association_config(context["association_id"], "interface_admin_links", False, context=context):
         get_index_association_permissions(context, request, context["association_id"], check=False)
 

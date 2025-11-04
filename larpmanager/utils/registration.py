@@ -42,7 +42,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
 
@@ -593,8 +593,16 @@ def check_character_maximum(event, member) -> tuple[bool, int]:
     Returns:
         Tuple of (has_reached_limit, max_allowed_characters)
     """
-    # Count current characters for this member in the event
-    current_character_count = event.get_elements(Character).filter(player=member).count()
+    # Get all characters for this member in the event
+    characters = event.get_elements(Character).filter(player=member)
+
+    # Get IDs of inactive characters (those with CharacterConfig inactive=True)
+    inactive_character_ids = CharacterConfig.objects.filter(
+        character__in=characters, name="inactive", value="True"
+    ).values_list("character_id", flat=True)
+
+    # Count only active characters (exclude inactive ones)
+    current_character_count = characters.exclude(id__in=inactive_character_ids).count()
 
     # Get the maximum allowed characters from event configuration
     maximum_characters_allowed = int(get_event_config(event.id, "user_character_max", 0))
@@ -830,8 +838,21 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
     if not characters:
         return
 
-    # Auto-assign the first character to the registration
-    RegistrationCharacterRel.objects.create(character_id=characters[0].id, reg=registration)
+    # Get IDs of inactive characters (those with CharacterConfig inactive=True)
+    character_ids = [char.id for char in characters]
+    inactive_character_ids = set(
+        CharacterConfig.objects.filter(character_id__in=character_ids, name="inactive", value="True").values_list(
+            "character_id", flat=True
+        )
+    )
+
+    # Filter out inactive characters
+    active_characters = [char for char in characters if char.id not in inactive_character_ids]
+    if not active_characters:
+        return
+
+    # Auto-assign the first active character to the registration
+    RegistrationCharacterRel.objects.create(character_id=active_characters[0].id, reg=registration)
 
 
 def get_reduced_available_count(run) -> int:

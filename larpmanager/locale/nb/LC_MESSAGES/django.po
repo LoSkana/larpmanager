@@ -954,6 +954,9 @@ msgstr "Aktiver"
 msgid "Addition"
 msgstr "Tillegg"
 
+msgid "Analysis"
+msgstr "Analyse"
+
 msgid "Approval"
 msgstr "Godkjenning"
 
@@ -1755,6 +1758,9 @@ msgstr "Lettvekt"
 msgid "Limitations"
 msgstr "Begrensninger"
 
+msgid "Maintainers"
+msgstr "Vedlikeholdere"
+
 msgid "Max fillers"
 msgstr "Maks fyllstoffer"
 
@@ -2075,6 +2081,9 @@ msgstr "Oversettelser"
 
 msgid "Type of text"
 msgstr "Type tekst"
+
+msgid "Uploading..."
+msgstr "Laster opp..."
 
 msgid "Url Shortner"
 msgstr "URL-forkortelse"
@@ -4565,6 +4574,9 @@ msgstr "Slik logger du inn igjen med kontoen"
 msgid "Total of recorded money inflows"
 msgstr "Summen av registrerte pengestrømmer"
 
+msgid "Uploading image, please wait..."
+msgstr "Laster opp bilde, vennligst vent..."
+
 msgid "You have completed the payment!"
 msgstr "Du har fullført innbetalingen!"
 
@@ -5259,6 +5271,9 @@ msgstr "Beskriv nøyaktig under hvilke forhold det skjer"
 msgid "Did you check the required data properly"
 msgstr "Har du sjekket de nødvendige dataene på riktig måte"
 
+msgid "Error uploading image. Please try again."
+msgstr "Feil ved opplasting av bilde. Vennligst prøv igjen."
+
 msgid "IP address from which the token was used"
 msgstr "IP-adressen som tokenet ble brukt fra"
 
@@ -5402,7 +5417,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Her er en liste over kritiske problemer som må løses"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "ISO-språkkode (f.eks. 'en', 'it', 'de')"
+msgstr "ISO-språkkode (f.eks. \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5881,6 +5896,9 @@ msgstr "Her er det begrensede antallet påmeldingsalternativer"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Jeg er interessert, men har ikke mye erfaring"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Inaktive karakterer kan ikke tildeles spillere"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "Er det noe annet du vil fortelle oss"
 
@@ -5925,6 +5943,9 @@ msgstr ""
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Du kan laste opp en fil i pdf-format eller et bilde"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "Du har ikke tillatelse til å analysere denne billetten"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Du har allerede betalt årets medlemskontingent"
@@ -6605,6 +6626,9 @@ msgstr "Administrer engangskoder for sikker tilgang til video-/lydinnhold"
 msgid "Set up the tickets that users can select during registration"
 msgstr "Konfigurer billettene som brukerne kan velge under registreringen"
 
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Denne karakteren er inaktiv og kan ikke tildeles spillere"
+
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""
 "Denne siden viser i detalj hvilke ferdigheter som er merket av en "
@@ -7197,9 +7221,18 @@ msgstr "Denne siden utfører ulike kontroller av tegnkortenes korrekthet"
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Denne siden viser informasjonen for å utføre loddtrekningen"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+"Billettanalysen er påbegynt. Du vil motta en e-post når den er fullført"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "For å laste opp relasjoner legger du til en ny fil med følgende kolonner"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Brukere som kan administrere supporthenvendelser og motta varsler om "
+"henvendelser"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Du har nådd det maksimale antallet tegn som kan opprettes"
@@ -10118,7 +10151,7 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Oppgi koden 'ta med en venn' fra en registrert deltaker for å få en "
+"Oppgi koden \"ta med en venn\" fra en registrert deltaker for å få en "
 "%(amount)d rabatt på registreringsavgiften din"
 
 msgid ""

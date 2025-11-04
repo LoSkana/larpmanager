@@ -954,6 +954,9 @@ msgstr "Aktivace"
 msgid "Addition"
 msgstr "Dodatek"
 
+msgid "Analysis"
+msgstr "Analýza"
+
 msgid "Approval"
 msgstr "Schválení"
 
@@ -1755,6 +1758,9 @@ msgstr "Lehké"
 msgid "Limitations"
 msgstr "Omezení"
 
+msgid "Maintainers"
+msgstr "Správci"
+
 msgid "Max fillers"
 msgstr "Max výplně"
 
@@ -2075,6 +2081,9 @@ msgstr "Překlady"
 
 msgid "Type of text"
 msgstr "Typ textu"
+
+msgid "Uploading..."
+msgstr "Nahrávání..."
 
 msgid "Url Shortner"
 msgstr "Zkracovač URL"
@@ -4565,6 +4574,9 @@ msgstr "Opětovné přihlášení pomocí účtu"
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
 
+msgid "Uploading image, please wait..."
+msgstr "Nahrávání obrázku, počkejte prosím..."
+
 msgid "You have completed the payment!"
 msgstr "Vklad jste dokončili!"
 
@@ -5257,6 +5269,9 @@ msgstr "Popište přesně, za jakých podmínek k tomu dochází"
 msgid "Did you check the required data properly"
 msgstr "Zkontrolovali jste správně požadované údaje"
 
+msgid "Error uploading image. Please try again."
+msgstr "Chyba při nahrávání obrázku. Zkuste to prosím znovu."
+
 msgid "IP address from which the token was used"
 msgstr "IP adresa, ze které byl token použit"
 
@@ -5400,7 +5415,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Zde je seznam kritických problémů, které je třeba odstranit"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "kód jazyka ISO (např. 'en', 'it', 'de')"
+msgstr "kód jazyka ISO (např. \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5878,6 +5893,9 @@ msgstr "Zde je omezený počet možností vstupu"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Mám zájem, ale nemám mnoho zkušeností"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Neaktivní postavy nelze přiřadit k hráčům"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "Chcete nám ještě něco říct"
 
@@ -5923,6 +5941,9 @@ msgstr "Tato stránka shrnuje typy úkolů v této akci"
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Můžete nahrát soubor ve formátu pdf nebo obrázek"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "K analýze tohoto tipu nemáte oprávnění"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Již jste zaplatili letošní členský příspěvek"
@@ -6597,6 +6618,9 @@ msgstr ""
 msgid "Set up the tickets that users can select during registration"
 msgstr "Nastavení tipů, které si uživatelé mohou vybrat při registraci"
 
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
+
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""
 "Na této stránce jsou podrobně uvedeny dovednosti označené přispěvatelem"
@@ -7155,9 +7179,17 @@ msgstr "Tato stránka provádí různé kontroly správnosti karet znaků"
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Na této stránce jsou uvedeny informace k provedení losování"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr "Zahájena analýza vstupenek. Po jejím dokončení obdržíte e-mail"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Chcete-li nahrát vztahy, přidejte druhý soubor s následujícími sloupci"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Uživatelé, kteří mohou spravovat tikety podpory a přijímat oznámení o "
+"tiketech"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Dosáhli jste maximálního počtu znaků, které lze vytvořit"
@@ -10015,8 +10047,8 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Zadejte kód 'přiveďte kamaráda', který vám poskytl registrovaný účastník, a "
-"získejte %(amount)d slevy z registračního poplatku"
+"Zadejte kód \"přiveďte kamaráda\", který vám poskytl registrovaný účastník, "
+"a získejte %(amount)d slevy z registračního poplatku"
 
 msgid ""
 "Indicate the special discount code, to be communicated to the participants, "

@@ -648,11 +648,11 @@ def association_accounting(context: dict) -> None:
         context["pay_money_sum"] + context["membership_sum"] + context["donations_sum"] + context["inflow_sum"]
     ) - (context["outflow_sum"] + context["transactions_sum"] + context["refund_sum"])
 
-    # Build year range dictionary from association creation to current year
+    # Build year range dictionary from current year to association creation
     association = Association.objects.only("created").get(pk=context["association_id"])
     start_year = int(association.created.year)
     end_year = int(datetime.now().date().year)
     context["sum_year"] = {}
-    while start_year <= end_year:
-        context["sum_year"][start_year] = 1
-        start_year += 1
+    while end_year >= start_year:
+        context["sum_year"][end_year] = 1
+        end_year -= 1

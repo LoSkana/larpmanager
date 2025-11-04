@@ -954,6 +954,9 @@ msgstr "Activeer"
 msgid "Addition"
 msgstr "Toevoeging"
 
+msgid "Analysis"
+msgstr "Analyse"
+
 msgid "Approval"
 msgstr "Goedkeuring"
 
@@ -1755,6 +1758,9 @@ msgstr "Lichtgewicht"
 msgid "Limitations"
 msgstr "Beperkingen"
 
+msgid "Maintainers"
+msgstr "Onderhouders"
+
 msgid "Max fillers"
 msgstr "Max vulstoffen"
 
@@ -2075,6 +2081,9 @@ msgstr "Vertalingen"
 
 msgid "Type of text"
 msgstr "Type tekst"
+
+msgid "Uploading..."
+msgstr "Uploaden..."
 
 msgid "Url Shortner"
 msgstr "Url Verkorter"
@@ -4565,6 +4574,9 @@ msgstr "Om weer in te loggen met het account"
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstroom"
 
+msgid "Uploading image, please wait..."
+msgstr "Afbeelding wordt geüpload, even geduld..."
+
 msgid "You have completed the payment!"
 msgstr "Je hebt de storting voltooid!"
 
@@ -5259,6 +5271,9 @@ msgstr "Beschrijf precies onder welke omstandigheden het optreedt"
 msgid "Did you check the required data properly"
 msgstr "Heb je de vereiste gegevens goed gecontroleerd"
 
+msgid "Error uploading image. Please try again."
+msgstr "Fout bij het uploaden van de afbeelding. Probeer het opnieuw."
+
 msgid "IP address from which the token was used"
 msgstr "IP-adres van waaruit het token is gebruikt"
 
@@ -5402,7 +5417,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "Hier is een lijst met kritieke problemen die moeten worden opgelost"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "ISO-taalcode (bijv. 'en', 'it', 'de')"
+msgstr "ISO-taalcode (bijv. \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5886,6 +5901,9 @@ msgstr "Dit zijn de beperkte toegangsmogelijkheden"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Ik ben geïnteresseerd, maar heb niet veel ervaring"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Inactieve personages kunnen niet worden toegewezen aan spelers"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "Is er nog iets dat je ons wilt vertellen"
 
@@ -5930,6 +5948,9 @@ msgstr ""
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Je kunt een bestand in pdf-formaat of een afbeelding uploaden"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "Je hebt geen toestemming om dit ticket te analyseren"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
@@ -6630,6 +6651,9 @@ msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Stel de tickets in die gebruikers kunnen selecteren tijdens de registratie"
 
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Dit personage is inactief en kan niet worden toegewezen aan spelers"
+
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""
 "Deze pagina toont in detail de vaardigheden die zijn gemarkeerd door een "
@@ -7279,9 +7303,18 @@ msgstr ""
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Deze pagina toont de informatie om de lottotrekking uit te voeren"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+"De ticketanalyse is gestart. U ontvangt een e-mail wanneer deze is voltooid"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Voeg een tweede bestand toe met de volgende kolommen om relaties te uploaden"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Gebruikers die supporttickets kunnen beheren en ticketmeldingen kunnen "
+"ontvangen"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Je hebt het maximale aantal tekens bereikt dat kan worden aangemaakt"

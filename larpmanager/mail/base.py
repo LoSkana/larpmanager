@@ -24,6 +24,7 @@ import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -31,7 +32,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
 from larpmanager.models.access import AssociationRole, EventRole, get_association_executives, get_event_organizers
-from larpmanager.models.association import Association, get_url, hdr
+from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
@@ -573,14 +574,37 @@ def get_exec_language(association: Association) -> str:
 
 
 def send_support_ticket_email(instance):
+    """Send ticket notification email to admins and association maintainers.
+
+    Args:
+        instance: LarpManagerTicket instance
+    """
+    # Build email subject
+    subject = f"LarpManager ticket - {instance.association.name}"
+    if instance.reason:
+        subject += f" [{instance.reason}]"
+
+    # Build email body
+    body = f"Ticket ID: {instance.id}<br /><br />"
+    body += f"Email: {instance.email} <br /><br />"
+    if instance.member:
+        body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
+    body += instance.content
+    if instance.screenshot:
+        body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
+
+    # Send to association maintainers
+    for maintainer in get_association_maintainers(instance.association):
+        my_send_mail(subject, body, maintainer.email)
+
+    # Add analyze button for superusers
+    analyze_path = reverse("exe_ticket_analyze", kwargs={"ticket_id": instance.id})
+    analyze_url = get_url(analyze_path.lstrip("/"), instance.association)
+    body += "<br /><br /><hr /><br />"
+    body += "<p><strong>Start automatic ticket analysis:</strong></p>"
+    body += f"<p><a href='{analyze_url}' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;'>Analyze Ticket</a></p>"
+    body += "<p><small>Note: Only superusers and association maintainers can start the analysis.</small></p>"
+
+    # Send to admins
     for _admin_name, admin_email in conf_settings.ADMINS:
-        subject = f"LarpManager ticket - {instance.association.name}"
-        if instance.reason:
-            subject += f" [{instance.reason}]"
-        body = f"Email: {instance.email} <br /><br />"
-        if instance.member:
-            body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
-        body += instance.content
-        if instance.screenshot:
-            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
         my_send_mail(subject, body, admin_email)

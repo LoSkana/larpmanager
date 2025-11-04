@@ -954,6 +954,9 @@ msgstr "Activar"
 msgid "Addition"
 msgstr "Adición"
 
+msgid "Analysis"
+msgstr "Análisis"
+
 msgid "Approval"
 msgstr "Aprobación"
 
@@ -1755,6 +1758,9 @@ msgstr "Ligero"
 msgid "Limitations"
 msgstr "Opciones"
 
+msgid "Maintainers"
+msgstr "Mantenedores"
+
 msgid "Max fillers"
 msgstr "Relleno máximo"
 
@@ -2075,6 +2081,9 @@ msgstr "Traducciones"
 
 msgid "Type of text"
 msgstr "Tipo de texto"
+
+msgid "Uploading..."
+msgstr "Cargando..."
 
 msgid "Url Shortner"
 msgstr "Acortador de Url"
@@ -4565,6 +4574,9 @@ msgstr "Para volver a conectarse con la cuenta"
 msgid "Total of recorded money inflows"
 msgstr "Total de entradas de dinero registradas"
 
+msgid "Uploading image, please wait..."
+msgstr "Cargando imagen, por favor espere..."
+
 msgid "You have completed the payment!"
 msgstr "¡Has completado el pago!"
 
@@ -5257,6 +5269,9 @@ msgstr "Describe exactamente en qué condiciones se encuentra"
 msgid "Did you check the required data properly"
 msgstr "¿Has comprobado correctamente los datos requeridos"
 
+msgid "Error uploading image. Please try again."
+msgstr "Error al cargar la imagen. Por favor, inténtelo de nuevo."
+
 msgid "IP address from which the token was used"
 msgstr "Dirección IP desde la que se utilizó el token"
 
@@ -5400,7 +5415,7 @@ msgid "Here is a list of critical problems to fix"
 msgstr "He aquí una lista de problemas críticos que hay que solucionar"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
-msgstr "Código de idioma ISO (por ejemplo, 'en', 'it', 'de')"
+msgstr "Código de idioma ISO (por ejemplo, \"en\", \"it\", \"de\")"
 
 msgctxt "event"
 msgid "If checked: shows the genre for each event"
@@ -5879,6 +5894,9 @@ msgstr "Estas son las opciones de inscripción con disponibilidad  limitada"
 msgid "I'm interested, but I don't have much experience"
 msgstr "Estoy interesado, pero no tengo mucha experiencia"
 
+msgid "Inactive characters can't be assigned to players"
+msgstr "Los personajes inactivos no pueden asignarse a jugadores"
+
 msgid "Is there anything else you would like to tell us"
 msgstr "¿Hay algo más que quieras decirnos"
 
@@ -5924,6 +5942,9 @@ msgstr "Esta página muestra los tipos de misiones del evento"
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Puede cargar un archivo en formato pdf, o una imagen"
+
+msgid "You don't have permission to analyze this ticket"
+msgstr "No tiene permiso para analizar este ticket"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Ya has pagado la cuota de afiliación de este año"
@@ -6631,6 +6652,9 @@ msgstr ""
 "Configurar las entradas que los usuarios pueden seleccionar durante el "
 "registro"
 
+msgid "This character is inactive and cannot be assigned to players"
+msgstr "Este personaje está inactivo y no puede ser asignado a jugadores"
+
 msgid "This page shows in detail the skills marked by a contributor"
 msgstr ""
 "Esta página muestra en detalle las competencias marcadas por un contribuidor"
@@ -7276,9 +7300,19 @@ msgstr ""
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Esta página muestra la información para realizar el sorteo de lotería"
 
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+"Análisis de entradas iniciado. Recibirá un correo electrónico cuando se haya"
+" completado"
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Para cargar relaciones, añada un segundo archivo con las siguientes columnas"
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+"Usuarios que pueden gestionar tickets de soporte y recibir notificaciones de"
+" tickets"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Ha alcanzado el número máximo de caracteres que se pueden crear"
@@ -10276,8 +10310,8 @@ msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
 "receive a %(amount)d discount on your registration fee"
 msgstr ""
-"Introduzca el código 'traiga a un amigo' proporcionado por un participante "
-"inscrito para recibir un %(amount)d de descuento en su cuota de inscripción"
+"Introduzca el código \"traiga a un amigo\" proporcionado por un participante"
+" inscrito para recibir un %(amount)d de descuento en su cuota de inscripción"
 
 msgid ""
 "Indicate the special discount code, to be communicated to the participants, "

@@ -332,49 +332,49 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    member_edit = get_member(num)
+    context["member_edit"] = get_member(num)
 
     # Handle form submission for member profile updates
     if request.method == "POST":
-        form = ExeMemberForm(request.POST, request.FILES, instance=member_edit, request=request)
+        form = ExeMemberForm(request.POST, request.FILES, instance=context["member_edit"], context=context)
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
         # Initialize empty form for GET requests
-        form = ExeMemberForm(instance=member_edit, request=request)
+        form = ExeMemberForm(instance=context["member_edit"], context=context)
     context["form"] = form
 
     # Get member registrations for current association events
     context["regs"] = Registration.objects.filter(
-        member=member_edit, run__event__association=context["association_id"]
+        member=context["member_edit"], run__event__association=context["association_id"]
     ).select_related("run")
 
     # Add accounting payment items to context
-    member_add_accountingitempayment(context, member_edit)
+    member_add_accountingitempayment(context, context["member_edit"])
 
     # Add other accounting items to context
-    member_add_accountingitemother(context, member_edit)
+    member_add_accountingitemother(context, context["member_edit"])
 
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=member_edit, hide=False, association_id=context["association_id"]
+        member=context["member_edit"], hide=False, association_id=context["association_id"]
     )
 
     # Process membership data and document paths
-    get_user_membership(member_edit, context["association_id"])
+    get_user_membership(context["member_edit"], context["association_id"])
 
     # Set document file paths if they exist
-    if member_edit.membership.document:
-        context["doc_path"] = member_edit.membership.get_document_filepath().lower()
+    if context["member_edit"].membership.document:
+        context["doc_path"] = context["member_edit"].membership.get_document_filepath().lower()
 
-    if member_edit.membership.request:
-        context["req_path"] = member_edit.membership.get_request_filepath().lower()
+    if context["member_edit"].membership.request:
+        context["req_path"] = context["member_edit"].membership.get_request_filepath().lower()
 
     # Add fiscal code validation if feature is enabled
     if "fiscal_code_check" in context["features"]:
-        context.update(calculate_fiscal_code(member_edit))
+        context.update(calculate_fiscal_code(context["member_edit"]))
 
     return render(request, "larpmanager/exe/users/member.html", context)
 
@@ -428,24 +428,24 @@ def exe_membership_status(request, num):
         Rendered membership editing form or redirect after successful update
     """
     context = check_association_context(request, "exe_membership")
-    member_edit = get_member(num)
-    context["membership"] = get_object_or_404(
-        Membership, member_id=member_edit.id, association_id=context["association_id"]
+    context["member_edit"] = get_member(num)
+    context["membership_edit"] = get_object_or_404(
+        Membership, member_id=context["member_edit"].id, association_id=context["association_id"]
     )
 
     if request.method == "POST":
-        form = ExeMembershipForm(request.POST, request.FILES, instance=context["membership"], request=request)
+        form = ExeMembershipForm(request.POST, request.FILES, instance=context["membership_edit"], request=request)
         if form.is_valid():
             form.save()
             messages.success(request, _("Profile updated"))
             return redirect(request.path)
     else:
-        form = ExeMembershipForm(instance=context["membership"], request=request)
+        form = ExeMembershipForm(instance=context["membership_edit"], request=request)
     context["form"] = form
 
     context["num"] = num
 
-    context["form"].page_title = str(member_edit) + " - " + _("Membership")
+    context["form"].page_title = str(context["member_edit"]) + " - " + _("Membership")
 
     return render(request, "larpmanager/exe/edit.html", context)
 
@@ -944,9 +944,9 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
     context = check_association_context(request, "exe_questions")
 
     # Retrieve the member and their question history
-    member_edit = get_member(r)
+    context["member_edit"] = get_member(r)
     context["list"] = HelpQuestion.objects.filter(
-        member=member_edit, association_id=context["association_id"]
+        member=context["member_edit"], association_id=context["association_id"]
     ).order_by("-created")
 
     # Get the most recent question from this member
@@ -964,7 +964,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
                 hp.run = last.run
 
             # Set answer metadata and save to database
-            hp.member = member_edit
+            hp.member = context["member_edit"]
             hp.is_user = False
             hp.association_id = context["association_id"]
             hp.save()

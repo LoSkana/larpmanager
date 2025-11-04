@@ -53,6 +53,7 @@ from larpmanager.models.form import (
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
+    CharacterConfig,
     CharacterStatus,
     Faction,
     FactionType,
@@ -124,7 +125,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             True if question is editable, False otherwise
         """
         # If character approval is disabled, all questions are editable
-        character_approval_enabled = get_event_config(self.params["event"].id, "user_character_approval", False)
+        character_approval_enabled = get_event_config(
+            self.params["event"].id, "user_character_approval", False, context=self.params
+        )
         if not character_approval_enabled:
             return True
 
@@ -189,7 +192,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 self.reorder_field(field_key)
 
             # Add access token field for external writing access
-            if get_event_config(event.id, "writing_external_access", False) and self.instance.pk:
+            if get_event_config(event.id, "writing_external_access", False, context=self.params) and self.instance.pk:
                 fields_default.add("access_token")
                 self.reorder_field("access_token")
 
@@ -199,7 +202,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             del self.fields[field_label]
 
         # Add character completion proposal field for user approval workflow
-        if not self.orga and get_event_config(event.id, "user_character_approval", False):
+        if not self.orga and get_event_config(event.id, "user_character_approval", False, context=self.params):
             if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
                 self.fields["propose"] = forms.BooleanField(
                     required=False,
@@ -259,6 +262,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Returns:
             None
         """
+        # Skip plots field - it's handled separately in _save_plot()
+        if s == "plots":
+            return
+
         # Handle non-faction fields using parent implementation
         if s != "factions_list":
             return super()._save_multi(s, instance)
@@ -333,7 +340,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
-            get_event_config(self.params["event"].id, "writing_relationship_length", 10000)
+            get_event_config(self.params["event"].id, "writing_relationship_length", 10000, context=self.params)
         )
 
         # Skip additional initialization for new instances
@@ -361,13 +368,28 @@ class OrgaCharacterForm(CharacterForm):
         else:
             self.delete_field("player")
 
-        if not get_event_config(self.params["event"].id, "user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False, context=self.params):
             self.delete_field("status")
 
         if "mirror" in self.fields:
             characters_query = self.params["run"].event.get_elements(Character).all()
             character_choices = [(character.id, character.name) for character in characters_query]
             self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + character_choices
+
+        # Add active field for campaign feature
+        if "campaign" in self.params["features"]:
+            self.fields["active"] = forms.BooleanField(
+                required=False,
+                label=_("Active"),
+                help_text=_("Inactive characters can't be assigned to players"),
+                widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
+            )
+            # Set initial value - default to True unless character has inactive config
+            if self.instance.pk:
+                is_inactive = self.instance.get_config("inactive", False)
+                self.initial["active"] = not (is_inactive == "True" or is_inactive is True)
+            else:
+                self.initial["active"] = True
 
         self._init_special_fields()
 
@@ -623,8 +645,34 @@ class OrgaCharacterForm(CharacterForm):
             self._save_plot(instance)
             self._save_px(instance)
             self._save_relationships(instance)
+            self._save_active(instance)
 
         return instance
+
+    def _save_active(self, instance: Any) -> None:
+        """Save active status to CharacterConfig if campaign feature is enabled."""
+        # Check if campaign feature is available
+        if "campaign" not in self.params["features"]:
+            return
+
+        # Only process if active field is present in cleaned data
+        if "active" not in self.cleaned_data:
+            return
+
+        # Get the active field value
+        is_active = self.cleaned_data["active"]
+
+        # Handle inactive status - create/update CharacterConfig if inactive
+        if not is_active:
+            # Character is inactive - ensure CharacterConfig exists with inactive=True
+            CharacterConfig.objects.update_or_create(
+                character=instance,
+                name="inactive",
+                defaults={"value": "True"},
+            )
+        else:
+            # Character is active - remove CharacterConfig if it exists
+            CharacterConfig.objects.filter(character=instance, name="inactive").delete()
 
 
 class OrgaWritingQuestionForm(MyForm):
@@ -756,7 +804,7 @@ class OrgaWritingQuestionForm(MyForm):
         self.fields["typ"].choices = filtered_choices
 
     def _init_editable(self):
-        if not get_event_config(self.params["event"].id, "user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", False, context=self.params):
             self.delete_field("editable")
         else:
             self.fields["editable"] = forms.MultipleChoiceField(

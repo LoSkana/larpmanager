@@ -1,13 +1,13 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {{ member }} - {% trans "Member" %}
+    {{ member_edit }} - {% trans "Member" %}
 {% endblock title %}
 {% block info %}
     {% trans "This page shows all information about the individual member available in the system" %}
 {% endblock info %}
 {% block content %}
-    <p>Email: {{ member.email }}</p>
+    <p>Email: {{ member_edit.email }}</p>
     <p>
         {% trans "Show" %}:
         <a href="#" class="my_toggle" tog='data'>{% trans "personal data" %}</a>,
@@ -113,24 +113,24 @@
     </div>
     <hr class="c" />
     {% if '.pdf' in doc_path %}
-        <embed src="{{ member.membership.get_document_filepath }}"
+        <embed src="{{ member_edit.membership.get_document_filepath }}"
                type="application/pdf"
                width="100%"
                height="500px">
     {% else %}
         <img class="membership_request"
-             src="{{ member.membership.get_document_filepath }}"
+             src="{{ member_edit.membership.get_document_filepath }}"
              alt="membership request" />
     {% endif %}
     <hr class="c" />
     {% if '.pdf' in req_path %}
-        <embed src="{{ member.membership.get_request_filepath }}"
+        <embed src="{{ member_edit.membership.get_request_filepath }}"
                type="application/pdf"
                width="100%"
                height="500px">
     {% else %}
         <img class="membership_request"
-             src="{{ member.membership.get_request_filepath }}"
+             src="{{ member_edit.membership.get_request_filepath }}"
              alt="membership request" />
     {% endif %}
 {% endblock content %}

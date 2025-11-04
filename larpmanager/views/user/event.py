@@ -645,7 +645,7 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
 
             # Add non-provisional registered members to the display list
             for reg in que_reg.select_related("member"):
-                if not is_reg_provisional(reg, event=context["event"], features=features):
+                if not is_reg_provisional(reg, event=context["event"], features=features, context=context):
                     context["registration_list"].append(reg.member)
 
     return render(request, "larpmanager/event/gallery.html", context)

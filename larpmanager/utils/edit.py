@@ -39,6 +39,7 @@ from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
+from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import check_association_context, check_event_context
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.exceptions import NotFoundError
@@ -750,7 +751,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
     res = {"res": "ok"}
 
     # Superusers bypass all validation checks
-    if request.user.is_superuser:
+    if is_lm_admin(request):
         return JsonResponse(res)
 
     # Extract and validate element ID from POST data
@@ -798,7 +799,7 @@ def writing_edit_working_ticket(request, element_type: str, element_id: int, use
         Cache timeout is set to minimum of ticket_time and 1 day.
     """
     # Superusers bypass all validation checks
-    if request.user.is_superuser:
+    if is_lm_admin(request):
         return ""
 
     # Handle plot objects by recursively checking all related characters
@@ -857,7 +858,7 @@ def working_ticket(request):
         return JsonResponse({"warn": "User not logged"})
 
     res = {"res": "ok"}
-    if request.user.is_superuser:
+    if is_lm_admin(request):
         return JsonResponse(res)
 
     eid = request.POST.get("eid")

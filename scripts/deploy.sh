@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Git pull main repository..."
+git pull
+
 echo "Stop tasks..."
 pkill -f process_tasks
 

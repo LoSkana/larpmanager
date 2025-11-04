@@ -38,10 +38,11 @@ translation.activate("en")
 def manual_sitemap_view(request: HttpRequest) -> HttpResponse:
     """Generate XML sitemap for organization or global site."""
     # Check if this is the global site (id=0) or organization-specific
-    if request.association["id"] == 0:
+    association_id = request.association["id"]
+    if association_id == 0:
         urls = larpmanager_sitemap()
     else:
-        urls = _organization_sitemap(request)
+        urls = _organization_sitemap(association_id)
 
     # Render URLs to XML format
     stream = _render_sitemap(urls)
@@ -80,7 +81,7 @@ def _render_sitemap(urls: list[str]) -> StringIO:
     return xml_stream
 
 
-def _organization_sitemap(request) -> list[str]:
+def _organization_sitemap(association_id) -> list[str]:
     """Generate sitemap URLs for an organization's events and runs.
 
     Args:
@@ -95,7 +96,7 @@ def _organization_sitemap(request) -> list[str]:
         and have end dates in the future.
     """
     # Get organization and check if it's a demo instance
-    organization = Association.objects.get(pk=request.association["id"])
+    organization = Association.objects.get(pk=association_id)
     organization_cache = get_cache_association(organization.slug)
     if organization_cache.get("demo", False):
         return []
@@ -110,7 +111,7 @@ def _organization_sitemap(request) -> list[str]:
     # Query active runs for future events
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
-        .filter(event__association_id=request.association["id"])
+        .filter(event__association_id=association_id)
         .filter(end__gte=datetime.now())
         .select_related("event", "event__association")
         .order_by("-end")

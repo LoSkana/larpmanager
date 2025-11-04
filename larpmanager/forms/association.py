@@ -75,6 +75,7 @@ class ExeAssociationForm(MyForm):
             "plan",
             "skin",
             "demo",
+            "maintainers",
         )
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:

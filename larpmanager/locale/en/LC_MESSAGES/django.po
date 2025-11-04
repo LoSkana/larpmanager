@@ -794,6 +794,9 @@ msgstr ""
 msgid "--- NOT ASSIGNED ---"
 msgstr ""
 
+msgid "Inactive characters can't be assigned to players"
+msgstr ""
+
 #, python-format
 msgid "This text will be added to the sheet, in the plot paragraph %(name)s"
 msgstr ""
@@ -2871,6 +2874,12 @@ msgid ""
 "Indicate the organization nationality to activate nation-specific features"
 msgstr ""
 
+msgid "Maintainers"
+msgstr ""
+
+msgid "Users who can manage support tickets and receive ticket notifications"
+msgstr ""
+
 msgid "Home"
 msgstr ""
 
@@ -3328,6 +3337,12 @@ msgid "Screenshot"
 msgstr ""
 
 msgid "Optional - A screenshot of the error / bug / problem"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Analysis"
 msgstr ""
 
 msgid "Male"
@@ -4692,6 +4707,15 @@ msgid "Rotate right"
 msgstr ""
 
 msgid "Select the new photo to upload"
+msgstr ""
+
+msgid "Uploading..."
+msgstr ""
+
+msgid "Uploading image, please wait..."
+msgstr ""
+
+msgid "Error uploading image. Please try again."
 msgstr ""
 
 msgid "Your characters"
@@ -6633,9 +6657,6 @@ msgid ""
 msgstr ""
 
 msgid "Seniority"
-msgstr ""
-
-msgid "Priority"
 msgstr ""
 
 msgid "Avoid"
@@ -9070,6 +9091,12 @@ msgstr ""
 msgid "Answer submitted!"
 msgstr ""
 
+msgid "You don't have permission to analyze this ticket"
+msgstr ""
+
+msgid "Ticket analysis started. You will receive an email when it's complete"
+msgstr ""
+
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr ""
 
@@ -9533,6 +9560,9 @@ msgid "You have reached the maximum number of characters that can be created"
 msgstr ""
 
 msgid "You already have an assigned character"
+msgstr ""
+
+msgid "This character is inactive and cannot be assigned to players"
 msgstr ""
 
 msgid "Assigned character!"
