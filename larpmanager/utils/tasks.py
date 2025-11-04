@@ -125,12 +125,13 @@ def send_mail_exec(
     association_id: int | None = None,
     run_id: int | None = None,
     reply_to: str | None = None,
+    interval: int = 20,
 ) -> None:
     """Send bulk emails to multiple recipients with staggered delivery.
 
     Sends emails to a comma-separated list of recipients with automatic delays
     between sends to prevent spam filtering. Emails are prefixed with the
-    organization/run name and scheduled with 10-second intervals.
+    organization/run name and scheduled with configurable intervals.
 
     Args:
         players: Comma-separated list of email addresses to send to
@@ -139,12 +140,13 @@ def send_mail_exec(
         association_id: Association ID for determining sender context
         run_id: Run ID for determining sender context (alternative to association_id)
         reply_to: Custom reply-to email address
+        interval: Interval in seconds between each email (default: 20)
 
     Returns:
         None
 
     Side Effects:
-        - Schedules individual emails with 10-second delays via background tasks
+        - Schedules individual emails with specified interval delays via background tasks
         - Sends notification to admins about bulk email operation
         - Logs warning if neither association_id nor run_id are provided
     """
@@ -176,9 +178,9 @@ def send_mail_exec(
         if email in seen_emails:
             continue
         email_count += 1
-        # Schedule email with 10-second delay per recipient to prevent spam filtering
+        # Schedule email with specified interval delay per recipient to prevent spam filtering
         # noinspection PyUnboundLocalVariable
-        my_send_mail(subj, body, email.strip(), sender_context, reply_to, schedule=email_count * 10)
+        my_send_mail(subj, body, email.strip(), sender_context, reply_to, schedule=email_count * interval)
         seen_emails[email] = 1
 
 

@@ -1789,6 +1789,9 @@ msgstr ""
 msgid "Optional - ram html code (substitute the text before)"
 msgstr ""
 
+msgid "Interval in seconds between each email (default: 20)"
+msgstr ""
+
 msgid "Manage participant questions"
 msgstr ""
 

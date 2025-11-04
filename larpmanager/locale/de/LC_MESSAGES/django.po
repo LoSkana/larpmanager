@@ -6198,6 +6198,9 @@ msgstr "Gibt an, ob er von den Teilnehmern ausgewählt werden kann"
 msgid "Input an element name to insert their reference code"
 msgstr "Eingabe eines Elementnamens zum Einfügen des Referenzcodes"
 
+msgid "Interval in seconds between each email (default: 20)"
+msgstr "Intervall in Sekunden zwischen den einzelnen E-Mails (Standard: 20)"
+
 msgid "Last step, please upload your membership application"
 msgstr "Als letzten Schritt laden Sie bitte Ihren Mitgliedsantrag hoch"
 

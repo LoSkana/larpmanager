@@ -6160,6 +6160,9 @@ msgstr "Označuje, zda jej mohou vybrat účastníci"
 msgid "Input an element name to insert their reference code"
 msgstr "Zadáním názvu prvku vložíte jeho referenční kód"
 
+msgid "Interval in seconds between each email (default: 20)"
+msgstr "Interval v sekundách mezi jednotlivými e-maily (výchozí: 20)"
+
 msgid "Last step, please upload your membership application"
 msgstr "V posledním kroku nahrajte přihlášku ke členství"
 
