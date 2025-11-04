@@ -6142,6 +6142,9 @@ msgstr "Angir om den kan velges av deltakerne"
 msgid "Input an element name to insert their reference code"
 msgstr "Skriv inn et elementnavn for å sette inn referansekoden"
 
+msgid "Interval in seconds between each email (default: 20)"
+msgstr "Intervall i sekunder mellom hver e-post (standard: 20)"
+
 msgid "Last step, please upload your membership application"
 msgstr "Siste trinn er å laste opp medlemssøknaden din"
 

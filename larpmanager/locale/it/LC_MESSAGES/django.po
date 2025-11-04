@@ -6144,6 +6144,10 @@ msgid "Input an element name to insert their reference code"
 msgstr ""
 "Scrivi il nome di un elemento per inserire il suo codice di riferimento"
 
+msgid "Interval in seconds between each email (default: 20)"
+msgstr ""
+"Intervallo in secondi tra un'e-mail e l'altra (valore predefinito: 20)"
+
 msgid "Last step, please upload your membership application"
 msgstr "Ultimo passaggio, per favore carica la tua richiesta di socio"
 
@@ -6530,7 +6534,7 @@ msgstr "Hai superato il numero massimo di opzioni selezionabili"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
-msgstr "Accedere al pannello di gestione <a href= %(url)s'>da qui</a>"
+msgstr "Accedi al pannello di gestione <a href= %(url)s'>da qui</a>"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vuoi accettare pagamenti elaborati attraverso il sistema"
@@ -6876,7 +6880,7 @@ msgstr "Indica il colore che verrà usato per lo sfondo dei testi"
 
 msgid "Lets staff access the diet information submitted by participants"
 msgstr ""
-"Consente al personale di accedere alle informazioni sulla dieta fornite dai "
+"Consente allo staff di accedere alle informazioni sulla dieta fornite dai "
 "partecipanti"
 
 msgid "Manage questions and options for characters and writing elements"

@@ -6144,6 +6144,9 @@ msgid "Input an element name to insert their reference code"
 msgstr ""
 "Introduzca un nombre de elemento para insertar su código de referencia"
 
+msgid "Interval in seconds between each email (default: 20)"
+msgstr "Intervalo en segundos entre cada correo electrónico (por defecto: 20)"
+
 msgid "Last step, please upload your membership application"
 msgstr "Último paso: cargue su solicitud de afiliación"
 

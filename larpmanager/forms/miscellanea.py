@@ -75,6 +75,12 @@ class SendMailForm(forms.Form):
         help_text=_("Optional - ram html code (substitute the text before)"),
         required=False,
     )
+    interval = forms.IntegerField(
+        initial=20,
+        min_value=20,
+        help_text=_("Interval in seconds between each email (default: 20)"),
+        required=False,
+    )
 
     def __init__(self, *args: object, **kwargs: object) -> None:
         """Initialize the form with show_link configuration.
