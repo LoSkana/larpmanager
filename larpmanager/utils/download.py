@@ -337,10 +337,10 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
     # Add context-specific fields based on applicable type
     if context["applicable"] == QuestionApplicable.QUEST:
         column_headers.append("typ")
-        row_values.append(el.typ.name)
+        row_values.append(el.typ.name if el.typ else "")
     elif context["applicable"] == QuestionApplicable.TRAIT:
         column_headers.append("quest")
-        row_values.append(el.quest.name)
+        row_values.append(el.quest.name if el.quest else "")
 
     # Extract answers and choices from context
     question_answers = context["answers"]
@@ -1206,7 +1206,7 @@ def export_abilities(context):
     )
     ability_rows = []
     for ability in ability_queryset:
-        row_data = [ability.name, ability.cost, ability.typ.name, ability.descr]
+        row_data = [ability.name, ability.cost, ability.typ.name if ability.typ else "", ability.descr]
         row_data.append(", ".join([prereq.name for prereq in ability.prerequisites.all()]))
         row_data.append(", ".join([req.name for req in ability.requirements.all()]))
         ability_rows.append(row_data)
