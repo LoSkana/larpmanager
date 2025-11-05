@@ -325,8 +325,13 @@ def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str
         return redirect("/" + p)
 
     # Use the first associated permission's slug as the default view
-    view_name = feature.association_permissions.first().slug
-    return redirect(reverse(view_name))
+    first_permission = feature.association_permissions.first()
+    if first_permission:
+        view_name = first_permission.slug
+        return redirect(reverse(view_name))
+
+    # If no association permissions exist, redirect to dashboard
+    return redirect("dashboard")
 
 
 def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: str = None) -> HttpResponseRedirect:
@@ -373,8 +378,13 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
         return redirect("/" + p)
 
     # Get the first event permission's slug as the default view name
-    view_name = feature.event_permissions.first().slug
-    return redirect(reverse(view_name, kwargs={"event_slug": event_slug}))
+    first_permission = feature.event_permissions.first()
+    if first_permission:
+        view_name = first_permission.slug
+        return redirect(reverse(view_name, kwargs={"event_slug": event_slug}))
+
+    # If no event permissions exist, redirect to event gallery
+    return redirect("gallery", event_slug=event_slug)
 
 
 def toggle_sidebar(request):
