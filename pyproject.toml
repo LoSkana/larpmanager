@@ -13,12 +13,14 @@ extend_exclude="static/,larpmanager/static/"
 
 [tool.ruff]
 line-length = 120
-lint.select = ["F", "E", "B", "UP", "I", "N", "PL"] # F, E, B, UP, I, N, PL, D
-lint.ignore = ["ISC001", "E501"]
 extend-exclude = ["main"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.ruff.lint]
+select = ["F", "E", "B", "UP", "I", "N", "PL"] # F, E, B, UP, I, N, PL, D
+ignore = ["ISC001", "E501"]
 
 [tool.ruff.lint.pylint]
 max-args = 8

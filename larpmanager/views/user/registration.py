@@ -82,6 +82,28 @@ from larpmanager.utils.registration import check_assign_character, get_reduced_a
 logger = logging.getLogger(__name__)
 
 
+def _check_pre_register_redirect(context: dict, event_slug: str) -> HttpResponse | None:
+    """Check if pre-registration should redirect to regular registration.
+
+    Args:
+        context: Event context dictionary
+        event_slug: Event slug for redirect URL
+
+    Returns:
+        HttpResponse redirect if should redirect, None otherwise
+    """
+    # Check if pre-registration is active for this specific event
+    if not get_event_config(context["event"].id, "pre_register_active", False):
+        return redirect("register", event_slug=event_slug)
+
+    # Check if registration is open and we're past the open date
+    if "registration_open" in context["features"]:
+        if context["run"].registration_open and context["run"].registration_open <= timezone_now():
+            return redirect("register", event_slug=event_slug)
+
+    return None
+
+
 @login_required
 def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     """Handle pre-registration for events before full registration opens.
@@ -107,6 +129,11 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
         context = get_event(request, event_slug)
         context["sel"] = context["event"].id
         check_event_feature(request, context, "pre_register")
+
+        # Check if we should redirect to regular registration
+        redirect_response = _check_pre_register_redirect(context, event_slug)
+        if redirect_response:
+            return redirect_response
     else:
         # Show all available events for pre-registration
         context = get_context(request)
