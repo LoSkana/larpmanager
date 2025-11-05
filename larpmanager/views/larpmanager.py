@@ -358,7 +358,7 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
 
     # Get event context and verify user has permission to manage features
     context = get_event_context(request, event_slug)
-    if not has_event_permission(request, {}, context["event"].slug, "orga_features"):
+    if not has_event_permission(request, context, context["event"].slug, "orga_features"):
         raise PermissionError()
 
     # Add the feature to the event's feature set and persist changes
