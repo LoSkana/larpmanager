@@ -130,7 +130,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
                 for mid in pk_set:
                     mb = Member.objects.get(pk=mid)
                     # Reset cached event links to reflect permission changes
-                    reset_event_links(mb.user.id, instance.association_id)
+                    reset_event_links(mb.id, instance.association_id)
             return
 
         # Only process role additions from this point forward
@@ -150,7 +150,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
             # Trigger member association join process
             mb.join(instance.association)
             # Invalidate cached permissions for this member
-            reset_event_links(mb.user.id, instance.association_id)
+            reset_event_links(mb.id, instance.association_id)
 
             # Send role approval notification to the member
             # Set language context for proper localization
@@ -208,7 +208,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
             if pk_set:
                 for mid in pk_set:
                     mb = Member.objects.get(pk=mid)
-                    reset_event_links(mb.user.id, instance.event.association_id)
+                    reset_event_links(mb.id, instance.event.association_id)
             return
 
         # Only process role additions from this point
@@ -228,7 +228,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
             # Ensure member is part of the association
             mb.join(instance.event.association)
             # Invalidate cached permissions for the member
-            reset_event_links(mb.user.id, instance.event.association_id)
+            reset_event_links(mb.id, instance.event.association_id)
 
             # Send approval notification to the member
             # Use member's preferred language for personalized communication

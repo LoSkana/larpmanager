@@ -455,14 +455,14 @@ def post_delete_association_permission_index_permission(sender, instance, **kwar
 def pre_delete_association_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.association_id)
+        reset_event_links(member.id, instance.association_id)
 
 
 @receiver(post_save, sender=AssociationRole)
 def post_save_association_role_reset(sender, instance, **kwargs):
     remove_association_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.association_id)
+        reset_event_links(member.id, instance.association_id)
 
 
 # AssocText signals
@@ -739,14 +739,14 @@ def post_delete_event_permission_reset(sender, instance, **kwargs):
 def pre_delete_event_role_reset(sender, instance, **kwargs):
     remove_event_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.event.association_id)
+        reset_event_links(member.id, instance.event.association_id)
 
 
 @receiver(post_save, sender=EventRole)
 def post_save_event_role_reset(sender, instance, **kwargs):
     remove_event_role_cache(instance.pk)
     for member in instance.members.all():
-        reset_event_links(member.user.id, instance.event.association_id)
+        reset_event_links(member.id, instance.event.association_id)
 
 
 # EventText signals

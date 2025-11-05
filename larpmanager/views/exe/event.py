@@ -118,7 +118,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
             er.save()
 
             # Refresh cached event links for user navigation
-            reset_event_links(request.user.id, context["association_id"])
+            reset_event_links(context["member"].id, context["association_id"])
 
             # Prepare success message encouraging quick setup completion
             msg = (
