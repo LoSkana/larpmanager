@@ -60,7 +60,8 @@ def exe_urlshortner(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_urlshortner_edit(request, num):
+def exe_urlshortner_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an existing URL shortener entry."""
     return exe_edit(request, ExeUrlShortnerForm, num, "exe_urlshortner")
 
 
@@ -77,7 +78,8 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_containers_edit(request, num):
+def exe_warehouse_containers_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Edit warehouse container using generic edit handler
     return exe_edit(request, ExeWarehouseContainerForm, num, "exe_warehouse_containers")
 
 
@@ -94,7 +96,8 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_tags_edit(request, num):
+def exe_warehouse_tags_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Edit warehouse tag via generic edit view
     return exe_edit(request, ExeWarehouseTagForm, num, "exe_warehouse_tags")
 
 
@@ -118,7 +121,8 @@ def exe_warehouse_items(request) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_items_edit(request, num):
+def exe_warehouse_items_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Delegate to exe_edit for warehouse item form handling
     return exe_edit(request, ExeWarehouseItemForm, num, "exe_warehouse_items")
 
 

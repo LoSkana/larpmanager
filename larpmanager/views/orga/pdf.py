@@ -298,20 +298,26 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, nu
 
 
 @login_required
-def orga_gallery_pdf(request, event_slug):
+def orga_gallery_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Generate PDF version of event character gallery for organizers."""
     context = check_event_context(request, event_slug, "orga_characters_pdf")
     return print_gallery(context, True)
 
 
 @login_required
-def orga_gallery_test(request, event_slug):
+def orga_gallery_test(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Render gallery template for character sheets in PDF format."""
     context = check_event_context(request, event_slug, "orga_characters_pdf")
     return render(request, "pdf/sheets/gallery.html", context)
 
 
 @login_required
-def orga_profiles_pdf(request, event_slug):
+def orga_profiles_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Generate PDF export of character profiles for an event."""
+    # Verify permissions and retrieve event context
     context = check_event_context(request, event_slug, "orga_characters_pdf")
+
+    # Generate and return the profiles PDF
     return print_profiles(context, True)
 
 

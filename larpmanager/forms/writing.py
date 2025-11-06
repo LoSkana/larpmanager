@@ -545,5 +545,5 @@ class SpeedLarpForm(WritingForm):
             "text": WritingTinyMCE(),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)

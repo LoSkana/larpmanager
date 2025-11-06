@@ -938,7 +938,8 @@ def delegated(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/member/delegated.html", context)
 
 
-def get_user_backend():
+def get_user_backend() -> str:
+    """Return the authentication backend path for allauth."""
     authentication_backend = "allauth.account.auth_backends.AuthenticationBackend"
     return authentication_backend
 

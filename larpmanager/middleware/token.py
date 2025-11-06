@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from typing import Callable
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django.contrib.auth import get_user_model, login
@@ -36,7 +36,8 @@ class TokenAuthMiddleware:
     then redirects to clean URL without the token.
     """
 
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with Django's get_response callable."""
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:

@@ -17,26 +17,35 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
+from larpmanager.models.association import Association
+from larpmanager.models.event import Event, Run
 
-def clear_config_cache(config_element):
+
+def clear_config_cache(config_element: Any) -> None:
+    """Clear the cache for a configuration element."""
     # noinspection PyProtectedMember
     cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))
 
 
-def reset_element_configs(element):
+def reset_element_configs(element: Event | Run | Association) -> None:
+    """Delete cached configs for the given element."""
     cache_key = cache_configs_key(element.id, element._meta.model_name.lower())
     cache.delete(cache_key)
 
 
-def cache_configs_key(config_owner_id, config_model_name):
+def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
+    """Generate cache key for configuration objects."""
     return f"configs_{config_model_name}_{config_owner_id}"
 
 
-def get_configs(model_instance):
+def get_configs(model_instance) -> dict:
+    # Get configuration dictionary for a Django model instance
     # noinspection PyProtectedMember
     return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())
 
@@ -280,7 +289,14 @@ def get_association_config(association_id, config_name, default_value=None, cont
     return _get_cached_config(association_id, "association", config_name, default_value, context, bypass_cache)
 
 
-def get_event_config(event_id, config_name, default_value=None, context=None, bypass_cache=False):
+def get_event_config(
+    event_id: int,
+    config_name: str,
+    default_value: Any = None,
+    context: dict[str, Any] | None = None,
+    bypass_cache: bool = False,
+) -> Any:
+    """Get event configuration value from cache or database."""
     return _get_cached_config(event_id, "event", config_name, default_value, context, bypass_cache)
 
 

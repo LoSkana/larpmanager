@@ -419,7 +419,7 @@ class CollectionNewForm(MyForm):
         fields = ("name",)
         widgets = {"cod": forms.HiddenInput()}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
 
@@ -479,7 +479,8 @@ class InvoiceSubmitForm(forms.Form):
     class Meta:
         abstract = True
 
-    def set_initial(self, field_name, initial_value):
+    def set_initial(self, field_name: str, initial_value: Any) -> None:
+        """Set the initial value for a form field."""
         self.fields[field_name].initial = initial_value
 
 

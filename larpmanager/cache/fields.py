@@ -31,11 +31,13 @@ from larpmanager.models.form import (
 )
 
 
-def event_fields_key(event_id):
+def event_fields_key(event_id: int) -> str:
+    """Generate cache key for event fields."""
     return f"event_fields_{event_id}"
 
 
-def clear_event_fields_cache(event_id):
+def clear_event_fields_cache(event_id: int) -> None:
+    """Clear cached event fields."""
     cache.delete(event_fields_key(event_id))
 
 

@@ -138,12 +138,14 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_runs_edit(request, num):
+def exe_runs_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit organization-wide run with event field."""
     return exe_edit(request, OrgaRunForm, num, "exe_events", additional_field="event")
 
 
 @login_required
-def exe_events_appearance(request, num):
+def exe_events_appearance(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit organization appearance settings for an event."""
     return exe_edit(request, OrgaAppearanceForm, num, "exe_events", additional_context={"add_another": False})
 
 
@@ -170,7 +172,8 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_templates_edit(request, num):
+def exe_templates_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an existing executive template."""
     return exe_edit(request, ExeTemplateForm, num, "exe_templates")
 
 

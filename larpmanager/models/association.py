@@ -270,7 +270,8 @@ class Association(BaseModel):
             ),
         ]
 
-    def get_currency_symbol(self):
+    def get_currency_symbol(self) -> str:
+        """Return the currency symbol for the payment currency."""
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
@@ -356,7 +357,8 @@ class AssociationText(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="texts")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining type and language displays."""
         # noinspection PyUnresolvedReferences
         return f"{self.get_typ_display()} {self.get_language_display()}"
 

@@ -58,7 +58,8 @@ from larpmanager.utils.pdf import (
 logger = logging.getLogger(__name__)
 
 
-def url_short(request, url_cod):
+def url_short(request: HttpRequest, url_cod: str) -> HttpResponseRedirect:
+    """Redirect to the URL associated with the given shortened code."""
     el = get_object_or_404(UrlShortner, cod=url_cod)
     return redirect(el.url)
 
@@ -229,7 +230,8 @@ def album_aux(request, context, parent_album):
 
 
 @login_required
-def album(request, event_slug):
+def album(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Render photo album view for an event."""
     context = get_event_context(request, event_slug)
     return album_aux(request, context, None)
 

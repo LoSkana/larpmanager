@@ -961,7 +961,8 @@ def _is_type_already_used(discount_type, member, run):
     return AccountingItemDiscount.objects.filter(disc__typ=discount_type, member=member, run=run).exists()
 
 
-def _is_discount_maxed(discount, run):
+def _is_discount_maxed(discount: Discount, run: Run) -> bool:
+    """Check if discount has exceeded maximum redemptions for a run."""
     redemption_count = AccountingItemDiscount.objects.filter(disc=discount, run=run).count()
     return redemption_count > discount.max_redeem
 

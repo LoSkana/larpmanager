@@ -112,7 +112,8 @@ class RegistrationTicket(BaseModel):
 
     order = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return ticket tier string representation with event, tier, name and price."""
         # noinspection PyUnresolvedReferences
         return (
             f"{self.event.name} ({self.get_tier_display()}) {self.name} "
@@ -346,11 +347,13 @@ class Registration(BaseModel):
     def display_run(self):
         return str(self.run)
 
-    def display_member(self):
+    def display_member(self) -> str:
+        """Delegate to member's display method."""
         # noinspection PyUnresolvedReferences
         return self.member.display_member()
 
-    def display_profile(self):
+    def display_profile(self) -> str:
+        # Delegate to the member's profile display method
         # noinspection PyUnresolvedReferences
         return self.member.display_profile()
 

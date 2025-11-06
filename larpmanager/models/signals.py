@@ -150,6 +150,7 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
+    Discount,
     PaymentInvoice,
     RefundRequest,
 )
@@ -308,8 +309,12 @@ def post_save_accounting_item_collection(sender, instance, created, **kwargs):
 
 # AccountingItemDiscount signals
 @receiver(post_save, sender=AccountingItemDiscount)
-def post_save_discount_accounting_cache(sender, instance, created, **kwargs):
+def post_save_discount_accounting_cache(sender: type, instance: Discount, created: bool, **kwargs) -> None:
+    """Update accounting caches when a discount is saved."""
+    # Process discount changes in accounting system
     process_accounting_discount_post_save(instance)
+
+    # Refresh member's accounting cache if discount is associated with a run and member
     if instance.run and instance.member_id:
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
@@ -333,7 +338,13 @@ def pre_save_accounting_item_expense(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemExpense)
-def post_save_accounting_item_expense(sender, instance, created, **kwargs):
+def post_save_accounting_item_expense(
+    sender: type,
+    instance: Any,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Send expense notification and update credit balance."""
     send_expense_notification_email(instance, created)
     update_credit_on_expense_save(instance)
 
@@ -351,8 +362,17 @@ def pre_save_accounting_item_other(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AccountingItemOther)
-def post_save_other_accounting_cache(sender, instance, created, **kwargs):
+def post_save_other_accounting_cache(
+    sender: type,
+    instance: AccountingItemOther,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Update token credit and member accounting cache after OtherAccounting save."""
+    # Update token credit based on the OtherAccounting instance
     update_token_credit_on_other_save(instance)
+
+    # Refresh member accounting cache if run and member are present
     if instance.run and instance.member_id:
         refresh_member_accounting_cache(instance.run, instance.member_id)
 
@@ -365,7 +385,8 @@ def post_delete_other_accounting_cache(sender, instance, **kwargs):
 
 # AccountingItemPayment signals
 @receiver(pre_save, sender=AccountingItemPayment)
-def pre_save_accounting_item_payment(sender, instance, **kwargs):
+def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayment, **kwargs: Any) -> None:
+    """Send payment confirmation and handle pre-save operations."""
     send_payment_confirmation_email(instance)
     handle_accounting_item_payment_pre_save(instance)
 
@@ -491,7 +512,8 @@ def pre_delete_association_translation(sender, instance, **kwargs):
 
 # Association signals
 @receiver(pre_save, sender=Association)
-def pre_save_association_set_skin_features(sender, instance, **kwargs):
+def pre_save_association_set_skin_features(sender: type, instance: Association, **kwargs: Any) -> None:
+    """Prepare association skin features and encryption key before saving."""
     prepare_association_skin_features(instance)
     generate_association_encryption_key(instance)
 
@@ -588,7 +610,8 @@ def post_save_character(sender: type, instance: Character, **kwargs) -> None:
 
 
 @receiver(pre_delete, sender=Character)
-def pre_delete_character_reset(sender, instance, **kwargs):
+def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any) -> None:
+    # Clear cached data for all runs of this character's event
     clear_event_cache_all_runs(instance.event)
     cleanup_character_pdfs_before_delete(instance)
 
@@ -626,7 +649,8 @@ def pre_save_notify_chat_message(sender, instance, **kwargs):
 
 # Collection signals
 @receiver(pre_save, sender=Collection)
-def pre_save_collection(sender, instance, **kwargs):
+def pre_save_collection(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Pre-save signal handler for collection instances."""
     handle_collection_pre_save(instance)
     process_collection_status_change(instance)
 
@@ -649,7 +673,8 @@ def post_delete_delivery_px(sender, instance, *args, **kwargs):
 
 # Event signals
 @receiver(pre_save, sender=Event)
-def pre_save_event(sender, instance, **kwargs):
+def pre_save_event(sender: type, instance: Event, **kwargs: Any) -> None:
+    """Invalidate cache and prepare campaign data before saving an Event."""
     on_event_pre_save_invalidate_cache(instance)
     prepare_campaign_event_data(instance)
 
@@ -723,28 +748,38 @@ def pre_save_event_permission(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=EventPermission)
-def post_save_event_permission_reset(sender, instance, **kwargs):
+def post_save_event_permission_reset(sender: type, instance: EventPermission, **kwargs: Any) -> None:
+    """Reset caches when EventPermission is saved."""
     clear_event_permission_cache(instance)
     clear_index_permission_cache("event")
 
 
 @receiver(post_delete, sender=EventPermission)
-def post_delete_event_permission_reset(sender, instance, **kwargs):
+def post_delete_event_permission_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset event permission caches after EventPermission deletion."""
     clear_event_permission_cache(instance)
     clear_index_permission_cache("event")
 
 
 # EventRole signals
 @receiver(pre_delete, sender=EventRole)
-def pre_delete_event_role_reset(sender, instance, **kwargs):
+def pre_delete_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
+    """Reset caches and event links when an EventRole is deleted."""
+    # Clear the event role cache for this instance
     remove_event_role_cache(instance.pk)
+
+    # Reset event links for all members associated with this role
     for member in instance.members.all():
         reset_event_links(member.id, instance.event.association_id)
 
 
 @receiver(post_save, sender=EventRole)
-def post_save_event_role_reset(sender, instance, **kwargs):
+def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
+    """Reset caches when an EventRole is saved."""
+    # Clear the event role cache for this specific instance
     remove_event_role_cache(instance.pk)
+
+    # Reset event links cache for all members assigned to this role
     for member in instance.members.all():
         reset_event_links(member.id, instance.event.association_id)
 
@@ -762,7 +797,8 @@ def post_save_event_text(sender, instance, created, **kwargs):
 
 # Faction signals
 @receiver(pre_save, sender=Faction)
-def pre_save_faction(sender, instance, *args, **kwargs):
+def pre_save_faction(sender: type, instance: Faction, *args: Any, **kwargs: Any) -> None:
+    """Signal handler that updates faction before saving."""
     replace_character_names(instance)
     on_faction_pre_save_update_cache(instance)
 
@@ -788,7 +824,8 @@ def post_save_faction_reset_rels(sender, instance: Faction, **kwargs) -> None:
 
 
 @receiver(pre_delete, sender=Faction)
-def pre_delete_faction(sender, instance, **kwargs):
+def pre_delete_faction(sender: type, instance: Faction, **kwargs: dict) -> None:
+    """Clean up faction PDFs and clear event cache before faction deletion."""
     cleanup_faction_pdfs_before_delete(instance)
     clear_event_cache_all_runs(instance.event)
 
@@ -1177,7 +1214,13 @@ def post_delete_registration_accounting_cache(sender, instance, **kwargs):
 
 # RegistrationCharacterRel signals
 @receiver(post_save, sender=RegistrationCharacterRel)
-def post_save_registration_character_rel_savereg(sender, instance, created, **kwargs):
+def post_save_registration_character_rel_savereg(
+    sender: type,
+    instance: Any,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Reset character cache and send assignment email notification."""
     reset_character_registration_cache(instance)
     send_character_assignment_email(instance, created)
 
@@ -1229,8 +1272,8 @@ def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any
 
 
 @receiver(post_delete, sender=Relationship)
-def post_delete_relationship_reset_rels(sender, instance, **kwargs):
-    # Update cache for source character
+def post_delete_relationship_reset_rels(sender, instance, **kwargs) -> None:
+    # Update cache for source character after relationship deletion
     refresh_character_relationships(instance.source)
 
 
@@ -1351,7 +1394,8 @@ def pre_delete_trait_reset(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=Trait)
-def post_delete_trait_reset_rels(sender, instance, **kwargs):
+def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset quest relationships after trait deletion."""
     # Update quest cache if trait had a quest
     if instance.quest:
         refresh_event_quest_relationships(instance.quest)
@@ -1371,26 +1415,30 @@ def pre_save_warehouse_item(sender, instance: WarehouseItem, **kwargs):
 
 # WritingOption signals
 @receiver(post_save, sender=WritingOption)
-def post_save_writing_option_reset(sender, instance, **kwargs):
+def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear caches when WritingOption is saved."""
     clear_event_fields_cache(instance.question.event_id)
     clear_event_cache_all_runs(instance.question.event)
 
 
 @receiver(pre_delete, sender=WritingOption)
-def pre_delete_character_option_reset(sender, instance, **kwargs):
+def pre_delete_character_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear character-related caches when a character option is deleted."""
     clear_event_cache_all_runs(instance.question.event)
     clear_event_fields_cache(instance.question.event_id)
 
 
 # WritingQuestion signals
 @receiver(pre_delete, sender=WritingQuestion)
-def pre_delete_writing_question_reset(sender, instance, **kwargs):
+def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, **kwargs: Any) -> None:
+    """Clear caches when a writing question is deleted."""
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
 
 
 @receiver(post_save, sender=WritingQuestion)
-def post_save_writing_question_reset(sender, instance, **kwargs):
+def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    # Clear cache for event fields and all runs when writing question changes
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
 

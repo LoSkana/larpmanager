@@ -308,7 +308,8 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def set_exclude(self, exclude_value):
+    def set_exclude(self, exclude_value: bool) -> None:
+        """Set the exclude flag."""
         self.excl = exclude_value
 
     def get_queryset(self) -> QuerySet[Event]:
@@ -328,13 +329,15 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def label_from_instance(self, obj):
+    def label_from_instance(self, obj: object) -> str:
+        """Return string representation of the given object."""
         return str(obj)
 
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def set_exclude(self, exclude):
+    def set_exclude(self, exclude: bool) -> None:
+        """Set the exclude flag."""
         self.exclude = exclude
 
     def get_queryset(self) -> QuerySet[Event]:
@@ -357,7 +360,8 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Event]:
+        """Return queryset of template events for the association."""
         return Event.objects.filter(association_id=self.association_id, template=True)
 
 
@@ -372,11 +376,13 @@ class AssocMS2:
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
+        # Return members queryset for this association
         return get_members_queryset(self.association_id)
 
     @staticmethod
-    def label_from_instance(obj):
+    def label_from_instance(obj: Member) -> str:
+        """Return formatted label with member name and email."""
         return f"{obj.display_real()} - {obj.email}"
 
 
@@ -415,7 +421,8 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         # noinspection PyUnresolvedReferences
         self.attrs["required"] = "required"
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Member]:
+        """Return members filtered by allowed IDs."""
         return Member.objects.filter(pk__in=self.allowed_member_ids)
 
     def label_from_instance(self, obj: Any) -> str:
@@ -482,10 +489,12 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        # Set the event for this instance
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Registration]:
+        """Return registrations for the current event with optimized prefetching."""
         return Registration.objects.prefetch_related("run", "run__event").filter(run__event=self.event)
 
     def label_from_instance(self, obj: Any) -> str:
@@ -505,7 +514,8 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Registration]:
+        """Return registrations for the current association with optimized queries."""
         return Registration.objects.prefetch_related("run", "run__event").filter(
             run__event__association_id=self.association_id
         )
@@ -528,7 +538,8 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Run]:
+        """Return runs for the current association."""
         return Run.objects.filter(event__association_id=self.association_id)
 
 
@@ -540,10 +551,12 @@ class EventCharacterS2:
         "title__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Character]:
+        """Return optimized queryset of event characters ordered by number."""
         return (
             self.event.get_elements(Character)
             .only("id", "name", "number", "teaser", "title", "event_id")
@@ -566,10 +579,12 @@ class EventPlotS2:
         "teaser__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Plot]:
+        """Return queryset of Plot elements for this event."""
         return self.event.get_elements(Plot)
 
 
@@ -588,10 +603,12 @@ class EventTraitS2:
         "teaser__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Trait]:
+        """Return optimized queryset of traits for the event, ordered by number."""
         return self.event.get_elements(Trait).only("id", "name", "number", "teaser", "event_id").order_by("number")
 
 
@@ -609,10 +626,12 @@ class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         "description__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[WritingOption]:
+        """Return queryset of WritingOption elements for the event."""
         return self.event.get_elements(WritingOption)
 
 
@@ -623,10 +642,12 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         "teaser__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Faction]:
+        # Return factions associated with this event
         return self.event.get_elements(Faction)
 
     def label_from_instance(self, instance: Faction) -> str:
@@ -641,10 +662,12 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         "name__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[AbilityPx]:
+        """Return ability experience entries for this event."""
         return self.event.get_elements(AbilityPx)
 
 
@@ -653,10 +676,12 @@ class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         "name__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[RegistrationTicket]:
+        """Return registration tickets for the event."""
         return self.event.get_elements(RegistrationTicket)
 
 
@@ -676,7 +701,8 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         # Extract flattened list of member IDs who have roles in this event
         self.allowed_member_ids = que.values_list("members__id", flat=True)
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Member]:
+        """Return queryset of members filtered by allowed IDs."""
         return Member.objects.filter(pk__in=self.allowed_member_ids)
 
 
@@ -689,7 +715,8 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[WarehouseContainer]:
+        """Return warehouse containers for the current association."""
         return WarehouseContainer.objects.filter(association_id=self.association_id)
 
 
@@ -699,10 +726,12 @@ class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[WarehouseArea]:
+        """Return warehouse areas for this event."""
         return self.event.get_elements(WarehouseArea)
 
 
@@ -715,7 +744,8 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[WarehouseItem]:
+        """Return warehouse items filtered by association."""
         return WarehouseItem.objects.filter(association_id=self.association_id)
 
 
@@ -736,7 +766,8 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
     def set_association_id(self, association_id):
         self.association_id = association_id
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[WarehouseTag]:
+        """Return warehouse tags filtered by association."""
         return WarehouseTag.objects.filter(association_id=self.association_id)
 
 
@@ -799,5 +830,6 @@ def get_members_queryset(association_id):
 
 
 class WritingTinyMCE(TinyMCE):
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize TinyMCE widget with custom styling for character markers."""
         super().__init__(attrs={"rows": 20, "content_style": ".char-marker { background: yellow !important; }"})

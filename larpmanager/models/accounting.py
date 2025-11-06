@@ -21,6 +21,7 @@
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association
@@ -401,7 +402,8 @@ class AccountingItemExpense(AccountingItem):
 
     is_approved = models.BooleanField(default=False)
 
-    def download(self):
+    def download(self) -> HttpResponse:
+        """Download the invoice file."""
         # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
@@ -552,8 +554,8 @@ class Discount(BaseModel):
             self.upd_js_attr(js, s)
         return js
 
-    def show_event(self):
-        # noinspection PyUnresolvedReferences
+    def show_event(self) -> str:
+        """Return comma-separated list of all associated runs."""
         return ", ".join([str(c) for c in self.runs.all()])
 
 

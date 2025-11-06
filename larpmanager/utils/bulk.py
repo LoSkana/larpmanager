@@ -160,7 +160,8 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
     return JsonResponse({"res": "ok"})
 
 
-def _get_inv_items(warehouse_item_ids, context):
+def _get_inv_items(warehouse_item_ids: list[int], context: dict) -> list[int]:
+    """Get warehouse item IDs filtered by association."""
     return WarehouseItem.objects.filter(
         association_id=context["association_id"], pk__in=warehouse_item_ids
     ).values_list("pk", flat=True)
@@ -241,7 +242,8 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
     ]
 
 
-def _get_chars(context, character_ids):
+def _get_chars(context: dict, character_ids: list) -> list:
+    """Return character IDs filtered by event and provided IDs."""
     return context["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
 
 
@@ -320,7 +322,8 @@ def exec_set_char_assigned(request: HttpRequest, context: dict[str, Any], target
     context["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
 
-def exec_set_char_status(request, context, target, ids):
+def exec_set_char_status(request, context: dict, target: str, ids: list[int]) -> None:
+    """Update character status for specified characters in the event."""
     context["event"].get_elements(Character).filter(pk__in=ids).update(status=target)
 
 

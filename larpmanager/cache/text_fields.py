@@ -39,7 +39,8 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing
 
 
-def cache_text_field_key(model_type, model_instance):
+def cache_text_field_key(model_type: type, model_instance: object) -> str:
+    """Generate cache key for model text fields."""
     return f"cache_text_fields_{model_type.__name__}_{model_instance.id}"
 
 

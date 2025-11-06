@@ -103,7 +103,8 @@ def almost_equal(s1: str, s2: str) -> bool:
     return False
 
 
-def leaderboard_key(association_id):
+def leaderboard_key(association_id: int) -> str:
+    """Return cache key for association leaderboard."""
     return f"leaderboard_{association_id}"
 
 
@@ -164,7 +165,8 @@ def get_leaderboard(association_id: int) -> dict:
     return cached_leaderboard
 
 
-def assign_badge(member, badge_code):
+def assign_badge(member: Member, badge_code: str) -> None:
+    """Assign a badge to a member by badge code."""
     try:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(member)

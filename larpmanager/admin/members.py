@@ -52,7 +52,8 @@ class MyUserAdmin(UserAdmin):
     ordering = ("id",)
 
     @staticmethod
-    def character_link(instance):
+    def character_link(instance) -> str:
+        """Generate admin link for member."""
         url = reverse("admin:larpmanager_member_change", args=[instance.member.id])
         return mark_safe(f"<a href='{url}'>{instance.member}</a>")
 
@@ -79,7 +80,8 @@ class MemberAdmin(DefModelAdmin):
     autocomplete_fields = ["user", "badges", "parent"]
 
     @staticmethod
-    def user_link(instance):
+    def user_link(instance) -> str:
+        """Generate HTML link to admin page for the user."""
         url = reverse("admin:auth_user_change", args=[instance.user.id])
         return mark_safe(f"<a href='{url}'>{instance.user}</a>")
 

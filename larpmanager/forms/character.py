@@ -803,15 +803,20 @@ class OrgaWritingQuestionForm(MyForm):
         # Apply filtered choices to form field
         self.fields["typ"].choices = filtered_choices
 
-    def _init_editable(self):
+    def _init_editable(self) -> None:
+        """Initialize the editable field based on character approval configuration."""
+        # Check if character approval feature is enabled for this event
         if not get_event_config(self.params["event"].id, "user_character_approval", False, context=self.params):
             self.delete_field("editable")
         else:
+            # Create multiple choice field for character status selection
             self.fields["editable"] = forms.MultipleChoiceField(
                 choices=CharacterStatus.choices,
                 widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
                 required=False,
             )
+
+            # Set initial values from existing instance if available
             if self.instance and self.instance.pk:
                 self.initial["editable"] = self.instance.get_editable()
 
@@ -826,7 +831,8 @@ class OrgaWritingQuestionForm(MyForm):
         self.fields["applicable"].widget = forms.HiddenInput()
         self.initial["applicable"] = self.params["writing_typ"]
 
-    def clean_editable(self):
+    def clean_editable(self) -> str:
+        """Join editable field values into comma-separated string."""
         return ",".join(self.cleaned_data["editable"])
 
 

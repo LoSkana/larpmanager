@@ -391,7 +391,8 @@ class ResidenceWidget(forms.MultiWidget):
         return [None] * 6
 
 
-def validate_no_pipe(value):
+def validate_no_pipe(value: str) -> None:
+    """Validate that the value does not contain pipe characters."""
     if "|" in value:
         raise forms.ValidationError(_("Character not allowed") + ": |")
 

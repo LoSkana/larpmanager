@@ -201,7 +201,8 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_inflows_edit(request, num):
+def exe_inflows_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an inflow entry for the association."""
     return exe_edit(request, ExeInflowForm, num, "exe_inflows")
 
 
@@ -247,7 +248,8 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_donations_edit(request, num):
+def exe_donations_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an organization-wide donation entry."""
     return exe_edit(request, ExeDonationForm, num, "exe_donations")
 
 
@@ -293,7 +295,8 @@ def exe_credits(request: HttpRequest) -> dict:
 
 
 @login_required
-def exe_credits_edit(request, num):
+def exe_credits_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Simple edit view wrapper for credit management
     return exe_edit(request, ExeCreditForm, num, "exe_credits")
 
 
@@ -341,7 +344,8 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_tokens_edit(request, num):
+def exe_tokens_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an existing registration token."""
     return exe_edit(request, ExeTokenForm, num, "exe_tokens")
 
 
@@ -400,7 +404,8 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_expenses_edit(request, num):
+def exe_expenses_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an expense for an association."""
     return exe_edit(request, ExeExpenseForm, num, "exe_expenses")
 
 
@@ -499,7 +504,8 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_payments_edit(request, num):
+def exe_payments_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit organization-wide payment method."""
     return exe_edit(request, ExePaymentForm, num, "exe_payments")
 
 
@@ -566,7 +572,8 @@ def exe_invoices(request) -> HttpResponse:
 
 
 @login_required
-def exe_invoices_edit(request, num):
+def exe_invoices_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an existing invoice."""
     return exe_edit(request, ExeInvoiceForm, num, "exe_invoices")
 
 
@@ -626,7 +633,8 @@ def exe_collections(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_collections_edit(request, num):
+def exe_collections_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit an existing collection."""
     return exe_edit(request, ExeCollectionForm, num, "exe_collections")
 
 
@@ -678,7 +686,8 @@ def exe_refunds(request: HttpRequest) -> dict:
 
 
 @login_required
-def exe_refunds_edit(request, num):
+def exe_refunds_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Single-line wrapper function - delegates to exe_edit with refund form
     return exe_edit(request, ExeRefundRequestForm, num, "exe_refunds")
 
 

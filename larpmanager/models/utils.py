@@ -281,7 +281,8 @@ class UploadToPathAndRename:
         return new_fn
 
 
-def _key_id(fernet_key):
+def _key_id(fernet_key: bytes) -> str:
+    """Generate a 12-character hash identifier for a Fernet key."""
     decoded_key = base64.urlsafe_b64decode(fernet_key)
     return hashlib.sha256(decoded_key).hexdigest()[:12]
 

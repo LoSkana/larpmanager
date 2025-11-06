@@ -113,12 +113,14 @@ def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int)
 
 
 @login_required
-def portraits(request, event_slug):
+def portraits(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Generate a portrait gallery for event characters."""
     context = get_event_context(request, event_slug, signup=True)
     return print_gallery(context)
 
 
 @login_required
-def profiles(request, event_slug):
+def profiles(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Generate character profiles PDF for an event."""
     context = get_event_context(request, event_slug, signup=True)
     return print_profiles(context)

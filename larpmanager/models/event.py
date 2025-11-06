@@ -27,6 +27,7 @@ from django.conf import settings as conf_settings
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
+from django.http import HttpResponse
 from django.utils import formats
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -358,11 +359,13 @@ class Event(BaseModel):
 
         return dc
 
-    def thumb(self):
+    def thumb(self) -> str:
+        """Return HTML markup for thumbnail image at 100px width."""
         # noinspection PyUnresolvedReferences
         return show_thumb(100, self.cover_thumb.url)
 
-    def download_sheet_template(self):
+    def download_sheet_template(self) -> HttpResponse:
+        """Download the sheet template file."""
         # noinspection PyUnresolvedReferences
         return download(self.sheet_template.path)
 
@@ -588,11 +591,13 @@ class Run(BaseModel):
             run_slug += f"-{self.number}"
         return run_slug
 
-    def get_where(self):
+    def get_where(self) -> str:
+        """Return the location of the associated event."""
         # noinspection PyUnresolvedReferences
         return self.event.where
 
-    def get_cover_url(self):
+    def get_cover_url(self) -> str:
+        """Return the thumbnail URL of the associated event's cover image."""
         # noinspection PyUnresolvedReferences
         return self.event.cover_thumb.url
 

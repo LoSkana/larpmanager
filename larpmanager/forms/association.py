@@ -317,7 +317,8 @@ class ExeAppearanceForm(MyCssForm):
         return css_file_path
 
     @staticmethod
-    def get_input_css():
+    def get_input_css() -> str:
+        # Return CSS class for association input fields
         return "association_css"
 
 

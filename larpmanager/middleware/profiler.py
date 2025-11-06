@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any
+from typing import Any, Callable
 
 from django.http import HttpRequest, HttpResponse
 from django.utils.timezone import now
@@ -32,7 +32,8 @@ logger = logging.getLogger(__name__)
 class ProfilerMiddleware:
     threshold = 0.5
 
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with Django response handler."""
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
@@ -83,7 +84,14 @@ class ProfilerMiddleware:
 
         return response
 
-    def process_view(self, request, view_func, view_args, view_kwargs):
+    def process_view(
+        self,
+        request: HttpRequest,
+        view_func: Callable,
+        view_args: tuple,
+        view_kwargs: dict,
+    ) -> None:
+        """Store the view function name in the request for profiling."""
         request._profiler_func_name = self._extract_view_func_name(view_func)
 
     @staticmethod

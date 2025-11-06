@@ -38,11 +38,13 @@ def calculate_fiscal_code(member):
     return primary_validation_result
 
 
-def _calculate_consonants(fiscal_code_string):
+def _calculate_consonants(fiscal_code_string: str) -> str:
+    """Extract consonants from string, excluding vowels and accented vowels."""
     return "".join([c for c in fiscal_code_string if c.isalpha() and c not in "AEIOUÀÈÉÌÒÙ"])
 
 
-def _calculate_vowels(text):
+def _calculate_vowels(text: str) -> str:
+    """Extract and concatenate all uppercase vowels from text."""
     return "".join([character for character in text if character in "AEIOU"])
 
 

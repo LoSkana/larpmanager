@@ -409,7 +409,8 @@ class WritingOption(BaseModel):
     def __str__(self):
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, run=None, currency_symbol=None):
+    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
+        """Return the display name for this ticket tier."""
         show_data = self.show(run)
         return show_data["name"]
 
@@ -439,7 +440,8 @@ class WritingChoice(BaseModel):
 
     element_id = models.IntegerField(blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Return string representation showing element ID, question name, and option name
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
@@ -457,7 +459,8 @@ class WritingAnswer(BaseModel):
 
     element_id = models.IntegerField(blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with element ID, question name, and text preview."""
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
 
@@ -751,7 +754,8 @@ class RegistrationChoice(BaseModel):
 
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """String representation showing registration, question and option."""
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 
@@ -769,7 +773,8 @@ class RegistrationAnswer(BaseModel):
 
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="answers")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with registration, question name, and truncated text."""
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.text[:100]}"
 
@@ -780,7 +785,8 @@ class RegistrationAnswer(BaseModel):
         ]
 
 
-def get_ordered_registration_questions(context):
+def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQuestion]:
+    """Get registration questions ordered by section and question order."""
     questions = context["event"].get_elements(RegistrationQuestion)
     return questions.order_by(F("section__order").asc(nulls_first=True), "order")
 

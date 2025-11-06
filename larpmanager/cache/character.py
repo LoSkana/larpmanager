@@ -235,7 +235,12 @@ def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) 
         res["chars"][character_position]["fields"][question] = value
 
 
-def get_character_element_fields(context, character_id, only_visible=True):
+def get_character_element_fields(
+    context: dict,
+    character_id: int,
+    only_visible: bool = True,
+) -> dict:
+    """Get writing element fields for a character."""
     return get_writing_element_fields(
         context, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
     )
@@ -480,7 +485,8 @@ def clear_run_cache_and_media(run: Run) -> None:
     delete_all_in_path(media_directory_path)
 
 
-def reset_event_cache_all(run):
+def reset_event_cache_all(run: Run) -> None:
+    """Delete the event cache for the given run."""
     cache_key = get_event_cache_all_key(run)
     cache.delete(cache_key)
 
@@ -593,7 +599,8 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
     res["chars"][instance.number].update(character_display_data)
 
 
-def update_event_cache_all_faction(instance, res):
+def update_event_cache_all_faction(instance, res: dict) -> None:
+    """Updates or adds faction data in the cache result dictionary."""
     faction_data = instance.show()
     if instance.number in res["factions"]:
         res["factions"][instance.number].update(faction_data)
@@ -747,7 +754,8 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
         clear_event_cache_all_runs(instance.event)
 
 
-def update_event_cache_all_runs(event, instance):
+def update_event_cache_all_runs(event, instance) -> None:
+    """Update event cache for all runs of the given event."""
     for run in event.runs.all():
         update_event_cache_all(run, instance)
 

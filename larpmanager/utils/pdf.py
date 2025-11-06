@@ -46,6 +46,7 @@ from larpmanager.cache.character import get_event_cache_all, get_writing_element
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
@@ -533,15 +534,18 @@ def cleanup_handout_template_pdfs_after_save(instance):
             safe_remove(el.get_filepath(run))
 
 
-def safe_remove(file_path):
+def safe_remove(file_path: str) -> None:
+    """Remove a file, ignoring if it doesn't exist."""
     try:
         os.remove(file_path)
     except FileNotFoundError:
         pass
 
 
-def remove_run_pdf(event):
+def remove_run_pdf(event: Event) -> None:
+    """Remove PDF files for all runs associated with the event."""
     for event_run in event.runs.all():
+        # Remove profiles and gallery PDFs for each run
         safe_remove(event_run.get_profiles_filepath())
         safe_remove(event_run.get_gallery_filepath())
 
@@ -688,9 +692,13 @@ def print_handout_bkg(association_slug: str, event_slug: str, c: Character) -> N
     print_handout_go(context, c)
 
 
-def print_character_go(context, character):
+def print_character_go(context: dict, character) -> None:
+    """Prints character information, handling missing character gracefully."""
     try:
+        # Validate character access and retrieve character data
         get_char_check(None, context, character, False, True)
+
+        # Generate and cache character print outputs
         print_character(context, True)
         print_character_friendly(context, True)
         print_character_rel(context, True)
@@ -1044,13 +1052,28 @@ def update_content(context: Any, working_dir: str, zip_dir: str, char: Any, aux_
     styles_document.write(styles_xml_path, pretty_print=True)
 
 
-def get_trait_character(run, number):
+def get_trait_character(run: Run, number: int) -> Character | None:
+    """Get the character assigned to a trait number in a specific run.
+
+    Args:
+        run: The Run instance to search in.
+        number: The trait number to look for.
+
+    Returns:
+        The Character assigned to the trait, or None if not found.
+    """
     try:
+        # Find the trait by event and number
         trait = Trait.objects.get(event_id=run.event_id, number=number)
+
+        # Get the member assigned to this trait in the run
         member = AssignmentTrait.objects.get(run=run, trait=trait).member
+
+        # Find the character registered for this member in the run
         registration_character_rels = RegistrationCharacterRel.objects.filter(
             reg__run=run, reg__member=member
         ).select_related("character")
+
         if not registration_character_rels.exists():
             return None
         return registration_character_rels.first().character
