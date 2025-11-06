@@ -4930,6 +4930,9 @@ msgstr "Přezkoumání citlivých údajů účastníků"
 msgid "Set up the membership configuration"
 msgstr "Nastavení konfigurace členství"
 
+msgid "The name of our hobby, four letters"
+msgstr "Název našeho koníčku, čtyři písmena"
+
 msgid "This page shows the warehouse items"
 msgstr "Na této stránce jsou uvedeny skladové položky"
 
@@ -6224,6 +6227,9 @@ msgstr ""
 
 msgid "Here is a to-do list of important actions to complete"
 msgstr "Zde je seznam úkolů, které je třeba splnit"
+
+msgid "Incorrect answer. Please enter the name of our hobby."
+msgstr "Nesprávná odpověď. Zadejte prosím název našeho koníčku."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Počáteční hodnota zkušenostních bodů pro všechny postavy"

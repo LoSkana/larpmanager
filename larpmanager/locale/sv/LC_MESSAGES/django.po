@@ -4930,6 +4930,9 @@ msgstr "Granska deltagarnas känsliga uppgifter"
 msgid "Set up the membership configuration"
 msgstr "Ställ in medlemskonfigurationen"
 
+msgid "The name of our hobby, four letters"
+msgstr "Namnet på vår hobby, fyra bokstäver"
+
 msgid "This page shows the warehouse items"
 msgstr "På denna sida visas lagerartiklarna"
 
@@ -6223,6 +6226,9 @@ msgstr "Visar listor över deltagare som ska övertygas om att registrera sig"
 
 msgid "Here is a to-do list of important actions to complete"
 msgstr "Här är en att-göra-lista över viktiga åtgärder som ska slutföras"
+
+msgid "Incorrect answer. Please enter the name of our hobby."
+msgstr "Felaktigt svar. Vänligen ange namnet på vår hobby."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Initialt värde av erfarenhetspoäng för alla karaktärer"

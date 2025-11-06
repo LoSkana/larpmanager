@@ -4931,6 +4931,9 @@ msgstr "Examiner les données sensibles des participants"
 msgid "Set up the membership configuration"
 msgstr "Configuration de l'adhésion"
 
+msgid "The name of our hobby, four letters"
+msgstr "Le nom de notre hobby, quatre lettres"
+
 msgid "This page shows the warehouse items"
 msgstr "Cette page présente les articles de l'entrepôt"
 
@@ -6250,6 +6253,9 @@ msgstr "Affiche des listes de participants à convaincre de s'inscrire"
 
 msgid "Here is a to-do list of important actions to complete"
 msgstr "Voici une liste d'actions importantes à réaliser"
+
+msgid "Incorrect answer. Please enter the name of our hobby."
+msgstr "Mauvaise réponse. Veuillez saisir le nom de notre hobby."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Valeur initiale des points d'expérience pour tous les personnages"

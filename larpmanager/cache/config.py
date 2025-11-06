@@ -23,8 +23,7 @@ from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
+from larpmanager.models.base import BaseModel
 
 
 def clear_config_cache(config_element: Any) -> None:
@@ -33,7 +32,7 @@ def clear_config_cache(config_element: Any) -> None:
     cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))
 
 
-def reset_element_configs(element: Event | Run | Association) -> None:
+def reset_element_configs(element: BaseModel) -> None:
     """Delete cached configs for the given element."""
     cache_key = cache_configs_key(element.id, element._meta.model_name.lower())
     cache.delete(cache_key)

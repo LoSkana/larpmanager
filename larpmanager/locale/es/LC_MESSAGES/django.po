@@ -4930,6 +4930,9 @@ msgstr "Revisar los datos sensibles de los participantes"
 msgid "Set up the membership configuration"
 msgstr "Establecer la configuración de afiliación"
 
+msgid "The name of our hobby, four letters"
+msgstr "El nombre de nuestra afición, cuatro letras"
+
 msgid "This page shows the warehouse items"
 msgstr "Esta página muestra los artículos del almacén"
 
@@ -6229,6 +6232,10 @@ msgstr ""
 
 msgid "Here is a to-do list of important actions to complete"
 msgstr "He aquí una lista de acciones importantes que hay que llevar a cabo"
+
+msgid "Incorrect answer. Please enter the name of our hobby."
+msgstr ""
+"Respuesta incorrecta. Por favor, introduzca el nombre de nuestra afición."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Valor inicial de los puntos de experiencia para todos los personajes"
