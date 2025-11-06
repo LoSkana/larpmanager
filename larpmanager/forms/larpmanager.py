@@ -20,8 +20,10 @@
 from typing import Any
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
@@ -65,8 +67,22 @@ class LarpManagerContact(LarpManagerCheck):
         widget=Textarea(attrs={"rows": 10, "placeholder": "Content"}),
     )
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    verification = forms.CharField(
+        required=True,
+        max_length=10,
+        label=_("The name of our hobby, four letters"),
+        widget=forms.TextInput(attrs={"placeholder": _("The name of our hobby, four letters")}),
+    )
+
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+
+    def clean_verification(self):
+        """Validate that the verification field contains 'larp'."""
+        verification = self.cleaned_data.get("verification", "")
+        if verification.strip().lower() != "larp":
+            raise ValidationError(_("Incorrect answer. Please enter the name of our hobby."))
+        return verification
 
 
 class LarpManagerTicketForm(MyForm):
