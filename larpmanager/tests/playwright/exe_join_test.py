@@ -52,16 +52,17 @@ def test_exe_join(pw_page):
     go_to(page, live_server, "/join")
 
     # check auto slug
-    page.get_by_role("textbox", name="Name").fill("prova°°à!* cs")
+    name_input = get_by_role("textbox", name="Name", exact=True)
+    name_input.fill("prova°°à!* cs")
     expect(page.locator("#slug")).to_have_value("provaacs")
     page.locator("#slug").click()
     page.locator("#slug").fill("proaacs")
-    page.get_by_role("textbox", name="Name").click()
-    page.get_by_role("textbox", name="Name").fill("prova°    °à!* cs")
+    name_input.click()
+    name_input.fill("prova°    °à!* cs")
     expect(page.locator("#slug")).to_have_value("proaacs")
 
-    page.get_by_role("textbox", name="Name").click()
-    page.get_by_role("textbox", name="Name").fill("Prova Larp")
+    name_input.click()
+    name_input.fill("Prova Larp")
     page.locator("#id_profile").wait_for(state="visible")
     load_image(page, "#id_profile")
     page.locator("#slug").fill("prova")
