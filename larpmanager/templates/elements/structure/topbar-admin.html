@@ -60,9 +60,11 @@
                                         <i class="fa-solid fa-users"></i> User
                                     </a>
                                 {% else %}
-                                    <a href="{% url 'manage' %}" class="admin-link">
-                                        <i class="fa-solid fa-toolbox"></i> Admin
-                                    </a>
+                                    {% if association_role %}
+                                        <a href="{% url 'manage' %}" class="admin-link">
+                                            <i class="fa-solid fa-toolbox"></i> Admin
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </div>
