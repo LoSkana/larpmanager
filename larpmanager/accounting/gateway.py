@@ -87,17 +87,18 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     # expiration_date = datetime.now(timezone.utc) + timedelta(hours=1)
     # expiration_date = format_datetime(expiration_date)
 
-    # Future implementation for additional body parameters
-    # body_params = {
-    #     "expire_date": expiration_date,
-    #     "external_code": invoice.causal,
-    #     "redirect_url": context["redirect"],
-    #     "callback_url": context["callback"],
-    # }
+    # Prepare body parameters with callback URL
+    body_params = {
+        "callback_url": context["callback"],
+    }
+    # Optional: Add more parameters if needed
+    # body_params["expire_date"] = expiration_date
+    # body_params["external_code"] = invoice.causal
+    # body_params["redirect_url"] = context["redirect"]
 
     # Create payment request with Satispay API (amount in cents)
     satispay_response = satispaython.create_payment(
-        satispay_key_id, satispay_rsa_key, math.ceil(amount * 100), context["payment_currency"], context["callback"]
+        satispay_key_id, satispay_rsa_key, math.ceil(amount * 100), context["payment_currency"], body_params
     )
 
     # Validate API response and handle errors
