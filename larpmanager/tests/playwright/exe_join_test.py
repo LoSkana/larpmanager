@@ -52,7 +52,7 @@ def test_exe_join(pw_page):
     go_to(page, live_server, "/join")
 
     # check auto slug
-    name_input = get_by_role("textbox", name="Name", exact=True)
+    name_input = page.get_by_role("textbox", name="Name", exact=True)
     name_input.fill("prova°°à!* cs")
     expect(page.locator("#slug")).to_have_value("provaacs")
     page.locator("#slug").click()
