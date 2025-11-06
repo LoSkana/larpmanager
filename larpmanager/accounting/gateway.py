@@ -90,11 +90,11 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     # Prepare body parameters with callback URL
     body_params = {
         "callback_url": context["callback"],
+        "redirect_url": context["redirect"],
+        "external_code": invoice.causal
     }
-    # Optional: Add more parameters if needed
+    # Optional
     # body_params["expire_date"] = expiration_date
-    # body_params["external_code"] = invoice.causal
-    # body_params["redirect_url"] = context["redirect"]
 
     # Create payment request with Satispay API (amount in cents)
     satispay_response = satispaython.create_payment(
