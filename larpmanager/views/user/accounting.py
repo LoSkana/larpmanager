@@ -813,7 +813,8 @@ def acc_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
 
 
 @login_required
-def acc_wait(request):
+def acc_wait(request: HttpRequest) -> HttpResponse:
+    """Render the account waiting page."""
     return render(request, "larpmanager/member/acc_wait.html")
 
 
@@ -1029,8 +1030,10 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     return redirect("home")
 
 
-def add_runs(ls, lis, future=True):
+def add_runs(ls: dict, lis: list, future: bool = True) -> None:
+    """Add runs from events to dictionary, optionally filtering past runs."""
     for e in lis:
+        # Filter and add runs to dictionary by ID
         for r in e.runs.all():
             if future and r.end < date.today():
                 continue

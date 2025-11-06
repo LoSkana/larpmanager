@@ -685,7 +685,8 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_volunteer_registry_edit(request, num):
+def exe_volunteer_registry_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Edit volunteer registry entry using standard exe form handling
     return exe_edit(request, ExeVolunteerRegistryForm, num, "exe_volunteer_registry")
 
 
@@ -794,7 +795,8 @@ def exe_badges(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_badges_edit(request, num):
+def exe_badges_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Delegate to generic edit view for badge editing
     return exe_edit(request, ExeBadgeForm, num, "exe_badges")
 
 

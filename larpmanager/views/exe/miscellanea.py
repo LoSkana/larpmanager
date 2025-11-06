@@ -142,7 +142,8 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_movements_edit(request, num):
+def exe_warehouse_movements_edit(request: HttpRequest, num: int) -> HttpResponse:
+    # Edit a specific warehouse movement by delegating to the generic exe_edit view
     return exe_edit(request, ExeWarehouseMovementForm, num, "exe_warehouse_movements")
 
 

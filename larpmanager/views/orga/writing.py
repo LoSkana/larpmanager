@@ -748,7 +748,8 @@ def orga_progress_steps(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_progress_steps_edit(request, event_slug, num):
+def orga_progress_steps_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a progress step for an event."""
     return orga_edit(request, event_slug, "orga_progress_steps", OrgaProgressStepForm, num)
 
 
@@ -953,7 +954,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Args:
         request (HttpRequest): The HTTP request object containing user and session data
-        s (str): Event slug string used to identify the specific event
+        event_slug (str): Event slug string used to identify the specific event
 
     Returns:
         HttpResponse: Rendered reading.html template with context containing all

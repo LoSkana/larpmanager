@@ -52,6 +52,7 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     Discount,
+    DiscountType,
     OtherChoices,
     PaymentInvoice,
     PaymentStatus,
@@ -857,7 +858,8 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         ObjectDoesNotExist: When discount code is not found for the event run
     """
 
-    def error(msg):
+    def error(msg: str) -> JsonResponse:
+        """Return a JSON error response."""
         return JsonResponse({"res": "ko", "msg": msg})
 
     # Get event context and validate discount feature availability
@@ -953,11 +955,17 @@ def _is_discount_invalid_for_registration(discount: Discount, member: Member, ru
     return Registration.objects.filter(member=member, run=run, cancellation_date__isnull=True).exists()
 
 
-def _is_discount_already_used(discount, member, run):
+def _is_discount_already_used(discount: Discount, member: Member, run: Run) -> bool:
+    """Check if discount has already been used by member for run."""
     return AccountingItemDiscount.objects.filter(disc=discount, member=member, run=run).exists()
 
 
-def _is_type_already_used(discount_type, member, run):
+def _is_type_already_used(
+    discount_type: DiscountType,
+    member: Member,
+    run: Run,
+) -> bool:
+    """Check if a discount type has already been used by a member for a run."""
     return AccountingItemDiscount.objects.filter(disc__typ=discount_type, member=member, run=run).exists()
 
 
@@ -1127,7 +1135,8 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/gift.html", context)
 
 
-def check_registration_open(context, request):
+def check_registration_open(context: dict, request) -> None:
+    """Check if registrations are open, redirect to home if closed."""
     if not context["run"].status["open"]:
         messages.warning(request, _("Registrations not open!"))
         raise RedirectError("home")
@@ -1239,7 +1248,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     Args:
         request (HttpRequest): The HTTP request object containing user and method info
-        s (str): Event slug identifier for the specific event
+        event_slug (str): Event slug identifier for the specific event
         code (str): Gift redemption code to be validated and processed
 
     Returns:

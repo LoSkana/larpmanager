@@ -66,7 +66,8 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_discounts_edit(request, event_slug, num):
+def orga_discounts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit discount for event."""
     return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, num)
 
 
@@ -281,7 +282,8 @@ def orga_tokens(request: HttpRequest, event_slug) -> dict:
 
 
 @login_required
-def orga_tokens_edit(request, event_slug, num):
+def orga_tokens_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit an organization token for a specific event."""
     return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, num)
 
 
@@ -322,7 +324,8 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_credits_edit(request, event_slug, num):
+def orga_credits_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit organization credits."""
     return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, num)
 
 
@@ -383,7 +386,8 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_payments_edit(request, event_slug, num):
+def orga_payments_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit an existing payment for an event."""
     return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, num)
 
 
@@ -436,7 +440,8 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_outflows_edit(request, event_slug, num):
+def orga_outflows_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit an outflow entry for an event."""
     return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, num)
 
 
@@ -484,7 +489,8 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> dict:
 
 
 @login_required
-def orga_inflows_edit(request, event_slug, num):
+def orga_inflows_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit an existing inflow entry for an event."""
     return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, num)
 
 
@@ -550,7 +556,8 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_expenses_edit(request, event_slug, num):
+def orga_expenses_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit an expense for an event."""
     return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, num)
 
 

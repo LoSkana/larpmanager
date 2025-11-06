@@ -20,7 +20,7 @@
 
 import inspect
 import os
-from typing import Union
+from typing import Any, Union
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
@@ -228,7 +228,8 @@ class Event(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Return the name representation of the object
         return self.name
 
     def get_elements(self, element_model_class: type) -> QuerySet:
@@ -293,15 +294,18 @@ class Event(BaseModel):
         # Return self if no parent exists, element not inheritable, or independence enabled
         return self
 
-    def get_cover_thumb_url(self):
+    def get_cover_thumb_url(self) -> str | None:
+        """Get the URL of the cover thumbnail image, or None if unavailable."""
         try:
             # noinspection PyUnresolvedReferences
             return self.cover_thumb.url
         except Exception as e:
+            # Log error and return None if cover_thumb is not available
             print(e)
             return None
 
-    def get_name(self):
+    def get_name(self) -> str:
+        # Return the name attribute
         return self.name
 
     def show(self) -> dict[str, str]:
@@ -377,7 +381,8 @@ class Event(BaseModel):
         os.makedirs(pdf_directory_path, exist_ok=True)
         return pdf_directory_path
 
-    def get_config(self, name, default_value=None, bypass_cache=False):
+    def get_config(self, name: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this instance."""
         return get_element_config(self, name, default_value, bypass_cache)
 
 
@@ -388,7 +393,8 @@ class EventConfig(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Return string representation combining event and name
         return f"{self.event} {self.name}"
 
     class Meta:
@@ -419,10 +425,12 @@ class BaseConceptModel(BaseModel):
         abstract = True
         ordering = ["event", "number"]
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Get the name attribute."""
         return get_attr(self, "name")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the string representation of this instance."""
         return self.name
 
 
@@ -510,7 +518,8 @@ class ProgressStep(BaseConceptModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Return formatted string with order number and name
         return f"{self.order} - {self.name}"
 
 
@@ -649,13 +658,16 @@ class Run(BaseModel):
 
         return run_media_path
 
-    def get_gallery_filepath(self):
+    def get_gallery_filepath(self) -> str:
+        """Return the file path for the gallery PDF."""
         return self.get_media_filepath() + "gallery.pdf"
 
-    def get_profiles_filepath(self):
+    def get_profiles_filepath(self) -> str:
+        """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, config_key, default_value=None, bypass_cache=False):
+    def get_config(self, config_key: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this object."""
         return get_element_config(self, config_key, default_value, bypass_cache)
 
 
@@ -666,7 +678,8 @@ class RunConfig(BaseModel):
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Return string representation combining run and name
         return f"{self.run} {self.name}"
 
     class Meta:
@@ -695,7 +708,8 @@ class PreRegistration(BaseModel):
 
     info = models.CharField(max_length=255)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Return string representation combining event and member
         return f"{self.event} {self.member}"
 
     class Meta:

@@ -87,7 +87,8 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
 
 
 @login_required
-def orga_registration_tickets_edit(request, event_slug, num):
+def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific registration ticket."""
     return orga_edit(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, num)
 
 
@@ -112,7 +113,8 @@ def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpRes
 
 
 @login_required
-def orga_registration_sections_edit(request, event_slug, num):
+def orga_registration_sections_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific registration section for an event."""
     return orga_edit(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, num)
 
 
@@ -358,7 +360,8 @@ def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpRespo
 
 
 @login_required
-def orga_registration_quotas_edit(request, event_slug, num):
+def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific registration quota for an event."""
     return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, num)
 
 
@@ -386,7 +389,8 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
 
 
 @login_required
-def orga_registration_installments_edit(request, event_slug, num):
+def orga_registration_installments_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    # Edit a specific registration installment for an event
     return orga_edit(request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, num)
 
 
@@ -403,5 +407,6 @@ def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpR
 
 
 @login_required
-def orga_registration_surcharges_edit(request, event_slug, num):
+def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a registration surcharge for an event."""
     return orga_edit(request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, num)

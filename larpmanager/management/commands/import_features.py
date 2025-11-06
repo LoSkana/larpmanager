@@ -145,15 +145,30 @@ class Command(BaseCommand):
         return many_to_many_fields
 
     @staticmethod
-    def prepare_foreign(model, fields):
+    def prepare_foreign(model: type, fields: dict) -> None:
+        """Convert foreign key fields to their ID equivalents for database operations.
+
+        Args:
+            model: Django model class to check field types against.
+            fields: Dictionary of field names to values, modified in-place.
+
+        Note:
+            Modifies the fields dictionary in-place, replacing ForeignKey fields
+            with their corresponding _id fields.
+        """
         for field_name in list(fields.keys()):
+            # Check if field exists in model
             try:
                 # noinspection PyUnresolvedReferences, PyProtectedMember
                 field_object = model._meta.get_field(field_name)
             except FieldDoesNotExist:
                 continue
+
+            # Process ForeignKey fields by converting to _id format
             if isinstance(field_object, ForeignKey):
                 field_value = fields.pop(field_name)
+
+                # Handle None, int, or slug-based lookup
                 if field_value is None:
                     fields[f"{field_name}_id"] = None
                 elif isinstance(field_value, int):

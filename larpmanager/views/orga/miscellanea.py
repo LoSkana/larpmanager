@@ -77,7 +77,8 @@ def orga_albums(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_albums_edit(request, event_slug, num):
+def orga_albums_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit album for an event."""
     return orga_edit(request, event_slug, "orga_albums", OrgaAlbumForm, num)
 
 
@@ -133,7 +134,8 @@ def orga_utils(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_utils_edit(request, event_slug, num):
+def orga_utils_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit utility item for event."""
     return orga_edit(request, event_slug, "orga_utils", UtilForm, num)
 
 
@@ -206,7 +208,8 @@ def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
-def orga_workshop_modules_edit(request, event_slug, num):
+def orga_workshop_modules_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a workshop module for an event."""
     return orga_edit(request, event_slug, "orga_workshop_modules", WorkshopModuleForm, num)
 
 
@@ -229,7 +232,8 @@ def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpRespon
 
 
 @login_required
-def orga_workshop_questions_edit(request, event_slug, num):
+def orga_workshop_questions_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit workshop question."""
     return orga_edit(request, event_slug, "orga_workshop_questions", WorkshopQuestionForm, num)
 
 
@@ -261,7 +265,8 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
-def orga_workshop_options_edit(request, event_slug, num):
+def orga_workshop_options_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit workshop option for an event."""
     return orga_edit(request, event_slug, "orga_workshop_options", WorkshopOptionForm, num)
 
 
@@ -278,7 +283,8 @@ def orga_problems(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_problems_edit(request, event_slug, num):
+def orga_problems_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    # Delegate to generic edit view for problem editing
     return orga_edit(request, event_slug, "orga_problems", OrgaProblemForm, num)
 
 
@@ -295,7 +301,8 @@ def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_warehouse_area_edit(request, event_slug, num):
+def orga_warehouse_area_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a warehouse area for an event."""
     return orga_edit(request, event_slug, "orga_warehouse_area", OrgaWarehouseAreaForm, num)
 
 
@@ -467,7 +474,8 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
 
 @login_required
-def orga_warehouse_assignment_item_edit(request, event_slug, num):
+def orga_warehouse_assignment_item_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit warehouse item assignment."""
     return orga_edit(request, event_slug, "orga_warehouse_manifest", OrgaWarehouseItemAssignmentForm, num)
 
 
@@ -530,7 +538,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
 
     Args:
         request (HttpRequest): HTTP request object containing POST data with item assignment details
-        s (str): Event slug identifier
+        event_slug (str): Event slug identifier
         num (str): Area number identifier
 
     Returns:
@@ -600,7 +608,8 @@ def orga_onetimes_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_onetimes_tokens_edit(request, event_slug, num):
+def orga_onetimes_tokens_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit one-time access token."""
     return orga_edit(request, event_slug, "orga_onetimes_tokens", OneTimeAccessTokenForm, num)
 
 

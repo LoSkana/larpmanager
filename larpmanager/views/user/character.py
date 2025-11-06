@@ -493,7 +493,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, r:
 
     Args:
         request (HttpRequest): HTTP request object containing user session
-        s (str): Event slug identifier
+        event_slug (str): Event slug identifier
         num (int): Character number identifier
         r (int): Rotation direction (1 for 90°, else -90°)
 

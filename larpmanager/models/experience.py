@@ -93,7 +93,8 @@ class AbilityPx(BaseConceptModel):
             ),
         ]
 
-    def display(self):
+    def display(self) -> str:
+        """Return formatted display string with name and cost."""
         return f"{self.name} ({self.cost})"
 
 
@@ -116,7 +117,8 @@ class DeliveryPx(BaseConceptModel):
             ),
         ]
 
-    def display(self):
+    def display(self) -> str:
+        """Return formatted display string with name and amount."""
         return f"{self.name} ({self.amount})"
 
 
@@ -192,5 +194,6 @@ class ModifierPx(BaseConceptModel):
             ),
         ]
 
-    def display(self):
+    def display(self) -> str:
+        """Return display name with cost."""
         return f"{self.name} ({self.cost})"

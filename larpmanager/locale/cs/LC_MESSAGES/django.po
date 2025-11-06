@@ -534,6 +534,9 @@ msgstr "Zápatí"
 msgid "Fourth"
 msgstr "Čtvrtý"
 
+msgid "Friend"
+msgstr "Přítel"
+
 msgid "Gender"
 msgstr "Žánr"
 
@@ -1511,6 +1514,9 @@ msgstr "IP adresa"
 
 msgid "IP address"
 msgstr "IP adresa"
+
+msgid "Influencer"
+msgstr "Influencer"
 
 msgid "Kicked out"
 msgstr "Hunted"

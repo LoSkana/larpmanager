@@ -54,7 +54,8 @@ class AssociationPermission(BaseModel):
 
     config = models.TextField(max_length=100, blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation of the object."""
         return self.name
 
     class Meta:
@@ -161,10 +162,12 @@ class EventPermission(BaseModel):
 
     config = models.TextField(max_length=100, blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
-    def get_display_name(self):
+    def get_display_name(self) -> str:
+        """Return the display name."""
         return self.name
 
     class Meta:

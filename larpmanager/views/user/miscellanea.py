@@ -64,9 +64,12 @@ def url_short(request: HttpRequest, url_cod: str) -> HttpResponseRedirect:
     return redirect(el.url)
 
 
-def util(request, util_cod):
+def util(request: HttpRequest, util_cod: str) -> HttpResponseRedirect:
+    """Redirect to download URL for the specified utility."""
     try:
+        # Retrieve utility object by code
         u = Util.objects.get(cod=util_cod)
+        # Redirect to download URL
         return HttpResponseRedirect(u.download())
     except Exception as err:
         raise Http404("not found") from err
@@ -321,7 +324,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
 
     Args:
         request (HttpRequest): The HTTP request object containing user data and POST parameters
-        s (str): Event slug identifier for the current event/run
+        event_slug (str): Event slug identifier for the current event/run
         m (int): Workshop module number to process
 
     Returns:
