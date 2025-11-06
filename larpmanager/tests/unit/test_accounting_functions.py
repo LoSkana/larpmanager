@@ -42,7 +42,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Discount,
     OtherChoices,
-    PaymentChoices,
+    PaymentChoices, DiscountType,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice

@@ -40,7 +40,7 @@ from larpmanager.models.accounting import (
     Discount,
     ExpenseChoices,
     OtherChoices,
-    PaymentChoices,
+    PaymentChoices, DiscountType,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.registration import TicketTier
