@@ -461,7 +461,7 @@ class BaseTestCase(TestCase):
                 name="Test Discount",
                 value=Decimal("10.00"),
                 max_redeem=10,
-                typ=Discount.STANDARD,
+                typ=DiscountType.STANDARD,
                 event=self.get_event(),
                 number=1,
             )

@@ -810,7 +810,7 @@ def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpRes
 # ~ if friend.run.end < datetime.now().date():
 # ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Code not valid for runs passed!')})
 # ~ # get discount friend
-# ~ disc = Discount.objects.get(typ=Discount.FRIEND, runs__in=[context['run']])
+# ~ disc = Discount.objects.get(typ=DiscountType.FRIEND, runs__in=[context['run']])
 # ~ if disc.max_redeem > 0:
 # ~ if AccountingItemDiscount.objects.filter(disc=disc, run=context['run']).count() > disc.max_redeem:
 # ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('We are sorry, the maximum number of concessions has been reached a friend')})
@@ -822,7 +822,7 @@ def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpRes
 # ~ except Exception as e:
 # ~ pass
 # ~ # check there are no discount stores a friend
-# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=Discount.STANDARD).count() > 0:
+# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.STANDARD).count() > 0:
 # ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits") + "."})
 # ~ # check the user TO don't already have the discount
 # ~ try:
@@ -830,7 +830,7 @@ def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpRes
 # ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('You have already used a personal code')})
 # ~ except Exception as e:
 # ~ pass
-# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=Discount.PLAYAGAIN).count() > 0:
+# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.PLAYAGAIN).count() > 0:
 # ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Discount not comulary with Play Again')})
 # ~ # all green! proceed
 # ~ now = datetime.now()
@@ -992,7 +992,7 @@ def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, even
         True if the discount can be applied, False otherwise
     """
     # For PLAYAGAIN discount: no other discounts and has another registration
-    if discount.typ == Discount.PLAYAGAIN:
+    if discount.typ == DiscountType.PLAYAGAIN:
         # Check if member already has any discount for this run
         if AccountingItemDiscount.objects.filter(member=member, run=run).exists():
             return False
@@ -1002,7 +1002,7 @@ def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, even
             return False
 
     # If PLAYAGAIN discount was already applied, no other allowed
-    elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=Discount.PLAYAGAIN).exists():
+    elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=DiscountType.PLAYAGAIN).exists():
         return False
 
     return True
