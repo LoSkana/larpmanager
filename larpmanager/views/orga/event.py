@@ -70,7 +70,8 @@ from larpmanager.utils.upload import go_upload
 
 
 @login_required
-def orga_event(request, event_slug):
+def orga_event(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Event management view for organizers."""
     context = check_event_context(request, event_slug, "orga_event")
     return full_event_edit(context, request, context["event"], context["run"], is_executive=False)
 
@@ -135,8 +136,8 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check if user has permission to manage roles for this event
     context = check_event_context(request, event_slug, "orga_roles")
 
-    def def_callback(event_context):
-        # Create default "Organizer" role if none exist
+    def def_callback(event_context: dict) -> EventRole:
+        """Create default 'Organizer' role for event."""
         return EventRole.objects.create(event=event_context["event"], number=1, name="Organizer")
 
     # Prepare the roles list with permissions and existing roles
@@ -209,7 +210,8 @@ def orga_appearance(request, event_slug):
 
 
 @login_required
-def orga_run(request, event_slug):
+def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Retrieve cached run data and render edit form
     run = get_cache_run(request.association["id"], event_slug)
     return orga_edit(
         request, event_slug, "orga_event", OrgaRunForm, run, "manage", additional_context={"add_another": False}
@@ -412,7 +414,9 @@ def orga_quick(request, event_slug):
 
 
 @login_required
-def orga_preferences(request, event_slug):
+def orga_preferences(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Render organizer preferences editing form."""
+    # Get current member ID and delegate to orga_edit
     m_id = request.user.member.id
     return orga_edit(
         request, event_slug, None, OrgaPreferencesForm, m_id, "manage", additional_context={"add_another": False}

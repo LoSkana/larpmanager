@@ -25,6 +25,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.access import AssociationPermission, EventPermission
+from larpmanager.models.association import Association
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +107,8 @@ def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict
     return cached_feature_data
 
 
-def clear_association_permission_cache(association):
+def clear_association_permission_cache(association: Association) -> None:
+    """Clear the association permission cache for the given association."""
     cache.delete(association_permission_feature_key(association.slug))
 
 
@@ -187,11 +189,13 @@ def get_event_permission_feature(slug: str | None) -> tuple[str, None, None]:
     return cached_feature
 
 
-def clear_event_permission_cache(event_permission):
+def clear_event_permission_cache(event_permission: EventPermission) -> None:
+    """Clear cache for an event permission."""
     cache.delete(event_permission_feature_key(event_permission.slug))
 
 
-def index_permission_key(permission_type):
+def index_permission_key(permission_type: str) -> str:
+    """Build cache key for index permission lookup."""
     return f"index_permission_key_{permission_type}"
 
 
@@ -256,5 +260,6 @@ def get_cache_index_permission(permission_type: str) -> list:
     return cached_result
 
 
-def clear_index_permission_cache(permission_type):
+def clear_index_permission_cache(permission_type: str) -> None:
+    """Clear the cached permission index for the specified permission type."""
     cache.delete(index_permission_key(permission_type))

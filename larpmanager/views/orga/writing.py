@@ -80,7 +80,8 @@ from larpmanager.utils.writing import retrieve_cache_text_field, writing_list, w
 
 
 @login_required
-def orga_plots(request, event_slug):
+def orga_plots(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display plots list for event organizers."""
     context = check_event_context(request, event_slug, "orga_plots")
     return writing_list(request, context, Plot, "plot")
 
@@ -194,7 +195,8 @@ def orga_plots_versions(request: HttpRequest, event_slug: str, num: int) -> Http
 
 
 @login_required
-def orga_factions(request, event_slug):
+def orga_factions(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Delegate to writing_list for faction management in event context
     context = check_event_context(request, event_slug, "orga_factions")
     return writing_list(request, context, Faction, "faction")
 
@@ -269,7 +271,8 @@ def orga_factions_versions(request: HttpRequest, event_slug: str, num: int) -> H
 
 
 @login_required
-def orga_quest_types(request, event_slug):
+def orga_quest_types(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Check event context and permissions for quest types management
     context = check_event_context(request, event_slug, "orga_quest_types")
     return writing_list(request, context, QuestType, "quest_type")
 
@@ -336,7 +339,8 @@ def orga_quest_types_versions(
 
 
 @login_required
-def orga_quests(request, event_slug):
+def orga_quests(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Validate event access and permissions
     context = check_event_context(request, event_slug, "orga_quests")
     return writing_list(request, context, Quest, "quest")
 
@@ -398,7 +402,8 @@ def orga_quests_versions(request: HttpRequest, event_slug: str, num: int) -> Htt
 
 
 @login_required
-def orga_traits(request, event_slug):
+def orga_traits(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display traits management page for event organizers."""
     context = check_event_context(request, event_slug, "orga_traits")
     return writing_list(request, context, Trait, "trait")
 
@@ -460,7 +465,8 @@ def orga_traits_versions(
 
 
 @login_required
-def orga_handouts(request, event_slug):
+def orga_handouts(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Check permissions and get event context for handouts feature
     context = check_event_context(request, event_slug, "orga_handouts")
     return writing_list(request, context, Handout, "handout")
 
@@ -553,7 +559,8 @@ def orga_handouts_versions(request: HttpRequest, event_slug: str, num: int) -> H
 
 
 @login_required
-def orga_handout_templates(request, event_slug):
+def orga_handout_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Check permissions and retrieve event context
     context = check_event_context(request, event_slug, "orga_handout_templates")
     return writing_list(request, context, HandoutTemplate, "handout_template")
 
@@ -581,7 +588,8 @@ def orga_handout_templates_edit(request: HttpRequest, event_slug: str, num: int)
 
 
 @login_required
-def orga_prologue_types(request, event_slug):
+def orga_prologue_types(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_prologue_types")
     return writing_list(request, context, PrologueType, "prologue_type")
 
@@ -610,7 +618,8 @@ def orga_prologue_types_edit(request: HttpRequest, event_slug: str, num: int) ->
 
 
 @login_required
-def orga_prologues(request, event_slug):
+def orga_prologues(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display the list of prologues for an event."""
     context = check_event_context(request, event_slug, "orga_prologues")
     return writing_list(request, context, Prologue, "prologue")
 
@@ -684,7 +693,8 @@ def orga_prologues_versions(
 
 
 @login_required
-def orga_speedlarps(request, event_slug):
+def orga_speedlarps(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display list of speed LARPs for an event."""
     context = check_event_context(request, event_slug, "orga_speedlarps")
     return writing_list(request, context, SpeedLarp, "speedlarp")
 
@@ -731,7 +741,8 @@ def orga_assignments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_progress_steps(request, event_slug):
+def orga_progress_steps(request: HttpRequest, event_slug: str) -> HttpResponse:
+    # Check permissions and get event context, then return progress steps list
     context = check_event_context(request, event_slug, "orga_progress_steps")
     return writing_list(request, context, ProgressStep, "progress_step")
 

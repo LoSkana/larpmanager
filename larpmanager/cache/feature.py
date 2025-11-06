@@ -116,11 +116,13 @@ def update_association_features(association_id: int) -> dict[str, int]:
     return res
 
 
-def clear_event_features_cache(event_id):
+def clear_event_features_cache(event_id: int) -> None:
+    """Clear cached event features for the specified event."""
     cache.delete(cache_event_features_key(event_id))
 
 
-def cache_event_features_key(event_id):
+def cache_event_features_key(event_id: int) -> str:
+    """Return cache key for event features."""
     return f"event_features_{event_id}"
 
 

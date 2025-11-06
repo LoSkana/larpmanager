@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+from typing import Callable
 
 from django.conf import settings as conf_settings
 from django.utils import translation
@@ -31,7 +32,8 @@ class LocaleAdvMiddleware:
     browser detection with validation against supported languages.
     """
 
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with Django response handler."""
         self.get_response = get_response
         # One-time configuration and initialization.
 

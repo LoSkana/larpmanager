@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
+from typing import Callable
 from urllib.parse import urlparse, urlunparse
 
 from django.http import HttpRequest, HttpResponse
@@ -31,7 +31,8 @@ class CorrectUrlMiddleware:
     redirects, and unwanted trailing characters in URLs.
     """
 
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with response handler."""
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:

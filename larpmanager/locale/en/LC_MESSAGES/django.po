@@ -1651,6 +1651,12 @@ msgstr ""
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
+msgid "The name of our hobby, four letters"
+msgstr ""
+
+msgid "Incorrect answer. Please enter the name of our hobby."
+msgstr ""
+
 msgid "Authorisation"
 msgstr ""
 

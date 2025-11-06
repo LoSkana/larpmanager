@@ -31,12 +31,14 @@ from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
 
 
-def reset_cache_run(association, slug):
+def reset_cache_run(association: Association, slug: str) -> None:
+    """Invalidate the cached run data for a specific event."""
     key = cache_run_key(association, slug)
     cache.delete(key)
 
 
-def cache_run_key(association_id, slug):
+def cache_run_key(association_id: int, slug: str) -> str:
+    """Generate cache key for run data."""
     return f"run_{association_id}_{slug}"
 
 
@@ -56,14 +58,25 @@ def get_cache_run(association: Association, slug: str) -> dict:
     return cached_result
 
 
-def init_cache_run(association_id, event_slug):
+def init_cache_run(association_id: int, event_slug: str) -> int | None:
+    """Get the run ID from association ID and event slug.
+
+    Args:
+        association_id: The association ID
+        event_slug: Event slug, optionally with run number (e.g., "event-2")
+
+    Returns:
+        Run ID if found, None otherwise
+    """
     try:
+        # Extract run number from event slug if present (e.g., "event-2" -> "event", 2)
         try:
             event_slug, run_number = event_slug.split("-")
             run_number = int(run_number)
         except ValueError:
             run_number = 1
 
+        # Fetch the run with related event data
         run = Run.objects.select_related("event").get(
             event__association_id=association_id, event__slug=event_slug, number=run_number
         )
@@ -93,12 +106,14 @@ def on_event_pre_save_invalidate_cache(instance):
             reset_cache_run(instance.association_id, run.get_slug())
 
 
-def reset_cache_config_run(run):
+def reset_cache_config_run(run: Run) -> None:
+    """Delete cached configuration for a run."""
     cache_key = cache_config_run_key(run)
     cache.delete(cache_key)
 
 
-def cache_config_run_key(run_instance):
+def cache_config_run_key(run_instance: Run) -> str:
+    """Return cache key for a run's config."""
     return f"run_config_{run_instance.id}"
 
 

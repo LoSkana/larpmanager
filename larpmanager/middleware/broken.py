@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from typing import Optional
+from typing import Callable, Optional
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
@@ -27,7 +27,8 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 
 class BrokenLinkEmailsMiddleware:
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with the response handler."""
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:

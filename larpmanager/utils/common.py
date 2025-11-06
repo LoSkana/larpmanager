@@ -27,16 +27,17 @@ import unicodedata
 from datetime import date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
-from django.http import Http404
+from django.http import Http404, HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
@@ -259,82 +260,142 @@ def get_album(context, album_id):
         raise Http404("Album does not exist") from err
 
 
-def get_album_cod(context, album_code):
+def get_album_cod(context: dict, album_code: str) -> None:
+    """Get album by code and add it to context, raising 404 if not found."""
     try:
         context["album"] = Album.objects.get(cod=album_code)
     except ObjectDoesNotExist as err:
         raise Http404("Album does not exist") from err
 
 
-def get_feature(context, feature_slug):
+def get_feature(context: dict, feature_slug: str) -> None:
+    """Add feature to context or raise 404 if not found."""
     try:
         context["feature"] = Feature.objects.get(slug=feature_slug)
     except ObjectDoesNotExist as err:
         raise Http404("Feature does not exist") from err
 
 
-def get_feature_module(context, num):
+def get_feature_module(context: dict, num: int) -> None:
+    """Retrieve FeatureModule by ID and add it to context, or raise 404 if not found."""
     try:
         context["feature_module"] = FeatureModule.objects.get(pk=num)
     except ObjectDoesNotExist as err:
         raise Http404("FeatureModule does not exist") from err
 
 
-def get_plot(context, plot_id):
+def get_plot(context: dict, plot_id: int) -> None:
+    """
+    Fetch and add plot to context with related data.
+
+    Args:
+        context: View context dictionary to update
+        plot_id: Primary key of the plot to retrieve
+
+    Raises:
+        Http404: If plot does not exist for the event
+    """
     try:
+        # Fetch plot with optimized queries for related objects and characters
         context["plot"] = (
             Plot.objects.select_related("event", "progress", "assigned")
             .prefetch_related("characters", "plotcharacterrel_set__character")
             .get(event=context["event"], pk=plot_id)
         )
+        # Set plot name in context for template display
         context["name"] = context["plot"].name
     except ObjectDoesNotExist as err:
         raise Http404("Plot does not exist") from err
 
 
-def get_quest_type(context, quest_number):
+def get_quest_type(context: dict, quest_number: int) -> QuestType:
+    """Get quest type from context by number."""
     get_element(context, quest_number, "quest_type", QuestType)
 
 
-def get_quest(context, quest_number):
+def get_quest(context: dict, quest_number: int) -> None:
+    """Get a quest element and add it to the context."""
     get_element(context, quest_number, "quest", Quest)
 
 
-def get_trait(character_context, trait_name):
+def get_trait(character_context: dict, trait_name: str) -> Trait:
+    """Get trait from character context by name."""
     get_element(character_context, trait_name, "trait", Trait)
 
 
-def get_handout(context, handout_id):
+def get_handout(context: dict, handout_id: int) -> None:
+    """Fetch handout from database and populate context with its data.
+
+    Args:
+        context: View context dictionary to populate with handout data
+        handout_id: Primary key of the handout to retrieve
+
+    Raises:
+        Http404: If handout does not exist for the given event
+    """
     try:
+        # Retrieve handout for current event
         context["handout"] = Handout.objects.get(event=context["event"], pk=handout_id)
         context["name"] = context["handout"].name
+
+        # Populate handout data for display
         context["handout"].data = context["handout"].show()
     except ObjectDoesNotExist as err:
         raise Http404("handout does not exist") from err
 
 
-def get_handout_template(context, handout_template_id):
+def get_handout_template(context: dict, handout_template_id: int) -> dict:
+    """Add handout template to context dict.
+
+    Args:
+        context: View context dictionary
+        handout_template_id: Primary key of the handout template
+
+    Returns:
+        Updated context dictionary
+
+    Raises:
+        Http404: If handout template does not exist
+    """
     try:
+        # Fetch the handout template and add to context
         context["handout_template"] = HandoutTemplate.objects.get(event=context["event"], pk=handout_template_id)
         context["name"] = context["handout_template"].name
     except ObjectDoesNotExist as err:
         raise Http404("handout_template does not exist") from err
 
+    return context
 
-def get_prologue(context, prologue_number):
+
+def get_prologue(context: dict, prologue_number: int) -> None:
+    # Retrieve prologue element and add it to the context
     get_element(context, prologue_number, "prologue", Prologue)
 
 
-def get_prologue_type(context, prologue_type_id):
+def get_prologue_type(context: dict, prologue_type_id: int) -> dict:
+    """Fetch prologue type and add it to context with its name."""
     try:
+        # Retrieve prologue type for the event
         context["prologue_type"] = PrologueType.objects.get(event=context["event"], pk=prologue_type_id)
         context["name"] = str(context["prologue_type"])
     except ObjectDoesNotExist as error:
         raise Http404("prologue_type does not exist") from error
 
+    return context
 
-def get_speedlarp(context, speedlarp_id):
+
+def get_speedlarp(context: dict, speedlarp_id: int) -> None:
+    """Get speedlarp object and add it to context with its name.
+
+    Args:
+        context: View context dictionary containing event
+        speedlarp_id: Primary key of the SpeedLarp object
+
+    Raises:
+        Http404: If speedlarp doesn't exist for the event
+    """
     try:
+        # Retrieve speedlarp for current event
         context["speedlarp"] = SpeedLarp.objects.get(event=context["event"], pk=speedlarp_id)
         context["name"] = str(context["speedlarp"])
     except ObjectDoesNotExist as err:
@@ -347,41 +408,83 @@ def get_speedlarp(context, speedlarp_id):
     # ~ return ("UNASSIGNED", None)
 
 
-def get_badge(badge_id, context):
+def get_badge(badge_id: int, context: dict) -> Badge:
+    """Get a badge by ID for a specific association."""
     try:
         return Badge.objects.get(pk=badge_id, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Badge does not exist") from err
 
 
-def get_collection_partecipate(context, contribution_code):
+def get_collection_partecipate(context: dict[str, Any], contribution_code: str) -> Collection:
+    """Retrieve collection by contribution code for the current association.
+
+    Args:
+        context: View context containing association_id
+        contribution_code: Unique contribution code for the collection
+
+    Returns:
+        Collection object matching the criteria
+
+    Raises:
+        Http404: If collection does not exist
+    """
     try:
         return Collection.objects.get(contribute_code=contribution_code, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Collection does not exist") from err
 
 
-def get_collection_redeem(context, redeem_code):
+def get_collection_redeem(context: dict, redeem_code: str) -> Collection:
+    """Get Collection by redeem code and association from context.
+
+    Args:
+        context: View context containing association_id
+        redeem_code: Unique redemption code for the collection
+
+    Returns:
+        Collection: The matching Collection instance
+
+    Raises:
+        Http404: If collection not found for given code and association
+    """
     try:
         return Collection.objects.get(redeem_code=redeem_code, association_id=context["association_id"])
     except ObjectDoesNotExist as error:
         raise Http404("Collection does not exist") from error
 
 
-def get_workshop(context, workshop_id):
+def get_workshop(context: dict, workshop_id: int) -> None:
+    """Get workshop module and add it to context, raise 404 if not found."""
     try:
         context["workshop"] = WorkshopModule.objects.get(event=context["event"], pk=workshop_id)
     except ObjectDoesNotExist as error:
         raise Http404("WorkshopModule does not exist") from error
 
 
-def get_workshop_question(context, n, mod):
+def get_workshop_question(context: dict, n: int, mod: int) -> dict:
+    """Get workshop question and add it to context.
+
+    Args:
+        context: Template context dictionary containing event
+        n: Workshop question primary key
+        mod: Module primary key
+
+    Returns:
+        Updated context dictionary with workshop_question
+
+    Raises:
+        Http404: If WorkshopQuestion doesn't exist
+    """
     try:
+        # Retrieve workshop question filtered by event and module
         context["workshop_question"] = WorkshopQuestion.objects.get(
             module__event=context["event"], pk=n, module__pk=mod
         )
     except ObjectDoesNotExist as err:
         raise Http404("WorkshopQuestion does not exist") from err
+
+    return context
 
 
 def get_workshop_option(context: dict, m: int) -> None:
@@ -407,7 +510,7 @@ def get_workshop_option(context: dict, m: int) -> None:
 
 def get_element(
     context: dict[str, Any],
-    primary_key: Union[int, str],
+    primary_key: int | str,
     context_key_name: str,
     model_class: type[BaseModel],
     by_number: bool = False,
@@ -415,26 +518,21 @@ def get_element(
     """
     Retrieve a model instance and add it to the context dictionary.
 
-    This function fetches a model instance related to a parent event and stores it
-    in the provided context dictionary. The lookup can be performed either by the
-    model's primary key or by a 'number' field.
+    Fetches a model instance related to a parent event and stores it in the provided
+    context dictionary. The lookup can be performed either by primary key or by a
+    'number' field.
 
     Args:
-        context: Context dictionary that must contain an 'event' key with a model instance
-            that has a `get_class_parent()` method. The retrieved object will be added
-            to this dictionary under the key specified by `context_key_name`.
+        context: Context dictionary that must contain an 'event' key with a model
+            instance that has a `get_class_parent()` method. The retrieved object
+            will be added to this dictionary under the key specified by `context_key_name`.
         primary_key: The identifier used to look up the model instance. Either a primary
             key (int/str) or a number field value depending on `by_number` parameter.
         context_key_name: The key name under which the retrieved object will be stored
             in the context dictionary. Also used in error messages.
         model_class: The Django model class to query. Must have a foreign key relationship
             to an 'event' and optionally a 'number' field if `by_number=True`.
-        by_number: If True, lookup by 'number' field instead of primary key. Defaults to False.
-
-    Returns:
-        None. Modifies the `context` dictionary in place by adding:
-            - context[context_key_name]: The retrieved model instance
-            - context["class_name"]: Set to the value of `context_key_name`
+        by_number: If True, lookup by 'number' field instead of primary key.
 
     Raises:
         Http404: If the requested object does not exist in the database.
@@ -448,6 +546,7 @@ def get_element(
         # Get the parent event associated with the current event in context
         parent_event = context["event"].get_class_parent(model_class)
 
+        # Perform database lookup based on specified field
         if by_number:
             # Lookup by 'number' field (e.g., ticket number, order number)
             context[context_key_name] = model_class.objects.get(event=parent_event, number=primary_key)
@@ -475,8 +574,10 @@ def get_relationship(context: dict, num: int) -> None:
         raise Http404("wrong event")
 
 
-def get_player_relationship(context, other_player_number):
+def get_player_relationship(context: dict, other_player_number: int) -> None:
+    """Retrieve and add player relationship to context."""
     try:
+        # Get relationship for the run's registration targeting the specified player
         context["relationship"] = PlayerRelationship.objects.get(
             reg=context["run"].reg, target__number=other_player_number
         )
@@ -484,7 +585,8 @@ def get_player_relationship(context, other_player_number):
         raise Http404("relationship does not exist") from err
 
 
-def get_time_diff(start_datetime, end_datetime):
+def get_time_diff(start_datetime: datetime, end_datetime: datetime) -> int:
+    """Calculate the difference in days between two datetimes."""
     return (start_datetime - end_datetime).days
 
 
@@ -507,7 +609,8 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     return get_time_diff(target_date, datetime.today().date())
 
 
-def generate_number(length):
+def generate_number(length: int) -> str:
+    """Generate a random string of digits with the specified length."""
     return "".join(random.choice(string.digits) for _ in range(length))
 
 
@@ -554,7 +657,8 @@ def rmdir(directory: Path) -> None:
     directory.rmdir()
 
 
-def average(lst):
+def average(lst: list[float]) -> float:
+    """Calculate the arithmetic mean of a list of numbers."""
     return sum(lst) / len(lst)
 
 
@@ -859,7 +963,8 @@ def _search_char_reg(context: dict, character, search_result: dict) -> None:
             search_result["player_prof"] = character.thumb.url
 
 
-def clear_messages(request):
+def clear_messages(request: HttpRequest) -> None:
+    """Clear all queued messages from the request."""
     if hasattr(request, "_messages"):
         request._messages._queued_messages.clear()
 
@@ -946,7 +1051,8 @@ def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
     return public_key, private_key
 
 
-def welcome_user(request, user):
+def welcome_user(request: HttpRequest, user: User) -> None:
+    """Display welcome message for user."""
     messages.success(request, _("Welcome") + ", " + user.get_username() + "!")
 
 

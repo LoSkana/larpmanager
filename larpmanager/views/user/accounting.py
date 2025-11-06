@@ -762,32 +762,41 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[H
     return render(request, "larpmanager/member/acc_collection_redeem.html", context)
 
 
-def acc_webhook_paypal(request, s):
-    # temp fix until we understand better the paypal fees
+def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse:
+    """Handle PayPal webhook for invoice payment confirmation."""
+    # Temporary fix until PayPal fees are better understood
     if invoice_received_money(s):
         return JsonResponse({"res": "ok"})
 
 
 @csrf_exempt
-def acc_webhook_satispay(request):
+def acc_webhook_satispay(request: HttpRequest) -> JsonResponse:
+    """Handle Satispay webhook callbacks and return success response."""
+    # Process incoming Satispay webhook
     satispay_webhook(request)
+
+    # Return success confirmation
     return JsonResponse({"res": "ok"})
 
 
 @csrf_exempt
-def acc_webhook_stripe(request):
+def acc_webhook_stripe(request: HttpRequest) -> JsonResponse:
+    """Handle Stripe webhook notifications."""
+    # Process Stripe webhook event
     stripe_webhook(request)
     return JsonResponse({"res": "ok"})
 
 
 @csrf_exempt
-def acc_webhook_sumup(request):
+def acc_webhook_sumup(request: HttpRequest) -> JsonResponse:
+    # Process SumUp webhook and return success response
     sumup_webhook(request)
     return JsonResponse({"res": "ok"})
 
 
 @csrf_exempt
-def acc_webhook_redsys(request):
+def acc_webhook_redsys(request: HttpRequest) -> JsonResponse:
+    """Process Redsys payment gateway webhook and return confirmation response."""
     redsys_webhook(request)
     return JsonResponse({"res": "ok"})
 

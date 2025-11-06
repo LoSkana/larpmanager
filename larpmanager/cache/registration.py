@@ -31,7 +31,8 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.common import _search_char_reg
 
 
-def clear_registration_counts_cache(run_id):
+def clear_registration_counts_cache(run_id: int) -> None:
+    """Clear cached registration counts for a run."""
     cache.delete(cache_registration_counts_key(run_id))
 
 

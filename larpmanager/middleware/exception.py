@@ -17,11 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Optional
+from typing import Callable, Optional
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -49,10 +49,12 @@ from larpmanager.utils.exceptions import (
 class ExceptionHandlingMiddleware:
     """Handle permission / missing feature instead of raising a 404."""
 
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with Django's get_response callable."""
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        """Process request through middleware chain."""
         return self.get_response(request)
 
     def process_exception(self, request: HttpRequest, exception: Exception) -> Optional[HttpResponse]:
@@ -136,7 +138,10 @@ class ExceptionHandlingMiddleware:
         return None
 
     @staticmethod
-    def _redirect_with_message(request, message_text, view_name, view_args, message_level="success"):
+    def _redirect_with_message(
+        request: HttpRequest, message_text: str, view_name: str, view_args: list, message_level: str = "success"
+    ) -> HttpResponseRedirect:
+        """Add a message to the request and redirect to a named view."""
         getattr(messages, message_level)(request, message_text)
         return redirect(reverse(view_name, args=view_args))
 

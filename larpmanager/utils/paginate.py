@@ -464,9 +464,23 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
     return elements
 
 
-def exe_paginate(request, context, pagination_type, template_name, view_name):
+def exe_paginate(
+    request: HttpRequest,
+    context: dict[str, Any],
+    pagination_type: str,
+    template_name: str,
+    view_name: str,
+) -> HttpResponse:
+    """Paginate content for organization-wide executive views."""
     return paginate(request, context, pagination_type, template_name, view_name, True)
 
 
-def orga_paginate(request, context, pagination_type, template_name, view_name):
+def orga_paginate(
+    request: HttpRequest,
+    context: dict,
+    pagination_type: str,
+    template_name: str,
+    view_name: str,
+) -> HttpResponse:
+    """Paginate items for organization views."""
     return paginate(request, context, pagination_type, template_name, view_name, False)

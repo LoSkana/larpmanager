@@ -183,7 +183,8 @@ def get_base_domain(request: HttpRequest) -> str:
 
 
 @require_POST
-def tutorial_query(request):
+def tutorial_query(request: HttpRequest) -> HttpResponse:
+    # Delegate to query_index for tutorial queries
     return query_index(request)
 
 

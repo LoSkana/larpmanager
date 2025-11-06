@@ -659,14 +659,20 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
 
 
 @login_required
-def orga_casting_toggle(request, event_slug, typ):
+def orga_casting_toggle(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
+    """Toggle the 'nope' status of a casting entry."""
     context = check_event_context(request, event_slug, "orga_casting")
+
     try:
+        # Extract member and element IDs from POST data
         pid = request.POST["pid"]
         oid = request.POST["oid"]
+
+        # Retrieve and toggle the casting entry's nope status
         c = Casting.objects.get(run=context["run"], typ=typ, member_id=pid, element=oid)
         c.nope = not c.nope
         c.save()
+
         return JsonResponse({"res": "ok"})
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})

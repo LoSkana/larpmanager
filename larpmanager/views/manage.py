@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -648,9 +649,23 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
     _orga_casting_actions(context, enabled_features)
 
 
-def _orga_user_actions(context, features, request):
+def _orga_user_actions(
+    context: dict[str, Any],
+    features: list[str],
+    request: HttpRequest,
+) -> None:
+    """Add action to context if there are unanswered help questions.
+
+    Args:
+        context: Template context dictionary to update with actions.
+        features: List of enabled feature names for the organization.
+        request: The current HTTP request object.
+    """
+    # Check if help feature is enabled
     if "help" in features:
         _closed_questions, open_questions = _get_help_questions(context, request)
+
+        # Add action notification if there are open questions
         if open_questions:
             _add_action(
                 context,
@@ -1152,16 +1167,19 @@ class WhatWouldYouLikeForm(Form):
         # Create the choice field with populated options and Select2 widget
         self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
 
-    def _add_guides_tutorials(self, content_choices):
-        # Add guides
+    def _add_guides_tutorials(self, content_choices: list[tuple[str, str]]) -> None:
+        """Add guide entries to content choices list."""
+        # Add guides with formatted titles and preview snippets
         for guide_data in get_guides_cache():
             content_choices.append(
                 (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}")
             )
 
-    def _add_tutorials_choices(self, choices):
+    def _add_tutorials_choices(self, choices: list[tuple[str, str]]) -> None:
+        """Add tutorial entries to choices list with formatted titles and previews."""
         # Add tutorials (including sections)
         for tutorial in get_tutorials_cache():
+            # Build tutorial title with optional section
             tutorial_title = tutorial["title"]
             if tutorial["section_title"] and slugify(tutorial["section_title"]) != slugify(tutorial["title"]):
                 tutorial_title += " - " + tutorial["section_title"]
@@ -1169,19 +1187,25 @@ class WhatWouldYouLikeForm(Form):
             else:
                 tutorial_choice_value = tutorial["slug"]
 
+            # Append formatted choice with tutorial marker and content preview
             choices.append(
                 (f"tutorial|{tutorial_choice_value}", f"{tutorial_title} [TUTORIAL] - {tutorial['content_preview']}")
             )
 
-    def _add_features_choices(self, choices):
+    def _add_features_choices(self, choices: list[tuple[str, str]]) -> None:
+        """Add feature entries to tutorial choices list."""
         # Add features recap
         for feature in get_features_cache():
+            # Build display text with feature name and optional module
             display_text = _(feature["name"])
             if feature["module_name"]:
                 display_text += " - " + _(feature["module_name"])
             display_text += " [FEATURE] "
+
+            # Append optional description
             if feature["descr"]:
                 display_text += _(feature["descr"])
+
             choices.append((f"feature|{feature['tutorial']}", display_text))
 
     def _add_dashboard_choices(self, choices: list[tuple[str, str]]) -> None:

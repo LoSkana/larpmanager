@@ -37,7 +37,7 @@ from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
-from larpmanager.models.member import Log
+from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import check_association_context, check_event_context
@@ -45,7 +45,8 @@ from larpmanager.utils.common import html_clean
 from larpmanager.utils.exceptions import NotFoundError
 
 
-def save_log(member, cls, el, dl=False):
+def save_log(member: Member, cls: type, el: Any, dl: bool = False) -> None:
+    """Create a log entry for model instance changes."""
     Log.objects.create(member=member, cls=cls.__name__, eid=el.id, dl=dl, dct=el.as_dict())
 
 
@@ -726,7 +727,8 @@ def _writing_save(
     return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
 
 
-def writing_edit_cache_key(event_id, writing_type):
+def writing_edit_cache_key(event_id: int, writing_type: str) -> str:
+    """Generate cache key for writing edit operations."""
     return f"orga_edit_{event_id}_{writing_type}"
 
 

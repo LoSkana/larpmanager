@@ -473,12 +473,14 @@ def remove_char_ability(char, ability_id):
     return ability_ids_to_remove
 
 
-def update_characters_experience_on_ability_change(instance):
+def update_characters_experience_on_ability_change(instance) -> None:
+    # Update experience points for all characters that have this ability
     for character in instance.characters.all():
         calculate_character_experience_points(character)
 
 
-def refresh_delivery_characters(instance):
+def refresh_delivery_characters(instance: DeliveryPx) -> None:
+    """Refresh all characters associated with this delivery option."""
     for character in instance.characters.all():
         character.save()
 

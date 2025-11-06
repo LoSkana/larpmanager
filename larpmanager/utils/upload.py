@@ -775,21 +775,40 @@ def _writing_question_load(
         _assign_choice_answer(writing_element, question_field, field_value, questions_dict, processing_logs)
 
 
-def _get_mirror_instance(context, character_element, mirror_character_name, error_logs):
+def _get_mirror_instance(
+    context: dict,
+    character_element: Character,
+    mirror_character_name: str,
+    error_logs: list[str],
+) -> None:
+    """Fetch and assign mirror character instance from event."""
     try:
         character_element.mirror = context["event"].get_elements(Character).get(name__iexact=mirror_character_name)
     except ObjectDoesNotExist:
         error_logs.append(f"ERR - mirror not found: {mirror_character_name}")
 
 
-def _assign_faction(context, element, value, logs):
+def _assign_faction(context: dict, element: Character, value: str, logs: list[str]) -> None:
+    """Assign character to factions by comma-separated faction names.
+
+    Args:
+        context: Dictionary containing event and other context data
+        element: Character instance to assign to factions
+        value: Comma-separated string of faction names
+        logs: List to append error messages to
+    """
+    # Process each faction name in the comma-separated list
     for faction_name in value.split(","):
         try:
+            # Find faction by case-insensitive name match for the event
             faction = Faction.objects.get(name__iexact=faction_name.strip(), event=context["event"])
+
+            # Save element and add to faction's characters
             element.save()  # to be sure
             faction.characters.add(element)
             faction.save()
         except ObjectDoesNotExist:
+            # Log faction not found errors
             logs.append(f"Faction not found: {faction_name}")
 
 
@@ -853,7 +872,8 @@ def form_load(request, context: dict, form, is_registration: bool = True) -> lis
     return log_messages
 
 
-def invert_dict(dictionary):
+def invert_dict(dictionary: dict[str, str]) -> dict[str, str]:
+    """Invert dictionary keys and values, normalizing values to lowercase and stripping whitespace."""
     return {value.lower().strip(): key for key, value in dictionary.items()}
 
 
@@ -1324,28 +1344,77 @@ def _ability_load(request, context: dict, csv_row: dict) -> str:
     return message
 
 
-def _assign_type(context, ability_element, error_logs, ability_type_name):
+def _assign_type(
+    context: dict,
+    ability_element: AbilityPx,
+    error_logs: list[str],
+    ability_type_name: str,
+) -> None:
+    """Assign ability type to element from event context.
+
+    Args:
+        context: Dict containing event with ability types
+        ability_element: Ability element to assign type to
+        error_logs: List to append error messages to
+        ability_type_name: Name of ability type to find
+    """
     try:
+        # Query ability type by name from event context
         ability_element.typ = context["event"].get_elements(AbilityTypePx).get(name__iexact=ability_type_name)
     except ObjectDoesNotExist:
+        # Log error if ability type not found
         error_logs.append(f"ERR - quest type not found: {ability_type_name}")
 
 
-def _assign_prereq(context, element, logs, value):
+def _assign_prereq(
+    context: dict,
+    element: AbilityPx,
+    logs: list[str],
+    value: str,
+) -> None:
+    """Assign prerequisites to an ability from comma-separated names.
+
+    Args:
+        context: Dictionary containing 'event' key with Event instance
+        element: Target ability to add prerequisites to
+        logs: List to append error messages
+        value: Comma-separated prerequisite ability names
+    """
+    # Parse each prerequisite name from the comma-separated string
     for prerequisite_name in value.split(","):
         try:
+            # Look up prerequisite ability by name (case-insensitive)
             prerequisite_element = context["event"].get_elements(AbilityPx).get(name__iexact=prerequisite_name.strip())
-            element.save()  # to be sure
+
+            # Ensure element is saved before adding M2M relationship
+            element.save()
             element.prerequisites.add(prerequisite_element)
         except ObjectDoesNotExist:
             logs.append(f"Prerequisite not found: {prerequisite_name}")
 
 
-def _assign_requirements(context, writing_element, error_logs, requirement_names):
+def _assign_requirements(
+    context: dict,
+    writing_element: BaseModel,
+    error_logs: list[str],
+    requirement_names: str,
+) -> None:
+    """Assign writing option requirements to a writing element by parsing comma-separated names.
+
+    Args:
+        context: Context dict containing 'event' key with Event instance
+        writing_element: WritingElement to add requirements to
+        error_logs: List to append error messages to
+        requirement_names: Comma-separated string of requirement names
+    """
+    # Process each requirement name from comma-separated string
     for requirement_name in requirement_names.split(","):
         try:
+            # Look up writing option by case-insensitive name match
             writing_option = context["event"].get_elements(WritingOption).get(name__iexact=requirement_name.strip())
             writing_element.save()  # to be sure
+
+            # Add the requirement to the writing element
             writing_element.requirements.add(writing_option)
         except ObjectDoesNotExist:
             error_logs.append(f"requirements not found: {requirement_name}")

@@ -25,6 +25,7 @@ from typing import Any, Optional
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -662,7 +663,8 @@ class HandoutTemplate(BaseModel):
     def __str__(self):
         return f"HT{self.number} {self.name}"
 
-    def download_template(self):
+    def download_template(self) -> HttpResponse:
+        """Download the template file."""
         # noinspection PyUnresolvedReferences
         return download(self.template.path)
 

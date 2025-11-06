@@ -70,11 +70,11 @@ class LarpManagerContact(LarpManagerCheck):
     verification = forms.CharField(
         required=True,
         max_length=10,
-        label=_("The name of our hobby, four letters"),
+        label="",
         widget=forms.TextInput(attrs={"placeholder": _("The name of our hobby, four letters")}),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
     def clean_verification(self):

@@ -83,7 +83,8 @@ class ConfigForm(MyForm):
             self._add_custom_field(el, res)
 
     @abstractmethod
-    def set_configs(self):
+    def set_configs(self) -> None:
+        """No-op method placeholder."""
         pass
 
     def set_section(self, section_slug, section_name):

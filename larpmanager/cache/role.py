@@ -99,7 +99,8 @@ def get_cache_association_role(ar_id: int) -> dict:
     return cached_result
 
 
-def remove_association_role_cache(association_role_id):
+def remove_association_role_cache(association_role_id: int) -> None:
+    # Delete the cached association role
     key = cache_association_role_key(association_role_id)
     cache.delete(key)
 
@@ -224,7 +225,8 @@ def get_index_association_permissions(
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 
-def cache_event_role_key(assignment_role_id):
+def cache_event_role_key(assignment_role_id: int) -> str:
+    """Return cache key for event role assignment."""
     return f"event_role_{assignment_role_id}"
 
 
@@ -288,7 +290,8 @@ def get_cache_event_role(ev_id: int) -> dict:
     return cached_result
 
 
-def remove_event_role_cache(assignment_role_id):
+def remove_event_role_cache(assignment_role_id: int) -> None:
+    """Remove cached event role data for the given assignment role ID."""
     key = cache_event_role_key(assignment_role_id)
     cache.delete(key)
 

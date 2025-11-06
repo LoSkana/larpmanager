@@ -213,7 +213,8 @@ class Album(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __unicode__(self) -> str:
+        """Return the title of the object."""
         # noinspection PyUnresolvedReferences
         return self.title
 
@@ -686,7 +687,8 @@ class PlayerRelationship(BaseModel):
 
     text = HTMLField(max_length=5000)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with registration, target, and run number."""
         # noinspection PyUnresolvedReferences
         return f"{self.reg} - {self.target} ({self.reg.run.number})"
 
@@ -911,7 +913,8 @@ class OneTimeAccessToken(BaseModel):
         verbose_name = _("One-Time Access Token")
         verbose_name_plural = _("One-Time Access Tokens")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation showing token preview and usage status."""
         status = _("Used") if self.used else _("Unused")
         return f"{self.token[:8]}... - {status}"
 

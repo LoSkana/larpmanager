@@ -23,6 +23,7 @@ from datetime import datetime
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -32,7 +33,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.event import PreRegistration, Run
+from larpmanager.models.event import Event, PreRegistration, Run
 from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
@@ -772,7 +773,8 @@ def get_registration_options(instance) -> list[tuple[str, str]]:
     return formatted_results
 
 
-def get_player_characters(member, event):
+def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
+    """Get all characters a player has for an event, ordered by most recently updated."""
     return event.get_elements(Character).filter(player=member).order_by("-updated")
 
 

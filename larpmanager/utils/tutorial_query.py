@@ -194,7 +194,8 @@ def remove_guide_from_search_index(guide_id: int) -> None:
     writer.commit()
 
 
-def similarity(first_string, second_string):
+def similarity(first_string: str, second_string: str) -> float:
+    """Calculate similarity ratio between two strings (case-insensitive)."""
     return SequenceMatcher(None, first_string.lower(), second_string.lower()).ratio()
 
 

@@ -24,6 +24,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -208,10 +209,12 @@ class MyForm(forms.ModelForm):
     def clean_association(self):
         return Association.objects.get(pk=self.params["association_id"])
 
-    def clean_name(self):
+    def clean_name(self) -> str:
+        """Validate that the name is unique within the event."""
         return self._validate_unique_event("name")
 
-    def clean_display(self):
+    def clean_display(self) -> str:
+        """Validate display field uniqueness within event."""
         return self._validate_unique_event("display")
 
     def _validate_unique_event(self, field_name: str) -> any:
@@ -337,7 +340,8 @@ class MyForm(forms.ModelForm):
         for ch in new - old:
             attr.add(ch)
 
-    def delete_field(self, field_key):
+    def delete_field(self, field_key: str) -> None:
+        """Remove a field from the form if it exists."""
         if field_key in self.fields:
             del self.fields[field_key]
 
@@ -489,10 +493,12 @@ class BaseRegistrationForm(MyFormRun):
         # Finalize question initialization with event context
         self._init_questions(event)
 
-    def _init_questions(self, event):
+    def _init_questions(self, event: Event) -> None:
+        """Initialize questions for the given event."""
         self.questions = self.question_class.get_instance_questions(event, self.params["features"])
 
-    def get_options_query(self, event):
+    def get_options_query(self, event) -> QuerySet:
+        """Return ordered options for questions in the given event."""
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
     def get_choice_options(
@@ -735,7 +741,8 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_keys
 
-    def check_editable(self, registration_question):
+    def check_editable(self, registration_question: RegistrationQuestion) -> bool:
+        # Always allow editing
         return True
 
     def _init_field(
@@ -1114,22 +1121,42 @@ class BaseRegistrationForm(MyFormRun):
             elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
                 self.save_reg_text(instance, oid, q)
 
-    def save_reg_text(self, instance, oid, q):
+    def save_reg_text(
+        self,
+        instance: Any,
+        oid: str | None,
+        q: Any,
+    ) -> None:
+        """Save or update a text answer for a registration question.
+
+        Args:
+            instance: The registration/application instance to attach the answer to.
+            oid: The new text value to save, or None to delete the answer.
+            q: The question object being answered.
+
+        Notes:
+            - Preserves disabled field values in organizer forms.
+            - Only creates new answers when content is provided.
+        """
+        # Check if an answer already exists for this question
         if q.id in self.answers:
             if not oid:
                 # For disabled questions in organizer forms, don't delete existing answers
                 # unless the organizer explicitly submitted an empty value for an editable field
                 orga = getattr(self, "orga", False)
                 is_disabled = hasattr(q, "status") and q.status == "d"
+
+                # Keep existing value for disabled fields in organizer forms
                 if orga and is_disabled:
-                    # Keep existing value for disabled fields in organizer forms
                     pass
                 else:
                     self.answers[q.id].delete()
             elif oid != self.answers[q.id].text:
+                # Update existing answer if the value has changed
                 self.answers[q.id].text = oid
                 self.answers[q.id].save()
-        elif oid:  # Only create new answers if there's actually content
+        elif oid:
+            # Only create new answers if there's actually content
             self.answer_class.objects.create(**{"question": q, self.instance_key: instance.id, "text": oid})
 
     def save_reg_single(self, instance: Any, oid: str | None, q: Any) -> None:
@@ -1281,11 +1308,13 @@ class MyCssForm(MyForm):
         default_storage.save(path, ContentFile(css))
 
     @staticmethod
-    def get_css_path(association_skin):
+    def get_css_path(association_skin) -> str:
+        # Returns empty string (CSS path logic not implemented)
         return ""
 
     @staticmethod
-    def get_input_css():
+    def get_input_css() -> str:
+        """Return CSS class string for input styling."""
         return ""
 
 

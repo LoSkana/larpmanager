@@ -4930,6 +4930,9 @@ msgstr "Gevoelige gegevens van deelnemers beoordelen"
 msgid "Set up the membership configuration"
 msgstr "De lidmaatschapsconfiguratie instellen"
 
+msgid "The name of our hobby, four letters"
+msgstr "De naam van onze hobby, vier letters"
+
 msgid "This page shows the warehouse items"
 msgstr "Deze pagina toont de items in het magazijn"
 
@@ -6231,6 +6234,9 @@ msgstr "Toont lijsten met deelnemers om ze over te halen zich aan te melden"
 
 msgid "Here is a to-do list of important actions to complete"
 msgstr "Hier is een lijst met belangrijke acties die je moet voltooien"
+
+msgid "Incorrect answer. Please enter the name of our hobby."
+msgstr "Fout antwoord. Voer de naam van onze hobby in."
 
 msgid "Initial value of experience points for all characters"
 msgstr "Beginwaarde van ervaringspunten voor alle personages"

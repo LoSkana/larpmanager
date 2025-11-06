@@ -681,7 +681,8 @@ def get_writer(context: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
     return response, writer
 
 
-def orga_registration_form_download(context):
+def orga_registration_form_download(context: dict) -> HttpResponse:
+    """Download registration form data as a ZIP archive."""
     return zip_exports(context, export_registration_form(context), "Registration form")
 
 
@@ -766,8 +767,9 @@ def _extract_values(field_names: list, queryset: object, field_mappings: dict) -
     return all_values
 
 
-def orga_character_form_download(request_context):
-    return zip_exports(request_context, export_character_form(request_context), "Character form")
+def orga_character_form_download(context: dict) -> HttpResponse:
+    """Generate and download character forms as a zip archive."""
+    return zip_exports(context, export_character_form(context), "Character form")
 
 
 def export_character_form(context: dict) -> list[tuple[str, list, list]]:
@@ -1128,7 +1130,8 @@ def _get_writing_names(context: dict) -> None:
     context["allowed"].extend(context["fields"].keys())
 
 
-def orga_tickets_download(request_context):
+def orga_tickets_download(request_context: dict) -> HttpResponse:
+    """Download tickets as a ZIP archive."""
     return zip_exports(request_context, export_tickets(request_context), "Tickets")
 
 

@@ -29,7 +29,8 @@ from larpmanager.models.association import Association
 from larpmanager.models.registration import Registration
 
 
-def clear_association_cache(association_slug):
+def clear_association_cache(association_slug: str) -> None:
+    """Clear cached association data."""
     key = cache_association_key(association_slug)
     cache.delete(key)
 

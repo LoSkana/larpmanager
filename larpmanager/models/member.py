@@ -332,11 +332,13 @@ class Member(BaseModel):
     def display_real(self):
         return f"{self.name} {self.surname}"
 
-    def display_profile(self):
+    def display_profile(self) -> str:
+        """Return the URL of the profile thumbnail image."""
         # noinspection PyUnresolvedReferences
         return self.profile_thumb.url
 
-    def get_card_number(self):
+    def get_card_number(self) -> int:
+        """Return the member's card number."""
         # noinspection PyUnresolvedReferences
         return self.id
 
@@ -364,7 +366,8 @@ class Member(BaseModel):
     def get_request_filepath(self):
         return os.path.join(self.get_member_filepath(), "request.pdf")
 
-    def join(self, association):
+    def join(self, association: Association) -> None:
+        """Join an association if not already a member."""
         membership = get_user_membership(self, association.id)  # type: ignore
         if membership.status == MembershipStatus.EMPTY:
             membership.status = MembershipStatus.JOINED

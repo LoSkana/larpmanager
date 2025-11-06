@@ -311,20 +311,33 @@ def _get_previous(context: dict, request: HttpRequest, typ: int) -> None:
         pass
 
 
-def _check_already_done(context, request, assignment_type):
-    # check already done
+def _check_already_done(context: dict, request, assignment_type: int) -> None:
+    """Check if assignment already exists and update context accordingly.
+
+    For character assignments (type 0), checks if max characters reached and lists assigned characters.
+    For trait assignments (type != 0), checks if trait already assigned and shows quest/trait info.
+
+    Args:
+        context: View context dictionary to update with assignment info
+        request: HTTP request object
+        assignment_type: 0 for character assignment, other values for trait types
+    """
+    # Check if character assignment already done (type 0)
     if assignment_type == 0:
         casting_chars = int(get_event_config(context["run"].event_id, "casting_characters", 1))
         if context["run"].reg.rcrs.count() >= casting_chars:
+            # Collect names of all assigned characters
             character_names = []
             for character_number in context["run"].reg.rcrs.values_list("character__number", flat=True):
                 character_names.append(context["chars"][character_number]["name"])
             context["assigned"] = ", ".join(character_names)
     else:
+        # Check if trait assignment already exists
         try:
             assignment_trait = AssignmentTrait.objects.get(
                 run=context["run"], member=context["member"], typ=assignment_type
             )
+            # Format quest and trait names for display
             context["assigned"] = (
                 f"{assignment_trait.trait.quest.show()['name']} - {assignment_trait.trait.show()['name']}"
             )
