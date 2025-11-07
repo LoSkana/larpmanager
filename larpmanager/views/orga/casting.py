@@ -53,31 +53,31 @@ from larpmanager.views.user.casting import (
 
 
 @login_required
-def orga_casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
+def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type: int = 0) -> HttpResponse:
     """Handle casting preferences for characters or traits based on type."""
     # Check user permissions for casting preferences
     context = check_event_context(request, event_slug, "orga_casting_preferences")
 
     # Get base casting details
-    casting_details(context, typ)
+    casting_details(context, casting_type)
 
     # Load preferences based on type
-    if typ == 0:
+    if casting_type == 0:
         casting_preferences_characters(context)
     else:
-        casting_preferences_traits(context, typ)
+        casting_preferences_traits(context, casting_type)
 
     return render(request, "larpmanager/event/casting/preferences.html", context)
 
 
 @login_required
-def orga_casting_history(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
+def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: int = 0) -> HttpResponse:
     """Render casting history page with characters or traits based on type.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        typ: History type (0 for characters, 1 for traits)
+        casting_type: History type (0 for characters, 1 for traits)
 
     Returns:
         Rendered casting history template
@@ -86,10 +86,10 @@ def orga_casting_history(request: HttpRequest, event_slug: str, typ: int = 0) ->
     context = check_event_context(request, event_slug, "orga_casting_history")
 
     # Add casting details to context
-    casting_details(context, typ)
+    casting_details(context, casting_type)
 
     # Add type-specific history data to context
-    if typ == 0:
+    if casting_type == 0:
         casting_history_characters(context)
     else:
         casting_history_traits(context)
@@ -601,7 +601,9 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
 
 
 @login_required
-def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = None, tick: str = "") -> HttpResponse:
+def orga_casting(
+    request: HttpRequest, event_slug: str, casting_type: Optional[int] = None, ticket: str = ""
+) -> HttpResponse:
     """Handle organizational casting assignments for LARP events.
 
     Manages the casting assignment process for event organizers, allowing them to
@@ -610,8 +612,8 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
     Args:
         request: The HTTP request object containing user data and POST parameters
         event_slug: Event slug identifier used to identify the specific event
-        typ: Casting type identifier. If None, redirects to default type 0
-        tick: Ticket identifier string for specific participant casting
+        casting_type: Casting type identifier. If None, redirects to default type 0
+        ticket: Ticket identifier string for specific participant casting
 
     Returns:
         HttpResponse: Rendered casting template with form and casting data,
@@ -624,12 +626,12 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
     context = check_event_context(request, event_slug, "orga_casting")
 
     # Redirect to default casting type if none specified
-    if typ is None:
-        return redirect("orga_casting", event_slug=context["run"].get_slug(), typ=0)
+    if casting_type is None:
+        return redirect("orga_casting", event_slug=context["run"].get_slug(), casting_type=0)
 
     # Set context variables for template rendering
-    context["typ"] = typ
-    context["tick"] = tick
+    context["typ"] = casting_type
+    context["tick"] = ticket
 
     # Handle POST request for casting assignment
     if request.method == "POST":
@@ -641,17 +643,17 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
 
         # Process casting assignment if submit button was clicked
         if request.POST.get("submit"):
-            assign_casting(request, context, typ)
+            assign_casting(request, context, casting_type)
             return redirect(request.path_info)
     else:
         # Initialize empty form for GET requests
         form = OrganizerCastingOptionsForm(context=context)
 
     # Retrieve and populate casting details for the specified type
-    casting_details(context, typ)
+    casting_details(context, casting_type)
 
     # Get casting data and populate form with current selections
-    get_casting_data(request, context, typ, form)
+    get_casting_data(request, context, casting_type, form)
 
     # Add form to context and render template
     context["form"] = form
@@ -659,7 +661,7 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
 
 
 @login_required
-def orga_casting_toggle(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
+def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str) -> JsonResponse:
     """Toggle the 'nope' status of a casting entry."""
     context = check_event_context(request, event_slug, "orga_casting")
 
@@ -669,7 +671,7 @@ def orga_casting_toggle(request: HttpRequest, event_slug: str, typ: str) -> Json
         oid = request.POST["oid"]
 
         # Retrieve and toggle the casting entry's nope status
-        c = Casting.objects.get(run=context["run"], typ=typ, member_id=pid, element=oid)
+        c = Casting.objects.get(run=context["run"], typ=casting_type, member_id=pid, element=oid)
         c.nope = not c.nope
         c.save()
 

@@ -82,13 +82,13 @@ def orga_albums_edit(request, event_slug, num):
 
 
 @login_required
-def orga_albums_upload(request: HttpRequest, event_slug: str, a: str) -> HttpResponse:
+def orga_albums_upload(request: HttpRequest, event_slug: str, album_slug: str) -> HttpResponse:
     """Upload photos and videos to an event album.
 
     Args:
         request: The HTTP request object containing user data and files
         event_slug: Event slug identifier
-        a: The album code/identifier string
+        album_slug: The album code/identifier string
 
     Returns:
         HttpResponse: Rendered upload form or redirect after successful upload
@@ -100,7 +100,7 @@ def orga_albums_upload(request: HttpRequest, event_slug: str, a: str) -> HttpRes
     context = check_event_context(request, event_slug, "orga_albums")
 
     # Retrieve and validate the album using the provided code
-    get_album_cod(context, a)
+    get_album_cod(context, album_slug)
 
     # Handle POST request for file upload
     if request.method == "POST":
@@ -530,7 +530,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
 
     Args:
         request (HttpRequest): HTTP request object containing POST data with item assignment details
-        s (str): Event slug identifier
+        event_slug (str): Event slug identifier
         num (str): Area number identifier
 
     Returns:

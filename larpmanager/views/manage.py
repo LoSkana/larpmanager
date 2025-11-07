@@ -1099,7 +1099,7 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
     context["intro_driver"] = True
 
 
-def orga_redirect(request, event_slug: str, n: int, p: str = None) -> HttpResponsePermanentRedirect:
+def orga_redirect(request, event_slug: str, run_number: int, path: str = None) -> HttpResponsePermanentRedirect:
     """
     Optimized redirect from /slug/number/path to /slug-number/path format.
 
@@ -1109,8 +1109,8 @@ def orga_redirect(request, event_slug: str, n: int, p: str = None) -> HttpRespon
     Args:
         request: Django HTTP request object (not used in redirect logic)
         event_slug: Event slug identifier
-        n: Run number for the event
-        p: Additional path components, defaults to None
+        run_number: Run number for the event
+        path: Additional path components, defaults to None
 
     Returns:
         HttpResponsePermanentRedirect: 301 redirect to normalized URL format
@@ -1119,15 +1119,15 @@ def orga_redirect(request, event_slug: str, n: int, p: str = None) -> HttpRespon
     path_parts = [event_slug]
 
     # Only add suffix for run numbers > 1 to keep URLs clean
-    if n > 1:
-        path_parts.append(f"-{n}")
+    if run_number > 1:
+        path_parts.append(f"-{run_number}")
 
     # Join slug and number components, add trailing slash
     base_path = "".join(path_parts) + "/"
 
-    # Append additional path if provided (p already includes leading slash if needed)
-    if p:
-        base_path += p
+    # Append additional path if provided (path already includes leading slash if needed)
+    if path:
+        base_path += path
 
     # Return permanent redirect (301) for better caching and SEO
     return HttpResponsePermanentRedirect("/" + base_path)

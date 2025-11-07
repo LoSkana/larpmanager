@@ -890,26 +890,26 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
 
 
 @login_required
-def orga_export(request: HttpRequest, event_slug: str, nm: str) -> HttpResponse:
+def orga_export(request: HttpRequest, event_slug: str, export_name: str) -> HttpResponse:
     """Export data for a specific model in organization context.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
-        nm: Model name (lowercase)
+        export_name: Model name (lowercase)
 
     Returns:
         Rendered export template with model data
     """
     # Check permissions for the specific model
-    perm = f"orga_{nm}s"
+    perm = f"orga_{export_name}s"
     context = check_event_context(request, event_slug, perm)
 
     # Get the model class dynamically
-    model = apps.get_model("larpmanager", nm.capitalize())
+    model = apps.get_model("larpmanager", export_name.capitalize())
 
     # Export model data and prepare context
-    context["nm"] = nm
+    context["nm"] = export_name
     export = export_data(context, model, True)[0]
     _model, context["key"], context["vals"] = export
 
@@ -917,24 +917,24 @@ def orga_export(request: HttpRequest, event_slug: str, nm: str) -> HttpResponse:
 
 
 @login_required
-def orga_version(request: HttpRequest, event_slug: str, nm: str, num: int) -> HttpResponse:
+def orga_version(request: HttpRequest, event_slug: str, name: str, num: int) -> HttpResponse:
     """Render version details for organization text content.
 
     Args:
         request: The HTTP request object
         event_slug: Event slug identifier
-        nm: Text type name (e.g., 'chronicle', 'story')
+        name: Text type name (e.g., 'chronicle', 'story')
         num: Version primary key
 
     Returns:
         Rendered HTML response with version details
     """
     # Check organization permissions for text type access
-    perm = f"orga_{nm}s"
+    perm = f"orga_{name}s"
     context = check_event_context(request, event_slug, perm)
 
     # Find text type code matching the provided name
-    tp = next(code for code, label in TextVersionChoices.choices if label.lower() == nm)
+    tp = next(code for code, label in TextVersionChoices.choices if label.lower() == name)
 
     # Retrieve specific version and format text for HTML display
     context["version"] = TextVersion.objects.get(tp=tp, pk=num)

@@ -72,14 +72,14 @@ def util(request, util_cod):
         raise Http404("not found") from err
 
 
-def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
+def help_red(request: HttpRequest, run_id: int) -> HttpResponseRedirect:
     """Redirect to help page for a specific run."""
     # Set up context with user data and association ID
     context = get_context(request)
 
     # Get the run object or raise 404 if not found
     try:
-        context["run"] = Run.objects.get(pk=n, event__association_id=context["association_id"])
+        context["run"] = Run.objects.get(pk=run_id, event__association_id=context["association_id"])
     except ObjectDoesNotExist as err:
         raise Http404("Run does not exist") from err
 
@@ -142,7 +142,7 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
 
 @login_required
-def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
+def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRedirect:
     """
     Handle attachment download for help questions.
 
@@ -151,7 +151,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
 
     Args:
         request: The HTTP request object containing user information
-        p: Primary key of the HelpQuestion to get attachment from
+        attachment_id: Primary key of the HelpQuestion to get attachment from
 
     Returns:
         HttpResponseRedirect: Redirect to the attachment URL
@@ -164,7 +164,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
 
     # Attempt to retrieve the help question by primary key
     try:
-        hp = HelpQuestion.objects.get(pk=p)
+        hp = HelpQuestion.objects.get(pk=attachment_id)
     except ObjectDoesNotExist as err:
         raise Http404("HelpQuestion does not exist") from err
 
@@ -176,20 +176,20 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
     return redirect(hp.attachment.url)
 
 
-def handout_ext(request: HttpRequest, event_slug: str, cod: str) -> HttpResponse:
+def handout_ext(request: HttpRequest, event_slug: str, code: str) -> HttpResponse:
     """Generate and return a PDF for a specific event handout.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        cod: Handout code identifier
+        code: Handout code identifier
 
     Returns:
         PDF file response with the handout content
     """
     # Retrieve event/run context and fetch handout by code
     context = get_event_context(request, event_slug)
-    context["handout"] = get_object_or_404(Handout, event=context["event"], cod=cod)
+    context["handout"] = get_object_or_404(Handout, event=context["event"], cod=code)
 
     # Generate PDF response
     return print_handout(context)
@@ -312,7 +312,7 @@ def valid_workshop_answer(request, context):
 
 
 @login_required
-def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpResponse:
+def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: int) -> HttpResponse:
     """
     Handle workshop answer submission and validation.
 
@@ -321,8 +321,8 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
 
     Args:
         request (HttpRequest): The HTTP request object containing user data and POST parameters
-        s (str): Event slug identifier for the current event/run
-        m (int): Workshop module number to process
+        event_slug (str): Event slug identifier for the current event/run
+        workshop_module_id (int): Workshop module number to process
 
     Returns:
         HttpResponse: Either a rendered template (answer form or failure page) or
@@ -334,7 +334,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
     """
     # Get event context and validate user access to workshop signup
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    get_workshop(context, m)
+    get_workshop(context, workshop_module_id)
 
     # Check if user has already completed this workshop module
     completed = [el.pk for el in context["member"].workshops.select_related().all()]
@@ -440,12 +440,12 @@ def shuttle_new(request):
 
 
 @login_required
-def shuttle_edit(request, n):
+def shuttle_edit(request, shuttle_id):
     """Edit existing shuttle service request.
 
     Args:
         request: HTTP request object
-        n: Shuttle service ID to edit
+        shuttle_id: Shuttle service ID to edit
 
     Returns:
         HttpResponse: Rendered edit form or redirect after successful update
@@ -453,7 +453,7 @@ def shuttle_edit(request, n):
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
 
-    shuttle = ShuttleService.objects.get(pk=n)
+    shuttle = ShuttleService.objects.get(pk=shuttle_id)
     if request.method == "POST":
         form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, context=context)
         if form.is_valid():

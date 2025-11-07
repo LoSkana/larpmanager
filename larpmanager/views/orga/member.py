@@ -301,7 +301,7 @@ def orga_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
+def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int) -> HttpResponse:
     """Handle organizer responses to member help questions.
 
     This view allows organizers to respond to help questions submitted by members
@@ -311,7 +311,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
     Args:
         request: HTTP request object containing POST data for form submission
         event_slug: Event/run identifier (slug or ID)
-        r: Member ID who submitted the question
+        member_id: Member ID who submitted the question
 
     Returns:
         HttpResponse: Rendered template for answering help questions or redirect
@@ -325,7 +325,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
     context = check_event_context(request, event_slug, "orga_questions")
 
     # Get the member who submitted the question
-    member = Member.objects.get(pk=r)
+    member = Member.objects.get(pk=member_id)
 
     # Handle form submission for organizer's answer
     if request.method == "POST":
@@ -370,20 +370,22 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
 
     # Get all help questions for this member in this event, newest first
     context["list"] = HelpQuestion.objects.filter(
-        member_id=r, association_id=context["association_id"], run_id=context["run"]
+        member_id=member_id, association_id=context["association_id"], run_id=context["run"]
     ).order_by("-created")
 
     return render(request, "larpmanager/orga/users/questions_answer.html", context)
 
 
 @login_required
-def orga_questions_close(request: HttpRequest, event_slug: str, r: str) -> HttpResponse:
+def orga_questions_close(request: HttpRequest, event_slug: str, member_id: str) -> HttpResponse:
     """Close a help question for an organization event."""
     context = check_event_context(request, event_slug, "orga_questions")
 
     # Get the most recent help question for this member and run
     h = (
-        HelpQuestion.objects.filter(member_id=r, association_id=context["association_id"], run_id=context["run"])
+        HelpQuestion.objects.filter(
+            member_id=member_id, association_id=context["association_id"], run_id=context["run"]
+        )
         .order_by("-created")
         .first()
     )
@@ -497,13 +499,13 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_read_mail(request: HttpRequest, event_slug: str, nm: str) -> HttpResponse:
+def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpResponse:
     """Display a specific email from the archive for organization staff.
 
     Args:
         request: The HTTP request object.
         event_slug: Event identifier string.
-        nm: The email name/identifier.
+        mail_id: The id of the email.
 
     Returns:
         Rendered template with email content.
@@ -512,7 +514,7 @@ def orga_read_mail(request: HttpRequest, event_slug: str, nm: str) -> HttpRespon
     context = check_event_context(request, event_slug, "orga_archive_email")
 
     # Retrieve the specific email for display
-    context["email"] = get_mail(request, context, nm)
+    context["email"] = get_mail(request, context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 

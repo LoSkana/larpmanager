@@ -849,13 +849,13 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request, event_slug, g):
+def faction(request, event_slug, faction_id):
     """Display detailed information for a specific faction.
 
     Args:
         request: HTTP request object
         event_slug: Event slug string
-        g: Faction identifier string
+        faction_id: Faction identifier string
 
     Returns:
         HttpResponse: Rendered faction detail page
@@ -866,8 +866,8 @@ def faction(request, event_slug, g):
     get_event_cache_all(context)
 
     typ = None
-    if g in context["factions"]:
-        context["faction"] = context["factions"][g]
+    if faction_id in context["factions"]:
+        context["faction"] = context["factions"][faction_id]
         typ = context["faction"]["typ"]
 
     if "faction" not in context or typ == "g" or "id" not in context["faction"]:
@@ -880,13 +880,13 @@ def faction(request, event_slug, g):
     return render(request, "larpmanager/event/faction.html", context)
 
 
-def quests(request: HttpRequest, event_slug: str, g: str | None = None) -> HttpResponse:
+def quests(request: HttpRequest, event_slug: str, quest_type_id: str | None = None) -> HttpResponse:
     """Display quest types or quests for a specific type in an event.
 
     Args:
         request: The HTTP request object
         event_slug: Event identifier string
-        g: Optional quest type number. If None, shows all quest types
+        quest_type_id: Optional quest type number. If None, shows all quest types
 
     Returns:
         HttpResponse: Rendered template with quest types or specific quests
@@ -896,12 +896,12 @@ def quests(request: HttpRequest, event_slug: str, g: str | None = None) -> HttpR
     check_visibility(context, "quest", _("Quest"))
 
     # If no quest type specified, show all quest types for the event
-    if not g:
+    if not quest_type_id:
         context["list"] = QuestType.objects.filter(event=context["event"]).order_by("number").prefetch_related("quests")
         return render(request, "larpmanager/event/quest_types.html", context)
 
     # Get specific quest type and build list of visible quests
-    get_element(context, g, "quest_type", QuestType, by_number=True)
+    get_element(context, quest_type_id, "quest_type", QuestType, by_number=True)
     context["list"] = []
 
     # Filter quests by event, visibility, and type, then add complete quest data
@@ -911,13 +911,13 @@ def quests(request: HttpRequest, event_slug: str, g: str | None = None) -> HttpR
     return render(request, "larpmanager/event/quests.html", context)
 
 
-def quest(request, event_slug, g):
+def quest(request, event_slug, quest_id):
     """Display individual quest details and associated traits.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
-        g: Quest number
+        quest_id: Quest number
 
     Returns:
         HttpResponse: Rendered quest template
@@ -925,7 +925,7 @@ def quest(request, event_slug, g):
     context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
-    get_element(context, g, "quest", Quest, by_number=True)
+    get_element(context, quest_id, "quest", Quest, by_number=True)
     context["quest_fields"] = get_writing_element_fields(
         context, "quest", QuestionApplicable.QUEST, context["quest"].id, only_visible=True
     )
@@ -991,25 +991,25 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/limitations.html", context)
 
 
-def export(request, event_slug, t):
+def export(request, event_slug, export_type):
     """Export event elements as JSON for external consumption.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
-        t: Type of elements to export ('char', 'faction', 'quest', 'trait')
+        export_type: Type of elements to export ('char', 'faction', 'quest', 'trait')
 
     Returns:
         JsonResponse: Exported elements data
     """
     context = get_event(request, event_slug)
-    if t == "char":
+    if export_type == "char":
         lst = context["event"].get_elements(Character).order_by("number")
-    elif t == "faction":
+    elif export_type == "faction":
         lst = context["event"].get_elements(Faction).order_by("number")
-    elif t == "quest":
+    elif export_type == "quest":
         lst = Quest.objects.filter(event=context["event"]).order_by("number")
-    elif t == "trait":
+    elif export_type == "trait":
         lst = Trait.objects.filter(quest__event=context["event"]).order_by("number")
     else:
         raise Http404("wrong type")

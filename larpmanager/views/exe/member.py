@@ -876,14 +876,14 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_read_mail(request: HttpRequest, nm: str) -> HttpResponse:
+def exe_read_mail(request: HttpRequest, mail_id: str) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
     context = check_association_context(request, "exe_archive_email")
     context["exe"] = True
 
     # Retrieve and add email data to context
-    context["email"] = get_mail(request, context, nm)
+    context["email"] = get_mail(request, context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 
@@ -922,7 +922,7 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
+def exe_questions_answer(request: HttpRequest, member_id: int) -> HttpResponse:
     """
     Handle question answering for executives.
 
@@ -931,7 +931,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user session and POST data
-        r: The primary key (ID) of the Member who submitted the question
+        member_id: The id of the Member who submitted the question
 
     Returns:
         HttpResponse: Rendered question answer form page or redirect to questions list
@@ -944,7 +944,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
     context = check_association_context(request, "exe_questions")
 
     # Retrieve the member and their question history
-    context["member_edit"] = get_member(r)
+    context["member_edit"] = get_member(member_id)
     context["list"] = HelpQuestion.objects.filter(
         member=context["member_edit"], association_id=context["association_id"]
     ).order_by("-created")
@@ -983,12 +983,12 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 
 
 @login_required
-def exe_questions_close(request: HttpRequest, r: int) -> HttpResponse:
+def exe_questions_close(request: HttpRequest, member_id: int) -> HttpResponse:
     """Close a help question for a member."""
     context = check_association_context(request, "exe_questions")
 
     # Get the member and their most recent help question
-    member = Member.objects.get(pk=r)
+    member = Member.objects.get(pk=member_id)
     h = (
         HelpQuestion.objects.filter(member=member, association_id=context["association_id"])
         .order_by("-created")

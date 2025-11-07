@@ -269,12 +269,12 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
-def profile_rotate(request: HttpRequest, n: int) -> JsonResponse:
+def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
     """Rotate user's profile image 90 degrees clockwise or counterclockwise.
 
     Args:
         request: Django HTTP request object containing authenticated user
-        n: Rotation direction indicator (1 for clockwise, any other value for counterclockwise)
+        rotation_angle: Rotation direction indicator (1 for clockwise, any other value for counterclockwise)
 
     Returns:
         JsonResponse: Contains status ('ok'/'ko') and optionally the new thumbnail URL
@@ -295,7 +295,7 @@ def profile_rotate(request: HttpRequest, n: int) -> JsonResponse:
     im = Image.open(path)
 
     # Rotate image based on direction parameter
-    if n == 1:
+    if rotation_angle == 1:
         out = im.rotate(90)  # Clockwise rotation
     else:
         out = im.rotate(-90)  # Counterclockwise rotation
@@ -494,7 +494,7 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def public(request: HttpRequest, n: int) -> HttpResponse:
+def public(request: HttpRequest, member_id: int) -> HttpResponse:
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -503,7 +503,7 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
 
     Args:
         request: HTTP request object containing user and association context
-        n: Member ID to display profile for
+        member_id: Member ID to display profile for
 
     Returns:
         HttpResponse: Rendered public member profile page
@@ -513,7 +513,7 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
-    context["member_public"] = get_member(n)
+    context["member_public"] = get_member(member_id)
 
     # Verify member has membership in current association
     if not Membership.objects.filter(
@@ -589,7 +589,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request, n):
+def chat(request, member_id):
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions
@@ -597,40 +597,39 @@ def chat(request, n):
     """
     context = get_context(request)
     check_association_feature(request, context, "chat")
-    mid = request.user.member.id
-    if n == mid:
+    my_member_id = context["member"].id
+    if member_id == my_member_id:
         messages.success(request, _("You can't send messages to yourself") + "!")
         return redirect("home")
-    other_member = get_member(n)
-    yid = other_member.id
-    channel = get_channel(yid, mid)
+
+    channel = get_channel(member_id, my_member_id)
     if request.method == "POST":
         tx = request.POST["text"]
         if len(tx) > 0:
             ChatMessage(
-                sender_id=mid,
-                receiver_id=yid,
+                sender_id=my_member_id,
+                receiver_id=member_id,
                 channel=channel,
                 message=tx,
                 association_id=context["association_id"],
             ).save()
-            your_contact = get_contact(yid, mid)
+            your_contact = get_contact(member_id, my_member_id)
             if not your_contact:
                 your_contact = Contact(
-                    me_id=yid,
-                    you_id=mid,
-                    channel=get_channel(mid, yid),
+                    me_id=member_id,
+                    you_id=my_member_id,
+                    channel=get_channel(my_member_id, member_id),
                     association_id=context["association_id"],
                 )
             your_contact.num_unread += 1
             your_contact.last_message = datetime.now()
             your_contact.save()
-            mine_contact = get_contact(mid, yid)
+            mine_contact = get_contact(my_member_id, member_id)
             if not mine_contact:
                 mine_contact = Contact(
-                    me_id=mid,
-                    you_id=yid,
-                    channel=get_channel(mid, yid),
+                    me_id=my_member_id,
+                    you_id=member_id,
+                    channel=get_channel(my_member_id, member_id),
                     association_id=context["association_id"],
                 )
             mine_contact.last_message = datetime.now()
@@ -638,7 +637,7 @@ def chat(request, n):
             messages.success(request, _("Message sent!"))
             return redirect(request.path_info)
 
-    mine_contact = get_contact(mid, yid)
+    mine_contact = get_contact(my_member_id, member_id)
     if mine_contact:
         mine_contact.num_unread = 0
         mine_contact.save()
@@ -666,11 +665,11 @@ def badges(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
+def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
     """Display a badge with shuffled member list."""
     context = get_context(request)
     check_association_feature(request, context, "badge")
-    badge = get_badge(n, context)
+    badge = get_badge(badge_id, context)
 
     # Initialize context with badge data
     context.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
@@ -687,7 +686,7 @@ def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
 
 
 @login_required
-def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
+def leaderboard(request: HttpRequest, page: int = 1) -> HttpResponse:
     """Display paginated leaderboard of members with badge scores.
 
     This view renders a paginated leaderboard showing members ranked by their
@@ -695,7 +694,7 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user and association data
-        p: Page number for pagination, defaults to 1. Will be clamped to valid range.
+        page: Page number for pagination, defaults to 1. Will be clamped to valid range.
 
     Returns:
         HttpResponse: Rendered leaderboard page with member rankings and pagination
@@ -715,18 +714,18 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     num_pages = math.ceil(len(member_list) / num_el)
 
     # Normalize page number to valid range
-    if p < 0:
-        p = 1
-    p = min(p, num_pages)
+    if page < 0:
+        page = 1
+    page = min(page, num_pages)
 
     # Build context with pagination data
     context.update(
         {
-            "pages": member_list[(p - 1) * num_el : p * num_el],
+            "pages": member_list[(page - 1) * num_el : page * num_el],
             "num_pages": num_pages,
-            "number": p,
-            "previous_page_number": p - 1,
-            "next_page_number": p + 1,
+            "number": page,
+            "previous_page_number": page - 1,
+            "next_page_number": page + 1,
         }
     )
 

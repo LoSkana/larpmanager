@@ -492,7 +492,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
 
 
 @login_required
-def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse:
+def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> HttpResponse:
     """
     Handle file uploads for organizers with element processing.
 
@@ -503,7 +503,7 @@ def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse
     Args:
         request: Django HTTP request object containing file data and POST parameters
         event_slug: Event slug identifier for the specific event
-        typ: Type of elements to upload (e.g., 'characters', 'items')
+        upload_type: Type of elements to upload (e.g., 'characters', 'items')
 
     Returns:
         HttpResponse: Either the upload form page or processing results page
@@ -512,8 +512,8 @@ def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse
         Exception: Any error during file processing is caught and displayed to user
     """
     # Check user permissions and get event context
-    context = check_event_context(request, event_slug, f"orga_{typ}")
-    context["typ"] = typ.rstrip("s")
+    context = check_event_context(request, event_slug, f"orga_{upload_type}")
+    context["typ"] = upload_type.rstrip("s")
     context["name"] = context["typ"]
 
     # Get column names for the upload template
@@ -524,7 +524,7 @@ def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse
         form = UploadElementsForm(request.POST, request.FILES)
 
         # Prepare redirect URL for after processing
-        redr = reverse(f"orga_{typ}", args=[context["run"].get_slug()])
+        redr = reverse(f"orga_{upload_type}", args=[context["run"].get_slug()])
 
         if form.is_valid():
             try:
@@ -553,13 +553,13 @@ def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse
 
 
 @login_required
-def orga_upload_template(request, event_slug: str, typ: str) -> HttpResponse:
+def orga_upload_template(request, event_slug: str, upload_type: str) -> HttpResponse:
     """Generate and download template files for data upload.
 
     Args:
         request: HTTP request object containing user session and metadata
         event_slug: Event identifier string used to locate the specific event
-        typ: Template type specifying which template to generate. Valid values:
+        upload_type: Template type specifying which template to generate. Valid values:
             - 'writing': Character writing elements template
             - 'registration': Event registration template
             - 'px_abilitie': Player experience abilities template
@@ -574,7 +574,7 @@ def orga_upload_template(request, event_slug: str, typ: str) -> HttpResponse:
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug)
-    context["typ"] = typ
+    context["typ"] = upload_type
 
     # Extract and set column names for template generation
     _get_column_names(context)
@@ -606,11 +606,11 @@ def orga_upload_template(request, event_slug: str, typ: str) -> HttpResponse:
     # Generate appropriate template based on type
     if context.get("writing_typ"):
         # Generate writing elements template for character backgrounds
-        exports = _writing_template(context, typ, value_mapping)
-    elif typ == "registration":
+        exports = _writing_template(context, upload_type, value_mapping)
+    elif upload_type == "registration":
         # Generate registration template for event signup data
-        exports = _reg_template(context, typ, value_mapping)
-    elif typ == "px_abilitie":
+        exports = _reg_template(context, upload_type, value_mapping)
+    elif upload_type == "px_abilitie":
         # Generate abilities template for player experience tracking
         exports = _ability_template(context)
     else:

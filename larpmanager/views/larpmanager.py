@@ -281,7 +281,9 @@ def redr(request, path):
     return choose_run(request, path, list(event_ids))
 
 
-def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str] = None) -> HttpResponseRedirect:
+def activate_feature_association(
+    request: HttpRequest, feature_slug: str, path: Optional[str] = None
+) -> HttpResponseRedirect:
     """Activate a feature for an association.
 
     Activates a feature by adding it to the association's features and redirects
@@ -289,8 +291,8 @@ def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str
 
     Args:
         request: Django HTTP request object containing user and association context
-        cod: Feature slug/code to activate
-        p: Optional URL path to redirect to after activation. If None, redirects
+        feature_slug: Feature slug to activate
+        path: Optional URL path to redirect to after activation. If None, redirects
            to the feature's default view based on associated permissions
 
     Returns:
@@ -302,7 +304,7 @@ def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str
     """
     context = get_context(request)
     # Retrieve the feature by slug, ensuring it exists
-    feature = get_object_or_404(Feature, slug=cod)
+    feature = get_object_or_404(Feature, slug=feature_slug)
 
     # Validate that this is an organization-wide feature
     if not feature.overall:
@@ -321,8 +323,8 @@ def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str
     messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # Redirect to specified path or feature's default view
-    if p:
-        return redirect("/" + p)
+    if path:
+        return redirect("/" + path)
 
     # Use the first associated permission's slug as the default view
     first_permission = feature.association_permissions.first()
@@ -334,7 +336,9 @@ def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str
     return redirect("dashboard")
 
 
-def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: str = None) -> HttpResponseRedirect:
+def activate_feature_event(
+    request: HttpRequest, event_slug: str, feature_slug: str, path: str = None
+) -> HttpResponseRedirect:
     """Activate a feature for a specific event.
 
     Enables a non-overall feature for the specified event and redirects the user
@@ -343,8 +347,8 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
     Args:
         request: Django HTTP request object containing user and session data
         event_slug: Event slug identifier used to locate the target event
-        cod: Feature slug/code identifying which feature to activate
-        p: Optional URL path to redirect to after successful activation.
+        feature_slug: Feature slug identifying which feature to activate
+        path: Optional URL path to redirect to after successful activation.
            If None, redirects to the feature's default event view.
 
     Returns:
@@ -355,7 +359,7 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
         PermissionError: If user lacks orga_features permission for the event
     """
     # Retrieve the feature by slug, raise 404 if not found
-    feature = get_object_or_404(Feature, slug=cod)
+    feature = get_object_or_404(Feature, slug=feature_slug)
 
     # Ensure this is an event-specific feature, not organization-wide
     if feature.overall:
@@ -374,8 +378,8 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
     messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # Redirect to custom path if provided, otherwise use feature's default view
-    if p:
-        return redirect("/" + p)
+    if path:
+        return redirect("/" + path)
 
     # Get the first event permission's slug as the default view name
     first_permission = feature.event_permissions.first()
@@ -917,7 +921,7 @@ def get_run_lm_payment(run):
 
 
 @login_required
-def lm_payments_confirm(request, r):
+def lm_payments_confirm(request, run_id):
     """Confirm payment for a specific run.
 
     Marks a run as paid with calculated total.
@@ -925,13 +929,13 @@ def lm_payments_confirm(request, r):
 
     Args:
         request: Django HTTP request object (must be authenticated admin)
-        r: Run ID to confirm payment for
+        run_id: Run ID to confirm payment for
 
     Returns:
         HttpResponseRedirect: Redirect to payments list
     """
     check_lm_admin(request)
-    run = Run.objects.get(pk=r)
+    run = Run.objects.get(pk=run_id)
     get_run_lm_payment(run)
     run.paid = run.total
     run.save()
@@ -1041,7 +1045,7 @@ def donate(request):
     return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
-def debug_user(request, mid):
+def debug_user(request, member_id):
     """Login as a specific user for debugging purposes.
 
     Allows admin users to login as another user for debugging.
@@ -1049,13 +1053,13 @@ def debug_user(request, mid):
 
     Args:
         request: Django HTTP request object
-        mid: Member ID to login as
+        member_id: Member ID to login as
 
     Side effects:
         Logs in as the specified user
     """
     check_lm_admin(request)
-    member = Member.objects.get(pk=mid)
+    member = Member.objects.get(pk=member_id)
     login(request, member.user, backend=get_user_backend())
 
 

@@ -858,21 +858,21 @@ def orga_registration_discounts(request: HttpRequest, event_slug: str, num: int)
 
 
 @login_required
-def orga_registration_discount_add(request, event_slug, num, dis):
+def orga_registration_discount_add(request, event_slug, num, discount_id):
     """Add a discount to a member's registration.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
         num: Registration ID
-        dis: Discount ID
+        discount_id: Discount ID
 
     Returns:
         HttpResponseRedirect: Redirect to registration discounts page
     """
     context = check_event_context(request, event_slug, "orga_registrations")
     get_registration(context, num)
-    get_discount(context, dis)
+    get_discount(context, discount_id)
     AccountingItemDiscount.objects.create(
         value=context["discount"].value,
         member=context["registration"].member,
@@ -889,7 +889,7 @@ def orga_registration_discount_add(request, event_slug, num, dis):
 
 
 @login_required
-def orga_registration_discount_del(request: HttpRequest, event_slug: str, num: int, dis: int) -> HttpResponse:
+def orga_registration_discount_del(request: HttpRequest, event_slug: str, num: int, discount_id: int) -> HttpResponse:
     """Delete a discount from a registration and redirect to discounts page."""
     # Check event permissions and get context
     context = check_event_context(request, event_slug, "orga_registrations")
@@ -898,7 +898,7 @@ def orga_registration_discount_del(request: HttpRequest, event_slug: str, num: i
     get_registration(context, num)
 
     # Delete the discount and save registration
-    AccountingItemDiscount.objects.get(pk=dis).delete()
+    AccountingItemDiscount.objects.get(pk=discount_id).delete()
     context["registration"].save()
 
     # Redirect to registration discounts page
