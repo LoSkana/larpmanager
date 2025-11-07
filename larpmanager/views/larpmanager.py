@@ -62,7 +62,7 @@ from larpmanager.models.member import Member, MembershipStatus, get_user_members
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.auth import check_lm_admin
 from larpmanager.utils.base import get_context, get_event_context
-from larpmanager.utils.exceptions import PermissionError
+from larpmanager.utils.exceptions import UserPermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.views.user.member import get_user_backend
 
@@ -310,7 +310,7 @@ def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str
 
     # Verify user has permission to manage association features
     if not has_association_permission(request, context, "exe_features"):
-        raise PermissionError()
+        raise UserPermissionError()
 
     # Get the association from request context and activate the feature
     association = get_object_or_404(Association, pk=context["association_id"])
@@ -364,7 +364,7 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
     # Get event context and verify user has permission to manage features
     context = get_event_context(request, event_slug)
     if not has_event_permission(request, context, context["event"].slug, "orga_features"):
-        raise PermissionError()
+        raise UserPermissionError()
 
     # Add the feature to the event's feature set and persist changes
     context["event"].features.add(feature)

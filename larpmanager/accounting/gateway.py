@@ -91,7 +91,7 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     body_params = {
         "callback_url": context["callback"],
         "redirect_url": context["redirect"],
-        "external_code": invoice.causal
+        "external_code": invoice.causal,
     }
     # Optional
     # body_params["expire_date"] = expiration_date

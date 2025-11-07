@@ -499,7 +499,7 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, event_slug: str) ->
 
     # Extract and validate POST parameters
     idx = request.POST.get("idx")
-    type = request.POST.get("type").lower()
+    operation = request.POST.get("type").lower()
     value = request.POST.get("value").lower() == "true"
 
     # Retrieve the warehouse item assignment
@@ -512,9 +512,9 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, event_slug: str) ->
     if assign.event_id != context["event"].id:
         return JsonResponse({"error": "not your event"}, status=400)
 
-    # Map request type to model field and update
+    # Map request operation to model field and update
     map_field = {"load": "loaded", "depl": "deployed"}
-    field = map_field.get(type, "")
+    field = map_field.get(operation, "")
     setattr(assign, field, value)
     assign.save()
 

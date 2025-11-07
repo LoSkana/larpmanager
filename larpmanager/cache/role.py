@@ -31,7 +31,7 @@ from larpmanager.cache.permission import (
 )
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.utils.auth import get_allowed_managed, is_lm_admin
-from larpmanager.utils.exceptions import PermissionError
+from larpmanager.utils.exceptions import UserPermissionError
 
 
 def cache_association_role_key(association_role_id):
@@ -88,7 +88,7 @@ def get_cache_association_role(ar_id: int) -> dict:
             association_role = AssociationRole.objects.get(pk=ar_id)
         except Exception as err:
             # Convert any database error to permission error
-            raise PermissionError() from err
+            raise UserPermissionError() from err
 
         # Process the association role data
         cached_result = get_association_role(association_role)
@@ -206,7 +206,7 @@ def get_index_association_permissions(
     # Check if user has any roles or admin privileges
     if not role_names and not is_admin:
         if check:
-            raise PermissionError()
+            raise UserPermissionError()
         else:
             return
 
@@ -279,7 +279,7 @@ def get_cache_event_role(ev_id: int) -> dict:
             event_role = EventRole.objects.get(pk=ev_id)
         except Exception as error:
             # Convert any database error to PermissionError
-            raise PermissionError() from error
+            raise UserPermissionError() from error
 
         # Process the event role data
         cached_result = get_event_role(event_role)
@@ -410,7 +410,7 @@ def get_index_event_permissions(request: HttpRequest, context: dict, event_slug:
     if "association_role" in context and 1 in context["association_role"]:
         is_organizer = True
     if enforce_check and not role_names and not is_organizer:
-        raise PermissionError()
+        raise UserPermissionError()
     if role_names:
         context["role_names"] = role_names
     event_features = context.get("features") or get_event_features(context["event"].id)

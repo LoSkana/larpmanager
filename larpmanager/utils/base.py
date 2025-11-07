@@ -44,8 +44,8 @@ from larpmanager.utils.exceptions import (
     FeatureError,
     MainPageError,
     MembershipError,
-    PermissionError,
     UnknowRunError,
+    UserPermissionError,
     check_event_feature,
 )
 from larpmanager.utils.registration import check_signup, registration_status
@@ -188,7 +188,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     # Get base user context and validate permission
     context = get_context(request)
     if not has_association_permission(request, context, permission_slug):
-        raise PermissionError()
+        raise UserPermissionError()
 
     # Retrieve feature configuration for this permission
     (required_feature, tutorial_identifier, config_slug) = get_association_permission_feature(permission_slug)
@@ -245,7 +245,7 @@ def check_event_context(request, event_slug: str, permission_slug: str | list[st
 
     # Verify user has the required permissions for this event
     if not has_event_permission(request, context, event_slug, permission_slug):
-        raise PermissionError()
+        raise UserPermissionError()
 
     # Process permission-specific features and configuration
     if permission_slug:

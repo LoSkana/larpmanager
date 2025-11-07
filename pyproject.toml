@@ -19,7 +19,7 @@ extend-exclude = ["main"]
 quote-style = "double"
 
 [tool.ruff.lint]
-select = ["F", "E", "B", "UP", "I", "N", "PL"] # F, E, B, UP, I, N, PL, D
+select = ["F", "E", "B", "UP", "I", "N", "PL", "A"] # D
 ignore = ["ISC001", "E501"]
 
 [tool.ruff.lint.pylint]

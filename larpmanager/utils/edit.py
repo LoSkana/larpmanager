@@ -864,10 +864,10 @@ def working_ticket(request):
         return JsonResponse(res)
 
     eid = request.POST.get("eid")
-    type = request.POST.get("type")
+    element_type = request.POST.get("type")
     token = request.POST.get("token")
 
-    msg = writing_edit_working_ticket(request, type, eid, token)
+    msg = writing_edit_working_ticket(request, element_type, eid, token)
     if msg:
         res["warn"] = msg
 
