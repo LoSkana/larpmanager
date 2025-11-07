@@ -500,7 +500,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
 @login_required
 def orga_character_form(request, event_slug):
-    return redirect("orga_writing_form", event_slug=event_slug, writing_typ="character")
+    return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 
 
 def check_writing_form_type(context: dict, form_type: str) -> None:
@@ -624,7 +624,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
             return redirect(
-                request.resolver_match.view_name, event_slug=context["run"].get_slug(), typ=writing_type, num=0
+                request.resolver_match.view_name, event_slug=context["run"].get_slug(), writing_type=writing_type, num=0
             )
 
         # Determine if we need to redirect to option editing
@@ -647,10 +647,10 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
             return redirect(
                 orga_writing_options_new,
                 event_slug=context["run"].get_slug(),
-                typ=writing_type,
+                writing_type=writing_type,
                 num=context["saved"].id,
             )
-        return redirect("orga_writing_form", event_slug=context["run"].get_slug(), typ=writing_type)
+        return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
     # Load existing options for the question being edited
     context["list"] = WritingOption.objects.filter(
@@ -691,7 +691,7 @@ def orga_writing_form_order(
     exchange_order(context, WritingQuestion, num, order)
 
     # Redirect back to the writing form page
-    return redirect("orga_writing_form", event_slug=context["run"].get_slug(), typ=writing_type)
+    return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
 
 @login_required
@@ -747,7 +747,10 @@ def writing_option_edit(context: dict, option_number: int, request: HttpRequest,
 
         # Redirect to appropriate target with context parameters
         return redirect(
-            redirect_target, event_slug=context["run"].get_slug(), typ=option_type, num=context["saved"].question_id
+            redirect_target,
+            event_slug=context["run"].get_slug(),
+            writing_type=option_type,
+            num=context["saved"].question_id,
         )
 
     # Render edit form if no successful submission
@@ -783,7 +786,7 @@ def orga_writing_options_order(
     return redirect(
         "orga_writing_form_edit",
         event_slug=context["run"].get_slug(),
-        typ=writing_type,
+        writing_type=writing_type,
         num=context["current"].question_id,
     )
 
