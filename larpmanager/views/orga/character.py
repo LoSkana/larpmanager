@@ -500,7 +500,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
 @login_required
 def orga_character_form(request, event_slug):
-    return redirect("orga_writing_form", event_slug=event_slug, typ="character")
+    return redirect("orga_writing_form", event_slug=event_slug, writing_typ="character")
 
 
 def check_writing_form_type(context: dict, form_type: str) -> None:
