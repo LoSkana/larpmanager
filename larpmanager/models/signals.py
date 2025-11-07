@@ -487,28 +487,42 @@ def pre_save_association_permission(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AssociationPermission)
-def post_save_association_permission_index_permission(sender, instance, **kwargs):
+def post_save_association_permission_index_permission(
+    sender: type, instance: AssociationPermission, **kwargs: Any
+) -> None:
+    """Clear caches when association permission is saved."""
     clear_index_permission_cache("association")
     clear_association_permission_cache(instance)
 
 
 @receiver(post_delete, sender=AssociationPermission)
-def post_delete_association_permission_index_permission(sender, instance, **kwargs):
+def post_delete_association_permission_index_permission(
+    sender: type, instance: AssociationPermission, **kwargs: Any
+) -> None:
+    """Clear association permission caches after deletion."""
     clear_index_permission_cache("association")
     clear_association_permission_cache(instance)
 
 
 # AssociationRole signals
 @receiver(pre_delete, sender=AssociationRole)
-def pre_delete_association_role_reset(sender, instance, **kwargs):
+def pre_delete_association_role_reset(sender: type, instance: AssociationRole, **kwargs: dict) -> None:
+    """Clean up cache and event links when an association role is deleted."""
+    # Clear cached role data
     remove_association_role_cache(instance.pk)
+
+    # Reset event links for all members with this role
     for member in instance.members.all():
         reset_event_links(member.id, instance.association_id)
 
 
 @receiver(post_save, sender=AssociationRole)
-def post_save_association_role_reset(sender, instance, **kwargs):
+def post_save_association_role_reset(sender: type, instance: AssociationRole, **kwargs: Any) -> None:
+    """Reset caches when an association role is saved."""
+    # Clear association role cache
     remove_association_role_cache(instance.pk)
+
+    # Reset event links for all members with this role
     for member in instance.members.all():
         reset_event_links(member.id, instance.association_id)
 
@@ -640,7 +654,7 @@ def post_save_character(sender: type, instance: Character, **kwargs) -> None:
 
 @receiver(pre_delete, sender=Character)
 def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any) -> None:
-    # Clear cached data for all runs of this character's event
+    # Clear event cache and cleanup PDFs before character deletion
     clear_event_cache_all_runs(instance.event)
     cleanup_character_pdfs_before_delete(instance)
 
@@ -787,7 +801,7 @@ def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> 
 
 @receiver(post_delete, sender=EventConfig)
 def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clear event configuration cache after deletion
+    """Clear event configuration cache after deletion."""
     clear_config_cache(instance.event)
 
 
@@ -981,7 +995,7 @@ def pre_save_larp_manager_faq(sender: type, instance: LarpManagerFaq, *args: Any
 # LarpManagerGuide signals
 @receiver(post_save, sender=LarpManagerGuide)
 def post_save_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
-    # Signal handler to reset guides cache when guide content changes
+    """Signal handler to reset guides cache when guide content changes."""
     reset_guides_cache()
 
 
@@ -1345,6 +1359,7 @@ def post_save_ticket_accounting_cache(
 
 @receiver(post_delete, sender=RegistrationTicket)
 def post_delete_ticket_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear accounting cache for all runs when a ticket is deleted."""
     # Clear accounting cache for all runs in the ticket's event
     for run in instance.event.runs.all():
         clear_registration_accounting_cache(run.id)
@@ -1359,13 +1374,13 @@ def pre_delete_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
 
 @receiver(post_save, sender=Relationship)
 def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Update cached relationships and delete PDF files after saving a relationship
+    """Update cached relationships and delete PDF files after saving a relationship."""
     refresh_character_relationships(instance.source)
     delete_character_pdf_files(instance.source)
 
 
 @receiver(post_delete, sender=Relationship)
-def post_delete_relationship_reset_rels(sender, instance, **kwargs) -> None:
+def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
     # Update cache for source character after relationship deletion
     refresh_character_relationships(instance.source)
 

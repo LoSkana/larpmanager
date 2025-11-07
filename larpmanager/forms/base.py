@@ -384,7 +384,8 @@ def max_selections_validator(max_choices: int) -> callable:
         >>> validator(['option1', 'option2', 'option3', 'option4'])  # Raises ValidationError
     """
 
-    def validator(selected_values):
+    def validator(selected_values: list) -> None:
+        """Validate that selected values do not exceed maximum allowed choices."""
         # Check if the number of selected values exceeds the maximum allowed
         if len(selected_values) > max_choices:
             # Raise validation error with localized message

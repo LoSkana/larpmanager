@@ -312,7 +312,7 @@ class OrgaConfigForm(ConfigForm):
         fields = ()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Initialize parent class and set cancellation prevention flag
+        """Initialize form and prevent registration cancellation."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
@@ -1419,6 +1419,7 @@ class ExeTemplateForm(FeatureForm):
         fields = ["name"]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the instance and configure the feature system."""
         # Initialize parent class and feature system
         super().__init__(*args, **kwargs)
         self._init_features(False)

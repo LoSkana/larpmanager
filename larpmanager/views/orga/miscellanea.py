@@ -284,7 +284,7 @@ def orga_problems(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_problems_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    # Delegate to generic edit view for problem editing
+    """Delegate to generic edit view for problem editing."""
     return orga_edit(request, event_slug, "orga_problems", OrgaProblemForm, num)
 
 

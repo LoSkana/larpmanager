@@ -229,7 +229,7 @@ class Event(BaseModel):
         ]
 
     def __str__(self) -> str:
-        # Return the name representation of the object
+        """Return the name of the object as a string."""
         return self.name
 
     def get_elements(self, element_model_class: type) -> QuerySet:
@@ -305,7 +305,7 @@ class Event(BaseModel):
             return None
 
     def get_name(self) -> str:
-        # Return the name attribute
+        """Return the name attribute."""
         return self.name
 
     def show(self) -> dict[str, str]:
@@ -394,7 +394,7 @@ class EventConfig(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self) -> str:
-        # Return string representation combining event and name
+        """Return string representation combining event and name."""
         return f"{self.event} {self.name}"
 
     class Meta:

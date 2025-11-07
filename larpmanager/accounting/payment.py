@@ -236,7 +236,8 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             pass
 
     # Define replacement function for regex substitution
-    def replace_placeholder(pattern_match):
+    def replace_placeholder(pattern_match: re.Match) -> str:
+        """Replace placeholder with value from dict or keep original."""
         placeholder_key = pattern_match.group(1)
         return placeholder_values.get(placeholder_key, pattern_match.group(0))
 

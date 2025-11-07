@@ -377,7 +377,7 @@ class AssocMS2:
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet:
-        # Return members queryset for this association
+        """Return members queryset for this association."""
         return get_members_queryset(self.association_id)
 
     @staticmethod
@@ -490,7 +490,7 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
     ]
 
     def set_event(self, event: Event) -> None:
-        # Set the event for this instance
+        """Set the event for this instance."""
         self.event = event
 
     def get_queryset(self) -> QuerySet[Registration]:
@@ -647,7 +647,7 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         self.event = event
 
     def get_queryset(self) -> QuerySet[Faction]:
-        # Return factions associated with this event
+        """Return factions associated with this event."""
         return self.event.get_elements(Faction)
 
     def label_from_instance(self, instance: Faction) -> str:

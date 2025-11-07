@@ -23,7 +23,7 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -75,8 +75,8 @@ def exe_roles(request) -> HttpResponse:
     # Check user permissions for role management
     context = check_association_context(request, "exe_roles")
 
-    def def_callback(context):
-        # Create default admin role for association
+    def def_callback(context: dict) -> AssociationRole:
+        """Create default admin role for association."""
         return AssociationRole.objects.create(association_id=context["association_id"], number=1, name="Admin")
 
     # Prepare roles list with existing association roles
@@ -322,13 +322,15 @@ def _exe_feature_after_link(feature: Feature) -> str:
 
 
 @login_required
-def exe_features_on(request, slug):
+def exe_features_on(request: HttpRequest, slug: str) -> HttpResponseRedirect:
+    # Enable feature and redirect to the appropriate page
     feature = exe_features_go(request, slug, on=True)
     return redirect(_exe_feature_after_link(feature))
 
 
 @login_required
-def exe_features_off(request, slug):
+def exe_features_off(request: HttpRequest, slug: str) -> HttpResponse:
+    """Disable features and redirect to management page."""
     exe_features_go(request, slug, on=False)
     return redirect("manage")
 

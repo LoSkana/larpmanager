@@ -140,6 +140,7 @@ class ChatMessage(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
+        """Return string representation with sender and message preview."""
         # Format message preview with sender and truncated content
         return f"CM - {self.sender} {self.message[:20]}"
 

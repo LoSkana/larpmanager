@@ -213,6 +213,7 @@ def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Render the event run edit form with cached run data."""
     # Retrieve cached run data and render edit form
     run = get_cache_run(request.association["id"], event_slug)
     return orga_edit(

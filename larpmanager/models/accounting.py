@@ -117,7 +117,7 @@ class PaymentInvoice(BaseModel):
         ]
 
     def __str__(self) -> str:
-        # Simple string representation showing payment status and details
+        """Return invoice summary with payment status and transaction details."""
         return (
             f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
         )
@@ -623,6 +623,7 @@ class Collection(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
+        """Return string representation based on member or name."""
         # Return member-based or name-based description
         if self.member:
             return f"Colletta per {self.member}"
@@ -703,7 +704,7 @@ class RefundRequest(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        # Return string representation with member name
+        """Return string representation with member name."""
         return f"Refund request of {self.member}"
 
     # ## Workshops

@@ -349,9 +349,21 @@ class Character(Writing):
         os.makedirs(directory_path, exist_ok=True)
         return directory_path
 
-    def get_sheet_filepath(self, run):
+    def get_sheet_filepath(self, run: Run) -> str:
+        """Get the path to this character's PDF sheet file.
+
+        Args:
+            run: The Run instance for which to get the sheet filepath.
+
+        Returns:
+            The full filesystem path to the character's PDF sheet file.
+        """
+        # Build the character's directory path
         character_directory = self.get_character_filepath(run)
+
+        # Create sheet filename using character number
         sheet_filename = f"#{self.number}.pdf"
+
         return os.path.join(character_directory, sheet_filename)
 
     def get_sheet_friendly_filepath(self, character_run=None):
@@ -790,7 +802,8 @@ def replace_char_names(text: str, chars: dict[str, str]) -> str:
     placeholder_map = {}
     placeholder_counter = 0
 
-    def create_placeholder(match):
+    def create_placeholder(match: re.Match[str]) -> str:
+        """Create unique placeholder for character reference and store original match."""
         nonlocal placeholder_counter
         placeholder = f"___CHAR_REF_{placeholder_counter}___"
         placeholder_map[placeholder] = match.group(0)

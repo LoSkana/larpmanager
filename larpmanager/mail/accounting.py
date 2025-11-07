@@ -841,7 +841,8 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
         notify_organization_exe(get_invoice_email, inv.association, inv)
 
 
-def notify_refund_request(payment):
+def notify_refund_request(payment: PaymentInvoice) -> None:
+    """Notify organization executives about a refund request."""
     notify_organization_exe(get_notify_refund_email, payment.association, payment)
 
 

@@ -88,7 +88,7 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
 
 class FeatureForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Initialize parent class and set cancellation prevention flag
+        """Initialize form and set cancellation prevention flag."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
@@ -163,7 +163,7 @@ class QuickSetupForm(MyForm):
     setup = {}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Initialize parent class and prevent cancellation
+        """Initialize the form and prevent cancellation."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 

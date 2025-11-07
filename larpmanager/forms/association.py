@@ -318,7 +318,7 @@ class ExeAppearanceForm(MyCssForm):
 
     @staticmethod
     def get_input_css() -> str:
-        # Return CSS class for association input fields
+        """Return CSS class for association input fields."""
         return "association_css"
 
 
@@ -368,6 +368,7 @@ class ExeConfigForm(ConfigForm):
         fields = ()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and prevent cancellation."""
         # Initialize parent class and prevent cancellation
         super().__init__(*args, **kwargs)
         self.prevent_canc = True

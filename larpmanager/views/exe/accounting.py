@@ -687,7 +687,7 @@ def exe_refunds(request: HttpRequest) -> dict:
 
 @login_required
 def exe_refunds_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Single-line wrapper function - delegates to exe_edit with refund form
+    # Single-line wrapper - delegates to exe_edit with refund form
     return exe_edit(request, ExeRefundRequestForm, num, "exe_refunds")
 
 
