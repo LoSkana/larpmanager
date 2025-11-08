@@ -880,12 +880,12 @@ def acc_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
 
 
 @login_required
-def acc_payed(request: HttpRequest, p: int = 0) -> HttpResponse:
+def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
     """Handle payment completion and redirect to profile check.
 
     Args:
         request: The HTTP request object containing user and association data
-        p: Payment invoice primary key. If 0, no specific invoice is processed
+        payment_id: Payment invoice primary key. If 0, no specific invoice is processed
 
     Returns:
         HttpResponse from acc_profile_check with success message and invoice
@@ -896,10 +896,12 @@ def acc_payed(request: HttpRequest, p: int = 0) -> HttpResponse:
     """
     # Check if a specific payment invoice ID was provided
     context = get_context(request)
-    if p:
+    if payment_id:
         try:
             # Retrieve the payment invoice for the current user and association
-            inv = PaymentInvoice.objects.get(pk=p, member=context["member"], association_id=context["association_id"])
+            inv = PaymentInvoice.objects.get(
+                pk=payment_id, member=context["member"], association_id=context["association_id"]
+            )
         except Exception as err:
             # Raise 404 if invoice not found or access denied
             raise Http404("eeeehm") from err

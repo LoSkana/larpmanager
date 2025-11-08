@@ -115,7 +115,7 @@ urlpatterns = [
         name="exe_archive_email",
     ),
     path(
-        "manage/mail/read/<int:nm>",
+        "manage/mail/read/<int:mail_id>",
         views_em.exe_read_mail,
         name="exe_read_mail",
     ),
@@ -125,12 +125,12 @@ urlpatterns = [
         name="exe_questions",
     ),
     path(
-        "manage/questions/<int:r>/answer/",
+        "manage/questions/<int:member_id>/answer/",
         views_em.exe_questions_answer,
         name="exe_questions_answer",
     ),
     path(
-        "manage/questions/<int:r>/close/",
+        "manage/questions/<int:member_id>/close/",
         views_em.exe_questions_close,
         name="exe_questions_close",
     ),
@@ -370,7 +370,7 @@ urlpatterns = [
         name="exe_templates_config",
     ),
     path(
-        "manage/template/roles/<int:eid>/<int:num>/",
+        "manage/template/roles/<int:event_id>/<int:num>/",
         views_ee.exe_templates_roles,
         name="exe_templates_roles",
     ),

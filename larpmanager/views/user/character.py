@@ -232,7 +232,7 @@ def character_your_link(context: dict, character, path: str = None) -> str:
 
 
 @login_required
-def character_your(request: HttpRequest, event_slug: str, p: str = None) -> HttpResponse:
+def character_your(request: HttpRequest, event_slug: str, path: str = None) -> HttpResponse:
     """Display user's character information.
 
     Shows the character information page for the authenticated user. If the user has
@@ -242,7 +242,7 @@ def character_your(request: HttpRequest, event_slug: str, p: str = None) -> Http
     Args:
         request: HTTP request object containing user authentication and session data
         event_slug: Event slug identifier for the specific event
-        p: Optional character parameter for additional filtering or display options
+        path: Optional character parameter for additional filtering or display options
 
     Returns:
         HttpResponse: Rendered character template, character selection list, or
@@ -267,14 +267,14 @@ def character_your(request: HttpRequest, event_slug: str, p: str = None) -> Http
     # If user has exactly one character, redirect directly to character page
     if len(rcrs) == 1:
         char = rcrs[0].character
-        url = character_your_link(context, char, p)
+        url = character_your_link(context, char, path)
         return HttpResponseRedirect(url)
 
     # Build character selection list for multiple characters
     # Create URLs and display names for each character option
     context["urls"] = []
     for el in rcrs:
-        url = character_your_link(context, el.character, p)
+        url = character_your_link(context, el.character, path)
         # Use custom name if available, otherwise use character's default name
         char = el.character.name
         if el.custom_name:
@@ -494,14 +494,14 @@ def character_profile_upload(request: HttpRequest, event_slug: str, num: int) ->
 
 
 @login_required
-def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, r: int) -> JsonResponse:
+def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, rotation_angle: int) -> JsonResponse:
     """Rotate character profile image by specified degrees.
 
     Args:
         request (HttpRequest): HTTP request object containing user session
-        s (str): Event slug identifier
+        event_slug (str): Event slug identifier
         num (int): Character number identifier
-        r (int): Rotation direction (1 for 90°, else -90°)
+        rotation_angle (int): Rotation direction (1 for 90°, else -90°)
 
     Returns:
         JsonResponse: Dictionary with 'res' status ('ok'/'ko') and 'src' URL if successful
@@ -530,7 +530,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, r:
     # Open and rotate the image based on direction parameter
     path = os.path.join(conf_settings.MEDIA_ROOT, path)
     im = Image.open(path)
-    if r == 1:
+    if rotation_angle == 1:
         out = im.rotate(90)
     else:
         out = im.rotate(-90)
@@ -922,14 +922,14 @@ def character_relationships(request: HttpRequest, event_slug: str, num: int) -> 
 
 
 @login_required
-def character_relationships_edit(request, event_slug, num, oth):
+def character_relationships_edit(request, event_slug, num, other_character_id):
     """Handle editing of character relationship with another character.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
         num: Character number
-        oth: Other character number for relationship
+        other_character_id: Other character number for relationship
 
     Returns:
         HttpResponse: Relationship edit form or redirect
@@ -939,10 +939,10 @@ def character_relationships_edit(request, event_slug, num, oth):
     get_char_check(request, context, num, True)
 
     context["relationship"] = None
-    if oth != 0:
-        get_player_relationship(context, oth)
+    if other_character_id != 0:
+        get_player_relationship(context, other_character_id)
 
-    if user_edit(request, context, PlayerRelationshipForm, "relationship", oth):
+    if user_edit(request, context, PlayerRelationshipForm, "relationship", other_character_id):
         return redirect("character_relationships", event_slug=context["run"].get_slug(), num=context["char"]["number"])
     return render(request, "larpmanager/orga/edit.html", context)
 

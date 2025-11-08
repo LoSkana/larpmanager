@@ -1154,7 +1154,7 @@ def check_registration_open(context, request):
 
 
 @login_required
-def gift_edit(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
+def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpResponse:
     """Handle gift registration modifications.
 
     This function manages the editing of gift registrations, allowing users to
@@ -1164,7 +1164,7 @@ def gift_edit(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
     Args:
         request: The HTTP request object containing user data and form submission
         event_slug: Event identifier string used to locate the specific event
-        r: The registration ID for the gift card being edited
+        gift_id: The registration ID for the gift card being edited
 
     Returns:
         HttpResponse: Either renders the gift edit form template or redirects
@@ -1180,7 +1180,7 @@ def gift_edit(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
     check_registration_open(context, request)
 
     # Retrieve the specific gift registration and prepare form context
-    reg = get_registration_gift(context, r, request)
+    reg = get_registration_gift(context, gift_id, request)
     _register_prepare(context, reg)
 
     # Handle POST requests for form submission (save or delete operations)
@@ -1260,7 +1260,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     Args:
         request (HttpRequest): The HTTP request object containing user and method info
-        s (str): Event slug identifier for the specific event
+        event_slug (str): Event slug identifier for the specific event
         code (str): Gift redemption code to be validated and processed
 
     Returns:
