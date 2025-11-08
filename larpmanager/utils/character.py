@@ -65,6 +65,7 @@ def get_character_relationships(context: dict, restrict: bool = True) -> None:
     Side Effects:
         - Updates context['rel'] with sorted list of relationship data
         - Updates context['pr'] with player relationship objects
+
     """
     relationship_text_by_character_id = {}
     character_data_by_id = {}
@@ -146,6 +147,7 @@ def get_character_sheet(context):
 
     Returns:
         dict: Complete character sheet with all sections
+
     """
     context["sheet_char"] = context["character"].show_complete()
 
@@ -165,8 +167,7 @@ def get_character_sheet(context):
 
 
 def get_character_sheet_px(context: dict) -> None:
-    """
-    Populates the character sheet with ability data grouped by type.
+    """Populates the character sheet with ability data grouped by type.
 
     Args:
         context: Context dictionary containing character data and features.
@@ -175,6 +176,7 @@ def get_character_sheet_px(context: dict) -> None:
 
     Returns:
         None: Modifies context dictionary in-place by adding 'sheet_abilities'.
+
     """
     # Check if px feature is enabled before processing
     if "px" not in context["features"]:
@@ -230,6 +232,7 @@ def get_character_sheet_questbuilder(context):
 
     Side effects:
         Updates context with sheet_traits containing complete trait and quest information
+
     """
     if "questbuilder" not in context["features"]:
         return
@@ -282,8 +285,7 @@ def get_character_sheet_plots(context: dict) -> None:
 
 
 def get_character_sheet_factions(context: dict[str, Any]) -> None:
-    """
-    Retrieves and processes faction data for character sheet display.
+    """Retrieves and processes faction data for character sheet display.
 
     Fetches factions associated with a character, along with their writing answers
     and choices, then adds the processed data to the context for rendering.
@@ -294,6 +296,7 @@ def get_character_sheet_factions(context: dict[str, Any]) -> None:
 
     Returns:
         None: Function modifies context dictionary in-place.
+
     """
     # Early return if faction feature is not enabled
     if "faction" not in context["features"]:
@@ -373,6 +376,7 @@ def get_character_sheet_fields(context: dict) -> None:
 
     Args:
         context: Context dictionary containing features and sheet_char data.
+
     """
     # Check if character feature is enabled
     if "character" not in context["features"]:
@@ -403,6 +407,7 @@ def get_char_check(
     Raises:
         NotFoundError: If character not found in cache or is hidden from user
         Http404: If character access is restricted and user lacks permission
+
     """
     # Load all event and character data into context cache
     get_event_cache_all(context)
@@ -449,6 +454,7 @@ def get_chars_relations(text: str, character_numbers: list[int]) -> tuple[list[i
     Note:
         The function searches from the highest possible number (max + 100) down to 1
         to ensure longer numbers are matched first, preventing partial matches.
+
     """
     active_characters = []
     extinct_characters = []
@@ -490,6 +496,7 @@ def check_missing_mandatory(context):
     Args:
         context: Context dictionary containing character and event data.
               Updates context with 'missing_fields' list.
+
     """
     context["missing_fields"] = []
     missing_question_names = []

@@ -46,6 +46,7 @@ def count_differences(first_string: str, second_string: str) -> int | bool:
         1
         >>> count_differences("abc", "abcd")
         False
+
     """
     # If the lengths of the strings are different, they can't be almost identical
     if len(first_string) != len(second_string):
@@ -80,6 +81,7 @@ def almost_equal(s1: str, s2: str) -> bool:
         True
         >>> almost_equal("test", "best")
         False
+
     """
     # Ensure that one string has exactly one more character than the other
     if abs(len(s1) - len(s2)) != 1:
@@ -125,6 +127,7 @@ def update_leaderboard(association_id: int) -> list[dict]:
             - created: Membership creation date
             - name: Member display name
             - profile: Profile thumbnail URL (if available)
+
     """
     leaderboard_entries = []
 
@@ -188,6 +191,7 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
     Raises:
         Http404: If email not found, belongs to different association,
                 or belongs to different run when run context is provided
+
     """
     # Attempt to retrieve the email by primary key
     try:
@@ -219,6 +223,7 @@ def create_member_profile_for_user(user: User, is_newly_created: bool) -> None:
 
     Returns:
         None
+
     """
     # Create new Member profile for newly registered users
     if is_newly_created:
@@ -247,6 +252,7 @@ def process_membership_status_updates(membership: Membership) -> None:
     Note:
         This function should be called before saving the membership
         to ensure proper field updates based on status.
+
     """
     # Handle ACCEPTED status: assign card number and date
     if membership.status == MembershipStatus.ACCEPTED:

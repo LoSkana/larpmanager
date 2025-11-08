@@ -51,6 +51,7 @@ class MyRegistrationView(RegistrationView):
 
         Raises:
             AuthenticationError: If user authentication fails after creation.
+
         """
         # Create new user from validated form data
         new_user = form.save()
@@ -94,6 +95,7 @@ class MyRegistrationView(RegistrationView):
         Note:
             The 'next' URL is validated for security using Django's
             url_has_allowed_host_and_scheme to prevent open redirect vulnerabilities.
+
         """
         # Check for 'next' parameter in POST data first, then GET data
         next_url = self.request.POST.get("next") or self.request.GET.get("next")
@@ -110,6 +112,7 @@ class MyRegistrationView(RegistrationView):
 
         Returns:
             dict: Form kwargs including request object
+
         """
         form_kwargs = super().get_form_kwargs()
         form_kwargs["request"] = self.request
@@ -131,6 +134,7 @@ class MyPasswordResetConfirmView(PasswordResetConfirmView):
         Returns:
             HttpResponse: Response after processing form, typically a redirect
             to the login page or success page.
+
         """
         # Call parent form_valid to handle the actual password reset
         response = super().form_valid(form)

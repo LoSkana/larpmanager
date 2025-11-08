@@ -73,6 +73,7 @@ def fix_filename(filename):
 
     Returns:
         str: Sanitized filename with only alphanumeric characters and spaces
+
     """
     return re.sub(r"[^A-Za-z0-9 ]+", "", filename)
 
@@ -86,6 +87,7 @@ def reprint(file_path):
 
     Returns:
         bool: True if file should be regenerated (debug mode, missing, or older than 1 day)
+
     """
     if conf_settings.DEBUG:
         return True
@@ -110,6 +112,7 @@ def return_pdf(file_path, filename):
 
     Raises:
         Http404: If PDF file is not found
+
     """
     try:
         pdf_file = open(file_path, "rb")
@@ -137,6 +140,7 @@ def link_callback(uri: str, rel: str) -> str:
     Example:
         >>> link_callback('/static/css/style.css', '')
         '/path/to/static/css/style.css'
+
     """
     # Get Django settings for URL and filesystem paths
     s_url = conf_settings.STATIC_URL
@@ -179,6 +183,7 @@ def add_pdf_instructions(context: dict) -> None:
         - Updates context with 'page_css', 'header_content', 'footer_content' keys
         - Replaces template variables with actual values
         - Replaces utility codes with URLs
+
     """
     # Extract PDF configuration from event settings
     for instruction_key in ["page_css", "header_content", "footer_content"]:
@@ -241,6 +246,7 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, html: boo
 
     Side Effects:
         Creates a PDF file at the specified output_filename path
+
     """
     # Render HTML content based on input type
     if html:
@@ -288,6 +294,7 @@ def print_character(context: dict, force: bool = False) -> HttpResponse:
 
     Returns:
         PDF response dictionary for character sheet
+
     """
     # Get the file path for the character sheet PDF
     file_path = context["character"].get_sheet_filepath(context["run"])
@@ -312,6 +319,7 @@ def print_character_friendly(context: dict, force: bool = False) -> HttpResponse
 
     Returns:
         HTTP response containing the PDF file
+
     """
     # Get the file path for the friendly character sheet
     file_path = context["character"].get_sheet_friendly_filepath(context["run"])
@@ -349,6 +357,7 @@ def print_faction(context: dict, force: bool = False) -> HttpResponse:
     Side Effects:
         - Sets context["pdf"] = True for template rendering flags
         - Creates/updates faction PDF file in the media directory
+
     """
     # Get the file path for the faction sheet PDF
     file_path = context["faction"].get_sheet_filepath(context["run"])
@@ -373,6 +382,7 @@ def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
 
     Returns:
         HTTP response with the relationships PDF
+
     """
     # Get the filepath for the character relationships PDF
     filepath = context["character"].get_relationships_filepath(context["run"])
@@ -388,8 +398,7 @@ def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
 
 
 def print_gallery(context: dict, force: bool = False) -> object:
-    """
-    Generate and return a PDF gallery of character portraits.
+    """Generate and return a PDF gallery of character portraits.
 
     Creates a PDF containing character portraits for characters with first aid
     capabilities. The PDF is cached and only regenerated when forced or when
@@ -406,6 +415,7 @@ def print_gallery(context: dict, force: bool = False) -> object:
     -------
     object
         PDF response object for download/display
+
     """
     # Get the filepath where the gallery PDF should be stored
     filepath = context["run"].get_gallery_filepath()
@@ -442,6 +452,7 @@ def print_profiles(context: dict, force: bool = False) -> HttpResponse:
 
     Returns:
         Tuple containing PDF response and filename
+
     """
     # Get the filepath for the profiles PDF
     filepath = context["run"].get_profiles_filepath()
@@ -466,6 +477,7 @@ def print_handout(context: dict, force: bool = True) -> Any:
 
     Returns:
         PDF response for the handout
+
     """
     # Get the file path for the handout PDF
     file_path = context["handout"].get_filepath(context["run"])
@@ -498,6 +510,7 @@ def cleanup_handout_pdfs_before_delete(handout):
 
     Args:
         handout: Handout instance being deleted
+
     """
     for event_run in handout.event.runs.all():
         safe_remove(handout.get_filepath(event_run))
@@ -508,6 +521,7 @@ def cleanup_handout_pdfs_after_save(instance):
 
     Args:
         instance: Handout instance that was saved
+
     """
     for run in instance.event.runs.all():
         safe_remove(instance.get_filepath(run))
@@ -518,6 +532,7 @@ def cleanup_handout_template_pdfs_before_delete(handout_template):
 
     Args:
         handout_template: HandoutTemplate instance being deleted
+
     """
     for event_run in handout_template.event.runs.all():
         safe_remove(handout_template.get_filepath(event_run))
@@ -528,6 +543,7 @@ def cleanup_handout_template_pdfs_after_save(instance):
 
     Args:
         instance: HandoutTemplate instance that was saved
+
     """
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
@@ -557,6 +573,7 @@ def delete_character_pdf_files(instance, single=None, runs=None) -> None:
         instance: Character instance whose PDF files should be deleted
         single: Optional specific run to delete files for
         runs: Optional queryset of runs, defaults to all event runs
+
     """
     # Default to all runs if none specified
     if not runs:
@@ -576,6 +593,7 @@ def cleanup_character_pdfs_before_delete(character):
 
     Args:
         character: Character instance being deleted
+
     """
     remove_run_pdf(character.event)
     delete_character_pdf_files(character)
@@ -586,6 +604,7 @@ def cleanup_character_pdfs_on_save(instance):
 
     Args:
         instance: Character instance that was saved
+
     """
     remove_run_pdf(instance.event)
     delete_character_pdf_files(instance)
@@ -596,6 +615,7 @@ def cleanup_relationship_pdfs_before_delete(instance):
 
     Args:
         instance: PlayerRelationship instance being deleted
+
     """
     for relationship_character_run in instance.reg.rcrs.all():
         delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
@@ -606,6 +626,7 @@ def cleanup_relationship_pdfs_after_save(instance):
 
     Args:
         instance: PlayerRelationship instance that was saved
+
     """
     for el in instance.reg.rcrs.all():
         delete_character_pdf_files(el.character, instance.reg.run)
@@ -616,6 +637,7 @@ def cleanup_faction_pdfs_before_delete(instance):
 
     Args:
         instance: Faction instance being deleted
+
     """
     for character in instance.event.character_set.all():
         delete_character_pdf_files(character)
@@ -626,6 +648,7 @@ def cleanup_faction_pdfs_on_save(instance):
 
     Args:
         instance: Faction instance that was saved
+
     """
     runs = instance.event.runs.all()
     for char in instance.characters.all():
@@ -651,6 +674,7 @@ def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created
     Args:
         assignment_trait_instance: AssignmentTrait instance that was saved
         is_newly_created: Boolean indicating if instance was created
+
     """
     if not assignment_trait_instance.member or not is_newly_created:
         return
@@ -675,6 +699,7 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 
     Returns:
         HttpRequest object with association and user attributes set.
+
     """
     request = HttpRequest()
     # Attach association from cache
@@ -726,6 +751,7 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
 
     Returns:
         None
+
     """
     # Create fake request context and get event run data
     request = get_fake_request(association_slug)
@@ -765,6 +791,7 @@ def odt_template(context: dict, char: dict, fp: str, template: str, aux_template
 
     Raises:
         Exception: After maximum retry attempts are exhausted
+
     """
     attempt = 0
     excepts = []
@@ -807,6 +834,7 @@ def exec_odt_template(
 
     Returns:
         None: Function writes PDF file to specified path
+
     """
     # Set up working directory based on character number
     working_dir = os.path.dirname(output_file_path)
@@ -852,8 +880,7 @@ def exec_odt_template(
 
 # translate html markup to odt
 def get_odt_content(context: dict, working_dir: str, aux_template) -> dict:
-    """
-    Extract ODT content from HTML template for PDF generation.
+    """Extract ODT content from HTML template for PDF generation.
 
     Converts an HTML template to ODT format using LibreOffice, then extracts
     and parses the XML content to retrieve text, automatic styles, and document
@@ -872,6 +899,7 @@ def get_odt_content(context: dict, working_dir: str, aux_template) -> dict:
 
     Raises:
         ValueError: If required XML elements are not found in the ODT files
+
     """
     # Render the Django template with provided context
     rendered_html = aux_template.render(context)
@@ -925,14 +953,14 @@ def get_odt_content(context: dict, working_dir: str, aux_template) -> dict:
 
 
 def clean_tag(tag):
-    """
-    Clean XML tag by removing namespace prefix.
+    """Clean XML tag by removing namespace prefix.
 
     Args:
         tag: XML tag string to clean
 
     Returns:
         str: Cleaned tag without namespace prefix
+
     """
     closing_brace_index = tag.find("}")
     if closing_brace_index >= 0:
@@ -941,12 +969,12 @@ def clean_tag(tag):
 
 
 def replace_data(template_path, character_data):
-    """
-    Replace character data placeholders in template file.
+    """Replace character data placeholders in template file.
 
     Args:
         template_path: Path to template file
         character_data: Character data dictionary with replacement values
+
     """
     with open(template_path) as template_file:
         file_content = template_file.read()
@@ -976,6 +1004,7 @@ def update_content(context: Any, working_dir: str, zip_dir: str, char: Any, aux_
 
     Raises:
         ValueError: If required XML elements are not found in document
+
     """
     # Update content.xml with character data
     content_xml_path = os.path.join(zip_dir, "content.xml")
@@ -1061,6 +1090,7 @@ def get_trait_character(run: Run, number: int) -> Character | None:
 
     Returns:
         The Character assigned to the trait, or None if not found.
+
     """
     try:
         # Find the trait by event and number
@@ -1108,6 +1138,7 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     Side Effects:
         - Generates PDF files in the media directory as needed
         - Displays warning messages to user for any failed PDF generations
+
     """
     # Create in-memory zip file buffer for PDF collection
     zip_buffer = io.BytesIO()
@@ -1145,6 +1176,7 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
         - Generates handout PDF files if needed
         - Adds PDFs to zip_file
         - Displays warning messages for failed generations
+
     """
     # Iterate through all handouts in the event
     for handout in context["event"].get_elements(Handout):
@@ -1183,6 +1215,7 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
         - Generates faction PDF files if needed
         - Adds PDFs to zip_file
         - Displays warning messages for failed generations
+
     """
     # Iterate through all factions in the event
     for faction in context["event"].get_elements(Faction):
@@ -1235,6 +1268,7 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
         - Generates character PDF files if needed
         - Adds PDFs to zip_file
         - Displays warning messages for failed generations
+
     """
     # Iterate through all characters in the event
     for character in context["event"].get_elements(Character):
@@ -1272,6 +1306,7 @@ def _bulk_profiles(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
         - Generates profiles PDF file if needed
         - Adds PDF to zip_file
         - Displays warning message if generation fails
+
     """
     # Check if profiles PDF was requested
     if request.POST.get("profiles"):
@@ -1305,6 +1340,7 @@ def _bulk_gallery(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile
         - Generates gallery PDF file if needed
         - Adds PDF to zip_file
         - Displays warning message if generation fails
+
     """
     # Check if gallery PDF was requested
     if request.POST.get("gallery"):

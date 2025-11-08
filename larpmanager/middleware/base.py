@@ -28,12 +28,11 @@ def is_ajax(http_request):
 
     Returns:
         bool: True if request is AJAX, False otherwise
+
     """
     return http_request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
 
 
 def show_toolbar(request):
-    """
-    Default function to determine whether to show the toolbar on a given page.
-    """
+    """Default function to determine whether to show the toolbar on a given page."""
     return getattr(conf_settings, "DEBUG_TOOLBAR", False) and not is_ajax(request)

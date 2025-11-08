@@ -63,6 +63,7 @@ class ExeWarehouseItemForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
+
         """
         # Initialize parent form
         super().__init__(*args, **kwargs)
@@ -189,6 +190,7 @@ class OrgaWarehouseItemAssignmentForm(MyForm):
         Raises:
             ValidationError: If an assignment for the same item and area
                 combination already exists in the database.
+
         """
         # Get cleaned data from parent validation
         cleaned = super().clean()

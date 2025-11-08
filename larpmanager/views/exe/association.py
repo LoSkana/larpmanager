@@ -71,6 +71,7 @@ def exe_roles(request) -> HttpResponse:
 
     Returns:
         Rendered roles management template
+
     """
     # Check user permissions for role management
     context = check_association_context(request, "exe_roles")
@@ -147,6 +148,7 @@ def exe_translations(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks exe_translations permission for the association
+
     """
     # Verify user has permission to manage translations for this association
     context = check_association_context(request, "exe_translations")
@@ -176,6 +178,7 @@ def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
     Raises:
         PermissionDenied: If user lacks exe_translations permission
         Http404: If translation with given ID doesn't exist
+
     """
     return exe_edit(request, ExeAssociationTranslationForm, num, "exe_translations")
 
@@ -212,6 +215,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Feature management form, redirect to manage page, or redirect
                      to single feature's after-link based on activation results
+
     """
     # Check user permissions and get initial context
     context = check_association_context(request, "exe_features")
@@ -250,8 +254,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
 
 
 def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature:
-    """
-    Activate or deactivate an overall feature for an association.
+    """Activate or deactivate an overall feature for an association.
 
     Args:
         request: The HTTP request object containing user and association context
@@ -263,6 +266,7 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
 
     Raises:
         Http404: If the feature is not an overall feature
+
     """
     # Check user permissions and retrieve feature context
     context = check_association_context(request, "exe_features")
@@ -310,6 +314,7 @@ def _exe_feature_after_link(feature: Feature) -> str:
 
     Returns:
         Full URL path for redirection
+
     """
     redirect_url_or_fragment = feature.after_link
 
@@ -368,6 +373,7 @@ def _add_in_iframe_param(url: str) -> str:
         "https://example.com/page?in_iframe=1"
         >>> _add_in_iframe_param("https://example.com/page?foo=bar")
         "https://example.com/page?foo=bar&in_iframe=1"
+
     """
     # Parse the URL into its components
     parsed_url = urlparse(url)
@@ -404,6 +410,7 @@ def feature_description(request: HttpRequest) -> JsonResponse:
     Returns:
         JsonResponse: JSON response with 'res' status and 'txt' content on success,
                      or error response with 'res': 'ko' if feature not found
+
     """
     # Extract feature ID from POST data
     fid = request.POST.get("fid")

@@ -144,6 +144,7 @@ class RegistrationTicket(BaseModel):
 
         Returns:
             Formatted string containing ticket information for display
+
         """
         # Get ticket display information from show method
         ticket_data = self.show(run)

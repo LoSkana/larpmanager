@@ -76,6 +76,7 @@ def get_reg_iscr(registration) -> int:
 
     Note:
         Discounts are not applied to registrations with redeem codes (gifted registrations).
+
     """
     # Initialize total registration fee
     total_registration_fee = 0
@@ -124,6 +125,7 @@ def get_reg_payments(registration, accounting_payments=None):
 
     Side effects:
         Sets registration.payments dictionary with payment breakdown
+
     """
     if accounting_payments is None:
         accounting_payments = AccountingItemPayment.objects.filter(
@@ -150,6 +152,7 @@ def get_reg_transactions(registration):
 
     Returns:
         int: Total transaction fees that are user burden
+
     """
     total_transaction_fees = 0
 
@@ -169,6 +172,7 @@ def get_accounting_refund(registration):
 
     Side effects:
         Sets registration.refunds dictionary with refund amounts by type
+
     """
     registration.refunds = {}
 
@@ -200,6 +204,7 @@ def quota_check(reg, start, alert, association_id):
 
     Side effects:
         Sets reg.quota, reg.deadline, and reg.qsr attributes
+
     """
     if not start:
         return
@@ -267,6 +272,7 @@ def installment_check(reg: "Registration", alert: int, association_id: int) -> N
     Side Effects:
         - Sets reg.quota to the amount due for the next installment
         - Sets reg.deadline to the deadline for the next payment
+
     """
     # Early return if registration has no ticket
     if not reg.ticket:
@@ -339,6 +345,7 @@ def _get_deadline_installment(association_id, installment, registration):
 
     Returns:
         int or None: Days until deadline, None if no deadline configured
+
     """
     if installment.days_deadline:
         deadline = get_payment_deadline(registration, installment.days_deadline, association_id)
@@ -359,6 +366,7 @@ def get_payment_deadline(registration, days_to_add, association_id):
 
     Returns:
         int: Days until payment deadline
+
     """
     days_since_registration = get_time_diff_today(registration.created.date())
     if not hasattr(registration, "membership"):
@@ -376,6 +384,7 @@ def registration_payments_status(registration):
 
     Returns:
         tuple: (is_paid, balance) where is_paid is boolean and balance is amount owed
+
     """
     registration.payment_status = ""
     if registration.tot_iscr > 0:
@@ -398,6 +407,7 @@ def cancel_run(instance):
     Side effects:
         Cancels all non-cancelled registrations and processes refunds
         for non-refunded registrations
+
     """
     for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance):
         cancel_reg(r)
@@ -432,6 +442,7 @@ def cancel_reg(registration):
     Side effects:
         Sets cancellation date, deletes characters, traits, discounts,
         bonus items, and resets event links
+
     """
     registration.cancellation_date = datetime.now()
     registration.save()
@@ -461,6 +472,7 @@ def get_display_choice(choices, key):
 
     Returns:
         str: Display name for the key, empty string if not found
+
     """
     for choice_key, display_name in choices:
         if choice_key == key:
@@ -476,6 +488,7 @@ def round_to_nearest_cent(amount):
 
     Returns:
         float: Rounded number, original if difference exceeds tolerance
+
     """
     rounded_amount = round(amount * 10) / 10
     rounding_tolerance = 0.03
@@ -489,6 +502,7 @@ def process_registration_pre_save(registration):
 
     Args:
         registration: Registration instance being saved
+
     """
     registration.surcharge = get_date_surcharge(registration, registration.run.event)
     registration.member.join(registration.run.event.association)
@@ -503,6 +517,7 @@ def get_date_surcharge(registration, event):
 
     Returns:
         int: Total surcharge amount based on registration date
+
     """
     if registration and registration.ticket:
         ticket_tier = registration.ticket.tier
@@ -541,6 +556,7 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
     Note:
         This function performs database updates and may trigger background
         email notifications for status changes.
+
     """
     # Early return if no member associated with registration
     if not registration.member:
@@ -583,6 +599,7 @@ def process_accounting_discount_post_save(discount_item):
 
     Args:
         discount_item: AccountingItemDiscount instance that was saved
+
     """
     if discount_item.run and not discount_item.expires:
         for reg in Registration.objects.filter(member_id=discount_item.member_id, run_id=discount_item.run_id):
@@ -594,6 +611,7 @@ def log_registration_ticket_saved(ticket):
 
     Args:
         ticket: RegistrationTicket instance that was saved
+
     """
     logger.debug(f"RegistrationTicket saved: {ticket} at {datetime.now()}")
     check_reg_events(ticket.event)
@@ -604,6 +622,7 @@ def process_registration_option_post_save(option):
 
     Args:
         option: RegistrationOption instance that was saved
+
     """
     logger.debug(f"RegistrationOption saved: {option} at {datetime.now()}")
     check_reg_events(option.question.event)
@@ -617,6 +636,7 @@ def check_reg_events(event):
 
     Side effects:
         Queues background task to update accounting for all registrations
+
     """
     registration_ids = []
     for run in event.runs.all():
@@ -627,8 +647,7 @@ def check_reg_events(event):
 
 @background_auto(queue="acc")
 def check_registration_background(registration_ids: Union[int, str, Iterable[int]]) -> None:
-    """
-    Process one or more registration IDs by invoking `check_reg_bkg_go` for each.
+    """Process one or more registration IDs by invoking `check_reg_bkg_go` for each.
 
     Args:
         registration_ids (Union[int, str, Iterable[int]]):
@@ -640,6 +659,7 @@ def check_registration_background(registration_ids: Union[int, str, Iterable[int
         - If an int is provided, calls `check_reg_bkg_go` once.
         - If a string is provided, splits it by commas and processes each ID.
         - If an iterable is provided, iterates through and processes each ID.
+
     """
     if not registration_ids:
         return
@@ -668,6 +688,7 @@ def trigger_registration_accounting(registration_id):
 
     Side effects:
         Triggers registration save to update accounting if registration exists
+
     """
     if not registration_id:
         return
@@ -698,6 +719,7 @@ def update_registration_accounting(reg: Registration) -> None:
         - reg.deadline: Payment deadline
         - reg.alert: Alert flag for upcoming deadlines
         - reg.payment_date: Date when payment was completed (if applicable)
+
     """
     # Skip processing for cancelled or completed runs
     for cancelled_or_done_status in [DevelopStatus.CANC, DevelopStatus.DONE]:
@@ -771,6 +793,7 @@ def update_member_registrations(member):
 
     Side effects:
         Saves all registrations to trigger accounting recalculation
+
     """
     for registration in Registration.objects.filter(member=member):
         registration.save()

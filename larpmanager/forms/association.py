@@ -84,6 +84,7 @@ class ExeAssociationForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -126,6 +127,7 @@ class ExeAssociationTextForm(MyForm):
         Side effects:
             - Modifies typ field choices based on enabled features
             - Adds comprehensive help text to typ field
+
         """
         super().__init__(*args, **kwargs)
         ch = AssociationTextType.choices
@@ -202,6 +204,7 @@ class ExeAssociationTextForm(MyForm):
         Raises:
             ValidationError: If a duplicate default text or language-type combination
                            already exists for this association
+
         """
         cleaned_data = super().clean()
 
@@ -765,6 +768,7 @@ class ExeConfigForm(ConfigForm):
 
         Returns:
             None
+
         """
         if "e-invoice" not in self.params["features"]:
             return
@@ -851,6 +855,7 @@ class FirstAssociationForm(MyForm):
 
         Raises:
             ValidationError: If the slug is already in use by another association.
+
         """
         data: str = self.cleaned_data["slug"]
         logger.debug(f"Validating association slug: {data}")
@@ -887,6 +892,7 @@ class ExeQuickSetupForm(QuickSetupForm):
         Args:
             *args: Variable positional arguments
             **kwargs: Variable keyword arguments
+
         """
         super().__init__(*args, **kwargs)
         self.setup = {}

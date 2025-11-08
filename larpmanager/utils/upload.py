@@ -80,6 +80,7 @@ def go_upload(request, context, upload_form_data):
 
     Returns:
         list: Result messages from processing function
+
     """
     # FIX
     # if request.POST.get("upload") == "cover":
@@ -122,6 +123,7 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
 
     Raises:
         None: All exceptions are caught and handled internally.
+
     """
     # Early return if no file provided
     if not uploaded_file:
@@ -178,6 +180,7 @@ def _get_file(context: dict, file, column_id: str = None) -> tuple[any, list[str
     Note:
         Function validates that all columns in the uploaded CSV are recognized
         based on the context configuration.
+
     """
     # Get available column names from context
     _get_column_names(context)
@@ -220,6 +223,7 @@ def registrations_load(request, context, uploaded_file_form):
 
     Returns:
         str: HTML formatted result message with processing statistics
+
     """
     (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
 
@@ -249,6 +253,7 @@ def _reg_load(request, context: dict, csv_row: dict, registration_questions: lis
 
     Raises:
         ObjectDoesNotExist: When user email or membership is not found
+
     """
     # Validate required email column exists
     if "email" not in csv_row:
@@ -308,6 +313,7 @@ def _reg_field_load(context, registration, field_name, field_value, registration
         field_value: Field value from CSV
         registration_questions: Dictionary of registration questions
         error_logs: List to append error messages to
+
     """
     if field_name == "email":
         return
@@ -342,6 +348,7 @@ def _assign_elem(
         lookup_value: Value to search for (number or name)
         model_type: Model type to query for the element
         error_logs: List to append error messages to
+
     """
     try:
         # Check if value is a digit to determine lookup method
@@ -370,6 +377,7 @@ def _reg_assign_characters(
         registration: Registration object to assign characters to
         character_names_string: Comma-separated string of character names
         error_logs: List to append error messages to
+
     """
     # Clear existing character assignments for this registration
     RegistrationCharacterRel.objects.filter(reg=registration).delete()
@@ -419,6 +427,7 @@ def writing_load(request, context: dict, form) -> list[str]:
     Note:
         For character type, processes main data file and optional relationships file.
         For plot type, processes main data file and optional plot relationships file.
+
     """
     logs = []
 
@@ -495,6 +504,7 @@ def _plot_rels_load(row: dict, chars: dict[str, int], plots: dict[str, int]) -> 
 
     Returns:
         Status message indicating success or failure with details
+
     """
     # Extract and normalize character name from row data
     character_name = row.get("character", "").lower()
@@ -530,6 +540,7 @@ def _relationships_load(row: dict, chars: dict) -> str:
 
     Returns:
         Status message indicating success or error with details
+
     """
     # Get source character name and validate it exists
     source_character_name = row.get("source", "").lower()
@@ -558,6 +569,7 @@ def _get_questions(questions_queryset: QuerySet) -> dict[str, dict[str, Union[in
 
     Returns:
         Dictionary with lowercase question names as keys and question metadata as values.
+
     """
     questions_by_name = {}
     for question in questions_queryset:
@@ -631,6 +643,7 @@ def element_load(request, context: dict, csv_row: dict, element_questions: list)
 
     Returns:
         Status message string indicating success/failure and operation details
+
     """
     # Validate that the required field name exists in the CSV row
     primary_field_name = context["field_name"].lower()
@@ -675,8 +688,7 @@ def element_load(request, context: dict, csv_row: dict, element_questions: list)
 
 
 def _writing_load_field(context: dict, element: BaseModel, field: str, value: any, questions: dict, logs: list) -> None:
-    """
-    Load writing field data during upload processing.
+    """Load writing field data during upload processing.
 
     Processes individual field values from upload data and updates the writing element
     accordingly. Handles special fields like 'typ' and 'quest' with object lookups,
@@ -701,6 +713,7 @@ def _writing_load_field(context: dict, element: BaseModel, field: str, value: an
     -------
     None
         Function modifies element and logs in place
+
     """
     # Skip processing if value is NaN/null
     if pd.isna(value):
@@ -751,6 +764,7 @@ def _writing_question_load(
         processing_logs: List to collect processing logs
         questions_dict: Dictionary of questions
         field_value: Value to assign to the field
+
     """
     if question_type == WritingQuestionType.MIRROR:
         _get_mirror_instance(context, writing_element, field_value, processing_logs)
@@ -796,6 +810,7 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
         element: Character instance to assign to factions
         value: Comma-separated string of faction names
         logs: List to append error messages to
+
     """
     # Process each faction name in the comma-separated list
     for faction_name in value.split(","):
@@ -832,6 +847,7 @@ def form_load(request, context: dict, form, is_registration: bool = True) -> lis
     Note:
         Expects 'first' field to contain questions file and 'second' field
         to contain options file. Files are processed sequentially.
+
     """
     log_messages = []
 
@@ -891,6 +907,7 @@ def _questions_load(context: dict, row_data: dict, is_registration: bool) -> str
 
     Returns:
         Status message indicating success or error details
+
     """
     # Extract and validate the required name field
     question_name = row_data.get("name")
@@ -956,8 +973,7 @@ def _questions_load(context: dict, row_data: dict, is_registration: bool) -> str
 
 
 def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
-    """
-    Generate mappings for question field types and attributes.
+    """Generate mappings for question field types and attributes.
 
     Args:
         is_registration: Whether to include additional registration-specific
@@ -966,6 +982,7 @@ def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
     Returns:
         Dictionary containing inverted mappings for question types, status,
         applicable contexts, and visibility settings.
+
     """
     # Create base mappings by inverting enum dictionaries
     mappings = {
@@ -1004,6 +1021,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
     Returns:
         Status message string indicating success/failure of the operation
         Format: "OK - Created/Updated {name}" or "ERR - {error_description}"
+
     """
     # Validate required fields are present in the CSV row
     for field in ["name", "question"]:
@@ -1068,6 +1086,7 @@ def _get_option(context, is_registration, option_name, parent_question_id):
 
     Returns:
         tuple: (created, instance) where created is bool and instance is the option object
+
     """
     if is_registration:
         option_instance, was_created = RegistrationOption.objects.get_or_create(
@@ -1098,6 +1117,7 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
 
     Returns:
         str: Full path to the created temporary file
+
     """
     # Create base temporary directory path
     tmp_file = os.path.join(conf_settings.MEDIA_ROOT, "tmp")
@@ -1130,6 +1150,7 @@ def cover_load(context, z_obj):
     Side effects:
         Extracts ZIP contents, processes images, updates character cover fields,
         and moves files to proper media directory structure
+
     """
     # extract images
     fpath = os.path.join(conf_settings.MEDIA_ROOT, "cover_load")
@@ -1167,6 +1188,7 @@ def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:
 
     Returns:
         List of log messages from the loading process
+
     """
     # Extract and validate file data from form
     (uploaded_dataframe, log_messages) = _get_file(context, form.cleaned_data["first"], 0)
@@ -1195,6 +1217,7 @@ def _ticket_load(request, context: dict, csv_row: dict) -> str:
 
     Raises:
         ValueError: When numeric conversion fails for max_available or price fields
+
     """
     # Validate required name column exists
     if "name" not in csv_row:
@@ -1255,6 +1278,7 @@ def abilities_load(request, context: dict, form) -> list:
 
     Returns:
         List of processing logs from ability loading operations
+
     """
     # Extract and validate input file data
     (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
@@ -1284,6 +1308,7 @@ def _ability_load(request, context: dict, csv_row: dict) -> str:
     Raises:
         ValueError: When required 'name' column is missing from csv_row
         AttributeError: When accessing invalid model fields
+
     """
     # Validate required name column exists
     if "name" not in csv_row:
@@ -1357,6 +1382,7 @@ def _assign_type(
         ability_element: Ability element to assign type to
         error_logs: List to append error messages to
         ability_type_name: Name of ability type to find
+
     """
     try:
         # Query ability type by name from event context
@@ -1379,6 +1405,7 @@ def _assign_prereq(
         element: Target ability to add prerequisites to
         logs: List to append error messages
         value: Comma-separated prerequisite ability names
+
     """
     # Parse each prerequisite name from the comma-separated string
     for prerequisite_name in value.split(","):
@@ -1406,6 +1433,7 @@ def _assign_requirements(
         writing_element: WritingElement to add requirements to
         error_logs: List to append error messages to
         requirement_names: Comma-separated string of requirement names
+
     """
     # Process each requirement name from comma-separated string
     for requirement_name in requirement_names.split(","):

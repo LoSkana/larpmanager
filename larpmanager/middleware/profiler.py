@@ -53,6 +53,7 @@ class ProfilerMiddleware:
         Note:
             The profiling data is only collected if the request has a
             _profiler_func_name attribute set by the view decorator.
+
         """
         # Record the start timestamp for duration calculation
         request._profiler_start_ts = now()
@@ -103,6 +104,7 @@ class ProfilerMiddleware:
 
         Returns:
             Name of the view class or function
+
         """
         # Check if it's a class-based view with view_class attribute
         if hasattr(view_function, "view_class"):

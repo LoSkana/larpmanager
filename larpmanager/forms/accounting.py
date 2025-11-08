@@ -79,6 +79,7 @@ class OrgaPersonalExpenseForm(MyFormRun):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
+
         """
         # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
@@ -548,6 +549,7 @@ class RefundRequestForm(MyForm):
             member: Member instance to extract credit limit from
             *args: Variable length argument list passed to parent
             **kwargs: Arbitrary keyword arguments passed to parent
+
         """
         # Extract member from kwargs and initialize parent form
         super().__init__(*args, **kwargs)
@@ -591,6 +593,7 @@ class ExePaymentSettingsForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent
             **kwargs: Arbitrary keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
 
@@ -661,6 +664,7 @@ class ExePaymentSettingsForm(MyForm):
         Note:
             Changes are tracked by storing old values with timestamped keys.
             Description and fee fields are not masked for readability.
+
         """
         instance = super().save(commit=commit)
 
@@ -715,6 +719,7 @@ class ExePaymentSettingsForm(MyForm):
         Returns:
             dict[str, list[str]]: Mapping of payment method slugs to field name lists.
                 Each list contains field names in format: {slug}_{field_type}.
+
         """
         payment_method_fields: dict[str, list[str]] = {}
 
@@ -768,6 +773,7 @@ class ExePaymentSettingsForm(MyForm):
         Raises:
             ValidationError: Added to form errors when fee values are invalid
                            (non-numeric or negative).
+
         """
         # Get initial cleaned data from parent class
         cleaned = super().clean()

@@ -159,6 +159,7 @@ def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
     Returns:
         HttpResponse: Redirect to home with success/error message
         HttpResponseForbidden: If user lacks permissions
+
     """
     # Get the ticket
     ticket = get_object_or_404(LarpManagerTicket, pk=ticket_id)

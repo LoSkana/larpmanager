@@ -32,6 +32,7 @@ def association_translation_key(association_id: int, language_code: str) -> str:
 
     Returns:
         A formatted cache key string for storing/retrieving translations
+
     """
     return f"association_translation_{association_id}_{language_code}"
 
@@ -45,6 +46,7 @@ def clear_association_translation_cache(association_id: int, language_code: str)
     Args:
         association_id: The unique identifier of the association
         language_code: ISO language code for the translation to clear
+
     """
     cache.delete(association_translation_key(association_id, language_code))
 
@@ -63,6 +65,7 @@ def update_association_translation(association_id: int, language_code: str) -> d
     Returns:
         Dictionary mapping original text strings to their custom translations.
         Empty dict if no translations exist for this association/language combination.
+
     """
     res: dict[str, str] = {}
 
@@ -87,6 +90,7 @@ def get_association_translation_cache(association_id: int, language_code: str) -
     Returns:
         Dictionary mapping original text strings to their custom translations.
         Returns empty dict if no translations exist for this combination.
+
     """
     key = association_translation_key(association_id, language_code)
     res = cache.get(key)

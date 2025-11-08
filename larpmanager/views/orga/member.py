@@ -52,6 +52,7 @@ def orga_newsletter(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         Rendered newsletter template with recipient list
+
     """
     # Check user permissions for newsletter feature
     context = check_event_context(request, event_slug, "orga_newsletter")
@@ -85,6 +86,7 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
     Note:
         Only includes members with safety information longer than min_length
         and excludes cancelled registrations.
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_safety")
@@ -140,6 +142,7 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
     Note:
         Only shows members with dietary preferences longer than min_length
         characters and excludes cancelled registrations.
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_diet")
@@ -188,6 +191,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template with newsletter management interface
         containing email lists grouped by member language preferences
+
     """
     # Check user permissions for spam management feature
     context = check_event_context(request, event_slug, "orga_spam")
@@ -237,6 +241,7 @@ def orga_persuade(request, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with member persuasion data
+
     """
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_persuade")
@@ -320,6 +325,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
     Raises:
         Member.DoesNotExist: If the specified member ID doesn't exist
         PermissionDenied: If user lacks required event permissions
+
     """
     # Check organizer permissions for this event and get context
     context = check_event_context(request, event_slug, "orga_questions")
@@ -402,6 +408,7 @@ def send_mail_batch(request: HttpRequest, association_id: int | None = None, run
         request: HTTP request containing POST data with email details
         association_id: Optional association ID for context
         run_id: Optional run ID for context
+
     """
     # Extract email parameters from POST data
     player_ids = request.POST["players"]
@@ -432,6 +439,7 @@ def orga_send_mail(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with form or redirect response after successful submission
+
     """
     # Check user permissions and build event context
     context = check_event_context(request, event_slug, "orga_send_mail")
@@ -466,6 +474,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with email archive data and pagination
+
     """
     # Check user permissions for accessing email archive
     context = check_event_context(request, event_slug, "orga_archive_email")
@@ -507,6 +516,7 @@ def orga_read_mail(request: HttpRequest, event_slug: str, nm: str) -> HttpRespon
 
     Returns:
         Rendered template with email content.
+
     """
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_archive_email")
@@ -535,6 +545,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     Note:
         Requires 'orga_sensitive' permission for the specified event.
         Displays only non-cancelled registrations and event staff members.
+
     """
     # Check user permissions for accessing sensitive data
     context = check_event_context(request, event_slug, "orga_sensitive")
@@ -599,6 +610,7 @@ def member_field_correct(member: object, member_fields: list[str]) -> None:
 
     Returns:
         None: Modifies the member object in place
+
     """
     # Format residence address using the member's get_residence method
     if "residence_address" in member_fields:

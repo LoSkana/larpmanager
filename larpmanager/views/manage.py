@@ -60,6 +60,7 @@ def manage(request, event_slug=None):
 
     Returns:
         HttpResponse: Redirect to home or appropriate management view
+
     """
     if request.association["id"] == 0:
         return redirect("home")
@@ -82,6 +83,7 @@ def _get_registration_status_code(run):
             - future: (code, registration_open)
             - primary/filler/waiting: (code, remaining_count)
             - others: (code, None)
+
     """
     features = get_event_features(run.event_id)
 
@@ -133,6 +135,7 @@ def _get_registration_status(run_instance) -> str:
     Note:
         Depends on _get_registration_status_code() to provide the status code and
         any additional values (like datetime for future registrations).
+
     """
     # Get the current status code and any additional data from the run
     status_code, opening_datetime = _get_registration_status_code(run_instance)
@@ -177,6 +180,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     Redirects:
         - To event creation if no events exist and exe_events feature is available
         - To quick setup if not completed
+
     """
     # Initialize context and permissions for the current user and association
     context = get_context(request)
@@ -254,6 +258,7 @@ def _exe_suggestions(context):
 
     Args:
         context: Context dictionary containing association ID and other data
+
     """
     suggestions = {
         "exe_methods": _("Set up the payment methods available to participants"),
@@ -287,6 +292,7 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     Returns:
         None: Modifies context in place by adding action items
+
     """
     # Get association features if not provided
     if not association_features:
@@ -362,14 +368,14 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
 
 def _exe_users_actions(request, context, enabled_features):
-    """
-    Process user management actions and setup tasks for executives.
+    """Process user management actions and setup tasks for executives.
 
     Args:
         request: HTTP request object
         association: Association instance
         context: Context dictionary to populate with actions
         enabled_features: Set of enabled features
+
     """
     if "membership" in enabled_features:
         if not get_association_text(context["association_id"], AssociationTextType.MEMBERSHIP):
@@ -397,13 +403,13 @@ def _exe_users_actions(request, context, enabled_features):
 
 
 def _exe_accounting_actions(request, context, enabled_features):
-    """
-    Process accounting-related setup actions for executives.
+    """Process accounting-related setup actions for executives.
 
     Args:
         request: request instance
         context: Context dictionary to populate with priority actions
         enabled_features: Set of enabled features for the association
+
     """
     if "payment" in enabled_features:
         if not context.get("methods", ""):
@@ -443,8 +449,8 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         Rendered dashboard
-    """
 
+    """
     # Set page context
     context = get_event_context(request, event_slug)
     context["orga_page"] = 1
@@ -526,6 +532,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
     Side effects:
         Modifies context by calling _add_priority() and _add_action() which populate
         action lists for the organizer dashboard
+
     """
     # Load feature flags to determine which checks to perform
     enabled_features = get_event_features(context["event"].id)
@@ -660,6 +667,7 @@ def _orga_user_actions(
         context: Template context dictionary to update with actions.
         features: List of enabled feature names for the organization.
         request: The current HTTP request object.
+
     """
     # Check if help feature is enabled
     if "help" in features:
@@ -730,6 +738,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
 
     Returns:
         None: Function modifies context in place by adding priority suggestions
+
     """
     # Early return if PX feature is not enabled
     if "px" not in enabled_features:
@@ -786,6 +795,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
 
     Returns:
         None: Modifies context in place by adding priority actions
+
     """
     # Check for conflicting installment features
     if "reg_installments" in enabled_features and "reg_quotas" in enabled_features:
@@ -902,6 +912,7 @@ def _orga_suggestions(context):
 
     Args:
         context: Context dictionary to add suggestions to
+
     """
     priorities = {
         "orga_quick": _("Quickly configure your events's most important settings"),
@@ -938,6 +949,7 @@ def _add_item(context, list_name, message_text, permission_key, custom_link):
         message_text: Item message text
         permission_key: Permission key
         custom_link: Optional custom link
+
     """
     if list_name not in context:
         context[list_name] = []
@@ -953,6 +965,7 @@ def _add_priority(context, priority_text, permission_key, custom_link=None):
         priority_text: Priority message text
         permission_key: Permission key for the action
         custom_link: Optional custom link
+
     """
     _add_item(context, "priorities_list", priority_text, permission_key, custom_link)
 
@@ -965,6 +978,7 @@ def _add_action(context, action_text, permission_key, custom_link=None):
         action_text: Action message text
         permission_key: Permission key for the action
         custom_link: Optional custom link
+
     """
     _add_item(context, "actions_list", action_text, permission_key, custom_link)
 
@@ -977,6 +991,7 @@ def _add_suggestion(context, suggestion_text, permission_key, custom_link=None):
         suggestion_text: Suggestion message text
         permission_key: Permission key for the action
         custom_link: Optional custom link
+
     """
     _add_item(context, "suggestions_list", suggestion_text, permission_key, custom_link)
 
@@ -991,6 +1006,7 @@ def _has_permission(request, context, permission):
 
     Returns:
         bool: True if user has permission
+
     """
     if permission.startswith("exe"):
         return has_association_permission(request, context, permission)
@@ -1008,6 +1024,7 @@ def _get_href(context, permission, display_name, custom_link_suffix):
 
     Returns:
         tuple: (title, href) for dashboard link
+
     """
     if custom_link_suffix:
         return _("Configuration"), _get_perm_link(context, permission, "manage") + custom_link_suffix
@@ -1100,8 +1117,7 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
 
 
 def orga_redirect(request, event_slug: str, n: int, p: str = None) -> HttpResponsePermanentRedirect:
-    """
-    Optimized redirect from /slug/number/path to /slug-number/path format.
+    """Optimized redirect from /slug/number/path to /slug-number/path format.
 
     Redirects URLs like /event-slug/2/some/path to /event-slug-2/some/path.
     Uses permanent redirect (301) for better SEO and caching.
@@ -1114,6 +1130,7 @@ def orga_redirect(request, event_slug: str, n: int, p: str = None) -> HttpRespon
 
     Returns:
         HttpResponsePermanentRedirect: 301 redirect to normalized URL format
+
     """
     # Initialize path components list with base slug
     path_parts = [event_slug]
@@ -1141,6 +1158,7 @@ class WhatWouldYouLikeForm(Form):
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments. Must contain 'context' key which
                      is extracted and stored as instance variable.
+
         """
         # Extract context from kwargs and call parent constructor
         self.context = kwargs.pop("context")
@@ -1231,6 +1249,7 @@ class WhatWouldYouLikeForm(Form):
         Args:
             choices: List of choice tuples to extend with function choices.
                     Each tuple contains (value, display_name).
+
         """
         event_priority_choices = []
         regular_choices = []
@@ -1271,6 +1290,7 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
 
     Raises:
         RedirectError: Always raised for navigation (success or error cases)
+
     """
     if request.POST:
         # Process form submission with POST data
@@ -1308,6 +1328,7 @@ def _get_choice_redirect_url(choice, context):
 
     Raises:
         ValueError: If the choice format is invalid or redirect cannot be determined
+
     """
     if not choice or "|" not in choice:
         raise ValueError(_("Invalid choice format"))

@@ -65,6 +65,7 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
 
     Returns:
         None
+
     """
     # Get the highest version number for this element and increment it
     n = TextVersion.objects.filter(tp=tp, eid=el.id).aggregate(Max("version"))["version__max"]
@@ -128,6 +129,7 @@ def _get_field_value(element: Any, question: Any) -> str | None:
 
     Returns:
         The field value as a string, or None if no value found
+
     """
     # Get the mapping of question types to their value extraction functions
     mapping = _get_values_mapping(element)
@@ -160,6 +162,7 @@ def _get_values_mapping(element) -> dict[str, callable]:
 
     Returns:
         Dictionary mapping field names to lambda functions that extract values.
+
     """
     # Basic text and content fields
     mapping = {
@@ -183,6 +186,7 @@ def check_run(element, context, accessor_field=None):
 
     Raises:
         Http404: If element doesn't belong to the expected run or event
+
     """
     if "run" not in context:
         return
@@ -214,6 +218,7 @@ def check_association(element: object, context: dict, attribute_field: str = Non
 
     Raises:
         Http404: If object doesn't belong to the association
+
     """
     # Extract specific field if requested
     if attribute_field:
@@ -251,6 +256,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
         - Logs the operation using save_log function
         - Deletes instance if delete flag is set
         - Updates context with 'saved', 'form', 'num', and optionally 'name' keys
+
     """
     if request.method == "POST":
         # Initialize form with POST data and files, bind to existing instance
@@ -301,6 +307,7 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
 
     Raises:
         NotFoundError: If object with given ID doesn't exist
+
     """
     # Retrieve object by primary key, handle any database exceptions
     try:
@@ -343,6 +350,7 @@ def backend_edit(
 
     Returns:
         bool: True if form was successfully processed and saved, False otherwise
+
     """
     # Extract model type and set up basic context variables
     model_type = form_type.Meta.model
@@ -429,6 +437,7 @@ def orga_edit(
 
     Returns:
         HttpResponse: Redirect response on successful edit, or rendered edit template
+
     """
     # Check user permissions and get base context for the event
     context = check_event_context(request, event_slug, permission)
@@ -467,8 +476,7 @@ def exe_edit(
     additional_field: str = None,
     additional_context: dict = None,
 ) -> HttpResponse:
-    """
-    Handle editing operations for organization-level entities.
+    """Handle editing operations for organization-level entities.
 
     Manages the edit workflow for various entity types at the organization level,
     including permission checking, form processing, and appropriate redirects.
@@ -484,6 +492,7 @@ def exe_edit(
 
     Returns:
         HttpResponse: Redirect response on successful edit, or rendered edit template
+
     """
     # Check user permissions and get base context
     context = check_association_context(request, permission)
@@ -523,6 +532,7 @@ def set_suggestion(context: dict, permission: str) -> None:
         context: Context dictionary containing either 'event' key with event object
                  or 'association_id' key with association ID
         permission: Permission name to create suggestion flag for
+
     """
     # Determine the target object based on context
     if "event" in context:
@@ -559,8 +569,7 @@ def writing_edit(
     element_type: str,
     redirect_url: Optional[str] = None,
 ) -> Optional[HttpResponse]:
-    """
-    Handle editing of writing elements with form processing.
+    """Handle editing of writing elements with form processing.
 
     Manages the creation and editing of writing elements (characters, backgrounds, etc.)
     through a dynamic form system. Handles both GET requests for form display and
@@ -580,6 +589,7 @@ def writing_edit(
 
     Note:
         Function modifies the context dictionary in-place to add form and display data.
+
     """
     # Set up element type metadata for template rendering
     context["elementTyp"] = form_type.Meta.model
@@ -635,6 +645,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
 
     Returns:
         None: Modifies the context dictionary in place
+
     """
     # Check if character finder is disabled for this event
     if get_event_config(context["event"].id, "writing_disable_char_finder", False, context):
@@ -665,8 +676,7 @@ def _writing_save(
     request: HttpRequest,
     tp: Optional[str],
 ) -> HttpResponse:
-    """
-    Save writing form data with AJAX and normal save handling.
+    """Save writing form data with AJAX and normal save handling.
 
     Handles both AJAX auto-save requests and normal form submissions. For normal saves,
     creates version history if type is provided, otherwise logs the operation. Supports
@@ -683,6 +693,7 @@ def _writing_save(
 
     Returns:
         HttpResponse: AJAX JSON response for auto-save or HTTP redirect after normal save
+
     """
     # Handle AJAX auto-save requests
     if "ajax" in request.POST:
@@ -748,6 +759,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
         JsonResponse: JSON response containing either success status or warning message
             - On success: {"res": "ok"}
             - On warning: {"res": "ok", "warn": "warning message"}
+
     """
     # Initialize default success response
     res = {"res": "ok"}
@@ -780,8 +792,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
 
 
 def writing_edit_working_ticket(request, element_type: str, element_id: int, user_token: str) -> str:
-    """
-    Manage working tickets to prevent concurrent editing conflicts.
+    """Manage working tickets to prevent concurrent editing conflicts.
 
     This function implements a locking mechanism to prevent multiple users from
     editing the same content simultaneously, which could result in data loss.
@@ -799,6 +810,7 @@ def writing_edit_working_ticket(request, element_type: str, element_id: int, use
     Note:
         Uses Redis cache with a 15-second timeout window to track active editors.
         Cache timeout is set to minimum of ticket_time and 1 day.
+
     """
     # Superusers bypass all validation checks
     if is_lm_admin(request):
@@ -855,6 +867,7 @@ def working_ticket(request):
 
     Returns:
         JsonResponse: Status response with optional warning if other users are editing
+
     """
     if not request.user.is_authenticated:
         return JsonResponse({"warn": "User not logged"})

@@ -448,6 +448,7 @@ class AssociationTranslation(BaseModel):
 
         Returns:
             A formatted string showing association, language, and truncated original text
+
         """
         return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
 
@@ -495,6 +496,7 @@ def get_association_maintainers(association: Association):
 
     Returns:
         QuerySet of Member instances who are maintainers for this association
+
     """
     return association.maintainers.all()
 
@@ -514,6 +516,7 @@ def get_url(path: str, obj: object = None) -> str:
 
     Returns:
         Complete URL string with proper protocol formatting
+
     """
     if obj:
         # Handle Association objects directly

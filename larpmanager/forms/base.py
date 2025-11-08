@@ -72,6 +72,7 @@ class MyForm(forms.ModelForm):
             Automatically removes 'deleted' and 'temp' fields if present.
             Sets up character widget with event context when available.
             Configures automatic fields as hidden or removes them based on instance state.
+
         """
         # Initialize parent class and extract context parameters
         super().__init__()
@@ -123,6 +124,7 @@ class MyForm(forms.ModelForm):
 
         Returns:
             list: Field names that are automatically set and hidden from user
+
         """
         automatic_fields = ["event", "association"]
         if hasattr(self, "auto_run"):
@@ -141,6 +143,7 @@ class MyForm(forms.ModelForm):
             - For existing instances, deletes the field entirely
             - For new instances, uses HiddenInput widget
             - Orders runs by end date
+
         """
         # Get base runs for the current event
         available_runs = Run.objects.filter(event=self.params["event"])
@@ -218,8 +221,7 @@ class MyForm(forms.ModelForm):
         return self._validate_unique_event("display")
 
     def _validate_unique_event(self, field_name: str) -> any:
-        """
-        Validate field uniqueness within event scope.
+        """Validate field uniqueness within event scope.
 
         This method ensures that a field value is unique within the context of a specific
         event or association, preventing duplicate entries that could cause conflicts.
@@ -238,6 +240,7 @@ class MyForm(forms.ModelForm):
         ------
         ValidationError
             If the value is not unique within the event scope
+
         """
         # Get the field value and event context parameters
         field_value = self.cleaned_data.get(field_name)
@@ -284,6 +287,7 @@ class MyForm(forms.ModelForm):
 
         Returns:
             The saved model instance.
+
         """
         # Call parent save method to get the instance
         instance = super(forms.ModelForm, self).save(commit=commit)
@@ -314,6 +318,7 @@ class MyForm(forms.ModelForm):
         Args:
             s: The field name for the many-to-many relationship
             instance: The model instance to update
+
         """
         # Get the initial set of related object primary keys
         if s in self.initial:
@@ -382,6 +387,7 @@ def max_selections_validator(max_choices: int) -> callable:
         >>> validator = max_selections_validator(3)
         >>> validator(['option1', 'option2'])  # OK
         >>> validator(['option1', 'option2', 'option3', 'option4'])  # Raises ValidationError
+
     """
 
     def validator(selected_values):
@@ -407,6 +413,7 @@ def max_length_validator(maximum_allowed_length: int) -> callable:
 
     Raises:
         ValidationError: When stripped text length exceeds the maximum allowed.
+
     """
 
     def validator(html_value: str) -> None:
@@ -460,6 +467,7 @@ class BaseRegistrationForm(MyFormRun):
 
         Returns:
             None: This method modifies instance attributes in place.
+
         """
         # Load existing answers if instance exists and has been saved
         if instance and instance.pk:
@@ -504,8 +512,7 @@ class BaseRegistrationForm(MyFormRun):
     def get_choice_options(
         self, all_options: dict, question, chosen_options=None, registration_count=None
     ) -> tuple[list[tuple], str]:
-        """
-        Build form choice options for a question with availability and ticket validation.
+        """Build form choice options for a question with availability and ticket validation.
 
         Processes available options for a registration question, applying availability
         constraints and ticket validation rules to generate valid form choices.
@@ -527,6 +534,7 @@ class BaseRegistrationForm(MyFormRun):
             A tuple containing:
             - List of (option_id, display_name) tuples for form choices
             - Combined help text string with question description and option details
+
         """
         choices = []
         help_text = question.description
@@ -567,8 +575,7 @@ class BaseRegistrationForm(MyFormRun):
     def check_option(
         self, previously_chosen_options: list, display_name: str, option, registration_count_by_option: dict, run
     ) -> tuple[str, bool]:
-        """
-        Check option availability and update display name with availability info.
+        """Check option availability and update display name with availability info.
 
         Verifies if an option is available for selection based on current registrations
         and maximum capacity. Updates the display name to show availability count.
@@ -584,6 +591,7 @@ class BaseRegistrationForm(MyFormRun):
             tuple[str, bool]: A tuple containing:
                 - updated_name: Display name with availability info appended
                 - is_valid: Boolean indicating if the option is valid/available
+
         """
         # Check if this option was already chosen by the user
         option_already_chosen = False
@@ -628,6 +636,7 @@ class BaseRegistrationForm(MyFormRun):
         Raises:
             ValidationError: If any selected option is no longer available or
                            validation rules are violated.
+
         """
         form_data = super().clean()
 
@@ -665,8 +674,7 @@ class BaseRegistrationForm(MyFormRun):
         return form_data
 
     def get_option_key_count(self, option: BaseModel) -> str:
-        """
-        Generate counting key for option availability tracking.
+        """Generate counting key for option availability tracking.
 
         This method creates a unique identifier string used to track the usage
         count of a specific option in the system's availability monitoring.
@@ -688,6 +696,7 @@ class BaseRegistrationForm(MyFormRun):
         >>> tracking_key = self.get_option_key_count(option)
         >>> print(tracking_key)
         'option_123'
+
         """
         # Generate unique key using option ID for tracking purposes
         tracking_key = f"option_{option.id}"
@@ -695,8 +704,7 @@ class BaseRegistrationForm(MyFormRun):
         return tracking_key
 
     def init_orga_fields(self, registration_section: str | None = None) -> list[str]:
-        """
-        Initialize form fields for organizer view with registration questions.
+        """Initialize form fields for organizer view with registration questions.
 
         This method processes registration questions for an event and creates
         corresponding form fields that organizers can use to manage registrations.
@@ -708,6 +716,7 @@ class BaseRegistrationForm(MyFormRun):
 
         Returns:
             List of initialized field keys that were successfully created.
+
         """
         # Get the event from the current run context
         event = self.params["run"].event
@@ -761,6 +770,7 @@ class BaseRegistrationForm(MyFormRun):
         Returns:
             Form field key string if field was created, None if question was skipped
             (computed questions or non-editable questions for users)
+
         """
         # Skip computed questions entirely - they don't need form fields
         if question.typ == WritingQuestionType.COMPUTED:
@@ -842,6 +852,7 @@ class BaseRegistrationForm(MyFormRun):
         Note:
             For special question types, the key may be replaced with a new identifier
             generated by the init_special method.
+
         """
         # Handle multiple choice questions (checkboxes, multi-select)
         if question.typ == BaseQuestionType.MULTIPLE:
@@ -888,6 +899,7 @@ class BaseRegistrationForm(MyFormRun):
         Returns:
             The field key if successfully initialized, None if the field
             doesn't exist in the form
+
         """
         # Get the field key, either directly from question type or mapped
         field_key = question.typ
@@ -928,6 +940,7 @@ class BaseRegistrationForm(MyFormRun):
             field_key: The field key/name to use in the form
             question: Question object containing field configuration
             is_required: Whether the field is required
+
         """
         # Set up validators based on question configuration
         length_validators = [max_length_validator(question.max_length)] if question.max_length else []
@@ -955,6 +968,7 @@ class BaseRegistrationForm(MyFormRun):
             field_key: Form field key
             question_config: Question object with configuration
             is_required: Whether field is required
+
         """
         # Configure validators based on question settings
         length_validators = [max_length_validator(question_config.max_length)] if question_config.max_length else []
@@ -1009,6 +1023,7 @@ class BaseRegistrationForm(MyFormRun):
         Side Effects:
             - Creates and adds a single choice field to self.fields
             - Sets initial value in self.initial if a previous selection exists
+
         """
         if is_organizational_context:
             # Get choice options for organizational context
@@ -1061,6 +1076,7 @@ class BaseRegistrationForm(MyFormRun):
             - Creates a MultipleChoiceField in self.fields[field_key]
             - Sets initial values in self.initial[field_key] if previous selections exist
             - Applies max_selections_validator if question has max_length limit
+
         """
         # Process choice options differently for organizational vs regular forms
         if is_organizational_form:
@@ -1104,6 +1120,7 @@ class BaseRegistrationForm(MyFormRun):
         Args:
             instance: Registration instance to save answers for
             orga (bool): Whether to save organizational questions
+
         """
         for q in self.questions:
             if q.skip(instance, self.params["features"], self.params, orga):
@@ -1137,6 +1154,7 @@ class BaseRegistrationForm(MyFormRun):
         Notes:
             - Preserves disabled field values in organizer forms.
             - Only creates new answers when content is provided.
+
         """
         # Check if an answer already exists for this question
         if q.id in self.answers:
@@ -1166,6 +1184,7 @@ class BaseRegistrationForm(MyFormRun):
             instance: The parent instance (registration/application)
             oid: The option ID as string (or None)
             q: The question object
+
         """
         # Skip if no option ID provided
         if not oid:
@@ -1250,6 +1269,7 @@ class MyCssForm(MyForm):
 
         Returns:
             The saved model instance.
+
         """
         # Generate unique CSS identifier
         self.instance.css_code = generate_id(32)
@@ -1273,6 +1293,7 @@ class MyCssForm(MyForm):
 
         Returns:
             None: Saves CSS file to storage, no return value.
+
         """
         # Get file path and base CSS content from form data
         path = self.get_css_path(instance)
@@ -1331,6 +1352,7 @@ class BaseAccForm(forms.Form):
         Args:
             *args: Variable positional arguments passed to parent class.
             **kwargs: Variable keyword arguments including required 'context' key.
+
         """
         self.context = kwargs.pop("context")
         super().__init__(*args, **kwargs)

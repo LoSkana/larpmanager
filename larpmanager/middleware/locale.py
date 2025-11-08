@@ -45,6 +45,7 @@ class LocaleAdvMiddleware:
 
         Returns:
             HttpResponse: Response with activated language
+
         """
         request.LANGUAGE_CODE = self.get_lang(request)
         translation.activate(request.LANGUAGE_CODE)
@@ -70,6 +71,7 @@ class LocaleAdvMiddleware:
         Note:
             This function has the side effect of activating the selected language
             globally and modifying the request's HTTP_ACCEPT_LANGUAGE header.
+
         """
         # Force English in test environment to ensure consistent test results
         if os.getenv("PYTEST_CURRENT_TEST"):

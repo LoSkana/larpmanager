@@ -67,6 +67,7 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
 
     Returns:
         Run ID if found, None otherwise
+
     """
     try:
         # Extract run number from event slug if present (e.g., "event-2" -> "event", 2)
@@ -90,6 +91,7 @@ def on_run_pre_save_invalidate_cache(instance):
 
     Args:
         instance: Run instance being saved
+
     """
     if instance.pk:
         reset_cache_run(instance.event.association_id, instance.get_slug())
@@ -100,6 +102,7 @@ def on_event_pre_save_invalidate_cache(instance):
 
     Args:
         instance: Event instance being saved
+
     """
     if instance.pk:
         for run in instance.runs.all():
@@ -125,6 +128,7 @@ def get_cache_config_run(run: Run) -> dict:
 
     Returns:
         Dictionary containing the run configuration data.
+
     """
     # Generate cache key for this specific run
     cache_key = cache_config_run_key(run)
@@ -141,8 +145,7 @@ def get_cache_config_run(run: Run) -> dict:
 
 
 def init_cache_config_run(run) -> dict:
-    """
-    Initialize and build cache configuration data for a run.
+    """Initialize and build cache configuration data for a run.
 
     This function creates a cache configuration context containing UI elements,
     limitations, and display settings for a specific run. It handles event features,
@@ -160,6 +163,7 @@ def init_cache_config_run(run) -> dict:
             - px_user: User experience points setting
             - show_* keys: Display configuration for character, faction, quest, trait
             - show_addit: Additional display configuration
+
     """
     # Get event features to determine what functionality is available
     event_features = get_event_features(run.event_id)
@@ -206,6 +210,7 @@ def on_run_post_save_reset_config_cache(instance):
 
     Args:
         instance: Run instance that was saved
+
     """
     if instance.pk:
         reset_cache_config_run(instance)
@@ -216,6 +221,7 @@ def on_event_post_save_reset_config_cache(instance):
 
     Args:
         instance: Event instance that was saved
+
     """
     if instance.pk:
         for run in instance.runs.all():

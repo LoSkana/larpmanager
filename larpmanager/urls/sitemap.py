@@ -58,6 +58,7 @@ def _render_sitemap(urls: list[str]) -> StringIO:
 
     Returns:
         StringIO object containing the generated XML sitemap
+
     """
     # Initialize XML stream and generator
     xml_stream = StringIO()
@@ -94,6 +95,7 @@ def _organization_sitemap(association_id) -> list[str]:
     Note:
         Only includes events that are not in START or CANCELLED status
         and have end dates in the future.
+
     """
     # Get organization and check if it's a demo instance
     organization = Association.objects.get(pk=association_id)
@@ -137,6 +139,7 @@ def larpmanager_sitemap() -> list[str]:
 
     Returns:
         List of complete URLs for static pages and blog posts.
+
     """
     urls = []
 

@@ -45,6 +45,7 @@ def send_membership_confirm(request, membership) -> None:
 
     Side Effects:
         Sends confirmation email to member about application status
+
     """
     # Get user profile and set language context
     member_profile = request.user.member
@@ -91,6 +92,7 @@ def send_membership_payment_notification_email(membership_item):
 
     Side effects:
         Sends payment confirmation email to member
+
     """
     if membership_item.hide:
         return
@@ -112,6 +114,7 @@ def handle_badge_assignment_notifications(instance, pk_set):
 
     Side effects:
         Sends badge achievement notification emails to members
+
     """
     for member_id in pk_set:
         member = Member.objects.get(pk=member_id)
@@ -134,6 +137,7 @@ def on_member_badges_m2m_changed(sender, **kwargs):
 
     Side effects:
         Sends badge achievement notification emails to members
+
     """
     action = kwargs.pop("action", None)
     if action != "post_add":
@@ -154,6 +158,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
 
     Side Effects:
         Sends approval email with payment instructions and card number
+
     """
     # Activate member's language for localized messages
     activate(member.language)
@@ -228,6 +233,7 @@ def notify_membership_reject(member, resp):
 
     Side effects:
         Sends rejection notification email
+
     """
     # Manda Mail
     activate(member.language)
@@ -247,6 +253,7 @@ def send_help_question_notification_email(instance):
 
     Side effects:
         Sends notifications to organizers for questions or to users for answers
+
     """
     if instance.pk:
         return
@@ -300,6 +307,7 @@ def get_help_email(help_question):
 
     Returns:
         tuple: (subject, body) for the notification email
+
     """
     subject = hdr(help_question) + _("New question by %(user)s") % {"user": help_question.member}
     email_body = _("A question was asked by: %(user)s") % {"user": help_question.member}
@@ -315,6 +323,7 @@ def send_chat_message_notification_email(instance):
 
     Side effects:
         Sends notification email to message receiver
+
     """
     if instance.pk:
         return
@@ -337,6 +346,7 @@ def get_activation_key(user):
 
     Returns:
         str: Signed activation key for email verification
+
     """
     """
     Generate the activation key which will be emailed to the user.
@@ -353,6 +363,7 @@ def get_email_context(activation_key, request):
 
     Returns:
         dict: Context dictionary for activation email template
+
     """
     """
     Build the template context used for the activation email.
@@ -374,6 +385,7 @@ def send_password_reset_remainder(membership):
 
     Side effects:
         Sends reminder emails to association executives and system admins
+
     """
     association = membership.association
     notify_organization_exe(get_password_reminder_email, association, membership)
@@ -391,6 +403,7 @@ def get_password_reminder_email(membership):
 
     Returns:
         tuple: (subject, body) for the reminder email
+
     """
     association = membership.association
     member = membership.member

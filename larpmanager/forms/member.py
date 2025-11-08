@@ -87,6 +87,7 @@ class MyAuthForm(AuthenticationForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         super().__init__(*args, **kwargs)
 
@@ -124,6 +125,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments. 'request' is extracted and stored
                 if present, remaining kwargs passed to parent.
+
         """
         # Extract request object and initialize parent form
         self.request = kwargs.pop("request", None)
@@ -207,6 +209,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         Returns:
             Created user instance with updated member profile.
+
         """
         # Create user instance from parent form
         user = super(RegistrationFormUniqueEmail, self).save()
@@ -240,6 +243,7 @@ class MyPasswordResetForm(PasswordResetForm):
         Args:
             *args: Variable length argument list
             **kwargs: Arbitrary keyword arguments
+
         """
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
@@ -259,8 +263,7 @@ class MyPasswordResetForm(PasswordResetForm):
         to_email: str,
         html_email_template_name: str | None = None,
     ) -> None:
-        """
-        Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
+        """Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
 
         Args:
             subject_template_name: Template name for email subject
@@ -272,6 +275,7 @@ class MyPasswordResetForm(PasswordResetForm):
 
         Returns:
             None
+
         """
         # Render email subject from template and remove newlines
         subject = loader.render_to_string(subject_template_name, context)
@@ -433,6 +437,7 @@ class ResidenceField(forms.MultiValueField):
 
         Raises:
             forms.ValidationError: If any field validation fails.
+
         """
         # Handle empty/None input by creating default values for all fields
         if not value:
@@ -463,6 +468,7 @@ class BaseProfileForm(MyForm):
         Args:
             *args: Positional arguments passed to parent
             **kwargs: Keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
 
@@ -551,6 +557,7 @@ class ProfileForm(BaseProfileForm):
         Args:
             *args: Variable positional arguments
             **kwargs: Variable keyword arguments including request context
+
         """
         super().__init__(*args, **kwargs)
 
@@ -609,9 +616,7 @@ class ProfileForm(BaseProfileForm):
             )
 
     def clean_birth_date(self):
-        """
-        Optimized birth date validation with cached association data.
-        """
+        """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]
         logger.debug(f"Validating birth date: {data}")
 
@@ -791,6 +796,7 @@ class ExeMembershipFeeForm(forms.Form):
         Args:
             *args: Positional arguments passed to parent form class.
             **kwargs: Keyword arguments including 'context' dict with association context.
+
         """
         # Extract association context and initialize parent form
         self.params = kwargs.pop("context", {})
@@ -883,6 +889,7 @@ class ExeMembershipDocumentForm(forms.Form):
 
         Raises:
             ValidationError: If member already has an active membership.
+
         """
         member = self.cleaned_data["member"]
         membership = Membership.objects.get(member=member, association_id=self.association_id)
@@ -938,6 +945,7 @@ class ExeProfileForm(MyForm):
         Args:
             *args: Positional arguments passed to parent
             **kwargs: Keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
@@ -969,8 +977,7 @@ class ExeProfileForm(MyForm):
 
     @staticmethod
     def get_members_fields() -> list[tuple[str, str, str]]:
-        """
-        Get available member fields for form configuration.
+        """Get available member fields for form configuration.
 
         Retrieves all fields from the Member model, excluding system fields and
         sensitive data fields that should not be configurable in forms.
@@ -978,6 +985,7 @@ class ExeProfileForm(MyForm):
         Returns:
             list[tuple[str, str, str]]: List of tuples containing field information
                 in the format (field_name, verbose_name, help_text)
+
         """
         # Define fields to exclude from configuration options
         # These are system fields or sensitive data that shouldn't be user-configurable
@@ -1024,6 +1032,7 @@ class ExeProfileForm(MyForm):
 
         Returns:
             The saved form instance
+
         """
         instance = super().save(commit=commit)
 

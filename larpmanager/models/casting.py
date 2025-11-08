@@ -79,6 +79,7 @@ class Quest(Writing):
 
         Returns:
             Dictionary with base data, type number, and visible traits
+
         """
         # Get base serialized data from parent class
         js = super().show(run)
@@ -217,6 +218,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     Note:
         @number patterns are validated but not included in the return value.
         Invalid trait references are logged as warnings but don't raise exceptions.
+
     """
     # Extract all #number patterns from text and find corresponding traits
     trait_numbers_to_return = re.findall(r"#([\d]+)", instance.text, re.IGNORECASE)

@@ -94,6 +94,7 @@ class SendMailForm(forms.Form):
 
         Returns:
             None: This method doesn't return a value.
+
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -231,6 +232,7 @@ class CompetencesForm(forms.Form):
         Args:
             *args: Variable positional arguments passed to parent class.
             **kwargs: Variable keyword arguments. Must contain 'list' key with iterable of objects.
+
         """
         self.list = kwargs.pop("list")
         super().__init__(*args, **kwargs)
@@ -267,6 +269,7 @@ def _delete_optionals_warehouse(warehouse_form):
 
     Side effects:
         Deletes form fields for warehouse options not enabled in config
+
     """
     for optional_field_name in WarehouseItem.get_optional_fields():
         if not get_association_config(
@@ -304,6 +307,7 @@ class OrganizerCastingOptionsForm(forms.Form):
         Args:
             *args: Variable length argument list passed to parent form.
             **kwargs: Arbitrary keyword arguments. Expects 'context' with event context.
+
         """
         # Extract context parameters if provided
         if "context" in kwargs:
@@ -357,6 +361,7 @@ class OrganizerCastingOptionsForm(forms.Form):
         Returns:
             dict[str, list]: Form data with field names as keys and values as lists.
                 Keys are field names, values are lists containing field data.
+
         """
         # Return cleaned data if form has been validated
         if hasattr(self, "cleaned_data"):
@@ -424,6 +429,7 @@ class OrgaCopyForm(forms.Form):
         Args:
             *args: Variable length argument list passed to parent form
             **kwargs: Arbitrary keyword arguments passed to parent form
+
         """
         self.params = kwargs.pop("context")
         super().__init__(*args, **kwargs)
@@ -483,6 +489,7 @@ def unique_util_cod() -> str:
 
     Raises:
         ValueError: If unable to generate a unique code after 5 attempts.
+
     """
     # Attempt to generate a unique code up to 5 times
     max_attempts = 5

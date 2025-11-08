@@ -75,6 +75,7 @@ class Command(BaseCommand):
         Args:
             *args: Command arguments
             **options: Command options
+
         """
         try:
             self.go()
@@ -98,6 +99,7 @@ class Command(BaseCommand):
         Note:
             This method should be scheduled to run daily via cron job or
             similar scheduling mechanism.
+
         """
         # Clean up database records and perform initial maintenance
         self.clean_db()
@@ -215,6 +217,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function performs side effects by updating badge cache
+
         """
         # Initialize cache for badges and player data
         cache = {"badges": {}, "players": {}}
@@ -257,6 +260,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Check if member already possesses this badge
         if badge_code in self.get_cache_badges_player(badge_cache, member):
@@ -277,6 +281,7 @@ class Command(BaseCommand):
             event: Event instance to derive badge from
             m: Member instance to award badge to
             cache (dict): Badge cache for performance
+
         """
         self.add_member_badge(event.slug, m, cache)
 
@@ -296,6 +301,7 @@ class Command(BaseCommand):
 
         Note:
             Modifies the cache dictionary by adding member badge data if not present.
+
         """
         # Check if member's badges are already cached
         if member.id not in cache["players"]:
@@ -327,6 +333,7 @@ class Command(BaseCommand):
 
         Note:
             Modifies the cache dictionary by adding newly fetched badges
+
         """
         try:
             # Check if badge code is not already cached
@@ -354,6 +361,7 @@ class Command(BaseCommand):
 
         Returns:
             Updated counter value for the member
+
         """
         # Initialize counter type if not exists
         if counter_name not in activity_cache:
@@ -381,6 +389,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Count total friend referral discounts associated with this registration
         friend_discount_count = AccountingItemDiscount.objects.filter(detail=reg.id, disc__typ=Discount.FRIEND).count()
@@ -414,6 +423,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Count total registrations/plays for this member
         play_count = self.get_count("play", cache, reg.member)
@@ -444,6 +454,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function modifies cache in-place by adding badges
+
         """
         # Retrieve the current help activity count for this member
         count = self.get_count("help", cache, m)
@@ -474,6 +485,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function modifies cache in-place by adding eligible badges
+
         """
         # Retrieve translation count from cache for the member
         count = self.get_count("trad", cache, m)
@@ -507,6 +519,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function modifies cache state and awards badges as side effects
+
         """
         # Get total count of staff registrations for this member
         count = self.get_count("staff", cache, m)
@@ -538,6 +551,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Badges are awarded as side effects through add_member_badge
+
         """
         # Get the total count of events organized by this member
         count = self.get_count("orga", cache, m)
@@ -573,6 +587,7 @@ class Command(BaseCommand):
         Note:
             The function filters out registrations for events that start within 3 days
             or have already started, and only processes events with valid start dates.
+
         """
         # Check if reminders should be sent during holidays
         send_reminders_during_holidays = association.get_config("remind_holidays", True)
@@ -613,6 +628,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Get event features and user membership for this registration
         event_features = get_event_features(reg.run.event_id)
@@ -664,6 +680,7 @@ class Command(BaseCommand):
         Note:
             Only processes registrations for the current year and sends reminders
             only if no membership fee has been paid and no payment is pending.
+
         """
         # Get current year for membership fee validation
         current_year = datetime.today().year
@@ -704,6 +721,7 @@ class Command(BaseCommand):
 
         Returns:
             None: This function performs actions but does not return a value
+
         """
         # Check if alerts are enabled for this registration
         if not reg.alert:
@@ -741,6 +759,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Skip processing if today is a holiday
         if check_holiday():

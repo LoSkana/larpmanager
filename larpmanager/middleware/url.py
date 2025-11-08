@@ -51,6 +51,7 @@ class CorrectUrlMiddleware:
         Note:
             This middleware should be placed early in the middleware stack to
             catch URL issues before they reach view processing.
+
         """
         path = request.get_full_path()
 

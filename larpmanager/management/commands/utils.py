@@ -33,6 +33,7 @@ def check_branch() -> None:
 
     Raises:
         CommandError: If current git branch is 'main' and not in CI environment.
+
     """
     # Skip check if running in CI environment
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":

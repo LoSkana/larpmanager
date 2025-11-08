@@ -33,6 +33,7 @@ def get_guides_cache_key() -> str:
 
     Returns:
         str: The cache key used for storing/retrieving guides data
+
     """
     return "guides_cache"
 
@@ -42,6 +43,7 @@ def get_tutorials_cache_key() -> str:
 
     Returns:
         str: The cache key used for storing/retrieving tutorials data
+
     """
     return "tutorials_cache"
 
@@ -51,6 +53,7 @@ def get_features_cache_key() -> str:
 
     Returns:
         str: The cache key used for storing/retrieving features data
+
     """
     return "features_cache"
 
@@ -60,6 +63,7 @@ def get_guides_cache() -> list[dict]:
 
     Returns:
         List of guide items with: slug, title, content_preview
+
     """
     cache_key = get_guides_cache_key()
     cached_guides = cache.get(cache_key)
@@ -80,6 +84,7 @@ def get_tutorials_cache() -> list[dict]:
 
     Returns:
         List of tutorial items with: slug, title, content_preview, section_slug, section_title
+
     """
     cache_key = get_tutorials_cache_key()
     cached_tutorials = cache.get(cache_key)
@@ -100,6 +105,7 @@ def get_features_cache() -> list[dict]:
 
     Returns:
         List of feature items with: tutorial, name, module_name, descr
+
     """
     cache_key = get_features_cache_key()
     cached_features = cache.get(cache_key)
@@ -200,6 +206,7 @@ def _extract_h2_sections(content: str) -> list[tuple]:
 
     Returns:
         List of (section_title, section_content) tuples
+
     """
     sections = []
 
@@ -226,6 +233,7 @@ def _get_content_preview(html_content: str, maximum_preview_length: int = 200) -
 
     Returns:
         Clean text preview
+
     """
     if not html_content:
         return ""

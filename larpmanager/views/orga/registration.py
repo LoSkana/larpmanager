@@ -96,6 +96,7 @@ def check_time(times, step, start=None):
 
     Returns:
         float: Current time
+
     """
     if step not in times:
         times[step] = []
@@ -110,6 +111,7 @@ def _orga_registrations_traits(registration, context):
     Args:
         registration: Registration instance to process
         context: Context dictionary with traits and quest data
+
     """
     if "questbuilder" not in context["features"]:
         return
@@ -152,6 +154,7 @@ def _orga_registrations_tickets(registration, context: dict) -> None:
 
     Returns:
         None: Modifies context dictionary in-place
+
     """
     # Define default ticket type for participants
     default_ticket_type = ("1", _("Participant"))
@@ -207,6 +210,7 @@ def orga_registrations_membership(registration, context):
     Args:
         registration: Registration instance
         context: Context dictionary with membership data
+
     """
     member = registration.member
     if member.id in context["memberships"]:
@@ -226,6 +230,7 @@ def regs_list_add(context_dict, category_list_key, category_name, member):
         category_list_key: List key to add to
         category_name: Category name
         member: Member instance to add
+
     """
     slugified_key = slugify(category_name)
     if category_list_key not in context_dict:
@@ -243,6 +248,7 @@ def _orga_registrations_standard(registration, context):
     Args:
         registration: Registration instance to process
         context: Context dictionary with event data
+
     """
     # skip if it is gift
     if registration.redeem_code:
@@ -268,6 +274,7 @@ def _orga_registration_character(context, registration):
     Args:
         context: Context dictionary with character data
         registration: Registration instance to update
+
     """
     if registration.member_id not in context["reg_chars"]:
         return
@@ -300,6 +307,7 @@ def orga_registrations_custom(registration, context, character_data):
         registration: Registration instance
         context: Context dictionary with custom field info
         character_data: Character data dictionary
+
     """
     if not hasattr(registration, "custom"):
         registration.custom = {}
@@ -325,6 +333,7 @@ def registrations_popup(request, context):
 
     Returns:
         dict: Response data for popup
+
     """
     registration_id = int(request.POST.get("idx", ""))
     question_id = request.POST.get("tp", "")
@@ -342,11 +351,11 @@ def registrations_popup(request, context):
 
 
 def _orga_registrations_custom_character(context):
-    """
-    Prepare custom character information for registration display.
+    """Prepare custom character information for registration display.
 
     Args:
         context: Context dictionary to populate with custom character info
+
     """
     if "custom_character" not in context["features"]:
         return
@@ -358,12 +367,12 @@ def _orga_registrations_custom_character(context):
 
 
 def _orga_registrations_prepare(context, request):
-    """
-    Prepare registration data including characters, tickets, and questions.
+    """Prepare registration data including characters, tickets, and questions.
 
     Args:
         context: Context dictionary to populate with registration data
         request: HTTP request object
+
     """
     context["reg_chars"] = {}
     for _character_number, character in context["chars"].items():
@@ -390,6 +399,7 @@ def _get_registration_fields(context: dict, member) -> dict:
 
     Returns:
         Dictionary mapping question IDs to RegistrationQuestion objects that the member can access
+
     """
     accessible_registration_questions = {}
 
@@ -436,6 +446,7 @@ def _orga_registrations_text_fields(context):
 
     Args:
         context: Context dictionary containing event and registration data
+
     """
     # add editor type questions
     text_field_ids = []
@@ -475,6 +486,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         - Caches character and registration data
         - Processes membership statuses for batch operations
         - Calculates accounting totals and payment status
+
     """
     # Verify user has permission to view registrations
     context = check_event_context(request, event_slug, "orga_registrations")
@@ -576,6 +588,7 @@ def orga_registration_form_list(request, event_slug):
 
     Returns:
         JsonResponse: Registration form data for organizer interface
+
     """
     context = check_event_context(request, event_slug, "orga_registrations")
 
@@ -636,6 +649,7 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
                      Format: {choice_name: {"emails": [...], "names": [...]}}
                      Returns empty response if question type is not single/multiple choice
                      or if user lacks permission.
+
     """
     # Check user permissions for accessing registration data
     context = check_event_context(request, event_slug, "orga_registrations")
@@ -706,6 +720,7 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, num: int) -> 
     Raises:
         Http404: If the event or registration (when num > 0) is not found
         PermissionDenied: If user lacks required event permissions
+
     """
     # Check user permissions and initialize context with event data
     context = check_event_context(request, event_slug, "orga_registrations")
@@ -774,6 +789,7 @@ def _save_questbuilder(context, form, reg):
         context: Context dictionary containing event and run data
         form: Form containing quest type selections
         reg: Registration object for the member
+
     """
     for qt in QuestType.objects.filter(event=context["event"]):
         qt_id = f"qt_{qt.number}"
@@ -804,6 +820,7 @@ def orga_registrations_customization(request, event_slug, num):
 
     Returns:
         HttpResponse: Rendered edit form or redirect to registrations page
+
     """
     context = check_event_context(request, event_slug, "orga_registrations")
     get_event_cache_all(context)
@@ -869,6 +886,7 @@ def orga_registration_discount_add(request, event_slug, num, dis):
 
     Returns:
         HttpResponseRedirect: Redirect to registration discounts page
+
     """
     context = check_event_context(request, event_slug, "orga_registrations")
     get_registration(context, num)
@@ -919,6 +937,7 @@ def orga_cancellations(request, event_slug):
 
     Returns:
         HttpResponse: Rendered cancellations page with cancelled registration list
+
     """
     context = check_event_context(request, event_slug, "orga_cancellations")
     context["list"] = (
@@ -982,6 +1001,7 @@ def orga_cancellation_refund(request, event_slug: str, num: str) -> HttpResponse
     Note:
         Creates AccountingItemOther entries for both token and credit refunds
         when amounts are greater than zero, then marks registration as refunded.
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_cancellations")
@@ -1044,6 +1064,7 @@ def get_pre_registration(event) -> dict[str, list | dict[int, int]]:
         - 'list': All pre-registrations for the event
         - 'pred': Pre-registrations from members who haven't signed up yet
         - Additional keys with preference counts
+
     """
     # Initialize result dictionary with empty lists
     result_data = {"list": [], "pred": []}
@@ -1100,6 +1121,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Redirect to the manage page for the event run
+
     """
     # Verify user permissions and get event context
     context = check_event_context(request, event_slug)
@@ -1128,6 +1150,7 @@ def lottery_info(request, context: dict) -> None:
     Args:
         request: HTTP request object
         context: Context dictionary to update with lottery info
+
     """
     # Get number of lottery draws from event configuration
     context["num_draws"] = int(get_event_config(context["event"].id, "lottery_num_draws", 0, context))
@@ -1168,6 +1191,7 @@ def orga_lottery(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Raises:
         Http404: When lottery is already filled (no more spots available for upgrade)
+
     """
     # Check user permissions for lottery management
     context = check_event_context(request, event_slug, "orga_lottery")
@@ -1232,6 +1256,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
 
     Raises:
         ObjectDoesNotExist: When member or registration cannot be found
+
     """
     # Check organizer permissions for registration management
     context = check_event_context(request, event_slug, "orga_registrations")

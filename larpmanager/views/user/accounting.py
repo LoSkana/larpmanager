@@ -102,6 +102,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
 
     Note:
         Redirects to home page if user has no associated organization (a_id == 0).
+
     """
     # Initialize base context and check for valid association
     context = get_context(request)
@@ -151,6 +152,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
 
     Note:
         Only shows non-hidden accounting items for the user's current association.
+
     """
     # Initialize context with default user data
     context = get_context(request)
@@ -185,8 +187,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def accounting_credits(request: HttpRequest) -> HttpResponse:
-    """
-    Display user's accounting credits including expenses, credits given/used, and refunds.
+    """Display user's accounting credits including expenses, credits given/used, and refunds.
 
     This view retrieves all accounting-related items for the current user within their
     associated organization, including approved expenses, credit transactions, payment
@@ -199,6 +200,7 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template displaying the user's accounting credits
             summary with expenses, given credits, used credits, and refunds.
+
     """
     # Get base user context with member and association info
     context = get_context(request)
@@ -255,6 +257,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks refund feature access
+
     """
     # Check user has permission to access refund functionality
     context = get_context(request)
@@ -312,6 +315,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
     Raises:
         PermissionDenied: If user lacks payment feature access
         Http404: If event or registration not found
+
     """
     # Get event context and validate user registration status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -364,6 +368,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
     Raises:
         Http404: If registration not found or invalid parameters
+
     """
     # Ensure payment feature is enabled for this association
     context = get_context(request)
@@ -461,6 +466,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
 
     Raises:
         PermissionDenied: If user lacks required association feature access
+
     """
     # Check if user has access to membership feature
     context = get_context(request)
@@ -523,6 +529,7 @@ def acc_donate(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks 'donate' feature access
+
     """
     # Check if user has permission to access donation feature
     context = get_context(request)
@@ -565,6 +572,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
 
     Raises:
         DatabaseError: If the atomic transaction fails during collection creation.
+
     """
     # Initialize context with user defaults and enable accounting display
     context = get_context(request)
@@ -596,8 +604,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def acc_collection_manage(request: HttpRequest, collection_code: str) -> HttpResponse:
-    """
-    Manage accounting collection for the authenticated user.
+    """Manage accounting collection for the authenticated user.
 
     Args:
         request: HTTP request object containing user and association data
@@ -608,6 +615,7 @@ def acc_collection_manage(request: HttpRequest, collection_code: str) -> HttpRes
 
     Raises:
         Http404: If the collection doesn't belong to the requesting user
+
     """
     # Initialize base user context and enable accounting display
     context = get_context(request)
@@ -647,6 +655,7 @@ def acc_collection_participate(request: HttpRequest, collection_code: str) -> Ht
 
     Raises:
         Http404: When the collection is not in OPEN status
+
     """
     # Initialize base context with user data and accounting flag
     context = get_context(request)
@@ -688,6 +697,7 @@ def acc_collection_close(request: HttpRequest, collection_code: str) -> HttpResp
 
     Raises:
         Http404: If collection doesn't belong to user or isn't open
+
     """
     # Get the collection the user participates in
     context = get_context(request)
@@ -728,6 +738,7 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[H
 
     Raises:
         Http404: If the collection is not found or status is not DONE
+
     """
     # Initialize the context with default user context and accounting flag
     context = get_context(request)
@@ -839,6 +850,7 @@ def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> Ht
 
     Returns:
         HttpResponse: Redirect to either profile page or accounting page
+
     """
     # Get current user's membership for this association
     context = get_context(request)
@@ -880,6 +892,7 @@ def acc_payed(request: HttpRequest, p: int = 0) -> HttpResponse:
 
     Raises:
         Http404: If payment invoice with given pk doesn't exist or doesn't belong to user
+
     """
     # Check if a specific payment invoice ID was provided
     context = get_context(request)
@@ -918,6 +931,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
     Raises:
         Http404: If payment submission type is unknown
+
     """
     context = get_context(request)
     # Only allow POST requests for security
@@ -974,8 +988,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
 @login_required
 def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
-    """
-    Confirm accounting payment invoice with authorization checks.
+    """Confirm accounting payment invoice with authorization checks.
 
     Args:
         request: HTTP request object with user authentication
@@ -987,6 +1000,7 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     Raises:
         ObjectDoesNotExist: When invoice with given code is not found
         PermissionDenied: When user lacks authorization to confirm invoice
+
     """
     # Retrieve invoice by confirmation code and association ID
     context = get_context(request)

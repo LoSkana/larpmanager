@@ -267,6 +267,7 @@ def pre_save_callback(sender: type, instance: object, *args: any, **kwargs: any)
     -------
     None
         This function performs side effects on the instance
+
     """
     # Auto-assign sequential numbers for models with number/order fields
     auto_assign_sequential_numbers(instance)
@@ -394,7 +395,6 @@ def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayme
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_payment_accounting_cache(sender, instance: PaymentInvoice, created: bool, **kwargs) -> None:
     """Updates accounting caches and processes payment-related calculations after payment save."""
-
     # Update registration and member accounting cache if payment has associated registration
     if instance.reg and instance.reg.run:
         instance.reg.save()
@@ -560,6 +560,7 @@ def pre_save_character_update_status(sender: type, instance: Character, **kwargs
         sender: Model class sending the signal.
         instance: Character instance being saved.
         **kwargs: Additional signal arguments.
+
     """
     # Send email notification for character status changes
     send_character_status_update_email(instance)
@@ -591,6 +592,7 @@ def post_save_character(sender: type, instance: Character, **kwargs) -> None:
 
     Returns:
         None
+
     """
     # Clean up any outdated PDF files associated with this character
     cleanup_character_pdfs_on_save(instance)
@@ -693,6 +695,7 @@ def post_save_event_update(sender: type, instance: Event, **kwargs) -> None:
 
     Returns:
         None
+
     """
     # Clear event-related caches to ensure fresh data
     clear_event_cache_all_runs(instance)
@@ -811,6 +814,7 @@ def post_save_faction_reset_rels(sender, instance: Faction, **kwargs) -> None:
         sender: The model class that sent the signal
         instance: The faction instance that was saved
         **kwargs: Additional keyword arguments from the signal
+
     """
     # Update faction cache for event relationships
     refresh_event_faction_relationships(instance)
@@ -1095,6 +1099,7 @@ def post_delete_quest_reset_rels(sender, instance, **kwargs) -> None:
         sender: The model class that sent the signal
         instance: The quest instance being deleted
         **kwargs: Additional keyword arguments from the signal
+
     """
     # Update questtype cache if quest had a type
     if instance.typ:
@@ -1122,6 +1127,7 @@ def post_save_questtype_reset_rels(
         sender: The model class that sent the signal.
         instance: The QuestType instance being saved.
         **kwargs: Additional keyword arguments from the signal.
+
     """
     # Update questtype cache
     refresh_event_questtype_relationships(instance)
@@ -1182,6 +1188,7 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 
     Returns:
         None
+
     """
     # Assign character from previous campaign if applicable
     assign_previous_campaign_character(instance)
@@ -1306,6 +1313,7 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
         sender: The model class that sent the signal
         instance: The Run instance that was saved
         **kwargs: Additional keyword arguments from the signal
+
     """
     # Clear registration-related caches for this run
     clear_registration_counts_cache(instance.id)
@@ -1470,6 +1478,7 @@ def paypal_webhook(sender, **kwargs):
 
     Returns:
         Result from invoice_received_money or None
+
     """
     return handle_valid_paypal_ipn(sender)
 
@@ -1481,6 +1490,7 @@ def paypal_ko_webhook(sender, **kwargs):
     Args:
         sender: Invalid IPN object from PayPal
         **kwargs: Additional keyword arguments
+
     """
     handle_invalid_paypal_ipn(sender)
 
@@ -1496,6 +1506,7 @@ def handle_request_exception(sender, request, **kwargs):
         sender: The sender of the signal
         request: The HttpRequest object
         **kwargs: Additional keyword arguments (may contain 'exception')
+
     """
     try:
         create_error_ticket(request)

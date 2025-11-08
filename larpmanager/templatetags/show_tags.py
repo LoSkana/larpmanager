@@ -54,6 +54,7 @@ def modulo(num, val):
 
     Returns:
         int: Remainder of num divided by val
+
     """
     return num % val
 
@@ -67,6 +68,7 @@ def basename(file_path):
 
     Returns:
         str: Basename of the file path (filename without directory)
+
     """
     if not file_path:
         return ""
@@ -82,6 +84,7 @@ def clean_tags(tx):
 
     Returns:
         str: Text with HTML tags removed and br tags replaced with spaces
+
     """
     tx = tx.replace("<br />", " ")
     return strip_tags(tx)
@@ -97,6 +100,7 @@ def get(value, arg):
 
     Returns:
         any: Dictionary value for key, or empty string if not found
+
     """
     if arg is not None and value and arg in value:
         return value[arg]
@@ -112,6 +116,7 @@ def get_tooltip(context, character):
 
     Returns:
         str: HTML string for character tooltip with avatar and details
+
     """
     avatar_url = static("larpmanager/assets/blank-avatar.svg")
     if "player_id" in character and character["player_id"] > 0 and character["player_prof"]:
@@ -137,6 +142,7 @@ def tooltip_fields(character, tooltip):
 
     Returns:
         str: Updated tooltip HTML with character fields
+
     """
     tooltip += f"<span><b class='name'>{character['name']}</b>"
 
@@ -164,6 +170,7 @@ def tooltip_factions(character, context, tooltip):
 
     Returns:
         str: Updated tooltip HTML with faction information
+
     """
     faction_names = ""
     for faction_number in context["factions"]:
@@ -192,6 +199,7 @@ def replace_chars(context, text, limit=200):
 
     Returns:
         str: Text with character references replaced by names
+
     """
     text = html_clean(text)
     for character_number in range(context["max_ch_number"], 0, -1):
@@ -239,6 +247,7 @@ def go_character(
     Example:
         >>> go_character(context, '#1', 1, 'See character #1', run_obj, True, False)
         'See character <a class="link_show_char" href="/run/char/1">John Doe</a>'
+
     """
     # Early return if search pattern not in text
     if search_pattern not in text:
@@ -299,6 +308,7 @@ def _remove_unimportant_prefix(text: str) -> str:
         "Hello world"
         >>> _remove_unimportant_prefix("Regular text")
         "Regular text"
+
     """
     # Return early if text is None or empty
     if not text:
@@ -350,6 +360,7 @@ def show_char(context: dict, element: Union[dict, str, None], run: Run, tooltip:
     Returns:
         Safe HTML string with character references converted to links and unimportant
         tags removed
+
     """
     # Extract text content from various input types
     if isinstance(element, dict) and "text" in element:
@@ -400,6 +411,7 @@ def go_trait(
     Returns:
         Modified text string with trait reference replaced by character link or name,
         or original text if pattern not found or character data unavailable
+
     """
     # Early return if search pattern not found in text
     if search not in text:
@@ -463,6 +475,7 @@ def show_trait(context, text, run, tooltip):
 
     Returns:
         str: Safe HTML with trait references converted to character links
+
     """
     if "max_trait" not in context:
         context["max_trait"] = Trait.objects.filter(event_id=run.event_id).aggregate(Max("number"))["number__max"]
@@ -490,6 +503,7 @@ def key(d, key_name, s_key_name=None):
 
     Returns:
         any: Dictionary value or empty string if not found
+
     """
     if not key_name:
         return ""
@@ -514,6 +528,7 @@ def get_field(form, field_name):
 
     Returns:
         Field: Form field or empty string if not found
+
     """
     if field_name in form:
         return form[field_name]
@@ -533,6 +548,7 @@ def get_field_show_char(context, form, name, run, tooltip):
 
     Returns:
         str: Processed field value with character links
+
     """
     if name in form:
         v = form[name]
@@ -551,6 +567,7 @@ def get_deep_field(form, key1, key2):
 
     Returns:
         any: Nested value or empty string if not found
+
     """
     if key1 in form:
         if key2 in form[key1]:
@@ -568,6 +585,7 @@ def get_form_field(form, name):
 
     Returns:
         Field: Form field or empty string if not found
+
     """
     if name in form.fields:
         return form[name]
@@ -584,6 +602,7 @@ def lookup(obj, prop):
 
     Returns:
         any: Property value or empty string if not found
+
     """
     if hasattr(obj, prop):
         value = getattr(obj, prop)
@@ -602,6 +621,7 @@ def get_registration_option(reg, number):
 
     Returns:
         str: Option form text or empty string
+
     """
     v = getattr(reg, f"option_{number}")
     if v:
@@ -619,6 +639,7 @@ def gt(value, arg):
 
     Returns:
         bool: True if value > arg
+
     """
     return value > int(arg)
 
@@ -633,6 +654,7 @@ def lt(value, arg):
 
     Returns:
         bool: True if value < arg
+
     """
     return value < int(arg)
 
@@ -647,6 +669,7 @@ def gte(value, arg):
 
     Returns:
         bool: True if value >= arg
+
     """
     return value >= int(arg)
 
@@ -661,6 +684,7 @@ def lte(value, arg):
 
     Returns:
         bool: True if value <= arg
+
     """
     return value <= int(arg)
 
@@ -675,6 +699,7 @@ def length_gt(value, arg):
 
     Returns:
         bool: True if len(value) > arg
+
     """
     return len(value) > int(arg)
 
@@ -689,6 +714,7 @@ def length_lt(value, arg):
 
     Returns:
         bool: True if len(value) < arg
+
     """
     return len(value) < int(arg)
 
@@ -703,6 +729,7 @@ def length_gte(value, arg):
 
     Returns:
         bool: True if len(value) >= arg
+
     """
     return len(value) >= int(arg)
 
@@ -717,6 +744,7 @@ def length_lte(value, arg):
 
     Returns:
         bool: True if len(value) <= arg
+
     """
     return len(value) <= int(arg)
 
@@ -730,6 +758,7 @@ def hex_to_rgb(hex_color):
 
     Returns:
         str: Comma-separated RGB values (e.g., '255,0,0')
+
     """
     hex_without_hash = hex_color.lstrip("#")
     rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
@@ -745,6 +774,7 @@ def define(val=None):
 
     Returns:
         any: The input value unchanged
+
     """
     return val
 
@@ -758,6 +788,7 @@ def template_trans(text):
 
     Returns:
         str: Translated text or original text if translation fails
+
     """
     try:
         return _(text)
@@ -776,6 +807,7 @@ def get_char_profile(context, char):
 
     Returns:
         str: URL to character profile image or default avatar
+
     """
     if "player_prof" in char and char["player_prof"]:
         return char["player_prof"]
@@ -806,6 +838,7 @@ def get_login_url(context: dict, provider: str, **params) -> str:
     Example:
         >>> get_login_url(context, 'google', scope='email', process='redirect')
         '/accounts/google/login/?scope=email&process=redirect&next=%2Fdashboard%2F'
+
     """
     request = context.get("request")
     query = dict(params)
@@ -848,6 +881,7 @@ def replace_underscore(value):
 
     Returns:
         str: String with underscores replaced by spaces
+
     """
     return value.replace("_", " ")
 
@@ -862,6 +896,7 @@ def remove(value, args):
 
     Returns:
         str: String with specified text removed (case-insensitive)
+
     """
     args = args.replace("_", " ")
     txt = re.sub(re.escape(args), "", value, flags=re.IGNORECASE)
@@ -878,6 +913,7 @@ def get_character_field(value, options):
 
     Returns:
         str: Formatted field value or comma-separated option names
+
     """
     if isinstance(value, str):
         return value
@@ -899,6 +935,7 @@ def format_decimal(decimal_value):
 
     Returns:
         str: Formatted decimal string, empty for zero, integer format when possible
+
     """
     try:
         rounded_value = round_to_nearest_cent(float(decimal_value))
@@ -920,6 +957,7 @@ def get_attributes(obj):
 
     Returns:
         dict: Dictionary of non-private attributes
+
     """
     return {k: v for k, v in vars(obj).items() if not k.startswith("_")}
 
@@ -934,6 +972,7 @@ def not_in(value, arg):
 
     Returns:
         bool: True if value not in the list
+
     """
     return value not in arg.split(",")
 
@@ -947,6 +986,7 @@ def abs_value(value):
 
     Returns:
         Absolute value or original value if conversion fails
+
     """
     try:
         return abs(value)
@@ -964,5 +1004,6 @@ def concat(val1, val2):
 
     Returns:
         str: Concatenated string
+
     """
     return f"{val1}{val2}"

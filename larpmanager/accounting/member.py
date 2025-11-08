@@ -66,6 +66,7 @@ def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
         - refunds: Active refund requests
         - registration_years: Registration data grouped by year
         - Various balance and membership information
+
     """
     member = context["member"]
     # Initialize user membership data for the given association
@@ -126,6 +127,7 @@ def _init_regs(registration_choices, context, pending_invoices, registration):
     Side effects:
         Updates context with payments_pending and payments_todo lists
         Sets registration.opts and registration.pending attributes
+
     """
     if registration.id not in registration_choices:
         registration_choices[registration.id] = {}
@@ -152,6 +154,7 @@ def _init_pending(member):
 
     Returns:
         dict: Mapping of registration IDs to lists of pending payment invoices
+
     """
     pending_payments_by_registration = {}
     pending_payment_invoices = PaymentInvoice.objects.filter(
@@ -174,6 +177,7 @@ def _init_choices(member):
 
     Returns:
         dict: Nested mapping of registration and question IDs to selected options
+
     """
     choices = {}
     choice_queryset = RegistrationChoice.objects.filter(reg__member_id=member.id)
@@ -201,6 +205,7 @@ def _info_token_credit(context, member):
 
     Side effects:
         Updates context with acc_tokens and acc_credits counts
+
     """
     # check if it had any token
     token_queryset = AccountingItemOther.objects.filter(
@@ -232,6 +237,7 @@ def _info_collections(context, member, request):
 
     Side effects:
         Updates context with collections and collection_gifts if feature enabled
+
     """
     if "collection" not in context["features"]:
         return
@@ -252,6 +258,7 @@ def _info_donations(context, member, request):
 
     Side effects:
         Updates context with donations list if feature enabled
+
     """
     if "donate" not in context["features"]:
         return
@@ -283,6 +290,7 @@ def _info_membership(context: dict, member, request) -> None:
         - year_membership_pending: Boolean indicating pending membership payments
         - year: Current year
         - grazing: Boolean indicating if within grace period
+
     """
     # Early return if membership feature is not enabled
     if "membership" not in context["features"]:

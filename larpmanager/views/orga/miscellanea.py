@@ -95,6 +95,7 @@ def orga_albums_upload(request: HttpRequest, event_slug: str, a: str) -> HttpRes
 
     Raises:
         PermissionDenied: If user lacks orga_albums permission for the event
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_albums")
@@ -152,6 +153,7 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template showing workshop completion status
             with context containing workshop data and member completion info
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_workshops")
@@ -195,6 +197,7 @@ def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse
 
     Returns:
         Rendered workshop modules page
+
     """
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_workshop_modules")
@@ -243,6 +246,7 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
 
     Returns:
         Rendered template response or POST redirect
+
     """
     # Check user permissions for workshop options management
     context = check_event_context(request, event_slug, "orga_workshop_options")
@@ -320,6 +324,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     Raises:
         PermissionDenied: If user lacks required warehouse area permissions
         Http404: If warehouse area with specified ID does not exist
+
     """
     # Check user permissions and get base context with event and area data
     context = check_event_context(request, event_slug, "orga_warehouse_area")
@@ -377,8 +382,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
 
 @login_required
 def orga_warehouse_checks(request, event_slug: str) -> HttpResponse:
-    """
-    Display warehouse item assignments for organization event management.
+    """Display warehouse item assignments for organization event management.
 
     Args:
         request: The HTTP request object containing user session and data
@@ -386,6 +390,7 @@ def orga_warehouse_checks(request, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with warehouse items and their assignments
+
     """
     # Check user permissions for warehouse management in this event
     context = check_event_context(request, event_slug, "orga_warehouse_checks")
@@ -436,6 +441,7 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
     Raises:
         PermissionDenied: If user lacks orga_warehouse_manifest permission
+
     """
     # Check user permissions and get base context for the event
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
@@ -493,6 +499,7 @@ def orga_warehouse_assignment_manifest(request: HttpRequest, event_slug: str) ->
 
     Raises:
         ObjectDoesNotExist: When assignment with given idx doesn't exist
+
     """
     # Check user permissions for warehouse manifest access
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
@@ -538,6 +545,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
 
     Raises:
         ValidationError: If required permissions are not met or area doesn't exist
+
     """
     # Check event permissions and retrieve the warehouse area
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
@@ -589,6 +597,7 @@ def orga_onetimes_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         Rendered template with token list
+
     """
     # Check user has permission to view one-time tokens for this event
     context = check_event_context(request, event_slug, "orga_onetimes")
@@ -633,6 +642,7 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
 
     Raises:
         PermissionDenied: If user lacks orga_warehouse_manifest permission
+
     """
     # Check user permissions for warehouse manifest access
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
@@ -718,6 +728,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
         - Deletes WarehouseItem records with final quantity <= 0
         - Sets event config 'warehouse_committed' to True
         - Creates Log entry with category 'warehouse'
+
     """
     # Check user permissions for warehouse manifest access
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")

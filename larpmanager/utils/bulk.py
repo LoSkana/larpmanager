@@ -40,8 +40,7 @@ from larpmanager.utils.exceptions import ReturnNowError
 
 
 def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
-    """
-    Extract and validate bulk operation parameters from request.
+    """Extract and validate bulk operation parameters from request.
 
     Extracts operation ID, target ID, and a list of entity IDs from the request,
     validates the data types, and logs the bulk operation attempt.
@@ -65,6 +64,7 @@ def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
     ------
     ReturnNowError
         If no valid IDs are provided in the request
+
     """
     # Extract and validate operation parameter, default to 0 for invalid values
     try:
@@ -141,6 +141,7 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
 
     Raises:
         ObjectDoesNotExist: When target objects for the operation are not found
+
     """
     # Extract bulk operation parameters from request
     object_ids, operation_name, operation_target = _get_bulk_params(request, context)
@@ -212,6 +213,7 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
 
     Raises:
         ReturnNowError: If POST request processed successfully with operation results
+
     """
     if request.POST:
         # Define mapping of operation types to their execution functions
@@ -343,6 +345,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
 
     Raises:
         ReturnNowError: When POST request is processed, containing execution results.
+
     """
     # Handle POST request by executing the requested bulk operation
     if request.POST:
@@ -447,6 +450,7 @@ def handle_bulk_quest(request, context) -> None:
     Args:
         request: HTTP request object
         context: Context dictionary containing event and other data
+
     """
     # Handle POST request - execute bulk operations
     if request.POST:
@@ -508,6 +512,7 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     Args:
         request: HTTP request object
         context: Context dictionary containing event data
+
     """
     if request.POST:
         # Execute bulk operation and return early if POST request

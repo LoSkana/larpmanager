@@ -62,6 +62,7 @@ def registration_available(run: Run, features: dict, context: dict | None = None
 
     Returns:
         None: Function modifies run.status in-place
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -126,6 +127,7 @@ def _available_waiting(registration: Registration, registration_counts: dict) ->
 
     Side Effects:
         Modifies registration.status dictionary with waiting availability information
+
     """
     # Handle infinite waiting list capacity
     if registration.event.max_waiting == 0:
@@ -163,6 +165,7 @@ def _available_filler(registration, registration_counts) -> bool:
 
     Side Effects:
         Modifies registration.status dictionary with filler availability information
+
     """
     # Handle infinite filler tickets case
     if registration.event.max_filler == 0:
@@ -198,6 +201,7 @@ def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
 
     Returns:
         Matching registration or None if not found
+
     """
     # Iterate through registrations to find matching run
     for m in my_regs:
@@ -214,8 +218,7 @@ def registration_status_signed(
     register_url: str,
     context: dict | None = None,
 ) -> None:
-    """
-    Updates the registration status for a signed user based on membership and payment features.
+    """Updates the registration status for a signed user based on membership and payment features.
 
     Args:
         run: The run object containing event and status information
@@ -232,6 +235,7 @@ def registration_status_signed(
 
     Raises:
         RewokedMembershipError: When membership status is revoked
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -316,6 +320,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
 
     Returns:
         True if payment status was processed and status text updated, False otherwise
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -413,6 +418,7 @@ def registration_status(
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -489,6 +495,7 @@ def _status_preregister(run: Run, member: Member, context: dict | None = None) -
         run: Event run object to update status for
         member: Member object to check pre-registration status
         context: Optional context dictionary containing cached pre-registration data
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -530,6 +537,7 @@ def _get_features_map(run: Run, context: dict):
 
     Returns:
         dict: Features dictionary for the run's event
+
     """
     if context is None:
         context = {}
@@ -557,6 +565,7 @@ def registration_find(run: Run, member: Member, context: dict | None = None):
 
     Returns:
         None: Function modifies run.reg attribute in-place
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -593,6 +602,7 @@ def check_character_maximum(event, member) -> tuple[bool, int]:
 
     Returns:
         Tuple of (has_reached_limit, max_allowed_characters)
+
     """
     # Get all characters for this member in the event
     characters = event.get_elements(Character).filter(player=member)
@@ -626,6 +636,7 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
 
     Returns:
         None: Function modifies run.status["details"] in place
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -684,6 +695,7 @@ def _status_approval(is_character_assigned: bool, features: dict, run: Any) -> N
 
     Returns:
         None: Modifies run.status["details"] in place
+
     """
     # Check if user_character feature is enabled
     if "user_character" not in features:
@@ -731,6 +743,7 @@ def get_registration_options(instance) -> list[tuple[str, str]]:
     Note:
         Questions are filtered based on event features and individual skip conditions.
         Choice questions are formatted as comma-separated option names.
+
     """
     formatted_results = []
     applicable_questions = []
@@ -802,6 +815,7 @@ def check_signup(request: HttpRequest, context: dict) -> None:
     Raises:
         SignupError: If no valid signup found
         WaitingError: If signup ticket is in waiting tier
+
     """
     # Get player registration for current run
     registration = get_player_signup(request, context)
@@ -825,6 +839,7 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
 
     Returns:
         None: Function performs side effects only
+
     """
     # Get the player's registration for this event
     registration = get_player_signup(request, context)
@@ -865,6 +880,7 @@ def get_reduced_available_count(run) -> int:
 
     Returns:
         Number of reduced tickets still available
+
     """
     # Get the ratio for reduced tickets per patron registrations
     reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio", 10))
@@ -902,6 +918,7 @@ def process_registration_event_change(registration: Registration) -> None:
         This function performs case-insensitive name matching to find equivalent
         elements in the target event. If no matching elements are found, the
         corresponding fields are set to None.
+
     """
     # Early return if this is a new registration (no existing data to migrate)
     if not registration.pk:
@@ -970,6 +987,7 @@ def check_character_ticket_options(registration: Registration, character: Charac
     Args:
         registration: Registration object containing ticket information
         character: Character object to check writing choices for
+
     """
     # Get the ticket ID from the registration
     registration_ticket_id = registration.ticket.id
@@ -1003,6 +1021,7 @@ def process_character_ticket_options(instance: Registration) -> None:
 
     Returns:
         None
+
     """
     # Early return if no member is associated with the instance
     if not instance.member:

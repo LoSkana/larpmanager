@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Script to analyze uncommitted git changes and filter out pydoc/comment-only changes.
+"""Script to analyze uncommitted git changes and filter out pydoc/comment-only changes.
 Prints only substantial code changes.
 """
 
@@ -82,8 +81,7 @@ def is_docstring_or_comment_line(line: str) -> bool:
 
 
 def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
-    """
-    Analyze changes in a file and determine if they're substantial.
+    """Analyze changes in a file and determine if they're substantial.
     Returns (has_substantial_changes, substantial_lines).
     """
     lines = file_diff.split('\n')

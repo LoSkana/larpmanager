@@ -59,6 +59,7 @@ class WritingForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -126,6 +127,7 @@ class PlayerRelationshipForm(MyForm):
 
         Raises:
             ValidationError: When validation rules are violated
+
         """
         cleaned_data = super().clean()
 
@@ -153,6 +155,7 @@ class PlayerRelationshipForm(MyForm):
 
         Returns:
             The saved instance.
+
         """
         instance = super().save(commit=False)
 
@@ -185,6 +188,7 @@ class UploadElementsForm(forms.Form):
             *args: Positional arguments passed to parent class.
             only_one: If True, removes 'second' field if present.
             **kwargs: Keyword arguments passed to parent class.
+
         """
         only_one = kwargs.pop("only_one", False)
         super().__init__(*args, **kwargs)
@@ -208,6 +212,7 @@ class BaseWritingForm(BaseRegistrationForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -243,6 +248,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
         Returns:
             The saved instance
+
         """
         # Save parent form and persist instance
         instance = super().save()
@@ -336,14 +342,14 @@ class PlotForm(WritingForm, BaseWritingForm):
         PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
     def save(self, commit: bool = True) -> PlotCharacterRel:
-        """
-        Save the form instance and update plot-character relationships.
+        """Save the form instance and update plot-character relationships.
 
         Args:
             commit: Whether to save the instance to the database.
 
         Returns:
             The saved instance with updated plot-character relationships.
+
         """
         instance = super().save()
 

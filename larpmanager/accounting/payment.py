@@ -81,6 +81,7 @@ def get_payment_fee(association_id, slug):
 
     Returns:
         float: Payment fee amount, 0.0 if not configured
+
     """
     payment_details = fetch_payment_details(association_id)
     fee_key = slug + "_fee"
@@ -101,6 +102,7 @@ def unique_invoice_cod(length=16):
 
     Raises:
         Exception: If unable to generate unique code after 5 attempts
+
     """
     max_attempts = 5
     for _attempt_number in range(max_attempts):
@@ -127,6 +129,7 @@ def set_data_invoice(
 
     Returns:
         None: Function modifies the invoice object in place
+
     """
     # Get the real display name of the current user
     member_real_display_name = context["member"].display_real()
@@ -183,6 +186,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
 
     Returns:
         None: Function modifies the invoice object in place
+
     """
     # Set invoice registration references
     invoice.idx = context["reg"].id
@@ -252,6 +256,7 @@ def round_up_to_two_decimals(value_to_round):
 
     Returns:
         float: Number rounded up to 2 decimal places
+
     """
     return math.ceil(value_to_round * 100) / 100
 
@@ -265,6 +270,7 @@ def update_invoice_gross_fee(request, invoice, amount, association_id, payment_m
         amount (Decimal): Base amount before fees
         association_id: Association instance ID
         payment_method (str): Payment method slug
+
     """
     # add fee for paymentmethod
     amount = float(amount)
@@ -306,6 +312,7 @@ def get_payment_form(
         - Updates context with invoice, payment forms, and method details
         - May create new PaymentInvoice object in database
         - Modifies invoice gross fee calculations
+
     """
     association_id: int = context["association_id"]
 
@@ -387,6 +394,7 @@ def payment_received(invoice):
 
     Side effects:
         Creates accounting records, processes collections/donations
+
     """
     association_features = get_association_features(invoice.association_id)
     payment_fee = get_payment_fee(invoice.association_id, invoice.method.slug)
@@ -454,6 +462,7 @@ def _process_payment(invoice):
 
     Args:
         invoice: Invoice object to process payment for
+
     """
     if not AccountingItemPayment.objects.filter(inv=invoice).exists():
         registration = Registration.objects.get(pk=invoice.idx)
@@ -486,6 +495,7 @@ def _process_fee(features, fee_percentage: float, invoice) -> None:
         features: Feature configuration object
         fee_percentage: Fee percentage to apply to the invoice gross amount
         invoice: Invoice object containing payment details
+
     """
     # Create new accounting transaction for the processing fee
     accounting_transaction = AccountingItemTransaction()
@@ -514,6 +524,7 @@ def process_payment_invoice_status_change(invoice):
 
     Args:
         invoice: PaymentInvoice instance being saved
+
     """
     if not invoice.pk:
         return
@@ -540,6 +551,7 @@ def process_refund_request_status_change(refund_request):
 
     Side effects:
         Creates accounting item when refund status changes to PAYED
+
     """
     if not refund_request.pk:
         return
@@ -585,6 +597,7 @@ def process_collection_status_change(collection: Collection) -> None:
     Note:
         Function returns early if collection has no primary key or if the
         previous status was already PAYED to prevent duplicate credits.
+
     """
     # Early return if collection hasn't been saved to database yet
     if not collection.pk:

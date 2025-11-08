@@ -63,6 +63,7 @@ def casting_characters(context: dict, reg: Registration) -> None:
         - Filters out filler characters for non-filler ticket tiers
         - Converts faction and character data to JSON for frontend use
         - Adds faction filter for transversal faction types
+
     """
     # Determine if we should filter out filler characters based on ticket tier
     filter_filler = hasattr(reg, "ticket") and reg.ticket and reg.ticket.tier != TicketTier.FILLER
@@ -108,6 +109,7 @@ def casting_quest_traits(context: dict, typ: str) -> None:
 
     Returns:
         None: Function modifies context dictionary in-place
+
     """
     trait_choices = {}
     faction_names = []
@@ -155,6 +157,7 @@ def casting_details(context: dict, casting_type: int) -> dict:
     Note:
         For casting_type > 0: Configures quest-related labels and data
         For casting_type = 0: Configures character-related labels
+
     """
     # Load event cache data into context
     get_event_cache_all(context)
@@ -204,6 +207,7 @@ def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse
     Raises:
         Http404: If event or run is not found via get_event_context
         PermissionDenied: If user lacks required casting feature permissions
+
     """
     # Get event context and validate user access permissions
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -281,6 +285,7 @@ def _get_previous(context: dict, request: HttpRequest, typ: int) -> None:
 
     Returns:
         None: Function modifies context dictionary in place
+
     """
     # Retrieve all previous casting choices for this member, run, and type
     # ordered by preference to maintain selection order
@@ -321,6 +326,7 @@ def _check_already_done(context: dict, request, assignment_type: int) -> None:
         context: View context dictionary to update with assignment info
         request: HTTP request object
         assignment_type: 0 for character assignment, other values for trait types
+
     """
     # Check if character assignment already done (type 0)
     if assignment_type == 0:
@@ -363,6 +369,7 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
 
     Returns:
         None: Function performs database operations and sends messages/emails.
+
     """
     # Clear all existing casting preferences for this user, run, and type
     Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
@@ -436,6 +443,7 @@ def get_casting_preferences(
         - average_preference (str): Average preference value formatted to 2 decimals,
                                    or "-" if no preferences exist
         - preference_distribution (dict): Mapping of preference values to their counts
+
     """
     total_preferences = 0
     preference_sum = 0
@@ -489,6 +497,7 @@ def casting_preferences_characters(context: dict) -> None:
         Updates context with:
         - Filtered character list based on PNG/staff/free/mirror status
         - 'list': List of dictionaries containing character casting preferences
+
     """
     # Set up base filters for character selection
     filters = {"png": True}
@@ -545,6 +554,7 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
     Note:
         This function has side effects - it modifies the context dictionary by adding
         a 'list' key containing trait preference data.
+
     """
     # Get the quest type for the given event and type number
     try:
@@ -595,6 +605,7 @@ def casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> 
     Raises:
         Http404: When casting preferences are disabled for the event or
                 when the user is not properly registered for the event
+
     """
     # Get event context and verify user signup status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -643,6 +654,7 @@ def casting_history_characters(context: dict) -> None:
     Note:
         Mirror characters are currently skipped (TODO: implement proper handling).
         Only considers non-cancelled registrations excluding STAFF and NPC tiers.
+
     """
     # Initialize context with empty list and character cache
     context["list"] = []
@@ -700,8 +712,7 @@ def casting_history_characters(context: dict) -> None:
 
 
 def casting_history_traits(context: dict) -> None:
-    """
-    Process casting history and character traits for display in the casting interface.
+    """Process casting history and character traits for display in the casting interface.
 
     This function populates the context dictionary with casting preferences and trait
     information for registrations in a specific run and casting type. It builds a
@@ -716,6 +727,7 @@ def casting_history_traits(context: dict) -> None:
 
     Returns:
         None: Function modifies the context dictionary in place.
+
     """
     # Initialize context containers for casting data
     context["list"] = []
@@ -782,6 +794,7 @@ def casting_history(request: HttpRequest, event_slug: str, typ: int = 0) -> Http
     Raises:
         Http404: If casting history feature is not enabled for the event
         Http404: If user is not registered for the event and not staff
+
     """
     # Get event context and verify user signup status
     context = get_event_context(request, event_slug, signup=True, include_status=True)

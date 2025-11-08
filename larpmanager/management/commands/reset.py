@@ -51,6 +51,7 @@ class Command(BaseCommand):
             - Truncates all database tables
             - Resets auto-increment sequences
             - Loads initial fixtures via init_db command
+
         """
         # Ensure we're not running on main branch
         check_branch()

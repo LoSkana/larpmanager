@@ -47,6 +47,7 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
 
     Side Effects:
         Updates the instance's vat_ticket and vat_options fields in the database.
+
     """
     # Early return if VAT feature is not enabled for this association
     if "vat" not in get_association_features(instance.association_id):
@@ -117,6 +118,7 @@ def get_previous_sum(aip: AccountingItemPayment, typ: type) -> int:
     Example:
         >>> previous_total = get_previous_sum(payment_item, AccountingItemPayment)
         >>> print(f"Previous payments total: {previous_total}")
+
     """
     # Filter items by same member and run, created before reference item
     previous_items = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)

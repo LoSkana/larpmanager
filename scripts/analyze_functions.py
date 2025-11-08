@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Analyze Python codebase and extract function statistics.
+"""Analyze Python codebase and extract function statistics.
 Outputs a CSV file with function name, file path, and line count, sorted by line count.
 """
 

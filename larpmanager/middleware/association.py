@@ -52,6 +52,7 @@ class AssociationIdentifyMiddleware:
 
         Returns:
             HttpResponse: Either a redirect or the normal response
+
         """
         return self.get_association_info(request) or self.get_response(request)
 
@@ -72,6 +73,7 @@ class AssociationIdentifyMiddleware:
 
         Raises:
             No exceptions are raised directly by this method
+
         """
         # Extract host components for domain analysis
         request_host = request.get_host().split(":")[0]
@@ -130,6 +132,7 @@ class AssociationIdentifyMiddleware:
         Note:
             Demo users (ending with 'demo.it') are automatically logged out when
             visiting the main page, except for post-login flows.
+
         """
         # Check for demo user logout requirement - skip if already in post-login flow
         current_user = request.user
@@ -173,6 +176,7 @@ class AssociationIdentifyMiddleware:
         Side Effects:
             - Sets request.association with the provided association data
             - Adds localized footer text to request.association["footer"]
+
         """
         # Attach association data to request for template access
         request.association = association_data

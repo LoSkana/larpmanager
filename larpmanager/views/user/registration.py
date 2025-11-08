@@ -91,6 +91,7 @@ def _check_pre_register_redirect(context: dict, event_slug: str) -> HttpResponse
 
     Returns:
         HttpResponse redirect if should redirect, None otherwise
+
     """
     # Check if pre-registration is active for this specific event
     if not get_event_config(context["event"].id, "pre_register_active", False):
@@ -122,6 +123,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     Side effects:
         - Creates PreRegistration records linking member to events
         - Saves preference order and additional info
+
     """
     # Handle specific event pre-registration vs all events listing
     if event_slug:
@@ -199,6 +201,7 @@ def pre_register_remove(request, event_slug):
 
     Returns:
         HttpResponse: Redirect to pre-registration list
+
     """
     context = get_event(request, event_slug)
     element = PreRegistration.objects.get(member=context["member"], event=context["event"])
@@ -219,6 +222,7 @@ def register_exclusive(request, event_slug, secret_code="", discount_code=""):
 
     Returns:
         HttpResponse: Result from register function
+
     """
     return register(request, event_slug, secret_code, discount_code)
 
@@ -252,6 +256,7 @@ def save_registration(
     Note:
         This function handles special features like user_character assignment
         and bring_friend functionality based on context feature flags.
+
     """
     # pprint(form.cleaned_data)  # Debug output for form data
 
@@ -324,6 +329,7 @@ def save_registration_standard(
         Modifies the registration instance with form data including:
         - Increments modification counter for non-gifted, non-provisional registrations
         - Updates additionals count, quotas, ticket selection, and payment amount
+
     """
     # Increment modification counter for standard registrations
     if not gifted and not provisional:
@@ -384,6 +390,7 @@ def registration_redirect(
     Note:
         This function handles the post-registration workflow by checking
         feature flags and user status to determine the next required action.
+
     """
     # Check if membership feature is enabled and user needs to complete profile
     if "membership" in context["features"]:
@@ -445,6 +452,7 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
 
     Raises:
         Http404: When the provided friend code is not found in the database
+
     """
     # Send bring-a-friend instructions email to the new registrant
     bring_friend_instructions(reg, context)
@@ -506,6 +514,7 @@ def register_info(request, context, form, registration, discount_info):
 
     Side effects:
         Updates context with form data, terms, conditions, and membership status
+
     """
     context["form"] = form
     context["lang"] = context["member"].language
@@ -543,6 +552,7 @@ def init_form_submitted(context, form, request, registration=None):
         form: Form object containing questions
         request: HTTP request object with POST data
         registration: Registration object (optional)
+
     """
     context["submitted"] = request.POST.dict()
     if hasattr(form, "questions"):
@@ -583,6 +593,7 @@ def register(
 
     Raises:
         RewokedMembershipError: When user membership has been revoked
+
     """
     # Get event and run context with status validation
     context = get_event_context(request, event_slug, include_status=True)
@@ -643,6 +654,7 @@ def _apply_ticket(context: dict, ticket_id: int | None) -> None:
     Args:
         context: Context dictionary to update with ticket data
         ticket_id: Ticket ID to retrieve, or None
+
     """
     if not ticket_id:
         return
@@ -691,6 +703,7 @@ def _check_redirect_registration(request, context: dict, event, secret_code: str
     Http404
         If an invalid registration secret code is provided when secret
         registration is enabled
+
     """
     # Check if event registration is closed
     if "closed" in context["run"].status:
@@ -739,6 +752,7 @@ def _register_prepare(context, registration):
 
     Returns:
         bool: True if this is a new registration, False if updating existing
+
     """
     is_new_registration = True
     context["tot_payed"] = 0
@@ -779,6 +793,7 @@ def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpRes
 
     Returns:
         Rendered HTML response with terms and conditions
+
     """
     # Initialize base user context
     context = get_context(request)
@@ -855,6 +870,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
 
     Raises:
         ObjectDoesNotExist: When discount code is not found for the event run
+
     """
 
     def error(msg):
@@ -921,6 +937,7 @@ def _check_discount(discount, member, run, event):
 
     Returns:
         str or None: Error message if invalid, None if valid
+
     """
     if _is_discount_invalid_for_registration(discount, member, run):
         return _("Discounts only applicable with new registrations")
@@ -968,8 +985,7 @@ def _is_discount_maxed(discount: Discount, run: Run) -> bool:
 
 
 def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, event: Event) -> bool:
-    """
-    Validate exclusive discount logic for member registrations.
+    """Validate exclusive discount logic for member registrations.
 
     Ensures that PLAYAGAIN discounts are mutually exclusive with other discounts
     and validates eligibility requirements.
@@ -982,6 +998,7 @@ def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, even
 
     Returns:
         True if the discount can be applied, False otherwise
+
     """
     # For PLAYAGAIN discount: no other discounts and has another registration
     if discount.typ == Discount.PLAYAGAIN:
@@ -1013,6 +1030,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
 
     Returns:
         JsonResponse containing a list of discount items with name, value, and expiration
+
     """
     # Get the event run context from the request and identifier
     context = get_event_context(request, event_slug)
@@ -1054,6 +1072,7 @@ def unregister(request, event_slug):
 
     Returns:
         HttpResponse: Confirmation form or redirect to accounting page after cancellation
+
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
 
@@ -1094,6 +1113,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
     Raises:
         Http404: If the event or run is not found
         PermissionDenied: If registration is not open or user lacks permissions
+
     """
     # Get event context and verify registration access
     context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
@@ -1153,6 +1173,7 @@ def gift_edit(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
     Raises:
         Http404: If the event, run, or registration cannot be found
         PermissionDenied: If user lacks permission to edit gift registrations
+
     """
     # Get event context and verify user has gift management permissions
     context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
@@ -1206,6 +1227,7 @@ def get_registration_gift(context: dict, registration_id: int | None, request) -
 
     Raises:
         Http404: If registration lookup fails or invalid parameters provided
+
     """
     registration = None
 
@@ -1229,8 +1251,7 @@ def get_registration_gift(context: dict, registration_id: int | None, request) -
 
 @login_required
 def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpResponse:
-    """
-    Handle gift code redemption for event registrations.
+    """Handle gift code redemption for event registrations.
 
     Processes the redemption of a gift code for event registrations. If the user
     is already registered for the event, they are redirected with a success message.
@@ -1249,6 +1270,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
     Raises:
         Http404: When no valid registration is found matching the provided code
                 and association constraints
+
     """
     # Get event context and validate user permissions for gift redemption
     context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)

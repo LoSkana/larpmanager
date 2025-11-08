@@ -98,6 +98,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     Note:
         Authenticated users see runs they're registered for even if in START development status.
         Anonymous users cannot see START status runs at all.
+
     """
     # Extract association ID from request context
     association_id = context["association_id"]
@@ -188,6 +189,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member) -> dict:
 
     Returns:
         Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
+
     """
     # Initialize empty dictionary to store character relations grouped by registration ID
     character_relations_by_registration_dict = {}
@@ -228,6 +230,7 @@ def get_payment_invoices_dict(registrations_by_id: dict, member) -> dict:
 
     Returns:
         Dictionary mapping registration IDs to lists of PaymentInvoice objects
+
     """
     # Initialize empty dictionary to store grouped payment invoices
     payment_invoices_by_registration = {}
@@ -268,6 +271,7 @@ def get_pre_registrations_dict(association_id: int, member) -> dict:
     Returns:
         Dictionary mapping event IDs to PreRegistration objects.
         Empty dict if member is None or has no pre-registrations.
+
     """
     # Initialize empty dictionary for pre-registration lookup
     event_id_to_pre_registration = {}
@@ -298,6 +302,7 @@ def get_coming_runs(association_id: int | None, future: bool = True) -> QuerySet
     Returns:
         QuerySet of Run objects with optimized select_related, ordered by end date.
         Future runs are ordered ascending, past runs descending.
+
     """
     # Base queryset: exclude cancelled runs and invisible events, optimize with select_related
     runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
@@ -320,8 +325,7 @@ def get_coming_runs(association_id: int | None, future: bool = True) -> QuerySet
 
 
 def home_json(request: HttpRequest, lang: str = "it") -> object:
-    """
-    Returns JSON response with upcoming events for the association.
+    """Returns JSON response with upcoming events for the association.
 
     Args:
         request: HTTP request object containing association context
@@ -329,6 +333,7 @@ def home_json(request: HttpRequest, lang: str = "it") -> object:
 
     Returns:
         JsonResponse: JSON object containing list of upcoming events
+
     """
     # Extract association ID from request context
     context = get_context(request)
@@ -369,6 +374,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
     Note:
         Uses caching to avoid duplicate events from multiple runs.
         Only includes events with valid end dates.
+
     """
     # Initialize context with default user data and empty list
     context = get_context(request)
@@ -416,6 +422,7 @@ def share(request):
 
     Returns:
         HttpResponse: Rendered template or redirect to home
+
     """
     context = get_context(request)
 
@@ -454,6 +461,7 @@ def event_register(request: HttpRequest, event_slug: str):
 
     Returns:
         Redirect to single run registration or list of available runs
+
     """
     context = get_event(request, event_slug)
     # check future runs
@@ -490,6 +498,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template response with past events calendar data.
                      Template: 'larpmanager/general/past.html'
+
     """
     # Extract association ID and initialize user context
     context = get_context(request)
@@ -558,6 +567,7 @@ def check_gallery_visibility(request, context):
 
     Returns:
         bool: True if gallery should be visible, False otherwise
+
     """
     if is_lm_admin(request):
         return True
@@ -596,6 +606,7 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Raises:
         Http404: If event or run not found (handled by get_event_context)
+
     """
     # Get event context and check if character feature is enabled
     context = get_event_context(request, event_slug, include_status=True)
@@ -652,8 +663,7 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 def event(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """
-    Display main event page with runs, registration status, and event details.
+    """Display main event page with runs, registration status, and event details.
 
     Args:
         request: HTTP request object containing user authentication and session data
@@ -667,6 +677,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
         - Categorizes runs as 'coming' (ended within 3 days) or 'past'
         - Includes user registration status if authenticated
         - Sets no_robots flag based on development status and timing
+
     """
     # Get base context with event and run information
     context = get_event_context(request, event_slug, include_status=True)
@@ -739,6 +750,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
     Note:
         Characters and their fields are filtered based on visibility permissions
         and event configuration settings.
+
     """
     # Get event context and validate user access
     context = get_event_context(request, event_slug, include_status=True)
@@ -787,6 +799,7 @@ def get_fact(factions_queryset) -> list[dict]:
 
     Returns:
         List of faction dictionaries containing character data
+
     """
     factions_with_characters = []
 
@@ -822,6 +835,7 @@ def check_visibility(context: dict, writing_type: str, writing_name: str) -> Non
     Raises:
         Http404: If the writing type is not active in current features
         HiddenError: If user lacks permission to view the content
+
     """
     # Get the mapping of writing types to features
     writing_type_to_feature_mapping = _get_writing_mapping()
@@ -859,6 +873,7 @@ def faction(request, event_slug, g):
 
     Returns:
         HttpResponse: Rendered faction detail page
+
     """
     context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "faction", _("Factions"))
@@ -890,6 +905,7 @@ def quests(request: HttpRequest, event_slug: str, g: str | None = None) -> HttpR
 
     Returns:
         HttpResponse: Rendered template with quest types or specific quests
+
     """
     # Get event context and verify user can view quests
     context = get_event_context(request, event_slug, include_status=True)
@@ -921,6 +937,7 @@ def quest(request, event_slug, g):
 
     Returns:
         HttpResponse: Rendered quest template
+
     """
     context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
@@ -941,8 +958,7 @@ def quest(request, event_slug, g):
 
 
 def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """
-    Display event limitations including ticket availability and discounts.
+    """Display event limitations including ticket availability and discounts.
 
     This view shows the current availability status of tickets, discounts, and
     registration options for a specific event run, helping users understand
@@ -955,6 +971,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template showing limitations, ticket availability,
         discounts, and registration options with their current usage counts.
+
     """
     # Get event and run context with status validation
     context = get_event_context(request, event_slug, include_status=True)
@@ -1001,6 +1018,7 @@ def export(request, event_slug, t):
 
     Returns:
         JsonResponse: Exported elements data
+
     """
     context = get_event(request, event_slug)
     if t == "char":

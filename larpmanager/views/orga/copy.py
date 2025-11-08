@@ -70,6 +70,7 @@ def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
 
     Side effects:
         Updates many-to-many relationships for all objects of cls in the event
+
     """
     old_id_to_new_id = {}
 
@@ -102,6 +103,7 @@ def correct_rels(
         child_model_class: Model class to update relationships for
         relationship_field: Relationship field name to correct
         matching_field: Field to use for matching (default: "number")
+
     """
     source_id_to_match_value = {}
     match_value_to_target_id = {}
@@ -131,6 +133,7 @@ def correct_relationship(e_id, p_id):
     Args:
         e_id: Target event ID with copied characters
         p_id: Source parent event ID with original characters
+
     """
     source_character_id_to_number = {}
     target_character_number_to_id = {}
@@ -182,8 +185,7 @@ def correct_relationship(e_id, p_id):
 
 
 def correct_workshop(e_id: int, p_id: int) -> None:
-    """
-    Correct workshop data mappings during event copying process.
+    """Correct workshop data mappings during event copying process.
 
     This function copies workshop modules, questions, and options from a source event
     to a target event, maintaining proper relationships between the copied objects.
@@ -194,6 +196,7 @@ def correct_workshop(e_id: int, p_id: int) -> None:
 
     Returns:
         None
+
     """
     # Build mapping cache from source event workshop modules (ID -> number)
     source_module_id_to_number = {}
@@ -246,6 +249,7 @@ def correct_plot_character(e_id, p_id):
     Args:
         e_id: Target event ID with copied elements
         p_id: Source parent event ID with original elements
+
     """
     character_id_mapping = {}
     for old_character in Character.objects.values_list("id", "number").filter(event_id=p_id):
@@ -275,6 +279,7 @@ def copy_character_config(e_id, p_id):
     Args:
         e_id: Target event ID to copy configurations to
         p_id: Parent event ID to copy configurations from
+
     """
     CharacterConfig.objects.filter(character__event_id=e_id).delete()
     character_id_by_number = {}
@@ -311,6 +316,7 @@ def copy(
 
     Returns:
         HttpResponseRedirect if error occurs, None if successful
+
     """
     # Validate parent event exists
     if not parent_event:
@@ -341,8 +347,7 @@ def copy(
 
 
 def copy_event(context, target_event_id, elements_to_copy, target_event, source_event_id, source_event):
-    """
-    Copy event data and related objects from parent to new event.
+    """Copy event data and related objects from parent to new event.
 
     Args:
         context: Context dictionary with form information
@@ -351,6 +356,7 @@ def copy_event(context, target_event_id, elements_to_copy, target_event, source_
         target_event: Target event instance
         source_event_id: Source parent event ID
         source_event: Source parent event instance
+
     """
     # Define copy actions for each target type
     copy_actions = {
@@ -404,6 +410,7 @@ def copy_registration(source_event_id: int, targets: list[str], target_event_id:
         targets: List of registration component types to copy ('ticket', 'question',
                 'discount', 'quota', 'installment', 'surcharge')
         target_event_id: Target event ID to copy to
+
     """
     # Copy registration tickets if requested
     if "ticket" in targets:
@@ -449,6 +456,7 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
 
     Returns:
         None
+
     """
     # Copy character-related elements and fix relationships
     if "character" in targets:
@@ -506,6 +514,7 @@ def copy_css(context, event, parent) -> None:
         context: Context object
         event: Target event to copy CSS to
         parent: Source event to copy CSS from
+
     """
     # Initialize appearance form and get source CSS path
     appearance_form = OrgaAppearanceForm(context=context)
@@ -534,6 +543,7 @@ def orga_copy(request, event_slug):
 
     Returns:
         HttpResponse: Rendered copy form template or redirect after successful copy
+
     """
     context = check_event_context(request, event_slug, "orga_copy")
 
@@ -555,14 +565,12 @@ def orga_copy(request, event_slug):
 
 
 def get_all_fields_from_form(form_class, context):
-    """
-    Return names of all available fields from given Form instance.
+    """Return names of all available fields from given Form instance.
 
     :arg form_class: Form instance
     :returns list of field names
     :rtype: list
     """
-
     fields = list(form_class(context=context).base_fields)
 
     for field_name in list(form_class(context=context).declared_fields):

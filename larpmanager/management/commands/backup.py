@@ -53,6 +53,7 @@ class Command(BaseCommand):
             - Creates directory structure: {path}/{event_id}/{year}/{month}/{day}/
             - Writes compressed ZIP backup files for each active run
             - Creates intermediate directories as needed
+
         """
         # Get current date for organizing backup files by date
         now_date = timezone.now().date()

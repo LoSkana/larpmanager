@@ -31,6 +31,7 @@ def generate_association_encryption_key(association):
 
     Args:
         association: Association instance being saved
+
     """
     if not association.key:
         association.key = Fernet.generate_key()
@@ -41,6 +42,7 @@ def auto_assign_association_permission_number(association_permission):
 
     Args:
         association_permission: AssociationPermission instance to assign number to
+
     """
     if not association_permission.number:
         max_number = AssociationPermission.objects.filter(
@@ -63,6 +65,7 @@ def prepare_association_skin_features(instance: Association) -> None:
 
     Returns:
         None
+
     """
     # Early return if no skin is associated
     if not instance.skin_id:
@@ -117,6 +120,7 @@ def apply_skin_features_to_association(association: Association) -> None:
         attribute set, which indicates that skin features should be updated.
         The actual feature update is deferred until after the current database
         transaction commits to ensure data consistency.
+
     """
     # Check if the association is marked for skin feature updates
     if not hasattr(association, "_update_skin_features"):

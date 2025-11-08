@@ -53,6 +53,7 @@ def get_character_filter(character, character_registrations, active_filters):
 
     Returns:
         bool: True if character passes all filters
+
     """
     if "free" in active_filters:
         if character.id in character_registrations:
@@ -72,6 +73,7 @@ def get_event_filter_characters(context, character_filters):
 
     Side effects:
         Updates context with filtered factions and characters lists
+
     """
     context["factions"] = []
 
@@ -130,6 +132,7 @@ def has_access_character(request, context):
 
     Returns:
         bool: True if user has access (organizer, owner, or player)
+
     """
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
@@ -150,6 +153,7 @@ def update_run_plan_on_event_change(run_instance):
 
     Args:
         run_instance: Run instance that was saved
+
     """
     if not run_instance.plan and run_instance.event:
         plan_updates = {"plan": run_instance.event.association.plan}
@@ -161,6 +165,7 @@ def prepare_campaign_event_data(event_instance):
 
     Args:
         event_instance: Event instance being saved
+
     """
     if event_instance.pk:
         try:
@@ -177,6 +182,7 @@ def copy_parent_event_to_campaign(event):
 
     Args:
         event: Event instance that was saved
+
     """
     if event.parent_id:
         # noinspection PyProtectedMember
@@ -199,6 +205,7 @@ def create_default_event_setup(event):
 
     Args:
         event: Event instance that was saved
+
     """
     if event.template:
         return
@@ -225,6 +232,7 @@ def save_event_tickets(features, instance):
     Args:
         features (dict): Enabled features for the event
         instance: Event instance to create tickets for
+
     """
     # create tickets if not exists
     tickets = [
@@ -258,6 +266,7 @@ def save_event_character_form(features: dict, instance) -> None:
         - Returns early if 'character' feature is not enabled
         - Uses parent event's form if instance has a parent
         - Activates organization language before processing
+
     """
     # Early return if character feature is not enabled
     if "character" not in features:
@@ -316,6 +325,7 @@ def _init_writing_element(instance, default_question_types, question_applicables
         instance: Event instance to initialize writing elements for
         default_question_types: Dictionary of default question types and their configurations
         question_applicables: List of QuestionApplicable types to create questions for
+
     """
     for applicable in question_applicables:
         # if there are already questions for this applicable, skip
@@ -358,6 +368,7 @@ def _init_character_form_questions(
 
     Returns:
         None
+
     """
     # Get existing character questions and their types
     existing_questions = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
@@ -420,6 +431,7 @@ def save_event_registration_form(features: dict, instance) -> None:
 
     Returns:
         None
+
     """
     # Activate the organization's language for proper translations
     _activate_orga_lang(instance)
@@ -494,6 +506,7 @@ def _activate_orga_lang(instance) -> None:
 
     Args:
         instance: Event instance to get organizers from.
+
     """
     # Count language frequency among organizers
     language_frequency = {}
@@ -535,6 +548,7 @@ def assign_previous_campaign_character(registration) -> None:
         - Skips cancelled registrations
         - Preserves custom character attributes from previous run
         - Does nothing if character already assigned to current run
+
     """
     # Skip if registration has no member or is cancelled
     if not registration.member or registration.cancellation_date:

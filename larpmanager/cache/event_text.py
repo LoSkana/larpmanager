@@ -38,6 +38,7 @@ def update_event_text(event_id: int, text_type: str, language: str) -> str:
 
     Returns:
         The event text or empty string if not found
+
     """
     event_text = ""
 
@@ -63,6 +64,7 @@ def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
 
     Returns:
         The cached or newly updated event text
+
     """
     # Try to get text from cache
     res = cache.get(event_text_key(event_id, typ, lang))
@@ -87,6 +89,7 @@ def update_event_text_def(event_id: int, typ: str) -> str:
 
     Returns:
         Default event text content or empty string if not found
+
     """
     default_text = ""
     try:
@@ -110,6 +113,7 @@ def get_event_text_cache_def(event_id: int, typ: str) -> str:
 
     Returns:
         The cached or newly generated event text
+
     """
     # Try to get cached result
     res = cache.get(event_text_key_def(event_id, typ))
@@ -132,6 +136,7 @@ def get_event_text(event_id: int, text_type: str, language_code: str = None) -> 
 
     Returns:
         The event text string for the specified parameters
+
     """
     # Use current language if no language specified
     if not language_code:

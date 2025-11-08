@@ -89,6 +89,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
     Raises:
         PermissionDenied: If user lacks required association permissions
         Http404: If specified event number doesn't exist
+
     """
     # Check user has executive events permission for the association
     context = check_association_context(request, "exe_events")
@@ -213,6 +214,7 @@ def exe_pre_registrations(request) -> HttpResponse:
     Returns:
         HttpResponse: Rendered HTML page showing pre-registration statistics
             with counts organized by preference level or total counts
+
     """
     # Check user permissions and initialize context
     context = check_association_context(request, "exe_pre_registrations")

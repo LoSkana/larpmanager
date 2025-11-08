@@ -44,6 +44,7 @@ def get_cache_skin(skin_identifier: str) -> dict | None:
 
     Returns:
         Cached skin data dictionary or None if initialization fails.
+
     """
     # Generate cache key for the skin
     cache_key = cache_skin_key(skin_identifier)
@@ -75,6 +76,7 @@ def init_cache_skin(domain: str) -> dict | None:
 
     Raises:
         ObjectDoesNotExist: When no AssociationSkin exists for the domain.
+
     """
     try:
         # Lookup skin configuration by domain

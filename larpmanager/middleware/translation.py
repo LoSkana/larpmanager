@@ -50,6 +50,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
 
         Args:
             request: The incoming HTTP request object
+
         """
         # Extract association ID from request context (set by earlier middleware)
         association_id = getattr(request, "association", {}).get("id", None)
@@ -81,6 +82,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
 
         Returns:
             The unmodified response object
+
         """
         # Restore default translation behavior for the next request
         trans_real._active.value = None
@@ -101,6 +103,7 @@ class AssociationTranslations(GNUTranslations):
     Attributes:
         _base: The underlying Django translation object
         _overrides: Dictionary mapping msgid strings to custom translations
+
     """
 
     def __init__(self, base_translation, overrides: dict[str, str]):
@@ -109,6 +112,7 @@ class AssociationTranslations(GNUTranslations):
         Args:
             base_translation: Django's standard translation object for the language
             overrides: Dictionary mapping original strings to custom translations
+
         """
         self._base = base_translation
         self._overrides = overrides or {}
@@ -121,6 +125,7 @@ class AssociationTranslations(GNUTranslations):
 
         Returns:
             The custom translation if available, otherwise the default translation
+
         """
         if message in self._overrides:
             return self._overrides[message]
@@ -136,6 +141,7 @@ class AssociationTranslations(GNUTranslations):
 
         Returns:
             The custom translation if available, otherwise the default translation
+
         """
         # Determine which form to check for override based on count
         key = singular if n == 1 else plural

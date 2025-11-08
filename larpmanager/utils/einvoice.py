@@ -38,6 +38,7 @@ def process_payment(invoice_id: int) -> None:
 
     Note:
         Creates ElectronicInvoice if it doesn't exist, then generates and saves XML.
+
     """
     # Retrieve the payment invoice by ID
     payment_invoice = PaymentInvoice.objects.get(pk=invoice_id)
@@ -78,6 +79,7 @@ def prepare_xml(invoice, electronic_invoice_config) -> str:
     Note:
         The generated XML includes both header and body sections required
         for Italian electronic invoice submission to the SDI system.
+
     """
     # Extract member data from invoice
     member = invoice.member
@@ -123,6 +125,7 @@ def _einvoice_header(
     Side effects:
         Modifies root XML element in-place by adding FatturaElettronicaHeader
         with transmission data, supplier (association), and customer (member) details
+
     """
     # Create config holder to optimize repeated calls
     config_holder = {}
@@ -218,8 +221,7 @@ def _einvoice_header(
 
 
 def _einvoice_body(einvoice, invoice, xml_root) -> None:
-    """
-    Build the body section of electronic invoice XML structure.
+    """Build the body section of electronic invoice XML structure.
 
     Args:
         einvoice: Electronic invoice instance containing creation date and number
@@ -228,6 +230,7 @@ def _einvoice_body(einvoice, invoice, xml_root) -> None:
 
     Returns:
         None: Modifies xml_root element in place by adding FatturaElettronicaBody
+
     """
     # Create main body element and general data section
     invoice_body = ET.SubElement(xml_root, "FatturaElettronicaBody")

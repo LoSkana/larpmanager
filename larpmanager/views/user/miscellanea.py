@@ -89,8 +89,7 @@ def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
 
 @login_required
 def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse:
-    """
-    Display help page with question submission form and user's previous questions.
+    """Display help page with question submission form and user's previous questions.
 
     Args:
         request: HTTP request object containing user session and form data
@@ -101,6 +100,7 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
     Raises:
         Http404: When event slug is provided but event/run not found
+
     """
     # Initialize context based on whether this is event-specific or general help
     if event_slug:
@@ -143,8 +143,7 @@ def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse
 
 @login_required
 def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
-    """
-    Handle attachment download for help questions.
+    """Handle attachment download for help questions.
 
     Validates user permissions and redirects to the attachment URL if authorized.
     Only the question owner or users with association role can access attachments.
@@ -158,6 +157,7 @@ def help_attachment(request: HttpRequest, p: int) -> HttpResponseRedirect:
 
     Raises:
         Http404: If HelpQuestion doesn't exist or user lacks permissions
+
     """
     # Get default user context with permissions
     context = get_context(request)
@@ -186,6 +186,7 @@ def handout_ext(request: HttpRequest, event_slug: str, cod: str) -> HttpResponse
 
     Returns:
         PDF file response with the handout content
+
     """
     # Retrieve event/run context and fetch handout by code
     context = get_event_context(request, event_slug)
@@ -205,6 +206,7 @@ def album_aux(request, context, parent_album):
 
     Returns:
         Rendered album page with sub-albums and uploads
+
     """
     context["subs"] = Album.objects.filter(run=context["run"], parent=parent_album, is_visible=True).order_by(
         "-created"
@@ -246,8 +248,7 @@ def album_sub(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
 
 @login_required
 def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """
-    Display workshops for a specific event with completion status for the current user.
+    """Display workshops for a specific event with completion status for the current user.
 
     Args:
         request: The HTTP request object containing user information
@@ -255,6 +256,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with workshop list and completion status
+
     """
     # Get event context with signup and status validation
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -292,6 +294,7 @@ def valid_workshop_answer(request, context):
 
     Returns:
         bool: True if all answers are correct, False otherwise
+
     """
     all_answers_correct = True
     for question in context["list"]:
@@ -313,8 +316,7 @@ def valid_workshop_answer(request, context):
 
 @login_required
 def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpResponse:
-    """
-    Handle workshop answer submission and validation.
+    """Handle workshop answer submission and validation.
 
     This function processes workshop submissions for LARP events, validates answers,
     tracks completion status, and manages progression through workshop modules.
@@ -331,6 +333,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, m: int) -> HttpRespon
     Raises:
         Http404: If event, run, or workshop module is not found
         PermissionDenied: If user doesn't have access to the workshop
+
     """
     # Get event context and validate user access to workshop signup
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -389,6 +392,7 @@ def shuttle(request):
 
     Returns:
         Rendered shuttle template with active and recent requests
+
     """
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
@@ -419,6 +423,7 @@ def shuttle_new(request):
 
     Returns:
         Redirect to shuttle list on success or form template on GET/invalid POST
+
     """
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
@@ -449,6 +454,7 @@ def shuttle_edit(request, n):
 
     Returns:
         HttpResponse: Rendered edit form or redirect after successful update
+
     """
     context = get_context(request)
     check_association_feature(request, context, "shuttle")

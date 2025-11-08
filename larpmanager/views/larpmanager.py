@@ -75,6 +75,7 @@ def lm_home(request):
 
     Returns:
         HttpResponse: Rendered home page template with context data
+
     """
     template_context = get_lm_contact(request)
     template_context["index"] = True
@@ -98,6 +99,7 @@ def ludomanager(template_context, http_request):
 
     Returns:
         HttpResponse: Rendered LudoManager template
+
     """
     template_context["association_skin"] = "LudoManager"
     template_context["platform"] = "LudoManager"
@@ -116,6 +118,7 @@ def contact(request):
 
     Returns:
         HttpResponse: Rendered contact template with form or success state
+
     """
     context = {}
     done = False
@@ -148,6 +151,7 @@ def go_redirect(request, slug, path, base_domain="larpmanager.com"):
 
     Returns:
         HttpResponseRedirect: Redirect to appropriate URL
+
     """
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
@@ -173,6 +177,7 @@ def choose_association(request, redirect_path, association_slugs):
 
     Returns:
         HttpResponse: Redirect to selected association or selection form
+
     """
     if len(association_slugs) == 0:
         return render(request, "larpmanager/larpmanager/na_assoc.html")
@@ -204,6 +209,7 @@ def go_redirect_run(run, path):
 
     Returns:
         HttpResponseRedirect: Redirect to the run's URL
+
     """
     full_url = f"https://{run.event.association.slug}.{run.event.association.skin.domain}/{run.get_slug()}/{path}"
     return redirect(full_url)
@@ -219,6 +225,7 @@ def choose_run(request, redirect_path, event_ids):
 
     Returns:
         HttpResponse: Redirect to selected run or selection form
+
     """
     available_runs = []
     run_display_names = []
@@ -262,6 +269,7 @@ def redr(request, path):
 
     Returns:
         HttpResponse: Redirect to appropriate association or event selection
+
     """
     if not path.startswith("event/"):
         association_slugs = set()
@@ -299,6 +307,7 @@ def activate_feature_association(request: HttpRequest, cod: str, p: Optional[str
     Raises:
         Http404: If feature doesn't exist or isn't marked as overall
         PermissionError: If user lacks exe_features permission for the association
+
     """
     context = get_context(request)
     # Retrieve the feature by slug, ensuring it exists
@@ -353,6 +362,7 @@ def activate_feature_event(request: HttpRequest, event_slug: str, cod: str, p: s
     Raises:
         Http404: If feature doesn't exist or is marked as overall (organization-wide)
         PermissionError: If user lacks orga_features permission for the event
+
     """
     # Retrieve the feature by slug, raise 404 if not found
     feature = get_object_or_404(Feature, slug=cod)
@@ -395,6 +405,7 @@ def toggle_sidebar(request):
 
     Returns:
         JsonResponse: Status response indicating success
+
     """
     key = "is_sidebar_open"
     if key in request.session:
@@ -418,6 +429,7 @@ def debug_mail(request):
 
     Raises:
         Http404: If not in dev or test environment
+
     """
     if request.enviro not in ["dev", "test"]:
         raise Http404()
@@ -446,6 +458,7 @@ def debug_slug(request, association_slug=""):
 
     Raises:
         Http404: If not in dev or test environment
+
     """
     if request.enviro not in ["dev", "test"]:
         raise Http404()
@@ -466,6 +479,7 @@ def ticket(request, reason=""):
 
     Returns:
         HttpResponse: Rendered ticket form or redirect after successful submission
+
     """
     context = get_context(request)
     context.update({"reason": reason})
@@ -495,6 +509,7 @@ def is_suspicious_user_agent(user_agent_string):
 
     Returns:
         bool: True if user agent appears to be from a bot, False otherwise
+
     """
     known_bot_identifiers = ["bot", "crawler", "spider", "http", "archive", "wget", "curl"]
     return any(bot_identifier in user_agent_string.lower() for bot_identifier in known_bot_identifiers)
@@ -513,6 +528,7 @@ def discord(request):
     Returns:
         HttpResponse: Rendered Discord form or redirect to Discord server
         HttpResponseForbidden: If bot detected
+
     """
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
@@ -540,6 +556,7 @@ def join(request):
 
     Returns:
         HttpResponse: Rendered join form or redirect after successful joining
+
     """
     context = get_lm_contact(request)
     if "red" in context:
@@ -575,6 +592,7 @@ def _join_form(context: dict, request) -> Association | None:
     Note:
         Updates context dictionary with form instance for template rendering.
         Sends email notifications to all configured admins upon successful creation.
+
     """
     if request.method == "POST":
         # Initialize and validate the association creation form
@@ -631,6 +649,7 @@ def discover(request):
 
     Returns:
         HttpResponse: Rendered discover page template
+
     """
     context = get_lm_contact(request)
     context["index"] = True
@@ -654,6 +673,7 @@ def tutorials(request: HttpRequest, slug: Optional[str] = None) -> HttpResponse:
 
     Raises:
         Http404: If tutorial with specified slug doesn't exist.
+
     """
     # Initialize base context with contact information
     context = get_lm_contact(request)
@@ -705,6 +725,7 @@ def guides(request):
 
     Returns:
         HttpResponse: Rendered guides template with list of published guides
+
     """
     context = get_lm_contact(request)
     context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
@@ -724,6 +745,7 @@ def guide(request, slug):
 
     Raises:
         Http404: If guide with given slug is not found or not published
+
     """
     context = get_lm_contact(request)
     context["index"] = True
@@ -751,6 +773,7 @@ def privacy(request):
 
     Returns:
         HttpResponse: Rendered privacy policy page
+
     """
     context = get_lm_contact(request)
     context.update({"text": get_association_text(context["association_id"], AssociationTextType.PRIVACY)})
@@ -768,6 +791,7 @@ def usage(request):
 
     Returns:
         HttpResponse: Rendered usage page
+
     """
     context = get_lm_contact(request)
     context["index"] = True
@@ -785,6 +809,7 @@ def about_us(request):
 
     Returns:
         HttpResponse: Rendered about us page
+
     """
     context = get_lm_contact(request)
     context["index"] = True
@@ -803,6 +828,7 @@ def get_lm_contact(request, check_main_site=True):
 
     Raises:
         MainPageError: If check_main_site=True and user is on association site
+
     """
     context = get_context(request, check_main_site=True)
     context.update({"lm": 1, "contact_form": LarpManagerContact(request=request), "platform": "LarpManager"})
@@ -821,6 +847,7 @@ def lm_list(request):
 
     Returns:
         HttpResponse: Rendered association list page
+
     """
     context = check_lm_admin(request)
 
@@ -847,6 +874,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks admin permissions (handled by check_lm_admin).
+
     """
     # Verify admin permissions and get base context
     context = check_lm_admin(request)
@@ -903,6 +931,7 @@ def get_run_lm_payment(run):
 
     Side effects:
         Modifies run object with features, active_registrations, and total attributes
+
     """
     run.features = len(get_association_features(run.event.association_id)) + len(get_event_features(run.event_id))
     run.active_registrations = (
@@ -929,6 +958,7 @@ def lm_payments_confirm(request, r):
 
     Returns:
         HttpResponseRedirect: Redirect to payments list
+
     """
     check_lm_admin(request)
     run = Run.objects.get(pk=r)
@@ -950,6 +980,7 @@ def lm_send(request):
 
     Returns:
         HttpResponse: Rendered email form or redirect after sending
+
     """
     context = check_lm_admin(request)
     if request.method == "POST":
@@ -985,6 +1016,7 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
     Note:
         Only shows data from the last 168 hours (7 days) and limits results to top 50
         entries by total duration.
+
     """
     # Check admin permissions and get base context
     context = check_lm_admin(request)
@@ -1026,6 +1058,7 @@ def donate(request):
     Returns:
         HttpResponse: Rendered donation form or redirect to PayPal
         HttpResponseForbidden: If bot detected
+
     """
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
@@ -1053,6 +1086,7 @@ def debug_user(request, mid):
 
     Side effects:
         Logs in as the specified user
+
     """
     check_lm_admin(request)
     member = Member.objects.get(pk=mid)
@@ -1072,6 +1106,7 @@ def demo(request):
     Returns:
         HttpResponse: Rendered demo form or redirect to created demo
         HttpResponseForbidden: If bot detected
+
     """
     user_agent = request.META.get("HTTP_USER_AGENT", "")
     if is_suspicious_user_agent(user_agent):
@@ -1106,6 +1141,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     Note:
         The created demo organization inherits the skin configuration from
         the current request's association context.
+
     """
     # Generate unique primary key for new association
     new_primary_key = Association.objects.order_by("-pk").values_list("pk", flat=True).first()

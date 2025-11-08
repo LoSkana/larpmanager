@@ -45,6 +45,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Ensure we're not running on main branch
         check_branch()

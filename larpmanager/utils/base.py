@@ -74,6 +74,7 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
     Raises:
         MembershipError: When user lacks proper association membership or
                         when accessing home page without valid association.
+
     """
     # Initialize result dictionary with association ID
     context = {"association_id": request.association["id"]}
@@ -155,6 +156,7 @@ def fetch_payment_details(association_id: int) -> dict:
 
     Returns:
         Dictionary containing payment gateway configuration
+
     """
     # Fetch association with only required fields for efficiency
     association = Association.objects.only("slug", "key").get(pk=association_id)
@@ -184,6 +186,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     Raises:
         PermissionError: If user lacks the required association permission
         FeatureError: If required feature is not enabled for the association
+
     """
     # Get base user context and validate permission
     context = get_context(request)
@@ -239,6 +242,7 @@ def check_event_context(request, event_slug: str, permission_slug: str | list[st
     Raises:
         PermissionError: If user lacks required permissions for the event
         FeatureError: If required feature is not enabled for the event
+
     """
     # Get basic event context and run information
     context = get_event_context(request, event_slug)
@@ -291,6 +295,7 @@ def get_event(request, event_slug, run_number=None):
 
     Raises:
         Http404: If event doesn't exist or belongs to wrong association
+
     """
     if request:
         context = get_context(request)
@@ -349,6 +354,7 @@ def get_event_context(
     Raises:
         Http404: If event is not found or user lacks required permissions
         PermissionDenied: If user cannot access requested features
+
     """
     # Get base event context with run information
     context = get_event(request, event_slug)
@@ -395,6 +401,7 @@ def prepare_run(context):
 
     Side effects:
         Updates context with run configuration, visibility settings, and writing fields
+
     """
     run_configuration = get_cache_config_run(context["run"])
 
@@ -431,6 +438,7 @@ def get_run(context, event_slug):
 
     Raises:
         UnknowRunError: If run cannot be found
+
     """
     try:
         res = get_cache_run(context["association_id"], event_slug)

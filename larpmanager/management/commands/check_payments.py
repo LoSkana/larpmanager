@@ -45,6 +45,7 @@ class Command(BaseCommand):
         Args:
             *args: Command arguments
             **options: Command options
+
         """
         try:
             self.check_satispay_payments()
@@ -63,6 +64,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Outputs results to stdout and logs any errors.
+
         """
         # Query all pending Satispay payment invoices
         pending_satispay_invoices = PaymentInvoice.objects.filter(

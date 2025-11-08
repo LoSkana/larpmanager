@@ -32,8 +32,7 @@ class BrokenLinkEmailsMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """
-        Send broken link emails for relevant 404 NOT FOUND responses.
+        """Send broken link emails for relevant 404 NOT FOUND responses.
 
         Args:
             request: The HTTP request object being processed.
@@ -41,6 +40,7 @@ class BrokenLinkEmailsMiddleware:
         Returns:
             The HTTP response object, potentially modified if a broken link
             was detected and processed.
+
         """
         # Get the initial response from the next middleware or view
         response = self.get_response(request)
@@ -59,9 +59,7 @@ class BrokenLinkEmailsMiddleware:
 
     @staticmethod
     def is_ignorable_404(request_uri):
-        """
-        Returns True if a 404 at the given URL *shouldn't* notify the site managers.
-        """
+        """Returns True if a 404 at the given URL *shouldn't* notify the site managers."""
         return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
     def check(self, request, response) -> Optional[HttpResponseRedirect]:
@@ -77,6 +75,7 @@ class BrokenLinkEmailsMiddleware:
 
         Returns:
             HttpResponseRedirect if a domain redirect is needed, None otherwise
+
         """
         # Extract basic request information
         domain = request.get_host()

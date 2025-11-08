@@ -92,6 +92,7 @@ class EventCharactersPdfForm(ConfigForm):
 
         Returns:
             None
+
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -175,6 +176,7 @@ class OrgaEventForm(MyForm):
             - Modifies form fields by deleting disabled feature fields
             - Sets prevent_canc flag to prevent cancellation
             - Configures campaign parent field widget
+
         """
         super().__init__(*args, **kwargs)
 
@@ -236,6 +238,7 @@ class OrgaEventForm(MyForm):
 
         Raises:
             ValidationError: If slug is already used by another event or is a reserved word.
+
         """
         data = self.cleaned_data["slug"]
         logger.debug(f"Validating event slug: {data}")
@@ -283,6 +286,7 @@ class OrgaFeatureForm(FeatureForm):
 
         Returns:
             The saved EventConfig instance.
+
         """
         # Save form without committing to database yet
         instance = super().save(commit=False)
@@ -366,9 +370,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_registration()
 
     def set_config_gallery(self):
-        """
-        Configure gallery settings for event forms.
-        """
+        """Configure gallery settings for event forms."""
         if "character" not in self.params["features"]:
             return
 
@@ -493,9 +495,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_structure(self):
-        """
-        Configure structural event settings including pre-registration, mail server, and cover options.
-        """
+        """Configure structural event settings including pre-registration, mail server, and cover options."""
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
             field_label = _("Active")
@@ -614,6 +614,7 @@ class OrgaConfigForm(ConfigForm):
         Note:
             Requires self.params["features"] to contain feature flags and access to
             self.set_section() and self.add_configs() methods.
+
         """
         # Configure campaign-related settings if campaign feature is enabled
         if "campaign" in self.params["features"]:
@@ -679,9 +680,7 @@ class OrgaConfigForm(ConfigForm):
             )
 
     def set_config_custom(self):
-        """
-        Configure character customization form fields for event settings.
-        """
+        """Configure character customization form fields for event settings."""
         if "custom_character" in self.params["features"]:
             self.set_section("custom_character", _("Character customisation"))
 
@@ -1008,6 +1007,7 @@ class OrgaAppearanceForm(MyCssForm):
 
         Returns:
             str: CSS input field identifier
+
         """
         return "event_css"
 
@@ -1020,6 +1020,7 @@ class OrgaAppearanceForm(MyCssForm):
 
         Returns:
             str: Path to CSS file
+
         """
         return f"css/{event_instance.association.slug}_{event_instance.slug}_{event_instance.css_code}.css"
 
@@ -1045,6 +1046,7 @@ class OrgaEventTextForm(MyForm):
         Args:
             *args: Variable positional arguments
             **kwargs: Variable keyword arguments including event and features
+
         """
         super().__init__(*args, **kwargs)
         ch = EventTextType.choices
@@ -1097,6 +1099,7 @@ class OrgaEventTextForm(MyForm):
 
         Raises:
             ValidationError: If default or language-type combination already exists.
+
         """
         cleaned_data = super().clean()
 
@@ -1183,6 +1186,7 @@ class OrgaRunForm(ConfigForm):
         Args:
             *args: Variable length argument list passed to parent form
             **kwargs: Arbitrary keyword arguments passed to parent form
+
         """
         super().__init__(*args, **kwargs)
 
@@ -1320,6 +1324,7 @@ class OrgaRunForm(ConfigForm):
 
         Raises:
             ValidationError: If end/start dates are missing or end is before start.
+
         """
         cleaned_data = super().clean()
 
@@ -1357,6 +1362,7 @@ class ExeEventForm(OrgaEventForm):
         Args:
             *args: Variable length argument list
             **kwargs: Arbitrary keyword arguments
+
         """
         super().__init__(*args, **kwargs)
 
@@ -1385,6 +1391,7 @@ class ExeEventForm(OrgaEventForm):
 
         Returns:
             Saved event instance.
+
         """
         instance = super().save(commit=False)
 
@@ -1431,6 +1438,7 @@ class ExeTemplateForm(FeatureForm):
 
         Returns:
             The saved Event instance.
+
         """
         instance = super().save(commit=False)
 
@@ -1460,6 +1468,7 @@ class ExeTemplateRolesForm(OrgaEventRoleForm):
         Args:
             *args: Variable length argument list
             **kwargs: Arbitrary keyword arguments
+
         """
         super().__init__(*args, **kwargs)
         self.fields["members"].required = False
@@ -1482,6 +1491,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
         Args:
             *args: Variable length argument list passed to parent
             **kwargs: Arbitrary keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
 
@@ -1589,6 +1599,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         Returns:
             None
+
         """
         # Check if user has permission to manage registrations for this event
         if not has_event_permission(
@@ -1659,6 +1670,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         Returns:
             None: Method modifies the form in place
+
         """
         # Get the writing feature mapping and check if feature is available
         feature_mapping = _get_writing_mapping()
@@ -1738,6 +1750,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             basic_question_types: Set of basic question types
             compiled_options: List to append compiled configurations
             field_definitions: Dictionary of field definitions
+
         """
         for _field_id, field in field_definitions.items():
             if field["typ"] == "name":
@@ -1756,6 +1769,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         Args:
             extra_fields: List to append extra field configurations
             feature_field_definitions: List of feature field tuples (feature, field_id, label)
+
         """
         for feature_field_definition in feature_field_definitions:
             feature = feature_field_definition[0]

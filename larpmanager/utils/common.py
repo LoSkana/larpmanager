@@ -89,6 +89,7 @@ def check_already(nm, params):
 
     Returns:
         bool: True if task already exists in queue
+
     """
     q = Task.objects.filter(task_name=nm, task_params=params)
     return q.exists()
@@ -103,6 +104,7 @@ def get_channel(first_entity_id, second_entity_id):
 
     Returns:
         int: Unique channel ID using Cantor pairing
+
     """
     first_entity_id = int(first_entity_id)
     second_entity_id = int(second_entity_id)
@@ -121,6 +123,7 @@ def cantor(first_integer, second_integer):
 
     Returns:
         float: Unique pairing result
+
     """
     return ((first_integer + second_integer) * (first_integer + second_integer + 1) / 2) + second_integer
 
@@ -131,6 +134,7 @@ def compute_diff(self, other):
     Args:
         self: Current instance
         other: Other instance to compare against
+
     """
     check_diff(self, other.text, self.text)
 
@@ -142,6 +146,7 @@ def check_diff(self, old_text, new_text):
         self: Instance to store diff result
         old_text: First text string
         new_text: Second text string
+
     """
     if old_text == new_text:
         self.diff = None
@@ -163,6 +168,7 @@ def get_member(member_id: int) -> Member:
 
     Raises:
         Http404: If member does not exist
+
     """
     try:
         return Member.objects.get(pk=member_id)
@@ -179,6 +185,7 @@ def get_contact(member_id, other_member_id):
 
     Returns:
         Contact: Contact instance or None if not found
+
     """
     try:
         return Contact.objects.get(me_id=member_id, you_id=other_member_id)
@@ -192,6 +199,7 @@ def get_event_template(context, template_id):
     Args:
         context: Template context dictionary
         template_id: Event template ID
+
     """
     try:
         context["event"] = Event.objects.get(pk=template_id, template=True, association_id=context["association_id"])
@@ -206,6 +214,7 @@ def get_char(context, character_identifier, by_number=False):
         context: Template context dictionary
         character_identifier: Character ID or number
         by_number: Whether to search by number instead of ID
+
     """
     get_element(context, character_identifier, "character", Character, by_number)
 
@@ -219,6 +228,7 @@ def get_registration(context, registration_id):
 
     Raises:
         Http404: If registration does not exist
+
     """
     try:
         context["registration"] = Registration.objects.get(run=context["run"], pk=registration_id)
@@ -236,6 +246,7 @@ def get_discount(context, discount_id):
 
     Raises:
         Http404: If discount does not exist
+
     """
     try:
         context["discount"] = Discount.objects.get(pk=discount_id)
@@ -253,6 +264,7 @@ def get_album(context, album_id):
 
     Raises:
         Http404: If album does not exist
+
     """
     try:
         context["album"] = Album.objects.get(pk=album_id)
@@ -285,8 +297,7 @@ def get_feature_module(context: dict, num: int) -> None:
 
 
 def get_plot(context: dict, plot_id: int) -> None:
-    """
-    Fetch and add plot to context with related data.
+    """Fetch and add plot to context with related data.
 
     Args:
         context: View context dictionary to update
@@ -294,6 +305,7 @@ def get_plot(context: dict, plot_id: int) -> None:
 
     Raises:
         Http404: If plot does not exist for the event
+
     """
     try:
         # Fetch plot with optimized queries for related objects and characters
@@ -332,6 +344,7 @@ def get_handout(context: dict, handout_id: int) -> None:
 
     Raises:
         Http404: If handout does not exist for the given event
+
     """
     try:
         # Retrieve handout for current event
@@ -356,6 +369,7 @@ def get_handout_template(context: dict, handout_template_id: int) -> dict:
 
     Raises:
         Http404: If handout template does not exist
+
     """
     try:
         # Fetch the handout template and add to context
@@ -393,6 +407,7 @@ def get_speedlarp(context: dict, speedlarp_id: int) -> None:
 
     Raises:
         Http404: If speedlarp doesn't exist for the event
+
     """
     try:
         # Retrieve speedlarp for current event
@@ -428,6 +443,7 @@ def get_collection_partecipate(context: dict[str, Any], contribution_code: str) 
 
     Raises:
         Http404: If collection does not exist
+
     """
     try:
         return Collection.objects.get(contribute_code=contribution_code, association_id=context["association_id"])
@@ -447,6 +463,7 @@ def get_collection_redeem(context: dict, redeem_code: str) -> Collection:
 
     Raises:
         Http404: If collection not found for given code and association
+
     """
     try:
         return Collection.objects.get(redeem_code=redeem_code, association_id=context["association_id"])
@@ -475,6 +492,7 @@ def get_workshop_question(context: dict, n: int, mod: int) -> dict:
 
     Raises:
         Http404: If WorkshopQuestion doesn't exist
+
     """
     try:
         # Retrieve workshop question filtered by event and module
@@ -496,6 +514,7 @@ def get_workshop_option(context: dict, m: int) -> None:
 
     Raises:
         Http404: If workshop option doesn't exist or belongs to wrong event
+
     """
     try:
         # Retrieve workshop option by primary key
@@ -515,8 +534,7 @@ def get_element(
     model_class: type[BaseModel],
     by_number: bool = False,
 ) -> None:
-    """
-    Retrieve a model instance and add it to the context dictionary.
+    """Retrieve a model instance and add it to the context dictionary.
 
     Fetches a model instance related to a parent event and stores it in the provided
     context dictionary. The lookup can be performed either by primary key or by a
@@ -541,6 +559,7 @@ def get_element(
         >>> context = {"event": some_event_instance}
         >>> get_element(context, 42, "ticket", Ticket, by_number=True)
         >>> # context now contains: {"event": ..., "ticket": <Ticket>, "class_name": "ticket"}
+
     """
     try:
         # Get the parent event associated with the current event in context
@@ -598,6 +617,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
 
     Returns:
         Time difference in days, or -1 if target_date is None
+
     """
     if not target_date:
         return -1
@@ -622,6 +642,7 @@ def html_clean(text: str | None) -> str:
 
     Returns:
         Cleaned text with HTML tags removed and entities unescaped.
+
     """
     if not text:
         return ""
@@ -670,6 +691,7 @@ def pretty_request(request) -> str:
 
     Returns:
         Formatted string containing request method, headers, and body
+
     """
     headers = ""
 
@@ -705,6 +727,7 @@ def check_field(model_class: type, field_name: str) -> bool:
 
     Returns:
         True if field exists, False otherwise
+
     """
     # Iterate through all fields including hidden ones
     for field in model_class._meta.get_fields(include_hidden=True):
@@ -725,6 +748,7 @@ def round_to_two_significant_digits(number: float | int) -> int:
     Notes:
         - Numbers with absolute value < 1000 are rounded to nearest 10 (down)
         - Numbers with absolute value >= 1000 are rounded to nearest 100 (down)
+
     """
     # Convert input to Decimal for precise arithmetic
     decimal_number = Decimal(number)
@@ -742,8 +766,7 @@ def round_to_two_significant_digits(number: float | int) -> int:
 
 
 def exchange_order(context: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
-    """
-    Exchange ordering positions between two elements in a sequence.
+    """Exchange ordering positions between two elements in a sequence.
 
     This function moves an element up or down in the ordering sequence by swapping
     its order value with an adjacent element. If no adjacent element exists,
@@ -762,6 +785,7 @@ def exchange_order(context: dict, model_class: type, element_id: int, move_up: b
     Note:
         The function handles edge cases where elements have the same order value
         by adjusting one of them to maintain proper ordering.
+
     """
     # Get elements queryset, defaulting to event elements if not provided
     elements = elements or context["event"].get_elements(model_class)
@@ -812,6 +836,7 @@ def normalize_string(input_string: str) -> str:
 
     Returns:
         Normalized string with lowercase, no spaces, and no accented characters.
+
     """
     # Convert to lowercase
     normalized_string = input_string.lower()
@@ -828,13 +853,13 @@ def normalize_string(input_string: str) -> str:
 
 
 def copy_class(target_event_id, source_event_id, model_class):
-    """
-    Copy all objects of a given class from source event to target event.
+    """Copy all objects of a given class from source event to target event.
 
     Args:
         target_event_id: Target event ID to copy objects to
         source_event_id: Source event ID to copy objects from
         model_class: Django model class to copy instances of
+
     """
     model_class.objects.filter(event_id=target_event_id).delete()
 
@@ -865,21 +890,20 @@ def copy_class(target_event_id, source_event_id, model_class):
 
 
 def get_payment_methods_ids(context):
-    """
-    Get set of payment method IDs for an association.
+    """Get set of payment method IDs for an association.
 
     Args:
         context: Context dictionary containing association ID
 
     Returns:
         set: Set of payment method primary keys
+
     """
     return set(Association.objects.get(pk=context["association_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content):
-    """
-    Detect CSV delimiter from content header line.
+    """Detect CSV delimiter from content header line.
 
     Args:
         content: CSV content string
@@ -889,6 +913,7 @@ def detect_delimiter(content):
 
     Raises:
         Exception: If no delimiter is found
+
     """
     header_line = content.split("\n")[0]
     for delimiter in ["\t", ";", ","]:
@@ -898,14 +923,14 @@ def detect_delimiter(content):
 
 
 def clean(s):
-    """
-    Clean and normalize string by removing symbols, spaces, and accents.
+    """Clean and normalize string by removing symbols, spaces, and accents.
 
     Args:
         s: String to clean
 
     Returns:
         str: Cleaned string with normalized characters
+
     """
     s = s.lower()
     s = re.sub(r"[^\w]", " ", s)  # remove symbols
@@ -916,8 +941,7 @@ def clean(s):
 
 
 def _search_char_reg(context: dict, character, search_result: dict) -> None:
-    """
-    Populate character search result with registration and player data.
+    """Populate character search result with registration and player data.
 
     This function extracts character and player information from registration data
     and populates a JSON object for search results display.
@@ -931,6 +955,7 @@ def _search_char_reg(context: dict, character, search_result: dict) -> None:
             JSON object to populate with search results data
 
     Returns: None -Modifies the search_result dictionary in place
+
     """
     # Set character name, prioritizing custom name if available
     search_result["name"] = character.name
@@ -984,6 +1009,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
         A tuple containing two lists:
         - closed_questions: List of closed or staff-originated questions
         - open_questions: List of open user-originated questions
+
     """
     # Filter questions by association ID
     base_queryset = HelpQuestion.objects.filter(association_id=context["association_id"])
@@ -1030,6 +1056,7 @@ def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
 
     Returns:
         Tuple of (public_key, private_key) or (None, None) if not found
+
     """
     # Get base configuration values
     public_key = conf_settings.RECAPTCHA_PUBLIC_KEY
@@ -1064,6 +1091,7 @@ def format_email_body(email) -> str:
 
     Returns:
         Cleaned and truncated email body text.
+
     """
     # Replace HTML line breaks with spaces
     body_with_spaces = email.body.replace("<br />", " ").replace("<br>", " ")

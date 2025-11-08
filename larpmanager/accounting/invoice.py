@@ -51,6 +51,7 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
         CSV format expected: [amount, causal, ...] where amount uses dot for thousands
         and comma for decimal separator. Only processes unverified invoices where
         payment amount meets or exceeds invoice amount.
+
     """
     # Decode CSV content and detect delimiter
     csv_content: str = csv_upload.read().decode("utf-8")
@@ -136,6 +137,7 @@ def invoice_received_money(
         - Updates invoice status to CHECKED
         - Saves financial details (gross amount, fees, transaction ID)
         - Sends admin notification for invalid payment codes
+
     """
     # Attempt to retrieve the payment invoice by code
     try:

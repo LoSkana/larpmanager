@@ -84,6 +84,7 @@ def get_character_optimized(context, num):
 
     Raises:
         Http404: If character does not exist
+
     """
     try:
         parent_event = context["event"].get_class_parent(Character)
@@ -129,6 +130,7 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         Rendered character list template
+
     """
     # Check user permissions for character management
     context = check_event_context(request, event_slug, "orga_characters")
@@ -156,6 +158,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
 
     Returns:
         HttpResponse: Rendered character edit form page
+
     """
     # Check user permissions for character organization features
     context = check_event_context(request, event_slug, "orga_characters")
@@ -182,6 +185,7 @@ def _characters_relationships(context):
 
     Args:
         context: Context dictionary to populate with relationship data
+
     """
     context["relationships"] = {}
     if "relationships" not in context["features"]:
@@ -250,6 +254,7 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, num: in
 
     Returns:
         Rendered HTML response with character relationships
+
     """
     # Check user permissions for character management
     context = check_event_context(request, event_slug, "orga_characters")
@@ -288,6 +293,7 @@ def orga_characters_view(request: HttpRequest, event_slug: str, num: int) -> Htt
 
     Returns:
         Rendered writing view for character
+
     """
     # Check permissions and initialize context
     context = check_event_context(request, event_slug, ["orga_reading", "orga_characters"])
@@ -321,6 +327,7 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
 
     Returns:
         Rendered HTML response with character summary
+
     """
     # Check permissions and get base context
     context = check_event_context(request, event_slug, "orga_characters")
@@ -365,6 +372,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> J
     Raises:
         PermissionDenied: If user lacks required event permissions
         Http404: If question or event not found
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_characters")
@@ -440,6 +448,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> 
 
     Raises:
         Http404: If event permission check fails or writing form type is invalid
+
     """
     # Check event permissions and validate writing form type
     context = check_event_context(request, event_slug, "orga_characters")
@@ -512,6 +521,7 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
 
     Raises:
         Http404: If the writing form type is not available
+
     """
     form_type = form_type.lower()
     writing_type_mapping = _get_writing_mapping()
@@ -552,6 +562,7 @@ def orga_writing_form(request: HttpRequest, event_slug: str, typ: str) -> HttpRe
     Raises:
         PermissionDenied: If user lacks 'orga_character_form' permission
         Http404: If the writing form type is invalid or event not found
+
     """
     # Verify user has permission to access character form organization features
     context = check_event_context(request, event_slug, "orga_character_form")
@@ -608,6 +619,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num:
     Raises:
         PermissionDenied: If user lacks 'orga_character_form' permission
         Http404: If writing form type is invalid for the event
+
     """
     # Check user permissions for editing character forms
     perm = "orga_character_form"
@@ -675,6 +687,7 @@ def orga_writing_form_order(
 
     Returns:
         Redirect to the writing form page.
+
     """
     # Verify user has permission to modify character forms
     context = check_event_context(request, event_slug, "orga_character_form")
@@ -701,6 +714,7 @@ def orga_writing_options_edit(request: HttpRequest, event_slug: str, typ: str, n
 
     Returns:
         HTTP response with the option edit form
+
     """
     # Verify user has character form permissions and get event context
     context = check_event_context(request, event_slug, "orga_character_form")
@@ -764,6 +778,7 @@ def orga_writing_options_order(
 
     Returns:
         Redirect to the writing form edit page
+
     """
     # Check event permission and initialize context
     context = check_event_context(request, event_slug, "orga_character_form")
@@ -798,6 +813,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
         This function performs multiple validation checks including character
         relationships, writing completeness, and speedlarp constraints to ensure
         event setup integrity.
+
     """
     # Initialize context and validate user permissions for the event
     context = check_event_context(request, event_slug)
@@ -862,6 +878,7 @@ def check_relations(character_cache, validation_checks, character_numbers, conte
     Side effects:
         Updates validation_checks with relat_missing and relat_extinct validation errors
         Populates character_cache with character relationship data
+
     """
     validation_checks["relat_missing"] = []
     validation_checks["relat_extinct"] = []
@@ -899,6 +916,7 @@ def check_writings(cache, checks, character_numbers, context, character_id_to_nu
 
     Side effects:
         Updates checks with extinct, missing, and interloper character issues
+
     """
     for element_type in [Faction, Plot, Prologue, SpeedLarp]:
         element_name = str(element_type.__name__).lower()
@@ -942,6 +960,7 @@ def check_speedlarp(checks, context, id_number_map):
 
     Side effects:
         Updates checks with speedlarp double assignments and missing configurations
+
     """
     if "speedlarp" not in context["features"]:
         return
@@ -995,6 +1014,7 @@ def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResp
 
     Returns:
         JsonResponse with element number or error status.
+
     """
     # Check user permissions for the event
     context = check_event_context(request, event_slug, "orga_characters")
@@ -1033,6 +1053,7 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, typ: str) -> 
 
     Raises:
         ObjectDoesNotExist: When the requested writing element cannot be found
+
     """
     # Attempt to retrieve the Excel form context for the specified element
     try:
@@ -1101,6 +1122,7 @@ def orga_writing_excel_submit(request, event_slug, typ):
 
     Returns:
         JsonResponse: Success status, element updates, or validation errors
+
     """
     try:
         context = _get_excel_form(request, event_slug, typ, is_submit=True)
@@ -1149,6 +1171,7 @@ def _get_excel_form(
     Raises:
         DoesNotExist: If question or element with given IDs don't exist
         PermissionDenied: If user lacks required permissions for the operation
+
     """
     # Check user permissions and setup base context
     context = check_event_context(request, event_slug, f"orga_{element_type}s")
@@ -1222,6 +1245,7 @@ def _get_question_update(context: dict, element) -> str:
 
     Returns:
         HTML string for the question update content
+
     """
     # Handle cover question type - return image thumbnail HTML
     if context["question"].typ in [WritingQuestionType.COVER]:
@@ -1276,6 +1300,7 @@ def _check_working_ticket(request, context: dict, working_ticket_token: str) -> 
 
     Returns:
         Error message if ticket is locked, None otherwise
+
     """
     # Check if somebody else has opened the character to edit it
     error_message = writing_edit_working_ticket(request, context["typ"], context["element"].id, working_ticket_token)

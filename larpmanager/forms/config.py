@@ -35,6 +35,7 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
 
         Returns:
             Safe HTML string containing the rendered checkbox elements
+
         """
         output = []
         value = value or []
@@ -66,6 +67,7 @@ class ConfigForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         super().__init__(*args, **kwargs)
 
@@ -96,6 +98,7 @@ class ConfigForm(MyForm):
 
         Side effects:
             Sets internal section state and jump_section if matches params
+
         """
         self._section = section_name
         if self.params.get("jump_section", "") == section_slug:
@@ -113,6 +116,7 @@ class ConfigForm(MyForm):
 
         Side effects:
             Appends field definition to config_fields list
+
         """
         self.config_fields.append(
             {
@@ -134,6 +138,7 @@ class ConfigForm(MyForm):
 
         Returns:
             The saved model instance.
+
         """
         # Save the parent form instance
         instance = super().save(commit=commit)
@@ -163,6 +168,7 @@ class ConfigForm(MyForm):
 
         Side effects:
             Updates result_dict dictionary with formatted field value
+
         """
         field_key = field_definition["key"]
 
@@ -202,6 +208,7 @@ class ConfigForm(MyForm):
         -----
         Supported field types include CHAR, BOOL, HTML, INT, TEXTAREA, MEMBERS, and MULTI_BOOL.
         The MEMBERS type requires extra parameter to contain association data for queryset filtering.
+
         """
         # Map each configuration type to its corresponding Django form field factory
         field_type_to_form_field = {
@@ -264,6 +271,7 @@ class ConfigForm(MyForm):
             - Adds field to form.fields and sets initial values
             - Updates sections mapping for UI organization
             - Initializes custom_field list if not present
+
         """
         # Extract key and initial value from configuration
         field_key = config["key"]
@@ -303,6 +311,7 @@ class ConfigForm(MyForm):
 
         Returns:
             dict: Mapping of configuration names to their current values
+
         """
         config_mapping = {}
         if self.instance.pk:

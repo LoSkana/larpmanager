@@ -29,8 +29,7 @@ class Command(BaseCommand):
     help = "Dump test db"
 
     def handle(self, *args: tuple, **kwargs: dict) -> None:
-        """
-        Django management command handler to dump test database.
+        """Django management command handler to dump test database.
 
         This function resets the database, applies migrations, and creates a clean
         SQL dump file for testing purposes. The dump is cleaned of PostgreSQL-specific
@@ -42,6 +41,7 @@ class Command(BaseCommand):
 
         Raises:
             subprocess.CalledProcessError: If database dump or cleaning operations fail
+
         """
         # Verify we're on the correct branch before proceeding
         check_branch()

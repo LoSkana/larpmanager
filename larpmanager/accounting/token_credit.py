@@ -52,6 +52,7 @@ def registration_tokens_credits_use(reg, remaining: float, association_id: int) 
     Side Effects:
         Creates AccountingItemPayment records and updates membership balances.
         Updates reg.tot_payed with applied amounts.
+
     """
     # Early return if no outstanding balance
     if remaining < 0:
@@ -97,8 +98,7 @@ def registration_tokens_credits_use(reg, remaining: float, association_id: int) 
 
 
 def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, association_id: int) -> None:
-    """
-    Offsets an overpayment by reducing or deleting AccountingItemPayment rows.
+    """Offsets an overpayment by reducing or deleting AccountingItemPayment rows.
 
     This function handles overpayments by systematically reducing or removing
     AccountingItemPayment entries with payment types TOKEN or CREDIT. The
@@ -113,8 +113,8 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
         Payments are processed in priority order: CREDIT first, then TOKEN,
         ordered by value (descending) and ID (descending) within each type.
         Rows are locked during processing to prevent race conditions.
-    """
 
+    """
     # Early return if no overpayment to process
     if overpay <= 0:
         return
@@ -179,6 +179,7 @@ def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Regi
     Examples:
         >>> incomplete_regs = get_regs_paying_incomplete()
         >>> association_incomplete = get_regs_paying_incomplete(my_association)
+
     """
     # Get base registration queryset, optionally filtered by association
     registration_queryset = get_regs(association)
@@ -210,6 +211,7 @@ def get_regs(association: Association) -> QuerySet[Registration]:
     Example:
         >>> active_regs = get_regs(my_association)
         >>> all_active_regs = get_regs(None)
+
     """
     # Start with all non-cancelled registrations
     registrations_queryset = Registration.objects.filter(cancellation_date__isnull=True)
@@ -232,6 +234,7 @@ def update_token_credit_on_payment_save(instance, created):
     Args:
         instance: AccountingItemPayment instance that was saved
         created: Boolean indicating if instance was created
+
     """
     if not created and instance.reg:
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
@@ -242,6 +245,7 @@ def update_token_credit_on_payment_delete(instance):
 
     Args:
         instance: AccountingItemPayment instance that was deleted
+
     """
     if instance.reg:
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
@@ -252,6 +256,7 @@ def update_token_credit_on_other_save(accounting_item):
 
     Args:
         accounting_item: AccountingItemOther instance that was saved
+
     """
     if not accounting_item.member:
         return
@@ -264,6 +269,7 @@ def update_credit_on_expense_save(expense_item):
 
     Args:
         expense_item: AccountingItemExpense instance that was saved
+
     """
     if not expense_item.member or not expense_item.is_approved:
         return
@@ -287,6 +293,7 @@ def update_token_credit(instance, token: bool = True) -> None:
     Side Effects:
         - Updates membership.tokens or membership.credit
         - Triggers accounting updates on affected registrations
+
     """
     association_id = instance.association_id
 
@@ -359,6 +366,7 @@ def handle_tokes_credits(
         features: List of enabled feature names
         registration: Registration object to process
         remaining_balance: Remaining balance (positive = use credits, negative = add credits)
+
     """
     # Skip if token credits are disabled globally or for this event
     if "token_credit" not in features or get_event_config(registration.run.event_id, "token_credit_disable_t", False):

@@ -47,6 +47,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
 
     Returns:
         Dict with keys: reg_menu, association_role, event_role, all_runs, open_runs, topbar
+
     """
     # Skip if not authenticated or no association
     if not context["member"] or context["association_id"] == 0:
@@ -180,6 +181,7 @@ def clear_run_event_links_cache(event: Event) -> None:
     Side Effects:
         Clears link cache entries via reset_event_links() for all relevant users.
         May perform multiple database queries to fetch role memberships.
+
     """
     # Clear cache for all members with roles in this specific event
     for event_role in EventRole.objects.filter(event=event).prefetch_related("members"):
@@ -218,6 +220,7 @@ def on_registration_post_save_reset_event_links(instance: Registration) -> None:
 
     Side Effects:
         Clears event link cache for the registered member and associated event
+
     """
     # Early return if no member is associated with the registration
     if not instance.member:
@@ -243,6 +246,7 @@ def reset_event_links(member_id: int, association_id: int) -> None:
     Side Effects:
         Removes cached event links from the cache system using the generated
         cache key for the specified member and association combination.
+
     """
     # Generate cache key for the specific member-association combination
     cache_key = get_cache_event_key(member_id, association_id)
@@ -267,6 +271,7 @@ def get_cache_event_key(member_id: int, association_id: int) -> str:
     Example:
         >>> get_cache_event_key(123, 456)
         'ctx_event_links_123_456'
+
     """
     # Generate cache key using member and association IDs
     return f"ctx_event_links_{member_id}_{association_id}"

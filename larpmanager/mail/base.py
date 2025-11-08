@@ -50,6 +50,7 @@ def check_holiday() -> bool:
     Returns:
         bool: True if today +/-1 day is a holiday in US, IT, CN, or UK,
               False otherwise.
+
     """
     # Get current date
     today = datetime.now().date()
@@ -73,6 +74,7 @@ def join_email(association):
 
     Side effects:
         Sends welcome and feedback request emails to association executives
+
     """
     for executive_member in get_association_executives(association):
         activate(executive_member.language)
@@ -113,6 +115,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
         - Sends approval notifications to association executives
         - Invalidates permission cache for affected members
         - Triggers member association join process
+
     """
     # Extract signal parameters with type safety
     model = kwargs.pop("model", None)
@@ -194,6 +197,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
     Note:
         This function is typically connected to EventRole.members.through's
         m2m_changed signal to handle role assignment notifications.
+
     """
     # Extract signal parameters with type safety
     model = kwargs.pop("model", None)
@@ -275,6 +279,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     Side Effects:
         - Activates the user's preferred language for email localization
         - Sends an email with friend invitation instructions and discount code
+
     """
     # Activate user's language for proper email localization
     activate(reg.member.language)
@@ -338,6 +343,7 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
         - Deactivates related casting preferences for the member
         - Sends email notification to the assigned member
         - Sets language context to member's preferred language
+
     """
     # Early return if no member or not a new assignment
     if not instance.member or not created:
@@ -407,6 +413,7 @@ def mail_confirm_casting(
     Side Effects:
         - Activates the member's preferred language for email localization
         - Sends a confirmation email via my_send_mail function
+
     """
     # Activate member's preferred language for localized email content
     activate(member.language)
@@ -451,6 +458,7 @@ def send_character_status_update_email(instance: Character) -> None:
         - Activates the player's preferred language for email content
         - Sends status change notification email to character player
         - Does nothing if approval feature disabled or no status change
+
     """
     # Early return if character approval feature is disabled for this event
     if not get_event_config(instance.event_id, "user_character_approval", False):
@@ -507,6 +515,7 @@ def notify_organization_exe(
         - Activates language settings for each recipient
         - Sends notification emails via my_send_mail
         - May send to main_mail or individual executive emails
+
     """
     # Check if association has a main email configured
     if association.main_mail:
@@ -550,6 +559,7 @@ def get_exec_language(association: Association) -> str:
         >>> association = Association.objects.get(slug='myorg')
         >>> lang = get_exec_language(association)
         >>> print(lang)  # 'it' if most executives prefer Italian
+
     """
     # Initialize dictionary to count language occurrences
     language_counts = {}
@@ -578,6 +588,7 @@ def send_support_ticket_email(instance):
 
     Args:
         instance: LarpManagerTicket instance
+
     """
     # Build email subject
     subject = f"LarpManager ticket - {instance.association.name}"

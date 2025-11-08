@@ -50,6 +50,7 @@ def generate_id(id_length):
 
     Returns:
         str: Random lowercase alphanumeric string of specified length
+
     """
     return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
 
@@ -73,6 +74,7 @@ def decimal_to_str(decimal_value: Decimal) -> str:
         '10'
         >>> decimal_to_str(Decimal('10.50'))
         '10.50'
+
     """
     # Convert decimal to string representation
     string_representation = str(decimal_value)
@@ -89,6 +91,7 @@ def slug_url_validator(val):
 
     Raises:
         ValidationError: If string contains invalid characters
+
     """
     if not val.islower() or not val.isalnum():
         raise ValidationError(_("Only lowercase characters and numbers are allowed, no spaces or symbols"))
@@ -110,6 +113,7 @@ def remove_non_ascii(text: str) -> str:
     Example:
         >>> remove_non_ascii("Hello 世界!")
         "Hello !"
+
     """
     # Define ASCII boundary (characters 0-127)
     max_ascii = 128
@@ -127,6 +131,7 @@ def my_uuid_short():
 
     Returns:
         str: 12-character UUID string
+
     """
     return my_uuid(12)
 
@@ -170,6 +175,7 @@ def show_thumb(height: int, image_url: str) -> SafeString:
     Example:
         >>> show_thumb(100, "/media/image.jpg")
         '<img style="height:100px" src="/media/image.jpg" />'
+
     """
     # Generate HTML img tag with inline height styling
     html_img_tag = f'<img style="height:{height}px" src="{image_url}" />'
@@ -187,6 +193,7 @@ def get_attr(obj: object, attr_name: str) -> str | None:
 
     Returns:
         Attribute value if truthy, empty string if falsy, None if missing
+
     """
     # Check if object has the requested attribute
     if not hasattr(obj, attr_name):
@@ -216,8 +223,7 @@ class UploadToPathAndRename:
         self.sub_path = sub_path
 
     def __call__(self, instance, filename: str) -> str:
-        """
-        Generate upload path for file with backup handling.
+        """Generate upload path for file with backup handling.
 
         Creates a unique filename using UUID and organizes files into directories
         based on instance attributes (event, run, album). When updating existing
@@ -232,6 +238,7 @@ class UploadToPathAndRename:
 
         Note:
             Backup files are stored in 'bkp/' subdirectory with timestamp suffix.
+
         """
         # Extract file extension and generate unique filename
         ext = filename.split(".")[-1].lower()
@@ -288,8 +295,7 @@ def _key_id(fernet_key: bytes) -> str:
 
 
 def get_payment_details_path(association: "Association") -> str:
-    """
-    Get encrypted payment details file path for association.
+    """Get encrypted payment details file path for association.
 
     Constructs a secure file path for storing encrypted payment configuration
     data specific to an association. Creates the payment settings directory
@@ -307,6 +313,7 @@ def get_payment_details_path(association: "Association") -> str:
         >>> path = get_payment_details_path(association)
         >>> path
         '/path/to/payment/settings/my-org.abc123.enc'
+
     """
     # Ensure payment settings directory exists
     os.makedirs(conf_settings.PAYMENT_SETTING_FOLDER, exist_ok=True)
@@ -322,8 +329,7 @@ def get_payment_details_path(association: "Association") -> str:
 
 
 def save_payment_details(association: "Association", payment_details: dict) -> None:
-    """
-    Encrypt and save payment details for association.
+    """Encrypt and save payment details for association.
 
     Args:
         association: Association instance with encryption key
@@ -336,6 +342,7 @@ def save_payment_details(association: "Association", payment_details: dict) -> N
         json.JSONEncoder: If payment_details cannot be serialized to JSON
         FileNotFoundError: If the target directory doesn't exist
         PermissionError: If insufficient permissions to write the file
+
     """
     # Create cipher using association's encryption key
     cipher = Fernet(association.key)
@@ -369,6 +376,7 @@ def strip_tags(html: str | None) -> str:
         "Hello world"
         >>> strip_tags(None)
         ""
+
     """
     # Handle None and empty string cases early
     if html is None or html == "":

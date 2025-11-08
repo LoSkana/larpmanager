@@ -43,6 +43,7 @@ class PxBaseForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         super().__init__(*args, **kwargs)
 

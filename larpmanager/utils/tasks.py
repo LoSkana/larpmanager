@@ -55,6 +55,7 @@ def background_auto(schedule=0, **background_kwargs):
 
     Returns:
         function: Decorator function
+
     """
 
     def decorator(original_function: Callable[..., Any]) -> Callable[..., Any]:
@@ -66,6 +67,7 @@ def background_auto(schedule=0, **background_kwargs):
         Returns:
             A wrapper function that either executes the original function directly
             or schedules it as a background task based on configuration.
+
         """
         # Create background task from the original function
         background_task = background(schedule=schedule, **background_kwargs)(original_function)
@@ -104,6 +106,7 @@ def mail_error(subject, email_body, exception=None):
 
     Side effects:
         Prints error details and sends error notification to admins
+
     """
     logger.error(f"Mail error: {exception}")
     logger.error(f"Subject: {subject}")
@@ -149,6 +152,7 @@ def send_mail_exec(
         - Schedules individual emails with specified interval delays via background tasks
         - Sends notification to admins about bulk email operation
         - Logs warning if neither association_id nor run_id are provided
+
     """
     seen_emails = {}
 
@@ -193,6 +197,7 @@ def my_send_mail_bkg(email_pk):
 
     Side effects:
         Sends the email and marks it as sent in database
+
     """
     try:
         email = Email.objects.get(pk=email_pk)
@@ -217,6 +222,7 @@ def clean_sender(sender_name):
 
     Returns:
         str: Sanitized sender name safe for email headers
+
     """
     sender_name = sender_name.replace(":", " ")
     sender_name = sender_name.split(",")[0]
@@ -253,6 +259,7 @@ def my_send_simple_mail(
     Note:
         Sends email using configured SMTP settings or default connection.
         Logs email details in debug mode for troubleshooting.
+
     """
     # Initialize email headers and BCC list
     email_headers = {}
@@ -379,6 +386,7 @@ def add_unsubscribe_body(association):
 
     Returns:
         str: HTML footer with unsubscribe link
+
     """
     html_footer = "<br /><br />-<br />"
     html_footer += f"<a href='{get_url('unsubscribe', association)}'>Unsubscribe</a>"
@@ -414,6 +422,7 @@ def my_send_mail(
         - Creates Email record in database
         - Schedules background task for email delivery
         - Modifies body with signature and unsubscribe link
+
     """
     # Clean up duplicate spaces in subject line
     subject = subject.replace("  ", " ")
@@ -482,6 +491,7 @@ def notify_admins(subject, message_text, exception=None):
 
     Side effects:
         Sends notification emails to all configured ADMINS
+
     """
     if exception:
         traceback_text = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))

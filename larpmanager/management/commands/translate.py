@@ -28,7 +28,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    """Translate elements in .po file untraslated, or with fuzzy translation, using deepl"""
+    """Translate elements in .po file untraslated, or with fuzzy translation, using deepl."""
 
     def handle(self, *args, **options) -> None:
         """Handle the translation command by initializing translator and processing translations."""
@@ -55,6 +55,7 @@ class Command(BaseCommand):
         Raises:
             Exception: When DeepL API usage limit is exceeded
             deepl.exceptions.DeepLException: When DeepL API encounters an error
+
         """
         # Check if DeepL API usage limit has been reached
         usage = self.translator.get_usage()
@@ -141,6 +142,7 @@ class Command(BaseCommand):
         Args:
             po: The PO file object to process
             po_path: Path where the processed PO file will be saved
+
         """
         # Create new ordered po file with original metadata
         sorted_po = polib.POFile()

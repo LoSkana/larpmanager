@@ -55,6 +55,7 @@ def send_expense_notification_email(instance: AccountingItemExpense, created: bo
 
     Returns:
         None
+
     """
     # Skip notification if expense is marked as hidden
     if instance.hide:
@@ -86,6 +87,7 @@ def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
 
     Returns:
         Tuple containing email subject and HTML body as strings
+
     """
     # Generate email subject with event context
     email_subject = hdr(instance) + _("Reimbursement request for %(event)s") % {"event": instance.run}
@@ -131,6 +133,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
 
     Returns:
         None
+
     """
     # Skip hidden or new expense items
     if expense_item.hide:
@@ -197,6 +200,7 @@ def get_token_credit_name(association_id: int) -> tuple[str, str]:
     Returns:
         A tuple containing (token_name, credit_name) as strings. Returns
         default translated values if custom names are not configured.
+
     """
     # Create configuration holder for caching retrieved values
     association_config_cache = {}
@@ -233,6 +237,7 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
         - payment_item.hide is False
         - Association has mail_payment config enabled
         - payment_item is being created (no existing pk)
+
     """
     # Early return if payment should be hidden from notifications
     if payment_item.hide:
@@ -277,6 +282,7 @@ def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, 
 
     Returns:
         None
+
     """
     # Send notification to the paying user
     activate(member.language)
@@ -313,6 +319,7 @@ def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: s
     Example:
         >>> subject, body = get_pay_token_email(payment, event_run, "Credits")
         >>> print(subject)  # "Payment: Credit usage for Summer Event 2023"
+
     """
     # Generate localized subject line with event and token information
     subject = hdr(instance) + _("Utilisation %(tokens)s per %(event)s") % {
@@ -348,6 +355,7 @@ def notify_pay_credit(credit_name: str, instance: AccountingItemPayment, member:
 
     Returns:
         None
+
     """
     # Send notification to the member who made the payment
     activate(member.language)
@@ -380,6 +388,7 @@ def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run:
         A tuple containing:
             - subject: Email subject line with event and credit information
             - body: Email body text describing the credit usage
+
     """
     # Generate email subject with event header and credit usage message
     email_subject = hdr(instance) + _("Utilisation %(credits)s per %(event)s") % {
@@ -418,6 +427,7 @@ def notify_pay_money(
 
     Returns:
         None
+
     """
     # Send notification email to the member who made the payment
     activate(paying_member.language)
@@ -455,6 +465,7 @@ def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run
         >>> subject, body = get_pay_money_email('€', payment_instance, event_run)
         >>> print(subject)  # "Payment for Event Name"
         >>> print(body)    # "A payment of 50.00 € was received for this event!"
+
     """
     # Generate email subject with event information
     subject = hdr(instance) + _("Payment for %(event)s") % {"event": run}
@@ -488,6 +499,7 @@ def send_token_credit_notification_email(accounting_item: AccountingItemOther) -
 
     Returns:
         None
+
     """
     # Skip processing if item is marked as hidden
     if accounting_item.hide:
@@ -520,6 +532,7 @@ def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
     Returns
     -------
     None
+
     """
     # Activate user's language for localized messages
     activate(instance.member.language)
@@ -563,6 +576,7 @@ def notify_credit(credit_name: str, instance: AccountingItemOther) -> None:
         - Sends localized email to the credit recipient
         - Sends localized emails to event organizers if credit is run-specific
         - Temporarily changes active language for each recipient
+
     """
     # Send notification email to the credit recipient
     activate(instance.member.language)
@@ -609,6 +623,7 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
         A tuple containing:
             - subject: Formatted email subject line with credit assignment info
             - body: Formatted email body with credit amount, type, and reason
+
     """
     # Build the base subject line with header and credit assignment text
     subject = hdr(instance) + _("Assignment %(elements)s") % {
@@ -669,6 +684,7 @@ def get_token_email(instance: AccountingItemOther, token_name: str) -> tuple[str
         >>> subject, body = get_token_email(accounting_item, "Credits")
         >>> print(subject)
         "Assignment Credits for Event Run 2024"
+
     """
     # Generate base subject with header and token assignment message
     email_subject = hdr(instance) + _("Assignment %(elements)s") % {
@@ -705,6 +721,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
 
     Returns:
         None
+
     """
     # Skip email if donation is marked as hidden
     if instance.hide:
@@ -742,6 +759,7 @@ def send_collection_activation_email(instance: AccountingItemCollection, created
 
     Returns:
         None
+
     """
     # Early return if this is an update, not a creation
     if not created:
@@ -771,11 +789,11 @@ def send_collection_activation_email(instance: AccountingItemCollection, created
 
 
 def send_gift_collection_notification_email(instance: AccountingItemCollection):
-    """
-    Send notification emails when gift collection participation is saved.
+    """Send notification emails when gift collection participation is saved.
 
     Args:
         instance: Collection gift instance
+
     """
     if not instance.pk:
         activate(instance.member.language)
@@ -806,6 +824,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
 
     Returns:
         None
+
     """
     # Check if payment notifications are enabled for this organization
     if not get_association_config(inv.association_id, "mail_payment", False):
@@ -856,6 +875,7 @@ def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:
         tuple[str, str]: A tuple containing:
             - subject (str): Email subject line with header and user info
             - body (str): Email body with payment details and amount
+
     """
     # Generate email subject with header prefix and requesting user
     subj = hdr(p) + _("Request refund from: %(user)s") % {"user": p.member}
@@ -876,6 +896,7 @@ def get_invoice_email(invoice) -> tuple[str, str]:
         tuple[str, str]: A tuple containing (subject, body) strings for the
             payment verification email. Subject includes payment description,
             body contains formatted payment details and action links.
+
     """
     # Start building the email body with verification prompt
     body = _("Verify that the data are correct") + ":"

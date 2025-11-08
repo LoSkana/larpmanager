@@ -105,6 +105,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with membership data and statistics.
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
@@ -191,6 +192,7 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with membership evaluation form
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
@@ -279,6 +281,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with membership check report data.
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership_check")
@@ -329,6 +332,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If member with given ID doesn't exist or user lacks permissions
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
@@ -426,6 +430,7 @@ def exe_membership_status(request, num):
 
     Returns:
         Rendered membership editing form or redirect after successful update
+
     """
     context = check_association_context(request, "exe_membership")
     context["member_edit"] = get_member(num)
@@ -463,6 +468,7 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Rendered registry.html template with formatted member list
         containing members with card numbers, ordered by card number
+
     """
     # Check user permissions for accessing membership registry
     context = check_association_context(request, "exe_membership_registry")
@@ -500,8 +506,7 @@ def exe_membership_registry(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_membership_fee(request: HttpRequest) -> HttpResponse:
-    """
-    Process membership fee payments for executives.
+    """Process membership fee payments for executives.
 
     This function handles both GET and POST requests for processing membership fee
     payments. It validates the form data, creates a payment invoice, and confirms
@@ -518,6 +523,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks 'exe_membership' permission (handled by decorator).
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
@@ -571,6 +577,7 @@ def exe_membership_document(request):
 
     Returns:
         Rendered form for document upload or redirect to membership list
+
     """
     context = check_association_context(request, "exe_membership")
 
@@ -612,6 +619,7 @@ def exe_enrolment(request) -> HttpResponse:
             - year: Current year
             - list: List of members with membership details, enrollment dates,
               and formatted names
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_enrolment")
@@ -670,6 +678,7 @@ def exe_volunteer_registry(request: HttpRequest) -> HttpResponse:
 
     Returns:
         Rendered volunteer registry template
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_volunteer_registry")
@@ -702,6 +711,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
     Raises:
         PermissionDenied: If user lacks exe_volunteer_registry permission.
         Association.DoesNotExist: If association not found.
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_volunteer_registry")
@@ -728,8 +738,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_vote(request: HttpRequest) -> HttpResponse:
-    """
-    Handle voting functionality for executives.
+    """Handle voting functionality for executives.
 
     Displays voting interface with candidates and current vote counts for the current year.
     Shows list of voters who have already participated in the voting process.
@@ -743,6 +752,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     Note:
         Requires 'exe_vote' permission for the associated organization.
         Candidates are configured via 'vote_candidates' association config.
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_vote")
@@ -811,6 +821,7 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with form or redirect after successful submission.
+
     """
     # Check if user has permission to send mail for this association
     context = check_association_context(request, "exe_send_mail")
@@ -834,8 +845,7 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_archive_email(request: HttpRequest) -> HttpResponse:
-    """
-    Display archived emails for the organization with pagination and formatting.
+    """Display archived emails for the organization with pagination and formatting.
 
     This view shows a paginated list of all emails sent through the system,
     with formatted display of email content and metadata.
@@ -845,6 +855,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with paginated email archive
+
     """
     # Check user permissions for accessing email archive
     context = check_association_context(request, "exe_archive_email")
@@ -900,6 +911,7 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
 
     Returns:
         Rendered template response with question lists and context data.
+
     """
     # Check user permissions for accessing executive questions feature
     context = check_association_context(request, "exe_questions")
@@ -923,8 +935,7 @@ def exe_questions(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
-    """
-    Handle question answering for executives.
+    """Handle question answering for executives.
 
     This view allows organization executives to answer help questions submitted by members.
     It displays the member's question history and provides a form to submit answers.
@@ -939,6 +950,7 @@ def exe_questions_answer(request: HttpRequest, r: int) -> HttpResponse:
 
     Raises:
         Member.DoesNotExist: If the member with the given ID doesn't exist
+
     """
     # Check executive permissions for question management
     context = check_association_context(request, "exe_questions")
@@ -1011,6 +1023,7 @@ def exe_newsletter(request):
 
     Returns:
         HttpResponse: Rendered newsletter management page with subscriber lists by language
+
     """
     context = check_association_context(request, "exe_newsletter")
 
@@ -1048,6 +1061,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks exe_newsletter permission for the association
+
     """
     # Check user permissions for newsletter export functionality
     context = check_association_context(request, "exe_newsletter")

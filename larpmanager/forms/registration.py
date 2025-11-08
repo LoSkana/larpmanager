@@ -87,6 +87,7 @@ class RegistrationForm(BaseRegistrationForm):
         Note:
             The form handles waiting list placement, quota management, payment
             processing, and dynamic question generation based on event configuration.
+
         """
         # Call parent constructor with all provided arguments
         super().__init__(*args, **kwargs)
@@ -150,6 +151,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Args:
             ticket: Selected ticket instance
+
         """
         """
         Check if given the selected ticket, we need to not require questions reserved
@@ -207,6 +209,7 @@ class RegistrationForm(BaseRegistrationForm):
         Args:
             event: Event instance
             reg_counts: Registration count data
+
         """
         self.tickets_map = {}
         if self.waiting_check:
@@ -222,6 +225,7 @@ class RegistrationForm(BaseRegistrationForm):
         Args:
             question: Registration question instance
             registration_counts: Registration count data
+
         """
         if question.skip(self.instance, self.params["features"]):
             return
@@ -248,6 +252,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Args:
             event: Event instance
+
         """
         # date surcharge
         surcharge = get_date_surcharge(self.instance, event)
@@ -261,6 +266,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Args:
             run: The Run instance to check status for field initialization.
+
         """
         # Skip if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
@@ -289,6 +295,7 @@ class RegistrationForm(BaseRegistrationForm):
         Args:
             event: Event instance containing quota configurations.
             run: Run instance with status and end date information.
+
         """
         quota_choices = []
 
@@ -348,6 +355,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Returns:
             HTML string containing formatted ticket descriptions for help text
+
         """
         # Get available tickets based on event, registration counts and run
         available_tickets = self.get_available_tickets(event, registration_counts, run)
@@ -385,6 +393,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Returns:
             bool: True if registration has ticket of given tier
+
         """
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == ticket_tier
 
@@ -393,6 +402,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Returns:
             bool: True if registration has primary ticket
+
         """
         excluded_ticket_tiers = [TicketTier.WAITING, TicketTier.FILLER]
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in excluded_ticket_tiers
@@ -405,6 +415,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Returns:
             bool: True if ticket should be visible
+
         """
         if registration_ticket.visible:
             return True
@@ -433,6 +444,7 @@ class RegistrationForm(BaseRegistrationForm):
         Returns:
             List of RegistrationTicket objects available for registration,
             or empty list if no tickets are available
+
         """
         # Check if user has staff or NPC tickets - these take priority
         for tier in [TicketTier.STAFF, TicketTier.NPC]:
@@ -483,6 +495,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Returns:
             bool: True if ticket should be skipped
+
         """
         # if this reduced, check count
         if ticket.tier == TicketTier.REDUCED:
@@ -501,6 +514,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         Returns:
             bool: True if ticket should be skipped
+
         """
         # If the option has a maximum roof, check has not been reached
         if ticket.max_available > 0:
@@ -530,6 +544,7 @@ class RegistrationForm(BaseRegistrationForm):
         Note:
             The logic considers ticket selection state, player history, run status,
             and member's existing registrations to determine ticket visibility.
+
         """
         # If this ticket is already selected in current registration flow, don't skip it
         if "ticket" in self.params and self.params["ticket"] == ticket.id:
@@ -664,6 +679,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         Args:
             *args: Variable length argument list passed to parent form.
             **kwargs: Arbitrary keyword arguments passed to parent form.
+
         """
         super().__init__(*args, **kwargs)
 
@@ -769,6 +785,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         Args:
             registration_section: Section identifier for form organization.
+
         """
         # Skip if quota feature is not enabled
         if "reg_quotas" not in self.params["features"]:
@@ -855,6 +872,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         Raises:
             ValidationError: If member already has an active registration for the event
+
         """
         data = self.cleaned_data["member"]
 
@@ -879,6 +897,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         Returns:
             int: Validated pay_what value (0 if None or empty)
+
         """
         data = self.cleaned_data.get("pay_what")
         # Convert None or empty string to 0 to prevent NULL constraint violations
@@ -895,6 +914,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         Args:
             s: Field name being saved
             instance: Registration instance
+
         """
         if s != "characters_new":
             return super()._save_multi(s, instance)
@@ -919,6 +939,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         Raises:
             ValidationError: If character is already assigned to another player for this event
+
         """
         data = self.cleaned_data["characters_new"]
 
@@ -1003,8 +1024,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
     @staticmethod
     def get_tier_available(event) -> list[tuple[str, str]]:
-        """
-        Get available ticket tiers based on event features and configuration.
+        """Get available ticket tiers based on event features and configuration.
 
         Filters ticket tiers by checking if required features are enabled for the event
         and if necessary configuration options are set. Returns only tiers that meet
@@ -1022,6 +1042,7 @@ class OrgaRegistrationTicketForm(MyForm):
             >>> tiers = get_tier_available(my_event)
             >>> print(tiers)
             [('standard', 'Standard'), ('reduced', 'Reduced Price')]
+
         """
         available_tiers = []
 
@@ -1098,6 +1119,7 @@ class OrgaRegistrationQuestionForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent form
             **kwargs: Arbitrary keyword arguments passed to parent form
+
         """
         super().__init__(*args, **kwargs)
 
@@ -1260,6 +1282,7 @@ class PreRegistrationForm(forms.Form):
         Args:
             *args: Variable length argument list passed to parent
             **kwargs: Arbitrary keyword arguments including 'context' context data
+
         """
         super().__init__()
         self.context = kwargs.pop("context")

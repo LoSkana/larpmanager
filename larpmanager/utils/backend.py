@@ -27,9 +27,8 @@ from django.http import HttpRequest
 
 
 class EmailOrUsernameModelBackend(ModelBackend):
-    """
-    Authentication backend which allows users to authenticate using either their
-    username or email address
+    """Authentication backend which allows users to authenticate using either their
+    username or email address.
 
     Source: https://stackoverflow.com/a/35836674/59984
     """
@@ -41,8 +40,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
         password: Optional[str] = None,
         **kwargs: Any,
     ) -> Optional[AbstractUser]:
-        """
-        Authenticate user with username/password allowing email or username.
+        """Authenticate user with username/password allowing email or username.
 
         Attempts to authenticate a user by checking both username and email fields
         for a match. This allows users to login with either their username or email
@@ -59,6 +57,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
 
         Note:
             Django <2.1 does not pass the request parameter.
+
         """
         # Get the user model for this authentication backend
         user_model = get_user_model()

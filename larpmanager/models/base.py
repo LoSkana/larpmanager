@@ -65,6 +65,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         Example:
             >>> obj.upd_js_attr({'existing': 'value'}, 'name')
             {'existing': 'value', 'name': 'John'}
+
         """
         # Get attribute value from model instance and add to JS object
         javascript_object[attribute_name] = get_attr(self, attribute_name)
@@ -80,6 +81,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
         Returns:
             str: Model name, search field, or default string representation.
+
         """
         # Check for 'name' attribute first - most common display field
         if hasattr(self, "name"):
@@ -97,6 +99,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
         Returns:
             str: URL for the event view using model slug
+
         """
         # noinspection PyUnresolvedReferences
         return reverse("event", kwargs={"event_slug": self.slug})
@@ -106,6 +109,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
         Returns:
             str: First 100 characters of text field or empty string
+
         """
         if hasattr(self, "text"):
             return self.text[:100]
@@ -130,6 +134,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
             >>> data = instance.as_dict()
             >>> print(data)
             {'id': 1, 'name': 'example', 'tags': [1, 2, 3]}
+
         """
         # Get model metadata for field introspection
         # noinspection PyUnresolvedReferences
@@ -212,6 +217,7 @@ class Feature(BaseModel):
 
         Returns:
             str: Feature name and module combination
+
         """
         return f"{self.name} - {self.module}"
 
@@ -248,6 +254,7 @@ class PaymentMethod(BaseModel):
 
         Returns:
             dict: Payment method data with slug, name, and optional profile URL
+
         """
         # noinspection PyUnresolvedReferences
         return {"slug": self.slug, "name": self.name, **({"profile": self.profile_thumb.url} if self.profile else {})}
@@ -279,6 +286,7 @@ def auto_assign_sequential_numbers(instance):
 
     Args:
         instance: Model instance to populate fields for
+
     """
     for field_name in ["number", "order"]:
         if hasattr(instance, field_name) and not getattr(instance, field_name):
@@ -302,6 +310,7 @@ def update_model_search_field(model_instance):
 
     Args:
         model_instance: Model instance to update search field for
+
     """
     if hasattr(model_instance, "search"):
         model_instance.search = None

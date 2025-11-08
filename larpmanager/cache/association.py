@@ -47,6 +47,7 @@ def get_cache_association(association_slug: str) -> dict | None:
 
     Returns:
         Association data dictionary or None if initialization fails.
+
     """
     # Generate cache key for the association
     cache_key = cache_association_key(association_slug)
@@ -78,6 +79,7 @@ def init_cache_association(a_slug: str) -> dict | None:
 
     Raises:
         No exceptions are raised - ObjectDoesNotExist is caught internally.
+
     """
     # Retrieve association object or return None if not found
     try:
@@ -151,6 +153,7 @@ def _init_features(association: Association, cache_element: dict) -> None:
 
     Returns:
         None: Modifies the cache_element dictionary in-place
+
     """
     # Get all features for this association
     cache_element["features"] = get_association_features(association.id)
@@ -194,6 +197,7 @@ def _init_payments(association, payment_info: dict) -> None:
     Args:
         association: Association object containing payment configuration
         payment_info: Dictionary to populate with payment information
+
     """
     # Set currency display information
     payment_info["payment_currency"] = association.get_payment_currency_display()

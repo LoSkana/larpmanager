@@ -239,6 +239,7 @@ class Event(BaseModel):
 
         Returns:
             Ordered queryset of elements
+
         """
         # Get all elements for the parent event
         queryset = element_model_class.objects.filter(event=self.get_class_parent(element_model_class))
@@ -267,6 +268,7 @@ class Event(BaseModel):
             Only specific model classes support inheritance. The method checks against
             a predefined list of inheritable elements and respects campaign independence
             configuration settings.
+
         """
         # Convert class objects to lowercase string representation
         if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
@@ -315,6 +317,7 @@ class Event(BaseModel):
                 Keys include: slug, name, tagline, description, website, genre,
                 where, authors, cover, cover_thumb, carousel_img, carousel_thumb,
                 font, background, background_red (when available).
+
         """
         dc = {}
 
@@ -611,6 +614,7 @@ class Run(BaseModel):
             str: Formatted date string or "TBA" if dates are missing.
                 Examples: "15 January 2024", "15 - 20 January 2024",
                 "15 January - 20 February 2024", "15 January 2024 - 20 January 2025"
+
         """
         # Handle missing dates - return "TBA" if either date is None
         if not self.start or not self.end:
@@ -639,6 +643,7 @@ class Run(BaseModel):
 
         Returns:
             The absolute path to the run's media directory.
+
         """
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences

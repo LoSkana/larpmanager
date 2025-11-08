@@ -93,6 +93,7 @@ def language(request: HttpRequest) -> HttpResponse:
     Note:
         Language changes are immediately activated and stored in the session.
         Authenticated users have their preference saved to the database.
+
     """
     # Determine current language based on user authentication status
     if request.user.is_authenticated:
@@ -240,6 +241,7 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     Note:
         Requires authenticated user with associated member object.
         Only accepts POST requests with valid image files.
+
     """
     # Only accept POST requests
     if not request.method == "POST":
@@ -284,6 +286,7 @@ def profile_rotate(request: HttpRequest, n: int) -> JsonResponse:
     Raises:
         IOError: If image file cannot be opened or saved
         AttributeError: If user has no associated member or profile
+
     """
     # Get the current profile image path
     path = str(request.user.member.profile)
@@ -325,6 +328,7 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered privacy template with user context and memberships.
+
     """
     # Get default user context for the request
     context = get_context(request)
@@ -346,8 +350,7 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
-    """
-    Revoke data sharing permission for a user's membership in an association.
+    """Revoke data sharing permission for a user's membership in an association.
 
     Sets the membership status to EMPTY, effectively removing data sharing consent
     for the user's membership in the specified association.
@@ -361,6 +364,7 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
 
     Raises:
         Http404: When association or membership is not found, or other errors occur
+
     """
     # Initialize context with default user data
     context = get_context(request)
@@ -402,6 +406,7 @@ def membership(request: HttpRequest) -> HttpResponse:
 
     Raises:
         Http404: If membership status is invalid for the requested operation.
+
     """
     # Initialize context with default user context
     context = get_context(request)
@@ -510,6 +515,7 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
 
     Raises:
         Http404: If member has no membership in the current association
+
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
@@ -702,6 +708,7 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
 
     Raises:
         PermissionDenied: If the 'badge' feature is not enabled for the association
+
     """
     # Check if badge feature is enabled for the association
     context = get_context(request)
@@ -744,6 +751,7 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
 
     Returns:
         Redirect response to home page
+
     """
     # Build context with user and association information
     context = get_context(request)
@@ -774,6 +782,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     Raises:
         PermissionDenied: If user doesn't have voting feature access.
         ValidationError: If voting configuration is invalid.
+
     """
     # Verify user has access to voting feature
     context = get_context(request)
@@ -860,6 +869,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
         - May create new delegated user accounts
         - Logs user in as different member (parent or child)
         - Disconnects last login update signal temporarily
+
     """
     # Ensure delegated members feature is enabled
     context = get_context(request)
@@ -946,8 +956,7 @@ def get_user_backend() -> str:
 
 @login_required
 def registrations(request: HttpRequest) -> HttpResponse:
-    """
-    Display user's registrations with status information.
+    """Display user's registrations with status information.
 
     Retrieves and displays all registrations for the current user within their
     association, including status information and related data for optimization.
@@ -959,6 +968,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template displaying the user's registrations
             with status and related information.
+
     """
     nt = []
     context = get_context(request)

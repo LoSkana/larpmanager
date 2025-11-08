@@ -75,6 +75,7 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Raises:
         ReturnNowError: When file download is requested, triggers immediate file response
+
     """
     # Check user permissions and retrieve event context
     context = check_event_context(request, event_slug, "orga_px_abilities")
@@ -117,6 +118,7 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, num: int) -> H
 
     Returns:
         HTTP response for ability editing or redirect
+
     """
     # Check user permissions for PX abilities management
     context = check_event_context(request, event_slug, "orga_px_abilities")

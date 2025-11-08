@@ -56,6 +56,7 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         Returns:
             str
                 HTML string containing feature checkboxes with tooltips and help icons
+
         """
         output = []
         value = value or []
@@ -102,6 +103,7 @@ class FeatureForm(MyForm):
         Side effects:
             Adds feature selection fields to the form organized by modules
             Sets initial values based on current feature assignments
+
         """
         selected_feature_ids = None
         if self.instance.pk:
@@ -141,6 +143,7 @@ class FeatureForm(MyForm):
         Side effects:
             Clears existing features and sets new ones based on form data
             Sets self.added_features with newly added feature IDs
+
         """
         old_features = set(instance.features.values_list("id", flat=True))
         instance.features.clear()
@@ -176,6 +179,7 @@ class QuickSetupForm(MyForm):
         Side effects:
             Creates boolean fields for each setup option
             Sets initial values based on current configuration
+
         """
         # for each value in self.setup, init a field
         for config_key, setup_element in self.setup.items():
@@ -205,6 +209,7 @@ class QuickSetupForm(MyForm):
         Note:
             This method performs database operations even when commit=False for
             feature assignments and configuration updates.
+
         """
         # Save the base instance first
         instance = super().save(commit=commit)

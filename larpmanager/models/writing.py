@@ -80,6 +80,7 @@ class Writing(BaseConceptModel):
 
         Returns:
             Dictionary containing id, number, and name attributes.
+
         """
         # noinspection PyUnresolvedReferences
         # Create base dictionary with id and number
@@ -104,6 +105,7 @@ class Writing(BaseConceptModel):
         Returns:
             Dict containing writing object data with id, number, name, and teaser
             fields suitable for JSON serialization and frontend display.
+
         """
         # Get base dictionary with id, number, and name fields
         js = self.show_red()
@@ -128,6 +130,7 @@ class Writing(BaseConceptModel):
 
         Returns:
             List of CSV rows: first row contains headers, second row contains example data.
+
         """
         # Initialize base CSV structure with mandatory columns
         csv_rows = [
@@ -249,6 +252,7 @@ class Character(Writing):
 
         Returns:
             True if character is active (no inactive config), False otherwise.
+
         """
         is_inactive = self.get_config("inactive", False)
         return not (is_inactive == "True" or is_inactive is True)
@@ -304,6 +308,7 @@ class Character(Writing):
         Args:
             event: Event object to get factions from. If None, uses self.event.
             js: Dictionary to populate with faction data.
+
         """
         js["factions"] = []
 
@@ -342,6 +347,7 @@ class Character(Writing):
 
         Returns:
             The absolute path to the character files directory.
+
         """
         # Build the path to the characters directory for this run
         directory_path = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
@@ -380,6 +386,7 @@ class Character(Writing):
 
         Returns:
             List of CSV rows with headers and examples including player column.
+
         """
         # Get base CSV structure from parent Writing class
         csv_rows = Writing.get_example_csv(enabled_features)
@@ -547,6 +554,7 @@ class Faction(Writing):
 
         Side Effects:
             Creates the faction directory structure if it doesn't exist
+
         """
         # Build directory path: event_media/factions/run_number/
         directory_path = os.path.join(run.event.get_media_filepath(), "factions", f"{run.number}/")
@@ -573,6 +581,7 @@ class Faction(Writing):
         Example:
             For faction #5 in run #2:
             /path/to/media/event_123/factions/2/#5.pdf
+
         """
         # Get the faction directory for this run
         faction_directory = self.get_faction_filepath(run)
@@ -702,6 +711,7 @@ class Handout(Writing):
 
         Returns:
             Absolute path to the handout PDF file.
+
         """
         # Build handouts directory path within event media
         handouts_directory = os.path.join(run.event.get_media_filepath(), "handouts")
@@ -780,6 +790,7 @@ def replace_char_names(text: str, chars: dict[str, str]) -> str:
 
     Returns:
         The processed text with character names replaced, or empty string if input is falsy
+
     """
     # Return empty string if input is falsy
     if not text:
@@ -849,6 +860,7 @@ def replace_character_names(instance) -> None:
     Note:
         Only processes instances that have a primary key, belong to an event,
         and where the event has writing_substitute configuration enabled.
+
     """
     # Early return if instance hasn't been saved to database yet
     if not instance.pk:

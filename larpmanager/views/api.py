@@ -45,6 +45,7 @@ def get_client_ip(request: HttpRequest) -> str:
 
     Returns:
         The client's IP address as a string
+
     """
     x_forwarded_for_header = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for_header:
@@ -73,6 +74,7 @@ def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_stat
 
     Returns:
         None. Errors are logged and admins are notified, but exceptions are suppressed.
+
     """
     try:
         # Get or create a system member for API logging
@@ -120,6 +122,7 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
 
     Raises:
         None: All exceptions are handled internally and returned as error responses
+
     """
     # Extract API key from GET parameters
     api_key_string = request.GET.get("api_key")
@@ -157,6 +160,7 @@ def published_events(request: HttpRequest) -> JsonResponse:
     Raises:
         JsonResponse: Returns error responses for invalid API keys, domain restrictions,
                      or internal server errors (status codes: 403, 401, 500)
+
     """
     # Restrict access to primary domain only in production environments
     if not settings.DEBUG and hasattr(request, "association") and request.association.get("id", 0) != 0:

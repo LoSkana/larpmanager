@@ -42,8 +42,7 @@ def paginate(
     view_name: str,
     exe: bool = True,
 ) -> HttpResponse | JsonResponse:
-    """
-    Handle pagination for DataTables AJAX requests and initial page rendering.
+    """Handle pagination for DataTables AJAX requests and initial page rendering.
 
     This function serves dual purposes:
     1. Renders the initial template with table configuration for GET requests
@@ -60,6 +59,7 @@ def paginate(
     Returns:
         HttpResponse: Rendered template for GET requests
         JsonResponse: DataTables-formatted JSON for POST requests
+
     """
     model_queryset = pagination_model.objects
     # Extract model name for table identification
@@ -105,8 +105,7 @@ def paginate(
 
 
 def _get_elements_query(cls, context: dict, request, model_type, is_executive: bool = True) -> tuple[any, int]:
-    """
-    Get filtered and paginated query elements based on context and request parameters.
+    """Get filtered and paginated query elements based on context and request parameters.
 
     Args:
         cls: The model class to query
@@ -117,6 +116,7 @@ def _get_elements_query(cls, context: dict, request, model_type, is_executive: b
 
     Returns:
         tuple: (filtered_elements_queryset, total_filtered_count)
+
     """
     # Extract pagination and filtering parameters from request
     start_index, page_length, order_params, filter_params = _get_query_params(request)
@@ -177,6 +177,7 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
 
     Returns:
         Filtered queryset with applied search conditions
+
     """
     # Get field mapping configuration for search operations
     field_map = _get_field_map()
@@ -228,6 +229,7 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
     Returns:
         List of Django ORM ordering field names with '-' prefix for descending order
+
     """
     ordering_fields = []
 
@@ -289,6 +291,7 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
             - length: Number of records to return
             - order: List of column names with ordering prefixes ('-' for desc)
             - filters: Dictionary mapping column names to search values
+
     """
     # Extract pagination parameters
     start = int(request.POST.get("start", 0))
@@ -335,6 +338,7 @@ def _prepare_data_json(context: dict, elements: list, view: str, edit: str, exe:
     Returns:
         List of dictionaries where each dict represents a row with string keys
         corresponding to column indices and HTML/text values
+
     """
     table_rows_data = []
 
@@ -394,6 +398,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
     Returns:
         Modified queryset with applied select_related, prefetch_related,
         annotations, and ordering based on the model type
+
     """
     # Apply select_related optimization for AccountingItem and subclasses
     if issubclass(typ, AccountingItem):

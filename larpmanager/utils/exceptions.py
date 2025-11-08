@@ -29,6 +29,7 @@ class FeatureError(Exception):
         feature (str): The feature that was required but not enabled
         run (int): Run ID associated with the error
         path (str): Request path where the error occurred
+
     """
 
     def __init__(self, feature: str, run: int, path: str) -> None:
@@ -38,6 +39,7 @@ class FeatureError(Exception):
             feature: The feature object to associate
             run: The run object to associate
             path: The file path string
+
         """
         super().__init__()
         # Store the feature reference
@@ -53,6 +55,7 @@ class RedirectError(Exception):
 
     Attributes:
         view (str): View name to redirect to
+
     """
 
     def __init__(self, view: Any) -> None:
@@ -66,6 +69,7 @@ class SignupError(Exception):
 
     Attributes:
         slug (str): Event slug associated with the signup error
+
     """
 
     def __init__(self, slug: str) -> None:
@@ -79,6 +83,7 @@ class WaitingError(Exception):
 
     Attributes:
         slug (str): Event slug for the waiting period
+
     """
 
     def __init__(self, slug: str) -> None:
@@ -92,6 +97,7 @@ class HiddenError(Exception):
     Attributes:
         slug (str): Event slug
         name (str): Name of the hidden content
+
     """
 
     def __init__(self, slug: str, name: str) -> None:
@@ -124,6 +130,7 @@ class MembershipError(Exception):
 
     Attributes:
         assocs (list, optional): List of associations related to the error
+
     """
 
     def __init__(self, assocs: list | None = None) -> None:
@@ -151,6 +158,7 @@ def check_association_feature(request: HttpRequest, context: dict, feature_slug:
 
     Example:
         check_association_feature(request, 'advanced_registration')
+
     """
     # Check if the requested feature slug exists in the association's enabled features
     if feature_slug not in context["features"]:
@@ -177,6 +185,7 @@ def check_event_feature(request: HttpRequest, context: dict, feature_slug: str) 
     Example:
         >>> check_event_feature(request, event_ctx, 'character_creation')
         # Raises FeatureError if 'character_creation' feature is disabled
+
     """
     # Check if the requested feature slug exists in the event's enabled features
     if feature_slug not in context["features"]:
@@ -189,6 +198,7 @@ class MainPageError(Exception):
 
     Attributes:
         path (str, optional): Original request path
+
     """
 
     def __init__(self, request: HttpRequest | None = None) -> None:
@@ -204,6 +214,7 @@ class ReturnNowError(Exception):
 
     Attributes:
         value: Value to return (typically JSON response)
+
     """
 
     def __init__(self, value: Any = None) -> None:

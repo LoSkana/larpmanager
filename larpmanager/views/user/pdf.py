@@ -48,6 +48,7 @@ def character_pdf_sheet(request: HttpRequest, event_slug: str, num: int) -> Http
 
     Returns:
         HTTP response containing the PDF character sheet
+
     """
     # Get event run context with signup verification
     context = get_event_context(request, event_slug, signup=True)
@@ -73,6 +74,7 @@ def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, num: int
 
     Returns:
         HttpResponse containing the printer-friendly character PDF
+
     """
     # Get event run context and validate signup access
     context = get_event_context(request, event_slug, signup=True)
@@ -98,6 +100,7 @@ def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int)
 
     Returns:
         PDF response with character relationships
+
     """
     # Get event/run context with signup validation
     context = get_event_context(request, event_slug, signup=True)

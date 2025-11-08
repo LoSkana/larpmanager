@@ -99,6 +99,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks required permissions for the event
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_expenses_my")
@@ -135,8 +136,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """
-    Display payment invoices awaiting confirmation for event organizers.
+    """Display payment invoices awaiting confirmation for event organizers.
 
     This view shows submitted payment invoices for the current event run with
     optimized database queries to prevent N+1 query problems. Results are
@@ -152,6 +152,7 @@ def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
     Raises:
         PermissionDenied: If user lacks 'orga_invoices' permission for the event
         Http404: If event with given slug does not exist
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_invoices")
@@ -194,6 +195,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> Ht
     Raises:
         Http404: If the invoice doesn't belong to the current event
         PermissionDenied: If user lacks orga_invoices permission (via check_event_context)
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_invoices")
@@ -236,8 +238,7 @@ def orga_accounting(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_tokens(request: HttpRequest, event_slug) -> dict:
-    """
-    Display and manage accounting tokens for an organization's events.
+    """Display and manage accounting tokens for an organization's events.
 
     This view handles the display of accounting tokens (credits/debits) for events
     within an organization, providing a paginated interface for token management.
@@ -251,6 +252,7 @@ def orga_tokens(request: HttpRequest, event_slug) -> dict:
 
     Raises:
         PermissionDenied: If user lacks 'orga_tokens' permission for the event
+
     """
     # Check user permissions for token management in the specified event
     context = check_event_context(request, event_slug, "orga_tokens")
@@ -295,6 +297,7 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered paginated credits page with accounting items
+
     """
     # Check user permissions for accessing organization credits functionality
     context = check_event_context(request, event_slug, "orga_credits")
@@ -328,8 +331,7 @@ def orga_credits_edit(request, event_slug, num):
 
 @login_required
 def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """
-    Display organization payments page with filterable payment data.
+    """Display organization payments page with filterable payment data.
 
     Args:
         request: HTTP request object containing user session and form data
@@ -337,6 +339,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered payments page with paginated payment data
+
     """
     # Check user permissions for accessing organization payments
     context = check_event_context(request, event_slug, "orga_payments")
@@ -389,8 +392,7 @@ def orga_payments_edit(request, event_slug, num):
 
 @login_required
 def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """
-    Display paginated outflow accounting items for event organizers.
+    """Display paginated outflow accounting items for event organizers.
 
     Args:
         request: HTTP request object containing user authentication and parameters
@@ -401,6 +403,7 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks 'orga_outflows' permission for the event
+
     """
     # Check user permissions for accessing outflow data in the specified event
     context = check_event_context(request, event_slug, "orga_outflows")
@@ -453,6 +456,7 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> dict:
 
     Returns:
         dict: Rendered HTTP response with paginated inflows table and context data
+
     """
     # Check user permissions for accessing organization inflow data
     context = check_event_context(request, event_slug, "orga_inflows")
@@ -490,8 +494,7 @@ def orga_inflows_edit(request, event_slug, num):
 
 @login_required
 def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """
-    Display and manage organization expenses for a specific event.
+    """Display and manage organization expenses for a specific event.
 
     This view provides paginated expense management functionality for event organizers,
     including approval actions and statement downloads when permissions allow.
@@ -502,6 +505,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with expense data and pagination controls
+
     """
     # Check user permissions for expense management and initialize context
     context = check_event_context(request, event_slug, "orga_expenses")
@@ -573,6 +577,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
     Raises:
         Http404: If expenses are disabled, expense doesn't exist, or user
                 lacks permission for the event
+
     """
     # Check user permissions for expense management on this event
     context = check_event_context(request, event_slug, "orga_expenses")

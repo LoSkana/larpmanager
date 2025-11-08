@@ -1,5 +1,4 @@
-"""
-Script to analyze Python files and count function invocations.
+"""Script to analyze Python files and count function invocations.
 
 This script walks through all .py files in the larpmanager codebase, identifies all function
 definitions, and counts how many times each function is called from within other
@@ -71,14 +70,14 @@ class FunctionAnalyzer(ast.NodeVisitor):
 
 
 def analyze_file(path):
-    """
-    Analyze a single Python file for function definitions and invocations.
+    """Analyze a single Python file for function definitions and invocations.
 
     Args:
         path: Path to the Python file
 
     Returns:
         tuple: (functions set, invocations list) or (None, None) if parsing fails
+
     """
     try:
         with open(path, 'r', encoding='utf-8') as f:
@@ -95,14 +94,14 @@ def analyze_file(path):
 
 
 def find_python_files(root_dir):
-    """
-    Find all Python files in the larpmanager directory.
+    """Find all Python files in the larpmanager directory.
 
     Args:
         root_dir: Root directory to search
 
     Yields:
         Path objects for each .py file found in larpmanager/
+
     """
     root_path = Path(root_dir)
     larpmanager_dir = root_path / 'larpmanager'

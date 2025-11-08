@@ -71,6 +71,7 @@ class ExceptionHandlingMiddleware:
             This method handles application-specific exceptions by routing them to
             appropriate error pages or redirect responses. Unhandled exceptions
             return None to allow Django's default exception handling.
+
         """
         # Define exception type to handler mappings for clean separation of concerns
         handlers = [
@@ -161,6 +162,7 @@ class ExceptionHandlingMiddleware:
 
         Raises:
             Http404: If association skin is managed, or if feature/run objects are not found
+
         """
         # Check if association skin is managed - if so, deny access completely
         context = get_context(request)

@@ -90,6 +90,7 @@ class Command(BaseCommand):
 
         Raises:
             ValueError: If field doesn't exist, isn't M2M, or slugs are missing
+
         """
         # Get the M2M field from the model metadata
         try:
@@ -133,6 +134,7 @@ class Command(BaseCommand):
 
         Returns:
             Dictionary containing only the many-to-many fields (list values)
+
         """
         many_to_many_fields = {}
         # Iterate through a copy of keys to safely modify the original dict

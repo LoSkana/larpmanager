@@ -56,6 +56,7 @@ class TokenAuthMiddleware:
         Note:
             Token is validated against cached user_id. Invalid tokens or users
             are silently ignored for security reasons.
+
         """
         # Extract authentication token from query parameters
         token = request.GET.get("token")

@@ -363,6 +363,7 @@ class WorkshopQuestion(BaseModel):
 
         Returns:
             Dictionary containing id, number and name attributes.
+
         """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "opt": [], "number": self.number}
@@ -398,6 +399,7 @@ class WorkshopOption(BaseModel):
 
         Returns:
             Dictionary with id, correctness flag, and name if present.
+
         """
         # noinspection PyUnresolvedReferences
         # Build base dict with id and correctness status
@@ -654,6 +656,7 @@ class Problem(BaseModel):
 
         Returns:
             Truncated string (max 100 chars) or original string if attribute doesn't exist.
+
         """
         # Check if attribute exists on object
         if not hasattr(self, attribute_name):
@@ -732,8 +735,7 @@ class Email(BaseModel):
 
 
 class OneTimeContent(BaseModel):
-    """
-    Model to store multimedia content for one-time access via tokens.
+    """Model to store multimedia content for one-time access via tokens.
     Organizers can upload video/audio files and generate access tokens.
     """
 
@@ -817,24 +819,24 @@ class OneTimeContent(BaseModel):
         super().save(*args, **kwargs)
 
     def generate_token(self, note=""):
-        """
-        Generate a new access token for this content.
+        """Generate a new access token for this content.
 
         Args:
             note (str): Optional note describing the purpose of this token
 
         Returns:
             OneTimeAccessToken: The newly created token
+
         """
         token = OneTimeAccessToken.objects.create(content=self, note=note)
         return token
 
     def get_token_stats(self):
-        """
-        Get statistics about tokens for this content.
+        """Get statistics about tokens for this content.
 
         Returns:
             dict: Dictionary with token statistics
+
         """
         access_tokens = self.access_tokens.all()
         return {
@@ -845,8 +847,7 @@ class OneTimeContent(BaseModel):
 
 
 class OneTimeAccessToken(BaseModel):
-    """
-    Access token for one-time viewing of content.
+    """Access token for one-time viewing of content.
     Each token can only be used once.
     """
 
@@ -926,12 +927,12 @@ class OneTimeAccessToken(BaseModel):
         super().save(*args, **kwargs)
 
     def mark_as_used(self, http_request=None, authenticated_member=None):
-        """
-        Mark this token as used and record access information.
+        """Mark this token as used and record access information.
 
         Args:
             http_request: Django HttpRequest object to extract metadata
             authenticated_member: Member object if user is authenticated
+
         """
         self.used = True
         self.used_at = timezone.now()

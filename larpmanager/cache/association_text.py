@@ -38,6 +38,7 @@ def update_association_text(association_id: int, typ: str, lang: str) -> str:
 
     Returns:
         Text content or empty string if not found
+
     """
     text_content = ""
     try:
@@ -62,6 +63,7 @@ def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
 
     Returns:
         Cached or freshly updated association text
+
     """
     # Try to get cached text
     cached_text = cache.get(association_text_key(association_id, typ, lang))
@@ -86,6 +88,7 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
 
     Returns:
         The default text content or empty string if not found
+
     """
     default_text = ""
     try:
@@ -112,6 +115,7 @@ def get_association_text_cache_def(association_id: int, typ: str) -> str:
 
     Returns:
         Association text content
+
     """
     # Try to retrieve from cache first
     cached_text = cache.get(association_text_key_def(association_id, typ))
@@ -136,6 +140,7 @@ def get_association_text(association_id: int, text_type: str, language_code: str
 
     Returns:
         The localized text string, or default language text if not found.
+
     """
     # Use current language if none specified
     if not language_code:

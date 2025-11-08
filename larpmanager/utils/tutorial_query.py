@@ -32,6 +32,7 @@ def _save_index(index_dir: str, schema) -> object:
 
     Returns:
         Whoosh index object
+
     """
     # Create directory if it doesn't exist and return new index
     if not os.path.exists(index_dir):
@@ -50,6 +51,7 @@ def get_or_create_index_tutorial(tutorial_index_directory: str) -> object:
 
     Returns:
         The created or existing search index object.
+
     """
     # Define schema for tutorial search indexing
     tutorial_schema = Schema(
@@ -65,8 +67,7 @@ def get_or_create_index_tutorial(tutorial_index_directory: str) -> object:
 
 @background_auto(queue="whoosh")
 def add_tutorial_to_search_index(tutorial_id: int) -> None:
-    """
-    Index tutorial content for search functionality.
+    """Index tutorial content for search functionality.
 
     Parses tutorial HTML content to extract sections and indexes them
     for full-text search. Each H2/H3 section is indexed separately
@@ -80,6 +81,7 @@ def add_tutorial_to_search_index(tutorial_id: int) -> None:
 
     Raises:
         No exceptions are raised - ObjectDoesNotExist is handled internally.
+
     """
     # Attempt to retrieve the tutorial instance
     try:
@@ -140,6 +142,7 @@ def get_or_create_index_guide(index_directory_path: str) -> object:
 
     Returns:
         The created or existing search index object.
+
     """
     # Define schema for guide documents with searchable fields
     guide_schema = Schema(
@@ -158,6 +161,7 @@ def add_guide_to_search_index(guide_id):
 
     Args:
         guide_id: ID of the LarpManagerGuide to index
+
     """
     try:
         instance = LarpManagerGuide.objects.get(pk=guide_id)
@@ -208,6 +212,7 @@ def get_sorted_permissions(model: type, query: str) -> list[dict[str, str]]:
 
     Returns:
         List of permission dictionaries sorted by name similarity to query
+
     """
     # Filter permissions by name or description containing the query
     permissions = model.objects.filter(Q(name__icontains=query) | Q(descr__icontains=query)).values(
@@ -238,6 +243,7 @@ def query_index(request: HttpRequest) -> JsonResponse:
         ValueError: If run_id cannot be converted to integer (handled internally)
         TypeError: If run_id is None (handled internally)
         ObjectDoesNotExist: If specified run doesn't exist (handled internally)
+
     """
     # Extract and validate input parameters
     original_search_query: str = request.POST.get("q", "")

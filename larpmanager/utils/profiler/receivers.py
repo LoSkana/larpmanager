@@ -46,6 +46,7 @@ def handle_profiler_response(
 
     Returns:
         None: This function doesn't return any value
+
     """
     # Parse the URL to separate path from query parameters
     parsed_url = urlparse(path)

@@ -126,6 +126,7 @@ class PaymentInvoice(BaseModel):
 
         Returns:
             Download URL or empty string if no invoice/name available.
+
         """
         # Check if invoice exists
         if not self.invoice:
@@ -145,6 +146,7 @@ class PaymentInvoice(BaseModel):
         Returns:
             str: HTML formatted string containing download link, text description,
                  and payment code if available. Returns empty string if no method.
+
         """
         details_html = ""
 
@@ -216,6 +218,7 @@ class ElectronicInvoice(BaseModel):
         Args:
             *args: Variable length argument list passed to parent save method.
             **kwargs: Arbitrary keyword arguments passed to parent save method.
+
         """
         # Auto-generate progressive number if not set (global counter)
         if not self.progressive:
@@ -271,6 +274,7 @@ class AccountingItem(BaseModel):
 
         Returns:
             String with ID, class name, and member info if available.
+
         """
         # Build base string with class name
         s = "Voce contabile"

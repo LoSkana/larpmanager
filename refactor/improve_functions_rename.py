@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Script to automatically improve functions using Claude Code CLI.
+"""Script to automatically improve functions using Claude Code CLI.
 Can accept a specific function as input or process from function_rename.csv.
 Processes each function: adds type hints, improves docstrings, adds comments.
 """
@@ -35,6 +34,7 @@ def extract_function_from_file(file_path: Path, function_name: str, function_num
         file_path: Path to the Python file
         function_name: Name of the function to extract
         function_number: Which occurrence of the function to extract (1-based)
+
     """
     try:
         with open(file_path, encoding="utf-8") as f:
@@ -70,8 +70,7 @@ def extract_function_from_file(file_path: Path, function_name: str, function_num
 def improve_function_with_claude_code(
     function_name: str, file_path: Path, function_source: str = None, function_number: int = 1
 ) -> tuple[bool, str | None]:
-    """
-    Call Claude Code CLI to improve the function.
+    """Call Claude Code CLI to improve the function.
     Returns (success, improved_function_source).
     """
     if function_source is None:
@@ -147,8 +146,7 @@ IMPORTANTE:
 
 
 def get_function_line_range(file_path: Path, function_name: str, function_number: int = 1) -> tuple[int, int] | None:
-    """
-    Get the line range of a function in a file.
+    """Get the line range of a function in a file.
 
     Args:
         file_path: Path to the Python file
@@ -157,6 +155,7 @@ def get_function_line_range(file_path: Path, function_name: str, function_number
 
     Returns:
         (start_line, end_line) or None if not found.
+
     """
     try:
         with open(file_path, encoding="utf-8") as f:
@@ -257,6 +256,7 @@ def replace_function_in_file(
         new_function_code: The improved function code
         original_function: The original function source
         function_number: Which occurrence of the function to replace (1-based)
+
     """
     try:
         with open(file_path, encoding="utf-8") as f:

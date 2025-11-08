@@ -102,6 +102,7 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
     -----
     The function uses exe_paginate for consistent pagination behavior and applies
     custom formatting callbacks for statement downloads and expense type display.
+
     """
     # Check user permissions and get base context for association
     context = check_association_context(request, "exe_outflows")
@@ -150,6 +151,7 @@ def exe_outflows_edit(request: HttpRequest, num: int) -> HttpResponse:
     Raises:
         Http404: If outflow record with given ID does not exist
         PermissionDenied: If user lacks permission to edit outflows
+
     """
     # Delegate to generic edit handler with outflow-specific form and redirect
     return exe_edit(request, ExeOutflowForm, num, "exe_outflows")
@@ -169,6 +171,7 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks required association permissions.
+
     """
     # Check user permissions for association accounting inflows access
     context = check_association_context(request, "exe_inflows")
@@ -224,6 +227,7 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks required association permissions.
+
     """
     # Check user has permission to view donations for this association
     context = check_association_context(request, "exe_donations")
@@ -255,8 +259,7 @@ def exe_donations_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 @login_required
 def exe_credits(request: HttpRequest) -> dict:
-    """
-    Display and manage credits for an association.
+    """Display and manage credits for an association.
 
     This view function handles the display of accounting credits for an organization,
     providing a paginated list with filtering and editing capabilities.
@@ -267,6 +270,7 @@ def exe_credits(request: HttpRequest) -> dict:
     Returns:
         dict: A dictionary containing the rendered HTML response with credits data
               and pagination controls.
+
     """
     # Check user permissions for credits management
     context = check_association_context(request, "exe_credits")
@@ -302,8 +306,7 @@ def exe_credits_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 @login_required
 def exe_tokens(request: HttpRequest) -> HttpResponse:
-    """
-    Display paginated list of accounting tokens for organization executives.
+    """Display paginated list of accounting tokens for organization executives.
 
     This view handles the display of token-based accounting items with filtering
     and pagination capabilities for organization-level administrators.
@@ -316,6 +319,7 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks 'exe_tokens' permission for the association.
+
     """
     # Check user permissions for token management at organization level
     context = check_association_context(request, "exe_tokens")
@@ -351,8 +355,7 @@ def exe_tokens_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 @login_required
 def exe_expenses(request: HttpRequest) -> HttpResponse:
-    """
-    Handle expense management for organization executives.
+    """Handle expense management for organization executives.
 
     Displays a paginated list of accounting expense items with approval functionality.
     Only users with 'exe_expenses' permission can access this view.
@@ -362,6 +365,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered expenses page with paginated expense items
+
     """
     # Check user permissions for expense management
     context = check_association_context(request, "exe_expenses")
@@ -422,6 +426,7 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
 
     Raises:
         Http404: If expense doesn't exist or doesn't belong to current organization
+
     """
     # Check user has permission to manage expenses
     context = check_association_context(request, "exe_expenses")
@@ -457,6 +462,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with paginated payment data and context
+
     """
     # Check user permissions for accessing payments section
     context = check_association_context(request, "exe_payments")
@@ -521,6 +527,7 @@ def exe_invoices(request) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with invoice list and pagination
+
     """
     # Check user permissions for invoice management
     context = check_association_context(request, "exe_invoices")
@@ -593,6 +600,7 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If invoice is already confirmed or in invalid status
+
     """
     # Check user permissions for invoice management
     context = check_association_context(request, "exe_invoices")
@@ -653,6 +661,7 @@ def exe_refunds(request: HttpRequest) -> dict:
 
     Raises:
         PermissionDenied: If user lacks exe_refunds permission
+
     """
     # Check user permissions for refund management
     context = check_association_context(request, "exe_refunds")
@@ -707,6 +716,7 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If the refund request is not in REQUEST status (already processed)
+
     """
     # Check user permissions for accessing refund management
     context = check_association_context(request, "exe_refunds")
@@ -773,6 +783,7 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If run doesn't belong to user's association
+
     """
     # Check user has accounting permissions for this association
     context = check_association_context(request, "exe_accounting")
@@ -825,6 +836,7 @@ def check_year(request: HttpRequest, context: dict) -> int:
 
     Raises:
         Association.DoesNotExist: If association with given ID doesn't exist
+
     """
     # Get association and generate valid years range
     association = Association.objects.get(pk=context["association_id"])
@@ -869,6 +881,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks exe_balance permission
+
     """
     # Verify user has executive balance permission
     context = check_association_context(request, "exe_balance")
@@ -994,6 +1007,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionError: If user lacks required association permissions for verification
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_verification")
@@ -1065,6 +1079,7 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If the invoice doesn't belong to the user's organization
+
     """
     # Check user has permission to access manual verification
     context = check_association_context(request, "exe_verification")

@@ -57,6 +57,7 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
     Side Effects:
         - Creates new Album instances in database for missing directories
         - Updates cache_subs dictionary with newly created albums
+
     """
     # Extract directory path, removing filename component
     directory_path = os.path.dirname(name)
@@ -115,6 +116,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     Returns:
         None
+
     """
     # Check if file already exists in album to avoid duplicates
     upload_name = os.path.basename(name)
@@ -180,6 +182,7 @@ def upload_albums(main, el):
 
     Side effects:
         Extracts zip file, creates album structure, uploads all images
+
     """
     cache_subalbums = {}
 
@@ -208,6 +211,7 @@ def zipdir(path, ziph):
 
     Side effects:
         Adds all files in directory tree to zip archive
+
     """
     for root, _dirs, files in os.walk(path):
         for file in files:
@@ -236,6 +240,7 @@ def check_centauri(request: HttpRequest, context: dict) -> Optional[HttpResponse
     Side Effects:
         Awards a configurable badge to the authenticated user if Centauri is triggered
         and a badge is configured for the association.
+
     """
     # Early return if Centauri feature is not enabled for this association
     if "centauri" not in context["features"]:
@@ -271,6 +276,7 @@ def _go_centauri(context: dict) -> bool:
 
     Returns:
         bool: True if Centauri should be displayed
+
     """
     if not context["member"]:
         return False
@@ -301,6 +307,7 @@ def get_warehouse_optionals(context, default_columns):
 
     Side effects:
         Updates context with optionals configuration and header column settings
+
     """
     optionals = {}
     has_active_optional = 0
@@ -332,6 +339,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
         - Handles EXIF orientation data automatically
         - Optimizes JPEG quality and converts RGBA/LA/P modes to RGB for JPEG format
         - Silently returns on any errors to avoid breaking the calling process
+
     """
     # Validate that the instance has a photo ImageField
     try:
@@ -402,6 +410,7 @@ def _get_extension(uploaded_file, image) -> str:
 
     Returns:
         str: Image format string (e.g., 'JPEG', 'PNG', 'WEBP')
+
     """
     # Extract file extension and normalize to lowercase
     file_extension = os.path.splitext(uploaded_file.name)[1].lower()
@@ -434,6 +443,7 @@ def _check_new(file_field, instance, sender) -> bool:
     Returns:
         True if this is not a new file upload (file already exists and unchanged),
         False if this is a new file upload or the file has changed
+
     """
     # Check if instance already exists in database
     if instance.pk:

@@ -313,6 +313,7 @@ class Member(BaseModel):
 
         Returns:
             str: The display name for the member.
+
         """
         # Use nickname if available
         if self.nickname:
@@ -353,6 +354,7 @@ class Member(BaseModel):
 
         Returns:
             The absolute path to the member's PDF directory.
+
         """
         # Build base PDF members directory path
         member_pdf_directory = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
@@ -575,6 +577,7 @@ class Badge(BaseModel):
 
         Returns:
             Dictionary with id, number, name, description and optional image URL
+
         """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
@@ -649,6 +652,7 @@ def get_user_membership(user: Member, association: Union[Association, int]) -> M
 
     Raises:
         Http404: If the association ID is invalid or not found
+
     """
     # Check if user already has a cached membership attribute
     if hasattr(user, "membership"):

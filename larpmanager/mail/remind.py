@@ -37,6 +37,7 @@ def remember_membership(registration):
 
     Side effects:
         Sends email reminder about membership requirement
+
     """
     activate(registration.member.language)
 
@@ -69,6 +70,7 @@ def get_remember_membership_body(registration) -> str:
         - Link to membership application
         - Offer for assistance
         - Warning about registration cancellation
+
     """
     # Generate main instruction message with event name and membership link
     email_body = (
@@ -111,6 +113,7 @@ def remember_pay(registration):
 
     Side effects:
         Sends email reminder about payment requirement
+
     """
     activate(registration.member.language)
 
@@ -148,6 +151,7 @@ def get_remember_pay_body(context: dict, is_provisional_registration: bool, regi
         >>> context = {'event': 'Summer LARP 2024'}
         >>> body = get_remember_pay_body(context, False, registration_obj)
         >>> print(body)  # Returns formatted HTML email body
+
     """
     # Extract payment information and build payment URL
     currency_symbol = registration.run.event.association.get_currency_symbol()
@@ -205,6 +209,7 @@ def remember_profile(registration):
 
     Side effects:
         Sends email reminder about profile completion requirement
+
     """
     activate(registration.member.language)
     context = {"event": registration.run, "url": get_url("profile", registration.run.event)}
@@ -226,6 +231,7 @@ def get_remember_profile_body(email_context):
 
     Returns:
         str: HTML formatted email body for profile reminder
+
     """
     return (
         _("Hello! You signed up for %(event)s but haven't completed your profile yet") % email_context
@@ -243,6 +249,7 @@ def remember_membership_fee(registration):
 
     Side effects:
         Sends email reminder about annual membership fee requirement
+
     """
     activate(registration.member.language)
     context = {"event": registration.run}
@@ -269,6 +276,7 @@ def get_remember_membership_fee_body(context: dict, registration) -> str:
     Returns:
         HTML formatted string containing the complete email body with membership
         fee reminder message and payment link
+
     """
     # Create main greeting and issue description
     email_body = (
@@ -311,6 +319,7 @@ def notify_deadlines(run):
 
     Side effects:
         Sends deadline reminder emails to all event organizers
+
     """
     deadline_results = check_run_deadlines([run])
     if not deadline_results:

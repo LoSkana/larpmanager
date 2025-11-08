@@ -64,6 +64,7 @@ def _temp_csv_file(column_headers, data_rows):
 
     Returns:
         str: CSV formatted string
+
     """
     df = pd.DataFrame(data_rows, columns=column_headers)
     buffer = io.StringIO()
@@ -82,6 +83,7 @@ def zip_exports(context, exports, filename):
 
     Returns:
         HttpResponse: ZIP file download response
+
     """
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
@@ -105,6 +107,7 @@ def download(context, typ, nm):
 
     Returns:
         HttpResponse: ZIP download response
+
     """
     exports = export_data(context, typ)
     return zip_exports(context, exports, nm.capitalize())
@@ -123,6 +126,7 @@ def export_data(context: dict, model_type: type, member_cover: bool = False) -> 
 
     Returns:
         List of tuples containing (model_name, headers, data_rows) for export
+
     """
     # Initialize query and prepare basic export data
     queryset = model_type.objects.all()
@@ -173,6 +177,7 @@ def export_plot_rels(context):
 
     Returns:
         list: Export tuple with plot relationship data
+
     """
     column_keys = ["plot", "character", "text"]
     relationship_values = []
@@ -201,6 +206,7 @@ def export_relationships(context):
 
     Returns:
         list: Export tuple with relationship data
+
     """
     column_headers = ["source", "target", "text"]
     relationship_rows = []
@@ -234,6 +240,7 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
             - choices: Dictionary mapping question_id -> element_id -> [choice_names]
             - questions: List of applicable questions for the model
             - assignments: (character model only) character_id -> member mapping
+
     """
     # Determine applicable question types for the model
     # noinspection PyProtectedMember
@@ -327,6 +334,7 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
     -------
     tuple[list, list]
         Tuple containing (values_list, headers_list) for the export row
+
     """
     row_values = []
     column_headers = []
@@ -391,6 +399,7 @@ def _row_header(
 
     Returns:
         None: Function modifies header_columns and row_values lists in place
+
     """
     # Extract member based on model type
     member = None
@@ -464,6 +473,7 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
 
     Returns:
         None: Function modifies key and val lists in-place
+
     """
     # Handle character-related data if character feature is enabled
     if "character" in context["features"]:
@@ -527,6 +537,7 @@ def _get_standard_row(context: dict, element: object) -> tuple[list, list]:
 
     Returns:
         Tuple of (values list, keys list)
+
     """
     values = []
     keys = []
@@ -554,6 +565,7 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
 
     Returns:
         None: Function modifies key and val lists in-place
+
     """
     processed_value = field_value
 
@@ -625,6 +637,7 @@ def _download_prepare(context: dict, model_name: str, queryset, type_config: dic
     Returns:
         Filtered and optimized Django queryset ready for CSV export with all
         necessary related data loaded and additional computed fields attached
+
     """
     # Apply event-based filtering if specified in type configuration
     if check_field(type_config, "event"):
@@ -669,6 +682,7 @@ def get_writer(context: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
 
     Returns:
         Tuple of HTTP response and CSV writer objects
+
     """
     # Create HTTP response with CSV content type and download headers
     response = HttpResponse(
@@ -701,6 +715,7 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
             - str: Sheet name for Excel export
             - list: Column headers
             - list: Data rows for the sheet
+
     """
     # Initialize mappings for question types and status values
     mappings = {
@@ -745,6 +760,7 @@ def _extract_values(field_names: list, queryset: object, field_mappings: dict) -
 
     Returns:
         List of lists containing extracted and transformed values for each row
+
     """
     all_values = []
 
@@ -773,8 +789,7 @@ def orga_character_form_download(context: dict) -> HttpResponse:
 
 
 def export_character_form(context: dict) -> list[tuple[str, list, list]]:
-    """
-    Export character form questions and options to CSV format.
+    """Export character form questions and options to CSV format.
 
     This function extracts writing questions and their associated options from an event
     and formats them for CSV export. It processes question metadata (type, status,
@@ -795,6 +810,7 @@ def export_character_form(context: dict) -> list[tuple[str, list, list]]:
         The function exports two sections:
         1. Writing questions with their metadata
         2. Writing options linked to their parent questions
+
     """
     # Define mappings for enum fields to human-readable values
     field_mappings = {
@@ -833,8 +849,7 @@ def export_character_form(context: dict) -> list[tuple[str, list, list]]:
 
 
 def _orga_registrations_acc(context, registrations=None):
-    """
-    Process registration accounting data for organizer reports.
+    """Process registration accounting data for organizer reports.
 
     Args:
         context: Context dictionary with event and feature information
@@ -842,6 +857,7 @@ def _orga_registrations_acc(context, registrations=None):
 
     Returns:
         dict: Processed accounting data keyed by registration ID
+
     """
     # Use cached accounting data for efficiency
     cached_data = get_registration_accounting_cache(context["run"])
@@ -858,8 +874,7 @@ def _orga_registrations_acc(context, registrations=None):
 
 
 def _orga_registrations_acc_reg(reg, context: dict, cache_aip: dict) -> dict:
-    """
-    Process registration accounting data for organizer downloads.
+    """Process registration accounting data for organizer downloads.
 
     Calculates payment breakdowns, remaining balances, and ticket pricing
     information for registration accounting reports.
@@ -878,6 +893,7 @@ def _orga_registrations_acc_reg(reg, context: dict, cache_aip: dict) -> dict:
             - Payment type breakdown (pay_a, pay_b, pay_c) if token_credit enabled
             - Remaining balance calculation
             - Ticket and options pricing breakdown
+
     """
     dt = {}
 
@@ -941,6 +957,7 @@ def _get_column_names(context: dict) -> None:
         - columns: List of dicts with column names and descriptions
         - fields: Dict mapping field names to types (for registration type)
         - name: Name of the export type (for px_abilitie type)
+
     """
     # Handle registration data export with participant, ticket, and question columns
     if context["typ"] == "registration":
@@ -1076,6 +1093,7 @@ def _get_writing_names(context: dict) -> None:
 
     Returns:
         None: Function modifies context dictionary in-place
+
     """
     # Determine the applicable writing question type based on context
     context["writing_typ"] = QuestionApplicable.get_applicable(context["typ"])
@@ -1143,6 +1161,7 @@ def export_tickets(context: dict) -> list[tuple[str, list[str], list]]:
 
     Returns:
         List containing tuple of (table_name, headers, data_rows).
+
     """
     # Define field mappings for data transformation
     mappings = {
@@ -1169,6 +1188,7 @@ def export_event(context):
 
     Returns:
         list: List of tuples containing configuration and features export data
+
     """
     column_names = ["name", "value"]
     configuration_values = []
@@ -1197,6 +1217,7 @@ def export_abilities(context):
     Returns:
         list: Single-item list containing tuple of ("abilities", keys, values)
               where keys are column headers and values are ability data rows
+
     """
     column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
 

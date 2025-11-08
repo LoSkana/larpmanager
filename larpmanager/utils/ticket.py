@@ -44,6 +44,7 @@ def analyze_ticket_bgk(ticket_id):
 
     Raises:
         Exception: If Claude is not available or ticket not found
+
     """
     # Verify connection
     if not _test_connection():
@@ -64,8 +65,7 @@ def analyze_ticket_bgk(ticket_id):
 
 
 def _analyze_ticket(ticket):
-    """Analyzes the ticket using Claude in a separate analysis directory"""
-
+    """Analyzes the ticket using Claude in a separate analysis directory."""
     # Get the analysis directory (sibling to the current project directory)
     current_dir = Path(__file__).resolve().parent.parent.parent
     analysis_dir = current_dir.parent / "analysis"
@@ -139,8 +139,7 @@ def _analyze_ticket(ticket):
 
 
 def _test_connection():
-    """Verify that Claude is installed and configured"""
-
+    """Verify that Claude is installed and configured."""
     result = subprocess.run(["claude", "--version"], check=False, capture_output=True, text=True, timeout=5)
     return result.returncode == 0
 
@@ -150,6 +149,7 @@ def _send_analysis_result_email(ticket):
 
     Args:
         ticket: LarpManagerTicket instance with completed analysis
+
     """
     # Build email subject
     subject = f"Ticket Analysis Complete - {ticket.association.name} [Ticket #{ticket.id}]"
@@ -196,6 +196,7 @@ def create_error_ticket(request):
 
     Returns:
         LarpManagerTicket instance if created, None if duplicate exists
+
     """
     # Get the exception if available
     exc_info = sys.exc_info()

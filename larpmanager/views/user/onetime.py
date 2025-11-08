@@ -55,6 +55,7 @@ def file_iterator(
     Raises:
         OSError: If file operations (seek/read) fail
         ValueError: If chunk_size <= 0 or start_pos/max_length < 0
+
     """
     try:
         # Seek to starting position if specified
@@ -91,14 +92,13 @@ def file_iterator(
 @never_cache
 @require_http_methods(["GET", "POST"])
 def onetime_access(request, token):
-    """
-    Public view to access one-time content via token.
+    """Public view to access one-time content via token.
     Security features:
     - No caching headers
     - No indexing headers
     - Token can only be used once
     - Streaming instead of direct download
-    - Logs access information
+    - Logs access information.
     """
     try:
         access_token = OneTimeAccessToken.objects.select_related("content").get(token=token)
@@ -169,8 +169,7 @@ def onetime_access(request, token):
 @never_cache
 @require_http_methods(["GET"])
 def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
-    """
-    Stream the media file for a one-time content with range request support.
+    """Stream the media file for a one-time content with range request support.
 
     This endpoint is called by video players to stream protected content files.
     Supports HTTP range requests for video seeking and handles security headers
@@ -185,6 +184,7 @@ def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
 
     Raises:
         Http404: If token is invalid, not initialized, content inactive, or file not found
+
     """
     content, file = _onetime_prepare(token)
 
@@ -276,6 +276,7 @@ def _onetime_prepare(token: str) -> tuple[Any, Any]:
 
     Raises:
         Http404: If token is invalid, expired, not initialized, or file unavailable
+
     """
     # Set maximum token usage time window (1 hour)
     max_time_use_seconds = 3600  # 3600 seconds = 1 hour

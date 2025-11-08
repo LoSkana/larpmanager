@@ -86,6 +86,7 @@ def get_acc_detail(
             - detail: Dictionary with breakdown by type (if type_field provided)
             - name: Display name
             - descr: Description
+
     """
     # Initialize result dictionary with base structure
     result = {"tot": 0, "num": 0, "detail": {}, "name": name, "descr": description}
@@ -141,6 +142,7 @@ def get_acc_reg_type(registration) -> tuple[str, str]:
         tuple[str, str]: A tuple containing:
             - type_code: Short code identifying the registration type
             - display_name: Human-readable name for the registration type
+
     """
     # Check if registration has been cancelled
     if registration.cancellation_date:
@@ -175,6 +177,7 @@ def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
             - detail: Breakdown by ticket type with individual totals/counts
             - name: Display name passed as parameter
             - descr: Description passed as parameter
+
     """
     # Initialize result dictionary with base structure
     accounting_data = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
@@ -218,6 +221,7 @@ def get_token_details(nm: str, run) -> dict:
             - num (int): Number of accounting items
             - detail (dict): Empty detail dictionary for future use
             - name (str): Display name for the category
+
     """
     # Initialize result dictionary with default values
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm}
@@ -259,6 +263,7 @@ def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> 
 
     Side effects:
         Updates run.revenue, run.costs, run.balance, and run.tax fields and saves the run
+
     """
     details_by_category = {}
     # Fetch feature flags to determine which accounting categories are enabled for this event
@@ -420,6 +425,7 @@ def check_accounting(association_id: int) -> None:
     Side Effects:
         Creates a new RecordAccounting entry in the database containing the
         calculated global_sum and bank_sum values for the association.
+
     """
     # Initialize context dictionary with association ID for accounting calculation
     context = {"association_id": association_id}
@@ -449,6 +455,7 @@ def check_run_accounting(run: Run) -> None:
     Side Effects:
         - Updates run accounting calculations via get_run_accounting
         - Creates a new RecordAccounting entry in the database
+
     """
     # Perform accounting calculations and update run balance
     get_run_accounting(run, {})
@@ -485,6 +492,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
         - refund_sum: Total refunds
         - in_sum: Total incoming money
         - out_sum: Total outgoing money
+
     """
     # Determine the date range for filtering accounting records
     if year:
@@ -598,6 +606,7 @@ def association_accounting(context: dict) -> None:
         - bank_sum: Bank account balance based on recorded transactions
         - sum_year: Dictionary mapping years to 1 (for year range)
         Plus all fields from association_accounting_data()
+
     """
     # Initialize member balance tracking
     context.update({"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0})

@@ -56,6 +56,7 @@ def reduced(value: str | None) -> str:
         'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa[...]'
         >>> reduced(None)
         None
+
     """
     # Define maximum allowed length before truncation
     max_length = 50

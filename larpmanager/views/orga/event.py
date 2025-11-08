@@ -95,6 +95,7 @@ def full_event_edit(
     Returns:
         HttpResponse: Either the edit form template for GET requests or a
         redirect response after successful form submission
+
     """
     # Disable numbering in the template context
     context["nonum"] = 1
@@ -269,6 +270,7 @@ def orga_features(request, event_slug):
 
     Returns:
         HttpResponse: Rendered features form or redirect after activation
+
     """
     context = check_event_context(request, event_slug, "orga_features")
     context["add_another"] = False
@@ -307,6 +309,7 @@ def orga_features_go(request: HttpRequest, context: dict, slug: str, on: bool = 
 
     Raises:
         Http404: If the feature is an overall feature (not event-specific)
+
     """
     # Get the feature from context using the slug
     get_feature(context, slug)
@@ -358,6 +361,7 @@ def _orga_feature_after_link(feature: Feature, event_slug: str) -> str:
 
     Returns:
         Full URL path for redirect
+
     """
     after_link = feature.after_link
 
@@ -434,8 +438,7 @@ def orga_backup(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 def _prepare_backup(context: dict) -> HttpResponse:
-    """
-    Prepare comprehensive event data backup by exporting various components.
+    """Prepare comprehensive event data backup by exporting various components.
 
     Creates a ZIP file containing exported event data including registrations,
     characters, factions, plots, abilities, and quest builder components based
@@ -453,6 +456,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
     Raises:
         KeyError: If required context keys are missing
         Exception: If export or ZIP creation fails
+
     """
     export_files = []
 
@@ -493,8 +497,7 @@ def _prepare_backup(context: dict) -> HttpResponse:
 
 @login_required
 def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse:
-    """
-    Handle file uploads for organizers with element processing.
+    """Handle file uploads for organizers with element processing.
 
     This function manages the upload process for various types of elements
     (characters, items, etc.) in LARP events. It validates permissions,
@@ -510,6 +513,7 @@ def orga_upload(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse
 
     Raises:
         Exception: Any error during file processing is caught and displayed to user
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, f"orga_{typ}")
@@ -571,6 +575,7 @@ def orga_upload_template(request, event_slug: str, typ: str) -> HttpResponse:
     Raises:
         PermissionDenied: If user lacks permission to access the specified event
         ValidationError: If template type is invalid or event not found
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug)
@@ -629,6 +634,7 @@ def _ability_template(context):
 
     Returns:
         list: Export data containing ability template with example values
+
     """
     export_data = []
     field_example_values = {
@@ -666,6 +672,7 @@ def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]
             - str: Template type ("questions" or "options")
             - list[str]: Column headers/keys
             - list[list[str]]: Sample data rows
+
     """
     template_exports = []
 
@@ -733,6 +740,7 @@ def _reg_template(
 
     Returns:
         List of tuples containing template name, column keys, and row values
+
     """
     # Extract existing column keys from context
     column_keys = list(context["columns"][0].keys())
@@ -779,6 +787,7 @@ def _writing_template(
     Returns:
         List of tuples containing template data where each tuple is:
         (template_name, column_keys, row_values_list)
+
     """
     # Extract non-skipped fields and their corresponding example values
     column_keys = [key for key, field_type in context["fields"].items() if field_type != "skip"]

@@ -55,6 +55,7 @@ class BaseQuestionType(models.TextChoices):
 
         Returns:
             set: Question types requiring text input
+
         """
         return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
@@ -64,6 +65,7 @@ class BaseQuestionType(models.TextChoices):
 
         Returns:
             set: Question types with predefined choices
+
         """
         return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
@@ -73,6 +75,7 @@ class BaseQuestionType(models.TextChoices):
 
         Returns:
             set: All basic question type values
+
         """
         return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
@@ -97,6 +100,7 @@ def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[st
 
     Returns:
         models.TextChoices: Extended choices class
+
     """
     members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
@@ -126,6 +130,7 @@ def get_def_writing_types():
 
     Returns:
         set: Set of default WritingQuestionType values
+
     """
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
 
@@ -135,6 +140,7 @@ def get_writing_max_length():
 
     Returns:
         int: Maximum character length for writing fields
+
     """
     return {
         WritingQuestionType.NAME,
@@ -309,6 +315,7 @@ class WritingQuestion(BaseModel):
 
         Returns:
             Dictionary containing description and name fields.
+
         """
         js = {}
         # Update JSON dict with description and name attributes
@@ -337,6 +344,7 @@ class WritingQuestion(BaseModel):
 
         Returns:
             bool: Always returns False, indicating no skipping should occur
+
         """
         # Default behavior: never skip processing
         return False
@@ -422,6 +430,7 @@ class WritingOption(BaseModel):
 
         Returns:
             Dictionary containing max_available and updated attributes.
+
         """
         # Initialize response with max available count
         js = {"max_available": self.max_available}
@@ -595,6 +604,7 @@ class RegistrationQuestion(BaseModel):
 
         Returns:
             QuerySet of RegistrationQuestion objects ordered by section and question order
+
         """
         # Get all questions for the event, ordered by section first, then by question order
         questions = RegistrationQuestion.objects.filter(event=event).order_by(
@@ -726,6 +736,7 @@ class RegistrationOption(BaseModel):
 
         Returns:
             Dictionary with tier name, price, description, question, and max availability.
+
         """
         # Build base dictionary with max availability
         js = {"max_available": self.max_available}
@@ -810,6 +821,7 @@ def _get_writing_mapping() -> dict[str, str]:
 
     Returns:
         Dictionary mapping writing types to module names.
+
     """
     # Core writing type mappings
     writing_type_to_module_mapping = {

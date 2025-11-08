@@ -105,6 +105,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         Raises:
             KeyError: If required 'params' key is missing from kwargs.
+
         """
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -123,6 +124,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         Returns:
             True if question is editable, False otherwise
+
         """
         # If character approval is disabled, all questions are editable
         character_approval_enabled = get_event_config(
@@ -159,6 +161,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             - Handles different field types based on question configuration
             - Adds organizer-specific fields when applicable
             - Conditionally adds character proposal field for user approval workflow
+
         """
         # Get event, preferring parent event if available
         event = self.params["event"]
@@ -261,6 +264,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         Returns:
             None
+
         """
         # Skip plots field - it's handled separately in _save_plot()
         if s == "plots":
@@ -302,6 +306,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         Raises:
             ValidationError: If more than one primary faction is selected
+
         """
         cleaned_data = super().clean()
 
@@ -456,6 +461,7 @@ class OrgaCharacterForm(CharacterForm):
 
         Args:
             instance: Character instance to save plots for
+
         """
         if "plot" not in self.params["features"]:
             return
@@ -559,6 +565,7 @@ class OrgaCharacterForm(CharacterForm):
 
         Args:
             instance: Character instance being saved
+
         """
         if "relationships" not in self.params["features"]:
             return
@@ -619,6 +626,7 @@ class OrgaCharacterForm(CharacterForm):
 
         Returns:
             The relationship object
+
         """
         # Create direct relationship (instance -> character)
         if relationship_type == "direct":
@@ -636,6 +644,7 @@ class OrgaCharacterForm(CharacterForm):
 
         Returns:
             The saved instance.
+
         """
         # Save the main instance using parent's save method
         instance = super().save()
@@ -693,6 +702,7 @@ class OrgaWritingQuestionForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent
             **kwargs: Arbitrary keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
 
@@ -859,6 +869,7 @@ class OrgaWritingOptionForm(MyForm):
 
         Side effects:
             Modifies form fields based on available features and event configuration
+
         """
         super().__init__(*args, **kwargs)
 

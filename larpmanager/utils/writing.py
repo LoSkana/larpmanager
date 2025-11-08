@@ -89,6 +89,7 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
         - assigned_map: Counter dict for assignment occurrences
         - progress_assigned_map: Counter dict for progress/assignment combinations
         - typ: String representation of the model type
+
     """
     features = context["features"]
     event = context["event"]
@@ -146,6 +147,7 @@ def writing_popup_question(context, idx, question_idx):
 
     Returns:
         dict: Question data for popup rendering
+
     """
     try:
         character = Character.objects.get(pk=idx, event=context["event"].get_class_parent(Character))
@@ -175,6 +177,7 @@ def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model
 
     Raises:
         ObjectDoesNotExist: When the requested writing element is not found
+
     """
     # Load all cached event data into context
     get_event_cache_all(context)
@@ -227,6 +230,7 @@ def writing_example(context, typ):
 
     Returns:
         dict: Example content and structure for the writing type
+
     """
     example_csv_rows = typ.get_example_csv(context["features"])
 
@@ -252,6 +256,7 @@ def writing_post(request, context, writing_element_type, template_name):
 
     Raises:
         ReturnNowError: When download operation needs to return immediately
+
     """
     if not request.POST:
         return
@@ -286,6 +291,7 @@ def writing_list(
     Note:
         This function modifies the context dictionary in-place and handles various
         writing types through conditional logic and specialized helper functions.
+
     """
     # Process any POST data for writing operations
     writing_post(request, context, writing_type, template_name)
@@ -362,6 +368,7 @@ def writing_bulk(context, request, typ):
 
     Side effects:
         Executes bulk operations through type-specific handlers
+
     """
     type_to_bulk_handler = {Character: handle_bulk_characters, Quest: handle_bulk_quest, Trait: handle_bulk_trait}
 
@@ -377,6 +384,7 @@ def _get_custom_form(context):
 
     Side effects:
         Updates context with form_questions and fields_name dictionaries
+
     """
     if not context["writing_typ"]:
         return
@@ -396,8 +404,7 @@ def _get_custom_form(context):
 
 
 def writing_list_query(context: dict, event, model_type) -> tuple[list[str], bool]:
-    """
-    Build optimized database query for writing element lists.
+    """Build optimized database query for writing element lists.
 
     Constructs an efficient Django ORM query for retrieving writing elements
     with appropriate select_related and prefetch_related optimizations based
@@ -412,6 +419,7 @@ def writing_list_query(context: dict, event, model_type) -> tuple[list[str], boo
         A tuple containing:
             - list[str]: Text fields that were deferred from the query
             - bool: Whether the model is a Writing subclass
+
     """
     # Determine if this is a Writing model and set up basic query structure
     is_writing_model = issubclass(model_type, Writing)
@@ -439,13 +447,13 @@ def writing_list_query(context: dict, event, model_type) -> tuple[list[str], boo
 
 
 def writing_list_text_fields(context, text_fields, writing_element_type):
-    """
-    Add editor-type question fields to text fields list and retrieve cached data.
+    """Add editor-type question fields to text fields list and retrieve cached data.
 
     Args:
         context: Context dictionary with event and writing type information
         text_fields: List of text field names to extend
         writing_element_type: Writing element model class
+
     """
     # add editor type questions
     writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
@@ -456,13 +464,13 @@ def writing_list_text_fields(context, text_fields, writing_element_type):
 
 
 def retrieve_cache_text_field(context, text_fields, element_type):
-    """
-    Retrieve and attach cached text field data to writing elements.
+    """Retrieve and attach cached text field data to writing elements.
 
     Args:
         context: Context dictionary with list of elements
         text_fields: List of text field names to cache
         element_type: Writing element model class
+
     """
     cached_text_fields = get_cache_text_field(element_type, context["event"])
     for element in context["list"]:
@@ -482,6 +490,7 @@ def _prepare_writing_list(context, request):
     Args:
         context: Template context dictionary to update
         request: HTTP request object with user information
+
     """
     try:
         name_question = (
@@ -515,6 +524,7 @@ def writing_list_plot(context):
 
     Side effects:
         Adds chars dictionary to context and attaches character lists to plot objects
+
     """
     event_relationships = get_event_rels_cache(context["event"]).get("plots", {})
 
@@ -588,6 +598,7 @@ def writing_list_char(context: dict) -> None:
 
     Returns:
         None: Modifies context dictionary in place
+
     """
     # Add player relationship if user_character feature is enabled
     if "user_character" in context["features"]:
@@ -637,11 +648,11 @@ def writing_list_char(context: dict) -> None:
 
 
 def char_add_addit(context):
-    """
-    Add additional configuration data to all characters in the context list.
+    """Add additional configuration data to all characters in the context list.
 
     Args:
         context: Context dictionary containing character list and event information
+
     """
     character_configs_by_id = {}
     event = context["event"].get_class_parent(Character)
@@ -658,8 +669,7 @@ def char_add_addit(context):
 
 
 def writing_view(request: HttpRequest, context: dict[str, Any], element_type_name: str) -> HttpResponse:
-    """
-    Display writing element view with character data and relationships.
+    """Display writing element view with character data and relationships.
 
     Args:
         request: HTTP request object containing user session and request data
@@ -673,6 +683,7 @@ def writing_view(request: HttpRequest, context: dict[str, Any], element_type_nam
         This function handles different writing element types and populates the context
         with appropriate data for rendering. Special handling is provided for character
         and plot elements.
+
     """
     # Set up base element data and context
     context["el"] = context[element_type_name]
@@ -722,6 +733,7 @@ def writing_versions(request, context, element_name, version_type):
 
     Returns:
         HttpResponse: Rendered versions template with diff data
+
     """
     context["versions"] = (
         TextVersion.objects.filter(tp=version_type, eid=context[element_name].id)
@@ -748,6 +760,7 @@ def replace_character_names_before_save(instance):
         instance: Character instance being saved
         *args: Additional positional arguments
         **kwargs: Additional keyword arguments
+
     """
     if not instance.pk:
         return

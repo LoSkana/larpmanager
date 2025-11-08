@@ -48,6 +48,7 @@ def is_reg_provisional(
 
     Returns:
         bool: True if registration is provisional, False otherwise
+
     """
     # Get event from registration if not provided
     if not event:
@@ -71,8 +72,7 @@ def is_reg_provisional(
 
 
 def get_payment_details(association: Association) -> dict:
-    """
-    Decrypt and retrieve payment details for association.
+    """Decrypt and retrieve payment details for association.
 
     Reads encrypted payment details from file system, decrypts using association's
     encryption key, and returns the data as a dictionary. If decryption fails or
@@ -87,6 +87,7 @@ def get_payment_details(association: Association) -> dict:
 
     Raises:
         None: All exceptions are caught and handled internally
+
     """
     # Initialize cipher with association's encryption key
     cipher = Fernet(association.key)
@@ -129,6 +130,7 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
 
     Returns:
         None
+
     """
     # Set member from registration if not already set
     if not instance.member:
@@ -163,6 +165,7 @@ def handle_collection_pre_save(instance: Collection) -> None:
 
     Returns:
         None
+
     """
     # Handle new Collection instances - generate unique codes
     if not instance.pk:
@@ -183,6 +186,7 @@ def handle_accounting_item_collection_post_save(instance):
 
     Args:
         instance: AccountingItemCollection instance that was saved
+
     """
     if instance.collection:
         instance.collection.save()

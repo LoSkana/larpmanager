@@ -49,6 +49,7 @@ def get_reg_counts(run: Run, reset_cache: bool = False) -> dict:
 
     Returns:
         Dictionary containing registration count data
+
     """
     # Generate cache key for this run
     cache_key = cache_registration_counts_key(run.id)
@@ -74,6 +75,7 @@ def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1)
         counter_dict: Dictionary to modify
         parameter_name: Key to add or increment
         increment_value: Value to add (default: 1)
+
     """
     # Initialize parameter if not present
     if parameter_name not in counter_dict:
@@ -97,6 +99,7 @@ def update_reg_counts(run) -> dict[str, int]:
         Dictionary containing registration counts data by ticket tier and choices.
         Keys include count_reg, count_wait, count_staff, count_fill, tk_{ticket_id},
         option_{option_id}, and option_char_{option_id}.
+
     """
     # Initialize base counters
     counts = {"count_reg": 0, "count_wait": 0, "count_staff": 0, "count_fill": 0}
@@ -173,8 +176,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
 
 
 def search_player(character, json_output: dict, context: dict) -> None:
-    """
-    Search for players in registration cache and populate results.
+    """Search for players in registration cache and populate results.
 
     This function attempts to find player registration data for a given character,
     either from a pre-loaded assignments cache or by querying the database directly.
@@ -188,6 +190,7 @@ def search_player(character, json_output: dict, context: dict) -> None:
 
     Returns:
         None: Function modifies character and json_output objects in place
+
     """
     # Check if assignments are pre-loaded in context (cache hit)
     if "assignments" in context:

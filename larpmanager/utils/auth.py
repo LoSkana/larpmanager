@@ -54,6 +54,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             - Updates member's name field if empty and 'given_name' is available
             - Updates member's surname field if empty and 'family_name' is available
             - Saves the member instance to persist changes
+
         """
         # Extract extra data from social login account
         social_provider_data = sociallogin.account.extra_data
@@ -90,6 +91,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             - Connects social account to existing user if email match found
             - Updates member profile with social login data
             - No action taken if user already exists or has no email
+
         """
         user = sociallogin.user
 
@@ -136,6 +138,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             - Creates new User instance in database
             - Updates associated Member profile with social login data
             - May trigger user creation signals
+
         """
         # Create the base user instance using parent implementation
         user = super().save_user(request, sociallogin, form)
@@ -163,6 +166,7 @@ def is_lm_admin(request: HttpRequest) -> bool:
 
     Note:
         Admin group checking is currently not implemented (TODO).
+
     """
     # Check if user has associated member profile
     if not hasattr(request.user, "member"):
@@ -199,6 +203,7 @@ def check_lm_admin(request: HttpRequest) -> dict[str, int]:
         >>> context = check_lm_admin(request)
         >>> print(context)
         {'association_id': 123, 'lm_admin': 1}
+
     """
     # Check if the current user has LM administrator privileges
     if not is_lm_admin(request):
@@ -225,6 +230,7 @@ def get_allowed_managed() -> list[str]:
         >>> permissions = get_allowed_managed()
         >>> 'exe_events' in permissions
         True
+
     """
     management_permission_keys = [
         # Executive-level permissions for organization-wide features
@@ -251,6 +257,7 @@ def auto_assign_event_permission_number(event_permission):
 
     Args:
         event_permission: EventPermission instance to assign number to
+
     """
     if not event_permission.number:
         max_number = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(

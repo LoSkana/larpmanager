@@ -125,6 +125,7 @@ class LarpManagerShowcase(BaseModel):
 
         Returns:
             str: HTML string for reduced image display or empty string if no image
+
         """
         if self.reduced:
             # noinspection PyUnresolvedReferences
@@ -136,6 +137,7 @@ class LarpManagerShowcase(BaseModel):
 
         Returns:
             str: First 100 characters of the showcase text
+
         """
         return self.text[:100]
 
@@ -153,6 +155,7 @@ class LarpManagerShowcase(BaseModel):
         Returns:
             Dictionary representation of the model instance with image URLs
             included if available.
+
         """
         # Get base dictionary representation from parent class
         result_dict = super().as_dict(include_many_to_many)
@@ -207,6 +210,7 @@ class LarpManagerGuide(BaseModel):
 
         Returns:
             str: HTML string for thumbnail display or empty string if no image
+
         """
         if self.thumb:
             # noinspection PyUnresolvedReferences
@@ -218,6 +222,7 @@ class LarpManagerGuide(BaseModel):
 
         Returns:
             str: First 100 characters of the guide text
+
         """
         return self.text[:100]
 
@@ -315,6 +320,7 @@ class LarpManagerTicket(BaseModel):
 
         Returns:
             str: HTML string for screenshot thumbnail or empty string if no image
+
         """
         if self.screenshot_reduced:
             # noinspection PyUnresolvedReferences

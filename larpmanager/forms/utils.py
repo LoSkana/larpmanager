@@ -65,6 +65,7 @@ def render_js(cls):
 
     Returns:
         list: HTML script tags with defer attributes
+
     """
     return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
 
@@ -116,6 +117,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         Args:
             *args: Variable positional arguments
             **kwargs: Arbitrary keyword arguments including help_text and feature_map
+
         """
         self.feature_help = kwargs.pop("help_text", {})
         self.feature_map = kwargs.pop("feature_map", {})
@@ -138,6 +140,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 
         Returns:
             Safe HTML string containing the complete checkbox widget markup
+
         """
         output = []
         # Ensure value is a list for membership checking
@@ -184,6 +187,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
 
         Returns:
             str: Translated name of the instance
+
         """
         return _(obj.name)
 
@@ -207,6 +211,7 @@ def prepare_permissions_role(form, typ) -> None:
         - Adds permission fields to form.fields dict
         - Sets form.modules list with field names
         - Sets form.prevent_canc=True for role number 1 (executives)
+
     """
     # Early return for executive role (number 1) - prevent cancellation
     if form.instance and form.instance.number == 1:
@@ -285,6 +290,7 @@ def save_permissions_role(instance, form):
     Side effects:
         Clears existing permissions and adds selected ones
         Skips permission saving for role number 1 (executives)
+
     """
     instance.save()
     if form.instance and form.instance.number == 1:
@@ -433,6 +439,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
 
         Returns:
             Formatted string with display name and email.
+
         """
         # noinspection PyUnresolvedReferences
         return f"{obj.display_real()} - {obj.email}"
@@ -446,6 +453,7 @@ def get_association_people(association_id):
 
     Returns:
         list: List of (member_id, display_string) tuples
+
     """
     ls = []
     que = Membership.objects.select_related("member").filter(association_id=association_id)
@@ -465,6 +473,7 @@ def get_run_choices(self, past=False):
     Side effects:
         Creates or updates 'run' field in form with run choices
         Sets initial value if run is in params
+
     """
     choices = [("", "-----")]
     runs = (
@@ -788,6 +797,7 @@ def remove_choice(choices, type_to_remove):
 
     Returns:
         list: New choice list without the specified type
+
     """
     filtered_choices = []
     for key, value in choices:
@@ -822,6 +832,7 @@ def get_members_queryset(association_id):
 
     Returns:
         QuerySet: Members with accepted, submitted, or joined membership status
+
     """
     allowed_statuses = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
     queryset = Member.objects.prefetch_related("memberships")

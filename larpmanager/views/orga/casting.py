@@ -81,6 +81,7 @@ def orga_casting_history(request: HttpRequest, event_slug: str, typ: int = 0) ->
 
     Returns:
         Rendered casting history template
+
     """
     # Check user permissions for casting history access
     context = check_event_context(request, event_slug, "orga_casting_history")
@@ -98,8 +99,7 @@ def orga_casting_history(request: HttpRequest, event_slug: str, typ: int = 0) ->
 
 
 def assign_casting(request: HttpRequest, context: dict, assignment_type: int) -> None:
-    """
-    Handle character casting assignment for organizers.
+    """Handle character casting assignment for organizers.
 
     Processes POST data to assign members to characters or traits in a LARP event.
     Supports mirror character functionality where assignments can be redirected
@@ -115,6 +115,7 @@ def assign_casting(request: HttpRequest, context: dict, assignment_type: int) ->
 
     Raises:
         No exceptions are raised, but errors are collected and displayed as messages
+
     """
     # TODO Assign member to mirror_inv
     # Check if mirror character feature is enabled
@@ -190,6 +191,7 @@ def get_casting_choices_characters(
             - taken_character_ids: List of character IDs that are already assigned
             - mirror_character_mapping: dict mapping character IDs to their mirror character IDs
             - allowed_character_ids: List of character IDs allowed by faction filtering
+
     """
     character_choices = {}
     mirror_character_mapping = {}
@@ -245,6 +247,7 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int]
 
     Returns:
         Tuple of (choices dict, taken trait IDs, empty dict)
+
     """
     trait_choices = {}
     assigned_trait_ids = []
@@ -307,6 +310,7 @@ def check_casting_player(
 
     Example:
         >>> should_skip = check_casting_player(context, registration, filters, 0, memb_cache, aim_cache)
+
     """
     # Filter by ticket type - skip if player's ticket not in allowed list
     if "tickets" in casting_filter_options and str(registration.ticket_id) not in casting_filter_options["tickets"]:
@@ -369,6 +373,7 @@ def get_casting_data(
         - Loads membership and payment status caches
         - Calculates registration and payment priorities
         - Filters players based on form options
+
     """
     # Extract filtering options from form (tickets, membership status, payment status)
     filter_options = form.get_data()
@@ -465,6 +470,7 @@ def _casting_prepare(context: dict, request, typ: str) -> tuple[int, dict[int, s
             - membership_fee_year: Membership fee year for the association
             - member_id_to_status: Dictionary mapping member IDs to their membership status
             - member_id_to_castings: Dictionary mapping member IDs to their list of casting objects
+
     """
     # Get the membership fee year for the current association
     membership_fee_year = get_membership_fee_year(context["association_id"])
@@ -487,8 +493,7 @@ def _casting_prepare(context: dict, request, typ: str) -> tuple[int, dict[int, s
 
 
 def _get_player_info(players: dict, registration: Registration) -> None:
-    """
-    Update the players dictionary with registration information for a single player.
+    """Update the players dictionary with registration information for a single player.
 
     Args:
         players (dict): Dictionary to store player information, keyed by member ID
@@ -496,6 +501,7 @@ def _get_player_info(players: dict, registration: Registration) -> None:
 
     Returns:
         None: Function modifies the players dictionary in-place
+
     """
     # Initialize basic player information with default priority
     players[registration.member_id] = {
@@ -532,6 +538,7 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
 
     Returns:
         List of preference elements for the player
+
     """
     # Initialize preferences list
     preferences = []
@@ -576,6 +583,7 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
         tuple: A tuple containing:
             - list: Sorted list of available character IDs that weren't chosen or taken
             - int: Number of characters actually added to each preference list
+
     """
     # Collect all character IDs that are available (not chosen and not taken)
     available_character_ids = []
@@ -619,6 +627,7 @@ def orga_casting(request: HttpRequest, event_slug: str, typ: Optional[int] = Non
 
     Raises:
         Http404: When the submitted form is not valid
+
     """
     # Check user permissions for accessing casting functionality
     context = check_event_context(request, event_slug, "orga_casting")
