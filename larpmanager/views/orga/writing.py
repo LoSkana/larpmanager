@@ -198,7 +198,8 @@ def orga_plots_versions(request: HttpRequest, event_slug: str, num: int) -> Http
 
 @login_required
 def orga_factions(request: HttpRequest, event_slug: str) -> HttpResponse:
-    # Delegate to writing_list for faction management in event context
+    """Delegate faction management to writing_list view in event context."""
+    # Validate event context and permissions
     context = check_event_context(request, event_slug, "orga_factions")
     return writing_list(request, context, Faction, "faction")
 
@@ -276,6 +277,7 @@ def orga_factions_versions(request: HttpRequest, event_slug: str, num: int) -> H
 
 @login_required
 def orga_quest_types(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage quest types for an event."""
     # Check event context and permissions for quest types management
     context = check_event_context(request, event_slug, "orga_quest_types")
     return writing_list(request, context, QuestType, "quest_type")
@@ -346,6 +348,7 @@ def orga_quest_types_versions(
 
 @login_required
 def orga_quests(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display event quests list for organizers."""
     # Validate event access and permissions
     context = check_event_context(request, event_slug, "orga_quests")
     return writing_list(request, context, Quest, "quest")
@@ -473,6 +476,7 @@ def orga_traits_versions(
 
 @login_required
 def orga_handouts(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display handouts list for event organizers."""
     # Check permissions and get event context for handouts feature
     context = check_event_context(request, event_slug, "orga_handouts")
     return writing_list(request, context, Handout, "handout")
@@ -569,6 +573,7 @@ def orga_handouts_versions(request: HttpRequest, event_slug: str, num: int) -> H
 
 @login_required
 def orga_handout_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display handout template list for event organizers."""
     # Check permissions and retrieve event context
     context = check_event_context(request, event_slug, "orga_handout_templates")
     return writing_list(request, context, HandoutTemplate, "handout_template")
@@ -599,6 +604,7 @@ def orga_handout_templates_edit(request: HttpRequest, event_slug: str, num: int)
 
 @login_required
 def orga_prologue_types(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display prologue types list for event organizers."""
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_prologue_types")
     return writing_list(request, context, PrologueType, "prologue_type")
@@ -747,6 +753,7 @@ def orga_speedlarps_versions(request: HttpRequest, event_slug: str, num: int) ->
 
 @login_required
 def orga_assignments(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Render the character assignments page for event organizers."""
     # Check event permissions and populate context with event cache data
     context = check_event_context(request, event_slug, "orga_assignments")
     get_event_cache_all(context)
@@ -755,13 +762,15 @@ def orga_assignments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_progress_steps(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Return progress steps list for event organization."""
     # Check permissions and get event context, then return progress steps list
     context = check_event_context(request, event_slug, "orga_progress_steps")
     return writing_list(request, context, ProgressStep, "progress_step")
 
 
 @login_required
-def orga_progress_steps_edit(request, event_slug, num):
+def orga_progress_steps_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a progress step for an event."""
     return orga_edit(request, event_slug, "orga_progress_steps", OrgaProgressStepForm, num)
 
 
@@ -969,7 +978,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Args:
         request (HttpRequest): The HTTP request object containing user and session data
-        s (str): Event slug string used to identify the specific event
+        event_slug (str): Event slug string used to identify the specific event
 
     Returns:
         HttpResponse: Rendered reading.html template with context containing all

@@ -24,7 +24,8 @@ from django.utils.translation import get_language
 from larpmanager.models.association import AssociationText
 
 
-def association_text_key(association_id, text_type, language):
+def association_text_key(association_id: int, text_type: str, language: str) -> str:
+    """Generate cache key for association text content."""
     return f"association_text_{association_id}_{text_type}_{language}"
 
 
@@ -75,7 +76,8 @@ def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
     return cached_text
 
 
-def association_text_key_def(association_id, text_type):
+def association_text_key_def(association_id: int, text_type: str) -> str:
+    """Generate cache key for association text definitions."""
     return f"association_text_def_{association_id}_{text_type}"
 
 

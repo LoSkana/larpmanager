@@ -193,12 +193,14 @@ def prepare_roles_list(context, permission_type, role_queryset, default_callback
 
 
 @login_required
-def orga_roles_edit(request, event_slug, num):
+def orga_roles_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit organization event role."""
     return orga_edit(request, event_slug, "orga_roles", OrgaEventRoleForm, num)
 
 
 @login_required
-def orga_appearance(request, event_slug):
+def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Handle appearance configuration for an event."""
     return orga_edit(
         request,
         event_slug,
@@ -212,6 +214,7 @@ def orga_appearance(request, event_slug):
 
 @login_required
 def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Render the event run edit form with cached run data."""
     # Retrieve cached run data and render edit form
     run = get_cache_run(request.association["id"], event_slug)
     return orga_edit(
@@ -228,7 +231,8 @@ def orga_texts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_texts_edit(request, event_slug, num):
+def orga_texts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit organization event text entry."""
     return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, num)
 
 
@@ -241,7 +245,8 @@ def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_buttons_edit(request, event_slug, num):
+def orga_buttons_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific button configuration for an event."""
     return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, num)
 
 
@@ -411,7 +416,9 @@ def orga_deadlines(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_quick(request, event_slug):
+def orga_quick(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Handle quick event setup form."""
+    # Delegate to orga_edit with quick setup form configuration
     return orga_edit(
         request, event_slug, "orga_quick", OrgaQuickSetupForm, None, "manage", additional_context={"add_another": False}
     )

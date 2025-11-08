@@ -227,15 +227,22 @@ def _characters_relationships(context):
         context["relationships"] = dict(sorted_relationships)
 
 
-def update_relationship(request, context, nm, fl):
+def update_relationship(request, context: dict, nm: str, fl: str) -> None:
+    """Update relationship texts from POST data."""
     for d in context[nm]:
+        # Get the identifier for this relationship item
         idx = getattr(d, fl).number
+
+        # Update Italian text if provided
         c = request.POST.get(f"{nm}_text_{idx}")
         if c:
             d.text = c
+
+        # Update English text if provided
         c = request.POST.get(f"{nm}_text_eng_{idx}")
         if c:
             d.text_eng = c
+
         d.save()
 
 
@@ -508,7 +515,8 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
 
 @login_required
-def orga_character_form(request, event_slug):
+def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+    # Redirect to writing form view with character type
     return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 
 

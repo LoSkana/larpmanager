@@ -42,7 +42,7 @@ from larpmanager.mail.remind import (
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,
-    Discount,
+    DiscountType,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -392,7 +392,9 @@ class Command(BaseCommand):
 
         """
         # Count total friend referral discounts associated with this registration
-        friend_discount_count = AccountingItemDiscount.objects.filter(detail=reg.id, disc__typ=Discount.FRIEND).count()
+        friend_discount_count = AccountingItemDiscount.objects.filter(
+            detail=reg.id, disc__typ=DiscountType.FRIEND
+        ).count()
 
         # Get current friend count from cache or calculate if not cached
         current_friend_count = self.get_count("friend", cache, reg.member, friend_discount_count)

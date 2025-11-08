@@ -40,7 +40,7 @@ from larpmanager.models.accounting import (
     Discount,
     ExpenseChoices,
     OtherChoices,
-    PaymentChoices,
+    PaymentChoices, DiscountType,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.registration import TicketTier
@@ -299,7 +299,7 @@ class TestRunAccountingFunctions(BaseTestCase):
 
         # Create discount
         discount = Discount.objects.create(
-            name="Test Discount", value=Decimal("20.00"), max_redeem=10, typ=Discount.STANDARD, event=run.event, number=1
+            name="Test Discount", value=Decimal("20.00"), max_redeem=10, typ=DiscountType.STANDARD, event=run.event, number=1
         )
         discount.runs.add(run)
 

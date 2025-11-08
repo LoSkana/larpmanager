@@ -54,7 +54,8 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_deliveries_edit(request, event_slug, num):
+def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a delivery for an event."""
     return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, num)
 
 
@@ -146,7 +147,8 @@ def orga_px_ability_types(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
-def orga_px_ability_types_edit(request, event_slug, num):
+def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit ability type for PX system."""
     return orga_edit(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm, num)
 
 
@@ -160,7 +162,8 @@ def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_rules_edit(request, event_slug, num):
+def orga_px_rules_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific rule for an event."""
     return orga_edit(request, event_slug, "orga_px_rules", OrgaRulePxForm, num)
 
 
@@ -194,7 +197,8 @@ def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_modifiers_edit(request, event_slug, num):
+def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit experience modifier for an event."""
     return orga_edit(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm, num)
 
 

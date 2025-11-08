@@ -92,7 +92,8 @@ class HelpQuestion(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining member and text."""
         return f"{self.member} {self.text}"
 
 
@@ -122,7 +123,8 @@ class Contact(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation showing connection between me and you."""
         return f"C - {self.me} {self.you}"
 
 
@@ -137,7 +139,9 @@ class ChatMessage(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with sender and message preview."""
+        # Format message preview with sender and truncated content
         return f"CM - {self.sender} {self.message[:20]}"
 
 
@@ -152,7 +156,8 @@ class Util(BaseModel):
 
     util = models.FileField(upload_to=UploadToPathAndRename("../utils/"))
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with member number and name."""
         return f"U{self.number} {self.name}"
 
     def download(self) -> HttpResponse:

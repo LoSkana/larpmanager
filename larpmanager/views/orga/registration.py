@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import time
+from datetime import date
 from random import shuffle
 
 from django.contrib import messages
@@ -1231,7 +1232,8 @@ def orga_lottery(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/registration/lottery.html", context)
 
 
-def calculate_age(date_of_birth, reference_date):
+def calculate_age(date_of_birth: date, reference_date: date) -> int:
+    """Calculate age in years between two dates."""
     return (
         reference_date.year
         - date_of_birth.year

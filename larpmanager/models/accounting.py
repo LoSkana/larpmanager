@@ -116,7 +116,8 @@ class PaymentInvoice(BaseModel):
             models.Index(fields=["status", "-created"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return invoice summary with payment status and transaction details."""
         return (
             f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
         )
@@ -458,17 +459,15 @@ class AccountingItemInflow(AccountingItemFlow):
     pass
 
 
-class Discount(BaseModel):
-    STANDARD = "a"
-    FRIEND = "f"
-    INFLUENCER = "I"
-    PLAYAGAIN = "p"
-    GIFT = "g"
-    TYPE_CHOICES = [
-        (STANDARD, _("Standard")),
-        (PLAYAGAIN, _("Play Again")),
-    ]
+class DiscountType(models.TextChoices):
+    STANDARD = "a", _("Standard")
+    PLAYAGAIN = "p", _("Play Again")
+    FRIEND = "f", _("Friend")
+    INFLUENCER = "I", _("Influencer")
+    GIFT = "g", _("Gift")
 
+
+class Discount(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
 
     runs = models.ManyToManyField(
@@ -502,7 +501,7 @@ class Discount(BaseModel):
 
     typ = models.CharField(
         max_length=1,
-        choices=TYPE_CHOICES,
+        choices=DiscountType.choices,
         verbose_name=_("Type"),
         help_text=_(
             "Indicate the type of discount: standard, play again (only available to those who "
@@ -627,7 +626,9 @@ class Collection(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation based on member or name."""
+        # Return member-based or name-based description
         if self.member:
             return f"Colletta per {self.member}"
         else:
@@ -706,7 +707,8 @@ class RefundRequest(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with member name."""
         return f"Refund request of {self.member}"
 
     # ## Workshops

@@ -59,7 +59,7 @@ class RedirectError(Exception):
     """
 
     def __init__(self, view: Any) -> None:
-        # Initialize base class
+        """Initialize with the given view."""
         super().__init__()
         self.view = view
 
@@ -87,6 +87,7 @@ class WaitingError(Exception):
     """
 
     def __init__(self, slug: str) -> None:
+        """Initialize with association slug."""
         super().__init__()
         self.slug = slug
 
@@ -218,6 +219,7 @@ class ReturnNowError(Exception):
     """
 
     def __init__(self, value: Any = None) -> None:
+        """Initialize with optional value."""
         super().__init__()
         self.value = value
 

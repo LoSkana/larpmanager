@@ -24,6 +24,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 
+from larpmanager.models.accounting import DiscountType
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
@@ -461,7 +462,7 @@ class BaseTestCase(TestCase):
                 name="Test Discount",
                 value=Decimal("10.00"),
                 max_redeem=10,
-                typ=Discount.STANDARD,
+                typ=DiscountType.STANDARD,
                 event=self.get_event(),
                 number=1,
             )

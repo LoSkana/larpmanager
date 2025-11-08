@@ -42,7 +42,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Discount,
     OtherChoices,
-    PaymentChoices,
+    PaymentChoices, DiscountType,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
@@ -273,7 +273,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
             name="Test Discount",
             value=Decimal("20.00"),
             max_redeem=10,
-            typ=Discount.STANDARD,
+            typ=DiscountType.STANDARD,
             event=run.event,
             number=1,
         )
@@ -546,7 +546,7 @@ class TestAccountingEdgeCases(BaseTestCase):
             name="Huge Discount",
             value=Decimal("200.00"),
             max_redeem=10,
-            typ=Discount.STANDARD,
+            typ=DiscountType.STANDARD,
             event=run.event,
             number=1,
         )

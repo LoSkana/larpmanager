@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, QuerySet
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -729,7 +729,8 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/event.html", context)
 
 
-def event_redirect(request, event_slug):
+def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+    # Redirect to the event detail view with the given slug
     return redirect("event", event_slug=event_slug)
 
 

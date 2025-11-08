@@ -43,8 +43,8 @@ def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
     return f"configs_{config_model_name}_{config_owner_id}"
 
 
-def get_configs(model_instance) -> dict:
-    # Get configuration dictionary for a Django model instance
+def get_configs(model_instance: Any) -> dict:
+    """Get configuration dictionary for a Django model instance."""
     # noinspection PyProtectedMember
     return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())
 

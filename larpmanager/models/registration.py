@@ -354,7 +354,7 @@ class Registration(BaseModel):
         return self.member.display_member()
 
     def display_profile(self) -> str:
-        # Delegate to the member's profile display method
+        # Delegate to member's profile display method
         # noinspection PyUnresolvedReferences
         return self.member.display_profile()
 

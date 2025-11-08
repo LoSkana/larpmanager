@@ -34,10 +34,11 @@ logger = logging.getLogger(__name__)
 
 
 class QuestType(Writing):
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def show(self, run: Run | None = None) -> dict:
+        """Return serialized data excluding commented quest list."""
         # Return base serialized data (commented quest list excluded)
         js = super().show(run)
         return js
@@ -68,7 +69,8 @@ class Quest(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Rappresentazione testuale con numero e nome della domanda
         return f"Q{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:
@@ -115,7 +117,8 @@ class Trait(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        # Return formatted tier representation with number and name
         return f"T{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:
@@ -155,7 +158,7 @@ class AssignmentTrait(BaseModel):
 
     typ = models.IntegerField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.run} ({self.member}) {self.trait}"
 
 
@@ -174,7 +177,8 @@ class Casting(BaseModel):
 
     active = models.BooleanField(default=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with run, member, element, preference, and rejection status."""
         return f"{self.run} ({self.member}) {self.element} {self.pref} {self.nope}"
 
 

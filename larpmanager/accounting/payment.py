@@ -240,7 +240,8 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             pass
 
     # Define replacement function for regex substitution
-    def replace_placeholder(pattern_match):
+    def replace_placeholder(pattern_match: re.Match) -> str:
+        """Replace placeholder with value from dict or keep original."""
         placeholder_key = pattern_match.group(1)
         return placeholder_values.get(placeholder_key, pattern_match.group(0))
 
@@ -417,8 +418,11 @@ def payment_received(invoice):
     return True
 
 
-def _process_collection(features, invoice):
+def _process_collection(features: dict, invoice: PaymentInvoice) -> None:
+    """Process collection item creation for an invoice if it doesn't exist."""
+    # Check if collection item already exists for this invoice
     if not AccountingItemCollection.objects.filter(inv=invoice).exists():
+        # Create new collection item from invoice data
         collection_item = AccountingItemCollection()
         collection_item.member_id = invoice.member_id
         collection_item.inv = invoice
@@ -427,12 +431,16 @@ def _process_collection(features, invoice):
         collection_item.collection_id = invoice.idx
         collection_item.save()
 
+        # Assign gifter badge if badge feature is enabled
         if "badge" in features:
             assign_badge(invoice.member, "gifter")
 
 
-def _process_donate(features, invoice):
+def _process_donate(features: dict, invoice: PaymentInvoice) -> None:
+    """Create donation accounting item and assign badge if enabled."""
+    # Check if donation accounting item already exists for this invoice
     if not AccountingItemDonation.objects.filter(inv=invoice).exists():
+        # Create and populate new donation accounting item
         accounting_item = AccountingItemDonation()
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
@@ -442,12 +450,16 @@ def _process_donate(features, invoice):
         accounting_item.descr = invoice.causal
         accounting_item.save()
 
+        # Assign donor badge if feature is enabled
         if "badge" in features:
             assign_badge(invoice.member, "donor")
 
 
-def _process_membership(invoice):
+def _process_membership(invoice: PaymentInvoice) -> None:
+    """Create membership accounting item if not already exists for the invoice."""
+    # Check if membership item already exists for this invoice
     if not AccountingItemMembership.objects.filter(inv=invoice).exists():
+        # Create and populate new membership accounting item
         accounting_item = AccountingItemMembership()
         accounting_item.year = datetime.now().year
         accounting_item.member_id = invoice.member_id

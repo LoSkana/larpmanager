@@ -140,7 +140,8 @@ def get_free_abilities(char: Character) -> list:
     return ast.literal_eval(config_value)
 
 
-def _free_abilities_cache_key():
+def _free_abilities_cache_key() -> str:
+    # Return cache key for free abilities
     return "free_abilities"
 
 
@@ -477,8 +478,9 @@ def remove_char_ability(char, ability_id):
     return ability_ids_to_remove
 
 
-def update_characters_experience_on_ability_change(instance) -> None:
-    # Update experience points for all characters that have this ability
+def update_characters_experience_on_ability_change(instance: AbilityPx) -> None:
+    """Update experience points for all characters with this ability."""
+    # Recalculate experience for each character that has this ability
     for character in instance.characters.all():
         calculate_character_experience_points(character)
 
