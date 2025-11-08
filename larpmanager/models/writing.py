@@ -76,7 +76,7 @@ class Writing(BaseConceptModel):
         abstract = True
 
     def show_red(self) -> dict[str, Any]:
-        """Returns a dictionary representation for red display.
+        """Return a dictionary representation for red display.
 
         Returns:
             Dictionary containing id, number, and name attributes.
@@ -363,6 +363,7 @@ class Character(Writing):
 
         Returns:
             The full filesystem path to the character's PDF sheet file.
+
         """
         # Build the character's directory path
         character_directory = self.get_character_filepath(run)

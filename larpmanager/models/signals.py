@@ -253,7 +253,7 @@ log = logging.getLogger(__name__)
 # Generic signal handlers (no specific sender)
 @receiver(pre_save)
 def pre_save_callback(sender: type, instance: object, *args: any, **kwargs: any) -> None:
-    """Generic pre-save handler for automatic field population.
+    """Handle pre-save operations for automatic field population.
 
     Automatically sets number/order fields and updates search fields
     for models that have them. This function is designed to be used
@@ -419,7 +419,7 @@ def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayme
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_payment_accounting_cache(sender, instance: PaymentInvoice, created: bool, **kwargs) -> None:
-    """Updates accounting caches and processes payment-related calculations after payment save."""
+    """Update accounting caches and process payment-related calculations after payment save."""
     # Update registration and member accounting cache if payment has associated registration
     if instance.reg and instance.reg.run:
         instance.reg.save()
@@ -1356,7 +1356,7 @@ def post_save_ticket_accounting_cache(
     created: bool,
     **kwargs: Any,
 ) -> None:
-    """Clears accounting cache for all runs when a ticket is saved."""
+    """Clear accounting cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)
 
     # Clear accounting cache for all runs in the ticket's event

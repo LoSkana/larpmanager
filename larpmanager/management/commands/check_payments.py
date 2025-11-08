@@ -40,7 +40,7 @@ class Command(BaseCommand):
     help = "Check status of pending payments across all payment gateways"
 
     def handle(self, *args, **options):
-        """Main command entry point with exception handling.
+        """Handle command execution with exception handling.
 
         Args:
             *args: Command arguments

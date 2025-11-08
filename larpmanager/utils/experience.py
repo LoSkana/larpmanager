@@ -492,7 +492,7 @@ def refresh_delivery_characters(instance: DeliveryPx) -> None:
 
 
 def update_characters_experience_on_rule_change(instance: RulePx) -> None:
-    """Updates experience points for all characters when experience rules change."""
+    """Update experience points for all characters when experience rules change."""
     # Get the event containing the rule
     parent_event = instance.event.get_class_parent(RulePx)
 

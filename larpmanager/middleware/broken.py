@@ -59,7 +59,7 @@ class BrokenLinkEmailsMiddleware:
 
     @staticmethod
     def is_ignorable_404(request_uri):
-        """Returns True if a 404 at the given URL *shouldn't* notify the site managers."""
+        """Return True if a 404 at the given URL *shouldn't* notify the site managers."""
         return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
     def check(self, request, response) -> Optional[HttpResponseRedirect]:

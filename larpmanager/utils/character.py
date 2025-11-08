@@ -167,7 +167,7 @@ def get_character_sheet(context):
 
 
 def get_character_sheet_px(context: dict) -> None:
-    """Populates the character sheet with ability data grouped by type.
+    """Populate the character sheet with ability data grouped by type.
 
     Args:
         context: Context dictionary containing character data and features.
@@ -197,7 +197,7 @@ def get_character_sheet_px(context: dict) -> None:
 
 
 def get_character_sheet_prologue(context: dict) -> None:
-    """Adds character prologues to context if prologue feature is enabled."""
+    """Add character prologues to context if prologue feature is enabled."""
     if "prologue" not in context["features"]:
         return
 
@@ -211,7 +211,7 @@ def get_character_sheet_prologue(context: dict) -> None:
 
 
 def get_character_sheet_speedlarp(context: dict) -> None:
-    """Populates context with speedlarp sheet data if feature is enabled."""
+    """Populate context with speedlarp sheet data if feature is enabled."""
     if "speedlarp" not in context["features"]:
         return
 
@@ -261,7 +261,7 @@ def get_character_sheet_questbuilder(context):
 
 
 def get_character_sheet_plots(context: dict) -> None:
-    """Adds character plot information to context if plot feature is enabled."""
+    """Add character plot information to context if plot feature is enabled."""
     if "plot" not in context["features"]:
         return
 
@@ -285,7 +285,7 @@ def get_character_sheet_plots(context: dict) -> None:
 
 
 def get_character_sheet_factions(context: dict[str, Any]) -> None:
-    """Retrieves and processes faction data for character sheet display.
+    """Retrieve and process faction data for character sheet display.
 
     Fetches factions associated with a character, along with their writing answers
     and choices, then adds the processed data to the context for rendering.
@@ -372,7 +372,7 @@ def get_character_sheet_factions(context: dict[str, Any]) -> None:
 
 
 def get_character_sheet_fields(context: dict) -> None:
-    """Updates character sheet context with character element fields.
+    """Update character sheet context with character element fields.
 
     Args:
         context: Context dictionary containing features and sheet_char data.

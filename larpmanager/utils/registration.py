@@ -218,7 +218,7 @@ def registration_status_signed(
     register_url: str,
     context: dict | None = None,
 ) -> None:
-    """Updates the registration status for a signed user based on membership and payment features.
+    """Update the registration status for a signed user based on membership and payment features.
 
     Args:
         run: The run object containing event and status information

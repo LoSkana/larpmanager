@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Payment gateway integration for PayPal, Stripe, and Redsys."""
+
 import base64
 import hashlib
 import hmac
@@ -766,8 +768,8 @@ class RedSysClient:
 
     @staticmethod
     def decode_parameters(merchant_parameters):
-        """Given the Ds_MerchantParameters from Redsys, decode it and eval the
-        json file
+        """Given the Ds_MerchantParameters from Redsys, decode it and eval the json file.
+
         :param merchant_parameters: Base 64 encoded json structure returned by
                Redsys
         :return merchant_parameters: Json structure with all parameters.
@@ -776,9 +778,10 @@ class RedSysClient:
         return json.loads(base64.b64decode(merchant_parameters).decode())
 
     def encrypt_order(self, order):
-        """This method creates a unique key for every request, based on the
-        Ds_Merchant_Order and in the shared secret (SERMEPA_SECRET_KEY).
-        This unique key is Triple DES ciphered.
+        """Create a unique key for every request using Triple DES encryption.
+
+        Based on the Ds_Merchant_Order and the shared secret (SERMEPA_SECRET_KEY).
+
         :param Ds_Merchant_Order: dict with all merchant parameters
         :return  order_encrypted: The encrypted order.
         """
@@ -791,8 +794,8 @@ class RedSysClient:
 
     @staticmethod
     def sign_hmac256(encrypted_order, merchant_parameters):
-        """Use the encrypted_order we have to sign the merchant data using
-        a HMAC SHA256 algorithm and encode the result using Base64.
+        """Use the encrypted_order to sign merchant data using HMAC SHA256 and encode with Base64.
+
         :param encrypted_order: Encrypted Ds_Merchant_Order
         :param merchant_parameters: Redsys already encoded parameters
         :return Generated signature as a base64 encoded string.
@@ -803,7 +806,8 @@ class RedSysClient:
         return base64.b64encode(hmac_signature)
 
     def redsys_generate_request(self, params):
-        """Method to generate Redsys Ds_MerchantParameters and Ds_Signature
+        """Generate Redsys Ds_MerchantParameters and Ds_Signature.
+
         :param params: dict with all transaction parameters
         :return dict url, signature, parameters and type signature.
         """

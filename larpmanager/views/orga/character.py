@@ -181,7 +181,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
 
 
 def _characters_relationships(context):
-    """Setup character relationships data and widgets for editing.
+    """Set up character relationships data and widgets for editing.
 
     Args:
         context: Context dictionary to populate with relationship data
@@ -521,7 +521,7 @@ def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRe
 
 
 def check_writing_form_type(context: dict, form_type: str) -> None:
-    """Validates writing form type and updates context with type information.
+    """Validate writing form type and update context with type information.
 
     Args:
         context: Context dictionary to update with type information

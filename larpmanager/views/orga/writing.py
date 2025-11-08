@@ -803,7 +803,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
     ----------
     request : HttpRequest
         HTTP request object containing POST data with 'type' and optional 'eid'
-    s : str
+    event_slug : str
         Event slug identifier
 
     Returns

@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Member accounting utilities for managing membership fees and credits."""
+
 from datetime import datetime
 from typing import Any
 

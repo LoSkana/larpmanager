@@ -94,7 +94,7 @@ from larpmanager.views.orga.member import send_mail_batch
 
 @login_required
 def exe_membership(request: HttpRequest) -> HttpResponse:
-    """Executive view for managing association memberships.
+    """Manage association memberships.
 
     Displays membership statistics, fee collection status, and membership
     administration tools for association executives. Shows pending memberships
@@ -180,7 +180,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
-    """Executive interface for evaluating membership applications.
+    """Evaluate membership applications.
 
     Handles membership approval/rejection processes and status updates,
     including notifications, duplicate checking, and registration updates

@@ -582,7 +582,7 @@ def get_element(
 
 
 def get_relationship(context: dict, num: int) -> None:
-    """Retrieves a relationship by ID and validates it belongs to the event."""
+    """Retrieve a relationship by ID and validate it belongs to the event."""
     try:
         context["relationship"] = Relationship.objects.get(pk=num)
     except ObjectDoesNotExist as err:

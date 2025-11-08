@@ -334,7 +334,7 @@ class WritingQuestion(BaseModel):
         processing_parameters: dict[str, Any],
         organization: Any,
     ) -> bool:
-        """Determines whether to skip processing for the given instance.
+        """Determine whether to skip processing for the given instance.
 
         Args:
             instance: The object instance to check for skipping
@@ -766,7 +766,7 @@ class RegistrationChoice(BaseModel):
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
 
     def __str__(self) -> str:
-        """String representation showing registration, question and option."""
+        """Return string representation showing registration, question and option."""
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 

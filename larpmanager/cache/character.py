@@ -499,7 +499,7 @@ def reset_event_cache_all(run: Run) -> None:
 
 
 def update_character_fields(instance, character_data: dict) -> None:
-    """Updates character fields with event-specific data if character features are enabled.
+    """Update character fields with event-specific data if character features are enabled.
 
     Args:
         instance: Event instance with event_id attribute
@@ -557,7 +557,7 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
 
 
 def update_event_cache_all_character_reg(character_registration, cache_result: dict, event_run) -> None:
-    """Updates character registration cache data for an event.
+    """Update character registration cache data for an event.
 
     Args:
         character_registration: Character registration instance
@@ -611,7 +611,7 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 
 
 def update_event_cache_all_faction(instance, res: dict) -> None:
-    """Updates or adds faction data in the cache result dictionary."""
+    """Update or add faction data in the cache result dictionary."""
     faction_data = instance.show()
     if instance.number in res["factions"]:
         res["factions"][instance.number].update(faction_data)

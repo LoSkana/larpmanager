@@ -86,7 +86,7 @@ def _organization_sitemap(association_id) -> list[str]:
     """Generate sitemap URLs for an organization's events and runs.
 
     Args:
-        request: HTTP request object containing organization context with association dict
+        association_id: ID of the organization/association to generate sitemap for
 
     Returns:
         List of fully qualified URLs for the organization's public pages.

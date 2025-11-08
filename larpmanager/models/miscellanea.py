@@ -741,6 +741,7 @@ class Email(BaseModel):
 
 class OneTimeContent(BaseModel):
     """Model to store multimedia content for one-time access via tokens.
+
     Organizers can upload video/audio files and generate access tokens.
     """
 
@@ -853,6 +854,7 @@ class OneTimeContent(BaseModel):
 
 class OneTimeAccessToken(BaseModel):
     """Access token for one-time viewing of content.
+
     Each token can only be used once.
     """
 

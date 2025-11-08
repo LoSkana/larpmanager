@@ -30,7 +30,7 @@ def association_text_key(association_id: int, text_type: str, language: str) -> 
 
 
 def update_association_text(association_id: int, typ: str, lang: str) -> str:
-    """Updates and caches association text for given ID, type and language.
+    """Update and cache association text for given ID, type and language.
 
     Args:
         association_id: Association ID
@@ -82,7 +82,7 @@ def association_text_key_def(association_id: int, text_type: str) -> str:
 
 
 def update_association_text_def(association_id: int, text_type: str) -> str:
-    """Updates and caches the default association text for given type.
+    """Update and cache the default association text for given type.
 
     Args:
         association_id: The association ID

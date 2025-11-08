@@ -27,8 +27,7 @@ from django.http import HttpRequest
 
 
 class EmailOrUsernameModelBackend(ModelBackend):
-    """Authentication backend which allows users to authenticate using either their
-    username or email address.
+    """Authentication backend which allows users to authenticate using either their username or email address.
 
     Source: https://stackoverflow.com/a/35836674/59984
     """

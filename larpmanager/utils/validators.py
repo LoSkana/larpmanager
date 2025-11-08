@@ -113,7 +113,8 @@ class FileTypeValidator:
             )
 
     def _normalize(self, allowed_types):
-        """Validate and transforms given allowed types
+        """Validate and transforms given allowed types.
+
         e.g; wildcard character specification will be normalized as text/* -> text.
         """
         allowed_mime_types = []
@@ -139,7 +140,7 @@ class FileTypeValidator:
 
     @staticmethod
     def _check_word_or_excel(file_object, detected_mime_type: str, file_extension: str) -> str:
-        """Returns proper mimetype in case of word or excel files.
+        """Return proper mimetype in case of word or excel files.
 
         Args:
             file_object: File object to analyze

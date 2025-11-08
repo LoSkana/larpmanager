@@ -325,7 +325,7 @@ def get_coming_runs(association_id: int | None, future: bool = True) -> QuerySet
 
 
 def home_json(request: HttpRequest, lang: str = "it") -> object:
-    """Returns JSON response with upcoming events for the association.
+    """Return JSON response with upcoming events for the association.
 
     Args:
         request: HTTP request object containing association context

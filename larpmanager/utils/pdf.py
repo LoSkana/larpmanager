@@ -711,14 +711,14 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 
 @background_auto(queue="pdf")
 def print_handout_bkg(association_slug: str, event_slug: str, c: Character) -> None:
-    """Prints character handout by creating a fake request and delegating to print_handout_go."""
+    """Print character handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(association_slug)
     context = get_event_context(request, event_slug)
     print_handout_go(context, c)
 
 
 def print_character_go(context: dict, character) -> None:
-    """Prints character information, handling missing character gracefully."""
+    """Print character information, handling missing character gracefully."""
     try:
         # Validate character access and retrieve character data
         get_char_check(None, context, character, False, True)

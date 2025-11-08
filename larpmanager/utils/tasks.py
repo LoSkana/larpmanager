@@ -44,7 +44,7 @@ INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"
 
 
 def background_auto(schedule=0, **background_kwargs):
-    """Decorator to conditionally run functions as background tasks.
+    """Conditionally run functions as background tasks.
 
     Creates a decorator that can run functions either synchronously
     (if AUTO_BACKGROUND_TASKS is True) or as background tasks.
@@ -59,7 +59,7 @@ def background_auto(schedule=0, **background_kwargs):
     """
 
     def decorator(original_function: Callable[..., Any]) -> Callable[..., Any]:
-        """Decorator that conditionally executes a function as a background task.
+        """Conditionally execute a function as a background task.
 
         Args:
             original_function: The function to be decorated for potential background execution.

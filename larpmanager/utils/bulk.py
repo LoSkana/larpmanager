@@ -499,7 +499,7 @@ def exec_set_ability_type(
     target: str | int,
     ids: list[int] | QuerySet,
 ) -> None:
-    """Updates ability type for selected abilities in bulk."""
+    """Update ability type for selected abilities in bulk."""
     # Get target ability type from event elements
     typ = context["event"].get_elements(AbilityTypePx).get(pk=target)
     # Update all selected abilities with new type

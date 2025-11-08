@@ -67,7 +67,7 @@ from larpmanager.utils.exceptions import ReturnNowError
 
 
 def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
-    """Setup progress and assignment tracking for writing elements.
+    """Set up progress and assignment tracking for writing elements.
 
     Populates the context dictionary with progress steps, assignments, and their
     respective mapping counters based on available features. Counts occurrences
@@ -377,7 +377,7 @@ def writing_bulk(context, request, typ):
 
 
 def _get_custom_form(context):
-    """Setup custom form questions and field names for writing elements.
+    """Set up custom form questions and field names for writing elements.
 
     Args:
         context: Context dictionary to populate with form data

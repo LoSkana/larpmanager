@@ -155,7 +155,7 @@ def _get_field_value(element: Any, question: Any) -> str | None:
 
 
 def _get_values_mapping(element) -> dict[str, callable]:
-    """Returns a mapping of field names to their value extraction functions.
+    """Return a mapping of field names to their value extraction functions.
 
     Args:
         element: The element object to extract values from.
@@ -234,10 +234,10 @@ def check_association(element: object, context: dict, attribute_field: str = Non
 
 
 def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: str, entity_id: int) -> bool:
-    """Generic user data editing with validation.
+    """Edit user data with validation.
 
-    Handles both GET and POST requests for editing user data. On POST, validates
-    the form and saves the instance. Supports deletion functionality when
+    Handle both GET and POST requests for editing user data. On POST, validate
+    the form and save the instance. Support deletion functionality when
     'delete' parameter is set to '1' in POST data.
 
     Args:

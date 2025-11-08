@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Invoice generation and CSV import/export utilities."""
+
 import csv
 import math
 from io import StringIO

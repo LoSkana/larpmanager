@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+"""Django admin configuration for access control models."""
 
 from django.contrib import admin
 from import_export import resources
@@ -33,12 +34,18 @@ from larpmanager.models.access import (
 
 
 class PermissionModuleResource(resources.ModelResource):
+    """Import/export resource for PermissionModule model."""
+
     class Meta:
+        """Meta configuration for PermissionModule resource."""
+
         model = PermissionModule
 
 
 @admin.register(PermissionModule)
 class PermissionModuleAdmin(ImportExportModelAdmin):
+    """Django admin for PermissionModule model."""
+
     resource_classes = [PermissionModuleResource]
     list_display = ("name", "icon")
     search_fields = ("name",)
@@ -46,18 +53,26 @@ class PermissionModuleAdmin(ImportExportModelAdmin):
 
 @admin.register(AssociationRole)
 class AssociationRoleAdmin(DefModelAdmin):
+    """Django admin for AssociationRole model."""
+
     list_display = ("name", "association", "number")
     autocomplete_fields = ["members", "association", "permissions"]
     search_fields = ("name",)
 
 
 class AssociationPermissionResource(resources.ModelResource):
+    """Import/export resource for AssociationPermission model."""
+
     class Meta:
+        """Meta configuration for AssociationPermission resource."""
+
         model = AssociationPermission
 
 
 @admin.register(AssociationPermission)
 class AssociationPermissionAdmin(ImportExportModelAdmin):
+    """Django admin for AssociationPermission model."""
+
     resource_classes = [AssociationPermissionResource]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)
@@ -66,18 +81,26 @@ class AssociationPermissionAdmin(ImportExportModelAdmin):
 
 @admin.register(EventRole)
 class EventRoleAdmin(DefModelAdmin):
+    """Django admin for EventRole model."""
+
     list_display = ("name", "event", "number")
     autocomplete_fields = ["members", "event", "permissions"]
     search_fields = ("name",)
 
 
 class EventPermissionResource(resources.ModelResource):
+    """Import/export resource for EventPermission model."""
+
     class Meta:
+        """Meta configuration for EventPermission resource."""
+
         model = EventPermission
 
 
 @admin.register(EventPermission)
 class EventPermissionAdmin(ImportExportModelAdmin):
+    """Django admin for EventPermission model."""
+
     resource_classes = [EventPermissionResource]
     autocomplete_fields = ["feature", "module"]
     list_display = ("name", "slug", "number", "descr", "module", "feature")

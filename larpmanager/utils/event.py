@@ -178,7 +178,7 @@ def prepare_campaign_event_data(event_instance):
 
 
 def copy_parent_event_to_campaign(event):
-    """Setup campaign event by copying from parent.
+    """Set up campaign event by copying from parent.
 
     Args:
         event: Event instance that was saved
@@ -201,7 +201,7 @@ def copy_parent_event_to_campaign(event):
 
 
 def create_default_event_setup(event):
-    """Setup event with runs, tickets, and forms after save.
+    """Set up event with runs, tickets, and forms after save.
 
     Args:
         event: Event instance that was saved

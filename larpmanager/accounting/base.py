@@ -17,6 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""Base accounting utilities and payment gateway integration."""
+
 import json
 import os
 

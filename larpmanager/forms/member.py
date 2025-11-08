@@ -249,7 +249,7 @@ class MyPasswordResetForm(PasswordResetForm):
         self.fields["email"].widget.attrs["maxlength"] = 70
 
     def get_users(self, email: str) -> Generator:
-        """Returns active users matching the given email (case-insensitive)."""
+        """Return active users matching the given email (case-insensitive)."""
         # noinspection PyProtectedMember
         active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)
         return (u for u in active_users)
@@ -263,7 +263,7 @@ class MyPasswordResetForm(PasswordResetForm):
         to_email: str,
         html_email_template_name: str | None = None,
     ) -> None:
-        """Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
+        """Send a django.core.mail.EmailMultiAlternatives to `to_email`.
 
         Args:
             subject_template_name: Template name for email subject
@@ -721,7 +721,7 @@ class ExeVolunteerRegistryForm(MyForm):
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
     def clean_member(self) -> Member:
-        """Validates member is not already registered as volunteer for this association."""
+        """Validate member is not already registered as volunteer for this association."""
         member = self.cleaned_data["member"]
 
         # Check for existing volunteer entries for this member and association

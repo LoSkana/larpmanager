@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Payment processing and management utilities."""
+
 import math
 import re
 from datetime import datetime

@@ -157,6 +157,7 @@ class Command(BaseCommand):
         Note:
             Modifies the fields dictionary in-place, replacing ForeignKey fields
             with their corresponding _id fields.
+
         """
         for field_name in list(fields.keys()):
             # Check if field exists in model

@@ -49,7 +49,7 @@ from larpmanager.utils.registration import registration_available
 
 @login_required
 def manage(request, event_slug=None):
-    """Main management dashboard routing.
+    """Route to the appropriate management dashboard.
 
     Routes to either executive management or organizer management
     based on whether an event slug is provided.
@@ -166,7 +166,7 @@ def _get_registration_status(run_instance) -> str:
 
 
 def _exe_manage(request: HttpRequest) -> HttpResponse:
-    """Executive management dashboard view.
+    """Display executive management dashboard.
 
     Displays association-level management interface with events,
     suggestions, actions, and accounting information.

@@ -269,7 +269,7 @@ def get_element_config(element, config_name: str, default_value, bypass_cache: b
 
 
 def _get_cached_config(element_id, element_type, config_name, default_value=None, context=None, bypass_cache=False):
-    """Helper function to get cached configuration for any element type."""
+    """Get cached configuration for any element type."""
     cache_key = f"{element_type}_configs"
 
     if context is None:

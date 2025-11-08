@@ -431,7 +431,7 @@ def get_run(context, event_slug):
 
     Args:
         context (dict): Context dictionary to update
-        s (str): Run slug identifier
+        event_slug (str): Event slug identifier
 
     Side effects:
         Updates context with run and event objects

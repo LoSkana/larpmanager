@@ -587,7 +587,7 @@ class RegistrationForm(BaseRegistrationForm):
         return result
 
     def clean(self) -> dict:
-        """Validates form data and checks for valid friend codes."""
+        """Validate form data and check for valid friend codes."""
         # Get cleaned data from parent class
         form_data = super().clean()
         run = self.params["run"]
@@ -1248,7 +1248,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
         self.fields["tickets"].widget.set_event(self.params["event"])
 
     def clean(self) -> dict[str, any]:
-        """Validates that only one deadline type (date or days) is specified."""
+        """Validate that only one deadline type (date or days) is specified."""
         cleaned_data = super().clean()
 
         # Check if both deadline types are specified

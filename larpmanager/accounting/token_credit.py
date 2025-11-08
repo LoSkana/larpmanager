@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+"""Token and credit balance management for member registrations."""
 from decimal import Decimal
 
 from django.db import transaction

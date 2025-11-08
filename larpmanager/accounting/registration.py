@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Registration accounting utilities for ticket pricing and payment calculation."""
+
 import logging
 import math
 from collections.abc import Iterable

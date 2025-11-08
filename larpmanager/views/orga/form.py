@@ -193,7 +193,7 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
     Args:
         request : HttpRequest
             The HTTP request object containing form data and user information
-        s : str
+        event_slug : str
             Event slug identifier for the specific event
         num : int
             Question number/ID to edit (0 for new questions)

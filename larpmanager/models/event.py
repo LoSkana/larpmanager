@@ -648,7 +648,7 @@ class Run(BaseModel):
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 
     def get_media_filepath(self) -> str:
-        """Returns the media file path for this run, creating the directory if needed.
+        """Return the media file path for this run, creating the directory if needed.
 
         Returns:
             The absolute path to the run's media directory.

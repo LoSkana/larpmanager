@@ -37,7 +37,7 @@ from larpmanager.models.miscellanea import OneTimeAccessToken
 def file_iterator(
     file_object: BinaryIO, chunk_size: int = 8192, start_pos: Optional[int] = None, max_length: Optional[int] = None
 ) -> Generator[bytes, None, None]:
-    """Generator to stream file in chunks with optional range support.
+    """Stream file in chunks with optional range support.
 
     Efficiently reads a file in chunks, optionally starting from a specific
     position and limiting the total bytes read. The file is automatically
@@ -93,6 +93,7 @@ def file_iterator(
 @require_http_methods(["GET", "POST"])
 def onetime_access(request, token):
     """Public view to access one-time content via token.
+
     Security features:
     - No caching headers
     - No indexing headers

@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Member balance calculation and management utilities."""
+
 import logging
 from datetime import date, datetime
 from decimal import Decimal

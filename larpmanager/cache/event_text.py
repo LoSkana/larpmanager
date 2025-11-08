@@ -29,7 +29,7 @@ def event_text_key(event_id, text_type, language):
 
 
 def update_event_text(event_id: int, text_type: str, language: str) -> str:
-    """Updates and caches event text for given event, type and language.
+    """Update and cache event text for given event, type and language.
 
     Args:
         event_id: The event identifier

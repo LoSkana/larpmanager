@@ -70,7 +70,7 @@ class Command(BaseCommand):
     help = "Automate processes "
 
     def handle(self, *args, **options):
-        """Main command entry point with exception handling.
+        """Handle command execution with exception handling.
 
         Args:
             *args: Command arguments

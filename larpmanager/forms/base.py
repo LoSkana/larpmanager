@@ -196,7 +196,7 @@ class MyForm(forms.ModelForm):
         return self.cleaned_data["run"]
 
     def clean_event(self) -> Event:
-        """Returns the appropriate event based on form configuration.
+        """Return the appropriate event based on form configuration.
 
         Returns event directly if choose_event exists, otherwise returns parent event
         based on element type.

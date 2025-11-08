@@ -34,5 +34,5 @@ def is_ajax(http_request):
 
 
 def show_toolbar(request):
-    """Default function to determine whether to show the toolbar on a given page."""
+    """Determine whether to show the toolbar on a given page."""
     return getattr(conf_settings, "DEBUG_TOOLBAR", False) and not is_ajax(request)

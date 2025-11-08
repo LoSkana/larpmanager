@@ -300,7 +300,7 @@ def get_cache_reg_field(run: Run) -> dict:
 
 
 def update_cache_reg_fields(registration: Registration) -> None:
-    """Updates cached registration fields for the given element's run."""
+    """Update cached registration fields for the given element's run."""
     # Get the run associated with the registration element
     run = registration.run
 

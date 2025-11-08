@@ -859,7 +859,7 @@ def check_year(request: HttpRequest, context: dict) -> int:
 
 @login_required
 def exe_balance(request: HttpRequest) -> HttpResponse:
-    """Executive view for displaying association balance sheet for a specific year.
+    """Display association balance sheet for a specific year.
 
     Calculates totals for memberships, donations, tickets, and expenses from
     various accounting models to generate comprehensive financial reporting.

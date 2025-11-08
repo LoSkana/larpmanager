@@ -142,7 +142,7 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
 
 @require_GET
 def published_events(request: HttpRequest) -> JsonResponse:
-    """API endpoint to get upcoming runs from associations with publisher feature enabled.
+    """Get upcoming runs from associations with publisher feature enabled.
 
     This endpoint returns a list of upcoming LARP events from associations that have
     the publisher feature enabled. It validates API keys and restricts access to the

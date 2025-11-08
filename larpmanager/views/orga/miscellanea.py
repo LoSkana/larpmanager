@@ -365,7 +365,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
             item.available -= el.quantity or 0
 
     def _assigned_updated(assignment_item: Any) -> Any:
-        """Helper function to extract assignment update timestamp for sorting."""
+        """Extract assignment update timestamp for sorting."""
         if getattr(assignment_item, "assigned", None):
             return assignment_item.assigned.get("updated") or getattr(assignment_item, "updated", None) or datetime.min
         return datetime.min
