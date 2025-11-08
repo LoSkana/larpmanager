@@ -1019,11 +1019,11 @@ def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResp
     # Check user permissions for the event
     context = check_event_context(request, event_slug, "orga_characters")
     idx = request.POST.get("idx")
-    type = request.POST.get("type")
+    element_type = request.POST.get("type")
 
     try:
         # Get element based on type (Trait or Character)
-        if type.lower() == "trait":
+        if element_type.lower() == "trait":
             el = context["event"].get_elements(Trait).get(pk=idx)
         else:
             el = context["event"].get_elements(Character).get(pk=idx)

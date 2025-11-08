@@ -88,7 +88,7 @@ def help_red(request: HttpRequest, n: int) -> HttpResponseRedirect:
 
 
 @login_required
-def help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse:
+def user_help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse:
     """Display help page with question submission form and user's previous questions.
 
     Args:

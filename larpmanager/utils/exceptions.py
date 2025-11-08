@@ -113,7 +113,7 @@ class NotFoundError(Exception):
     pass
 
 
-class PermissionError(Exception):
+class UserPermissionError(Exception):
     """Exception raised when user lacks required permissions."""
 
     pass

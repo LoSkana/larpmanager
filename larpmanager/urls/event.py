@@ -311,7 +311,7 @@ urlpatterns = [
     ),
     path(
         "<slug:event_slug>/help/",
-        views_ums.help,
+        views_ums.user_help,
         name="help",
     ),
     path(

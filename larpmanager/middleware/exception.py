@@ -36,12 +36,12 @@ from larpmanager.utils.exceptions import (
     MainPageError,
     MembershipError,
     NotFoundError,
-    PermissionError,
     RedirectError,
     ReturnNowError,
     RewokedMembershipError,
     SignupError,
     UnknowRunError,
+    UserPermissionError,
     WaitingError,
 )
 
@@ -76,7 +76,7 @@ class ExceptionHandlingMiddleware:
         # Define exception type to handler mappings for clean separation of concerns
         handlers = [
             # Permission-related errors - show appropriate error pages
-            (PermissionError, lambda ex: render(request, "exception/permission.html")),
+            (UserPermissionError, lambda ex: render(request, "exception/permission.html")),
             (NotFoundError, lambda ex: render(request, "exception/notfound.html")),
             (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
             # Run-related errors - show available runs for the current association
