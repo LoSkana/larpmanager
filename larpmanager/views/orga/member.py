@@ -230,7 +230,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_persuade(request, event_slug: str) -> HttpResponse:
+def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display members who can be persuaded to register for the event.
 
     Shows association members who haven't registered yet, excluding current

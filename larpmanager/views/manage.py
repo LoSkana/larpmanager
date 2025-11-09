@@ -48,7 +48,7 @@ from larpmanager.utils.registration import registration_available
 
 
 @login_required
-def manage(request, event_slug=None):
+def manage(request: HttpRequest, event_slug=None):
     """Route to the appropriate management dashboard.
 
     Routes to either executive management or organizer management
@@ -278,7 +278,7 @@ def _exe_suggestions(context) -> None:
         _add_suggestion(context, suggestion_text, permission_key)
 
 
-def _exe_actions(request, context: dict, association_features: dict | None = None) -> None:
+def _exe_actions(request: HttpRequest, context: dict, association_features: dict | None = None) -> None:
     """Determine available executive actions based on association features.
 
     Adds action items to the management dashboard based on user permissions
@@ -370,7 +370,7 @@ def _exe_actions(request, context: dict, association_features: dict | None = Non
     _exe_users_actions(request, context, association_features)
 
 
-def _exe_users_actions(request, context, enabled_features) -> None:
+def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) -> None:
     """Process user management actions and setup tasks for executives.
 
     Args:
@@ -405,7 +405,7 @@ def _exe_users_actions(request, context, enabled_features) -> None:
             )
 
 
-def _exe_accounting_actions(request, context, enabled_features) -> None:
+def _exe_accounting_actions(request: HttpRequest, context: dict, enabled_features) -> None:
     """Process accounting-related setup actions for executives.
 
     Args:
@@ -999,7 +999,7 @@ def _add_suggestion(context, suggestion_text, permission_key, custom_link=None) 
     _add_item(context, "suggestions_list", suggestion_text, permission_key, custom_link)
 
 
-def _has_permission(request, context, permission):
+def _has_permission(request: HttpRequest, context: dict, permission):
     """Check if user has required permission for action.
 
     Args:
@@ -1042,7 +1042,7 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
     return reverse(view_name, args=[context["run"].get_slug()])
 
 
-def _compile(request, context) -> None:
+def _compile(request: HttpRequest, context: dict) -> None:
     """Compile management dashboard with suggestions, actions, and priorities.
 
     Processes and organizes management content sections, handling empty states
@@ -1119,7 +1119,7 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
     context["intro_driver"] = True
 
 
-def orga_redirect(request, event_slug: str, run_number: int, path: str | None = None) -> HttpResponsePermanentRedirect:
+def orga_redirect(request: HttpRequest, event_slug: str, run_number: int, path: str | None = None) -> HttpResponsePermanentRedirect:
     """Optimized redirect from /slug/number/path to /slug-number/path format.
 
     Redirects URLs like /event-slug/2/some/path to /event-slug-2/some/path.

@@ -330,7 +330,7 @@ def orga_registrations_custom(registration, context, character_data) -> None:
             registration.custom[custom_field_slug].append(field_value)
 
 
-def registrations_popup(request, context):
+def registrations_popup(request: HttpRequest, context: dict):
     """Handle AJAX popup requests for registration details.
 
     Args:
@@ -588,7 +588,7 @@ def orga_registrations_accounting(request: HttpRequest, event_slug: str) -> Json
 
 
 @login_required
-def orga_registration_form_list(request, event_slug: str):
+def orga_registration_form_list(request: HttpRequest, event_slug: str):
     """Handle registration form list management for event organizers.
 
     Args:
@@ -822,7 +822,7 @@ def _save_questbuilder(context, form, reg) -> None:
 
 
 @login_required
-def orga_registrations_customization(request, event_slug, num):
+def orga_registrations_customization(request: HttpRequest, event_slug: str, num):
     """Handle organization customization of player registration character relationships.
 
     Args:
@@ -889,7 +889,7 @@ def orga_registration_discounts(request: HttpRequest, event_slug: str, num: int)
 
 
 @login_required
-def orga_registration_discount_add(request, event_slug, num, discount_id):
+def orga_registration_discount_add(request: HttpRequest, event_slug: str, num, discount_id):
     """Add a discount to a member's registration.
 
     Args:
@@ -942,7 +942,7 @@ def orga_registration_discount_del(request: HttpRequest, event_slug: str, num: i
 
 
 @login_required
-def orga_cancellations(request, event_slug: str):
+def orga_cancellations(request: HttpRequest, event_slug: str):
     """Display cancelled registrations for event organizers.
 
     Args:
@@ -997,7 +997,7 @@ def orga_cancellations(request, event_slug: str):
 
 
 @login_required
-def orga_cancellation_refund(request, event_slug: str, num: str) -> HttpResponse:
+def orga_cancellation_refund(request: HttpRequest, event_slug: str, num: str) -> HttpResponse:
     """Handle cancellation refunds for tokens and credits.
 
     Processes refund requests for cancelled registrations, creating accounting
@@ -1158,7 +1158,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     return redirect("manage", event_slug=context["run"].get_slug())
 
 
-def lottery_info(request, context: dict) -> None:
+def lottery_info(request: HttpRequest, context: dict) -> None:
     """Add lottery-related information to the context dictionary.
 
     Args:

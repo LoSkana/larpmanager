@@ -792,7 +792,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request, element_type: str, element_id: int, user_token: str) -> str:
+def writing_edit_working_ticket(request: HttpRequest, element_type: str, element_id: int, user_token: str) -> str:
     """Manage working tickets to prevent concurrent editing conflicts.
 
     This function implements a locking mechanism to prevent multiple users from
@@ -860,7 +860,7 @@ def writing_edit_working_ticket(request, element_type: str, element_id: int, use
 
 
 @require_POST
-def working_ticket(request):
+def working_ticket(request: HttpRequest):
     """Handle working ticket requests to prevent concurrent editing conflicts.
 
     Args:

@@ -219,7 +219,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     return context
 
 
-def check_event_context(request, event_slug: str, permission_slug: str | list[str] | None = None) -> dict:
+def check_event_context(request: HttpRequest, event_slug: str, permission_slug: str | list[str] | None = None) -> dict:
     """Check event permissions and prepare management context.
 
     Validates user permissions for event management operations and prepares
@@ -282,7 +282,7 @@ def check_event_context(request, event_slug: str, permission_slug: str | list[st
     return context
 
 
-def get_event(request, event_slug, run_number=None):
+def get_event(request: HttpRequest, event_slug: str, run_number=None):
     """Get event context from slug and number.
 
     Args:
@@ -375,7 +375,7 @@ def get_event_context(
         registration_status(context["run"], context["member"], context)
 
     # Configure user permissions and sidebar for authorized users
-    if has_event_permission(request, context, event_slug: str):
+    if has_event_permission(request, context, event_slug):
         get_index_event_permissions(request, context, event_slug)
         context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 

@@ -39,7 +39,7 @@ from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot
 from larpmanager.utils.exceptions import ReturnNowError
 
 
-def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
+def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[int], int, int]:
     """Extract and validate bulk operation parameters from request.
 
     Extracts operation ID, target ID, and a list of entity IDs from the request,
@@ -243,13 +243,13 @@ def _get_chars(context: dict, character_ids: list) -> list:
     return context["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
 
 
-def exec_add_char_fact(request, context, target, ids) -> None:
+def exec_add_char_fact(request: HttpRequest, context: dict, target, ids) -> None:
     """Add characters to a faction."""
     fact = context["event"].get_elements(Faction).get(pk=target)
     fact.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_fact(request, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_fact(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a faction."""
     fact = context["event"].get_elements(Faction).get(pk=target)
     fact.characters.remove(*_get_chars(context, ids))
@@ -261,7 +261,7 @@ def exec_add_char_plot(request: HttpRequest, context: dict, target: int, ids: li
     plot.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_plot(request, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_plot(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a plot element."""
     plot = context["event"].get_elements(Plot).get(pk=target)
     plot.characters.remove(*_get_chars(context, ids))
@@ -278,7 +278,7 @@ def exec_add_char_delivery(
     delivery.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_delivery(request, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_delivery(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from delivery."""
     delivery = context["event"].get_elements(DeliveryPx).get(pk=target)
     delivery.characters.remove(*_get_chars(context, ids))
@@ -318,7 +318,7 @@ def exec_set_char_assigned(request: HttpRequest, context: dict[str, Any], target
     context["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
 
-def exec_set_char_status(request, context: dict, target: str, ids: list[int]) -> None:
+def exec_set_char_status(request: HttpRequest, context: dict, target: str, ids: list[int]) -> None:
     """Update character status for specified characters in the event."""
     context["event"].get_elements(Character).filter(pk__in=ids).update(status=target)
 
@@ -438,7 +438,7 @@ def exec_set_quest_type(
     context["event"].get_elements(Quest).filter(pk__in=ids).update(typ=quest_type)
 
 
-def handle_bulk_quest(request, context) -> None:
+def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
     """Handle bulk operations for quest management.
 
     Args:

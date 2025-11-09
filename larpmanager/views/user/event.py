@@ -418,7 +418,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def share(request):
+def share(request: HttpRequest):
     """Handle member data sharing consent for organization.
 
     Args:
@@ -562,7 +562,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/general/past.html", context)
 
 
-def check_gallery_visibility(request, context) -> bool:
+def check_gallery_visibility(request: HttpRequest, context: dict) -> bool:
     """Check if gallery is visible to the current user based on event configuration.
 
     Args:
@@ -868,7 +868,7 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request, event_slug, faction_id):
+def faction(request: HttpRequest, event_slug: str, faction_id):
     """Display detailed information for a specific faction.
 
     Args:
@@ -937,7 +937,7 @@ def quests(request: HttpRequest, event_slug: str, quest_type_id: str | None = No
     return render(request, "larpmanager/event/quests.html", context)
 
 
-def quest(request, event_slug, quest_id):
+def quest(request: HttpRequest, event_slug: str, quest_id):
     """Display individual quest details and associated traits.
 
     Args:
@@ -1022,7 +1022,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/limitations.html", context)
 
 
-def export(request, event_slug, export_type):
+def export(request: HttpRequest, event_slug: str, export_type):
     """Export event elements as JSON for external consumption.
 
     Args:

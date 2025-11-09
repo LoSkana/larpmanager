@@ -28,6 +28,7 @@ from pathlib import Path
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest
 from django.utils import timezone
 
 from larpmanager.models.association import Association
@@ -188,7 +189,7 @@ def _send_analysis_result_email(ticket) -> None:
     #     my_send_mail(subject, body, maintainer.email)
 
 
-def create_error_ticket(request):
+def create_error_ticket(request: HttpRequest):
     """Create an error ticket automatically when an error occurs.
 
     Only creates one ticket per day for the same error to avoid spam.

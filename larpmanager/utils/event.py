@@ -20,6 +20,7 @@
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
+from django.http import HttpRequest
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -120,7 +121,7 @@ def get_event_filter_characters(context, character_filters) -> None:
         context["factions"].append(default_faction)
 
 
-def has_access_character(request, context) -> bool:
+def has_access_character(request: HttpRequest, context: dict) -> bool:
     """Check if user has access to view/edit a specific character.
 
     Args:

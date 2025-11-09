@@ -23,6 +23,7 @@ from datetime import datetime
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
+from django.http import HttpRequest
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -35,7 +36,7 @@ from larpmanager.models.member import Badge, Member
 from larpmanager.utils.tasks import my_send_mail
 
 
-def send_membership_confirm(request, membership) -> None:
+def send_membership_confirm(request: HttpRequest, membership) -> None:
     """Send confirmation email when membership application is submitted.
 
     Args:

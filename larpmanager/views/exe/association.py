@@ -56,7 +56,7 @@ from larpmanager.views.orga.event import prepare_roles_list
 
 
 @login_required
-def exe_association(request):
+def exe_association(request: HttpRequest):
     """Edit association details."""
     return exe_edit(
         request,
@@ -98,7 +98,7 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_roles_edit(request, num):
+def exe_roles_edit(request: HttpRequest, num):
     """Edit specific association role."""
     return exe_edit(request, ExeAssociationRoleForm, num, "exe_roles")
 
@@ -114,7 +114,7 @@ def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse
 
 
 @login_required
-def exe_profile(request):
+def exe_profile(request: HttpRequest):
     """Edit user profile settings."""
     return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"add_another": False})
 
@@ -136,7 +136,7 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_texts_edit(request, num):
+def exe_texts_edit(request: HttpRequest, num):
     """Edit specific association text."""
     return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
 
@@ -195,7 +195,7 @@ def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_methods(request):
+def exe_methods(request: HttpRequest):
     """Edit payment methods settings."""
     return exe_edit(
         request,
@@ -208,7 +208,7 @@ def exe_methods(request):
 
 
 @login_required
-def exe_appearance(request):
+def exe_appearance(request: HttpRequest):
     """Edit association appearance settings."""
     return exe_edit(
         request,
@@ -462,13 +462,13 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
-def exe_quick(request):
+def exe_quick(request: HttpRequest):
     """Edit quick setup configuration."""
     return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"add_another": False})
 
 
 @login_required
-def exe_preferences(request):
+def exe_preferences(request: HttpRequest):
     """Edit user preferences."""
     return exe_edit(
         request,

@@ -199,7 +199,7 @@ def handout_ext(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
     return print_handout(context)
 
 
-def album_aux(request, context, parent_album):
+def album_aux(request: HttpRequest, context: dict, parent_album):
     """Prepare album context with sub-albums and paginated uploads.
 
     Args:
@@ -288,7 +288,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/workshops/index.html", context)
 
 
-def valid_workshop_answer(request, context):
+def valid_workshop_answer(request: HttpRequest, context: dict):
     """Validate workshop quiz answers and determine pass/fail status.
 
     Args:
@@ -387,7 +387,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: i
 
 
 @login_required
-def shuttle(request):
+def shuttle(request: HttpRequest):
     """Display shuttle service requests for the current association.
 
     Args:
@@ -418,7 +418,7 @@ def shuttle(request):
 
 
 @login_required
-def shuttle_new(request):
+def shuttle_new(request: HttpRequest):
     """Handle creation of new shuttle service requests.
 
     Args:
@@ -448,7 +448,7 @@ def shuttle_new(request):
 
 
 @login_required
-def shuttle_edit(request, shuttle_id):
+def shuttle_edit(request: HttpRequest, shuttle_id):
     """Edit existing shuttle service request.
 
     Args:

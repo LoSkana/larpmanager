@@ -599,7 +599,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request, member_id):
+def chat(request: HttpRequest, member_id):
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions

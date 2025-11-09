@@ -314,7 +314,7 @@ def remove_event_role_cache(assignment_role_id: int) -> None:
     cache.delete(key)
 
 
-def get_event_roles(request: HttpRequest, context, slug: str) -> tuple[bool, dict[str, int], list[str]]:
+def get_event_roles(request: HttpRequest, context: dict, slug: str) -> tuple[bool, dict[str, int], list[str]]:
     """Get user's event roles and permissions for a specific event slug.
 
     Args:

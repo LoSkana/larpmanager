@@ -72,7 +72,7 @@ from larpmanager.utils.edit import save_log
 logger = logging.getLogger(__name__)
 
 
-def go_upload(request, context, upload_form_data):
+def go_upload(request: HttpRequest, context: dict, upload_form_data):
     """Route uploaded files to appropriate processing functions.
 
     Args:
@@ -214,7 +214,7 @@ def _get_file(context: dict, file, column_id: str | None = None) -> tuple[any, l
     return input_dataframe, []
 
 
-def registrations_load(request, context, uploaded_file_form):
+def registrations_load(request: HttpRequest, context: dict, uploaded_file_form):
     """Load registration data from uploaded CSV file.
 
     Args:
@@ -237,7 +237,7 @@ def registrations_load(request, context, uploaded_file_form):
     return processing_logs
 
 
-def _reg_load(request, context: dict, csv_row: dict, registration_questions: list) -> str:
+def _reg_load(request: HttpRequest, context: dict, csv_row: dict, registration_questions: list) -> str:
     """Load registration data from CSV row for bulk import.
 
     Creates or updates registrations with field validation, membership checks,
@@ -426,7 +426,7 @@ def _reg_assign_characters(
         RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
 
 
-def writing_load(request, context: dict, form) -> list[str]:
+def writing_load(request: HttpRequest, context: dict, form) -> list[str]:
     """Load writing data from uploaded files and process relationships.
 
     Processes uploaded files containing writing elements and their relationships.
@@ -654,7 +654,7 @@ def _assign_choice_answer(
                 )
 
 
-def element_load(request, context: dict, csv_row: dict, element_questions: list) -> str:
+def element_load(request: HttpRequest, context: dict, csv_row: dict, element_questions: list) -> str:
     """Load generic element data from CSV row for bulk import.
 
     Processes element creation or updates with field validation,
@@ -845,7 +845,7 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
             logs.append(f"Faction not found: {faction_name}")
 
 
-def form_load(request, context: dict, form, is_registration: bool = True) -> list[str]:
+def form_load(request: HttpRequest, context: dict, form, is_registration: bool = True) -> list[str]:
     """Load form questions and options from uploaded files.
 
     Processes uploaded CSV/Excel files to create form questions and their
@@ -1213,7 +1213,7 @@ def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:
     return log_messages
 
 
-def _ticket_load(request, context: dict, csv_row: dict) -> str:
+def _ticket_load(request: HttpRequest, context: dict, csv_row: dict) -> str:
     """Load ticket data from CSV row for bulk import.
 
     Creates or updates RegistrationTicket objects with proper validation,
@@ -1275,7 +1275,7 @@ def _ticket_load(request, context: dict, csv_row: dict) -> str:
     return f"OK - Created {ticket}" if was_created else f"OK - Updated {ticket}"
 
 
-def abilities_load(request, context: dict, form) -> list:
+def abilities_load(request: HttpRequest, context: dict, form) -> list:
     """Load abilities from uploaded file and process each row.
 
     Args:
@@ -1298,7 +1298,7 @@ def abilities_load(request, context: dict, form) -> list:
     return processing_logs
 
 
-def _ability_load(request, context: dict, csv_row: dict) -> str:
+def _ability_load(request: HttpRequest, context: dict, csv_row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
     Creates or updates ability objects with comprehensive field validation,

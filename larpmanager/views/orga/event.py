@@ -278,7 +278,7 @@ def orga_config(
 
 
 @login_required
-def orga_features(request, event_slug: str):
+def orga_features(request: HttpRequest, event_slug: str):
     """Manage event features activation and configuration.
 
     Args:
@@ -591,7 +591,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
 
 
 @login_required
-def orga_upload_template(request, event_slug: str, upload_type: str) -> HttpResponse:
+def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str) -> HttpResponse:
     """Generate and download template files for data upload.
 
     Args:

@@ -550,7 +550,7 @@ def copy_css(context, event, parent) -> None:
 
 
 @login_required
-def orga_copy(request, event_slug: str):
+def orga_copy(request: HttpRequest, event_slug: str):
     """Handle event copying functionality for organizers.
 
     Args:

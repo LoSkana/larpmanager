@@ -178,7 +178,7 @@ def _reload_fixtures():
 
 
 @pytest.fixture(autouse=True, scope="function")
-def _e2e_db_setup(request, django_db_blocker):
+def _e2e_db_setup(request: HttpRequest, django_db_blocker):
     """Set up database for e2e tests with single database per worker."""
     with django_db_blocker.unblock():
         if not _database_has_tables():

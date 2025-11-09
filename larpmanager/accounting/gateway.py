@@ -125,7 +125,7 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     context["pay_id"] = response_data["id"]
 
 
-def satispay_check(request, context) -> None:
+def satispay_check(request: HttpRequest, context: dict) -> None:
     """Check status of pending Satispay payments.
 
     Args:
@@ -221,7 +221,7 @@ def satispay_webhook(request: HttpRequest) -> None:
     satispay_verify(context, payment_id)
 
 
-def get_paypal_form(request, context, invoice, amount) -> None:
+def get_paypal_form(request: HttpRequest, context: dict, invoice, amount) -> None:
     """Create PayPal payment form.
 
     Args:
@@ -292,7 +292,7 @@ def handle_invalid_paypal_ipn(invalid_ipn_object) -> None:
     notify_admins("paypal ko", formatted_ipn_body)
 
 
-def get_stripe_form(request, context: dict, invoice, amount: float) -> None:
+def get_stripe_form(request: HttpRequest, context: dict, invoice, amount: float) -> None:
     """Create Stripe payment form and session.
 
     Creates a Stripe product and price for the given invoice amount, then
@@ -345,7 +345,7 @@ def get_stripe_form(request, context: dict, invoice, amount: float) -> None:
     invoice.save()
 
 
-def stripe_webhook(request):
+def stripe_webhook(request: HttpRequest):
     """Handle Stripe webhook events for payment processing.
 
     Args:
@@ -686,7 +686,7 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
     # ~ context['signature'] = sig
 
 
-def redsys_webhook(request, ok: bool = True) -> bool:
+def redsys_webhook(request: HttpRequest, ok: bool = True) -> bool:
     """Handle RedSys payment webhook notifications.
 
     Processes incoming webhook requests from RedSys payment gateway,

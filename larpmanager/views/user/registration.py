@@ -193,7 +193,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
 
 
 @login_required
-def pre_register_remove(request, event_slug: str):
+def pre_register_remove(request: HttpRequest, event_slug: str):
     """Remove user's pre-registration for an event.
 
     Args:
@@ -212,7 +212,7 @@ def pre_register_remove(request, event_slug: str):
 
 
 @login_required
-def register_exclusive(request, event_slug, secret_code="", discount_code=""):
+def register_exclusive(request: HttpRequest, event_slug: str, secret_code="", discount_code=""):
     """Handle exclusive event registration (delegates to main register function).
 
     Args:
@@ -516,7 +516,7 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
         friend.save()
 
 
-def register_info(request, context, form, registration, discount_info) -> None:
+def register_info(request: HttpRequest, context: dict, form, registration, discount_info) -> None:
     """Display registration information and status.
 
     Args:
@@ -698,7 +698,7 @@ def _apply_ticket(context: dict, ticket_id: int | None) -> None:
         pass
 
 
-def _check_redirect_registration(request, context: dict, event, secret_code: str | None) -> HttpResponse | None:
+def _check_redirect_registration(request: HttpRequest, context: dict, event, secret_code: str | None) -> HttpResponse | None:
     """Check if registration should be redirected based on event status and settings.
 
     This function performs various checks to determine if a user's registration
@@ -824,7 +824,7 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
     return render(request, "larpmanager/event/register_conditions.html", context)
 
 
-# ~ def discount_bring_friend(request, context, cod):
+# ~ def discount_bring_friend(request: HttpRequest, context: dict, cod):
 # ~ # check if there is a registration with that cod
 # ~ try:
 # ~ friend = Registration.objects.get(special_cod=cod)
@@ -1085,7 +1085,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
 
 
 @login_required
-def unregister(request, event_slug: str):
+def unregister(request: HttpRequest, event_slug: str):
     """Handle user self-unregistration from an event.
 
     Args:

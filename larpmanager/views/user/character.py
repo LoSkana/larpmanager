@@ -402,7 +402,7 @@ def _update_character(context: dict, character: Character, form: Form, message: 
 
 
 @login_required
-def character_customize(request, event_slug, num):
+def character_customize(request: HttpRequest, event_slug: str, num):
     """Handle character customization form with profile and custom fields.
 
     Args:
@@ -552,7 +552,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
 
 
 @login_required
-def character_list(request, event_slug: str):
+def character_list(request: HttpRequest, event_slug: str):
     """Display list of player's characters for an event with customization fields.
 
     Args:
@@ -581,7 +581,7 @@ def character_list(request, event_slug: str):
 
 
 @login_required
-def character_create(request, event_slug: str):
+def character_create(request: HttpRequest, event_slug: str):
     """Handle character creation with maximum character validation.
 
     Args:
@@ -604,7 +604,7 @@ def character_create(request, event_slug: str):
 
 
 @login_required
-def character_edit(request, event_slug, num):
+def character_edit(request: HttpRequest, event_slug: str, num):
     """Handle character editing form for specific character.
 
     Args:
@@ -654,7 +654,7 @@ def get_options_dependencies(context: dict) -> None:
 
 
 @login_required
-def character_assign(request, event_slug, num):
+def character_assign(request: HttpRequest, event_slug: str, num):
     """Assign character to user's registration if not already assigned.
 
     Args:
@@ -773,7 +773,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_num: i
 
 
 @login_required
-def character_abilities_del(request, event_slug, num, id_del):
+def character_abilities_del(request: HttpRequest, event_slug: str, num, id_del):
     """Remove character ability with validation and dependency handling.
 
     Args:
@@ -835,7 +835,7 @@ def _save_character_abilities(context, request: HttpRequest) -> None:
     get_undo_abilities(request, context, context["character"], selected_id)
 
 
-def get_undo_abilities(request, context, char, new_ability_id=None):
+def get_undo_abilities(request: HttpRequest, context: dict, char, new_ability_id=None):
     """Get list of recently acquired abilities that can be undone.
 
     Args:
@@ -928,7 +928,7 @@ def character_relationships(request: HttpRequest, event_slug: str, num: int) -> 
 
 
 @login_required
-def character_relationships_edit(request, event_slug, num, other_character_id):
+def character_relationships_edit(request: HttpRequest, event_slug: str, num, other_character_id):
     """Handle editing of character relationship with another character.
 
     Args:

@@ -249,7 +249,7 @@ def writing_example(context, typ):
     return response
 
 
-def writing_post(request, context, writing_element_type, template_name) -> None:
+def writing_post(request: HttpRequest, context: dict, writing_element_type, template_name) -> None:
     """Handle POST requests for writing operations.
 
     Args:
@@ -731,7 +731,7 @@ def writing_view(request: HttpRequest, context: dict[str, Any], element_type_nam
     return render(request, "larpmanager/orga/writing/view.html", context)
 
 
-def writing_versions(request, context, element_name, version_type):
+def writing_versions(request: HttpRequest, context: dict, element_name, version_type):
     """Display text versions with diff comparison for writing elements.
 
     Args:

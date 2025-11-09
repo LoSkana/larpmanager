@@ -277,7 +277,7 @@ def round_up_to_two_decimals(value_to_round):
     return math.ceil(value_to_round * 100) / 100
 
 
-def update_invoice_gross_fee(request, invoice, amount, association_id, payment_method):
+def update_invoice_gross_fee(request: HttpRequest, invoice, amount, association_id, payment_method):
     """Update invoice with gross amount including payment processing fees.
 
     Args:

@@ -29,7 +29,7 @@ ignore = [
 	"D104", # Missing docstring in public package
 	"D105", # Missing docstring in magic method
 	"D106", # Missing docstring in public nested class, would be useless on Meta
-    "ANN001",  # TODO remove Missing type annotation for functions
+    #"ANN001",  # TODO remove Missing type annotation for functions
     "ANN002",  # TODO remove Missing type annotation for *args
     "ANN003",  # TODO remove Missing type annotation for **kwargs
     "ANN201",  # TODO remove Missing return type annotation for public function

@@ -227,7 +227,7 @@ def _characters_relationships(context) -> None:
         context["relationships"] = dict(sorted_relationships)
 
 
-def update_relationship(request, context: dict, nm: str, fl: str) -> None:
+def update_relationship(request: HttpRequest, context: dict, nm: str, fl: str) -> None:
     """Update relationship texts from POST data."""
     for d in context[nm]:
         # Get the identifier for this relationship item
@@ -1139,7 +1139,7 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
 
 @require_POST
-def orga_writing_excel_submit(request, event_slug, writing_type):
+def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_type):
     """Handle Excel submission for writing data with validation.
 
     Args:
@@ -1319,7 +1319,7 @@ def _get_question_update(context: dict, element) -> str:
     return display_value
 
 
-def _check_working_ticket(request, context: dict, working_ticket_token: str) -> str | None:
+def _check_working_ticket(request: HttpRequest, context: dict, working_ticket_token: str) -> str | None:
     """Check if ticket is being edited by another user.
 
     Args:

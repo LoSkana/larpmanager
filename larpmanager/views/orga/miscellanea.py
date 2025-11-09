@@ -391,7 +391,7 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
 
 
 @login_required
-def orga_warehouse_checks(request, event_slug: str) -> HttpResponse:
+def orga_warehouse_checks(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display warehouse item assignments for organization event management.
 
     Args:
@@ -587,7 +587,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
 
 
 @login_required
-def orga_onetimes(request, event_slug: str):
+def orga_onetimes(request: HttpRequest, event_slug: str):
     """List all one-time contents for an event."""
     context = check_event_context(request, event_slug, "orga_onetimes")
     context["list"] = OneTimeContent.objects.filter(event=context["event"]).order_by("-created")
@@ -595,7 +595,7 @@ def orga_onetimes(request, event_slug: str):
 
 
 @login_required
-def orga_onetimes_edit(request, event_slug, num):
+def orga_onetimes_edit(request: HttpRequest, event_slug: str, num):
     """Edit or create a one-time content."""
     return orga_edit(request, event_slug, "orga_onetimes", OneTimeContentForm, num)
 

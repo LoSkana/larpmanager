@@ -119,7 +119,7 @@ def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
     return render(request, "404.html", {"exe": exception})
 
 
-def error_500(request):
+def error_500(request: HttpRequest):
     """Handle 500 errors with custom template.
 
     Args:
