@@ -719,8 +719,7 @@ def _check_redirect_registration(request, context: dict, event, secret_code: str
             # Redirect to pre-registration if available and active
             if "pre_register" in context["features"] and get_event_config(event.id, "pre_register_active", False):
                 return redirect("pre_register", event_slug=context["event"].slug)
-            else:
-                return render(request, "larpmanager/event/not_open.html", context)
+            return render(request, "larpmanager/event/not_open.html", context)
 
     return None
 

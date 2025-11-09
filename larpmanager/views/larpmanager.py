@@ -180,23 +180,22 @@ def choose_association(request, redirect_path, association_slugs):
     """
     if len(association_slugs) == 0:
         return render(request, "larpmanager/larpmanager/na_assoc.html")
-    elif len(association_slugs) == 1:
+    if len(association_slugs) == 1:
         return go_redirect(request, association_slugs[0], redirect_path)
+    # show page to choose them
+    if request.POST:
+        form = RedirectForm(request.POST, slugs=association_slugs)
+        if form.is_valid():
+            selected_index = int(form.cleaned_data["slug"])
+            if selected_index < len(association_slugs):
+                return go_redirect(request, association_slugs[selected_index], redirect_path)
     else:
-        # show page to choose them
-        if request.POST:
-            form = RedirectForm(request.POST, slugs=association_slugs)
-            if form.is_valid():
-                selected_index = int(form.cleaned_data["slug"])
-                if selected_index < len(association_slugs):
-                    return go_redirect(request, association_slugs[selected_index], redirect_path)
-        else:
-            form = RedirectForm(slugs=association_slugs)
-        return render(
-            request,
-            "larpmanager/larpmanager/redirect.html",
-            {"form": form, "name": "association"},
-        )
+        form = RedirectForm(slugs=association_slugs)
+    return render(
+        request,
+        "larpmanager/larpmanager/redirect.html",
+        {"form": form, "name": "association"},
+    )
 
 
 def go_redirect_run(run, path):
@@ -235,24 +234,23 @@ def choose_run(request, redirect_path, event_ids):
 
     if len(run_display_names) == 0:
         return render(request, "larpmanager/larpmanager/na_event.html")
-    elif len(run_display_names) == 1:
+    if len(run_display_names) == 1:
         return go_redirect_run(available_runs[0], redirect_path)
 
+    # show page to choose them
+    if request.POST:
+        form = RedirectForm(request.POST, slugs=run_display_names)
+        if form.is_valid():
+            selected_index = int(form.cleaned_data["slug"])
+            if selected_index < len(run_display_names):
+                return go_redirect_run(available_runs[selected_index], redirect_path)
     else:
-        # show page to choose them
-        if request.POST:
-            form = RedirectForm(request.POST, slugs=run_display_names)
-            if form.is_valid():
-                selected_index = int(form.cleaned_data["slug"])
-                if selected_index < len(run_display_names):
-                    return go_redirect_run(available_runs[selected_index], redirect_path)
-        else:
-            form = RedirectForm(slugs=run_display_names)
-        return render(
-            request,
-            "larpmanager/larpmanager/redirect.html",
-            {"form": form, "name": "event"},
-        )
+        form = RedirectForm(slugs=run_display_names)
+    return render(
+        request,
+        "larpmanager/larpmanager/redirect.html",
+        {"form": form, "name": "event"},
+    )
 
 
 @login_required

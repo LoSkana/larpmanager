@@ -328,8 +328,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
             request, _("We cannot find your registration for this event. Are you logged in as the correct user") + "?"
         )
         return redirect("accounting")
-    else:
-        reg = context["run"].reg
+    reg = context["run"].reg
 
     # Validate fiscal code if feature is enabled for this association
     if "fiscal_code_check" in context["features"]:
@@ -345,8 +344,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
     # Redirect to payment processing with or without specific method
     if method:
         return redirect("acc_reg", reg_id=reg.id, method=method)
-    else:
-        return redirect("acc_reg", reg_id=reg.id)
+    return redirect("acc_reg", reg_id=reg.id)
 
 
 @login_required

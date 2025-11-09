@@ -1253,7 +1253,7 @@ class OrgaRunForm(ConfigForm):
             return config_list
 
         if not get_event_config(self.params["event"].id, "writing_field_visibility", False):
-            return
+            return None
 
         help_text = _(
             "Selected fields will be displayed as follows: public fields visible to all participants, "

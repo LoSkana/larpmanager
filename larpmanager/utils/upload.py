@@ -94,16 +94,15 @@ def go_upload(request, context, upload_form_data):
 
     if upload_type == "registration_form":
         return form_load(request, context, upload_form_data, is_registration=True)
-    elif upload_type == "character_form":
+    if upload_type == "character_form":
         return form_load(request, context, upload_form_data, is_registration=False)
-    elif upload_type == "registration":
+    if upload_type == "registration":
         return registrations_load(request, context, upload_form_data)
-    elif upload_type == "px_abilitie":
+    if upload_type == "px_abilitie":
         return abilities_load(request, context, upload_form_data)
-    elif upload_type == "registration_ticket":
+    if upload_type == "registration_ticket":
         return tickets_load(request, context, upload_form_data)
-    else:
-        return writing_load(request, context, upload_form_data)
+    return writing_load(request, context, upload_form_data)
 
 
 def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
@@ -682,8 +681,7 @@ def element_load(request, context: dict, csv_row: dict, element_questions: list)
 
     if is_newly_created:
         return f"OK - Created {element_name}"
-    else:
-        return f"OK - Updated {element_name}"
+    return f"OK - Updated {element_name}"
 
 
 def _writing_load_field(context: dict, element: BaseModel, field: str, value: any, questions: dict, logs: list) -> None:
@@ -1058,8 +1056,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
     # Return appropriate success message
     if was_created:
         return f"OK - Created {option_name}"
-    else:
-        return f"OK - Updated {option_name}"
+    return f"OK - Updated {option_name}"
 
 
 def _get_option(context, is_registration, option_name, parent_question_id):

@@ -243,11 +243,11 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
     """
     # Early return if Centauri feature is not enabled for this association
     if "centauri" not in context["features"]:
-        return
+        return None
 
     # Check random probability condition for triggering Centauri
     if not _go_centauri(context):
-        return
+        return None
 
     # Build template context with association-specific Centauri content
     template_context = {}

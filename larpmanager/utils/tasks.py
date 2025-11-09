@@ -82,9 +82,8 @@ def background_auto(schedule=0, **background_kwargs):
                 filtered_kwargs = {key: value for key, value in kwargs.items() if key not in INTERNAL_KWARGS}
                 # Execute function directly in foreground
                 return original_function(*args, **filtered_kwargs)
-            else:
-                # Schedule function as background task
-                return background_task(*args, **kwargs)
+            # Schedule function as background task
+            return background_task(*args, **kwargs)
 
         # Attach task references to wrapper for external access
         wrapper.task = background_task

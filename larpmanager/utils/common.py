@@ -110,8 +110,7 @@ def get_channel(first_entity_id, second_entity_id):
     second_entity_id = int(second_entity_id)
     if first_entity_id > second_entity_id:
         return int(cantor(first_entity_id, second_entity_id))
-    else:
-        return int(cantor(second_entity_id, first_entity_id))
+    return int(cantor(second_entity_id, first_entity_id))
 
 
 def cantor(first_integer, second_integer):

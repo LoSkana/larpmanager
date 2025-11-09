@@ -213,8 +213,7 @@ def get_index_association_permissions(
     if not role_names and not is_admin:
         if check:
             raise UserPermissionError()
-        else:
-            return
+        return
 
     # Set role names in context for template rendering
     context["role_names"] = role_names

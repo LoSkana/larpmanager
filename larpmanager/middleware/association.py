@@ -154,7 +154,7 @@ class AssociationIdentifyMiddleware:
 
         # Allow admin panel access without association
         if request.path.startswith("/admin"):
-            return
+            return None
 
         # No valid association found - render error page
         return render(request, "exception/association.html", {})

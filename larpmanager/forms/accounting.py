@@ -756,8 +756,7 @@ class ExePaymentSettingsForm(MyForm):
             middle_section_length = len(input_string) - minimum_maskable_length
             masked_middle_section = "*" * middle_section_length
             return first_three_chars + masked_middle_section + last_three_chars
-        else:
-            return input_string
+        return input_string
 
     def clean(self) -> dict[str, any]:
         """Validate and normalize fee field values.

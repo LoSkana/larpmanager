@@ -84,13 +84,13 @@ class BrokenLinkEmailsMiddleware:
         # Skip processing if referer contains query parameters
         referer = request.META.get("HTTP_REFERER", "None")
         if "?" in referer:
-            return
+            return None
 
         # Filter out bot traffic to reduce noise
         user_agent = request.META.get("HTTP_USER_AGENT", "<none>")
         for bot_identifier in ["bot", "facebookexternalhit"]:
             if bot_identifier in str(user_agent):
-                return
+                return None
 
         # Handle domain redirection for larpmanager.com with $ separator
         # print(domain)
@@ -103,11 +103,11 @@ class BrokenLinkEmailsMiddleware:
 
         # Skip ignorable 404 paths (common crawlers, assets, etc.)
         if self.is_ignorable_404(path):
-            return
+            return None
 
         # Only process authenticated users or webhook paths
         if "webhook" not in path and not request.user.is_authenticated:
-            return
+            return None
 
         # Extract exception information from response HTML
         html_content = response.content.decode("utf-8")

@@ -385,8 +385,7 @@ def stripe_webhook(request):
     # ~ return True
     # ~ elif event['type'] == 'checkout.session.async_payment_succeeded':
     # ~ return True
-    else:
-        return True
+    return True
         # raise Exception('Unhandled event type {}'.format(event['type']))
 
 

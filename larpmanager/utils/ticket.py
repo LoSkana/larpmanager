@@ -133,9 +133,8 @@ def _analyze_ticket(ticket):
             {analysis_data.get("confidence", 0.0)}
         """
         return response, priority
-    else:
-        # Fallback: use entire response as text
-        return output, 0.5
+    # Fallback: use entire response as text
+    return output, 0.5
 
 
 def _test_connection():
@@ -203,7 +202,7 @@ def create_error_ticket(request):
     exception = exc_info[1] if exc_info[1] else None
 
     if exception is None:
-        return
+        return None
 
     # Get association from request context if available
     association = None

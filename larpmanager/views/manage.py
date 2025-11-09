@@ -67,8 +67,7 @@ def manage(request, event_slug=None):
 
     if event_slug:
         return _orga_manage(request, event_slug)
-    else:
-        return _exe_manage(request)
+    return _exe_manage(request)
 
 
 def _get_registration_status_code(run):
@@ -157,9 +156,8 @@ def _get_registration_status(run_instance) -> str:
         if opening_datetime:
             formatted_opening_date = opening_datetime.strftime(format_datetime)
             return _("Registrations opening at: %(date)s") % {"date": formatted_opening_date}
-        else:
-            # Fallback when datetime is not available
-            return _("Registrations opening not set")
+        # Fallback when datetime is not available
+        return _("Registrations opening not set")
 
     # Return the appropriate status message or default to closed
     return status_messages.get(status_code, _("Registration closed"))

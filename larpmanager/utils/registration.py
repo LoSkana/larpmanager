@@ -456,7 +456,7 @@ def registration_status(
             run.status["open"] = False
             run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             return
-        elif run.registration_open > current_datetime:
+        if run.registration_open > current_datetime:
             run.status["open"] = False
             run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             run.status["details"] = _("Opening at: %(date)s") % {

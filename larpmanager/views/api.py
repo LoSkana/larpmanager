@@ -251,5 +251,4 @@ def published_events(request: HttpRequest) -> JsonResponse:
         # Return appropriate error response based on debug mode
         if settings.DEBUG:
             return JsonResponse({"error": str(e)}, status=500)
-        else:
-            return JsonResponse({"error": "Internal server error"}, status=500)
+        return JsonResponse({"error": "Internal server error"}, status=500)

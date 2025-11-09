@@ -268,7 +268,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         """
         # Skip plots field - it's handled separately in _save_plot()
         if s == "plots":
-            return
+            return None
 
         # Handle non-faction fields using parent implementation
         if s != "factions_list":
@@ -276,7 +276,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         # Only process factions if the factions_list field is present in the form
         if "factions_list" not in self.cleaned_data:
-            return
+            return None
 
         # Get new faction IDs from cleaned form data
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
@@ -593,11 +593,10 @@ class OrgaCharacterForm(CharacterForm):
                 if ch_id not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_id]:
                     continue
                 # else delete
-                else:
-                    rel = self._get_rel(ch_id, instance, rel_type)
-                    save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], True)
-                    rel.delete()
-                    continue
+                rel = self._get_rel(ch_id, instance, rel_type)
+                save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], True)
+                rel.delete()
+                continue
 
             # if the value is present, and is the same as before, do nothing
             if ch_id in self.params["relationships"] and rel_type in self.params["relationships"][ch_id]:
@@ -799,7 +798,7 @@ class OrgaWritingQuestionForm(MyForm):
                     continue
 
                 # Check feature activation for non-default types
-                elif choice[0] not in ["name", "teaser", "text"]:
+                if choice[0] not in ["name", "teaser", "text"]:
                     if choice[0] not in self.params["features"]:
                         continue
 

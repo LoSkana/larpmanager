@@ -604,7 +604,7 @@ def orga_registration_form_list(request, event_slug):
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
         if not organizer and context["member"].id not in q.allowed_map:
-            return
+            return None
 
     res = {}
     popup = []
@@ -669,13 +669,13 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
         run_id = context["run"].id
         organizer = run_id in context["all_runs"] and 1 in context["all_runs"][run_id]
         if not organizer and context["member"].id not in q.allowed_map:
-            return
+            return None
 
     res = {}
 
     # Only process single or multiple choice questions
     if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-        return
+        return None
 
     # Build mapping of option IDs to option names
     cho = {}

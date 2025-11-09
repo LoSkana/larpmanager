@@ -299,10 +299,9 @@ class Member(BaseModel):
             if slugify(nick) != slugify(name):
                 name += f" - {nick}"
             return name
-        elif self.name or self.surname:
+        if self.name or self.surname:
             return self.display_real()
-        else:
-            return str(self.user)
+        return str(self.user)
 
     def display_member(self) -> str:
         """Return a user-friendly display name for the member.

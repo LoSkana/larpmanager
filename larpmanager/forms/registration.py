@@ -1191,7 +1191,7 @@ class OrgaRegistrationQuestionForm(MyForm):
                     continue
 
                 # check the feature is active
-                elif choice[0] not in ["ticket"]:
+                if choice[0] not in ["ticket"]:
                     if choice[0] not in self.params["features"]:
                         continue
 

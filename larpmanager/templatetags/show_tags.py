@@ -513,8 +513,7 @@ def key(d, key_name, s_key_name=None):
     key_name = str(key_name)
     if key_name in d:
         return d[key_name]
-    else:
-        return ""
+    return ""
 
 
 @register.simple_tag
@@ -813,7 +812,7 @@ def get_char_profile(context, char):
     if "cover" in context["features"]:
         if "cover_orig" in context and "cover" in char:
             return char["cover"]
-        elif "thumb" in char:
+        if "thumb" in char:
             return char["thumb"]
     return "/static/larpmanager/assets/blank-avatar.svg"
 

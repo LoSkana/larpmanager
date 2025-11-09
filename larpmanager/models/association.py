@@ -485,8 +485,7 @@ def hdr(association_or_related_object: Association | Any) -> str:
     # Check if object has an associated Association via association attribute
     if association_or_related_object.association:
         return f"[{association_or_related_object.association.name}] "
-    else:
-        return "[LarpManager] "
+    return "[LarpManager] "
 
 
 def get_association_maintainers(association: Association):

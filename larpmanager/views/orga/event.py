@@ -115,8 +115,7 @@ def full_event_edit(
             messages.success(request, _("Operation completed") + "!")
             if is_executive:
                 return redirect("manage")
-            else:
-                return redirect("manage", event_slug=run.get_slug())
+            return redirect("manage", event_slug=run.get_slug())
     else:
         # Create empty forms for GET requests
         event_form = OrgaEventForm(instance=event, context=context, prefix="form1")

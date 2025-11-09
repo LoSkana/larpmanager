@@ -147,7 +147,7 @@ def invoice_received_money(
     except ObjectDoesNotExist:
         # Notify administrators of invalid payment attempt
         notify_admins("invalid payment", "wrong invoice: " + invoice_code)
-        return
+        return None
 
     # Process payment updates within atomic transaction
     with transaction.atomic():

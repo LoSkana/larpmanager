@@ -473,7 +473,7 @@ def event_register(request: HttpRequest, event_slug: str):
     )
     if len(runs) == 0 and "pre_register" in context["features"]:
         return redirect("pre_register", event_slug=event_slug)
-    elif len(runs) == 1:
+    if len(runs) == 1:
         run = runs.first()
         return redirect("register", event_slug=run.get_slug())
     context["list"] = []

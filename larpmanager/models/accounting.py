@@ -631,8 +631,7 @@ class Collection(BaseModel):
         # Return member-based or name-based description
         if self.member:
             return f"Colletta per {self.member}"
-        else:
-            return f"Colletta per {self.name}"
+        return f"Colletta per {self.name}"
 
     def display_member(self) -> str:
         """Return member's display name if exists, otherwise return name."""

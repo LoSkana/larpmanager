@@ -472,7 +472,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
     # Only process single or multiple choice questions
     if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-        return
+        return None
 
     # Build mapping of option IDs to option names
     cho = {}
@@ -1165,8 +1165,7 @@ def orga_writing_excel_submit(request, event_slug, writing_type):
             "update": _get_question_update(context, obj),
         }
         return JsonResponse(response)
-    else:
-        return JsonResponse({"k": 2, "errors": context["form"].errors})
+    return JsonResponse({"k": 2, "errors": context["form"].errors})
 
 
 def _get_excel_form(

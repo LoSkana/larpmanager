@@ -701,8 +701,7 @@ def _writing_save(
         # Check if element exists in context before processing
         if nm in context:
             return writing_edit_save_ajax(form, request, context)
-        else:
-            return JsonResponse({"res": "ko"})
+        return JsonResponse({"res": "ko"})
 
     # Process normal form submission
     # Save form data but keep as temporary until processing complete

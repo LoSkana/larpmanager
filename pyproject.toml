@@ -19,7 +19,7 @@ extend-exclude = ["main"]
 quote-style = "double"
 
 [tool.ruff.lint]
-select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D"]
+select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D", "R"]
 ignore = [
 	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
 	"E501", # Line too lung, ignored to use ruff formatter
