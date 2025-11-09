@@ -20,7 +20,18 @@ quote-style = "double"
 
 [tool.ruff.lint]
 select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D"]
-ignore = ["ISC001", "E501"]
+ignore = [
+	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
+	"E501", # Line too lung, ignored to use ruff formatter
+	"D100", # Missing docstring in public module
+	"D101", # Missing docstring in public class, to be removed later,
+	"D104", # Missing docstring in public package
+	"D105", # Missing docstring in magic method
+	"D106" # Missing docstring in public nested class, would be useless on Meta
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.lint.pylint]
 max-args = 8

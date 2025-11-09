@@ -23,7 +23,6 @@ import os
 import shutil
 from datetime import datetime
 from decimal import Decimal
-from typing import Union
 
 import pandas as pd
 from django.conf import settings as conf_settings
@@ -561,7 +560,7 @@ def _relationships_load(row: dict, chars: dict) -> str:
     return f"OK - Relationship {source_character_name} {target_character_name}"
 
 
-def _get_questions(questions_queryset: QuerySet) -> dict[str, dict[str, Union[int, str, dict[str, int]]]]:
+def _get_questions(questions_queryset: QuerySet) -> dict[str, dict[str, int | str | dict[str, int]]]:
     """Build a dictionary mapping question names to their metadata.
 
     Args:
@@ -694,25 +693,13 @@ def _writing_load_field(context: dict, element: BaseModel, field: str, value: an
     accordingly. Handles special fields like 'typ' and 'quest' with object lookups,
     and delegates other field types to question loading.
 
-    Parameters
-    ----------
-    context : dict
-        Context dictionary containing event and field information
-    element : WritingElement
-        Writing element instance to update with field data
-    field : str
-        Name of the field being processed
-    value : any
-        Value from upload data for this field
-    questions : dict
-        Dictionary mapping field names to question instances
-    logs : list
-        List to append error messages to during processing
-
-    Returns
-    -------
-    None
-        Function modifies element and logs in place
+    Args:
+        context: Context dictionary containing event and field information
+        element: Writing element instance to update with field data
+        field: Name of the field being processed
+        value: Value from upload data for this field
+        questions: Dictionary mapping field names to question instances
+        logs: List to append error messages to during processing
 
     """
     # Skip processing if value is NaN/null

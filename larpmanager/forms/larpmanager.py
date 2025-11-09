@@ -75,6 +75,7 @@ class LarpManagerContact(LarpManagerCheck):
     )
 
     def __init__(self, *args, **kwargs) -> None:
+        """Initialize delete association form."""
         super().__init__(*args, **kwargs)
 
     def clean_verification(self):

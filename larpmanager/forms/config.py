@@ -188,26 +188,18 @@ class ConfigForm(MyForm):
     def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra=None) -> forms.Field | None:
         """Create appropriate Django form field based on configuration type.
 
-        Parameters
-        ----------
-        field_type : ConfigType
-            Type of configuration field that determines which Django form field to create
-        label : str
-            Human-readable label text displayed for the form field
-        help_text : str
-            Descriptive text shown to help users understand the field purpose
-        extra : Any, optional
-            Additional configuration data specific to certain field types (e.g., choices for MULTI_BOOL)
+        Args:
+            field_type:  Type of configuration field that determines which Django form field to create
+            label: Human-readable label text displayed for the form field
+            help_text: Descriptive text shown to help users understand the field purpose
+            extra:Additional configuration data specific to certain field types (e.g., choices for MULTI_BOOL)
 
-        Returns
-        -------
-        forms.Field or None
-            Django form field instance matching the specified type, or None if field_type is unknown
+        Returns:
+            forms.Field or None: Django form field instance matching the specified type, or None if field_type is unknown
 
-        Notes
-        -----
-        Supported field types include CHAR, BOOL, HTML, INT, TEXTAREA, MEMBERS, and MULTI_BOOL.
-        The MEMBERS type requires extra parameter to contain association data for queryset filtering.
+        Notes:
+            Supported field types include CHAR, BOOL, HTML, INT, TEXTAREA, MEMBERS, and MULTI_BOOL.
+            The MEMBERS type requires extra parameter to contain association data for queryset filtering.
 
         """
         # Map each configuration type to its corresponding Django form field factory

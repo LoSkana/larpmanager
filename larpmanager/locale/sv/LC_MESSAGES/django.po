@@ -3020,6 +3020,12 @@ msgstr "Standard"
 msgid "Play Again"
 msgstr "Spela igen"
 
+msgid "Friend"
+msgstr ""
+
+msgid "Influencer"
+msgstr ""
+
 msgid "Name of the discount - internal use"
 msgstr "Namn på rabatt - för internt bruk"
 

@@ -49,8 +49,8 @@ class TestCacheSignals(BaseTestCase):
     """Test cases for cache-related signal receivers"""
 
     def setUp(self):
+        """Clear cache before each test."""
         super().setUp()
-        # Clear cache before each test
         cache.clear()
 
     @patch("larpmanager.cache.character.update_event_cache_all")

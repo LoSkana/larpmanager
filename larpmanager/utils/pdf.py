@@ -404,16 +404,11 @@ def print_gallery(context: dict, force: bool = False) -> object:
     capabilities. The PDF is cached and only regenerated when forced or when
     the cache is outdated.
 
-    Parameters
-    ----------
-    context : dict
-        Context dictionary containing run information and character data
-    force : bool, default False
-        Whether to force regeneration of the PDF even if cache is valid
+    Args:
+        context: Context dictionary containing run information and character data
+        force: Whether to force regeneration of the PDF even if cache is valid
 
-    Returns
-    -------
-    object
+    Returns:
         PDF response object for download/display
 
     """

@@ -45,25 +45,18 @@ def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
     Extracts operation ID, target ID, and a list of entity IDs from the request,
     validates the data types, and logs the bulk operation attempt.
 
-    Parameters
-    ----------
-    request : HttpRequest
-        HTTP request object containing POST data with operation parameters
-    context : dict
-        Context dictionary containing event/run information and association ID
+    Args:
+        request: HTTP request object containing POST data with operation parameters
+        context: Context dictionary containing event/run information and association ID
 
-    Returns
-    -------
-    tuple[list[int], int, int]
-        A tuple containing:
-        - entity_ids: List of validated integer IDs for bulk operation
-        - operation_code: Integer operation code (defaults to 0 if invalid)
-        - target_code: Integer target code (defaults to 0 if invalid)
+    Returns:
+        :tuple[list[int], int, int]: A tuple containing:
+            - entity_ids: List of validated integer IDs for bulk operation
+            - operation_code: Integer operation code (defaults to 0 if invalid)
+            - target_code: Integer target code (defaults to 0 if invalid)
 
-    Raises
-    ------
-    ReturnNowError
-        If no valid IDs are provided in the request
+    Raises:
+        ReturnNowError: If no valid IDs are provided in the request
 
     """
     # Extract and validate operation parameter, default to 0 for invalid values

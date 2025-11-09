@@ -123,6 +123,7 @@ def remove_non_ascii(text: str) -> str:
 
 
 def my_uuid_miny():
+    """Generate tiny UUID with letter prefix and 4 characters."""
     return random.choice(string.ascii_letters) + my_uuid(4)
 
 
@@ -145,6 +146,7 @@ def my_uuid(length: int | None = None) -> str:
 
 
 def download_d(session):
+    """Alias for download function."""
     return download(session)
 
 
@@ -220,6 +222,7 @@ def get_sum(queryset: QuerySet) -> Decimal | int:
 @deconstructible
 class UploadToPathAndRename:
     def __init__(self, sub_path):
+        """Initialize upload path handler with sub-directory."""
         self.sub_path = sub_path
 
     def __call__(self, instance, filename: str) -> str:
@@ -403,7 +406,9 @@ class MLStripper(HTMLParser):
         self.text = StringIO()
 
     def handle_data(self, d):
+        """Handle data by writing it to the internal text buffer."""
         self.text.write(d)
 
     def get_data(self):
+        """Return the accumulated text data."""
         return self.text.getvalue()

@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any, Optional
+from typing import Any
 
 from django import forms
 from django.conf import settings as conf_settings
@@ -210,6 +210,7 @@ class MyForm(forms.ModelForm):
         return self.params["event"].get_class_parent(typ)
 
     def clean_association(self):
+        """Return association from params."""
         return Association.objects.get(pk=self.params["association_id"])
 
     def clean_name(self) -> str:
@@ -226,20 +227,14 @@ class MyForm(forms.ModelForm):
         This method ensures that a field value is unique within the context of a specific
         event or association, preventing duplicate entries that could cause conflicts.
 
-        Parameters
-        ----------
-        field_name : str
-            Name of the field to validate for uniqueness
+        Args:
+            field_name: Name of the field to validate for uniqueness
 
-        Returns
-        -------
-        any
-            The validated field value if unique
+        Returns:
+            any: The validated field value if unique
 
-        Raises
-        ------
-        ValidationError
-            If the value is not unique within the event scope
+        Raises:
+            ValidationError: If the value is not unique within the event scope
 
         """
         # Get the field value and event context parameters
@@ -455,7 +450,7 @@ class BaseRegistrationForm(MyFormRun):
         # Store form sections organized by category
         self.sections = {}
 
-    def _init_reg_question(self, instance: Optional[Any], event: Any) -> None:
+    def _init_reg_question(self, instance: Any | None, event: Any) -> None:
         """Initialize registration questions and answers from existing instance.
 
         Loads existing answers and choices from the database for a given registration
@@ -518,23 +513,16 @@ class BaseRegistrationForm(MyFormRun):
         Processes available options for a registration question, applying availability
         constraints and ticket validation rules to generate valid form choices.
 
-        Parameters
-        ----------
-        all_options : dict
-            Dictionary mapping question IDs to their available option lists
-        question : Question
-            Question instance to retrieve and process options for
-        chosen_options : optional
-            Previously selected options for validation checks
-        registration_count : optional
-            Registration count data used for availability verification
+        Args:
+            all_options: Dictionary mapping question IDs to their available option lists
+            question: Question instance to retrieve and process options for
+            chosen_options: Previously selected options for validation checks
+            registration_count:  Registration count data used for availability verification
 
-        Returns
-        -------
-        tuple[list[tuple], str]
-            A tuple containing:
-            - List of (option_id, display_name) tuples for form choices
-            - Combined help text string with question description and option details
+        Returns:
+            tuple[list[tuple], str]: A tuple containing:
+                - List of (option_id, display_name) tuples for form choices
+                - Combined help text string with question description and option details
 
         """
         choices = []
@@ -680,23 +668,12 @@ class BaseRegistrationForm(MyFormRun):
         This method creates a unique identifier string used to track the usage
         count of a specific option in the system's availability monitoring.
 
-        Parameters
-        ----------
-        option : Option
-            The option instance for which to generate the tracking key.
+        Args:
+            option: The option instance for which to generate the tracking key.
 
-        Returns
-        -------
-        str
-            A formatted key string in the format "option_{id}" used for
+        Returns:
+            str: A formatted key string in the format "option_{id}" used for
             tracking option usage counts.
-
-        Examples
-        --------
-        >>> option = Option(id=123)
-        >>> tracking_key = self.get_option_key_count(option)
-        >>> print(tracking_key)
-        'option_123'
 
         """
         # Generate unique key using option ID for tracking purposes
@@ -752,12 +729,12 @@ class BaseRegistrationForm(MyFormRun):
         return field_keys
 
     def check_editable(self, registration_question: RegistrationQuestion) -> bool:
-        # Always allow editing
+        """Always allow editing."""
         return True
 
     def _init_field(
-        self, question: WritingQuestion, registration_counts: Optional[dict[str, Any]] = None, is_organizer: bool = True
-    ) -> Optional[str]:
+        self, question: WritingQuestion, registration_counts: dict[str, Any] | None = None, is_organizer: bool = True
+    ) -> str | None:
         """Initialize form field for a writing question.
 
         Creates and configures a form field based on the writing question type and settings.
@@ -1331,7 +1308,7 @@ class MyCssForm(MyForm):
 
     @staticmethod
     def get_css_path(association_skin) -> str:
-        # Returns empty string (CSS path logic not implemented)
+        """Returns empty string (CSS path logic not implemented)."""
         return ""
 
     @staticmethod

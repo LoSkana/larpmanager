@@ -23,7 +23,6 @@ import random
 import shutil
 import zipfile
 from io import BytesIO
-from typing import Optional
 from uuid import uuid4
 from zipfile import ZipFile
 
@@ -221,7 +220,7 @@ def zipdir(path, ziph):
             )
 
 
-def check_centauri(request: HttpRequest, context: dict) -> Optional[HttpResponse]:
+def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
     """Check and display Centauri easter egg feature.
 
     Randomly triggers a special Centauri easter egg feature that displays custom content

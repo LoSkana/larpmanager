@@ -396,7 +396,7 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
 
 @login_required
 def orga_registration_installments_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    # Edit a specific registration installment for an event
+    """Edit a specific registration installment for an event."""
     return orga_edit(request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, num)
 
 

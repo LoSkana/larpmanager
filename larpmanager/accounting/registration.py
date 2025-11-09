@@ -25,7 +25,6 @@ import math
 from collections.abc import Iterable
 from datetime import datetime
 from decimal import Decimal
-from typing import Union
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
@@ -648,7 +647,7 @@ def check_reg_events(event):
 
 
 @background_auto(queue="acc")
-def check_registration_background(registration_ids: Union[int, str, Iterable[int]]) -> None:
+def check_registration_background(registration_ids: int | str | Iterable[int]) -> None:
     """Process one or more registration IDs by invoking `check_reg_bkg_go` for each.
 
     Args:

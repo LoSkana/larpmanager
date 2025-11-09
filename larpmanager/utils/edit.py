@@ -19,7 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import time
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -328,8 +329,8 @@ def backend_edit(
     request: HttpRequest,
     context: dict[str, Any],
     form_type: type[ModelForm],
-    element_id: Optional[int],
-    additional_field: Optional[str] = None,
+    element_id: int | None,
+    additional_field: str | None = None,
     is_association_based: bool = False,
     quiet: bool = False,
 ) -> bool:
@@ -567,8 +568,8 @@ def writing_edit(
     form_type: type[forms.Form],
     element_name: str,
     element_type: str,
-    redirect_url: Optional[str] = None,
-) -> Optional[HttpResponse]:
+    redirect_url: str | None = None,
+) -> HttpResponse | None:
     """Handle editing of writing elements with form processing.
 
     Manages the creation and editing of writing elements (characters, backgrounds, etc.)
@@ -672,9 +673,9 @@ def _writing_save(
     form: Any,
     form_type: type,
     nm: str,
-    redr: Optional[Callable],
+    redr: Callable | None,
     request: HttpRequest,
-    tp: Optional[str],
+    tp: str | None,
 ) -> HttpResponse:
     """Save writing form data with AJAX and normal save handling.
 

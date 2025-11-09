@@ -799,23 +799,16 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
     available for selection, excluding those already taken based on the specified
     type (registrations, abilities, etc.).
 
-    Parameters
-    ----------
-    request : HttpRequest
-        HTTP request object containing POST data with 'type' and optional 'eid'
-    event_slug : str
-        Event slug identifier
+    Args:
+        request: HTTP request object containing POST data with 'type' and optional 'eid'
+        event_slug: Event slug identifier
 
-    Returns
-    -------
-    JsonResponse
+    Returns:
         JSON response containing available character options as list of tuples
         with format: {"res": [(character_id, character_str), ...]}
 
-    Raises
-    ------
-    Http404
-        If request method is not POST
+    Raises:
+        Http404, if request method is not POST
 
     """
     # Validate request method

@@ -49,6 +49,7 @@ class TicketTier(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of ticket tier values to string identifiers."""
         return {
             TicketTier.STANDARD: "Standard",
             TicketTier.NEW_PLAYER: "New player",
@@ -129,6 +130,7 @@ class RegistrationTicket(BaseModel):
         return js
 
     def get_price(self):
+        """Return the tier price."""
         return self.price
 
     def get_form_text(self, run: Run = None, currency_symbol: str = None) -> str:
@@ -346,6 +348,7 @@ class Registration(BaseModel):
         return f"{self.run} - {self.member}"
 
     def display_run(self):
+        """Return string representation of the associated run."""
         return str(self.run)
 
     def display_member(self) -> str:
@@ -354,7 +357,7 @@ class Registration(BaseModel):
         return self.member.display_member()
 
     def display_profile(self) -> str:
-        # Delegate to member's profile display method
+        """Delegate to member's profile display method."""
         # noinspection PyUnresolvedReferences
         return self.member.display_profile()
 

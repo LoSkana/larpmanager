@@ -43,10 +43,12 @@ class LarpManagerFaqAdmin(DefModelAdmin):
 
     @staticmethod
     def question_red(instance):
+        """Return truncated question for admin display."""
         return instance.question[:100]
 
     @staticmethod
     def answer_red(instance):
+        """Return truncated answer for admin display."""
         return instance.answer[:100]
 
 
@@ -62,6 +64,7 @@ class LarpManagerTutorial(DefModelAdmin):
 
     @staticmethod
     def descr_red(instance):
+        """Return truncated description for admin display."""
         return instance.descr[:100]
 
 
@@ -86,10 +89,12 @@ class LarpManagerDiscoverAdmin(DefModelAdmin):
 
     @staticmethod
     def text_red(instance):
+        """Return truncated text for admin display."""
         return instance.text[:100]
 
     @staticmethod
     def text_len(instance):
+        """Return text length for admin display."""
         return len(instance.text)
 
 
@@ -104,6 +109,7 @@ class LarpManagerTicketAdmin(DefModelAdmin):
 
     @staticmethod
     def content_red(instance):
+        """Return truncated content for admin display."""
         return instance.content[:100]
 
 

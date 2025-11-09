@@ -87,10 +87,12 @@ class MemberAdmin(DefModelAdmin):
 
     @staticmethod
     def diet_red(instance):
+        """Return reduced diet info for admin display."""
         return reduced(instance.diet)
 
     @staticmethod
     def safety_red(instance):
+        """Return reduced safety info for admin display."""
         return reduced(instance.safety)
 
 

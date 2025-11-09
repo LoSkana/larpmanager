@@ -91,4 +91,5 @@ def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
 
 
 def clear_event_button_cache(event_id):
+    """Clear cached event button data for given event ID."""
     cache.delete(event_button_key(event_id))

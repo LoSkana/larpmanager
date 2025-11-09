@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -57,7 +57,7 @@ class ExceptionHandlingMiddleware:
         """Process request through middleware chain."""
         return self.get_response(request)
 
-    def process_exception(self, request: HttpRequest, exception: Exception) -> Optional[HttpResponse]:
+    def process_exception(self, request: HttpRequest, exception: Exception) -> HttpResponse | None:
         """Process Django middleware exceptions and route to appropriate handlers.
 
         Args:

@@ -20,7 +20,6 @@
 
 import os
 import re
-from typing import Union
 
 from allauth.utils import get_request_param
 from django import template
@@ -344,7 +343,7 @@ def _remove_unimportant_prefix(text: str) -> str:
 
 
 @register.simple_tag(takes_context=True)
-def show_char(context: dict, element: Union[dict, str, None], run: Run, tooltip: bool) -> str:
+def show_char(context: dict, element: dict | str | None, run: Run, tooltip: bool) -> str:
     """Template tag to process text and convert character references to links.
 
     This function processes text content and converts character references (prefixed with

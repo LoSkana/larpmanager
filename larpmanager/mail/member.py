@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime
-from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -142,9 +141,9 @@ def on_member_badges_m2m_changed(sender, **kwargs):
     action = kwargs.pop("action", None)
     if action != "post_add":
         return
-    instance: Optional[Badge] = kwargs.pop("instance", None)
+    instance: Badge | None = kwargs.pop("instance", None)
     # model = kwargs.pop("model", None)
-    pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
+    pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
     handle_badge_assignment_notifications(instance, pk_set)
 

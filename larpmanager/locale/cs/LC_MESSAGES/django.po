@@ -2994,6 +2994,12 @@ msgstr "Standardní"
 msgid "Play Again"
 msgstr "Znovu si zahrát"
 
+msgid "Friend"
+msgstr ""
+
+msgid "Influencer"
+msgstr ""
+
 msgid "Name of the discount - internal use"
 msgstr "Název slevy - pro interní použití"
 

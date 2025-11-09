@@ -191,10 +191,12 @@ class PlayerRelationshipAdmin(DefModelAdmin):
 
     @staticmethod
     def text_red(instance):
+        """Return reduced text for admin display."""
         return reduced(instance.text)
 
     @staticmethod
     def reg_red(instance):
+        """Return registration with run number for admin display."""
         return f"{instance.reg} ({instance.reg.run.number})"
 
 
@@ -207,6 +209,7 @@ class EmailAdmin(DefModelAdmin):
 
     @staticmethod
     def body_red(instance):
+        """Return reduced body text for admin display."""
         return reduced(instance.body)
 
 
@@ -220,6 +223,7 @@ class OneTimeAccessTokenInline(admin.TabularInline):
     can_delete = True
 
     def has_add_permission(self, request, obj=None):
+        """Allow adding new tokens."""
         return True
 
 

@@ -21,8 +21,9 @@
 import logging
 import re
 import traceback
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional, Union
+from typing import Any
 
 from background_task import background
 from django.conf import settings as conf_settings
@@ -396,9 +397,9 @@ def add_unsubscribe_body(association):
 def my_send_mail(
     subject: str,
     body: str,
-    recipient: Union[str, Member],
-    context_object: Optional[Union[Run, Event, Association, Any]] = None,
-    reply_to: Optional[str] = None,
+    recipient: str | Member,
+    context_object: Run | Event | Association | Any | None = None,
+    reply_to: str | None = None,
     schedule: int = 0,
 ) -> None:
     """Queue email for sending with context-aware formatting.

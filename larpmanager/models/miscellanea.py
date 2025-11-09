@@ -224,6 +224,7 @@ class Album(BaseModel):
         return self.title
 
     def show_thumb(self):
+        """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
@@ -272,6 +273,7 @@ class AlbumImage(BaseModel):
         return self.upload.name
 
     def show_thumb(self):
+        """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
@@ -465,6 +467,7 @@ class WarehouseItem(BaseModel):
 
     @classmethod
     def get_optional_fields(cls):
+        """Return list of optional field names."""
         return ["quantity"]
 
 
@@ -676,15 +679,19 @@ class Problem(BaseModel):
         return attribute_value[:100]
 
     def where_l(self):
+        """Return truncated 'where' attribute text."""
         return self.get_small_text("where")
 
     def when_l(self):
+        """Return truncated 'when' attribute text."""
         return self.get_small_text("when")
 
     def who_l(self):
+        """Return truncated 'who' attribute text."""
         return self.get_small_text("who")
 
     def what_l(self):
+        """Return truncated 'what' attribute text."""
         return self.get_small_text("what")
 
 

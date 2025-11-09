@@ -552,4 +552,5 @@ class SpeedLarpForm(WritingForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize writing element form."""
         super().__init__(*args, **kwargs)

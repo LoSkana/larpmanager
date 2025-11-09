@@ -3063,6 +3063,12 @@ msgstr "Standard"
 msgid "Play Again"
 msgstr "Zagraj ponownie"
 
+msgid "Friend"
+msgstr ""
+
+msgid "Influencer"
+msgstr ""
+
 msgid "Name of the discount - internal use"
 msgstr "Nazwa rabatu - do użytku wewnętrznego"
 

@@ -21,7 +21,7 @@
 import logging
 import traceback
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -234,7 +234,7 @@ def save_registration(
     form: Any,  # Registration form instance
     run: Run,
     event: Event,
-    reg: Optional[Registration],
+    reg: Registration | None,
     gifted: bool = False,
 ) -> "Registration":
     """Save registration data and handle payment processing.
@@ -682,27 +682,18 @@ def _check_redirect_registration(request, context: dict, event, secret_code: str
     attempt should be redirected or blocked based on event configuration,
     timing, and access controls.
 
-    Parameters
-    ----------
-    request : HttpRequest
-        Django HTTP request object containing user and session data
-    context : dict
-        Context dictionary containing event, run data, features, and tier info
-    event : Event
-        Event model instance being registered for
-    secret_code : str or None
-        Optional secret code for registration access, None if not provided
+    Args:
+        request: Django HTTP request object containing user and session data
+        context: Context dictionary containing event, run data, features, and tier info
+        event: Event model instance being registered for
+        secret_code: Optional secret code for registration access, None if not provided
 
-    Returns
-    -------
-    HttpResponse or None
+    Returns:
         HttpResponse object for redirect/error pages if registration should be
         blocked or redirected, None if registration can proceed normally
 
-    Raises
-    ------
-    Http404
-        If an invalid registration secret code is provided when secret
+    Raises:
+        Http404, if an invalid registration secret code is provided when secret
         registration is enabled
 
     """

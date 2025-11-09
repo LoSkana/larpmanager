@@ -522,16 +522,12 @@ def send_token_credit_notification_email(accounting_item: AccountingItemOther) -
 def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
     """Send refund notifications to user and organizers.
 
-    Parameters
-    ----------
-    credit_name : str
-        Name of the credit currency
-    instance : AccountingItemOther
-        Accounting item instance for refund
+    Args:
+        credit_name: Name of the credit currency
+        instance: Accounting item instance for refund
 
-    Returns
-    -------
-    None
+    Returns:
+        None
 
     """
     # Activate user's language for localized messages

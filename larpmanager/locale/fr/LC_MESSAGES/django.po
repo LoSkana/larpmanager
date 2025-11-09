@@ -3110,6 +3110,12 @@ msgstr "Standard"
 msgid "Play Again"
 msgstr "Jouer à nouveau"
 
+msgid "Friend"
+msgstr ""
+
+msgid "Influencer"
+msgstr ""
+
 msgid "Name of the discount - internal use"
 msgstr "Nom de la remise - pour usage interne"
 

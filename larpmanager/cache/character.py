@@ -20,7 +20,6 @@
 
 import os
 import shutil
-from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -687,7 +686,7 @@ def on_character_factions_m2m_changed(sender, **kwargs) -> None:
         return
 
     # Get the faction instance and clear related event cache
-    instance: Optional[Faction] = kwargs.pop("instance", None)
+    instance: Faction | None = kwargs.pop("instance", None)
     clear_event_cache_all_runs(instance.event)
 
 

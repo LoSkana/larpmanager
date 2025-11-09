@@ -20,7 +20,6 @@
 
 import json
 import logging
-from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -421,7 +420,7 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
 
 
 def get_casting_preferences(
-    element_number: int, context: dict, casting_type: int = 0, casting_queryset: Optional[QuerySet] = None
+    element_number: int, context: dict, casting_type: int = 0, casting_queryset: QuerySet | None = None
 ) -> tuple[int, str, dict[int, int]]:
     """Calculate and return casting preference statistics.
 

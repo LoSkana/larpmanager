@@ -20,7 +20,7 @@
 
 import inspect
 import os
-from typing import Any, Union
+from typing import Any
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
@@ -250,7 +250,7 @@ class Event(BaseModel):
             queryset = queryset.order_by("number")
         return queryset
 
-    def get_class_parent(self, model_class: Union[type[BaseModel], str]):
+    def get_class_parent(self, model_class: type[BaseModel] | str):
         """Get the parent event for inheriting elements of a specific model class.
 
         This method determines whether to use the parent event's elements or the current
@@ -522,7 +522,7 @@ class ProgressStep(BaseConceptModel):
         ]
 
     def __str__(self) -> str:
-        # Return formatted string with order number and name
+        """Return formatted string with order number and name."""
         return f"{self.order} - {self.name}"
 
 
@@ -684,7 +684,7 @@ class RunConfig(BaseModel):
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self) -> str:
-        # Return string representation combining run and name
+        """Return string representation combining run and name."""
         return f"{self.run} {self.name}"
 
     class Meta:
@@ -714,7 +714,7 @@ class PreRegistration(BaseModel):
     info = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        # Return string representation combining event and member
+        """Return string representation combining event and member."""
         return f"{self.event} {self.member}"
 
     class Meta:

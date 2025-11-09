@@ -730,7 +730,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
-    # Redirect to the event detail view with the given slug
+    """Redirect to the event detail view with the given slug."""
     return redirect("event", event_slug=event_slug)
 
 

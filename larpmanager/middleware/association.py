@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
@@ -57,7 +57,7 @@ class AssociationIdentifyMiddleware:
         return self.get_association_info(request) or self.get_response(request)
 
     @classmethod
-    def get_association_info(cls, request) -> Optional[HttpResponse]:
+    def get_association_info(cls, request) -> HttpResponse | None:
         """Extract association information from request domain.
 
         Determines the environment based on host domain, extracts subdomain to identify
@@ -116,7 +116,7 @@ class AssociationIdentifyMiddleware:
         return cls.get_main_info(request, base_domain)
 
     @classmethod
-    def get_main_info(cls, request: HttpRequest, base_domain: str) -> Optional[HttpResponse]:
+    def get_main_info(cls, request: HttpRequest, base_domain: str) -> HttpResponse | None:
         """Handle requests to main domain without specific association.
 
         Handles demo user logout, skin loading, and default redirects

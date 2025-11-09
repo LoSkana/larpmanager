@@ -3090,6 +3090,12 @@ msgstr "Standaard"
 msgid "Play Again"
 msgstr "Opnieuw spelen"
 
+msgid "Friend"
+msgstr ""
+
+msgid "Influencer"
+msgstr ""
+
 msgid "Name of the discount - internal use"
 msgstr "Naam van korting - voor intern gebruik"
 

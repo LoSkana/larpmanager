@@ -20,7 +20,7 @@
 
 import os
 import re
-from typing import Any, Optional
+from typing import Any
 
 from django.db import models
 from django.db.models import Q
@@ -91,7 +91,7 @@ class Writing(BaseConceptModel):
             self.upd_js_attr(js, s)
         return js
 
-    def show(self, run: Optional[Any] = None) -> dict[str, Any]:
+    def show(self, run: Any | None = None) -> dict[str, Any]:
         """Generate a display dictionary with basic writing information and teaser.
 
         Builds upon the reduced representation from show_red() by adding the teaser
@@ -244,6 +244,7 @@ class Character(Writing):
         return f"#{self.number} {self.name}"
 
     def get_config(self, name, default_value=None, bypass_cache=False):
+        """Get configuration value for this character."""
         return get_element_config(self, name, default_value, bypass_cache)
 
     @property
@@ -374,20 +375,25 @@ class Character(Writing):
         return os.path.join(character_directory, sheet_filename)
 
     def get_sheet_friendly_filepath(self, character_run=None):
+        """Return filepath for the light PDF version of the character sheet."""
         return os.path.join(self.get_character_filepath(character_run), f"#{self.number}-light.pdf")
 
     def get_relationships_filepath(self, run=None):
+        """Return filepath for the relationships PDF."""
         return os.path.join(self.get_character_filepath(run), f"#{self.number}-rels.pdf")
 
     def show_thumb(self):
+        """Return HTML for displaying character thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(200, self.thumb.url)
 
     def relationships(self):
+        """Return queryset of relationships where this character is the source."""
         return Relationship.objects.filter(source_id=self.pk)
 
     def get_plot_characters(self):
+        """Return queryset of plot-character relations for this character."""
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
@@ -482,6 +488,7 @@ class Plot(Writing):
         return self.name
 
     def get_plot_characters(self):
+        """Return queryset of plot-character relations for this plot."""
         return (
             PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character").order_by("character__number")
         )

@@ -54,7 +54,7 @@ def count_differences(first_string: str, second_string: str) -> int | bool:
 
     # Count the number of differences between the two strings
     differences = 0
-    for first_char, second_char in zip(first_string, second_string):
+    for first_char, second_char in zip(first_string, second_string, strict=False):
         if first_char != second_char:
             differences += 1
 

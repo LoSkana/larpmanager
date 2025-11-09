@@ -421,6 +421,7 @@ class CollectionNewForm(MyForm):
         widgets = {"cod": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize collection new form."""
         super().__init__(*args, **kwargs)
 
 

@@ -382,7 +382,7 @@ def get_handout_template(context: dict, handout_template_id: int) -> dict:
 
 
 def get_prologue(context: dict, prologue_number: int) -> None:
-    # Retrieve prologue element and add it to the context
+    """Retrieve prologue element and add it to the context."""
     get_element(context, prologue_number, "prologue", Prologue)
 
 

@@ -35,6 +35,7 @@ from larpmanager.utils.exceptions import UserPermissionError
 
 
 def cache_association_role_key(association_role_id):
+    """Generate cache key for association role."""
     return f"association_role_{association_role_id}"
 
 
@@ -102,7 +103,7 @@ def get_cache_association_role(ar_id: int) -> dict:
 
 
 def remove_association_role_cache(association_role_id: int) -> None:
-    # Delete the cached association role
+    """Delete the cached association role."""
     key = cache_association_role_key(association_role_id)
     cache.delete(key)
 

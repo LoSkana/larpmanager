@@ -312,6 +312,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def set_exclude(self, exclude_value: bool) -> None:
@@ -340,6 +341,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         return str(obj)
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def set_exclude(self, exclude: bool) -> None:
@@ -364,6 +366,7 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[Event]:
@@ -380,6 +383,7 @@ class AssocMS2:
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet:
@@ -521,6 +525,7 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[Registration]:
@@ -545,6 +550,7 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[Run]:
@@ -722,6 +728,7 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[WarehouseContainer]:
@@ -751,6 +758,7 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[WarehouseItem]:
@@ -773,6 +781,7 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
     ]
 
     def set_association_id(self, association_id):
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[WarehouseTag]:

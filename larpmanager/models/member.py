@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
-from typing import Union
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -331,6 +330,7 @@ class Member(BaseModel):
         return str(self.pk)
 
     def display_real(self):
+        """Return full real name as 'name surname'."""
         return f"{self.name} {self.surname}"
 
     def display_profile(self) -> str:
@@ -366,6 +366,7 @@ class Member(BaseModel):
         return member_pdf_directory
 
     def get_request_filepath(self):
+        """Return the full file path for member request PDF."""
         return os.path.join(self.get_member_filepath(), "request.pdf")
 
     def join(self, association: Association) -> None:
@@ -388,6 +389,7 @@ class Member(BaseModel):
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 
     def get_config(self, name, default_value=None, bypass_cache=False):
+        """Get configuration value for this member."""
         return get_element_config(self, name, default_value, bypass_cache)
 
 
@@ -485,6 +487,7 @@ class Membership(BaseModel):
         return f"{self.member} - {self.association}"
 
     def get_request_filepath(self):
+        """Get request file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
@@ -493,6 +496,7 @@ class Membership(BaseModel):
             return ""
 
     def get_document_filepath(self):
+        """Get document file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
@@ -636,7 +640,7 @@ class Vote(BaseModel):
         return f"V{self.number} {self.member} ({self.association} - {self.year})"
 
 
-def get_user_membership(user: Member, association: Union[Association, int]) -> Membership:
+def get_user_membership(user: Member, association: Association | int) -> Membership:
     """Get or create a membership for a user in an association.
 
     This function first checks if the user already has a cached membership

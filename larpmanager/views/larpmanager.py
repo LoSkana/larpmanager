@@ -20,7 +20,6 @@
 
 import random
 from datetime import date, datetime, timedelta
-from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -290,7 +289,7 @@ def redr(request, path):
 
 
 def activate_feature_association(
-    request: HttpRequest, feature_slug: str, path: Optional[str] = None
+    request: HttpRequest, feature_slug: str, path: str | None = None
 ) -> HttpResponseRedirect:
     """Activate a feature for an association.
 
@@ -662,7 +661,7 @@ def discover(request):
 
 
 @override("en")
-def tutorials(request: HttpRequest, slug: Optional[str] = None) -> HttpResponse:
+def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
     """Display tutorial pages with navigation.
 
     Shows individual tutorials with previous/next navigation.

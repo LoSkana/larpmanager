@@ -290,6 +290,7 @@ def _get_cached_config(element_id, element_type, config_name, default_value=None
 
 
 def get_association_config(association_id, config_name, default_value=None, context=None, bypass_cache=False):
+    """Get configuration value for association."""
     return _get_cached_config(association_id, "association", config_name, default_value, context, bypass_cache)
 
 

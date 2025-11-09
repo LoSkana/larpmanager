@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
@@ -62,7 +62,7 @@ class BrokenLinkEmailsMiddleware:
         """Return True if a 404 at the given URL *shouldn't* notify the site managers."""
         return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
-    def check(self, request, response) -> Optional[HttpResponseRedirect]:
+    def check(self, request, response) -> HttpResponseRedirect | None:
         """Middleware for detecting and logging broken links.
 
         Monitors for 404 errors and tracks problematic URLs for debugging,

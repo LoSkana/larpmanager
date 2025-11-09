@@ -21,7 +21,6 @@ import ast
 import json
 from collections import defaultdict
 from decimal import Decimal
-from typing import Optional
 
 from django.db import transaction
 from django.db.models import Prefetch, Q, Sum
@@ -141,7 +140,7 @@ def get_free_abilities(char: Character) -> list:
 
 
 def _free_abilities_cache_key() -> str:
-    # Return cache key for free abilities
+    """Return cache key for free abilities."""
     return "free_abilities"
 
 
@@ -316,7 +315,7 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
 
 
 def on_experience_characters_m2m_changed(
-    sender, instance: Optional[DeliveryPx], action: str, pk_set: Optional[set], **kwargs
+    sender, instance: DeliveryPx | None, action: str, pk_set: set | None, **kwargs
 ) -> None:
     """Handle m2m changes for experience-character relationships."""
     # Only process relevant m2m actions

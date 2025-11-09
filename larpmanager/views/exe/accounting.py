@@ -86,22 +86,17 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
     for the current association. It requires proper association permissions and
     configures field display with custom callbacks for formatting.
 
-    Parameters
-    ----------
-    request : HttpRequest
-        Django HTTP request object containing user authentication and session data.
+    Args:
+        request: Django HTTP request object containing user authentication and session data.
         Must be from an authenticated user with appropriate association permissions.
 
-    Returns
-    -------
-    HttpResponse
-        Rendered HTTP response containing the outflows list template with pagination
+    Returns:
+        HttpResponse: Rendered HTTP response containing the outflows list template with pagination
         and configured field display options.
 
-    Notes
-    -----
-    The function uses exe_paginate for consistent pagination behavior and applies
-    custom formatting callbacks for statement downloads and expense type display.
+    Notes:
+        The function uses exe_paginate for consistent pagination behavior and applies
+        custom formatting callbacks for statement downloads and expense type display.
 
     """
     # Check user permissions and get base context for association
@@ -300,7 +295,7 @@ def exe_credits(request: HttpRequest) -> dict:
 
 @login_required
 def exe_credits_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Simple edit view wrapper for credit management
+    """Simple edit view wrapper for credit management."""
     return exe_edit(request, ExeCreditForm, num, "exe_credits")
 
 
@@ -696,7 +691,7 @@ def exe_refunds(request: HttpRequest) -> dict:
 
 @login_required
 def exe_refunds_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Single-line wrapper - delegates to exe_edit with refund form
+    """Single-line wrapper - delegates to exe_edit with refund form."""
     return exe_edit(request, ExeRefundRequestForm, num, "exe_refunds")
 
 

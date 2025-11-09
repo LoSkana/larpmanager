@@ -21,7 +21,7 @@
 import os
 import re
 from collections.abc import Generator
-from typing import Any, BinaryIO, Optional
+from typing import Any, BinaryIO
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, StreamingHttpResponse
@@ -35,7 +35,7 @@ from larpmanager.models.miscellanea import OneTimeAccessToken
 
 
 def file_iterator(
-    file_object: BinaryIO, chunk_size: int = 8192, start_pos: Optional[int] = None, max_length: Optional[int] = None
+    file_object: BinaryIO, chunk_size: int = 8192, start_pos: int | None = None, max_length: int | None = None
 ) -> Generator[bytes, None, None]:
     """Stream file in chunks with optional range support.
 
@@ -194,7 +194,7 @@ def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
 
     # Parse HTTP Range header for partial content requests (video seeking)
     range_header = request.META.get("HTTP_RANGE", "").strip()
-    range_match: Optional[re.Match] = None
+    range_match: re.Match | None = None
     if range_header:
         range_match = re.search(r"bytes=(\d+)-(\d*)", range_header)
 

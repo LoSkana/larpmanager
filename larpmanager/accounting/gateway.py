@@ -29,7 +29,7 @@ import math
 import re
 from decimal import Decimal
 from pprint import pformat
-from typing import Any, Union
+from typing import Any
 
 import requests
 import satispaython
@@ -391,7 +391,7 @@ def stripe_webhook(request):
 
 
 def get_sumup_form(
-    request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: Union[int, float, Decimal]
+    request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: int | float | Decimal
 ) -> None:
     """Generate SumUp payment form for invoice processing.
 

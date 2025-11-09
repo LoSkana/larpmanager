@@ -37,6 +37,7 @@ def clear_registration_counts_cache(run_id: int) -> None:
 
 
 def cache_registration_counts_key(run_id):
+    """Generate cache key for registration counts."""
     return f"registration_counts_{run_id}"
 
 

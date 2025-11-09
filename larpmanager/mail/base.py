@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from datetime import datetime, timedelta
-from typing import Optional
 
 import holidays
 from django.conf import settings as conf_settings
@@ -121,10 +120,10 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
     model = kwargs.pop("model", None)
     if model == Member:
         action = kwargs.pop("action", None)
-        instance: Optional[AssociationRole] = kwargs.pop("instance", None)
+        instance: AssociationRole | None = kwargs.pop("instance", None)
         if not instance:
             return
-        pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
+        pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
         # Handle role removal or clear - invalidate cache immediately
         # This ensures permissions are updated when roles are removed
@@ -203,8 +202,8 @@ def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
     model = kwargs.pop("model", None)
     if model == Member:
         action = kwargs.pop("action", None)
-        instance: Optional[EventRole] = kwargs.pop("instance", None)
-        pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
+        instance: EventRole | None = kwargs.pop("instance", None)
+        pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
         # Handle role removal or clear - invalidate cache immediately
         # Cache invalidation ensures permission changes take effect

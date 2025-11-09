@@ -315,25 +315,18 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
     This function constructs export data by combining element metadata with
     question-specific answers and choices based on the applicable context type.
 
-    Parameters
-    ----------
-    context : dict
-        Context dictionary containing:
-        - questions: List of question objects
-        - answers: Dict mapping question IDs to element answers
-        - choices: Dict mapping question IDs to element choice selections
-        - applicable: QuestionApplicable enum value
-    el : object
-        Element instance (registration, character, etc.) to extract data from
-    model : str
-        Model type identifier ('registration', 'character', etc.)
-    member_cover : bool, optional
-        Whether to include member profile images in export, by default False
+    Args:
+        context: Context dictionary containing:
+            - questions: List of question objects
+            - answers: Dict mapping question IDs to element answers
+            - choices: Dict mapping question IDs to element choice selections
+            - applicable: QuestionApplicable enum value
+        el: Element instance (registration, character, etc.) to extract data from
+        model: Model type identifier ('registration', 'character', etc.)
+        member_cover: Whether to include member profile images in export, by default False
 
-    Returns
-    -------
-    tuple[list, list]
-        Tuple containing (values_list, headers_list) for the export row
+    Returns:
+        tuple[list, list]: Tuple containing (values_list, headers_list) for the export row
 
     """
     row_values = []

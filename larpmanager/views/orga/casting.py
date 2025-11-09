@@ -20,7 +20,6 @@
 
 import json
 import random
-from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -611,7 +610,7 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
 
 @login_required
 def orga_casting(
-    request: HttpRequest, event_slug: str, casting_type: Optional[int] = None, ticket: str = ""
+    request: HttpRequest, event_slug: str, casting_type: int | None = None, ticket: str = ""
 ) -> HttpResponse:
     """Handle organizational casting assignments for LARP events.
 

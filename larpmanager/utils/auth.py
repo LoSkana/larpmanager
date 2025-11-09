@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Optional
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.models import SocialLogin
@@ -116,7 +115,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             # No existing user found - let normal signup process continue
             pass
 
-    def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Optional[Form] = None) -> User:
+    def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Form | None = None) -> User:
         """Save new user from social login.
 
         Creates a new user account from social authentication data and updates

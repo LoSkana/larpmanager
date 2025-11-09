@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Callable
+from collections.abc import Callable
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django.contrib.auth import get_user_model, login

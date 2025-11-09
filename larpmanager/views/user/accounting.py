@@ -20,7 +20,6 @@
 
 import logging
 from datetime import date, datetime
-from typing import Optional, Union
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -297,7 +296,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None) -> HttpResponse:
+def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) -> HttpResponse:
     """Handle payment redirection for event registration.
 
     Validates user permissions and registration status before redirecting to
@@ -451,7 +450,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
 
 @login_required
-def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpResponse:
+def acc_membership(request: HttpRequest, method: str | None = None) -> HttpResponse:
     """Process membership fee payment for the current year.
 
     This function handles the membership fee payment workflow, including validation
@@ -722,7 +721,7 @@ def acc_collection_close(request: HttpRequest, collection_code: str) -> HttpResp
 
 
 @login_required
-def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[HttpResponseRedirect, HttpResponse]:
+def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpResponseRedirect | HttpResponse:
     """Handle redemption of completed accounting collections.
 
     This function allows users to redeem completed accounting collections by changing
@@ -800,7 +799,7 @@ def acc_webhook_stripe(request: HttpRequest) -> JsonResponse:
 
 @csrf_exempt
 def acc_webhook_sumup(request: HttpRequest) -> JsonResponse:
-    # Process SumUp webhook and return success response
+    """Process SumUp webhook and return success response."""
     sumup_webhook(request)
     return JsonResponse({"res": "ok"})
 

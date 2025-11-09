@@ -22,7 +22,7 @@ import ast
 import json
 import os
 import time
-from typing import Any, Optional, Union
+from typing import Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -289,7 +289,7 @@ def character_form(
     request: HttpRequest,
     context: dict[str, Any],
     event_slug: str,
-    instance: Optional[Union[Character, RegistrationCharacterRel]],
+    instance: Character | RegistrationCharacterRel | None,
     form_class: type[Form],
 ) -> HttpResponse:
     """Handle character creation and editing form processing.

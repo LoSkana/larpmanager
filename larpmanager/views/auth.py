@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -77,7 +76,7 @@ class MyRegistrationView(RegistrationView):
 
         return new_user
 
-    def get_success_url(self, user: Optional[Member] = None) -> str:
+    def get_success_url(self, user: Member | None = None) -> str:
         """Get URL to redirect to after successful registration.
 
         Determines the appropriate redirect URL after a user successfully completes

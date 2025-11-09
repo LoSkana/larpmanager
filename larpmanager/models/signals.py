@@ -259,22 +259,6 @@ def pre_save_callback(sender: type, instance: object, *args: any, **kwargs: any)
     for models that have them. This function is designed to be used
     as a Django model signal handler.
 
-    Parameters
-    ----------
-    sender : type
-        Model class sending the signal
-    instance : object
-        Model instance being saved
-    *args : any
-        Additional positional arguments passed by Django signal
-    **kwargs : any
-        Additional keyword arguments passed by Django signal
-
-    Returns
-    -------
-    None
-        This function performs side effects on the instance
-
     """
     # Auto-assign sequential numbers for models with number/order fields
     auto_assign_sequential_numbers(instance)
@@ -348,7 +332,7 @@ def post_delete_discount_accounting_cache(sender: type, instance: Any, **kwargs:
 # AccountingItemDonation signals
 @receiver(pre_save, sender=AccountingItemDonation)
 def pre_save_accounting_item_donation(sender: type, instance: AccountingItem, *args: Any, **kwargs: Any) -> None:
-    # Send confirmation email to donor
+    """Send confirmation email to donor."""
     send_donation_confirmation_email(instance)
 
 
@@ -476,13 +460,14 @@ def post_save_assignment_trait(
 
 @receiver(post_delete, sender=AssignmentTrait)
 def post_delete_assignment_trait_reset(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clear cache and media after assignment deletion
+    """Clear cache and media after assignment deletion."""
     clear_run_cache_and_media(instance.run)
 
 
 # AssociationPermission signals
 @receiver(pre_save, sender=AssociationPermission)
 def pre_save_association_permission(sender, instance, **kwargs):
+    """Auto-assign number to association permission before save."""
     auto_assign_association_permission_number(instance)
 
 
@@ -530,11 +515,13 @@ def post_save_association_role_reset(sender: type, instance: AssociationRole, **
 # AssocText signals
 @receiver(pre_delete, sender=AssociationText)
 def pre_delete_association_text(sender, instance, **kwargs):
+    """Clear association text cache before deletion."""
     clear_association_text_cache_on_delete(instance)
 
 
 @receiver(post_save, sender=AssociationText)
 def post_save_association_text(sender, instance, created, **kwargs):
+    """Update association text cache after save."""
     update_association_text_cache_on_save(instance)
 
 
@@ -578,18 +565,20 @@ def post_save_association_reset_lm_home(sender, instance, **kwargs) -> None:
 # AssociationConfig signals
 @receiver(post_save, sender=AssociationConfig)
 def post_save_reset_association_config(sender, instance, **kwargs):
+    """Clear association config cache after save."""
     clear_config_cache(instance.association)
 
 
 @receiver(post_delete, sender=AssociationConfig)
 def post_delete_reset_association_config(sender, instance, **kwargs):
+    """Clear association config cache after deletion."""
     clear_config_cache(instance.association)
 
 
 # AssociationSkin signals
 @receiver(post_save, sender=AssociationSkin)
 def post_save_association_skin_reset_cache(sender: type, instance: Association, **kwargs: Any) -> None:
-    # Clear skin cache when association is saved
+    """Clear skin cache when association is saved."""
     clear_skin_cache(instance.domain)
 
 
@@ -656,7 +645,7 @@ def post_save_character(sender: type, instance: Character, **kwargs) -> None:
 
 @receiver(pre_delete, sender=Character)
 def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any) -> None:
-    # Clear event cache and cleanup PDFs before character deletion
+    """Clear event cache and cleanup PDFs before character deletion."""
     clear_event_cache_all_runs(instance.event)
     cleanup_character_pdfs_before_delete(instance)
 
@@ -684,14 +673,14 @@ def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any)
 
 @receiver(post_delete, sender=CharacterConfig)
 def post_delete_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Reset character configuration cache after model deletion
+    """Reset character configuration cache after model deletion."""
     clear_config_cache(instance.character)
 
 
 # ChatMessage signals
 @receiver(pre_save, sender=ChatMessage)
 def pre_save_notify_chat_message(sender: type[ChatMessage], instance: ChatMessage, **kwargs: Any) -> None:
-    # Notify users via email when a new chat message is created
+    """Notify users via email when a new chat message is created."""
     send_chat_message_notification_email(instance)
 
 
@@ -778,7 +767,7 @@ def post_save_event_update(sender: type, instance: Event, **kwargs) -> None:
 
 @receiver(post_delete, sender=Event)
 def post_delete_event_links(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clear cache for event links after deletion
+    """Clear cache for event links after deletion."""
     clear_run_event_links_cache(instance)
 
 
@@ -791,7 +780,7 @@ def post_save_event_button(sender: type, instance: Any, created: bool, **kwargs:
 
 @receiver(pre_delete, sender=EventButton)
 def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clear cache when event button is deleted
+    """Clear cache when event button is deleted."""
     clear_event_button_cache(instance.event_id)
 
 
@@ -861,7 +850,7 @@ def pre_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
 
 @receiver(post_save, sender=EventText)
 def post_save_event_text(sender: type, instance: EventText, created: bool, **kwargs: Any) -> None:
-    # Update cache when EventText is saved
+    """Update cache when EventText is saved."""
     update_event_text_cache_on_save(instance)
 
 
@@ -1025,13 +1014,13 @@ def pre_save_larp_manager_tutorial(sender: type, instance: Any, *args: Any, **kw
 
 @receiver(post_save, sender=LarpManagerTutorial)
 def post_save_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Django signal handler that clears the tutorials cache when a related model is saved
+    """Django signal handler that clears the tutorials cache when a related model is saved."""
     reset_tutorials_cache()
 
 
 @receiver(post_delete, sender=LarpManagerTutorial)
 def post_delete_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Reset tutorials cache after instance deletion
+    """Reset tutorials cache after instance deletion."""
     reset_tutorials_cache()
 
 
@@ -1085,7 +1074,7 @@ def pre_save_payment_invoice(sender: type[PaymentInvoice], instance: PaymentInvo
 # PlayerRelationship signals
 @receiver(pre_delete, sender=PlayerRelationship)
 def pre_delete_player_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clean up relationship PDFs before deleting instance
+    """Clean up relationship PDFs before deleting instance."""
     cleanup_relationship_pdfs_before_delete(instance)
 
 
@@ -1127,7 +1116,7 @@ def post_delete_plot_reset_rels(sender, instance: Plot, **kwargs: Any) -> None:
 # PreRegistration signals
 @receiver(pre_save, sender=PreRegistration)
 def pre_save_pre_registration(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Send confirmation email for the pre-registration
+    """Send confirmation email for the pre-registration."""
     send_pre_registration_confirmation_email(instance)
 
 
@@ -1163,7 +1152,7 @@ def post_delete_prologue_reset_rels(sender, instance, **kwargs) -> None:
 # Quest signals
 @receiver(pre_save, sender=Quest)
 def pre_save_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Update cache before saving quest instance
+    """Update cache before saving quest instance."""
     on_quest_pre_save_update_cache(instance)
 
 
@@ -1233,7 +1222,7 @@ def post_save_questtype_reset_rels(
 
 @receiver(pre_delete, sender=QuestType)
 def pre_delete_quest_type_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
-    # Clear cache when a quest type is deleted
+    """Clear cache when a quest type is deleted."""
     clear_event_cache_all_runs(instance.event)
 
 
@@ -1307,13 +1296,13 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 
 @receiver(pre_delete, sender=Registration)
 def pre_delete_registration(sender: type, instance: Registration, *args, **kwargs) -> None:
-    # Send email notification before registration is deleted
+    """Send email notification before registration is deleted."""
     send_registration_deletion_email(instance)
 
 
 @receiver(post_delete, sender=Registration)
 def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clear accounting cache for the associated run after registration deletion
+    """Clear accounting cache for the associated run after registration deletion."""
     clear_registration_accounting_cache(instance.run_id)
 
 
@@ -1332,7 +1321,7 @@ def post_save_registration_character_rel_savereg(
 
 @receiver(post_delete, sender=RegistrationCharacterRel)
 def post_delete_registration_character_rel_savereg(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Reset character registration cache after relationship deletion
+    """Reset character registration cache after relationship deletion."""
     reset_character_registration_cache(instance)
 
 
@@ -1388,7 +1377,7 @@ def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any
 
 @receiver(post_delete, sender=Relationship)
 def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Update cache for source character after relationship deletion
+    """Update cache for source character after relationship deletion."""
     refresh_character_relationships(instance.source)
 
 
@@ -1408,7 +1397,7 @@ def post_delete_rule_px(sender: type, instance: Any, *args: Any, **kwargs: Any) 
 # Run signals
 @receiver(pre_save, sender=Run)
 def pre_save_run(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Invalidate cache on run pre-save signal
+    """Invalidate cache on run pre-save signal."""
     on_run_pre_save_invalidate_cache(instance)
 
 
@@ -1449,7 +1438,7 @@ def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
 
 @receiver(post_delete, sender=Run)
 def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clear event links cache when a run link is deleted
+    """Clear event links cache when a run link is deleted."""
     clear_run_event_links_cache(instance.event)
 
 
@@ -1566,7 +1555,7 @@ def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, *
 
 @receiver(post_save, sender=WritingQuestion)
 def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any) -> None:
-    # Clear cache for event fields and all runs when writing question changes
+    """Clear cache for event fields and all runs when writing question changes."""
     clear_event_fields_cache(instance.event_id)
     clear_event_cache_all_runs(instance.event)
 

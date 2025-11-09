@@ -19,7 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.utils.timezone import now

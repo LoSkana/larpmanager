@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any, Optional
+from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
@@ -34,11 +34,11 @@ class EmailOrUsernameModelBackend(ModelBackend):
 
     def authenticate(
         self,
-        request: Optional[HttpRequest],
-        username: Optional[str] = None,
-        password: Optional[str] = None,
+        request: HttpRequest | None,
+        username: str | None = None,
+        password: str | None = None,
         **kwargs: Any,
-    ) -> Optional[AbstractUser]:
+    ) -> AbstractUser | None:
         """Authenticate user with username/password allowing email or username.
 
         Attempts to authenticate a user by checking both username and email fields

@@ -947,23 +947,6 @@ def on_plot_characters_m2m_changed(
     This signal handler is triggered when characters are added, removed, or
     cleared from a plot's character relationships.
 
-    Parameters
-    ----------
-    sender : type
-        The through model class (PlotCharacterRel)
-    instance : Plot
-        The Plot instance whose relationships are changing
-    action : str
-        The type of change ('post_add', 'post_remove', 'post_clear', etc.)
-    pk_set : set[int] | None
-        Set of primary keys of the Character objects being modified
-    **kwargs
-        Additional keyword arguments from the signal
-
-    Returns
-    -------
-    None
-
     """
     # Delegate to the generic M2M relationship handler for character updates
     # This ensures both plot and character caches are properly invalidated
@@ -1009,27 +992,6 @@ def on_prologue_characters_m2m_changed(
     Updates both prologue cache and character caches when relationships change.
     This signal handler is triggered when characters are added, removed, or cleared
     from a prologue's character relationships.
-
-    Parameters
-    ----------
-    sender : type
-        The through model class for the many-to-many relationship
-    instance : Prologue
-        The Prologue instance whose relationships are changing
-    action : str
-        The type of change being performed:
-        - 'post_add': Characters were added to the prologue
-        - 'post_remove': Characters were removed from the prologue
-        - 'post_clear': All characters were cleared from the prologue
-    pk_set : set[int] | None
-        Set of primary keys of the Character objects being affected.
-        None when action is 'post_clear'
-    **kwargs
-        Additional keyword arguments passed by Django's m2m_changed signal
-
-    Returns
-    -------
-    None
 
     """
     # Delegate to utility function that handles m2m relationship cache updates

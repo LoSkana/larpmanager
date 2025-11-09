@@ -81,6 +81,7 @@ class BaseQuestionType(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of question types to string identifiers."""
         return {
             BaseQuestionType.SINGLE: "single-choice",
             BaseQuestionType.MULTIPLE: "multi-choice",
@@ -176,6 +177,7 @@ class QuestionStatus(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of question status values to string identifiers."""
         return {
             QuestionStatus.OPTIONAL: "optional",
             QuestionStatus.MANDATORY: "mandatory",
@@ -194,6 +196,7 @@ class QuestionVisibility(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of visibility values to string identifiers."""
         return {
             QuestionVisibility.SEARCHABLE: "searchable",
             QuestionVisibility.PUBLIC: "public",
@@ -232,6 +235,7 @@ class QuestionApplicable(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of type values to labels."""
         return {value: label for value, label in cls.choices}
 
 
@@ -325,6 +329,7 @@ class WritingQuestion(BaseModel):
 
     @staticmethod
     def get_instance_questions(event_instance, enabled_features):
+        """Get all writing questions for the event instance ordered by order field."""
         return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
@@ -350,12 +355,15 @@ class WritingQuestion(BaseModel):
         return False
 
     def get_editable(self):
+        """Return list of editable character statuses."""
         return self.editable.split(",") if self.editable else []
 
     def set_editable(self, editable_list):
+        """Set editable character statuses from list."""
         self.editable = ",".join(editable_list)
 
     def get_editable_display(self):
+        """Return comma-separated display of editable character statuses."""
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
     class Meta:
@@ -711,6 +719,7 @@ class RegistrationOption(BaseModel):
         return f"{self.question} {self.name[:30]} ({self.price}€)"
 
     def get_price(self):
+        """Return the option price."""
         return self.price
 
     def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:

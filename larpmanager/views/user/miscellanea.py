@@ -20,7 +20,6 @@
 
 import logging
 from datetime import datetime, timedelta
-from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -91,7 +90,7 @@ def help_red(request: HttpRequest, run_id: int) -> HttpResponseRedirect:
 
 
 @login_required
-def user_help(request: HttpRequest, event_slug: Optional[str] = None) -> HttpResponse:
+def user_help(request: HttpRequest, event_slug: str | None = None) -> HttpResponse:
     """Display help page with question submission form and user's previous questions.
 
     Args:
