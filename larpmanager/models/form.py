@@ -55,6 +55,7 @@ class BaseQuestionType(models.TextChoices):
 
         Returns:
             set: Question types requiring text input
+
         """
         return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
@@ -64,6 +65,7 @@ class BaseQuestionType(models.TextChoices):
 
         Returns:
             set: Question types with predefined choices
+
         """
         return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
@@ -73,11 +75,13 @@ class BaseQuestionType(models.TextChoices):
 
         Returns:
             set: All basic question type values
+
         """
         return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of question types to string identifiers."""
         return {
             BaseQuestionType.SINGLE: "single-choice",
             BaseQuestionType.MULTIPLE: "multi-choice",
@@ -97,6 +101,7 @@ def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[st
 
     Returns:
         models.TextChoices: Extended choices class
+
     """
     members = [(m.name, (m.value, m.label)) for m in base] + [(n, (v, lbl)) for (n, v, lbl) in extra]
     return models.TextChoices(name, members)
@@ -126,6 +131,7 @@ def get_def_writing_types():
 
     Returns:
         set: Set of default WritingQuestionType values
+
     """
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
 
@@ -135,6 +141,7 @@ def get_writing_max_length():
 
     Returns:
         int: Maximum character length for writing fields
+
     """
     return {
         WritingQuestionType.NAME,
@@ -170,6 +177,7 @@ class QuestionStatus(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of question status values to string identifiers."""
         return {
             QuestionStatus.OPTIONAL: "optional",
             QuestionStatus.MANDATORY: "mandatory",
@@ -188,6 +196,7 @@ class QuestionVisibility(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
+        """Return mapping of visibility values to string identifiers."""
         return {
             QuestionVisibility.SEARCHABLE: "searchable",
             QuestionVisibility.PUBLIC: "public",
@@ -226,7 +235,8 @@ class QuestionApplicable(models.TextChoices):
 
     @classmethod
     def get_mapping(cls):
-        return {value: label for value, label in cls.choices}
+        """Return mapping of type values to labels."""
+        return dict(cls.choices)
 
 
 class WritingQuestion(BaseModel):
@@ -257,7 +267,10 @@ class WritingQuestion(BaseModel):
     order = models.IntegerField(default=0)
 
     status = models.CharField(
-        max_length=1, choices=QuestionStatus.choices, default=QuestionStatus.OPTIONAL, verbose_name=_("Status")
+        max_length=1,
+        choices=QuestionStatus.choices,
+        default=QuestionStatus.OPTIONAL,
+        verbose_name=_("Status"),
     )
 
     visibility = models.CharField(
@@ -274,7 +287,7 @@ class WritingQuestion(BaseModel):
         blank=True,
         verbose_name=_("Editable"),
         help_text=_(
-            "This field can be edited by the participant only when the character is in one of the selected statuses"
+            "This field can be edited by the participant only when the character is in one of the selected statuses",
         ),
     )
 
@@ -283,7 +296,7 @@ class WritingQuestion(BaseModel):
         verbose_name=_("Maximum length"),
         help_text=_(
             "For text questions, maximum number of characters; For multiple options, maximum "
-            "number of options (0 = no limit)"
+            "number of options (0 = no limit)",
         ),
     )
 
@@ -301,7 +314,7 @@ class WritingQuestion(BaseModel):
         help_text=_("Select the types of writing elements that this question applies to"),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -309,6 +322,7 @@ class WritingQuestion(BaseModel):
 
         Returns:
             Dictionary containing description and name fields.
+
         """
         js = {}
         # Update JSON dict with description and name attributes
@@ -318,6 +332,7 @@ class WritingQuestion(BaseModel):
 
     @staticmethod
     def get_instance_questions(event_instance, enabled_features):
+        """Get all writing questions for the event instance ordered by order field."""
         return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
@@ -327,7 +342,7 @@ class WritingQuestion(BaseModel):
         processing_parameters: dict[str, Any],
         organization: Any,
     ) -> bool:
-        """Determines whether to skip processing for the given instance.
+        """Determine whether to skip processing for the given instance.
 
         Args:
             instance: The object instance to check for skipping
@@ -337,23 +352,29 @@ class WritingQuestion(BaseModel):
 
         Returns:
             bool: Always returns False, indicating no skipping should occur
+
         """
         # Default behavior: never skip processing
         return False
 
     def get_editable(self):
+        """Return list of editable character statuses."""
         return self.editable.split(",") if self.editable else []
 
-    def set_editable(self, editable_list):
+    def set_editable(self, editable_list) -> None:
+        """Set editable character statuses from list."""
         self.editable = ",".join(editable_list)
 
     def get_editable_display(self):
+        """Return comma-separated display of editable character statuses."""
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
     class Meta:
         indexes = [
             models.Index(
-                fields=["event", "applicable", "status"], condition=Q(deleted__isnull=True), name="wq_evt_app_stat_act"
+                fields=["event", "applicable", "status"],
+                condition=Q(deleted__isnull=True),
+                name="wq_evt_app_stat_act",
             ),
             models.Index(fields=["event", "applicable"], condition=Q(deleted__isnull=True), name="wq_evt_app_act"),
         ]
@@ -402,11 +423,11 @@ class WritingOption(BaseModel):
         blank=True,
         help_text=_(
             "If you select one (or more) tickets, the option will only be available to "
-            "participants who have selected that ticket"
+            "participants who have selected that ticket",
         ),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.question} {self.name}"
 
     def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
@@ -422,6 +443,7 @@ class WritingOption(BaseModel):
 
         Returns:
             Dictionary containing max_available and updated attributes.
+
         """
         # Initialize response with max available count
         js = {"max_available": self.max_available}
@@ -497,7 +519,10 @@ class RegistrationQuestion(BaseModel):
     order = models.IntegerField(default=0)
 
     status = models.CharField(
-        max_length=1, choices=QuestionStatus.choices, default=QuestionStatus.OPTIONAL, verbose_name=_("Status")
+        max_length=1,
+        choices=QuestionStatus.choices,
+        default=QuestionStatus.OPTIONAL,
+        verbose_name=_("Status"),
     )
 
     max_length = models.IntegerField(
@@ -505,7 +530,7 @@ class RegistrationQuestion(BaseModel):
         verbose_name=_("Maximum length"),
         help_text=_(
             "Optional - For text questions, maximum number of characters; For multiple options, maximum "
-            "number of options (0 = no limit)"
+            "number of options (0 = no limit)",
         ),
     )
 
@@ -516,7 +541,7 @@ class RegistrationQuestion(BaseModel):
         verbose_name=_("Faction list"),
         help_text=_(
             "Optional - If you select one (or more) factions, the question will only be shown to participants "
-            "with characters in all chosen factions"
+            "with characters in all chosen factions",
         ),
     )
 
@@ -543,7 +568,7 @@ class RegistrationQuestion(BaseModel):
         verbose_name=_("Ticket list"),
         help_text=_(
             "If you select one (or more) tickets, the question will only be shown to participants "
-            "who have selected one of those tickets"
+            "who have selected one of those tickets",
         ),
     )
 
@@ -555,7 +580,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Section"),
         help_text=_(
-            "The question will be shown in the selected section (if left empty it will shown at the start of the form)"
+            "The question will be shown in the selected section (if left empty it will shown at the start of the form)",
         ),
     )
 
@@ -565,7 +590,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Allowed"),
         help_text=_(
-            "Staff members who are allowed to be able to see the responses of participants (leave blank to let everyone see)"
+            "Staff members who are allowed to be able to see the responses of participants (leave blank to let everyone see)",
         ),
     )
 
@@ -575,7 +600,7 @@ class RegistrationQuestion(BaseModel):
         help_text=_("Indicates whether the option can be included in the gifted signups"),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -595,10 +620,12 @@ class RegistrationQuestion(BaseModel):
 
         Returns:
             QuerySet of RegistrationQuestion objects ordered by section and question order
+
         """
         # Get all questions for the event, ordered by section first, then by question order
         questions = RegistrationQuestion.objects.filter(event=event).order_by(
-            F("section__order").asc(nulls_first=True), "order"
+            F("section__order").asc(nulls_first=True),
+            "order",
         )
 
         # Conditionally add annotations based on enabled features
@@ -611,7 +638,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration, features, params=None, is_organizer=False):
+    def skip(self, registration, features, params=None, is_organizer=False) -> bool:
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
@@ -697,10 +724,11 @@ class RegistrationOption(BaseModel):
 
     order = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.question} {self.name[:30]} ({self.price}€)"
 
     def get_price(self):
+        """Return the option price."""
         return self.price
 
     def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
@@ -726,6 +754,7 @@ class RegistrationOption(BaseModel):
 
         Returns:
             Dictionary with tier name, price, description, question, and max availability.
+
         """
         # Build base dictionary with max availability
         js = {"max_available": self.max_available}
@@ -755,7 +784,7 @@ class RegistrationChoice(BaseModel):
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="choices")
 
     def __str__(self) -> str:
-        """String representation showing registration, question and option."""
+        """Return string representation showing registration, question and option."""
         # noinspection PyUnresolvedReferences
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 
@@ -794,7 +823,7 @@ def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQu
 def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
     """Return list of writing elements with their display names and applicable types."""
     # Define available writing elements with their identifiers, translated names, and applicable types
-    writing_elements = [
+    return [
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
         ("plot", _("Plots"), QuestionApplicable.PLOT),
@@ -802,7 +831,6 @@ def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
         ("prologue", _("Prologues"), QuestionApplicable.PROLOGUE),
     ]
-    return writing_elements
 
 
 def _get_writing_mapping() -> dict[str, str]:
@@ -810,9 +838,10 @@ def _get_writing_mapping() -> dict[str, str]:
 
     Returns:
         Dictionary mapping writing types to module names.
+
     """
     # Core writing type mappings
-    writing_type_to_module_mapping = {
+    return {
         "character": "character",
         "faction": "faction",
         "plot": "plot",
@@ -820,4 +849,3 @@ def _get_writing_mapping() -> dict[str, str]:
         "trait": "questbuilder",
         "prologue": "prologue",
     }
-    return writing_type_to_module_mapping

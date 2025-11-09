@@ -52,6 +52,7 @@ class Command(BaseCommand):
             - association_permission.yaml: AssociationPermission configurations
             - event_permission.yaml: EventPermission configurations
             - payment_methods.yaml: PaymentMethod configurations
+
         """
         # Define models to export with their respective fields for serialization
         export_models = {

@@ -42,7 +42,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestPaymentFunctions(BaseTestCase):
     """Test cases for payment utility functions"""
 
-    def test_get_payment_fee_no_fee(self):
+    def test_get_payment_fee_no_fee(self) -> None:
         """Test get_payment_fee when no fee is configured"""
         association = self.get_association()
 
@@ -51,7 +51,7 @@ class TestPaymentFunctions(BaseTestCase):
         self.assertEqual(result, 0.0)
 
     @patch("larpmanager.accounting.payment.fetch_payment_details")
-    def test_get_payment_fee_with_fee(self, mock_get_details):
+    def test_get_payment_fee_with_fee(self, mock_get_details) -> None:
         """Test get_payment_fee with configured fee"""
         mock_get_details.return_value = {"paypal_fee": "2.5"}
 
@@ -61,7 +61,7 @@ class TestPaymentFunctions(BaseTestCase):
         self.assertEqual(result, 2.5)
 
     @patch("larpmanager.accounting.payment.fetch_payment_details")
-    def test_get_payment_fee_with_comma_separator(self, mock_get_details):
+    def test_get_payment_fee_with_comma_separator(self, mock_get_details) -> None:
         """Test get_payment_fee handles comma as decimal separator"""
         mock_get_details.return_value = {"stripe_fee": "3,75"}
 
@@ -70,7 +70,7 @@ class TestPaymentFunctions(BaseTestCase):
 
         self.assertEqual(result, 3.75)
 
-    def test_unique_invoice_cod_generates_code(self):
+    def test_unique_invoice_cod_generates_code(self) -> None:
         """Test unique_invoice_cod generates a code"""
         result = unique_invoice_cod()
 
@@ -78,44 +78,44 @@ class TestPaymentFunctions(BaseTestCase):
         self.assertEqual(len(result), 16)
         self.assertTrue(result.isalnum())
 
-    def test_unique_invoice_cod_custom_length(self):
+    def test_unique_invoice_cod_custom_length(self) -> None:
         """Test unique_invoice_cod with custom length"""
         result = unique_invoice_cod(length=10)
 
         self.assertEqual(len(result), 10)
 
-    def test_unique_invoice_cod_is_unique(self):
+    def test_unique_invoice_cod_is_unique(self) -> None:
         """Test unique_invoice_cod generates unique codes"""
         code1 = unique_invoice_cod()
         code2 = unique_invoice_cod()
 
         self.assertNotEqual(code1, code2)
 
-    def test_round_up_to_two_decimals_basic(self):
+    def test_round_up_to_two_decimals_basic(self) -> None:
         """Test rounding up to two decimals"""
         result = round_up_to_two_decimals(10.123)
 
         self.assertEqual(result, 10.13)
 
-    def test_round_up_to_two_decimals_already_two(self):
+    def test_round_up_to_two_decimals_already_two(self) -> None:
         """Test rounding when already two decimals"""
         result = round_up_to_two_decimals(10.12)
 
         self.assertEqual(result, 10.12)
 
-    def test_round_up_to_two_decimals_rounds_up(self):
+    def test_round_up_to_two_decimals_rounds_up(self) -> None:
         """Test rounding up behavior"""
         result = round_up_to_two_decimals(10.111)
 
         self.assertEqual(result, 10.12)
 
-    def test_round_up_to_two_decimals_zero(self):
+    def test_round_up_to_two_decimals_zero(self) -> None:
         """Test rounding zero"""
         result = round_up_to_two_decimals(0)
 
         self.assertEqual(result, 0.0)
 
-    def test_round_up_to_two_decimals_negative(self):
+    def test_round_up_to_two_decimals_negative(self) -> None:
         """Test rounding negative number"""
         result = round_up_to_two_decimals(-5.678)
 
@@ -126,7 +126,7 @@ class TestInvoiceFunctions(BaseTestCase):
     """Test cases for invoice processing functions"""
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_basic(self, mock_get):
+    def test_invoice_received_money_basic(self, mock_get) -> None:
         """Test invoice_received_money processes payment"""
         mock_invoice = MagicMock()
         mock_invoice.status = PaymentStatus.SUBMITTED
@@ -141,7 +141,7 @@ class TestInvoiceFunctions(BaseTestCase):
         self.assertEqual(mock_invoice.mc_fee, 2.5)
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_with_txn_id(self, mock_get):
+    def test_invoice_received_money_with_txn_id(self, mock_get) -> None:
         """Test invoice_received_money with transaction ID"""
         mock_invoice = MagicMock()
         mock_invoice.status = PaymentStatus.SUBMITTED
@@ -153,7 +153,7 @@ class TestInvoiceFunctions(BaseTestCase):
         self.assertEqual(mock_invoice.txn_id, "TXN789")
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_not_found(self, mock_get):
+    def test_invoice_received_money_not_found(self, mock_get) -> None:
         """Test invoice_received_money when invoice not found"""
         from django.core.exceptions import ObjectDoesNotExist
 
@@ -164,7 +164,7 @@ class TestInvoiceFunctions(BaseTestCase):
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_already_confirmed(self, mock_get):
+    def test_invoice_received_money_already_confirmed(self, mock_get) -> None:
         """Test invoice_received_money skips already confirmed"""
         mock_invoice = MagicMock()
         mock_invoice.status = PaymentStatus.CONFIRMED
@@ -181,7 +181,7 @@ class TestInvoiceFunctions(BaseTestCase):
 class TestVATFunctions(BaseTestCase):
     """Test cases for VAT calculation functions"""
 
-    def test_compute_vat_no_vat(self):
+    def test_compute_vat_no_vat(self) -> None:
         """Test calculate_payment_vat when no VAT configured"""
         member = self.get_member()
         association = self.get_association()
@@ -198,7 +198,7 @@ class TestVATFunctions(BaseTestCase):
         # With no VAT config, should be 0
         self.assertEqual(payment.vat_ticket, 0.0)
 
-    def test_compute_vat_with_vat_config(self):
+    def test_compute_vat_with_vat_config(self) -> None:
         """Test calculate_payment_vat with VAT configured"""
         member = self.get_member()
         association = self.get_association()
@@ -230,7 +230,7 @@ class TestVATFunctions(BaseTestCase):
         # If it's 0, the function logic might require specific conditions
         self.assertEqual(payment.vat_ticket, 0.0)
 
-    def test_get_previous_sum_no_previous(self):
+    def test_get_previous_sum_no_previous(self) -> None:
         """Test get_previous_sum with no previous payments"""
         from larpmanager.models.accounting import AccountingItemPayment
 
@@ -247,7 +247,7 @@ class TestVATFunctions(BaseTestCase):
 
         self.assertEqual(result, 0)
 
-    def test_get_previous_sum_with_previous(self):
+    def test_get_previous_sum_with_previous(self) -> None:
         """Test get_previous_sum with previous payments"""
         from larpmanager.models.accounting import AccountingItemPayment
 

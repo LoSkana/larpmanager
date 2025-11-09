@@ -18,8 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
-from typing import Union
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -38,6 +38,8 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.codes import countries
+
+logger = logging.getLogger(__name__)
 
 
 class GenderChoices(models.TextChoices):
@@ -90,7 +92,7 @@ class Member(BaseModel):
             "If you prefer that your real name and surname not be publicly visible, please "
             "indicate an alias that will be displayed instead. Note: If you register for an "
             "event, your real first and last name will be shown to other participants, and to the "
-            "organisers."
+            "organisers.",
         ),
         blank=True,
     )
@@ -104,7 +106,7 @@ class Member(BaseModel):
             "If for whatever reason the first and last name shown on your documents is "
             "different from the one you prefer to use, then write it here. It will only be "
             "used for internal bureaucratic purposes, and will NEVER be displayed to other "
-            "participants."
+            "participants.",
         ),
     )
 
@@ -147,7 +149,7 @@ class Member(BaseModel):
         verbose_name=_("Contact"),
         help_text=_(
             "Indicates a way for other participants to contact you. It can be an email, a social "
-            "profile, whatever you want. It will be made public to others participants"
+            "profile, whatever you want. It will be made public to others participants",
         ),
         blank=True,
         null=True,
@@ -160,7 +162,7 @@ class Member(BaseModel):
         verbose_name=_("First aid"),
         help_text=_(
             "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to intervene in "
-            "case accidents occur during the event?"
+            "case accidents occur during the event?",
         ),
         null=True,
     )
@@ -201,7 +203,7 @@ class Member(BaseModel):
         null=True,
         verbose_name=_("Date of expiration of the document"),
         help_text=_(
-            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for."
+            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for.",
         ),
     )
 
@@ -228,7 +230,7 @@ class Member(BaseModel):
         help_text=_(
             "Fill in this field if you follow a personal diet for reasons of choice(e.g. "
             "vegetarian, vegan) or health (celiac disease, allergies). Leave empty if you do "
-            "not have things to report!"
+            "not have things to report!",
         ),
     )
 
@@ -246,7 +248,7 @@ class Member(BaseModel):
             "mental health problems (e.g. neurosis, bipolar disorder, anxiety disorder, "
             "various phobias), trigger topics ('lines and veils', we can't promise that you "
             "won't run into them in the event, but we'll make sure they're not part of your "
-            "main quests). Leave empty if you do not have things to report!"
+            "main quests). Leave empty if you do not have things to report!",
         ),
     )
 
@@ -266,7 +268,7 @@ class Member(BaseModel):
         help_text=_(
             "Upload your portrait photo. It will be shown to other participants to help recognize "
             "you in the event. Choose a photo that you would put in an official document (in which "
-            "you are alone, centered on your face)"
+            "you are alone, centered on your face)",
         ),
         blank=True,
         null=True,
@@ -293,17 +295,16 @@ class Member(BaseModel):
     class Meta:
         ordering = ["surname", "name"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.nickname:
             name = self.display_real()
             nick = self.nickname
             if slugify(nick) != slugify(name):
                 name += f" - {nick}"
             return name
-        elif self.name or self.surname:
+        if self.name or self.surname:
             return self.display_real()
-        else:
-            return str(self.user)
+        return str(self.user)
 
     def display_member(self) -> str:
         """Return a user-friendly display name for the member.
@@ -313,6 +314,7 @@ class Member(BaseModel):
 
         Returns:
             str: The display name for the member.
+
         """
         # Use nickname if available
         if self.nickname:
@@ -329,7 +331,8 @@ class Member(BaseModel):
         # Final fallback to primary key
         return str(self.pk)
 
-    def display_real(self):
+    def display_real(self) -> str:
+        """Return full real name as 'name surname'."""
         return f"{self.name} {self.surname}"
 
     def display_profile(self) -> str:
@@ -353,6 +356,7 @@ class Member(BaseModel):
 
         Returns:
             The absolute path to the member's PDF directory.
+
         """
         # Build base PDF members directory path
         member_pdf_directory = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
@@ -364,6 +368,7 @@ class Member(BaseModel):
         return member_pdf_directory
 
     def get_request_filepath(self):
+        """Return the full file path for member request PDF."""
         return os.path.join(self.get_member_filepath(), "request.pdf")
 
     def join(self, association: Association) -> None:
@@ -386,6 +391,7 @@ class Member(BaseModel):
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 
     def get_config(self, name, default_value=None, bypass_cache=False):
+        """Get configuration value for this member."""
         return get_element_config(self, name, default_value, bypass_cache)
 
 
@@ -396,7 +402,7 @@ class MemberConfig(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} {self.name}"
 
     class Meta:
@@ -437,7 +443,10 @@ class Membership(BaseModel):
     tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     status = models.CharField(
-        max_length=1, choices=MembershipStatus.choices, default=MembershipStatus.EMPTY, db_index=True
+        max_length=1,
+        choices=MembershipStatus.choices,
+        default=MembershipStatus.EMPTY,
+        db_index=True,
     )
 
     request = models.FileField(upload_to=UploadToPathAndRename("request/"), null=True, blank=True)
@@ -461,10 +470,14 @@ class Membership(BaseModel):
     class Meta:
         indexes = [
             models.Index(
-                fields=["association", "member"], condition=Q(deleted__isnull=True), name="memb_association_mem_act"
+                fields=["association", "member"],
+                condition=Q(deleted__isnull=True),
+                name="memb_association_mem_act",
             ),
             models.Index(
-                fields=["association", "status"], condition=Q(deleted__isnull=True), name="memb_association_stat_act"
+                fields=["association", "status"],
+                condition=Q(deleted__isnull=True),
+                name="memb_association_stat_act",
             ),
         ]
         constraints = [
@@ -479,23 +492,25 @@ class Membership(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} - {self.association}"
 
     def get_request_filepath(self):
+        """Get request file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
         except Exception as exception:
-            print(exception)
+            logger.debug(f"Request file not available for membership {self.id}: {exception}")
             return ""
 
     def get_document_filepath(self):
+        """Get document file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
         except Exception as error:
-            print(error)
+            logger.debug(f"Document file not available for membership {self.id}: {error}")
             return ""
 
 
@@ -575,6 +590,7 @@ class Badge(BaseModel):
 
         Returns:
             Dictionary with id, number, name, description and optional image URL
+
         """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
@@ -601,7 +617,7 @@ class Log(BaseModel):
 
     dl = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.cls} {self.eid}"
 
 
@@ -629,11 +645,11 @@ class Vote(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"V{self.number} {self.member} ({self.association} - {self.year})"
 
 
-def get_user_membership(user: Member, association: Union[Association, int]) -> Membership:
+def get_user_membership(user: Member, association: Association | int) -> Membership:
     """Get or create a membership for a user in an association.
 
     This function first checks if the user already has a cached membership
@@ -649,6 +665,7 @@ def get_user_membership(user: Member, association: Union[Association, int]) -> M
 
     Raises:
         Http404: If the association ID is invalid or not found
+
     """
     # Check if user already has a cached membership attribute
     if hasattr(user, "membership"):
@@ -660,7 +677,8 @@ def get_user_membership(user: Member, association: Union[Association, int]) -> M
 
     # Validate that we have a valid association ID
     if not association_id:
-        raise Http404("Association not found")
+        msg = "Association not found"
+        raise Http404(msg)
 
     # Get existing membership or create a new one for this user/association pair
     membership, _ = Membership.objects.get_or_create(member=user, association_id=association_id)

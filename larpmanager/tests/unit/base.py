@@ -24,6 +24,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 
+from larpmanager.models.accounting import DiscountType
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
@@ -341,10 +342,10 @@ class BaseTestCase(TestCase):
             event = self.get_event()
 
         # Get next available number for this event
-        if 'number' not in kwargs:
-            last_char = Character.objects.filter(event=event).order_by('-number').first()
+        if "number" not in kwargs:
+            last_char = Character.objects.filter(event=event).order_by("-number").first()
             next_number = (last_char.number + 1) if last_char else 1
-            kwargs['number'] = next_number
+            kwargs["number"] = next_number
 
         defaults = {"name": "Test Character", "event": event}
         defaults.update(kwargs)
@@ -461,7 +462,7 @@ class BaseTestCase(TestCase):
                 name="Test Discount",
                 value=Decimal("10.00"),
                 max_redeem=10,
-                typ=Discount.STANDARD,
+                typ=DiscountType.STANDARD,
                 event=self.get_event(),
                 number=1,
             )

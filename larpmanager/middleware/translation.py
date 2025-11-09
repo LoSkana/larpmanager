@@ -20,6 +20,7 @@
 
 from gettext import GNUTranslations
 
+from django.http import HttpRequest
 from django.utils import translation as dj_translation
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import trans_real
@@ -45,11 +46,12 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
     organizations can see different text for the same UI elements.
     """
 
-    def process_request(self, request) -> None:
+    def process_request(self, request: HttpRequest) -> None:
         """Inject association-specific translations into the request context.
 
         Args:
             request: The incoming HTTP request object
+
         """
         # Extract association ID from request context (set by earlier middleware)
         association_id = getattr(request, "association", {}).get("id", None)
@@ -81,6 +83,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
 
         Returns:
             The unmodified response object
+
         """
         # Restore default translation behavior for the next request
         trans_real._active.value = None
@@ -101,14 +104,16 @@ class AssociationTranslations(GNUTranslations):
     Attributes:
         _base: The underlying Django translation object
         _overrides: Dictionary mapping msgid strings to custom translations
+
     """
 
-    def __init__(self, base_translation, overrides: dict[str, str]):
+    def __init__(self, base_translation, overrides: dict[str, str]) -> None:
         """Initialize the translation wrapper with base translations and overrides.
 
         Args:
             base_translation: Django's standard translation object for the language
             overrides: Dictionary mapping original strings to custom translations
+
         """
         self._base = base_translation
         self._overrides = overrides or {}
@@ -121,6 +126,7 @@ class AssociationTranslations(GNUTranslations):
 
         Returns:
             The custom translation if available, otherwise the default translation
+
         """
         if message in self._overrides:
             return self._overrides[message]
@@ -136,6 +142,7 @@ class AssociationTranslations(GNUTranslations):
 
         Returns:
             The custom translation if available, otherwise the default translation
+
         """
         # Determine which form to check for override based on count
         key = singular if n == 1 else plural

@@ -19,7 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import time
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -65,6 +66,7 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
 
     Returns:
         None
+
     """
     # Get the highest version number for this element and increment it
     n = TextVersion.objects.filter(tp=tp, eid=el.id).aggregate(Max("version"))["version__max"]
@@ -128,6 +130,7 @@ def _get_field_value(element: Any, question: Any) -> str | None:
 
     Returns:
         The field value as a string, or None if no value found
+
     """
     # Get the mapping of question types to their value extraction functions
     mapping = _get_values_mapping(element)
@@ -153,16 +156,17 @@ def _get_field_value(element: Any, question: Any) -> str | None:
 
 
 def _get_values_mapping(element) -> dict[str, callable]:
-    """Returns a mapping of field names to their value extraction functions.
+    """Return a mapping of field names to their value extraction functions.
 
     Args:
         element: The element object to extract values from.
 
     Returns:
         Dictionary mapping field names to lambda functions that extract values.
+
     """
     # Basic text and content fields
-    mapping = {
+    return {
         "text": lambda: element.text,
         "teaser": lambda: element.teaser,
         "name": lambda: element.name,
@@ -170,10 +174,9 @@ def _get_values_mapping(element) -> dict[str, callable]:
         # Related faction names joined by comma
         "faction": lambda: ", ".join([faction.name for faction in element.factions_list.all()]),
     }
-    return mapping
 
 
-def check_run(element, context, accessor_field=None):
+def check_run(element, context, accessor_field=None) -> None:
     """Validate that element belongs to the correct run and event.
 
     Args:
@@ -183,6 +186,7 @@ def check_run(element, context, accessor_field=None):
 
     Raises:
         Http404: If element doesn't belong to the expected run or event
+
     """
     if "run" not in context:
         return
@@ -191,7 +195,8 @@ def check_run(element, context, accessor_field=None):
         element = getattr(element, accessor_field)
 
     if hasattr(element, "run") and element.run != context["run"]:
-        raise Http404("not your run")
+        msg = "not your run"
+        raise Http404(msg)
 
     if hasattr(element, "event"):
         is_child_event = context["event"].parent_id is not None
@@ -201,10 +206,11 @@ def check_run(element, context, accessor_field=None):
         if (not is_child_event and not event_matches) or (
             is_child_event and not event_matches and not parent_event_matches
         ):
-            raise Http404("not your event")
+            msg = "not your event"
+            raise Http404(msg)
 
 
-def check_association(element: object, context: dict, attribute_field: str = None) -> None:
+def check_association(element: object, context: dict, attribute_field: str | None = None) -> None:
     """Check if object belongs to the correct association.
 
     Args:
@@ -214,6 +220,7 @@ def check_association(element: object, context: dict, attribute_field: str = Non
 
     Raises:
         Http404: If object doesn't belong to the association
+
     """
     # Extract specific field if requested
     if attribute_field:
@@ -225,14 +232,15 @@ def check_association(element: object, context: dict, attribute_field: str = Non
 
     # Verify object belongs to current association
     if element.association_id != context["association_id"]:
-        raise Http404("not your association")
+        msg = "not your association"
+        raise Http404(msg)
 
 
 def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: str, entity_id: int) -> bool:
-    """Generic user data editing with validation.
+    """Edit user data with validation.
 
-    Handles both GET and POST requests for editing user data. On POST, validates
-    the form and saves the instance. Supports deletion functionality when
+    Handle both GET and POST requests for editing user data. On POST, validate
+    the form and save the instance. Support deletion functionality when
     'delete' parameter is set to '1' in POST data.
 
     Args:
@@ -251,6 +259,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
         - Logs the operation using save_log function
         - Deletes instance if delete flag is set
         - Updates context with 'saved', 'form', 'num', and optionally 'name' keys
+
     """
     if request.method == "POST":
         # Initialize form with POST data and files, bind to existing instance
@@ -290,7 +299,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
     return False
 
 
-def backend_get(context: dict, model_type: type, entity_id: int, association_field: str = None) -> None:
+def backend_get(context: dict, model_type: type, entity_id: int, association_field: str | None = None) -> None:
     """Retrieve an object by ID and perform security checks.
 
     Args:
@@ -301,12 +310,13 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
 
     Raises:
         NotFoundError: If object with given ID doesn't exist
+
     """
     # Retrieve object by primary key, handle any database exceptions
     try:
         element = model_type.objects.get(pk=entity_id)
     except Exception as err:
-        raise NotFoundError() from err
+        raise NotFoundError from err
 
     # Store object in context and perform security validations
     context["el"] = element
@@ -321,8 +331,8 @@ def backend_edit(
     request: HttpRequest,
     context: dict[str, Any],
     form_type: type[ModelForm],
-    element_id: Optional[int],
-    additional_field: Optional[str] = None,
+    element_id: int | None,
+    additional_field: str | None = None,
     is_association_based: bool = False,
     quiet: bool = False,
 ) -> bool:
@@ -343,6 +353,7 @@ def backend_edit(
 
     Returns:
         bool: True if form was successfully processed and saved, False otherwise
+
     """
     # Extract model type and set up basic context variables
     model_type = form_type.Meta.model
@@ -429,6 +440,7 @@ def orga_edit(
 
     Returns:
         HttpResponse: Redirect response on successful edit, or rendered edit template
+
     """
     # Check user permissions and get base context for the event
     context = check_event_context(request, event_slug, permission)
@@ -463,12 +475,11 @@ def exe_edit(
     form_type: type[MyForm],
     entity_id: int,
     permission: str,
-    redirect_view: str = None,
-    additional_field: str = None,
-    additional_context: dict = None,
+    redirect_view: str | None = None,
+    additional_field: str | None = None,
+    additional_context: dict | None = None,
 ) -> HttpResponse:
-    """
-    Handle editing operations for organization-level entities.
+    """Handle editing operations for organization-level entities.
 
     Manages the edit workflow for various entity types at the organization level,
     including permission checking, form processing, and appropriate redirects.
@@ -484,6 +495,7 @@ def exe_edit(
 
     Returns:
         HttpResponse: Redirect response on successful edit, or rendered edit template
+
     """
     # Check user permissions and get base context
     context = check_association_context(request, permission)
@@ -494,7 +506,12 @@ def exe_edit(
 
     # Process the edit operation through backend handler
     if backend_edit(
-        request, context, form_type, entity_id, additional_field=additional_field, is_association_based=True
+        request,
+        context,
+        form_type,
+        entity_id,
+        additional_field=additional_field,
+        is_association_based=True,
     ):
         # Set permission suggestion for UI feedback
         set_suggestion(context, permission)
@@ -523,12 +540,10 @@ def set_suggestion(context: dict, permission: str) -> None:
         context: Context dictionary containing either 'event' key with event object
                  or 'association_id' key with association ID
         permission: Permission name to create suggestion flag for
+
     """
     # Determine the target object based on context
-    if "event" in context:
-        target_object = context["event"]
-    else:
-        target_object = Association.objects.get(pk=context["association_id"])
+    target_object = context["event"] if "event" in context else Association.objects.get(pk=context["association_id"])
 
     # Build the configuration key for this permission's suggestion
     config_key = f"{permission}_suggestion"
@@ -542,8 +557,8 @@ def set_suggestion(context: dict, permission: str) -> None:
     foreign_key_field = _get_fkey_config(target_object)
 
     # Create or retrieve the configuration entry
-    (config, created) = target_object.configs.model.objects.get_or_create(
-        **{foreign_key_field: target_object, "name": config_key}
+    (config, _created) = target_object.configs.model.objects.get_or_create(
+        **{foreign_key_field: target_object, "name": config_key},
     )
 
     # Set the suggestion flag to True and save
@@ -557,10 +572,9 @@ def writing_edit(
     form_type: type[forms.Form],
     element_name: str,
     element_type: str,
-    redirect_url: Optional[str] = None,
-) -> Optional[HttpResponse]:
-    """
-    Handle editing of writing elements with form processing.
+    redirect_url: str | None = None,
+) -> HttpResponse | None:
+    """Handle editing of writing elements with form processing.
 
     Manages the creation and editing of writing elements (characters, backgrounds, etc.)
     through a dynamic form system. Handles both GET requests for form display and
@@ -580,6 +594,7 @@ def writing_edit(
 
     Note:
         Function modifies the context dictionary in-place to add form and display data.
+
     """
     # Set up element type metadata for template rendering
     context["elementTyp"] = form_type.Meta.model
@@ -635,16 +650,14 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
 
     Returns:
         None: Modifies the context dictionary in place
+
     """
     # Check if character finder is disabled for this event
     if get_event_config(context["event"].id, "writing_disable_char_finder", False, context):
         return
 
     # Select appropriate widget class based on type
-    if model_type == Trait:
-        widget_class = EventTraitS2Widget
-    else:
-        widget_class = EventCharacterS2Widget
+    widget_class = EventTraitS2Widget if model_type == Trait else EventCharacterS2Widget
 
     # Initialize widget with event configuration
     widget = widget_class(attrs={"id": "char_finder"})
@@ -661,12 +674,11 @@ def _writing_save(
     form: Any,
     form_type: type,
     nm: str,
-    redr: Optional[Callable],
+    redr: Callable | None,
     request: HttpRequest,
-    tp: Optional[str],
+    tp: str | None,
 ) -> HttpResponse:
-    """
-    Save writing form data with AJAX and normal save handling.
+    """Save writing form data with AJAX and normal save handling.
 
     Handles both AJAX auto-save requests and normal form submissions. For normal saves,
     creates version history if type is provided, otherwise logs the operation. Supports
@@ -683,14 +695,14 @@ def _writing_save(
 
     Returns:
         HttpResponse: AJAX JSON response for auto-save or HTTP redirect after normal save
+
     """
     # Handle AJAX auto-save requests
     if "ajax" in request.POST:
         # Check if element exists in context before processing
         if nm in context:
             return writing_edit_save_ajax(form, request, context)
-        else:
-            return JsonResponse({"res": "ko"})
+        return JsonResponse({"res": "ko"})
 
     # Process normal form submission
     # Save form data but keep as temporary until processing complete
@@ -748,6 +760,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
         JsonResponse: JSON response containing either success status or warning message
             - On success: {"res": "ok"}
             - On warning: {"res": "ok", "warn": "warning message"}
+
     """
     # Initialize default success response
     res = {"res": "ok"}
@@ -779,9 +792,8 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request, element_type: str, element_id: int, user_token: str) -> str:
-    """
-    Manage working tickets to prevent concurrent editing conflicts.
+def writing_edit_working_ticket(request: HttpRequest, element_type: str, element_id: int, user_token: str) -> str:
+    """Manage working tickets to prevent concurrent editing conflicts.
 
     This function implements a locking mechanism to prevent multiple users from
     editing the same content simultaneously, which could result in data loss.
@@ -799,6 +811,7 @@ def writing_edit_working_ticket(request, element_type: str, element_id: int, use
     Note:
         Uses Redis cache with a 15-second timeout window to track active editors.
         Cache timeout is set to minimum of ticket_time and 1 day.
+
     """
     # Superusers bypass all validation checks
     if is_lm_admin(request):
@@ -847,7 +860,7 @@ def writing_edit_working_ticket(request, element_type: str, element_id: int, use
 
 
 @require_POST
-def working_ticket(request):
+def working_ticket(request: HttpRequest):
     """Handle working ticket requests to prevent concurrent editing conflicts.
 
     Args:
@@ -855,6 +868,7 @@ def working_ticket(request):
 
     Returns:
         JsonResponse: Status response with optional warning if other users are editing
+
     """
     if not request.user.is_authenticated:
         return JsonResponse({"warn": "User not logged"})
@@ -864,10 +878,10 @@ def working_ticket(request):
         return JsonResponse(res)
 
     eid = request.POST.get("eid")
-    type = request.POST.get("type")
+    element_type = request.POST.get("type")
     token = request.POST.get("token")
 
-    msg = writing_edit_working_ticket(request, type, eid, token)
+    msg = writing_edit_working_ticket(request, element_type, eid, token)
     if msg:
         res["warn"] = msg
 

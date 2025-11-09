@@ -20,6 +20,7 @@
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
+from django.http import HttpRequest
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -43,7 +44,7 @@ from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.common import copy_class
 
 
-def get_character_filter(character, character_registrations, active_filters):
+def get_character_filter(character, character_registrations, active_filters) -> bool:
     """Check if character should be included based on filter criteria.
 
     Args:
@@ -53,17 +54,14 @@ def get_character_filter(character, character_registrations, active_filters):
 
     Returns:
         bool: True if character passes all filters
+
     """
-    if "free" in active_filters:
-        if character.id in character_registrations:
-            return False
-    if "mirror" in active_filters and character.mirror_id:
-        if character.mirror_id in character_registrations:
-            return False
-    return True
+    if "free" in active_filters and character.id in character_registrations:
+        return False
+    return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context, character_filters):
+def get_event_filter_characters(context, character_filters) -> None:
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -72,12 +70,14 @@ def get_event_filter_characters(context, character_filters):
 
     Side effects:
         Updates context with filtered factions and characters lists
+
     """
     context["factions"] = []
 
     character_registrations = {}
     for registration_character_relation in RegistrationCharacterRel.objects.filter(
-        reg__run=context["run"], reg__cancellation_date__isnull=True
+        reg__run=context["run"],
+        reg__cancellation_date__isnull=True,
     ).select_related("reg", "reg__member"):
         character_registrations[registration_character_relation.character_id] = registration_character_relation.reg
 
@@ -113,7 +113,7 @@ def get_event_filter_characters(context, character_filters):
         default_faction.name = "all"
         default_faction.data = default_faction.show_red()
         default_faction.chars = []
-        for _character_id, character in characters_by_id.items():
+        for character in characters_by_id.values():
             if not get_character_filter(character, character_registrations, character_filters):
                 continue
             character.data = character.show_red()
@@ -121,7 +121,7 @@ def get_event_filter_characters(context, character_filters):
         context["factions"].append(default_faction)
 
 
-def has_access_character(request, context):
+def has_access_character(request: HttpRequest, context: dict) -> bool:
     """Check if user has access to view/edit a specific character.
 
     Args:
@@ -130,6 +130,7 @@ def has_access_character(request, context):
 
     Returns:
         bool: True if user has access (organizer, owner, or player)
+
     """
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
@@ -139,28 +140,27 @@ def has_access_character(request, context):
     if "owner_id" in context["char"] and context["char"]["owner_id"] == current_member_id:
         return True
 
-    if "player_id" in context["char"] and context["char"]["player_id"] == current_member_id:
-        return True
-
-    return False
+    return bool("player_id" in context["char"] and context["char"]["player_id"] == current_member_id)
 
 
-def update_run_plan_on_event_change(run_instance):
+def update_run_plan_on_event_change(run_instance) -> None:
     """Set run plan from association default if not already set.
 
     Args:
         run_instance: Run instance that was saved
+
     """
     if not run_instance.plan and run_instance.event:
         plan_updates = {"plan": run_instance.event.association.plan}
         Run.objects.filter(pk=run_instance.pk).update(**plan_updates)
 
 
-def prepare_campaign_event_data(event_instance):
+def prepare_campaign_event_data(event_instance) -> None:
     """Prepare campaign event data before saving.
 
     Args:
         event_instance: Event instance being saved
+
     """
     if event_instance.pk:
         try:
@@ -172,11 +172,12 @@ def prepare_campaign_event_data(event_instance):
         event_instance._old_parent_id = None
 
 
-def copy_parent_event_to_campaign(event):
-    """Setup campaign event by copying from parent.
+def copy_parent_event_to_campaign(event) -> None:
+    """Set up campaign event by copying from parent.
 
     Args:
         event: Event instance that was saved
+
     """
     if event.parent_id:
         # noinspection PyProtectedMember
@@ -194,11 +195,12 @@ def copy_parent_event_to_campaign(event):
             del event._skip_campaign_setup
 
 
-def create_default_event_setup(event):
-    """Setup event with runs, tickets, and forms after save.
+def create_default_event_setup(event) -> None:
+    """Set up event with runs, tickets, and forms after save.
 
     Args:
         event: Event instance that was saved
+
     """
     if event.template:
         return
@@ -219,12 +221,13 @@ def create_default_event_setup(event):
     clear_event_fields_cache(event.id)
 
 
-def save_event_tickets(features, instance):
+def save_event_tickets(features, instance) -> None:
     """Create default registration tickets for event.
 
     Args:
         features (dict): Enabled features for the event
         instance: Event instance to create tickets for
+
     """
     # create tickets if not exists
     tickets = [
@@ -258,6 +261,7 @@ def save_event_character_form(features: dict, instance) -> None:
         - Returns early if 'character' feature is not enabled
         - Uses parent event's form if instance has a parent
         - Activates organization language before processing
+
     """
     # Early return if character feature is not enabled
     if "character" not in features:
@@ -309,13 +313,14 @@ def save_event_character_form(features: dict, instance) -> None:
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
-def _init_writing_element(instance, default_question_types, question_applicables):
+def _init_writing_element(instance, default_question_types, question_applicables) -> None:
     """Initialize writing questions for specific applicables in an event instance.
 
     Args:
         instance: Event instance to initialize writing elements for
         default_question_types: Dictionary of default question types and their configurations
         question_applicables: List of QuestionApplicable types to create questions for
+
     """
     for applicable in question_applicables:
         # if there are already questions for this applicable, skip
@@ -358,6 +363,7 @@ def _init_character_form_questions(
 
     Returns:
         None
+
     """
     # Get existing character questions and their types
     existing_questions = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
@@ -388,7 +394,7 @@ def _init_character_form_questions(
     available_types -= protected_types
 
     # Process each remaining question type based on feature availability
-    for question_type in sorted(list(available_types)):
+    for question_type in sorted(available_types):
         # Create question if feature is enabled but question doesn't exist
         if question_type in features and question_type not in existing_types:
             WritingQuestion.objects.create(
@@ -420,6 +426,7 @@ def save_event_registration_form(features: dict, instance) -> None:
 
     Returns:
         None
+
     """
     # Activate the organization's language for proper translations
     _activate_orga_lang(instance)
@@ -465,12 +472,12 @@ def save_event_registration_form(features: dict, instance) -> None:
         "pay_what_you_want": _("Freely indicate the amount of your donation"),
         "reg_surcharges": _("Registration surcharge"),
         "reg_quotas": _(
-            "Number of installments to split the fee: payments and deadlines will be equally divided from the registration date"
+            "Number of installments to split the fee: payments and deadlines will be equally divided from the registration date",
         ),
     }
 
     # Process each feature-specific question type
-    for el in sorted(list(all_types)):
+    for el in sorted(all_types):
         # Add question if feature is enabled but question doesn't exist
         if el in features and el not in types:
             RegistrationQuestion.objects.create(
@@ -494,6 +501,7 @@ def _activate_orga_lang(instance) -> None:
 
     Args:
         instance: Event instance to get organizers from.
+
     """
     # Count language frequency among organizers
     language_frequency = {}
@@ -507,10 +515,7 @@ def _activate_orga_lang(instance) -> None:
             language_frequency[organizer_language] += 1
 
     # Select most common language or default to English
-    if language_frequency:
-        most_common_language = max(language_frequency, key=language_frequency.get)
-    else:
-        most_common_language = "en"
+    most_common_language = max(language_frequency, key=language_frequency.get) if language_frequency else "en"
 
     # Activate the selected language
     activate(most_common_language)
@@ -535,6 +540,7 @@ def assign_previous_campaign_character(registration) -> None:
         - Skips cancelled registrations
         - Preserves custom character attributes from previous run
         - Does nothing if character already assigned to current run
+
     """
     # Skip if registration has no member or is cancelled
     if not registration.member or registration.cancellation_date:
@@ -551,7 +557,7 @@ def assign_previous_campaign_character(registration) -> None:
     # Find the most recent run from the same campaign series
     previous_campaign_run = (
         Run.objects.filter(
-            Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id)
+            Q(event__parent=registration.run.event.parent) | Q(event_id=registration.run.event.parent_id),
         )
         .exclude(event_id=registration.run.event_id)
         .order_by("-end")
@@ -562,7 +568,8 @@ def assign_previous_campaign_character(registration) -> None:
 
     # Get character relationship from previous run and create new one
     previous_character_relation = RegistrationCharacterRel.objects.filter(
-        reg__member=registration.member, reg__run=previous_campaign_run
+        reg__member=registration.member,
+        reg__run=previous_campaign_run,
     ).first()
 
     # Only proceed if previous character exists and is active
@@ -570,7 +577,8 @@ def assign_previous_campaign_character(registration) -> None:
         return
 
     new_character_relation = RegistrationCharacterRel.objects.create(
-        reg=registration, character=previous_character_relation.character
+        reg=registration,
+        character=previous_character_relation.character,
     )
 
     # Copy custom character attributes from previous run

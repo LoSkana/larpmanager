@@ -20,7 +20,6 @@
 
 import logging
 from datetime import date, datetime
-from typing import Optional, Union
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -102,6 +101,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
 
     Note:
         Redirects to home page if user has no associated organization (a_id == 0).
+
     """
     # Initialize base context and check for valid association
     context = get_context(request)
@@ -151,6 +151,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
 
     Note:
         Only shows non-hidden accounting items for the user's current association.
+
     """
     # Initialize context with default user data
     context = get_context(request)
@@ -176,7 +177,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         {
             "given": given_tokens,
             "used": used_tokens,
-        }
+        },
     )
 
     # Render and return the token accounting template
@@ -185,8 +186,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def accounting_credits(request: HttpRequest) -> HttpResponse:
-    """
-    Display user's accounting credits including expenses, credits given/used, and refunds.
+    """Display user's accounting credits including expenses, credits given/used, and refunds.
 
     This view retrieves all accounting-related items for the current user within their
     associated organization, including approved expenses, credit transactions, payment
@@ -199,6 +199,7 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template displaying the user's accounting credits
             summary with expenses, given credits, used credits, and refunds.
+
     """
     # Get base user context with member and association info
     context = get_context(request)
@@ -208,7 +209,10 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
         {
             # Approved expenses for the user in current association
             "exp": AccountingItemExpense.objects.filter(
-                member=context["member"], hide=False, is_approved=True, association_id=context["association_id"]
+                member=context["member"],
+                hide=False,
+                is_approved=True,
+                association_id=context["association_id"],
             ),
             # Credits given to the user in current association
             "given": AccountingItemOther.objects.filter(
@@ -231,7 +235,7 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
                 oth=OtherChoices.REFUND,
                 association_id=context["association_id"],
             ),
-        }
+        },
     )
 
     # Render the accounting credits template with populated context
@@ -255,6 +259,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks refund feature access
+
     """
     # Check user has permission to access refund functionality
     context = get_context(request)
@@ -281,7 +286,8 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
             # Show success message and redirect to accounting dashboard
             messages.success(
-                request, _("Request for reimbursement entered! You will receive notice when it is processed.") + "."
+                request,
+                _("Request for reimbursement entered! You will receive notice when it is processed.") + ".",
             )
             return redirect("accounting")
     else:
@@ -294,7 +300,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None) -> HttpResponse:
+def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) -> HttpResponse:
     """Handle payment redirection for event registration.
 
     Validates user permissions and registration status before redirecting to
@@ -312,6 +318,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
     Raises:
         PermissionDenied: If user lacks payment feature access
         Http404: If event or registration not found
+
     """
     # Get event context and validate user registration status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -322,11 +329,11 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
     # Verify user has valid registration for this event
     if not context["run"].reg:
         messages.warning(
-            request, _("We cannot find your registration for this event. Are you logged in as the correct user") + "?"
+            request,
+            _("We cannot find your registration for this event. Are you logged in as the correct user") + "?",
         )
         return redirect("accounting")
-    else:
-        reg = context["run"].reg
+    reg = context["run"].reg
 
     # Validate fiscal code if feature is enabled for this association
     if "fiscal_code_check" in context["features"]:
@@ -335,15 +342,15 @@ def acc_pay(request: HttpRequest, event_slug: str, method: Optional[str] = None)
         if "error_cf" in result:
             # Redirect to profile page if fiscal code has errors
             messages.warning(
-                request, _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"]
+                request,
+                _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"],
             )
             return redirect("profile")
 
     # Redirect to payment processing with or without specific method
     if method:
         return redirect("acc_reg", reg_id=reg.id, method=method)
-    else:
-        return redirect("acc_reg", reg_id=reg.id)
+    return redirect("acc_reg", reg_id=reg.id)
 
 
 @login_required
@@ -364,6 +371,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
     Raises:
         Http404: If registration not found or invalid parameters
+
     """
     # Ensure payment feature is enabled for this association
     context = get_context(request)
@@ -378,7 +386,8 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
             run__event__association_id=context["association_id"],
         )
     except Exception as err:
-        raise Http404(f"registration not found {err}") from err
+        msg = f"registration not found {err}"
+        raise Http404(msg) from err
 
     # Get event context and mark as accounting page
     context = get_event_context(request, reg.run.get_slug())
@@ -446,7 +455,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
 
 @login_required
-def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpResponse:
+def acc_membership(request: HttpRequest, method: str | None = None) -> HttpResponse:
     """Process membership fee payment for the current year.
 
     This function handles the membership fee payment workflow, including validation
@@ -461,6 +470,7 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
 
     Raises:
         PermissionDenied: If user lacks required association feature access
+
     """
     # Check if user has access to membership feature
     context = get_context(request)
@@ -477,12 +487,14 @@ def acc_membership(request: HttpRequest, method: Optional[str] = None) -> HttpRe
     year = datetime.now().year
     try:
         AccountingItemMembership.objects.get(
-            year=year, member=context["member"], association_id=context["association_id"]
+            year=year,
+            member=context["member"],
+            association_id=context["association_id"],
         )
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Membership fee not found for member={context['member'].id}, year={year}: {e}")
 
     # Set up context variables for template rendering
     context["year"] = year
@@ -523,6 +535,7 @@ def acc_donate(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks 'donate' feature access
+
     """
     # Check if user has permission to access donation feature
     context = get_context(request)
@@ -565,6 +578,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
 
     Raises:
         DatabaseError: If the atomic transaction fails during collection creation.
+
     """
     # Initialize context with user defaults and enable accounting display
     context = get_context(request)
@@ -596,8 +610,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def acc_collection_manage(request: HttpRequest, collection_code: str) -> HttpResponse:
-    """
-    Manage accounting collection for the authenticated user.
+    """Manage accounting collection for the authenticated user.
 
     Args:
         request: HTTP request object containing user and association data
@@ -608,6 +621,7 @@ def acc_collection_manage(request: HttpRequest, collection_code: str) -> HttpRes
 
     Raises:
         Http404: If the collection doesn't belong to the requesting user
+
     """
     # Initialize base user context and enable accounting display
     context = get_context(request)
@@ -618,16 +632,18 @@ def acc_collection_manage(request: HttpRequest, collection_code: str) -> HttpRes
 
     # Verify user ownership of the collection
     if context["member"] != c.organizer:
-        raise Http404("Collection not yours")
+        msg = "Collection not yours"
+        raise Http404(msg)
 
     # Add collection data and filtered accounting items to context
     context.update(
         {
             "coll": c,
             "list": AccountingItemCollection.objects.filter(
-                collection=c, collection__association_id=context["association_id"]
+                collection=c,
+                collection__association_id=context["association_id"],
             ),
-        }
+        },
     )
 
     # Render and return the collection management template
@@ -647,6 +663,7 @@ def acc_collection_participate(request: HttpRequest, collection_code: str) -> Ht
 
     Raises:
         Http404: When the collection is not in OPEN status
+
     """
     # Initialize base context with user data and accounting flag
     context = get_context(request)
@@ -658,7 +675,8 @@ def acc_collection_participate(request: HttpRequest, collection_code: str) -> Ht
 
     # Validate collection is open for participation
     if c.status != CollectionStatus.OPEN:
-        raise Http404("Collection not open")
+        msg = "Collection not open"
+        raise Http404(msg)
 
     # Handle form submission for collection participation
     if request.method == "POST":
@@ -688,6 +706,7 @@ def acc_collection_close(request: HttpRequest, collection_code: str) -> HttpResp
 
     Raises:
         Http404: If collection doesn't belong to user or isn't open
+
     """
     # Get the collection the user participates in
     context = get_context(request)
@@ -695,11 +714,13 @@ def acc_collection_close(request: HttpRequest, collection_code: str) -> HttpResp
 
     # Verify the current user is the organizer of this collection
     if context["member"] != c.organizer:
-        raise Http404("Collection not yours")
+        msg = "Collection not yours"
+        raise Http404(msg)
 
     # Ensure the collection is in an open state before closing
     if c.status != CollectionStatus.OPEN:
-        raise Http404("Collection not open")
+        msg = "Collection not open"
+        raise Http404(msg)
 
     # Atomically update the collection status to prevent race conditions
     with transaction.atomic():
@@ -712,7 +733,7 @@ def acc_collection_close(request: HttpRequest, collection_code: str) -> HttpResp
 
 
 @login_required
-def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[HttpResponseRedirect, HttpResponse]:
+def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpResponseRedirect | HttpResponse:
     """Handle redemption of completed accounting collections.
 
     This function allows users to redeem completed accounting collections by changing
@@ -728,6 +749,7 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[H
 
     Raises:
         Http404: If the collection is not found or status is not DONE
+
     """
     # Initialize the context with default user context and accounting flag
     context = get_context(request)
@@ -739,7 +761,8 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[H
 
     # Verify collection is in the correct status for redemption
     if c.status != CollectionStatus.DONE:
-        raise Http404("Collection not found")
+        msg = "Collection not found"
+        raise Http404(msg)
 
     # Handle POST request for collection redemption
     if request.method == "POST":
@@ -755,18 +778,20 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> Union[H
 
     # For GET requests, prepare collection items list for display
     context["list"] = AccountingItemCollection.objects.filter(
-        collection=c, collection__association_id=context["association_id"]
+        collection=c,
+        collection__association_id=context["association_id"],
     ).select_related("member", "collection")
 
     # Render the redemption template with collection data
     return render(request, "larpmanager/member/acc_collection_redeem.html", context)
 
 
-def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse:
+def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:
     """Handle PayPal webhook for invoice payment confirmation."""
     # Temporary fix until PayPal fees are better understood
     if invoice_received_money(s):
         return JsonResponse({"res": "ok"})
+    return None
 
 
 @csrf_exempt
@@ -789,7 +814,7 @@ def acc_webhook_stripe(request: HttpRequest) -> JsonResponse:
 
 @csrf_exempt
 def acc_webhook_sumup(request: HttpRequest) -> JsonResponse:
-    # Process SumUp webhook and return success response
+    """Process SumUp webhook and return success response."""
     sumup_webhook(request)
     return JsonResponse({"res": "ok"})
 
@@ -813,7 +838,8 @@ def acc_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
 
 
 @login_required
-def acc_wait(request):
+def acc_wait(request: HttpRequest) -> HttpResponse:
+    """Render the account waiting page."""
     return render(request, "larpmanager/member/acc_wait.html")
 
 
@@ -839,6 +865,7 @@ def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> Ht
 
     Returns:
         HttpResponse: Redirect to either profile page or accounting page
+
     """
     # Get current user's membership for this association
     context = get_context(request)
@@ -868,28 +895,34 @@ def acc_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
 
 
 @login_required
-def acc_payed(request: HttpRequest, p: int = 0) -> HttpResponse:
+def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
     """Handle payment completion and redirect to profile check.
 
     Args:
         request: The HTTP request object containing user and association data
-        p: Payment invoice primary key. If 0, no specific invoice is processed
+        payment_id: Payment invoice primary key. If 0, no specific invoice is processed
 
     Returns:
         HttpResponse from acc_profile_check with success message and invoice
 
     Raises:
         Http404: If payment invoice with given pk doesn't exist or doesn't belong to user
+
     """
     # Check if a specific payment invoice ID was provided
     context = get_context(request)
-    if p:
+    if payment_id:
         try:
             # Retrieve the payment invoice for the current user and association
-            inv = PaymentInvoice.objects.get(pk=p, member=context["member"], association_id=context["association_id"])
+            inv = PaymentInvoice.objects.get(
+                pk=payment_id,
+                member=context["member"],
+                association_id=context["association_id"],
+            )
         except Exception as err:
             # Raise 404 if invoice not found or access denied
-            raise Http404("eeeehm") from err
+            msg = "eeeehm"
+            raise Http404(msg) from err
     else:
         # No specific invoice to process
         inv = None
@@ -918,10 +951,11 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
     Raises:
         Http404: If payment submission type is unknown
+
     """
     context = get_context(request)
     # Only allow POST requests for security
-    if not request.method == "POST":
+    if request.method != "POST":
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
@@ -974,8 +1008,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
 @login_required
 def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
-    """
-    Confirm accounting payment invoice with authorization checks.
+    """Confirm accounting payment invoice with authorization checks.
 
     Args:
         request: HTTP request object with user authentication
@@ -987,6 +1020,7 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     Raises:
         ObjectDoesNotExist: When invoice with given code is not found
         PermissionDenied: When user lacks authorization to confirm invoice
+
     """
     # Retrieve invoice by confirmation code and association ID
     context = get_context(request)
@@ -1014,10 +1048,9 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
                 found = True
 
     # For registration payments, check event permissions
-    if not found:
-        if inv.typ == PaymentType.REGISTRATION:
-            reg = Registration.objects.get(pk=inv.idx)
-            check_event_context(request, reg.run.get_slug())
+    if not found and inv.typ == PaymentType.REGISTRATION:
+        reg = Registration.objects.get(pk=inv.idx)
+        check_event_context(request, reg.run.get_slug())
 
     # Atomically update invoice status to confirmed
     with transaction.atomic():
@@ -1029,8 +1062,10 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     return redirect("home")
 
 
-def add_runs(ls, lis, future=True):
+def add_runs(ls: dict, lis: list, future: bool = True) -> None:
+    """Add runs from events to dictionary, optionally filtering past runs."""
     for e in lis:
+        # Filter and add runs to dictionary by ID
         for r in e.runs.all():
             if future and r.end < date.today():
                 continue

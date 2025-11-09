@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -51,6 +50,7 @@ class MyRegistrationView(RegistrationView):
 
         Raises:
             AuthenticationError: If user authentication fails after creation.
+
         """
         # Create new user from validated form data
         new_user = form.save()
@@ -60,7 +60,7 @@ class MyRegistrationView(RegistrationView):
             **{
                 User.USERNAME_FIELD: new_user.get_username(),
                 "password": form.cleaned_data["password1"],
-            }
+            },
         )
 
         # Log in the authenticated user and send registration signal
@@ -76,7 +76,7 @@ class MyRegistrationView(RegistrationView):
 
         return new_user
 
-    def get_success_url(self, user: Optional[Member] = None) -> str:
+    def get_success_url(self, user: Member | None = None) -> str:
         """Get URL to redirect to after successful registration.
 
         Determines the appropriate redirect URL after a user successfully completes
@@ -94,6 +94,7 @@ class MyRegistrationView(RegistrationView):
         Note:
             The 'next' URL is validated for security using Django's
             url_has_allowed_host_and_scheme to prevent open redirect vulnerabilities.
+
         """
         # Check for 'next' parameter in POST data first, then GET data
         next_url = self.request.POST.get("next") or self.request.GET.get("next")
@@ -110,6 +111,7 @@ class MyRegistrationView(RegistrationView):
 
         Returns:
             dict: Form kwargs including request object
+
         """
         form_kwargs = super().get_form_kwargs()
         form_kwargs["request"] = self.request
@@ -131,6 +133,7 @@ class MyPasswordResetConfirmView(PasswordResetConfirmView):
         Returns:
             HttpResponse: Response after processing form, typically a redirect
             to the login page or success page.
+
         """
         # Call parent form_valid to handle the actual password reset
         response = super().form_valid(form)

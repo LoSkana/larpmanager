@@ -19,9 +19,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
-from typing import Callable
+from collections.abc import Callable
 
 from django.conf import settings as conf_settings
+from django.http import HttpRequest
 from django.utils import translation
 
 
@@ -45,14 +46,14 @@ class LocaleAdvMiddleware:
 
         Returns:
             HttpResponse: Response with activated language
+
         """
         request.LANGUAGE_CODE = self.get_lang(request)
         translation.activate(request.LANGUAGE_CODE)
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
 
     @staticmethod
-    def get_lang(request) -> str:
+    def get_lang(request: HttpRequest) -> str:
         """Determine appropriate language for the request.
 
         Selects the most appropriate language based on a priority hierarchy:
@@ -70,6 +71,7 @@ class LocaleAdvMiddleware:
         Note:
             This function has the side effect of activating the selected language
             globally and modifying the request's HTTP_ACCEPT_LANGUAGE header.
+
         """
         # Force English in test environment to ensure consistent test results
         if os.getenv("PYTEST_CURRENT_TEST"):
@@ -88,10 +90,7 @@ class LocaleAdvMiddleware:
                     if browser_language == language_code:
                         is_language_supported = True
                 # Default to English if detected language is not supported
-                if not is_language_supported:
-                    selected_language = "en"
-                else:
-                    selected_language = browser_language
+                selected_language = "en" if not is_language_supported else browser_language
         else:
             # For anonymous users, rely on browser language detection
             selected_language = translation.get_language_from_request(request)

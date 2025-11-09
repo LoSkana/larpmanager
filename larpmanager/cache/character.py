@@ -20,7 +20,6 @@
 
 import os
 import shutil
-from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -42,11 +41,12 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
 
 
-def delete_all_in_path(path):
+def delete_all_in_path(path) -> None:
     """Recursively delete all contents within a directory path.
 
     Args:
         path (str): Directory path to clean
+
     """
     if os.path.exists(path):
         # Remove all contents inside the path
@@ -58,7 +58,7 @@ def delete_all_in_path(path):
                 shutil.rmtree(entry_path)
 
 
-def get_event_cache_all_key(event_run):
+def get_event_cache_all_key(event_run) -> str:
     """Generate cache key for event data.
 
     Args:
@@ -66,6 +66,7 @@ def get_event_cache_all_key(event_run):
 
     Returns:
         str: Cache key for event factions and characters
+
     """
     return f"event_factions_characters_{event_run.event.slug}_{event_run.number}"
 
@@ -83,6 +84,7 @@ def init_event_cache_all(context: dict) -> dict:
     Returns:
         dict: Cached event data including characters, factions, and
               optionally traits if questbuilder feature is enabled.
+
     """
     # Initialize empty result dictionary for cache storage
     cached_event_data = {}
@@ -113,6 +115,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     Returns:
         The updated results dictionary with character data, assignments, and max character number.
+
     """
     cache_result["chars"] = {}
 
@@ -130,7 +133,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     # Get list of assigned character IDs for mirror filtering
     assigned_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
-        "character_id", flat=True
+        "character_id",
+        flat=True,
     )
 
     # Process each character for the event cache
@@ -164,8 +168,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
 
 def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) -> None:
-    """
-    Retrieve and cache writing fields for characters in an event.
+    """Retrieve and cache writing fields for characters in an event.
 
     This function populates character data with their associated writing field
     responses, including both multiple choice selections and text answers.
@@ -181,6 +184,7 @@ def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) 
     Note:
         Function returns early if 'character' feature is not enabled or if
         no questions are available in the context.
+
     """
     # Early return if character feature is not enabled
     if "character" not in context["features"]:
@@ -242,15 +246,22 @@ def get_character_element_fields(
 ) -> dict:
     """Get writing element fields for a character."""
     return get_writing_element_fields(
-        context, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
+        context,
+        "character",
+        QuestionApplicable.CHARACTER,
+        character_id,
+        only_visible=only_visible,
     )
 
 
 def get_writing_element_fields(
-    context: dict, feature_name: str, applicable, element_id: int, only_visible: bool = True
+    context: dict,
+    feature_name: str,
+    applicable,
+    element_id: int,
+    only_visible: bool = True,
 ) -> dict:
-    """
-    Get writing fields for a specific element with visibility filtering.
+    """Get writing fields for a specific element with visibility filtering.
 
     Retrieves writing questions, options, and field values for a given element,
     applying visibility filters based on context configuration.
@@ -269,6 +280,7 @@ def get_writing_element_fields(
             - questions: Available questions from context
             - options: Available options from context
             - fields: Mapping of question_id to field values (text or list of option_ids)
+
     """
     # Apply visibility filtering to populate context with visible fields
     visible_writing_fields(context, applicable, only_visible=only_visible)
@@ -276,7 +288,7 @@ def get_writing_element_fields(
     # Filter questions based on visibility configuration
     # Only include questions that are explicitly shown or when show_all is enabled
     visible_question_ids = []
-    for question_id in context["questions"].keys():
+    for question_id in context["questions"]:
         question_config_key = str(question_id)
         # Skip questions not marked as visible unless showing all
         if "show_all" not in context and question_config_key not in context[f"show_{feature_name}"]:
@@ -323,6 +335,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         - Creates a fake faction (number 0) for characters without primary factions
         - Only includes factions that have associated characters
         - Organizes factions by type for easy lookup
+
     """
     # Initialize faction data structures
     result["factions"] = {}
@@ -399,6 +412,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
         - quests: Mapping of quest numbers to their display data
         - traits: Mapping of trait numbers to enhanced trait data with relationships
         - max_tr_number: Maximum trait number or 0 if no traits exist
+
     """
     # Build quest types mapping ordered by number
     res["quest_types"] = {}
@@ -433,7 +447,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
 
         # Find the character this trait is assigned to
         found_character = None
-        for _number, character in res["chars"].items():
+        for character in res["chars"].values():
             if "player_id" in character and character["player_id"] == assignment_trait.member_id:
                 found_character = character
                 break
@@ -463,6 +477,7 @@ def get_event_cache_all(context: dict) -> None:
 
     Args:
         context: Context dictionary containing run information.
+
     """
     # Get cache key for the current run
     cache_key = get_event_cache_all_key(context["run"])
@@ -492,11 +507,12 @@ def reset_event_cache_all(run: Run) -> None:
 
 
 def update_character_fields(instance, character_data: dict) -> None:
-    """Updates character fields with event-specific data if character features are enabled.
+    """Update character fields with event-specific data if character features are enabled.
 
     Args:
         instance: Event instance with event_id attribute
         character_data: Dictionary to update with character element fields
+
     """
     # Check if character features are enabled for this event
     enabled_features = get_event_features(instance.event_id)
@@ -521,6 +537,7 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
 
     Returns:
         None
+
     """
     # Get the cache key for the event and retrieve cached data
     cache_key = get_event_cache_all_key(run)
@@ -548,12 +565,13 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
 
 
 def update_event_cache_all_character_reg(character_registration, cache_result: dict, event_run) -> None:
-    """Updates character registration cache data for an event.
+    """Update character registration cache data for an event.
 
     Args:
         character_registration: Character registration instance
         cache_result: Result dictionary to update with character data
         event_run: Event run instance
+
     """
     # Get character from registration instance
     character = character_registration.character
@@ -563,7 +581,9 @@ def update_event_cache_all_character_reg(character_registration, cache_result: d
 
     # Search and update player information
     search_player(
-        character, character_display_data, {"run": event_run, "assignments": {character.number: character_registration}}
+        character,
+        character_display_data,
+        {"run": event_run, "assignments": {character.number: character_registration}},
     )
 
     # Initialize character entry if not exists
@@ -581,6 +601,7 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
         instance: Character instance to update
         res: Result dictionary to store character data
         run: Event run context
+
     """
     # Generate character display data for the specific run
     character_display_data = instance.show(run)
@@ -600,7 +621,7 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 
 
 def update_event_cache_all_faction(instance, res: dict) -> None:
-    """Updates or adds faction data in the cache result dictionary."""
+    """Update or add faction data in the cache result dictionary."""
     faction_data = instance.show()
     if instance.number in res["factions"]:
         res["factions"][instance.number].update(faction_data)
@@ -618,6 +639,7 @@ def has_different_cache_values(instance: object, previous_instance: object, attr
 
     Returns:
         True if any attribute differs, False otherwise
+
     """
     for attribute_name in attributes_to_check:
         # Get attribute values from both instances
@@ -635,7 +657,8 @@ def update_member_event_character_cache(instance: Member) -> None:
     """Update event cache for all active character registrations of a member."""
     # Get all active character registrations for this member
     active_character_registrations = RegistrationCharacterRel.objects.filter(
-        reg__member_id=instance.id, reg__cancellation_date__isnull=True
+        reg__member_id=instance.id,
+        reg__cancellation_date__isnull=True,
     )
     active_character_registrations = active_character_registrations.select_related("character", "reg", "reg__run")
 
@@ -675,7 +698,7 @@ def on_character_factions_m2m_changed(sender, **kwargs) -> None:
         return
 
     # Get the faction instance and clear related event cache
-    instance: Optional[Faction] = kwargs.pop("instance", None)
+    instance: Faction | None = kwargs.pop("instance", None)
     clear_event_cache_all_runs(instance.event)
 
 
@@ -688,6 +711,7 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
 
     Args:
         instance: The Faction instance being saved.
+
     """
     # Handle new faction creation - clear all event caches
     if not instance.pk:
@@ -741,6 +765,7 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
 
     Args:
         instance: The trait instance being saved.
+
     """
     # Clear cache for new traits
     if not instance.pk:

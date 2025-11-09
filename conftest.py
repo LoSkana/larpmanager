@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Pytest configuration and fixtures for LarpManager test suite."""
+
 import logging
 import os
 import subprocess
@@ -28,6 +30,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
+from django.http import HttpRequest
 
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationSkin
@@ -40,18 +43,18 @@ _DB_INITIALIZED = {}
 
 
 @pytest.fixture(autouse=True, scope="session")
-def _env_for_tests():
+def _env_for_tests() -> None:
     os.environ.setdefault("PYTHONHASHSEED", "0")
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 
 @pytest.fixture(autouse=True)
-def _email_backend(settings):
+def _email_backend(settings) -> None:
     settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 
 @pytest.fixture(autouse=True)
-def _cache_isolation(settings):
+def _cache_isolation(settings) -> None:
     settings.CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -63,6 +66,7 @@ def _cache_isolation(settings):
 
 @pytest.fixture
 def pw_page(pytestconfig, browser_type, live_server):
+    """Prepares browser, context and finally page, for playwright tests."""
     headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
 
     browser = browser_type.launch(headless=not headed, slow_mo=50)
@@ -76,7 +80,7 @@ def pw_page(pytestconfig, browser_type, live_server):
 
     page.on("dialog", lambda dialog: dialog.accept())
 
-    def on_response(response):
+    def on_response(response) -> None:
         error_status = 500
         if response.status == error_status:
             raise AssertionError(f"HTTP 500 su {response.url}")
@@ -89,7 +93,7 @@ def pw_page(pytestconfig, browser_type, live_server):
     browser.close()
 
 
-def _truncate_app_tables():
+def _truncate_app_tables() -> None:
     with connection.cursor() as cur:
         cur.execute(r"""
         DO $$
@@ -111,11 +115,13 @@ def _truncate_app_tables():
         END$$;""")
 
 
-def psql(params, env):
-    subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)
+def psql(params, env) -> None:
+    """Performs a query on the db."""
+    subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)  # noqa: S603
 
 
-def clean_db(host, env, name, user):
+def clean_db(host, env, name, user) -> None:
+    """Drop the schema and recreate it."""
     psql(
         [
             "psql",
@@ -150,7 +156,7 @@ def _database_has_tables():
         return count > 0
 
 
-def _load_test_db_sql():
+def _load_test_db_sql() -> None:
     """Load test database from SQL file."""
     env = os.environ.copy()
     env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
@@ -170,15 +176,14 @@ def _load_test_db_sql():
     psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", str(sql_path)], env)
 
 
-def _reload_fixtures():
+def _reload_fixtures() -> None:
     _truncate_app_tables()
     call_command("init_db")
 
 
 @pytest.fixture(autouse=True, scope="function")
-def _e2e_db_setup(request, django_db_blocker):
-    """Setup database for e2e tests with single database per worker."""
-
+def _e2e_db_setup(request: HttpRequest, django_db_blocker):
+    """Set up database for e2e tests with single database per worker."""
     with django_db_blocker.unblock():
         if not _database_has_tables():
             # No tables - load from SQL dump
@@ -191,7 +196,7 @@ def _e2e_db_setup(request, django_db_blocker):
 
 
 @pytest.fixture(autouse=True)
-def _ensure_association_skin(db):
+def _ensure_association_skin(db) -> None:
     """Ensure default AssociationSkin and AssociationRole exist for tests."""
     if not AssociationSkin.objects.filter(pk=1).exists():
         AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")

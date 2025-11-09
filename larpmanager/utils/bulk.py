@@ -39,32 +39,25 @@ from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot
 from larpmanager.utils.exceptions import ReturnNowError
 
 
-def _get_bulk_params(request, context) -> tuple[list[int], int, int]:
-    """
-    Extract and validate bulk operation parameters from request.
+def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[int], int, int]:
+    """Extract and validate bulk operation parameters from request.
 
     Extracts operation ID, target ID, and a list of entity IDs from the request,
     validates the data types, and logs the bulk operation attempt.
 
-    Parameters
-    ----------
-    request : HttpRequest
-        HTTP request object containing POST data with operation parameters
-    context : dict
-        Context dictionary containing event/run information and association ID
+    Args:
+        request: HTTP request object containing POST data with operation parameters
+        context: Context dictionary containing event/run information and association ID
 
-    Returns
-    -------
-    tuple[list[int], int, int]
-        A tuple containing:
-        - entity_ids: List of validated integer IDs for bulk operation
-        - operation_code: Integer operation code (defaults to 0 if invalid)
-        - target_code: Integer target code (defaults to 0 if invalid)
+    Returns:
+        :tuple[list[int], int, int]: A tuple containing:
+            - entity_ids: List of validated integer IDs for bulk operation
+            - operation_code: Integer operation code (defaults to 0 if invalid)
+            - target_code: Integer target code (defaults to 0 if invalid)
 
-    Raises
-    ------
-    ReturnNowError
-        If no valid IDs are provided in the request
+    Raises:
+        ReturnNowError: If no valid IDs are provided in the request
+
     """
     # Extract and validate operation parameter, default to 0 for invalid values
     try:
@@ -141,6 +134,7 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
 
     Raises:
         ObjectDoesNotExist: When target objects for the operation are not found
+
     """
     # Extract bulk operation parameters from request
     object_ids, operation_name, operation_target = _get_bulk_params(request, context)
@@ -163,7 +157,8 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
 def _get_inv_items(warehouse_item_ids: list[int], context: dict) -> list[int]:
     """Get warehouse item IDs filtered by association."""
     return WarehouseItem.objects.filter(
-        association_id=context["association_id"], pk__in=warehouse_item_ids
+        association_id=context["association_id"],
+        pk__in=warehouse_item_ids,
     ).values_list("pk", flat=True)
 
 
@@ -212,6 +207,7 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
 
     Raises:
         ReturnNowError: If POST request processed successfully with operation results
+
     """
     if request.POST:
         # Define mapping of operation types to their execution functions
@@ -247,13 +243,13 @@ def _get_chars(context: dict, character_ids: list) -> list:
     return context["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
 
 
-def exec_add_char_fact(request, context, target, ids) -> None:
+def exec_add_char_fact(request: HttpRequest, context: dict, target, ids) -> None:
     """Add characters to a faction."""
     fact = context["event"].get_elements(Faction).get(pk=target)
     fact.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_fact(request, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_fact(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a faction."""
     fact = context["event"].get_elements(Faction).get(pk=target)
     fact.characters.remove(*_get_chars(context, ids))
@@ -265,7 +261,7 @@ def exec_add_char_plot(request: HttpRequest, context: dict, target: int, ids: li
     plot.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_plot(request, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_plot(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a plot element."""
     plot = context["event"].get_elements(Plot).get(pk=target)
     plot.characters.remove(*_get_chars(context, ids))
@@ -282,7 +278,7 @@ def exec_add_char_delivery(
     delivery.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_delivery(request, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_delivery(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from delivery."""
     delivery = context["event"].get_elements(DeliveryPx).get(pk=target)
     delivery.characters.remove(*_get_chars(context, ids))
@@ -322,7 +318,7 @@ def exec_set_char_assigned(request: HttpRequest, context: dict[str, Any], target
     context["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
 
-def exec_set_char_status(request, context: dict, target: str, ids: list[int]) -> None:
+def exec_set_char_status(request: HttpRequest, context: dict, target: str, ids: list[int]) -> None:
     """Update character status for specified characters in the event."""
     context["event"].get_elements(Character).filter(pk__in=ids).update(status=target)
 
@@ -343,6 +339,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
 
     Raises:
         ReturnNowError: When POST request is processed, containing execution results.
+
     """
     # Handle POST request by executing the requested bulk operation
     if request.POST:
@@ -373,7 +370,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_FACT, "label": _("Add to faction"), "objs": factions},
                 {"idx": Operations.DEL_CHAR_FACT, "label": _("Remove from faction"), "objs": factions},
-            ]
+            ],
         )
 
     # Add plot-related operations if plot feature is enabled
@@ -383,7 +380,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
                 {"idx": Operations.DEL_CHAR_PLOT, "label": _("Remove from plot"), "objs": plots},
-            ]
+            ],
         )
 
     # Add prologue-related operations if prologue feature is enabled
@@ -393,7 +390,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_PROLOGUE, "label": _("Add prologue"), "objs": prologues},
                 {"idx": Operations.DEL_CHAR_PROLOGUE, "label": _("Remove prologue"), "objs": prologues},
-            ]
+            ],
         )
 
     # Add XP delivery operations if px feature is enabled
@@ -403,14 +400,14 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
                 {"idx": Operations.DEL_CHAR_DELIVERY, "label": _("Remove from xp delivery"), "objs": delivery},
-            ]
+            ],
         )
 
     # Add progress step operation if progress feature is enabled
     if "progress" in context["features"]:
         progress_steps = context["event"].get_elements(ProgressStep).values("id", "name").order_by("order")
         context["bulk"].append(
-            {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps}
+            {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps},
         )
 
     # Add staff assignment operation if assigned feature is enabled
@@ -419,14 +416,14 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
         event_staff = get_event_staffers(context["event"])
         staff_members = [{"id": m.id, "name": m.show_nick()} for m in event_staff]
         context["bulk"].append(
-            {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members}
+            {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members},
         )
 
     # Add status assignment operation if enabled
     if get_event_config(context["event"].id, "user_character_approval", False, context):
         status_choices = [{"id": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
         context["bulk"].append(
-            {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices}
+            {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices},
         )
 
 
@@ -441,12 +438,13 @@ def exec_set_quest_type(
     context["event"].get_elements(Quest).filter(pk__in=ids).update(typ=quest_type)
 
 
-def handle_bulk_quest(request, context) -> None:
+def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
     """Handle bulk operations for quest management.
 
     Args:
         request: HTTP request object
         context: Context dictionary containing event and other data
+
     """
     # Handle POST request - execute bulk operations
     if request.POST:
@@ -495,7 +493,7 @@ def exec_set_ability_type(
     target: str | int,
     ids: list[int] | QuerySet,
 ) -> None:
-    """Updates ability type for selected abilities in bulk."""
+    """Update ability type for selected abilities in bulk."""
     # Get target ability type from event elements
     typ = context["event"].get_elements(AbilityTypePx).get(pk=target)
     # Update all selected abilities with new type
@@ -508,6 +506,7 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     Args:
         request: HTTP request object
         context: Context dictionary containing event data
+
     """
     if request.POST:
         # Execute bulk operation and return early if POST request

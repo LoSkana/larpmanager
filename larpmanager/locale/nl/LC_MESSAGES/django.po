@@ -534,6 +534,9 @@ msgstr "Voettekst"
 msgid "Fourth"
 msgstr "Vierde"
 
+msgid "Friend"
+msgstr "Vriend"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -1511,6 +1514,9 @@ msgstr "IP-adres"
 
 msgid "IP address"
 msgstr "IP-adres"
+
+msgid "Influencer"
+msgstr "Beïnvloeder"
 
 msgid "Kicked out"
 msgstr "Opgejaagd"

@@ -45,6 +45,7 @@ def get_client_ip(request: HttpRequest) -> str:
 
     Returns:
         The client's IP address as a string
+
     """
     x_forwarded_for_header = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for_header:
@@ -73,12 +74,14 @@ def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_stat
 
     Returns:
         None. Errors are logged and admins are notified, but exceptions are suppressed.
+
     """
     try:
         # Get or create a system member for API logging
         # This ensures all API logs are associated with a consistent system user
-        system_member, created = Member.objects.get_or_create(
-            username="api_system", defaults={"email": "api@larpmanager.com", "first_name": "API", "last_name": "System"}
+        system_member, _created = Member.objects.get_or_create(
+            username="api_system",
+            defaults={"email": "api@larpmanager.com", "first_name": "API", "last_name": "System"},
         )
 
         # Build comprehensive log data dictionary
@@ -120,6 +123,7 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
 
     Raises:
         None: All exceptions are handled internally and returned as error responses
+
     """
     # Extract API key from GET parameters
     api_key_string = request.GET.get("api_key")
@@ -139,7 +143,7 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
 
 @require_GET
 def published_events(request: HttpRequest) -> JsonResponse:
-    """API endpoint to get upcoming runs from associations with publisher feature enabled.
+    """Get upcoming runs from associations with publisher feature enabled.
 
     This endpoint returns a list of upcoming LARP events from associations that have
     the publisher feature enabled. It validates API keys and restricts access to the
@@ -157,6 +161,7 @@ def published_events(request: HttpRequest) -> JsonResponse:
     Raises:
         JsonResponse: Returns error responses for invalid API keys, domain restrictions,
                      or internal server errors (status codes: 403, 401, 500)
+
     """
     # Restrict access to primary domain only in production environments
     if not settings.DEBUG and hasattr(request, "association") and request.association.get("id", 0) != 0:
@@ -170,7 +175,8 @@ def published_events(request: HttpRequest) -> JsonResponse:
     try:
         # Query associations that have publisher feature enabled and are not deleted
         publisher_associations = Association.objects.filter(
-            features__slug="publisher", deleted__isnull=True
+            features__slug="publisher",
+            deleted__isnull=True,
         ).select_related("skin")
 
         # Get all upcoming runs from publisher associations, ordered by start date
@@ -247,5 +253,4 @@ def published_events(request: HttpRequest) -> JsonResponse:
         # Return appropriate error response based on debug mode
         if settings.DEBUG:
             return JsonResponse({"error": str(e)}, status=500)
-        else:
-            return JsonResponse({"error": "Internal server error"}, status=500)
+        return JsonResponse({"error": "Internal server error"}, status=500)

@@ -24,7 +24,7 @@ from django.core.cache import cache
 from larpmanager.models.event import EventButton
 
 
-def event_button_key(event_id):
+def event_button_key(event_id) -> str:
     """Generate cache key for event buttons.
 
     Args:
@@ -32,6 +32,7 @@ def event_button_key(event_id):
 
     Returns:
         str: Cache key for event buttons
+
     """
     return f"event_button_{event_id}"
 
@@ -51,6 +52,7 @@ def update_event_button(event_id: int) -> list[tuple[str, str, str]]:
 
     Side effects:
         Updates the cache with current button data using a 1-day timeout.
+
     """
     buttons_data = []
 
@@ -73,6 +75,7 @@ def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
 
     Returns:
         List of (name, tooltip, link) tuples for event buttons.
+
     """
     # Check if buttons are already cached for this event
     cache_key = event_button_key(event_id)
@@ -87,5 +90,6 @@ def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:
     return cached_buttons
 
 
-def clear_event_button_cache(event_id):
+def clear_event_button_cache(event_id) -> None:
+    """Clear cached event button data for given event ID."""
     cache.delete(event_button_key(event_id))

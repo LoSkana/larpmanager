@@ -36,7 +36,8 @@ def clear_larpmanager_home_cache() -> None:
     cache.delete(cache_larpmanager_home_key())
 
 
-def cache_larpmanager_home_key():
+def cache_larpmanager_home_key() -> str:
+    """Generate cache key for larpmanager home data."""
     return "cache_lm_home"
 
 
@@ -45,6 +46,7 @@ def get_cache_lm_home() -> dict:
 
     Returns:
         Cached or freshly computed home data.
+
     """
     # Get cache key and attempt to retrieve cached data
     cache_key = cache_larpmanager_home_key()
@@ -72,6 +74,7 @@ def update_cache_lm_home() -> dict[str, int | list]:
             - promoters: List of promoter data
             - showcase: List of showcase items
             - reviews: List of review data
+
     """
     context = {}
 
@@ -98,6 +101,7 @@ def _get_reviews() -> list[dict]:
 
     Returns:
         List of review dictionaries.
+
     """
     reviews = []
     # Convert each review object to dictionary representation
@@ -120,6 +124,7 @@ def _get_promoters() -> list[dict]:
 
     Returns:
         List of promoter dictionaries from associations with valid promoter data.
+
     """
     # Filter associations that have promoter data
     associations_queryset = Association.objects.exclude(promoter__isnull=True)

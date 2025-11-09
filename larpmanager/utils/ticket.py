@@ -28,6 +28,7 @@ from pathlib import Path
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest
 from django.utils import timezone
 
 from larpmanager.models.association import Association
@@ -36,7 +37,7 @@ from larpmanager.utils.tasks import background_auto, my_send_mail
 
 
 @background_auto(queue="analyze_ticket")
-def analyze_ticket_bgk(ticket_id):
+def analyze_ticket_bgk(ticket_id) -> None:
     """Analyze a ticket and send result email to admins and maintainers.
 
     Args:
@@ -44,10 +45,12 @@ def analyze_ticket_bgk(ticket_id):
 
     Raises:
         Exception: If Claude is not available or ticket not found
+
     """
     # Verify connection
     if not _test_connection():
-        raise Exception("Claude not available!")
+        msg = "Claude not available!"
+        raise Exception(msg)
 
     try:
         ticket = LarpManagerTicket.objects.get(id=ticket_id)
@@ -60,12 +63,12 @@ def analyze_ticket_bgk(ticket_id):
         # Send result email to admins and maintainers
         _send_analysis_result_email(ticket)
     except ObjectDoesNotExist as err:
-        raise Exception(f"Ticket #{ticket_id} not found") from err
+        msg = f"Ticket #{ticket_id} not found"
+        raise Exception(msg) from err
 
 
 def _analyze_ticket(ticket):
-    """Analyzes the ticket using Claude in a separate analysis directory"""
-
+    """Analyzes the ticket using Claude in a separate analysis directory."""
     # Get the analysis directory (sibling to the current project directory)
     current_dir = Path(__file__).resolve().parent.parent.parent
     analysis_dir = current_dir.parent / "analysis"
@@ -99,7 +102,7 @@ def _analyze_ticket(ticket):
 
     # Build the command and run it in the analysis directory
     result = subprocess.run(
-        ["claude", "--print"],
+        ["claude", "--print"],  # noqa: S607
         check=False,
         input=prompt,
         capture_output=True,
@@ -112,7 +115,8 @@ def _analyze_ticket(ticket):
     output = result.stdout.strip()
 
     if result.returncode != 0:
-        raise Exception(f"Claude Error: {result.stderr} - {output} - {analysis_dir}")
+        msg = f"Claude Error: {result.stderr} - {output} - {analysis_dir}"
+        raise Exception(msg)
 
     # Extract JSON from response
     json_match = re.search(r"\{.*\}", output, re.DOTALL)
@@ -133,23 +137,22 @@ def _analyze_ticket(ticket):
             {analysis_data.get("confidence", 0.0)}
         """
         return response, priority
-    else:
-        # Fallback: use entire response as text
-        return output, 0.5
+    # Fallback: use entire response as text
+    return output, 0.5
 
 
 def _test_connection():
-    """Verify that Claude is installed and configured"""
-
-    result = subprocess.run(["claude", "--version"], check=False, capture_output=True, text=True, timeout=5)
+    """Verify that Claude is installed and configured."""
+    result = subprocess.run(["claude", "--version"], check=False, capture_output=True, text=True, timeout=5)  # noqa: S607
     return result.returncode == 0
 
 
-def _send_analysis_result_email(ticket):
+def _send_analysis_result_email(ticket) -> None:
     """Send analysis result email to admins and association maintainers.
 
     Args:
         ticket: LarpManagerTicket instance with completed analysis
+
     """
     # Build email subject
     subject = f"Ticket Analysis Complete - {ticket.association.name} [Ticket #{ticket.id}]"
@@ -186,7 +189,7 @@ def _send_analysis_result_email(ticket):
     #     my_send_mail(subject, body, maintainer.email)
 
 
-def create_error_ticket(request):
+def create_error_ticket(request: HttpRequest):
     """Create an error ticket automatically when an error occurs.
 
     Only creates one ticket per day for the same error to avoid spam.
@@ -196,13 +199,14 @@ def create_error_ticket(request):
 
     Returns:
         LarpManagerTicket instance if created, None if duplicate exists
+
     """
     # Get the exception if available
     exc_info = sys.exc_info()
     exception = exc_info[1] if exc_info[1] else None
 
     if exception is None:
-        return
+        return None
 
     # Get association from request context if available
     association = None
@@ -239,7 +243,7 @@ def create_error_ticket(request):
         content = content[:max_length] + "\n...(truncated)"
 
     # Create unique identifier for this error (hash of error type + message)
-    error_identifier = hashlib.md5(f"{error_type}:{error_message}".encode()).hexdigest()
+    error_identifier = hashlib.md5(f"{error_type}:{error_message}".encode()).hexdigest()  # noqa: S324
 
     # Check if a similar error ticket was created today
     today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
@@ -255,12 +259,10 @@ def create_error_ticket(request):
         return None
 
     # Create the error ticket
-    ticket = LarpManagerTicket.objects.create(
+    return LarpManagerTicket.objects.create(
         association=association,
         reason="error",
         email="system@larpmanager.com",
         content=f"[{error_identifier}]\n\n{content}",
         member=None,  # System-generated ticket
     )
-
-    return ticket

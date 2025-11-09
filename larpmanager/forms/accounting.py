@@ -79,6 +79,7 @@ class OrgaPersonalExpenseForm(MyFormRun):
         Args:
             *args: Variable length argument list passed to parent constructor.
             **kwargs: Arbitrary keyword arguments passed to parent constructor.
+
         """
         # Initialize parent form with all provided arguments
         super().__init__(*args, **kwargs)
@@ -420,6 +421,7 @@ class CollectionNewForm(MyForm):
         widgets = {"cod": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize collection new form."""
         super().__init__(*args, **kwargs)
 
 
@@ -498,8 +500,8 @@ class WireInvoiceSubmitForm(InvoiceSubmitForm):
                     "image/tiff",
                     "image/webp",
                     "application/pdf",
-                ]
-            )
+                ],
+            ),
         ],
         label=PaymentInvoice._meta.get_field("invoice").verbose_name,
         help_text=_("Upload a PDF file or image (JPG, PNG, etc.)"),
@@ -517,9 +519,8 @@ class WireInvoiceSubmitForm(InvoiceSubmitForm):
         super().__init__(*args, **kwargs)
 
         # Remove invoice field when receipt is not required
-        if not require_receipt:
-            if "invoice" in self.fields:
-                del self.fields["invoice"]
+        if not require_receipt and "invoice" in self.fields:
+            del self.fields["invoice"]
 
 
 class AnyInvoiceSubmitForm(InvoiceSubmitForm):
@@ -548,6 +549,7 @@ class RefundRequestForm(MyForm):
             member: Member instance to extract credit limit from
             *args: Variable length argument list passed to parent
             **kwargs: Arbitrary keyword arguments passed to parent
+
         """
         # Extract member from kwargs and initialize parent form
         super().__init__(*args, **kwargs)
@@ -585,12 +587,13 @@ class ExePaymentSettingsForm(MyForm):
             "payment_methods": forms.CheckboxSelectMultiple,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize PaymentMethodForm with dynamic payment method configuration.
 
         Args:
             *args: Variable length argument list passed to parent
             **kwargs: Arbitrary keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
 
@@ -618,7 +621,7 @@ class ExePaymentSettingsForm(MyForm):
                 help_dict = {
                     "descr": _("Description of this payment method to be displayed to the user"),
                     "fee": _(
-                        "Percentage to be retained by the payment system - enter the value as a number, without the percentage symbol"
+                        "Percentage to be retained by the payment system - enter the value as a number, without the percentage symbol",
                     ),
                 }
                 if label in help_dict:
@@ -661,6 +664,7 @@ class ExePaymentSettingsForm(MyForm):
         Note:
             Changes are tracked by storing old values with timestamped keys.
             Description and fee fields are not masked for readability.
+
         """
         instance = super().save(commit=commit)
 
@@ -668,7 +672,7 @@ class ExePaymentSettingsForm(MyForm):
         res = get_payment_details(self.instance)
 
         # Iterate through payment detail fields by category
-        for _slug, lst in self.get_payment_details_fields().items():
+        for lst in self.get_payment_details_fields().values():
             for el in lst:
                 # Process only fields present in cleaned form data
                 if el in self.cleaned_data:
@@ -676,17 +680,11 @@ class ExePaymentSettingsForm(MyForm):
                     input_value = self.cleaned_data[el]
 
                     # Get original value or default to empty string
-                    if el in res:
-                        orig_value = res[el]
-                    else:
-                        orig_value = ""
+                    orig_value = res.get(el, "")
 
                     # Apply masking based on field type
                     # Description and fee fields remain unmasked for clarity
-                    if el.endswith(("_descr", "_fee")):
-                        data_string = orig_value
-                    else:
-                        data_string = self.mask_string(orig_value)
+                    data_string = orig_value if el.endswith(("_descr", "_fee")) else self.mask_string(orig_value)
 
                     # Track changes only when values actually differ
                     if input_value != data_string:
@@ -715,6 +713,7 @@ class ExePaymentSettingsForm(MyForm):
         Returns:
             dict[str, list[str]]: Mapping of payment method slugs to field name lists.
                 Each list contains field names in format: {slug}_{field_type}.
+
         """
         payment_method_fields: dict[str, list[str]] = {}
 
@@ -750,8 +749,7 @@ class ExePaymentSettingsForm(MyForm):
             middle_section_length = len(input_string) - minimum_maskable_length
             masked_middle_section = "*" * middle_section_length
             return first_three_chars + masked_middle_section + last_three_chars
-        else:
-            return input_string
+        return input_string
 
     def clean(self) -> dict[str, any]:
         """Validate and normalize fee field values.
@@ -768,6 +766,7 @@ class ExePaymentSettingsForm(MyForm):
         Raises:
             ValidationError: Added to form errors when fee values are invalid
                            (non-numeric or negative).
+
         """
         # Get initial cleaned data from parent class
         cleaned = super().clean()

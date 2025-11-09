@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""
-Analyze Python codebase and extract function statistics.
+"""Analyze Python codebase and extract function statistics.
+
 Outputs a CSV file with function name, file path, and line count, sorted by line count.
 """
 
@@ -56,8 +56,8 @@ def analyze_codebase(root_dir="."):
     return all_functions
 
 
-def main():
-    """Main entry point."""
+def main() -> None:
+    """Run the main analysis."""
     print("Analyzing codebase...")
 
     # Get the project root (parent of scripts directory)

@@ -534,6 +534,9 @@ msgstr "Pied de page"
 msgid "Fourth"
 msgstr "Quatrième"
 
+msgid "Friend"
+msgstr "Ami"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -1511,6 +1514,9 @@ msgstr "Adresse IP"
 
 msgid "IP address"
 msgstr "Adresse IP"
+
+msgid "Influencer"
+msgstr "Influenceur"
 
 msgid "Kicked out"
 msgstr "Chassé"

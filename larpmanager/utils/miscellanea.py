@@ -18,12 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import json
+import logging
 import os
 import random
 import shutil
 import zipfile
 from io import BytesIO
-from typing import Optional
 from uuid import uuid4
 from zipfile import ZipFile
 
@@ -38,6 +38,8 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+
+logger = logging.getLogger(__name__)
 
 
 def upload_albums_dir(main, cache_subs: dict, name: str):
@@ -57,6 +59,7 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
     Side Effects:
         - Creates new Album instances in database for missing directories
         - Updates cache_subs dictionary with newly created albums
+
     """
     # Extract directory path, removing filename component
     directory_path = os.path.dirname(name)
@@ -115,6 +118,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     Returns:
         None
+
     """
     # Check if file already exists in album to avoid duplicates
     upload_name = os.path.basename(name)
@@ -159,7 +163,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     # Complete the file path with unique filename
     destination_path = os.path.join(destination_path, unique_filename)
-    print(destination_path)
+    logger.debug(f"Uploading album image to: {destination_path}")
 
     # Move file from extraction path to final destination
     os.rename(os.path.join(o_path, name), destination_path)
@@ -171,7 +175,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     album_image.save()
 
 
-def upload_albums(main, el):
+def upload_albums(main, el) -> None:
     """Extract and upload all files from zip archive to album structure.
 
     Args:
@@ -180,6 +184,7 @@ def upload_albums(main, el):
 
     Side effects:
         Extracts zip file, creates album structure, uploads all images
+
     """
     cache_subalbums = {}
 
@@ -199,7 +204,7 @@ def upload_albums(main, el):
     shutil.rmtree(extraction_path)
 
 
-def zipdir(path, ziph):
+def zipdir(path, ziph) -> None:
     """Recursively add directory contents to zip file.
 
     Args:
@@ -208,6 +213,7 @@ def zipdir(path, ziph):
 
     Side effects:
         Adds all files in directory tree to zip archive
+
     """
     for root, _dirs, files in os.walk(path):
         for file in files:
@@ -217,7 +223,7 @@ def zipdir(path, ziph):
             )
 
 
-def check_centauri(request: HttpRequest, context: dict) -> Optional[HttpResponse]:
+def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
     """Check and display Centauri easter egg feature.
 
     Randomly triggers a special Centauri easter egg feature that displays custom content
@@ -236,20 +242,24 @@ def check_centauri(request: HttpRequest, context: dict) -> Optional[HttpResponse
     Side Effects:
         Awards a configurable badge to the authenticated user if Centauri is triggered
         and a badge is configured for the association.
+
     """
     # Early return if Centauri feature is not enabled for this association
     if "centauri" not in context["features"]:
-        return
+        return None
 
     # Check random probability condition for triggering Centauri
     if not _go_centauri(context):
-        return
+        return None
 
     # Build template context with association-specific Centauri content
     template_context = {}
     for config_key in ["centauri_descr", "centauri_content"]:
         template_context[config_key] = get_association_config(
-            context["association_id"], config_key, None, template_context
+            context["association_id"],
+            config_key,
+            None,
+            template_context,
         )
 
     # Award badge to user if configured for this association
@@ -271,6 +281,7 @@ def _go_centauri(context: dict) -> bool:
 
     Returns:
         bool: True if Centauri should be displayed
+
     """
     if not context["member"]:
         return False
@@ -285,14 +296,11 @@ def _go_centauri(context: dict) -> bool:
     if not centauri_probability:
         return False
 
-    random_value = random.randint(0, 1000)
-    if random_value > centauri_probability:
-        return False
-
-    return True
+    random_value = random.randint(0, 1000)  # noqa: S311
+    return not random_value > centauri_probability
 
 
-def get_warehouse_optionals(context, default_columns):
+def get_warehouse_optionals(context, default_columns) -> None:
     """Get warehouse optional field configuration for display.
 
     Args:
@@ -301,6 +309,7 @@ def get_warehouse_optionals(context, default_columns):
 
     Side effects:
         Updates context with optionals configuration and header column settings
+
     """
     optionals = {}
     has_active_optional = 0
@@ -332,6 +341,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
         - Handles EXIF orientation data automatically
         - Optimizes JPEG quality and converts RGBA/LA/P modes to RGB for JPEG format
         - Silently returns on any errors to avoid breaking the calling process
+
     """
     # Validate that the instance has a photo ImageField
     try:
@@ -402,6 +412,7 @@ def _get_extension(uploaded_file, image) -> str:
 
     Returns:
         str: Image format string (e.g., 'JPEG', 'PNG', 'WEBP')
+
     """
     # Extract file extension and normalize to lowercase
     file_extension = os.path.splitext(uploaded_file.name)[1].lower()
@@ -434,6 +445,7 @@ def _check_new(file_field, instance, sender) -> bool:
     Returns:
         True if this is not a new file upload (file already exists and unchanged),
         False if this is a new file upload or the file has changed
+
     """
     # Check if instance already exists in database
     if instance.pk:
@@ -448,9 +460,9 @@ def _check_new(file_field, instance, sender) -> bool:
                 # Compare file names and check if no new file data is present
                 if file_field.name == existing_file_name and not getattr(file_field, "file", None):
                     return True
-        except Exception:
+        except Exception as e:
             # Silently handle any database or attribute errors
-            pass
+            logger.debug(f"Error checking file field for instance pk={instance.pk}: {e}")
 
     # Default to treating as new file upload
     return False

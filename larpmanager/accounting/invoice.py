@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Invoice generation and CSV import/export utilities."""
+
 import csv
 import math
 from io import StringIO
@@ -51,6 +53,7 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
         CSV format expected: [amount, causal, ...] where amount uses dot for thousands
         and comma for decimal separator. Only processes unverified invoices where
         payment amount meets or exceeds invoice amount.
+
     """
     # Decode CSV content and detect delimiter
     csv_content: str = csv_upload.read().decode("utf-8")
@@ -97,7 +100,7 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
 
             # Verify payment amount is sufficient (rounded up)
             amount_difference: float = math.ceil(float(payment_amount_string)) - math.ceil(
-                float(pending_invoice.mc_gross)
+                float(pending_invoice.mc_gross),
             )
             if amount_difference > 0:
                 continue
@@ -112,7 +115,10 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
 
 
 def invoice_received_money(
-    invoice_code: str, gross_amount: float = None, processing_fee: float = None, transaction_id: str = None
+    invoice_code: str,
+    gross_amount: float | None = None,
+    processing_fee: float | None = None,
+    transaction_id: str | None = None,
 ) -> bool:
     """Process received payment for a payment invoice.
 
@@ -136,6 +142,7 @@ def invoice_received_money(
         - Updates invoice status to CHECKED
         - Saves financial details (gross amount, fees, transaction ID)
         - Sends admin notification for invalid payment codes
+
     """
     # Attempt to retrieve the payment invoice by code
     try:
@@ -143,7 +150,7 @@ def invoice_received_money(
     except ObjectDoesNotExist:
         # Notify administrators of invalid payment attempt
         notify_admins("invalid payment", "wrong invoice: " + invoice_code)
-        return
+        return None
 
     # Process payment updates within atomic transaction
     with transaction.atomic():

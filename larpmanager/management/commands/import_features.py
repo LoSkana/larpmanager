@@ -32,7 +32,7 @@ from django.db.models import ForeignKey, ManyToManyField
 class Command(BaseCommand):
     help = "Reload features from yaml"
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         """Import feature system fixtures from YAML files.
 
         Loads modules, features, permissions, and other system configuration
@@ -90,17 +90,20 @@ class Command(BaseCommand):
 
         Raises:
             ValueError: If field doesn't exist, isn't M2M, or slugs are missing
+
         """
         # Get the M2M field from the model metadata
         try:
             # noinspection PyUnresolvedReferences, PyProtectedMember
             many_to_many_field = model._meta.get_field(field_name)
         except FieldDoesNotExist as err:
-            raise ValueError(f"{field_name} not found on {model_label}") from err
+            msg = f"{field_name} not found on {model_label}"
+            raise ValueError(msg) from err
 
         # Validate that the field is actually a many-to-many field
         if not isinstance(many_to_many_field, ManyToManyField):
-            raise ValueError(f"{field_name} not m2m on {model_label}")
+            msg = f"{field_name} not m2m on {model_label}"
+            raise ValueError(msg)
 
         # Get the related model and separate integer IDs from string slugs
         related_model = many_to_many_field.remote_field.model
@@ -115,7 +118,8 @@ class Command(BaseCommand):
             # Check for missing slugs and raise error if any are not found
             missing_slugs = sorted(set(slug_values) - set(slug_to_primary_key.keys()))
             if missing_slugs:
-                raise ValueError(f"missing slugs for {model_label}.{field_name}: {', '.join(missing_slugs)}")
+                msg = f"missing slugs for {model_label}.{field_name}: {', '.join(missing_slugs)}"
+                raise ValueError(msg)
             primary_keys_from_slugs = [slug_to_primary_key[slug] for slug in slug_values]
         else:
             primary_keys_from_slugs = []
@@ -133,6 +137,7 @@ class Command(BaseCommand):
 
         Returns:
             Dictionary containing only the many-to-many fields (list values)
+
         """
         many_to_many_fields = {}
         # Iterate through a copy of keys to safely modify the original dict
@@ -145,15 +150,31 @@ class Command(BaseCommand):
         return many_to_many_fields
 
     @staticmethod
-    def prepare_foreign(model, fields):
+    def prepare_foreign(model: type, fields: dict) -> None:
+        """Convert foreign key fields to their ID equivalents for database operations.
+
+        Args:
+            model: Django model class to check field types against.
+            fields: Dictionary of field names to values, modified in-place.
+
+        Note:
+            Modifies the fields dictionary in-place, replacing ForeignKey fields
+            with their corresponding _id fields.
+
+        """
         for field_name in list(fields.keys()):
+            # Check if field exists in model
             try:
                 # noinspection PyUnresolvedReferences, PyProtectedMember
                 field_object = model._meta.get_field(field_name)
             except FieldDoesNotExist:
                 continue
+
+            # Process ForeignKey fields by converting to _id format
             if isinstance(field_object, ForeignKey):
                 field_value = fields.pop(field_name)
+
+                # Handle None, int, or slug-based lookup
                 if field_value is None:
                     fields[f"{field_name}_id"] = None
                 elif isinstance(field_value, int):

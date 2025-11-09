@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import time
 
 from django.utils.translation import activate
@@ -36,13 +37,16 @@ from larpmanager.models.registration import Registration
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
 
+logger = logging.getLogger(__name__)
+
 
 @background_auto(queue="acc")
-def update_registration_status_bkg(registration_id):
+def update_registration_status_bkg(registration_id) -> None:
     """Background task to update registration status with delay.
 
     Args:
         registration_id: ID of the registration to update
+
     """
     time.sleep(1)
     registration = Registration.objects.get(pk=registration_id)
@@ -68,6 +72,7 @@ def update_registration_status(instance) -> None:
         - Skips notifications for provisional registrations
         - Sends different messages based on modification type (1=new, other=update)
         - Organizer notifications depend on association configuration settings
+
     """
     # Skip registration not gifted - no notifications needed
     if instance.modified == 0:
@@ -139,6 +144,7 @@ def registration_options(registration_instance) -> str:
 
     Returns:
         str: HTML formatted string with registration details for email content
+
     """
     email_body = ""
 
@@ -194,8 +200,7 @@ def registration_options(registration_instance) -> str:
 
 
 def registration_payments(instance: Registration, currency: str) -> str:
-    """
-    Generate payment information HTML for registration emails.
+    """Generate payment information HTML for registration emails.
 
     This function creates localized HTML content for registration payment notifications,
     including payment amounts, deadlines, and payment links. The content varies based
@@ -213,6 +218,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
     Note:
         - If deadline > 0: Shows specific deadline in days with warning about cancellation
         - If deadline <= 0: Shows immediate payment required message
+
     """
     # Build the payment URL using the event and run slug
     full_payment_url = get_url("accounting/pay", instance.run.event)
@@ -233,7 +239,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
             + _(
                 "You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
                 "Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-                "payment by the deadline, your registration may be cancelled."
+                "payment by the deadline, your registration may be cancelled.",
             )
             % template_data
         )
@@ -244,15 +250,14 @@ def registration_payments(instance: Registration, currency: str) -> str:
         + _(
             "<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon as "
             "possible. Make your payment <a href='%(url)s'>on this page</a>. If we do not "
-            "receive payment, your registration may be cancelled."
+            "receive payment, your registration may be cancelled.",
         )
         % template_data
     )
 
 
 def send_character_assignment_email(instance, created: bool) -> None:
-    """
-    Send character assignment email when registration-character relation is created.
+    """Send character assignment email when registration-character relation is created.
 
     This function sends an email notification to a member when they are assigned
     a character for a LARP event. The email includes character details and a link
@@ -264,6 +269,7 @@ def send_character_assignment_email(instance, created: bool) -> None:
 
     Returns:
         None
+
     """
     # Early return if this is an update, not a creation
     if not created:
@@ -330,6 +336,7 @@ def update_registration_cancellation(instance: Registration) -> None:
     Note:
         Does nothing if the registration is provisional. Organizer notifications
         are only sent if 'mail_signup_del' config is enabled for the association.
+
     """
     # Skip processing for provisional registrations
     if is_reg_provisional(instance):
@@ -367,6 +374,7 @@ def send_registration_cancellation_email(instance: Registration) -> None:
 
     Returns:
         None
+
     """
     # Skip if run is completed/done
     if instance.run and instance.run.development == DevelopStatus.DONE:
@@ -377,8 +385,8 @@ def send_registration_cancellation_email(instance: Registration) -> None:
     if instance.pk:
         try:
             previous_registration = Registration.objects.get(pk=instance.pk)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Registration pk={instance.pk} not found in pre-save: {e}")
 
     # Send cancellation email only when registration is newly cancelled
     if previous_registration and instance.cancellation_date and not previous_registration.cancellation_date:
@@ -399,6 +407,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
 
     Returns:
         None
+
     """
     # Skip if registration already has a cancellation date
     if instance.cancellation_date:
@@ -427,11 +436,12 @@ def send_registration_deletion_email(instance: Registration) -> None:
             my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
-def send_pre_registration_confirmation_email(pre_registration):
+def send_pre_registration_confirmation_email(pre_registration) -> None:
     """Handle pre-registration pre-save notifications.
 
     Args:
         pre_registration: PreRegistration instance being saved
+
     """
     context = {"event": pre_registration.event}
     if not pre_registration.pk:

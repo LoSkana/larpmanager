@@ -42,7 +42,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestTokenCreditUseFunctions(BaseTestCase):
     """Test cases for token and credit usage functions"""
 
-    def test_registration_tokens_credits_use_no_balance(self):
+    def test_registration_tokens_credits_use_no_balance(self) -> None:
         """Test token/credit use with no member balance"""
         member = self.get_member()
         association = self.get_association()
@@ -60,7 +60,7 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         # No tokens or credits available, tot_payed should remain unchanged
         self.assertEqual(registration.tot_payed, Decimal("0.00"))
 
-    def test_registration_tokens_credits_use_tokens_only(self):
+    def test_registration_tokens_credits_use_tokens_only(self) -> None:
         """Test using tokens to pay registration"""
         member = self.get_member()
         association = self.get_association()
@@ -80,7 +80,7 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         self.assertEqual(registration.tot_payed, Decimal("30.00"))
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
-    def test_registration_tokens_credits_use_credits_only(self):
+    def test_registration_tokens_credits_use_credits_only(self) -> None:
         """Test using credits to pay registration"""
         member = self.get_member()
         association = self.get_association()
@@ -100,7 +100,7 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         self.assertEqual(registration.tot_payed, Decimal("40.00"))
         self.assertEqual(membership.credit, Decimal("0.00"))
 
-    def test_registration_tokens_credits_use_both(self):
+    def test_registration_tokens_credits_use_both(self) -> None:
         """Test using both tokens and credits"""
         member = self.get_member()
         association = self.get_association()
@@ -121,7 +121,7 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         self.assertEqual(membership.tokens, Decimal("0.00"))
         self.assertEqual(membership.credit, Decimal("20.00"))
 
-    def test_registration_tokens_credits_use_negative_remaining(self):
+    def test_registration_tokens_credits_use_negative_remaining(self) -> None:
         """Test token/credit use with negative remaining (overpay)"""
         member = self.get_member()
         association = self.get_association()
@@ -138,7 +138,7 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         membership.refresh_from_db()
         self.assertEqual(membership.tokens, Decimal("50.00"))
 
-    def test_registration_tokens_credits_use_partial_tokens(self):
+    def test_registration_tokens_credits_use_partial_tokens(self) -> None:
         """Test using partial tokens when remaining is less than balance"""
         member = self.get_member()
         association = self.get_association()
@@ -161,7 +161,7 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 class TestTokenCreditOverpayFunctions(BaseTestCase):
     """Test cases for token and credit overpay reversal"""
 
-    def test_registration_tokens_credits_overpay_no_payments(self):
+    def test_registration_tokens_credits_overpay_no_payments(self) -> None:
         """Test overpay reversal with no token/credit payments"""
         member = self.get_member()
         association = self.get_association()
@@ -175,7 +175,7 @@ class TestTokenCreditOverpayFunctions(BaseTestCase):
         payments = AccountingItemPayment.objects.filter(reg=registration)
         self.assertEqual(payments.count(), 0)
 
-    def test_registration_tokens_credits_overpay_credit_first(self):
+    def test_registration_tokens_credits_overpay_credit_first(self) -> None:
         """Test overpay reversal removes credits before tokens"""
         member = self.get_member()
         association = self.get_association()
@@ -199,7 +199,7 @@ class TestTokenCreditOverpayFunctions(BaseTestCase):
         self.assertEqual(credit_payment.value, Decimal("5.00"))
         self.assertEqual(token_payment.value, Decimal("30.00"))
 
-    def test_registration_tokens_credits_overpay_delete_empty(self):
+    def test_registration_tokens_credits_overpay_delete_empty(self) -> None:
         """Test overpay reversal deletes payment when value reaches zero"""
         member = self.get_member()
         association = self.get_association()
@@ -216,7 +216,7 @@ class TestTokenCreditOverpayFunctions(BaseTestCase):
         payments = AccountingItemPayment.objects.filter(reg=registration, pay=PaymentChoices.CREDIT)
         self.assertEqual(payments.count(), 0)
 
-    def test_registration_tokens_credits_overpay_multiple_payments(self):
+    def test_registration_tokens_credits_overpay_multiple_payments(self) -> None:
         """Test overpay reversal with multiple payments"""
         member = self.get_member()
         association = self.get_association()
@@ -239,7 +239,7 @@ class TestTokenCreditOverpayFunctions(BaseTestCase):
         )["total"] or Decimal("0.00")
         self.assertEqual(total, Decimal("5.00"))
 
-    def test_registration_tokens_credits_overpay_zero_amount(self):
+    def test_registration_tokens_credits_overpay_zero_amount(self) -> None:
         """Test overpay reversal with zero amount"""
         member = self.get_member()
         association = self.get_association()
@@ -260,7 +260,7 @@ class TestTokenCreditOverpayFunctions(BaseTestCase):
 class TestRegistrationQueryFunctions(BaseTestCase):
     """Test cases for registration query functions"""
 
-    def test_get_regs_basic(self):
+    def test_get_regs_basic(self) -> None:
         """Test getting active registrations"""
         member = self.get_member()
         association = self.get_association()
@@ -271,7 +271,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
         self.assertIn(registration, regs)
 
-    def test_get_regs_excludes_cancelled(self):
+    def test_get_regs_excludes_cancelled(self) -> None:
         """Test get_regs excludes cancelled registrations"""
         from datetime import datetime
 
@@ -286,7 +286,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
         self.assertNotIn(registration, regs)
 
-    def test_get_regs_excludes_done_events(self):
+    def test_get_regs_excludes_done_events(self) -> None:
         """Test get_regs excludes registrations from completed events"""
         member = self.get_member()
         association = self.get_association()
@@ -299,7 +299,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
         self.assertNotIn(registration, regs)
 
-    def test_get_regs_excludes_cancelled_events(self):
+    def test_get_regs_excludes_cancelled_events(self) -> None:
         """Test get_regs excludes registrations from cancelled events"""
         member = self.get_member()
         association = self.get_association()
@@ -312,7 +312,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
         self.assertNotIn(registration, regs)
 
-    def test_get_regs_paying_incomplete_basic(self):
+    def test_get_regs_paying_incomplete_basic(self) -> None:
         """Test getting registrations with incomplete payments"""
         from larpmanager.models.registration import Registration
 
@@ -331,7 +331,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
         self.assertIn(registration, regs)
 
-    def test_get_regs_paying_incomplete_excludes_paid(self):
+    def test_get_regs_paying_incomplete_excludes_paid(self) -> None:
         """Test get_regs_paying_incomplete excludes fully paid"""
         from larpmanager.models.registration import Registration
 
@@ -350,7 +350,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
 
         self.assertNotIn(registration, regs)
 
-    def test_get_regs_paying_incomplete_ignores_small_diff(self):
+    def test_get_regs_paying_incomplete_ignores_small_diff(self) -> None:
         """Test get_regs_paying_incomplete ignores small differences"""
         from larpmanager.models.registration import Registration
 
@@ -370,7 +370,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
         # Difference is 0.02, should be ignored (threshold is 0.05)
         self.assertNotIn(registration, regs)
 
-    def test_get_regs_paying_incomplete_includes_overpay(self):
+    def test_get_regs_paying_incomplete_includes_overpay(self) -> None:
         """Test get_regs_paying_incomplete includes overpayments"""
         from larpmanager.models.registration import Registration
 

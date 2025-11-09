@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, login_orga
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_reg_form(pw_page):
+def test_orga_reg_form(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -41,7 +41,7 @@ def test_orga_reg_form(pw_page):
     check_filler(page, live_server)
 
 
-def prepare_form(page, live_server):
+def prepare_form(page, live_server) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
@@ -86,7 +86,7 @@ def prepare_form(page, live_server):
     page.get_by_role("button", name="Confirm").click()
 
 
-def prepare_surcharge(page, live_server):
+def prepare_surcharge(page, live_server) -> None:
     go_to(page, live_server, "test/manage")
     # Add surcharges
     page.get_by_role("link", name="Surcharges").click()
@@ -117,7 +117,7 @@ def prepare_surcharge(page, live_server):
     page.get_by_role("button", name="Confirm").click()
 
 
-def signup(page, live_server):
+def signup(page, live_server) -> None:
     # try signup
     go_to(page, live_server, "test/")
     page.get_by_role("link", name="Register").click()
@@ -137,7 +137,7 @@ def signup(page, live_server):
     )
 
 
-def check_filler(page, live_server):
+def check_filler(page, live_server) -> None:
     # set up filler
     go_to(page, live_server, "test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()

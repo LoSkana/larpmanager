@@ -18,9 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Member balance calculation and management utilities."""
+
 import logging
 from datetime import date, datetime
 from decimal import Decimal
+from typing import Any
 
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -55,14 +58,14 @@ logger = logging.getLogger(__name__)
 
 def get_acc_detail(
     name: str,
-    run,
+    run: Any,
     description: str,
-    model_class,
-    choices,
+    model_class: type,
+    choices: Any,
     type_field: str | None,
-    filters: dict | None = None,
+    filters: dict[str, Any] | None = None,
     filter_by_registration: bool = False,
-) -> dict:
+) -> dict[str, Any]:
     """Get detailed accounting breakdown for a specific accounting item type.
 
     This function calculates totals, counts, and detailed breakdowns by type
@@ -86,6 +89,7 @@ def get_acc_detail(
             - detail: Dictionary with breakdown by type (if type_field provided)
             - name: Display name
             - descr: Description
+
     """
     # Initialize result dictionary with base structure
     result = {"tot": 0, "num": 0, "detail": {}, "name": name, "descr": description}
@@ -126,7 +130,7 @@ def get_acc_detail(
     return result
 
 
-def get_acc_reg_type(registration) -> tuple[str, str]:
+def get_acc_reg_type(registration: Registration) -> tuple[str, str]:
     """Determine registration type for accounting categorization.
 
     Analyzes a registration instance to categorize it for accounting purposes.
@@ -141,6 +145,7 @@ def get_acc_reg_type(registration) -> tuple[str, str]:
         tuple[str, str]: A tuple containing:
             - type_code: Short code identifying the registration type
             - display_name: Human-readable name for the registration type
+
     """
     # Check if registration has been cancelled
     if registration.cancellation_date:
@@ -157,7 +162,7 @@ def get_acc_reg_type(registration) -> tuple[str, str]:
     )
 
 
-def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
+def get_acc_reg_detail(nm: str, run: Run, descr: str) -> dict[str, int | str | dict[str, dict[str, int | str]]]:
     """Get detailed registration accounting breakdown by ticket tier.
 
     Analyzes all non-cancelled registrations for a given run and provides
@@ -175,6 +180,7 @@ def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
             - detail: Breakdown by ticket type with individual totals/counts
             - name: Display name passed as parameter
             - descr: Description passed as parameter
+
     """
     # Initialize result dictionary with base structure
     accounting_data = {"tot": 0, "num": 0, "detail": {}, "name": nm, "descr": descr}
@@ -202,7 +208,7 @@ def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
     return accounting_data
 
 
-def get_token_details(nm: str, run) -> dict:
+def get_token_details(nm: str, run: Run) -> dict[str, int | dict | str]:
     """Get token accounting details for a run.
 
     Calculates the total value and count of accounting items for a specific run,
@@ -218,6 +224,7 @@ def get_token_details(nm: str, run) -> dict:
             - num (int): Number of accounting items
             - detail (dict): Empty detail dictionary for future use
             - name (str): Display name for the category
+
     """
     # Initialize result dictionary with default values
     dc = {"tot": 0, "num": 0, "detail": {}, "name": nm}
@@ -259,6 +266,7 @@ def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> 
 
     Side effects:
         Updates run.revenue, run.costs, run.balance, and run.tax fields and saves the run
+
     """
     details_by_category = {}
     # Fetch feature flags to determine which accounting categories are enabled for this event
@@ -294,7 +302,12 @@ def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> 
     sum_inflows = 0
     if "inflow" in features:
         details_by_category["in"] = get_acc_detail(
-            _("Inflows"), run, _("Total of recorded money inflows"), AccountingItemInflow, None, None
+            _("Inflows"),
+            run,
+            _("Total of recorded money inflows"),
+            AccountingItemInflow,
+            None,
+            None,
         )
         sum_inflows = details_by_category["in"]["tot"]
 
@@ -382,7 +395,9 @@ def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> 
 
     # Process registrations: get theoretical total based on selected ticket tiers
     details_by_category["reg"] = get_acc_reg_detail(
-        _("Registrations"), run, _("Theoretical total of income due to participation fees selected by the participants")
+        _("Registrations"),
+        run,
+        _("Theoretical total of income due to participation fees selected by the participants"),
     )
 
     # Calculate final financial figures
@@ -420,6 +435,7 @@ def check_accounting(association_id: int) -> None:
     Side Effects:
         Creates a new RecordAccounting entry in the database containing the
         calculated global_sum and bank_sum values for the association.
+
     """
     # Initialize context dictionary with association ID for accounting calculation
     context = {"association_id": association_id}
@@ -429,7 +445,9 @@ def check_accounting(association_id: int) -> None:
 
     # Persist accounting results to database via RecordAccounting model
     RecordAccounting.objects.create(
-        association_id=association_id, global_sum=context["global_sum"], bank_sum=context["bank_sum"]
+        association_id=association_id,
+        global_sum=context["global_sum"],
+        bank_sum=context["bank_sum"],
     )
 
 
@@ -449,6 +467,7 @@ def check_run_accounting(run: Run) -> None:
     Side Effects:
         - Updates run accounting calculations via get_run_accounting
         - Creates a new RecordAccounting entry in the database
+
     """
     # Perform accounting calculations and update run balance
     get_run_accounting(run, {})
@@ -485,6 +504,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
         - refund_sum: Total refunds
         - in_sum: Total incoming money
         - out_sum: Total outgoing money
+
     """
     # Determine the date range for filtering accounting records
     if year:
@@ -498,46 +518,62 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
     # Calculate executive-level outflows (not associated with any specific run)
     context["outflow_exec_sum"] = get_sum(
         AccountingItemOutflow.objects.filter(
-            run=None, association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            run=None,
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
     # Calculate executive-level inflows (not associated with any specific run)
     context["inflow_exec_sum"] = get_sum(
         AccountingItemInflow.objects.filter(
-            run=None, association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            run=None,
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
 
     # Calculate membership fees collected
     context["membership_sum"] = get_sum(
         AccountingItemMembership.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
     # Calculate donations received
     context["donations_sum"] = get_sum(
         AccountingItemDonation.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
     # Calculate collections (gifts/prepaid credits) received
     context["collections_sum"] = get_sum(
         AccountingItemCollection.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
 
     # Calculate all inflows for the association
     context["inflow_sum"] = get_sum(
         AccountingItemInflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
     # Calculate all outflows for the association
     context["outflow_sum"] = get_sum(
         AccountingItemOutflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
 
     # Calculate cash payments received (excluding online/bank transfers)
@@ -547,13 +583,15 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
             association_id=context["association_id"],
             created__gte=start_date,
             created__lte=end_date,
-        )
+        ),
     )
     # Calculate transaction fees charged by payment processors
     context["transactions_sum"] = get_sum(
         AccountingItemTransaction.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
     # Calculate total refunds issued
     context["refund_sum"] = get_sum(
@@ -562,7 +600,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
             association_id=context["association_id"],
             created__gte=start_date,
             created__lte=end_date,
-        )
+        ),
     )
 
     # Calculate net incoming and outgoing sums
@@ -598,6 +636,7 @@ def association_accounting(context: dict) -> None:
         - bank_sum: Bank account balance based on recorded transactions
         - sum_year: Dictionary mapping years to 1 (for year range)
         Plus all fields from association_accounting_data()
+
     """
     # Initialize member balance tracking
     context.update({"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0})

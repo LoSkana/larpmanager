@@ -87,6 +87,7 @@ class MyAuthForm(AuthenticationForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         super().__init__(*args, **kwargs)
 
@@ -124,6 +125,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments. 'request' is extracted and stored
                 if present, remaining kwargs passed to parent.
+
         """
         # Extract request object and initialize parent form
         self.request = kwargs.pop("request", None)
@@ -171,7 +173,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             required=True,
             label=_("Authorisation"),
             help_text=_(
-                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy",
             )
             + "?",
         )
@@ -181,7 +183,10 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             public, private = get_recaptcha_secrets(self.request)
             if public and private:
                 self.fields["captcha"] = ReCaptchaField(
-                    widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
+                    widget=ReCaptchaV3,
+                    label="Captcha",
+                    public_key=public,
+                    private_key=private,
                 )
 
         # Reorder fields to place language selection first
@@ -196,7 +201,8 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         # Prevent duplicate email registrations
         if User.objects.filter(email__iexact=data).exists():
-            raise ValidationError("Email already used! It seems you already have an account!")
+            msg = "Email already used! It seems you already have an account!"
+            raise ValidationError(msg)
         return data
 
     def save(self, commit: bool = True) -> User:
@@ -207,6 +213,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         Returns:
             Created user instance with updated member profile.
+
         """
         # Create user instance from parent form
         user = super(RegistrationFormUniqueEmail, self).save()
@@ -234,18 +241,19 @@ class MyPasswordResetConfirmForm(SetPasswordForm):
 class MyPasswordResetForm(PasswordResetForm):
     """Custom password reset form with association-specific handling."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize form with email field constraints.
 
         Args:
             *args: Variable length argument list
             **kwargs: Arbitrary keyword arguments
+
         """
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 
     def get_users(self, email: str) -> Generator:
-        """Returns active users matching the given email (case-insensitive)."""
+        """Return active users matching the given email (case-insensitive)."""
         # noinspection PyProtectedMember
         active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)
         return (u for u in active_users)
@@ -259,8 +267,7 @@ class MyPasswordResetForm(PasswordResetForm):
         to_email: str,
         html_email_template_name: str | None = None,
     ) -> None:
-        """
-        Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
+        """Send a django.core.mail.EmailMultiAlternatives to `to_email`.
 
         Args:
             subject_template_name: Template name for email subject
@@ -272,6 +279,7 @@ class MyPasswordResetForm(PasswordResetForm):
 
         Returns:
             None
+
         """
         # Render email subject from template and remove newlines
         subject = loader.render_to_string(subject_template_name, context)
@@ -340,16 +348,16 @@ COUNTRY_CHOICES = sorted([(country.alpha_2, country.name) for country in pycount
 
 # noinspection PyUnresolvedReferences
 FULL_PROVINCE_CHOICES = sorted(
-    [(province.code, province.name, province.country_code) for province in pycountry.subdivisions], key=lambda x: x[1]
+    [(province.code, province.name, province.country_code) for province in pycountry.subdivisions],
+    key=lambda x: x[1],
 )
 
 PROVINCE_CHOICES = [("", "----")] + [(province[0], province[1]) for province in FULL_PROVINCE_CHOICES]
 
 country_subdivisions_map = {}
 for province in FULL_PROVINCE_CHOICES:
-    if province[2] == "IT":
-        if re.match(r"^IT-\d{2}", province[0]):
-            continue
+    if province[2] == "IT" and re.match(r"^IT-\d{2}", province[0]):
+        continue
     if province[2] not in country_subdivisions_map:
         country_subdivisions_map[province[2]] = []
     country_subdivisions_map[province[2]].append([province[0], province[1]])
@@ -433,11 +441,11 @@ class ResidenceField(forms.MultiValueField):
 
         Raises:
             forms.ValidationError: If any field validation fails.
+
         """
         # Handle empty/None input by creating default values for all fields
         if not value:
-            value = self.compress([None] * len(self.fields))
-            return value
+            return self.compress([None] * len(self.fields))
 
         try:
             cleaned_data = []
@@ -452,17 +460,18 @@ class ResidenceField(forms.MultiValueField):
 
             # Compress cleaned data into final format
             return self.compress(cleaned_data)
-        except forms.ValidationError as err:
-            raise err
+        except forms.ValidationError:
+            raise
 
 
 class BaseProfileForm(MyForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize base profile form with field filtering based on association settings.
 
         Args:
             *args: Positional arguments passed to parent
             **kwargs: Keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
 
@@ -542,7 +551,7 @@ class ProfileForm(BaseProfileForm):
             "document_expiration": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize member form with dynamic field validation and configuration.
 
         Sets mandatory fields, handles voting candidates, and adds required
@@ -551,6 +560,7 @@ class ProfileForm(BaseProfileForm):
         Args:
             *args: Variable positional arguments
             **kwargs: Variable keyword arguments including request context
+
         """
         super().__init__(*args, **kwargs)
 
@@ -603,15 +613,13 @@ class ProfileForm(BaseProfileForm):
                 required=True,
                 label=_("Authorisation"),
                 help_text=_(
-                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy",
                 )
                 + "?",
             )
 
     def clean_birth_date(self):
-        """
-        Optimized birth date validation with cached association data.
-        """
+        """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]
         logger.debug(f"Validating birth date: {data}")
 
@@ -640,9 +648,8 @@ class ProfileForm(BaseProfileForm):
         cleaned_data = super().clean()
 
         # Check if profile photo is both allowed and mandatory, then validate presence
-        if "profile" in self.allowed and "profile" in self.mandatory:
-            if not self.instance.profile:
-                self.add_error(None, _("Please upload your profile photo") + "!")
+        if "profile" in self.allowed and "profile" in self.mandatory and not self.instance.profile:
+            self.add_error(None, _("Please upload your profile photo") + "!")
 
         return cleaned_data
 
@@ -690,7 +697,7 @@ class MembershipResponseForm(forms.Form):
         required=False,
         max_length=1000,
         help_text=_(
-            "Optional text to be included in the email sent to the participant to notify them of the approval decision"
+            "Optional text to be included in the email sent to the participant to notify them of the approval decision",
         ),
     )
 
@@ -716,13 +723,14 @@ class ExeVolunteerRegistryForm(MyForm):
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
     def clean_member(self) -> Member:
-        """Validates member is not already registered as volunteer for this association."""
+        """Validate member is not already registered as volunteer for this association."""
         member = self.cleaned_data["member"]
 
         # Check for existing volunteer entries for this member and association
         lst = VolunteerRegistry.objects.filter(member=member, association_id=self.params["association_id"])
         if lst.count() > 1:
-            raise ValidationError("Volunteer entry already existing!")
+            msg = "Volunteer entry already existing!"
+            raise ValidationError(msg)
 
         return member
 
@@ -791,6 +799,7 @@ class ExeMembershipFeeForm(forms.Form):
         Args:
             *args: Positional arguments passed to parent form class.
             **kwargs: Keyword arguments including 'context' dict with association context.
+
         """
         # Extract association context and initialize parent form
         self.params = kwargs.pop("context", {})
@@ -883,6 +892,7 @@ class ExeMembershipDocumentForm(forms.Form):
 
         Raises:
             ValidationError: If member already has an active membership.
+
         """
         member = self.cleaned_data["member"]
         membership = Membership.objects.get(member=member, association_id=self.association_id)
@@ -932,12 +942,13 @@ class ExeProfileForm(MyForm):
         model = Association
         fields = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize member field configuration form.
 
         Args:
             *args: Positional arguments passed to parent
             **kwargs: Keyword arguments passed to parent
+
         """
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
@@ -969,8 +980,7 @@ class ExeProfileForm(MyForm):
 
     @staticmethod
     def get_members_fields() -> list[tuple[str, str, str]]:
-        """
-        Get available member fields for form configuration.
+        """Get available member fields for form configuration.
 
         Retrieves all fields from the Member model, excluding system fields and
         sensitive data fields that should not be configurable in forms.
@@ -978,6 +988,7 @@ class ExeProfileForm(MyForm):
         Returns:
             list[tuple[str, str, str]]: List of tuples containing field information
                 in the format (field_name, verbose_name, help_text)
+
         """
         # Define fields to exclude from configuration options
         # These are system fields or sensitive data that shouldn't be user-configurable
@@ -1024,6 +1035,7 @@ class ExeProfileForm(MyForm):
 
         Returns:
             The saved form instance
+
         """
         instance = super().save(commit=commit)
 

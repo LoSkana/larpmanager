@@ -62,6 +62,7 @@ def registration_available(run: Run, features: dict, context: dict | None = None
 
     Returns:
         None: Function modifies run.status in-place
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -126,6 +127,7 @@ def _available_waiting(registration: Registration, registration_counts: dict) ->
 
     Side Effects:
         Modifies registration.status dictionary with waiting availability information
+
     """
     # Handle infinite waiting list capacity
     if registration.event.max_waiting == 0:
@@ -163,6 +165,7 @@ def _available_filler(registration, registration_counts) -> bool:
 
     Side Effects:
         Modifies registration.status dictionary with filler availability information
+
     """
     # Handle infinite filler tickets case
     if registration.event.max_filler == 0:
@@ -198,6 +201,7 @@ def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
 
     Returns:
         Matching registration or None if not found
+
     """
     # Iterate through registrations to find matching run
     for m in my_regs:
@@ -214,8 +218,7 @@ def registration_status_signed(
     register_url: str,
     context: dict | None = None,
 ) -> None:
-    """
-    Updates the registration status for a signed user based on membership and payment features.
+    """Update the registration status for a signed user based on membership and payment features.
 
     Args:
         run: The run object containing event and status information
@@ -232,6 +235,7 @@ def registration_status_signed(
 
     Raises:
         RewokedMembershipError: When membership status is revoked
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -260,7 +264,7 @@ def registration_status_signed(
     if "membership" in features:
         # Check for revoked membership status and raise error
         if user_membership.status in [MembershipStatus.REWOKED]:
-            raise RewokedMembershipError()
+            raise RewokedMembershipError
 
         # Handle incomplete membership applications (empty, joined, uploaded)
         if user_membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
@@ -316,6 +320,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
 
     Returns:
         True if payment status was processed and status text updated, False otherwise
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -350,7 +355,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
                 member_id=run.reg.member_id,
                 status=PaymentStatus.SUBMITTED,
                 typ=PaymentType.REGISTRATION,
-            )
+            ),
         )
         wire_created_invoices = list(
             PaymentInvoice.objects.filter(
@@ -359,7 +364,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
                 status=PaymentStatus.CREATED,
                 typ=PaymentType.REGISTRATION,
                 method__slug="wire",
-            )
+            ),
         )
 
     # Handle pending payment status
@@ -413,6 +418,7 @@ def registration_status(
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -450,11 +456,11 @@ def registration_status(
             run.status["open"] = False
             run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             return
-        elif run.registration_open > current_datetime:
+        if run.registration_open > current_datetime:
             run.status["open"] = False
             run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             run.status["details"] = _("Opening at: %(date)s") % {
-                "date": run.registration_open.strftime(format_datetime)
+                "date": run.registration_open.strftime(format_datetime),
             }
             return
 
@@ -489,6 +495,7 @@ def _status_preregister(run: Run, member: Member, context: dict | None = None) -
         run: Event run object to update status for
         member: Member object to check pre-registration status
         context: Optional context dictionary containing cached pre-registration data
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -507,7 +514,9 @@ def _status_preregister(run: Run, member: Member, context: dict | None = None) -
         else:
             # Fallback to database query if no cache provided
             has_pre_registration = PreRegistration.objects.filter(
-                event_id=run.event_id, member=member, deleted__isnull=True
+                event_id=run.event_id,
+                member=member,
+                deleted__isnull=True,
             ).exists()
 
     # Set status message based on pre-registration state
@@ -530,6 +539,7 @@ def _get_features_map(run: Run, context: dict):
 
     Returns:
         dict: Features dictionary for the run's event
+
     """
     if context is None:
         context = {}
@@ -539,11 +549,10 @@ def _get_features_map(run: Run, context: dict):
         features_map = {}
     if run.event_id not in features_map:
         features_map[run.event_id] = get_event_features(run.event_id)
-    event_features = features_map[run.event_id]
-    return event_features
+    return features_map[run.event_id]
 
 
-def registration_find(run: Run, member: Member, context: dict | None = None):
+def registration_find(run: Run, member: Member, context: dict | None = None) -> None:
     """Find and attach registration for a user to a run.
 
     Searches for an active registration (non-cancelled, non-redeemed) for the given
@@ -557,6 +566,7 @@ def registration_find(run: Run, member: Member, context: dict | None = None):
 
     Returns:
         None: Function modifies run.reg attribute in-place
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -577,7 +587,10 @@ def registration_find(run: Run, member: Member, context: dict | None = None):
     try:
         registration_queryset = Registration.objects.select_related("ticket")
         run.reg = registration_queryset.get(
-            run=run, member=member, redeem_code__isnull=True, cancellation_date__isnull=True
+            run=run,
+            member=member,
+            redeem_code__isnull=True,
+            cancellation_date__isnull=True,
         )
     except ObjectDoesNotExist:
         # No active registration found for this user and run
@@ -593,13 +606,16 @@ def check_character_maximum(event, member) -> tuple[bool, int]:
 
     Returns:
         Tuple of (has_reached_limit, max_allowed_characters)
+
     """
     # Get all characters for this member in the event
     characters = event.get_elements(Character).filter(player=member)
 
     # Get IDs of inactive characters (those with CharacterConfig inactive=True)
     inactive_character_ids = CharacterConfig.objects.filter(
-        character__in=characters, name="inactive", value="True"
+        character__in=characters,
+        name="inactive",
+        value="True",
     ).values_list("character_id", flat=True)
 
     # Count only active characters (exclude inactive ones)
@@ -626,6 +642,7 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
 
     Returns:
         None: Function modifies run.status["details"] in place
+
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -684,6 +701,7 @@ def _status_approval(is_character_assigned: bool, features: dict, run: Any) -> N
 
     Returns:
         None: Modifies run.status["details"] in place
+
     """
     # Check if user_character feature is enabled
     if "user_character" not in features:
@@ -731,6 +749,7 @@ def get_registration_options(instance) -> list[tuple[str, str]]:
     Note:
         Questions are filtered based on event features and individual skip conditions.
         Choice questions are formatted as comma-separated option names.
+
     """
     formatted_results = []
     applicable_questions = []
@@ -752,7 +771,7 @@ def get_registration_options(instance) -> list[tuple[str, str]]:
     # Fetch choice answers and group by question
     choice_options_by_question = {}
     for choice in RegistrationChoice.objects.filter(question_id__in=question_ids_cache, reg=instance).select_related(
-        "option"
+        "option",
     ):
         if choice.question_id not in choice_options_by_question:
             choice_options_by_question[choice.question_id] = []
@@ -782,7 +801,9 @@ def get_player_signup(request: HttpRequest, context: dict) -> Registration | Non
     """Get active registration for current user in the given run context."""
     # Filter registrations for current run and user, excluding cancelled ones
     active_registrations = Registration.objects.filter(
-        run=context["run"], member=context["member"], cancellation_date__isnull=True
+        run=context["run"],
+        member=context["member"],
+        cancellation_date__isnull=True,
     )
 
     # Return first registration if exists
@@ -802,6 +823,7 @@ def check_signup(request: HttpRequest, context: dict) -> None:
     Raises:
         SignupError: If no valid signup found
         WaitingError: If signup ticket is in waiting tier
+
     """
     # Get player registration for current run
     registration = get_player_signup(request, context)
@@ -825,6 +847,7 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
 
     Returns:
         None: Function performs side effects only
+
     """
     # Get the player's registration for this event
     registration = get_player_signup(request, context)
@@ -844,8 +867,9 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
     character_ids = [char.id for char in characters]
     inactive_character_ids = set(
         CharacterConfig.objects.filter(character_id__in=character_ids, name="inactive", value="True").values_list(
-            "character_id", flat=True
-        )
+            "character_id",
+            flat=True,
+        ),
     )
 
     # Filter out inactive characters
@@ -865,16 +889,21 @@ def get_reduced_available_count(run) -> int:
 
     Returns:
         Number of reduced tickets still available
+
     """
     # Get the ratio for reduced tickets per patron registrations
     reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio", 10))
 
     # Count current reduced and patron registrations (excluding cancelled)
     reduced_registrations_count = Registration.objects.filter(
-        run=run, ticket__tier=TicketTier.REDUCED, cancellation_date__isnull=True
+        run=run,
+        ticket__tier=TicketTier.REDUCED,
+        cancellation_date__isnull=True,
     ).count()
     patron_registrations_count = Registration.objects.filter(
-        run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True
+        run=run,
+        ticket__tier=TicketTier.PATRON,
+        cancellation_date__isnull=True,
     ).count()
     # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
 
@@ -902,6 +931,7 @@ def process_registration_event_change(registration: Registration) -> None:
         This function performs case-insensitive name matching to find equivalent
         elements in the target event. If no matching elements are found, the
         corresponding fields are set to None.
+
     """
     # Early return if this is a new registration (no existing data to migrate)
     if not registration.pk:
@@ -934,10 +964,11 @@ def process_registration_event_change(registration: Registration) -> None:
         try:
             # Find matching question and option in the new event
             registration_choice.question = registration.run.event.get_elements(RegistrationQuestion).get(
-                name__iexact=question_name
+                name__iexact=question_name,
             )
             registration_choice.option = registration.run.event.get_elements(RegistrationOption).get(
-                question=registration_choice.question, name__iexact=option_name
+                question=registration_choice.question,
+                name__iexact=option_name,
             )
             registration_choice.save()
         except ObjectDoesNotExist:
@@ -953,7 +984,7 @@ def process_registration_event_change(registration: Registration) -> None:
         try:
             # Find matching question in the new event to preserve the answer
             registration_answer.question = registration.run.event.get_elements(RegistrationQuestion).get(
-                name__iexact=question_name
+                name__iexact=question_name,
             )
             registration_answer.save()
         except ObjectDoesNotExist:
@@ -970,6 +1001,7 @@ def check_character_ticket_options(registration: Registration, character: Charac
     Args:
         registration: Registration object containing ticket information
         character: Character object to check writing choices for
+
     """
     # Get the ticket ID from the registration
     registration_ticket_id = registration.ticket.id
@@ -1003,6 +1035,7 @@ def process_character_ticket_options(instance: Registration) -> None:
 
     Returns:
         None
+
     """
     # Early return if no member is associated with the instance
     if not instance.member:

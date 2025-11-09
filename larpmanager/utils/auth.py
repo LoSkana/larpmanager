@@ -17,7 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Optional
+
+import logging
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.models import SocialLogin
@@ -28,6 +29,8 @@ from django.forms import Form
 from django.http import Http404, HttpRequest
 
 from larpmanager.models.access import EventPermission
+
+logger = logging.getLogger(__name__)
 
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -54,10 +57,11 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             - Updates member's name field if empty and 'given_name' is available
             - Updates member's surname field if empty and 'family_name' is available
             - Saves the member instance to persist changes
+
         """
         # Extract extra data from social login account
         social_provider_data = sociallogin.account.extra_data
-        # print(social_provider_data)
+        # logger.debug(f"Social provider data: {social_provider_data}")
 
         # Update name field if it's empty and given_name is available
         if "given_name" in social_provider_data and len(user.member.name) == 0:
@@ -90,6 +94,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             - Connects social account to existing user if email match found
             - Updates member profile with social login data
             - No action taken if user already exists or has no email
+
         """
         user = sociallogin.user
 
@@ -114,7 +119,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             # No existing user found - let normal signup process continue
             pass
 
-    def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Optional[Form] = None) -> User:
+    def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Form | None = None) -> User:
         """Save new user from social login.
 
         Creates a new user account from social authentication data and updates
@@ -136,6 +141,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             - Creates new User instance in database
             - Updates associated Member profile with social login data
             - May trigger user creation signals
+
         """
         # Create the base user instance using parent implementation
         user = super().save_user(request, sociallogin, form)
@@ -163,6 +169,7 @@ def is_lm_admin(request: HttpRequest) -> bool:
 
     Note:
         Admin group checking is currently not implemented (TODO).
+
     """
     # Check if user has associated member profile
     if not hasattr(request.user, "member"):
@@ -199,10 +206,12 @@ def check_lm_admin(request: HttpRequest) -> dict[str, int]:
         >>> context = check_lm_admin(request)
         >>> print(context)
         {'association_id': 123, 'lm_admin': 1}
+
     """
     # Check if the current user has LM administrator privileges
     if not is_lm_admin(request):
-        raise Http404("Not lm admin")
+        msg = "Not lm admin"
+        raise Http404(msg)
 
     # Return admin context with association ID and admin flag
     return {"association_id": request.association["id"], "lm_admin": 1}
@@ -225,8 +234,9 @@ def get_allowed_managed() -> list[str]:
         >>> permissions = get_allowed_managed()
         >>> 'exe_events' in permissions
         True
+
     """
-    management_permission_keys = [
+    return [
         # Executive-level permissions for organization-wide features
         "exe_events",
         "exe_accounting",
@@ -243,18 +253,18 @@ def get_allowed_managed() -> list[str]:
         "orga_sensitive",
         "orga_preferences",
     ]
-    return management_permission_keys
 
 
-def auto_assign_event_permission_number(event_permission):
+def auto_assign_event_permission_number(event_permission) -> None:
     """Assign number to event permission if not set.
 
     Args:
         event_permission: EventPermission instance to assign number to
+
     """
     if not event_permission.number:
         max_number = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(
-            Max("number")
+            Max("number"),
         )["number__max"]
         if not max_number:
             max_number = 1

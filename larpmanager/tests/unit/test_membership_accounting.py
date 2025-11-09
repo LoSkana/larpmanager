@@ -37,7 +37,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestMembershipCreation(BaseTestCase):
     """Test cases for membership creation"""
 
-    def test_create_basic_membership(self):
+    def test_create_basic_membership(self) -> None:
         """Test creating a basic membership"""
         member = self.get_member()
         association = self.get_association()
@@ -54,7 +54,7 @@ class TestMembershipCreation(BaseTestCase):
         self.assertEqual(membership.credit, Decimal("0.00"))
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
-    def test_create_membership_with_initial_credit(self):
+    def test_create_membership_with_initial_credit(self) -> None:
         """Test creating a membership with initial credit"""
         member = self.get_member()
         association = self.get_association()
@@ -68,7 +68,7 @@ class TestMembershipCreation(BaseTestCase):
         self.assertIsNotNone(membership.id)
         self.assertEqual(membership.credit, Decimal("50.00"))
 
-    def test_create_membership_with_initial_tokens(self):
+    def test_create_membership_with_initial_tokens(self) -> None:
         """Test creating a membership with initial tokens"""
         member = self.get_member()
         association = self.get_association()
@@ -82,7 +82,7 @@ class TestMembershipCreation(BaseTestCase):
         self.assertIsNotNone(membership.id)
         self.assertEqual(membership.tokens, Decimal("10.00"))
 
-    def test_create_membership_with_status(self):
+    def test_create_membership_with_status(self) -> None:
         """Test creating a membership with specific status"""
         member = self.get_member()
         association = self.get_association()
@@ -102,7 +102,7 @@ class TestMembershipCreation(BaseTestCase):
         self.assertIsNotNone(membership.id)
         self.assertEqual(membership.status, MembershipStatus.ACCEPTED)
 
-    def test_create_membership_with_card_number(self):
+    def test_create_membership_with_card_number(self) -> None:
         """Test that card number is auto-generated for accepted membership"""
         member = self.get_member()
         association = self.get_association()
@@ -127,7 +127,7 @@ class TestMembershipCreation(BaseTestCase):
 class TestMembershipModification(BaseTestCase):
     """Test cases for membership modification"""
 
-    def test_modify_membership_credit(self):
+    def test_modify_membership_credit(self) -> None:
         """Test modifying membership credit"""
         membership = self.get_member().membership
         original_credit = membership.credit
@@ -138,7 +138,7 @@ class TestMembershipModification(BaseTestCase):
         updated = Membership.objects.get(id=membership.id)
         self.assertEqual(updated.credit, Decimal("150.00"))
 
-    def test_modify_membership_tokens(self):
+    def test_modify_membership_tokens(self) -> None:
         """Test modifying membership tokens"""
         membership = self.get_member().membership
         original_tokens = membership.tokens
@@ -149,7 +149,7 @@ class TestMembershipModification(BaseTestCase):
         updated = Membership.objects.get(id=membership.id)
         self.assertEqual(updated.tokens, Decimal("25.00"))
 
-    def test_modify_membership_status(self):
+    def test_modify_membership_status(self) -> None:
         """Test modifying membership status"""
         membership = self.get_member().membership
 
@@ -159,7 +159,7 @@ class TestMembershipModification(BaseTestCase):
         updated = Membership.objects.get(id=membership.id)
         self.assertEqual(updated.status, MembershipStatus.SUBMITTED)
 
-    def test_modify_membership_compiled_flag(self):
+    def test_modify_membership_compiled_flag(self) -> None:
         """Test modifying membership compiled flag"""
         membership = self.get_member().membership
 
@@ -169,7 +169,7 @@ class TestMembershipModification(BaseTestCase):
         updated = Membership.objects.get(id=membership.id)
         self.assertTrue(updated.compiled)
 
-    def test_increase_credit(self):
+    def test_increase_credit(self) -> None:
         """Test increasing membership credit"""
         membership = self.get_member().membership
         original_credit = membership.credit
@@ -180,7 +180,7 @@ class TestMembershipModification(BaseTestCase):
         updated = Membership.objects.get(id=membership.id)
         self.assertEqual(updated.credit, original_credit + Decimal("50.00"))
 
-    def test_decrease_credit(self):
+    def test_decrease_credit(self) -> None:
         """Test decreasing membership credit"""
         membership = self.get_member().membership
         membership.credit = Decimal("100.00")
@@ -197,7 +197,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
     """Test cases for automatic membership accounting updates"""
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_tokens_automatic_update_on_token_given(self, mock_features):
+    def test_tokens_automatic_update_on_token_given(self, mock_features) -> None:
         """Test automatic token balance update when tokens are given"""
         mock_features.return_value = {"token_credit": True}
 
@@ -225,7 +225,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.tokens, Decimal("5.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_tokens_automatic_update_on_token_used(self, mock_features):
+    def test_tokens_automatic_update_on_token_used(self, mock_features) -> None:
         """Test automatic token balance update when tokens are used"""
         mock_features.return_value = {"token_credit": True}
 
@@ -257,7 +257,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.tokens, Decimal("7.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_credit_automatic_update_on_credit_given(self, mock_features):
+    def test_credit_automatic_update_on_credit_given(self, mock_features) -> None:
         """Test automatic credit balance update when credit is given"""
         mock_features.return_value = {"token_credit": True}
 
@@ -286,7 +286,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.credit, Decimal("50.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_credit_automatic_update_on_credit_used(self, mock_features):
+    def test_credit_automatic_update_on_credit_used(self, mock_features) -> None:
         """Test automatic credit balance update when credit is used"""
         mock_features.return_value = {"token_credit": True}
 
@@ -319,7 +319,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.credit, Decimal("75.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_credit_automatic_update_on_expense_approved(self, mock_features):
+    def test_credit_automatic_update_on_expense_approved(self, mock_features) -> None:
         """Test automatic credit balance update when expense is approved"""
         mock_features.return_value = {"token_credit": True}
 
@@ -348,7 +348,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.credit, Decimal("30.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_credit_automatic_update_on_refund(self, mock_features):
+    def test_credit_automatic_update_on_refund(self, mock_features) -> None:
         """Test automatic credit balance update when refund is given"""
         mock_features.return_value = {"token_credit": True}
 
@@ -379,7 +379,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.credit, Decimal("80.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_multiple_token_operations(self, mock_features):
+    def test_multiple_token_operations(self, mock_features) -> None:
         """Test automatic token balance with multiple operations"""
         mock_features.return_value = {"token_credit": True}
 
@@ -418,7 +418,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.tokens, Decimal("6.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_multiple_credit_operations(self, mock_features):
+    def test_multiple_credit_operations(self, mock_features) -> None:
         """Test automatic credit balance with multiple operations"""
         mock_features.return_value = {"token_credit": True}
 
@@ -461,7 +461,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.credit, Decimal("120.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_no_update_when_feature_disabled(self, mock_features):
+    def test_no_update_when_feature_disabled(self, mock_features) -> None:
         """Test that automatic updates don't happen when feature is disabled"""
         mock_features.return_value = {}  # token_credit feature disabled
 
@@ -486,7 +486,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.tokens, Decimal("5.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_token_balance_never_negative(self, mock_features):
+    def test_token_balance_never_negative(self, mock_features) -> None:
         """Test that token balance calculation handles edge cases"""
         mock_features.return_value = {"token_credit": True}
 
@@ -518,7 +518,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.tokens, Decimal("0.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_delete_token_item_updates_balance(self, mock_features):
+    def test_delete_token_item_updates_balance(self, mock_features) -> None:
         """Test that deleting a token item updates the balance"""
         mock_features.return_value = {"token_credit": True}
 
@@ -551,7 +551,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         self.assertEqual(updated_membership.tokens, Decimal("0.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_update_payment_item_recalculates_balance(self, mock_features):
+    def test_update_payment_item_recalculates_balance(self, mock_features) -> None:
         """Test that updating a payment item recalculates the balance"""
         mock_features.return_value = {"token_credit": True}
 

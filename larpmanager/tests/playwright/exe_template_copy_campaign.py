@@ -28,7 +28,7 @@ from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_con
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_template_copy(pw_page):
+def test_exe_template_copy(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,7 +42,7 @@ def test_exe_template_copy(pw_page):
     campaign(live_server, page)
 
 
-def template(live_server, page):
+def template(live_server, page) -> None:
     # Activate template
     go_to(page, live_server, "/manage/features/template/on")
     go_to(page, live_server, "/manage/template")
@@ -88,7 +88,7 @@ def template(live_server, page):
     go_to(page, live_server, "/fromtemplate/1/manage/copy")
 
 
-def setup(live_server, page):
+def setup(live_server, page) -> None:
     # activate factions
     go_to(page, live_server, "/test/1/manage/features/faction/on")
     # activate xp
@@ -113,7 +113,7 @@ def setup(live_server, page):
     submit_confirm(page)
 
 
-def copy(live_server, page):
+def copy(live_server, page) -> None:
     # copy event
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
@@ -148,7 +148,7 @@ def copy(live_server, page):
     expect(page.locator('[id="\\32 "]')).to_contain_text("11")
 
 
-def campaign(live_server, page):
+def campaign(live_server, page) -> None:
     # create campaign
     go_to(page, live_server, "/manage/features/campaign/on")
     go_to(page, live_server, "/manage/events")

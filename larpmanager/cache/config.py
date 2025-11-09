@@ -43,8 +43,8 @@ def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
     return f"configs_{config_model_name}_{config_owner_id}"
 
 
-def get_configs(model_instance) -> dict:
-    # Get configuration dictionary for a Django model instance
+def get_configs(model_instance: Any) -> dict:
+    """Get configuration dictionary for a Django model instance."""
     # noinspection PyProtectedMember
     return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())
 
@@ -58,6 +58,7 @@ def get_element_configs(element_id: int, model_name: str) -> dict:
 
     Returns:
         Dictionary containing the element configurations
+
     """
     # Generate cache key for the element and model combination
     cache_key = cache_configs_key(element_id, model_name)
@@ -72,8 +73,7 @@ def get_element_configs(element_id: int, model_name: str) -> dict:
 
 
 def update_configs(element_id: int, model_name: str) -> dict[str, str]:
-    """
-    Retrieve configuration values for a given element.
+    """Retrieve configuration values for a given element.
 
     This function fetches configuration key-value pairs for different model types
     (event, association, run, member, character) based on the element ID and model name.
@@ -88,6 +88,7 @@ def update_configs(element_id: int, model_name: str) -> dict[str, str]:
     Example:
         >>> update_configs(123, "event")
         {"max_participants": "50", "registration_deadline": "2024-01-15"}
+
     """
     # Define mapping between model names and their corresponding config models
     model_map = {
@@ -134,6 +135,7 @@ def save_all_element_configs(obj, dct: dict[str, str]) -> None:
     Side Effects:
         - Updates existing configuration values in the database
         - Creates new configuration records for new names
+
     """
     # Get the foreign key field name for linking configs to the parent object
     fk_field = _get_fkey_config(obj)
@@ -182,6 +184,7 @@ def save_single_config(obj: object, name: str, value: any) -> None:
     Raises:
         AttributeError: If obj doesn't have a 'configs' attribute.
         DatabaseError: If the database operation fails.
+
     """
     # Get the foreign key field name for this object type
     fk_field = _get_fkey_config(obj)
@@ -209,6 +212,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
         >>> event = Event()
         >>> _get_fkey_config(event)
         'event'
+
     """
     # Map model class names to their configuration foreign key field names
     foreign_key_field_map = {
@@ -223,8 +227,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
     model_class_name = model_instance.__class__.__name__
 
     # Return the corresponding foreign key field name
-    foreign_key_field_name = foreign_key_field_map.get(model_class_name)
-    return foreign_key_field_name
+    return foreign_key_field_map.get(model_class_name)
 
 
 def get_element_config(element, config_name: str, default_value, bypass_cache: bool = False):
@@ -249,6 +252,7 @@ def get_element_config(element, config_name: str, default_value, bypass_cache: b
     Note:
         If element lacks aux_configs attribute, it will be populated either from
         cache (default) or directly from database (if bypass_cache=True).
+
     """
     # Check if element already has cached configurations
     if not hasattr(element, "aux_configs"):
@@ -264,7 +268,7 @@ def get_element_config(element, config_name: str, default_value, bypass_cache: b
 
 
 def _get_cached_config(element_id, element_type, config_name, default_value=None, context=None, bypass_cache=False):
-    """Helper function to get cached configuration for any element type."""
+    """Get cached configuration for any element type."""
     cache_key = f"{element_type}_configs"
 
     if context is None:
@@ -285,6 +289,7 @@ def _get_cached_config(element_id, element_type, config_name, default_value=None
 
 
 def get_association_config(association_id, config_name, default_value=None, context=None, bypass_cache=False):
+    """Get configuration value for association."""
     return _get_cached_config(association_id, "association", config_name, default_value, context, bypass_cache)
 
 
@@ -309,6 +314,7 @@ def evaluate_config(configurations: dict, configuration_name: str, default_value
 
     Returns:
         Configuration value with appropriate type conversion, or default value
+
     """
     # Return default if configuration key doesn't exist
     if configuration_name not in configurations:

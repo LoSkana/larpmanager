@@ -28,7 +28,7 @@ from larpmanager.tests.utils import check_download, go_to, load_image, login_org
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_membership(pw_page):
+def test_user_signup_membership(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,7 +40,7 @@ def test_user_signup_membership(pw_page):
     pay(live_server, page)
 
 
-def signup(live_server, page):
+def signup(live_server, page) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
     # Activate membership
@@ -80,7 +80,7 @@ def signup(live_server, page):
     submit_confirm(page)
 
 
-def membership(live_server, page):
+def membership(live_server, page) -> None:
     # send membership
     go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Provisional registration")
@@ -111,7 +111,7 @@ def membership(live_server, page):
     page.get_by_role("link", name="to confirm it proceed with").click()
 
 
-def pay(live_server, page):
+def pay(live_server, page) -> None:
     # pay
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect(page.locator("b")).to_contain_text("100")

@@ -45,7 +45,7 @@ def cache_text_field_key(model_type: type, model_instance: object) -> str:
 
 
 def remove_html_tags(text):
-    """Remove html tags from a string"""
+    """Remove html tags from a string."""
     html_tag_pattern = re.compile("<.*?>")
     return re.sub(html_tag_pattern, "", text)
 
@@ -60,6 +60,7 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
 
     Returns:
         A tuple containing the processed text and its original length
+
     """
     # Handle None values by setting to empty string
     if text_value is None:
@@ -82,8 +83,7 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
         )
 
     # Return the processed text and original length
-    result = (cleaned_text, original_length)
-    return result
+    return (cleaned_text, original_length)
 
 
 # Writing
@@ -98,6 +98,7 @@ def init_cache_text_field(model_class: type, event: Event) -> dict:
 
     Returns:
         Dictionary mapping instance identifiers to cached text field data.
+
     """
     cache_result = {}
     # Iterate through all instances of the given type for the event's parent
@@ -127,6 +128,7 @@ def _init_element_cache_text_field(
     Side Effects:
         Populates result_cache[element.id] with cached text field data including teaser, text,
         and editor questions
+
     """
     # Initialize element entry in result dictionary if not exists
     if element.id not in result_cache:
@@ -173,6 +175,7 @@ def update_cache_text_fields(el: object) -> None:
 
     Args:
         el: Element object to update cache for
+
     """
     # Get element type and associated event
     element_type = el.__class__
@@ -197,6 +200,7 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
     Args:
         instance: Answer instance containing question, element_id, and text data.
             Must have question, element_id, question_id, and text attributes.
+
     """
     # Only process editor-type questions
     if instance.question.typ != BaseQuestionType.EDITOR:
@@ -217,7 +221,9 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
 
     # Update cache with new text field data and persist to cache
     cached_text_fields[instance.element_id][question_field_id] = get_single_cache_text_field(
-        instance.element_id, question_field_id, instance.text
+        instance.element_id,
+        question_field_id,
+        instance.text,
     )
     cache.set(cache_key, cached_text_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
@@ -233,6 +239,7 @@ def init_cache_reg_field(run: Run) -> dict:
 
     Returns:
         Dictionary mapping registration field cache data.
+
     """
     cache_data = {}
     # Iterate through all registrations for this run and populate cache
@@ -247,6 +254,7 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
     Args:
         registration: Registration element to process
         cache_result: Result dictionary to populate with cached data
+
     """
     # Initialize element entry in result dictionary if not present
     if registration.id not in cache_result:
@@ -262,7 +270,9 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
             answer_text = RegistrationAnswer.objects.get(question_id=question_id, reg_id=registration.id).text
             field_key = str(question_id)
             cache_result[registration.id][field_key] = get_single_cache_text_field(
-                registration.id, field_key, answer_text
+                registration.id,
+                field_key,
+                answer_text,
             )
         except ObjectDoesNotExist:
             pass
@@ -276,6 +286,7 @@ def get_cache_reg_field(run: Run) -> dict:
 
     Returns:
         Dictionary containing cached registration field data.
+
     """
     # Generate cache key for the run's registration fields
     cache_key = cache_text_field_key(Registration, run)
@@ -292,7 +303,7 @@ def get_cache_reg_field(run: Run) -> dict:
 
 
 def update_cache_reg_fields(registration: Registration) -> None:
-    """Updates cached registration fields for the given element's run."""
+    """Update cached registration fields for the given element's run."""
     # Get the run associated with the registration element
     run = registration.run
 
@@ -318,6 +329,7 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
 
     Returns:
         None
+
     """
     # Skip processing if question is not an editor type
     if instance.question.typ != BaseQuestionType.EDITOR:
@@ -333,7 +345,9 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
     # Update the specific field for this registration with new text content
     question_field = str(instance.question_id)
     cached_registration_fields[instance.reg_id][question_field] = get_single_cache_text_field(
-        instance.reg_id, question_field, instance.text
+        instance.reg_id,
+        question_field,
+        instance.text,
     )
 
     # Store updated cache data with 1-day timeout
@@ -353,6 +367,7 @@ def update_text_fields_cache(model_instance: object) -> None:
 
     Returns:
         None
+
     """
     # Update cache for Writing model instances
     if issubclass(model_instance.__class__, Writing):

@@ -20,6 +20,7 @@
 import base64
 import hashlib
 import json
+import logging
 import os
 import random
 import string
@@ -35,11 +36,14 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum
 from django.utils.deconstruct import deconstructible
-from django.utils.safestring import SafeString, mark_safe
+from django.utils.html import format_html
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
+
+logger = logging.getLogger(__name__)
 
 
 def generate_id(id_length):
@@ -50,8 +54,9 @@ def generate_id(id_length):
 
     Returns:
         str: Random lowercase alphanumeric string of specified length
+
     """
-    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
+    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))  # noqa: S311
 
 
 def decimal_to_str(decimal_value: Decimal) -> str:
@@ -73,15 +78,15 @@ def decimal_to_str(decimal_value: Decimal) -> str:
         '10'
         >>> decimal_to_str(Decimal('10.50'))
         '10.50'
+
     """
     # Convert decimal to string representation
     string_representation = str(decimal_value)
     # Remove trailing .00 for cleaner display of whole numbers
-    string_representation = string_representation.replace(".00", "")
-    return string_representation
+    return string_representation.replace(".00", "")
 
 
-def slug_url_validator(val):
+def slug_url_validator(val) -> None:
     """Validate that string contains only lowercase alphanumeric characters.
 
     Args:
@@ -89,6 +94,7 @@ def slug_url_validator(val):
 
     Raises:
         ValidationError: If string contains invalid characters
+
     """
     if not val.islower() or not val.isalnum():
         raise ValidationError(_("Only lowercase characters and numbers are allowed, no spaces or symbols"))
@@ -110,6 +116,7 @@ def remove_non_ascii(text: str) -> str:
     Example:
         >>> remove_non_ascii("Hello 世界!")
         "Hello !"
+
     """
     # Define ASCII boundary (characters 0-127)
     max_ascii = 128
@@ -119,7 +126,8 @@ def remove_non_ascii(text: str) -> str:
 
 
 def my_uuid_miny():
-    return random.choice(string.ascii_letters) + my_uuid(4)
+    """Generate tiny UUID with letter prefix and 4 characters."""
+    return random.choice(string.ascii_letters) + my_uuid(4)  # noqa: S311
 
 
 def my_uuid_short():
@@ -127,6 +135,7 @@ def my_uuid_short():
 
     Returns:
         str: 12-character UUID string
+
     """
     return my_uuid(12)
 
@@ -140,6 +149,7 @@ def my_uuid(length: int | None = None) -> str:
 
 
 def download_d(session):
+    """Alias for download function."""
     return download(session)
 
 
@@ -170,12 +180,10 @@ def show_thumb(height: int, image_url: str) -> SafeString:
     Example:
         >>> show_thumb(100, "/media/image.jpg")
         '<img style="height:100px" src="/media/image.jpg" />'
-    """
-    # Generate HTML img tag with inline height styling
-    html_img_tag = f'<img style="height:{height}px" src="{image_url}" />'
 
-    # Return as SafeString to prevent HTML escaping in templates
-    return mark_safe(html_img_tag)
+    """
+    # Generate HTML img tag with inline height styling using format_html for safety
+    return format_html('<img style="height:{}px" src="{}" />', height, image_url)
 
 
 def get_attr(obj: object, attr_name: str) -> str | None:
@@ -187,6 +195,7 @@ def get_attr(obj: object, attr_name: str) -> str | None:
 
     Returns:
         Attribute value if truthy, empty string if falsy, None if missing
+
     """
     # Check if object has the requested attribute
     if not hasattr(obj, attr_name):
@@ -212,12 +221,12 @@ def get_sum(queryset: QuerySet) -> Decimal | int:
 
 @deconstructible
 class UploadToPathAndRename:
-    def __init__(self, sub_path):
+    def __init__(self, sub_path) -> None:
+        """Initialize upload path handler with sub-directory."""
         self.sub_path = sub_path
 
     def __call__(self, instance, filename: str) -> str:
-        """
-        Generate upload path for file with backup handling.
+        """Generate upload path for file with backup handling.
 
         Creates a unique filename using UUID and organizes files into directories
         based on instance attributes (event, run, album). When updating existing
@@ -232,6 +241,7 @@ class UploadToPathAndRename:
 
         Note:
             Backup files are stored in 'bkp/' subdirectory with timestamp suffix.
+
         """
         # Extract file extension and generate unique filename
         ext = filename.split(".")[-1].lower()
@@ -274,8 +284,8 @@ class UploadToPathAndRename:
                 bkp_fn = f"{instance.pk}_{datetime.now()}.{ext}"
                 bkp_fn = os.path.join(str(bkp), bkp_fn)
                 current_fn = os.path.join(conf_settings.MEDIA_ROOT, path, el)
-                # print(bkp)
-                # print(bkp_fn)
+                # logger.debug(f"Backup: {bkp}")
+                # logger.debug(f"Backup filename: {bkp_fn}")
                 os.rename(current_fn, bkp_fn)
 
         return new_fn
@@ -288,8 +298,7 @@ def _key_id(fernet_key: bytes) -> str:
 
 
 def get_payment_details_path(association: "Association") -> str:
-    """
-    Get encrypted payment details file path for association.
+    """Get encrypted payment details file path for association.
 
     Constructs a secure file path for storing encrypted payment configuration
     data specific to an association. Creates the payment settings directory
@@ -307,6 +316,7 @@ def get_payment_details_path(association: "Association") -> str:
         >>> path = get_payment_details_path(association)
         >>> path
         '/path/to/payment/settings/my-org.abc123.enc'
+
     """
     # Ensure payment settings directory exists
     os.makedirs(conf_settings.PAYMENT_SETTING_FOLDER, exist_ok=True)
@@ -322,8 +332,7 @@ def get_payment_details_path(association: "Association") -> str:
 
 
 def save_payment_details(association: "Association", payment_details: dict) -> None:
-    """
-    Encrypt and save payment details for association.
+    """Encrypt and save payment details for association.
 
     Args:
         association: Association instance with encryption key
@@ -336,6 +345,7 @@ def save_payment_details(association: "Association", payment_details: dict) -> N
         json.JSONEncoder: If payment_details cannot be serialized to JSON
         FileNotFoundError: If the target directory doesn't exist
         PermissionError: If insufficient permissions to write the file
+
     """
     # Create cipher using association's encryption key
     cipher = Fernet(association.key)
@@ -369,6 +379,7 @@ def strip_tags(html: str | None) -> str:
         "Hello world"
         >>> strip_tags(None)
         ""
+
     """
     # Handle None and empty string cases early
     if html is None or html == "":
@@ -394,8 +405,10 @@ class MLStripper(HTMLParser):
         # Initialize text buffer for content extraction
         self.text = StringIO()
 
-    def handle_data(self, d):
+    def handle_data(self, d) -> None:
+        """Handle data by writing it to the internal text buffer."""
         self.text.write(d)
 
     def get_data(self):
+        """Return the accumulated text data."""
         return self.text.getvalue()

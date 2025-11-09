@@ -28,7 +28,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, login_user,
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_character_form(pw_page):
+def test_orga_character_form(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -79,7 +79,7 @@ def test_orga_character_form(pw_page):
     create_second_char(live_server, page)
 
 
-def create_second_char(live_server, page):
+def create_second_char(live_server, page) -> None:
     login_user(page, live_server)
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
@@ -114,7 +114,7 @@ def create_second_char(live_server, page):
     )
 
 
-def show_chars(page, live_server):
+def show_chars(page, live_server) -> None:
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Writing")).click()
     page.locator("#id_writing_field_visibility").check()
@@ -126,7 +126,7 @@ def show_chars(page, live_server):
     submit_confirm(page)
 
 
-def check_first_char(page, live_server):
+def check_first_char(page, live_server) -> None:
     page.get_by_role("link", name="Change").click()
     expect(page.locator("#id_q4")).to_have_value("aaaaaaaaaa")
     page.get_by_text("bbbbbbbbbb").click()
@@ -170,7 +170,7 @@ def check_first_char(page, live_server):
     page.get_by_text("long descr").click()
 
 
-def recheck_char(live_server, page):
+def recheck_char(live_server, page) -> None:
     expect(page.locator("#main_form")).to_contain_text("long descr")
     expect(page.locator("#lbl_id_q8")).to_contain_text("restricted")
     expect(page.locator("#main_form")).to_contain_text("restricted textonly only descrall all descr")
@@ -183,7 +183,7 @@ def recheck_char(live_server, page):
     submit_confirm(page)
 
 
-def create_first_char(live_server, page):
+def create_first_char(live_server, page) -> None:
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Register").click()
     page.get_by_role("button", name="Continue").click()
@@ -233,13 +233,13 @@ def create_first_char(live_server, page):
     submit_confirm(page)
 
 
-def fill_presentation_text(page):
+def fill_presentation_text(page) -> None:
     fill_tinymce(page, "id_teaser", "baba")
 
     fill_tinymce(page, "id_text", "bebe")
 
 
-def add_field_special(page):
+def add_field_special(page) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -282,7 +282,7 @@ def add_field_special(page):
     submit_confirm(page)
 
 
-def add_field_restricted(page):
+def add_field_restricted(page) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("restricted")
@@ -319,7 +319,7 @@ def add_field_restricted(page):
     submit_confirm(page)
 
 
-def add_field_multiple(page):
+def add_field_multiple(page) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("m")
     page.locator("#id_name").click()
@@ -357,7 +357,7 @@ def add_field_multiple(page):
     submit_confirm(page)
 
 
-def add_field_available(page):
+def add_field_available(page) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("available text")
@@ -383,7 +383,7 @@ def add_field_available(page):
     submit_confirm(page)
 
 
-def add_field_text(page):
+def add_field_text(page) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")

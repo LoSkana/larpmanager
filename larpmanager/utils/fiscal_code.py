@@ -20,6 +20,7 @@ def calculate_fiscal_code(member):
 
     Returns:
         dict: Dictionary containing fiscal code validation results
+
     """
     # ignore non-italian citizens
     if member.nationality and member.nationality.lower() != "it":
@@ -56,6 +57,7 @@ def _extract_last_name(last_name: str) -> str:
 
     Returns:
         3-character string code.
+
     """
     # Convert to uppercase for consistent processing
     normalized_last_name = last_name.upper()
@@ -76,6 +78,7 @@ def _extract_first_name(first_name: str) -> str:
 
     Returns:
         A 3-character string extracted from the first name.
+
     """
     normalized_name = first_name.upper()
 
@@ -99,6 +102,7 @@ def _extract_birth_date(birth_date: date | None, male: bool) -> str:
 
     Returns:
         Formatted birth date string (YYMDD format)
+
     """
     month_codes = "ABCDEHLMPRST"
     if not birth_date:
@@ -124,12 +128,12 @@ def _clean_birth_place(birth_place: str | None) -> str:
 
     Returns:
         Cleaned birth place string with parenthetical content removed.
+
     """
     if not birth_place:
         return ""
     # Remove everything in parenthesis
-    birth_place_without_parentheses = re.sub(r"\(.*?\)", "", birth_place)
-    return birth_place_without_parentheses
+    return re.sub(r"\(.*?\)", "", birth_place)
 
 
 def _slugify(input_text):
@@ -140,6 +144,7 @@ def _slugify(input_text):
 
     Returns:
         str: Normalized text with accents removed, lowercased, and special characters replaced
+
     """
     # Remove accents
     normalized_text = input_text
@@ -156,8 +161,7 @@ def _slugify(input_text):
     # Replace any sequence of whitespace or hyphens with a single hyphen
     normalized_text = re.sub(r"[\s-]+", "-", normalized_text)
     # Strip leading and trailing hyphens
-    normalized_text = normalized_text.strip("-")
-    return normalized_text
+    return normalized_text.strip("-")
 
 
 def _extract_municipality_code(birth_place: str) -> str:
@@ -176,6 +180,7 @@ def _extract_municipality_code(birth_place: str) -> str:
         The function performs case-insensitive matching using slugified names.
         It searches first in nations data, then in municipality codes with
         exact and partial matching strategies.
+
     """
     # Convert birth place to slugified format for consistent matching
     slugified_birth_place = _slugify(birth_place)
@@ -221,6 +226,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
 
     Returns:
         Single character check digit (A-Z) to complete the 16-character fiscal code
+
     """
     # Lookup table for characters in even positions (0-indexed: 1, 3, 5, etc.)
     # Maps each alphanumeric character to its numeric value for checksum calculation
@@ -315,8 +321,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
             weighted_sum += odd_position_values[character]
 
     # Convert the modulo 26 result to a letter (A=0, B=1, ..., Z=25)
-    check_digit = chr((weighted_sum % 26) + ord("A"))
-    return check_digit
+    return chr((weighted_sum % 26) + ord("A"))
 
 
 def _go(member: Member, male: bool = True) -> dict[str, Any]:
@@ -340,6 +345,7 @@ def _go(member: Member, male: bool = True) -> dict[str, Any]:
             - supplied_cf (str): Member's existing fiscal code (uppercase)
             - error_cf (str): Error message if validation fails
             - correct_cf (bool): True if calculated matches supplied code
+
     """
     expected_fiscal_code_length = 16
     expected_name_parts_count = 2
@@ -391,11 +397,11 @@ def _go(member: Member, male: bool = True) -> dict[str, Any]:
     elif validation_context["calculated_cf"][:6] != validation_context["supplied_cf"][:6]:
         validation_context["error_cf"] = _(
             "First and last name characters do not match (remember to enter the correct first "
-            "and last names in legal_name)"
+            "and last names in legal_name)",
         )
     elif validation_context["calculated_cf"][-6:-1] != validation_context["supplied_cf"][-6:-1]:
         validation_context["error_cf"] = _(
-            "Characters relating to place of birth do not match (check exact municipality)"
+            "Characters relating to place of birth do not match (check exact municipality)",
         )
     elif validation_context["calculated_cf"][6:10] != validation_context["supplied_cf"][6:10]:
         validation_context["error_cf"] = _("Date of birth characters do not match (check exact date)")

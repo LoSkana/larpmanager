@@ -61,6 +61,7 @@ def update_event_fields(event_id: int) -> dict:
                 'ids': {question_type: question_id, ...}
             }
         }
+
     """
     cached_fields = {}
     event = Event.objects.get(pk=event_id)
@@ -122,8 +123,7 @@ def get_event_fields_cache(event_id: int) -> dict:
 
 
 def visible_writing_fields(context: dict, applicable: QuestionApplicable, only_visible: bool = True) -> None:
-    """
-    Filter and cache visible writing fields based on visibility settings.
+    """Filter and cache visible writing fields based on visibility settings.
 
     This function processes writing fields from the context and filters them based on
     visibility rules, storing the results in separate categories for questions, options,
@@ -138,6 +138,7 @@ def visible_writing_fields(context: dict, applicable: QuestionApplicable, only_v
     Returns:
         None: Results are stored directly in the context dictionary under 'questions',
               'options', and 'searchable' keys.
+
     """
     # Get the label key for the applicable question type
     applicable_type_key = QuestionApplicable(applicable).label

@@ -32,9 +32,11 @@ from larpmanager.utils.pdf import (
 )
 
 
-def check_print_pdf(context):
+def check_print_pdf(context: dict) -> None:
+    """Check if PDF printing is enabled in context, raise 404 if not ready."""
     if "show_addit" not in context or "print_pdf" not in context["show_addit"]:
-        raise Http404("not ready")
+        msg = "not ready"
+        raise Http404(msg)
 
 
 @login_required
@@ -48,6 +50,7 @@ def character_pdf_sheet(request: HttpRequest, event_slug: str, num: int) -> Http
 
     Returns:
         HTTP response containing the PDF character sheet
+
     """
     # Get event run context with signup verification
     context = get_event_context(request, event_slug, signup=True)
@@ -73,6 +76,7 @@ def character_pdf_sheet_friendly(request: HttpRequest, event_slug: str, num: int
 
     Returns:
         HttpResponse containing the printer-friendly character PDF
+
     """
     # Get event run context and validate signup access
     context = get_event_context(request, event_slug, signup=True)
@@ -98,6 +102,7 @@ def character_pdf_relationships(request: HttpRequest, event_slug: str, num: int)
 
     Returns:
         PDF response with character relationships
+
     """
     # Get event/run context with signup validation
     context = get_event_context(request, event_slug, signup=True)

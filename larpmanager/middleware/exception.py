@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,12 +36,12 @@ from larpmanager.utils.exceptions import (
     MainPageError,
     MembershipError,
     NotFoundError,
-    PermissionError,
     RedirectError,
     ReturnNowError,
     RewokedMembershipError,
     SignupError,
     UnknowRunError,
+    UserPermissionError,
     WaitingError,
 )
 
@@ -57,7 +57,7 @@ class ExceptionHandlingMiddleware:
         """Process request through middleware chain."""
         return self.get_response(request)
 
-    def process_exception(self, request: HttpRequest, exception: Exception) -> Optional[HttpResponse]:
+    def process_exception(self, request: HttpRequest, exception: Exception) -> HttpResponse | None:
         """Process Django middleware exceptions and route to appropriate handlers.
 
         Args:
@@ -71,11 +71,12 @@ class ExceptionHandlingMiddleware:
             This method handles application-specific exceptions by routing them to
             appropriate error pages or redirect responses. Unhandled exceptions
             return None to allow Django's default exception handling.
+
         """
         # Define exception type to handler mappings for clean separation of concerns
         handlers = [
             # Permission-related errors - show appropriate error pages
-            (PermissionError, lambda ex: render(request, "exception/permission.html")),
+            (UserPermissionError, lambda ex: render(request, "exception/permission.html")),
             (NotFoundError, lambda ex: render(request, "exception/notfound.html")),
             (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
             # Run-related errors - show available runs for the current association
@@ -89,7 +90,7 @@ class ExceptionHandlingMiddleware:
                         .exclude(event__visible=False)
                         .select_related("event")
                         .filter(event__association_id=request.association["id"])
-                        .order_by("-end")
+                        .order_by("-end"),
                     },
                 ),
             ),
@@ -99,20 +100,29 @@ class ExceptionHandlingMiddleware:
             (
                 SignupError,
                 lambda ex: self._redirect_with_message(
-                    request, _("To access this feature, you must first register") + "!", "register", [ex.slug]
+                    request,
+                    _("To access this feature, you must first register") + "!",
+                    "register",
+                    [ex.slug],
                 ),
             ),
             (
                 WaitingError,
                 lambda ex: self._redirect_with_message(
-                    request, _("This feature is available for non-waiting tickets") + "!", "register", [ex.slug]
+                    request,
+                    _("This feature is available for non-waiting tickets") + "!",
+                    "register",
+                    [ex.slug],
                 ),
             ),
             # Content visibility and access errors
             (
                 HiddenError,
                 lambda ex: self._redirect_with_message(
-                    request, ex.name + " " + _("not visible at this time"), "gallery", [ex.slug]
+                    request,
+                    ex.name + " " + _("not visible at this time"),
+                    "gallery",
+                    [ex.slug],
                 ),
             ),
             # Flow control exceptions - handle redirects and early returns
@@ -139,7 +149,11 @@ class ExceptionHandlingMiddleware:
 
     @staticmethod
     def _redirect_with_message(
-        request: HttpRequest, message_text: str, view_name: str, view_args: list, message_level: str = "success"
+        request: HttpRequest,
+        message_text: str,
+        view_name: str,
+        view_args: list,
+        message_level: str = "success",
     ) -> HttpResponseRedirect:
         """Add a message to the request and redirect to a named view."""
         getattr(messages, message_level)(request, message_text)
@@ -161,17 +175,20 @@ class ExceptionHandlingMiddleware:
 
         Raises:
             Http404: If association skin is managed, or if feature/run objects are not found
+
         """
         # Check if association skin is managed - if so, deny access completely
         context = get_context(request)
         if context["skin_managed"]:
-            raise Http404("not allowed")
+            msg = "not allowed"
+            raise Http404(msg)
 
         # Retrieve the feature object or raise 404 if not found
         try:
             feature = Feature.objects.get(slug=exception.feature)
         except ObjectDoesNotExist as error:
-            raise Http404("Feature not found") from error
+            msg = "Feature not found"
+            raise Http404(msg) from error
 
         # Build base context with exception and feature data
         context.update({"exe": exception, "feature": feature})
@@ -185,7 +202,8 @@ class ExceptionHandlingMiddleware:
             try:
                 run = Run.objects.get(pk=exception.run)
             except ObjectDoesNotExist as error:
-                raise Http404("Run not found") from error
+                msg = "Run not found"
+                raise Http404(msg) from error
 
             # Add run context and check event-level permissions
             context["run"] = run

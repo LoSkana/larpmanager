@@ -38,6 +38,7 @@ def process_payment(invoice_id: int) -> None:
 
     Note:
         Creates ElectronicInvoice if it doesn't exist, then generates and saves XML.
+
     """
     # Retrieve the payment invoice by ID
     payment_invoice = PaymentInvoice.objects.get(pk=invoice_id)
@@ -48,7 +49,9 @@ def process_payment(invoice_id: int) -> None:
     except Exception:
         # Create new electronic invoice if none exists
         electronic_invoice = ElectronicInvoice(
-            inv=payment_invoice, year=datetime.now().year, association=payment_invoice.association
+            inv=payment_invoice,
+            year=datetime.now().year,
+            association=payment_invoice.association,
         )
         electronic_invoice.save()
 
@@ -58,7 +61,7 @@ def process_payment(invoice_id: int) -> None:
     # Save the generated XML to the electronic invoice
     electronic_invoice.xml = xml_content
     electronic_invoice.save()
-    # Todo sends XML and track track
+    # TODO sends XML and track track
 
 
 def prepare_xml(invoice, electronic_invoice_config) -> str:
@@ -78,6 +81,7 @@ def prepare_xml(invoice, electronic_invoice_config) -> str:
     Note:
         The generated XML includes both header and body sections required
         for Italian electronic invoice submission to the SDI system.
+
     """
     # Extract member data from invoice
     member = invoice.member
@@ -101,12 +105,15 @@ def prepare_xml(invoice, electronic_invoice_config) -> str:
 
     # Decode bytes to string for return
     # noinspection PyUnresolvedReferences
-    xml_string = xml_bytes_buffer.getvalue().decode("utf-8")
-    return xml_string
+    return xml_bytes_buffer.getvalue().decode("utf-8")
 
 
 def _einvoice_header(
-    einvoice: "ElectronicInvoice", inv: PaymentInvoice, member: Member, name_number: int, root: ET.Element
+    einvoice: "ElectronicInvoice",
+    inv: PaymentInvoice,
+    member: Member,
+    name_number: int,
+    root: ET.Element,
 ) -> None:
     """Create the header section of an electronic invoice XML structure.
 
@@ -123,6 +130,7 @@ def _einvoice_header(
     Side effects:
         Modifies root XML element in-place by adding FatturaElettronicaHeader
         with transmission data, supplier (association), and customer (member) details
+
     """
     # Create config holder to optimize repeated calls
     config_holder = {}
@@ -136,14 +144,20 @@ def _einvoice_header(
     # Set Italy as default country code for electronic invoicing
     ET.SubElement(transmitter_id, "IdPaese").text = "IT"
     ET.SubElement(transmitter_id, "IdCodice").text = get_association_config(
-        inv.association_id, "einvoice_idcodice", None, config_holder
+        inv.association_id,
+        "einvoice_idcodice",
+        None,
+        config_holder,
     )
     # Progressive invoice number padded to 10 digits
     ET.SubElement(transmission_data, "ProgressivoInvio").text = str(einvoice.progressive).zfill(10)
     # Standard format for private entities
     ET.SubElement(transmission_data, "FormatoTrasmissione").text = "FPR12"
     ET.SubElement(transmission_data, "CodiceDestinatario").text = get_association_config(
-        inv.association_id, "einvoice_codicedestinatario", None, config_holder
+        inv.association_id,
+        "einvoice_codicedestinatario",
+        None,
+        config_holder,
     )
 
     # Build supplier section - association information as service provider
@@ -153,35 +167,62 @@ def _einvoice_header(
     vat_fiscal_id = ET.SubElement(supplier_registry_data, "IdFiscaleIVA")
     ET.SubElement(vat_fiscal_id, "IdPaese").text = "IT"
     ET.SubElement(vat_fiscal_id, "IdCodice").text = get_association_config(
-        inv.association_id, "einvoice_partitaiva", None, config_holder
+        inv.association_id,
+        "einvoice_partitaiva",
+        None,
+        config_holder,
     )
     # Add association name and tax regime
     supplier_registry = ET.SubElement(supplier_registry_data, "Anagrafica")
     ET.SubElement(supplier_registry, "Denominazione").text = get_association_config(
-        inv.association_id, "einvoice_denominazione", None, config_holder
+        inv.association_id,
+        "einvoice_denominazione",
+        None,
+        config_holder,
     )
     ET.SubElement(supplier_registry_data, "RegimeFiscale").text = get_association_config(
-        inv.association_id, "einvoice_regimefiscale", None, config_holder
+        inv.association_id,
+        "einvoice_regimefiscale",
+        None,
+        config_holder,
     )
     # Add association registered address
     supplier_address = ET.SubElement(supplier_provider, "Sede")
     ET.SubElement(supplier_address, "Indirizzo").text = get_association_config(
-        inv.association_id, "einvoice_indirizzo", None, config_holder
+        inv.association_id,
+        "einvoice_indirizzo",
+        None,
+        config_holder,
     )
     ET.SubElement(supplier_address, "NumeroCivico").text = get_association_config(
-        inv.association_id, "einvoice_numerocivico", None, config_holder
+        inv.association_id,
+        "einvoice_numerocivico",
+        None,
+        config_holder,
     )
     ET.SubElement(supplier_address, "Cap").text = get_association_config(
-        inv.association_id, "einvoice_cap", None, config_holder
+        inv.association_id,
+        "einvoice_cap",
+        None,
+        config_holder,
     )
     ET.SubElement(supplier_address, "Comune").text = get_association_config(
-        inv.association_id, "einvoice_comune", None, config_holder
+        inv.association_id,
+        "einvoice_comune",
+        None,
+        config_holder,
     )
     ET.SubElement(supplier_address, "Provincia").text = get_association_config(
-        inv.association_id, "einvoice_provincia", None, config_holder
+        inv.association_id,
+        "einvoice_provincia",
+        None,
+        config_holder,
     )
     ET.SubElement(supplier_address, "Nazione").text = get_association_config(
-        inv.association_id, "einvoice_nazione", None, config_holder
+        inv.association_id,
+        "einvoice_nazione",
+        None,
+        config_holder,
     )
 
     # Build customer section - member receiving the invoice
@@ -218,8 +259,7 @@ def _einvoice_header(
 
 
 def _einvoice_body(einvoice, invoice, xml_root) -> None:
-    """
-    Build the body section of electronic invoice XML structure.
+    """Build the body section of electronic invoice XML structure.
 
     Args:
         einvoice: Electronic invoice instance containing creation date and number
@@ -228,6 +268,7 @@ def _einvoice_body(einvoice, invoice, xml_root) -> None:
 
     Returns:
         None: Modifies xml_root element in place by adding FatturaElettronicaBody
+
     """
     # Create main body element and general data section
     invoice_body = ET.SubElement(xml_root, "FatturaElettronicaBody")

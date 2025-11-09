@@ -4,8 +4,7 @@ from typing import Any
 
 from django import forms
 from django.forms import Textarea
-from django.utils.html import escape
-from django.utils.safestring import mark_safe
+from django.utils.html import escape, format_html_join
 from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
@@ -35,11 +34,12 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
 
         Returns:
             Safe HTML string containing the rendered checkbox elements
+
         """
-        output = []
         value = value or []
 
-        # Iterate through each choice option to create checkbox elements
+        # Build list of checkbox elements as tuples for format_html_join
+        checkbox_elements = []
         for i, (option_value, option_label) in enumerate(self.choices):
             # Generate unique ID for each checkbox using the base name and index
             checkbox_id = f"{escape(attrs.get('id', name))}_{i}"
@@ -47,16 +47,24 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
             # Check if current option value is in the selected values list
             checked = "checked" if str(option_value) in value else ""
 
-            # Create the checkbox input element with proper escaping
-            checkbox_html = f'<input type="checkbox" name="{escape(name)}" value="{escape(option_value)}" id="{checkbox_id}" {checked}>'
+            # Build the complete HTML for this checkbox
+            checkbox_elements.append(
+                (
+                    name,
+                    option_value,
+                    checkbox_id,
+                    checked,
+                    checkbox_id,
+                    option_label,
+                ),
+            )
 
-            # Create the associated label element
-            link_html = f'<label for="{checkbox_id}">{escape(option_label)}</label>'
-
-            # Wrap checkbox and label in a container div
-            output.append(f'<div class="feature_checkbox">{checkbox_html} {link_html}</div>')
-
-        return mark_safe("\n".join(output))
+        # Use format_html_join to safely generate the HTML
+        return format_html_join(
+            "\n",
+            '<div class="feature_checkbox"><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label></div>',
+            checkbox_elements,
+        )
 
 
 class ConfigForm(MyForm):
@@ -66,6 +74,7 @@ class ConfigForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         super().__init__(*args, **kwargs)
 
@@ -85,9 +94,8 @@ class ConfigForm(MyForm):
     @abstractmethod
     def set_configs(self) -> None:
         """No-op method placeholder."""
-        pass
 
-    def set_section(self, section_slug, section_name):
+    def set_section(self, section_slug, section_name) -> None:
         """Set the current section for grouping configuration fields.
 
         Args:
@@ -96,12 +104,13 @@ class ConfigForm(MyForm):
 
         Side effects:
             Sets internal section state and jump_section if matches params
+
         """
         self._section = section_name
         if self.params.get("jump_section", "") == section_slug:
             self.jump_section = section_name
 
-    def add_configs(self, configuration_key, config_type, field_label, field_help_text, extra_data=None):
+    def add_configs(self, configuration_key, config_type, field_label, field_help_text, extra_data=None) -> None:
         """Add a configuration field to be rendered in the form.
 
         Args:
@@ -113,6 +122,7 @@ class ConfigForm(MyForm):
 
         Side effects:
             Appends field definition to config_fields list
+
         """
         self.config_fields.append(
             {
@@ -122,7 +132,7 @@ class ConfigForm(MyForm):
                 "label": field_label,
                 "help_text": field_help_text,
                 "extra": extra_data,
-            }
+            },
         )
 
     def save(self, commit: bool = True) -> Any:
@@ -134,6 +144,7 @@ class ConfigForm(MyForm):
 
         Returns:
             The saved model instance.
+
         """
         # Save the parent form instance
         instance = super().save(commit=commit)
@@ -154,7 +165,7 @@ class ConfigForm(MyForm):
 
         return instance
 
-    def _get_custom_field(self, field_definition, result_dict):
+    def _get_custom_field(self, field_definition, result_dict) -> None:
         """Extract and format configuration field value from form data.
 
         Args:
@@ -163,6 +174,7 @@ class ConfigForm(MyForm):
 
         Side effects:
             Updates result_dict dictionary with formatted field value
+
         """
         field_key = field_definition["key"]
 
@@ -182,26 +194,19 @@ class ConfigForm(MyForm):
     def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra=None) -> forms.Field | None:
         """Create appropriate Django form field based on configuration type.
 
-        Parameters
-        ----------
-        field_type : ConfigType
-            Type of configuration field that determines which Django form field to create
-        label : str
-            Human-readable label text displayed for the form field
-        help_text : str
-            Descriptive text shown to help users understand the field purpose
-        extra : Any, optional
-            Additional configuration data specific to certain field types (e.g., choices for MULTI_BOOL)
+        Args:
+            field_type:  Type of configuration field that determines which Django form field to create
+            label: Human-readable label text displayed for the form field
+            help_text: Descriptive text shown to help users understand the field purpose
+            extra:Additional configuration data specific to certain field types (e.g., choices for MULTI_BOOL)
 
-        Returns
-        -------
-        forms.Field or None
-            Django form field instance matching the specified type, or None if field_type is unknown
+        Returns:
+            forms.Field or None: Django form field instance matching the specified type, or None if field_type is unknown
 
-        Notes
-        -----
-        Supported field types include CHAR, BOOL, HTML, INT, TEXTAREA, MEMBERS, and MULTI_BOOL.
-        The MEMBERS type requires extra parameter to contain association data for queryset filtering.
+        Notes:
+            Supported field types include CHAR, BOOL, HTML, INT, TEXTAREA, MEMBERS, and MULTI_BOOL.
+            The MEMBERS type requires extra parameter to contain association data for queryset filtering.
+
         """
         # Map each configuration type to its corresponding Django form field factory
         field_type_to_form_field = {
@@ -216,7 +221,10 @@ class ConfigForm(MyForm):
             ),
             # Rich text editor field for HTML content
             ConfigType.HTML: lambda: forms.CharField(
-                label=label, widget=TinyMCE(), help_text=help_text, required=False
+                label=label,
+                widget=TinyMCE(),
+                help_text=help_text,
+                required=False,
             ),
             # Numeric input field with integer validation
             ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
@@ -264,6 +272,7 @@ class ConfigForm(MyForm):
             - Adds field to form.fields and sets initial values
             - Updates sections mapping for UI organization
             - Initializes custom_field list if not present
+
         """
         # Extract key and initial value from configuration
         field_key = config["key"]
@@ -303,6 +312,7 @@ class ConfigForm(MyForm):
 
         Returns:
             dict: Mapping of configuration names to their current values
+
         """
         config_mapping = {}
         if self.instance.pk:

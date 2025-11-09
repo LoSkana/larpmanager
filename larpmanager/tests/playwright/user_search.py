@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, login_orga
 pytestmark = pytest.mark.e2e
 
 
-def test_user_search(pw_page):
+def test_user_search(pw_page) -> None:
     page, live_server, _ = pw_page
 
     prepare(page, live_server)
@@ -44,7 +44,7 @@ def test_user_search(pw_page):
     filter_multi(page)
 
 
-def filter_multi(page):
+def filter_multi(page) -> None:
     # filter multi choice
     page.get_by_role("link", name="tag").click()
     page.get_by_role("link", name="wunder").click()
@@ -75,7 +75,7 @@ def filter_multi(page):
     )
 
 
-def filter_single(page):
+def filter_single(page) -> None:
     # filter single choice
     page.get_by_role("link", name="color").click()
     page.get_by_role("link", name="red").click()
@@ -90,7 +90,7 @@ def filter_single(page):
     page.get_by_role("link", name="color").click()
 
 
-def filter_faction(page):
+def filter_faction(page) -> None:
     # filter factions
     expect(page.locator("#one")).to_contain_text(
         "You are including (at least one of these filters) You are excluding (none of these filters) All None Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser"
@@ -108,7 +108,7 @@ def filter_faction(page):
     page.get_by_role("link", name="Factions").nth(1).click()
 
 
-def prepare(page, live_server):
+def prepare(page, live_server) -> None:
     # prepare
     login_orga(page, live_server)
     go_to(page, live_server, "/test/manage")
@@ -161,7 +161,7 @@ def prepare(page, live_server):
     page.get_by_role("button", name="Confirm").click()
 
 
-def characters(page, live_server):
+def characters(page, live_server) -> None:
     # create characters
     page.get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="").click()

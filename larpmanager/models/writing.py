@@ -20,7 +20,7 @@
 
 import os
 import re
-from typing import Any, Optional
+from typing import Any
 
 from django.db import models
 from django.db.models import Q
@@ -76,10 +76,11 @@ class Writing(BaseConceptModel):
         abstract = True
 
     def show_red(self) -> dict[str, Any]:
-        """Returns a dictionary representation for red display.
+        """Return a dictionary representation for red display.
 
         Returns:
             Dictionary containing id, number, and name attributes.
+
         """
         # noinspection PyUnresolvedReferences
         # Create base dictionary with id and number
@@ -90,7 +91,7 @@ class Writing(BaseConceptModel):
             self.upd_js_attr(js, s)
         return js
 
-    def show(self, run: Optional[Any] = None) -> dict[str, Any]:
+    def show(self, run: Any | None = None) -> dict[str, Any]:
         """Generate a display dictionary with basic writing information and teaser.
 
         Builds upon the reduced representation from show_red() by adding the teaser
@@ -104,6 +105,7 @@ class Writing(BaseConceptModel):
         Returns:
             Dict containing writing object data with id, number, name, and teaser
             fields suitable for JSON serialization and frontend display.
+
         """
         # Get base dictionary with id, number, and name fields
         js = self.show_red()
@@ -128,6 +130,7 @@ class Writing(BaseConceptModel):
 
         Returns:
             List of CSV rows: first row contains headers, second row contains example data.
+
         """
         # Initialize base CSV structure with mandatory columns
         csv_rows = [
@@ -182,7 +185,7 @@ class Character(Writing):
         related_name="mirror_inv",
         help_text=_(
             "Indicate whether the character is a mirror (i.e., whether this pg shows the true "
-            "secret face of another character)"
+            "secret face of another character)",
         ),
     )
 
@@ -222,7 +225,10 @@ class Character(Writing):
     )
 
     status = models.CharField(
-        max_length=1, choices=CharacterStatus.choices, default=CharacterStatus.CREATION, verbose_name=_("Status")
+        max_length=1,
+        choices=CharacterStatus.choices,
+        default=CharacterStatus.CREATION,
+        verbose_name=_("Status"),
     )
 
     access_token = models.CharField(
@@ -233,14 +239,15 @@ class Character(Writing):
         verbose_name=_("External access code"),
         help_text=_(
             "Allows external access to this character through a secret URL "
-            "(change the code if it has been shared with the wrong people)"
+            "(change the code if it has been shared with the wrong people)",
         ),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"#{self.number} {self.name}"
 
     def get_config(self, name, default_value=None, bypass_cache=False):
+        """Get configuration value for this character."""
         return get_element_config(self, name, default_value, bypass_cache)
 
     @property
@@ -249,6 +256,7 @@ class Character(Writing):
 
         Returns:
             True if character is active (no inactive config), False otherwise.
+
         """
         is_inactive = self.get_config("inactive", False)
         return not (is_inactive == "True" or is_inactive is True)
@@ -271,7 +279,7 @@ class Character(Writing):
             js["owner"] = self.player.display_member()
 
         js["show"] = js["name"]
-        if "title" in js and js["title"]:
+        if js.get("title"):
             js["show"] += " - " + js["title"]
 
         if run:
@@ -304,14 +312,12 @@ class Character(Writing):
         Args:
             event: Event object to get factions from. If None, uses self.event.
             js: Dictionary to populate with faction data.
+
         """
         js["factions"] = []
 
         # Determine which event to use for faction lookup
-        if event:
-            faction_event = event.get_class_parent("faction")
-        else:
-            faction_event = self.event.get_class_parent("faction")
+        faction_event = event.get_class_parent("faction") if event else self.event.get_class_parent("faction")
 
         # Track if we find a primary faction
         has_primary_faction = False
@@ -342,6 +348,7 @@ class Character(Writing):
 
         Returns:
             The absolute path to the character files directory.
+
         """
         # Build the path to the characters directory for this run
         directory_path = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
@@ -349,26 +356,45 @@ class Character(Writing):
         os.makedirs(directory_path, exist_ok=True)
         return directory_path
 
-    def get_sheet_filepath(self, run):
+    def get_sheet_filepath(self, run: Run) -> str:
+        """Get the path to this character's PDF sheet file.
+
+        Args:
+            run: The Run instance for which to get the sheet filepath.
+
+        Returns:
+            The full filesystem path to the character's PDF sheet file.
+
+        """
+        # Build the character's directory path
         character_directory = self.get_character_filepath(run)
+
+        # Create sheet filename using character number
         sheet_filename = f"#{self.number}.pdf"
+
         return os.path.join(character_directory, sheet_filename)
 
     def get_sheet_friendly_filepath(self, character_run=None):
+        """Return filepath for the light PDF version of the character sheet."""
         return os.path.join(self.get_character_filepath(character_run), f"#{self.number}-light.pdf")
 
     def get_relationships_filepath(self, run=None):
+        """Return filepath for the relationships PDF."""
         return os.path.join(self.get_character_filepath(run), f"#{self.number}-rels.pdf")
 
     def show_thumb(self):
+        """Return HTML for displaying character thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(200, self.thumb.url)
+        return None
 
     def relationships(self):
+        """Return queryset of relationships where this character is the source."""
         return Relationship.objects.filter(source_id=self.pk)
 
     def get_plot_characters(self):
+        """Return queryset of plot-character relations for this character."""
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
@@ -380,6 +406,7 @@ class Character(Writing):
 
         Returns:
             List of CSV rows with headers and examples including player column.
+
         """
         # Get base CSV structure from parent Writing class
         csv_rows = Writing.get_example_csv(enabled_features)
@@ -419,7 +446,7 @@ class CharacterConfig(BaseModel):
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.character} {self.name}"
 
     class Meta:
@@ -458,10 +485,11 @@ class Plot(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def get_plot_characters(self):
+        """Return queryset of plot-character relations for this plot."""
         return (
             PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character").order_by("character__number")
         )
@@ -476,7 +504,7 @@ class PlotCharacterRel(BaseModel):
 
     text = models.TextField(max_length=5000, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.plot} - {self.character}"
 
     class Meta:
@@ -547,6 +575,7 @@ class Faction(Writing):
 
         Side Effects:
             Creates the faction directory structure if it doesn't exist
+
         """
         # Build directory path: event_media/factions/run_number/
         directory_path = os.path.join(run.event.get_media_filepath(), "factions", f"{run.number}/")
@@ -573,6 +602,7 @@ class Faction(Writing):
         Example:
             For faction #5 in run #2:
             /path/to/media/event_123/factions/2/#5.pdf
+
         """
         # Get the faction directory for this run
         faction_directory = self.get_faction_filepath(run)
@@ -593,7 +623,7 @@ class Faction(Writing):
 
         return js
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
@@ -604,7 +634,7 @@ class Faction(Writing):
 
 
 class PrologueType(Writing):
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
@@ -637,7 +667,7 @@ class Prologue(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"P{self.number} {self.name} ({self.typ})"
 
 
@@ -660,7 +690,7 @@ class HandoutTemplate(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"HT{self.number} {self.name}"
 
     def download_template(self) -> HttpResponse:
@@ -691,7 +721,7 @@ class Handout(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"H{self.number} {self.name}"
 
     def get_filepath(self, run: Run) -> str:
@@ -702,6 +732,7 @@ class Handout(Writing):
 
         Returns:
             Absolute path to the handout PDF file.
+
         """
         # Build handouts directory path within event media
         handouts_directory = os.path.join(run.event.get_media_filepath(), "handouts")
@@ -739,7 +770,7 @@ class TextVersion(BaseModel):
 
     dl = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.tp} {self.eid} {self.version}"
 
 
@@ -761,7 +792,7 @@ class SpeedLarp(Writing):
 
         return js
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"S{self.number} {self.name} ({self.typ} - {self.station})"
 
     class Meta:
@@ -780,6 +811,7 @@ def replace_char_names(text: str, chars: dict[str, str]) -> str:
 
     Returns:
         The processed text with character names replaced, or empty string if input is falsy
+
     """
     # Return empty string if input is falsy
     if not text:
@@ -790,7 +822,8 @@ def replace_char_names(text: str, chars: dict[str, str]) -> str:
     placeholder_map = {}
     placeholder_counter = 0
 
-    def create_placeholder(match):
+    def create_placeholder(match: re.Match[str]) -> str:
+        """Create unique placeholder for character reference and store original match."""
         nonlocal placeholder_counter
         placeholder = f"___CHAR_REF_{placeholder_counter}___"
         placeholder_map[placeholder] = match.group(0)
@@ -849,6 +882,7 @@ def replace_character_names(instance) -> None:
     Note:
         Only processes instances that have a primary key, belong to an event,
         and where the event has writing_substitute configuration enabled.
+
     """
     # Early return if instance hasn't been saved to database yet
     if not instance.pk:
@@ -894,7 +928,7 @@ class Relationship(BaseModel):
 
     text = HTMLField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.source} {self.target}"
 
     class Meta:

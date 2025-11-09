@@ -28,7 +28,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    """Translate elements in .po file untraslated, or with fuzzy translation, using deepl"""
+    """Translate elements in .po file untraslated, or with fuzzy translation, using deepl."""
 
     def handle(self, *args, **options) -> None:
         """Handle the translation command by initializing translator and processing translations."""
@@ -55,11 +55,13 @@ class Command(BaseCommand):
         Raises:
             Exception: When DeepL API usage limit is exceeded
             deepl.exceptions.DeepLException: When DeepL API encounters an error
+
         """
         # Check if DeepL API usage limit has been reached
         usage = self.translator.get_usage()
         if usage.any_limit_reached:
-            raise Exception("LIMIT EXCEEDED!")
+            msg = "LIMIT EXCEEDED!"
+            raise Exception(msg)
 
         try:
             # Display the original text to be translated
@@ -72,7 +74,9 @@ class Command(BaseCommand):
 
             # Perform the actual translation using DeepL API
             translation_result = self.translator.translate_text(
-                entry.msgid, source_lang="EN", target_lang=target_language
+                entry.msgid,
+                source_lang="EN",
+                target_lang=target_language,
             )
             entry.msgstr = str(translation_result)
 
@@ -84,7 +88,7 @@ class Command(BaseCommand):
             self.stdout.write(exception)
             self.stdout.write(entry.msgid)
 
-    def go_polib(self):
+    def go_polib(self) -> None:
         """Process translation files using polib and DeepL API for automatic translation.
 
         Iterates through all locale directories and translates untranslated
@@ -103,7 +107,7 @@ class Command(BaseCommand):
                 file_lines = file_input.read().splitlines(True)
             first_empty_line_index = file_lines.index("\n")
             file_lines = file_lines[first_empty_line_index:]
-            file_lines = ['msgid ""\n', 'msgstr ""\n', '"Content-Type: text/plain; charset=UTF-8"\n'] + file_lines
+            file_lines = ['msgid ""\n', 'msgstr ""\n', '"Content-Type: text/plain; charset=UTF-8"\n', *file_lines]
             with open(po_file_path, "w") as file_output:
                 file_output.writelines(file_lines)
 
@@ -114,13 +118,12 @@ class Command(BaseCommand):
             punctuation_symbols = (".", "?", "!", ",")
             has_changed = False
             for entry in po_file:
-                if entry.msgstr:
-                    if entry.msgstr.endswith(punctuation_symbols):
-                        if not entry.msgid.endswith(punctuation_symbols):
-                            if "fuzzy" in entry.flags:
-                                entry.flags.remove("fuzzy")
-                            entry.msgstr = entry.msgstr.rstrip(".?!,")
-                            has_changed = True
+                if entry.msgstr and entry.msgstr.endswith(punctuation_symbols):
+                    if not entry.msgid.endswith(punctuation_symbols):
+                        if "fuzzy" in entry.flags:
+                            entry.flags.remove("fuzzy")
+                        entry.msgstr = entry.msgstr.rstrip(".?!,")
+                        has_changed = True
 
             if has_changed:
                 self.save_po(po_file, po_file_path)
@@ -141,6 +144,7 @@ class Command(BaseCommand):
         Args:
             po: The PO file object to process
             po_path: Path where the processed PO file will be saved
+
         """
         # Create new ordered po file with original metadata
         sorted_po = polib.POFile()

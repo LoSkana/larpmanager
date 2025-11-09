@@ -89,6 +89,7 @@ def check_already(nm, params):
 
     Returns:
         bool: True if task already exists in queue
+
     """
     q = Task.objects.filter(task_name=nm, task_params=params)
     return q.exists()
@@ -103,13 +104,13 @@ def get_channel(first_entity_id, second_entity_id):
 
     Returns:
         int: Unique channel ID using Cantor pairing
+
     """
     first_entity_id = int(first_entity_id)
     second_entity_id = int(second_entity_id)
     if first_entity_id > second_entity_id:
         return int(cantor(first_entity_id, second_entity_id))
-    else:
-        return int(cantor(second_entity_id, first_entity_id))
+    return int(cantor(second_entity_id, first_entity_id))
 
 
 def cantor(first_integer, second_integer):
@@ -121,27 +122,30 @@ def cantor(first_integer, second_integer):
 
     Returns:
         float: Unique pairing result
+
     """
     return ((first_integer + second_integer) * (first_integer + second_integer + 1) / 2) + second_integer
 
 
-def compute_diff(self, other):
+def compute_diff(self, other) -> None:
     """Compute differences between this instance and another.
 
     Args:
         self: Current instance
         other: Other instance to compare against
+
     """
     check_diff(self, other.text, self.text)
 
 
-def check_diff(self, old_text, new_text):
+def check_diff(self, old_text, new_text) -> None:
     """Generate HTML diff between two text strings.
 
     Args:
         self: Instance to store diff result
         old_text: First text string
         new_text: Second text string
+
     """
     if old_text == new_text:
         self.diff = None
@@ -163,11 +167,13 @@ def get_member(member_id: int) -> Member:
 
     Raises:
         Http404: If member does not exist
+
     """
     try:
         return Member.objects.get(pk=member_id)
     except ObjectDoesNotExist as err:
-        raise Http404("Member does not exist") from err
+        msg = "Member does not exist"
+        raise Http404(msg) from err
 
 
 def get_contact(member_id, other_member_id):
@@ -179,6 +185,7 @@ def get_contact(member_id, other_member_id):
 
     Returns:
         Contact: Contact instance or None if not found
+
     """
     try:
         return Contact.objects.get(me_id=member_id, you_id=other_member_id)
@@ -186,31 +193,33 @@ def get_contact(member_id, other_member_id):
         return None
 
 
-def get_event_template(context, template_id):
+def get_event_template(context, template_id) -> None:
     """Get event template by ID and add to context.
 
     Args:
         context: Template context dictionary
         template_id: Event template ID
+
     """
     try:
         context["event"] = Event.objects.get(pk=template_id, template=True, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
-        raise NotFoundError() from err
+        raise NotFoundError from err
 
 
-def get_char(context, character_identifier, by_number=False):
+def get_char(context, character_identifier, by_number=False) -> None:
     """Get character by ID or number and add to context.
 
     Args:
         context: Template context dictionary
         character_identifier: Character ID or number
         by_number: Whether to search by number instead of ID
+
     """
     get_element(context, character_identifier, "character", Character, by_number)
 
 
-def get_registration(context, registration_id):
+def get_registration(context, registration_id) -> None:
     """Get registration by ID and add to context.
 
     Args:
@@ -219,15 +228,17 @@ def get_registration(context, registration_id):
 
     Raises:
         Http404: If registration does not exist
+
     """
     try:
         context["registration"] = Registration.objects.get(run=context["run"], pk=registration_id)
         context["name"] = str(context["registration"])
     except ObjectDoesNotExist as err:
-        raise Http404("Registration does not exist") from err
+        msg = "Registration does not exist"
+        raise Http404(msg) from err
 
 
-def get_discount(context, discount_id):
+def get_discount(context, discount_id) -> None:
     """Get discount by ID and add to context.
 
     Args:
@@ -236,15 +247,17 @@ def get_discount(context, discount_id):
 
     Raises:
         Http404: If discount does not exist
+
     """
     try:
         context["discount"] = Discount.objects.get(pk=discount_id)
         context["name"] = str(context["discount"])
     except ObjectDoesNotExist as err:
-        raise Http404("Discount does not exist") from err
+        msg = "Discount does not exist"
+        raise Http404(msg) from err
 
 
-def get_album(context, album_id):
+def get_album(context, album_id) -> None:
     """Get album by ID and add to context.
 
     Args:
@@ -253,11 +266,13 @@ def get_album(context, album_id):
 
     Raises:
         Http404: If album does not exist
+
     """
     try:
         context["album"] = Album.objects.get(pk=album_id)
     except ObjectDoesNotExist as err:
-        raise Http404("Album does not exist") from err
+        msg = "Album does not exist"
+        raise Http404(msg) from err
 
 
 def get_album_cod(context: dict, album_code: str) -> None:
@@ -265,7 +280,8 @@ def get_album_cod(context: dict, album_code: str) -> None:
     try:
         context["album"] = Album.objects.get(cod=album_code)
     except ObjectDoesNotExist as err:
-        raise Http404("Album does not exist") from err
+        msg = "Album does not exist"
+        raise Http404(msg) from err
 
 
 def get_feature(context: dict, feature_slug: str) -> None:
@@ -273,7 +289,8 @@ def get_feature(context: dict, feature_slug: str) -> None:
     try:
         context["feature"] = Feature.objects.get(slug=feature_slug)
     except ObjectDoesNotExist as err:
-        raise Http404("Feature does not exist") from err
+        msg = "Feature does not exist"
+        raise Http404(msg) from err
 
 
 def get_feature_module(context: dict, num: int) -> None:
@@ -281,12 +298,12 @@ def get_feature_module(context: dict, num: int) -> None:
     try:
         context["feature_module"] = FeatureModule.objects.get(pk=num)
     except ObjectDoesNotExist as err:
-        raise Http404("FeatureModule does not exist") from err
+        msg = "FeatureModule does not exist"
+        raise Http404(msg) from err
 
 
 def get_plot(context: dict, plot_id: int) -> None:
-    """
-    Fetch and add plot to context with related data.
+    """Fetch and add plot to context with related data.
 
     Args:
         context: View context dictionary to update
@@ -294,6 +311,7 @@ def get_plot(context: dict, plot_id: int) -> None:
 
     Raises:
         Http404: If plot does not exist for the event
+
     """
     try:
         # Fetch plot with optimized queries for related objects and characters
@@ -305,7 +323,8 @@ def get_plot(context: dict, plot_id: int) -> None:
         # Set plot name in context for template display
         context["name"] = context["plot"].name
     except ObjectDoesNotExist as err:
-        raise Http404("Plot does not exist") from err
+        msg = "Plot does not exist"
+        raise Http404(msg) from err
 
 
 def get_quest_type(context: dict, quest_number: int) -> QuestType:
@@ -332,6 +351,7 @@ def get_handout(context: dict, handout_id: int) -> None:
 
     Raises:
         Http404: If handout does not exist for the given event
+
     """
     try:
         # Retrieve handout for current event
@@ -341,7 +361,8 @@ def get_handout(context: dict, handout_id: int) -> None:
         # Populate handout data for display
         context["handout"].data = context["handout"].show()
     except ObjectDoesNotExist as err:
-        raise Http404("handout does not exist") from err
+        msg = "handout does not exist"
+        raise Http404(msg) from err
 
 
 def get_handout_template(context: dict, handout_template_id: int) -> dict:
@@ -356,19 +377,21 @@ def get_handout_template(context: dict, handout_template_id: int) -> dict:
 
     Raises:
         Http404: If handout template does not exist
+
     """
     try:
         # Fetch the handout template and add to context
         context["handout_template"] = HandoutTemplate.objects.get(event=context["event"], pk=handout_template_id)
         context["name"] = context["handout_template"].name
     except ObjectDoesNotExist as err:
-        raise Http404("handout_template does not exist") from err
+        msg = "handout_template does not exist"
+        raise Http404(msg) from err
 
     return context
 
 
 def get_prologue(context: dict, prologue_number: int) -> None:
-    # Retrieve prologue element and add it to the context
+    """Retrieve prologue element and add it to the context."""
     get_element(context, prologue_number, "prologue", Prologue)
 
 
@@ -379,7 +402,8 @@ def get_prologue_type(context: dict, prologue_type_id: int) -> dict:
         context["prologue_type"] = PrologueType.objects.get(event=context["event"], pk=prologue_type_id)
         context["name"] = str(context["prologue_type"])
     except ObjectDoesNotExist as error:
-        raise Http404("prologue_type does not exist") from error
+        msg = "prologue_type does not exist"
+        raise Http404(msg) from error
 
     return context
 
@@ -393,13 +417,15 @@ def get_speedlarp(context: dict, speedlarp_id: int) -> None:
 
     Raises:
         Http404: If speedlarp doesn't exist for the event
+
     """
     try:
         # Retrieve speedlarp for current event
         context["speedlarp"] = SpeedLarp.objects.get(event=context["event"], pk=speedlarp_id)
         context["name"] = str(context["speedlarp"])
     except ObjectDoesNotExist as err:
-        raise Http404("speedlarp does not exist") from err
+        msg = "speedlarp does not exist"
+        raise Http404(msg) from err
 
     # ~ def get_ord_faction(char):
     # ~ for g in char.factions_list.all():
@@ -413,7 +439,8 @@ def get_badge(badge_id: int, context: dict) -> Badge:
     try:
         return Badge.objects.get(pk=badge_id, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
-        raise Http404("Badge does not exist") from err
+        msg = "Badge does not exist"
+        raise Http404(msg) from err
 
 
 def get_collection_partecipate(context: dict[str, Any], contribution_code: str) -> Collection:
@@ -428,11 +455,13 @@ def get_collection_partecipate(context: dict[str, Any], contribution_code: str) 
 
     Raises:
         Http404: If collection does not exist
+
     """
     try:
         return Collection.objects.get(contribute_code=contribution_code, association_id=context["association_id"])
     except ObjectDoesNotExist as err:
-        raise Http404("Collection does not exist") from err
+        msg = "Collection does not exist"
+        raise Http404(msg) from err
 
 
 def get_collection_redeem(context: dict, redeem_code: str) -> Collection:
@@ -447,11 +476,13 @@ def get_collection_redeem(context: dict, redeem_code: str) -> Collection:
 
     Raises:
         Http404: If collection not found for given code and association
+
     """
     try:
         return Collection.objects.get(redeem_code=redeem_code, association_id=context["association_id"])
     except ObjectDoesNotExist as error:
-        raise Http404("Collection does not exist") from error
+        msg = "Collection does not exist"
+        raise Http404(msg) from error
 
 
 def get_workshop(context: dict, workshop_id: int) -> None:
@@ -459,7 +490,8 @@ def get_workshop(context: dict, workshop_id: int) -> None:
     try:
         context["workshop"] = WorkshopModule.objects.get(event=context["event"], pk=workshop_id)
     except ObjectDoesNotExist as error:
-        raise Http404("WorkshopModule does not exist") from error
+        msg = "WorkshopModule does not exist"
+        raise Http404(msg) from error
 
 
 def get_workshop_question(context: dict, n: int, mod: int) -> dict:
@@ -475,14 +507,18 @@ def get_workshop_question(context: dict, n: int, mod: int) -> dict:
 
     Raises:
         Http404: If WorkshopQuestion doesn't exist
+
     """
     try:
         # Retrieve workshop question filtered by event and module
         context["workshop_question"] = WorkshopQuestion.objects.get(
-            module__event=context["event"], pk=n, module__pk=mod
+            module__event=context["event"],
+            pk=n,
+            module__pk=mod,
         )
     except ObjectDoesNotExist as err:
-        raise Http404("WorkshopQuestion does not exist") from err
+        msg = "WorkshopQuestion does not exist"
+        raise Http404(msg) from err
 
     return context
 
@@ -496,16 +532,19 @@ def get_workshop_option(context: dict, m: int) -> None:
 
     Raises:
         Http404: If workshop option doesn't exist or belongs to wrong event
+
     """
     try:
         # Retrieve workshop option by primary key
         context["workshop_option"] = WorkshopOption.objects.get(pk=m)
     except ObjectDoesNotExist as err:
-        raise Http404("WorkshopOption does not exist") from err
+        msg = "WorkshopOption does not exist"
+        raise Http404(msg) from err
 
     # Validate workshop option belongs to current event
     if context["workshop_option"].question.module.event != context["event"]:
-        raise Http404("wrong event")
+        msg = "wrong event"
+        raise Http404(msg)
 
 
 def get_element(
@@ -515,8 +554,7 @@ def get_element(
     model_class: type[BaseModel],
     by_number: bool = False,
 ) -> None:
-    """
-    Retrieve a model instance and add it to the context dictionary.
+    """Retrieve a model instance and add it to the context dictionary.
 
     Fetches a model instance related to a parent event and stores it in the provided
     context dictionary. The lookup can be performed either by primary key or by a
@@ -541,6 +579,7 @@ def get_element(
         >>> context = {"event": some_event_instance}
         >>> get_element(context, 42, "ticket", Ticket, by_number=True)
         >>> # context now contains: {"event": ..., "ticket": <Ticket>, "class_name": "ticket"}
+
     """
     try:
         # Get the parent event associated with the current event in context
@@ -559,19 +598,22 @@ def get_element(
 
     except ObjectDoesNotExist as err:
         # Raise a user-friendly 404 error if the object doesn't exist
-        raise Http404(f"{context_key_name} does not exist") from err
+        msg = f"{context_key_name} does not exist"
+        raise Http404(msg) from err
 
 
 def get_relationship(context: dict, num: int) -> None:
-    """Retrieves a relationship by ID and validates it belongs to the event."""
+    """Retrieve a relationship by ID and validate it belongs to the event."""
     try:
         context["relationship"] = Relationship.objects.get(pk=num)
     except ObjectDoesNotExist as err:
-        raise Http404("relationship does not exist") from err
+        msg = "relationship does not exist"
+        raise Http404(msg) from err
 
     # Validate relationship belongs to the current event
     if context["relationship"].source.event_id != context["event"].id:
-        raise Http404("wrong event")
+        msg = "wrong event"
+        raise Http404(msg)
 
 
 def get_player_relationship(context: dict, other_player_number: int) -> None:
@@ -579,10 +621,12 @@ def get_player_relationship(context: dict, other_player_number: int) -> None:
     try:
         # Get relationship for the run's registration targeting the specified player
         context["relationship"] = PlayerRelationship.objects.get(
-            reg=context["run"].reg, target__number=other_player_number
+            reg=context["run"].reg,
+            target__number=other_player_number,
         )
     except ObjectDoesNotExist as err:
-        raise Http404("relationship does not exist") from err
+        msg = "relationship does not exist"
+        raise Http404(msg) from err
 
 
 def get_time_diff(start_datetime: datetime, end_datetime: datetime) -> int:
@@ -598,6 +642,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
 
     Returns:
         Time difference in days, or -1 if target_date is None
+
     """
     if not target_date:
         return -1
@@ -611,7 +656,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
 
 def generate_number(length: int) -> str:
     """Generate a random string of digits with the specified length."""
-    return "".join(random.choice(string.digits) for _ in range(length))
+    return "".join(random.choice(string.digits) for _ in range(length))  # noqa: S311
 
 
 def html_clean(text: str | None) -> str:
@@ -622,21 +667,21 @@ def html_clean(text: str | None) -> str:
 
     Returns:
         Cleaned text with HTML tags removed and entities unescaped.
+
     """
     if not text:
         return ""
     # Remove all HTML tags from the text
     text = strip_tags(text)
     # Unescape HTML entities (e.g., &amp; -> &, &lt; -> <)
-    text = html.unescape(text)
-    return text
+    return html.unescape(text)
 
 
 def dump(obj: object) -> str:
     """Return a string representation of all object attributes and their values."""
     output_string = ""
     for attribute_name in dir(obj):
-        output_string += f"obj.{attribute_name} = {repr(getattr(obj, attribute_name))}\n"
+        output_string += f"obj.{attribute_name} = {getattr(obj, attribute_name)!r}\n"
     return output_string
 
 
@@ -662,7 +707,7 @@ def average(lst: list[float]) -> float:
     return sum(lst) / len(lst)
 
 
-def pretty_request(request) -> str:
+def pretty_request(request: HttpRequest) -> str:
     """Format HTTP request details into a readable string representation.
 
     Args:
@@ -670,6 +715,7 @@ def pretty_request(request) -> str:
 
     Returns:
         Formatted string containing request method, headers, and body
+
     """
     headers = ""
 
@@ -705,15 +751,13 @@ def check_field(model_class: type, field_name: str) -> bool:
 
     Returns:
         True if field exists, False otherwise
+
     """
     # Iterate through all fields including hidden ones
-    for field in model_class._meta.get_fields(include_hidden=True):
-        if field.name == field_name:
-            return True
-    return False
+    return any(field.name == field_name for field in model_class._meta.get_fields(include_hidden=True))
 
 
-def round_to_two_significant_digits(number: float | int) -> int:
+def round_to_two_significant_digits(number: float) -> int:
     """Round a number to two significant digits using specific thresholds.
 
     Args:
@@ -725,6 +769,7 @@ def round_to_two_significant_digits(number: float | int) -> int:
     Notes:
         - Numbers with absolute value < 1000 are rounded to nearest 10 (down)
         - Numbers with absolute value >= 1000 are rounded to nearest 100 (down)
+
     """
     # Convert input to Decimal for precise arithmetic
     decimal_number = Decimal(number)
@@ -742,8 +787,7 @@ def round_to_two_significant_digits(number: float | int) -> int:
 
 
 def exchange_order(context: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
-    """
-    Exchange ordering positions between two elements in a sequence.
+    """Exchange ordering positions between two elements in a sequence.
 
     This function moves an element up or down in the ordering sequence by swapping
     its order value with an adjacent element. If no adjacent element exists,
@@ -762,6 +806,7 @@ def exchange_order(context: dict, model_class: type, element_id: int, move_up: b
     Note:
         The function handles edge cases where elements have the same order value
         by adjusting one of them to maintain proper ordering.
+
     """
     # Get elements queryset, defaulting to event elements if not provided
     elements = elements or context["event"].get_elements(model_class)
@@ -812,6 +857,7 @@ def normalize_string(input_string: str) -> str:
 
     Returns:
         Normalized string with lowercase, no spaces, and no accented characters.
+
     """
     # Convert to lowercase
     normalized_string = input_string.lower()
@@ -820,21 +866,19 @@ def normalize_string(input_string: str) -> str:
     normalized_string = normalized_string.replace(" ", "")
 
     # Remove accented characters using Unicode normalization
-    normalized_string = "".join(
+    return "".join(
         char for char in unicodedata.normalize("NFD", normalized_string) if unicodedata.category(char) != "Mn"
     )
 
-    return normalized_string
 
-
-def copy_class(target_event_id, source_event_id, model_class):
-    """
-    Copy all objects of a given class from source event to target event.
+def copy_class(target_event_id, source_event_id, model_class) -> None:
+    """Copy all objects of a given class from source event to target event.
 
     Args:
         target_event_id: Target event ID to copy objects to
         source_event_id: Source event ID to copy objects from
         model_class: Django model class to copy instances of
+
     """
     model_class.objects.filter(event_id=target_event_id).delete()
 
@@ -865,21 +909,20 @@ def copy_class(target_event_id, source_event_id, model_class):
 
 
 def get_payment_methods_ids(context):
-    """
-    Get set of payment method IDs for an association.
+    """Get set of payment method IDs for an association.
 
     Args:
         context: Context dictionary containing association ID
 
     Returns:
         set: Set of payment method primary keys
+
     """
     return set(Association.objects.get(pk=context["association_id"]).payment_methods.values_list("pk", flat=True))
 
 
 def detect_delimiter(content):
-    """
-    Detect CSV delimiter from content header line.
+    """Detect CSV delimiter from content header line.
 
     Args:
         content: CSV content string
@@ -889,35 +932,35 @@ def detect_delimiter(content):
 
     Raises:
         Exception: If no delimiter is found
+
     """
     header_line = content.split("\n")[0]
     for delimiter in ["\t", ";", ","]:
         if delimiter in header_line:
             return delimiter
-    raise Exception("no delimiter")
+    msg = "no delimiter"
+    raise Exception(msg)
 
 
 def clean(s):
-    """
-    Clean and normalize string by removing symbols, spaces, and accents.
+    """Clean and normalize string by removing symbols, spaces, and accents.
 
     Args:
         s: String to clean
 
     Returns:
         str: Cleaned string with normalized characters
+
     """
     s = s.lower()
     s = re.sub(r"[^\w]", " ", s)  # remove symbols
     s = re.sub(r"\s", " ", s)  # replace whitespaces with spaces
     s = re.sub(r" +", "", s)  # remove spaces
-    s = s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
-    return s
+    return s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
 
 
 def _search_char_reg(context: dict, character, search_result: dict) -> None:
-    """
-    Populate character search result with registration and player data.
+    """Populate character search result with registration and player data.
 
     This function extracts character and player information from registration data
     and populates a JSON object for search results display.
@@ -931,6 +974,7 @@ def _search_char_reg(context: dict, character, search_result: dict) -> None:
             JSON object to populate with search results data
 
     Returns: None -Modifies the search_result dictionary in place
+
     """
     # Set character name, prioritizing custom name if available
     search_result["name"] = character.name
@@ -958,9 +1002,8 @@ def _search_char_reg(context: dict, character, search_result: dict) -> None:
             search_result[attribute_suffix] = getattr(character.rcr, "custom_" + attribute_suffix)
 
     # Override profile with character cover if event supports both cover and user characters
-    if {"cover", "user_character"}.issubset(get_event_features(context["run"].event_id)):
-        if character.cover:
-            search_result["player_prof"] = character.thumb.url
+    if {"cover", "user_character"}.issubset(get_event_features(context["run"].event_id)) and character.cover:
+        search_result["player_prof"] = character.thumb.url
 
 
 def clear_messages(request: HttpRequest) -> None:
@@ -969,7 +1012,7 @@ def clear_messages(request: HttpRequest) -> None:
         request._messages._queued_messages.clear()
 
 
-def _get_help_questions(context: dict, request) -> tuple[list, list]:
+def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list]:
     """Retrieve and categorize help questions for the current association/run.
 
     Fetches help questions filtered by association and optionally by run, then
@@ -984,6 +1027,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
         A tuple containing two lists:
         - closed_questions: List of closed or staff-originated questions
         - open_questions: List of open user-originated questions
+
     """
     # Filter questions by association ID
     base_queryset = HelpQuestion.objects.filter(association_id=context["association_id"])
@@ -1003,7 +1047,9 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
 
     # Get the most recent question for each member with related data
     questions = base_queryset.filter(created__in=Subquery(latest_created_per_member)).select_related(
-        "member", "run", "run__event"
+        "member",
+        "run",
+        "run__event",
     )
 
     # Categorize questions into open and closed lists
@@ -1019,7 +1065,7 @@ def _get_help_questions(context: dict, request) -> tuple[list, list]:
     return closed_questions, open_questions
 
 
-def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
+def get_recaptcha_secrets(request: HttpRequest) -> tuple[str | None, str | None]:
     """Get reCAPTCHA public and private keys for the current request.
 
     Handles both single-site and multi-site configurations. In multi-site mode,
@@ -1030,6 +1076,7 @@ def get_recaptcha_secrets(request) -> tuple[str | None, str | None]:
 
     Returns:
         Tuple of (public_key, private_key) or (None, None) if not found
+
     """
     # Get base configuration values
     public_key = conf_settings.RECAPTCHA_PUBLIC_KEY
@@ -1064,6 +1111,7 @@ def format_email_body(email) -> str:
 
     Returns:
         Cleaned and truncated email body text.
+
     """
     # Replace HTML line breaks with spaces
     body_with_spaces = email.body.replace("<br />", " ").replace("<br>", " ")

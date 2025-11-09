@@ -66,6 +66,7 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
 
     Returns:
         HttpResponse: Rendered tickets template or download response
+
     """
     # Check user permissions for accessing registration tickets management
     context = check_event_context(request, event_slug, "orga_registration_tickets")
@@ -87,7 +88,8 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
 
 
 @login_required
-def orga_registration_tickets_edit(request, event_slug, num):
+def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific registration ticket."""
     return orga_edit(request, event_slug, "orga_registration_tickets", OrgaRegistrationTicketForm, num)
 
 
@@ -112,7 +114,8 @@ def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpRes
 
 
 @login_required
-def orga_registration_sections_edit(request, event_slug, num):
+def orga_registration_sections_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific registration section for an event."""
     return orga_edit(request, event_slug, "orga_registration_sections", OrgaRegistrationSectionForm, num)
 
 
@@ -133,6 +136,7 @@ def orga_registration_sections_order(
 
     Returns:
         Redirect to registration sections page
+
     """
     # Verify user has permission to manage registration sections
     context = check_event_context(request, event_slug, "orga_registration_sections")
@@ -156,6 +160,7 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
 
     Returns:
         HttpResponse: Rendered registration form page or download response
+
     """
     # Check if user has permission to access the registration form management
     context = check_event_context(request, event_slug, "orga_registration_form")
@@ -180,8 +185,7 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
 
 @login_required
 def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
-    """
-    Handle registration form question editing for organizers.
+    """Handle registration form question editing for organizers.
 
     This view allows organizers to edit registration questions, handle form submissions,
     and redirect to appropriate pages based on the question type and user actions.
@@ -189,19 +193,20 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
     Args:
         request : HttpRequest
             The HTTP request object containing form data and user information
-        s : str
+        event_slug : str
             Event slug identifier for the specific event
         num : int
             Question number/ID to edit (0 for new questions)
 
-    Returns
+    Returns:
         HttpResponse
             Either a rendered form edit page or a redirect response after successful save
 
-    Notes
+    Notes:
         - Handles both creation (num=0) and editing of existing questions
         - Automatically redirects to option creation for single/multiple choice questions
         - Validates that choice questions have at least one option defined
+
     """
     # Check user permissions for registration form editing
     perm = "orga_registration_form"
@@ -234,7 +239,9 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
         # Redirect to option creation if needed, otherwise back to form list
         if edit_option:
             return redirect(
-                orga_registration_options_new, event_slug=context["run"].get_slug(), num=context["saved"].id
+                orga_registration_options_new,
+                event_slug=context["run"].get_slug(),
+                num=context["saved"].id,
             )
         return redirect(perm, event_slug=context["run"].get_slug())
 
@@ -269,6 +276,7 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, num: i
 
     Returns:
         HttpResponse: Rendered registration option edit page or redirect
+
     """
     # Check user permissions for registration form management
     context = check_event_context(request, event_slug, "orga_registration_form")
@@ -277,7 +285,8 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, num: i
     if not context["event"].get_elements(RegistrationQuestion).exists():
         # Display warning message to user about missing prerequisites
         messages.warning(
-            request, _("You must create at least one registration question before you can create registration options")
+            request,
+            _("You must create at least one registration question before you can create registration options"),
         )
         # Redirect to registration questions creation page
         return redirect("orga_registration_form_edit", event_slug=event_slug, num=0)
@@ -295,8 +304,7 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str, num: in
 
 
 def registration_option_edit(context, option_number, request):
-    """
-    Handle editing of registration option with form processing and redirect logic.
+    """Handle editing of registration option with form processing and redirect logic.
 
     Args:
         context: Context dictionary with event and form data
@@ -305,6 +313,7 @@ def registration_option_edit(context, option_number, request):
 
     Returns:
         HttpResponse: Redirect to next step or rendered edit form
+
     """
     if backend_edit(request, context, OrgaRegistrationOptionForm, option_number, is_association_based=False):
         redirect_target = "orga_registration_form_edit"
@@ -332,6 +341,7 @@ def orga_registration_options_order(
 
     Returns:
         Redirect to the registration form edit page
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_registration_form")
@@ -341,7 +351,9 @@ def orga_registration_options_order(
 
     # Redirect back to the form edit page
     return redirect(
-        "orga_registration_form_edit", event_slug=context["run"].get_slug(), num=context["current"].question_id
+        "orga_registration_form_edit",
+        event_slug=context["run"].get_slug(),
+        num=context["current"].question_id,
     )
 
 
@@ -358,7 +370,8 @@ def orga_registration_quotas(request: HttpRequest, event_slug: str) -> HttpRespo
 
 
 @login_required
-def orga_registration_quotas_edit(request, event_slug, num):
+def orga_registration_quotas_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific registration quota for an event."""
     return orga_edit(request, event_slug, "orga_registration_quotas", OrgaRegistrationQuotaForm, num)
 
 
@@ -375,6 +388,7 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
 
     Returns:
         Rendered installments management page
+
     """
     # Verify user has permission to access registration installment management
     context = check_event_context(request, event_slug, "orga_registration_installments")
@@ -386,7 +400,8 @@ def orga_registration_installments(request: HttpRequest, event_slug: str) -> Htt
 
 
 @login_required
-def orga_registration_installments_edit(request, event_slug, num):
+def orga_registration_installments_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a specific registration installment for an event."""
     return orga_edit(request, event_slug, "orga_registration_installments", OrgaRegistrationInstallmentForm, num)
 
 
@@ -403,5 +418,6 @@ def orga_registration_surcharges(request: HttpRequest, event_slug: str) -> HttpR
 
 
 @login_required
-def orga_registration_surcharges_edit(request, event_slug, num):
+def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+    """Edit a registration surcharge for an event."""
     return orga_edit(request, event_slug, "orga_registration_surcharges", OrgaRegistrationSurchargeForm, num)

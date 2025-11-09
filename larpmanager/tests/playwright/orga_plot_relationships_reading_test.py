@@ -33,7 +33,7 @@ from larpmanager.tests.utils import (
 pytestmark = pytest.mark.e2e
 
 
-def test_plot_relationship_reading(pw_page):
+def test_plot_relationship_reading(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -56,7 +56,7 @@ def test_plot_relationship_reading(pw_page):
     reading(live_server, page)
 
 
-def reading(live_server, page):
+def reading(live_server, page) -> None:
     go_to(page, live_server, "/test/manage/")
 
     # set prova presentation and text
@@ -112,7 +112,7 @@ def reading(live_server, page):
     expect(page.locator("#one")).to_contain_text("testona Text wwwww prova bruuuu")
 
 
-def relationships(live_server, page):
+def relationships(live_server, page) -> None:
     # create second character
     page.get_by_role("link", name="Characters", exact=True).click()
     page.get_by_role("link", name="New").click()
@@ -150,7 +150,7 @@ def relationships(live_server, page):
     expect(page.locator("#one")).to_contain_text("Relationships Test Character ciaaoooooo")
 
 
-def plots(live_server, page):
+def plots(live_server, page) -> None:
     # create plot
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
@@ -232,7 +232,7 @@ def plots(live_server, page):
     expect(page.locator("#one")).to_contain_text("testona wwwwwbruuuu")
 
 
-def plots_character(live_server, page):
+def plots_character(live_server, page) -> None:
     go_to(page, live_server, "/test/1/manage/")
     # create other plots
     page.get_by_role("link", name="Plots", exact=True).click()

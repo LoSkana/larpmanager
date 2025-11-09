@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -42,7 +43,7 @@ from larpmanager.mail.remind import (
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,
-    Discount,
+    DiscountType,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -69,12 +70,13 @@ class Command(BaseCommand):
 
     help = "Automate processes "
 
-    def handle(self, *args, **options):
-        """Main command entry point with exception handling.
+    def handle(self, *args: Any, **options: Any) -> None:
+        """Handle command execution with exception handling.
 
         Args:
             *args: Command arguments
             **options: Command options
+
         """
         try:
             self.go()
@@ -98,6 +100,7 @@ class Command(BaseCommand):
         Note:
             This method should be scheduled to run daily via cron job or
             similar scheduling mechanism.
+
         """
         # Clean up database records and perform initial maintenance
         self.clean_db()
@@ -149,7 +152,7 @@ class Command(BaseCommand):
                 print_run_bkg(run.event.association.slug, run.get_slug())
 
     @staticmethod
-    def check_old_payments():
+    def check_old_payments() -> None:
         """Delete payment invoices older than 60 days with CREATED status.
 
         Cleans up abandoned payment attempts to prevent database bloat.
@@ -161,7 +164,7 @@ class Command(BaseCommand):
             payment_invoice.delete()
 
     @staticmethod
-    def check_payment_not_approved():
+    def check_payment_not_approved() -> None:
         """Notify admins about payment invoices awaiting approval.
 
         Sends notifications for submitted payment invoices and cleans up
@@ -177,7 +180,7 @@ class Command(BaseCommand):
                 notify_admins("notify_invoice_check fail", payment_invoice.idx, exception)
 
     @staticmethod
-    def check_password_reset():
+    def check_password_reset() -> None:
         """Send password reset reminders and clear processed requests.
 
         Processes pending password reset requests by sending reminder emails
@@ -191,7 +194,7 @@ class Command(BaseCommand):
             membership.save()
 
     @staticmethod
-    def clean_db():
+    def clean_db() -> None:
         """Execute configured database cleanup operations.
 
         Runs SQL cleanup commands defined in CLEAN_DB setting to maintain
@@ -215,6 +218,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function performs side effects by updating badge cache
+
         """
         # Initialize cache for badges and player data
         cache = {"badges": {}, "players": {}}
@@ -227,7 +231,7 @@ class Command(BaseCommand):
 
             # Process registrations excluding waiting list, staff, and NPCs
             for registration in registrations.exclude(
-                ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC]
+                ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
             ):
                 self.check_ach_player(registration, cache)
 
@@ -238,7 +242,7 @@ class Command(BaseCommand):
         for run in Run.objects.filter(end__gt=datetime.today()):
             # Get confirmed registrations (excluding waiting list)
             for registration in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
-                ticket__tier=TicketTier.WAITING
+                ticket__tier=TicketTier.WAITING,
             ):
                 # Check friend referral achievements
                 self.check_friends_player(registration, cache)
@@ -257,6 +261,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Check if member already possesses this badge
         if badge_code in self.get_cache_badges_player(badge_cache, member):
@@ -270,13 +275,14 @@ class Command(BaseCommand):
         # Award badge to member by adding to many-to-many relationship
         badge.members.add(member)
 
-    def check_event_badge(self, event, m, cache):
+    def check_event_badge(self, event, m, cache) -> None:
         """Award event-specific badge to member.
 
         Args:
             event: Event instance to derive badge from
             m: Member instance to award badge to
             cache (dict): Badge cache for performance
+
         """
         self.add_member_badge(event.slug, m, cache)
 
@@ -296,6 +302,7 @@ class Command(BaseCommand):
 
         Note:
             Modifies the cache dictionary by adding member badge data if not present.
+
         """
         # Check if member's badges are already cached
         if member.id not in cache["players"]:
@@ -327,6 +334,7 @@ class Command(BaseCommand):
 
         Note:
             Modifies the cache dictionary by adding newly fetched badges
+
         """
         try:
             # Check if badge code is not already cached
@@ -342,7 +350,10 @@ class Command(BaseCommand):
 
     @staticmethod
     def get_count(
-        counter_name: str, activity_cache: dict[str, dict[int, int]], member, increment_value: int = 1
+        counter_name: str,
+        activity_cache: dict[str, dict[int, int]],
+        member,
+        increment_value: int = 1,
     ) -> int:
         """Track and increment member activity counters.
 
@@ -354,6 +365,7 @@ class Command(BaseCommand):
 
         Returns:
             Updated counter value for the member
+
         """
         # Initialize counter type if not exists
         if counter_name not in activity_cache:
@@ -381,9 +393,13 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Count total friend referral discounts associated with this registration
-        friend_discount_count = AccountingItemDiscount.objects.filter(detail=reg.id, disc__typ=Discount.FRIEND).count()
+        friend_discount_count = AccountingItemDiscount.objects.filter(
+            detail=reg.id,
+            disc__typ=DiscountType.FRIEND,
+        ).count()
 
         # Get current friend count from cache or calculate if not cached
         current_friend_count = self.get_count("friend", cache, reg.member, friend_discount_count)
@@ -393,7 +409,7 @@ class Command(BaseCommand):
         tier_thresholds = [1, 4, 8, 12]  # Minimum friends required for each tier
 
         # Iterate through each tier and award badges if threshold is met
-        for tier_index in range(0, len(badge_tiers)):
+        for tier_index in range(len(badge_tiers)):
             # Skip tier if friend count doesn't meet minimum requirement
             if current_friend_count < tier_thresholds[tier_index]:
                 continue
@@ -414,6 +430,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Count total registrations/plays for this member
         play_count = self.get_count("play", cache, reg.member)
@@ -423,7 +440,7 @@ class Command(BaseCommand):
         play_count_limits = [1, 5, 10, 15]
 
         # Iterate through each badge tier and award if threshold is met
-        for badge_index in range(0, len(badge_types)):
+        for badge_index in range(len(badge_types)):
             if play_count < play_count_limits[badge_index]:
                 continue
 
@@ -444,6 +461,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function modifies cache in-place by adding badges
+
         """
         # Retrieve the current help activity count for this member
         count = self.get_count("help", cache, m)
@@ -453,7 +471,7 @@ class Command(BaseCommand):
         lm = [1]  # Minimum help count required for each tier
 
         # Iterate through each badge tier and check eligibility
-        for i in range(0, len(tp)):
+        for i in range(len(tp)):
             # Skip if member hasn't reached the threshold for this tier
             if count < lm[i]:
                 continue
@@ -474,6 +492,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function modifies cache in-place by adding eligible badges
+
         """
         # Retrieve translation count from cache for the member
         count = self.get_count("trad", cache, m)
@@ -483,7 +502,7 @@ class Command(BaseCommand):
         lm = [1]
 
         # Iterate through each badge type and check eligibility
-        for i in range(0, len(tp)):
+        for i in range(len(tp)):
             # Skip if member hasn't met minimum requirement for this badge
             if count < lm[i]:
                 continue
@@ -507,6 +526,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Function modifies cache state and awards badges as side effects
+
         """
         # Get total count of staff registrations for this member
         count = self.get_count("staff", cache, m)
@@ -516,7 +536,7 @@ class Command(BaseCommand):
         lm = [1, 4, 7, 10]
 
         # Iterate through each badge tier and award if requirements are met
-        for i in range(0, len(tp)):
+        for i in range(len(tp)):
             # Skip if member hasn't reached the minimum count for this badge
             if count < lm[i]:
                 continue
@@ -538,6 +558,7 @@ class Command(BaseCommand):
 
         Returns:
             None: Badges are awarded as side effects through add_member_badge
+
         """
         # Get the total count of events organized by this member
         count = self.get_count("orga", cache, m)
@@ -547,7 +568,7 @@ class Command(BaseCommand):
         lm = [1, 3, 5, 7]
 
         # Iterate through each badge tier and award if threshold is met
-        for i in range(0, len(tp)):
+        for i in range(len(tp)):
             # Skip if member hasn't reached this threshold yet
             if count < lm[i]:
                 continue
@@ -573,6 +594,7 @@ class Command(BaseCommand):
         Note:
             The function filters out registrations for events that start within 3 days
             or have already started, and only processes events with valid start dates.
+
         """
         # Check if reminders should be sent during holidays
         send_reminders_during_holidays = association.get_config("remind_holidays", True)
@@ -592,7 +614,7 @@ class Command(BaseCommand):
 
         # Filter registrations to exclude events without start dates or starting too soon
         registrations_queryset = registrations_queryset.exclude(run__start__isnull=True).exclude(
-            run__start__lte=minimum_start_date.date()
+            run__start__lte=minimum_start_date.date(),
         )
 
         # Process each qualifying registration for reminder emails
@@ -613,6 +635,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Get event features and user membership for this registration
         event_features = get_event_features(reg.run.event_id)
@@ -664,6 +687,7 @@ class Command(BaseCommand):
         Note:
             Only processes registrations for the current year and sends reminders
             only if no membership fee has been paid and no payment is pending.
+
         """
         # Get current year for membership fee validation
         current_year = datetime.today().year
@@ -674,7 +698,8 @@ class Command(BaseCommand):
 
         # Check if membership fee has already been paid for this year
         membership_fee_already_paid = AccountingItemMembership.objects.filter(
-            year=registration.run.end.year, member=registration.member
+            year=registration.run.end.year,
+            member=registration.member,
         ).count()
         if membership_fee_already_paid > 0:
             return
@@ -704,6 +729,7 @@ class Command(BaseCommand):
 
         Returns:
             None: This function performs actions but does not return a value
+
         """
         # Check if alerts are enabled for this registration
         if not reg.alert:
@@ -741,6 +767,7 @@ class Command(BaseCommand):
 
         Returns:
             None
+
         """
         # Skip processing if today is a holiday
         if check_holiday():

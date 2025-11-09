@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
@@ -52,11 +52,12 @@ class AssociationIdentifyMiddleware:
 
         Returns:
             HttpResponse: Either a redirect or the normal response
+
         """
         return self.get_association_info(request) or self.get_response(request)
 
     @classmethod
-    def get_association_info(cls, request) -> Optional[HttpResponse]:
+    def get_association_info(cls, request: HttpRequest) -> HttpResponse | None:
         """Extract association information from request domain.
 
         Determines the environment based on host domain, extracts subdomain to identify
@@ -72,6 +73,7 @@ class AssociationIdentifyMiddleware:
 
         Raises:
             No exceptions are raised directly by this method
+
         """
         # Extract host components for domain analysis
         request_host = request.get_host().split(":")[0]
@@ -114,7 +116,7 @@ class AssociationIdentifyMiddleware:
         return cls.get_main_info(request, base_domain)
 
     @classmethod
-    def get_main_info(cls, request: HttpRequest, base_domain: str) -> Optional[HttpResponse]:
+    def get_main_info(cls, request: HttpRequest, base_domain: str) -> HttpResponse | None:
         """Handle requests to main domain without specific association.
 
         Handles demo user logout, skin loading, and default redirects
@@ -130,6 +132,7 @@ class AssociationIdentifyMiddleware:
         Note:
             Demo users (ending with 'demo.it') are automatically logged out when
             visiting the main page, except for post-login flows.
+
         """
         # Check for demo user logout requirement - skip if already in post-login flow
         current_user = request.user
@@ -151,7 +154,7 @@ class AssociationIdentifyMiddleware:
 
         # Allow admin panel access without association
         if request.path.startswith("/admin"):
-            return
+            return None
 
         # No valid association found - render error page
         return render(request, "exception/association.html", {})
@@ -173,6 +176,7 @@ class AssociationIdentifyMiddleware:
         Side Effects:
             - Sets request.association with the provided association data
             - Adds localized footer text to request.association["footer"]
+
         """
         # Attach association data to request for template access
         request.association = association_data
@@ -182,5 +186,7 @@ class AssociationIdentifyMiddleware:
 
         # Load and attach localized footer text for the association
         request.association["footer"] = get_association_text(
-            request.association["id"], AssociationTextType.FOOTER, current_language
+            request.association["id"],
+            AssociationTextType.FOOTER,
+            current_language,
         )

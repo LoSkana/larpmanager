@@ -28,7 +28,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_user_accounting(pw_page):
+def test_user_accounting(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,7 +42,7 @@ def test_user_accounting(pw_page):
     collections(page, live_server)
 
 
-def prepare(page, live_server):
+def prepare(page, live_server) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
 
@@ -72,7 +72,7 @@ def prepare(page, live_server):
     submit_confirm(page)
 
 
-def donation(page, live_server):
+def donation(page, live_server) -> None:
     # test donation
     go_to(page, live_server, "/manage/features/donate/on")
 
@@ -102,7 +102,7 @@ def donation(page, live_server):
     expect(page.locator("#one")).to_contain_text("(10.00€)")
 
 
-def membership_fees(page, live_server):
+def membership_fees(page, live_server) -> None:
     # test membership fees
     go_to(page, live_server, "/manage/features/membership/on")
 
@@ -159,7 +159,7 @@ def membership_fees(page, live_server):
     expect(page.locator("#one")).not_to_contain_text("Payment membership fee")
 
 
-def collections(page, live_server):
+def collections(page, live_server) -> None:
     # test collections
     go_to(page, live_server, "/manage/features/collection/on")
 

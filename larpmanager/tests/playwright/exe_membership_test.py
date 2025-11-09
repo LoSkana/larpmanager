@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_membership(pw_page):
+def test_exe_membership(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)

@@ -77,6 +77,7 @@ class AssociationTranslationAdmin(DefModelAdmin):
 
         Returns:
             The original text truncated to 50 characters with ellipsis if needed
+
         """
         max_length = 50
         return obj.msgid[:max_length] + "..." if len(obj.msgid) > max_length else obj.msgid
@@ -91,6 +92,7 @@ class AssociationTranslationAdmin(DefModelAdmin):
 
         Returns:
             The translated text truncated to 50 characters with ellipsis if needed
+
         """
         max_length = 50
         return obj.msgstr[:max_length] + "..." if len(obj.msgstr) > max_length else obj.msgstr

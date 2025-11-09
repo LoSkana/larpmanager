@@ -86,22 +86,18 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
     for the current association. It requires proper association permissions and
     configures field display with custom callbacks for formatting.
 
-    Parameters
-    ----------
-    request : HttpRequest
-        Django HTTP request object containing user authentication and session data.
+    Args:
+        request: Django HTTP request object containing user authentication and session data.
         Must be from an authenticated user with appropriate association permissions.
 
-    Returns
-    -------
-    HttpResponse
-        Rendered HTTP response containing the outflows list template with pagination
+    Returns:
+        HttpResponse: Rendered HTTP response containing the outflows list template with pagination
         and configured field display options.
 
-    Notes
-    -----
-    The function uses exe_paginate for consistent pagination behavior and applies
-    custom formatting callbacks for statement downloads and expense type display.
+    Notes:
+        The function uses exe_paginate for consistent pagination behavior and applies
+        custom formatting callbacks for statement downloads and expense type display.
+
     """
     # Check user permissions and get base context for association
     context = check_association_context(request, "exe_outflows")
@@ -125,12 +121,16 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 "type": lambda el: el.get_exp_display(),
             },
-        }
+        },
     )
 
     # Return paginated view with configured context and template
     return exe_paginate(
-        request, context, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
+        request,
+        context,
+        AccountingItemOutflow,
+        "larpmanager/exe/accounting/outflows.html",
+        "exe_outflows_edit",
     )
 
 
@@ -150,6 +150,7 @@ def exe_outflows_edit(request: HttpRequest, num: int) -> HttpResponse:
     Raises:
         Http404: If outflow record with given ID does not exist
         PermissionDenied: If user lacks permission to edit outflows
+
     """
     # Delegate to generic edit handler with outflow-specific form and redirect
     return exe_edit(request, ExeOutflowForm, num, "exe_outflows")
@@ -169,6 +170,7 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks required association permissions.
+
     """
     # Check user permissions for association accounting inflows access
     context = check_association_context(request, "exe_inflows")
@@ -191,12 +193,16 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
             "callbacks": {
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
             },
-        }
+        },
     )
 
     # Render paginated inflows list with edit functionality
     return exe_paginate(
-        request, context, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
+        request,
+        context,
+        AccountingItemInflow,
+        "larpmanager/exe/accounting/inflows.html",
+        "exe_inflows_edit",
     )
 
 
@@ -224,6 +230,7 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks required association permissions.
+
     """
     # Check user has permission to view donations for this association
     context = check_association_context(request, "exe_donations")
@@ -238,12 +245,16 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
                 ("value", _("Value")),  # Monetary amount
                 ("created", _("Date")),  # When donation was created
             ],
-        }
+        },
     )
 
     # Render paginated donations list using the accounting template
     return exe_paginate(
-        request, context, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
+        request,
+        context,
+        AccountingItemDonation,
+        "larpmanager/exe/accounting/donations.html",
+        "exe_donations_edit",
     )
 
 
@@ -255,8 +266,7 @@ def exe_donations_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 @login_required
 def exe_credits(request: HttpRequest) -> dict:
-    """
-    Display and manage credits for an association.
+    """Display and manage credits for an association.
 
     This view function handles the display of accounting credits for an organization,
     providing a paginated list with filtering and editing capabilities.
@@ -267,6 +277,7 @@ def exe_credits(request: HttpRequest) -> dict:
     Returns:
         dict: A dictionary containing the rendered HTML response with credits data
               and pagination controls.
+
     """
     # Check user permissions for credits management
     context = check_association_context(request, "exe_credits")
@@ -285,25 +296,28 @@ def exe_credits(request: HttpRequest) -> dict:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
-        }
+        },
     )
 
     # Render paginated credits list with editing capabilities
     return exe_paginate(
-        request, context, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
+        request,
+        context,
+        AccountingItemOther,
+        "larpmanager/exe/accounting/credits.html",
+        "exe_credits_edit",
     )
 
 
 @login_required
 def exe_credits_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Simple edit view wrapper for credit management
+    """Simple edit view wrapper for credit management."""
     return exe_edit(request, ExeCreditForm, num, "exe_credits")
 
 
 @login_required
 def exe_tokens(request: HttpRequest) -> HttpResponse:
-    """
-    Display paginated list of accounting tokens for organization executives.
+    """Display paginated list of accounting tokens for organization executives.
 
     This view handles the display of token-based accounting items with filtering
     and pagination capabilities for organization-level administrators.
@@ -316,6 +330,7 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks 'exe_tokens' permission for the association.
+
     """
     # Check user permissions for token management at organization level
     context = check_association_context(request, "exe_tokens")
@@ -335,11 +350,15 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
-        }
+        },
     )
     # Render paginated view with AccountingItemOther model data
     return exe_paginate(
-        request, context, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit"
+        request,
+        context,
+        AccountingItemOther,
+        "larpmanager/exe/accounting/tokens.html",
+        "exe_tokens_edit",
     )
 
 
@@ -351,8 +370,7 @@ def exe_tokens_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 @login_required
 def exe_expenses(request: HttpRequest) -> HttpResponse:
-    """
-    Handle expense management for organization executives.
+    """Handle expense management for organization executives.
 
     Displays a paginated list of accounting expense items with approval functionality.
     Only users with 'exe_expenses' permission can access this view.
@@ -362,6 +380,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered expenses page with paginated expense items
+
     """
     # Check user permissions for expense management
     context = check_association_context(request, "exe_expenses")
@@ -394,12 +413,16 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Display human-readable expense type
                 "type": lambda el: el.get_exp_display(),
             },
-        }
+        },
     )
 
     # Return paginated expense list with edit functionality
     return exe_paginate(
-        request, context, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
+        request,
+        context,
+        AccountingItemExpense,
+        "larpmanager/exe/accounting/expenses.html",
+        "exe_expenses_edit",
     )
 
 
@@ -422,6 +445,7 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
 
     Raises:
         Http404: If expense doesn't exist or doesn't belong to current organization
+
     """
     # Check user has permission to manage expenses
     context = check_association_context(request, "exe_expenses")
@@ -430,11 +454,13 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
     try:
         exp = AccountingItemExpense.objects.get(pk=num)
     except Exception as err:
-        raise Http404("no id expense") from err
+        msg = "no id expense"
+        raise Http404(msg) from err
 
     # Verify expense belongs to current organization
     if exp.association_id != context["association_id"]:
-        raise Http404("not your orga")
+        msg = "not your orga"
+        raise Http404(msg)
 
     # Mark expense as approved and save changes
     exp.is_approved = True
@@ -457,6 +483,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with paginated payment data and context
+
     """
     # Check user permissions for accessing payments section
     context = check_association_context(request, "exe_payments")
@@ -494,12 +521,16 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
             },
-        }
+        },
     )
 
     # Return paginated view of AccountingItemPayment records
     return exe_paginate(
-        request, context, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
+        request,
+        context,
+        AccountingItemPayment,
+        "larpmanager/exe/accounting/payments.html",
+        "exe_payments_edit",
     )
 
 
@@ -510,7 +541,7 @@ def exe_payments_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_invoices(request) -> HttpResponse:
+def exe_invoices(request: HttpRequest) -> HttpResponse:
     """Display and manage payment invoices for the organization.
 
     This view provides a paginated list of payment invoices with filtering
@@ -521,6 +552,7 @@ def exe_invoices(request) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with invoice list and pagination
+
     """
     # Check user permissions for invoice management
     context = check_association_context(request, "exe_invoices")
@@ -562,12 +594,16 @@ def exe_invoices(request) -> HttpResponse:
                 if el.status == PaymentStatus.SUBMITTED
                 else "",
             },
-        }
+        },
     )
 
     # Return paginated invoice list with edit functionality
     return exe_paginate(
-        request, context, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit"
+        request,
+        context,
+        PaymentInvoice,
+        "larpmanager/exe/accounting/invoices.html",
+        "exe_invoices_edit",
     )
 
 
@@ -593,6 +629,7 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If invoice is already confirmed or in invalid status
+
     """
     # Check user permissions for invoice management
     context = check_association_context(request, "exe_invoices")
@@ -606,7 +643,8 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
         context["el"].status = PaymentStatus.CONFIRMED
     else:
         # Reject if invoice already processed
-        raise Http404("already done")
+        msg = "already done"
+        raise Http404(msg)
 
     # Persist changes to database
     context["el"].save()
@@ -653,6 +691,7 @@ def exe_refunds(request: HttpRequest) -> dict:
 
     Raises:
         PermissionDenied: If user lacks exe_refunds permission
+
     """
     # Check user permissions for refund management
     context = check_association_context(request, "exe_refunds")
@@ -678,7 +717,7 @@ def exe_refunds(request: HttpRequest) -> dict:
                 if el.status != RefundStatus.PAYED
                 else "",
             },
-        }
+        },
     )
 
     # Return paginated refund requests with template context
@@ -687,7 +726,7 @@ def exe_refunds(request: HttpRequest) -> dict:
 
 @login_required
 def exe_refunds_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Single-line wrapper function - delegates to exe_edit with refund form
+    """Single-line wrapper - delegates to exe_edit with refund form."""
     return exe_edit(request, ExeRefundRequestForm, num, "exe_refunds")
 
 
@@ -707,6 +746,7 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If the refund request is not in REQUEST status (already processed)
+
     """
     # Check user permissions for accessing refund management
     context = check_association_context(request, "exe_refunds")
@@ -720,7 +760,8 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
         context["el"].status = RefundStatus.PAYED
     else:
         # Prevent duplicate processing of already confirmed requests
-        raise Http404("already done")
+        msg = "already done"
+        raise Http404(msg)
 
     # Persist the status change to the database
     context["el"].save()
@@ -773,6 +814,7 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If run doesn't belong to user's association
+
     """
     # Check user has accounting permissions for this association
     context = check_association_context(request, "exe_accounting")
@@ -780,7 +822,8 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
     # Get the run and verify ownership
     context["run"] = Run.objects.get(pk=num)
     if context["run"].event.association_id != context["association_id"]:
-        raise Http404("not your run")
+        msg = "not your run"
+        raise Http404(msg)
 
     # Get accounting data for this run
     context["dc"] = get_run_accounting(context["run"], context)
@@ -794,7 +837,8 @@ def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
 
     # Get accounting records for the organization (not tied to specific runs)
     context["list"] = RecordAccounting.objects.filter(
-        association_id=context["association_id"], run__isnull=True
+        association_id=context["association_id"],
+        run__isnull=True,
     ).order_by("created")
 
     # If no records exist, create them and redirect
@@ -825,6 +869,7 @@ def check_year(request: HttpRequest, context: dict) -> int:
 
     Raises:
         Association.DoesNotExist: If association with given ID doesn't exist
+
     """
     # Get association and generate valid years range
     association = Association.objects.get(pk=context["association_id"])
@@ -847,7 +892,7 @@ def check_year(request: HttpRequest, context: dict) -> int:
 
 @login_required
 def exe_balance(request: HttpRequest) -> HttpResponse:
-    """Executive view for displaying association balance sheet for a specific year.
+    """Display association balance sheet for a specific year.
 
     Calculates totals for memberships, donations, tickets, and expenses from
     various accounting models to generate comprehensive financial reporting.
@@ -869,6 +914,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks exe_balance permission
+
     """
     # Verify user has executive balance permission
     context = check_association_context(request, "exe_balance")
@@ -880,14 +926,16 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
     # Calculate total membership fees for the year
     context["memberships"] = get_sum(
-        AccountingItemMembership.objects.filter(association_id=context["association_id"], year=year)
+        AccountingItemMembership.objects.filter(association_id=context["association_id"], year=year),
     )
 
     # Calculate total donations received in the year
     context["donations"] = get_sum(
         AccountingItemDonation.objects.filter(
-            association_id=context["association_id"], created__gte=start, created__lt=end
-        )
+            association_id=context["association_id"],
+            created__gte=start,
+            created__lt=end,
+        ),
     )
 
     # Calculate net ticket revenue (cash payments minus transaction fees)
@@ -897,18 +945,22 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
             pay=PaymentChoices.MONEY,
             created__gte=start,
             created__lt=end,
-        )
+        ),
     ) - get_sum(
         AccountingItemTransaction.objects.filter(
-            association_id=context["association_id"], created__gte=start, created__lt=end
-        )
+            association_id=context["association_id"],
+            created__gte=start,
+            created__lt=end,
+        ),
     )
 
     # Calculate total inflows for the year
     context["inflows"] = get_sum(
         AccountingItemInflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
-        )
+            association_id=context["association_id"],
+            payment_date__gte=start,
+            payment_date__lt=end,
+        ),
     )
 
     # Sum all incoming funds
@@ -925,7 +977,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
             created__gte=start,
             created__lt=end,
             oth=OtherChoices.REFUND,
-        )
+        ),
     )
 
     # Initialize expenditure categories with zero values
@@ -935,7 +987,10 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Aggregate approved personal expenses by balance category
     for el in (
         AccountingItemExpense.objects.filter(
-            association_id=context["association_id"], created__gte=start, created__lt=end, is_approved=True
+            association_id=context["association_id"],
+            created__gte=start,
+            created__lt=end,
+            is_approved=True,
         )
         .values("balance")
         .annotate(Sum("value"))
@@ -960,7 +1015,9 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Add association-level outflows to expenditure categories
     for el in (
         AccountingItemOutflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
+            association_id=context["association_id"],
+            payment_date__gte=start,
+            payment_date__lt=end,
         )
         .values("balance")
         .annotate(Sum("value"))
@@ -994,6 +1051,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionError: If user lacks required association permissions for verification
+
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_verification")
@@ -1065,6 +1123,7 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
 
     Raises:
         Http404: If the invoice doesn't belong to the user's organization
+
     """
     # Check user has permission to access manual verification
     context = check_association_context(request, "exe_verification")
@@ -1074,7 +1133,8 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
 
     # Ensure invoice belongs to user's organization
     if invoice.association_id != context["association_id"]:
-        raise Http404("not your association!")
+        msg = "not your association!"
+        raise Http404(msg)
 
     # Check if payment is already verified to prevent duplicates
     if invoice.verified:

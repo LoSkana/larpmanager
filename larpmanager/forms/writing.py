@@ -59,6 +59,7 @@ class WritingForm(MyForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -66,7 +67,7 @@ class WritingForm(MyForm):
         # Configure which fields should display links in the form
         self.show_link = ["id_teaser", "id_text"]
 
-    def _init_special_fields(self):
+    def _init_special_fields(self) -> None:
         """Initialize special form fields based on available question types.
 
         Configures cover, assigned, and progress fields based on writing question types.
@@ -75,15 +76,14 @@ class WritingForm(MyForm):
         for question in self.questions:
             question_types.add(question.typ)
 
-        if WritingQuestionType.COVER not in question_types:
-            if "cover" in self.fields:
-                del self.fields["cover"]
+        if WritingQuestionType.COVER not in question_types and "cover" in self.fields:
+            del self.fields["cover"]
 
         if WritingQuestionType.ASSIGNED in question_types:
             staffer_choices = [
                 (member.id, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
             ]
-            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + staffer_choices
+            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
         else:
             self.delete_field("assigned")
 
@@ -126,6 +126,7 @@ class PlayerRelationshipForm(MyForm):
 
         Raises:
             ValidationError: When validation rules are violated
+
         """
         cleaned_data = super().clean()
 
@@ -153,6 +154,7 @@ class PlayerRelationshipForm(MyForm):
 
         Returns:
             The saved instance.
+
         """
         instance = super().save(commit=False)
 
@@ -185,6 +187,7 @@ class UploadElementsForm(forms.Form):
             *args: Positional arguments passed to parent class.
             only_one: If True, removes 'second' field if present.
             **kwargs: Keyword arguments passed to parent class.
+
         """
         only_one = kwargs.pop("only_one", False)
         super().__init__(*args, **kwargs)
@@ -208,6 +211,7 @@ class BaseWritingForm(BaseRegistrationForm):
         Args:
             *args: Variable length argument list passed to parent class.
             **kwargs: Arbitrary keyword arguments passed to parent class.
+
         """
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
@@ -232,8 +236,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
     def get_option_key_count(self, option) -> str:
         """Return cache key for tracking option character count."""
-        cache_key = f"option_char_{option.id}"
-        return cache_key
+        return f"option_char_{option.id}"
 
     def save(self, commit: bool = True) -> Any:
         """Save the form and handle registration questions if present.
@@ -243,6 +246,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
         Returns:
             The saved instance
+
         """
         # Save parent form and persist instance
         instance = super().save()
@@ -274,7 +278,7 @@ class PlotForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize plot form with character relationships and dynamic fields.
 
         Sets up plot editing form with character selection, role text fields,
@@ -291,8 +295,11 @@ class PlotForm(WritingForm, BaseWritingForm):
         if self.instance.pk:
             plot_characters_data = list(
                 self.instance.get_plot_characters().values_list(
-                    "character__id", "character__number", "character__name", "text"
-                )
+                    "character__id",
+                    "character__number",
+                    "character__name",
+                    "text",
+                ),
             )
             self.init_characters = [ch[0] for ch in plot_characters_data]
         else:
@@ -336,14 +343,14 @@ class PlotForm(WritingForm, BaseWritingForm):
         PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
     def save(self, commit: bool = True) -> PlotCharacterRel:
-        """
-        Save the form instance and update plot-character relationships.
+        """Save the form instance and update plot-character relationships.
 
         Args:
             commit: Whether to save the instance to the database.
 
         Returns:
             The saved instance with updated plot-character relationships.
+
         """
         instance = super().save()
 
@@ -352,7 +359,7 @@ class PlotForm(WritingForm, BaseWritingForm):
 
         # Create or update plot-character relationships for each character
         for ch_id in self.chars_id:
-            (pr, created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+            (pr, _created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
 
             # Extract role text from cleaned_data or raw data
             field = f"char_role_{pr.character_id}"
@@ -546,4 +553,5 @@ class SpeedLarpForm(WritingForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize writing element form."""
         super().__init__(*args, **kwargs)

@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Callable
+from collections.abc import Callable
 from urllib.parse import urlparse, urlunparse
 
 from django.http import HttpRequest, HttpResponse
@@ -51,6 +51,7 @@ class CorrectUrlMiddleware:
         Note:
             This middleware should be placed early in the middleware stack to
             catch URL issues before they reach view processing.
+
         """
         path = request.get_full_path()
 
@@ -79,6 +80,4 @@ class CorrectUrlMiddleware:
                 return redirect(path.strip(char))
 
         # No URL issues found, continue with normal request processing
-        response = self.get_response(request)
-
-        return response
+        return self.get_response(request)

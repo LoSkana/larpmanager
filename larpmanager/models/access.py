@@ -54,7 +54,8 @@ class AssociationPermission(BaseModel):
 
     config = models.TextField(max_length=100, blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation of the object."""
         return self.name
 
     class Meta:
@@ -100,6 +101,7 @@ def get_association_executives(association: Association) -> QuerySet[Member]:
 
     Raises:
         AssociationRole.DoesNotExist: If no executive role (number=1) exists for the association.
+
     """
     # Get the executive role (number 1) for the association
     executive_role = AssociationRole.objects.get(association=association, number=1)
@@ -127,6 +129,7 @@ def get_association_inners(association: Association) -> list[Member]:
         >>> members = get_association_inners(association)
         >>> len(members)
         5
+
     """
     lst = []
     already = {}
@@ -161,10 +164,12 @@ class EventPermission(BaseModel):
 
     config = models.TextField(max_length=100, blank=True, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
-    def get_display_name(self):
+    def get_display_name(self) -> str:
+        """Return the display name."""
         return self.name
 
     class Meta:
@@ -211,9 +216,10 @@ def get_event_organizers(event: Event) -> QuerySet[Member]:
     Note:
         This function uses get_or_create to ensure the organizer role exists,
         so it may create a new EventRole if none exists for this event.
+
     """
     # Get or create the event organizer role (role number 1)
-    (organizer_role, was_created) = EventRole.objects.get_or_create(event=event, number=1)
+    (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)
 
     # Return all members assigned to the organizer role
     return organizer_role.members.all()
@@ -233,6 +239,7 @@ def get_event_staffers(event: Event) -> list:
 
     Note:
         Members with multiple roles in the same event are only included once
+
     """
     # Fetch all event roles with their associated members in a single query
     roles = EventRole.objects.filter(event=event).prefetch_related("members")

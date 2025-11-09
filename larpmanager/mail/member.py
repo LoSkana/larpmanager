@@ -19,11 +19,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime
-from typing import Optional
 
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
+from django.http import HttpRequest
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -36,7 +36,7 @@ from larpmanager.models.member import Badge, Member
 from larpmanager.utils.tasks import my_send_mail
 
 
-def send_membership_confirm(request, membership) -> None:
+def send_membership_confirm(request: HttpRequest, membership) -> None:
     """Send confirmation email when membership application is submitted.
 
     Args:
@@ -45,6 +45,7 @@ def send_membership_confirm(request, membership) -> None:
 
     Side Effects:
         Sends confirmation email to member about application status
+
     """
     # Get user profile and set language context
     member_profile = request.user.member
@@ -54,20 +55,20 @@ def send_membership_confirm(request, membership) -> None:
     email_subject = hdr(membership) + _("Request of membership to the Organization")
     email_body = _(
         "You have completed your application for association membership: therefore, your "
-        "event registrations are temporarily confirmed."
+        "event registrations are temporarily confirmed.",
     )
 
     # Add review process information
     email_body += "<br /><br />" + _(
         "As per the statutes, we will review your request at the next board meeting and "
         "send you an update e-mail as soon as possible (you should receive a reply within "
-        "a few weeks at the latest)."
+        "a few weeks at the latest).",
     )
 
     # Add payment information for approved membership
     email_body += "<br /><br />" + _(
         "Once your admission is approved, you will be able to pay for the tickets for the "
-        "events you have registered for."
+        "events you have registered for.",
     )
 
     # Check if membership fee is required and add fee information
@@ -75,7 +76,7 @@ def send_membership_confirm(request, membership) -> None:
     if membership_fee_amount:
         email_body += " " + _(
             "Please also note that payment of the annual membership fee (%(amount)d "
-            "%(currency)s) is required to participate in events."
+            "%(currency)s) is required to participate in events.",
         ) % {"amount": membership_fee_amount, "currency": request.association["currency_symbol"]}
 
     # Add closing message and send email
@@ -83,7 +84,7 @@ def send_membership_confirm(request, membership) -> None:
     my_send_mail(email_subject, email_body, member_profile, membership)
 
 
-def send_membership_payment_notification_email(membership_item):
+def send_membership_payment_notification_email(membership_item) -> None:
     """Send notification when membership fee payment is received.
 
     Args:
@@ -91,6 +92,7 @@ def send_membership_payment_notification_email(membership_item):
 
     Side effects:
         Sends payment confirmation email to member
+
     """
     if membership_item.hide:
         return
@@ -103,7 +105,7 @@ def send_membership_payment_notification_email(membership_item):
     my_send_mail(subject, body, membership_item.member, membership_item)
 
 
-def handle_badge_assignment_notifications(instance, pk_set):
+def handle_badge_assignment_notifications(instance, pk_set) -> None:
     """Handle badge assignment notifications for a set of members.
 
     Args:
@@ -112,6 +114,7 @@ def handle_badge_assignment_notifications(instance, pk_set):
 
     Side effects:
         Sends badge achievement notification emails to members
+
     """
     for member_id in pk_set:
         member = Member.objects.get(pk=member_id)
@@ -125,7 +128,7 @@ def handle_badge_assignment_notifications(instance, pk_set):
         my_send_mail(subject, body, member, instance)
 
 
-def on_member_badges_m2m_changed(sender, **kwargs):
+def on_member_badges_m2m_changed(sender, **kwargs) -> None:
     """Handle badge assignment notifications.
 
     Args:
@@ -134,13 +137,14 @@ def on_member_badges_m2m_changed(sender, **kwargs):
 
     Side effects:
         Sends badge achievement notification emails to members
+
     """
     action = kwargs.pop("action", None)
     if action != "post_add":
         return
-    instance: Optional[Badge] = kwargs.pop("instance", None)
+    instance: Badge | None = kwargs.pop("instance", None)
     # model = kwargs.pop("model", None)
-    pk_set: Optional[list[int]] = kwargs.pop("pk_set", None)
+    pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
     handle_badge_assignment_notifications(instance, pk_set)
 
@@ -154,6 +158,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
 
     Side Effects:
         Sends approval email with payment instructions and card number
+
     """
     # Activate member's language for localized messages
     activate(member.language)
@@ -174,7 +179,8 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
     # Check for pending payments across member's registrations
     association_id = member.membership.association_id
     member_registrations = member.registrations.filter(
-        run__event__association_id=association_id, run__start__gte=datetime.now().date()
+        run__event__association_id=association_id,
+        run__start__gte=datetime.now().date(),
     )
     requires_membership_fee = False
     unpaid_registration_links = []
@@ -212,14 +218,14 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
         body += "<br /><br />" + _(
             "In addition, you must be up to date with the payment of your membership fee in "
             "order to participate in events. Make your payment <a href='%(url)s'>on this "
-            "page</a>."
+            "page</a>.",
         ) % {"url": membership_fee_url}
 
     # Send the notification email
     my_send_mail(subject, body, member, member.membership)
 
 
-def notify_membership_reject(member, resp):
+def notify_membership_reject(member, resp) -> None:
     """Send notification when membership application is rejected.
 
     Args:
@@ -228,6 +234,7 @@ def notify_membership_reject(member, resp):
 
     Side effects:
         Sends rejection notification email
+
     """
     # Manda Mail
     activate(member.language)
@@ -239,7 +246,7 @@ def notify_membership_reject(member, resp):
     my_send_mail(subject, body, member, member.membership)
 
 
-def send_help_question_notification_email(instance):
+def send_help_question_notification_email(instance) -> None:
     """Send notifications for help questions and answers.
 
     Args:
@@ -247,6 +254,7 @@ def send_help_question_notification_email(instance):
 
     Side effects:
         Sends notifications to organizers for questions or to users for answers
+
     """
     if instance.pk:
         return
@@ -279,13 +287,7 @@ def send_help_question_notification_email(instance):
         subject = hdr(instance) + _("New answer") + "!"
         body = _("Your question has been answered") + f": {instance.text}"
 
-        if instance.run:
-            url = get_url(
-                f"{instance.run.get_slug()}/help",
-                instance,
-            )
-        else:
-            url = get_url("help", instance)
+        url = get_url(f"{instance.run.get_slug()}/help", instance) if instance.run else get_url("help", instance)
 
         body += "<br /><br />" + _("(<a href='%(url)s'>answer here</a>)") % {"url": url}
 
@@ -300,6 +302,7 @@ def get_help_email(help_question):
 
     Returns:
         tuple: (subject, body) for the notification email
+
     """
     subject = hdr(help_question) + _("New question by %(user)s") % {"user": help_question.member}
     email_body = _("A question was asked by: %(user)s") % {"user": help_question.member}
@@ -307,7 +310,7 @@ def get_help_email(help_question):
     return subject, email_body
 
 
-def send_chat_message_notification_email(instance):
+def send_chat_message_notification_email(instance) -> None:
     """Send notification for new chat messages.
 
     Args:
@@ -315,6 +318,7 @@ def send_chat_message_notification_email(instance):
 
     Side effects:
         Sends notification email to message receiver
+
     """
     if instance.pk:
         return
@@ -337,6 +341,7 @@ def get_activation_key(user):
 
     Returns:
         str: Signed activation key for email verification
+
     """
     """
     Generate the activation key which will be emailed to the user.
@@ -353,6 +358,7 @@ def get_email_context(activation_key, request):
 
     Returns:
         dict: Context dictionary for activation email template
+
     """
     """
     Build the template context used for the activation email.
@@ -366,7 +372,7 @@ def get_email_context(activation_key, request):
     }
 
 
-def send_password_reset_remainder(membership):
+def send_password_reset_remainder(membership) -> None:
     """Send password reset reminder to association executives and admins.
 
     Args:
@@ -374,6 +380,7 @@ def send_password_reset_remainder(membership):
 
     Side effects:
         Sends reminder emails to association executives and system admins
+
     """
     association = membership.association
     notify_organization_exe(get_password_reminder_email, association, membership)
@@ -391,6 +398,7 @@ def get_password_reminder_email(membership):
 
     Returns:
         tuple: (subject, body) for the reminder email
+
     """
     association = membership.association
     member = membership.member
@@ -398,6 +406,6 @@ def get_password_reminder_email(membership):
     reset_url = get_url(f"reset/{reset_token_parts[0]}/{reset_token_parts[1]}/", association)
     subject = _("Password reset of user %(user)s") % {"user": member}
     body = _("The user requested the password reset, but did not complete it. Give them this link: %(url)s") % {
-        "url": reset_url
+        "url": reset_url,
     }
     return subject, body

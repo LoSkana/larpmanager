@@ -53,7 +53,7 @@ def analyze_file(filepath):
     return results
 
 
-def main(folder="."):
+def main(folder=".") -> None:
     all_results = []
     for root, _dirs, files in os.walk(folder):
         if any(excluded in root for excluded in ("venv", "tests", "migrations")):

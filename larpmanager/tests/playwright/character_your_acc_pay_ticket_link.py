@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, load_image, login_user, submit_confir
 pytestmark = pytest.mark.e2e
 
 
-def test_character_your_acc_pay_ticket_link(pw_page):
+def test_character_your_acc_pay_ticket_link(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,7 +42,7 @@ def test_character_your_acc_pay_ticket_link(pw_page):
 
     acc_refund(page, live_server)
 
-def check_direct_ticket_link(page, live_server):
+def check_direct_ticket_link(page, live_server) -> None:
     go_to(page, live_server, "/test/manage")
     # Setup NPC ticket
     page.get_by_role("link", name="Configuration").click()
@@ -64,18 +64,18 @@ def check_direct_ticket_link(page, live_server):
     page.get_by_role("link", name="Registration is open!").click()
     page.get_by_label("Ticket (*)").click()
     expect(page.get_by_label("Ticket (*)")).to_have_value("1")
-    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot("- combobox \"Ticket (*)\":\n  - option \"Standard\" [selected]")
+    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot('- combobox "Ticket (*)":\n  - option "Standard" [selected]')
 
     # Test direct link
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
-    page.locator("[id=\"\\32 \"]").get_by_role("link", name="Link").click()
+    page.locator('[id="\\32 "]').get_by_role("link", name="Link").click()
     expect(page.get_by_label("Ticket (*)")).to_have_value("2")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
     expect(page.locator("#one")).to_contain_text("Registration confirmed (Staff)")
 
-def check_character_your_link(page, live_server):
+def check_character_your_link(page, live_server) -> None:
     # Test character your link
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Features").click()
@@ -95,13 +95,13 @@ def check_character_your_link(page, live_server):
     expect(page.locator("#banner")).to_contain_text("Test Character - Test Larp")
     expect(page.locator("#one")).to_contain_text("Player: Admin Test Presentation Test Teaser Text Test Text")
 
-def check_acc_pay_link(page, live_server):
+def check_acc_pay_link(page, live_server) -> None:
     # Test acc pay link
     go_to(page, live_server, "/test/manage")
 
     # Set ticket price
     page.get_by_role("link", name="Tickets").click()
-    page.locator("[id=\"\\32 \"]").get_by_role("link", name="").click()
+    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("100.00")
@@ -144,7 +144,7 @@ def check_acc_pay_link(page, live_server):
     go_to(page, live_server, "/accounting/pay/test/paypal/")
     expect(page.locator("#one")).to_contain_text("Choose the payment method: Wire sadsadsa Submit")
 
-def check_factions_indep_campaign(page, live_server):
+def check_factions_indep_campaign(page, live_server) -> None:
     # Add first event factions
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
@@ -239,7 +239,7 @@ def check_factions_indep_campaign(page, live_server):
     page.get_by_role("link", name="Faction", exact=True).click()
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text primaaa tranver")
 
-def acc_refund(page, live_server):
+def acc_refund(page, live_server) -> None:
     # activate features
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Features").click()

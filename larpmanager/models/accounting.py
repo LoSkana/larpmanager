@@ -116,7 +116,8 @@ class PaymentInvoice(BaseModel):
             models.Index(fields=["status", "-created"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return invoice summary with payment status and transaction details."""
         return (
             f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
         )
@@ -126,6 +127,7 @@ class PaymentInvoice(BaseModel):
 
         Returns:
             Download URL or empty string if no invoice/name available.
+
         """
         # Check if invoice exists
         if not self.invoice:
@@ -145,6 +147,7 @@ class PaymentInvoice(BaseModel):
         Returns:
             str: HTML formatted string containing download link, text description,
                  and payment code if available. Returns empty string if no method.
+
         """
         details_html = ""
 
@@ -169,7 +172,11 @@ class PaymentInvoice(BaseModel):
 
 class ElectronicInvoice(BaseModel):
     inv = models.OneToOneField(
-        PaymentInvoice, on_delete=models.SET_NULL, null=True, blank=True, related_name="electronicinvoice"
+        PaymentInvoice,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="electronicinvoice",
     )
 
     progressive = models.IntegerField()
@@ -216,6 +223,7 @@ class ElectronicInvoice(BaseModel):
         Args:
             *args: Variable length argument list passed to parent save method.
             **kwargs: Arbitrary keyword arguments passed to parent save method.
+
         """
         # Auto-generate progressive number if not set (global counter)
         if not self.progressive:
@@ -271,6 +279,7 @@ class AccountingItem(BaseModel):
 
         Returns:
             String with ID, class name, and member info if available.
+
         """
         # Build base string with class name
         s = "Voce contabile"
@@ -298,7 +307,11 @@ class AccountingItem(BaseModel):
 
 class AccountingItemTransaction(AccountingItem):
     reg = models.ForeignKey(
-        Registration, on_delete=models.CASCADE, related_name="accounting_items_t", null=True, blank=True
+        Registration,
+        on_delete=models.CASCADE,
+        related_name="accounting_items_t",
+        null=True,
+        blank=True,
     )
 
     user_burden = models.BooleanField(default=False)
@@ -310,7 +323,9 @@ class AccountingItemMembership(AccountingItem):
     class Meta:
         indexes = [
             models.Index(
-                fields=["association", "year"], condition=Q(deleted__isnull=True), name="acctmem_association_year_act"
+                fields=["association", "year"],
+                condition=Q(deleted__isnull=True),
+                name="acctmem_association_year_act",
             ),
         ]
 
@@ -364,7 +379,11 @@ class AccountingItemPayment(AccountingItem):
     pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
     reg = models.ForeignKey(
-        Registration, on_delete=models.CASCADE, related_name="accounting_items_p", null=True, blank=True
+        Registration,
+        on_delete=models.CASCADE,
+        related_name="accounting_items_p",
+        null=True,
+        blank=True,
     )
 
     info = models.CharField(max_length=150, null=True, blank=True)
@@ -454,17 +473,15 @@ class AccountingItemInflow(AccountingItemFlow):
     pass
 
 
-class Discount(BaseModel):
-    STANDARD = "a"
-    FRIEND = "f"
-    INFLUENCER = "I"
-    PLAYAGAIN = "p"
-    GIFT = "g"
-    TYPE_CHOICES = [
-        (STANDARD, _("Standard")),
-        (PLAYAGAIN, _("Play Again")),
-    ]
+class DiscountType(models.TextChoices):
+    STANDARD = "a", _("Standard")
+    PLAYAGAIN = "p", _("Play Again")
+    FRIEND = "f", _("Friend")
+    INFLUENCER = "I", _("Influencer")
+    GIFT = "g", _("Gift")
 
+
+class Discount(BaseModel):
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
 
     runs = models.ManyToManyField(
@@ -483,7 +500,7 @@ class Discount(BaseModel):
     )
 
     max_redeem = models.IntegerField(
-        help_text=_("Indicate the maximum number of such discounts that can be requested (0 for infinite uses)")
+        help_text=_("Indicate the maximum number of such discounts that can be requested (0 for infinite uses)"),
     )
 
     cod = models.CharField(
@@ -492,17 +509,17 @@ class Discount(BaseModel):
         verbose_name=_("Code"),
         help_text=_(
             "Indicate the special discount code, to be communicated to the participants, which "
-            "will need to be entered during registration."
+            "will need to be entered during registration.",
         ),
     )
 
     typ = models.CharField(
         max_length=1,
-        choices=TYPE_CHOICES,
+        choices=DiscountType.choices,
         verbose_name=_("Type"),
         help_text=_(
             "Indicate the type of discount: standard, play again (only available to those who "
-            "have already played this event)"
+            "have already played this event)",
         ),
     )
 
@@ -515,7 +532,7 @@ class Discount(BaseModel):
         default=True,
         help_text=_(
             "Indicate whether the discount can be used only on new enrollment, or whether it "
-            "can be used by already registered participants."
+            "can be used by already registered participants.",
         ),
     )
 
@@ -623,11 +640,12 @@ class Collection(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation based on member or name."""
+        # Return member-based or name-based description
         if self.member:
             return f"Colletta per {self.member}"
-        else:
-            return f"Colletta per {self.name}"
+        return f"Colletta per {self.name}"
 
     def display_member(self) -> str:
         """Return member's display name if exists, otherwise return name."""
@@ -649,7 +667,8 @@ class Collection(BaseModel):
                 return
 
         # If all attempts failed, raise an error
-        raise ValueError("Too many attempts to generate the code")
+        msg = "Too many attempts to generate the code"
+        raise ValueError(msg)
 
     def unique_redeem_code(self) -> None:
         """Generate a unique redeem code for the collection."""
@@ -662,7 +681,8 @@ class Collection(BaseModel):
                 self.redeem_code = generated_code
                 return
         # Raise error if unable to generate unique code after max attempts
-        raise ValueError("Too many attempts to generate the code")
+        msg = "Too many attempts to generate the code"
+        raise ValueError(msg)
 
 
 class AccountingItemCollection(AccountingItem):
@@ -686,7 +706,7 @@ class RefundRequest(BaseModel):
         verbose_name=_("Details"),
         help_text=_(
             "Indicate all references of how you want your refund to be paid  (ex: IBAN and "
-            "full bank details, paypal link, etc)"
+            "full bank details, paypal link, etc)",
         ),
     )
 
@@ -702,7 +722,8 @@ class RefundRequest(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with member name."""
         return f"Refund request of {self.member}"
 
     # ## Workshops

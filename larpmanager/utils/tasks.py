@@ -21,8 +21,9 @@
 import logging
 import re
 import traceback
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional, Union
+from typing import Any
 
 from background_task import background
 from django.conf import settings as conf_settings
@@ -44,7 +45,7 @@ INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"
 
 
 def background_auto(schedule=0, **background_kwargs):
-    """Decorator to conditionally run functions as background tasks.
+    """Conditionally run functions as background tasks.
 
     Creates a decorator that can run functions either synchronously
     (if AUTO_BACKGROUND_TASKS is True) or as background tasks.
@@ -55,10 +56,11 @@ def background_auto(schedule=0, **background_kwargs):
 
     Returns:
         function: Decorator function
+
     """
 
     def decorator(original_function: Callable[..., Any]) -> Callable[..., Any]:
-        """Decorator that conditionally executes a function as a background task.
+        """Conditionally execute a function as a background task.
 
         Args:
             original_function: The function to be decorated for potential background execution.
@@ -66,6 +68,7 @@ def background_auto(schedule=0, **background_kwargs):
         Returns:
             A wrapper function that either executes the original function directly
             or schedules it as a background task based on configuration.
+
         """
         # Create background task from the original function
         background_task = background(schedule=schedule, **background_kwargs)(original_function)
@@ -79,9 +82,8 @@ def background_auto(schedule=0, **background_kwargs):
                 filtered_kwargs = {key: value for key, value in kwargs.items() if key not in INTERNAL_KWARGS}
                 # Execute function directly in foreground
                 return original_function(*args, **filtered_kwargs)
-            else:
-                # Schedule function as background task
-                return background_task(*args, **kwargs)
+            # Schedule function as background task
+            return background_task(*args, **kwargs)
 
         # Attach task references to wrapper for external access
         wrapper.task = background_task
@@ -94,7 +96,7 @@ def background_auto(schedule=0, **background_kwargs):
 # MAIL
 
 
-def mail_error(subject, email_body, exception=None):
+def mail_error(subject, email_body, exception=None) -> None:
     """Handle email sending errors and notify administrators.
 
     Args:
@@ -104,6 +106,7 @@ def mail_error(subject, email_body, exception=None):
 
     Side effects:
         Prints error details and sends error notification to admins
+
     """
     logger.error(f"Mail error: {exception}")
     logger.error(f"Subject: {subject}")
@@ -149,6 +152,7 @@ def send_mail_exec(
         - Schedules individual emails with specified interval delays via background tasks
         - Sends notification to admins about bulk email operation
         - Logs warning if neither association_id nor run_id are provided
+
     """
     seen_emails = {}
 
@@ -185,7 +189,7 @@ def send_mail_exec(
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(email_pk):
+def my_send_mail_bkg(email_pk) -> None:
     """Background task to send a queued email.
 
     Args:
@@ -193,6 +197,7 @@ def my_send_mail_bkg(email_pk):
 
     Side effects:
         Sends the email and marks it as sent in database
+
     """
     try:
         email = Email.objects.get(pk=email_pk)
@@ -217,12 +222,12 @@ def clean_sender(sender_name):
 
     Returns:
         str: Sanitized sender name safe for email headers
+
     """
     sender_name = sender_name.replace(":", " ")
     sender_name = sender_name.split(",")[0]
     sender_name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", sender_name)
-    sender_name = re.sub(r"\s+", " ", sender_name).strip()
-    return sender_name
+    return re.sub(r"\s+", " ", sender_name).strip()
 
 
 def my_send_simple_mail(
@@ -253,6 +258,7 @@ def my_send_simple_mail(
     Note:
         Sends email using configured SMTP settings or default connection.
         Logs email details in debug mode for troubleshooting.
+
     """
     # Initialize email headers and BCC list
     email_headers = {}
@@ -274,7 +280,11 @@ def my_send_simple_mail(
 
             # Check if event has custom SMTP configuration
             event_smtp_host_user = get_event_config(
-                event.id, "mail_server_host_user", "", context=cache_context, bypass_cache=True
+                event.id,
+                "mail_server_host_user",
+                "",
+                context=cache_context,
+                bypass_cache=True,
             )
 
             # Only apply event settings if SMTP host user is configured
@@ -287,13 +297,25 @@ def my_send_simple_mail(
                     host=get_event_config(event.id, "mail_server_host", "", context=cache_context, bypass_cache=True),
                     port=get_event_config(event.id, "mail_server_port", "", context=cache_context, bypass_cache=True),
                     username=get_event_config(
-                        event.id, "mail_server_host_user", "", context=cache_context, bypass_cache=True
+                        event.id,
+                        "mail_server_host_user",
+                        "",
+                        context=cache_context,
+                        bypass_cache=True,
                     ),
                     password=get_event_config(
-                        event.id, "mail_server_host_password", "", context=cache_context, bypass_cache=True
+                        event.id,
+                        "mail_server_host_password",
+                        "",
+                        context=cache_context,
+                        bypass_cache=True,
                     ),
                     use_tls=get_event_config(
-                        event.id, "mail_server_use_tls", False, context=cache_context, bypass_cache=True
+                        event.id,
+                        "mail_server_use_tls",
+                        False,
+                        context=cache_context,
+                        bypass_cache=True,
                     ),
                 )
                 event_settings_applied = True
@@ -368,7 +390,7 @@ def my_send_simple_mail(
     except Exception as email_sending_exception:
         # Log the error and re-raise for caller handling
         mail_error(subj, body, email_sending_exception)
-        raise email_sending_exception
+        raise
 
 
 def add_unsubscribe_body(association):
@@ -379,6 +401,7 @@ def add_unsubscribe_body(association):
 
     Returns:
         str: HTML footer with unsubscribe link
+
     """
     html_footer = "<br /><br />-<br />"
     html_footer += f"<a href='{get_url('unsubscribe', association)}'>Unsubscribe</a>"
@@ -388,9 +411,9 @@ def add_unsubscribe_body(association):
 def my_send_mail(
     subject: str,
     body: str,
-    recipient: Union[str, Member],
-    context_object: Optional[Union[Run, Event, Association, Any]] = None,
-    reply_to: Optional[str] = None,
+    recipient: str | Member,
+    context_object: Run | Event | Association | Any | None = None,
+    reply_to: str | None = None,
     schedule: int = 0,
 ) -> None:
     """Queue email for sending with context-aware formatting.
@@ -414,6 +437,7 @@ def my_send_mail(
         - Creates Email record in database
         - Schedules background task for email delivery
         - Modifies body with signature and unsubscribe link
+
     """
     # Clean up duplicate spaces in subject line
     subject = subject.replace("  ", " ")
@@ -472,7 +496,7 @@ def my_send_mail(
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subject, message_text, exception=None):
+def notify_admins(subject, message_text, exception=None) -> None:
     """Send notification email to system administrators.
 
     Args:
@@ -482,6 +506,7 @@ def notify_admins(subject, message_text, exception=None):
 
     Side effects:
         Sends notification emails to all configured ADMINS
+
     """
     if exception:
         traceback_text = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))

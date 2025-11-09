@@ -52,6 +52,7 @@ def orga_newsletter(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         Rendered newsletter template with recipient list
+
     """
     # Check user permissions for newsletter feature
     context = check_event_context(request, event_slug, "orga_newsletter")
@@ -85,6 +86,7 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
     Note:
         Only includes members with safety information longer than min_length
         and excludes cancelled registrations.
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_safety")
@@ -93,7 +95,7 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build mapping of member IDs to their character list
     member_chars = {}
-    for _num, el in context["chars"].items():
+    for el in context["chars"].values():
         if "player_id" not in el:
             continue
         # Initialize member's character list if not exists
@@ -140,6 +142,7 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
     Note:
         Only shows members with dietary preferences longer than min_length
         characters and excludes cancelled registrations.
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_diet")
@@ -148,7 +151,7 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build mapping of member IDs to their character names and numbers
     member_chars = {}
-    for _num, el in context["chars"].items():
+    for el in context["chars"].values():
         if "player_id" not in el:
             continue
         if el["player_id"] not in member_chars:
@@ -188,6 +191,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template with newsletter management interface
         containing email lists grouped by member language preferences
+
     """
     # Check user permissions for spam management feature
     context = check_event_context(request, event_slug, "orga_spam")
@@ -195,8 +199,9 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get members already registered for current or future runs
     already = list(
         Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
 
     # Add event staff members to exclusion list
@@ -225,7 +230,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_persuade(request, event_slug: str) -> HttpResponse:
+def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display members who can be persuaded to register for the event.
 
     Shows association members who haven't registered yet, excluding current
@@ -237,6 +242,7 @@ def orga_persuade(request, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with member persuasion data
+
     """
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_persuade")
@@ -244,8 +250,9 @@ def orga_persuade(request, event_slug: str) -> HttpResponse:
     # Get list of members already registered for current/future runs
     already = list(
         Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
 
     # Add event staff members to exclusion list
@@ -301,7 +308,7 @@ def orga_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> HttpResponse:
+def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int) -> HttpResponse:
     """Handle organizer responses to member help questions.
 
     This view allows organizers to respond to help questions submitted by members
@@ -311,7 +318,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
     Args:
         request: HTTP request object containing POST data for form submission
         event_slug: Event/run identifier (slug or ID)
-        r: Member ID who submitted the question
+        member_id: Member ID who submitted the question
 
     Returns:
         HttpResponse: Rendered template for answering help questions or redirect
@@ -320,12 +327,13 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
     Raises:
         Member.DoesNotExist: If the specified member ID doesn't exist
         PermissionDenied: If user lacks required event permissions
+
     """
     # Check organizer permissions for this event and get context
     context = check_event_context(request, event_slug, "orga_questions")
 
     # Get the member who submitted the question
-    member = Member.objects.get(pk=r)
+    member = Member.objects.get(pk=member_id)
 
     # Handle form submission for organizer's answer
     if request.method == "POST":
@@ -356,7 +364,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
     # Find characters and factions associated with this member
     context["reg_characters"] = []
     context["reg_factions"] = []
-    for _num, char in context["chars"].items():
+    for char in context["chars"].values():
         # Skip characters without assigned players
         if "player_id" not in char:
             continue
@@ -370,20 +378,26 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, r: int) -> Http
 
     # Get all help questions for this member in this event, newest first
     context["list"] = HelpQuestion.objects.filter(
-        member_id=r, association_id=context["association_id"], run_id=context["run"]
+        member_id=member_id,
+        association_id=context["association_id"],
+        run_id=context["run"],
     ).order_by("-created")
 
     return render(request, "larpmanager/orga/users/questions_answer.html", context)
 
 
 @login_required
-def orga_questions_close(request: HttpRequest, event_slug: str, r: str) -> HttpResponse:
+def orga_questions_close(request: HttpRequest, event_slug: str, member_id: str) -> HttpResponse:
     """Close a help question for an organization event."""
     context = check_event_context(request, event_slug, "orga_questions")
 
     # Get the most recent help question for this member and run
     h = (
-        HelpQuestion.objects.filter(member_id=r, association_id=context["association_id"], run_id=context["run"])
+        HelpQuestion.objects.filter(
+            member_id=member_id,
+            association_id=context["association_id"],
+            run_id=context["run"],
+        )
         .order_by("-created")
         .first()
     )
@@ -402,6 +416,7 @@ def send_mail_batch(request: HttpRequest, association_id: int | None = None, run
         request: HTTP request containing POST data with email details
         association_id: Optional association ID for context
         run_id: Optional run ID for context
+
     """
     # Extract email parameters from POST data
     player_ids = request.POST["players"]
@@ -432,6 +447,7 @@ def orga_send_mail(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with form or redirect response after successful submission
+
     """
     # Check user permissions and build event context
     context = check_event_context(request, event_slug, "orga_send_mail")
@@ -466,6 +482,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered template with email archive data and pagination
+
     """
     # Check user permissions for accessing email archive
     context = check_event_context(request, event_slug, "orga_archive_email")
@@ -489,7 +506,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "recipient": lambda el: str(el.recipient),
                 "subj": lambda el: str(el.subj),
             },
-        }
+        },
     )
 
     # Return paginated email archive using the Email model
@@ -497,22 +514,23 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_read_mail(request: HttpRequest, event_slug: str, nm: str) -> HttpResponse:
+def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpResponse:
     """Display a specific email from the archive for organization staff.
 
     Args:
         request: The HTTP request object.
         event_slug: Event identifier string.
-        nm: The email name/identifier.
+        mail_id: The id of the email.
 
     Returns:
         Rendered template with email content.
+
     """
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_archive_email")
 
     # Retrieve the specific email for display
-    context["email"] = get_mail(request, context, nm)
+    context["email"] = get_mail(request, context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 
@@ -535,6 +553,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     Note:
         Requires 'orga_sensitive' permission for the specified event.
         Displays only non-cancelled registrations and event staff members.
+
     """
     # Check user permissions for accessing sensitive data
     context = check_event_context(request, event_slug, "orga_sensitive")
@@ -544,7 +563,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build mapping of member IDs to their character assignments
     member_chars = {}
-    for _num, el in context["chars"].items():
+    for el in context["chars"].values():
         if "player_id" not in el:
             continue
         if el["player_id"] not in member_chars:
@@ -554,14 +573,15 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Collect all relevant member IDs (registered participants + staff)
     member_list = list(
         Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
     member_list.extend([mb.id for mb in get_event_staffers(context["run"].event)])
 
     # Define member model and fields to display
     member_cls: type[Member] = Member
-    member_fields = ["name", "surname"] + sorted(context["members_fields"])
+    member_fields = ["name", "surname", *sorted(context["members_fields"])]
 
     # Query and process member data
     context["list"] = Member.objects.filter(id__in=member_list).order_by("created")
@@ -599,6 +619,7 @@ def member_field_correct(member: object, member_fields: list[str]) -> None:
 
     Returns:
         None: Modifies the member object in place
+
     """
     # Format residence address using the member's get_residence method
     if "residence_address" in member_fields:

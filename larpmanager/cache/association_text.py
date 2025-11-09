@@ -17,19 +17,24 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import logging
+
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.utils.translation import get_language
 
 from larpmanager.models.association import AssociationText
 
+logger = logging.getLogger(__name__)
 
-def association_text_key(association_id, text_type, language):
+
+def association_text_key(association_id: int, text_type: str, language: str) -> str:
+    """Generate cache key for association text content."""
     return f"association_text_{association_id}_{text_type}_{language}"
 
 
 def update_association_text(association_id: int, typ: str, lang: str) -> str:
-    """Updates and caches association text for given ID, type and language.
+    """Update and cache association text for given ID, type and language.
 
     Args:
         association_id: Association ID
@@ -38,14 +43,15 @@ def update_association_text(association_id: int, typ: str, lang: str) -> str:
 
     Returns:
         Text content or empty string if not found
+
     """
     text_content = ""
     try:
         # Retrieve association text from database
         text_content = AssociationText.objects.get(association_id=association_id, typ=typ, language=lang).text
-    except Exception:
+    except Exception as e:
         # Return empty string if text not found
-        pass
+        logger.debug(f"Association text not found for {association_id}, {typ}, {lang}: {e}")
 
     # Cache the result for one day
     cache.set(association_text_key(association_id, typ, lang), text_content, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -62,6 +68,7 @@ def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
 
     Returns:
         Cached or freshly updated association text
+
     """
     # Try to get cached text
     cached_text = cache.get(association_text_key(association_id, typ, lang))
@@ -73,12 +80,13 @@ def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
     return cached_text
 
 
-def association_text_key_def(association_id, text_type):
+def association_text_key_def(association_id: int, text_type: str) -> str:
+    """Generate cache key for association text definitions."""
     return f"association_text_def_{association_id}_{text_type}"
 
 
 def update_association_text_def(association_id: int, text_type: str) -> str:
-    """Updates and caches the default association text for given type.
+    """Update and cache the default association text for given type.
 
     Args:
         association_id: The association ID
@@ -86,6 +94,7 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
 
     Returns:
         The default text content or empty string if not found
+
     """
     default_text = ""
     try:
@@ -93,12 +102,14 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
         default_text = (
             AssociationText.objects.filter(association_id=association_id, typ=text_type, default=True).first().text
         )
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Default association text not found for {association_id}, {text_type}: {e}")
 
     # Cache the result for one day
     cache.set(
-        association_text_key_def(association_id, text_type), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+        association_text_key_def(association_id, text_type),
+        default_text,
+        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
     )
     return default_text
 
@@ -112,6 +123,7 @@ def get_association_text_cache_def(association_id: int, typ: str) -> str:
 
     Returns:
         Association text content
+
     """
     # Try to retrieve from cache first
     cached_text = cache.get(association_text_key_def(association_id, typ))
@@ -123,7 +135,7 @@ def get_association_text_cache_def(association_id: int, typ: str) -> str:
     return cached_text
 
 
-def get_association_text(association_id: int, text_type: str, language_code: str = None) -> str:
+def get_association_text(association_id: int, text_type: str, language_code: str | None = None) -> str:
     """Get association text for the specified type and language.
 
     Retrieves localized text for an association. Falls back to default
@@ -136,6 +148,7 @@ def get_association_text(association_id: int, text_type: str, language_code: str
 
     Returns:
         The localized text string, or default language text if not found.
+
     """
     # Use current language if none specified
     if not language_code:

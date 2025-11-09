@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from django.conf import settings as conf_settings
+from django.http import HttpRequest
 
 
 def is_ajax(http_request):
@@ -28,12 +29,11 @@ def is_ajax(http_request):
 
     Returns:
         bool: True if request is AJAX, False otherwise
+
     """
     return http_request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
 
 
-def show_toolbar(request):
-    """
-    Default function to determine whether to show the toolbar on a given page.
-    """
+def show_toolbar(request: HttpRequest):
+    """Determine whether to show the toolbar on a given page."""
     return getattr(conf_settings, "DEBUG_TOOLBAR", False) and not is_ajax(request)

@@ -34,13 +34,13 @@ logger = logging.getLogger(__name__)
 
 
 class QuestType(Writing):
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def show(self, run: Run | None = None) -> dict:
+        """Return serialized data excluding commented quest list."""
         # Return base serialized data (commented quest list excluded)
-        js = super().show(run)
-        return js
+        return super().show(run)
 
     class Meta:
         indexes = [
@@ -51,7 +51,11 @@ class QuestType(Writing):
 
 class Quest(Writing):
     typ = models.ForeignKey(
-        QuestType, on_delete=models.CASCADE, null=True, related_name="quests", verbose_name=_("Type")
+        QuestType,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="quests",
+        verbose_name=_("Type"),
     )
 
     class Meta:
@@ -68,7 +72,8 @@ class Quest(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Rappresentazione testuale con numero e nome della domanda."""
         return f"Q{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:
@@ -79,6 +84,7 @@ class Quest(Writing):
 
         Returns:
             Dictionary with base data, type number, and visible traits
+
         """
         # Get base serialized data from parent class
         js = super().show(run)
@@ -114,7 +120,8 @@ class Trait(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return formatted tier representation with number and name."""
         return f"T{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:
@@ -154,7 +161,7 @@ class AssignmentTrait(BaseModel):
 
     typ = models.IntegerField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.run} ({self.member}) {self.trait}"
 
 
@@ -173,7 +180,8 @@ class Casting(BaseModel):
 
     active = models.BooleanField(default=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with run, member, element, preference, and rejection status."""
         return f"{self.run} ({self.member}) {self.element} {self.pref} {self.nope}"
 
 
@@ -217,6 +225,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     Note:
         @number patterns are validated but not included in the return value.
         Invalid trait references are logged as warnings but don't raise exceptions.
+
     """
     # Extract all #number patterns from text and find corresponding traits
     trait_numbers_to_return = re.findall(r"#([\d]+)", instance.text, re.IGNORECASE)

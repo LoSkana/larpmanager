@@ -31,63 +31,63 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestMemberUtilityFunctions(BaseTestCase):
     """Test cases for member utility functions"""
 
-    def test_count_differences_identical(self):
+    def test_count_differences_identical(self) -> None:
         """Test count_differences with identical strings"""
         result = count_differences("hello", "hello")
 
         self.assertEqual(result, 0)
 
-    def test_count_differences_one_diff(self):
+    def test_count_differences_one_diff(self) -> None:
         """Test count_differences with one difference"""
         result = count_differences("hello", "hallo")
 
         self.assertEqual(result, 1)
 
-    def test_count_differences_multiple_diff(self):
+    def test_count_differences_multiple_diff(self) -> None:
         """Test count_differences with multiple differences"""
         result = count_differences("hello", "world")
 
         self.assertEqual(result, 4)
 
-    def test_count_differences_different_length(self):
+    def test_count_differences_different_length(self) -> None:
         """Test count_differences with different length strings"""
         result = count_differences("hello", "hi")
 
         self.assertEqual(result, False)
 
-    def test_almost_equal_one_extra_char(self):
+    def test_almost_equal_one_extra_char(self) -> None:
         """Test almost_equal with one extra character"""
         result = almost_equal("hello", "helo")
 
         self.assertTrue(result)
 
-    def test_almost_equal_one_extra_at_end(self):
+    def test_almost_equal_one_extra_at_end(self) -> None:
         """Test almost_equal with one extra at end"""
         result = almost_equal("hello", "hellox")
 
         self.assertTrue(result)
 
-    def test_almost_equal_one_extra_at_start(self):
+    def test_almost_equal_one_extra_at_start(self) -> None:
         """Test almost_equal with one extra at start"""
         result = almost_equal("xhello", "hello")
 
         self.assertTrue(result)
 
-    def test_almost_equal_different_chars(self):
+    def test_almost_equal_different_chars(self) -> None:
         """Test almost_equal with different characters"""
         result = almost_equal("hello", "hallo")
 
         # Same length, different chars - not almost equal
         self.assertFalse(result)
 
-    def test_almost_equal_two_length_diff(self):
+    def test_almost_equal_two_length_diff(self) -> None:
         """Test almost_equal with two length difference"""
         result = almost_equal("hello", "hel")
 
         # Difference of 2, not almost equal
         self.assertFalse(result)
 
-    def test_almost_equal_no_match(self):
+    def test_almost_equal_no_match(self) -> None:
         """Test almost_equal with completely different strings"""
         result = almost_equal("hello", "worldx")
 
@@ -97,25 +97,25 @@ class TestMemberUtilityFunctions(BaseTestCase):
 class TestTextCachingFunctions(BaseTestCase):
     """Test cases for text caching functions"""
 
-    def test_event_text_key_format(self):
+    def test_event_text_key_format(self) -> None:
         """Test event text key format"""
         result = event_text_key(123, "welcome", "en")
 
         self.assertEqual(result, "event_text_123_welcome_en")
 
-    def test_event_text_key_def_format(self):
+    def test_event_text_key_def_format(self) -> None:
         """Test event text default key format"""
         result = event_text_key_def(123, "welcome")
 
         self.assertEqual(result, "event_text_def_123_welcome")
 
-    def test_association_text_key_format(self):
+    def test_association_text_key_format(self) -> None:
         """Test association text key format"""
         result = association_text_key(456, "terms", "it")
 
         self.assertEqual(result, "association_text_456_terms_it")
 
-    def test_association_text_key_def_format(self):
+    def test_association_text_key_def_format(self) -> None:
         """Test association text default key format"""
         result = association_text_key_def(456, "terms")
 
@@ -124,7 +124,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.event_text.get_event_text_cache")
     @patch("larpmanager.cache.event_text.get_event_text_cache_def")
     @patch("larpmanager.cache.event_text.get_language")
-    def test_get_event_text_with_lang(self, mock_lang, mock_def, mock_cache):
+    def test_get_event_text_with_lang(self, mock_lang, mock_def, mock_cache) -> None:
         """Test get_event_text with language"""
         mock_lang.return_value = "en"
         mock_cache.return_value = "Welcome text"
@@ -138,7 +138,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.event_text.get_event_text_cache")
     @patch("larpmanager.cache.event_text.get_event_text_cache_def")
     @patch("larpmanager.cache.event_text.get_language")
-    def test_get_event_text_fallback_to_default(self, mock_lang, mock_def, mock_cache):
+    def test_get_event_text_fallback_to_default(self, mock_lang, mock_def, mock_cache) -> None:
         """Test get_event_text falls back to default"""
         mock_lang.return_value = "en"
         mock_cache.return_value = None
@@ -152,7 +152,7 @@ class TestTextCachingFunctions(BaseTestCase):
 
     @patch("larpmanager.cache.event_text.get_event_text_cache")
     @patch("larpmanager.cache.event_text.get_language")
-    def test_get_event_text_uses_current_lang(self, mock_lang, mock_cache):
+    def test_get_event_text_uses_current_lang(self, mock_lang, mock_cache) -> None:
         """Test get_event_text uses current language when not specified"""
         mock_lang.return_value = "it"
         mock_cache.return_value = "Benvenuto"
@@ -165,7 +165,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.association_text.get_association_text_cache")
     @patch("larpmanager.cache.association_text.get_association_text_cache_def")
     @patch("larpmanager.cache.association_text.get_language")
-    def test_get_association_text_with_lang(self, mock_lang, mock_def, mock_cache):
+    def test_get_association_text_with_lang(self, mock_lang, mock_def, mock_cache) -> None:
         """Test get_association_text with language"""
         mock_lang.return_value = "en"
         mock_cache.return_value = "Terms text"
@@ -179,7 +179,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.association_text.get_association_text_cache")
     @patch("larpmanager.cache.association_text.get_association_text_cache_def")
     @patch("larpmanager.cache.association_text.get_language")
-    def test_get_association_text_fallback_to_default(self, mock_lang, mock_def, mock_cache):
+    def test_get_association_text_fallback_to_default(self, mock_lang, mock_def, mock_cache) -> None:
         """Test get_association_text falls back to default"""
         mock_lang.return_value = "en"
         mock_cache.return_value = None

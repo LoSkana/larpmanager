@@ -42,7 +42,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Discount,
     OtherChoices,
-    PaymentChoices,
+    PaymentChoices, DiscountType,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
@@ -53,7 +53,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
     """Test cases for token and credit usage functions"""
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_tokens(self, mock_features):
+    def test_registration_tokens_credits_use_with_tokens(self, mock_features) -> None:
         """Test using tokens to pay for registration"""
         mock_features.return_value = {"token_credit": True}
 
@@ -85,7 +85,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(token_payments.first().value, Decimal("30.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_credits(self, mock_features):
+    def test_registration_tokens_credits_use_with_credits(self, mock_features) -> None:
         """Test using credits to pay for registration
 
         Note: This test verifies the basic credit payment logic.
@@ -118,7 +118,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_tokens_then_credits(self, mock_features):
+    def test_registration_tokens_credits_use_tokens_then_credits(self, mock_features) -> None:
         """Test using tokens first, then credits"""
         mock_features.return_value = {"token_credit": True}
 
@@ -148,7 +148,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(membership.credit, Decimal("10.00"))  # 40 of 50 used
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_overpay_removes_credit_first(self, mock_features):
+    def test_registration_tokens_credits_overpay_removes_credit_first(self, mock_features) -> None:
         """Test overpayment reversal removes credits before tokens"""
         mock_features.return_value = {"token_credit": True}
 
@@ -179,7 +179,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(token_payments.first().value, Decimal("20.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_zero_remaining(self, mock_features):
+    def test_registration_tokens_credits_use_with_zero_remaining(self, mock_features) -> None:
         """Test that function handles zero remaining correctly
 
         Note: This test verifies the function doesn't crash with zero remaining.
@@ -201,7 +201,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
             self.fail("Function should handle zero remaining gracefully")
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_negative_remaining(self, mock_features):
+    def test_registration_tokens_credits_use_with_negative_remaining(self, mock_features) -> None:
         """Test that function handles negative remaining correctly"""
         mock_features.return_value = {"token_credit": True}
 
@@ -220,7 +220,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
     """Test cases for registration accounting calculation functions"""
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_basic(self, mock_features):
+    def test_get_reg_iscr_basic(self, mock_features) -> None:
         """Test basic registration cost calculation"""
         mock_features.return_value = {}
 
@@ -239,7 +239,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(total, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_with_additionals(self, mock_features):
+    def test_get_reg_iscr_with_additionals(self, mock_features) -> None:
         """Test registration cost with additional participants"""
         mock_features.return_value = {}
 
@@ -257,7 +257,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreater(total, Decimal("50.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_with_discount(self, mock_features):
+    def test_get_reg_iscr_with_discount(self, mock_features) -> None:
         """Test registration cost with discount applied"""
         mock_features.return_value = {}
 
@@ -273,7 +273,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
             name="Test Discount",
             value=Decimal("20.00"),
             max_redeem=10,
-            typ=Discount.STANDARD,
+            typ=DiscountType.STANDARD,
             event=run.event,
             number=1,
         )
@@ -292,7 +292,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(total, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_with_options(self, mock_features):
+    def test_get_reg_iscr_with_options(self, mock_features) -> None:
         """Test registration cost with paid options"""
         mock_features.return_value = {}
 
@@ -313,7 +313,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         # Should include option price
         self.assertGreater(total, Decimal("100.00"))
 
-    def test_get_reg_payments_no_payments(self):
+    def test_get_reg_payments_no_payments(self) -> None:
         """Test payment calculation with no payments"""
         registration = self.create_registration(tot_iscr=Decimal("100.00"))
 
@@ -321,7 +321,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         self.assertEqual(total, Decimal("0.00"))
 
-    def test_get_reg_payments_with_money(self):
+    def test_get_reg_payments_with_money(self) -> None:
         """Test payment calculation with money payment"""
         member = self.get_member()
         association = self.get_association()
@@ -335,7 +335,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         self.assertEqual(total, Decimal("50.00"))
 
-    def test_get_reg_payments_with_multiple_payments(self):
+    def test_get_reg_payments_with_multiple_payments(self) -> None:
         """Test payment calculation with multiple payments"""
         member = self.get_member()
         association = self.get_association()
@@ -355,33 +355,33 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         self.assertEqual(total, Decimal("60.00"))
 
-    def test_round_to_nearest_cent_down(self):
+    def test_round_to_nearest_cent_down(self) -> None:
         """Test rounding down to nearest tenth with tolerance"""
         result = round_to_nearest_cent(Decimal("10.24"))
         # Rounds to 10.2, but difference (0.04) exceeds tolerance (0.03)
         # so returns original value
         self.assertEqual(result, 10.24)
 
-    def test_round_to_nearest_cent_up(self):
+    def test_round_to_nearest_cent_up(self) -> None:
         """Test rounding up to nearest tenth with tolerance"""
         result = round_to_nearest_cent(Decimal("10.26"))
         # Rounds to 10.3, but difference (0.04) exceeds tolerance (0.03)
         # so returns original value
         self.assertEqual(result, 10.26)
 
-    def test_round_to_nearest_cent_exact(self):
+    def test_round_to_nearest_cent_exact(self) -> None:
         """Test rounding exact tenth value"""
         result = round_to_nearest_cent(Decimal("10.50"))
         self.assertEqual(result, 10.5)
 
-    def test_round_to_nearest_cent_small_value(self):
+    def test_round_to_nearest_cent_small_value(self) -> None:
         """Test rounding very small value within tolerance"""
         result = round_to_nearest_cent(Decimal("0.04"))
         # Rounds to 0.0, difference is 0.04 which exceeds tolerance 0.03
         # so returns original
         self.assertEqual(result, 0.04)
 
-    def test_round_to_nearest_cent_negative(self):
+    def test_round_to_nearest_cent_negative(self) -> None:
         """Test rounding negative value"""
         result = round_to_nearest_cent(Decimal("-5.68"))
         # Rounds to nearest 0.1, so -5.68 -> -5.7
@@ -389,7 +389,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
     @patch("larpmanager.cache.feature.get_event_features")
     @patch("larpmanager.accounting.registration.handle_tokes_credits")
-    def test_update_registration_accounting_basic(self, mock_handle, mock_features):
+    def test_update_registration_accounting_basic(self, mock_handle, mock_features) -> None:
         """Test basic registration accounting update"""
         mock_features.return_value = {}
         mock_handle.return_value = None
@@ -412,7 +412,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
     @patch("larpmanager.cache.feature.get_event_features")
     @patch("larpmanager.accounting.registration.handle_tokes_credits")
-    def test_update_registration_accounting_with_payment(self, mock_handle, mock_features):
+    def test_update_registration_accounting_with_payment(self, mock_handle, mock_features) -> None:
         """Test registration accounting update with payment"""
         mock_features.return_value = {}
         mock_handle.return_value = None
@@ -439,7 +439,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(registration.tot_payed, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_update_registration_accounting_cancelled_run(self, mock_features):
+    def test_update_registration_accounting_cancelled_run(self, mock_features) -> None:
         """Test that cancelled runs don't get accounting updates"""
         mock_features.return_value = {}
 
@@ -464,7 +464,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 class TestAccountingEdgeCases(BaseTestCase):
     """Test edge cases and boundary conditions"""
 
-    def test_get_reg_payments_with_deleted_payments(self):
+    def test_get_reg_payments_with_deleted_payments(self) -> None:
         """Test payment calculation behavior with deleted payments"""
         member = self.get_member()
         association = self.get_association()
@@ -488,7 +488,7 @@ class TestAccountingEdgeCases(BaseTestCase):
         self.assertGreaterEqual(total_after, Decimal("0.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_tokens_credits_with_insufficient_balance(self, mock_features):
+    def test_tokens_credits_with_insufficient_balance(self, mock_features) -> None:
         """Test using more tokens/credits than available"""
         mock_features.return_value = {"token_credit": True}
 
@@ -518,19 +518,19 @@ class TestAccountingEdgeCases(BaseTestCase):
         )
         self.assertEqual(token_payments.first().value, Decimal("10.00"))
 
-    def test_round_to_nearest_cent_with_none(self):
+    def test_round_to_nearest_cent_with_none(self) -> None:
         """Test rounding with None value raises TypeError"""
         # The function doesn't handle None, it will raise TypeError
         with self.assertRaises(TypeError):
             round_to_nearest_cent(None)
 
-    def test_round_to_nearest_cent_with_zero(self):
+    def test_round_to_nearest_cent_with_zero(self) -> None:
         """Test rounding zero"""
         result = round_to_nearest_cent(Decimal("0.00"))
         self.assertEqual(result, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_minimum_zero(self, mock_features):
+    def test_get_reg_iscr_minimum_zero(self, mock_features) -> None:
         """Test that registration cost never goes negative with large discount"""
         mock_features.return_value = {}
 
@@ -546,7 +546,7 @@ class TestAccountingEdgeCases(BaseTestCase):
             name="Huge Discount",
             value=Decimal("200.00"),
             max_redeem=10,
-            typ=Discount.STANDARD,
+            typ=DiscountType.STANDARD,
             event=run.event,
             number=1,
         )

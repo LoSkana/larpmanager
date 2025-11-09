@@ -12,8 +12,7 @@
         });
         </script>
         {% if upload %}
-            <a class="new button"
-               href="{% url 'orga_upload' run.get_slug upload %}">{% trans "Upload" %}</a>
+            <a class="new button" href="{% url 'orga_upload' run.get_slug upload %}">{% trans "Upload" %}</a>
         {% endif %}
         {% if download %}
             <form action="{{ request.path }}" method="post" class="inline">
@@ -23,12 +22,10 @@
             </form>
         {% endif %}
         {% if export %}
-            <a class="new button"
-               href="{% url 'orga_export' run.get_slug export %}">{% trans "Export" %}</a>
+            <a class="new button" href="{% url 'orga_export' run.get_slug export %}">{% trans "Export" %}</a>
         {% endif %}
         {% if export %}
-            <a class="new button"
-               href="{% url 'orga_export' run.get_slug export %}">{% trans "Export" %}</a>
+            <a class="new button" href="{% url 'orga_export' run.get_slug export %}">{% trans "Export" %}</a>
         {% endif %}
         {% if bulk %}<a class="new button my_toggle" tog='bulk' href="#">Bulk</a>{% endif %}
         {% if writing_header %}

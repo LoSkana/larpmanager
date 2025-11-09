@@ -55,7 +55,7 @@ class HelpQuestion(BaseModel):
         verbose_name=_("Event"),
         help_text=_(
             "If your question is about a specific event, please select it! If  is a general "
-            "question instead, please leave it blank."
+            "question instead, please leave it blank.",
         ),
     )
 
@@ -85,14 +85,15 @@ class HelpQuestion(BaseModel):
                     "image/jpeg",
                     "image/png",
                     "image/gif",
-                ]
-            )
+                ],
+            ),
         ],
     )
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining member and text."""
         return f"{self.member} {self.text}"
 
 
@@ -122,7 +123,8 @@ class Contact(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation showing connection between me and you."""
         return f"C - {self.me} {self.you}"
 
 
@@ -137,7 +139,9 @@ class ChatMessage(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with sender and message preview."""
+        # Format message preview with sender and truncated content
         return f"CM - {self.sender} {self.message[:20]}"
 
 
@@ -152,7 +156,8 @@ class Util(BaseModel):
 
     util = models.FileField(upload_to=UploadToPathAndRename("../utils/"))
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with member number and name."""
         return f"U{self.number} {self.name}"
 
     def download(self) -> HttpResponse:
@@ -181,7 +186,7 @@ class UrlShortner(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"U{self.number} {self.name}"
 
 
@@ -219,9 +224,11 @@ class Album(BaseModel):
         return self.title
 
     def show_thumb(self):
+        """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
+        return None
 
 
 class AlbumUpload(BaseModel):
@@ -263,13 +270,15 @@ class AlbumImage(BaseModel):
 
     height = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.upload.name
 
     def show_thumb(self):
+        """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
+        return None
 
     def original_url(self) -> str:
         """Extract the original media URL path from the full URL."""
@@ -302,7 +311,7 @@ class CompetenceMemberRel(BaseModel):
 
     info = models.TextField(max_length=5000)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} - {self.competence} ({self.exp})"
 
     class Meta:
@@ -324,7 +333,7 @@ class WorkshopModule(BaseModel):
 
     members = models.ManyToManyField(Member, related_name="workshops", through="WorkshopMemberRel")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def show(self) -> dict[str, Any]:
@@ -340,7 +349,7 @@ class WorkshopMemberRel(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.workshop} - {self.member}"
 
 
@@ -355,7 +364,7 @@ class WorkshopQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshop_questions")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def show(self) -> dict[str, any]:
@@ -363,6 +372,7 @@ class WorkshopQuestion(BaseModel):
 
         Returns:
             Dictionary containing id, number and name attributes.
+
         """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "opt": [], "number": self.number}
@@ -390,7 +400,7 @@ class WorkshopOption(BaseModel):
 
     number = models.IntegerField(blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.question} {self.name} ({self.is_correct})"
 
     def show(self) -> dict[str, Any]:
@@ -398,6 +408,7 @@ class WorkshopOption(BaseModel):
 
         Returns:
             Dictionary with id, correctness flag, and name if present.
+
         """
         # noinspection PyUnresolvedReferences
         # Build base dict with id and correctness status
@@ -458,6 +469,7 @@ class WarehouseItem(BaseModel):
 
     @classmethod
     def get_optional_fields(cls):
+        """Return list of optional field names."""
         return ["quantity"]
 
 
@@ -541,7 +553,7 @@ class ShuttleService(BaseModel):
         help_text=_(
             "Indicates how you can be recognized, if you will be found near some point "
             "specific, if you have a lot of luggage: any information that might help us help "
-            "you"
+            "you",
         ),
     )
 
@@ -566,7 +578,7 @@ class ShuttleService(BaseModel):
     notes = models.TextField(
         verbose_name=_("Note"),
         help_text=_(
-            "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival"
+            "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival",
         ),
         null=True,
     )
@@ -575,7 +587,7 @@ class ShuttleService(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} ({self.date} {self.time}) {self.status}"
 
 
@@ -606,7 +618,7 @@ class Problem(BaseModel):
             "Indicate severity: RED (risks ruining the event for more than half of the "
             "participants), ORANGE (risks ruining the event for more than ten participants),  YELLOW "
             "(risks ruining the event for a few participants), GREEN (more than  problems, finesses "
-            "to be fixed)"
+            "to be fixed)",
         ),
     )
 
@@ -617,7 +629,7 @@ class Problem(BaseModel):
         verbose_name=_("Status"),
         help_text=_(
             "When putting in WORKING, indicate in the comments the specific actions that  are "
-            "being performed; when putting in CLOSED, indicate showd in the  comments."
+            "being performed; when putting in CLOSED, indicate showd in the  comments.",
         ),
         db_index=True,
     )
@@ -654,6 +666,7 @@ class Problem(BaseModel):
 
         Returns:
             Truncated string (max 100 chars) or original string if attribute doesn't exist.
+
         """
         # Check if attribute exists on object
         if not hasattr(self, attribute_name):
@@ -668,15 +681,19 @@ class Problem(BaseModel):
         return attribute_value[:100]
 
     def where_l(self):
+        """Return truncated 'where' attribute text."""
         return self.get_small_text("where")
 
     def when_l(self):
+        """Return truncated 'when' attribute text."""
         return self.get_small_text("when")
 
     def who_l(self):
+        """Return truncated 'who' attribute text."""
         return self.get_small_text("who")
 
     def what_l(self):
+        """Return truncated 'what' attribute text."""
         return self.get_small_text("what")
 
 
@@ -727,13 +744,13 @@ class Email(BaseModel):
 
     search = models.CharField(max_length=500, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.recipient} - {self.subj}"
 
 
 class OneTimeContent(BaseModel):
-    """
-    Model to store multimedia content for one-time access via tokens.
+    """Model to store multimedia content for one-time access via tokens.
+
     Organizers can upload video/audio files and generate access tokens.
     """
 
@@ -794,10 +811,10 @@ class OneTimeContent(BaseModel):
         verbose_name = _("One-Time Content")
         verbose_name_plural = _("One-Time Contents")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({self.event.name})"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Override save to capture file metadata."""
         if self.file:
             self.file_size = self.file.size
@@ -817,24 +834,23 @@ class OneTimeContent(BaseModel):
         super().save(*args, **kwargs)
 
     def generate_token(self, note=""):
-        """
-        Generate a new access token for this content.
+        """Generate a new access token for this content.
 
         Args:
             note (str): Optional note describing the purpose of this token
 
         Returns:
             OneTimeAccessToken: The newly created token
+
         """
-        token = OneTimeAccessToken.objects.create(content=self, note=note)
-        return token
+        return OneTimeAccessToken.objects.create(content=self, note=note)
 
     def get_token_stats(self):
-        """
-        Get statistics about tokens for this content.
+        """Get statistics about tokens for this content.
 
         Returns:
             dict: Dictionary with token statistics
+
         """
         access_tokens = self.access_tokens.all()
         return {
@@ -845,8 +861,8 @@ class OneTimeContent(BaseModel):
 
 
 class OneTimeAccessToken(BaseModel):
-    """
-    Access token for one-time viewing of content.
+    """Access token for one-time viewing of content.
+
     Each token can only be used once.
     """
 
@@ -918,20 +934,20 @@ class OneTimeAccessToken(BaseModel):
         status = _("Used") if self.used else _("Unused")
         return f"{self.token[:8]}... - {status}"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Generate token on creation."""
         if not self.token:
             # Generate a cryptographically secure token
             self.token = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)
 
-    def mark_as_used(self, http_request=None, authenticated_member=None):
-        """
-        Mark this token as used and record access information.
+    def mark_as_used(self, http_request=None, authenticated_member=None) -> None:
+        """Mark this token as used and record access information.
 
         Args:
             http_request: Django HttpRequest object to extract metadata
             authenticated_member: Member object if user is authenticated
+
         """
         self.used = True
         self.used_at = timezone.now()

@@ -23,7 +23,7 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -56,14 +56,20 @@ from larpmanager.views.orga.event import prepare_roles_list
 
 
 @login_required
-def exe_association(request):
+def exe_association(request: HttpRequest):
+    """Edit association details."""
     return exe_edit(
-        request, ExeAssociationForm, None, "exe_association", "manage", additional_context={"add_another": False}
+        request,
+        ExeAssociationForm,
+        None,
+        "exe_association",
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
 @login_required
-def exe_roles(request) -> HttpResponse:
+def exe_roles(request: HttpRequest) -> HttpResponse:
     """Handle association roles management page.
 
     Args:
@@ -71,12 +77,13 @@ def exe_roles(request) -> HttpResponse:
 
     Returns:
         Rendered roles management template
+
     """
     # Check user permissions for role management
     context = check_association_context(request, "exe_roles")
 
-    def def_callback(context):
-        # Create default admin role for association
+    def def_callback(context: dict) -> AssociationRole:
+        """Create default admin role for association."""
         return AssociationRole.objects.create(association_id=context["association_id"], number=1, name="Admin")
 
     # Prepare roles list with existing association roles
@@ -91,7 +98,8 @@ def exe_roles(request) -> HttpResponse:
 
 
 @login_required
-def exe_roles_edit(request, num):
+def exe_roles_edit(request: HttpRequest, num):
+    """Edit specific association role."""
     return exe_edit(request, ExeAssociationRoleForm, num, "exe_roles")
 
 
@@ -106,7 +114,8 @@ def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse
 
 
 @login_required
-def exe_profile(request):
+def exe_profile(request: HttpRequest):
+    """Edit user profile settings."""
     return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"add_another": False})
 
 
@@ -118,14 +127,17 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
     # Fetch and order association texts for display
     context["list"] = AssociationText.objects.filter(association_id=context["association_id"]).order_by(
-        "typ", "default", "language"
+        "typ",
+        "default",
+        "language",
     )
 
     return render(request, "larpmanager/exe/texts.html", context)
 
 
 @login_required
-def exe_texts_edit(request, num):
+def exe_texts_edit(request: HttpRequest, num):
+    """Edit specific association text."""
     return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
 
 
@@ -147,6 +159,7 @@ def exe_translations(request: HttpRequest) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks exe_translations permission for the association
+
     """
     # Verify user has permission to manage translations for this association
     context = check_association_context(request, "exe_translations")
@@ -176,25 +189,39 @@ def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
     Raises:
         PermissionDenied: If user lacks exe_translations permission
         Http404: If translation with given ID doesn't exist
+
     """
     return exe_edit(request, ExeAssociationTranslationForm, num, "exe_translations")
 
 
 @login_required
-def exe_methods(request):
+def exe_methods(request: HttpRequest):
+    """Edit payment methods settings."""
     return exe_edit(
-        request, ExePaymentSettingsForm, None, "exe_methods", "manage", additional_context={"add_another": False}
+        request,
+        ExePaymentSettingsForm,
+        None,
+        "exe_methods",
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
 @login_required
-def exe_appearance(request):
+def exe_appearance(request: HttpRequest):
+    """Edit association appearance settings."""
     return exe_edit(
-        request, ExeAppearanceForm, None, "exe_appearance", "manage", additional_context={"add_another": False}
+        request,
+        ExeAppearanceForm,
+        None,
+        "exe_appearance",
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
-def f_k_exe(f_id, r_id):
+def f_k_exe(f_id, r_id) -> str:
+    """Generate feature key for association role."""
     return f"feature_{f_id}_exe_{r_id}_key"
 
 
@@ -212,6 +239,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Feature management form, redirect to manage page, or redirect
                      to single feature's after-link based on activation results
+
     """
     # Check user permissions and get initial context
     context = check_association_context(request, "exe_features")
@@ -221,7 +249,8 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     if backend_edit(request, context, ExeFeatureForm, None, additional_field=None, is_association_based=True):
         # Get newly activated features that have after-links
         context["new_features"] = Feature.objects.filter(
-            pk__in=context["form"].added_features, after_link__isnull=False
+            pk__in=context["form"].added_features,
+            after_link__isnull=False,
         )
 
         # If no features with after-links, redirect to manage page
@@ -250,8 +279,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
 
 
 def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature:
-    """
-    Activate or deactivate an overall feature for an association.
+    """Activate or deactivate an overall feature for an association.
 
     Args:
         request: The HTTP request object containing user and association context
@@ -263,6 +291,7 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
 
     Raises:
         Http404: If the feature is not an overall feature
+
     """
     # Check user permissions and retrieve feature context
     context = check_association_context(request, "exe_features")
@@ -270,7 +299,8 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
 
     # Ensure this is an overall feature (organization-wide)
     if not context["feature"].overall:
-        raise Http404("not overall feature!")
+        msg = "not overall feature!"
+        raise Http404(msg)
 
     # Get feature ID and association object
     feature_id = context["feature"].id
@@ -310,6 +340,7 @@ def _exe_feature_after_link(feature: Feature) -> str:
 
     Returns:
         Full URL path for redirection
+
     """
     redirect_url_or_fragment = feature.after_link
 
@@ -322,13 +353,15 @@ def _exe_feature_after_link(feature: Feature) -> str:
 
 
 @login_required
-def exe_features_on(request, slug):
+def exe_features_on(request: HttpRequest, slug: str) -> HttpResponseRedirect:
+    """Enable feature and redirect to the appropriate page."""
     feature = exe_features_go(request, slug, on=True)
     return redirect(_exe_feature_after_link(feature))
 
 
 @login_required
-def exe_features_off(request, slug):
+def exe_features_off(request: HttpRequest, slug: str) -> HttpResponse:
+    """Disable features and redirect to management page."""
     exe_features_go(request, slug, on=False)
     return redirect("manage")
 
@@ -368,6 +401,7 @@ def _add_in_iframe_param(url: str) -> str:
         "https://example.com/page?in_iframe=1"
         >>> _add_in_iframe_param("https://example.com/page?foo=bar")
         "https://example.com/page?foo=bar&in_iframe=1"
+
     """
     # Parse the URL into its components
     parsed_url = urlparse(url)
@@ -380,7 +414,7 @@ def _add_in_iframe_param(url: str) -> str:
     updated_query_string = urlencode(existing_query_params, doseq=True)
 
     # Reconstruct the complete URL with the modified query string
-    modified_url = urlunparse(
+    return urlunparse(
         (
             parsed_url.scheme,
             parsed_url.netloc,
@@ -388,10 +422,8 @@ def _add_in_iframe_param(url: str) -> str:
             parsed_url.params,
             updated_query_string,
             parsed_url.fragment,
-        )
+        ),
     )
-
-    return modified_url
 
 
 @require_POST
@@ -404,6 +436,7 @@ def feature_description(request: HttpRequest) -> JsonResponse:
     Returns:
         JsonResponse: JSON response with 'res' status and 'txt' content on success,
                      or error response with 'res': 'ko' if feature not found
+
     """
     # Extract feature ID from POST data
     fid = request.POST.get("fid")
@@ -429,12 +462,19 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
-def exe_quick(request):
+def exe_quick(request: HttpRequest):
+    """Edit quick setup configuration."""
     return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"add_another": False})
 
 
 @login_required
-def exe_preferences(request):
+def exe_preferences(request: HttpRequest):
+    """Edit user preferences."""
     return exe_edit(
-        request, ExePreferencesForm, request.user.member.id, None, "manage", additional_context={"add_another": False}
+        request,
+        ExePreferencesForm,
+        request.user.member.id,
+        None,
+        "manage",
+        additional_context={"add_another": False},
     )

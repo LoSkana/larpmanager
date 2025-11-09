@@ -23,11 +23,12 @@ from slugify import slugify
 from larpmanager.models.larpmanager import LarpManagerFaq
 
 
-def generate_tutorial_url_slug(tutorial):
+def generate_tutorial_url_slug(tutorial) -> None:
     """Generate slug for tutorial if not already set.
 
     Args:
         tutorial: LarpManagerTutorial instance being saved
+
     """
     if not tutorial.slug:
         tutorial.slug = slugify(tutorial.name)
@@ -50,6 +51,7 @@ def auto_assign_faq_sequential_number(faq: LarpManagerFaq) -> None:
     Note:
         If the FAQ already has a number assigned, no action is taken.
         The numbering starts at 1 for the first FAQ of each type.
+
     """
     # Skip assignment if FAQ already has a number
     if faq.number:

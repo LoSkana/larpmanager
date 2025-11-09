@@ -65,7 +65,7 @@ urlpatterns = [
         name="character_customize",
     ),
     path(
-        "<slug:event_slug>/character/<int:num>/profile/rotate/<int:r>/",
+        "<slug:event_slug>/character/<int:num>/profile/rotate/<int:rotation_angle>/",
         views_uc.character_profile_rotate,
         name="character_profile_rotate",
     ),
@@ -105,7 +105,7 @@ urlpatterns = [
         name="character_relationships",
     ),
     path(
-        "<slug:event_slug>/character/<int:num>/relationships/edit/<int:oth>",
+        "<slug:event_slug>/character/<int:num>/relationships/edit/<int:other_character_id>",
         views_uc.character_relationships_edit,
         name="character_relationships_edit",
     ),
@@ -130,7 +130,7 @@ urlpatterns = [
         name="character_your",
     ),
     path(
-        "<slug:event_slug>/character/your/<path:p>",
+        "<slug:event_slug>/character/your/<path:path>",
         views_uc.character_your,
         name="character_your",
     ),
@@ -150,7 +150,7 @@ urlpatterns = [
         name="gift",
     ),
     path(
-        "<slug:event_slug>/gift/edit/<int:r>/",
+        "<slug:event_slug>/gift/edit/<int:gift_id>/",
         views_ur.gift_edit,
         name="gift_edit",
     ),
@@ -165,7 +165,7 @@ urlpatterns = [
         name="casting",
     ),
     path(
-        "<slug:event_slug>/casting/<int:typ>/",
+        "<slug:event_slug>/casting/<int:casting_type>/",
         views_uca.casting,
         name="casting",
     ),
@@ -175,7 +175,7 @@ urlpatterns = [
         name="casting_preferences",
     ),
     path(
-        "<slug:event_slug>/casting/preferences/<int:typ>/",
+        "<slug:event_slug>/casting/preferences/<int:casting_type>/",
         views_uca.casting_preferences,
         name="casting_preferences",
     ),
@@ -185,7 +185,7 @@ urlpatterns = [
         name="casting_history",
     ),
     path(
-        "<slug:event_slug>/casting/history/<int:typ>/",
+        "<slug:event_slug>/casting/history/<int:casting_type>/",
         views_uca.casting_history,
         name="casting_history",
     ),
@@ -195,7 +195,7 @@ urlpatterns = [
         name="factions",
     ),
     path(
-        "<slug:event_slug>/faction/<int:g>/",
+        "<slug:event_slug>/faction/<int:faction_id>/",
         views_ue.faction,
         name="faction",
     ),
@@ -205,12 +205,12 @@ urlpatterns = [
         name="quests",
     ),
     path(
-        "<slug:event_slug>/quests/<int:g>/",
+        "<slug:event_slug>/quests/<int:quest_type_id>/",
         views_ue.quests,
         name="quests",
     ),
     path(
-        "<slug:event_slug>/quest/<int:g>/",
+        "<slug:event_slug>/quest/<int:quest_id>/",
         views_ue.quest,
         name="quest",
     ),
@@ -225,12 +225,12 @@ urlpatterns = [
         name="album_sub",
     ),
     path(
-        "<slug:event_slug>/export/<slug:t>/",
+        "<slug:event_slug>/export/<slug:export_type>/",
         views_ue.export,
         name="export",
     ),
     path(
-        "<slug:event_slug>/handout/<slug:cod>/",
+        "<slug:event_slug>/handout/<slug:code>/",
         views_ums.handout_ext,
         name="handout_ext",
     ),
@@ -305,13 +305,13 @@ urlpatterns = [
         name="workshops",
     ),
     path(
-        "<slug:event_slug>/workshops/answer/<int:m>/",
+        "<slug:event_slug>/workshops/answer/<int:workshop_module_id>/",
         views_ums.workshop_answer,
         name="workshop_answer",
     ),
     path(
         "<slug:event_slug>/help/",
-        views_ums.help,
+        views_ums.user_help,
         name="help",
     ),
     path(

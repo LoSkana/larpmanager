@@ -24,7 +24,7 @@ from larpmanager.tests.utils import check_download, go_to, login_orga, submit_co
 pytestmark = pytest.mark.e2e
 
 
-def test_user_pdf(pw_page):
+def test_user_pdf(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)

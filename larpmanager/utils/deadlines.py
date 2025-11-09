@@ -38,6 +38,7 @@ def get_users_data(member_ids):
 
     Returns:
         list: List of (display_name, email) tuples
+
     """
     return [
         (str(member), member.email)
@@ -56,13 +57,15 @@ def get_membership_fee_year(association_id, year=None):
 
     Returns:
         set: Set of member IDs who paid fee for the year
+
     """
     if not year:
         year = datetime.now().year
     return set(
         AccountingItemMembership.objects.filter(association_id=association_id, year=year).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
 
 
@@ -74,6 +77,7 @@ def check_run_deadlines(runs: list) -> list:
 
     Returns:
         List of dicts with deadline violations per run
+
     """
     if not runs:
         return []
@@ -146,7 +150,14 @@ def check_run_deadlines(runs: list) -> list:
             # Check membership or profile deadlines
             if uses_membership:
                 deadlines_membership(
-                    deadline_violations, features, fees, memberships, now, registration, run, tolerance
+                    deadline_violations,
+                    features,
+                    fees,
+                    memberships,
+                    now,
+                    registration,
+                    run,
+                    tolerance,
                 )
             else:
                 deadlines_profile(deadline_violations, features, memberships, now, registration, run, tolerance)
@@ -164,8 +175,14 @@ def check_run_deadlines(runs: list) -> list:
 
 
 def deadlines_profile(
-    deadline_violations, features, memberships, current_datetime, registration, event_run, tolerance_days
-):
+    deadline_violations,
+    features,
+    memberships,
+    current_datetime,
+    registration,
+    event_run,
+    tolerance_days,
+) -> None:
     """Check profile completion deadlines for registration.
 
     Args:
@@ -179,6 +196,7 @@ def deadlines_profile(
 
     Side effects:
         Updates deadline_violations with profile deadline violations
+
     """
     membership = memberships.get(registration.member_id)
     if not membership:
@@ -221,6 +239,7 @@ def deadlines_membership(
     Side Effects:
         Updates violations_by_type dictionary with membership and fee deadline violations
         under keys: 'memb', 'memb_del', 'fee', 'fee_del'
+
     """
     # Get membership for the registered member
     membership = memberships_by_member_id.get(registration.member_id)
@@ -252,7 +271,7 @@ def deadlines_membership(
             violations_by_type["fee"].append(registration.member_id)
 
 
-def deadlines_payment(deadline_violations, event_features, registration, tolerance_days):
+def deadlines_payment(deadline_violations, event_features, registration, tolerance_days) -> None:
     """Check payment deadlines for registration.
 
     Args:
@@ -263,6 +282,7 @@ def deadlines_payment(deadline_violations, event_features, registration, toleran
 
     Side effects:
         Updates deadline_violations with payment deadline violations
+
     """
     # check payments
     if "payment" not in event_features:
@@ -274,7 +294,7 @@ def deadlines_payment(deadline_violations, event_features, registration, toleran
         deadline_violations["pay"].append(registration.member_id)
 
 
-def deadlines_casting(collect, features, player_ids, run):
+def deadlines_casting(collect, features, player_ids, run) -> None:
     """Check casting preference submission for players.
 
     Args:
@@ -285,6 +305,7 @@ def deadlines_casting(collect, features, player_ids, run):
 
     Side effects:
         Updates collect with casting preference violations
+
     """
     # check casting
     if "casting" not in features:

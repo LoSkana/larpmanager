@@ -79,7 +79,7 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_warehouse_containers_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Edit warehouse container using generic edit handler
+    """Edit warehouse container using generic edit handler."""
     return exe_edit(request, ExeWarehouseContainerForm, num, "exe_warehouse_containers")
 
 
@@ -97,12 +97,12 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_warehouse_tags_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Edit warehouse tag via generic edit view
+    """Edit warehouse tag via generic edit view."""
     return exe_edit(request, ExeWarehouseTagForm, num, "exe_warehouse_tags")
 
 
 @login_required
-def exe_warehouse_items(request) -> HttpResponse:
+def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
     """Display warehouse items for organization administrators."""
     # Check user permissions for warehouse management
     context = check_association_context(request, "exe_warehouse_items")
@@ -122,7 +122,7 @@ def exe_warehouse_items(request) -> HttpResponse:
 
 @login_required
 def exe_warehouse_items_edit(request: HttpRequest, num: int) -> HttpResponse:
-    # Delegate to exe_edit for warehouse item form handling
+    """Delegate to exe_edit for warehouse item form handling."""
     return exe_edit(request, ExeWarehouseItemForm, num, "exe_warehouse_items")
 
 
@@ -142,7 +142,8 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_movements_edit(request, num):
+def exe_warehouse_movements_edit(request: HttpRequest, num: int) -> HttpResponse:
+    """Edit a specific warehouse movement by delegating to the generic exe_edit view."""
     return exe_edit(request, ExeWarehouseMovementForm, num, "exe_warehouse_movements")
 
 
@@ -159,6 +160,7 @@ def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
     Returns:
         HttpResponse: Redirect to home with success/error message
         HttpResponseForbidden: If user lacks permissions
+
     """
     # Get the ticket
     ticket = get_object_or_404(LarpManagerTicket, pk=ticket_id)

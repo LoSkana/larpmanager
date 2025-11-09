@@ -55,6 +55,7 @@ class AccountingItemAdmin(DefModelAdmin):
 
     @admin.display(ordering="reg__run", description="Run")
     def get_run(self, registration):
+        """Get run from registration for admin display."""
         return registration.reg.run
 
 

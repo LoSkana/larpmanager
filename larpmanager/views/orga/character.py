@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import contextlib
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -75,7 +76,7 @@ from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, w
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
-def get_character_optimized(context, num):
+def get_character_optimized(context, num) -> None:
     """Get character with optimized queries for editing.
 
     Args:
@@ -84,6 +85,7 @@ def get_character_optimized(context, num):
 
     Raises:
         Http404: If character does not exist
+
     """
     try:
         parent_event = context["event"].get_class_parent(Character)
@@ -116,7 +118,8 @@ def get_character_optimized(context, num):
         context["character"] = character_query.get(event=parent_event, pk=num)
         context["class_name"] = "character"
     except ObjectDoesNotExist as err:
-        raise Http404("character does not exist") from err
+        msg = "character does not exist"
+        raise Http404(msg) from err
 
 
 @login_required
@@ -129,6 +132,7 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         Rendered character list template
+
     """
     # Check user permissions for character management
     context = check_event_context(request, event_slug, "orga_characters")
@@ -156,6 +160,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
 
     Returns:
         HttpResponse: Rendered character edit form page
+
     """
     # Check user permissions for character organization features
     context = check_event_context(request, event_slug, "orga_characters")
@@ -177,20 +182,19 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
     return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
-def _characters_relationships(context):
-    """Setup character relationships data and widgets for editing.
+def _characters_relationships(context) -> None:
+    """Set up character relationships data and widgets for editing.
 
     Args:
         context: Context dictionary to populate with relationship data
+
     """
     context["relationships"] = {}
     if "relationships" not in context["features"]:
         return
 
-    try:
+    with contextlib.suppress(ObjectDoesNotExist):
         context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
-    except ObjectDoesNotExist:
-        pass
 
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
@@ -223,15 +227,22 @@ def _characters_relationships(context):
         context["relationships"] = dict(sorted_relationships)
 
 
-def update_relationship(request, context, nm, fl):
+def update_relationship(request: HttpRequest, context: dict, nm: str, fl: str) -> None:
+    """Update relationship texts from POST data."""
     for d in context[nm]:
+        # Get the identifier for this relationship item
         idx = getattr(d, fl).number
+
+        # Update Italian text if provided
         c = request.POST.get(f"{nm}_text_{idx}")
         if c:
             d.text = c
+
+        # Update English text if provided
         c = request.POST.get(f"{nm}_text_eng_{idx}")
         if c:
             d.text_eng = c
+
         d.save()
 
 
@@ -250,6 +261,7 @@ def orga_characters_relationships(request: HttpRequest, event_slug: str, num: in
 
     Returns:
         Rendered HTML response with character relationships
+
     """
     # Check user permissions for character management
     context = check_event_context(request, event_slug, "orga_characters")
@@ -288,6 +300,7 @@ def orga_characters_view(request: HttpRequest, event_slug: str, num: int) -> Htt
 
     Returns:
         Rendered writing view for character
+
     """
     # Check permissions and initialize context
     context = check_event_context(request, event_slug, ["orga_reading", "orga_characters"])
@@ -321,6 +334,7 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
 
     Returns:
         Rendered HTML response with character summary
+
     """
     # Check permissions and get base context
     context = check_event_context(request, event_slug, "orga_characters")
@@ -347,7 +361,7 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
 
 
 @login_required
-def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
+def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse:
     """Generate form list data for writing questions in JSON format.
 
     Processes writing questions and their answers for display in organizer interface,
@@ -356,7 +370,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> J
     Args:
         request: HTTP request object containing POST data with question ID
         event_slug: Event slug identifier
-        typ: Question type identifier for filtering applicable questions
+        writing_type: Question type identifier for filtering applicable questions
 
     Returns:
         JsonResponse: JSON response containing question results, popup indicators,
@@ -365,10 +379,11 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> J
     Raises:
         PermissionDenied: If user lacks required event permissions
         Http404: If question or event not found
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_characters")
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
     event = context["event"]
 
     # Use parent event if current event is a child
@@ -379,7 +394,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> J
     eid = request.POST.get("num")
 
     # Determine applicable question type and get related element IDs
-    applicable = QuestionApplicable.get_applicable(typ)
+    applicable = QuestionApplicable.get_applicable(writing_type)
     element_typ = QuestionApplicable.get_applicable_inverse(applicable)
     element_ids = element_typ.objects.filter(event=event).values_list("id", flat=True)
 
@@ -422,7 +437,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, typ: str) -> J
 
 
 @login_required
-def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
+def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse:
     """Generate email data for writing form options by character choices.
 
     This function processes writing form questions and returns email data
@@ -431,7 +446,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> 
     Args:
         request: The HTTP request object containing POST data
         event_slug: Event identifier string
-        typ: Writing form type identifier
+        writing_type: Writing form type identifier
 
     Returns:
         JsonResponse containing email data organized by option choices.
@@ -440,10 +455,11 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> 
 
     Raises:
         Http404: If event permission check fails or writing form type is invalid
+
     """
     # Check event permissions and validate writing form type
     context = check_event_context(request, event_slug, "orga_characters")
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
 
     # Get the parent event if this is a child event
     event = context["event"]
@@ -456,7 +472,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> 
 
     # Only process single or multiple choice questions
     if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-        return
+        return None
 
     # Build mapping of option IDs to option names
     cho = {}
@@ -499,12 +515,13 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, typ: str) -> 
 
 
 @login_required
-def orga_character_form(request, event_slug):
-    return redirect("orga_writing_form", event_slug=event_slug, typ="character")
+def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+    """Redirect to writing form view with character type."""
+    return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 
 
 def check_writing_form_type(context: dict, form_type: str) -> None:
-    """Validates writing form type and updates context with type information.
+    """Validate writing form type and update context with type information.
 
     Args:
         context: Context dictionary to update with type information
@@ -512,6 +529,7 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
 
     Raises:
         Http404: If the writing form type is not available
+
     """
     form_type = form_type.lower()
     writing_type_mapping = _get_writing_mapping()
@@ -523,7 +541,8 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
 
     # Validate the requested type is available
     if form_type not in available_types:
-        raise Http404(f"unknown writing form type: {form_type}")
+        msg = f"unknown writing form type: {form_type}"
+        raise Http404(msg)
 
     # Update context with type information
     context["typ"] = form_type
@@ -533,7 +552,7 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
 
 
 @login_required
-def orga_writing_form(request: HttpRequest, event_slug: str, typ: str) -> HttpResponse:
+def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
     """Display and manage writing form questions for character creation.
 
     This view handles both GET requests to display the writing form configuration
@@ -543,7 +562,7 @@ def orga_writing_form(request: HttpRequest, event_slug: str, typ: str) -> HttpRe
     Args:
         request: The HTTP request object containing user session and form data
         event_slug: Event identifier string used to locate the specific event
-        typ: The writing form type identifier (e.g., 'character', 'background')
+        writing_type: The writing form type identifier (e.g., 'character', 'background')
 
     Returns:
         HttpResponse: Either a rendered HTML template for the form configuration
@@ -552,12 +571,13 @@ def orga_writing_form(request: HttpRequest, event_slug: str, typ: str) -> HttpRe
     Raises:
         PermissionDenied: If user lacks 'orga_character_form' permission
         Http404: If the writing form type is invalid or event not found
+
     """
     # Verify user has permission to access character form organization features
     context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate the writing form type parameter and add to context
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
 
     # Handle POST request for downloading character form data
     if request.method == "POST" and request.POST.get("download") == "1":
@@ -582,13 +602,13 @@ def orga_writing_form(request: HttpRequest, event_slug: str, typ: str) -> HttpRe
 
     # Set approval configuration and status flags for template rendering
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", False, context)
-    context["status"] = "user_character" in context["features"] and typ.lower() == "character"
+    context["status"] = "user_character" in context["features"] and writing_type.lower() == "character"
 
     return render(request, "larpmanager/orga/characters/form.html", context)
 
 
 @login_required
-def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num: int) -> HttpResponse:
+def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: str, num: int) -> HttpResponse:
     """Edit writing form questions with validation and option handling.
 
     Handles the editing of writing form questions for LARP events, including
@@ -598,7 +618,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num:
     Args:
         request: The HTTP request object containing form data and user info
         event_slug: Event slug identifier for the current event
-        typ: Writing form type identifier (e.g., 'character', 'background')
+        writing_type: Writing form type identifier (e.g., 'character', 'background')
         num: Question number/ID to edit, or 0 for new question
 
     Returns:
@@ -608,13 +628,14 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num:
     Raises:
         PermissionDenied: If user lacks 'orga_character_form' permission
         Http404: If writing form type is invalid for the event
+
     """
     # Check user permissions for editing character forms
     perm = "orga_character_form"
     context = check_event_context(request, event_slug, perm)
 
     # Validate the writing form type exists for this event
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
 
     # Process form submission using backend edit utility
     if backend_edit(request, context, OrgaWritingQuestionForm, num, is_association_based=False):
@@ -623,7 +644,12 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num:
 
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), typ=typ, num=0)
+            return redirect(
+                request.resolver_match.view_name,
+                event_slug=context["run"].get_slug(),
+                writing_type=writing_type,
+                num=0,
+            )
 
         # Determine if we need to redirect to option editing
         edit_option = False
@@ -643,13 +669,17 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num:
         # Redirect to option editing if needed, otherwise back to form list
         if edit_option:
             return redirect(
-                orga_writing_options_new, event_slug=context["run"].get_slug(), typ=typ, num=context["saved"].id
+                orga_writing_options_new,
+                event_slug=context["run"].get_slug(),
+                writing_type=writing_type,
+                num=context["saved"].id,
             )
-        return redirect("orga_writing_form", event_slug=context["run"].get_slug(), typ=typ)
+        return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
     # Load existing options for the question being edited
     context["list"] = WritingOption.objects.filter(
-        question=context["el"], question__applicable=context["writing_typ"]
+        question=context["el"],
+        question__applicable=context["writing_typ"],
     ).order_by("order")
 
     # Render the form edit template with context
@@ -660,7 +690,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, typ: str, num:
 def orga_writing_form_order(
     request: HttpRequest,
     event_slug: str,
-    typ: str,
+    writing_type: str,
     num: int,
     order: str,
 ) -> HttpResponse:
@@ -669,51 +699,53 @@ def orga_writing_form_order(
     Args:
         request: The HTTP request object.
         event_slug: Event slug identifier.
-        typ: The writing form type to reorder questions for.
+        writing_type: The writing form type to reorder questions for.
         num: The question number to move.
         order: The direction to move ('up' or 'down').
 
     Returns:
         Redirect to the writing form page.
+
     """
     # Verify user has permission to modify character forms
     context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate the writing form type exists
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
 
     # Exchange the order of questions
     exchange_order(context, WritingQuestion, num, order)
 
     # Redirect back to the writing form page
-    return redirect("orga_writing_form", event_slug=context["run"].get_slug(), typ=typ)
+    return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
 
 @login_required
-def orga_writing_options_edit(request: HttpRequest, event_slug: str, typ: str, num: int) -> HttpResponse:
+def orga_writing_options_edit(request: HttpRequest, event_slug: str, writing_type: str, num: int) -> HttpResponse:
     """Edit writing form option for event organizers.
 
     Args:
         request: The HTTP request object
         event_slug: Event slug identifier
-        typ: Writing form type (background, origin, etc.)
+        writing_type: Writing form type (background, origin, etc.)
         num: Option number to edit
 
     Returns:
         HTTP response with the option edit form
+
     """
     # Verify user has character form permissions and get event context
     context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate the writing form type exists and is allowed
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
 
     # Process the option edit form and return response
-    return writing_option_edit(context, num, request, typ)
+    return writing_option_edit(context, num, request, writing_type)
 
 
 @login_required
-def orga_writing_options_new(request: HttpRequest, event_slug: str, typ: str, num: int) -> HttpResponse:
+def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type: str, num: int) -> HttpResponse:
     """Create new writing option for character form question.
 
     Validates permissions and creates a new writing option for the specified
@@ -723,11 +755,11 @@ def orga_writing_options_new(request: HttpRequest, event_slug: str, typ: str, nu
     context = check_event_context(request, event_slug, "orga_character_form")
 
     # Ensure the writing form type is valid
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
 
     # Set question ID in context and delegate to option editor
     context["question_id"] = num
-    return writing_option_edit(context, 0, request, typ)
+    return writing_option_edit(context, 0, request, writing_type)
 
 
 def writing_option_edit(context: dict, option_number: int, request: HttpRequest, option_type: str) -> HttpResponse:
@@ -742,7 +774,10 @@ def writing_option_edit(context: dict, option_number: int, request: HttpRequest,
 
         # Redirect to appropriate target with context parameters
         return redirect(
-            redirect_target, event_slug=context["run"].get_slug(), typ=option_type, num=context["saved"].question_id
+            redirect_target,
+            event_slug=context["run"].get_slug(),
+            writing_type=option_type,
+            num=context["saved"].question_id,
         )
 
     # Render edit form if no successful submission
@@ -751,32 +786,40 @@ def writing_option_edit(context: dict, option_number: int, request: HttpRequest,
 
 @login_required
 def orga_writing_options_order(
-    request: HttpRequest, event_slug: str, typ: str, num: int, order: int
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,
+    num: int,
+    order: int,
 ) -> HttpResponseRedirect:
     """Reorder writing options within a writing form question.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        typ: Writing form type identifier
+        writing_type: Writing form type identifier
         num: Question ID number
         order: New order position for the option
 
     Returns:
         Redirect to the writing form edit page
+
     """
     # Check event permission and initialize context
     context = check_event_context(request, event_slug, "orga_character_form")
 
     # Validate writing form type exists in context
-    check_writing_form_type(context, typ)
+    check_writing_form_type(context, writing_type)
 
     # Exchange order positions of WritingOption objects
     exchange_order(context, WritingOption, num, order)
 
     # Redirect back to writing form edit view
     return redirect(
-        "orga_writing_form_edit", event_slug=context["run"].get_slug(), typ=typ, num=context["current"].question_id
+        "orga_writing_form_edit",
+        event_slug=context["run"].get_slug(),
+        writing_type=writing_type,
+        num=context["current"].question_id,
     )
 
 
@@ -798,6 +841,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
         This function performs multiple validation checks including character
         relationships, writing completeness, and speedlarp constraints to ensure
         event setup integrity.
+
     """
     # Initialize context and validate user permissions for the event
     context = check_event_context(request, event_slug)
@@ -849,7 +893,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/writing/check.html", context)
 
 
-def check_relations(character_cache, validation_checks, character_numbers, context, number_to_id_map):
+def check_relations(character_cache, validation_checks, character_numbers, context, number_to_id_map) -> None:
     """Check character relationships for missing and extinct references.
 
     Args:
@@ -862,6 +906,7 @@ def check_relations(character_cache, validation_checks, character_numbers, conte
     Side effects:
         Updates validation_checks with relat_missing and relat_extinct validation errors
         Populates character_cache with character relationship data
+
     """
     validation_checks["relat_missing"] = []
     validation_checks["relat_extinct"] = []
@@ -883,11 +928,11 @@ def check_relations(character_cache, validation_checks, character_numbers, conte
                         "f_name": first_character_name,
                         "s_id": number_to_id_map[other_character_id],
                         "s_name": second_character_name,
-                    }
+                    },
                 )
 
 
-def check_writings(cache, checks, character_numbers, context, character_id_to_number_map):
+def check_writings(cache, checks, character_numbers, context, character_id_to_number_map) -> None:
     """Validate writing submissions and requirements for different element types.
 
     Args:
@@ -899,6 +944,7 @@ def check_writings(cache, checks, character_numbers, context, character_id_to_nu
 
     Side effects:
         Updates checks with extinct, missing, and interloper character issues
+
     """
     for element_type in [Faction, Plot, Prologue, SpeedLarp]:
         element_name = str(element_type.__name__).lower()
@@ -932,7 +978,7 @@ def check_writings(cache, checks, character_numbers, context, character_id_to_nu
                 # cache[nm][f.number] = (str(f), from_text)
 
 
-def check_speedlarp(checks, context, id_number_map):
+def check_speedlarp(checks, context, id_number_map) -> None:
     """Validate speedlarp character configurations.
 
     Args:
@@ -942,6 +988,7 @@ def check_speedlarp(checks, context, id_number_map):
 
     Side effects:
         Updates checks with speedlarp double assignments and missing configurations
+
     """
     if "speedlarp" not in context["features"]:
         return
@@ -966,7 +1013,9 @@ def check_speedlarp(checks, context, id_number_map):
 
 
 def check_speedlarp_prepare(
-    element, character_id_to_number_map: dict[int, int], character_speeds: dict[int, dict[str, list[str]]]
+    element,
+    character_id_to_number_map: dict[int, int],
+    character_speeds: dict[int, dict[str, list[str]]],
 ) -> None:
     """Prepare speed LARP data by mapping character relationships to speeds structure."""
     # Extract character numbers from element's character map
@@ -995,15 +1044,16 @@ def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResp
 
     Returns:
         JsonResponse with element number or error status.
+
     """
     # Check user permissions for the event
     context = check_event_context(request, event_slug, "orga_characters")
     idx = request.POST.get("idx")
-    type = request.POST.get("type")
+    element_type = request.POST.get("type")
 
     try:
         # Get element based on type (Trait or Character)
-        if type.lower() == "trait":
+        if element_type.lower() == "trait":
             el = context["event"].get_elements(Trait).get(pk=idx)
         else:
             el = context["event"].get_elements(Character).get(pk=idx)
@@ -1015,7 +1065,7 @@ def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResp
 
 
 @require_POST
-def orga_writing_excel_edit(request: HttpRequest, event_slug: str, typ: str) -> JsonResponse:
+def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse:
     """Handle Excel-based editing of writing elements.
 
     Manages bulk editing of character stories and writing content through
@@ -1025,7 +1075,7 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, typ: str) -> 
     Args:
         request: HTTP request object containing user session and form data
         event_slug: Event slug for permission checking and context setup
-        typ: Type identifier specifying the kind of writing question/element
+        writing_type: Type identifier specifying the kind of writing question/element
 
     Returns:
         JsonResponse: JSON response containing form HTML, editor configuration,
@@ -1033,10 +1083,11 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, typ: str) -> 
 
     Raises:
         ObjectDoesNotExist: When the requested writing element cannot be found
+
     """
     # Attempt to retrieve the Excel form context for the specified element
     try:
-        context = _get_excel_form(request, event_slug, typ)
+        context = _get_excel_form(request, event_slug, writing_type)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -1051,10 +1102,7 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, typ: str) -> 
     if context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]:
         if context["question"].max_length:
             # Set appropriate label for multiple choice vs text fields
-            if context["question"].typ == "m":
-                name = _("options")
-            else:
-                name = "text length"
+            name = _("options") if context["question"].typ == "m" else "text length"
             # Generate counter display with current/max length format
             counter = (
                 f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
@@ -1091,19 +1139,20 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, typ: str) -> 
 
 
 @require_POST
-def orga_writing_excel_submit(request, event_slug, typ):
+def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_type):
     """Handle Excel submission for writing data with validation.
 
     Args:
         request: HTTP request with form data
         event_slug: Event slug for permission checking and context setup
-        typ: Writing type identifier
+        writing_type: Writing type identifier
 
     Returns:
         JsonResponse: Success status, element updates, or validation errors
+
     """
     try:
-        context = _get_excel_form(request, event_slug, typ, is_submit=True)
+        context = _get_excel_form(request, event_slug, writing_type, is_submit=True)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -1124,12 +1173,14 @@ def orga_writing_excel_submit(request, event_slug, typ):
             "update": _get_question_update(context, obj),
         }
         return JsonResponse(response)
-    else:
-        return JsonResponse({"k": 2, "errors": context["form"].errors})
+    return JsonResponse({"k": 2, "errors": context["form"].errors})
 
 
 def _get_excel_form(
-    request: HttpRequest, event_slug: str, element_type: str, is_submit: bool = False
+    request: HttpRequest,
+    event_slug: str,
+    element_type: str,
+    is_submit: bool = False,
 ) -> dict[str, Any]:
     """Prepare Excel form context for bulk editing operations.
 
@@ -1149,6 +1200,7 @@ def _get_excel_form(
     Raises:
         DoesNotExist: If question or element with given IDs don't exist
         PermissionDenied: If user lacks required permissions for the operation
+
     """
     # Check user permissions and setup base context
     context = check_event_context(request, event_slug, f"orga_{element_type}s")
@@ -1222,6 +1274,7 @@ def _get_question_update(context: dict, element) -> str:
 
     Returns:
         HTML string for the question update content
+
     """
     # Handle cover question type - return image thumbnail HTML
     if context["question"].typ in [WritingQuestionType.COVER]:
@@ -1252,7 +1305,7 @@ def _get_question_update(context: dict, element) -> str:
         # get option names
         option_ids = [int(option_value) for option_value in display_value]
         query = context["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
-        display_value = ", ".join([display for display in query.values_list("name", flat=True)])
+        display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
         # check if it is over the character limit
         display_value = str(display_value)
@@ -1266,7 +1319,7 @@ def _get_question_update(context: dict, element) -> str:
     return display_value
 
 
-def _check_working_ticket(request, context: dict, working_ticket_token: str) -> str | None:
+def _check_working_ticket(request: HttpRequest, context: dict, working_ticket_token: str) -> str | None:
     """Check if ticket is being edited by another user.
 
     Args:
@@ -1276,6 +1329,7 @@ def _check_working_ticket(request, context: dict, working_ticket_token: str) -> 
 
     Returns:
         Error message if ticket is locked, None otherwise
+
     """
     # Check if somebody else has opened the character to edit it
     error_message = writing_edit_working_ticket(request, context["typ"], context["element"].id, working_ticket_token)
@@ -1283,7 +1337,10 @@ def _check_working_ticket(request, context: dict, working_ticket_token: str) -> 
     # Check if somebody has opened the same field to edit it
     if not error_message:
         error_message = writing_edit_working_ticket(
-            request, context["typ"], f"{context['element'].id}_{context['question'].id}", working_ticket_token
+            request,
+            context["typ"],
+            f"{context['element'].id}_{context['question'].id}",
+            working_ticket_token,
         )
 
     return error_message

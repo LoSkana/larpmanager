@@ -89,6 +89,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
     Raises:
         PermissionDenied: If user lacks required association permissions
         Http404: If specified event number doesn't exist
+
     """
     # Check user has executive events permission for the association
     context = check_association_context(request, "exe_events")
@@ -110,7 +111,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
         if "saved" in context and num == 0:
             # Automatically add requesting user as event organizer
             # Get or create organizer role (number=1 is standard organizer role)
-            (er, created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
+            (er, _created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
             if not er.name:
                 er.name = "Organizer"
             # Add current user's member profile to organizer role
@@ -192,15 +193,15 @@ def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_templates_roles(request: HttpRequest, eid: int, num: int | None) -> HttpResponse:
+def exe_templates_roles(request: HttpRequest, event_id: int, num: int | None) -> HttpResponse:
     """Edit or create template roles for an event."""
     add_ctx = get_context(request)
-    get_event_template(add_ctx, eid)
+    get_event_template(add_ctx, event_id)
     return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", additional_context=add_ctx)
 
 
 @login_required
-def exe_pre_registrations(request) -> HttpResponse:
+def exe_pre_registrations(request: HttpRequest) -> HttpResponse:
     """Display pre-registration statistics for all association events.
 
     This function retrieves and displays pre-registration data for all events
@@ -213,6 +214,7 @@ def exe_pre_registrations(request) -> HttpResponse:
     Returns:
         HttpResponse: Rendered HTML page showing pre-registration statistics
             with counts organized by preference level or total counts
+
     """
     # Check user permissions and initialize context
     context = check_association_context(request, "exe_pre_registrations")

@@ -33,14 +33,16 @@ def check_branch() -> None:
 
     Raises:
         CommandError: If current git branch is 'main' and not in CI environment.
+
     """
     # Skip check if running in CI environment
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
 
     # Get current git branch name
-    current_branch_name = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
+    current_branch_name = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()  # noqa: S607
 
     # Raise error if on main branch
     if current_branch_name == "main":
-        raise CommandError("This command cannot be executed while on 'main'")
+        msg = "This command cannot be executed while on 'main'"
+        raise CommandError(msg)

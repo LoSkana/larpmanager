@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import math
 import os
 import random
@@ -75,6 +76,8 @@ from larpmanager.utils.pdf import get_membership_request
 from larpmanager.utils.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
 
+logger = logging.getLogger(__name__)
+
 
 def language(request: HttpRequest) -> HttpResponse:
     """Handle language selection and preference setting for users.
@@ -93,12 +96,10 @@ def language(request: HttpRequest) -> HttpResponse:
     Note:
         Language changes are immediately activated and stored in the session.
         Authenticated users have their preference saved to the database.
+
     """
     # Determine current language based on user authentication status
-    if request.user.is_authenticated:
-        current_language = request.user.member.language
-    else:
-        current_language = get_language()
+    current_language = request.user.member.language if request.user.is_authenticated else get_language()
 
     # Process form submission for language change
     if request.method == "POST":
@@ -189,7 +190,7 @@ def profile(request: HttpRequest):
             "form": form,
             "member": member,
             "disable_join": True,
-        }
+        },
     )
 
     context["custom_text"] = get_association_text(context["association_id"], AssociationTextType.PROFILE)
@@ -240,9 +241,10 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     Note:
         Requires authenticated user with associated member object.
         Only accepts POST requests with valid image files.
+
     """
     # Only accept POST requests
-    if not request.method == "POST":
+    if request.method != "POST":
         return JsonResponse({"res": "ko"})
 
     # Validate uploaded image using form
@@ -269,12 +271,12 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
-def profile_rotate(request: HttpRequest, n: int) -> JsonResponse:
+def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
     """Rotate user's profile image 90 degrees clockwise or counterclockwise.
 
     Args:
         request: Django HTTP request object containing authenticated user
-        n: Rotation direction indicator (1 for clockwise, any other value for counterclockwise)
+        rotation_angle: Rotation direction indicator (1 for clockwise, any other value for counterclockwise)
 
     Returns:
         JsonResponse: Contains status ('ok'/'ko') and optionally the new thumbnail URL
@@ -284,6 +286,7 @@ def profile_rotate(request: HttpRequest, n: int) -> JsonResponse:
     Raises:
         IOError: If image file cannot be opened or saved
         AttributeError: If user has no associated member or profile
+
     """
     # Get the current profile image path
     path = str(request.user.member.profile)
@@ -295,7 +298,7 @@ def profile_rotate(request: HttpRequest, n: int) -> JsonResponse:
     im = Image.open(path)
 
     # Rotate image based on direction parameter
-    if n == 1:
+    if rotation_angle == 1:
         out = im.rotate(90)  # Clockwise rotation
     else:
         out = im.rotate(-90)  # Counterclockwise rotation
@@ -325,6 +328,7 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered privacy template with user context and memberships.
+
     """
     # Get default user context for the request
     context = get_context(request)
@@ -335,9 +339,9 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
             "member": request.user.member,
             # Get active memberships, excluding empty and revoked ones
             "joined": request.user.member.memberships.exclude(status=MembershipStatus.EMPTY).exclude(
-                status=MembershipStatus.REWOKED
+                status=MembershipStatus.REWOKED,
             ),
-        }
+        },
     )
 
     # Render and return the privacy template with context
@@ -346,8 +350,7 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
-    """
-    Revoke data sharing permission for a user's membership in an association.
+    """Revoke data sharing permission for a user's membership in an association.
 
     Sets the membership status to EMPTY, effectively removing data sharing consent
     for the user's membership in the specified association.
@@ -361,6 +364,7 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
 
     Raises:
         Http404: When association or membership is not found, or other errors occur
+
     """
     # Initialize context with default user data
     context = get_context(request)
@@ -381,7 +385,8 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
         messages.success(request, _("Data share removed successfully") + "!")
     except Exception as err:
         # Handle any errors by raising 404
-        raise Http404("error in performing request") from err
+        msg = "error in performing request"
+        raise Http404(msg) from err
 
     # Redirect back to privacy settings page
     return redirect("profile_privacy")
@@ -402,6 +407,7 @@ def membership(request: HttpRequest) -> HttpResponse:
 
     Raises:
         Http404: If membership status is invalid for the requested operation.
+
     """
     # Initialize context with default user context
     context = get_context(request)
@@ -416,7 +422,8 @@ def membership(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         # Validate membership status allows form submission
         if el.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
-            raise Http404("wrong membership")
+            msg = "wrong membership"
+            raise Http404(msg)
 
         # Second pass - confirmation after file upload
         if el.status == MembershipStatus.UPLOADED:
@@ -494,7 +501,7 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def public(request: HttpRequest, n: int) -> HttpResponse:
+def public(request: HttpRequest, member_id: int) -> HttpResponse:
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -503,23 +510,26 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
 
     Args:
         request: HTTP request object containing user and association context
-        n: Member ID to display profile for
+        member_id: Member ID to display profile for
 
     Returns:
         HttpResponse: Rendered public member profile page
 
     Raises:
         Http404: If member has no membership in the current association
+
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
-    context["member_public"] = get_member(n)
+    context["member_public"] = get_member(member_id)
 
     # Verify member has membership in current association
     if not Membership.objects.filter(
-        member=context["member_public"], association_id=context["association_id"]
+        member=context["member_public"],
+        association_id=context["association_id"],
     ).exists():
-        raise Http404("no membership")
+        msg = "no membership"
+        raise Http404(msg)
 
     # Add badges if badge feature is enabled for association
     if "badge" in context["features"]:
@@ -563,8 +573,8 @@ def public(request: HttpRequest, n: int) -> HttpResponse:
         try:
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Social contact validation failed for member={member_id}: {e}")
 
     return render(request, "larpmanager/member/public.html", context)
 
@@ -580,16 +590,16 @@ def chats(request: HttpRequest) -> HttpResponse:
     context.update(
         {
             "list": Contact.objects.filter(me=request.user.member, association_id=context["association_id"]).order_by(
-                "-last_message"
-            )
-        }
+                "-last_message",
+            ),
+        },
     )
 
     return render(request, "larpmanager/member/chats.html", context)
 
 
 @login_required
-def chat(request, n):
+def chat(request: HttpRequest, member_id):
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions
@@ -597,40 +607,39 @@ def chat(request, n):
     """
     context = get_context(request)
     check_association_feature(request, context, "chat")
-    mid = request.user.member.id
-    if n == mid:
+    my_member_id = context["member"].id
+    if member_id == my_member_id:
         messages.success(request, _("You can't send messages to yourself") + "!")
         return redirect("home")
-    other_member = get_member(n)
-    yid = other_member.id
-    channel = get_channel(yid, mid)
+
+    channel = get_channel(member_id, my_member_id)
     if request.method == "POST":
         tx = request.POST["text"]
         if len(tx) > 0:
             ChatMessage(
-                sender_id=mid,
-                receiver_id=yid,
+                sender_id=my_member_id,
+                receiver_id=member_id,
                 channel=channel,
                 message=tx,
                 association_id=context["association_id"],
             ).save()
-            your_contact = get_contact(yid, mid)
+            your_contact = get_contact(member_id, my_member_id)
             if not your_contact:
                 your_contact = Contact(
-                    me_id=yid,
-                    you_id=mid,
-                    channel=get_channel(mid, yid),
+                    me_id=member_id,
+                    you_id=my_member_id,
+                    channel=get_channel(my_member_id, member_id),
                     association_id=context["association_id"],
                 )
             your_contact.num_unread += 1
             your_contact.last_message = datetime.now()
             your_contact.save()
-            mine_contact = get_contact(mid, yid)
+            mine_contact = get_contact(my_member_id, member_id)
             if not mine_contact:
                 mine_contact = Contact(
-                    me_id=mid,
-                    you_id=yid,
-                    channel=get_channel(mid, yid),
+                    me_id=my_member_id,
+                    you_id=member_id,
+                    channel=get_channel(my_member_id, member_id),
                     association_id=context["association_id"],
                 )
             mine_contact.last_message = datetime.now()
@@ -638,12 +647,12 @@ def chat(request, n):
             messages.success(request, _("Message sent!"))
             return redirect(request.path_info)
 
-    mine_contact = get_contact(mid, yid)
+    mine_contact = get_contact(my_member_id, member_id)
     if mine_contact:
         mine_contact.num_unread = 0
         mine_contact.save()
     context["list"] = ChatMessage.objects.filter(channel=channel, association_id=context["association_id"]).order_by(
-        "-created"
+        "-created",
     )
     return render(request, "larpmanager/member/chat.html", context)
 
@@ -666,11 +675,11 @@ def badges(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
+def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
     """Display a badge with shuffled member list."""
     context = get_context(request)
     check_association_feature(request, context, "badge")
-    badge = get_badge(n, context)
+    badge = get_badge(badge_id, context)
 
     # Initialize context with badge data
     context.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
@@ -681,13 +690,13 @@ def badge(request: HttpRequest, n: str, p: int = 1) -> HttpResponse:
 
     # Shuffle members using deterministic daily seed
     v = datetime.today().date() - date(1970, 1, 1)
-    random.Random(v.days).shuffle(context["list"])
+    random.Random(v.days).shuffle(context["list"])  # noqa: S311
 
     return render(request, "larpmanager/general/badge.html", context)
 
 
 @login_required
-def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
+def leaderboard(request: HttpRequest, page: int = 1) -> HttpResponse:
     """Display paginated leaderboard of members with badge scores.
 
     This view renders a paginated leaderboard showing members ranked by their
@@ -695,13 +704,14 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
 
     Args:
         request: Django HTTP request object containing user and association data
-        p: Page number for pagination, defaults to 1. Will be clamped to valid range.
+        page: Page number for pagination, defaults to 1. Will be clamped to valid range.
 
     Returns:
         HttpResponse: Rendered leaderboard page with member rankings and pagination
 
     Raises:
         PermissionDenied: If the 'badge' feature is not enabled for the association
+
     """
     # Check if badge feature is enabled for the association
     context = get_context(request)
@@ -715,19 +725,19 @@ def leaderboard(request: HttpRequest, p: int = 1) -> HttpResponse:
     num_pages = math.ceil(len(member_list) / num_el)
 
     # Normalize page number to valid range
-    if p < 0:
-        p = 1
-    p = min(p, num_pages)
+    if page < 0:
+        page = 1
+    page = min(page, num_pages)
 
     # Build context with pagination data
     context.update(
         {
-            "pages": member_list[(p - 1) * num_el : p * num_el],
+            "pages": member_list[(page - 1) * num_el : page * num_el],
             "num_pages": num_pages,
-            "number": p,
-            "previous_page_number": p - 1,
-            "next_page_number": p + 1,
-        }
+            "number": page,
+            "previous_page_number": page - 1,
+            "next_page_number": page + 1,
+        },
     )
 
     # Set page identifier for template
@@ -744,6 +754,7 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
 
     Returns:
         Redirect response to home page
+
     """
     # Build context with user and association information
     context = get_context(request)
@@ -774,6 +785,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     Raises:
         PermissionDenied: If user doesn't have voting feature access.
         ValidationError: If voting configuration is invalid.
+
     """
     # Verify user has access to voting feature
     context = get_context(request)
@@ -828,9 +840,9 @@ def vote(request: HttpRequest) -> HttpResponse:
         try:
             idx = int(mb)
             context["candidates"].append(Member.objects.get(pk=idx))
-        except Exception:
+        except Exception as e:
             # Skip invalid candidate IDs
-            pass
+            logger.debug(f"Invalid candidate ID or member not found: {mb}: {e}")
 
     # Randomize candidate order to prevent position bias
     random.shuffle(context["candidates"])
@@ -860,6 +872,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
         - May create new delegated user accounts
         - Logs user in as different member (parent or child)
         - Disconnects last login update signal temporarily
+
     """
     # Ensure delegated members feature is enabled
     context = get_context(request)
@@ -875,7 +888,8 @@ def delegated(request: HttpRequest) -> HttpResponse:
             # Log back in as parent account
             login(request, request.user.member.parent.user, backend=backend)
             messages.success(
-                request, _("You are now logged in with your main account") + ":" + str(request.user.member)
+                request,
+                _("You are now logged in with your main account") + ":" + str(request.user.member),
             )
             return redirect("home")
         # Show option to return to parent account
@@ -893,7 +907,8 @@ def delegated(request: HttpRequest) -> HttpResponse:
         if account_login:
             account_login = int(account_login)
             if account_login not in del_dict:
-                raise Http404(f"delegated account not found: {account_login}")
+                msg = f"delegated account not found: {account_login}"
+                raise Http404(msg)
             delegated = del_dict[account_login]
             # Log in as the selected delegated account
             login(request, delegated.user, backend=backend)
@@ -940,14 +955,12 @@ def delegated(request: HttpRequest) -> HttpResponse:
 
 def get_user_backend() -> str:
     """Return the authentication backend path for allauth."""
-    authentication_backend = "allauth.account.auth_backends.AuthenticationBackend"
-    return authentication_backend
+    return "allauth.account.auth_backends.AuthenticationBackend"
 
 
 @login_required
 def registrations(request: HttpRequest) -> HttpResponse:
-    """
-    Display user's registrations with status information.
+    """Display user's registrations with status information.
 
     Retrieves and displays all registrations for the current user within their
     association, including status information and related data for optimization.
@@ -959,6 +972,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: Rendered template displaying the user's registrations
             with status and related information.
+
     """
     nt = []
     context = get_context(request)
@@ -973,7 +987,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
             "pre_registrations_dict": get_pre_registrations_dict(context["association_id"], context["member"]),
             "character_rels_dict": get_character_rels_dict(my_regs_dict, context["member"]),
             "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, context["member"]),
-        }
+        },
     )
 
     # Process each registration to calculate status and append to results

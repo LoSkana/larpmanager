@@ -46,7 +46,7 @@ class TestMailSignals(BaseTestCase):
     """Test cases for mail-related signal receivers"""
 
     @patch("larpmanager.mail.base.my_send_mail")
-    def test_traits_can_be_created(self, mock_mail):
+    def test_traits_can_be_created(self, mock_mail) -> None:
         """Test that Trait can be created"""
         event = self.get_event()
 
@@ -57,7 +57,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(trait.id)
 
     @patch("larpmanager.mail.base.my_send_mail")
-    def test_character_can_be_updated(self, mock_mail):
+    def test_character_can_be_updated(self, mock_mail) -> None:
         """Test that Character can be updated"""
         from larpmanager.models.writing import Character
         character = self.character()
@@ -71,7 +71,7 @@ class TestMailSignals(BaseTestCase):
         self.assertEqual(character.name, "Updated Name")
 
     @patch("larpmanager.mail.member.my_send_mail")
-    def test_accounting_item_membership_can_be_created(self, mock_mail):
+    def test_accounting_item_membership_can_be_created(self, mock_mail) -> None:
         """Test that AccountingItemMembership can be created"""
         member = self.get_member()
         from datetime import datetime
@@ -86,7 +86,7 @@ class TestMailSignals(BaseTestCase):
 
     @patch("larpmanager.mail.base.get_association_executives")
     @patch("larpmanager.mail.member.my_send_mail")
-    def test_help_question_can_be_created(self, mock_mail, mock_get_executives):
+    def test_help_question_can_be_created(self, mock_mail, mock_get_executives) -> None:
         """Test that HelpQuestion can be created"""
         mock_get_executives.return_value = []  # No executives
         member = self.get_member()
@@ -102,7 +102,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(question.id)
 
     @patch("larpmanager.mail.member.my_send_mail")
-    def test_chat_message_can_be_created(self, mock_mail):
+    def test_chat_message_can_be_created(self, mock_mail) -> None:
         """Test that ChatMessage can be created"""
         sender = self.get_member()
         receiver = self.get_member()
@@ -115,7 +115,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(message.id)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_registration_character_rel_can_be_created(self, mock_mail):
+    def test_registration_character_rel_can_be_created(self, mock_mail) -> None:
         """Test that RegistrationCharacterRel can be created"""
         registration = self.get_registration()
         character = self.character()
@@ -127,7 +127,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(rel.id)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_registration_alert_can_be_changed(self, mock_mail):
+    def test_registration_alert_can_be_changed(self, mock_mail) -> None:
         """Test that Registration alert can be changed"""
         from larpmanager.models.registration import Registration
 
@@ -143,7 +143,7 @@ class TestMailSignals(BaseTestCase):
         self.assertEqual(registration.alert, new_alert)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_registration_can_be_deleted(self, mock_mail):
+    def test_registration_can_be_deleted(self, mock_mail) -> None:
         """Test that Registration can be deleted"""
         from larpmanager.models.registration import Registration
         registration = self.get_registration()
@@ -155,7 +155,7 @@ class TestMailSignals(BaseTestCase):
         self.assertFalse(Registration.objects.filter(id=reg_id, deleted__isnull=True).exists())
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_pre_registration_can_be_created(self, mock_mail):
+    def test_pre_registration_can_be_created(self, mock_mail) -> None:
         """Test that PreRegistration can be created"""
         member = self.get_member()
         event = self.get_event()
@@ -167,7 +167,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(pre_reg.id)
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_accounting_item_expense_can_be_created(self, mock_mail):
+    def test_accounting_item_expense_can_be_created(self, mock_mail) -> None:
         """Test that AccountingItemExpense can be created"""
         from larpmanager.models.accounting import ExpenseChoices
         member = self.get_member()
@@ -182,7 +182,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(expense.id)
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_accounting_item_expense_value_can_be_changed(self, mock_mail):
+    def test_accounting_item_expense_value_can_be_changed(self, mock_mail) -> None:
         """Test that AccountingItemExpense value can be changed"""
         from larpmanager.models.accounting import ExpenseChoices
         member = self.get_member()
@@ -203,7 +203,7 @@ class TestMailSignals(BaseTestCase):
         self.assertEqual(expense.value, Decimal("75.00"))
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_accounting_item_payment_value_can_be_changed(self, mock_mail):
+    def test_accounting_item_payment_value_can_be_changed(self, mock_mail) -> None:
         """Test that AccountingItemPayment value can be changed"""
         from larpmanager.models.accounting import PaymentChoices
         member = self.get_member()
@@ -224,7 +224,7 @@ class TestMailSignals(BaseTestCase):
         self.assertEqual(payment.value, Decimal("150.00"))
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_accounting_item_other_value_can_be_changed(self, mock_mail):
+    def test_accounting_item_other_value_can_be_changed(self, mock_mail) -> None:
         """Test that AccountingItemOther value can be changed"""
         from larpmanager.models.accounting import OtherChoices
         member = self.get_member()
@@ -246,7 +246,7 @@ class TestMailSignals(BaseTestCase):
         self.assertEqual(other.value, Decimal("35.00"))
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_accounting_item_donation_pre_save_sends_mail(self, mock_mail):
+    def test_accounting_item_donation_pre_save_sends_mail(self, mock_mail) -> None:
         """Test that AccountingItemDonation pre_save signal sends mail"""
         from larpmanager.models.accounting import AccountingItemDonation
 
@@ -261,7 +261,7 @@ class TestMailSignals(BaseTestCase):
         self.assertTrue(mock_mail.called)
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_collection_post_save_sends_mail(self, mock_mail):
+    def test_collection_post_save_sends_mail(self, mock_mail) -> None:
         """Test that Collection post_save signal sends mail"""
         association = self.get_association()
         organizer = self.organizer()
@@ -273,7 +273,7 @@ class TestMailSignals(BaseTestCase):
         self.assertTrue(mock_mail.called)
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_accounting_item_collection_value_can_be_changed(self, mock_mail):
+    def test_accounting_item_collection_value_can_be_changed(self, mock_mail) -> None:
         """Test that AccountingItemCollection value can be changed"""
         from larpmanager.models.accounting import AccountingItemCollection
 
@@ -295,7 +295,7 @@ class TestMailSignals(BaseTestCase):
         self.assertEqual(item.value, Decimal("40.00"))
 
     @patch("larpmanager.mail.base.my_send_mail")
-    def test_traits_are_unique_per_event(self, mock_mail):
+    def test_traits_are_unique_per_event(self, mock_mail) -> None:
         """Test that Trait names are unique per event"""
         event = self.get_event()
 
@@ -306,7 +306,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(trait1.id)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_registration_alert_values_can_be_set(self, mock_mail):
+    def test_registration_alert_values_can_be_set(self, mock_mail) -> None:
         """Test that registration alert values can be set"""
         from larpmanager.models.registration import Registration
 
@@ -323,7 +323,7 @@ class TestMailSignals(BaseTestCase):
             self.assertEqual(registration.alert, alert_value)
 
     @patch("larpmanager.mail.accounting.my_send_mail")
-    def test_accounting_payment_types_can_be_created(self, mock_mail):
+    def test_accounting_payment_types_can_be_created(self, mock_mail) -> None:
         """Test that accounting payment types can be created"""
         from larpmanager.models.accounting import PaymentChoices
         member = self.get_member()
@@ -350,7 +350,7 @@ class TestMailSignals(BaseTestCase):
 
     @patch("larpmanager.mail.base.get_association_executives")
     @patch("larpmanager.mail.member.my_send_mail")
-    def test_help_questions_can_be_created(self, mock_mail, mock_get_executives):
+    def test_help_questions_can_be_created(self, mock_mail, mock_get_executives) -> None:
         """Test that help questions can be created"""
         mock_get_executives.return_value = []  # No executives
         member = self.get_member()
@@ -367,7 +367,7 @@ class TestMailSignals(BaseTestCase):
         self.assertIsNotNone(question.id)
 
     @patch("larpmanager.mail.member.my_send_mail")
-    def test_chat_messages_with_different_channels_can_be_created(self, mock_mail):
+    def test_chat_messages_with_different_channels_can_be_created(self, mock_mail) -> None:
         """Test that chat messages with different channels can be created"""
         sender = self.get_member()
         receiver = self.get_member()

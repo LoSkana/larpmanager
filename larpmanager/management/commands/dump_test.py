@@ -29,8 +29,7 @@ class Command(BaseCommand):
     help = "Dump test db"
 
     def handle(self, *args: tuple, **kwargs: dict) -> None:
-        """
-        Django management command handler to dump test database.
+        """Django management command handler to dump test database.
 
         This function resets the database, applies migrations, and creates a clean
         SQL dump file for testing purposes. The dump is cleaned of PostgreSQL-specific
@@ -42,6 +41,7 @@ class Command(BaseCommand):
 
         Raises:
             subprocess.CalledProcessError: If database dump or cleaning operations fail
+
         """
         # Verify we're on the correct branch before proceeding
         check_branch()
@@ -73,7 +73,7 @@ class Command(BaseCommand):
 
         # Execute database dump with error handling
         try:
-            subprocess.run(dump_cmd, check=True, env=env)
+            subprocess.run(dump_cmd, check=True, env=env)  # noqa: S603
             self.stdout.write(self.style.SUCCESS("Database dump completed: test_db.sql"))
         except subprocess.CalledProcessError as e:
             self.stderr.write(self.style.ERROR(f"Dump failed: {e}"))
@@ -85,4 +85,4 @@ class Command(BaseCommand):
             r"/^\\restrict/d;/^\\unrestrict/d;/COMMENT ON SCHEMA public/d",
             "larpmanager/tests/test_db.sql",
         ]
-        subprocess.run(clean_cmd, check=True, env=env)
+        subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603

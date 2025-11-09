@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import logging
 from datetime import date
 
 from django.conf import settings as conf_settings
@@ -28,6 +29,8 @@ from django.http import Http404, HttpRequest
 
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email
+
+logger = logging.getLogger(__name__)
 
 
 def count_differences(first_string: str, second_string: str) -> int | bool:
@@ -46,6 +49,7 @@ def count_differences(first_string: str, second_string: str) -> int | bool:
         1
         >>> count_differences("abc", "abcd")
         False
+
     """
     # If the lengths of the strings are different, they can't be almost identical
     if len(first_string) != len(second_string):
@@ -53,7 +57,7 @@ def count_differences(first_string: str, second_string: str) -> int | bool:
 
     # Count the number of differences between the two strings
     differences = 0
-    for first_char, second_char in zip(first_string, second_string):
+    for first_char, second_char in zip(first_string, second_string, strict=False):
         if first_char != second_char:
             differences += 1
 
@@ -80,6 +84,7 @@ def almost_equal(s1: str, s2: str) -> bool:
         True
         >>> almost_equal("test", "best")
         False
+
     """
     # Ensure that one string has exactly one more character than the other
     if abs(len(s1) - len(s2)) != 1:
@@ -125,6 +130,7 @@ def update_leaderboard(association_id: int) -> list[dict]:
             - created: Membership creation date
             - name: Member display name
             - profile: Profile thumbnail URL (if available)
+
     """
     leaderboard_entries = []
 
@@ -171,7 +177,7 @@ def assign_badge(member: Member, badge_code: str) -> None:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(member)
     except Exception as e:
-        print(e)
+        logger.exception(f"Failed to assign badge {badge_code} to member {member}: {e}")
 
 
 def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
@@ -188,21 +194,25 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
     Raises:
         Http404: If email not found, belongs to different association,
                 or belongs to different run when run context is provided
+
     """
     # Attempt to retrieve the email by primary key
     try:
         email = Email.objects.get(pk=email_id)
     except ObjectDoesNotExist as err:
-        raise Http404("not found") from err
+        msg = "not found"
+        raise Http404(msg) from err
 
     # Verify email belongs to the requesting association
     if email.association_id != context["association_id"]:
-        raise Http404("not your association")
+        msg = "not your association"
+        raise Http404(msg)
 
     # Check run-specific authorization if run context is provided
     run = context.get("run")
     if run and email.run_id != run.id:
-        raise Http404("not your run")
+        msg = "not your run"
+        raise Http404(msg)
 
     return email
 
@@ -219,6 +229,7 @@ def create_member_profile_for_user(user: User, is_newly_created: bool) -> None:
 
     Returns:
         None
+
     """
     # Create new Member profile for newly registered users
     if is_newly_created:
@@ -247,13 +258,14 @@ def process_membership_status_updates(membership: Membership) -> None:
     Note:
         This function should be called before saving the membership
         to ensure proper field updates based on status.
+
     """
     # Handle ACCEPTED status: assign card number and date
     if membership.status == MembershipStatus.ACCEPTED:
         # Assign next available card number if not already set
         if not membership.card_number:
             max_card_number = Membership.objects.filter(association=membership.association).aggregate(
-                Max("card_number")
+                Max("card_number"),
             )["card_number__max"]
             if not max_card_number:
                 max_card_number = 0

@@ -30,24 +30,24 @@ READ_SIZE = 2048
 
 @deconstructible
 class FileTypeValidator:
-    """
-    File type validator for validating mimetypes and extensions
+    """File type validator for validating mimetypes and extensions.
 
     Args:
         allowed_types (list): list of acceptable mimetypes e.g; ['image/jpeg', 'application/pdf']
                     see https://www.iana.org/assignments/media-types/media-types.xhtml
         allowed_extensions (list, optional): list of allowed file extensions e.g; ['.jpeg', '.pdf', '.docx']
+
     """
 
     type_message = _("File type '%(detected_type)s' is not allowed.Allowed types are: '%(allowed_types)s'.")
 
     extension_message = _(
-        "File extension '%(extension)s' is not allowed. Allowed extensions are: '%(allowed_extensions)s'."
+        "File extension '%(extension)s' is not allowed. Allowed extensions are: '%(allowed_extensions)s'.",
     )
 
     invalid_message = _(
         "Allowed type '%(allowed_type)s' is not a valid type.See "
-        "https://www.iana.org/assignments/media-types/media-types.xhtml"
+        "https://www.iana.org/assignments/media-types/media-types.xhtml",
     )
 
     def __init__(self, allowed_types: list[str], allowed_extensions: tuple[str, ...] = ()) -> None:
@@ -73,12 +73,13 @@ class FileTypeValidator:
         Note:
             The file position is reset to the beginning after validation to ensure
             the file can be read normally by subsequent operations.
+
         """
         # Read file header to detect MIME type using libmagic
         detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
 
         # Extract file extension from filename
-        root, extension = os.path.splitext(fileobj.name.lower())
+        _root, extension = os.path.splitext(fileobj.name.lower())
 
         # Reset file position to beginning for subsequent reads
         fileobj.seek(0)
@@ -112,9 +113,9 @@ class FileTypeValidator:
             )
 
     def _normalize(self, allowed_types):
-        """
-        Validate and transforms given allowed types
-        e.g; wildcard character specification will be normalized as text/* -> text
+        """Validate and transforms given allowed types.
+
+        e.g; wildcard character specification will be normalized as text/* -> text.
         """
         allowed_mime_types = []
         for allowed_type_original in allowed_types:
@@ -139,8 +140,7 @@ class FileTypeValidator:
 
     @staticmethod
     def _check_word_or_excel(file_object, detected_mime_type: str, file_extension: str) -> str:
-        """
-        Returns proper mimetype in case of word or excel files.
+        """Return proper mimetype in case of word or excel files.
 
         Args:
             file_object: File object to analyze
@@ -149,6 +149,7 @@ class FileTypeValidator:
 
         Returns:
             str: Corrected MIME type for Microsoft Office files
+
         """
         # Define known Microsoft Office file type identifiers
         word_identifier_strings = [

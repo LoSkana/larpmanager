@@ -2730,6 +2730,12 @@ msgstr ""
 msgid "Play Again"
 msgstr ""
 
+msgid "Friend"
+msgstr ""
+
+msgid "Influencer"
+msgstr ""
+
 msgid "Name of the discount - internal use"
 msgstr ""
 

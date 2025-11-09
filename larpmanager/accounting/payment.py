@@ -18,11 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Payment processing and management utilities."""
+
+import logging
 import math
 import re
 from datetime import datetime
 from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
@@ -71,8 +74,13 @@ from larpmanager.utils.base import fetch_payment_details, update_payment_details
 from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
 
+if TYPE_CHECKING:
+    from decimal import Decimal
 
-def get_payment_fee(association_id, slug):
+logger = logging.getLogger(__name__)
+
+
+def get_payment_fee(association_id: int, slug: str) -> float:
     """Get payment processing fee for a specific payment method.
 
     Args:
@@ -81,6 +89,7 @@ def get_payment_fee(association_id, slug):
 
     Returns:
         float: Payment fee amount, 0.0 if not configured
+
     """
     payment_details = fetch_payment_details(association_id)
     fee_key = slug + "_fee"
@@ -90,7 +99,7 @@ def get_payment_fee(association_id, slug):
     return float(payment_details[fee_key].replace(",", "."))
 
 
-def unique_invoice_cod(length=16):
+def unique_invoice_cod(length: int = 16) -> str:
     """Generate a unique invoice code.
 
     Args:
@@ -101,17 +110,23 @@ def unique_invoice_cod(length=16):
 
     Raises:
         Exception: If unable to generate unique code after 5 attempts
+
     """
     max_attempts = 5
     for _attempt_number in range(max_attempts):
         invoice_code = generate_id(length)
         if not PaymentInvoice.objects.filter(cod=invoice_code).exists():
             return invoice_code
-    raise ValueError("Too many attempts to generate the code")
+    msg = "Too many attempts to generate the code"
+    raise ValueError(msg)
 
 
 def set_data_invoice(
-    request: HttpRequest, context: dict, invoice: PaymentInvoice, form: Form, association_id: int
+    request: HttpRequest,
+    context: dict,
+    invoice: PaymentInvoice,
+    form: Form,
+    association_id: int,
 ) -> None:
     """Set invoice data from form submission.
 
@@ -127,6 +142,7 @@ def set_data_invoice(
 
     Returns:
         None: Function modifies the invoice object in place
+
     """
     # Get the real display name of the current user
     member_real_display_name = context["member"].display_real()
@@ -183,6 +199,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
 
     Returns:
         None: Function modifies the invoice object in place
+
     """
     # Set invoice registration references
     invoice.idx = context["reg"].id
@@ -211,14 +228,16 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
         # Look for a registration question with matching name
         try:
             registration_question = RegistrationQuestion.objects.get(
-                event=context["reg"].run.event, name__iexact=question_name
+                event=context["reg"].run.event,
+                name__iexact=question_name,
             )
 
             # Handle single/multiple choice questions
             if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 selected_option_names = []
                 user_choices = RegistrationChoice.objects.filter(
-                    question=registration_question, reg_id=context["reg"].id
+                    question=registration_question,
+                    reg_id=context["reg"].id,
                 )
 
                 # Collect all selected option names
@@ -228,7 +247,8 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             else:
                 # Handle text-based questions
                 answer_value = RegistrationAnswer.objects.get(
-                    question=registration_question, reg_id=context["reg"].id
+                    question=registration_question,
+                    reg_id=context["reg"].id,
                 ).text
             placeholder_values[question_name] = answer_value
         except ObjectDoesNotExist:
@@ -236,7 +256,8 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             pass
 
     # Define replacement function for regex substitution
-    def replace_placeholder(pattern_match):
+    def replace_placeholder(pattern_match: re.Match) -> str:
+        """Replace placeholder with value from dict or keep original."""
         placeholder_key = pattern_match.group(1)
         return placeholder_values.get(placeholder_key, pattern_match.group(0))
 
@@ -244,7 +265,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     invoice.causal = re.sub(placeholder_pattern, replace_placeholder, custom_reason_template)
 
 
-def round_up_to_two_decimals(value_to_round):
+def round_up_to_two_decimals(value_to_round: float) -> float:
     """Round number up to two decimal places.
 
     Args:
@@ -252,19 +273,22 @@ def round_up_to_two_decimals(value_to_round):
 
     Returns:
         float: Number rounded up to 2 decimal places
+
     """
     return math.ceil(value_to_round * 100) / 100
 
 
-def update_invoice_gross_fee(request, invoice, amount, association_id, payment_method):
+def update_invoice_gross_fee(
+    invoice: PaymentInvoice, amount: Decimal, association_id: int, payment_method: PaymentMethod
+) -> float:
     """Update invoice with gross amount including payment processing fees.
 
     Args:
-        request: Django HTTP request object
         invoice: PaymentInvoice instance to update
         amount (Decimal): Base amount before fees
         association_id: Association instance ID
         payment_method (str): Payment method slug
+
     """
     # add fee for paymentmethod
     amount = float(amount)
@@ -283,7 +307,11 @@ def update_invoice_gross_fee(request, invoice, amount, association_id, payment_m
 
 
 def get_payment_form(
-    request: HttpRequest, form: Any, payment_type: str, context: dict[str, Any], invoice_key: str | None = None
+    request: HttpRequest,
+    form: Any,
+    payment_type: str,
+    context: dict[str, Any],
+    invoice_key: str | None = None,
 ) -> None:
     """Create or update payment invoice and prepare gateway-specific form.
 
@@ -306,6 +334,7 @@ def get_payment_form(
         - Updates context with invoice, payment forms, and method details
         - May create new PaymentInvoice object in database
         - Modifies invoice gross fee calculations
+
     """
     association_id: int = context["association_id"]
 
@@ -323,9 +352,9 @@ def get_payment_form(
     if invoice_key is not None:
         try:
             invoice = PaymentInvoice.objects.get(key=invoice_key, status=PaymentStatus.CREATED)
-        except Exception:
+        except Exception as e:
             # Invoice not found or invalid, will create new one
-            pass
+            logger.debug(f"Invoice {invoice_key} not found or invalid: {e}")
 
     # Create new invoice if existing one not found or invalid
     if not invoice:
@@ -346,11 +375,11 @@ def get_payment_form(
     set_data_invoice(request, context, invoice, form, association_id)
 
     # Calculate final amount including fees and update invoice
-    payment_amount = update_invoice_gross_fee(request, invoice, payment_amount, association_id, payment_method)
+    payment_amount = update_invoice_gross_fee(invoice, payment_amount, association_id, payment_method)
     context["invoice"] = invoice
 
     # Check if receipt is required for manual payments (applies to all payment types)
-    require_receipt = get_association_config(association_id, "payment_require_receipt", False)
+    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", False)
     context["require_receipt"] = require_receipt
 
     # Prepare gateway-specific forms based on selected payment method
@@ -379,7 +408,7 @@ def get_payment_form(
         get_satispay_form(request, context, invoice, payment_amount)
 
 
-def payment_received(invoice):
+def payment_received(invoice: PaymentInvoice) -> bool:
     """Process a received payment and update related records.
 
     Args:
@@ -387,12 +416,13 @@ def payment_received(invoice):
 
     Side effects:
         Creates accounting records, processes collections/donations
+
     """
     association_features = get_association_features(invoice.association_id)
     payment_fee = get_payment_fee(invoice.association_id, invoice.method.slug)
 
     if payment_fee > 0 and not AccountingItemTransaction.objects.filter(inv=invoice).exists():
-        _process_fee(association_features, payment_fee, invoice)
+        _process_fee(payment_fee, invoice)
 
     if invoice.typ == PaymentType.REGISTRATION:
         _process_payment(invoice)
@@ -409,8 +439,11 @@ def payment_received(invoice):
     return True
 
 
-def _process_collection(features, invoice):
+def _process_collection(features: dict, invoice: PaymentInvoice) -> None:
+    """Process collection item creation for an invoice if it doesn't exist."""
+    # Check if collection item already exists for this invoice
     if not AccountingItemCollection.objects.filter(inv=invoice).exists():
+        # Create new collection item from invoice data
         collection_item = AccountingItemCollection()
         collection_item.member_id = invoice.member_id
         collection_item.inv = invoice
@@ -419,12 +452,16 @@ def _process_collection(features, invoice):
         collection_item.collection_id = invoice.idx
         collection_item.save()
 
+        # Assign gifter badge if badge feature is enabled
         if "badge" in features:
             assign_badge(invoice.member, "gifter")
 
 
-def _process_donate(features, invoice):
+def _process_donate(features: dict, invoice: PaymentInvoice) -> None:
+    """Create donation accounting item and assign badge if enabled."""
+    # Check if donation accounting item already exists for this invoice
     if not AccountingItemDonation.objects.filter(inv=invoice).exists():
+        # Create and populate new donation accounting item
         accounting_item = AccountingItemDonation()
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
@@ -434,12 +471,16 @@ def _process_donate(features, invoice):
         accounting_item.descr = invoice.causal
         accounting_item.save()
 
+        # Assign donor badge if feature is enabled
         if "badge" in features:
             assign_badge(invoice.member, "donor")
 
 
-def _process_membership(invoice):
+def _process_membership(invoice: PaymentInvoice) -> None:
+    """Create membership accounting item if not already exists for the invoice."""
+    # Check if membership item already exists for this invoice
     if not AccountingItemMembership.objects.filter(inv=invoice).exists():
+        # Create and populate new membership accounting item
         accounting_item = AccountingItemMembership()
         accounting_item.year = datetime.now().year
         accounting_item.member_id = invoice.member_id
@@ -449,11 +490,12 @@ def _process_membership(invoice):
         accounting_item.save()
 
 
-def _process_payment(invoice):
+def _process_payment(invoice: PaymentInvoice) -> None:
     """Process a payment from an invoice and create accounting entries.
 
     Args:
         invoice: Invoice object to process payment for
+
     """
     if not AccountingItemPayment.objects.filter(inv=invoice).exists():
         registration = Registration.objects.get(pk=invoice.idx)
@@ -475,7 +517,7 @@ def _process_payment(invoice):
             process_payment(invoice.id)
 
 
-def _process_fee(features, fee_percentage: float, invoice) -> None:
+def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
     """Process payment processing fee for an invoice.
 
     Creates an accounting transaction to track payment processing fees
@@ -486,6 +528,7 @@ def _process_fee(features, fee_percentage: float, invoice) -> None:
         features: Feature configuration object
         fee_percentage: Fee percentage to apply to the invoice gross amount
         invoice: Invoice object containing payment details
+
     """
     # Create new accounting transaction for the processing fee
     accounting_transaction = AccountingItemTransaction()
@@ -509,11 +552,12 @@ def _process_fee(features, fee_percentage: float, invoice) -> None:
         accounting_transaction.save()
 
 
-def process_payment_invoice_status_change(invoice):
+def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
     """Process payment invoice status changes and trigger payment received.
 
     Args:
         invoice: PaymentInvoice instance being saved
+
     """
     if not invoice.pk:
         return
@@ -532,7 +576,7 @@ def process_payment_invoice_status_change(invoice):
     payment_received(invoice)
 
 
-def process_refund_request_status_change(refund_request):
+def process_refund_request_status_change(refund_request: HttpRequest) -> None:
     """Process refund request status changes.
 
     Args:
@@ -540,6 +584,7 @@ def process_refund_request_status_change(refund_request):
 
     Side effects:
         Creates accounting item when refund status changes to PAYED
+
     """
     if not refund_request.pk:
         return
@@ -585,6 +630,7 @@ def process_collection_status_change(collection: Collection) -> None:
     Note:
         Function returns early if collection has no primary key or if the
         previous status was already PAYED to prevent duplicate credits.
+
     """
     # Early return if collection hasn't been saved to database yet
     if not collection.pk:

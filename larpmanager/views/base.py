@@ -61,6 +61,7 @@ class MyLoginView(LoginView):
         Note:
             This method is called only after form validation has passed. The welcome_user
             function handles user greeting logic and session setup.
+
         """
         # Welcome the authenticated user and set up session state
         welcome_user(self.request, authentication_form.get_user())
@@ -85,6 +86,7 @@ def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:
 
     Note:
         Association ID 0 is reserved for the main/default organization.
+
     """
     # Check if this is the default/main association (ID 0)
     if request.association["id"] == 0:
@@ -110,13 +112,14 @@ def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
     Returns:
         HttpResponse: A rendered HTTP response containing the 404 error page
                      with the exception context.
+
     """
     # Render the custom 404 template with exception context
     # The 'exe' variable provides exception details to the template
     return render(request, "404.html", {"exe": exception})
 
 
-def error_500(request):
+def error_500(request: HttpRequest):
     """Handle 500 errors with custom template.
 
     Args:
@@ -124,6 +127,7 @@ def error_500(request):
 
     Returns:
         HttpResponse: Rendered 500 error page
+
     """
     return render(request, "500.html")
 
@@ -145,6 +149,7 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
 
     Note:
         The session token expires after 60 seconds for security purposes.
+
     """
     # Check if user is authenticated, redirect to login if not
     user = request.user
@@ -171,6 +176,7 @@ def get_base_domain(request: HttpRequest) -> str:
 
     Returns:
         Base domain (e.g., 'example.com' from 'subdomain.example.com').
+
     """
     host = request.get_host()
     host_parts = host.split(".")
@@ -184,7 +190,7 @@ def get_base_domain(request: HttpRequest) -> str:
 
 @require_POST
 def tutorial_query(request: HttpRequest) -> HttpResponse:
-    # Delegate to query_index for tutorial queries
+    """Delegate to query_index for tutorial queries."""
     return query_index(request)
 
 
@@ -197,6 +203,7 @@ def upload_media(request: HttpRequest) -> JsonResponse:
 
     Returns:
         JSON response with file location or error message
+
     """
     if request.method == "POST" and request.FILES.get("file"):
         file = request.FILES["file"]
@@ -233,6 +240,7 @@ def set_member_config(request: HttpRequest) -> JsonResponse:
         - Requires authenticated user
         - Converts string 'true'/'false' to boolean values
         - All parameter values are converted to lowercase for consistency
+
     """
     # Check user authentication status
     if not request.user.is_authenticated:

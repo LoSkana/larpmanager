@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import os
+from argparse import ArgumentParser
 
 from django.core.management import BaseCommand
 from django.utils import timezone
@@ -32,7 +33,8 @@ from larpmanager.views.orga.event import _prepare_backup
 class Command(BaseCommand):
     help = "Backup events"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: ArgumentParser) -> None:
+        """Add command line arguments for the backup command."""
         parser.add_argument("--path", type=str, required=True, help="Backup path")
 
     def handle(self, *args: tuple, **options: dict) -> None:
@@ -53,6 +55,7 @@ class Command(BaseCommand):
             - Creates directory structure: {path}/{event_id}/{year}/{month}/{day}/
             - Writes compressed ZIP backup files for each active run
             - Creates intermediate directories as needed
+
         """
         # Get current date for organizing backup files by date
         now_date = timezone.now().date()
@@ -73,7 +76,7 @@ class Command(BaseCommand):
                 str(now_date.year),
                 str(now_date.month).zfill(2),
                 str(now_date.day).zfill(2),
-                f"{str(run)}.zip",
+                f"{run!s}.zip",
             )
 
             # Create directory structure if it doesn't exist

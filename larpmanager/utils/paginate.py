@@ -1,3 +1,4 @@
+import logging
 from decimal import Decimal
 from typing import Any
 
@@ -33,6 +34,8 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.member import Membership
 
+logger = logging.getLogger(__name__)
+
 
 def paginate(
     request: HttpRequest,
@@ -42,8 +45,7 @@ def paginate(
     view_name: str,
     exe: bool = True,
 ) -> HttpResponse | JsonResponse:
-    """
-    Handle pagination for DataTables AJAX requests and initial page rendering.
+    """Handle pagination for DataTables AJAX requests and initial page rendering.
 
     This function serves dual purposes:
     1. Renders the initial template with table configuration for GET requests
@@ -60,6 +62,7 @@ def paginate(
     Returns:
         HttpResponse: Rendered template for GET requests
         JsonResponse: DataTables-formatted JSON for POST requests
+
     """
     model_queryset = pagination_model.objects
     # Extract model name for table identification
@@ -82,7 +85,11 @@ def paginate(
 
     # Get filtered elements and count based on search/filter criteria
     filtered_elements, filtered_records_count = _get_elements_query(
-        model_queryset, context, request, pagination_model, exe
+        model_queryset,
+        context,
+        request,
+        pagination_model,
+        exe,
     )
 
     # Get total count of all records (unfiltered)
@@ -100,13 +107,12 @@ def paginate(
             "recordsTotal": total_records_count,
             "recordsFiltered": filtered_records_count,
             "data": datatables_rows,
-        }
+        },
     )
 
 
 def _get_elements_query(cls, context: dict, request, model_type, is_executive: bool = True) -> tuple[any, int]:
-    """
-    Get filtered and paginated query elements based on context and request parameters.
+    """Get filtered and paginated query elements based on context and request parameters.
 
     Args:
         cls: The model class to query
@@ -117,6 +123,7 @@ def _get_elements_query(cls, context: dict, request, model_type, is_executive: b
 
     Returns:
         tuple: (filtered_elements_queryset, total_filtered_count)
+
     """
     # Extract pagination and filtering parameters from request
     start_index, page_length, order_params, filter_params = _get_query_params(request)
@@ -177,6 +184,7 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
 
     Returns:
         Filtered queryset with applied search conditions
+
     """
     # Get field mapping configuration for search operations
     field_map = _get_field_map()
@@ -187,10 +195,10 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
 
         # Validate column index is within bounds
         if column_index >= len(context["fields"]):
-            print(f"this shouldn't happen! _get_ordering {column_filters} {context['fields']}")
+            logger.error(f"Column index out of bounds in _get_ordering: {column_filters} {context['fields']}")
 
         # Extract field and name from context fields
-        field_name, display_name = context["fields"][column_index - 1]
+        field_name, _display_name = context["fields"][column_index - 1]
 
         # Handle special case for run field with search capability
         if field_name == "run":
@@ -203,10 +211,7 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
             continue
 
         # Map field to search fields using field_map or use as single field
-        if field_name in field_map:
-            search_fields = field_map[field_name]
-        else:
-            search_fields = [field_name]
+        search_fields = field_map.get(field_name, [field_name])
 
         # Build OR query for all mapped fields with case-insensitive search
         q_filter = Q()
@@ -228,6 +233,7 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
     Returns:
         List of Django ORM ordering field names with '-' prefix for descending order
+
     """
     ordering_fields = []
 
@@ -248,18 +254,15 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
         # Validate column index is within bounds
         if column_index_int >= len(context["fields"]):
-            print(f"this shouldn't happen! _get_ordering {column_order} {context['fields']}")
-        field_name, display_name = context["fields"][column_index_int - 1]
+            logger.error(f"Column index out of bounds in _get_ordering: {column_order} {context['fields']}")
+        field_name, _display_name = context["fields"][column_index_int - 1]
 
         # Skip callback fields as they can't be used for database ordering
         if field_name in context.get("callbacks", {}):
             continue
 
         # Map field name if transformation exists, otherwise use as-is
-        if field_name in field_map:
-            mapped_fields = field_map[field_name]
-        else:
-            mapped_fields = [field_name]
+        mapped_fields = field_map.get(field_name, [field_name])
 
         # Add ordering fields with proper direction prefix
         for mapped_field in mapped_fields:
@@ -273,8 +276,7 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
 def _get_field_map() -> dict[str, list[str]]:
     """Return field mapping for member-related queries."""
-    member_field_map = {"member": ["member__surname", "member__name"]}
-    return member_field_map
+    return {"member": ["member__surname", "member__name"]}
 
 
 def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[str, str]]:
@@ -289,6 +291,7 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
             - length: Number of records to return
             - order: List of column names with ordering prefixes ('-' for desc)
             - filters: Dictionary mapping column names to search values
+
     """
     # Extract pagination parameters
     start = int(request.POST.get("start", 0))
@@ -335,6 +338,7 @@ def _prepare_data_json(context: dict, elements: list, view: str, edit: str, exe:
     Returns:
         List of dictionaries where each dict represents a row with string keys
         corresponding to column indices and HTML/text values
+
     """
     table_rows_data = []
 
@@ -394,6 +398,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
     Returns:
         Modified queryset with applied select_related, prefetch_related,
         annotations, and ordering based on the model type
+
     """
     # Apply select_related optimization for AccountingItem and subclasses
     if issubclass(typ, AccountingItem):
@@ -410,7 +415,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
                 When(status=PaymentStatus.SUBMITTED, then=Value(0)),
                 default=Value(1),
                 output_field=IntegerField(),
-            )
+            ),
         )
         elements = elements.order_by("is_submitted", "-created")
 
@@ -421,7 +426,8 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
 
         # Subquery to get the latest membership credit for each member
         latest_membership_subquery = Membership.objects.filter(
-            member_id=OuterRef("member_id"), association_id=context["association_id"]
+            member_id=OuterRef("member_id"),
+            association_id=context["association_id"],
         ).order_by("id")[:1]
         elements = elements.annotate(credits=Subquery(latest_membership_subquery.values("credit")))
 
@@ -433,7 +439,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
         decimal_field = DecimalField(max_digits=value_field.max_digits, decimal_places=value_field.decimal_places)
 
         # Define zero value with proper decimal field type
-        zero_value = Value(Decimal("0"), output_field=decimal_field)
+        zero_value = Value(Decimal(0), output_field=decimal_field)
 
         # Subquery to calculate total transaction value per invoice
         transaction_total_subquery = (

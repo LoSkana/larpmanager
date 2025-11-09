@@ -48,9 +48,9 @@ repos:
     hooks:
       - id: ruff
         args: [--fix]
-        exclude: ^(larpmanager/tests/|refactor/)
+        exclude: ^(larpmanager/tests/|larpmanager/migrations/|refactor/|scripts/)
       - id: ruff-format
-        exclude: ^(larpmanager/tests/|refactor/)
+        exclude: ^(larpmanager/tests/|larpmanager/migrations/|refactor/|scripts/)
 
   - repo: local
     hooks:

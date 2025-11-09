@@ -17,18 +17,16 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import contextlib
 import io
 import logging
 import os
 import os.path
 import re
-import shutil
-import time
 import zipfile
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-import lxml.etree
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth.models import AnonymousUser
@@ -73,6 +71,7 @@ def fix_filename(filename):
 
     Returns:
         str: Sanitized filename with only alphanumeric characters and spaces
+
     """
     return re.sub(r"[^A-Za-z0-9 ]+", "", filename)
 
@@ -86,6 +85,7 @@ def reprint(file_path):
 
     Returns:
         bool: True if file should be regenerated (debug mode, missing, or older than 1 day)
+
     """
     if conf_settings.DEBUG:
         return True
@@ -110,6 +110,7 @@ def return_pdf(file_path, filename):
 
     Raises:
         Http404: If PDF file is not found
+
     """
     try:
         pdf_file = open(file_path, "rb")
@@ -118,7 +119,8 @@ def return_pdf(file_path, filename):
         response["Content-Disposition"] = f"inline;filename={fix_filename(filename)}.pdf"
         return response
     except FileNotFoundError as err:
-        raise Http404("File not found") from err
+        msg = "File not found"
+        raise Http404(msg) from err
 
 
 def link_callback(uri: str, rel: str) -> str:
@@ -137,6 +139,7 @@ def link_callback(uri: str, rel: str) -> str:
     Example:
         >>> link_callback('/static/css/style.css', '')
         '/path/to/static/css/style.css'
+
     """
     # Get Django settings for URL and filesystem paths
     s_url = conf_settings.STATIC_URL
@@ -179,11 +182,16 @@ def add_pdf_instructions(context: dict) -> None:
         - Updates context with 'page_css', 'header_content', 'footer_content' keys
         - Replaces template variables with actual values
         - Replaces utility codes with URLs
+
     """
     # Extract PDF configuration from event settings
     for instruction_key in ["page_css", "header_content", "footer_content"]:
         context[instruction_key] = get_event_config(
-            context["event"].id, instruction_key, "", context, bypass_cache=True
+            context["event"].id,
+            instruction_key,
+            "",
+            context,
+            bypass_cache=True,
         )
 
     # Build replacement codes dictionary with event and character data
@@ -241,6 +249,7 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, html: boo
 
     Side Effects:
         Creates a PDF file at the specified output_filename path
+
     """
     # Render HTML content based on input type
     if html:
@@ -288,6 +297,7 @@ def print_character(context: dict, force: bool = False) -> HttpResponse:
 
     Returns:
         PDF response dictionary for character sheet
+
     """
     # Get the file path for the character sheet PDF
     file_path = context["character"].get_sheet_filepath(context["run"])
@@ -312,6 +322,7 @@ def print_character_friendly(context: dict, force: bool = False) -> HttpResponse
 
     Returns:
         HTTP response containing the PDF file
+
     """
     # Get the file path for the friendly character sheet
     file_path = context["character"].get_sheet_friendly_filepath(context["run"])
@@ -349,6 +360,7 @@ def print_faction(context: dict, force: bool = False) -> HttpResponse:
     Side Effects:
         - Sets context["pdf"] = True for template rendering flags
         - Creates/updates faction PDF file in the media directory
+
     """
     # Get the file path for the faction sheet PDF
     file_path = context["faction"].get_sheet_filepath(context["run"])
@@ -373,6 +385,7 @@ def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
 
     Returns:
         HTTP response with the relationships PDF
+
     """
     # Get the filepath for the character relationships PDF
     filepath = context["character"].get_relationships_filepath(context["run"])
@@ -388,24 +401,19 @@ def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
 
 
 def print_gallery(context: dict, force: bool = False) -> object:
-    """
-    Generate and return a PDF gallery of character portraits.
+    """Generate and return a PDF gallery of character portraits.
 
     Creates a PDF containing character portraits for characters with first aid
     capabilities. The PDF is cached and only regenerated when forced or when
     the cache is outdated.
 
-    Parameters
-    ----------
-    context : dict
-        Context dictionary containing run information and character data
-    force : bool, default False
-        Whether to force regeneration of the PDF even if cache is valid
+    Args:
+        context: Context dictionary containing run information and character data
+        force: Whether to force regeneration of the PDF even if cache is valid
 
-    Returns
-    -------
-    object
+    Returns:
         PDF response object for download/display
+
     """
     # Get the filepath where the gallery PDF should be stored
     filepath = context["run"].get_gallery_filepath()
@@ -419,7 +427,7 @@ def print_gallery(context: dict, force: bool = False) -> object:
         context["first_aid"] = []
 
         # Iterate through all characters to find those with first aid
-        for _character_number, character_element in context["chars"].items():
+        for character_element in context["chars"].values():
             if "first_aid" in character_element and character_element["first_aid"] == "y":
                 context["first_aid"].append(character_element)
 
@@ -442,6 +450,7 @@ def print_profiles(context: dict, force: bool = False) -> HttpResponse:
 
     Returns:
         Tuple containing PDF response and filename
+
     """
     # Get the filepath for the profiles PDF
     filepath = context["run"].get_profiles_filepath()
@@ -466,6 +475,7 @@ def print_handout(context: dict, force: bool = True) -> Any:
 
     Returns:
         PDF response for the handout
+
     """
     # Get the file path for the handout PDF
     file_path = context["handout"].get_filepath(context["run"])
@@ -493,41 +503,45 @@ def print_volunteer_registry(context: dict) -> str:
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
-def cleanup_handout_pdfs_before_delete(handout):
+def cleanup_handout_pdfs_before_delete(handout) -> None:
     """Handle handout pre-delete PDF cleanup.
 
     Args:
         handout: Handout instance being deleted
+
     """
     for event_run in handout.event.runs.all():
         safe_remove(handout.get_filepath(event_run))
 
 
-def cleanup_handout_pdfs_after_save(instance):
+def cleanup_handout_pdfs_after_save(instance) -> None:
     """Handle handout post-save PDF cleanup.
 
     Args:
         instance: Handout instance that was saved
+
     """
     for run in instance.event.runs.all():
         safe_remove(instance.get_filepath(run))
 
 
-def cleanup_handout_template_pdfs_before_delete(handout_template):
+def cleanup_handout_template_pdfs_before_delete(handout_template) -> None:
     """Handle handout template pre-delete PDF cleanup.
 
     Args:
         handout_template: HandoutTemplate instance being deleted
+
     """
     for event_run in handout_template.event.runs.all():
         safe_remove(handout_template.get_filepath(event_run))
 
 
-def cleanup_handout_template_pdfs_after_save(instance):
+def cleanup_handout_template_pdfs_after_save(instance) -> None:
     """Handle handout template post-save PDF cleanup.
 
     Args:
         instance: HandoutTemplate instance that was saved
+
     """
     for run in instance.event.runs.all():
         for el in instance.handouts.all():
@@ -536,10 +550,8 @@ def cleanup_handout_template_pdfs_after_save(instance):
 
 def safe_remove(file_path: str) -> None:
     """Remove a file, ignoring if it doesn't exist."""
-    try:
+    with contextlib.suppress(FileNotFoundError):
         os.remove(file_path)
-    except FileNotFoundError:
-        pass
 
 
 def remove_run_pdf(event: Event) -> None:
@@ -557,6 +569,7 @@ def delete_character_pdf_files(instance, single=None, runs=None) -> None:
         instance: Character instance whose PDF files should be deleted
         single: Optional specific run to delete files for
         runs: Optional queryset of runs, defaults to all event runs
+
     """
     # Default to all runs if none specified
     if not runs:
@@ -571,61 +584,67 @@ def delete_character_pdf_files(instance, single=None, runs=None) -> None:
         safe_remove(instance.get_relationships_filepath(run))
 
 
-def cleanup_character_pdfs_before_delete(character):
+def cleanup_character_pdfs_before_delete(character) -> None:
     """Handle character pre-delete PDF cleanup.
 
     Args:
         character: Character instance being deleted
+
     """
     remove_run_pdf(character.event)
     delete_character_pdf_files(character)
 
 
-def cleanup_character_pdfs_on_save(instance):
+def cleanup_character_pdfs_on_save(instance) -> None:
     """Handle character post-save PDF cleanup.
 
     Args:
         instance: Character instance that was saved
+
     """
     remove_run_pdf(instance.event)
     delete_character_pdf_files(instance)
 
 
-def cleanup_relationship_pdfs_before_delete(instance):
+def cleanup_relationship_pdfs_before_delete(instance) -> None:
     """Handle player relationship pre-delete PDF cleanup.
 
     Args:
         instance: PlayerRelationship instance being deleted
+
     """
     for relationship_character_run in instance.reg.rcrs.all():
         delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
 
 
-def cleanup_relationship_pdfs_after_save(instance):
+def cleanup_relationship_pdfs_after_save(instance) -> None:
     """Handle player relationship post-save PDF cleanup.
 
     Args:
         instance: PlayerRelationship instance that was saved
+
     """
     for el in instance.reg.rcrs.all():
         delete_character_pdf_files(el.character, instance.reg.run)
 
 
-def cleanup_faction_pdfs_before_delete(instance):
+def cleanup_faction_pdfs_before_delete(instance) -> None:
     """Handle faction pre-delete PDF cleanup.
 
     Args:
         instance: Faction instance being deleted
+
     """
     for character in instance.event.character_set.all():
         delete_character_pdf_files(character)
 
 
-def cleanup_faction_pdfs_on_save(instance):
+def cleanup_faction_pdfs_on_save(instance) -> None:
     """Handle faction post-save PDF cleanup.
 
     Args:
         instance: Faction instance that was saved
+
     """
     runs = instance.event.runs.all()
     for char in instance.characters.all():
@@ -645,12 +664,13 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
         delete_character_pdf_files(character, trait_instance.run)
 
 
-def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created):
+def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created) -> None:
     """Handle assignment trait post-save PDF cleanup.
 
     Args:
         assignment_trait_instance: AssignmentTrait instance that was saved
         is_newly_created: Boolean indicating if instance was created
+
     """
     if not assignment_trait_instance.member or not is_newly_created:
         return
@@ -661,9 +681,9 @@ def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created
 # ## TASKS
 
 
-def print_handout_go(context: dict, character: Character) -> HttpResponse:
-    """Retrieve character handout and generate printable version."""
-    get_handout(context, character)
+def print_handout_go(context: dict, handout_id: int) -> HttpResponse:
+    """Retrieve handout and generate printable version."""
+    get_handout(context, handout_id)
     return print_handout(context)
 
 
@@ -675,6 +695,7 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 
     Returns:
         HttpRequest object with association and user attributes set.
+
     """
     request = HttpRequest()
     # Attach association from cache
@@ -685,15 +706,15 @@ def get_fake_request(association_slug: str) -> HttpRequest:
 
 
 @background_auto(queue="pdf")
-def print_handout_bkg(association_slug: str, event_slug: str, c: Character) -> None:
-    """Prints character handout by creating a fake request and delegating to print_handout_go."""
+def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -> None:
+    """Print handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(association_slug)
     context = get_event_context(request, event_slug)
-    print_handout_go(context, c)
+    print_handout_go(context, handout_id)
 
 
 def print_character_go(context: dict, character) -> None:
-    """Prints character information, handling missing character gracefully."""
+    """Print character information, handling missing character gracefully."""
     try:
         # Validate character access and retrieve character data
         get_char_check(None, context, character, False, True)
@@ -726,6 +747,7 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
 
     Returns:
         None
+
     """
     # Create fake request context and get event run data
     request = get_fake_request(association_slug)
@@ -744,195 +766,15 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
         print_handout_go(context, handout_number)
 
 
-# ## OLD PRINTING
-
-
-def odt_template(context: dict, char: dict, fp: str, template: str, aux_template: str) -> None:
-    """Execute ODT template generation with retry mechanism.
-
-    Attempts to execute ODT template generation with automatic retry
-    on failure. Logs errors and implements exponential backoff.
-
-    Args:
-        context: Context dictionary for template rendering
-        char: Character dict data for template processing
-        fp: File path for output generation
-        template: Primary template identifier
-        aux_template: Auxiliary template identifier
-
-    Returns:
-        None
-
-    Raises:
-        Exception: After maximum retry attempts are exhausted
-    """
-    attempt = 0
-    excepts = []
-    max_attempts = 5
-
-    # Retry loop with maximum attempt limit
-    while attempt < max_attempts:
-        try:
-            # Execute the main ODT template processing
-            exec_odt_template(context, char, fp, template, aux_template)
-            return
-        except Exception as e:
-            # Log detailed error information for debugging
-            logger.error(f"Error in PDF creation: {e}")
-            logger.error(f"Character: {char}")
-            logger.error(f"Template: {template}")
-
-            # Increment attempt counter and store exception
-            attempt += 1
-            excepts.append(e)
-
-            # Wait before retry to allow transient issues to resolve
-            time.sleep(2)
-
-    # Log final error after all attempts exhausted
-    logger.error(f"ERROR IN odt_template: {excepts}")
-
-
-def exec_odt_template(
-    context: dict, character: dict, output_file_path: str, template: object, aux_template: object
-) -> None:
-    """Process ODT template to generate PDF for character data.
-
-    Args:
-        context: Context dictionary containing template rendering data
-        character: Character data dictionary with character information
-        output_file_path: Output file path where the generated PDF will be saved
-        template: ODT template file object with path attribute
-        aux_template: Auxiliary template object for content processing
-
-    Returns:
-        None: Function writes PDF file to specified path
-    """
-    # Set up working directory based on character number
-    working_dir = os.path.dirname(output_file_path)
-    working_dir = os.path.join(working_dir, str(character["number"]))
-    logger.debug(f"Character PDF working directory: {working_dir}")
-
-    # Clean up existing output file if present
-    if os.path.exists(output_file_path):
-        os.remove(output_file_path)
-
-    # Set up temporary working directory for processing
-    working_dir += "-work"
-    if os.path.exists(working_dir):
-        logger.debug(f"Cleaning up existing character directory: {working_dir}")
-        shutil.rmtree(working_dir)
-    os.makedirs(working_dir)
-
-    # Create subdirectory for unzipped template content
-    unzipped_template_dir = os.path.join(working_dir, "zipdd")
-    os.makedirs(unzipped_template_dir)
-
-    # Extract ODT template to working directory
-    os.chdir(unzipped_template_dir)
-    os.system(f"unzip -q {template.path}")
-
-    # Process template content with character data
-    update_content(context, working_dir, unzipped_template_dir, character, aux_template)
-
-    # Repackage modified content back into ODT format
-    os.chdir(unzipped_template_dir)
-    os.system("zip -q -r ../out.odt *")
-
-    # Convert ODT to PDF using unoconv
-    os.chdir(working_dir)
-    os.system("/usr/bin/unoconv -f pdf out.odt")
-
-    # Move generated PDF to final destination
-    os.rename("out.pdf", output_file_path)
-    # ## TODO shutil.rmtree(working_dir)
-    # if os.path.exists(working_dir):
-    # shutil.rmtree(working_dir)
-
-
-# translate html markup to odt
-def get_odt_content(context: dict, working_dir: str, aux_template) -> dict:
-    """
-    Extract ODT content from HTML template for PDF generation.
-
-    Converts an HTML template to ODT format using LibreOffice, then extracts
-    and parses the XML content to retrieve text, automatic styles, and document
-    styles for further processing.
-
-    Args:
-        context: Template context dictionary containing variables for rendering
-        working_dir: Working directory path for temporary file operations
-        aux_template: Django template object to be rendered and converted
-
-    Returns:
-        Dictionary containing extracted ODT elements:
-            - txt: List of text elements from content.xml
-            - auto: List of automatic style elements from content.xml
-            - styles: List of style elements from styles.xml
-
-    Raises:
-        ValueError: If required XML elements are not found in the ODT files
-    """
-    # Render the Django template with provided context
-    rendered_html = aux_template.render(context)
-
-    # Write rendered HTML to temporary file for LibreOffice conversion
-    output_html_path = os.path.join(working_dir, "auxiliary.html")
-    html_file = open(output_html_path, "w")
-    html_file.write(rendered_html)
-    html_file.close()
-
-    # Convert HTML to ODT format using LibreOffice headless mode
-    os.chdir(working_dir)
-    os.system("soffice --headless --convert-to odt auxiliary.html")
-
-    # Prepare extraction directory and clean up any existing content
-    auxiliary_extraction_dir = os.path.join(working_dir, "aux")
-    if os.path.exists(auxiliary_extraction_dir):
-        shutil.rmtree(auxiliary_extraction_dir)
-    os.makedirs(auxiliary_extraction_dir)
-
-    # Extract ODT file contents (ODT is essentially a ZIP archive)
-    os.chdir(auxiliary_extraction_dir)
-    os.system("unzip -q ../aux.odt")
-
-    # Parse content.xml to extract text and automatic style elements
-    content_document = lxml.etree.parse("content.xml")
-    text_elements = content_document.xpath('//*[local-name()="text"]')
-    automatic_style_elements = content_document.xpath('//*[local-name()="automatic-styles"]')
-
-    # Validate that required elements exist in content.xml
-    if not text_elements or not automatic_style_elements:
-        raise ValueError("Required XML elements not found in content.xml")
-    text_root = text_elements[0]
-    automatic_styles_root = automatic_style_elements[0]
-
-    # Parse styles.xml to extract document style definitions
-    styles_document = lxml.etree.parse("styles.xml")
-    style_elements = styles_document.xpath('//*[local-name()="styles"]')
-
-    # Validate that required elements exist in styles.xml
-    if not style_elements:
-        raise ValueError("Required XML elements not found in styles.xml")
-    styles_root = style_elements[0]
-
-    # Return extracted content as dictionary with child elements
-    return {
-        "txt": text_root.getchildren(),
-        "auto": automatic_styles_root.getchildren(),
-        "styles": styles_root.getchildren(),
-    }
-
-
 def clean_tag(tag):
-    """
-    Clean XML tag by removing namespace prefix.
+    """Clean XML tag by removing namespace prefix.
 
     Args:
         tag: XML tag string to clean
 
     Returns:
         str: Cleaned tag without namespace prefix
+
     """
     closing_brace_index = tag.find("}")
     if closing_brace_index >= 0:
@@ -940,13 +782,13 @@ def clean_tag(tag):
     return tag
 
 
-def replace_data(template_path, character_data):
-    """
-    Replace character data placeholders in template file.
+def replace_data(template_path, character_data) -> None:
+    """Replace character data placeholders in template file.
 
     Args:
         template_path: Path to template file
         character_data: Character data dictionary with replacement values
+
     """
     with open(template_path) as template_file:
         file_content = template_file.read()
@@ -961,97 +803,6 @@ def replace_data(template_path, character_data):
         template_file.write(file_content)
 
 
-def update_content(context: Any, working_dir: str, zip_dir: str, char: Any, aux_template: str) -> None:
-    """Update PDF content for character sheets.
-
-    Modifies LibreOffice document content with character data for PDF
-    generation, handling template replacement and content formatting.
-
-    Args:
-        context: Context object for processing
-        working_dir: Working directory path for temporary files
-        zip_dir: Directory containing extracted ODT files
-        char: Character object containing data for replacement
-        aux_template: Auxiliary template identifier
-
-    Raises:
-        ValueError: If required XML elements are not found in document
-    """
-    # Update content.xml with character data
-    content_xml_path = os.path.join(zip_dir, "content.xml")
-    replace_data(content_xml_path, char)
-
-    # Parse content document and get template elements
-    content_document = lxml.etree.parse(content_xml_path)
-    template_elements = get_odt_content(context, working_dir, aux_template)
-
-    # Find and clear automatic styles section
-    automatic_styles_elements = content_document.xpath('//*[local-name()="automatic-styles"]')
-    if not automatic_styles_elements:
-        raise ValueError("automatic-styles element not found in content.xml")
-
-    automatic_styles = automatic_styles_elements[0]
-    # Remove existing child elements from styles
-    for child_element in automatic_styles.getchildren():
-        automatic_styles.remove(child_element)
-
-    # Add new automatic styles, removing master-page-name attributes
-    for child_element in template_elements["auto"]:
-        master_page_attribute = None
-        for attribute_key in child_element.attrib.keys():
-            if clean_tag(attribute_key) == "master-page-name":
-                master_page_attribute = attribute_key
-
-        # Remove master-page attribute if found
-        if master_page_attribute is not None:
-            del child_element.attrib[master_page_attribute]
-        automatic_styles.append(child_element)
-
-    # Find and replace content placeholder with actual content
-    content_placeholder = content_document.xpath('//*[text()="@content@"]')
-    if content_placeholder:
-        content_placeholder = content_placeholder[0]
-        parent_element = content_placeholder.getparent()
-        parent_element.remove(content_placeholder)
-
-        # Append text elements, skipping sequence declarations
-        for element in template_elements["txt"]:
-            if clean_tag(element.tag) == "sequence-decls":
-                continue
-            parent_element.append(element)
-
-    # Write updated content back to file
-    content_document.write(content_xml_path, pretty_print=True)
-
-    # Update styles.xml with character data
-    styles_xml_path = os.path.join(zip_dir, "styles.xml")
-    replace_data(styles_xml_path, char)
-
-    # Parse styles document and find styles section
-    styles_document = lxml.etree.parse(styles_xml_path)
-    styles_elements = styles_document.xpath('//*[local-name()="styles"]')
-    if not styles_elements:
-        raise ValueError("styles element not found in styles.xml")
-
-    styles_section = styles_elements[0]
-
-    # Add style elements from template
-    # Note: Commented code shows previous filtering logic for specific styles
-    for child_element in template_elements["styles"]:
-        # ~ Skip = false
-        # ~ if ch.tag.endswith("default-style"):
-        # ~ skip = True
-        # ~ for key in ch.attrib:
-        # ~ if key.endswith("name") and ch.attrib[key] in ["Footer", "Header", "Title", "Subtitle", "Text_20_body", "Heading_20_1", "Heading_20_2"]:
-        # ~ skip = True
-        # ~ if skip:
-        # ~ continue
-        styles_section.append(child_element)
-
-    # Write updated styles back to file
-    styles_document.write(styles_xml_path, pretty_print=True)
-
-
 def get_trait_character(run: Run, number: int) -> Character | None:
     """Get the character assigned to a trait number in a specific run.
 
@@ -1061,6 +812,7 @@ def get_trait_character(run: Run, number: int) -> Character | None:
 
     Returns:
         The Character assigned to the trait, or None if not found.
+
     """
     try:
         # Find the trait by event and number
@@ -1071,7 +823,8 @@ def get_trait_character(run: Run, number: int) -> Character | None:
 
         # Find the character registered for this member in the run
         registration_character_rels = RegistrationCharacterRel.objects.filter(
-            reg__run=run, reg__member=member
+            reg__run=run,
+            reg__member=member,
         ).select_related("character")
 
         if not registration_character_rels.exists():
@@ -1108,6 +861,7 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     Side Effects:
         - Generates PDF files in the media directory as needed
         - Displays warning messages to user for any failed PDF generations
+
     """
     # Create in-memory zip file buffer for PDF collection
     zip_buffer = io.BytesIO()
@@ -1145,6 +899,7 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
         - Generates handout PDF files if needed
         - Adds PDFs to zip_file
         - Displays warning messages for failed generations
+
     """
     # Iterate through all handouts in the event
     for handout in context["event"].get_elements(Handout):
@@ -1183,6 +938,7 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
         - Generates faction PDF files if needed
         - Adds PDFs to zip_file
         - Displays warning messages for failed generations
+
     """
     # Iterate through all factions in the event
     for faction in context["event"].get_elements(Faction):
@@ -1202,7 +958,11 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
 
                 # Load custom faction fields for the sheet
                 context["fact"] = get_writing_element_fields(
-                    context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
+                    context,
+                    "faction",
+                    QuestionApplicable.FACTION,
+                    context["sheet_faction"]["id"],
+                    only_visible=True,
                 )
 
                 filepath = context["faction"].get_sheet_filepath(context["run"])
@@ -1235,6 +995,7 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
         - Generates character PDF files if needed
         - Adds PDFs to zip_file
         - Displays warning messages for failed generations
+
     """
     # Iterate through all characters in the event
     for character in context["event"].get_elements(Character):
@@ -1272,6 +1033,7 @@ def _bulk_profiles(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
         - Generates profiles PDF file if needed
         - Adds PDF to zip_file
         - Displays warning message if generation fails
+
     """
     # Check if profiles PDF was requested
     if request.POST.get("profiles"):
@@ -1305,6 +1067,7 @@ def _bulk_gallery(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile
         - Generates gallery PDF file if needed
         - Adds PDF to zip_file
         - Displays warning message if generation fails
+
     """
     # Check if gallery PDF was requested
     if request.POST.get("gallery"):

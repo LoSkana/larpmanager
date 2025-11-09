@@ -28,7 +28,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, login_user, s
 pytestmark = pytest.mark.e2e
 
 
-def test_user_registration_form_gift(pw_page):
+def test_user_registration_form_gift(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -44,7 +44,7 @@ def test_user_registration_form_gift(pw_page):
     gift(page, live_server)
 
 
-def prepare(page, live_server):
+def prepare(page, live_server) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
 
@@ -78,7 +78,7 @@ def prepare(page, live_server):
     go_to(page, live_server, "/test/manage/form/")
 
 
-def field_choice(page, live_server):
+def field_choice(page, live_server) -> None:
     # create single choice
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -110,7 +110,7 @@ def field_choice(page, live_server):
     submit_confirm(page)
 
 
-def field_multiple(page, live_server):
+def field_multiple(page, live_server) -> None:
     # create multiple choice
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("m")
@@ -154,7 +154,7 @@ def field_multiple(page, live_server):
     page.get_by_role("link", name="New").click()
 
 
-def field_text(page, live_server):
+def field_text(page, live_server) -> None:
     # create text
     page.locator("#id_typ").select_option("t")
     page.locator("#id_description").click()
@@ -196,7 +196,7 @@ def field_text(page, live_server):
     expect(page.get_by_label("choice")).to_contain_text("secondas")
 
 
-def gift(page, live_server):
+def gift(page, live_server) -> None:
     # make ticket giftable
     go_to(page, live_server, "/test/manage/tickets/")
     page.get_by_role("link", name="").click()

@@ -1,5 +1,4 @@
-"""
-Script to analyze Python files and count function invocations.
+"""Script to analyze Python files and count function invocations.
 
 This script walks through all .py files in the larpmanager codebase, identifies all function
 definitions, and counts how many times each function is called from within other
@@ -18,14 +17,14 @@ from pathlib import Path
 class FunctionAnalyzer(ast.NodeVisitor):
     """AST visitor to collect function definitions and their invocations."""
 
-    def __init__(self, path):
+    def __init__(self, path) -> None:
         self.path = path
         self.functions = []  # List of (function_name, function_number) tuples
         self.function_counts = defaultdict(int)  # Track count of each function name
         self.invocations = []  # List of function names called in this file
         self.current_function = None
 
-    def visit_FunctionDef(self, node):
+    def visit_FunctionDef(self, node) -> None:
         """Visit function definitions."""
         # Count occurrence of this function name in this file
         self.function_counts[node.name] += 1
@@ -44,11 +43,11 @@ class FunctionAnalyzer(ast.NodeVisitor):
         # Restore previous function context
         self.current_function = previous_function
 
-    def visit_AsyncFunctionDef(self, node):
+    def visit_AsyncFunctionDef(self, node) -> None:
         """Visit async function definitions."""
         self.visit_FunctionDef(node)
 
-    def visit_Call(self, node):
+    def visit_Call(self, node) -> None:
         """Visit function calls."""
         # Only count calls that happen inside a function
         if self.current_function is not None:
@@ -71,17 +70,17 @@ class FunctionAnalyzer(ast.NodeVisitor):
 
 
 def analyze_file(path):
-    """
-    Analyze a single Python file for function definitions and invocations.
+    """Analyze a single Python file for function definitions and invocations.
 
     Args:
         path: Path to the Python file
 
     Returns:
         tuple: (functions set, invocations list) or (None, None) if parsing fails
+
     """
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, "r", encoding="utf-8") as f:
             content = f.read()
 
         tree = ast.parse(content, filename=str(path))
@@ -95,17 +94,17 @@ def analyze_file(path):
 
 
 def find_python_files(root_dir):
-    """
-    Find all Python files in the larpmanager directory.
+    """Find all Python files in the larpmanager directory.
 
     Args:
         root_dir: Root directory to search
 
     Yields:
         Path objects for each .py file found in larpmanager/
+
     """
     root_path = Path(root_dir)
-    larpmanager_dir = root_path / 'larpmanager'
+    larpmanager_dir = root_path / "larpmanager"
 
     if not larpmanager_dir.exists():
         print(f"Warning: larpmanager directory not found at {larpmanager_dir}")
@@ -113,18 +112,18 @@ def find_python_files(root_dir):
 
     # Directories to skip
     skip_dirs = {
-        '__pycache__', '.pytest_cache', 'migrations', 'staticfiles',
-        '.tox', 'dist', 'build', '.eggs', 'tests'
+        "__pycache__", ".pytest_cache", "migrations", "staticfiles",
+        ".tox", "dist", "build", ".eggs", "tests"
     }
 
-    for py_file in larpmanager_dir.rglob('*.py'):
+    for py_file in larpmanager_dir.rglob("*.py"):
         # Skip files in excluded directories
         if any(skip_dir in py_file.parts for skip_dir in skip_dirs):
             continue
         yield py_file
 
 
-def main():
+def main() -> None:
     """Main function to run the analysis."""
     # Get the project root (parent of refactor directory)
     script_dir = Path.cwd()
@@ -175,26 +174,26 @@ def main():
             # A function might be defined in multiple files (same name)
             for abs_path, rel_path, func_number in all_defined_functions[func_name]:
                 results.append({
-                    'name': func_name,
-                    'path': rel_path,
-                    'invocation_count': count,
-                    'function_number': func_number
+                    "name": func_name,
+                    "path": rel_path,
+                    "invocation_count": count,
+                    "function_number": func_number
                 })
 
     # Sort by invocation count (descending), then by function name
-    results.sort(key=lambda x: (-x['invocation_count'], x['name'], x['path']))
+    results.sort(key=lambda x: (-x["invocation_count"], x["name"], x["path"]))
 
     # Write results to CSV file
-    output_file = Path('refactor/function_invocations.csv')
-    with open(output_file, 'w', encoding='utf-8') as f:
+    output_file = Path("refactor/function_invocations.csv")
+    with open(output_file, "w", encoding="utf-8") as f:
         # Write header
-        f.write('name,path,invocation_count,function_number\n')
+        f.write("name,path,invocation_count,function_number\n")
 
         # Write data
         for result in results:
             # Escape file path if it contains commas
-            path = result['path']
-            if ',' in path:
+            path = result["path"]
+            if "," in path:
                 path = f'"{path}"'
 
             f.write(f"{result['name']},{path},{result['invocation_count']},{result['function_number']}\n")
@@ -208,5 +207,5 @@ def main():
         print(f"{i}. {result['name']} ({result['path']}) #{result['function_number']}: {result['invocation_count']} invocations")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

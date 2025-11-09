@@ -64,6 +64,7 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Raises:
         PermissionDenied: If user lacks 'orga_characters_pdf' permission for event
+
     """
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -117,6 +118,7 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
 
     Raises:
         PermissionDenied: If user lacks orga_characters_pdf permission
+
     """
     # Verify organizer permissions for PDF access
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -156,6 +158,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     Returns:
         Redirect response to characters PDF page
+
     """
     # Check user permissions for PDF operations
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -185,6 +188,7 @@ def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -
 
     Returns:
         HTTP response containing the generated PDF
+
     """
     # Check organizer permissions for PDF access
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -207,6 +211,7 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, num: int) 
 
     Returns:
         Rendered PDF template response
+
     """
     # Check user permissions for character PDF generation
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -246,6 +251,7 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, num: in
 
     Returns:
         Rendered PDF template for friendly test sheet
+
     """
     # Verify user has permission to access character PDFs
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -283,6 +289,7 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, nu
 
     Returns:
         Rendered relationships template response
+
     """
     # Check organization permissions for character PDF access
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -343,6 +350,7 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> 
     Raises:
         PermissionDenied: If user lacks orga_characters_pdf permission
         Http404: If faction with the specified number doesn't exist or isn't in cache
+
     """
     # Verify organizer permissions for PDF generation
     context = check_event_context(request, event_slug, "orga_characters_pdf")
@@ -358,12 +366,17 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> 
         context["sheet_faction"] = context["factions"][num]
     else:
         # Faction number not found in cache
-        raise Http404("Faction does not exist")
+        msg = "Faction does not exist"
+        raise Http404(msg)
 
     # Load custom faction fields configured for this event
     # Only visible fields are included in the PDF
     context["fact"] = get_writing_element_fields(
-        context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
+        context,
+        "faction",
+        QuestionApplicable.FACTION,
+        context["sheet_faction"]["id"],
+        only_visible=True,
     )
 
     # Generate and return the faction sheet PDF (force=True for fresh generation)

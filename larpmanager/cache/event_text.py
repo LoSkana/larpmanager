@@ -17,19 +17,24 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import logging
+
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.utils.translation import get_language
 
 from larpmanager.models.event import EventText
 
+logger = logging.getLogger(__name__)
 
-def event_text_key(event_id, text_type, language):
+
+def event_text_key(event_id, text_type, language) -> str:
+    """Generate cache key for event text."""
     return f"event_text_{event_id}_{text_type}_{language}"
 
 
 def update_event_text(event_id: int, text_type: str, language: str) -> str:
-    """Updates and caches event text for given event, type and language.
+    """Update and cache event text for given event, type and language.
 
     Args:
         event_id: The event identifier
@@ -38,14 +43,15 @@ def update_event_text(event_id: int, text_type: str, language: str) -> str:
 
     Returns:
         The event text or empty string if not found
+
     """
     event_text = ""
 
     # Try to get event text from database
     try:
         event_text = EventText.objects.get(event_id=event_id, typ=text_type, language=language).text
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Event text not found for event_id={event_id}, type={text_type}, language={language}: {e}")
 
     # Cache the result for 1 day
     cache.set(event_text_key(event_id, text_type, language), event_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -63,6 +69,7 @@ def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
 
     Returns:
         The cached or newly updated event text
+
     """
     # Try to get text from cache
     res = cache.get(event_text_key(event_id, typ, lang))
@@ -74,7 +81,8 @@ def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
     return res
 
 
-def event_text_key_def(event_id, text_type):
+def event_text_key_def(event_id, text_type) -> str:
+    """Generate cache key for default event text."""
     return f"event_text_def_{event_id}_{text_type}"
 
 
@@ -87,14 +95,15 @@ def update_event_text_def(event_id: int, typ: str) -> str:
 
     Returns:
         Default event text content or empty string if not found
+
     """
     default_text = ""
     try:
         # Get default event text for the specified event and type
         default_text = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
-    except Exception:
+    except Exception as e:
         # Return empty string if no default text found or any error occurs
-        pass
+        logger.debug(f"Default event text not found for event_id={event_id}, type={typ}: {e}")
 
     # Cache the result for one day
     cache.set(event_text_key_def(event_id, typ), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -110,6 +119,7 @@ def get_event_text_cache_def(event_id: int, typ: str) -> str:
 
     Returns:
         The cached or newly generated event text
+
     """
     # Try to get cached result
     res = cache.get(event_text_key_def(event_id, typ))
@@ -119,7 +129,7 @@ def get_event_text_cache_def(event_id: int, typ: str) -> str:
     return res
 
 
-def get_event_text(event_id: int, text_type: str, language_code: str = None) -> str:
+def get_event_text(event_id: int, text_type: str, language_code: str | None = None) -> str:
     """Get event text for the specified event, type, and language.
 
     Retrieves event text from cache if available, otherwise falls back to
@@ -132,6 +142,7 @@ def get_event_text(event_id: int, text_type: str, language_code: str = None) -> 
 
     Returns:
         The event text string for the specified parameters
+
     """
     # Use current language if no language specified
     if not language_code:

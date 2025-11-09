@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga
 pytestmark = pytest.mark.e2e
 
 
-def test_inventory(pw_page):
+def test_inventory(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -41,7 +41,7 @@ def test_inventory(pw_page):
     checks(page)
 
 
-def prepare(page):
+def prepare(page) -> None:
     # Activate feature inventory
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Warehouse").check()
@@ -82,7 +82,7 @@ def prepare(page):
     page.get_by_role("button", name="Confirm").click()
 
 
-def add_items(page):
+def add_items(page) -> None:
     # add new items
     page.get_by_role("link", name="Items").click()
     page.get_by_role("link", name="New").click()
@@ -125,7 +125,7 @@ def add_items(page):
     )
 
 
-def bulk(page):
+def bulk(page) -> None:
     # test bulk
     page.get_by_role("link", name="Bulk").click()
     page.locator("td:nth-child(5)").first.click()
@@ -162,7 +162,7 @@ def bulk(page):
     expect(page.locator("#one")).to_contain_text("Item 3sa maintenance")
 
 
-def area_assigmenents(page):
+def area_assigmenents(page) -> None:
     page.get_by_role("link", name="Area").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -218,7 +218,7 @@ def area_assigmenents(page):
     page.wait_for_timeout(2000)
 
 
-def checks(page):
+def checks(page) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
     expect(page.locator("#one")).to_contain_text("New Kitchen Position: ss Description: sds")

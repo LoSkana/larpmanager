@@ -41,7 +41,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestMemberAccountingFunctions(BaseTestCase):
     """Test cases for member accounting utility functions"""
 
-    def test_init_pending_no_pending(self):
+    def test_init_pending_no_pending(self) -> None:
         """Test _init_pending with no pending payments"""
         member = self.get_member()
 
@@ -49,7 +49,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         self.assertEqual(result, {})
 
-    def test_init_choices_no_choices(self):
+    def test_init_choices_no_choices(self) -> None:
         """Test _init_choices with no registration choices"""
         member = self.get_member()
 
@@ -57,7 +57,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         self.assertEqual(result, {})
 
-    def test_init_choices_with_choices(self):
+    def test_init_choices_with_choices(self) -> None:
         """Test _init_choices with registration choices"""
         member = self.get_member()
         run = self.get_run()
@@ -75,7 +75,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
         self.assertEqual(result[registration.id][question.id]["question"], question)
         self.assertIn(option1, result[registration.id][question.id]["selected_options"])
 
-    def test_init_choices_multiple_options(self):
+    def test_init_choices_multiple_options(self) -> None:
         """Test _init_choices with multiple options selected"""
         member = self.get_member()
         run = self.get_run()
@@ -91,7 +91,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         self.assertEqual(len(result[registration.id][question.id]["selected_options"]), 2)
 
-    def test_info_token_credit_no_items(self):
+    def test_info_token_credit_no_items(self) -> None:
         """Test _info_token_credit with no tokens or credits"""
         member = self.get_member()
         association = self.get_association()
@@ -102,7 +102,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
         self.assertEqual(context["acc_tokens"], 0)
         self.assertEqual(context["acc_credits"], 0)
 
-    def test_info_token_credit_with_tokens(self):
+    def test_info_token_credit_with_tokens(self) -> None:
         """Test _info_token_credit with tokens"""
         member = self.get_member()
         association = self.get_association()
@@ -117,7 +117,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         self.assertEqual(context["acc_tokens"], 1)
 
-    def test_info_token_credit_with_credits(self):
+    def test_info_token_credit_with_credits(self) -> None:
         """Test _info_token_credit with credits"""
         member = self.get_member()
         association = self.get_association()
@@ -136,7 +136,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         self.assertEqual(context["acc_credits"], 2)
 
-    def test_info_token_credit_with_both(self):
+    def test_info_token_credit_with_both(self) -> None:
         """Test _info_token_credit with both tokens and credits"""
         member = self.get_member()
         association = self.get_association()
@@ -161,7 +161,7 @@ class TestBaseUtilityFunctions(BaseTestCase):
     """Test cases for base utility functions"""
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_no_payment_feature(self, mock_features):
+    def test_is_reg_provisional_no_payment_feature(self, mock_features) -> None:
         """Test is_reg_provisional when payment feature is disabled"""
         mock_features.return_value = {}
 
@@ -174,7 +174,7 @@ class TestBaseUtilityFunctions(BaseTestCase):
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_fully_paid(self, mock_features):
+    def test_is_reg_provisional_fully_paid(self, mock_features) -> None:
         """Test is_reg_provisional when fully paid"""
         mock_features.return_value = {"payment": True}
 
@@ -187,7 +187,7 @@ class TestBaseUtilityFunctions(BaseTestCase):
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_no_cost(self, mock_features):
+    def test_is_reg_provisional_no_cost(self, mock_features) -> None:
         """Test is_reg_provisional with no cost registration"""
         mock_features.return_value = {"payment": True}
 
@@ -200,7 +200,7 @@ class TestBaseUtilityFunctions(BaseTestCase):
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_partial_payment(self, mock_features):
+    def test_is_reg_provisional_partial_payment(self, mock_features) -> None:
         """Test is_reg_provisional with partial payment"""
         mock_features.return_value = {"payment": True}
 

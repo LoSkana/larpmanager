@@ -534,6 +534,9 @@ msgstr "Bunntekst"
 msgid "Fourth"
 msgstr "Fjerde"
 
+msgid "Friend"
+msgstr "Venn"
+
 msgid "Gender"
 msgstr "Sjanger"
 
@@ -1511,6 +1514,9 @@ msgstr "IP-adresse"
 
 msgid "IP address"
 msgstr "IP-adresse"
+
+msgid "Influencer"
+msgstr "Påvirker"
 
 msgid "Kicked out"
 msgstr "Jaktet"

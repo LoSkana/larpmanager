@@ -39,6 +39,7 @@ def cache_association(request: HttpRequest) -> dict:
             - languages: Available language options if user has no member
             - google_tag: Google Analytics tag ID from settings
             - hotjar_siteid: Hotjar site ID from settings
+
     """
     context = {}
 

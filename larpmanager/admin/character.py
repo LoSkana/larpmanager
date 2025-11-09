@@ -67,6 +67,7 @@ class WritingQuestionAdmin(DefModelAdmin):
 
     @staticmethod
     def description_red(instance):
+        """Return reduced description for admin display."""
         return reduced(instance.description)
 
 
@@ -80,6 +81,7 @@ class WritingOptionAdmin(DefModelAdmin):
 
     @staticmethod
     def details_red(instance):
+        """Return reduced details for admin display."""
         return reduced(instance.description)
 
 
@@ -98,6 +100,7 @@ class WritingAnswerAdmin(DefModelAdmin):
 
     @staticmethod
     def text_red(instance):
+        """Return reduced text for admin display."""
         return reduced(instance.text)
 
 

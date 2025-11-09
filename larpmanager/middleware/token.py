@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Callable
+from collections.abc import Callable
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django.contrib.auth import get_user_model, login
@@ -56,6 +56,7 @@ class TokenAuthMiddleware:
         Note:
             Token is validated against cached user_id. Invalid tokens or users
             are silently ignored for security reasons.
+
         """
         # Extract authentication token from query parameters
         token = request.GET.get("token")

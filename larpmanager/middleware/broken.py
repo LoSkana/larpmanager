@@ -18,12 +18,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import re
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+
+logger = logging.getLogger(__name__)
 
 
 class BrokenLinkEmailsMiddleware:
@@ -32,8 +35,7 @@ class BrokenLinkEmailsMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """
-        Send broken link emails for relevant 404 NOT FOUND responses.
+        """Send broken link emails for relevant 404 NOT FOUND responses.
 
         Args:
             request: The HTTP request object being processed.
@@ -41,6 +43,7 @@ class BrokenLinkEmailsMiddleware:
         Returns:
             The HTTP response object, potentially modified if a broken link
             was detected and processed.
+
         """
         # Get the initial response from the next middleware or view
         response = self.get_response(request)
@@ -59,12 +62,10 @@ class BrokenLinkEmailsMiddleware:
 
     @staticmethod
     def is_ignorable_404(request_uri):
-        """
-        Returns True if a 404 at the given URL *shouldn't* notify the site managers.
-        """
+        """Return True if a 404 at the given URL *shouldn't* notify the site managers."""
         return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
-    def check(self, request, response) -> Optional[HttpResponseRedirect]:
+    def check(self, request, response) -> HttpResponseRedirect | None:
         """Middleware for detecting and logging broken links.
 
         Monitors for 404 errors and tracks problematic URLs for debugging,
@@ -77,6 +78,7 @@ class BrokenLinkEmailsMiddleware:
 
         Returns:
             HttpResponseRedirect if a domain redirect is needed, None otherwise
+
         """
         # Extract basic request information
         domain = request.get_host()
@@ -85,17 +87,17 @@ class BrokenLinkEmailsMiddleware:
         # Skip processing if referer contains query parameters
         referer = request.META.get("HTTP_REFERER", "None")
         if "?" in referer:
-            return
+            return None
 
         # Filter out bot traffic to reduce noise
         user_agent = request.META.get("HTTP_USER_AGENT", "<none>")
         for bot_identifier in ["bot", "facebookexternalhit"]:
             if bot_identifier in str(user_agent):
-                return
+                return None
 
         # Handle domain redirection for larpmanager.com with $ separator
-        # print(domain)
-        # print(path)
+        # logger.debug(f"Domain: {domain}")
+        # logger.debug(f"Path: {path}")
         if domain == "larpmanager.com" and "$" in path:
             path_parts = path.split("$")
             # print (at)
@@ -104,11 +106,11 @@ class BrokenLinkEmailsMiddleware:
 
         # Skip ignorable 404 paths (common crawlers, assets, etc.)
         if self.is_ignorable_404(path):
-            return
+            return None
 
         # Only process authenticated users or webhook paths
         if "webhook" not in path and not request.user.is_authenticated:
-            return
+            return None
 
         # Extract exception information from response HTML
         html_content = response.content.decode("utf-8")
@@ -122,10 +124,11 @@ class BrokenLinkEmailsMiddleware:
             f"Broken link on {domain}",
             f"Requested URL: {path}\n"
             f"Exception: {exception}\n"
-            f"User: {str(request.user)}\n"
+            f"User: {request.user!s}\n"
             f"Referrer: {referer}\n"
             f"User agent: {user_agent}\n"
             f"IP address: {ip_address}\n\n"
             f"{vars(request)}",
             fail_silently=True,
         )
+        return None

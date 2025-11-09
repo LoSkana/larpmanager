@@ -28,7 +28,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_signup_accounting(pw_page):
+def test_signup_accounting(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -46,7 +46,7 @@ def test_signup_accounting(pw_page):
     check_delete(live_server, page)
 
 
-def check_delete(live_server, page):
+def check_delete(live_server, page) -> None:
     # update signup - orga
     go_to(page, live_server, "/test/manage/registrations")
     page.wait_for_selector("table")
@@ -79,7 +79,7 @@ def check_delete(live_server, page):
     page.get_by_role("button", name="Confirmation delete").click()
 
 
-def discount(live_server, page):
+def discount(live_server, page) -> None:
     # check signup
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
@@ -130,7 +130,7 @@ def discount(live_server, page):
     page.locator("#register_go").click()
 
 
-def pay(live_server, page):
+def pay(live_server, page) -> None:
     # check accounting
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
@@ -162,7 +162,7 @@ def pay(live_server, page):
     page.get_by_role("link", name="Confirm", exact=True).click()
 
 
-def token_credits(live_server, page):
+def token_credits(live_server, page) -> None:
     # activate tokens credits
     go_to(page, live_server, "/manage/features/token_credit/on")
     go_to(page, live_server, "/manage/tokens")
@@ -210,7 +210,7 @@ def token_credits(live_server, page):
     submit_confirm(page)
 
 
-def signup_pay(live_server, page):
+def signup_pay(live_server, page) -> None:
     # Signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
@@ -235,7 +235,7 @@ def signup_pay(live_server, page):
     expect(page.locator("#one")).to_contain_text("test iban")
 
 
-def setup_payment(live_server, page):
+def setup_payment(live_server, page) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
 

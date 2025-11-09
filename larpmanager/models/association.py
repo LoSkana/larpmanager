@@ -193,8 +193,8 @@ class Association(BaseModel):
                     "font/woff",
                     "font/woff2",
                     "font/sfnt",
-                ]
-            )
+                ],
+            ),
         ],
     )
 
@@ -276,6 +276,7 @@ class Association(BaseModel):
         return get_currency_symbol(self.get_payment_currency_display())
 
     def get_config(self, name, default_value=None, bypass_cache=False):
+        """Get configuration value for this association."""
         return get_element_config(self, name, default_value, bypass_cache)
 
     def promoter_dict(self) -> dict[str, str]:
@@ -296,7 +297,7 @@ class AssociationConfig(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.association} {self.name}"
 
     class Meta:
@@ -341,7 +342,10 @@ class AssociationText(BaseModel):
     text = HTMLField(blank=True, null=True)
 
     typ = models.CharField(
-        max_length=2, choices=AssociationTextType.choices, verbose_name=_("Type"), help_text=_("Type of text")
+        max_length=2,
+        choices=AssociationTextType.choices,
+        verbose_name=_("Type"),
+        help_text=_("Type of text"),
     )
 
     language = models.CharField(
@@ -400,7 +404,10 @@ class AssociationTranslation(BaseModel):
     """
 
     number = models.IntegerField(
-        null=True, blank=True, verbose_name=_("Number"), help_text=_("Optional ordering number")
+        null=True,
+        blank=True,
+        verbose_name=_("Number"),
+        help_text=_("Optional ordering number"),
     )
 
     association = models.ForeignKey(
@@ -448,6 +455,7 @@ class AssociationTranslation(BaseModel):
 
         Returns:
             A formatted string showing association, language, and truncated original text
+
         """
         return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
 
@@ -483,8 +491,7 @@ def hdr(association_or_related_object: Association | Any) -> str:
     # Check if object has an associated Association via association attribute
     if association_or_related_object.association:
         return f"[{association_or_related_object.association.name}] "
-    else:
-        return "[LarpManager] "
+    return "[LarpManager] "
 
 
 def get_association_maintainers(association: Association):
@@ -495,6 +502,7 @@ def get_association_maintainers(association: Association):
 
     Returns:
         QuerySet of Member instances who are maintainers for this association
+
     """
     return association.maintainers.all()
 
@@ -514,6 +522,7 @@ def get_url(path: str, obj: object = None) -> str:
 
     Returns:
         Complete URL string with proper protocol formatting
+
     """
     if obj:
         # Handle Association objects directly

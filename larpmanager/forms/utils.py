@@ -24,8 +24,7 @@ from typing import Any
 from django import forms
 from django.db.models import Q, QuerySet
 from django.forms.widgets import Widget
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
@@ -65,6 +64,7 @@ def render_js(cls):
 
     Returns:
         list: HTML script tags with defer attributes
+
     """
     return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
 
@@ -110,12 +110,13 @@ class SlugInput(forms.TextInput):
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
     """Custom checkbox widget for role permission selection with help text."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize widget with feature help text and mapping.
 
         Args:
             *args: Variable positional arguments
             **kwargs: Arbitrary keyword arguments including help_text and feature_map
+
         """
         self.feature_help = kwargs.pop("help_text", {})
         self.feature_map = kwargs.pop("feature_map", {})
@@ -138,15 +139,16 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 
         Returns:
             Safe HTML string containing the complete checkbox widget markup
+
         """
-        output = []
         # Ensure value is a list for membership checking
         value = value or []
 
         # Localized text for help icon tooltip
         know_more = _("click on the icon to open the tutorial")
 
-        # Generate HTML for each checkbox option
+        # Build list of checkbox elements as tuples for format_html_join
+        checkbox_elements = []
         for i, (option_value, option_label) in enumerate(self.choices):
             # Create unique ID for each checkbox using index
             checkbox_id = f"{attrs.get('id', name)}_{i}"
@@ -154,23 +156,31 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
             # Determine if this option should be checked
             checked = "checked" if option_value in value else ""
 
-            # Build individual HTML components
-            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            label_html = f'<label for="{checkbox_id}">{option_label}</label>'
-            link_html = f'<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
-
             # Get help text for this specific feature option
             help_text = self.feature_help.get(option_value, "")
+            feature_value = self.feature_map.get(option_value, "")
 
-            # Combine all components into a single checkbox div
-            output.append(f"""
-                <div class="feature_checkbox lm_tooltip">
-                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
-                    {checkbox_html} {label_html} {link_html}
-                </div>
-            """)
+            # Add tuple with all the data needed for this checkbox
+            checkbox_elements.append(
+                (
+                    help_text,
+                    know_more,
+                    name,
+                    option_value,
+                    checkbox_id,
+                    checked,
+                    checkbox_id,
+                    option_label,
+                    feature_value,
+                ),
+            )
 
-        return mark_safe("\n".join(output))
+        # Use format_html_join to safely generate the HTML
+        return format_html_join(
+            "\n",
+            '<div class="feature_checkbox lm_tooltip"><span class="hide lm_tooltiptext">{} ({})</span><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label> <a href="#" feat="{}"><i class="fas fa-question-circle"></i></a></div>',
+            checkbox_elements,
+        )
 
 
 class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
@@ -184,6 +194,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
 
         Returns:
             str: Translated name of the instance
+
         """
         return _(obj.name)
 
@@ -207,6 +218,7 @@ def prepare_permissions_role(form, typ) -> None:
         - Adds permission fields to form.fields dict
         - Sets form.modules list with field names
         - Sets form.prevent_canc=True for role number 1 (executives)
+
     """
     # Early return for executive role (number 1) - prevent cancellation
     if form.instance and form.instance.number == 1:
@@ -250,8 +262,7 @@ def prepare_permissions_role(form, typ) -> None:
         field_name = f"perm_{module.pk}"
 
         # Create module label with icon markup
-        label = _(module.name)
-        label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
+        label = format_html("<i class='fa-solid fa-{}'></i> {}", module.icon, _(module.name))
 
         # Determine which permissions should be initially selected
         module_permission_ids = [permission.pk for permission in module_permissions]
@@ -275,7 +286,7 @@ def prepare_permissions_role(form, typ) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance, form):
+def save_permissions_role(instance, form) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -285,6 +296,7 @@ def save_permissions_role(instance, form):
     Side effects:
         Clears existing permissions and adds selected ones
         Skips permission saving for role number 1 (executives)
+
     """
     instance.save()
     if form.instance and form.instance.number == 1:
@@ -305,7 +317,8 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def set_exclude(self, exclude_value: bool) -> None:
@@ -333,7 +346,8 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         """Return string representation of the given object."""
         return str(obj)
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def set_exclude(self, exclude: bool) -> None:
@@ -357,7 +371,8 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[Event]:
@@ -373,11 +388,12 @@ class AssocMS2:
         "user__email__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet:
-        # Return members queryset for this association
+        """Return members queryset for this association."""
         return get_members_queryset(self.association_id)
 
     @staticmethod
@@ -433,6 +449,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
 
         Returns:
             Formatted string with display name and email.
+
         """
         # noinspection PyUnresolvedReferences
         return f"{obj.display_real()} - {obj.email}"
@@ -446,16 +463,17 @@ def get_association_people(association_id):
 
     Returns:
         list: List of (member_id, display_string) tuples
+
     """
     ls = []
     que = Membership.objects.select_related("member").filter(association_id=association_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
     for f in que:
-        ls.append((f.member_id, f"{str(f.member)} - {f.member.email}"))
+        ls.append((f.member_id, f"{f.member!s} - {f.member.email}"))
     return ls
 
 
-def get_run_choices(self, past=False):
+def get_run_choices(self, past=False) -> None:
     """Generate run choices for form fields.
 
     Args:
@@ -465,6 +483,7 @@ def get_run_choices(self, past=False):
     Side effects:
         Creates or updates 'run' field in form with run choices
         Sets initial value if run is in params
+
     """
     choices = [("", "-----")]
     runs = (
@@ -490,7 +509,7 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
     ]
 
     def set_event(self, event: Event) -> None:
-        # Set the event for this instance
+        """Set the event for this instance."""
         self.event = event
 
     def get_queryset(self) -> QuerySet[Registration]:
@@ -511,13 +530,14 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[Registration]:
         """Return registrations for the current association with optimized queries."""
         return Registration.objects.prefetch_related("run", "run__event").filter(
-            run__event__association_id=self.association_id
+            run__event__association_id=self.association_id,
         )
 
     def label_from_instance(self, obj: Any) -> str:
@@ -535,7 +555,8 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[Run]:
@@ -647,7 +668,7 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         self.event = event
 
     def get_queryset(self) -> QuerySet[Faction]:
-        # Return factions associated with this event
+        """Return factions associated with this event."""
         return self.event.get_elements(Faction)
 
     def label_from_instance(self, instance: Faction) -> str:
@@ -712,7 +733,8 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[WarehouseContainer]:
@@ -741,7 +763,8 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[WarehouseItem]:
@@ -763,7 +786,8 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id):
+    def set_association_id(self, association_id) -> None:
+        """Set the association ID for this widget."""
         self.association_id = association_id
 
     def get_queryset(self) -> QuerySet[WarehouseTag]:
@@ -788,6 +812,7 @@ def remove_choice(choices, type_to_remove):
 
     Returns:
         list: New choice list without the specified type
+
     """
     filtered_choices = []
     for key, value in choices:
@@ -822,11 +847,11 @@ def get_members_queryset(association_id):
 
     Returns:
         QuerySet: Members with accepted, submitted, or joined membership status
+
     """
     allowed_statuses = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
     queryset = Member.objects.prefetch_related("memberships")
-    queryset = queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
-    return queryset
+    return queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
 class WritingTinyMCE(TinyMCE):

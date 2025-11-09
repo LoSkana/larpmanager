@@ -27,7 +27,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout
 pytestmark = pytest.mark.e2e
 
 
-def test_user_character_option_reg_ticket(pw_page):
+def test_user_character_option_reg_ticket(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -45,7 +45,7 @@ def test_user_character_option_reg_ticket(pw_page):
     go_to(page, live_server, "/test/character/1")
 
 
-def prepare(page):
+def prepare(page) -> None:
     # configure event
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Player editor").check()
@@ -92,7 +92,7 @@ def prepare(page):
     page.get_by_role("button", name="Confirm").click()
 
 
-def create_character(page):
+def create_character(page) -> None:
     # signup first ticket
     page.get_by_role("link", name="Register").click()
     page.get_by_label("Ticket").select_option("1")

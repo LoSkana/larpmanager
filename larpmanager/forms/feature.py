@@ -21,7 +21,7 @@ from typing import Any
 
 from django import forms
 from django.db.models import Q
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html_join
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
@@ -56,43 +56,53 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         Returns:
             str
                 HTML string containing feature checkboxes with tooltips and help icons
+
         """
-        output = []
         value = value or []
 
         # Get localized text for help tooltip
         know_more = _("click on the icon to open the tutorial")
 
-        # Generate HTML for each feature option
+        # Build list of checkbox elements as tuples for format_html_join
+        checkbox_elements = []
         for i, (option_value, option_label) in enumerate(self.choices):
             # Create unique checkbox ID and determine checked state
             checkbox_id = f"{attrs.get('id', name)}_{i}"
             checked = "checked" if str(option_value) in value else ""
 
-            # Build individual HTML components
-            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            label_html = f'<label for="{checkbox_id}">{option_label}</label>'
-            link_html = f'<a href="#" feat="{option_value}"><i class="fas fa-question-circle"></i></a>'
-
-            # Get help text for this feature and build tooltip
+            # Get help text for this feature
             help_text = self.feature_help.get(option_value, "")
-            output.append(f"""
-                <div class="feature_checkbox lm_tooltip">
-                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
-                    {checkbox_html} {label_html} {link_html}
-                </div>
-            """)
 
-        return mark_safe("\n".join(output))
+            # Add tuple with all the data needed for this checkbox
+            checkbox_elements.append(
+                (
+                    help_text,
+                    know_more,
+                    name,
+                    option_value,
+                    checkbox_id,
+                    checked,
+                    checkbox_id,
+                    option_label,
+                    option_value,
+                ),
+            )
+
+        # Use format_html_join to safely generate the HTML
+        return format_html_join(
+            "\n",
+            '<div class="feature_checkbox lm_tooltip"><span class="hide lm_tooltiptext">{} ({})</span><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label> <a href="#" feat="{}"><i class="fas fa-question-circle"></i></a></div>',
+            checkbox_elements,
+        )
 
 
 class FeatureForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Initialize parent class and set cancellation prevention flag
+        """Initialize form and set cancellation prevention flag."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, is_association_level):
+    def _init_features(self, is_association_level) -> None:
         """Initialize feature selection fields organized by modules.
 
         Args:
@@ -102,6 +112,7 @@ class FeatureForm(MyForm):
         Side effects:
             Adds feature selection fields to the form organized by modules
             Sets initial values based on current feature assignments
+
         """
         selected_feature_ids = None
         if self.instance.pk:
@@ -110,11 +121,13 @@ class FeatureForm(MyForm):
         feature_modules = FeatureModule.objects.exclude(order=0).order_by("order")
         if is_association_level:
             feature_modules = feature_modules.filter(
-                Q(nationality__isnull=True) | Q(nationality=self.instance.nationality)
+                Q(nationality__isnull=True) | Q(nationality=self.instance.nationality),
             )
         for feature_module in feature_modules:
             module_features = feature_module.features.filter(
-                overall=is_association_level, placeholder=False, hidden=False
+                overall=is_association_level,
+                placeholder=False,
+                hidden=False,
             ).order_by("order")
             feature_choices = [(str(feature.id), _(feature.name)) for feature in module_features]
             feature_help_texts = {str(feature.id): _(feature.descr) for feature in module_features}
@@ -132,7 +145,7 @@ class FeatureForm(MyForm):
             if selected_feature_ids:
                 self.initial[f"mod_{feature_module.id}"] = selected_feature_ids
 
-    def _save_features(self, instance):
+    def _save_features(self, instance) -> None:
         """Save selected features to the instance.
 
         Args:
@@ -141,6 +154,7 @@ class FeatureForm(MyForm):
         Side effects:
             Clears existing features and sets new ones based on form data
             Sets self.added_features with newly added feature IDs
+
         """
         old_features = set(instance.features.values_list("id", flat=True))
         instance.features.clear()
@@ -163,11 +177,11 @@ class QuickSetupForm(MyForm):
     setup = {}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        # Initialize parent class and prevent cancellation
+        """Initialize the form and prevent cancellation."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features):
+    def init_fields(self, features) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:
@@ -176,17 +190,17 @@ class QuickSetupForm(MyForm):
         Side effects:
             Creates boolean fields for each setup option
             Sets initial values based on current configuration
+
         """
         # for each value in self.setup, init a field
         for config_key, setup_element in self.setup.items():
             (is_feature_flag, field_label, field_help_text) = setup_element
             self.fields[config_key] = forms.BooleanField(
-                required=False, label=field_label, help_text=field_help_text + "?"
+                required=False,
+                label=field_label,
+                help_text=field_help_text + "?",
             )
-            if is_feature_flag:
-                initial_value = config_key in features
-            else:
-                initial_value = self.instance.get_config(config_key, False)
+            initial_value = config_key in features if is_feature_flag else self.instance.get_config(config_key, False)
             self.initial[config_key] = initial_value
 
     def save(self, commit: bool = True) -> Association:
@@ -205,6 +219,7 @@ class QuickSetupForm(MyForm):
         Note:
             This method performs database operations even when commit=False for
             feature assignments and configuration updates.
+
         """
         # Save the base instance first
         instance = super().save(commit=commit)

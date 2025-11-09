@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any, Optional
+from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
@@ -27,22 +27,19 @@ from django.http import HttpRequest
 
 
 class EmailOrUsernameModelBackend(ModelBackend):
-    """
-    Authentication backend which allows users to authenticate using either their
-    username or email address
+    """Authentication backend which allows users to authenticate using either their username or email address.
 
     Source: https://stackoverflow.com/a/35836674/59984
     """
 
     def authenticate(
         self,
-        request: Optional[HttpRequest],
-        username: Optional[str] = None,
-        password: Optional[str] = None,
+        request: HttpRequest | None,
+        username: str | None = None,
+        password: str | None = None,
         **kwargs: Any,
-    ) -> Optional[AbstractUser]:
-        """
-        Authenticate user with username/password allowing email or username.
+    ) -> AbstractUser | None:
+        """Authenticate user with username/password allowing email or username.
 
         Attempts to authenticate a user by checking both username and email fields
         for a match. This allows users to login with either their username or email
@@ -59,6 +56,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
 
         Note:
             Django <2.1 does not pass the request parameter.
+
         """
         # Get the user model for this authentication backend
         user_model = get_user_model()
@@ -72,7 +70,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
         # potentially exist in either field, even for different users
         # noinspection PyProtectedMember
         matching_users = user_model._default_manager.filter(
-            Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username)
+            Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username),
         )
 
         # Test password against each matching user record
@@ -88,3 +86,4 @@ class EmailOrUsernameModelBackend(ModelBackend):
             # difference between an existing and a non-existing user (see
             # https://code.djangoproject.com/ticket/20760)
             user_model().set_password(password)
+        return None

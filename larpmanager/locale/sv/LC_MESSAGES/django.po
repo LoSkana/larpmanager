@@ -534,6 +534,9 @@ msgstr "Sidfot"
 msgid "Fourth"
 msgstr "Fjärde"
 
+msgid "Friend"
+msgstr "Vän"
+
 msgid "Gender"
 msgstr "Genre"
 
@@ -1511,6 +1514,9 @@ msgstr "IP-adress"
 
 msgid "IP address"
 msgstr "IP-adress"
+
+msgid "Influencer"
+msgstr "Influencer"
 
 msgid "Kicked out"
 msgstr "Jagad"

@@ -25,7 +25,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_conf
 pytestmark = pytest.mark.e2e
 
 
-def test_user_character_form_editor(pw_page):
+def test_user_character_form_editor(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -41,7 +41,7 @@ def test_user_character_form_editor(pw_page):
     character(page, live_server)
 
 
-def prepare(page, live_server):
+def prepare(page, live_server) -> None:
     # Activate characters
     go_to(page, live_server, "/test/1/manage/features/character/on")
 
@@ -64,7 +64,7 @@ def prepare(page, live_server):
     expect(page.locator('[id="\\33 "]')).to_contain_text("Sheet")
 
 
-def field_single(page, live_server):
+def field_single(page, live_server) -> None:
     # add single
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -92,7 +92,7 @@ def field_single(page, live_server):
     submit_confirm(page)
 
 
-def field_multiple(page, live_server):
+def field_multiple(page, live_server) -> None:
     # Add multiple
     page.get_by_role("link", name="New").click()
     page.get_by_text("Question type").click()
@@ -129,7 +129,7 @@ def field_multiple(page, live_server):
     submit_confirm(page)
 
 
-def field_text(page, live_server):
+def field_text(page, live_server) -> None:
     # Add text
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
@@ -169,7 +169,7 @@ def field_text(page, live_server):
     submit_confirm(page)
 
 
-def character(page, live_server):
+def character(page, live_server) -> None:
     # signup, create char
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()

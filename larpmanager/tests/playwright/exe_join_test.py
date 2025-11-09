@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, load_image, submit
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_join(pw_page):
+def test_exe_join(pw_page) -> None:
     page, live_server, _ = pw_page
 
     go_to(page, live_server, "/debug")

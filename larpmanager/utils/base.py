@@ -44,8 +44,8 @@ from larpmanager.utils.exceptions import (
     FeatureError,
     MainPageError,
     MembershipError,
-    PermissionError,
     UnknowRunError,
+    UserPermissionError,
     check_event_feature,
 )
 from larpmanager.utils.registration import check_signup, registration_status
@@ -74,6 +74,7 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
     Raises:
         MembershipError: When user lacks proper association membership or
                         when accessing home page without valid association.
+
     """
     # Initialize result dictionary with association ID
     context = {"association_id": request.association["id"]}
@@ -93,7 +94,7 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
             if context["member"]:
                 user_associations = [membership.association for membership in context["member"].memberships.all()]
                 raise MembershipError(user_associations)
-            raise MembershipError()
+            raise MembershipError
         return context
 
     if check_main_site:
@@ -155,6 +156,7 @@ def fetch_payment_details(association_id: int) -> dict:
 
     Returns:
         Dictionary containing payment gateway configuration
+
     """
     # Fetch association with only required fields for efficiency
     association = Association.objects.only("slug", "key").get(pk=association_id)
@@ -184,11 +186,12 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     Raises:
         PermissionError: If user lacks the required association permission
         FeatureError: If required feature is not enabled for the association
+
     """
     # Get base user context and validate permission
     context = get_context(request)
     if not has_association_permission(request, context, permission_slug):
-        raise PermissionError()
+        raise UserPermissionError
 
     # Retrieve feature configuration for this permission
     (required_feature, tutorial_identifier, config_slug) = get_association_permission_feature(permission_slug)
@@ -216,7 +219,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     return context
 
 
-def check_event_context(request, event_slug: str, permission_slug: str | list[str] | None = None) -> dict:
+def check_event_context(request: HttpRequest, event_slug: str, permission_slug: str | list[str] | None = None) -> dict:
     """Check event permissions and prepare management context.
 
     Validates user permissions for event management operations and prepares
@@ -239,13 +242,14 @@ def check_event_context(request, event_slug: str, permission_slug: str | list[st
     Raises:
         PermissionError: If user lacks required permissions for the event
         FeatureError: If required feature is not enabled for the event
+
     """
     # Get basic event context and run information
     context = get_event_context(request, event_slug)
 
     # Verify user has the required permissions for this event
     if not has_event_permission(request, context, event_slug, permission_slug):
-        raise PermissionError()
+        raise UserPermissionError
 
     # Process permission-specific features and configuration
     if permission_slug:
@@ -278,7 +282,7 @@ def check_event_context(request, event_slug: str, permission_slug: str | list[st
     return context
 
 
-def get_event(request, event_slug, run_number=None):
+def get_event(request: HttpRequest, event_slug: str, run_number=None):
     """Get event context from slug and number.
 
     Args:
@@ -291,11 +295,9 @@ def get_event(request, event_slug, run_number=None):
 
     Raises:
         Http404: If event doesn't exist or belongs to wrong association
+
     """
-    if request:
-        context = get_context(request)
-    else:
-        context = {}
+    context = get_context(request) if request else {}
 
     try:
         if run_number:
@@ -305,7 +307,8 @@ def get_event(request, event_slug, run_number=None):
 
         if "association_id" in context:
             if context["event"].association_id != context["association_id"]:
-                raise Http404("wrong association")
+                msg = "wrong association"
+                raise Http404(msg)
         else:
             context["association_id"] = context["event"].association_id
 
@@ -319,11 +322,16 @@ def get_event(request, event_slug, run_number=None):
 
         return context
     except ObjectDoesNotExist as error:
-        raise Http404("Event does not exist") from error
+        msg = "Event does not exist"
+        raise Http404(msg) from error
 
 
 def get_event_context(
-    request, event_slug: str, signup: bool = False, feature_slug: str | None = None, include_status: bool = False
+    request,
+    event_slug: str,
+    signup: bool = False,
+    feature_slug: str | None = None,
+    include_status: bool = False,
 ) -> dict:
     """Get comprehensive event run context with permissions and features.
 
@@ -349,6 +357,7 @@ def get_event_context(
     Raises:
         Http404: If event is not found or user lacks required permissions
         PermissionDenied: If user cannot access requested features
+
     """
     # Get base event context with run information
     context = get_event(request, event_slug)
@@ -387,7 +396,7 @@ def get_event_context(
     return context
 
 
-def prepare_run(context):
+def prepare_run(context) -> None:
     """Prepare run context with visibility and field configurations.
 
     Args:
@@ -395,6 +404,7 @@ def prepare_run(context):
 
     Side effects:
         Updates context with run configuration, visibility settings, and writing fields
+
     """
     run_configuration = get_cache_config_run(context["run"])
 
@@ -419,18 +429,19 @@ def prepare_run(context):
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
 
-def get_run(context, event_slug):
+def get_run(context, event_slug) -> None:
     """Load run and event data from cache and database.
 
     Args:
         context (dict): Context dictionary to update
-        s (str): Run slug identifier
+        event_slug (str): Event slug identifier
 
     Side effects:
         Updates context with run and event objects
 
     Raises:
         UnknowRunError: If run cannot be found
+
     """
     try:
         res = get_cache_run(context["association_id"], event_slug)
@@ -457,4 +468,4 @@ def get_run(context, event_slug):
         context["run"] = que.get(pk=res)
         context["event"] = context["run"].event
     except Exception as err:
-        raise UnknowRunError() from err
+        raise UnknowRunError from err

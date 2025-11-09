@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+"""Django admin interface configuration for LarpManager models."""
 
 import importlib
 import pkgutil

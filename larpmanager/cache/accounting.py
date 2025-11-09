@@ -50,6 +50,7 @@ def round_to_nearest_cent(amount: float) -> float:
         1.2
         >>> round_to_nearest_cent(1.26789)
         1.26789
+
     """
     # Round to nearest 0.1 (cent) by multiplying by 10, rounding, then dividing
     rounded_amount = round(amount * 10) / 10
@@ -65,7 +66,7 @@ def round_to_nearest_cent(amount: float) -> float:
     return float(amount)
 
 
-def get_registration_accounting_cache_key(run_id):
+def get_registration_accounting_cache_key(run_id) -> str:
     """Generate cache key for registration accounting data.
 
     Args:
@@ -73,15 +74,17 @@ def get_registration_accounting_cache_key(run_id):
 
     Returns:
         str: Cache key for registration accounting data
+
     """
     return f"registration_accounting_{run_id}"
 
 
-def clear_registration_accounting_cache(run_id):
+def clear_registration_accounting_cache(run_id) -> None:
     """Reset registration accounting cache for a run.
 
     Args:
         run_id: id of Run instance to reset cache for
+
     """
     cache_key = get_registration_accounting_cache_key(run_id)
     cache.delete(cache_key)
@@ -103,6 +106,7 @@ def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, d
             - features (dict): Event features configuration
             - registration_tickets_by_id (dict): Registration tickets indexed by ticket ID
             - payment_cache_by_member (dict): Aggregated payment data by member ID
+
     """
     # Retrieve event features and ensure it's a dictionary
     features = get_event_features(run.event_id)
@@ -131,7 +135,9 @@ def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, d
 
         # Aggregate payment data by member and payment type
         for member_id, payment_value, payment_type in payments_query.exclude(hide=True).values_list(
-            "member_id", "value", "pay"
+            "member_id",
+            "value",
+            "pay",
         ):
             # Initialize member entry if not exists
             if member_id not in payment_cache_by_member:
@@ -159,6 +165,7 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
 
     Returns:
         None
+
     """
     # Get the cache key and retrieve existing cached data
     cache_key = get_registration_accounting_cache_key(run.id)
@@ -191,7 +198,10 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
         # Update cache with fresh accounting data for each registration
         for registration in member_registrations:
             accounting_data = _calculate_registration_accounting(
-                registration, registration_tickets, cached_already_invoiced_payments, features
+                registration,
+                registration_tickets,
+                cached_already_invoiced_payments,
+                features,
             )
             # Store calculated values as formatted strings in cache
             cached_accounting_data[registration.id] = {key: f"{value:g}" for key, value in accounting_data.items()}
@@ -212,6 +222,7 @@ def get_registration_accounting_cache(run: Run) -> dict:
     Returns:
         dict: Cached registration accounting data containing payment summaries,
               registration statistics, and financial information.
+
     """
     # Generate the cache key for this specific run
     cache_key = get_registration_accounting_cache_key(run.id)
@@ -239,6 +250,7 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
     Returns:
         Dictionary mapping registration IDs to their accounting data, where each
         accounting entry contains string-formatted monetary values
+
     """
     # Get accounting context data (features, tickets, pricing)
     features, registration_tickets, cached_accounting_info_per_registration = _get_accounting_context(run)
@@ -251,7 +263,10 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
     for registration in active_registrations:
         # Calculate accounting details for this registration
         accounting_data = _calculate_registration_accounting(
-            registration, registration_tickets, cached_accounting_info_per_registration, features
+            registration,
+            registration_tickets,
+            cached_accounting_info_per_registration,
+            features,
         )
 
         # Format monetary values as strings without trailing zeros
@@ -277,6 +292,7 @@ def _calculate_registration_accounting(reg, reg_tickets: dict, cache_aip: dict, 
             - Basic financial fields (total_paid, total_registration_cost, quota, etc.)
             - Payment breakdown by type (cash_payment, credit_payment, token_payment)
             - Remaining balance and ticket pricing information
+
     """
     accounting_data = {}
     max_rounding = 0.05

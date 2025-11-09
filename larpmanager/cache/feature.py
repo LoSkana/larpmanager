@@ -26,16 +26,17 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 
 
-def reset_association_features(association_id):
+def reset_association_features(association_id) -> None:
     """Clear cached association features.
 
     Args:
         association_id (int): Association ID to clear cache for
+
     """
     cache.delete(cache_association_features_key(association_id))
 
 
-def cache_association_features_key(association_id):
+def cache_association_features_key(association_id) -> str:
     """Generate cache key for association features.
 
     Args:
@@ -43,6 +44,7 @@ def cache_association_features_key(association_id):
 
     Returns:
         str: Cache key for association features
+
     """
     return f"association_features_{association_id}"
 
@@ -55,6 +57,7 @@ def get_association_features(association_id):
 
     Returns:
         dict: Dictionary of enabled features {feature_slug: 1}
+
     """
     cache_key = cache_association_features_key(association_id)
     cached_features = cache.get(cache_key)
@@ -78,6 +81,7 @@ def update_association_features(association_id: int) -> dict[str, int]:
 
     Raises:
         No exceptions raised - ObjectDoesNotExist is handled gracefully
+
     """
     res = {}
     try:
@@ -134,6 +138,7 @@ def get_event_features(event_id):
 
     Returns:
         dict: Dictionary of enabled event features {feature_slug: 1}
+
     """
     cache_key = cache_event_features_key(event_id)
     cached_features = cache.get(cache_key)
@@ -151,6 +156,7 @@ def update_event_features(ev_id):
 
     Returns:
         dict: Feature dictionary with enabled features marked as 1
+
     """
     try:
         event = Event.objects.get(pk=ev_id)
@@ -173,11 +179,12 @@ def update_event_features(ev_id):
         return {}
 
 
-def on_association_post_save_reset_features_cache(instance):
+def on_association_post_save_reset_features_cache(instance) -> None:
     """Handle association post-save feature cache reset.
 
     Args:
         instance: Association instance that was saved
+
     """
     reset_association_features(instance.id)
     for ev_id in instance.events.values_list("pk", flat=True):

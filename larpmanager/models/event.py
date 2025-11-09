@@ -19,8 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import inspect
+import logging
 import os
-from typing import Union
+from typing import Any
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
@@ -46,6 +47,8 @@ from larpmanager.models.utils import (
     my_uuid_short,
     show_thumb,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class Event(BaseModel):
@@ -164,7 +167,7 @@ class Event(BaseModel):
         blank=True,
         verbose_name=_("Campaign"),
         help_text=_(
-            "If you select another event, it will be considered in the same campaign, and they will share the characters"
+            "If you select another event, it will be considered in the same campaign, and they will share the characters",
         )
         + " - "
         + _("if you leave this empty, this can be the starting event of a new campaign"),
@@ -228,7 +231,8 @@ class Event(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the name of the object as a string."""
         return self.name
 
     def get_elements(self, element_model_class: type) -> QuerySet:
@@ -239,6 +243,7 @@ class Event(BaseModel):
 
         Returns:
             Ordered queryset of elements
+
         """
         # Get all elements for the parent event
         queryset = element_model_class.objects.filter(event=self.get_class_parent(element_model_class))
@@ -248,7 +253,7 @@ class Event(BaseModel):
             queryset = queryset.order_by("number")
         return queryset
 
-    def get_class_parent(self, model_class: Union[type[BaseModel], str]):
+    def get_class_parent(self, model_class: type[BaseModel] | str):
         """Get the parent event for inheriting elements of a specific model class.
 
         This method determines whether to use the parent event's elements or the current
@@ -267,6 +272,7 @@ class Event(BaseModel):
             Only specific model classes support inheritance. The method checks against
             a predefined list of inheritable elements and respects campaign independence
             configuration settings.
+
         """
         # Convert class objects to lowercase string representation
         if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
@@ -293,15 +299,18 @@ class Event(BaseModel):
         # Return self if no parent exists, element not inheritable, or independence enabled
         return self
 
-    def get_cover_thumb_url(self):
+    def get_cover_thumb_url(self) -> str | None:
+        """Get the URL of the cover thumbnail image, or None if unavailable."""
         try:
             # noinspection PyUnresolvedReferences
             return self.cover_thumb.url
         except Exception as e:
-            print(e)
+            # Log error and return None if cover_thumb is not available
+            logger.debug(f"Cover thumbnail not available for event {self.id}: {e}")
             return None
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Return the name attribute."""
         return self.name
 
     def show(self) -> dict[str, str]:
@@ -315,6 +324,7 @@ class Event(BaseModel):
                 Keys include: slug, name, tagline, description, website, genre,
                 where, authors, cover, cover_thumb, carousel_img, carousel_thumb,
                 font, background, background_red (when available).
+
         """
         dc = {}
 
@@ -377,7 +387,8 @@ class Event(BaseModel):
         os.makedirs(pdf_directory_path, exist_ok=True)
         return pdf_directory_path
 
-    def get_config(self, name, default_value=None, bypass_cache=False):
+    def get_config(self, name: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this instance."""
         return get_element_config(self, name, default_value, bypass_cache)
 
 
@@ -388,7 +399,8 @@ class EventConfig(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining event and name."""
         return f"{self.event} {self.name}"
 
     class Meta:
@@ -419,10 +431,12 @@ class BaseConceptModel(BaseModel):
         abstract = True
         ordering = ["event", "number"]
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Get the name attribute."""
         return get_attr(self, "name")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the string representation of this instance."""
         return self.name
 
 
@@ -510,7 +524,8 @@ class ProgressStep(BaseConceptModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return formatted string with order number and name."""
         return f"{self.order} - {self.name}"
 
 
@@ -552,7 +567,7 @@ class Run(BaseModel):
         unique=True,
         verbose_name=_("Secret code"),
         help_text=_(
-            "This code is used to generate the secret registration link, you may keep the default or customize it"
+            "This code is used to generate the secret registration link, you may keep the default or customize it",
         ),
         db_index=True,
     )
@@ -611,6 +626,7 @@ class Run(BaseModel):
             str: Formatted date string or "TBA" if dates are missing.
                 Examples: "15 January 2024", "15 - 20 January 2024",
                 "15 January - 20 February 2024", "15 January 2024 - 20 January 2025"
+
         """
         # Handle missing dates - return "TBA" if either date is None
         if not self.start or not self.end:
@@ -635,10 +651,11 @@ class Run(BaseModel):
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 
     def get_media_filepath(self) -> str:
-        """Returns the media file path for this run, creating the directory if needed.
+        """Return the media file path for this run, creating the directory if needed.
 
         Returns:
             The absolute path to the run's media directory.
+
         """
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
@@ -649,13 +666,16 @@ class Run(BaseModel):
 
         return run_media_path
 
-    def get_gallery_filepath(self):
+    def get_gallery_filepath(self) -> str:
+        """Return the file path for the gallery PDF."""
         return self.get_media_filepath() + "gallery.pdf"
 
-    def get_profiles_filepath(self):
+    def get_profiles_filepath(self) -> str:
+        """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, config_key, default_value=None, bypass_cache=False):
+    def get_config(self, config_key: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this object."""
         return get_element_config(self, config_key, default_value, bypass_cache)
 
 
@@ -666,7 +686,8 @@ class RunConfig(BaseModel):
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining run and name."""
         return f"{self.run} {self.name}"
 
     class Meta:
@@ -695,7 +716,8 @@ class PreRegistration(BaseModel):
 
     info = models.CharField(max_length=255)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining event and member."""
         return f"{self.event} {self.member}"
 
     class Meta:

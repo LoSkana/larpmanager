@@ -73,6 +73,7 @@ def walk_patterns(patterns) -> set[str]:
 
     Returns:
         Set of URL prefixes without angle brackets or regex anchors.
+
     """
     prefixes = set()
     for element in patterns:

@@ -21,7 +21,6 @@ import ast
 import json
 from collections import defaultdict
 from decimal import Decimal
-from typing import Optional
 
 from django.db import transaction
 from django.db.models import Prefetch, Q, Sum
@@ -55,6 +54,7 @@ def _build_px_context(character) -> tuple[set[int], set[int], dict[int, list[tup
         - Set of ability IDs already learned by the character
         - Set of option IDs selected for the character
         - Dictionary mapping ability IDs to lists of modifier tuples (cost, prerequisites, requirements)
+
     """
     # Get all abilities already learned by the character
     # This creates a set of primary keys for efficient lookup operations
@@ -64,8 +64,9 @@ def _build_px_context(character) -> tuple[set[int], set[int], dict[int, list[tup
     # Filter by character ID and applicable question type for accuracy
     current_character_choices = set(
         WritingChoice.objects.filter(
-            element_id=character.id, question__applicable=QuestionApplicable.CHARACTER
-        ).values_list("option_id", flat=True)
+            element_id=character.id,
+            question__applicable=QuestionApplicable.CHARACTER,
+        ).values_list("option_id", flat=True),
     )
 
     # Get all modifiers with optimized prefetch for related objects
@@ -117,6 +118,7 @@ def _apply_modifier_cost(
         modifiers_by_ability_id: Mapping of ability IDs to lists of (cost, prereq_ids, req_ids) tuples.
         character_ability_ids: Set of ability IDs the character currently has.
         character_choice_ids: Set of choice IDs the character currently has.
+
     """
     # Look only at modifiers for this specific ability
     for cost, prerequisite_ability_ids, required_choice_ids in modifiers_by_ability_id.get(ability.id, ()):
@@ -138,7 +140,8 @@ def get_free_abilities(char: Character) -> list:
     return ast.literal_eval(config_value)
 
 
-def _free_abilities_cache_key():
+def _free_abilities_cache_key() -> str:
+    """Return cache key for free abilities."""
     return "free_abilities"
 
 
@@ -148,12 +151,12 @@ def set_free_abilities(char: Character, frees: list[int]) -> None:
     save_single_config(char, config_name, json.dumps(frees))
 
 
-def calculate_character_experience_points(character):
-    """
-    Update character experience points and apply ability calculations.
+def calculate_character_experience_points(character) -> None:
+    """Update character experience points and apply ability calculations.
 
     Args:
         character: Character instance to update
+
     """
     if "px" not in get_event_features(character.event_id):
         return
@@ -180,35 +183,32 @@ def calculate_character_experience_points(character):
     apply_rules_computed(character)
 
 
-def _handle_free_abilities(character):
-    """
-    Handle free abilities that characters should automatically receive.
+def _handle_free_abilities(character) -> None:
+    """Handle free abilities that characters should automatically receive.
 
     Args:
         character: Character instance to process
+
     """
     free_ability_ids = get_free_abilities(character)
 
     # look for available ability with cost 0, and not already in the free list: get them!
     for ability in get_available_ability_px(character, 0):
-        if ability.visible and ability.cost == 0:
-            if ability.id not in free_ability_ids:
-                character.px_ability_list.add(ability)
-                free_ability_ids.append(ability.id)
+        if ability.visible and ability.cost == 0 and ability.id not in free_ability_ids:
+            character.px_ability_list.add(ability)
+            free_ability_ids.append(ability.id)
 
     # look for current abilities with cost non 0, yet got in the past as free: remove them!
     for ability in get_current_ability_px(character):
-        if ability.visible and ability.cost > 0:
-            if ability.id in free_ability_ids:
-                removed_ability_ids = remove_char_ability(character, ability.id)
-                free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
+        if ability.visible and ability.cost > 0 and ability.id in free_ability_ids:
+            removed_ability_ids = remove_char_ability(character, ability.id)
+            free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
 
     set_free_abilities(character, free_ability_ids)
 
 
 def get_current_ability_px(character: Character) -> list[AbilityPx]:
-    """
-    Get current abilities with modified costs for a character.
+    """Get current abilities with modified costs for a character.
 
     Retrieves character abilities and applies cost modifications based on
     character context including current abilities, choices, and modifiers.
@@ -218,6 +218,7 @@ def get_current_ability_px(character: Character) -> list[AbilityPx]:
 
     Returns:
         List of abilities with modified costs applied
+
     """
     # Build the context for PX calculations including current abilities and modifiers
     current_character_abilities, current_character_choices, modifiers_by_ability = _build_px_context(character)
@@ -244,6 +245,7 @@ def check_available_ability_px(ability, current_char_abilities, current_char_cho
 
     Returns:
         True if all prerequisites and requirements are met, False otherwise
+
     """
     # Extract prerequisite IDs from the ability
     prerequisite_ids = {ability.id for ability in ability.prerequisites.all()}
@@ -270,6 +272,7 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
     Returns:
         List of AbilityPx instances that the character can purchase with their
         current PX and that meet all prerequisites and requirements
+
     """
     # Build context with current character abilities, choices, and modifiers
     current_character_abilities, current_character_choices, modifiers_by_ability = _build_px_context(char)
@@ -311,7 +314,11 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
 
 
 def on_experience_characters_m2m_changed(
-    sender, instance: Optional[DeliveryPx], action: str, pk_set: Optional[set], **kwargs
+    sender,
+    instance: DeliveryPx | None,
+    action: str,
+    pk_set: set | None,
+    **kwargs,
 ) -> None:
     """Handle m2m changes for experience-character relationships."""
     # Only process relevant m2m actions
@@ -323,10 +330,7 @@ def on_experience_characters_m2m_changed(
         calculate_character_experience_points(instance)
     else:
         # Get characters from pk_set or instance relationship
-        if pk_set:
-            characters = Character.objects.filter(pk__in=pk_set)
-        else:
-            characters = instance.characters.all()
+        characters = Character.objects.filter(pk__in=pk_set) if pk_set else instance.characters.all()
 
         # Update experience points for each affected character
         for char in characters:
@@ -334,7 +338,11 @@ def on_experience_characters_m2m_changed(
 
 
 def on_rule_abilities_m2m_changed(
-    sender: type, instance: RulePx, action: str, pk_set: set[int] | None, **kwargs
+    sender: type,
+    instance: RulePx,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs,
 ) -> None:
     """Handle changes to rule abilities many-to-many relationships.
 
@@ -354,7 +362,11 @@ def on_rule_abilities_m2m_changed(
 
 
 def on_modifier_abilities_m2m_changed(
-    sender: type, instance: ModifierPx, action: str, pk_set: set[int] | None, **kwargs
+    sender: type,
+    instance: ModifierPx,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs,
 ) -> None:
     """Handle modifier abilities m2m changes by recalculating character experience."""
     # Only process relevant m2m actions
@@ -370,8 +382,7 @@ def on_modifier_abilities_m2m_changed(
 
 
 def apply_rules_computed(char) -> None:
-    """
-    Apply computed field rules to calculate character statistics.
+    """Apply computed field rules to calculate character statistics.
 
     This function processes all computed writing questions for a character's event,
     applies mathematical rules based on the character's abilities, and saves the
@@ -388,6 +399,7 @@ def apply_rules_computed(char) -> None:
     Note:
         Division operations are safe-guarded against division by zero.
         Computed values are formatted to remove trailing zeros and decimal points.
+
     """
     # Get the character's event and initialize computed question values
     event = char.event
@@ -419,23 +431,24 @@ def apply_rules_computed(char) -> None:
     for rule in applicable_rules:
         field_id = rule.field.id
         computed_field_values[field_id] = operations.get(
-            rule.operation, lambda current_value, rule_amount: current_value
+            rule.operation,
+            lambda current_value, rule_amount: current_value,
         )(computed_field_values[field_id], rule.amount)
 
     # Save computed values as WritingAnswer objects with clean formatting
     for question_id, computed_value in computed_field_values.items():
-        (writing_answer, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+        (writing_answer, _created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
         # Format decimal value and remove trailing zeros/decimal point
         writing_answer.text = format(computed_value, "f").rstrip("0").rstrip(".")
         writing_answer.save()
 
 
-def add_char_addit(character):
-    """
-    Add additional configuration data to character object.
+def add_char_addit(character) -> None:
+    """Add additional configuration data to character object.
 
     Args:
         character: Character instance to add additional data to
+
     """
     character.addit = {}
     character_configs = CharacterConfig.objects.filter(character__id=character.id)
@@ -448,12 +461,12 @@ def add_char_addit(character):
 
 
 def remove_char_ability(char, ability_id):
-    """
-    Remove character ability and all dependent abilities.
+    """Remove character ability and all dependent abilities.
 
     Args:
         char: Character instance
         ability_id: ID of ability to remove
+
     """
     ability_ids_to_remove = {ability_id}
 
@@ -473,8 +486,9 @@ def remove_char_ability(char, ability_id):
     return ability_ids_to_remove
 
 
-def update_characters_experience_on_ability_change(instance) -> None:
-    # Update experience points for all characters that have this ability
+def update_characters_experience_on_ability_change(instance: AbilityPx) -> None:
+    """Update experience points for all characters with this ability."""
+    # Recalculate experience for each character that has this ability
     for character in instance.characters.all():
         calculate_character_experience_points(character)
 
@@ -486,7 +500,7 @@ def refresh_delivery_characters(instance: DeliveryPx) -> None:
 
 
 def update_characters_experience_on_rule_change(instance: RulePx) -> None:
-    """Updates experience points for all characters when experience rules change."""
+    """Update experience points for all characters when experience rules change."""
     # Get the event containing the rule
     parent_event = instance.event.get_class_parent(RulePx)
 

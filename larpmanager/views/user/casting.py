@@ -20,7 +20,6 @@
 
 import json
 import logging
-from typing import Optional
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -63,6 +62,7 @@ def casting_characters(context: dict, reg: Registration) -> None:
         - Filters out filler characters for non-filler ticket tiers
         - Converts faction and character data to JSON for frontend use
         - Adds faction filter for transversal faction types
+
     """
     # Determine if we should filter out filler characters based on ticket tier
     filter_filler = hasattr(reg, "ticket") and reg.ticket and reg.ticket.tier != TicketTier.FILLER
@@ -108,6 +108,7 @@ def casting_quest_traits(context: dict, typ: str) -> None:
 
     Returns:
         None: Function modifies context dictionary in-place
+
     """
     trait_choices = {}
     faction_names = []
@@ -155,6 +156,7 @@ def casting_details(context: dict, casting_type: int) -> dict:
     Note:
         For casting_type > 0: Configures quest-related labels and data
         For casting_type = 0: Configures character-related labels
+
     """
     # Load event cache data into context
     get_event_cache_all(context)
@@ -174,20 +176,23 @@ def casting_details(context: dict, casting_type: int) -> dict:
     context["typ"] = casting_type
     for config_key, default_value in (("add", 0), ("min", 5), ("max", 5)):
         context[f"casting_{config_key}"] = int(
-            get_event_config(context["event"].id, f"casting_{config_key}", default_value, context)
+            get_event_config(context["event"].id, f"casting_{config_key}", default_value, context),
         )
 
     # Set boolean casting preferences from event configuration
     for preference_name in ["show_pref", "history", "avoid"]:
         context["casting_" + preference_name] = get_event_config(
-            context["event"].id, "casting_" + preference_name, False, context
+            context["event"].id,
+            "casting_" + preference_name,
+            False,
+            context,
         )
 
     return context
 
 
 @login_required
-def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
+def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> HttpResponse:
     """Handle user casting preferences for LARP events.
 
     This view manages the casting preference selection process for registered users,
@@ -196,7 +201,7 @@ def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse
     Args:
         request: Django HTTP request object containing user session and POST data
         event_slug: Event slug identifier used to retrieve the specific event run
-        typ: Casting type identifier for different casting categories (default: 0)
+        casting_type: Casting type identifier for different casting categories (default: 0)
 
     Returns:
         HttpResponse: Rendered casting form template or redirect response to appropriate page
@@ -204,6 +209,7 @@ def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse
     Raises:
         Http404: If event or run is not found via get_event_context
         PermissionDenied: If user lacks required casting feature permissions
+
     """
     # Get event context and validate user access permissions
     context = get_event_context(request, event_slug, signup=True, include_status=True)
@@ -220,35 +226,35 @@ def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse
             request,
             _(
                 "You are on the waiting list, you must be registered with a regular ticket to be "
-                "able to select your preferences!"
+                "able to select your preferences!",
             ),
         )
         return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Load casting details and options for the specified type
-    casting_details(context, typ)
+    casting_details(context, casting_type)
     logger.debug(
-        f"Casting context for typ {typ}: {context.get('gl_name', 'Unknown')}, features: {list(context.get('features', {}).keys())}"
+        f"Casting context for casting_type {casting_type}: {context.get('gl_name', 'Unknown')}, features: {list(context.get('features', {}).keys())}",
     )
 
     # Set template path for rendering
     red = "larpmanager/event/casting/casting.html"
 
     # Check if user has already completed casting assignments
-    _check_already_done(context, request, typ)
+    _check_already_done(context, request, casting_type)
 
     # If assignments are already done, render read-only view
     if "assigned" in context:
         return render(request, red, context)
 
     # Load any previously saved preferences for this casting type
-    _get_previous(context, request, typ)
+    _get_previous(context, request, casting_type)
 
     # Process POST request with new casting preferences
     if request.method == "POST":
         prefs = {}
         # Extract preference choices from form data
-        for i in range(0, context["casting_max"]):
+        for i in range(context["casting_max"]):
             k = f"choice{i}"
             if k not in request.POST:
                 continue
@@ -257,11 +263,11 @@ def casting(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse
             # Validate no duplicate preferences selected
             if pref in prefs.values():
                 messages.warning(request, _("You have indicated several preferences towards the same element!"))
-                return redirect("casting", event_slug=context["run"].get_slug(), typ=typ)
+                return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
             prefs[i] = pref
 
         # Save preferences and redirect to refresh page
-        _casting_update(context, prefs, request, typ)
+        _casting_update(context, prefs, request, casting_type)
         return redirect(request.path_info)
 
     # Render casting form for GET requests
@@ -281,6 +287,7 @@ def _get_previous(context: dict, request: HttpRequest, typ: int) -> None:
 
     Returns:
         None: Function modifies context dictionary in place
+
     """
     # Retrieve all previous casting choices for this member, run, and type
     # ordered by preference to maintain selection order
@@ -321,6 +328,7 @@ def _check_already_done(context: dict, request, assignment_type: int) -> None:
         context: View context dictionary to update with assignment info
         request: HTTP request object
         assignment_type: 0 for character assignment, other values for trait types
+
     """
     # Check if character assignment already done (type 0)
     if assignment_type == 0:
@@ -335,7 +343,9 @@ def _check_already_done(context: dict, request, assignment_type: int) -> None:
         # Check if trait assignment already exists
         try:
             assignment_trait = AssignmentTrait.objects.get(
-                run=context["run"], member=context["member"], typ=assignment_type
+                run=context["run"],
+                member=context["member"],
+                typ=assignment_type,
             )
             # Format quest and trait names for display
             context["assigned"] = (
@@ -363,6 +373,7 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
 
     Returns:
         None: Function performs database operations and sends messages/emails.
+
     """
     # Clear all existing casting preferences for this user, run, and type
     Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
@@ -370,12 +381,16 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
     # Create new casting preferences based on submitted data
     for preference_order, element_id in prefs.items():
         Casting.objects.create(
-            run=context["run"], member=context["member"], typ=typ, element=element_id, pref=preference_order
+            run=context["run"],
+            member=context["member"],
+            typ=typ,
+            element=element_id,
+            pref=preference_order,
         )
 
     # Handle casting avoidance preferences if feature is enabled
     avoidance_text = None
-    if "casting_avoid" in context and context["casting_avoid"]:
+    if context.get("casting_avoid"):
         # Clear existing avoidance preferences
         CastingAvoid.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
 
@@ -396,12 +411,12 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
     # Build preference list for confirmation email
     preference_names_list = []
     for casting_preference in Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by(
-        "pref"
+        "pref",
     ):
         if typ == 0:
             # Character casting: get character name
             preference_names_list.append(
-                Character.objects.get(pk=casting_preference.element).show(context["run"])["name"]
+                Character.objects.get(pk=casting_preference.element).show(context["run"])["name"],
             )
         else:
             # Trait casting: get quest and trait names
@@ -414,7 +429,10 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
 
 
 def get_casting_preferences(
-    element_number: int, context: dict, casting_type: int = 0, casting_queryset: Optional[QuerySet] = None
+    element_number: int,
+    context: dict,
+    casting_type: int = 0,
+    casting_queryset: QuerySet | None = None,
 ) -> tuple[int, str, dict[int, int]]:
     """Calculate and return casting preference statistics.
 
@@ -436,13 +454,14 @@ def get_casting_preferences(
         - average_preference (str): Average preference value formatted to 2 decimals,
                                    or "-" if no preferences exist
         - preference_distribution (dict): Mapping of preference values to their counts
+
     """
     total_preferences = 0
     preference_sum = 0
 
     # Initialize distribution dictionary with all possible preference values
     preference_distribution = {}
-    for preference_value in range(0, context["casting_max"] + 1):
+    for preference_value in range(context["casting_max"] + 1):
         preference_distribution[preference_value] = 0
 
     # Get casting queryset if not provided
@@ -462,10 +481,7 @@ def get_casting_preferences(
             preference_distribution[preference_value] += 1
 
     # Calculate average preference or return placeholder
-    if total_preferences == 0:
-        average_preference = "-"
-    else:
-        average_preference = "%.2f" % (preference_sum * 1.0 / total_preferences)
+    average_preference = "-" if total_preferences == 0 else "%.2f" % (preference_sum * 1.0 / total_preferences)
 
     return total_preferences, average_preference, preference_distribution
 
@@ -489,6 +505,7 @@ def casting_preferences_characters(context: dict) -> None:
         Updates context with:
         - Filtered character list based on PNG/staff/free/mirror status
         - 'list': List of dictionaries containing character casting preferences
+
     """
     # Set up base filters for character selection
     filters = {"png": True}
@@ -545,12 +562,13 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
     Note:
         This function has side effects - it modifies the context dictionary by adding
         a 'list' key containing trait preference data.
+
     """
     # Get the quest type for the given event and type number
     try:
         quest_type = QuestType.objects.get(event=context["event"], number=quest_type_number)
     except ObjectDoesNotExist as err:
-        raise Http404() from err
+        raise Http404 from err
 
     # Initialize the list to store trait preference data
     context["list"] = []
@@ -576,7 +594,7 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
 
 
 @login_required
-def casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
+def casting_preferences(request: HttpRequest, event_slug: str, casting_type: int = 0) -> HttpResponse:
     """Display casting preferences interface for characters or traits.
 
     Provides a web interface for users to set their casting preferences during
@@ -586,7 +604,7 @@ def casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> 
     Args:
         request: Django HTTP request object containing user session and data
         event_slug: Event slug identifier used to locate the specific event
-        typ: Preference type selector - 0 for character preferences,
+        casting_type: Preference type selector - 0 for character preferences,
              any other value for trait-based preferences
 
     Returns:
@@ -595,14 +613,16 @@ def casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> 
     Raises:
         Http404: When casting preferences are disabled for the event or
                 when the user is not properly registered for the event
+
     """
     # Get event context and verify user signup status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    casting_details(context, typ)
+    casting_details(context, casting_type)
 
     # Check if casting preferences are enabled for this event
     if not context["casting_show_pref"]:
-        raise Http404("Not cool, bro!")
+        msg = "Not cool, bro!"
+        raise Http404(msg)
 
     # Build features map and check registration status
     context.update({"features_map": {context["event"].id: context["features"]}})
@@ -610,16 +630,17 @@ def casting_preferences(request: HttpRequest, event_slug: str, typ: int = 0) -> 
 
     # Verify user has valid registration for this event
     if context["run"].reg is None:
-        raise Http404("not registered")
+        msg = "not registered"
+        raise Http404(msg)
 
     # Route to appropriate preference handler based on type
-    if typ == 0:
+    if casting_type == 0:
         # Handle character-based casting preferences
         casting_preferences_characters(context)
     else:
         # Handle trait-based preferences (requires questbuilder feature)
         check_event_feature(request, context, "questbuilder")
-        casting_preferences_traits(context, typ)
+        casting_preferences_traits(context, casting_type)
 
     return render(request, "larpmanager/event/casting/preferences.html", context)
 
@@ -643,6 +664,7 @@ def casting_history_characters(context: dict) -> None:
     Note:
         Mirror characters are currently skipped (TODO: implement proper handling).
         Only considers non-cancelled registrations excluding STAFF and NPC tiers.
+
     """
     # Initialize context with empty list and character cache
     context["list"] = []
@@ -687,10 +709,7 @@ def casting_history_characters(context: dict) -> None:
                 continue
 
             # Format character display string with number and name
-            if character:
-                character_display = f"#{character.number} {character.name}"
-            else:
-                character_display = "-----"
+            character_display = f"#{character.number} {character.name}" if character else "-----"
 
             # Store preference with 1-based indexing
             registration.prefs[casting.pref + 1] = character_display
@@ -700,8 +719,7 @@ def casting_history_characters(context: dict) -> None:
 
 
 def casting_history_traits(context: dict) -> None:
-    """
-    Process casting history and character traits for display in the casting interface.
+    """Process casting history and character traits for display in the casting interface.
 
     This function populates the context dictionary with casting preferences and trait
     information for registrations in a specific run and casting type. It builds a
@@ -716,6 +734,7 @@ def casting_history_traits(context: dict) -> None:
 
     Returns:
         None: Function modifies the context dictionary in place.
+
     """
     # Initialize context containers for casting data
     context["list"] = []
@@ -758,22 +777,22 @@ def casting_history_traits(context: dict) -> None:
 
     # Log processing statistics for debugging
     logger.debug(
-        f"Casting history context for typ {context.get('typ', 0)}: {len(context.get('list', []))} registrations processed"
+        f"Casting history context for typ {context.get('typ', 0)}: {len(context.get('list', []))} registrations processed",
     )
 
 
 @login_required
-def casting_history(request: HttpRequest, event_slug: str, typ: int = 0) -> HttpResponse:
+def casting_history(request: HttpRequest, event_slug: str, casting_type: int = 0) -> HttpResponse:
     """Display casting history for characters or traits.
 
     This view provides access to casting history data for events, allowing users
     to view historical casting decisions for either characters or traits based
-    on the typ parameter.
+    on the casting_type parameter.
 
     Args:
         request: The HTTP request object containing user and session data
         event_slug: Event slug identifier used to locate the specific event
-        typ: History type selector - 0 for character history, 1 for trait history.
+        casting_type: History type selector - 0 for character history, 1 for trait history.
              Defaults to 0 (character history)
 
     Returns:
@@ -782,24 +801,27 @@ def casting_history(request: HttpRequest, event_slug: str, typ: int = 0) -> Http
     Raises:
         Http404: If casting history feature is not enabled for the event
         Http404: If user is not registered for the event and not staff
+
     """
     # Get event context and verify user signup status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    casting_details(context, typ)
+    casting_details(context, casting_type)
 
     # Check if casting history feature is enabled for this event
     if not context["casting_history"]:
-        raise Http404("Not cool, bro!")
+        msg = "Not cool, bro!"
+        raise Http404(msg)
 
     # Verify user registration or staff access
     if context["run"].reg is None and "staff" not in context:
-        raise Http404("not registered")
+        msg = "not registered"
+        raise Http404(msg)
 
     # Populate casting details for the specified type
-    casting_details(context, typ)
+    casting_details(context, casting_type)
 
     # Handle different history types
-    if typ == 0:
+    if casting_type == 0:
         # Load character casting history
         casting_history_characters(context)
     else:

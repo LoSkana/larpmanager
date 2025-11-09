@@ -30,7 +30,7 @@ from larpmanager.models.association import Association
 logger = logging.getLogger(__name__)
 
 
-def association_permission_feature_key(permission_slug):
+def association_permission_feature_key(permission_slug) -> str:
     """Generate cache key for association permission features.
 
     Args:
@@ -38,6 +38,7 @@ def association_permission_feature_key(permission_slug):
 
     Returns:
         str: Cache key for association permission feature
+
     """
     return f"association_permission_feature_{permission_slug}"
 
@@ -56,16 +57,14 @@ def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
             - feature_slug: The feature slug or 'def' if placeholder
             - tutorial: Feature tutorial text or empty string
             - config: Permission config text or empty string
+
     """
     # Fetch permission with related feature data to minimize queries
     perm = AssociationPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
 
     # Use default slug for placeholder features, otherwise use actual feature slug
-    if feature.placeholder:
-        slug = "def"
-    else:
-        slug = feature.slug
+    slug = "def" if feature.placeholder else feature.slug
 
     # Extract tutorial and config data with fallback to empty strings
     tutorial = feature.tutorial or ""
@@ -73,7 +72,9 @@ def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
 
     # Cache the processed data for future requests
     cache.set(
-        association_permission_feature_key(slug), (slug, tutorial, config), timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+        association_permission_feature_key(slug),
+        (slug, tutorial, config),
+        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
     )
     return slug, tutorial, config
 
@@ -92,6 +93,7 @@ def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict
             - feature_slug (str): The feature slug, defaults to "def" if slug is empty
             - tutorial (str | None): Tutorial content if available
             - config (dict | None): Configuration data if available
+
     """
     # Return default values if no slug provided
     if not slug:
@@ -112,7 +114,7 @@ def clear_association_permission_cache(association: Association) -> None:
     cache.delete(association_permission_feature_key(association.slug))
 
 
-def event_permission_feature_key(permission_slug):
+def event_permission_feature_key(permission_slug) -> str:
     """Generate cache key for event permission features.
 
     Args:
@@ -120,6 +122,7 @@ def event_permission_feature_key(permission_slug):
 
     Returns:
         str: Cache key for event permission feature
+
     """
     return f"event_permission_feature_{permission_slug}"
 
@@ -135,6 +138,7 @@ def update_event_permission_feature(permission_slug: str) -> tuple[str, str, str
             - feature_slug: The feature slug or "def" if placeholder
             - tutorial: The feature tutorial text or empty string
             - config: The permission config or empty string
+
     """
     try:
         # Fetch permission with related feature to avoid additional queries
@@ -147,10 +151,7 @@ def update_event_permission_feature(permission_slug: str) -> tuple[str, str, str
     permission_feature = event_permission.feature
 
     # Determine the appropriate slug based on feature type
-    if permission_feature.placeholder:
-        feature_slug = "def"
-    else:
-        feature_slug = permission_feature.slug
+    feature_slug = "def" if permission_feature.placeholder else permission_feature.slug
 
     # Extract tutorial and config with fallback to empty strings
     feature_tutorial = permission_feature.tutorial or ""
@@ -174,6 +175,7 @@ def get_event_permission_feature(slug: str | None) -> tuple[str, None, None]:
 
     Returns:
         Tuple containing permission feature data
+
     """
     # Return default values if no slug provided
     if not slug:
@@ -213,6 +215,7 @@ def update_index_permission(permission_type: str) -> list[dict]:
 
     Raises:
         KeyError: If permission_type is not 'event' or 'association'
+
     """
     # Map permission type to corresponding model class
     type_to_model_mapping = {"event": EventPermission, "association": AssociationPermission}
@@ -249,6 +252,7 @@ def get_cache_index_permission(permission_type: str) -> list:
 
     Returns:
         The cached or freshly updated permission index.
+
     """
     # Attempt to retrieve from cache
     cached_result = cache.get(index_permission_key(permission_type))

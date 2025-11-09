@@ -20,6 +20,7 @@
 
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
+from django.http import HttpRequest
 from django.utils.html import format_html
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, RunFilter, reduced
@@ -191,10 +192,12 @@ class PlayerRelationshipAdmin(DefModelAdmin):
 
     @staticmethod
     def text_red(instance):
+        """Return reduced text for admin display."""
         return reduced(instance.text)
 
     @staticmethod
-    def reg_red(instance):
+    def reg_red(instance) -> str:
+        """Return registration with run number for admin display."""
         return f"{instance.reg} ({instance.reg.run.number})"
 
 
@@ -207,6 +210,7 @@ class EmailAdmin(DefModelAdmin):
 
     @staticmethod
     def body_red(instance):
+        """Return reduced body text for admin display."""
         return reduced(instance.body)
 
 
@@ -219,7 +223,8 @@ class OneTimeAccessTokenInline(admin.TabularInline):
     fields = ("note", "token", "used", "used_at", "used_by", "ip_address")
     can_delete = True
 
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request, obj=None) -> bool:
+        """Allow adding new tokens."""
         return True
 
 
@@ -253,7 +258,7 @@ class OneTimeContentAdmin(DefModelAdmin):
                     "description",
                     "file",
                     "active",
-                )
+                ),
             },
         ),
         (
@@ -273,7 +278,7 @@ class OneTimeContentAdmin(DefModelAdmin):
 
     file_display.short_description = "File"
 
-    def file_size_display(self, obj):
+    def file_size_display(self, obj) -> str:
         """Display human-readable file size."""
         if not obj.file_size:
             return "-"
@@ -326,7 +331,7 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
                     "content",
                     "token",
                     "note",
-                )
+                ),
             },
         ),
         (
@@ -345,12 +350,12 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
         ),
     )
 
-    def token_short(self, obj):
+    def token_short(self, obj) -> str:
         """Display shortened token."""
         return f"{obj.token[:12]}..."
 
     token_short.short_description = "Token"
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, request: HttpRequest) -> bool:
         """Prevent adding tokens through admin - they should be generated via the content."""
         return True
