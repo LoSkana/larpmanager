@@ -99,7 +99,7 @@ def _analyze_ticket(ticket):
 
     # Build the command and run it in the analysis directory
     result = subprocess.run(
-        ["claude", "--print"],
+        ["claude", "--print"],  # noqa: S607
         check=False,
         input=prompt,
         capture_output=True,
@@ -139,7 +139,7 @@ def _analyze_ticket(ticket):
 
 def _test_connection():
     """Verify that Claude is installed and configured."""
-    result = subprocess.run(["claude", "--version"], check=False, capture_output=True, text=True, timeout=5)
+    result = subprocess.run(["claude", "--version"], check=False, capture_output=True, text=True, timeout=5)  # noqa: S607
     return result.returncode == 0
 
 
@@ -239,7 +239,7 @@ def create_error_ticket(request):
         content = content[:max_length] + "\n...(truncated)"
 
     # Create unique identifier for this error (hash of error type + message)
-    error_identifier = hashlib.md5(f"{error_type}:{error_message}".encode()).hexdigest()
+    error_identifier = hashlib.md5(f"{error_type}:{error_message}".encode()).hexdigest()  # noqa: S324
 
     # Check if a similar error ticket was created today
     today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)

@@ -40,7 +40,7 @@ def check_branch() -> None:
         return
 
     # Get current git branch name
-    current_branch_name = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
+    current_branch_name = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()  # noqa: S607
 
     # Raise error if on main branch
     if current_branch_name == "main":

@@ -293,7 +293,7 @@ def _go_centauri(context: dict) -> bool:
     if not centauri_probability:
         return False
 
-    random_value = random.randint(0, 1000)
+    random_value = random.randint(0, 1000)  # noqa: S311
     if random_value > centauri_probability:
         return False
 

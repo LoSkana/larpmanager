@@ -76,8 +76,8 @@ class Command(BaseCommand):
                     # Delete all data and reset auto-increment sequences
                     for model in apps.get_models():
                         table = model._meta.db_table
-                        cursor.execute(f'DELETE FROM "{table}";')
-                        cursor.execute(f'DELETE FROM sqlite_sequence WHERE name="{table}";')  # reset AUTOINCREMENT
+                        cursor.execute(f'DELETE FROM "{table}";')  # noqa: S608
+                        cursor.execute(f'DELETE FROM sqlite_sequence WHERE name="{table}";')  # noqa: S608
 
                     # Re-enable foreign key constraints
                     cursor.execute("PRAGMA foreign_keys = ON;")

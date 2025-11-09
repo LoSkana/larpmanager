@@ -630,7 +630,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
 
 def generate_number(length: int) -> str:
     """Generate a random string of digits with the specified length."""
-    return "".join(random.choice(string.digits) for _ in range(length))
+    return "".join(random.choice(string.digits) for _ in range(length))  # noqa: S311
 
 
 def html_clean(text: str | None) -> str:

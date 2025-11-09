@@ -426,7 +426,7 @@ def get_sumup_form(
 
     # Make authentication request and extract token
     authentication_response = requests.request(
-        "POST", authentication_url, headers=authentication_headers, data=authentication_payload
+        "POST", authentication_url, headers=authentication_headers, data=authentication_payload, timeout=30
     )
     authentication_response_data = json.loads(authentication_response.text)
     # logger.debug(f"Response text: {authentication_response.text}")
@@ -458,7 +458,9 @@ def get_sumup_form(
 
     # Create checkout session and extract checkout ID
     # logger.debug(f"Payload: {checkout_payload}")
-    checkout_response = requests.request("POST", checkout_url, headers=checkout_headers, data=checkout_payload)
+    checkout_response = requests.request(
+        "POST", checkout_url, headers=checkout_headers, data=checkout_payload, timeout=30
+    )
     # logger.debug(f"SumUp response: {checkout_response.text}")
     checkout_response_data = json.loads(checkout_response.text)
 
@@ -774,7 +776,8 @@ class RedSysClient:
                Redsys
         :return merchant_parameters: Json structure with all parameters.
         """
-        assert isinstance(merchant_parameters, str)
+        if not isinstance(merchant_parameters, str):
+            raise TypeError(f"merchant_parameters must be str, got {type(merchant_parameters)}")
         return json.loads(base64.b64decode(merchant_parameters).decode())
 
     def encrypt_order(self, order):
@@ -785,7 +788,8 @@ class RedSysClient:
         :param Ds_Merchant_Order: dict with all merchant parameters
         :return  order_encrypted: The encrypted order.
         """
-        assert isinstance(order, str)
+        if not isinstance(order, str):
+            raise TypeError(f"order must be str, got {type(order)}")
         initialization_vector = b"\0\0\0\0\0\0\0\0"
         decoded_secret_key = base64.b64decode(self.secret_key)
         triple_des_cipher = DES3.new(decoded_secret_key, DES3.MODE_CBC, IV=initialization_vector)
@@ -800,8 +804,10 @@ class RedSysClient:
         :param merchant_parameters: Redsys already encoded parameters
         :return Generated signature as a base64 encoded string.
         """
-        assert isinstance(encrypted_order, bytes)
-        assert isinstance(merchant_parameters, bytes)
+        if not isinstance(encrypted_order, bytes):
+            raise TypeError(f"encrypted_order must be bytes, got {type(encrypted_order)}")
+        if not isinstance(merchant_parameters, bytes):
+            raise TypeError(f"merchant_parameters must be bytes, got {type(merchant_parameters)}")
         hmac_signature = hmac.new(encrypted_order, merchant_parameters, hashlib.sha256).digest()
         return base64.b64encode(hmac_signature)
 

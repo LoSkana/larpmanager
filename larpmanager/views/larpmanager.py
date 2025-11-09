@@ -1157,7 +1157,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     (demo_user, created) = User.objects.get_or_create(
         email=f"test{new_primary_key}@demo.it", username=f"test{new_primary_key}"
     )
-    demo_user.password = "pippo"
+    demo_user.password = "pippo"  # noqa: S105
     demo_user.save()
 
     # Configure member profile with demo information

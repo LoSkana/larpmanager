@@ -689,7 +689,7 @@ def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
 
     # Shuffle members using deterministic daily seed
     v = datetime.today().date() - date(1970, 1, 1)
-    random.Random(v.days).shuffle(context["list"])
+    random.Random(v.days).shuffle(context["list"])  # noqa: S311
 
     return render(request, "larpmanager/general/badge.html", context)
 

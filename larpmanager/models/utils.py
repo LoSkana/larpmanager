@@ -56,7 +56,7 @@ def generate_id(id_length):
         str: Random lowercase alphanumeric string of specified length
 
     """
-    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
+    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))  # noqa: S311
 
 
 def decimal_to_str(decimal_value: Decimal) -> str:
@@ -127,7 +127,7 @@ def remove_non_ascii(text: str) -> str:
 
 def my_uuid_miny():
     """Generate tiny UUID with letter prefix and 4 characters."""
-    return random.choice(string.ascii_letters) + my_uuid(4)
+    return random.choice(string.ascii_letters) + my_uuid(4)  # noqa: S311
 
 
 def my_uuid_short():
