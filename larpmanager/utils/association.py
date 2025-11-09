@@ -26,7 +26,7 @@ from larpmanager.models.access import AssociationPermission
 from larpmanager.models.association import Association
 
 
-def generate_association_encryption_key(association):
+def generate_association_encryption_key(association) -> None:
     """Generate Fernet encryption key for new associations.
 
     Args:
@@ -37,7 +37,7 @@ def generate_association_encryption_key(association):
         association.key = Fernet.generate_key()
 
 
-def auto_assign_association_permission_number(association_permission):
+def auto_assign_association_permission_number(association_permission) -> None:
     """Assign number to association permission if not set.
 
     Args:
@@ -46,7 +46,7 @@ def auto_assign_association_permission_number(association_permission):
     """
     if not association_permission.number:
         max_number = AssociationPermission.objects.filter(
-            feature__module=association_permission.feature.module
+            feature__module=association_permission.feature.module,
         ).aggregate(Max("number"))["number__max"]
         if not max_number:
             max_number = 1

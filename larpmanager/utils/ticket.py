@@ -36,7 +36,7 @@ from larpmanager.utils.tasks import background_auto, my_send_mail
 
 
 @background_auto(queue="analyze_ticket")
-def analyze_ticket_bgk(ticket_id):
+def analyze_ticket_bgk(ticket_id) -> None:
     """Analyze a ticket and send result email to admins and maintainers.
 
     Args:
@@ -48,7 +48,8 @@ def analyze_ticket_bgk(ticket_id):
     """
     # Verify connection
     if not _test_connection():
-        raise Exception("Claude not available!")
+        msg = "Claude not available!"
+        raise Exception(msg)
 
     try:
         ticket = LarpManagerTicket.objects.get(id=ticket_id)
@@ -61,7 +62,8 @@ def analyze_ticket_bgk(ticket_id):
         # Send result email to admins and maintainers
         _send_analysis_result_email(ticket)
     except ObjectDoesNotExist as err:
-        raise Exception(f"Ticket #{ticket_id} not found") from err
+        msg = f"Ticket #{ticket_id} not found"
+        raise Exception(msg) from err
 
 
 def _analyze_ticket(ticket):
@@ -112,7 +114,8 @@ def _analyze_ticket(ticket):
     output = result.stdout.strip()
 
     if result.returncode != 0:
-        raise Exception(f"Claude Error: {result.stderr} - {output} - {analysis_dir}")
+        msg = f"Claude Error: {result.stderr} - {output} - {analysis_dir}"
+        raise Exception(msg)
 
     # Extract JSON from response
     json_match = re.search(r"\{.*\}", output, re.DOTALL)
@@ -143,7 +146,7 @@ def _test_connection():
     return result.returncode == 0
 
 
-def _send_analysis_result_email(ticket):
+def _send_analysis_result_email(ticket) -> None:
     """Send analysis result email to admins and association maintainers.
 
     Args:

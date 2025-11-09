@@ -79,8 +79,9 @@ def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_stat
     try:
         # Get or create a system member for API logging
         # This ensures all API logs are associated with a consistent system user
-        system_member, created = Member.objects.get_or_create(
-            username="api_system", defaults={"email": "api@larpmanager.com", "first_name": "API", "last_name": "System"}
+        system_member, _created = Member.objects.get_or_create(
+            username="api_system",
+            defaults={"email": "api@larpmanager.com", "first_name": "API", "last_name": "System"},
         )
 
         # Build comprehensive log data dictionary
@@ -174,7 +175,8 @@ def published_events(request: HttpRequest) -> JsonResponse:
     try:
         # Query associations that have publisher feature enabled and are not deleted
         publisher_associations = Association.objects.filter(
-            features__slug="publisher", deleted__isnull=True
+            features__slug="publisher",
+            deleted__isnull=True,
         ).select_related("skin")
 
         # Get all upcoming runs from publisher associations, ordered by start date

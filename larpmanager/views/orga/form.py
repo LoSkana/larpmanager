@@ -239,7 +239,9 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
         # Redirect to option creation if needed, otherwise back to form list
         if edit_option:
             return redirect(
-                orga_registration_options_new, event_slug=context["run"].get_slug(), num=context["saved"].id
+                orga_registration_options_new,
+                event_slug=context["run"].get_slug(),
+                num=context["saved"].id,
             )
         return redirect(perm, event_slug=context["run"].get_slug())
 
@@ -283,7 +285,8 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, num: i
     if not context["event"].get_elements(RegistrationQuestion).exists():
         # Display warning message to user about missing prerequisites
         messages.warning(
-            request, _("You must create at least one registration question before you can create registration options")
+            request,
+            _("You must create at least one registration question before you can create registration options"),
         )
         # Redirect to registration questions creation page
         return redirect("orga_registration_form_edit", event_slug=event_slug, num=0)
@@ -348,7 +351,9 @@ def orga_registration_options_order(
 
     # Redirect back to the form edit page
     return redirect(
-        "orga_registration_form_edit", event_slug=context["run"].get_slug(), num=context["current"].question_id
+        "orga_registration_form_edit",
+        event_slug=context["run"].get_slug(),
+        num=context["current"].question_id,
     )
 
 

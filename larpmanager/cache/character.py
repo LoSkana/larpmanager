@@ -41,7 +41,7 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
 
 
-def delete_all_in_path(path):
+def delete_all_in_path(path) -> None:
     """Recursively delete all contents within a directory path.
 
     Args:
@@ -58,7 +58,7 @@ def delete_all_in_path(path):
                 shutil.rmtree(entry_path)
 
 
-def get_event_cache_all_key(event_run):
+def get_event_cache_all_key(event_run) -> str:
     """Generate cache key for event data.
 
     Args:
@@ -133,7 +133,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     # Get list of assigned character IDs for mirror filtering
     assigned_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
-        "character_id", flat=True
+        "character_id",
+        flat=True,
     )
 
     # Process each character for the event cache
@@ -245,12 +246,20 @@ def get_character_element_fields(
 ) -> dict:
     """Get writing element fields for a character."""
     return get_writing_element_fields(
-        context, "character", QuestionApplicable.CHARACTER, character_id, only_visible=only_visible
+        context,
+        "character",
+        QuestionApplicable.CHARACTER,
+        character_id,
+        only_visible=only_visible,
     )
 
 
 def get_writing_element_fields(
-    context: dict, feature_name: str, applicable, element_id: int, only_visible: bool = True
+    context: dict,
+    feature_name: str,
+    applicable,
+    element_id: int,
+    only_visible: bool = True,
 ) -> dict:
     """Get writing fields for a specific element with visibility filtering.
 
@@ -279,7 +288,7 @@ def get_writing_element_fields(
     # Filter questions based on visibility configuration
     # Only include questions that are explicitly shown or when show_all is enabled
     visible_question_ids = []
-    for question_id in context["questions"].keys():
+    for question_id in context["questions"]:
         question_config_key = str(question_id)
         # Skip questions not marked as visible unless showing all
         if "show_all" not in context and question_config_key not in context[f"show_{feature_name}"]:
@@ -438,7 +447,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
 
         # Find the character this trait is assigned to
         found_character = None
-        for _number, character in res["chars"].items():
+        for character in res["chars"].values():
             if "player_id" in character and character["player_id"] == assignment_trait.member_id:
                 found_character = character
                 break
@@ -572,7 +581,9 @@ def update_event_cache_all_character_reg(character_registration, cache_result: d
 
     # Search and update player information
     search_player(
-        character, character_display_data, {"run": event_run, "assignments": {character.number: character_registration}}
+        character,
+        character_display_data,
+        {"run": event_run, "assignments": {character.number: character_registration}},
     )
 
     # Initialize character entry if not exists
@@ -646,7 +657,8 @@ def update_member_event_character_cache(instance: Member) -> None:
     """Update event cache for all active character registrations of a member."""
     # Get all active character registrations for this member
     active_character_registrations = RegistrationCharacterRel.objects.filter(
-        reg__member_id=instance.id, reg__cancellation_date__isnull=True
+        reg__member_id=instance.id,
+        reg__cancellation_date__isnull=True,
     )
     active_character_registrations = active_character_registrations.select_related("character", "reg", "reg__run")
 

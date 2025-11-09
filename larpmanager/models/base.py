@@ -212,7 +212,7 @@ class Feature(BaseModel):
     class Meta:
         ordering = ["module", "order"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return string representation of the feature.
 
         Returns:
@@ -277,11 +277,11 @@ class PublisherApiKey(BaseModel):
             self.key = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({'Active' if self.active else 'Inactive'})"
 
 
-def auto_assign_sequential_numbers(instance):
+def auto_assign_sequential_numbers(instance) -> None:
     """Auto-populate number and order fields for model instances.
 
     Args:
@@ -305,7 +305,7 @@ def auto_assign_sequential_numbers(instance):
                     setattr(instance, field_name, max_value + 1)
 
 
-def update_model_search_field(model_instance):
+def update_model_search_field(model_instance) -> None:
     """Update search field for model instances that have one.
 
     Args:

@@ -70,7 +70,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
         # potentially exist in either field, even for different users
         # noinspection PyProtectedMember
         matching_users = user_model._default_manager.filter(
-            Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username)
+            Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username),
         )
 
         # Test password against each matching user record

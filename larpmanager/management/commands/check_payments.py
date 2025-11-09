@@ -39,7 +39,7 @@ class Command(BaseCommand):
 
     help = "Check status of pending payments across all payment gateways"
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         """Handle command execution with exception handling.
 
         Args:
@@ -52,7 +52,7 @@ class Command(BaseCommand):
             # Future payment gateway checks can be added here
         except Exception as e:
             notify_admins("Check Payments", "Error checking payments", e)
-            logger.error(f"Error in check_payments command: {e}")
+            logger.exception(f"Error in check_payments command: {e}")
 
     def check_satispay_payments(self) -> None:
         """Check all pending Satispay payments and verify their status.
@@ -93,5 +93,5 @@ class Command(BaseCommand):
 
         # Report successful completion with count of checked payments
         self.stdout.write(
-            self.style.SUCCESS(f"Successfully checked {successfully_verified_count} pending Satispay payments.")
+            self.style.SUCCESS(f"Successfully checked {successfully_verified_count} pending Satispay payments."),
         )

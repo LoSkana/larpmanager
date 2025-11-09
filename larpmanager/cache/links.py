@@ -95,7 +95,7 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
 
     # Build accessible runs
     navigation_context.update(
-        _get_accessible_runs(association_id, navigation_context["association_role"], navigation_context["event_role"])
+        _get_accessible_runs(association_id, navigation_context["association_role"], navigation_context["event_role"]),
     )
 
     # Determine if topbar should be shown
@@ -193,7 +193,8 @@ def clear_run_event_links_cache(event: Event) -> None:
     # These users typically have access to all events in the association
     try:
         association_role = AssociationRole.objects.prefetch_related("members").get(
-            association_id=event.association_id, number=1
+            association_id=event.association_id,
+            number=1,
         )
         for member in association_role.members.all():
             reset_event_links(member.id, event.association_id)

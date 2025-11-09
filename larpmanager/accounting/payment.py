@@ -24,8 +24,7 @@ import logging
 import math
 import re
 from datetime import datetime
-from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
@@ -74,6 +73,9 @@ from larpmanager.utils.base import fetch_payment_details, update_payment_details
 from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
 
+if TYPE_CHECKING:
+    from decimal import Decimal
+
 logger = logging.getLogger(__name__)
 
 
@@ -114,11 +116,16 @@ def unique_invoice_cod(length=16):
         invoice_code = generate_id(length)
         if not PaymentInvoice.objects.filter(cod=invoice_code).exists():
             return invoice_code
-    raise ValueError("Too many attempts to generate the code")
+    msg = "Too many attempts to generate the code"
+    raise ValueError(msg)
 
 
 def set_data_invoice(
-    request: HttpRequest, context: dict, invoice: PaymentInvoice, form: Form, association_id: int
+    request: HttpRequest,
+    context: dict,
+    invoice: PaymentInvoice,
+    form: Form,
+    association_id: int,
 ) -> None:
     """Set invoice data from form submission.
 
@@ -220,14 +227,16 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
         # Look for a registration question with matching name
         try:
             registration_question = RegistrationQuestion.objects.get(
-                event=context["reg"].run.event, name__iexact=question_name
+                event=context["reg"].run.event,
+                name__iexact=question_name,
             )
 
             # Handle single/multiple choice questions
             if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 selected_option_names = []
                 user_choices = RegistrationChoice.objects.filter(
-                    question=registration_question, reg_id=context["reg"].id
+                    question=registration_question,
+                    reg_id=context["reg"].id,
                 )
 
                 # Collect all selected option names
@@ -237,7 +246,8 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             else:
                 # Handle text-based questions
                 answer_value = RegistrationAnswer.objects.get(
-                    question=registration_question, reg_id=context["reg"].id
+                    question=registration_question,
+                    reg_id=context["reg"].id,
                 ).text
             placeholder_values[question_name] = answer_value
         except ObjectDoesNotExist:
@@ -295,7 +305,11 @@ def update_invoice_gross_fee(request, invoice, amount, association_id, payment_m
 
 
 def get_payment_form(
-    request: HttpRequest, form: Any, payment_type: str, context: dict[str, Any], invoice_key: str | None = None
+    request: HttpRequest,
+    form: Any,
+    payment_type: str,
+    context: dict[str, Any],
+    invoice_key: str | None = None,
 ) -> None:
     """Create or update payment invoice and prepare gateway-specific form.
 
@@ -392,7 +406,7 @@ def get_payment_form(
         get_satispay_form(request, context, invoice, payment_amount)
 
 
-def payment_received(invoice):
+def payment_received(invoice) -> bool:
     """Process a received payment and update related records.
 
     Args:
@@ -474,7 +488,7 @@ def _process_membership(invoice: PaymentInvoice) -> None:
         accounting_item.save()
 
 
-def _process_payment(invoice):
+def _process_payment(invoice) -> None:
     """Process a payment from an invoice and create accounting entries.
 
     Args:
@@ -536,7 +550,7 @@ def _process_fee(features, fee_percentage: float, invoice) -> None:
         accounting_transaction.save()
 
 
-def process_payment_invoice_status_change(invoice):
+def process_payment_invoice_status_change(invoice) -> None:
     """Process payment invoice status changes and trigger payment received.
 
     Args:
@@ -560,7 +574,7 @@ def process_payment_invoice_status_change(invoice):
     payment_received(invoice)
 
 
-def process_refund_request_status_change(refund_request):
+def process_refund_request_status_change(refund_request: HttpRequest) -> None:
     """Process refund request status changes.
 
     Args:

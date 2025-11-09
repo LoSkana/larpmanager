@@ -59,12 +59,17 @@ from larpmanager.views.orga.event import prepare_roles_list
 def exe_association(request):
     """Edit association details."""
     return exe_edit(
-        request, ExeAssociationForm, None, "exe_association", "manage", additional_context={"add_another": False}
+        request,
+        ExeAssociationForm,
+        None,
+        "exe_association",
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
 @login_required
-def exe_roles(request) -> HttpResponse:
+def exe_roles(request: HttpRequest) -> HttpResponse:
     """Handle association roles management page.
 
     Args:
@@ -122,7 +127,9 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
     # Fetch and order association texts for display
     context["list"] = AssociationText.objects.filter(association_id=context["association_id"]).order_by(
-        "typ", "default", "language"
+        "typ",
+        "default",
+        "language",
     )
 
     return render(request, "larpmanager/exe/texts.html", context)
@@ -191,7 +198,12 @@ def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
 def exe_methods(request):
     """Edit payment methods settings."""
     return exe_edit(
-        request, ExePaymentSettingsForm, None, "exe_methods", "manage", additional_context={"add_another": False}
+        request,
+        ExePaymentSettingsForm,
+        None,
+        "exe_methods",
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
@@ -199,11 +211,16 @@ def exe_methods(request):
 def exe_appearance(request):
     """Edit association appearance settings."""
     return exe_edit(
-        request, ExeAppearanceForm, None, "exe_appearance", "manage", additional_context={"add_another": False}
+        request,
+        ExeAppearanceForm,
+        None,
+        "exe_appearance",
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
-def f_k_exe(f_id, r_id):
+def f_k_exe(f_id, r_id) -> str:
     """Generate feature key for association role."""
     return f"feature_{f_id}_exe_{r_id}_key"
 
@@ -232,7 +249,8 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     if backend_edit(request, context, ExeFeatureForm, None, additional_field=None, is_association_based=True):
         # Get newly activated features that have after-links
         context["new_features"] = Feature.objects.filter(
-            pk__in=context["form"].added_features, after_link__isnull=False
+            pk__in=context["form"].added_features,
+            after_link__isnull=False,
         )
 
         # If no features with after-links, redirect to manage page
@@ -281,7 +299,8 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
 
     # Ensure this is an overall feature (organization-wide)
     if not context["feature"].overall:
-        raise Http404("not overall feature!")
+        msg = "not overall feature!"
+        raise Http404(msg)
 
     # Get feature ID and association object
     feature_id = context["feature"].id
@@ -403,7 +422,7 @@ def _add_in_iframe_param(url: str) -> str:
             parsed_url.params,
             updated_query_string,
             parsed_url.fragment,
-        )
+        ),
     )
 
 
@@ -452,5 +471,10 @@ def exe_quick(request):
 def exe_preferences(request):
     """Edit user preferences."""
     return exe_edit(
-        request, ExePreferencesForm, request.user.member.id, None, "manage", additional_context={"add_another": False}
+        request,
+        ExePreferencesForm,
+        request.user.member.id,
+        None,
+        "manage",
+        additional_context={"add_another": False},
     )

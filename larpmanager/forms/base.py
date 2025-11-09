@@ -161,7 +161,8 @@ class MyForm(forms.ModelForm):
             if self.params["event"].parent_id:
                 related_event_ids.add(self.params["event"].parent_id)
                 sibling_event_ids = Event.objects.filter(parent_id=self.params["event"].parent_id).values_list(
-                    "pk", flat=True
+                    "pk",
+                    flat=True,
                 )
                 related_event_ids.update(sibling_event_ids)
 
@@ -293,9 +294,8 @@ class MyForm(forms.ModelForm):
         # Process each field in the form
         for s in self.fields:
             # Skip custom fields if they exist
-            if hasattr(self, "custom_field"):
-                if s in self.custom_field:
-                    continue
+            if hasattr(self, "custom_field") and s in self.custom_field:
+                continue
 
             # Handle multi-select widgets specially
             if isinstance(self.fields[s].widget, s2forms.ModelSelect2MultipleWidget):
@@ -473,7 +473,7 @@ class BaseRegistrationForm(MyFormRun):
 
             # Populate choice dictionaries with existing single/multiple choice answers
             for choice_answer in self.choice_class.objects.filter(**{self.instance_key: instance.id}).select_related(
-                "question"
+                "question",
             ):
                 # Handle single choice questions - store the selected choice
                 if choice_answer.question.typ == BaseQuestionType.SINGLE:
@@ -506,7 +506,11 @@ class BaseRegistrationForm(MyFormRun):
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
     def get_choice_options(
-        self, all_options: dict, question, chosen_options=None, registration_count=None
+        self,
+        all_options: dict,
+        question,
+        chosen_options=None,
+        registration_count=None,
     ) -> tuple[list[tuple], str]:
         """Build form choice options for a question with availability and ticket validation.
 
@@ -543,7 +547,11 @@ class BaseRegistrationForm(MyFormRun):
             # Check availability constraints if registration counts provided
             if registration_count and option.max_available > 0:
                 option_display_name, is_valid = self.check_option(
-                    chosen_options, option_display_name, option, registration_count, event_run
+                    chosen_options,
+                    option_display_name,
+                    option,
+                    registration_count,
+                    event_run,
                 )
                 if not is_valid:
                     continue
@@ -562,7 +570,12 @@ class BaseRegistrationForm(MyFormRun):
         return choices, help_text
 
     def check_option(
-        self, previously_chosen_options: list, display_name: str, option, registration_count_by_option: dict, run
+        self,
+        previously_chosen_options: list,
+        display_name: str,
+        option,
+        registration_count_by_option: dict,
+        run,
     ) -> tuple[str, bool]:
         """Check option availability and update display name with availability info.
 
@@ -731,7 +744,10 @@ class BaseRegistrationForm(MyFormRun):
         return True
 
     def _init_field(
-        self, question: WritingQuestion, registration_counts: dict[str, Any] | None = None, is_organizer: bool = True
+        self,
+        question: WritingQuestion,
+        registration_counts: dict[str, Any] | None = None,
+        is_organizer: bool = True,
     ) -> str | None:
         """Initialize form field for a writing question.
 
@@ -786,9 +802,8 @@ class BaseRegistrationForm(MyFormRun):
             self.fields[field_key].disabled = not is_field_active
 
         # Configure max length validation for applicable question types
-        if question.max_length:
-            if question.typ in get_writing_max_length():
-                self.max_lengths[f"id_{field_key}"] = (question.max_length, question.typ)
+        if question.max_length and question.typ in get_writing_max_length():
+            self.max_lengths[f"id_{field_key}"] = (question.max_length, question.typ)
 
         # Mark mandatory fields with visual indicator and track for validation
         if question.status == QuestionStatus.MANDATORY:
@@ -1016,7 +1031,10 @@ class BaseRegistrationForm(MyFormRun):
 
             # Get choice options with quota tracking for user registration
             (available_choices, help_text) = self.get_choice_options(
-                self.choices, question, previously_chosen_options, registration_counts
+                self.choices,
+                question,
+                previously_chosen_options,
+                registration_counts,
             )
 
         # Create the choice field with determined options and configuration
@@ -1032,7 +1050,12 @@ class BaseRegistrationForm(MyFormRun):
             self.initial[field_key] = self.singles[question.id].option_id
 
     def init_multiple(
-        self, field_key: str, is_organizational_form: bool, question: Any, registration_counts: dict, is_required: bool
+        self,
+        field_key: str,
+        is_organizational_form: bool,
+        question: Any,
+        registration_counts: dict,
+        is_required: bool,
     ) -> None:
         """Set up multiple choice form field handling.
 
@@ -1063,7 +1086,10 @@ class BaseRegistrationForm(MyFormRun):
             if question.id in self.multiples:
                 previously_selected_choices = self.multiples[question.id]
             (available_choices, help_text) = self.get_choice_options(
-                self.choices, question, previously_selected_choices, registration_counts
+                self.choices,
+                question,
+                previously_selected_choices,
+                registration_counts,
             )
 
         # Add validator for maximum selection limit if specified
@@ -1081,7 +1107,7 @@ class BaseRegistrationForm(MyFormRun):
 
         # Set initial values from previously selected options
         if question.id in self.multiples:
-            initial_option_ids = list([selected_choice.option_id for selected_choice in self.multiples[question.id]])
+            initial_option_ids = [selected_choice.option_id for selected_choice in self.multiples[question.id]]
             self.initial[field_key] = initial_option_ids
 
     def reorder_field(self, field_name: str) -> None:
@@ -1090,7 +1116,7 @@ class BaseRegistrationForm(MyFormRun):
         field = self.fields.pop(field_name)
         self.fields[field_name] = field
 
-    def save_reg_questions(self, instance, orga=True):
+    def save_reg_questions(self, instance, orga=True) -> None:
         """Save registration question answers to database.
 
         Args:
@@ -1192,11 +1218,11 @@ class BaseRegistrationForm(MyFormRun):
             return
 
         # Convert option IDs to a set of integers
-        oid = set([int(o) for o in oid])
+        oid = {int(o) for o in oid}
 
         # If question already has existing choices, sync the differences
         if q.id in self.multiples:
-            old = set([el.option_id for el in self.multiples[q.id]])
+            old = {el.option_id for el in self.multiples[q.id]}
 
             # Create new choices for added options
             for add in oid - old:
@@ -1205,7 +1231,7 @@ class BaseRegistrationForm(MyFormRun):
             # Delete choices for removed options
             rem = old - oid
             self.choice_class.objects.filter(
-                **{"question": q, self.instance_key: instance.id, "option_id__in": rem}
+                **{"question": q, self.instance_key: instance.id, "option_id__in": rem},
             ).delete()
         else:
             # Create all choices from scratch if none exist
@@ -1342,5 +1368,8 @@ class BaseAccForm(forms.Form):
 
         # Load payment fees configuration for the association
         self.context["user_fees"] = get_association_config(
-            self.context["association_id"], "payment_fees_user", False, self.context
+            self.context["association_id"],
+            "payment_fees_user",
+            False,
+            self.context,
         )

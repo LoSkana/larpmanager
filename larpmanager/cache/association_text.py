@@ -107,7 +107,9 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
 
     # Cache the result for one day
     cache.set(
-        association_text_key_def(association_id, text_type), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+        association_text_key_def(association_id, text_type),
+        default_text,
+        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
     )
     return default_text
 
@@ -133,7 +135,7 @@ def get_association_text_cache_def(association_id: int, typ: str) -> str:
     return cached_text
 
 
-def get_association_text(association_id: int, text_type: str, language_code: str = None) -> str:
+def get_association_text(association_id: int, text_type: str, language_code: str | None = None) -> str:
     """Get association text for the specified type and language.
 
     Retrieves localized text for an association. Falls back to default

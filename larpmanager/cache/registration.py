@@ -36,7 +36,7 @@ def clear_registration_counts_cache(run_id: int) -> None:
     cache.delete(cache_registration_counts_key(run_id))
 
 
-def cache_registration_counts_key(run_id):
+def cache_registration_counts_key(run_id) -> str:
     """Generate cache key for registration counts."""
     return f"registration_counts_{run_id}"
 
@@ -56,10 +56,7 @@ def get_reg_counts(run: Run, reset_cache: bool = False) -> dict:
     cache_key = cache_registration_counts_key(run.id)
 
     # Check if we should bypass cache
-    if reset_cache:
-        cached_counts = None
-    else:
-        cached_counts = cache.get(cache_key)
+    cached_counts = None if reset_cache else cache.get(cache_key)
 
     # Update and cache if not found
     if cached_counts is None:
@@ -210,7 +207,8 @@ def search_player(character, json_output: dict, context: dict) -> None:
         try:
             # Fetch registration character relationship with related objects
             character.rcr = RegistrationCharacterRel.objects.select_related("reg", "reg__member").get(
-                reg__run_id=context["run"].id, character=character
+                reg__run_id=context["run"].id,
+                character=character,
             )
             character.reg = character.rcr.reg
             character.member = character.reg.member

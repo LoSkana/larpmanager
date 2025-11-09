@@ -80,7 +80,7 @@ def analyze_file(path):
 
     """
     try:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, "r", encoding="utf-8") as f:
             content = f.read()
 
         tree = ast.parse(content, filename=str(path))
@@ -104,7 +104,7 @@ def find_python_files(root_dir):
 
     """
     root_path = Path(root_dir)
-    larpmanager_dir = root_path / 'larpmanager'
+    larpmanager_dir = root_path / "larpmanager"
 
     if not larpmanager_dir.exists():
         print(f"Warning: larpmanager directory not found at {larpmanager_dir}")
@@ -112,11 +112,11 @@ def find_python_files(root_dir):
 
     # Directories to skip
     skip_dirs = {
-        '__pycache__', '.pytest_cache', 'migrations', 'staticfiles',
-        '.tox', 'dist', 'build', '.eggs', 'tests'
+        "__pycache__", ".pytest_cache", "migrations", "staticfiles",
+        ".tox", "dist", "build", ".eggs", "tests"
     }
 
-    for py_file in larpmanager_dir.rglob('*.py'):
+    for py_file in larpmanager_dir.rglob("*.py"):
         # Skip files in excluded directories
         if any(skip_dir in py_file.parts for skip_dir in skip_dirs):
             continue
@@ -174,26 +174,26 @@ def main():
             # A function might be defined in multiple files (same name)
             for abs_path, rel_path, func_number in all_defined_functions[func_name]:
                 results.append({
-                    'name': func_name,
-                    'path': rel_path,
-                    'invocation_count': count,
-                    'function_number': func_number
+                    "name": func_name,
+                    "path": rel_path,
+                    "invocation_count": count,
+                    "function_number": func_number
                 })
 
     # Sort by invocation count (descending), then by function name
-    results.sort(key=lambda x: (-x['invocation_count'], x['name'], x['path']))
+    results.sort(key=lambda x: (-x["invocation_count"], x["name"], x["path"]))
 
     # Write results to CSV file
-    output_file = Path('refactor/function_invocations.csv')
-    with open(output_file, 'w', encoding='utf-8') as f:
+    output_file = Path("refactor/function_invocations.csv")
+    with open(output_file, "w", encoding="utf-8") as f:
         # Write header
-        f.write('name,path,invocation_count,function_number\n')
+        f.write("name,path,invocation_count,function_number\n")
 
         # Write data
         for result in results:
             # Escape file path if it contains commas
-            path = result['path']
-            if ',' in path:
+            path = result["path"]
+            if "," in path:
                 path = f'"{path}"'
 
             f.write(f"{result['name']},{path},{result['invocation_count']},{result['function_number']}\n")
@@ -207,5 +207,5 @@ def main():
         print(f"{i}. {result['name']} ({result['path']}) #{result['function_number']}: {result['invocation_count']} invocations")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -60,7 +60,7 @@ class MyRegistrationView(RegistrationView):
             **{
                 User.USERNAME_FIELD: new_user.get_username(),
                 "password": form.cleaned_data["password1"],
-            }
+            },
         )
 
         # Log in the authenticated user and send registration signal

@@ -175,7 +175,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     album_image.save()
 
 
-def upload_albums(main, el):
+def upload_albums(main, el) -> None:
     """Extract and upload all files from zip archive to album structure.
 
     Args:
@@ -204,7 +204,7 @@ def upload_albums(main, el):
     shutil.rmtree(extraction_path)
 
 
-def zipdir(path, ziph):
+def zipdir(path, ziph) -> None:
     """Recursively add directory contents to zip file.
 
     Args:
@@ -256,7 +256,10 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
     template_context = {}
     for config_key in ["centauri_descr", "centauri_content"]:
         template_context[config_key] = get_association_config(
-            context["association_id"], config_key, None, template_context
+            context["association_id"],
+            config_key,
+            None,
+            template_context,
         )
 
     # Award badge to user if configured for this association
@@ -294,13 +297,10 @@ def _go_centauri(context: dict) -> bool:
         return False
 
     random_value = random.randint(0, 1000)  # noqa: S311
-    if random_value > centauri_probability:
-        return False
-
-    return True
+    return not random_value > centauri_probability
 
 
-def get_warehouse_optionals(context, default_columns):
+def get_warehouse_optionals(context, default_columns) -> None:
     """Get warehouse optional field configuration for display.
 
     Args:

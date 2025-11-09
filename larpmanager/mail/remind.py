@@ -29,7 +29,7 @@ from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.tasks import my_send_mail
 
 
-def remember_membership(registration):
+def remember_membership(registration) -> None:
     """Send membership reminder email to registered user.
 
     Args:
@@ -42,11 +42,12 @@ def remember_membership(registration):
     activate(registration.member.language)
 
     subject = hdr(registration.run.event) + _("Confirmation of registration for %(event)s") % {
-        "event": registration.run
+        "event": registration.run,
     }
 
     body = get_association_text(
-        registration.run.event.association_id, AssociationTextType.REMINDER_MEMBERSHIP
+        registration.run.event.association_id,
+        AssociationTextType.REMINDER_MEMBERSHIP,
     ) or get_remember_membership_body(registration)
 
     my_send_mail(subject, body, registration.member, registration.run)
@@ -76,7 +77,7 @@ def get_remember_membership_body(registration) -> str:
     email_body = (
         _(
             "Hello! To confirm your provisional registration for %(event)s, "
-            "you must apply for membership in the association"
+            "you must apply for membership in the association",
         )
         % {"event": registration.run}
         + ". "
@@ -105,7 +106,7 @@ def get_remember_membership_body(registration) -> str:
     return email_body
 
 
-def remember_pay(registration):
+def remember_pay(registration) -> None:
     """Send payment reminder email to registered user.
 
     Args:
@@ -126,7 +127,8 @@ def remember_pay(registration):
         email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
 
     email_body = get_association_text(
-        registration.run.event.association_id, AssociationTextType.REMINDER_PAY
+        registration.run.event.association_id,
+        AssociationTextType.REMINDER_PAY,
     ) or get_remember_pay_body(email_context, is_provisional_registration, registration)
 
     my_send_mail(email_subject, email_body, registration.member, registration.run)
@@ -193,7 +195,7 @@ def get_remember_pay_body(context: dict, is_provisional_registration: bool, regi
         "<br /><br />"
         + _(
             "If we don't hear from you, we'll assume you're no longer interested in the event and "
-            "will cancel your registration to make room for other participants"
+            "will cancel your registration to make room for other participants",
         )
         + "."
     )
@@ -201,7 +203,7 @@ def get_remember_pay_body(context: dict, is_provisional_registration: bool, regi
     return email_body
 
 
-def remember_profile(registration):
+def remember_profile(registration) -> None:
     """Send profile completion reminder email to registered user.
 
     Args:
@@ -217,7 +219,8 @@ def remember_profile(registration):
     subject = hdr(registration.run.event) + _("Profile compilation reminder for %(event)s") % context
 
     body = get_association_text(
-        registration.run.event.association_id, AssociationTextType.REMINDER_PROFILE
+        registration.run.event.association_id,
+        AssociationTextType.REMINDER_PROFILE,
     ) or get_remember_profile_body(context)
 
     my_send_mail(subject, body, registration.member, registration.run)
@@ -241,7 +244,7 @@ def get_remember_profile_body(email_context):
     )
 
 
-def remember_membership_fee(registration):
+def remember_membership_fee(registration) -> None:
     """Send membership fee reminder email to registered user.
 
     Args:
@@ -257,7 +260,8 @@ def remember_membership_fee(registration):
     subject = hdr(registration.run.event) + _("Reminder payment of membership fees for %(event)s") % context
 
     body = get_association_text(
-        registration.run.event.association_id, AssociationTextType.REMINDER_MEMBERSHIP_FEE
+        registration.run.event.association_id,
+        AssociationTextType.REMINDER_MEMBERSHIP_FEE,
     ) or get_remember_membership_fee_body(context, registration)
 
     my_send_mail(subject, body, registration.member, registration.run)
@@ -311,7 +315,7 @@ def get_remember_membership_fee_body(context: dict, registration) -> str:
     return email_body
 
 
-def notify_deadlines(run):
+def notify_deadlines(run) -> None:
     """Send deadline notification emails to event organizers.
 
     Args:

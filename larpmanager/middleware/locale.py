@@ -22,6 +22,7 @@ import os
 from collections.abc import Callable
 
 from django.conf import settings as conf_settings
+from django.http import HttpRequest
 from django.utils import translation
 
 
@@ -52,7 +53,7 @@ class LocaleAdvMiddleware:
         return self.get_response(request)
 
     @staticmethod
-    def get_lang(request) -> str:
+    def get_lang(request: HttpRequest) -> str:
         """Determine appropriate language for the request.
 
         Selects the most appropriate language based on a priority hierarchy:
@@ -89,10 +90,7 @@ class LocaleAdvMiddleware:
                     if browser_language == language_code:
                         is_language_supported = True
                 # Default to English if detected language is not supported
-                if not is_language_supported:
-                    selected_language = "en"
-                else:
-                    selected_language = browser_language
+                selected_language = "en" if not is_language_supported else browser_language
         else:
             # For anonymous users, rely on browser language detection
             selected_language = translation.get_language_from_request(request)

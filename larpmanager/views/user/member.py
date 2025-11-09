@@ -99,10 +99,7 @@ def language(request: HttpRequest) -> HttpResponse:
 
     """
     # Determine current language based on user authentication status
-    if request.user.is_authenticated:
-        current_language = request.user.member.language
-    else:
-        current_language = get_language()
+    current_language = request.user.member.language if request.user.is_authenticated else get_language()
 
     # Process form submission for language change
     if request.method == "POST":
@@ -193,7 +190,7 @@ def profile(request: HttpRequest):
             "form": form,
             "member": member,
             "disable_join": True,
-        }
+        },
     )
 
     context["custom_text"] = get_association_text(context["association_id"], AssociationTextType.PROFILE)
@@ -247,7 +244,7 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
 
     """
     # Only accept POST requests
-    if not request.method == "POST":
+    if request.method != "POST":
         return JsonResponse({"res": "ko"})
 
     # Validate uploaded image using form
@@ -342,9 +339,9 @@ def profile_privacy(request: HttpRequest) -> HttpResponse:
             "member": request.user.member,
             # Get active memberships, excluding empty and revoked ones
             "joined": request.user.member.memberships.exclude(status=MembershipStatus.EMPTY).exclude(
-                status=MembershipStatus.REWOKED
+                status=MembershipStatus.REWOKED,
             ),
-        }
+        },
     )
 
     # Render and return the privacy template with context
@@ -388,7 +385,8 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
         messages.success(request, _("Data share removed successfully") + "!")
     except Exception as err:
         # Handle any errors by raising 404
-        raise Http404("error in performing request") from err
+        msg = "error in performing request"
+        raise Http404(msg) from err
 
     # Redirect back to privacy settings page
     return redirect("profile_privacy")
@@ -424,7 +422,8 @@ def membership(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         # Validate membership status allows form submission
         if el.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
-            raise Http404("wrong membership")
+            msg = "wrong membership"
+            raise Http404(msg)
 
         # Second pass - confirmation after file upload
         if el.status == MembershipStatus.UPLOADED:
@@ -526,9 +525,11 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
 
     # Verify member has membership in current association
     if not Membership.objects.filter(
-        member=context["member_public"], association_id=context["association_id"]
+        member=context["member_public"],
+        association_id=context["association_id"],
     ).exists():
-        raise Http404("no membership")
+        msg = "no membership"
+        raise Http404(msg)
 
     # Add badges if badge feature is enabled for association
     if "badge" in context["features"]:
@@ -589,9 +590,9 @@ def chats(request: HttpRequest) -> HttpResponse:
     context.update(
         {
             "list": Contact.objects.filter(me=request.user.member, association_id=context["association_id"]).order_by(
-                "-last_message"
-            )
-        }
+                "-last_message",
+            ),
+        },
     )
 
     return render(request, "larpmanager/member/chats.html", context)
@@ -651,7 +652,7 @@ def chat(request, member_id):
         mine_contact.num_unread = 0
         mine_contact.save()
     context["list"] = ChatMessage.objects.filter(channel=channel, association_id=context["association_id"]).order_by(
-        "-created"
+        "-created",
     )
     return render(request, "larpmanager/member/chat.html", context)
 
@@ -736,7 +737,7 @@ def leaderboard(request: HttpRequest, page: int = 1) -> HttpResponse:
             "number": page,
             "previous_page_number": page - 1,
             "next_page_number": page + 1,
-        }
+        },
     )
 
     # Set page identifier for template
@@ -887,7 +888,8 @@ def delegated(request: HttpRequest) -> HttpResponse:
             # Log back in as parent account
             login(request, request.user.member.parent.user, backend=backend)
             messages.success(
-                request, _("You are now logged in with your main account") + ":" + str(request.user.member)
+                request,
+                _("You are now logged in with your main account") + ":" + str(request.user.member),
             )
             return redirect("home")
         # Show option to return to parent account
@@ -905,7 +907,8 @@ def delegated(request: HttpRequest) -> HttpResponse:
         if account_login:
             account_login = int(account_login)
             if account_login not in del_dict:
-                raise Http404(f"delegated account not found: {account_login}")
+                msg = f"delegated account not found: {account_login}"
+                raise Http404(msg)
             delegated = del_dict[account_login]
             # Log in as the selected delegated account
             login(request, delegated.user, backend=backend)
@@ -984,7 +987,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
             "pre_registrations_dict": get_pre_registrations_dict(context["association_id"], context["member"]),
             "character_rels_dict": get_character_rels_dict(my_regs_dict, context["member"]),
             "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, context["member"]),
-        }
+        },
     )
 
     # Process each registration to calculate status and append to results

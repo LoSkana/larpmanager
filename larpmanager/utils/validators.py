@@ -42,12 +42,12 @@ class FileTypeValidator:
     type_message = _("File type '%(detected_type)s' is not allowed.Allowed types are: '%(allowed_types)s'.")
 
     extension_message = _(
-        "File extension '%(extension)s' is not allowed. Allowed extensions are: '%(allowed_extensions)s'."
+        "File extension '%(extension)s' is not allowed. Allowed extensions are: '%(allowed_extensions)s'.",
     )
 
     invalid_message = _(
         "Allowed type '%(allowed_type)s' is not a valid type.See "
-        "https://www.iana.org/assignments/media-types/media-types.xhtml"
+        "https://www.iana.org/assignments/media-types/media-types.xhtml",
     )
 
     def __init__(self, allowed_types: list[str], allowed_extensions: tuple[str, ...] = ()) -> None:
@@ -79,7 +79,7 @@ class FileTypeValidator:
         detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
 
         # Extract file extension from filename
-        root, extension = os.path.splitext(fileobj.name.lower())
+        _root, extension = os.path.splitext(fileobj.name.lower())
 
         # Reset file position to beginning for subsequent reads
         fileobj.seek(0)

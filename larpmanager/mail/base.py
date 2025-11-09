@@ -65,7 +65,7 @@ def check_holiday() -> bool:
     return False
 
 
-def join_email(association):
+def join_email(association) -> None:
     """Send welcome emails to association executives when they join.
 
     Args:
@@ -79,14 +79,16 @@ def join_email(association):
         activate(executive_member.language)
         welcome_subject = _("Welcome to LarpManager") + "!"
         welcome_body = render_to_string(
-            "mails/join_association.html", {"member": executive_member, "association": association}
+            "mails/join_association.html",
+            {"member": executive_member, "association": association},
         )
         my_send_mail(welcome_subject, welcome_body, executive_member)
 
         activate(executive_member.language)
         feedback_subject = "We'd love your feedback on LarpManager"
         feedback_body = render_to_string(
-            "mails/help_association.html", {"member": executive_member, "association": association}
+            "mails/help_association.html",
+            {"member": executive_member, "association": association},
         )
         feedback_delay_seconds = 3600 * 24 * 2
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
@@ -296,7 +298,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
         + " "
         + _(
             "Every friend who signs up and uses this code in the 'Discounts' field will "
-            "receive %(amount_to)s %(currency)s off the ticket"
+            "receive %(amount_to)s %(currency)s off the ticket",
         )
         % {
             "amount_to": context["bring_friend_discount_to"],
@@ -371,7 +373,7 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
     # Create main email body with trait assignment details
     body = _(
         "In the event <b>%(event)s</b> to which you are enrolled, you have been assigned the "
-        "trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
+        "trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>.",
     ) % {"event": instance.run, "trait": trait_display["name"], "quest": quest_display["name"]}
 
     # Add character access link to the email body
@@ -391,7 +393,11 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
 
 
 def mail_confirm_casting(
-    member, run, preference_category_name: str, selected_preferences: list, elements_to_avoid: str
+    member,
+    run,
+    preference_category_name: str,
+    selected_preferences: list,
+    elements_to_avoid: str,
 ) -> None:
     """Send casting preference confirmation email to member.
 
@@ -485,14 +491,16 @@ def send_character_status_update_email(instance: Character) -> None:
                 return
 
             # Construct email subject with event, character, and status info
-            email_subject = f"{hdr(instance.event)} - {str(instance)} - {instance.get_status_display()}"
+            email_subject = f"{hdr(instance.event)} - {instance!s} - {instance.get_status_display()}"
 
             # Send the notification email to the player
             my_send_mail(email_subject, email_body, instance.player, instance.event)
 
 
 def notify_organization_exe(
-    notification_generator: callable, association: Association, context_instance: object
+    notification_generator: callable,
+    association: Association,
+    context_instance: object,
 ) -> None:
     """Send notification to association executives.
 
@@ -574,15 +582,10 @@ def get_exec_language(association: Association) -> str:
             language_counts[executive_language] += 1
 
     # Determine the most common language or default to English
-    if language_counts:
-        most_common_language = max(language_counts, key=language_counts.get)
-    else:
-        most_common_language = "en"
-
-    return most_common_language
+    return max(language_counts, key=language_counts.get) if language_counts else "en"
 
 
-def send_support_ticket_email(instance):
+def send_support_ticket_email(instance) -> None:
     """Send ticket notification email to admins and association maintainers.
 
     Args:

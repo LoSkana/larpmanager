@@ -200,16 +200,19 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
     try:
         email = Email.objects.get(pk=email_id)
     except ObjectDoesNotExist as err:
-        raise Http404("not found") from err
+        msg = "not found"
+        raise Http404(msg) from err
 
     # Verify email belongs to the requesting association
     if email.association_id != context["association_id"]:
-        raise Http404("not your association")
+        msg = "not your association"
+        raise Http404(msg)
 
     # Check run-specific authorization if run context is provided
     run = context.get("run")
     if run and email.run_id != run.id:
-        raise Http404("not your run")
+        msg = "not your run"
+        raise Http404(msg)
 
     return email
 
@@ -262,7 +265,7 @@ def process_membership_status_updates(membership: Membership) -> None:
         # Assign next available card number if not already set
         if not membership.card_number:
             max_card_number = Membership.objects.filter(association=membership.association).aggregate(
-                Max("card_number")
+                Max("card_number"),
             )["card_number__max"]
             if not max_card_number:
                 max_card_number = 0

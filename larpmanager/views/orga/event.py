@@ -80,7 +80,11 @@ def orga_event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 def full_event_edit(
-    context: dict, request: HttpRequest, event: Event, run: Run, is_executive: bool = False
+    context: dict,
+    request: HttpRequest,
+    event: Event,
+    run: Run,
+    is_executive: bool = False,
 ) -> HttpResponse:
     """Comprehensive event editing with validation.
 
@@ -149,7 +153,7 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/roles.html", context)
 
 
-def prepare_roles_list(context, permission_type, role_queryset, default_callback):
+def prepare_roles_list(context, permission_type, role_queryset, default_callback) -> None:
     """Prepare role list with permissions organized by module for display.
 
     Builds a formatted list of roles with their members and grouped permissions,
@@ -186,7 +190,7 @@ def prepare_roles_list(context, permission_type, role_queryset, default_callback
             for module in sorted_modules:
                 permissions_sorted = sorted(permissions_by_module[module], key=lambda permission: permission.number)
                 permissions_names = ", ".join(
-                    [str(_(event_permission.name)) for event_permission in permissions_sorted]
+                    [str(_(event_permission.name)) for event_permission in permissions_sorted],
                 )
                 formatted_permissions.append(f"<b>{module}</b> ({permissions_names})")
             role.perms_list = ", ".join(formatted_permissions)
@@ -220,7 +224,13 @@ def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Retrieve cached run data and render edit form
     run = get_cache_run(request.association["id"], event_slug)
     return orga_edit(
-        request, event_slug, "orga_event", OrgaRunForm, run, "manage", additional_context={"add_another": False}
+        request,
+        event_slug,
+        "orga_event",
+        OrgaRunForm,
+        run,
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
@@ -268,7 +278,7 @@ def orga_config(
 
 
 @login_required
-def orga_features(request, event_slug):
+def orga_features(request, event_slug: str):
     """Manage event features activation and configuration.
 
     Args:
@@ -283,7 +293,8 @@ def orga_features(request, event_slug):
     context["add_another"] = False
     if backend_edit(request, context, OrgaFeatureForm, None, additional_field=None, is_association_based=False):
         context["new_features"] = Feature.objects.filter(
-            pk__in=context["form"].added_features, after_link__isnull=False
+            pk__in=context["form"].added_features,
+            after_link__isnull=False,
         )
         if not context["new_features"]:
             return redirect("manage", event_slug=context["run"].get_slug())
@@ -323,7 +334,8 @@ def orga_features_go(request: HttpRequest, context: dict, slug: str, on: bool = 
 
     # Check if feature is overall - these cannot be toggled per event
     if context["feature"].overall:
-        raise Http404("overall feature!")
+        msg = "overall feature!"
+        raise Http404(msg)
 
     # Get current event features and target feature ID
     current_event_feature_ids = list(context["event"].features.values_list("id", flat=True))
@@ -422,7 +434,13 @@ def orga_quick(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle quick event setup form."""
     # Delegate to orga_edit with quick setup form configuration
     return orga_edit(
-        request, event_slug, "orga_quick", OrgaQuickSetupForm, None, "manage", additional_context={"add_another": False}
+        request,
+        event_slug,
+        "orga_quick",
+        OrgaQuickSetupForm,
+        None,
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
@@ -432,7 +450,13 @@ def orga_preferences(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get current member ID and delegate to orga_edit
     m_id = request.user.member.id
     return orga_edit(
-        request, event_slug, None, OrgaPreferencesForm, m_id, "manage", additional_context={"add_another": False}
+        request,
+        event_slug,
+        None,
+        OrgaPreferencesForm,
+        m_id,
+        "manage",
+        additional_context={"add_another": False},
     )
 
 
@@ -552,7 +576,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
             except Exception as exp:
                 # Log the full traceback and show error to user
                 logger.exception(f"Upload error: {exp}")
-                logger.error(traceback.format_exc())
+                logger.exception(traceback.format_exc())
                 messages.error(request, _("Unknow error on upload") + f": {exp}")
 
             # Redirect back to the main page on error or completion
@@ -736,7 +760,9 @@ def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]
 
 
 def _reg_template(
-    context: dict, template_type: str, value_mapping: dict
+    context: dict,
+    template_type: str,
+    value_mapping: dict,
 ) -> list[tuple[str, list[str], list[list[str]]]]:
     """Generate registration template data for export.
 
@@ -769,7 +795,7 @@ def _reg_template(
     column_keys.extend(context["fields"])
 
     # Add values for dynamic fields based on field type mapping
-    for _field_name, field_type in context["fields"].items():
+    for field_type in context["fields"].values():
         row_values.append(value_mapping[field_type])
 
     # Create export tuple with template name, keys, and values
@@ -777,7 +803,9 @@ def _reg_template(
 
 
 def _writing_template(
-    context: dict, type_prefix: str, value_mapping: dict
+    context: dict,
+    type_prefix: str,
+    value_mapping: dict,
 ) -> list[tuple[str, list[str], list[list[str]]]]:
     """Generate template data for writing export with field mappings.
 
@@ -822,7 +850,7 @@ def _writing_template(
                 "relationships - template",
                 list(context["columns"][1].keys()),
                 [["Test Character", "Another Character", "Super pals"]],
-            )
+            ),
         )
 
     # Add roles template for plot writing
@@ -832,6 +860,6 @@ def _writing_template(
                 "roles - template",
                 list(context["columns"][1].keys()),
                 [["Test Plot", "Test Character", "Gonna be a super star"]],
-            )
+            ),
         )
     return template_exports

@@ -176,13 +176,16 @@ def casting_details(context: dict, casting_type: int) -> dict:
     context["typ"] = casting_type
     for config_key, default_value in (("add", 0), ("min", 5), ("max", 5)):
         context[f"casting_{config_key}"] = int(
-            get_event_config(context["event"].id, f"casting_{config_key}", default_value, context)
+            get_event_config(context["event"].id, f"casting_{config_key}", default_value, context),
         )
 
     # Set boolean casting preferences from event configuration
     for preference_name in ["show_pref", "history", "avoid"]:
         context["casting_" + preference_name] = get_event_config(
-            context["event"].id, "casting_" + preference_name, False, context
+            context["event"].id,
+            "casting_" + preference_name,
+            False,
+            context,
         )
 
     return context
@@ -223,7 +226,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> Htt
             request,
             _(
                 "You are on the waiting list, you must be registered with a regular ticket to be "
-                "able to select your preferences!"
+                "able to select your preferences!",
             ),
         )
         return redirect("gallery", event_slug=context["run"].get_slug())
@@ -231,7 +234,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> Htt
     # Load casting details and options for the specified type
     casting_details(context, casting_type)
     logger.debug(
-        f"Casting context for casting_type {casting_type}: {context.get('gl_name', 'Unknown')}, features: {list(context.get('features', {}).keys())}"
+        f"Casting context for casting_type {casting_type}: {context.get('gl_name', 'Unknown')}, features: {list(context.get('features', {}).keys())}",
     )
 
     # Set template path for rendering
@@ -251,7 +254,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> Htt
     if request.method == "POST":
         prefs = {}
         # Extract preference choices from form data
-        for i in range(0, context["casting_max"]):
+        for i in range(context["casting_max"]):
             k = f"choice{i}"
             if k not in request.POST:
                 continue
@@ -340,7 +343,9 @@ def _check_already_done(context: dict, request, assignment_type: int) -> None:
         # Check if trait assignment already exists
         try:
             assignment_trait = AssignmentTrait.objects.get(
-                run=context["run"], member=context["member"], typ=assignment_type
+                run=context["run"],
+                member=context["member"],
+                typ=assignment_type,
             )
             # Format quest and trait names for display
             context["assigned"] = (
@@ -376,12 +381,16 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
     # Create new casting preferences based on submitted data
     for preference_order, element_id in prefs.items():
         Casting.objects.create(
-            run=context["run"], member=context["member"], typ=typ, element=element_id, pref=preference_order
+            run=context["run"],
+            member=context["member"],
+            typ=typ,
+            element=element_id,
+            pref=preference_order,
         )
 
     # Handle casting avoidance preferences if feature is enabled
     avoidance_text = None
-    if "casting_avoid" in context and context["casting_avoid"]:
+    if context.get("casting_avoid"):
         # Clear existing avoidance preferences
         CastingAvoid.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
 
@@ -402,12 +411,12 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
     # Build preference list for confirmation email
     preference_names_list = []
     for casting_preference in Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by(
-        "pref"
+        "pref",
     ):
         if typ == 0:
             # Character casting: get character name
             preference_names_list.append(
-                Character.objects.get(pk=casting_preference.element).show(context["run"])["name"]
+                Character.objects.get(pk=casting_preference.element).show(context["run"])["name"],
             )
         else:
             # Trait casting: get quest and trait names
@@ -420,7 +429,10 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
 
 
 def get_casting_preferences(
-    element_number: int, context: dict, casting_type: int = 0, casting_queryset: QuerySet | None = None
+    element_number: int,
+    context: dict,
+    casting_type: int = 0,
+    casting_queryset: QuerySet | None = None,
 ) -> tuple[int, str, dict[int, int]]:
     """Calculate and return casting preference statistics.
 
@@ -449,7 +461,7 @@ def get_casting_preferences(
 
     # Initialize distribution dictionary with all possible preference values
     preference_distribution = {}
-    for preference_value in range(0, context["casting_max"] + 1):
+    for preference_value in range(context["casting_max"] + 1):
         preference_distribution[preference_value] = 0
 
     # Get casting queryset if not provided
@@ -469,10 +481,7 @@ def get_casting_preferences(
             preference_distribution[preference_value] += 1
 
     # Calculate average preference or return placeholder
-    if total_preferences == 0:
-        average_preference = "-"
-    else:
-        average_preference = "%.2f" % (preference_sum * 1.0 / total_preferences)
+    average_preference = "-" if total_preferences == 0 else "%.2f" % (preference_sum * 1.0 / total_preferences)
 
     return total_preferences, average_preference, preference_distribution
 
@@ -559,7 +568,7 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
     try:
         quest_type = QuestType.objects.get(event=context["event"], number=quest_type_number)
     except ObjectDoesNotExist as err:
-        raise Http404() from err
+        raise Http404 from err
 
     # Initialize the list to store trait preference data
     context["list"] = []
@@ -612,7 +621,8 @@ def casting_preferences(request: HttpRequest, event_slug: str, casting_type: int
 
     # Check if casting preferences are enabled for this event
     if not context["casting_show_pref"]:
-        raise Http404("Not cool, bro!")
+        msg = "Not cool, bro!"
+        raise Http404(msg)
 
     # Build features map and check registration status
     context.update({"features_map": {context["event"].id: context["features"]}})
@@ -620,7 +630,8 @@ def casting_preferences(request: HttpRequest, event_slug: str, casting_type: int
 
     # Verify user has valid registration for this event
     if context["run"].reg is None:
-        raise Http404("not registered")
+        msg = "not registered"
+        raise Http404(msg)
 
     # Route to appropriate preference handler based on type
     if casting_type == 0:
@@ -698,10 +709,7 @@ def casting_history_characters(context: dict) -> None:
                 continue
 
             # Format character display string with number and name
-            if character:
-                character_display = f"#{character.number} {character.name}"
-            else:
-                character_display = "-----"
+            character_display = f"#{character.number} {character.name}" if character else "-----"
 
             # Store preference with 1-based indexing
             registration.prefs[casting.pref + 1] = character_display
@@ -769,7 +777,7 @@ def casting_history_traits(context: dict) -> None:
 
     # Log processing statistics for debugging
     logger.debug(
-        f"Casting history context for typ {context.get('typ', 0)}: {len(context.get('list', []))} registrations processed"
+        f"Casting history context for typ {context.get('typ', 0)}: {len(context.get('list', []))} registrations processed",
     )
 
 
@@ -801,11 +809,13 @@ def casting_history(request: HttpRequest, event_slug: str, casting_type: int = 0
 
     # Check if casting history feature is enabled for this event
     if not context["casting_history"]:
-        raise Http404("Not cool, bro!")
+        msg = "Not cool, bro!"
+        raise Http404(msg)
 
     # Verify user registration or staff access
     if context["run"].reg is None and "staff" not in context:
-        raise Http404("not registered")
+        msg = "not registered"
+        raise Http404(msg)
 
     # Populate casting details for the specified type
     casting_details(context, casting_type)

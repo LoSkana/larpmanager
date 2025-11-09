@@ -157,7 +157,8 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
 def _get_inv_items(warehouse_item_ids: list[int], context: dict) -> list[int]:
     """Get warehouse item IDs filtered by association."""
     return WarehouseItem.objects.filter(
-        association_id=context["association_id"], pk__in=warehouse_item_ids
+        association_id=context["association_id"],
+        pk__in=warehouse_item_ids,
     ).values_list("pk", flat=True)
 
 
@@ -369,7 +370,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_FACT, "label": _("Add to faction"), "objs": factions},
                 {"idx": Operations.DEL_CHAR_FACT, "label": _("Remove from faction"), "objs": factions},
-            ]
+            ],
         )
 
     # Add plot-related operations if plot feature is enabled
@@ -379,7 +380,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
                 {"idx": Operations.DEL_CHAR_PLOT, "label": _("Remove from plot"), "objs": plots},
-            ]
+            ],
         )
 
     # Add prologue-related operations if prologue feature is enabled
@@ -389,7 +390,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_PROLOGUE, "label": _("Add prologue"), "objs": prologues},
                 {"idx": Operations.DEL_CHAR_PROLOGUE, "label": _("Remove prologue"), "objs": prologues},
-            ]
+            ],
         )
 
     # Add XP delivery operations if px feature is enabled
@@ -399,14 +400,14 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
             [
                 {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
                 {"idx": Operations.DEL_CHAR_DELIVERY, "label": _("Remove from xp delivery"), "objs": delivery},
-            ]
+            ],
         )
 
     # Add progress step operation if progress feature is enabled
     if "progress" in context["features"]:
         progress_steps = context["event"].get_elements(ProgressStep).values("id", "name").order_by("order")
         context["bulk"].append(
-            {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps}
+            {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps},
         )
 
     # Add staff assignment operation if assigned feature is enabled
@@ -415,14 +416,14 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
         event_staff = get_event_staffers(context["event"])
         staff_members = [{"id": m.id, "name": m.show_nick()} for m in event_staff]
         context["bulk"].append(
-            {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members}
+            {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members},
         )
 
     # Add status assignment operation if enabled
     if get_event_config(context["event"].id, "user_character_approval", False, context):
         status_choices = [{"id": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
         context["bulk"].append(
-            {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices}
+            {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices},
         )
 
 

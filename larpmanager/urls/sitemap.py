@@ -39,10 +39,7 @@ def manual_sitemap_view(request: HttpRequest) -> HttpResponse:
     """Generate XML sitemap for organization or global site."""
     # Check if this is the global site (id=0) or organization-specific
     association_id = request.association["id"]
-    if association_id == 0:
-        urls = larpmanager_sitemap()
-    else:
-        urls = _organization_sitemap(association_id)
+    urls = larpmanager_sitemap() if association_id == 0 else _organization_sitemap(association_id)
 
     # Render URLs to XML format
     stream = _render_sitemap(urls)

@@ -62,7 +62,7 @@ from larpmanager.utils.common import copy_class
 logger = logging.getLogger(__name__)
 
 
-def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
+def correct_rels_many(e_id, cls_p, cls, field, rel_field="number") -> None:
     """Correct many-to-many relationships after copying event elements.
 
     Args:
@@ -96,8 +96,13 @@ def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
 
 
 def correct_rels(
-    target_event_id, source_event_id, parent_model_class, child_model_class, relationship_field, matching_field="number"
-):
+    target_event_id,
+    source_event_id,
+    parent_model_class,
+    child_model_class,
+    relationship_field,
+    matching_field="number",
+) -> None:
     """Correct model relationships after copying event elements.
 
     Args:
@@ -131,7 +136,7 @@ def correct_rels(
         child_obj.save()
 
 
-def correct_relationship(e_id, p_id):
+def correct_relationship(e_id, p_id) -> None:
     """Correct character relationships after event copying.
 
     Args:
@@ -247,7 +252,7 @@ def correct_workshop(e_id: int, p_id: int) -> None:
         option.save()
 
 
-def correct_plot_character(e_id, p_id):
+def correct_plot_character(e_id, p_id) -> None:
     """Correct plot-character relationships after event copying.
 
     Args:
@@ -277,7 +282,7 @@ def correct_plot_character(e_id, p_id):
         relationship.save()
 
 
-def copy_character_config(e_id, p_id):
+def copy_character_config(e_id, p_id) -> None:
     """Copy character configuration settings from parent to target event.
 
     Args:
@@ -296,8 +301,10 @@ def copy_character_config(e_id, p_id):
             for retry_attempt in range(2):
                 try:
                     with transaction.atomic():
-                        character_config, created = CharacterConfig.objects.update_or_create(
-                            character_id=target_character_id, name=config.name, defaults={"value": config.value}
+                        _character_config, _created = CharacterConfig.objects.update_or_create(
+                            character_id=target_character_id,
+                            name=config.name,
+                            defaults={"value": config.value},
                         )
                     break
                 except IntegrityError:
@@ -307,7 +314,11 @@ def copy_character_config(e_id, p_id):
 
 
 def copy(
-    request: HttpRequest, context: dict, parent_event: Event, target_event: Event, data_types_to_copy: list
+    request: HttpRequest,
+    context: dict,
+    parent_event: Event,
+    target_event: Event,
+    data_types_to_copy: list,
 ) -> HttpResponseRedirect | None:
     """Copy event data from a parent event to the current event.
 
@@ -351,7 +362,7 @@ def copy(
     return None
 
 
-def copy_event(context, target_event_id, elements_to_copy, target_event, source_event_id, source_event):
+def copy_event(context, target_event_id, elements_to_copy, target_event, source_event_id, source_event) -> None:
     """Copy event data and related objects from parent to new event.
 
     Args:
@@ -380,7 +391,7 @@ def copy_event(context, target_event_id, elements_to_copy, target_event, source_
             copy_actions[element_type]()
 
 
-def _copy_event_fields(context, event, parent_event):
+def _copy_event_fields(context, event, parent_event) -> None:
     """Copy basic event fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaEventForm, context):
         if field_name == "slug":
@@ -390,7 +401,7 @@ def _copy_event_fields(context, event, parent_event):
     event.name = "copy - " + event.name
 
 
-def _copy_appearance_fields(context, child_event, parent_event):
+def _copy_appearance_fields(context, child_event, parent_event) -> None:
     """Copy appearance fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaAppearanceForm, context):
         if field_name == "event_css":
@@ -400,7 +411,7 @@ def _copy_appearance_fields(context, child_event, parent_event):
             setattr(child_event, field_name, field_value)
 
 
-def _copy_features(event, parent):
+def _copy_features(event, parent) -> None:
     """Copy features from parent to child event."""
     for feature in parent.features.all():
         event.features.add(feature)
@@ -539,7 +550,7 @@ def copy_css(context, event, parent) -> None:
 
 
 @login_required
-def orga_copy(request, event_slug):
+def orga_copy(request, event_slug: str):
     """Handle event copying functionality for organizers.
 
     Args:

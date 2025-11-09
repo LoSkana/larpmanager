@@ -94,7 +94,7 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
             if context["member"]:
                 user_associations = [membership.association for membership in context["member"].memberships.all()]
                 raise MembershipError(user_associations)
-            raise MembershipError()
+            raise MembershipError
         return context
 
     if check_main_site:
@@ -191,7 +191,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
     # Get base user context and validate permission
     context = get_context(request)
     if not has_association_permission(request, context, permission_slug):
-        raise UserPermissionError()
+        raise UserPermissionError
 
     # Retrieve feature configuration for this permission
     (required_feature, tutorial_identifier, config_slug) = get_association_permission_feature(permission_slug)
@@ -249,7 +249,7 @@ def check_event_context(request, event_slug: str, permission_slug: str | list[st
 
     # Verify user has the required permissions for this event
     if not has_event_permission(request, context, event_slug, permission_slug):
-        raise UserPermissionError()
+        raise UserPermissionError
 
     # Process permission-specific features and configuration
     if permission_slug:
@@ -297,10 +297,7 @@ def get_event(request, event_slug, run_number=None):
         Http404: If event doesn't exist or belongs to wrong association
 
     """
-    if request:
-        context = get_context(request)
-    else:
-        context = {}
+    context = get_context(request) if request else {}
 
     try:
         if run_number:
@@ -310,7 +307,8 @@ def get_event(request, event_slug, run_number=None):
 
         if "association_id" in context:
             if context["event"].association_id != context["association_id"]:
-                raise Http404("wrong association")
+                msg = "wrong association"
+                raise Http404(msg)
         else:
             context["association_id"] = context["event"].association_id
 
@@ -324,11 +322,16 @@ def get_event(request, event_slug, run_number=None):
 
         return context
     except ObjectDoesNotExist as error:
-        raise Http404("Event does not exist") from error
+        msg = "Event does not exist"
+        raise Http404(msg) from error
 
 
 def get_event_context(
-    request, event_slug: str, signup: bool = False, feature_slug: str | None = None, include_status: bool = False
+    request,
+    event_slug: str,
+    signup: bool = False,
+    feature_slug: str | None = None,
+    include_status: bool = False,
 ) -> dict:
     """Get comprehensive event run context with permissions and features.
 
@@ -372,7 +375,7 @@ def get_event_context(
         registration_status(context["run"], context["member"], context)
 
     # Configure user permissions and sidebar for authorized users
-    if has_event_permission(request, context, event_slug):
+    if has_event_permission(request, context, event_slug: str):
         get_index_event_permissions(request, context, event_slug)
         context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
@@ -393,7 +396,7 @@ def get_event_context(
     return context
 
 
-def prepare_run(context):
+def prepare_run(context) -> None:
     """Prepare run context with visibility and field configurations.
 
     Args:
@@ -426,7 +429,7 @@ def prepare_run(context):
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
 
-def get_run(context, event_slug):
+def get_run(context, event_slug) -> None:
     """Load run and event data from cache and database.
 
     Args:
@@ -465,4 +468,4 @@ def get_run(context, event_slug):
         context["run"] = que.get(pk=res)
         context["event"] = context["run"].event
     except Exception as err:
-        raise UnknowRunError() from err
+        raise UnknowRunError from err

@@ -35,7 +35,10 @@ from larpmanager.models.miscellanea import OneTimeAccessToken
 
 
 def file_iterator(
-    file_object: BinaryIO, chunk_size: int = 8192, start_pos: int | None = None, max_length: int | None = None
+    file_object: BinaryIO,
+    chunk_size: int = 8192,
+    start_pos: int | None = None,
+    max_length: int | None = None,
 ) -> Generator[bytes, None, None]:
     """Stream file in chunks with optional range support.
 

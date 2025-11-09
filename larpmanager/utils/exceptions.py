@@ -111,19 +111,13 @@ class HiddenError(Exception):
 class NotFoundError(Exception):
     """Generic exception for content not found scenarios."""
 
-    pass
-
 
 class UserPermissionError(Exception):
     """Exception raised when user lacks required permissions."""
 
-    pass
-
 
 class UnknowRunError(Exception):
     """Exception raised when a run cannot be found or identified."""
-
-    pass
 
 
 class MembershipError(Exception):

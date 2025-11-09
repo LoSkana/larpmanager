@@ -158,7 +158,10 @@ def assign_casting(request: HttpRequest, context: dict, assignment_type: int) ->
             else:
                 # Create trait assignment for non-character types
                 AssignmentTrait.objects.create(
-                    trait_id=entity_id, run_id=registration.run_id, member=member, typ=assignment_type
+                    trait_id=entity_id,
+                    run_id=registration.run_id,
+                    member=member,
+                    typ=assignment_type,
                 )
 
         except Exception as exception:
@@ -172,7 +175,8 @@ def assign_casting(request: HttpRequest, context: dict, assignment_type: int) ->
 
 
 def get_casting_choices_characters(
-    context: dict, filtering_options: dict
+    context: dict,
+    filtering_options: dict,
 ) -> tuple[dict[int, str], list[int], dict[int, str], list[int]]:
     """Get character choices for casting with filtering and availability status.
 
@@ -213,7 +217,8 @@ def get_casting_choices_characters(
 
     # Get characters that are already registered for this run
     registered_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
-        "character_id", flat=True
+        "character_id",
+        flat=True,
     )
 
     # Process all characters for the event (excluding hidden ones)
@@ -281,7 +286,9 @@ def check_player_skip_quests(registration: Registration, trait_type: str) -> boo
     """Check if player has traits allowing quest skipping."""
     return (
         AssignmentTrait.objects.filter(
-            run_id=registration.run_id, member_id=registration.member_id, typ=trait_type
+            run_id=registration.run_id,
+            member_id=registration.member_id,
+            typ=trait_type,
         ).count()
         > 0
     )
@@ -350,14 +357,14 @@ def check_casting_player(
         has_existing_assignment = check_player_skip_quests(registration, casting_type)
 
     # Skip if player already has assignments
-    if has_existing_assignment:
-        return True
-
-    return False
+    return bool(has_existing_assignment)
 
 
 def get_casting_data(
-    request: HttpRequest, context: dict, casting_type: int, form: "OrganizerCastingOptionsForm"
+    request: HttpRequest,
+    context: dict,
+    casting_type: int,
+    form: "OrganizerCastingOptionsForm",
 ) -> None:
     """Retrieve and process casting data for automated character assignment algorithm.
 
@@ -395,7 +402,8 @@ def get_casting_data(
     if casting_type == 0:
         # Character casting - includes faction filtering and mirror handling
         (available_choices, taken_characters, mirror_characters, allowed_factions) = get_casting_choices_characters(
-            context, filter_options
+            context,
+            filter_options,
         )
     else:
         # Quest trait casting
@@ -410,7 +418,7 @@ def get_casting_data(
     registrations_query = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
     # Exclude non-participant ticket types from casting
     registrations_query = registrations_query.exclude(
-        ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC]
+        ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
     )
     registrations_query = registrations_query.order_by("created").select_related("ticket", "member")
     for registration in registrations_query:
@@ -423,7 +431,11 @@ def get_casting_data(
 
         # Extract player's character preferences from casting submissions
         player_choice_list = _get_player_preferences(
-            allowed_factions, casting_submissions, chosen_characters, character_avoidances, registration
+            allowed_factions,
+            casting_submissions,
+            chosen_characters,
+            character_avoidances,
+            registration,
         )
 
         # Track players who didn't submit preferences
@@ -434,7 +446,11 @@ def get_casting_data(
 
     # Add random unchosen characters to resolve ties fairly
     unchosen_characters, unchosen_padding = _fill_not_chosen(
-        available_choices, chosen_characters, context, player_preferences, taken_characters
+        available_choices,
+        chosen_characters,
+        context,
+        player_preferences,
+        taken_characters,
     )
 
     # Load character avoidance texts (reasons players can't play certain characters)
@@ -590,7 +606,7 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
     """
     # Collect all character IDs that are available (not chosen and not taken)
     available_character_ids = []
-    for character_id in choices.keys():
+    for character_id in choices:
         if character_id not in chosen and character_id not in taken:
             available_character_ids.append(character_id)
 
@@ -601,11 +617,11 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
     characters_to_add_count = min(context["casting_add"], len(available_character_ids))
 
     # Add randomly shuffled available characters to each player's preferences
-    for _member_id, preference_list in preferences.items():
+    for preference_list in preferences.values():
         # Shuffle for each player to ensure fair random distribution
         random.shuffle(available_character_ids)
         # Add the specified number of characters to this player's preferences
-        for index in range(0, characters_to_add_count):
+        for index in range(characters_to_add_count):
             preference_list.append(available_character_ids[index])
 
     return available_character_ids, characters_to_add_count
@@ -613,7 +629,10 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
 
 @login_required
 def orga_casting(
-    request: HttpRequest, event_slug: str, casting_type: int | None = None, ticket: str = ""
+    request: HttpRequest,
+    event_slug: str,
+    casting_type: int | None = None,
+    ticket: str = "",
 ) -> HttpResponse:
     """Handle organizational casting assignments for LARP events.
 
@@ -651,7 +670,8 @@ def orga_casting(
 
         # Validate form data before processing
         if not form.is_valid():
-            raise Http404("form not valid")
+            msg = "form not valid"
+            raise Http404(msg)
 
         # Process casting assignment if submit button was clicked
         if request.POST.get("submit"):

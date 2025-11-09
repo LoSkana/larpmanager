@@ -64,8 +64,9 @@ def _build_px_context(character) -> tuple[set[int], set[int], dict[int, list[tup
     # Filter by character ID and applicable question type for accuracy
     current_character_choices = set(
         WritingChoice.objects.filter(
-            element_id=character.id, question__applicable=QuestionApplicable.CHARACTER
-        ).values_list("option_id", flat=True)
+            element_id=character.id,
+            question__applicable=QuestionApplicable.CHARACTER,
+        ).values_list("option_id", flat=True),
     )
 
     # Get all modifiers with optimized prefetch for related objects
@@ -150,7 +151,7 @@ def set_free_abilities(char: Character, frees: list[int]) -> None:
     save_single_config(char, config_name, json.dumps(frees))
 
 
-def calculate_character_experience_points(character):
+def calculate_character_experience_points(character) -> None:
     """Update character experience points and apply ability calculations.
 
     Args:
@@ -182,7 +183,7 @@ def calculate_character_experience_points(character):
     apply_rules_computed(character)
 
 
-def _handle_free_abilities(character):
+def _handle_free_abilities(character) -> None:
     """Handle free abilities that characters should automatically receive.
 
     Args:
@@ -193,17 +194,15 @@ def _handle_free_abilities(character):
 
     # look for available ability with cost 0, and not already in the free list: get them!
     for ability in get_available_ability_px(character, 0):
-        if ability.visible and ability.cost == 0:
-            if ability.id not in free_ability_ids:
-                character.px_ability_list.add(ability)
-                free_ability_ids.append(ability.id)
+        if ability.visible and ability.cost == 0 and ability.id not in free_ability_ids:
+            character.px_ability_list.add(ability)
+            free_ability_ids.append(ability.id)
 
     # look for current abilities with cost non 0, yet got in the past as free: remove them!
     for ability in get_current_ability_px(character):
-        if ability.visible and ability.cost > 0:
-            if ability.id in free_ability_ids:
-                removed_ability_ids = remove_char_ability(character, ability.id)
-                free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
+        if ability.visible and ability.cost > 0 and ability.id in free_ability_ids:
+            removed_ability_ids = remove_char_ability(character, ability.id)
+            free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
 
     set_free_abilities(character, free_ability_ids)
 
@@ -315,7 +314,11 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
 
 
 def on_experience_characters_m2m_changed(
-    sender, instance: DeliveryPx | None, action: str, pk_set: set | None, **kwargs
+    sender,
+    instance: DeliveryPx | None,
+    action: str,
+    pk_set: set | None,
+    **kwargs,
 ) -> None:
     """Handle m2m changes for experience-character relationships."""
     # Only process relevant m2m actions
@@ -327,10 +330,7 @@ def on_experience_characters_m2m_changed(
         calculate_character_experience_points(instance)
     else:
         # Get characters from pk_set or instance relationship
-        if pk_set:
-            characters = Character.objects.filter(pk__in=pk_set)
-        else:
-            characters = instance.characters.all()
+        characters = Character.objects.filter(pk__in=pk_set) if pk_set else instance.characters.all()
 
         # Update experience points for each affected character
         for char in characters:
@@ -338,7 +338,11 @@ def on_experience_characters_m2m_changed(
 
 
 def on_rule_abilities_m2m_changed(
-    sender: type, instance: RulePx, action: str, pk_set: set[int] | None, **kwargs
+    sender: type,
+    instance: RulePx,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs,
 ) -> None:
     """Handle changes to rule abilities many-to-many relationships.
 
@@ -358,7 +362,11 @@ def on_rule_abilities_m2m_changed(
 
 
 def on_modifier_abilities_m2m_changed(
-    sender: type, instance: ModifierPx, action: str, pk_set: set[int] | None, **kwargs
+    sender: type,
+    instance: ModifierPx,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs,
 ) -> None:
     """Handle modifier abilities m2m changes by recalculating character experience."""
     # Only process relevant m2m actions
@@ -423,18 +431,19 @@ def apply_rules_computed(char) -> None:
     for rule in applicable_rules:
         field_id = rule.field.id
         computed_field_values[field_id] = operations.get(
-            rule.operation, lambda current_value, rule_amount: current_value
+            rule.operation,
+            lambda current_value, rule_amount: current_value,
         )(computed_field_values[field_id], rule.amount)
 
     # Save computed values as WritingAnswer objects with clean formatting
     for question_id, computed_value in computed_field_values.items():
-        (writing_answer, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
+        (writing_answer, _created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
         # Format decimal value and remove trailing zeros/decimal point
         writing_answer.text = format(computed_value, "f").rstrip("0").rstrip(".")
         writing_answer.save()
 
 
-def add_char_addit(character):
+def add_char_addit(character) -> None:
     """Add additional configuration data to character object.
 
     Args:

@@ -95,7 +95,7 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build mapping of member IDs to their character list
     member_chars = {}
-    for _num, el in context["chars"].items():
+    for el in context["chars"].values():
         if "player_id" not in el:
             continue
         # Initialize member's character list if not exists
@@ -151,7 +151,7 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build mapping of member IDs to their character names and numbers
     member_chars = {}
-    for _num, el in context["chars"].items():
+    for el in context["chars"].values():
         if "player_id" not in el:
             continue
         if el["player_id"] not in member_chars:
@@ -199,8 +199,9 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get members already registered for current or future runs
     already = list(
         Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
 
     # Add event staff members to exclusion list
@@ -249,8 +250,9 @@ def orga_persuade(request, event_slug: str) -> HttpResponse:
     # Get list of members already registered for current/future runs
     already = list(
         Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
 
     # Add event staff members to exclusion list
@@ -362,7 +364,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
     # Find characters and factions associated with this member
     context["reg_characters"] = []
     context["reg_factions"] = []
-    for _num, char in context["chars"].items():
+    for char in context["chars"].values():
         # Skip characters without assigned players
         if "player_id" not in char:
             continue
@@ -376,7 +378,9 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
 
     # Get all help questions for this member in this event, newest first
     context["list"] = HelpQuestion.objects.filter(
-        member_id=member_id, association_id=context["association_id"], run_id=context["run"]
+        member_id=member_id,
+        association_id=context["association_id"],
+        run_id=context["run"],
     ).order_by("-created")
 
     return render(request, "larpmanager/orga/users/questions_answer.html", context)
@@ -390,7 +394,9 @@ def orga_questions_close(request: HttpRequest, event_slug: str, member_id: str) 
     # Get the most recent help question for this member and run
     h = (
         HelpQuestion.objects.filter(
-            member_id=member_id, association_id=context["association_id"], run_id=context["run"]
+            member_id=member_id,
+            association_id=context["association_id"],
+            run_id=context["run"],
         )
         .order_by("-created")
         .first()
@@ -500,7 +506,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "recipient": lambda el: str(el.recipient),
                 "subj": lambda el: str(el.subj),
             },
-        }
+        },
     )
 
     # Return paginated email archive using the Email model
@@ -557,7 +563,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build mapping of member IDs to their character assignments
     member_chars = {}
-    for _num, el in context["chars"].items():
+    for el in context["chars"].values():
         if "player_id" not in el:
             continue
         if el["player_id"] not in member_chars:
@@ -567,14 +573,15 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Collect all relevant member IDs (registered participants + staff)
     member_list = list(
         Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
     member_list.extend([mb.id for mb in get_event_staffers(context["run"].event)])
 
     # Define member model and fields to display
     member_cls: type[Member] = Member
-    member_fields = ["name", "surname"] + sorted(context["members_fields"])
+    member_fields = ["name", "surname", *sorted(context["members_fields"])]
 
     # Query and process member data
     context["list"] = Member.objects.filter(id__in=member_list).order_by("created")

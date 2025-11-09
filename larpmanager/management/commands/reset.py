@@ -68,19 +68,18 @@ class Command(BaseCommand):
 
         # Handle SQLite database reset
         elif connection.vendor == "sqlite":
-            with transaction.atomic():
-                with connection.cursor() as cursor:
-                    # Disable foreign key constraints for deletion
-                    cursor.execute("PRAGMA foreign_keys = OFF;")
+            with transaction.atomic(), connection.cursor() as cursor:
+                # Disable foreign key constraints for deletion
+                cursor.execute("PRAGMA foreign_keys = OFF;")
 
-                    # Delete all data and reset auto-increment sequences
-                    for model in apps.get_models():
-                        table = model._meta.db_table
-                        cursor.execute(f'DELETE FROM "{table}";')  # noqa: S608
-                        cursor.execute(f'DELETE FROM sqlite_sequence WHERE name="{table}";')  # noqa: S608
+                # Delete all data and reset auto-increment sequences
+                for model in apps.get_models():
+                    table = model._meta.db_table
+                    cursor.execute(f'DELETE FROM "{table}";')  # noqa: S608
+                    cursor.execute(f'DELETE FROM sqlite_sequence WHERE name="{table}";')  # noqa: S608
 
-                    # Re-enable foreign key constraints
-                    cursor.execute("PRAGMA foreign_keys = ON;")
+                # Re-enable foreign key constraints
+                cursor.execute("PRAGMA foreign_keys = ON;")
 
         # Load initial fixtures and test data
         call_command("init_db")

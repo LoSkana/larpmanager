@@ -28,7 +28,7 @@ from larpmanager.models.event import EventText
 logger = logging.getLogger(__name__)
 
 
-def event_text_key(event_id, text_type, language):
+def event_text_key(event_id, text_type, language) -> str:
     """Generate cache key for event text."""
     return f"event_text_{event_id}_{text_type}_{language}"
 
@@ -81,7 +81,7 @@ def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
     return res
 
 
-def event_text_key_def(event_id, text_type):
+def event_text_key_def(event_id, text_type) -> str:
     """Generate cache key for default event text."""
     return f"event_text_def_{event_id}_{text_type}"
 
@@ -129,7 +129,7 @@ def get_event_text_cache_def(event_id: int, typ: str) -> str:
     return res
 
 
-def get_event_text(event_id: int, text_type: str, language_code: str = None) -> str:
+def get_event_text(event_id: int, text_type: str, language_code: str | None = None) -> str:
     """Get event text for the specified event, type, and language.
 
     Retrieves event text from cache if available, otherwise falls back to

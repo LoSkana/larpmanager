@@ -128,7 +128,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
         """
         # If character approval is disabled, all questions are editable
         character_approval_enabled = get_event_config(
-            self.params["event"].id, "user_character_approval", False, context=self.params
+            self.params["event"].id,
+            "user_character_approval",
+            False,
+            context=self.params,
         )
         if not character_approval_enabled:
             return True
@@ -214,7 +217,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                         "Click here to confirm that you have completed the character and are ready to "
                         "propose it to the staff. Be careful: some fields may no longer be editable. "
                         "Leave the field blank to save your changes and to be able to continue them in "
-                        "the future."
+                        "the future.",
                     ),
                     widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
                 )
@@ -224,7 +227,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         self._init_factions()
         self._init_custom_fields()
 
-    def _init_factions(self):
+    def _init_factions(self) -> None:
         """Initialize faction selection field for character form.
 
         Sets up a multiple choice field for selectable factions if the faction
@@ -346,7 +349,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
-            get_event_config(self.params["event"].id, "writing_relationship_length", 10000, context=self.params)
+            get_event_config(self.params["event"].id, "writing_relationship_length", 10000, context=self.params),
         )
 
         # Skip additional initialization for new instances
@@ -359,7 +362,7 @@ class OrgaCharacterForm(CharacterForm):
         # Initialize plot-related fields
         self._init_plots()
 
-    def _init_character(self):
+    def _init_character(self) -> None:
         """Initialize character form fields based on features and event configuration.
 
         Sets up factions, custom fields, player assignment, approval status,
@@ -380,7 +383,7 @@ class OrgaCharacterForm(CharacterForm):
         if "mirror" in self.fields:
             characters_query = self.params["run"].event.get_elements(Character).all()
             character_choices = [(character.id, character.name) for character in characters_query]
-            self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---"))] + character_choices
+            self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
 
         # Add active field for campaign feature
         if "campaign" in self.params["features"]:
@@ -399,7 +402,7 @@ class OrgaCharacterForm(CharacterForm):
 
         self._init_special_fields()
 
-    def _init_plots(self):
+    def _init_plots(self) -> None:
         """Initialize plot assignment fields in character forms.
 
         Sets up plot selection options and plot-related character
@@ -448,16 +451,16 @@ class OrgaCharacterForm(CharacterForm):
             self.field_link[plot_field_id] = reverse("orga_plots_edit", args=reverse_args)
 
             # if not first, add to ordering up
-            if not index == 0:
+            if index != 0:
                 reverse_args = [self.params["run"].get_slug(), plot_character.id, "0"]
                 self.ordering_up[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
             # if not last, add to ordering down
-            if not index == total_plots - 1:
+            if index != total_plots - 1:
                 reverse_args = [self.params["run"].get_slug(), plot_character.id, "1"]
                 self.ordering_down[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
-    def _save_plot(self, instance):
+    def _save_plot(self, instance) -> None:
         """Save plot associations for a character.
 
         Args:
@@ -494,7 +497,7 @@ class OrgaCharacterForm(CharacterForm):
             pr.text = self.cleaned_data[field]
             pr.save()
 
-    def _init_px(self):
+    def _init_px(self) -> None:
         """Initialize PX (ability/delivery) form fields if PX feature is enabled."""
         if "px" not in self.params["features"]:
             return
@@ -535,7 +538,7 @@ class OrgaCharacterForm(CharacterForm):
         if "px_delivery_list" in self.cleaned_data:
             instance.px_delivery_list.set(self.cleaned_data["px_delivery_list"])
 
-    def _init_factions(self):
+    def _init_factions(self) -> None:
         """Initialize faction selection fields for character forms.
 
         Sets up faction choice fields with proper widget configuration
@@ -547,7 +550,10 @@ class OrgaCharacterForm(CharacterForm):
         queryset = self.params["run"].event.get_elements(Faction)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
-            queryset=queryset, widget=FactionS2WidgetMulti(), required=False, label=_("Factions")
+            queryset=queryset,
+            widget=FactionS2WidgetMulti(),
+            required=False,
+            label=_("Factions"),
         )
         self.fields["factions_list"].widget.set_event(self.params["event"])
 
@@ -561,7 +567,7 @@ class OrgaCharacterForm(CharacterForm):
         for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(faction_data[0])
 
-    def _save_relationships(self, instance):
+    def _save_relationships(self, instance) -> None:
         """Save character relationships from form data.
 
         Args:
@@ -586,7 +592,8 @@ class OrgaCharacterForm(CharacterForm):
 
             # check ch_id is in chars of the event
             if ch_id not in chars_ids:
-                raise Http404(f"char {ch_id} not recognized")
+                msg = f"char {ch_id} not recognized"
+                raise Http404(msg)
 
             # if value is empty
             if not value:
@@ -608,8 +615,9 @@ class OrgaCharacterForm(CharacterForm):
             # Use strip_tags to get plain text length from HTML content
             plain_text = strip_tags(value)
             if len(plain_text) > self.relationship_max_length:
+                msg = f"Relationship text for character #{ch_id} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
                 raise ValidationError(
-                    f"Relationship text for character #{ch_id} exceeds maximum length of {self.relationship_max_length} characters. Current length: {len(plain_text)}"
+                    msg,
                 )
 
             rel = self._get_rel(ch_id, instance, rel_type)
@@ -633,7 +641,7 @@ class OrgaCharacterForm(CharacterForm):
             (relationship, created) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=character_id)
         # Create reverse relationship (character -> instance)
         else:
-            (relationship, created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)
+            (relationship, _created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)
         return relationship
 
     def save(self, commit: bool = True) -> object:
@@ -696,7 +704,7 @@ class OrgaWritingQuestionForm(MyForm):
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize WritingQuestionForm with dynamic field configuration.
 
         Args:
@@ -860,7 +868,7 @@ class OrgaWritingOptionForm(MyForm):
             "tickets": TicketS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize form with feature-based field customization.
 
         Args:

@@ -51,7 +51,11 @@ class QuestType(Writing):
 
 class Quest(Writing):
     typ = models.ForeignKey(
-        QuestType, on_delete=models.CASCADE, null=True, related_name="quests", verbose_name=_("Type")
+        QuestType,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="quests",
+        verbose_name=_("Type"),
     )
 
     class Meta:

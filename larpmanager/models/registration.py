@@ -108,7 +108,8 @@ class RegistrationTicket(BaseModel):
     )
 
     giftable = models.BooleanField(
-        default=False, help_text=_("Optional - Indicates whether the ticket can be gifted to other participants")
+        default=False,
+        help_text=_("Optional - Indicates whether the ticket can be gifted to other participants"),
     )
 
     order = models.IntegerField(default=0)
@@ -133,7 +134,7 @@ class RegistrationTicket(BaseModel):
         """Return the tier price."""
         return self.price
 
-    def get_form_text(self, run: Run = None, currency_symbol: str = None) -> str:
+    def get_form_text(self, run: Run = None, currency_symbol: str | None = None) -> str:
         """Generate formatted text representation for form display.
 
         Creates a text string combining the ticket name, price (if available),
@@ -191,7 +192,7 @@ class RegistrationQuota(BaseModel):
     quotas = models.IntegerField(help_text=_("Quotas total number"))
 
     days_available = models.IntegerField(
-        help_text=_("Minimum number of days before the event for which it is made available (0  = always)")
+        help_text=_("Minimum number of days before the event for which it is made available (0  = always)"),
     )
 
     surcharge = models.IntegerField(default=0)
@@ -210,7 +211,7 @@ class RegistrationQuota(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.quotas} {self.days_available} ({self.surcharge}€)"
 
 
@@ -222,7 +223,7 @@ class RegistrationInstallment(BaseModel):
     order = models.IntegerField(help_text=_("Payment order"))
 
     amount = models.IntegerField(
-        help_text=_("Total amount of payment to be received by this date (0 = all outstanding)")
+        help_text=_("Total amount of payment to be received by this date (0 = all outstanding)"),
     )
 
     days_deadline = models.IntegerField(
@@ -230,7 +231,7 @@ class RegistrationInstallment(BaseModel):
         blank=True,
         help_text=_(
             "Deadline in the measure of days from enrollment (fill in one between the fixed "
-            "deadline and the deadline in days)"
+            "deadline and the deadline in days)",
         ),
     )
 
@@ -257,7 +258,7 @@ class RegistrationInstallment(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.order} {self.amount} ({self.days_deadline} - {self.date_deadline})"
 
 
@@ -284,7 +285,7 @@ class RegistrationSurcharge(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.amount} ({self.date})"
 
 
@@ -329,7 +330,11 @@ class Registration(BaseModel):
     modified = models.IntegerField(default=0)
 
     special_cod = models.CharField(
-        max_length=12, verbose_name=_("Unique code"), unique=True, default=my_uuid_short, db_index=True
+        max_length=12,
+        verbose_name=_("Unique code"),
+        unique=True,
+        default=my_uuid_short,
+        db_index=True,
     )
 
     redeem_code = models.CharField(max_length=16, null=True, blank=True)
@@ -344,7 +349,7 @@ class Registration(BaseModel):
         through="RegistrationCharacterRel",
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.run} - {self.member}"
 
     def display_run(self):
@@ -411,7 +416,7 @@ class RegistrationCharacterRel(BaseModel):
         verbose_name=_("Character name"),
         help_text=_(
             "Specify your custom character name (depending on the event you can choose the "
-            "name, or adapt the name to your chosen gender)"
+            "name, or adapt the name to your chosen gender)",
         ),
     )
 
@@ -445,7 +450,7 @@ class RegistrationCharacterRel(BaseModel):
         null=True,
         verbose_name=_("Private"),
         help_text=_(
-            "Indicates public information about your character, which will be shown only to you and the organizers"
+            "Indicates public information about your character, which will be shown only to you and the organizers",
         ),
     )
 

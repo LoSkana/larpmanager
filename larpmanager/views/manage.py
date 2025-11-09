@@ -212,14 +212,15 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     if not get_association_config(context["association_id"], "exe_quick_suggestion", False, context=context):
         setup_message = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
-            "the features most useful for your organization"
+            "the features most useful for your organization",
         )
         messages.success(request, setup_message)
         return redirect("exe_quick")
 
     # Get ongoing runs (events in START or SHOW development status)
     ongoing_runs_queryset = Run.objects.filter(
-        event__association_id=context["association_id"], development__in=[DevelopStatus.START, DevelopStatus.SHOW]
+        event__association_id=context["association_id"],
+        development__in=[DevelopStatus.START, DevelopStatus.SHOW],
     )
     context["ongoing_runs"] = ongoing_runs_queryset.select_related("event").order_by("end")
 
@@ -251,7 +252,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/manage/exe.html", context)
 
 
-def _exe_suggestions(context):
+def _exe_suggestions(context) -> None:
     """Add priority tasks and suggestions to the executive management context.
 
     Args:
@@ -262,10 +263,10 @@ def _exe_suggestions(context):
         "exe_methods": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
-            "Grant access to organization management for other users and define roles with specific permissions"
+            "Grant access to organization management for other users and define roles with specific permissions",
         ),
         "exe_appearance": _(
-            "Customize the appearance of all organizational pages, including colors, fonts, and images"
+            "Customize the appearance of all organizational pages, including colors, fonts, and images",
         ),
         "exe_features": _("Activate new features and enhance the functionality of the platform"),
         "exe_config": _("Set up specific values for the interface configuration or features"),
@@ -277,7 +278,7 @@ def _exe_suggestions(context):
         _add_suggestion(context, suggestion_text, permission_key)
 
 
-def _exe_actions(request, context: dict, association_features: dict = None) -> None:
+def _exe_actions(request, context: dict, association_features: dict | None = None) -> None:
     """Determine available executive actions based on association features.
 
     Adds action items to the management dashboard based on user permissions
@@ -308,7 +309,7 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
         _add_action(
             context,
             _(
-                "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed"
+                "There are past runs still open: <b>%(list)s</b>. Once all tasks (accounting, etc.) are finished, mark them as completed",
             )
             % {"list": ", ".join(runs_to_conclude)},
             "exe_events",
@@ -316,7 +317,8 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending expense approvals
     pending_expenses_count = AccountingItemExpense.objects.filter(
-        run__event__association_id=context["association_id"], is_approved=False
+        run__event__association_id=context["association_id"],
+        is_approved=False,
     ).count()
     if pending_expenses_count:
         _add_action(
@@ -327,7 +329,8 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending payment approvals
     pending_payments_count = PaymentInvoice.objects.filter(
-        association_id=context["association_id"], status=PaymentStatus.SUBMITTED
+        association_id=context["association_id"],
+        status=PaymentStatus.SUBMITTED,
     ).count()
     if pending_payments_count:
         _add_action(
@@ -338,7 +341,8 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending refund approvals
     pending_refunds_count = RefundRequest.objects.filter(
-        association_id=context["association_id"], status=RefundStatus.REQUEST
+        association_id=context["association_id"],
+        status=RefundStatus.REQUEST,
     ).count()
     if pending_refunds_count:
         _add_action(
@@ -349,7 +353,8 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
 
     # Check for pending member approvals
     pending_members_count = Membership.objects.filter(
-        association_id=context["association_id"], status=MembershipStatus.SUBMITTED
+        association_id=context["association_id"],
+        status=MembershipStatus.SUBMITTED,
     ).count()
     if pending_members_count:
         _add_action(
@@ -365,7 +370,7 @@ def _exe_actions(request, context: dict, association_features: dict = None) -> N
     _exe_users_actions(request, context, association_features)
 
 
-def _exe_users_actions(request, context, enabled_features):
+def _exe_users_actions(request, context, enabled_features) -> None:
     """Process user management actions and setup tasks for executives.
 
     Args:
@@ -391,7 +396,7 @@ def _exe_users_actions(request, context, enabled_features):
             )
 
     if "help" in enabled_features:
-        closed_questions, open_questions = _get_help_questions(context, request)
+        _closed_questions, open_questions = _get_help_questions(context, request)
         if open_questions:
             _add_action(
                 context,
@@ -400,7 +405,7 @@ def _exe_users_actions(request, context, enabled_features):
             )
 
 
-def _exe_accounting_actions(request, context, enabled_features):
+def _exe_accounting_actions(request, context, enabled_features) -> None:
     """Process accounting-related setup actions for executives.
 
     Args:
@@ -409,13 +414,12 @@ def _exe_accounting_actions(request, context, enabled_features):
         enabled_features: Set of enabled features for the association
 
     """
-    if "payment" in enabled_features:
-        if not context.get("methods", ""):
-            _add_priority(
-                context,
-                _("Set up payment methods"),
-                "exe_methods",
-            )
+    if "payment" in enabled_features and not context.get("methods", ""):
+        _add_priority(
+            context,
+            _("Set up payment methods"),
+            "exe_methods",
+        )
 
     if "organization_tax" in enabled_features:
         if not get_association_config(context["association_id"], "organization_tax_perc", "", context=context):
@@ -467,7 +471,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     if not get_event_config(context["event"].id, "orga_quick_suggestion", False, context=context):
         message = _(
             "Before accessing the event dashboard, please complete the quick setup by selecting "
-            "the features most useful for your event"
+            "the features most useful for your event",
         )
         messages.success(request, message)
         return redirect("orga_quick", event_slug=event_slug)
@@ -601,7 +605,8 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
 
     # Check for pending payment approvals
     pending_payments_count = PaymentInvoice.objects.filter(
-        reg__run=context["run"], status=PaymentStatus.SUBMITTED
+        reg__run=context["run"],
+        status=PaymentStatus.SUBMITTED,
     ).count()
     if pending_payments_count:
         _add_action(
@@ -680,7 +685,7 @@ def _orga_user_actions(
             )
 
 
-def _orga_casting_actions(context, enabled_features):
+def _orga_casting_actions(context, enabled_features) -> None:
     """Add priority actions related to casting and quest builder setup.
 
     Checks for missing casting configurations and quest/trait relationships,
@@ -801,7 +806,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
             context,
             _(
                 "You have activated both fixed and dynamic installments; they are not meant to be used together, "
-                "deactivate one of the two in the features management panel"
+                "deactivate one of the two in the features management panel",
             ),
             "orga_features",
         )
@@ -834,7 +839,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
                 _add_priority(
                     context,
                     _(
-                        "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s"
+                        "You have some fixed installments with both date and days set, but those values cannot be set at the same time: %(list)s",
                     )
                     % {"list": ", ".join([str(installment) for installment in installments_with_both_deadlines])},
                     "orga_registration_installments",
@@ -863,7 +868,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
             )
 
 
-def _orga_reg_actions(context, enabled_features):
+def _orga_reg_actions(context, enabled_features) -> None:
     """Add priority actions for registration management setup.
 
     Checks registration status, required tickets, and registration features
@@ -905,7 +910,7 @@ def _orga_reg_actions(context, enabled_features):
             )
 
 
-def _orga_suggestions(context):
+def _orga_suggestions(context) -> None:
     """Add priority suggestions for event organization.
 
     Args:
@@ -924,7 +929,7 @@ def _orga_suggestions(context):
 
     suggestions = {
         "orga_registration_form": _(
-            "Define the registration form, and set up any number of registration questions and their options"
+            "Define the registration form, and set up any number of registration questions and their options",
         ),
         "orga_roles": _("Grant access to event management for other users and define roles with specific permissions"),
         "orga_appearance": _("Customize the appearance of all event pages, including colors, fonts, and images"),
@@ -938,7 +943,7 @@ def _orga_suggestions(context):
         _add_suggestion(context, suggestion_text, permission_slug)
 
 
-def _add_item(context, list_name, message_text, permission_key, custom_link):
+def _add_item(context, list_name, message_text, permission_key, custom_link) -> None:
     """Add item to specific list in management context.
 
     Args:
@@ -955,7 +960,7 @@ def _add_item(context, list_name, message_text, permission_key, custom_link):
     context[list_name].append((message_text, permission_key, custom_link))
 
 
-def _add_priority(context, priority_text, permission_key, custom_link=None):
+def _add_priority(context, priority_text, permission_key, custom_link=None) -> None:
     """Add priority item to management dashboard.
 
     Args:
@@ -968,7 +973,7 @@ def _add_priority(context, priority_text, permission_key, custom_link=None):
     _add_item(context, "priorities_list", priority_text, permission_key, custom_link)
 
 
-def _add_action(context, action_text, permission_key, custom_link=None):
+def _add_action(context, action_text, permission_key, custom_link=None) -> None:
     """Add action item to management dashboard.
 
     Args:
@@ -981,7 +986,7 @@ def _add_action(context, action_text, permission_key, custom_link=None):
     _add_item(context, "actions_list", action_text, permission_key, custom_link)
 
 
-def _add_suggestion(context, suggestion_text, permission_key, custom_link=None):
+def _add_suggestion(context, suggestion_text, permission_key, custom_link=None) -> None:
     """Add suggestion item to management dashboard.
 
     Args:
@@ -1037,7 +1042,7 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
     return reverse(view_name, args=[context["run"].get_slug()])
 
 
-def _compile(request, context):
+def _compile(request, context) -> None:
     """Compile management dashboard with suggestions, actions, and priorities.
 
     Processes and organizes management content sections, handling empty states
@@ -1060,7 +1065,7 @@ def _compile(request, context):
             continue
 
         permission_slug_list.extend(
-            [slug for _name, slug, _url in context[f"{section_name}_list"] if _has_permission(request, context, slug)]
+            [slug for _name, slug, _url in context[f"{section_name}_list"] if _has_permission(request, context, slug)],
         )
 
     for permission_model in (EventPermission, AssociationPermission):
@@ -1079,7 +1084,7 @@ def _compile(request, context):
             (permission_name, tutorial) = permission_cache[slug]
             link_name, link_url = _get_href(context, slug, permission_name, custom_link)
             context[section_name].append(
-                {"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug}
+                {"text": text, "link": link_name, "href": link_url, "tutorial": tutorial, "slug": slug},
             )
 
 
@@ -1114,7 +1119,7 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
     context["intro_driver"] = True
 
 
-def orga_redirect(request, event_slug: str, run_number: int, path: str = None) -> HttpResponsePermanentRedirect:
+def orga_redirect(request, event_slug: str, run_number: int, path: str | None = None) -> HttpResponsePermanentRedirect:
     """Optimized redirect from /slug/number/path to /slug-number/path format.
 
     Redirects URLs like /event-slug/2/some/path to /event-slug-2/some/path.
@@ -1188,7 +1193,7 @@ class WhatWouldYouLikeForm(Form):
         # Add guides with formatted titles and preview snippets
         for guide_data in get_guides_cache():
             content_choices.append(
-                (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}")
+                (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}"),
             )
 
     def _add_tutorials_choices(self, choices: list[tuple[str, str]]) -> None:
@@ -1205,7 +1210,7 @@ class WhatWouldYouLikeForm(Form):
 
             # Append formatted choice with tutorial marker and content preview
             choices.append(
-                (f"tutorial|{tutorial_choice_value}", f"{tutorial_title} [TUTORIAL] - {tutorial['content_preview']}")
+                (f"tutorial|{tutorial_choice_value}", f"{tutorial_title} [TUTORIAL] - {tutorial['content_preview']}"),
             )
 
     def _add_features_choices(self, choices: list[tuple[str, str]]) -> None:
@@ -1230,7 +1235,7 @@ class WhatWouldYouLikeForm(Form):
         all_runs = {**self.context.get("open_runs", {}), **self.context.get("past_runs", {})}
 
         # Add run dashboard choices for each accessible run
-        for _run_id, run_data in all_runs.items():
+        for run_data in all_runs.values():
             choices.append((f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard")))
 
         # Add association dashboard choice if user has association role
@@ -1257,7 +1262,7 @@ class WhatWouldYouLikeForm(Form):
             all_permissions = self.context.get(permission_type, {})
 
             # Iterate through modules and their permission lists
-            for _module, permission_list in all_permissions.items():
+            for permission_list in all_permissions.values():
                 for permission in permission_list:
                     # Create choice tuple with translated name and description
                     choice_tuple = (

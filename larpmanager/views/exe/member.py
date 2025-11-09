@@ -113,15 +113,17 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     # Get set of member IDs who have paid membership fees for current year
     fees = set(
         AccountingItemMembership.objects.filter(
-            association_id=context["association_id"], year=datetime.now().year
-        ).values_list("member_id", flat=True)
+            association_id=context["association_id"],
+            year=datetime.now().year,
+        ).values_list("member_id", flat=True),
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
         Run.objects.filter(event__association_id=context["association_id"], end__gt=datetime.today()).values_list(
-            "pk", "search"
-        )
+            "pk",
+            "search",
+        ),
     )
 
     # Get registrations for upcoming runs and group by member
@@ -142,7 +144,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
                 When(status=MembershipStatus.SUBMITTED, then=Value(0)),
                 default=Value(1),
                 output_field=IntegerField(),
-            )
+            ),
         )
         .order_by("sort_priority", "-updated")
     )
@@ -171,7 +173,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
         # Add upcoming run names for members with registrations
         if el["member__id"] in next_regs:
             el["run_names"] = ", ".join(
-                [next_runs[run_id] for run_id in next_regs[el["member__id"]] if run_id in next_runs]
+                [next_runs[run_id] for run_id in next_regs[el["member__id"]] if run_id in next_runs],
             )
         context["list"].append(el)
 
@@ -250,9 +252,8 @@ def exe_membership_evaluation(request: HttpRequest, num: int) -> HttpResponse:
 
     # Compare normalized names to detect potential duplicates
     for other in que.values_list("member__surname", "member__name"):
-        if normalize_string(other[1]) == normalized_name:
-            if normalize_string(other[0]) == normalized_surname:
-                context["member_exists"] = True
+        if normalize_string(other[1]) == normalized_name and normalize_string(other[0]) == normalized_surname:
+            context["member_exists"] = True
 
     # Add fiscal code validation if feature is enabled
     if "fiscal_code_check" in context["features"]:
@@ -291,7 +292,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
         Membership.objects.filter(association_id=context["association_id"])
         .select_related("member")
         .exclude(status__in=[MembershipStatus.EMPTY, MembershipStatus.JOINED])
-        .values_list("member_id", flat=True)
+        .values_list("member_id", flat=True),
     )
 
     # Perform fiscal code validation if feature is enabled
@@ -352,7 +353,8 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
     # Get member registrations for current association events
     context["regs"] = Registration.objects.filter(
-        member=context["member_edit"], run__event__association=context["association_id"]
+        member=context["member_edit"],
+        run__event__association=context["association_id"],
     ).select_related("run")
 
     # Add accounting payment items to context
@@ -363,7 +365,9 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
 
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=context["member_edit"], hide=False, association_id=context["association_id"]
+        member=context["member_edit"],
+        hide=False,
+        association_id=context["association_id"],
     )
 
     # Process membership data and document paths
@@ -390,7 +394,9 @@ def member_add_accountingitempayment(context: dict, member: Member) -> dict:
     """
     # Fetch visible payments for the member in the current association
     context["pays"] = AccountingItemPayment.objects.filter(
-        member=member, hide=False, association_id=context["association_id"]
+        member=member,
+        hide=False,
+        association_id=context["association_id"],
     ).select_related("reg")
 
     # Set display type based on payment method
@@ -407,7 +413,9 @@ def member_add_accountingitemother(context: dict, member: Member) -> None:
     """Add accounting other items to member context with localized type labels."""
     # Query non-hidden accounting items for the member in current association
     context["others"] = AccountingItemOther.objects.filter(
-        member=member, hide=False, association_id=context["association_id"]
+        member=member,
+        hide=False,
+        association_id=context["association_id"],
     ).select_related("run")
 
     # Set localized type labels based on item category
@@ -435,7 +443,9 @@ def exe_membership_status(request, num):
     context = check_association_context(request, "exe_membership")
     context["member_edit"] = get_member(num)
     context["membership_edit"] = get_object_or_404(
-        Membership, member_id=context["member_edit"].id, association_id=context["association_id"]
+        Membership,
+        member_id=context["member_edit"].id,
+        association_id=context["association_id"],
     )
 
     if request.method == "POST":
@@ -602,7 +612,7 @@ def exe_membership_document(request):
 
 
 @login_required
-def exe_enrolment(request) -> HttpResponse:
+def exe_enrolment(request: HttpRequest) -> HttpResponse:
     """Display yearly enrollment list with membership card numbers.
 
     Generates a list of enrolled members for the current year, including their
@@ -632,14 +642,17 @@ def exe_enrolment(request) -> HttpResponse:
     # Build cache of member enrollment dates from accounting items
     cache = {}
     for el in AccountingItemMembership.objects.filter(
-        association_id=context["association_id"], year=context["year"]
+        association_id=context["association_id"],
+        year=context["year"],
     ).values_list("member_id", "created"):
         cache[el[0]] = el[1]
 
     # Query memberships with card numbers for enrolled members
     context["list"] = []
     que = Membership.objects.filter(
-        member_id__in=cache.keys(), association_id=context["association_id"], card_number__isnull=False
+        member_id__in=cache.keys(),
+        association_id=context["association_id"],
+        card_number__isnull=False,
     )
     que = que.select_related("member").order_by("card_number")
 
@@ -786,7 +799,8 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
 
     # Get list of members who have already voted this year
     context["voters"] = Member.objects.filter(
-        votes_given__year=context["year"], votes_given__association_id=context["association_id"]
+        votes_given__year=context["year"],
+        votes_given__association_id=context["association_id"],
     ).distinct()
 
     return render(request, "larpmanager/exe/users/vote.html", context)
@@ -881,7 +895,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
                 "recipient": lambda el: str(el.recipient),
                 "subj": lambda el: str(el.subj),
             },
-        }
+        },
     )
 
     # Return paginated view of Email objects
@@ -960,7 +974,8 @@ def exe_questions_answer(request: HttpRequest, member_id: int) -> HttpResponse:
     # Retrieve the member and their question history
     context["member_edit"] = get_member(member_id)
     context["list"] = HelpQuestion.objects.filter(
-        member=context["member_edit"], association_id=context["association_id"]
+        member=context["member_edit"],
+        association_id=context["association_id"],
     ).order_by("-created")
 
     # Get the most recent question from this member
@@ -1070,7 +1085,8 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
 
     # Set up CSV response with appropriate headers for file download
     response = HttpResponse(
-        content_type="text/csv", headers={"Content-Disposition": f'attachment; filename="Newsletter-{lang}.csv"'}
+        content_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="Newsletter-{lang}.csv"'},
     )
     writer = csv.writer(response)
 

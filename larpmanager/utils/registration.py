@@ -264,7 +264,7 @@ def registration_status_signed(
     if "membership" in features:
         # Check for revoked membership status and raise error
         if user_membership.status in [MembershipStatus.REWOKED]:
-            raise RewokedMembershipError()
+            raise RewokedMembershipError
 
         # Handle incomplete membership applications (empty, joined, uploaded)
         if user_membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
@@ -355,7 +355,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
                 member_id=run.reg.member_id,
                 status=PaymentStatus.SUBMITTED,
                 typ=PaymentType.REGISTRATION,
-            )
+            ),
         )
         wire_created_invoices = list(
             PaymentInvoice.objects.filter(
@@ -364,7 +364,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
                 status=PaymentStatus.CREATED,
                 typ=PaymentType.REGISTRATION,
                 method__slug="wire",
-            )
+            ),
         )
 
     # Handle pending payment status
@@ -460,7 +460,7 @@ def registration_status(
             run.status["open"] = False
             run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
             run.status["details"] = _("Opening at: %(date)s") % {
-                "date": run.registration_open.strftime(format_datetime)
+                "date": run.registration_open.strftime(format_datetime),
             }
             return
 
@@ -514,7 +514,9 @@ def _status_preregister(run: Run, member: Member, context: dict | None = None) -
         else:
             # Fallback to database query if no cache provided
             has_pre_registration = PreRegistration.objects.filter(
-                event_id=run.event_id, member=member, deleted__isnull=True
+                event_id=run.event_id,
+                member=member,
+                deleted__isnull=True,
             ).exists()
 
     # Set status message based on pre-registration state
@@ -550,7 +552,7 @@ def _get_features_map(run: Run, context: dict):
     return features_map[run.event_id]
 
 
-def registration_find(run: Run, member: Member, context: dict | None = None):
+def registration_find(run: Run, member: Member, context: dict | None = None) -> None:
     """Find and attach registration for a user to a run.
 
     Searches for an active registration (non-cancelled, non-redeemed) for the given
@@ -585,7 +587,10 @@ def registration_find(run: Run, member: Member, context: dict | None = None):
     try:
         registration_queryset = Registration.objects.select_related("ticket")
         run.reg = registration_queryset.get(
-            run=run, member=member, redeem_code__isnull=True, cancellation_date__isnull=True
+            run=run,
+            member=member,
+            redeem_code__isnull=True,
+            cancellation_date__isnull=True,
         )
     except ObjectDoesNotExist:
         # No active registration found for this user and run
@@ -608,7 +613,9 @@ def check_character_maximum(event, member) -> tuple[bool, int]:
 
     # Get IDs of inactive characters (those with CharacterConfig inactive=True)
     inactive_character_ids = CharacterConfig.objects.filter(
-        character__in=characters, name="inactive", value="True"
+        character__in=characters,
+        name="inactive",
+        value="True",
     ).values_list("character_id", flat=True)
 
     # Count only active characters (exclude inactive ones)
@@ -764,7 +771,7 @@ def get_registration_options(instance) -> list[tuple[str, str]]:
     # Fetch choice answers and group by question
     choice_options_by_question = {}
     for choice in RegistrationChoice.objects.filter(question_id__in=question_ids_cache, reg=instance).select_related(
-        "option"
+        "option",
     ):
         if choice.question_id not in choice_options_by_question:
             choice_options_by_question[choice.question_id] = []
@@ -794,7 +801,9 @@ def get_player_signup(request: HttpRequest, context: dict) -> Registration | Non
     """Get active registration for current user in the given run context."""
     # Filter registrations for current run and user, excluding cancelled ones
     active_registrations = Registration.objects.filter(
-        run=context["run"], member=context["member"], cancellation_date__isnull=True
+        run=context["run"],
+        member=context["member"],
+        cancellation_date__isnull=True,
     )
 
     # Return first registration if exists
@@ -858,8 +867,9 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
     character_ids = [char.id for char in characters]
     inactive_character_ids = set(
         CharacterConfig.objects.filter(character_id__in=character_ids, name="inactive", value="True").values_list(
-            "character_id", flat=True
-        )
+            "character_id",
+            flat=True,
+        ),
     )
 
     # Filter out inactive characters
@@ -886,10 +896,14 @@ def get_reduced_available_count(run) -> int:
 
     # Count current reduced and patron registrations (excluding cancelled)
     reduced_registrations_count = Registration.objects.filter(
-        run=run, ticket__tier=TicketTier.REDUCED, cancellation_date__isnull=True
+        run=run,
+        ticket__tier=TicketTier.REDUCED,
+        cancellation_date__isnull=True,
     ).count()
     patron_registrations_count = Registration.objects.filter(
-        run=run, ticket__tier=TicketTier.PATRON, cancellation_date__isnull=True
+        run=run,
+        ticket__tier=TicketTier.PATRON,
+        cancellation_date__isnull=True,
     ).count()
     # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
 
@@ -950,10 +964,11 @@ def process_registration_event_change(registration: Registration) -> None:
         try:
             # Find matching question and option in the new event
             registration_choice.question = registration.run.event.get_elements(RegistrationQuestion).get(
-                name__iexact=question_name
+                name__iexact=question_name,
             )
             registration_choice.option = registration.run.event.get_elements(RegistrationOption).get(
-                question=registration_choice.question, name__iexact=option_name
+                question=registration_choice.question,
+                name__iexact=option_name,
             )
             registration_choice.save()
         except ObjectDoesNotExist:
@@ -969,7 +984,7 @@ def process_registration_event_change(registration: Registration) -> None:
         try:
             # Find matching question in the new event to preserve the answer
             registration_answer.question = registration.run.event.get_elements(RegistrationQuestion).get(
-                name__iexact=question_name
+                name__iexact=question_name,
             )
             registration_answer.save()
         except ObjectDoesNotExist:

@@ -96,7 +96,7 @@ def background_auto(schedule=0, **background_kwargs):
 # MAIL
 
 
-def mail_error(subject, email_body, exception=None):
+def mail_error(subject, email_body, exception=None) -> None:
     """Handle email sending errors and notify administrators.
 
     Args:
@@ -189,7 +189,7 @@ def send_mail_exec(
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(email_pk):
+def my_send_mail_bkg(email_pk) -> None:
     """Background task to send a queued email.
 
     Args:
@@ -280,7 +280,11 @@ def my_send_simple_mail(
 
             # Check if event has custom SMTP configuration
             event_smtp_host_user = get_event_config(
-                event.id, "mail_server_host_user", "", context=cache_context, bypass_cache=True
+                event.id,
+                "mail_server_host_user",
+                "",
+                context=cache_context,
+                bypass_cache=True,
             )
 
             # Only apply event settings if SMTP host user is configured
@@ -293,13 +297,25 @@ def my_send_simple_mail(
                     host=get_event_config(event.id, "mail_server_host", "", context=cache_context, bypass_cache=True),
                     port=get_event_config(event.id, "mail_server_port", "", context=cache_context, bypass_cache=True),
                     username=get_event_config(
-                        event.id, "mail_server_host_user", "", context=cache_context, bypass_cache=True
+                        event.id,
+                        "mail_server_host_user",
+                        "",
+                        context=cache_context,
+                        bypass_cache=True,
                     ),
                     password=get_event_config(
-                        event.id, "mail_server_host_password", "", context=cache_context, bypass_cache=True
+                        event.id,
+                        "mail_server_host_password",
+                        "",
+                        context=cache_context,
+                        bypass_cache=True,
                     ),
                     use_tls=get_event_config(
-                        event.id, "mail_server_use_tls", False, context=cache_context, bypass_cache=True
+                        event.id,
+                        "mail_server_use_tls",
+                        False,
+                        context=cache_context,
+                        bypass_cache=True,
                     ),
                 )
                 event_settings_applied = True
@@ -374,7 +390,7 @@ def my_send_simple_mail(
     except Exception as email_sending_exception:
         # Log the error and re-raise for caller handling
         mail_error(subj, body, email_sending_exception)
-        raise email_sending_exception
+        raise
 
 
 def add_unsubscribe_body(association):
@@ -480,7 +496,7 @@ def my_send_mail(
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subject, message_text, exception=None):
+def notify_admins(subject, message_text, exception=None) -> None:
     """Send notification email to system administrators.
 
     Args:

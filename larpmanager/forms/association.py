@@ -149,7 +149,7 @@ class ExeAssociationTextForm(MyForm):
                     AssociationTextType.REMINDER_MEMBERSHIP_FEE,
                     AssociationTextType.REMINDER_PAY,
                     AssociationTextType.REMINDER_PROFILE,
-                ]
+                ],
             )
         elif "membership" not in self.params["features"]:
             delete_choice.extend([AssociationTextType.REMINDER_MEMBERSHIP, AssociationTextType.REMINDER_MEMBERSHIP_FEE])
@@ -170,16 +170,16 @@ class ExeAssociationTextForm(MyForm):
             AssociationTextType.LEGAL: _("Content of legal notice page linked at the bottom of all pages"),
             AssociationTextType.FOOTER: _("Added to the bottom of all pages"),
             AssociationTextType.TOC: _(
-                "Terms and conditions of signup, shown in a page linked in the registration form"
+                "Terms and conditions of signup, shown in a page linked in the registration form",
             ),
             AssociationTextType.RECEIPT: _("Content of the receipt created for each payment and sent to participants"),
             AssociationTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
             AssociationTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),
             AssociationTextType.REMINDER_MEMBERSHIP: _(
-                "Content of mail reminding participants to fill their membership request"
+                "Content of mail reminding participants to fill their membership request",
             ),
             AssociationTextType.REMINDER_MEMBERSHIP_FEE: _(
-                "Content of mail reminding participants to pay the membership fee"
+                "Content of mail reminding participants to pay the membership fee",
             ),
             AssociationTextType.REMINDER_PAY: _("Content of mail reminding participants to pay their signup fee"),
             AssociationTextType.REMINDER_PROFILE: _("Content of mail reminding participants to fill their profile"),
@@ -303,7 +303,7 @@ class ExeAppearanceForm(MyCssForm):
         required=False,
         help_text=_(
             "Freely insert CSS commands, they will be reported in all pages  in the space of "
-            "your Organization. In this way you can customize freely the appearance."
+            "your Organization. In this way you can customize freely the appearance.",
         ),
     )
 
@@ -328,7 +328,7 @@ class ExeFeatureForm(FeatureForm):
     page_title = _("Features")
 
     page_info = _(
-        "Manage features activated for the organization and all its events (click on a feature to show its description)"
+        "Manage features activated for the organization and all its events (click on a feature to show its description)",
     )
 
     load_js = ["feature-search"]
@@ -437,7 +437,7 @@ class ExeConfigForm(ConfigForm):
         # Configure signup cancellation notification option
         signup_cancellation_label = _("Signup cancellation")
         signup_cancellation_help_text = _(
-            "If checked: Send a notification email to the organisers for cancellation of registration"
+            "If checked: Send a notification email to the organisers for cancellation of registration",
         )
         self.add_configs("mail_signup_del", ConfigType.BOOL, signup_cancellation_label, signup_cancellation_help_text)
 
@@ -557,7 +557,7 @@ class ExeConfigForm(ConfigForm):
             # Tolerance period before automatic cancellation
             field_label = _("Tolerance")
             field_help_text = _(
-                "Number of days past the deadline beyond which registrations are marked to be cancelled (default 30 days)"
+                "Number of days past the deadline beyond which registrations are marked to be cancelled (default 30 days)",
             )
             self.add_configs("deadline_tolerance", ConfigType.INT, field_label, field_help_text)
 
@@ -589,7 +589,7 @@ class ExeConfigForm(ConfigForm):
             field_label = _("Months free quota")
             field_help_text = _(
                 "Number of months, starting from the beginning of the membership year, for which "
-                "to make free membership fee payment"
+                "to make free membership fee payment",
             )
             self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
 
@@ -647,7 +647,7 @@ class ExeConfigForm(ConfigForm):
             # Payment fee configuration - who pays gateway fees
             label_charge_fees_to_participant = _("Charge transaction fees to participant")
             help_text_charge_fees_to_participant = _(
-                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the participant covers them instead of the organization"
+                "If enabled, the system will automatically add payment gateway fees to the ticket price, so the participant covers them instead of the organization",
             )
             self.add_configs(
                 "payment_fees_user",
@@ -659,25 +659,31 @@ class ExeConfigForm(ConfigForm):
             # Payment amount modification controls
             label_disable_amount_change = _("Disable amount change")
             help_text_disable_amount_change = _(
-                "If checked: Hides the possibility for the participant to change the payment amount for his entries"
+                "If checked: Hides the possibility for the participant to change the payment amount for his entries",
             )
             self.add_configs(
-                "payment_hide_amount", ConfigType.BOOL, label_disable_amount_change, help_text_disable_amount_change
+                "payment_hide_amount",
+                ConfigType.BOOL,
+                label_disable_amount_change,
+                help_text_disable_amount_change,
             )
 
             # Unique payment identification system
             label_unique_payment_code = _("Unique code")
             help_text_unique_payment_code = _(
-                "If checked: Adds a unique code to each payment, which helps in being able to recognize it"
+                "If checked: Adds a unique code to each payment, which helps in being able to recognize it",
             )
             self.add_configs(
-                "payment_special_code", ConfigType.BOOL, label_unique_payment_code, help_text_unique_payment_code
+                "payment_special_code",
+                ConfigType.BOOL,
+                label_unique_payment_code,
+                help_text_unique_payment_code,
             )
 
             # Manual payment receipt requirement
             label_require_payment_receipt = _("Require receipt for manual payments")
             help_text_require_payment_receipt = _(
-                "If checked: Participants must provide a receipt/invoice for manual payments"
+                "If checked: Participants must provide a receipt/invoice for manual payments",
             )
             self.add_configs(
                 "payment_require_receipt",
@@ -698,7 +704,7 @@ class ExeConfigForm(ConfigForm):
             # VAT percentage for additional registration options
             label_vat_on_options = _("Options")
             help_text_vat_on_options = _(
-                "Percentage of VAT to be calculated on the sum of the costs of the registration options"
+                "Percentage of VAT to be calculated on the sum of the costs of the registration options",
             )
             self.add_configs("vat_options", ConfigType.INT, label_vat_on_options, help_text_vat_on_options)
 
@@ -710,14 +716,20 @@ class ExeConfigForm(ConfigForm):
             label_token_display_name = _("Token name")
             help_text_token_display_name = _("Name to be displayed for tokens")
             self.add_configs(
-                "token_credit_token_name", ConfigType.CHAR, label_token_display_name, help_text_token_display_name
+                "token_credit_token_name",
+                ConfigType.CHAR,
+                label_token_display_name,
+                help_text_token_display_name,
             )
 
             # Customizable credit display name
             label_credit_display_name = _("Name credits")
             help_text_credit_display_name = _("Name to be displayed for credits")
             self.add_configs(
-                "token_credit_credit_name", ConfigType.CHAR, label_credit_display_name, help_text_credit_display_name
+                "token_credit_credit_name",
+                ConfigType.CHAR,
+                label_credit_display_name,
+                help_text_credit_display_name,
             )
 
         # Configure treasury management and appointee selection
@@ -739,7 +751,7 @@ class ExeConfigForm(ConfigForm):
             label_organization_fee_percentage = _("Percentage")
             help_text_organization_fee_percentage = _(
                 "Percentage of takings calculated as a fee for association infrastructure (in "
-                "whole numbers from 0 to 100)"
+                "whole numbers from 0 to 100)",
             )
             self.add_configs(
                 "organization_tax_perc",
@@ -753,10 +765,13 @@ class ExeConfigForm(ConfigForm):
             self.set_section("expense", _("Expenses"))
             label_disable_event_approval = _("Disable event approval")
             help_text_disable_event_approval = _(
-                "If checked, approval of expenses can be performed only from the organization panel"
+                "If checked, approval of expenses can be performed only from the organization panel",
             )
             self.add_configs(
-                "expense_disable_orga", ConfigType.BOOL, label_disable_event_approval, help_text_disable_event_approval
+                "expense_disable_orga",
+                ConfigType.BOOL,
+                label_disable_event_approval,
+                help_text_disable_event_approval,
             )
 
     def set_config_einvoice(self) -> None:
@@ -869,7 +884,8 @@ class FirstAssociationForm(MyForm):
 
         # Raise validation error if slug already exists
         if lst.count() > 0:
-            raise ValidationError("Slug already used!")
+            msg = "Slug already used!"
+            raise ValidationError(msg)
 
         return data
 
@@ -883,7 +899,7 @@ class ExeQuickSetupForm(QuickSetupForm):
         model = Association
         fields = []
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize association setup form with feature configuration options.
 
         Sets up available features and configuration options based on
@@ -905,7 +921,7 @@ class ExeQuickSetupForm(QuickSetupForm):
                         _("Campaign"),
                         _("Do you want to manage campaigns, a series of events that share the same characters"),
                     ),
-                }
+                },
             )
 
         self.setup.update(
@@ -920,7 +936,7 @@ class ExeQuickSetupForm(QuickSetupForm):
                     False,
                     _("Transaction fees"),
                     _(
-                        "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization"
+                        "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization",
                     ),
                 ),
                 "membership": (
@@ -937,12 +953,12 @@ class ExeQuickSetupForm(QuickSetupForm):
                     True,
                     _("Reminders"),
                     _(
-                        "Do you want to enable an automatic email reminder system for registered users who miss a deadline"
+                        "Do you want to enable an automatic email reminder system for registered users who miss a deadline",
                     ),
                 ),
                 "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
                 "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
-            }
+            },
         )
 
         self.init_fields(get_association_features(self.instance.pk))
@@ -974,5 +990,8 @@ class ExePreferencesForm(ConfigForm):
         sidebar_collapse_label = _("Collapse sidebar")
         sidebar_collapse_help_text = _("If checked: collpase sidebars links, and expand on mouse hover")
         self.add_configs(
-            "interface_collapse_sidebar", ConfigType.BOOL, sidebar_collapse_label, sidebar_collapse_help_text
+            "interface_collapse_sidebar",
+            ConfigType.BOOL,
+            sidebar_collapse_label,
+            sidebar_collapse_help_text,
         )

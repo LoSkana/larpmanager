@@ -76,7 +76,7 @@ def orga_expenses_my(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display user's personal expenses for an event run."""
     context = check_event_context(request, event_slug, "orga_expenses_my")
     context["list"] = AccountingItemExpense.objects.filter(run=context["run"], member=context["member"]).order_by(
-        "-created"
+        "-created",
     )
     return render(request, "larpmanager/orga/accounting/expenses_my.html", context)
 
@@ -206,7 +206,8 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> Ht
 
     # Verify invoice belongs to the current event run
     if context["el"].reg.run != context["run"]:
-        raise Http404("i'm sorry, what?")
+        msg = "i'm sorry, what?"
+        raise Http404(msg)
 
     # Check if invoice can be confirmed (must be CREATED or SUBMITTED)
     if context["el"].status == PaymentStatus.CREATED or context["el"].status == PaymentStatus.SUBMITTED:
@@ -273,13 +274,17 @@ def orga_tokens(request: HttpRequest, event_slug) -> dict:
                 ("value", _("Value")),  # Token monetary value
                 ("created", _("Date")),  # Token creation timestamp
             ],
-        }
+        },
     )
 
     # Return paginated view of AccountingItemOther objects (tokens)
     # Uses the organization accounting tokens template and edit route
     return orga_paginate(
-        request, context, AccountingItemOther, "larpmanager/orga/accounting/tokens.html", "orga_tokens_edit"
+        request,
+        context,
+        AccountingItemOther,
+        "larpmanager/orga/accounting/tokens.html",
+        "orga_tokens_edit",
     )
 
 
@@ -317,12 +322,16 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
-        }
+        },
     )
 
     # Return paginated view of accounting items using the configured context
     return orga_paginate(
-        request, context, AccountingItemOther, "larpmanager/orga/accounting/credits.html", "orga_credits_edit"
+        request,
+        context,
+        AccountingItemOther,
+        "larpmanager/orga/accounting/credits.html",
+        "orga_credits_edit",
     )
 
 
@@ -379,12 +388,16 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
             },
-        }
+        },
     )
 
     # Return paginated payment data with configured template
     return orga_paginate(
-        request, context, AccountingItemPayment, "larpmanager/orga/accounting/payments.html", "orga_payments_edit"
+        request,
+        context,
+        AccountingItemPayment,
+        "larpmanager/orga/accounting/payments.html",
+        "orga_payments_edit",
     )
 
 
@@ -433,12 +446,16 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Display human-readable type labels
                 "type": lambda el: el.get_exp_display(),
             },
-        }
+        },
     )
 
     # Render paginated table with outflow data and edit functionality
     return orga_paginate(
-        request, context, AccountingItemOutflow, "larpmanager/orga/accounting/outflows.html", "orga_outflows_edit"
+        request,
+        context,
+        AccountingItemOutflow,
+        "larpmanager/orga/accounting/outflows.html",
+        "orga_outflows_edit",
     )
 
 
@@ -483,12 +500,16 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> dict:
             "callbacks": {
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
             },
-        }
+        },
     )
 
     # Return paginated view with configured context and template rendering
     return orga_paginate(
-        request, context, AccountingItemInflow, "larpmanager/orga/accounting/inflows.html", "orga_inflows_edit"
+        request,
+        context,
+        AccountingItemInflow,
+        "larpmanager/orga/accounting/inflows.html",
+        "orga_inflows_edit",
     )
 
 
@@ -518,7 +539,10 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Determine if approval functionality should be disabled for this organization
     context["disable_approval"] = get_association_config(
-        context["event"].association_id, "expense_disable_orga", False, context
+        context["event"].association_id,
+        "expense_disable_orga",
+        False,
+        context,
     )
 
     # Cache the translated approval text for callback usage
@@ -550,12 +574,16 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Display human-readable expense type from model choices
                 "type": lambda el: el.get_exp_display(),
             },
-        }
+        },
     )
 
     # Render paginated expense list using the organization template
     return orga_paginate(
-        request, context, AccountingItemExpense, "larpmanager/orga/accounting/expenses.html", "orga_expenses_edit"
+        request,
+        context,
+        AccountingItemExpense,
+        "larpmanager/orga/accounting/expenses.html",
+        "orga_expenses_edit",
     )
 
 
@@ -591,17 +619,20 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
 
     # Verify that expense functionality is enabled for this association
     if get_association_config(context["event"].association_id, "expense_disable_orga", False):
-        raise Http404("eh no caro mio")
+        msg = "eh no caro mio"
+        raise Http404(msg)
 
     # Retrieve the expense object or raise 404 if not found
     try:
         exp = AccountingItemExpense.objects.get(pk=num)
     except Exception as err:
-        raise Http404("no id expense") from err
+        msg = "no id expense"
+        raise Http404(msg) from err
 
     # Ensure the expense belongs to the current event
     if exp.run.event != context["event"]:
-        raise Http404("not your orga")
+        msg = "not your orga"
+        raise Http404(msg)
 
     # Update expense approval status and save to database
     exp.is_approved = True

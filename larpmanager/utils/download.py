@@ -93,7 +93,7 @@ def zip_exports(context, exports, filename):
             zip_file.writestr(f"{export_name}.csv", _temp_csv_file(csv_headers, csv_rows))
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer.read(), content_type="application/zip")
-    response["Content-Disposition"] = f"attachment; filename={str(context['run'])} - {filename}.zip"
+    response["Content-Disposition"] = f"attachment; filename={context['run']!s} - {filename}.zip"
     return response
 
 
@@ -162,9 +162,8 @@ def export_data(context: dict, model_type: type, member_cover: bool = False) -> 
         exports.extend(export_plot_rels(context))
 
     # Add character relationships if feature is enabled
-    if model_name == "character":
-        if "relationships" in context["features"]:
-            exports.extend(export_relationships(context))
+    if model_name == "character" and "relationships" in context["features"]:
+        exports.extend(export_relationships(context))
 
     return exports
 
@@ -192,7 +191,7 @@ def export_plot_rels(context):
                 plot_character_relationship.plot.name,
                 plot_character_relationship.character.name,
                 plot_character_relationship.text,
-            ]
+            ],
         )
 
     return [("plot_rels", column_keys, relationship_values)]
@@ -296,7 +295,7 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
     if model == "character":
         context["assignments"] = {}
         for registration_character_relation in RegistrationCharacterRel.objects.filter(
-            reg__run=context["run"]
+            reg__run=context["run"],
         ).select_related("reg", "reg__member"):
             context["assignments"][registration_character_relation.character_id] = (
                 registration_character_relation.reg.member
@@ -375,7 +374,12 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
 
 
 def _row_header(
-    context: dict, el: object, header_columns: list, member_cover: bool, model: str, row_values: list
+    context: dict,
+    el: object,
+    header_columns: list,
+    member_cover: bool,
+    model: str,
+    row_values: list,
 ) -> None:
     """Build header row data with member information and basic element data.
 
@@ -587,9 +591,8 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
         return
 
     # Check if title field is enabled in features
-    if field_name in ["title"]:
-        if field_name not in context["features"]:
-            return
+    if field_name in ["title"] and field_name not in context["features"]:
+        return
 
     # Handle faction field processing
     if field_name == "factions":
@@ -962,7 +965,7 @@ def _get_column_names(context: dict) -> None:
                 + ")</i>",
                 "characters": _("(Optional) The character names to assign to the player, separated by commas"),
                 "donation": _("(Optional) The amount of a voluntary donation"),
-            }
+            },
         ]
         # Build field type mapping from registration questions for validation
         questions = get_ordered_registration_questions(context).values("name", "typ")
@@ -981,7 +984,7 @@ def _get_column_names(context: dict) -> None:
                 "description": _("(Optional) The ticket's description"),
                 "price": _("(Optional) The cost of the ticket"),
                 "max_available": _("(Optional) Maximun number of spots available"),
-            }
+            },
         ]
 
     # Handle ability/experience system export
@@ -994,7 +997,7 @@ def _get_column_names(context: dict) -> None:
                 "descr": _("(Optional) The ability description"),
                 "prerequisites": _("(Optional) Other ability as prerequisite, comma-separated"),
                 "requirements": _("(Optional) Character options as requirements, comma-separated"),
-            }
+            },
         ]
         context["name"] = "Ability"
 
@@ -1011,7 +1014,7 @@ def _get_column_names(context: dict) -> None:
                 "status": _("The question status, allowed values are")
                 + ": 'optional', 'mandatory', 'disabled', 'hidden'",
                 "max_length": _(
-                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
+                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)",
                 ),
             },
             {
@@ -1023,7 +1026,7 @@ def _get_column_names(context: dict) -> None:
                 "description": _("Optional – Additional information about the option, displayed below the question"),
                 "price": _("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
                 "max_available": _(
-                    "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)"
+                    "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)",
                 ),
             },
         ]
@@ -1044,7 +1047,7 @@ def _get_column_names(context: dict) -> None:
                 "visibility": _("The question visibility to participants, allowed values are")
                 + ": 'searchable', 'public', 'private', 'hidden'",
                 "max_length": _(
-                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)"
+                    "Optional - For text questions, maximum number of characters; For multiple options, maximum number of options (0 = no limit)",
                 ),
             },
             {
@@ -1114,7 +1117,7 @@ def _get_writing_names(context: dict) -> None:
                     "source": _("First character in the relationship (origin)"),
                     "target": _("Second character in the relationship (destination)"),
                     "text": _("Description of the relationship from source to target"),
-                }
+                },
             )
 
     # Configure plot-specific columns
@@ -1124,7 +1127,7 @@ def _get_writing_names(context: dict) -> None:
                 "plot": _("Name of the plot"),
                 "character": _("Name of the character"),
                 "text": _("Description of the role of the character in the plot"),
-            }
+            },
         )
 
     # Configure quest-specific columns

@@ -19,15 +19,29 @@ extend-exclude = ["main"]
 quote-style = "double"
 
 [tool.ruff.lint]
-select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D", "R", "W", "T", "S"]
+select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D", "R", "W", "T", "S", "Q", "ANN"]
+
 ignore = [
 	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
-	"E501", # Line too lung, ignored to use ruff formatter
+	"E501", # Line too long, ignored to use ruff formatter
 	"D100", # Missing docstring in public module
 	"D101", # Missing docstring in public class, to be removed later,
 	"D104", # Missing docstring in public package
 	"D105", # Missing docstring in magic method
-	"D106" # Missing docstring in public nested class, would be useless on Meta
+	"D106", # Missing docstring in public nested class, would be useless on Meta
+    "ANN001",  # TODO remove Missing type annotation for functions
+    "ANN002",  # TODO remove Missing type annotation for *args
+    "ANN003",  # TODO remove Missing type annotation for **kwargs
+    "ANN201",  # TODO remove Missing return type annotation for public function
+    "ANN202",  # TODO remove Missing return type annotation for private function
+    "ANN204",  # TODO remove Missing return type annotation for special method
+    "ANN205",  # TODO remove Missing return type annotation for staticmethod
+    "ANN206",  # TODO remove Missing return type annotation for classmethod
+    "ANN401",  # Dynamically typed expressions (Any) are disallowed
+    "COM812",  # Trailing comma missing (conflicts with formatter)
+    "TD002",   # Missing author in TODO
+    "TD003",   # Missing issue link in TODO
+    "FIX002",  # Line contains TODO
 ]
 
 [tool.ruff.lint.pydocstyle]

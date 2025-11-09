@@ -121,12 +121,16 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 "type": lambda el: el.get_exp_display(),
             },
-        }
+        },
     )
 
     # Return paginated view with configured context and template
     return exe_paginate(
-        request, context, AccountingItemOutflow, "larpmanager/exe/accounting/outflows.html", "exe_outflows_edit"
+        request,
+        context,
+        AccountingItemOutflow,
+        "larpmanager/exe/accounting/outflows.html",
+        "exe_outflows_edit",
     )
 
 
@@ -189,12 +193,16 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
             "callbacks": {
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
             },
-        }
+        },
     )
 
     # Render paginated inflows list with edit functionality
     return exe_paginate(
-        request, context, AccountingItemInflow, "larpmanager/exe/accounting/inflows.html", "exe_inflows_edit"
+        request,
+        context,
+        AccountingItemInflow,
+        "larpmanager/exe/accounting/inflows.html",
+        "exe_inflows_edit",
     )
 
 
@@ -237,12 +245,16 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
                 ("value", _("Value")),  # Monetary amount
                 ("created", _("Date")),  # When donation was created
             ],
-        }
+        },
     )
 
     # Render paginated donations list using the accounting template
     return exe_paginate(
-        request, context, AccountingItemDonation, "larpmanager/exe/accounting/donations.html", "exe_donations_edit"
+        request,
+        context,
+        AccountingItemDonation,
+        "larpmanager/exe/accounting/donations.html",
+        "exe_donations_edit",
     )
 
 
@@ -284,12 +296,16 @@ def exe_credits(request: HttpRequest) -> dict:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
-        }
+        },
     )
 
     # Render paginated credits list with editing capabilities
     return exe_paginate(
-        request, context, AccountingItemOther, "larpmanager/exe/accounting/credits.html", "exe_credits_edit"
+        request,
+        context,
+        AccountingItemOther,
+        "larpmanager/exe/accounting/credits.html",
+        "exe_credits_edit",
     )
 
 
@@ -334,11 +350,15 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],
-        }
+        },
     )
     # Render paginated view with AccountingItemOther model data
     return exe_paginate(
-        request, context, AccountingItemOther, "larpmanager/exe/accounting/tokens.html", "exe_tokens_edit"
+        request,
+        context,
+        AccountingItemOther,
+        "larpmanager/exe/accounting/tokens.html",
+        "exe_tokens_edit",
     )
 
 
@@ -393,12 +413,16 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Display human-readable expense type
                 "type": lambda el: el.get_exp_display(),
             },
-        }
+        },
     )
 
     # Return paginated expense list with edit functionality
     return exe_paginate(
-        request, context, AccountingItemExpense, "larpmanager/exe/accounting/expenses.html", "exe_expenses_edit"
+        request,
+        context,
+        AccountingItemExpense,
+        "larpmanager/exe/accounting/expenses.html",
+        "exe_expenses_edit",
     )
 
 
@@ -430,11 +454,13 @@ def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
     try:
         exp = AccountingItemExpense.objects.get(pk=num)
     except Exception as err:
-        raise Http404("no id expense") from err
+        msg = "no id expense"
+        raise Http404(msg) from err
 
     # Verify expense belongs to current organization
     if exp.association_id != context["association_id"]:
-        raise Http404("not your orga")
+        msg = "not your orga"
+        raise Http404(msg)
 
     # Mark expense as approved and save changes
     exp.is_approved = True
@@ -495,12 +521,16 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
             },
-        }
+        },
     )
 
     # Return paginated view of AccountingItemPayment records
     return exe_paginate(
-        request, context, AccountingItemPayment, "larpmanager/exe/accounting/payments.html", "exe_payments_edit"
+        request,
+        context,
+        AccountingItemPayment,
+        "larpmanager/exe/accounting/payments.html",
+        "exe_payments_edit",
     )
 
 
@@ -511,7 +541,7 @@ def exe_payments_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_invoices(request) -> HttpResponse:
+def exe_invoices(request: HttpRequest) -> HttpResponse:
     """Display and manage payment invoices for the organization.
 
     This view provides a paginated list of payment invoices with filtering
@@ -564,12 +594,16 @@ def exe_invoices(request) -> HttpResponse:
                 if el.status == PaymentStatus.SUBMITTED
                 else "",
             },
-        }
+        },
     )
 
     # Return paginated invoice list with edit functionality
     return exe_paginate(
-        request, context, PaymentInvoice, "larpmanager/exe/accounting/invoices.html", "exe_invoices_edit"
+        request,
+        context,
+        PaymentInvoice,
+        "larpmanager/exe/accounting/invoices.html",
+        "exe_invoices_edit",
     )
 
 
@@ -609,7 +643,8 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
         context["el"].status = PaymentStatus.CONFIRMED
     else:
         # Reject if invoice already processed
-        raise Http404("already done")
+        msg = "already done"
+        raise Http404(msg)
 
     # Persist changes to database
     context["el"].save()
@@ -682,7 +717,7 @@ def exe_refunds(request: HttpRequest) -> dict:
                 if el.status != RefundStatus.PAYED
                 else "",
             },
-        }
+        },
     )
 
     # Return paginated refund requests with template context
@@ -725,7 +760,8 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
         context["el"].status = RefundStatus.PAYED
     else:
         # Prevent duplicate processing of already confirmed requests
-        raise Http404("already done")
+        msg = "already done"
+        raise Http404(msg)
 
     # Persist the status change to the database
     context["el"].save()
@@ -786,7 +822,8 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
     # Get the run and verify ownership
     context["run"] = Run.objects.get(pk=num)
     if context["run"].event.association_id != context["association_id"]:
-        raise Http404("not your run")
+        msg = "not your run"
+        raise Http404(msg)
 
     # Get accounting data for this run
     context["dc"] = get_run_accounting(context["run"], context)
@@ -800,7 +837,8 @@ def exe_accounting_rec(request: HttpRequest) -> HttpResponse:
 
     # Get accounting records for the organization (not tied to specific runs)
     context["list"] = RecordAccounting.objects.filter(
-        association_id=context["association_id"], run__isnull=True
+        association_id=context["association_id"],
+        run__isnull=True,
     ).order_by("created")
 
     # If no records exist, create them and redirect
@@ -888,14 +926,16 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
 
     # Calculate total membership fees for the year
     context["memberships"] = get_sum(
-        AccountingItemMembership.objects.filter(association_id=context["association_id"], year=year)
+        AccountingItemMembership.objects.filter(association_id=context["association_id"], year=year),
     )
 
     # Calculate total donations received in the year
     context["donations"] = get_sum(
         AccountingItemDonation.objects.filter(
-            association_id=context["association_id"], created__gte=start, created__lt=end
-        )
+            association_id=context["association_id"],
+            created__gte=start,
+            created__lt=end,
+        ),
     )
 
     # Calculate net ticket revenue (cash payments minus transaction fees)
@@ -905,18 +945,22 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
             pay=PaymentChoices.MONEY,
             created__gte=start,
             created__lt=end,
-        )
+        ),
     ) - get_sum(
         AccountingItemTransaction.objects.filter(
-            association_id=context["association_id"], created__gte=start, created__lt=end
-        )
+            association_id=context["association_id"],
+            created__gte=start,
+            created__lt=end,
+        ),
     )
 
     # Calculate total inflows for the year
     context["inflows"] = get_sum(
         AccountingItemInflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
-        )
+            association_id=context["association_id"],
+            payment_date__gte=start,
+            payment_date__lt=end,
+        ),
     )
 
     # Sum all incoming funds
@@ -933,7 +977,7 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
             created__gte=start,
             created__lt=end,
             oth=OtherChoices.REFUND,
-        )
+        ),
     )
 
     # Initialize expenditure categories with zero values
@@ -943,7 +987,10 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Aggregate approved personal expenses by balance category
     for el in (
         AccountingItemExpense.objects.filter(
-            association_id=context["association_id"], created__gte=start, created__lt=end, is_approved=True
+            association_id=context["association_id"],
+            created__gte=start,
+            created__lt=end,
+            is_approved=True,
         )
         .values("balance")
         .annotate(Sum("value"))
@@ -968,7 +1015,9 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Add association-level outflows to expenditure categories
     for el in (
         AccountingItemOutflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start, payment_date__lt=end
+            association_id=context["association_id"],
+            payment_date__gte=start,
+            payment_date__lt=end,
         )
         .values("balance")
         .annotate(Sum("value"))
@@ -1084,7 +1133,8 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
 
     # Ensure invoice belongs to user's organization
     if invoice.association_id != context["association_id"]:
-        raise Http404("not your association!")
+        msg = "not your association!"
+        raise Http404(msg)
 
     # Check if payment is already verified to prevent duplicates
     if invoice.verified:

@@ -173,8 +173,8 @@ class TestTextFieldSignals(BaseTestCase):
     def test_feature_module_post_save_resets_permissions_cache(self, mock_reset):
         """Test that FeatureModule post_save signal resets permissions cache"""
         # Use all_objects to include soft-deleted records
-        max_id = FeatureModule.all_objects.aggregate(models.Max('id'))['id__max'] or 0
-        max_order = FeatureModule.objects.aggregate(models.Max('order'))['order__max'] or 0
+        max_id = FeatureModule.all_objects.aggregate(models.Max("id"))["id__max"] or 0
+        max_order = FeatureModule.objects.aggregate(models.Max("order"))["order__max"] or 0
         module = FeatureModule(id=max_id + 1, name="Test Module Post Save", icon="test-icon", order=max_order + 1)
         module.save()
 
@@ -185,8 +185,8 @@ class TestTextFieldSignals(BaseTestCase):
     def test_feature_module_post_delete_resets_permissions_cache(self, mock_reset):
         """Test that FeatureModule post_delete signal resets permissions cache"""
         # Use all_objects to include soft-deleted records
-        max_id = FeatureModule.all_objects.aggregate(models.Max('id'))['id__max'] or 0
-        max_order = FeatureModule.objects.aggregate(models.Max('order'))['order__max'] or 0
+        max_id = FeatureModule.all_objects.aggregate(models.Max("id"))["id__max"] or 0
+        max_order = FeatureModule.objects.aggregate(models.Max("order"))["order__max"] or 0
         module = FeatureModule.objects.create(id=max_id + 1, name="Test Module Post Delete", icon="test-icon", order=max_order + 1)
         mock_reset.reset_mock()  # Reset after the create call
         module.delete()

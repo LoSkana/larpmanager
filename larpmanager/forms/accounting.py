@@ -500,8 +500,8 @@ class WireInvoiceSubmitForm(InvoiceSubmitForm):
                     "image/tiff",
                     "image/webp",
                     "application/pdf",
-                ]
-            )
+                ],
+            ),
         ],
         label=PaymentInvoice._meta.get_field("invoice").verbose_name,
         help_text=_("Upload a PDF file or image (JPG, PNG, etc.)"),
@@ -519,9 +519,8 @@ class WireInvoiceSubmitForm(InvoiceSubmitForm):
         super().__init__(*args, **kwargs)
 
         # Remove invoice field when receipt is not required
-        if not require_receipt:
-            if "invoice" in self.fields:
-                del self.fields["invoice"]
+        if not require_receipt and "invoice" in self.fields:
+            del self.fields["invoice"]
 
 
 class AnyInvoiceSubmitForm(InvoiceSubmitForm):
@@ -588,7 +587,7 @@ class ExePaymentSettingsForm(MyForm):
             "payment_methods": forms.CheckboxSelectMultiple,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize PaymentMethodForm with dynamic payment method configuration.
 
         Args:
@@ -622,7 +621,7 @@ class ExePaymentSettingsForm(MyForm):
                 help_dict = {
                     "descr": _("Description of this payment method to be displayed to the user"),
                     "fee": _(
-                        "Percentage to be retained by the payment system - enter the value as a number, without the percentage symbol"
+                        "Percentage to be retained by the payment system - enter the value as a number, without the percentage symbol",
                     ),
                 }
                 if label in help_dict:
@@ -673,7 +672,7 @@ class ExePaymentSettingsForm(MyForm):
         res = get_payment_details(self.instance)
 
         # Iterate through payment detail fields by category
-        for _slug, lst in self.get_payment_details_fields().items():
+        for lst in self.get_payment_details_fields().values():
             for el in lst:
                 # Process only fields present in cleaned form data
                 if el in self.cleaned_data:
@@ -681,17 +680,11 @@ class ExePaymentSettingsForm(MyForm):
                     input_value = self.cleaned_data[el]
 
                     # Get original value or default to empty string
-                    if el in res:
-                        orig_value = res[el]
-                    else:
-                        orig_value = ""
+                    orig_value = res.get(el, "")
 
                     # Apply masking based on field type
                     # Description and fee fields remain unmasked for clarity
-                    if el.endswith(("_descr", "_fee")):
-                        data_string = orig_value
-                    else:
-                        data_string = self.mask_string(orig_value)
+                    data_string = orig_value if el.endswith(("_descr", "_fee")) else self.mask_string(orig_value)
 
                     # Track changes only when values actually differ
                     if input_value != data_string:

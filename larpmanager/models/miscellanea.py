@@ -55,7 +55,7 @@ class HelpQuestion(BaseModel):
         verbose_name=_("Event"),
         help_text=_(
             "If your question is about a specific event, please select it! If  is a general "
-            "question instead, please leave it blank."
+            "question instead, please leave it blank.",
         ),
     )
 
@@ -85,8 +85,8 @@ class HelpQuestion(BaseModel):
                     "image/jpeg",
                     "image/png",
                     "image/gif",
-                ]
-            )
+                ],
+            ),
         ],
     )
 
@@ -186,7 +186,7 @@ class UrlShortner(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"U{self.number} {self.name}"
 
 
@@ -270,7 +270,7 @@ class AlbumImage(BaseModel):
 
     height = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.upload.name
 
     def show_thumb(self):
@@ -311,7 +311,7 @@ class CompetenceMemberRel(BaseModel):
 
     info = models.TextField(max_length=5000)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} - {self.competence} ({self.exp})"
 
     class Meta:
@@ -333,7 +333,7 @@ class WorkshopModule(BaseModel):
 
     members = models.ManyToManyField(Member, related_name="workshops", through="WorkshopMemberRel")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def show(self) -> dict[str, Any]:
@@ -349,7 +349,7 @@ class WorkshopMemberRel(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.workshop} - {self.member}"
 
 
@@ -364,7 +364,7 @@ class WorkshopQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshop_questions")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def show(self) -> dict[str, any]:
@@ -400,7 +400,7 @@ class WorkshopOption(BaseModel):
 
     number = models.IntegerField(blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.question} {self.name} ({self.is_correct})"
 
     def show(self) -> dict[str, Any]:
@@ -553,7 +553,7 @@ class ShuttleService(BaseModel):
         help_text=_(
             "Indicates how you can be recognized, if you will be found near some point "
             "specific, if you have a lot of luggage: any information that might help us help "
-            "you"
+            "you",
         ),
     )
 
@@ -578,7 +578,7 @@ class ShuttleService(BaseModel):
     notes = models.TextField(
         verbose_name=_("Note"),
         help_text=_(
-            "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival"
+            "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival",
         ),
         null=True,
     )
@@ -587,7 +587,7 @@ class ShuttleService(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} ({self.date} {self.time}) {self.status}"
 
 
@@ -618,7 +618,7 @@ class Problem(BaseModel):
             "Indicate severity: RED (risks ruining the event for more than half of the "
             "participants), ORANGE (risks ruining the event for more than ten participants),  YELLOW "
             "(risks ruining the event for a few participants), GREEN (more than  problems, finesses "
-            "to be fixed)"
+            "to be fixed)",
         ),
     )
 
@@ -629,7 +629,7 @@ class Problem(BaseModel):
         verbose_name=_("Status"),
         help_text=_(
             "When putting in WORKING, indicate in the comments the specific actions that  are "
-            "being performed; when putting in CLOSED, indicate showd in the  comments."
+            "being performed; when putting in CLOSED, indicate showd in the  comments.",
         ),
         db_index=True,
     )
@@ -744,7 +744,7 @@ class Email(BaseModel):
 
     search = models.CharField(max_length=500, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.recipient} - {self.subj}"
 
 
@@ -811,10 +811,10 @@ class OneTimeContent(BaseModel):
         verbose_name = _("One-Time Content")
         verbose_name_plural = _("One-Time Contents")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({self.event.name})"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Override save to capture file metadata."""
         if self.file:
             self.file_size = self.file.size
@@ -934,14 +934,14 @@ class OneTimeAccessToken(BaseModel):
         status = _("Used") if self.used else _("Unused")
         return f"{self.token[:8]}... - {status}"
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Generate token on creation."""
         if not self.token:
             # Generate a cryptographically secure token
             self.token = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)
 
-    def mark_as_used(self, http_request=None, authenticated_member=None):
+    def mark_as_used(self, http_request=None, authenticated_member=None) -> None:
         """Mark this token as used and record access information.
 
         Args:

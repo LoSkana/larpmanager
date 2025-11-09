@@ -32,7 +32,7 @@ from django.db.models import ForeignKey, ManyToManyField
 class Command(BaseCommand):
     help = "Reload features from yaml"
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         """Import feature system fixtures from YAML files.
 
         Loads modules, features, permissions, and other system configuration
@@ -97,11 +97,13 @@ class Command(BaseCommand):
             # noinspection PyUnresolvedReferences, PyProtectedMember
             many_to_many_field = model._meta.get_field(field_name)
         except FieldDoesNotExist as err:
-            raise ValueError(f"{field_name} not found on {model_label}") from err
+            msg = f"{field_name} not found on {model_label}"
+            raise ValueError(msg) from err
 
         # Validate that the field is actually a many-to-many field
         if not isinstance(many_to_many_field, ManyToManyField):
-            raise ValueError(f"{field_name} not m2m on {model_label}")
+            msg = f"{field_name} not m2m on {model_label}"
+            raise ValueError(msg)
 
         # Get the related model and separate integer IDs from string slugs
         related_model = many_to_many_field.remote_field.model
@@ -116,7 +118,8 @@ class Command(BaseCommand):
             # Check for missing slugs and raise error if any are not found
             missing_slugs = sorted(set(slug_values) - set(slug_to_primary_key.keys()))
             if missing_slugs:
-                raise ValueError(f"missing slugs for {model_label}.{field_name}: {', '.join(missing_slugs)}")
+                msg = f"missing slugs for {model_label}.{field_name}: {', '.join(missing_slugs)}"
+                raise ValueError(msg)
             primary_keys_from_slugs = [slug_to_primary_key[slug] for slug in slug_values]
         else:
             primary_keys_from_slugs = []

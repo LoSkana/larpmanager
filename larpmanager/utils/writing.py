@@ -102,12 +102,12 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
         context["progress_steps"] = {
             step.id: str(step) for step in ProgressStep.objects.filter(event=event).order_by("order")
         }
-        context["progress_steps_map"] = {step_id: 0 for step_id in context["progress_steps"]}
+        context["progress_steps_map"] = dict.fromkeys(context["progress_steps"], 0)
 
     # Initialize assignment tracking if feature is enabled
     if "assigned" in features:
         context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event)}
-        context["assigned_map"] = {member_id: 0 for member_id in context["assigned"]}
+        context["assigned_map"] = dict.fromkeys(context["assigned"], 0)
 
     # Initialize combined progress/assignment tracking if both features enabled
     if "progress" in features and "assigned" in features:
@@ -155,7 +155,8 @@ def writing_popup_question(context, idx, question_idx):
     try:
         character = Character.objects.get(pk=idx, event=context["event"].get_class_parent(Character))
         question = WritingQuestion.objects.get(
-            pk=question_idx, event=context["event"].get_class_parent(WritingQuestion)
+            pk=question_idx,
+            event=context["event"].get_class_parent(WritingQuestion),
         )
         writing_answer = WritingAnswer.objects.get(element_id=character.id, question=question)
         html_text = f"<h2>{character} - {question.name}</h2>" + writing_answer.text
@@ -248,7 +249,7 @@ def writing_example(context, typ):
     return response
 
 
-def writing_post(request, context, writing_element_type, template_name):
+def writing_post(request, context, writing_element_type, template_name) -> None:
     """Handle POST requests for writing operations.
 
     Args:
@@ -275,7 +276,10 @@ def writing_post(request, context, writing_element_type, template_name):
 
 
 def writing_list(
-    request: HttpRequest, context: dict[str, Any], writing_type: type[Model], template_name: str
+    request: HttpRequest,
+    context: dict[str, Any],
+    writing_type: type[Model],
+    template_name: str,
 ) -> HttpResponse:
     """Handle writing list display with POST processing and bulk operations.
 
@@ -361,7 +365,7 @@ def writing_list(
     return render(request, "larpmanager/orga/writing/" + template_name + "s.html", context)
 
 
-def writing_bulk(context, request, typ):
+def writing_bulk(context, request, typ) -> None:
     """Handle bulk operations for different writing element types.
 
     Args:
@@ -379,7 +383,7 @@ def writing_bulk(context, request, typ):
         type_to_bulk_handler[typ](request, context)
 
 
-def _get_custom_form(context):
+def _get_custom_form(context) -> None:
     """Set up custom form questions and field names for writing elements.
 
     Args:
@@ -400,7 +404,7 @@ def _get_custom_form(context):
     context["form_questions"] = {}
     for question in questions:
         question.basic_typ = question.typ in BaseQuestionType.get_basic_types()
-        if question.typ in context["fields_name"].keys():
+        if question.typ in context["fields_name"]:
             context["fields_name"][question.typ] = question.name
         else:
             context["form_questions"][question.id] = question
@@ -449,7 +453,7 @@ def writing_list_query(context: dict, event, model_type) -> tuple[list[str], boo
     return deferred_text_fields, is_writing_model
 
 
-def writing_list_text_fields(context, text_fields, writing_element_type):
+def writing_list_text_fields(context, text_fields, writing_element_type) -> None:
     """Add editor-type question fields to text fields list and retrieve cached data.
 
     Args:
@@ -466,7 +470,7 @@ def writing_list_text_fields(context, text_fields, writing_element_type):
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
 
-def retrieve_cache_text_field(context, text_fields, element_type):
+def retrieve_cache_text_field(context, text_fields, element_type) -> None:
     """Retrieve and attach cached text field data to writing elements.
 
     Args:
@@ -487,7 +491,7 @@ def retrieve_cache_text_field(context, text_fields, element_type):
             setattr(element, field_name + "_ln", line_count)
 
 
-def _prepare_writing_list(context, request):
+def _prepare_writing_list(context, request: HttpRequest) -> None:
     """Prepare context data for writing list display and configuration.
 
     Args:
@@ -507,19 +511,18 @@ def _prepare_writing_list(context, request):
 
     model_name = context["label_typ"].lower()
     context["default_fields"] = context["member"].get_config(f"open_{model_name}_{context['event'].id}", "[]")
-    if context["default_fields"] == "[]":
-        if model_name in context["writing_fields"]:
-            question_field_list = [
-                f"q_{question_id}" for name, question_id in context["writing_fields"][model_name]["ids"].items()
-            ]
-            context["default_fields"] = json.dumps(question_field_list)
+    if context["default_fields"] == "[]" and model_name in context["writing_fields"]:
+        question_field_list = [
+            f"q_{question_id}" for name, question_id in context["writing_fields"][model_name]["ids"].items()
+        ]
+        context["default_fields"] = json.dumps(question_field_list)
 
     context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", False, context)
 
     context["writing_unimportant"] = get_event_config(context["event"].id, "writing_unimportant", False, context)
 
 
-def writing_list_plot(context):
+def writing_list_plot(context) -> None:
     """Build character associations for plot list display.
 
     Args:
@@ -613,9 +616,11 @@ def writing_list_char(context: dict) -> None:
         context["list"] = context["list"].annotate(
             has_registration=Exists(
                 RegistrationCharacterRel.objects.filter(
-                    character=OuterRef("pk"), reg__run_id=context["run"].id, reg__cancellation_date__isnull=True
-                )
-            )
+                    character=OuterRef("pk"),
+                    reg__run_id=context["run"].id,
+                    reg__cancellation_date__isnull=True,
+                ),
+            ),
         )
 
     # Get cached relationship data for the event
@@ -650,7 +655,7 @@ def writing_list_char(context: dict) -> None:
     char_add_addit(context)
 
 
-def char_add_addit(context):
+def char_add_addit(context) -> None:
     """Add additional configuration data to all characters in the context list.
 
     Args:
@@ -665,10 +670,7 @@ def char_add_addit(context):
         character_configs_by_id[config.character_id][config.name] = config.value
 
     for character in context["list"]:
-        if character.id in character_configs_by_id:
-            character.addit = character_configs_by_id[character.id]
-        else:
-            character.addit = {}
+        character.addit = character_configs_by_id.get(character.id, {})
 
 
 def writing_view(request: HttpRequest, context: dict[str, Any], element_type_name: str) -> HttpResponse:
@@ -710,7 +712,11 @@ def writing_view(request: HttpRequest, context: dict[str, Any], element_type_nam
         applicable_questions = QuestionApplicable.get_applicable(element_type_name)
         if applicable_questions:
             context["element"] = get_writing_element_fields(
-                context, element_type_name, applicable_questions, context["el"].id, only_visible=False
+                context,
+                element_type_name,
+                applicable_questions,
+                context["el"].id,
+                only_visible=False,
             )
         context["sheet_char"] = context["el"].show_complete()
 
@@ -755,7 +761,7 @@ def writing_versions(request, context, element_name, version_type):
     return render(request, "larpmanager/orga/writing/versions.html", context)
 
 
-def replace_character_names_before_save(instance):
+def replace_character_names_before_save(instance) -> None:
     """Django signal handler to replace character names before saving.
 
     Args:

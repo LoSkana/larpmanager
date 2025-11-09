@@ -64,12 +64,12 @@ def check_direct_ticket_link(page, live_server):
     page.get_by_role("link", name="Registration is open!").click()
     page.get_by_label("Ticket (*)").click()
     expect(page.get_by_label("Ticket (*)")).to_have_value("1")
-    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot("- combobox \"Ticket (*)\":\n  - option \"Standard\" [selected]")
+    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot('- combobox "Ticket (*)":\n  - option "Standard" [selected]')
 
     # Test direct link
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
-    page.locator("[id=\"\\32 \"]").get_by_role("link", name="Link").click()
+    page.locator('[id="\\32 "]').get_by_role("link", name="Link").click()
     expect(page.get_by_label("Ticket (*)")).to_have_value("2")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
@@ -101,7 +101,7 @@ def check_acc_pay_link(page, live_server):
 
     # Set ticket price
     page.get_by_role("link", name="Tickets").click()
-    page.locator("[id=\"\\32 \"]").get_by_role("link", name="").click()
+    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("100.00")

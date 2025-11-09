@@ -147,8 +147,8 @@ def test_ghost_plots_secret_factions(pw_page):
 
     # change teaser
     page.get_by_role("cell", name="Test Teaser").dblclick()
-    page.locator("iframe[title=\"Rich Text Area\"]").content_frame.locator("html").click()
-    page.locator("iframe[title=\"Rich Text Area\"]").content_frame.get_by_label("Rich Text Area").fill("Test Teaser2")
+    page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
+    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser2")
     page.get_by_role("button", name="Confirm").click()
 
     # reload page, check everything is correct

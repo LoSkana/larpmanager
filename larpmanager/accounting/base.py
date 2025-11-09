@@ -36,7 +36,10 @@ from larpmanager.utils.tasks import notify_admins
 
 
 def is_reg_provisional(
-    instance: Registration, event: Event | None = None, features: dict | None = None, context: dict | None = None
+    instance: Registration,
+    event: Event | None = None,
+    features: dict | None = None,
+    context: dict | None = None,
 ) -> bool:
     """Check if a registration is in provisional status.
 
@@ -183,7 +186,7 @@ def handle_collection_pre_save(instance: Collection) -> None:
         instance.total += el.value
 
 
-def handle_accounting_item_collection_post_save(instance):
+def handle_accounting_item_collection_post_save(instance) -> None:
     """Update collection total when items are added.
 
     Args:

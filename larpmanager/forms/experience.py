@@ -139,7 +139,7 @@ class OrgaModifierPxForm(MyForm):
 
     page_info = _(
         "Manage ability modifiers. Modifiers are triggered only if all prerequisites "
-        + "and requirements are met. If multiple modifiers apply, only the first is used"
+        "and requirements are met. If multiple modifiers apply, only the first is used",
     )
 
     class Meta:

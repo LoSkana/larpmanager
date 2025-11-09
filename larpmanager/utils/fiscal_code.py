@@ -397,11 +397,11 @@ def _go(member: Member, male: bool = True) -> dict[str, Any]:
     elif validation_context["calculated_cf"][:6] != validation_context["supplied_cf"][:6]:
         validation_context["error_cf"] = _(
             "First and last name characters do not match (remember to enter the correct first "
-            "and last names in legal_name)"
+            "and last names in legal_name)",
         )
     elif validation_context["calculated_cf"][-6:-1] != validation_context["supplied_cf"][-6:-1]:
         validation_context["error_cf"] = _(
-            "Characters relating to place of birth do not match (check exact municipality)"
+            "Characters relating to place of birth do not match (check exact municipality)",
         )
     elif validation_context["calculated_cf"][6:10] != validation_context["supplied_cf"][6:10]:
         validation_context["error_cf"] = _("Date of birth characters do not match (check exact date)")

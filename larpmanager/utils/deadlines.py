@@ -63,8 +63,9 @@ def get_membership_fee_year(association_id, year=None):
         year = datetime.now().year
     return set(
         AccountingItemMembership.objects.filter(association_id=association_id, year=year).values_list(
-            "member_id", flat=True
-        )
+            "member_id",
+            flat=True,
+        ),
     )
 
 
@@ -149,7 +150,14 @@ def check_run_deadlines(runs: list) -> list:
             # Check membership or profile deadlines
             if uses_membership:
                 deadlines_membership(
-                    deadline_violations, features, fees, memberships, now, registration, run, tolerance
+                    deadline_violations,
+                    features,
+                    fees,
+                    memberships,
+                    now,
+                    registration,
+                    run,
+                    tolerance,
                 )
             else:
                 deadlines_profile(deadline_violations, features, memberships, now, registration, run, tolerance)
@@ -167,8 +175,14 @@ def check_run_deadlines(runs: list) -> list:
 
 
 def deadlines_profile(
-    deadline_violations, features, memberships, current_datetime, registration, event_run, tolerance_days
-):
+    deadline_violations,
+    features,
+    memberships,
+    current_datetime,
+    registration,
+    event_run,
+    tolerance_days,
+) -> None:
     """Check profile completion deadlines for registration.
 
     Args:
@@ -257,7 +271,7 @@ def deadlines_membership(
             violations_by_type["fee"].append(registration.member_id)
 
 
-def deadlines_payment(deadline_violations, event_features, registration, tolerance_days):
+def deadlines_payment(deadline_violations, event_features, registration, tolerance_days) -> None:
     """Check payment deadlines for registration.
 
     Args:
@@ -280,7 +294,7 @@ def deadlines_payment(deadline_violations, event_features, registration, toleran
         deadline_violations["pay"].append(registration.member_id)
 
 
-def deadlines_casting(collect, features, player_ids, run):
+def deadlines_casting(collect, features, player_ids, run) -> None:
     """Check casting preference submission for players.
 
     Args:

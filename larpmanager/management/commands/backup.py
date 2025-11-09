@@ -76,7 +76,7 @@ class Command(BaseCommand):
                 str(now_date.year),
                 str(now_date.month).zfill(2),
                 str(now_date.day).zfill(2),
-                f"{str(run)}.zip",
+                f"{run!s}.zip",
             )
 
             # Create directory structure if it doesn't exist

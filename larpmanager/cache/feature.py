@@ -26,7 +26,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 
 
-def reset_association_features(association_id):
+def reset_association_features(association_id) -> None:
     """Clear cached association features.
 
     Args:
@@ -36,7 +36,7 @@ def reset_association_features(association_id):
     cache.delete(cache_association_features_key(association_id))
 
 
-def cache_association_features_key(association_id):
+def cache_association_features_key(association_id) -> str:
     """Generate cache key for association features.
 
     Args:
@@ -179,7 +179,7 @@ def update_event_features(ev_id):
         return {}
 
 
-def on_association_post_save_reset_features_cache(instance):
+def on_association_post_save_reset_features_cache(instance) -> None:
     """Handle association post-save feature cache reset.
 
     Args:

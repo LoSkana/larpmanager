@@ -177,7 +177,7 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         {
             "given": given_tokens,
             "used": used_tokens,
-        }
+        },
     )
 
     # Render and return the token accounting template
@@ -209,7 +209,10 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
         {
             # Approved expenses for the user in current association
             "exp": AccountingItemExpense.objects.filter(
-                member=context["member"], hide=False, is_approved=True, association_id=context["association_id"]
+                member=context["member"],
+                hide=False,
+                is_approved=True,
+                association_id=context["association_id"],
             ),
             # Credits given to the user in current association
             "given": AccountingItemOther.objects.filter(
@@ -232,7 +235,7 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
                 oth=OtherChoices.REFUND,
                 association_id=context["association_id"],
             ),
-        }
+        },
     )
 
     # Render the accounting credits template with populated context
@@ -283,7 +286,8 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
             # Show success message and redirect to accounting dashboard
             messages.success(
-                request, _("Request for reimbursement entered! You will receive notice when it is processed.") + "."
+                request,
+                _("Request for reimbursement entered! You will receive notice when it is processed.") + ".",
             )
             return redirect("accounting")
     else:
@@ -325,7 +329,8 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
     # Verify user has valid registration for this event
     if not context["run"].reg:
         messages.warning(
-            request, _("We cannot find your registration for this event. Are you logged in as the correct user") + "?"
+            request,
+            _("We cannot find your registration for this event. Are you logged in as the correct user") + "?",
         )
         return redirect("accounting")
     reg = context["run"].reg
@@ -337,7 +342,8 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
         if "error_cf" in result:
             # Redirect to profile page if fiscal code has errors
             messages.warning(
-                request, _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"]
+                request,
+                _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"],
             )
             return redirect("profile")
 
@@ -380,7 +386,8 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
             run__event__association_id=context["association_id"],
         )
     except Exception as err:
-        raise Http404(f"registration not found {err}") from err
+        msg = f"registration not found {err}"
+        raise Http404(msg) from err
 
     # Get event context and mark as accounting page
     context = get_event_context(request, reg.run.get_slug())
@@ -480,7 +487,9 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
     year = datetime.now().year
     try:
         AccountingItemMembership.objects.get(
-            year=year, member=context["member"], association_id=context["association_id"]
+            year=year,
+            member=context["member"],
+            association_id=context["association_id"],
         )
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
@@ -623,16 +632,18 @@ def acc_collection_manage(request: HttpRequest, collection_code: str) -> HttpRes
 
     # Verify user ownership of the collection
     if context["member"] != c.organizer:
-        raise Http404("Collection not yours")
+        msg = "Collection not yours"
+        raise Http404(msg)
 
     # Add collection data and filtered accounting items to context
     context.update(
         {
             "coll": c,
             "list": AccountingItemCollection.objects.filter(
-                collection=c, collection__association_id=context["association_id"]
+                collection=c,
+                collection__association_id=context["association_id"],
             ),
-        }
+        },
     )
 
     # Render and return the collection management template
@@ -664,7 +675,8 @@ def acc_collection_participate(request: HttpRequest, collection_code: str) -> Ht
 
     # Validate collection is open for participation
     if c.status != CollectionStatus.OPEN:
-        raise Http404("Collection not open")
+        msg = "Collection not open"
+        raise Http404(msg)
 
     # Handle form submission for collection participation
     if request.method == "POST":
@@ -702,11 +714,13 @@ def acc_collection_close(request: HttpRequest, collection_code: str) -> HttpResp
 
     # Verify the current user is the organizer of this collection
     if context["member"] != c.organizer:
-        raise Http404("Collection not yours")
+        msg = "Collection not yours"
+        raise Http404(msg)
 
     # Ensure the collection is in an open state before closing
     if c.status != CollectionStatus.OPEN:
-        raise Http404("Collection not open")
+        msg = "Collection not open"
+        raise Http404(msg)
 
     # Atomically update the collection status to prevent race conditions
     with transaction.atomic():
@@ -747,7 +761,8 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpRes
 
     # Verify collection is in the correct status for redemption
     if c.status != CollectionStatus.DONE:
-        raise Http404("Collection not found")
+        msg = "Collection not found"
+        raise Http404(msg)
 
     # Handle POST request for collection redemption
     if request.method == "POST":
@@ -763,7 +778,8 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpRes
 
     # For GET requests, prepare collection items list for display
     context["list"] = AccountingItemCollection.objects.filter(
-        collection=c, collection__association_id=context["association_id"]
+        collection=c,
+        collection__association_id=context["association_id"],
     ).select_related("member", "collection")
 
     # Render the redemption template with collection data
@@ -899,11 +915,14 @@ def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
         try:
             # Retrieve the payment invoice for the current user and association
             inv = PaymentInvoice.objects.get(
-                pk=payment_id, member=context["member"], association_id=context["association_id"]
+                pk=payment_id,
+                member=context["member"],
+                association_id=context["association_id"],
             )
         except Exception as err:
             # Raise 404 if invoice not found or access denied
-            raise Http404("eeeehm") from err
+            msg = "eeeehm"
+            raise Http404(msg) from err
     else:
         # No specific invoice to process
         inv = None
@@ -936,7 +955,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
     """
     context = get_context(request)
     # Only allow POST requests for security
-    if not request.method == "POST":
+    if request.method != "POST":
         messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
@@ -1029,10 +1048,9 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
                 found = True
 
     # For registration payments, check event permissions
-    if not found:
-        if inv.typ == PaymentType.REGISTRATION:
-            reg = Registration.objects.get(pk=inv.idx)
-            check_event_context(request, reg.run.get_slug())
+    if not found and inv.typ == PaymentType.REGISTRATION:
+        reg = Registration.objects.get(pk=inv.idx)
+        check_event_context(request, reg.run.get_slug())
 
     # Atomically update invoice status to confirmed
     with transaction.atomic():

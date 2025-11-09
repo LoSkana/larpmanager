@@ -172,7 +172,11 @@ class PaymentInvoice(BaseModel):
 
 class ElectronicInvoice(BaseModel):
     inv = models.OneToOneField(
-        PaymentInvoice, on_delete=models.SET_NULL, null=True, blank=True, related_name="electronicinvoice"
+        PaymentInvoice,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="electronicinvoice",
     )
 
     progressive = models.IntegerField()
@@ -303,7 +307,11 @@ class AccountingItem(BaseModel):
 
 class AccountingItemTransaction(AccountingItem):
     reg = models.ForeignKey(
-        Registration, on_delete=models.CASCADE, related_name="accounting_items_t", null=True, blank=True
+        Registration,
+        on_delete=models.CASCADE,
+        related_name="accounting_items_t",
+        null=True,
+        blank=True,
     )
 
     user_burden = models.BooleanField(default=False)
@@ -315,7 +323,9 @@ class AccountingItemMembership(AccountingItem):
     class Meta:
         indexes = [
             models.Index(
-                fields=["association", "year"], condition=Q(deleted__isnull=True), name="acctmem_association_year_act"
+                fields=["association", "year"],
+                condition=Q(deleted__isnull=True),
+                name="acctmem_association_year_act",
             ),
         ]
 
@@ -369,7 +379,11 @@ class AccountingItemPayment(AccountingItem):
     pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
     reg = models.ForeignKey(
-        Registration, on_delete=models.CASCADE, related_name="accounting_items_p", null=True, blank=True
+        Registration,
+        on_delete=models.CASCADE,
+        related_name="accounting_items_p",
+        null=True,
+        blank=True,
     )
 
     info = models.CharField(max_length=150, null=True, blank=True)
@@ -486,7 +500,7 @@ class Discount(BaseModel):
     )
 
     max_redeem = models.IntegerField(
-        help_text=_("Indicate the maximum number of such discounts that can be requested (0 for infinite uses)")
+        help_text=_("Indicate the maximum number of such discounts that can be requested (0 for infinite uses)"),
     )
 
     cod = models.CharField(
@@ -495,7 +509,7 @@ class Discount(BaseModel):
         verbose_name=_("Code"),
         help_text=_(
             "Indicate the special discount code, to be communicated to the participants, which "
-            "will need to be entered during registration."
+            "will need to be entered during registration.",
         ),
     )
 
@@ -505,7 +519,7 @@ class Discount(BaseModel):
         verbose_name=_("Type"),
         help_text=_(
             "Indicate the type of discount: standard, play again (only available to those who "
-            "have already played this event)"
+            "have already played this event)",
         ),
     )
 
@@ -518,7 +532,7 @@ class Discount(BaseModel):
         default=True,
         help_text=_(
             "Indicate whether the discount can be used only on new enrollment, or whether it "
-            "can be used by already registered participants."
+            "can be used by already registered participants.",
         ),
     )
 
@@ -653,7 +667,8 @@ class Collection(BaseModel):
                 return
 
         # If all attempts failed, raise an error
-        raise ValueError("Too many attempts to generate the code")
+        msg = "Too many attempts to generate the code"
+        raise ValueError(msg)
 
     def unique_redeem_code(self) -> None:
         """Generate a unique redeem code for the collection."""
@@ -666,7 +681,8 @@ class Collection(BaseModel):
                 self.redeem_code = generated_code
                 return
         # Raise error if unable to generate unique code after max attempts
-        raise ValueError("Too many attempts to generate the code")
+        msg = "Too many attempts to generate the code"
+        raise ValueError(msg)
 
 
 class AccountingItemCollection(AccountingItem):
@@ -690,7 +706,7 @@ class RefundRequest(BaseModel):
         verbose_name=_("Details"),
         help_text=_(
             "Indicate all references of how you want your refund to be paid  (ex: IBAN and "
-            "full bank details, paypal link, etc)"
+            "full bank details, paypal link, etc)",
         ),
     )
 

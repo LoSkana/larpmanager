@@ -121,19 +121,19 @@ def get_features_cache() -> list[dict]:
     return features_list
 
 
-def reset_guides_cache():
+def reset_guides_cache() -> None:
     """Reset the guides cache."""
     guides_cache_key = get_guides_cache_key()
     cache.delete(guides_cache_key)
 
 
-def reset_tutorials_cache():
+def reset_tutorials_cache() -> None:
     """Reset the tutorials cache."""
     tutorials_cache_key = get_tutorials_cache_key()
     cache.delete(tutorials_cache_key)
 
 
-def reset_features_cache():
+def reset_features_cache() -> None:
     """Reset the features cache."""
     features_cache_key = get_features_cache_key()
     cache.delete(features_cache_key)
@@ -149,7 +149,7 @@ def _build_guides_cache() -> list[dict]:
                 "slug": published_guide.slug,
                 "title": published_guide.title,
                 "content_preview": _get_content_preview(published_guide.text, 100),
-            }
+            },
         )
 
     return published_guides
@@ -171,7 +171,7 @@ def _build_tutorials_cache() -> list[dict]:
                     "content_preview": _get_content_preview(section_content, 100),
                     "section_slug": section_slug,
                     "section_title": section_title,
-                }
+                },
             )
 
     return tutorials
@@ -192,7 +192,7 @@ def _build_features_cache() -> list[dict]:
                 "name": feature.name,
                 "module_name": feature.module.name if feature.module else None,
                 "descr": feature.descr,
-            }
+            },
         )
 
     return feature_list

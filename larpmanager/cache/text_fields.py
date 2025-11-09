@@ -221,7 +221,9 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
 
     # Update cache with new text field data and persist to cache
     cached_text_fields[instance.element_id][question_field_id] = get_single_cache_text_field(
-        instance.element_id, question_field_id, instance.text
+        instance.element_id,
+        question_field_id,
+        instance.text,
     )
     cache.set(cache_key, cached_text_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
@@ -268,7 +270,9 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
             answer_text = RegistrationAnswer.objects.get(question_id=question_id, reg_id=registration.id).text
             field_key = str(question_id)
             cache_result[registration.id][field_key] = get_single_cache_text_field(
-                registration.id, field_key, answer_text
+                registration.id,
+                field_key,
+                answer_text,
             )
         except ObjectDoesNotExist:
             pass
@@ -341,7 +345,9 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
     # Update the specific field for this registration with new text content
     question_field = str(instance.question_id)
     cached_registration_fields[instance.reg_id][question_field] = get_single_cache_text_field(
-        instance.reg_id, question_field, instance.text
+        instance.reg_id,
+        question_field,
+        instance.text,
     )
 
     # Store updated cache data with 1-day timeout

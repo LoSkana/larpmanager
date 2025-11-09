@@ -124,7 +124,7 @@ class BrokenLinkEmailsMiddleware:
             f"Broken link on {domain}",
             f"Requested URL: {path}\n"
             f"Exception: {exception}\n"
-            f"User: {str(request.user)}\n"
+            f"User: {request.user!s}\n"
             f"Referrer: {referer}\n"
             f"User agent: {user_agent}\n"
             f"IP address: {ip_address}\n\n"

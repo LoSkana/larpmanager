@@ -67,7 +67,7 @@ class WritingForm(MyForm):
         # Configure which fields should display links in the form
         self.show_link = ["id_teaser", "id_text"]
 
-    def _init_special_fields(self):
+    def _init_special_fields(self) -> None:
         """Initialize special form fields based on available question types.
 
         Configures cover, assigned, and progress fields based on writing question types.
@@ -76,15 +76,14 @@ class WritingForm(MyForm):
         for question in self.questions:
             question_types.add(question.typ)
 
-        if WritingQuestionType.COVER not in question_types:
-            if "cover" in self.fields:
-                del self.fields["cover"]
+        if WritingQuestionType.COVER not in question_types and "cover" in self.fields:
+            del self.fields["cover"]
 
         if WritingQuestionType.ASSIGNED in question_types:
             staffer_choices = [
                 (member.id, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
             ]
-            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---"))] + staffer_choices
+            self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
         else:
             self.delete_field("assigned")
 
@@ -279,7 +278,7 @@ class PlotForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize plot form with character relationships and dynamic fields.
 
         Sets up plot editing form with character selection, role text fields,
@@ -296,8 +295,11 @@ class PlotForm(WritingForm, BaseWritingForm):
         if self.instance.pk:
             plot_characters_data = list(
                 self.instance.get_plot_characters().values_list(
-                    "character__id", "character__number", "character__name", "text"
-                )
+                    "character__id",
+                    "character__number",
+                    "character__name",
+                    "text",
+                ),
             )
             self.init_characters = [ch[0] for ch in plot_characters_data]
         else:
@@ -357,7 +359,7 @@ class PlotForm(WritingForm, BaseWritingForm):
 
         # Create or update plot-character relationships for each character
         for ch_id in self.chars_id:
-            (pr, created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+            (pr, _created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
 
             # Extract role text from cleaned_data or raw data
             field = f"char_role_{pr.character_id}"

@@ -131,7 +131,7 @@ def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, ass
                     When(pay=PaymentChoices.CREDIT, then=Value(0)),
                     When(pay=PaymentChoices.TOKEN, then=Value(1)),
                     output_field=IntegerField(),
-                )
+                ),
             )
             .order_by("pay_priority", "-value", "-id")
         )
@@ -218,7 +218,7 @@ def get_regs(association: Association) -> QuerySet[Registration]:
 
     # Exclude registrations from cancelled or completed events
     registrations_queryset = registrations_queryset.exclude(
-        run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE]
+        run__development__in=[DevelopStatus.CANC, DevelopStatus.DONE],
     )
 
     # Filter by association if provided
@@ -228,7 +228,7 @@ def get_regs(association: Association) -> QuerySet[Registration]:
     return registrations_queryset
 
 
-def update_token_credit_on_payment_save(instance, created):
+def update_token_credit_on_payment_save(instance, created) -> None:
     """Handle accounting item payment post-save token/credit updates.
 
     Args:
@@ -240,7 +240,7 @@ def update_token_credit_on_payment_save(instance, created):
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
-def update_token_credit_on_payment_delete(instance):
+def update_token_credit_on_payment_delete(instance) -> None:
     """Handle accounting item payment post-delete token/credit updates.
 
     Args:
@@ -251,7 +251,7 @@ def update_token_credit_on_payment_delete(instance):
         update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
 
 
-def update_token_credit_on_other_save(accounting_item):
+def update_token_credit_on_other_save(accounting_item) -> None:
     """Handle accounting item other save for token/credit updates.
 
     Args:
@@ -264,7 +264,7 @@ def update_token_credit_on_other_save(accounting_item):
     update_token_credit(accounting_item, accounting_item.oth == OtherChoices.TOKEN)
 
 
-def update_credit_on_expense_save(expense_item):
+def update_credit_on_expense_save(expense_item) -> None:
     """Handle accounting item expense save for credit updates.
 
     Args:
@@ -308,12 +308,16 @@ def update_token_credit(instance, token: bool = True) -> None:
     if token:
         # Get all tokens given to the member
         tokens_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.TOKEN, association_id=association_id
+            member_id=instance.member_id,
+            oth=OtherChoices.TOKEN,
+            association_id=association_id,
         )
 
         # Get all tokens used by the member
         tokens_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id, pay=PaymentChoices.TOKEN, association_id=association_id
+            member_id=instance.member_id,
+            pay=PaymentChoices.TOKEN,
+            association_id=association_id,
         )
 
         # Calculate and save new token balance
@@ -324,22 +328,30 @@ def update_token_credit(instance, token: bool = True) -> None:
     else:
         # Get all approved expenses for the member
         credit_expenses = AccountingItemExpense.objects.filter(
-            member_id=instance.member_id, is_approved=True, association_id=association_id
+            member_id=instance.member_id,
+            is_approved=True,
+            association_id=association_id,
         )
 
         # Get all credits given to the member
         credits_given = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.CREDIT, association_id=association_id
+            member_id=instance.member_id,
+            oth=OtherChoices.CREDIT,
+            association_id=association_id,
         )
 
         # Get all credits used by the member
         credits_used = AccountingItemPayment.objects.filter(
-            member_id=instance.member_id, pay=PaymentChoices.CREDIT, association_id=association_id
+            member_id=instance.member_id,
+            pay=PaymentChoices.CREDIT,
+            association_id=association_id,
         )
 
         # Get all refunds given to the member
         credits_refunded = AccountingItemOther.objects.filter(
-            member_id=instance.member_id, oth=OtherChoices.REFUND, association_id=association_id
+            member_id=instance.member_id,
+            oth=OtherChoices.REFUND,
+            association_id=association_id,
         )
 
         # Calculate and save new credit balance (expenses + credits - used - refunds)

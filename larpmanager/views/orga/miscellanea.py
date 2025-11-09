@@ -228,7 +228,8 @@ def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpRespon
 
     # Retrieve and order workshop questions by module and question number
     context["list"] = WorkshopQuestion.objects.filter(module__event=context["event"]).order_by(
-        "module__number", "number"
+        "module__number",
+        "number",
     )
 
     return render(request, "larpmanager/orga/workshop/questions.html", context)
@@ -261,7 +262,9 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
 
     # Fetch and order workshop options for the event
     context["list"] = WorkshopOption.objects.filter(question__module__event=context["event"]).order_by(
-        "question__module__number", "question__number", "is_correct"
+        "question__module__number",
+        "question__number",
+        "is_correct",
     )
 
     # Render the workshop options template
@@ -572,7 +575,9 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
 
     # Handle item selection - create or update assignment
     (assign, _cr) = WarehouseItemAssignment.objects.get_or_create(
-        item_id=idx, area=context["area"], event=context["event"]
+        item_id=idx,
+        area=context["area"],
+        event=context["event"],
     )
     assign.quantity = quantity
     assign.notes = notes
@@ -582,7 +587,7 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, num: s
 
 
 @login_required
-def orga_onetimes(request, event_slug):
+def orga_onetimes(request, event_slug: str):
     """List all one-time contents for an event."""
     context = check_event_context(request, event_slug, "orga_onetimes")
     context["list"] = OneTimeContent.objects.filter(event=context["event"]).order_by("-created")
@@ -692,7 +697,7 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
                     "assigned_quantity": assigned_quantity,
                     "final_quantity": final_quantity,
                     "will_delete": final_quantity <= 0,  # Flag items that will be removed
-                }
+                },
             )
 
     # Sort preview: items to be deleted first (prioritize warnings), then alphabetically
@@ -782,7 +787,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
             else:
                 # Reduce item quantity by the assigned amount
                 items_modified.append(
-                    f"UPDATED: {item.name} ({current_quantity} → {final_quantity}, assigned {assigned_quantity})"
+                    f"UPDATED: {item.name} ({current_quantity} → {final_quantity}, assigned {assigned_quantity})",
                 )
                 item.quantity = final_quantity
                 item.save()

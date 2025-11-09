@@ -23,7 +23,7 @@ from slugify import slugify
 from larpmanager.models.larpmanager import LarpManagerFaq
 
 
-def generate_tutorial_url_slug(tutorial):
+def generate_tutorial_url_slug(tutorial) -> None:
     """Generate slug for tutorial if not already set.
 
     Args:

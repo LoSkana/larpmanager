@@ -72,7 +72,7 @@ class TestModelSignals(BaseTestCase):
         event = self.get_event()
 
         # Get the current max order
-        max_order = RegistrationQuestion.objects.filter(event=event).aggregate(models.Max('order'))['order__max'] or 0
+        max_order = RegistrationQuestion.objects.filter(event=event).aggregate(models.Max("order"))["order__max"] or 0
 
         # Create objects that should get auto-incremented order
         question1 = RegistrationQuestion(name="question1", description="Test", event=event)

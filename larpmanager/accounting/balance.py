@@ -301,7 +301,12 @@ def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> 
     sum_inflows = 0
     if "inflow" in features:
         details_by_category["in"] = get_acc_detail(
-            _("Inflows"), run, _("Total of recorded money inflows"), AccountingItemInflow, None, None
+            _("Inflows"),
+            run,
+            _("Total of recorded money inflows"),
+            AccountingItemInflow,
+            None,
+            None,
         )
         sum_inflows = details_by_category["in"]["tot"]
 
@@ -389,7 +394,9 @@ def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> 
 
     # Process registrations: get theoretical total based on selected ticket tiers
     details_by_category["reg"] = get_acc_reg_detail(
-        _("Registrations"), run, _("Theoretical total of income due to participation fees selected by the participants")
+        _("Registrations"),
+        run,
+        _("Theoretical total of income due to participation fees selected by the participants"),
     )
 
     # Calculate final financial figures
@@ -437,7 +444,9 @@ def check_accounting(association_id: int) -> None:
 
     # Persist accounting results to database via RecordAccounting model
     RecordAccounting.objects.create(
-        association_id=association_id, global_sum=context["global_sum"], bank_sum=context["bank_sum"]
+        association_id=association_id,
+        global_sum=context["global_sum"],
+        bank_sum=context["bank_sum"],
     )
 
 
@@ -508,46 +517,62 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
     # Calculate executive-level outflows (not associated with any specific run)
     context["outflow_exec_sum"] = get_sum(
         AccountingItemOutflow.objects.filter(
-            run=None, association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            run=None,
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
     # Calculate executive-level inflows (not associated with any specific run)
     context["inflow_exec_sum"] = get_sum(
         AccountingItemInflow.objects.filter(
-            run=None, association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            run=None,
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
 
     # Calculate membership fees collected
     context["membership_sum"] = get_sum(
         AccountingItemMembership.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
     # Calculate donations received
     context["donations_sum"] = get_sum(
         AccountingItemDonation.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
     # Calculate collections (gifts/prepaid credits) received
     context["collections_sum"] = get_sum(
         AccountingItemCollection.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
 
     # Calculate all inflows for the association
     context["inflow_sum"] = get_sum(
         AccountingItemInflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
     # Calculate all outflows for the association
     context["outflow_sum"] = get_sum(
         AccountingItemOutflow.objects.filter(
-            association_id=context["association_id"], payment_date__gte=start_date, payment_date__lte=end_date
-        )
+            association_id=context["association_id"],
+            payment_date__gte=start_date,
+            payment_date__lte=end_date,
+        ),
     )
 
     # Calculate cash payments received (excluding online/bank transfers)
@@ -557,13 +582,15 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
             association_id=context["association_id"],
             created__gte=start_date,
             created__lte=end_date,
-        )
+        ),
     )
     # Calculate transaction fees charged by payment processors
     context["transactions_sum"] = get_sum(
         AccountingItemTransaction.objects.filter(
-            association_id=context["association_id"], created__gte=start_date, created__lte=end_date
-        )
+            association_id=context["association_id"],
+            created__gte=start_date,
+            created__lte=end_date,
+        ),
     )
     # Calculate total refunds issued
     context["refund_sum"] = get_sum(
@@ -572,7 +599,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
             association_id=context["association_id"],
             created__gte=start_date,
             created__lte=end_date,
-        )
+        ),
     )
 
     # Calculate net incoming and outgoing sums

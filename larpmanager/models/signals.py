@@ -466,14 +466,16 @@ def post_delete_assignment_trait_reset(sender: type, instance: Any, **kwargs: An
 
 # AssociationPermission signals
 @receiver(pre_save, sender=AssociationPermission)
-def pre_save_association_permission(sender, instance, **kwargs):
+def pre_save_association_permission(sender, instance, **kwargs) -> None:
     """Auto-assign number to association permission before save."""
     auto_assign_association_permission_number(instance)
 
 
 @receiver(post_save, sender=AssociationPermission)
 def post_save_association_permission_index_permission(
-    sender: type, instance: AssociationPermission, **kwargs: Any
+    sender: type,
+    instance: AssociationPermission,
+    **kwargs: Any,
 ) -> None:
     """Clear caches when association permission is saved."""
     clear_index_permission_cache("association")
@@ -482,7 +484,9 @@ def post_save_association_permission_index_permission(
 
 @receiver(post_delete, sender=AssociationPermission)
 def post_delete_association_permission_index_permission(
-    sender: type, instance: AssociationPermission, **kwargs: Any
+    sender: type,
+    instance: AssociationPermission,
+    **kwargs: Any,
 ) -> None:
     """Clear association permission caches after deletion."""
     clear_index_permission_cache("association")
@@ -514,26 +518,26 @@ def post_save_association_role_reset(sender: type, instance: AssociationRole, **
 
 # AssocText signals
 @receiver(pre_delete, sender=AssociationText)
-def pre_delete_association_text(sender, instance, **kwargs):
+def pre_delete_association_text(sender, instance, **kwargs) -> None:
     """Clear association text cache before deletion."""
     clear_association_text_cache_on_delete(instance)
 
 
 @receiver(post_save, sender=AssociationText)
-def post_save_association_text(sender, instance, created, **kwargs):
+def post_save_association_text(sender, instance, created, **kwargs) -> None:
     """Update association text cache after save."""
     update_association_text_cache_on_save(instance)
 
 
 # AssociationTranslation signals
 @receiver(post_save, sender=AssociationTranslation)
-def post_save_association_translation(sender, instance, created, **kwargs):
+def post_save_association_translation(sender, instance, created, **kwargs) -> None:
     """Clear cache when association translation is saved."""
     clear_association_translation_cache(instance.association_id, instance.language)
 
 
 @receiver(pre_delete, sender=AssociationTranslation)
-def pre_delete_association_translation(sender, instance, **kwargs):
+def pre_delete_association_translation(sender, instance, **kwargs) -> None:
     """Clear cache when association translation is deleted."""
     clear_association_translation_cache(instance.association_id, instance.language)
 
@@ -564,13 +568,13 @@ def post_save_association_reset_lm_home(sender, instance, **kwargs) -> None:
 
 # AssociationConfig signals
 @receiver(post_save, sender=AssociationConfig)
-def post_save_reset_association_config(sender, instance, **kwargs):
+def post_save_reset_association_config(sender, instance, **kwargs) -> None:
     """Clear association config cache after save."""
     clear_config_cache(instance.association)
 
 
 @receiver(post_delete, sender=AssociationConfig)
-def post_delete_reset_association_config(sender, instance, **kwargs):
+def post_delete_reset_association_config(sender, instance, **kwargs) -> None:
     """Clear association config cache after deletion."""
     clear_config_cache(instance.association)
 
@@ -1593,7 +1597,7 @@ def paypal_webhook(sender, **kwargs):
 
 
 @receiver(invalid_ipn_received)
-def paypal_ko_webhook(sender, **kwargs):
+def paypal_ko_webhook(sender, **kwargs) -> None:
     """Handle invalid PayPal IPN notifications.
 
     Args:
@@ -1605,7 +1609,7 @@ def paypal_ko_webhook(sender, **kwargs):
 
 
 @receiver(got_request_exception)
-def handle_request_exception(sender, request, **kwargs):
+def handle_request_exception(sender, request, **kwargs) -> None:
     """Handle request exceptions and create error tickets automatically.
 
     This signal handler is triggered when an exception occurs during request processing.

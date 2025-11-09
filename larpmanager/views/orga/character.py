@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import contextlib
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -75,7 +76,7 @@ from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, w
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
-def get_character_optimized(context, num):
+def get_character_optimized(context, num) -> None:
     """Get character with optimized queries for editing.
 
     Args:
@@ -117,7 +118,8 @@ def get_character_optimized(context, num):
         context["character"] = character_query.get(event=parent_event, pk=num)
         context["class_name"] = "character"
     except ObjectDoesNotExist as err:
-        raise Http404("character does not exist") from err
+        msg = "character does not exist"
+        raise Http404(msg) from err
 
 
 @login_required
@@ -180,7 +182,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
     return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
-def _characters_relationships(context):
+def _characters_relationships(context) -> None:
     """Set up character relationships data and widgets for editing.
 
     Args:
@@ -191,10 +193,8 @@ def _characters_relationships(context):
     if "relationships" not in context["features"]:
         return
 
-    try:
+    with contextlib.suppress(ObjectDoesNotExist):
         context["rel_tutorial"] = Feature.objects.get(slug="relationships").tutorial
-    except ObjectDoesNotExist:
-        pass
 
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     widget = EventCharacterS2Widget(attrs={"id": "new_rel_select"})
@@ -541,7 +541,8 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
 
     # Validate the requested type is available
     if form_type not in available_types:
-        raise Http404(f"unknown writing form type: {form_type}")
+        msg = f"unknown writing form type: {form_type}"
+        raise Http404(msg)
 
     # Update context with type information
     context["typ"] = form_type
@@ -644,7 +645,10 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
             return redirect(
-                request.resolver_match.view_name, event_slug=context["run"].get_slug(), writing_type=writing_type, num=0
+                request.resolver_match.view_name,
+                event_slug=context["run"].get_slug(),
+                writing_type=writing_type,
+                num=0,
             )
 
         # Determine if we need to redirect to option editing
@@ -674,7 +678,8 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
 
     # Load existing options for the question being edited
     context["list"] = WritingOption.objects.filter(
-        question=context["el"], question__applicable=context["writing_typ"]
+        question=context["el"],
+        question__applicable=context["writing_typ"],
     ).order_by("order")
 
     # Render the form edit template with context
@@ -781,7 +786,11 @@ def writing_option_edit(context: dict, option_number: int, request: HttpRequest,
 
 @login_required
 def orga_writing_options_order(
-    request: HttpRequest, event_slug: str, writing_type: str, num: int, order: int
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,
+    num: int,
+    order: int,
 ) -> HttpResponseRedirect:
     """Reorder writing options within a writing form question.
 
@@ -884,7 +893,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/writing/check.html", context)
 
 
-def check_relations(character_cache, validation_checks, character_numbers, context, number_to_id_map):
+def check_relations(character_cache, validation_checks, character_numbers, context, number_to_id_map) -> None:
     """Check character relationships for missing and extinct references.
 
     Args:
@@ -919,11 +928,11 @@ def check_relations(character_cache, validation_checks, character_numbers, conte
                         "f_name": first_character_name,
                         "s_id": number_to_id_map[other_character_id],
                         "s_name": second_character_name,
-                    }
+                    },
                 )
 
 
-def check_writings(cache, checks, character_numbers, context, character_id_to_number_map):
+def check_writings(cache, checks, character_numbers, context, character_id_to_number_map) -> None:
     """Validate writing submissions and requirements for different element types.
 
     Args:
@@ -969,7 +978,7 @@ def check_writings(cache, checks, character_numbers, context, character_id_to_nu
                 # cache[nm][f.number] = (str(f), from_text)
 
 
-def check_speedlarp(checks, context, id_number_map):
+def check_speedlarp(checks, context, id_number_map) -> None:
     """Validate speedlarp character configurations.
 
     Args:
@@ -1004,7 +1013,9 @@ def check_speedlarp(checks, context, id_number_map):
 
 
 def check_speedlarp_prepare(
-    element, character_id_to_number_map: dict[int, int], character_speeds: dict[int, dict[str, list[str]]]
+    element,
+    character_id_to_number_map: dict[int, int],
+    character_speeds: dict[int, dict[str, list[str]]],
 ) -> None:
     """Prepare speed LARP data by mapping character relationships to speeds structure."""
     # Extract character numbers from element's character map
@@ -1091,10 +1102,7 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
     if context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]:
         if context["question"].max_length:
             # Set appropriate label for multiple choice vs text fields
-            if context["question"].typ == "m":
-                name = _("options")
-            else:
-                name = "text length"
+            name = _("options") if context["question"].typ == "m" else "text length"
             # Generate counter display with current/max length format
             counter = (
                 f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
@@ -1169,7 +1177,10 @@ def orga_writing_excel_submit(request, event_slug, writing_type):
 
 
 def _get_excel_form(
-    request: HttpRequest, event_slug: str, element_type: str, is_submit: bool = False
+    request: HttpRequest,
+    event_slug: str,
+    element_type: str,
+    is_submit: bool = False,
 ) -> dict[str, Any]:
     """Prepare Excel form context for bulk editing operations.
 
@@ -1294,7 +1305,7 @@ def _get_question_update(context: dict, element) -> str:
         # get option names
         option_ids = [int(option_value) for option_value in display_value]
         query = context["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
-        display_value = ", ".join([display for display in query.values_list("name", flat=True)])
+        display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
         # check if it is over the character limit
         display_value = str(display_value)
@@ -1326,7 +1337,10 @@ def _check_working_ticket(request, context: dict, working_ticket_token: str) -> 
     # Check if somebody has opened the same field to edit it
     if not error_message:
         error_message = writing_edit_working_ticket(
-            request, context["typ"], f"{context['element'].id}_{context['question'].id}", working_ticket_token
+            request,
+            context["typ"],
+            f"{context['element'].id}_{context['question'].id}",
+            working_ticket_token,
         )
 
     return error_message

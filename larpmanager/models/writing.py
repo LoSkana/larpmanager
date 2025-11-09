@@ -185,7 +185,7 @@ class Character(Writing):
         related_name="mirror_inv",
         help_text=_(
             "Indicate whether the character is a mirror (i.e., whether this pg shows the true "
-            "secret face of another character)"
+            "secret face of another character)",
         ),
     )
 
@@ -225,7 +225,10 @@ class Character(Writing):
     )
 
     status = models.CharField(
-        max_length=1, choices=CharacterStatus.choices, default=CharacterStatus.CREATION, verbose_name=_("Status")
+        max_length=1,
+        choices=CharacterStatus.choices,
+        default=CharacterStatus.CREATION,
+        verbose_name=_("Status"),
     )
 
     access_token = models.CharField(
@@ -236,11 +239,11 @@ class Character(Writing):
         verbose_name=_("External access code"),
         help_text=_(
             "Allows external access to this character through a secret URL "
-            "(change the code if it has been shared with the wrong people)"
+            "(change the code if it has been shared with the wrong people)",
         ),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"#{self.number} {self.name}"
 
     def get_config(self, name, default_value=None, bypass_cache=False):
@@ -276,7 +279,7 @@ class Character(Writing):
             js["owner"] = self.player.display_member()
 
         js["show"] = js["name"]
-        if "title" in js and js["title"]:
+        if js.get("title"):
             js["show"] += " - " + js["title"]
 
         if run:
@@ -314,10 +317,7 @@ class Character(Writing):
         js["factions"] = []
 
         # Determine which event to use for faction lookup
-        if event:
-            faction_event = event.get_class_parent("faction")
-        else:
-            faction_event = self.event.get_class_parent("faction")
+        faction_event = event.get_class_parent("faction") if event else self.event.get_class_parent("faction")
 
         # Track if we find a primary faction
         has_primary_faction = False
@@ -446,7 +446,7 @@ class CharacterConfig(BaseModel):
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.character} {self.name}"
 
     class Meta:
@@ -485,7 +485,7 @@ class Plot(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     def get_plot_characters(self):
@@ -504,7 +504,7 @@ class PlotCharacterRel(BaseModel):
 
     text = models.TextField(max_length=5000, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.plot} - {self.character}"
 
     class Meta:
@@ -623,7 +623,7 @@ class Faction(Writing):
 
         return js
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
@@ -634,7 +634,7 @@ class Faction(Writing):
 
 
 class PrologueType(Writing):
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
@@ -667,7 +667,7 @@ class Prologue(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"P{self.number} {self.name} ({self.typ})"
 
 
@@ -690,7 +690,7 @@ class HandoutTemplate(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"HT{self.number} {self.name}"
 
     def download_template(self) -> HttpResponse:
@@ -721,7 +721,7 @@ class Handout(Writing):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"H{self.number} {self.name}"
 
     def get_filepath(self, run: Run) -> str:
@@ -770,7 +770,7 @@ class TextVersion(BaseModel):
 
     dl = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.tp} {self.eid} {self.version}"
 
 
@@ -792,7 +792,7 @@ class SpeedLarp(Writing):
 
         return js
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"S{self.number} {self.name} ({self.typ} - {self.station})"
 
     class Meta:
@@ -928,7 +928,7 @@ class Relationship(BaseModel):
 
     text = HTMLField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.source} {self.target}"
 
     class Meta:

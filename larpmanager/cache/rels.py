@@ -317,7 +317,9 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
             for element in elements:
                 if should_pass_features:
                     relationship_cache[cache_key_plural][element.id] = get_relationships_function(
-                        element, features, event
+                        element,
+                        features,
+                        event,
                     )
                 else:
                     relationship_cache[cache_key_plural][element.id] = get_relationships_function(element)
@@ -727,7 +729,7 @@ def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
 
     except Exception as error:
         # Log error details for debugging while maintaining function stability
-        logger.error(f"Error getting relationships for quest {quest.id}: {error}")
+        logger.exception(f"Error getting relationships for quest {quest.id}: {error}")
         relationships = {}
 
     return relationships
@@ -769,7 +771,7 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
 
     except Exception as exception:
         # Log error and return empty dict on failure
-        logger.error(f"Error getting relationships for questtype {questtype.id}: {exception}")
+        logger.exception(f"Error getting relationships for questtype {questtype.id}: {exception}")
         relationships = {}
 
     return relationships
@@ -908,7 +910,11 @@ def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
 
 
 def on_faction_characters_m2m_changed(
-    sender: type, instance: Faction, action: str, pk_set: set[int] | None, **kwargs: dict
+    sender: type,
+    instance: Faction,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs: dict,
 ) -> None:
     """Handle faction-character relationship changes.
 
@@ -939,7 +945,11 @@ def on_faction_characters_m2m_changed(
 
 
 def on_plot_characters_m2m_changed(
-    sender: type, instance: "Plot", action: str, pk_set: set[int] | None, **kwargs
+    sender: type,
+    instance: "Plot",
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs,
 ) -> None:
     """Handle plot-character relationship changes.
 
@@ -954,7 +964,11 @@ def on_plot_characters_m2m_changed(
 
 
 def on_speedlarp_characters_m2m_changed(
-    sender: type, instance: "SpeedLarp", action: str, pk_set: set[int] | None, **kwargs
+    sender: type,
+    instance: "SpeedLarp",
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs,
 ) -> None:
     """Handle speedlarp-character relationship changes.
 
@@ -985,7 +999,11 @@ def on_speedlarp_characters_m2m_changed(
 
 
 def on_prologue_characters_m2m_changed(
-    sender: type, instance: Prologue, action: str, pk_set: set[int] | None, **kwargs
+    sender: type,
+    instance: Prologue,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs,
 ) -> None:
     """Handle prologue-character relationship changes.
 

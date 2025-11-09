@@ -156,7 +156,7 @@ def get_or_create_index_guide(index_directory_path: str) -> object:
 
 
 @background_auto(queue="whoosh")
-def add_guide_to_search_index(guide_id):
+def add_guide_to_search_index(guide_id) -> None:
     """Index a guide document for search functionality.
 
     Args:
@@ -216,7 +216,9 @@ def get_sorted_permissions(model: type, query: str) -> list[dict[str, str]]:
     """
     # Filter permissions by name or description containing the query
     permissions = model.objects.filter(Q(name__icontains=query) | Q(descr__icontains=query)).values(
-        "name", "slug", "descr"
+        "name",
+        "slug",
+        "descr",
     )
 
     # Sort by similarity to query string, most similar first
@@ -312,5 +314,6 @@ def query_index(request: HttpRequest) -> JsonResponse:
 
     # Return consolidated search results
     return JsonResponse(
-        {"guides": matching_guides, "tutorials": matching_tutorials, "links": permission_links}, safe=False
+        {"guides": matching_guides, "tutorials": matching_tutorials, "links": permission_links},
+        safe=False,
     )

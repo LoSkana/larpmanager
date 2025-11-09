@@ -85,7 +85,7 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
                     checkbox_id,
                     option_label,
                     option_value,
-                )
+                ),
             )
 
         # Use format_html_join to safely generate the HTML
@@ -102,7 +102,7 @@ class FeatureForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, is_association_level):
+    def _init_features(self, is_association_level) -> None:
         """Initialize feature selection fields organized by modules.
 
         Args:
@@ -121,11 +121,13 @@ class FeatureForm(MyForm):
         feature_modules = FeatureModule.objects.exclude(order=0).order_by("order")
         if is_association_level:
             feature_modules = feature_modules.filter(
-                Q(nationality__isnull=True) | Q(nationality=self.instance.nationality)
+                Q(nationality__isnull=True) | Q(nationality=self.instance.nationality),
             )
         for feature_module in feature_modules:
             module_features = feature_module.features.filter(
-                overall=is_association_level, placeholder=False, hidden=False
+                overall=is_association_level,
+                placeholder=False,
+                hidden=False,
             ).order_by("order")
             feature_choices = [(str(feature.id), _(feature.name)) for feature in module_features]
             feature_help_texts = {str(feature.id): _(feature.descr) for feature in module_features}
@@ -143,7 +145,7 @@ class FeatureForm(MyForm):
             if selected_feature_ids:
                 self.initial[f"mod_{feature_module.id}"] = selected_feature_ids
 
-    def _save_features(self, instance):
+    def _save_features(self, instance) -> None:
         """Save selected features to the instance.
 
         Args:
@@ -179,7 +181,7 @@ class QuickSetupForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features):
+    def init_fields(self, features) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:
@@ -194,12 +196,11 @@ class QuickSetupForm(MyForm):
         for config_key, setup_element in self.setup.items():
             (is_feature_flag, field_label, field_help_text) = setup_element
             self.fields[config_key] = forms.BooleanField(
-                required=False, label=field_label, help_text=field_help_text + "?"
+                required=False,
+                label=field_label,
+                help_text=field_help_text + "?",
             )
-            if is_feature_flag:
-                initial_value = config_key in features
-            else:
-                initial_value = self.instance.get_config(config_key, False)
+            initial_value = config_key in features if is_feature_flag else self.instance.get_config(config_key, False)
             self.initial[config_key] = initial_value
 
     def save(self, commit: bool = True) -> Association:

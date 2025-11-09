@@ -36,7 +36,7 @@ def clear_larpmanager_home_cache() -> None:
     cache.delete(cache_larpmanager_home_key())
 
 
-def cache_larpmanager_home_key():
+def cache_larpmanager_home_key() -> str:
     """Generate cache key for larpmanager home data."""
     return "cache_lm_home"
 

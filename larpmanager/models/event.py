@@ -167,7 +167,7 @@ class Event(BaseModel):
         blank=True,
         verbose_name=_("Campaign"),
         help_text=_(
-            "If you select another event, it will be considered in the same campaign, and they will share the characters"
+            "If you select another event, it will be considered in the same campaign, and they will share the characters",
         )
         + " - "
         + _("if you leave this empty, this can be the starting event of a new campaign"),
@@ -567,7 +567,7 @@ class Run(BaseModel):
         unique=True,
         verbose_name=_("Secret code"),
         help_text=_(
-            "This code is used to generate the secret registration link, you may keep the default or customize it"
+            "This code is used to generate the secret registration link, you may keep the default or customize it",
         ),
         db_index=True,
     )

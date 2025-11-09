@@ -156,7 +156,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
             "character_rels_dict": character_relations_by_registration_id,
             "payment_invoices_dict": payment_invoices_by_registration_id,
             "pre_registrations_dict": pre_registrations_by_event_id,
-        }
+        },
     )
 
     # Process each run to determine registration status and categorize
@@ -243,7 +243,9 @@ def get_payment_invoices_dict(registrations_by_id: dict, member) -> dict:
         # Fetch all payment invoices for user's registrations in single optimized query
         # Include method relation to avoid N+1 queries when accessing invoice.method
         payment_invoices = PaymentInvoice.objects.filter(
-            reg_id__in=registration_ids, member=member, typ=PaymentType.REGISTRATION
+            reg_id__in=registration_ids,
+            member=member,
+            typ=PaymentType.REGISTRATION,
         ).select_related("method")
 
         # Group payment invoices by registration ID using idx field as key
@@ -281,7 +283,9 @@ def get_pre_registrations_dict(association_id: int, member) -> dict:
         # Get all pre-registrations for user's events in one query
         # Filter by association, member, and exclude deleted records
         member_pre_registrations = PreRegistration.objects.filter(
-            event__association_id=association_id, member=member, deleted__isnull=True
+            event__association_id=association_id,
+            member=member,
+            deleted__isnull=True,
         ).select_related("event")
 
         # Group pre-registrations by event ID for fast lookup
@@ -542,7 +546,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
             "character_rels_dict": character_rels_dict,
             "payment_invoices_dict": payment_invoices_dict,
             "pre_registrations_dict": pre_registrations_dict,
-        }
+        },
     )
 
     # Process each run to add registration status information
@@ -558,7 +562,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/general/past.html", context)
 
 
-def check_gallery_visibility(request, context):
+def check_gallery_visibility(request, context) -> bool:
     """Check if gallery is visible to the current user based on event configuration.
 
     Args:
@@ -623,7 +627,7 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     if check_gallery_visibility(request, context):
         # Load character cache if writing fields are visible or character display is forced
         if not get_event_config(context["event"].id, "writing_field_visibility", False, context) or context.get(
-            "show_character"
+            "show_character",
         ):
             get_event_cache_all(context)
 
@@ -721,7 +725,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Determine if search engines should index this page
     context["no_robots"] = (
-        not context["run"].development == DevelopStatus.SHOW
+        context["run"].development != DevelopStatus.SHOW
         or not context["run"].end
         or datetime.today().date() > context["run"].end
     )
@@ -768,7 +772,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
         visible_writing_fields(context, QuestionApplicable.CHARACTER)
 
         # Filter character fields based on visibility settings
-        for _character_number, character_data in context["chars"].items():
+        for character_data in context["chars"].values():
             character_fields = character_data.get("fields")
             if not character_fields:
                 continue
@@ -887,10 +891,15 @@ def faction(request, event_slug, faction_id):
         typ = context["faction"]["typ"]
 
     if "faction" not in context or typ == "g" or "id" not in context["faction"]:
-        raise Http404("Faction does not exist")
+        msg = "Faction does not exist"
+        raise Http404(msg)
 
     context["fact"] = get_writing_element_fields(
-        context, "faction", QuestionApplicable.FACTION, context["faction"]["id"], only_visible=True
+        context,
+        "faction",
+        QuestionApplicable.FACTION,
+        context["faction"]["id"],
+        only_visible=True,
     )
 
     return render(request, "larpmanager/event/faction.html", context)
@@ -945,7 +954,11 @@ def quest(request, event_slug, quest_id):
 
     get_element(context, quest_id, "quest", Quest, by_number=True)
     context["quest_fields"] = get_writing_element_fields(
-        context, "quest", QuestionApplicable.QUEST, context["quest"].id, only_visible=True
+        context,
+        "quest",
+        QuestionApplicable.QUEST,
+        context["quest"].id,
+        only_visible=True,
     )
 
     traits = []
@@ -1031,7 +1044,8 @@ def export(request, event_slug, export_type):
     elif export_type == "trait":
         lst = Trait.objects.filter(quest__event=context["event"]).order_by("number")
     else:
-        raise Http404("wrong type")
+        msg = "wrong type"
+        raise Http404(msg)
     # r = Run(event=context["event"])
     aux = {}
     for el in lst:

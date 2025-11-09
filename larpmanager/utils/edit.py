@@ -176,7 +176,7 @@ def _get_values_mapping(element) -> dict[str, callable]:
     }
 
 
-def check_run(element, context, accessor_field=None):
+def check_run(element, context, accessor_field=None) -> None:
     """Validate that element belongs to the correct run and event.
 
     Args:
@@ -195,7 +195,8 @@ def check_run(element, context, accessor_field=None):
         element = getattr(element, accessor_field)
 
     if hasattr(element, "run") and element.run != context["run"]:
-        raise Http404("not your run")
+        msg = "not your run"
+        raise Http404(msg)
 
     if hasattr(element, "event"):
         is_child_event = context["event"].parent_id is not None
@@ -205,10 +206,11 @@ def check_run(element, context, accessor_field=None):
         if (not is_child_event and not event_matches) or (
             is_child_event and not event_matches and not parent_event_matches
         ):
-            raise Http404("not your event")
+            msg = "not your event"
+            raise Http404(msg)
 
 
-def check_association(element: object, context: dict, attribute_field: str = None) -> None:
+def check_association(element: object, context: dict, attribute_field: str | None = None) -> None:
     """Check if object belongs to the correct association.
 
     Args:
@@ -230,7 +232,8 @@ def check_association(element: object, context: dict, attribute_field: str = Non
 
     # Verify object belongs to current association
     if element.association_id != context["association_id"]:
-        raise Http404("not your association")
+        msg = "not your association"
+        raise Http404(msg)
 
 
 def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: str, entity_id: int) -> bool:
@@ -296,7 +299,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
     return False
 
 
-def backend_get(context: dict, model_type: type, entity_id: int, association_field: str = None) -> None:
+def backend_get(context: dict, model_type: type, entity_id: int, association_field: str | None = None) -> None:
     """Retrieve an object by ID and perform security checks.
 
     Args:
@@ -313,7 +316,7 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
     try:
         element = model_type.objects.get(pk=entity_id)
     except Exception as err:
-        raise NotFoundError() from err
+        raise NotFoundError from err
 
     # Store object in context and perform security validations
     context["el"] = element
@@ -472,9 +475,9 @@ def exe_edit(
     form_type: type[MyForm],
     entity_id: int,
     permission: str,
-    redirect_view: str = None,
-    additional_field: str = None,
-    additional_context: dict = None,
+    redirect_view: str | None = None,
+    additional_field: str | None = None,
+    additional_context: dict | None = None,
 ) -> HttpResponse:
     """Handle editing operations for organization-level entities.
 
@@ -503,7 +506,12 @@ def exe_edit(
 
     # Process the edit operation through backend handler
     if backend_edit(
-        request, context, form_type, entity_id, additional_field=additional_field, is_association_based=True
+        request,
+        context,
+        form_type,
+        entity_id,
+        additional_field=additional_field,
+        is_association_based=True,
     ):
         # Set permission suggestion for UI feedback
         set_suggestion(context, permission)
@@ -535,10 +543,7 @@ def set_suggestion(context: dict, permission: str) -> None:
 
     """
     # Determine the target object based on context
-    if "event" in context:
-        target_object = context["event"]
-    else:
-        target_object = Association.objects.get(pk=context["association_id"])
+    target_object = context["event"] if "event" in context else Association.objects.get(pk=context["association_id"])
 
     # Build the configuration key for this permission's suggestion
     config_key = f"{permission}_suggestion"
@@ -552,8 +557,8 @@ def set_suggestion(context: dict, permission: str) -> None:
     foreign_key_field = _get_fkey_config(target_object)
 
     # Create or retrieve the configuration entry
-    (config, created) = target_object.configs.model.objects.get_or_create(
-        **{foreign_key_field: target_object, "name": config_key}
+    (config, _created) = target_object.configs.model.objects.get_or_create(
+        **{foreign_key_field: target_object, "name": config_key},
     )
 
     # Set the suggestion flag to True and save
@@ -652,10 +657,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
         return
 
     # Select appropriate widget class based on type
-    if model_type == Trait:
-        widget_class = EventTraitS2Widget
-    else:
-        widget_class = EventCharacterS2Widget
+    widget_class = EventTraitS2Widget if model_type == Trait else EventCharacterS2Widget
 
     # Initialize widget with event configuration
     widget = widget_class(attrs={"id": "char_finder"})

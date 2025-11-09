@@ -219,7 +219,7 @@ def get_event_organizers(event: Event) -> QuerySet[Member]:
 
     """
     # Get or create the event organizer role (role number 1)
-    (organizer_role, was_created) = EventRole.objects.get_or_create(event=event, number=1)
+    (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)
 
     # Return all members assigned to the organizer role
     return organizer_role.members.all()

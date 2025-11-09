@@ -210,7 +210,8 @@ def check_lm_admin(request: HttpRequest) -> dict[str, int]:
     """
     # Check if the current user has LM administrator privileges
     if not is_lm_admin(request):
-        raise Http404("Not lm admin")
+        msg = "Not lm admin"
+        raise Http404(msg)
 
     # Return admin context with association ID and admin flag
     return {"association_id": request.association["id"], "lm_admin": 1}
@@ -254,7 +255,7 @@ def get_allowed_managed() -> list[str]:
     ]
 
 
-def auto_assign_event_permission_number(event_permission):
+def auto_assign_event_permission_number(event_permission) -> None:
     """Assign number to event permission if not set.
 
     Args:
@@ -263,7 +264,7 @@ def auto_assign_event_permission_number(event_permission):
     """
     if not event_permission.number:
         max_number = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(
-            Max("number")
+            Max("number"),
         )["number__max"]
         if not max_number:
             max_number = 1

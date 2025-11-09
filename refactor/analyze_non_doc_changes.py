@@ -28,11 +28,11 @@ def is_docstring_or_comment_line(line: str) -> bool:
         return True
 
     # Skip git diff markers
-    if stripped.startswith(('@@', '+++', '---', 'index', 'diff --git')):
+    if stripped.startswith(("@@", "+++", "---", "index", "diff --git")):
         return True
 
     # Get the actual content without +/- prefix
-    if stripped.startswith(('+', '-')):
+    if stripped.startswith(("+", "-")):
         content = stripped[1:].strip()
     else:
         content = stripped
@@ -42,11 +42,11 @@ def is_docstring_or_comment_line(line: str) -> bool:
         return True
 
     # Check for function definitions
-    if content.startswith('def '):
+    if content.startswith("def "):
         return True
 
     # Check for comments
-    if content.startswith('#'):
+    if content.startswith("#"):
         return True
 
     # Check for docstrings (triple quotes)
@@ -59,18 +59,18 @@ def is_docstring_or_comment_line(line: str) -> bool:
         return True
 
     # Check for type hints and annotations (often just documentation)
-    if re.match(r'^\s*->\s*.*:', content):
+    if re.match(r"^\s*->\s*.*:", content):
         return True
 
     # Check for docstring content (common patterns)
     docstring_patterns = [
-        r'^\s*Args:\s*$',
-        r'^\s*Returns:\s*$',
-        r'^\s*Raises:\s*$',
-        r'^\s*Note:\s*$',
-        r'^\s*Example:\s*$',
-        r'^\s*\w+\s*\([^)]*\):\s*.*$',  # Args descriptions
-        r'^\s*\w+:\s+.*$',  # Parameter descriptions
+        r"^\s*Args:\s*$",
+        r"^\s*Returns:\s*$",
+        r"^\s*Raises:\s*$",
+        r"^\s*Note:\s*$",
+        r"^\s*Example:\s*$",
+        r"^\s*\w+\s*\([^)]*\):\s*.*$",  # Args descriptions
+        r"^\s*\w+:\s+.*$",  # Parameter descriptions
     ]
 
     for pattern in docstring_patterns:
@@ -84,7 +84,7 @@ def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
     """Analyze changes in a file and determine if they're substantial.
     Returns (has_substantial_changes, substantial_lines).
     """
-    lines = file_diff.split('\n')
+    lines = file_diff.split("\n")
     substantial_lines = []
     in_docstring = False
     docstring_delimiter = None
@@ -102,7 +102,7 @@ def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
                 if triple_double == 2:
                     # Single-line docstring (opening and closing on same line)
                     # Consider it as docstring content
-                    if line.startswith(('+', '-')) and not line.startswith(('+++', '---')):
+                    if line.startswith(("+", "-")) and not line.startswith(("+++", "---")):
                         continue  # Skip this line, it's a docstring
                 elif not in_docstring:
                     # Starting a multi-line docstring
@@ -118,7 +118,7 @@ def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
             if triple_single > 0:
                 if triple_single == 2:
                     # Single-line docstring
-                    if line.startswith(('+', '-')) and not line.startswith(('+++', '---')):
+                    if line.startswith(("+", "-")) and not line.startswith(("+++", "---")):
                         continue
                 elif not in_docstring:
                     # Starting a multi-line docstring
@@ -136,7 +136,7 @@ def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
             continue
 
         # Check for substantial changes outside of docstrings
-        if line.startswith(('+', '-')) and not line.startswith(('+++', '---')):
+        if line.startswith(("+", "-")) and not line.startswith(("+++", "---")):
             if not is_docstring_or_comment_line(line):
                 substantial_lines.append(line)
 
@@ -148,8 +148,8 @@ def main():
     print("Analyzing uncommitted changes for substantial (non-documentation) modifications...\n")
 
     # Get list of modified files
-    modified_files = run_git_command(['git', 'diff', '--name-only', 'HEAD']).strip().split('\n')
-    modified_files = [f for f in modified_files if f and f.endswith('.py')]
+    modified_files = run_git_command(["git", "diff", "--name-only", "HEAD"]).strip().split("\n")
+    modified_files = [f for f in modified_files if f and f.endswith(".py")]
 
     if not modified_files:
         print("No Python files with uncommitted changes found.")
@@ -160,7 +160,7 @@ def main():
 
     for file_path in modified_files:
         # Get diff for this file
-        file_diff = run_git_command(['git', 'diff', 'HEAD', '--', file_path])
+        file_diff = run_git_command(["git", "diff", "HEAD", "--", file_path])
 
         if not file_diff:
             continue

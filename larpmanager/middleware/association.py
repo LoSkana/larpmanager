@@ -57,7 +57,7 @@ class AssociationIdentifyMiddleware:
         return self.get_association_info(request) or self.get_response(request)
 
     @classmethod
-    def get_association_info(cls, request) -> HttpResponse | None:
+    def get_association_info(cls, request: HttpRequest) -> HttpResponse | None:
         """Extract association information from request domain.
 
         Determines the environment based on host domain, extracts subdomain to identify
@@ -186,5 +186,7 @@ class AssociationIdentifyMiddleware:
 
         # Load and attach localized footer text for the association
         request.association["footer"] = get_association_text(
-            request.association["id"], AssociationTextType.FOOTER, current_language
+            request.association["id"],
+            AssociationTextType.FOOTER,
+            current_language,
         )

@@ -20,6 +20,7 @@
 
 from gettext import GNUTranslations
 
+from django.http import HttpRequest
 from django.utils import translation as dj_translation
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import trans_real
@@ -45,7 +46,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
     organizations can see different text for the same UI elements.
     """
 
-    def process_request(self, request) -> None:
+    def process_request(self, request: HttpRequest) -> None:
         """Inject association-specific translations into the request context.
 
         Args:
@@ -106,7 +107,7 @@ class AssociationTranslations(GNUTranslations):
 
     """
 
-    def __init__(self, base_translation, overrides: dict[str, str]):
+    def __init__(self, base_translation, overrides: dict[str, str]) -> None:
         """Initialize the translation wrapper with base translations and overrides.
 
         Args:

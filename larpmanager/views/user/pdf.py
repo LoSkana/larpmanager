@@ -35,7 +35,8 @@ from larpmanager.utils.pdf import (
 def check_print_pdf(context: dict) -> None:
     """Check if PDF printing is enabled in context, raise 404 if not ready."""
     if "show_addit" not in context or "print_pdf" not in context["show_addit"]:
-        raise Http404("not ready")
+        msg = "not ready"
+        raise Http404(msg)
 
 
 @login_required

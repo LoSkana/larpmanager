@@ -165,7 +165,7 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
     return None
 
 
-def _get_file(context: dict, file, column_id: str = None) -> tuple[any, list[str]]:
+def _get_file(context: dict, file, column_id: str | None = None) -> tuple[any, list[str]]:
     """Get file path and save uploaded file to media directory.
 
     Args:
@@ -280,7 +280,9 @@ def _reg_load(request, context: dict, csv_row: dict, registration_questions: lis
 
     # Get or create registration for this run and member
     (registration, was_created) = Registration.objects.get_or_create(
-        run=context["run"], member=member, cancellation_date__isnull=True
+        run=context["run"],
+        member=member,
+        cancellation_date__isnull=True,
     )
 
     error_logs = []
@@ -304,7 +306,7 @@ def _reg_load(request, context: dict, csv_row: dict, registration_questions: lis
     return status_message
 
 
-def _reg_field_load(context, registration, field_name, field_value, registration_questions, error_logs):
+def _reg_field_load(context, registration, field_name, field_value, registration_questions, error_logs) -> None:
     """Load individual registration field from CSV data.
 
     Args:
@@ -330,12 +332,22 @@ def _reg_field_load(context, registration, field_name, field_value, registration
         registration.pay_what = Decimal(field_value)
     else:
         _assign_choice_answer(
-            registration, field_name, field_value, registration_questions, error_logs, is_registration=True
+            registration,
+            field_name,
+            field_value,
+            registration_questions,
+            error_logs,
+            is_registration=True,
         )
 
 
 def _assign_elem(
-    context: dict, target_object: object, field_name: str, lookup_value: str, model_type: type, error_logs: list
+    context: dict,
+    target_object: object,
+    field_name: str,
+    lookup_value: str,
+    model_type: type,
+    error_logs: list,
 ) -> None:
     """Assign an element to an object field based on value lookup.
 
@@ -369,7 +381,10 @@ def _assign_elem(
 
 
 def _reg_assign_characters(
-    context: dict, registration: Registration, character_names_string: str, error_logs: list[str]
+    context: dict,
+    registration: Registration,
+    character_names_string: str,
+    error_logs: list[str],
 ) -> None:
     """Assign characters to a registration based on comma-separated character names.
 
@@ -583,8 +598,13 @@ def _get_questions(questions_queryset: QuerySet) -> dict[str, dict[str, int | st
 
 
 def _assign_choice_answer(
-    target_element, field_name, field_value, available_questions, error_logs, is_registration=False
-):
+    target_element,
+    field_name,
+    field_value,
+    available_questions,
+    error_logs,
+    is_registration=False,
+) -> None:
     """Assign choice answers to form elements during bulk import.
 
     Processes choice field assignments with validation, option matching,
@@ -622,11 +642,15 @@ def _assign_choice_answer(
 
             if is_registration:
                 RegistrationChoice.objects.create(
-                    reg_id=target_element.id, question_id=question["id"], option_id=option_id
+                    reg_id=target_element.id,
+                    question_id=question["id"],
+                    option_id=option_id,
                 )
             else:
                 WritingChoice.objects.create(
-                    element_id=target_element.id, question_id=question["id"], option_id=option_id
+                    element_id=target_element.id,
+                    question_id=question["id"],
+                    option_id=option_id,
                 )
 
 
@@ -740,8 +764,14 @@ def _writing_load_field(context: dict, element: BaseModel, field: str, value: an
 
 
 def _writing_question_load(
-    context, writing_element, question_field, question_type, processing_logs, questions_dict, field_value
-):
+    context,
+    writing_element,
+    question_field,
+    question_type,
+    processing_logs,
+    questions_dict,
+    field_value,
+) -> None:
     """Process and load writing question values into element fields.
 
     Args:
@@ -953,11 +983,7 @@ def _questions_load(context: dict, row_data: dict, is_registration: bool) -> str
     question_instance.save()
 
     # Return appropriate success message based on operation
-    if was_created:
-        status_message = f"OK - Created {question_name}"
-    else:
-        status_message = f"OK - Updated {question_name}"
-    return status_message
+    return f"OK - Created {question_name}" if was_created else f"OK - Updated {question_name}"
 
 
 def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
@@ -1121,13 +1147,12 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
 
     # Write uploaded file chunks to temporary file
     with open(tmp_file, "wb") as destination:
-        for chunk in csv_upload.chunks():
-            destination.write(chunk)
+        destination.writelines(csv_upload.chunks())
 
     return tmp_file
 
 
-def cover_load(context, z_obj):
+def cover_load(context, z_obj) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
     Args:
@@ -1247,12 +1272,7 @@ def _ticket_load(request, context: dict, csv_row: dict) -> str:
     save_log(context["member"], RegistrationTicket, ticket)
 
     # Return appropriate success message
-    if was_created:
-        status_message = f"OK - Created {ticket}"
-    else:
-        status_message = f"OK - Updated {ticket}"
-
-    return status_message
+    return f"OK - Created {ticket}" if was_created else f"OK - Updated {ticket}"
 
 
 def abilities_load(request, context: dict, form) -> list:
@@ -1303,7 +1323,8 @@ def _ability_load(request, context: dict, csv_row: dict) -> str:
 
     # Get or create ability object using event's class parent
     (ability_element, was_created) = AbilityPx.objects.get_or_create(
-        event=context["event"].get_class_parent(AbilityPx), name=csv_row["name"]
+        event=context["event"].get_class_parent(AbilityPx),
+        name=csv_row["name"],
     )
 
     logs = []
@@ -1348,12 +1369,7 @@ def _ability_load(request, context: dict, csv_row: dict) -> str:
     save_log(context["member"], AbilityPx, ability_element)
 
     # Return appropriate success message
-    if was_created:
-        message = f"OK - Created {ability_element}"
-    else:
-        message = f"OK - Updated {ability_element}"
-
-    return message
+    return f"OK - Created {ability_element}" if was_created else f"OK - Updated {ability_element}"
 
 
 def _assign_type(

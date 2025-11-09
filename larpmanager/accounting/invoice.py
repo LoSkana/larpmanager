@@ -100,7 +100,7 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
 
             # Verify payment amount is sufficient (rounded up)
             amount_difference: float = math.ceil(float(payment_amount_string)) - math.ceil(
-                float(pending_invoice.mc_gross)
+                float(pending_invoice.mc_gross),
             )
             if amount_difference > 0:
                 continue
@@ -115,7 +115,10 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
 
 
 def invoice_received_money(
-    invoice_code: str, gross_amount: float = None, processing_fee: float = None, transaction_id: str = None
+    invoice_code: str,
+    gross_amount: float | None = None,
+    processing_fee: float | None = None,
+    transaction_id: str | None = None,
 ) -> bool:
     """Process received payment for a payment invoice.
 

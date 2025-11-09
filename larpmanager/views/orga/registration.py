@@ -109,7 +109,7 @@ def check_time(times, step, start=None):
     return now
 
 
-def _orga_registrations_traits(registration, context):
+def _orga_registrations_traits(registration, context) -> None:
     """Process and organize character traits for registration display.
 
     Args:
@@ -208,7 +208,7 @@ def _orga_registrations_tickets(registration, context: dict) -> None:
     context["reg_all"][registration_type[0]]["list"].append(registration)
 
 
-def orga_registrations_membership(registration, context):
+def orga_registrations_membership(registration, context) -> None:
     """Process membership status for registration display.
 
     Args:
@@ -226,7 +226,7 @@ def orga_registrations_membership(registration, context):
     registration.membership = member.membership.get_status_display
 
 
-def regs_list_add(context_dict, category_list_key, category_name, member):
+def regs_list_add(context_dict, category_list_key, category_name, member) -> None:
     """Add member to categorized registration lists.
 
     Args:
@@ -246,7 +246,7 @@ def regs_list_add(context_dict, category_list_key, category_name, member):
         context_dict[category_list_key][slugified_key]["players"].append(member.display_member())
 
 
-def _orga_registrations_standard(registration, context):
+def _orga_registrations_standard(registration, context) -> None:
     """Process standard registration data including characters and membership.
 
     Args:
@@ -267,12 +267,11 @@ def _orga_registrations_standard(registration, context):
         orga_registrations_membership(registration, context)
 
     # age at run
-    if context["registration_reg_que_age"]:
-        if registration.member.birth_date and context["run"].start:
-            registration.age = calculate_age(registration.member.birth_date, context["run"].start)
+    if context["registration_reg_que_age"] and registration.member.birth_date and context["run"].start:
+        registration.age = calculate_age(registration.member.birth_date, context["run"].start)
 
 
-def _orga_registration_character(context, registration):
+def _orga_registration_character(context, registration) -> None:
     """Process character data for registration including factions and customizations.
 
     Args:
@@ -291,7 +290,10 @@ def _orga_registration_character(context, registration):
             for faction_number in character["factions"]:
                 if faction_number in context["factions"]:
                     regs_list_add(
-                        context, "list_factions", context["factions"][faction_number]["name"], registration.member
+                        context,
+                        "list_factions",
+                        context["factions"][faction_number]["name"],
+                        registration.member,
                     )
 
         if "custom_character" in context["features"]:
@@ -304,7 +306,7 @@ def _orga_registration_character(context, registration):
             registration.custom[section] = ", ".join(registration.custom[section])
 
 
-def orga_registrations_custom(registration, context, character_data):
+def orga_registrations_custom(registration, context, character_data) -> None:
     """Process custom character information for registration.
 
     Args:
@@ -345,7 +347,8 @@ def registrations_popup(request, context):
     try:
         registration = Registration.objects.get(pk=registration_id, run=context["run"])
         question = RegistrationQuestion.objects.get(
-            pk=question_id, event=context["event"].get_class_parent(RegistrationQuestion)
+            pk=question_id,
+            event=context["event"].get_class_parent(RegistrationQuestion),
         )
         answer = RegistrationAnswer.objects.get(reg=registration, question=question)
         html_text = f"<h2>{registration} - {question.name}</h2>" + answer.text
@@ -354,7 +357,7 @@ def registrations_popup(request, context):
         return JsonResponse({"k": 0})
 
 
-def _orga_registrations_custom_character(context):
+def _orga_registrations_custom_character(context) -> None:
     """Prepare custom character information for registration display.
 
     Args:
@@ -370,7 +373,7 @@ def _orga_registrations_custom_character(context):
         context["custom_info"].append(field_name)
 
 
-def _orga_registrations_prepare(context, request):
+def _orga_registrations_prepare(context, request: HttpRequest) -> None:
     """Prepare registration data including characters, tickets, and questions.
 
     Args:
@@ -379,7 +382,7 @@ def _orga_registrations_prepare(context, request):
 
     """
     context["reg_chars"] = {}
-    for _character_number, character in context["chars"].items():
+    for character in context["chars"].values():
         if "player_id" not in character:
             continue
         if character["player_id"] not in context["reg_chars"]:
@@ -445,7 +448,7 @@ def _orga_registrations_discount(context: dict) -> None:
         context["reg_discounts"][accounting_item_discount.member_id].append(accounting_item_discount.disc.name)
 
 
-def _orga_registrations_text_fields(context):
+def _orga_registrations_text_fields(context) -> None:
     """Process editor-type registration questions and add them to context.
 
     Args:
@@ -519,7 +522,10 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Check if age-based question filtering is enabled
     context["registration_reg_que_age"] = get_event_config(
-        context["event"].id, "registration_reg_que_age", False, context
+        context["event"].id,
+        "registration_reg_que_age",
+        False,
+        context,
     )
 
     # Initialize registration grouping dictionary
@@ -545,9 +551,8 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         _orga_registrations_standard(r, context)
 
         # Add discount information if available
-        if "discount" in context["features"]:
-            if r.member_id in context["reg_discounts"]:
-                r.discounts = context["reg_discounts"][r.member_id]
+        if "discount" in context["features"] and r.member_id in context["reg_discounts"]:
+            r.discounts = context["reg_discounts"][r.member_id]
 
         # Add questbuilder trait information
         _orga_registrations_traits(r, context)
@@ -583,7 +588,7 @@ def orga_registrations_accounting(request: HttpRequest, event_slug: str) -> Json
 
 
 @login_required
-def orga_registration_form_list(request, event_slug):
+def orga_registration_form_list(request, event_slug: str):
     """Handle registration form list management for event organizers.
 
     Args:
@@ -743,7 +748,10 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, num: int) -> 
         # Initialize form with existing instance for editing or new instance for creation
         if num != 0:
             form = OrgaRegistrationForm(
-                request.POST, instance=context["registration"], context=context, request=request
+                request.POST,
+                instance=context["registration"],
+                context=context,
+                request=request,
             )
         else:
             form = OrgaRegistrationForm(request.POST, context=context)
@@ -786,7 +794,7 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, num: int) -> 
     return render(request, "larpmanager/orga/edit.html", context)
 
 
-def _save_questbuilder(context, form, reg):
+def _save_questbuilder(context, form, reg) -> None:
     """Save quest type assignments from questbuilder form.
 
     Args:
@@ -830,7 +838,9 @@ def orga_registrations_customization(request, event_slug, num):
     get_event_cache_all(context)
     get_char(context, num)
     rcr = RegistrationCharacterRel.objects.get(
-        character_id=context["character"].id, reg__run_id=context["run"].id, reg__cancellation_date__isnull=True
+        character_id=context["character"].id,
+        reg__run_id=context["run"].id,
+        reg__cancellation_date__isnull=True,
     )
 
     if request.method == "POST":
@@ -932,7 +942,7 @@ def orga_registration_discount_del(request: HttpRequest, event_slug: str, num: i
 
 
 @login_required
-def orga_cancellations(request, event_slug):
+def orga_cancellations(request, event_slug: str):
     """Display cancelled registrations for event organizers.
 
     Args:
@@ -1208,7 +1218,8 @@ def orga_lottery(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Calculate how many registrations need to be upgraded
         to_upgrade = context["num_draws"] - context["num_def"]
         if to_upgrade <= 0:
-            raise Http404("already filled!")
+            msg = "already filled!"
+            raise Http404(msg)
 
         # Fetch all lottery tier registrations for this event run
         regs = Registration.objects.filter(run=context["run"], ticket__tier=TicketTier.LOTTERY)
@@ -1308,7 +1319,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
                 "document_expiration",
                 "accessibility",
                 "residence_address",
-            ]
+            ],
         )
 
     # Process and display configured member fields

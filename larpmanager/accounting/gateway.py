@@ -101,14 +101,19 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
 
     # Create payment request with Satispay API (amount in cents)
     satispay_response = satispaython.create_payment(
-        satispay_key_id, satispay_rsa_key, math.ceil(amount * 100), context["payment_currency"], body_params
+        satispay_key_id,
+        satispay_rsa_key,
+        math.ceil(amount * 100),
+        context["payment_currency"],
+        body_params,
     )
 
     # Validate API response and handle errors
     expected_success_status_code = 200
     if satispay_response.status_code != expected_success_status_code:
         notify_admins("satispay ko", str(satispay_response.content))
-        raise Http404("something went wrong :( ")
+        msg = "something went wrong :( "
+        raise Http404(msg)
 
     # Parse response and update invoice with payment ID
     response_data = json.loads(satispay_response.content)
@@ -120,7 +125,7 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     context["pay_id"] = response_data["id"]
 
 
-def satispay_check(request, context):
+def satispay_check(request, context) -> None:
     """Check status of pending Satispay payments.
 
     Args:
@@ -204,7 +209,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
         invoice_received_money(invoice.cod, payment_amount)
 
 
-def satispay_webhook(request):
+def satispay_webhook(request: HttpRequest) -> None:
     """Handle Satispay webhook notifications.
 
     Args:
@@ -216,7 +221,7 @@ def satispay_webhook(request):
     satispay_verify(context, payment_id)
 
 
-def get_paypal_form(request, context, invoice, amount):
+def get_paypal_form(request, context, invoice, amount) -> None:
     """Create PayPal payment form.
 
     Args:
@@ -272,7 +277,7 @@ def handle_valid_paypal_ipn(ipn_obj):
     return None
 
 
-def handle_invalid_paypal_ipn(invalid_ipn_object):
+def handle_invalid_paypal_ipn(invalid_ipn_object) -> None:
     """Handle invalid PayPal IPN notifications.
 
     Args:
@@ -359,12 +364,12 @@ def stripe_webhook(request):
 
     try:
         event = stripe.Webhook.construct_event(payload, signature_header, endpoint_secret)
-    except ValueError as error:
+    except ValueError:
         # Invalid payload
-        raise error
-    except stripe.error.SignatureVerificationError as error:
+        raise
+    except stripe.error.SignatureVerificationError:
         # Invalid signature
-        raise error
+        raise
 
     # Handle the event
     if event["type"] == "checkout.session.completed" or event["type"] == "checkout.session.async_payment_succeeded":
@@ -391,7 +396,10 @@ def stripe_webhook(request):
 
 
 def get_sumup_form(
-    request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: int | float | Decimal
+    request: HttpRequest,
+    context: dict[str, Any],
+    invoice: PaymentInvoice,
+    amount: float | Decimal,
 ) -> None:
     """Generate SumUp payment form for invoice processing.
 
@@ -426,7 +434,11 @@ def get_sumup_form(
 
     # Make authentication request and extract token
     authentication_response = requests.request(
-        "POST", authentication_url, headers=authentication_headers, data=authentication_payload, timeout=30
+        "POST",
+        authentication_url,
+        headers=authentication_headers,
+        data=authentication_payload,
+        timeout=30,
     )
     authentication_response_data = json.loads(authentication_response.text)
     # logger.debug(f"Response text: {authentication_response.text}")
@@ -446,7 +458,7 @@ def get_sumup_form(
             "return_url": request.build_absolute_uri(reverse("acc_webhook_sumup")),
             "redirect_url": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
             "payment_type": "boleto",
-        }
+        },
     )
 
     # Set authorization headers with obtained token
@@ -459,7 +471,11 @@ def get_sumup_form(
     # Create checkout session and extract checkout ID
     # logger.debug(f"Payload: {checkout_payload}")
     checkout_response = requests.request(
-        "POST", checkout_url, headers=checkout_headers, data=checkout_payload, timeout=30
+        "POST",
+        checkout_url,
+        headers=checkout_headers,
+        data=checkout_payload,
+        timeout=30,
     )
     # logger.debug(f"SumUp response: {checkout_response.text}")
     checkout_response_data = json.loads(checkout_response.text)
@@ -524,7 +540,8 @@ def redsys_invoice_cod() -> str:
             return invoice_code
 
     # Raise error if all attempts failed
-    raise ValueError("Too many attempts to generate the code")
+    msg = "Too many attempts to generate the code"
+    raise ValueError(msg)
 
 
 def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: Decimal) -> None:
@@ -570,7 +587,7 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
             "DS_MERCHANT_MERCHANTNAME": context["name"],
             "DS_MERCHANT_TERMINAL": context["redsys_merchant_terminal"],
             "DS_MERCHANT_TRANSACTIONTYPE": "0",  # Standard payment
-        }
+        },
     )
 
     # Configure callback URLs for payment flow
@@ -579,11 +596,11 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
             "DS_MERCHANT_MERCHANTURL": request.build_absolute_uri(reverse("acc_webhook_redsys")),
             "DS_MERCHANT_URLOK": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
             "DS_MERCHANT_URLKO": request.build_absolute_uri(reverse("acc_redsys_ko")),
-        }
+        },
     )
 
     # Add optional payment methods if configured
-    if "key" in context and context["key"]:
+    if context.get("key"):
         payment_parameters["DS_MERCHANT_PAYMETHODS"] = context["key"]
 
     # Determine sandbox mode from configuration
@@ -694,7 +711,8 @@ def redsys_webhook(request, ok: bool = True) -> bool:
 
     # Initialize RedSys client with merchant credentials
     redsys_payment_client = RedSysClient(
-        business_code=context["redsys_merchant_code"], secret_key=context["redsys_secret_key"]
+        business_code=context["redsys_merchant_code"],
+        secret_key=context["redsys_secret_key"],
     )
 
     # Validate the webhook signature and extract order code
@@ -777,7 +795,8 @@ class RedSysClient:
         :return merchant_parameters: Json structure with all parameters.
         """
         if not isinstance(merchant_parameters, str):
-            raise TypeError(f"merchant_parameters must be str, got {type(merchant_parameters)}")
+            msg = f"merchant_parameters must be str, got {type(merchant_parameters)}"
+            raise TypeError(msg)
         return json.loads(base64.b64decode(merchant_parameters).decode())
 
     def encrypt_order(self, order):
@@ -789,7 +808,8 @@ class RedSysClient:
         :return  order_encrypted: The encrypted order.
         """
         if not isinstance(order, str):
-            raise TypeError(f"order must be str, got {type(order)}")
+            msg = f"order must be str, got {type(order)}"
+            raise TypeError(msg)
         initialization_vector = b"\0\0\0\0\0\0\0\0"
         decoded_secret_key = base64.b64decode(self.secret_key)
         triple_des_cipher = DES3.new(decoded_secret_key, DES3.MODE_CBC, IV=initialization_vector)
@@ -805,9 +825,11 @@ class RedSysClient:
         :return Generated signature as a base64 encoded string.
         """
         if not isinstance(encrypted_order, bytes):
-            raise TypeError(f"encrypted_order must be bytes, got {type(encrypted_order)}")
+            msg = f"encrypted_order must be bytes, got {type(encrypted_order)}"
+            raise TypeError(msg)
         if not isinstance(merchant_parameters, bytes):
-            raise TypeError(f"merchant_parameters must be bytes, got {type(merchant_parameters)}")
+            msg = f"merchant_parameters must be bytes, got {type(merchant_parameters)}"
+            raise TypeError(msg)
         hmac_signature = hmac.new(encrypted_order, merchant_parameters, hashlib.sha256).digest()
         return base64.b64encode(hmac_signature)
 

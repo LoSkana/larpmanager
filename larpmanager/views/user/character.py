@@ -180,13 +180,15 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
 
     # Check if external access feature is enabled for this event
     if not get_event_config(context["event"].id, "writing_external_access", False, context):
-        raise Http404("external access not active")
+        msg = "external access not active"
+        raise Http404(msg)
 
     # Attempt to retrieve character using the provided access token
     try:
         char = context["event"].get_elements(Character).get(access_token=code)
     except ObjectDoesNotExist as err:
-        raise Http404("invalid code") from err
+        msg = "invalid code"
+        raise Http404(msg) from err
 
     # Load all cached event data including characters
     get_event_cache_all(context)
@@ -204,7 +206,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
     return _character_sheet(request, context)
 
 
-def character_your_link(context: dict, character, path: str = None) -> str:
+def character_your_link(context: dict, character, path: str | None = None) -> str:
     """Generate a URL link for a character page.
 
     Args:
@@ -232,7 +234,7 @@ def character_your_link(context: dict, character, path: str = None) -> str:
 
 
 @login_required
-def character_your(request: HttpRequest, event_slug: str, path: str = None) -> HttpResponse:
+def character_your(request: HttpRequest, event_slug: str, path: str | None = None) -> HttpResponse:
     """Display user's character information.
 
     Shows the character information page for the authenticated user. If the user has
@@ -321,10 +323,7 @@ def character_form(
         form = form_class(request.POST, request.FILES, instance=instance, context=context)
         if form.is_valid():
             # Set appropriate success message based on operation type
-            if instance:
-                success_message = _("Informations saved") + "!"
-            else:
-                success_message = _("New character created") + "!"
+            success_message = _("Informations saved") + "!" if instance else _("New character created") + "!"
 
             # Save character data within atomic transaction
             with transaction.atomic():
@@ -358,7 +357,10 @@ def character_form(
 
     # Configure form display options from event settings
     context["hide_unavailable"] = get_event_config(
-        context["event"].id, "character_form_hide_unavailable", False, context
+        context["event"].id,
+        "character_form_hide_unavailable",
+        False,
+        context,
     )
 
     return render(request, "larpmanager/event/character/edit.html", context)
@@ -393,7 +395,7 @@ def _update_character(context: dict, character: Character, form: Form, message: 
             character.status = CharacterStatus.PROPOSED
             message = _(
                 "The character has been proposed to the staff, who will examine it and approve it "
-                "or request changes if necessary."
+                "or request changes if necessary.",
             )
 
     return message
@@ -421,7 +423,8 @@ def character_customize(request, event_slug, num):
 
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["run"].reg, character__number=num
+            reg=context["run"].reg,
+            character__number=num,
         )
         if rgr.custom_profile:
             context["custom_profile"] = rgr.profile_thumb.url
@@ -431,7 +434,8 @@ def character_customize(request, event_slug, num):
 
         return character_form(request, context, event_slug, rgr, RegistrationCharacterRelForm)
     except ObjectDoesNotExist as err:
-        raise Http404("not your char!") from err
+        msg = "not your char!"
+        raise Http404(msg) from err
 
 
 @login_required
@@ -456,7 +460,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, num: int) ->
 
     """
     # Validate request method is POST
-    if not request.method == "POST":
+    if request.method != "POST":
         return JsonResponse({"res": "ko"})
 
     # Validate uploaded file using form
@@ -472,7 +476,8 @@ def character_profile_upload(request: HttpRequest, event_slug: str, num: int) ->
     # Retrieve character registration relationship
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["run"].reg, character__number=num
+            reg=context["run"].reg,
+            character__number=num,
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
@@ -517,7 +522,8 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
     # Retrieve character registration relationship with related objects
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["run"].reg, character__number=num
+            reg=context["run"].reg,
+            character__number=num,
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
@@ -530,10 +536,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
     # Open and rotate the image based on direction parameter
     path = os.path.join(conf_settings.MEDIA_ROOT, path)
     im = Image.open(path)
-    if rotation_angle == 1:
-        out = im.rotate(90)
-    else:
-        out = im.rotate(-90)
+    out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
     # Generate unique filename and save rotated image
     ext = path.split(".")[-1]
@@ -549,7 +552,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
 
 
 @login_required
-def character_list(request, event_slug):
+def character_list(request, event_slug: str):
     """Display list of player's characters for an event with customization fields.
 
     Args:
@@ -578,7 +581,7 @@ def character_list(request, event_slug):
 
 
 @login_required
-def character_create(request, event_slug):
+def character_create(request, event_slug: str):
     """Handle character creation with maximum character validation.
 
     Args:
@@ -760,7 +763,8 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_num: i
 
     # Check if user ability selection is enabled for this event
     if not get_event_config(event_id, "px_user", False):
-        raise Http404("ehm.")
+        msg = "ehm."
+        raise Http404(msg)
 
     # Validate character access permissions
     get_char_check(request, context, character_num, True)
@@ -788,7 +792,8 @@ def character_abilities_del(request, event_slug, num, id_del):
     context = check_char_abilities(request, event_slug, num)
     undo_abilities = get_undo_abilities(request, context, context["character"])
     if id_del not in undo_abilities:
-        raise Http404("ability out of undo window")
+        msg = "ability out of undo window"
+        raise Http404(msg)
 
     with transaction.atomic():
         remove_char_ability(context["character"], id_del)
@@ -798,7 +803,7 @@ def character_abilities_del(request, event_slug, num, id_del):
     return redirect("character_abilities", event_slug=context["run"].get_slug(), num=context["character"].number)
 
 
-def _save_character_abilities(context, request):
+def _save_character_abilities(context, request: HttpRequest) -> None:
     """Process character ability selection and save to character.
 
     Args:
@@ -858,7 +863,7 @@ def get_undo_abilities(request, context, char, new_ability_id=None):
         save_single_config(char, config_key, json.dumps(ability_timestamp_map))
 
     # return map of abilities recently added, with int key
-    return [int(ability_id) for ability_id in ability_timestamp_map.keys()]
+    return [int(ability_id) for ability_id in ability_timestamp_map]
 
 
 @login_required
@@ -895,7 +900,8 @@ def character_relationships(request: HttpRequest, event_slug: str, num: int) -> 
 
     # Query player relationships for the current character's player in this run
     que = PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
-        reg__member_id=context["char"]["player_id"], reg__run=context["run"]
+        reg__member_id=context["char"]["player_id"],
+        reg__run=context["run"],
     )
 
     # Process each relationship and build display data
@@ -972,16 +978,19 @@ def show_char(request: HttpRequest, event_slug: str) -> JsonResponse:
     # Extract and validate search parameter from POST data
     search_text = request.POST.get("text", "").strip()
     if not search_text.startswith(("#", "@", "^")):
-        raise Http404(f"malformed request {search_text}")
+        msg = f"malformed request {search_text}"
+        raise Http404(msg)
 
     # Parse numeric character ID from search string
     character_id = int(search_text[1:])
     if not character_id:
-        raise Http404(f"not valid search {character_id}")
+        msg = f"not valid search {character_id}"
+        raise Http404(msg)
 
     # Verify character exists in context
     if character_id not in context["chars"]:
-        raise Http404(f"not present char number {character_id}")
+        msg = f"not present char number {character_id}"
+        raise Http404(msg)
 
     # Generate tooltip content and return JSON response
     character = context["chars"][character_id]

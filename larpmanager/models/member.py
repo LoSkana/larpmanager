@@ -92,7 +92,7 @@ class Member(BaseModel):
             "If you prefer that your real name and surname not be publicly visible, please "
             "indicate an alias that will be displayed instead. Note: If you register for an "
             "event, your real first and last name will be shown to other participants, and to the "
-            "organisers."
+            "organisers.",
         ),
         blank=True,
     )
@@ -106,7 +106,7 @@ class Member(BaseModel):
             "If for whatever reason the first and last name shown on your documents is "
             "different from the one you prefer to use, then write it here. It will only be "
             "used for internal bureaucratic purposes, and will NEVER be displayed to other "
-            "participants."
+            "participants.",
         ),
     )
 
@@ -149,7 +149,7 @@ class Member(BaseModel):
         verbose_name=_("Contact"),
         help_text=_(
             "Indicates a way for other participants to contact you. It can be an email, a social "
-            "profile, whatever you want. It will be made public to others participants"
+            "profile, whatever you want. It will be made public to others participants",
         ),
         blank=True,
         null=True,
@@ -162,7 +162,7 @@ class Member(BaseModel):
         verbose_name=_("First aid"),
         help_text=_(
             "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to intervene in "
-            "case accidents occur during the event?"
+            "case accidents occur during the event?",
         ),
         null=True,
     )
@@ -203,7 +203,7 @@ class Member(BaseModel):
         null=True,
         verbose_name=_("Date of expiration of the document"),
         help_text=_(
-            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for."
+            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for.",
         ),
     )
 
@@ -230,7 +230,7 @@ class Member(BaseModel):
         help_text=_(
             "Fill in this field if you follow a personal diet for reasons of choice(e.g. "
             "vegetarian, vegan) or health (celiac disease, allergies). Leave empty if you do "
-            "not have things to report!"
+            "not have things to report!",
         ),
     )
 
@@ -248,7 +248,7 @@ class Member(BaseModel):
             "mental health problems (e.g. neurosis, bipolar disorder, anxiety disorder, "
             "various phobias), trigger topics ('lines and veils', we can't promise that you "
             "won't run into them in the event, but we'll make sure they're not part of your "
-            "main quests). Leave empty if you do not have things to report!"
+            "main quests). Leave empty if you do not have things to report!",
         ),
     )
 
@@ -268,7 +268,7 @@ class Member(BaseModel):
         help_text=_(
             "Upload your portrait photo. It will be shown to other participants to help recognize "
             "you in the event. Choose a photo that you would put in an official document (in which "
-            "you are alone, centered on your face)"
+            "you are alone, centered on your face)",
         ),
         blank=True,
         null=True,
@@ -295,7 +295,7 @@ class Member(BaseModel):
     class Meta:
         ordering = ["surname", "name"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.nickname:
             name = self.display_real()
             nick = self.nickname
@@ -331,7 +331,7 @@ class Member(BaseModel):
         # Final fallback to primary key
         return str(self.pk)
 
-    def display_real(self):
+    def display_real(self) -> str:
         """Return full real name as 'name surname'."""
         return f"{self.name} {self.surname}"
 
@@ -402,7 +402,7 @@ class MemberConfig(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} {self.name}"
 
     class Meta:
@@ -443,7 +443,10 @@ class Membership(BaseModel):
     tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     status = models.CharField(
-        max_length=1, choices=MembershipStatus.choices, default=MembershipStatus.EMPTY, db_index=True
+        max_length=1,
+        choices=MembershipStatus.choices,
+        default=MembershipStatus.EMPTY,
+        db_index=True,
     )
 
     request = models.FileField(upload_to=UploadToPathAndRename("request/"), null=True, blank=True)
@@ -467,10 +470,14 @@ class Membership(BaseModel):
     class Meta:
         indexes = [
             models.Index(
-                fields=["association", "member"], condition=Q(deleted__isnull=True), name="memb_association_mem_act"
+                fields=["association", "member"],
+                condition=Q(deleted__isnull=True),
+                name="memb_association_mem_act",
             ),
             models.Index(
-                fields=["association", "status"], condition=Q(deleted__isnull=True), name="memb_association_stat_act"
+                fields=["association", "status"],
+                condition=Q(deleted__isnull=True),
+                name="memb_association_stat_act",
             ),
         ]
         constraints = [
@@ -485,7 +492,7 @@ class Membership(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.member} - {self.association}"
 
     def get_request_filepath(self):
@@ -610,7 +617,7 @@ class Log(BaseModel):
 
     dl = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.cls} {self.eid}"
 
 
@@ -638,7 +645,7 @@ class Vote(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"V{self.number} {self.member} ({self.association} - {self.year})"
 
 
@@ -670,7 +677,8 @@ def get_user_membership(user: Member, association: Association | int) -> Members
 
     # Validate that we have a valid association ID
     if not association_id:
-        raise Http404("Association not found")
+        msg = "Association not found"
+        raise Http404(msg)
 
     # Get existing membership or create a new one for this user/association pair
     membership, _ = Membership.objects.get_or_create(member=user, association_id=association_id)

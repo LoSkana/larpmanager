@@ -102,7 +102,7 @@ def exe_warehouse_tags_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_items(request) -> HttpResponse:
+def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
     """Display warehouse items for organization administrators."""
     # Check user permissions for warehouse management
     context = check_association_context(request, "exe_warehouse_items")

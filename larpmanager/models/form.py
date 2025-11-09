@@ -236,7 +236,7 @@ class QuestionApplicable(models.TextChoices):
     @classmethod
     def get_mapping(cls):
         """Return mapping of type values to labels."""
-        return {value: label for value, label in cls.choices}
+        return dict(cls.choices)
 
 
 class WritingQuestion(BaseModel):
@@ -267,7 +267,10 @@ class WritingQuestion(BaseModel):
     order = models.IntegerField(default=0)
 
     status = models.CharField(
-        max_length=1, choices=QuestionStatus.choices, default=QuestionStatus.OPTIONAL, verbose_name=_("Status")
+        max_length=1,
+        choices=QuestionStatus.choices,
+        default=QuestionStatus.OPTIONAL,
+        verbose_name=_("Status"),
     )
 
     visibility = models.CharField(
@@ -284,7 +287,7 @@ class WritingQuestion(BaseModel):
         blank=True,
         verbose_name=_("Editable"),
         help_text=_(
-            "This field can be edited by the participant only when the character is in one of the selected statuses"
+            "This field can be edited by the participant only when the character is in one of the selected statuses",
         ),
     )
 
@@ -293,7 +296,7 @@ class WritingQuestion(BaseModel):
         verbose_name=_("Maximum length"),
         help_text=_(
             "For text questions, maximum number of characters; For multiple options, maximum "
-            "number of options (0 = no limit)"
+            "number of options (0 = no limit)",
         ),
     )
 
@@ -311,7 +314,7 @@ class WritingQuestion(BaseModel):
         help_text=_("Select the types of writing elements that this question applies to"),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -358,7 +361,7 @@ class WritingQuestion(BaseModel):
         """Return list of editable character statuses."""
         return self.editable.split(",") if self.editable else []
 
-    def set_editable(self, editable_list):
+    def set_editable(self, editable_list) -> None:
         """Set editable character statuses from list."""
         self.editable = ",".join(editable_list)
 
@@ -369,7 +372,9 @@ class WritingQuestion(BaseModel):
     class Meta:
         indexes = [
             models.Index(
-                fields=["event", "applicable", "status"], condition=Q(deleted__isnull=True), name="wq_evt_app_stat_act"
+                fields=["event", "applicable", "status"],
+                condition=Q(deleted__isnull=True),
+                name="wq_evt_app_stat_act",
             ),
             models.Index(fields=["event", "applicable"], condition=Q(deleted__isnull=True), name="wq_evt_app_act"),
         ]
@@ -418,11 +423,11 @@ class WritingOption(BaseModel):
         blank=True,
         help_text=_(
             "If you select one (or more) tickets, the option will only be available to "
-            "participants who have selected that ticket"
+            "participants who have selected that ticket",
         ),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.question} {self.name}"
 
     def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
@@ -514,7 +519,10 @@ class RegistrationQuestion(BaseModel):
     order = models.IntegerField(default=0)
 
     status = models.CharField(
-        max_length=1, choices=QuestionStatus.choices, default=QuestionStatus.OPTIONAL, verbose_name=_("Status")
+        max_length=1,
+        choices=QuestionStatus.choices,
+        default=QuestionStatus.OPTIONAL,
+        verbose_name=_("Status"),
     )
 
     max_length = models.IntegerField(
@@ -522,7 +530,7 @@ class RegistrationQuestion(BaseModel):
         verbose_name=_("Maximum length"),
         help_text=_(
             "Optional - For text questions, maximum number of characters; For multiple options, maximum "
-            "number of options (0 = no limit)"
+            "number of options (0 = no limit)",
         ),
     )
 
@@ -533,7 +541,7 @@ class RegistrationQuestion(BaseModel):
         verbose_name=_("Faction list"),
         help_text=_(
             "Optional - If you select one (or more) factions, the question will only be shown to participants "
-            "with characters in all chosen factions"
+            "with characters in all chosen factions",
         ),
     )
 
@@ -560,7 +568,7 @@ class RegistrationQuestion(BaseModel):
         verbose_name=_("Ticket list"),
         help_text=_(
             "If you select one (or more) tickets, the question will only be shown to participants "
-            "who have selected one of those tickets"
+            "who have selected one of those tickets",
         ),
     )
 
@@ -572,7 +580,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Section"),
         help_text=_(
-            "The question will be shown in the selected section (if left empty it will shown at the start of the form)"
+            "The question will be shown in the selected section (if left empty it will shown at the start of the form)",
         ),
     )
 
@@ -582,7 +590,7 @@ class RegistrationQuestion(BaseModel):
         blank=True,
         verbose_name=_("Allowed"),
         help_text=_(
-            "Staff members who are allowed to be able to see the responses of participants (leave blank to let everyone see)"
+            "Staff members who are allowed to be able to see the responses of participants (leave blank to let everyone see)",
         ),
     )
 
@@ -592,7 +600,7 @@ class RegistrationQuestion(BaseModel):
         help_text=_("Indicates whether the option can be included in the gifted signups"),
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -616,7 +624,8 @@ class RegistrationQuestion(BaseModel):
         """
         # Get all questions for the event, ordered by section first, then by question order
         questions = RegistrationQuestion.objects.filter(event=event).order_by(
-            F("section__order").asc(nulls_first=True), "order"
+            F("section__order").asc(nulls_first=True),
+            "order",
         )
 
         # Conditionally add annotations based on enabled features
@@ -629,7 +638,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration, features, params=None, is_organizer=False):
+    def skip(self, registration, features, params=None, is_organizer=False) -> bool:
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
@@ -715,7 +724,7 @@ class RegistrationOption(BaseModel):
 
     order = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.question} {self.name[:30]} ({self.price}€)"
 
     def get_price(self):

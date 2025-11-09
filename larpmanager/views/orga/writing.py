@@ -157,11 +157,13 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, num: int, order
     try:
         rel = PlotCharacterRel.objects.get(pk=num)
     except ObjectDoesNotExist as err:
-        raise Http404("plot rel not found") from err
+        msg = "plot rel not found"
+        raise Http404(msg) from err
 
     # Validate relationship belongs to current event
     if rel.character.event != context["event"]:
-        raise Http404("plot rel wrong event")
+        msg = "plot rel wrong event"
+        raise Http404(msg)
 
     # Get all relationships for the same character to reorder within
     elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
@@ -812,7 +814,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
 
     """
     # Validate request method
-    if not request.method == "POST":
+    if request.method != "POST":
         return Http404()
 
     # Extract class name from POST data
@@ -824,7 +826,8 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
         context = check_event_context(request, event_slug, "orga_registrations")
         # Get characters already assigned to registrations in this run
         taken_characters = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id).values_list(
-            "character_id", flat=True
+            "character_id",
+            flat=True,
         )
     else:
         # Handle other class types (abilities, etc.)
@@ -832,10 +835,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
         perms = {"abilitypx": "orga_px_abilities"}
 
         # Determine permission based on class name
-        if class_name in perms:
-            perm = perms[class_name]
-        else:
-            perm = "orga_" + class_name + "s"
+        perm = perms[class_name] if class_name in perms else "orga_" + class_name + "s"
 
         # Check permissions for the event
         context = check_event_context(request, event_slug, perm)
@@ -874,7 +874,7 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
 
     """
     # Validate request method - only POST allowed
-    if not request.method == "POST":
+    if request.method != "POST":
         return Http404()
 
     # Get event context from slug

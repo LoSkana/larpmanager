@@ -193,8 +193,8 @@ class Association(BaseModel):
                     "font/woff",
                     "font/woff2",
                     "font/sfnt",
-                ]
-            )
+                ],
+            ),
         ],
     )
 
@@ -297,7 +297,7 @@ class AssociationConfig(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.association} {self.name}"
 
     class Meta:
@@ -342,7 +342,10 @@ class AssociationText(BaseModel):
     text = HTMLField(blank=True, null=True)
 
     typ = models.CharField(
-        max_length=2, choices=AssociationTextType.choices, verbose_name=_("Type"), help_text=_("Type of text")
+        max_length=2,
+        choices=AssociationTextType.choices,
+        verbose_name=_("Type"),
+        help_text=_("Type of text"),
     )
 
     language = models.CharField(
@@ -401,7 +404,10 @@ class AssociationTranslation(BaseModel):
     """
 
     number = models.IntegerField(
-        null=True, blank=True, verbose_name=_("Number"), help_text=_("Optional ordering number")
+        null=True,
+        blank=True,
+        verbose_name=_("Number"),
+        help_text=_("Optional ordering number"),
     )
 
     association = models.ForeignKey(

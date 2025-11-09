@@ -155,10 +155,7 @@ def go_redirect(request, slug, path, base_domain="larpmanager.com"):
     if request.enviro in ["dev", "test"]:
         return redirect("http://127.0.0.1:8000/")
 
-    if slug:
-        new_path = f"https://{slug}.{base_domain}/"
-    else:
-        new_path = f"https://{base_domain}/"
+    new_path = f"https://{slug}.{base_domain}/" if slug else f"https://{base_domain}/"
 
     if path:
         new_path += path
@@ -271,7 +268,7 @@ def redr(request, path):
     if not path.startswith("event/"):
         association_slugs = set()
         for association_role in AssociationRole.objects.filter(members=request.user.member).select_related(
-            "association"
+            "association",
         ):
             association_slugs.add(association_role.association.slug)
         # get all events where they have association role
@@ -287,7 +284,9 @@ def redr(request, path):
 
 
 def activate_feature_association(
-    request: HttpRequest, feature_slug: str, path: str | None = None
+    request: HttpRequest,
+    feature_slug: str,
+    path: str | None = None,
 ) -> HttpResponseRedirect:
     """Activate a feature for an association.
 
@@ -314,11 +313,12 @@ def activate_feature_association(
 
     # Validate that this is an organization-wide feature
     if not feature.overall:
-        raise Http404("feature not overall")
+        msg = "feature not overall"
+        raise Http404(msg)
 
     # Verify user has permission to manage association features
     if not has_association_permission(request, context, "exe_features"):
-        raise UserPermissionError()
+        raise UserPermissionError
 
     # Get the association from request context and activate the feature
     association = get_object_or_404(Association, pk=context["association_id"])
@@ -343,7 +343,10 @@ def activate_feature_association(
 
 
 def activate_feature_event(
-    request: HttpRequest, event_slug: str, feature_slug: str, path: str = None
+    request: HttpRequest,
+    event_slug: str,
+    feature_slug: str,
+    path: str | None = None,
 ) -> HttpResponseRedirect:
     """Activate a feature for a specific event.
 
@@ -370,12 +373,13 @@ def activate_feature_event(
 
     # Ensure this is an event-specific feature, not organization-wide
     if feature.overall:
-        raise Http404("feature overall")
+        msg = "feature overall"
+        raise Http404(msg)
 
     # Get event context and verify user has permission to manage features
     context = get_event_context(request, event_slug)
     if not has_event_permission(request, context, context["event"].slug, "orga_features"):
-        raise UserPermissionError()
+        raise UserPermissionError
 
     # Add the feature to the event's feature set and persist changes
     context["event"].features.add(feature)
@@ -433,7 +437,7 @@ def debug_mail(request):
 
     """
     if request.enviro not in ["dev", "test"]:
-        raise Http404()
+        raise Http404
 
     for reg in Registration.objects.all():
         remember_profile(reg)
@@ -462,7 +466,7 @@ def debug_slug(request, association_slug=""):
 
     """
     if request.enviro not in ["dev", "test"]:
-        raise Http404()
+        raise Http404
 
     request.session["debug_slug"] = association_slug
     return redirect("home")
@@ -576,7 +580,7 @@ def join(request):
     return render(request, "larpmanager/larpmanager/join.html", context)
 
 
-def _join_form(context: dict, request) -> Association | None:
+def _join_form(context: dict, request: HttpRequest) -> Association | None:
     """Process association creation form for new users.
 
     Handles form validation, association creation, user role assignment,
@@ -605,8 +609,10 @@ def _join_form(context: dict, request) -> Association | None:
             new_association.save()
 
             # Create admin role for the new association and assign creator
-            (admin_role, created) = AssociationRole.objects.get_or_create(
-                association=new_association, number=1, name="Admin"
+            (admin_role, _created) = AssociationRole.objects.get_or_create(
+                association=new_association,
+                number=1,
+                name="Admin",
             )
             admin_role.members.add(context["member"])
             admin_role.save()
@@ -688,7 +694,8 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
             tutorial = LarpManagerTutorial.objects.order_by("order").first()
             context["intro"] = True
     except ObjectDoesNotExist as err:
-        raise Http404("tutorial not found") from err
+        msg = "tutorial not found"
+        raise Http404(msg) from err
 
     if tutorial:
         # Set current tutorial order for navigation
@@ -754,7 +761,8 @@ def guide(request, slug):
     try:
         context["guide"] = LarpManagerGuide.objects.get(slug=slug, published=True)
     except ObjectDoesNotExist as err:
-        raise Http404("guide not found") from err
+        msg = "guide not found"
+        raise Http404(msg) from err
 
     context["og_image"] = context["guide"].thumb.url
     context["og_title"] = f"{context['guide'].title} - LarpManager"
@@ -853,7 +861,7 @@ def lm_list(request):
     context = check_lm_admin(request)
 
     context["list"] = Association.objects.annotate(total_registrations=Count("events__runs__registrations")).order_by(
-        "-total_registrations"
+        "-total_registrations",
     )
 
     return render(request, "larpmanager/larpmanager/list.html", context)
@@ -921,7 +929,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/larpmanager/payments.html", context)
 
 
-def get_run_lm_payment(run):
+def get_run_lm_payment(run) -> None:
     """Calculate payment details for a run.
 
     Calculates features count, active registrations, and total payment
@@ -1075,7 +1083,7 @@ def donate(request):
     return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
-def debug_user(request, member_id):
+def debug_user(request, member_id) -> None:
     """Login as a specific user for debugging purposes.
 
     Allows admin users to login as another user for debugging.
@@ -1150,12 +1158,16 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
 
     # Create demo association with unique slug and inherited skin
     demo_association = Association.objects.create(
-        slug=f"test{new_primary_key}", name="Demo Organization", skin_id=request.association["skin_id"], demo=True
+        slug=f"test{new_primary_key}",
+        name="Demo Organization",
+        skin_id=request.association["skin_id"],
+        demo=True,
     )
 
     # Create test admin user with demo credentials
     (demo_user, created) = User.objects.get_or_create(
-        email=f"test{new_primary_key}@demo.it", username=f"test{new_primary_key}"
+        email=f"test{new_primary_key}@demo.it",
+        username=f"test{new_primary_key}",
     )
     demo_user.password = "pippo"  # noqa: S105
     demo_user.save()
@@ -1167,7 +1179,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     demo_member.save()
 
     # Create admin role and assign member with full permissions
-    (admin_role, created) = AssociationRole.objects.get_or_create(association=demo_association, number=1, name="Admin")
+    (admin_role, _created) = AssociationRole.objects.get_or_create(association=demo_association, number=1, name="Admin")
     admin_role.members.add(demo_member)
     admin_role.save()
 

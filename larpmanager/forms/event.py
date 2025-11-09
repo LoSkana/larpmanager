@@ -248,12 +248,13 @@ class OrgaEventForm(MyForm):
         if self.instance is not None and self.instance.pk is not None:
             lst.exclude(pk=self.instance.pk)
         if lst.count() > 0:
-            raise ValidationError("Slug already used!")
+            msg = "Slug already used!"
+            raise ValidationError(msg)
 
         # Check if slug conflicts with reserved static prefixes
-        if data and hasattr(conf_settings, "STATIC_PREFIXES"):
-            if data in conf_settings.STATIC_PREFIXES:
-                raise ValidationError("Reserved word, please choose another!")
+        if data and hasattr(conf_settings, "STATIC_PREFIXES") and data in conf_settings.STATIC_PREFIXES:
+            msg = "Reserved word, please choose another!"
+            raise ValidationError(msg)
 
         return data
 
@@ -264,7 +265,7 @@ class OrgaFeatureForm(FeatureForm):
     page_title = _("Event features")
 
     page_info = _(
-        "Manage features activated for this event and all its runs (click on a feature to show its description)"
+        "Manage features activated for this event and all its runs (click on a feature to show its description)",
     )
 
     load_js = ["feature-search"]
@@ -320,7 +321,7 @@ class OrgaConfigForm(ConfigForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def set_configs(self):
+    def set_configs(self) -> None:
         """Configure form fields for event settings and features.
 
         Sets up various configuration sections including email notifications,
@@ -329,7 +330,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_section("email", _("Email notifications"))
         disable_assignment_label = _("Disable assignment")
         disable_assignment_help_text = _(
-            "If checked: Does not send communication to the participant when the character is assigned"
+            "If checked: Does not send communication to the participant when the character is assigned",
         )
         self.add_configs("mail_character", ConfigType.BOOL, disable_assignment_label, disable_assignment_help_text)
 
@@ -337,7 +338,7 @@ class OrgaConfigForm(ConfigForm):
 
         show_shortcuts_label = _("Show shortcuts")
         show_shortcuts_help_text = _(
-            "If checked: when first accessing the manage page, automatically show shortcuts on mobile"
+            "If checked: when first accessing the manage page, automatically show shortcuts on mobile",
         )
         self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, show_shortcuts_label, show_shortcuts_help_text)
 
@@ -369,7 +370,7 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_config_registration()
 
-    def set_config_gallery(self):
+    def set_config_gallery(self) -> None:
         """Configure gallery settings for event forms."""
         if "character" not in self.params["features"]:
             return
@@ -382,20 +383,20 @@ class OrgaConfigForm(ConfigForm):
 
         label = _("Request registration")
         help_text = _(
-            "If checked, the subscribers' gallery will not be displayed to those who are not registered to the event"
+            "If checked, the subscribers' gallery will not be displayed to those who are not registered to the event",
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
         if "character" in self.params["features"]:
             label = _("Hide unassigned characters")
             help_text = _(
-                "If checked, does not show characters in the gallery who have not been assigned a participant"
+                "If checked, does not show characters in the gallery who have not been assigned a participant",
             )
             self.add_configs("gallery_hide_uncasted_characters", ConfigType.BOOL, label, help_text)
 
             label = _("Hide participants without a character")
             help_text = _(
-                "If checked, does not show participants in the gallery who have not been assigned a character"
+                "If checked, does not show participants in the gallery who have not been assigned a character",
             )
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
@@ -415,7 +416,7 @@ class OrgaConfigForm(ConfigForm):
         # Configure table grouping behavior
         grouping_label = _("Disable grouping")
         grouping_help_text = _(
-            "If checked, all registrations are displayed in a single table rather than being separated by type"
+            "If checked, all registrations are displayed in a single table rather than being separated by type",
         )
         self.add_configs("registration_no_grouping", ConfigType.BOOL, grouping_label, grouping_help_text)
 
@@ -427,7 +428,7 @@ class OrgaConfigForm(ConfigForm):
         # Configure staff visibility permissions for registration questions
         allowed_label = _("Allowed")
         allowed_help_text = _(
-            "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the participants"
+            "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the participants",
         )
         self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, allowed_label, allowed_help_text)
 
@@ -435,39 +436,48 @@ class OrgaConfigForm(ConfigForm):
         hide_unavailable_label = _("Hide not available")
         hide_unavailable_help_text = _(
             "If checked, options no longer available in the registration form are hidden, "
-            "instead of being displayed disabled"
+            "instead of being displayed disabled",
         )
         self.add_configs(
-            "registration_hide_unavailable", ConfigType.BOOL, hide_unavailable_label, hide_unavailable_help_text
+            "registration_hide_unavailable",
+            ConfigType.BOOL,
+            hide_unavailable_label,
+            hide_unavailable_help_text,
         )
 
         # Enable faction-based question visibility
         faction_selection_label = _("Faction selection")
         faction_selection_help_text = _(
             "If checked, allows a registration form question to be visible only if the participant is "
-            "assigned to certain factions."
+            "assigned to certain factions.",
         )
         self.add_configs(
-            "registration_reg_que_faction", ConfigType.BOOL, faction_selection_label, faction_selection_help_text
+            "registration_reg_que_faction",
+            ConfigType.BOOL,
+            faction_selection_label,
+            faction_selection_help_text,
         )
 
         # Enable ticket-based question visibility
         ticket_selection_label = _("Ticket selection")
         ticket_selection_help_text = _(
-            "If checked, allows a registration form question to be visible based on the selected registration ticket."
+            "If checked, allows a registration form question to be visible based on the selected registration ticket.",
         )
         self.add_configs(
-            "registration_reg_que_tickets", ConfigType.BOOL, ticket_selection_label, ticket_selection_help_text
+            "registration_reg_que_tickets",
+            ConfigType.BOOL,
+            ticket_selection_label,
+            ticket_selection_help_text,
         )
 
         # Enable age-based question visibility
         age_selection_label = _("Age selection")
         age_selection_help_text = _(
-            "If checked, allows a registration form question to be visible based on the participant's age"
+            "If checked, allows a registration form question to be visible based on the participant's age",
         )
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, age_selection_label, age_selection_help_text)
 
-    def set_config_char_form(self):
+    def set_config_char_form(self) -> None:
         """Configure character form options for events with character feature enabled.
 
         Sets up configuration fields for character form behavior including
@@ -478,7 +488,7 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Hide not available")
             help_text = _(
-                "If checked, options no longer available in the form are hidden, instead of being displayed disabled"
+                "If checked, options no longer available in the form are hidden, instead of being displayed disabled",
             )
             self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, label, help_text)
 
@@ -494,7 +504,7 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If checked, allows a option to be visible only if other options are selected")
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
-    def set_config_structure(self):
+    def set_config_structure(self) -> None:
         """Configure structural event settings including pre-registration, mail server, and cover options."""
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
@@ -527,7 +537,7 @@ class OrgaConfigForm(ConfigForm):
             field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
             self.add_configs("cover_orig", ConfigType.BOOL, field_label, field_help_text)
 
-    def set_config_writing(self):
+    def set_config_writing(self) -> None:
         """Configure writing system settings for events.
 
         Sets up background writing features, character story elements,
@@ -542,7 +552,7 @@ class OrgaConfigForm(ConfigForm):
 
             config_label = _("Cover")
             config_help_text = _(
-                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant"
+                "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant",
             )
             self.add_configs("writing_cover", ConfigType.BOOL, config_label, config_help_text)
 
@@ -552,13 +562,13 @@ class OrgaConfigForm(ConfigForm):
 
             config_label = _("Assigned")
             config_help_text = _(
-                "Enables field 'assigned', to track which staff member is responsible for each writing element"
+                "Enables field 'assigned', to track which staff member is responsible for each writing element",
             )
             self.add_configs("writing_assigned", ConfigType.BOOL, config_label, config_help_text)
 
             config_label = _("Field visibility")
             config_help_text = _(
-                "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time"
+                "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time",
             )
             self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
@@ -580,7 +590,7 @@ class OrgaConfigForm(ConfigForm):
 
             config_label = _("Paste as text")
             config_help_text = _(
-                "If checked, automatically removes formatting when pasting text into the WYSIWYG editor"
+                "If checked, automatically removes formatting when pasting text into the WYSIWYG editor",
             )
             self.add_configs("writing_paste_text", ConfigType.BOOL, config_label, config_help_text)
 
@@ -590,13 +600,13 @@ class OrgaConfigForm(ConfigForm):
 
             config_label = _("External access")
             config_help_text = _(
-                "If checked, generates secret urls to share the full character sheet with a not signed up user"
+                "If checked, generates secret urls to share the full character sheet with a not signed up user",
             )
             self.add_configs("writing_external_access", ConfigType.BOOL, config_label, config_help_text)
 
             config_label = _("Unimportant")
             config_help_text = _(
-                "If checked, allows to track the plots or relationships not really important for the character"
+                "If checked, allows to track the plots or relationships not really important for the character",
             )
             self.add_configs("writing_unimportant", ConfigType.BOOL, config_label, config_help_text)
 
@@ -622,7 +632,10 @@ class OrgaConfigForm(ConfigForm):
             independent_factions_label = _("Independent factions")
             independent_factions_help_text = _("If checked, do not use the parent event's factions")
             self.add_configs(
-                "campaign_faction_indep", ConfigType.BOOL, independent_factions_label, independent_factions_help_text
+                "campaign_faction_indep",
+                ConfigType.BOOL,
+                independent_factions_label,
+                independent_factions_help_text,
             )
 
         # Configure experience points system if px feature is enabled
@@ -633,14 +646,14 @@ class OrgaConfigForm(ConfigForm):
             player_selection_label = _("Player selection")
             player_selection_help_text = _(
                 "If checked, participants may add abilities themselves, by selecting from those that "
-                "are visible, and whose pre-requisites they meet."
+                "are visible, and whose pre-requisites they meet.",
             )
             self.add_configs("px_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
 
             # Undo period configuration - time window for skill revocation
             undo_period_label = _("Undo period")
             undo_period_help_text = _(
-                "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)"
+                "Time window (in hours) during which the user can revoke a chosen skill and recover spent XP (default is 0)",
             )
             self.add_configs("px_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
 
@@ -648,7 +661,10 @@ class OrgaConfigForm(ConfigForm):
             initial_experience_points_label = _("Initial experience points")
             initial_experience_points_help_text = _("Initial value of experience points for all characters")
             self.add_configs(
-                "px_start", ConfigType.INT, initial_experience_points_label, initial_experience_points_help_text
+                "px_start",
+                ConfigType.INT,
+                initial_experience_points_label,
+                initial_experience_points_help_text,
             )
 
         # Configure player character editor if user_character feature is enabled
@@ -664,13 +680,16 @@ class OrgaConfigForm(ConfigForm):
             character_approval_label = _("Approval")
             character_approval_help_text = _("If checked, activates a staff-managed approval process for characters")
             self.add_configs(
-                "user_character_approval", ConfigType.BOOL, character_approval_label, character_approval_help_text
+                "user_character_approval",
+                ConfigType.BOOL,
+                character_approval_label,
+                character_approval_help_text,
             )
 
             # Player relationships configuration
             player_relationships_label = _("Relationships")
             player_relationships_help_text = _(
-                "If checked, enables participants to write their own list of character relationships"
+                "If checked, enables participants to write their own list of character relationships",
             )
             self.add_configs(
                 "user_character_player_relationships",
@@ -679,31 +698,37 @@ class OrgaConfigForm(ConfigForm):
                 player_relationships_help_text,
             )
 
-    def set_config_custom(self):
+    def set_config_custom(self) -> None:
         """Configure character customization form fields for event settings."""
         if "custom_character" in self.params["features"]:
             self.set_section("custom_character", _("Character customisation"))
 
             character_name_label = _("Name")
             character_name_help_text = _(
-                "If checked, it allows participants to customise the names of their characters"
+                "If checked, it allows participants to customise the names of their characters",
             )
             self.add_configs("custom_character_name", ConfigType.BOOL, character_name_label, character_name_help_text)
 
             character_profile_label = _("Profile")
             character_profile_help_text = _(
-                "If checked, allows participants to customise their characters' profile picture"
+                "If checked, allows participants to customise their characters' profile picture",
             )
             self.add_configs(
-                "custom_character_profile", ConfigType.BOOL, character_profile_label, character_profile_help_text
+                "custom_character_profile",
+                ConfigType.BOOL,
+                character_profile_label,
+                character_profile_help_text,
             )
 
             character_pronoun_label = _("Pronoun")
             character_pronoun_help_text = _(
-                "If checked, it allows participants to customise their characters' pronouns"
+                "If checked, it allows participants to customise their characters' pronouns",
             )
             self.add_configs(
-                "custom_character_pronoun", ConfigType.BOOL, character_pronoun_label, character_pronoun_help_text
+                "custom_character_pronoun",
+                ConfigType.BOOL,
+                character_pronoun_label,
+                character_pronoun_help_text,
             )
 
             character_song_label = _("Song")
@@ -713,21 +738,27 @@ class OrgaConfigForm(ConfigForm):
             character_private_label = _("Private")
             character_private_help_text = _(
                 "If checked, it allows participants to enter private information on their characters, "
-                "visible only to them and the staff"
+                "visible only to them and the staff",
             )
             self.add_configs(
-                "custom_character_private", ConfigType.BOOL, character_private_label, character_private_help_text
+                "custom_character_private",
+                ConfigType.BOOL,
+                character_private_label,
+                character_private_help_text,
             )
 
             character_public_label = _("Public")
             character_public_help_text = _(
-                "If checked, it allows participants to enter public information on their characters, visible to all"
+                "If checked, it allows participants to enter public information on their characters, visible to all",
             )
             self.add_configs(
-                "custom_character_public", ConfigType.BOOL, character_public_label, character_public_help_text
+                "custom_character_public",
+                ConfigType.BOOL,
+                character_public_label,
+                character_public_help_text,
             )
 
-    def set_config_casting(self):
+    def set_config_casting(self) -> None:
         """Configure casting-related form fields for event settings.
 
         Sets up casting preferences, assignments, and display options
@@ -751,7 +782,7 @@ class OrgaConfigForm(ConfigForm):
             label = _("Field for exclusions")
             help_text = _(
                 "If checked, it adds a field in which the participant can indicate which elements they "
-                "wish to avoid altogether"
+                "wish to avoid altogether",
             )
             self.add_configs("casting_avoid", ConfigType.BOOL, label, help_text)
 
@@ -773,13 +804,13 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Registration priority")
             help_text = _(
-                "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong)"
+                "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong)",
             )
             self.add_configs("casting_reg_priority", ConfigType.INT, label, help_text)
 
             label = _("Payment priority")
             help_text = _(
-                "A measure of how much to favor participants who completed full payment earlier (0=default disabled, 1=normal, 10=strong)"
+                "A measure of how much to favor participants who completed full payment earlier (0=default disabled, 1=normal, 10=strong)",
             )
             self.add_configs("casting_pay_priority", ConfigType.INT, label, help_text)
 
@@ -803,14 +834,14 @@ class OrgaConfigForm(ConfigForm):
             payment_alert_label = _("Alert")
             payment_alert_help_text = _(
                 "Given a payment deadline, indicates the number of days under which it notifies "
-                "the participant to proceed with the payment. Default 30."
+                "the participant to proceed with the payment. Default 30.",
             )
             self.add_configs("payment_alert", ConfigType.INT, payment_alert_label, payment_alert_help_text)
 
             # Custom payment reason configuration with dynamic field substitution
             payment_reason_label = _("Causal")
             payment_reason_help_text = _(
-                "If present, it indicates the reason for the payment that the participant must put on the payments they make."
+                "If present, it indicates the reason for the payment that the participant must put on the payments they make.",
             )
             payment_reason_help_text += (
                 " "
@@ -823,10 +854,13 @@ class OrgaConfigForm(ConfigForm):
             # Option to disable provisional registrations - auto-confirm all registrations
             disable_provisional_label = _("Disable provisional")
             disable_provisional_help_text = _(
-                "If checked, all registrations are confirmed even if no payment has been received"
+                "If checked, all registrations are confirmed even if no payment has been received",
             )
             self.add_configs(
-                "payment_no_provisional", ConfigType.BOOL, disable_provisional_label, disable_provisional_help_text
+                "payment_no_provisional",
+                ConfigType.BOOL,
+                disable_provisional_label,
+                disable_provisional_help_text,
             )
 
         # Configure token and credit system controls
@@ -842,7 +876,10 @@ class OrgaConfigForm(ConfigForm):
             disable_credits_label = _("Disable credits")
             disable_credits_help_text = _("If checked, no credits will be used in the entries for this event")
             self.add_configs(
-                "token_credit_disable_c", ConfigType.BOOL, disable_credits_label, disable_credits_help_text
+                "token_credit_disable_c",
+                ConfigType.BOOL,
+                disable_credits_label,
+                disable_credits_help_text,
             )
 
         # Configure bring-a-friend referral discount system
@@ -852,19 +889,25 @@ class OrgaConfigForm(ConfigForm):
             # Discount amount for the referring participant
             referrer_discount_label = _("Forward discount")
             referrer_discount_help_text = _(
-                "Value of the discount for the registered participant who gives the code to a friend who signs up"
+                "Value of the discount for the registered participant who gives the code to a friend who signs up",
             )
             self.add_configs(
-                "bring_friend_discount_to", ConfigType.INT, referrer_discount_label, referrer_discount_help_text
+                "bring_friend_discount_to",
+                ConfigType.INT,
+                referrer_discount_label,
+                referrer_discount_help_text,
             )
 
             # Discount amount for the referred friend
             referred_discount_label = _("Discount back")
             referred_discount_help_text = _(
-                "Value of the discount for the friend who signs up using the code of a registered participant"
+                "Value of the discount for the friend who signs up using the code of a registered participant",
             )
             self.add_configs(
-                "bring_friend_discount_from", ConfigType.INT, referred_discount_label, referred_discount_help_text
+                "bring_friend_discount_from",
+                ConfigType.INT,
+                referred_discount_label,
+                referred_discount_help_text,
             )
 
     def set_config_registration(self) -> None:
@@ -896,7 +939,10 @@ class OrgaConfigForm(ConfigForm):
         collaborator_ticket_label = "Collaborator"
         collaborator_ticket_help_text = _("If checked, allow ticket tier: Collaborator")
         self.add_configs(
-            "ticket_collaborator", ConfigType.BOOL, collaborator_ticket_label, collaborator_ticket_help_text
+            "ticket_collaborator",
+            ConfigType.BOOL,
+            collaborator_ticket_label,
+            collaborator_ticket_help_text,
         )
 
         # Configure seller ticket tier
@@ -911,7 +957,7 @@ class OrgaConfigForm(ConfigForm):
             reduced_ratio_help_text = _(
                 "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
                 "Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for "
-                "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
+                "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets",
             )
             self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
 
@@ -921,10 +967,13 @@ class OrgaConfigForm(ConfigForm):
             filler_free_registration_label = _("Free registration")
             filler_free_registration_help_text = _(
                 "If checked, participants may sign up as fillers at any time; otherwise, they may only "
-                "do so if the stipulated number of characters has been reached"
+                "do so if the stipulated number of characters has been reached",
             )
             self.add_configs(
-                "filler_always", ConfigType.BOOL, filler_free_registration_label, filler_free_registration_help_text
+                "filler_always",
+                ConfigType.BOOL,
+                filler_free_registration_label,
+                filler_free_registration_help_text,
             )
 
         # Configure lottery system if feature is enabled
@@ -940,7 +989,10 @@ class OrgaConfigForm(ConfigForm):
             lottery_conversion_ticket_label = _("Conversion ticket")
             lottery_conversion_ticket_help_text = _("Name of the ticket into which to convert")
             self.add_configs(
-                "lottery_ticket", ConfigType.CHAR, lottery_conversion_ticket_label, lottery_conversion_ticket_help_text
+                "lottery_ticket",
+                ConfigType.CHAR,
+                lottery_conversion_ticket_label,
+                lottery_conversion_ticket_help_text,
             )
 
 
@@ -1002,7 +1054,7 @@ class OrgaAppearanceForm(MyCssForm):
         return instance
 
     @staticmethod
-    def get_input_css():
+    def get_input_css() -> str:
         """Get the CSS input field name.
 
         Returns:
@@ -1012,7 +1064,7 @@ class OrgaAppearanceForm(MyCssForm):
         return "event_css"
 
     @staticmethod
-    def get_css_path(event_instance):
+    def get_css_path(event_instance) -> str:
         """Generate CSS file path for event styling.
 
         Args:
@@ -1037,7 +1089,7 @@ class OrgaEventTextForm(MyForm):
         model = EventText
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize event text form with feature-based field filtering.
 
         Filters available text types based on activated features and
@@ -1057,7 +1109,7 @@ class OrgaEventTextForm(MyForm):
 
         if not get_event_config(self.params["event"].id, "user_character_approval", False):
             delete_choice.extend(
-                [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW]
+                [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW],
             )
 
         for tp in delete_choice:
@@ -1072,13 +1124,13 @@ class OrgaEventTextForm(MyForm):
             EventTextType.SIGNUP: _("Added at the bottom of mail confirming signup to participants"),
             EventTextType.ASSIGNMENT: _("Added at the bottom of mail notifying participants of character assignment"),
             EventTextType.CHARACTER_PROPOSED: _(
-                "Content of mail notifying participants of their character in proposed status"
+                "Content of mail notifying participants of their character in proposed status",
             ),
             EventTextType.CHARACTER_APPROVED: _(
-                "Content of mail notifying participants of their character in approved status"
+                "Content of mail notifying participants of their character in approved status",
             ),
             EventTextType.CHARACTER_REVIEW: _(
-                "Content of mail notifying participants of their character in review status"
+                "Content of mail notifying participants of their character in review status",
             ),
         }
         help_text = []
@@ -1180,7 +1232,7 @@ class OrgaRunForm(ConfigForm):
             "registration_open": DateTimePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize RunForm with event-specific configuration and field setup.
 
         Args:
@@ -1257,7 +1309,7 @@ class OrgaRunForm(ConfigForm):
 
         help_text = _(
             "Selected fields will be displayed as follows: public fields visible to all participants, "
-            "private fields visible only to assigned participants"
+            "private fields visible only to assigned participants",
         )
 
         writing_elements = _get_writing_elements()
@@ -1272,7 +1324,7 @@ class OrgaRunForm(ConfigForm):
                 continue
             questions = self.params["writing_fields"][writing_element_key]["questions"]
             field_choices = []
-            for _question_id, question_field in questions.items():
+            for question_field in questions.values():
                 question_type = question_field["typ"]
                 if question_type in basic_types:
                     question_type = str(question_field["id"])
@@ -1305,13 +1357,20 @@ class OrgaRunForm(ConfigForm):
         if additional_choices:
             help_text = _("Selected elements will be shown to participants")
             self.add_configs(
-                "show_addit", ConfigType.MULTI_BOOL, _("Elements"), help_text, extra_data=additional_choices
+                "show_addit",
+                ConfigType.MULTI_BOOL,
+                _("Elements"),
+                help_text,
+                extra_data=additional_choices,
             )
 
         self.set_section("visibility", _("Visibility"))
         for writing_element_key, writing_element_label in writing_elements:
             self.add_configs(
-                f"show_{writing_element_key}", ConfigType.BOOL, writing_element_label, writing_element_label
+                f"show_{writing_element_key}",
+                ConfigType.BOOL,
+                writing_element_label,
+                writing_element_label,
             )
 
         return config_list
@@ -1356,7 +1415,7 @@ class OrgaProgressStepForm(MyForm):
 class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize ExeEventForm with template event selection.
 
         Args:
@@ -1373,7 +1432,7 @@ class ExeEventForm(OrgaEventForm):
                 queryset=qs,
                 label=_("Template"),
                 help_text=_(
-                    "You can indicate a template event from which functionality and configurations will be copied"
+                    "You can indicate a template event from which functionality and configurations will be copied",
                 ),
                 widget=TemplateS2Widget(),
             )
@@ -1397,7 +1456,7 @@ class ExeEventForm(OrgaEventForm):
 
         # Copy template event data if template feature enabled and event is new
         if "template" in self.params["features"] and not self.instance.pk:
-            if "template_event" in self.cleaned_data and self.cleaned_data["template_event"]:
+            if self.cleaned_data.get("template_event"):
                 event_id = self.cleaned_data["template_event"].id
                 event = Event.objects.get(pk=event_id)
 
@@ -1463,7 +1522,7 @@ class ExeTemplateForm(FeatureForm):
 class ExeTemplateRolesForm(OrgaEventRoleForm):
     """Form for managing template event roles with optional members."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize template roles form with optional member requirement.
 
         Args:
@@ -1486,7 +1545,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
         model = Event
         fields = []
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize OrgaQuickSetupForm with event feature configuration.
 
         Args:
@@ -1521,7 +1580,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                         _("Experience points"),
                         _("Do you want to manage character progression through abilities"),
                     ),
-                }
+                },
             )
 
         self.setup.update(
@@ -1556,7 +1615,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     _("Voluntary donation"),
                     _("Do you want to allow users to add a voluntary donation to their registration fee"),
                 ),
-            }
+            },
         )
 
         self.init_fields(get_event_features(self.instance.pk))
@@ -1565,7 +1624,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 class OrgaPreferencesForm(ExePreferencesForm):
     """Form for setting event organizer preferences and field visibility."""
 
-    def set_configs(self):
+    def set_configs(self) -> None:
         """Configure organizer preference settings and field display options.
 
         Sets up default field visibility options for registration and character forms.
@@ -1604,7 +1663,10 @@ class OrgaPreferencesForm(ExePreferencesForm):
         """
         # Check if user has permission to manage registrations for this event
         if not has_event_permission(
-            self.params["request"], self.params, self.params["event"].slug, "orga_registrations"
+            self.params["request"],
+            self.params,
+            self.params["event"].slug,
+            "orga_registrations",
         ):
             return
 
@@ -1644,7 +1706,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
                         else registration_field.name[: field_name_max_length - 5] + " [...]",
                     )
                     for field_id, registration_field in registration_fields.items()
-                ]
+                ],
             )
 
         # Create the final configuration with all collected fields
@@ -1684,7 +1746,10 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Check user permissions for this writing section
         if not has_event_permission(
-            self.params["request"], self.params, self.params["event"].slug, f"orga_{writing_section[0]}s"
+            self.params["request"],
+            self.params,
+            self.params["event"].slug,
+            f"orga_{writing_section[0]}s",
         ):
             return
 
@@ -1718,7 +1783,8 @@ class OrgaPreferencesForm(ExePreferencesForm):
             if "faction" in self.params["features"]:
                 available_questions = self.params["event"].get_elements(WritingQuestion)
                 faction_question = available_questions.get(
-                    applicable=QuestionApplicable.CHARACTER, typ=WritingQuestionType.FACTIONS
+                    applicable=QuestionApplicable.CHARACTER,
+                    typ=WritingQuestionType.FACTIONS,
                 )
                 feature_fields.insert(0, ("faction", f"q_{faction_question.id}", _("Factions")))
 
@@ -1744,7 +1810,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_options,
         )
 
-    def _compile_configs(self, basic_question_types, compiled_options, field_definitions):
+    def _compile_configs(self, basic_question_types, compiled_options, field_definitions) -> None:
         """Compile configuration options from field definitions.
 
         Args:
@@ -1753,18 +1819,15 @@ class OrgaPreferencesForm(ExePreferencesForm):
             field_definitions: Dictionary of field definitions
 
         """
-        for _field_id, field in field_definitions.items():
+        for field in field_definitions.values():
             if field["typ"] == "name":
                 continue
 
-            if field["typ"] in basic_question_types:
-                toggle_key = f".lq_{field['id']}"
-            else:
-                toggle_key = f"q_{field['id']}"
+            toggle_key = f".lq_{field['id']}" if field["typ"] in basic_question_types else f"q_{field['id']}"
 
             compiled_options.append((toggle_key, field["name"]))
 
-    def add_feature_extra(self, extra_fields, feature_field_definitions):
+    def add_feature_extra(self, extra_fields, feature_field_definitions) -> None:
         """Add feature-specific extra fields to configuration.
 
         Args:

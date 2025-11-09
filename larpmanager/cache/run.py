@@ -79,14 +79,16 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
 
         # Fetch the run with related event data
         run = Run.objects.select_related("event").get(
-            event__association_id=association_id, event__slug=event_slug, number=run_number
+            event__association_id=association_id,
+            event__slug=event_slug,
+            number=run_number,
         )
         return run.id
     except ObjectDoesNotExist:
         return None
 
 
-def on_run_pre_save_invalidate_cache(instance):
+def on_run_pre_save_invalidate_cache(instance) -> None:
     """Handle run pre-save cache invalidation.
 
     Args:
@@ -97,7 +99,7 @@ def on_run_pre_save_invalidate_cache(instance):
         reset_cache_run(instance.event.association_id, instance.get_slug())
 
 
-def on_event_pre_save_invalidate_cache(instance):
+def on_event_pre_save_invalidate_cache(instance) -> None:
     """Handle event pre-save cache invalidation.
 
     Args:
@@ -205,7 +207,7 @@ def init_cache_config_run(run) -> dict:
     return context
 
 
-def on_run_post_save_reset_config_cache(instance):
+def on_run_post_save_reset_config_cache(instance) -> None:
     """Handle run post-save cache reset.
 
     Args:
@@ -216,7 +218,7 @@ def on_run_post_save_reset_config_cache(instance):
         reset_cache_config_run(instance)
 
 
-def on_event_post_save_reset_config_cache(instance):
+def on_event_post_save_reset_config_cache(instance) -> None:
     """Handle event post-save cache reset.
 
     Args:

@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 
 @background_auto(queue="acc")
-def update_registration_status_bkg(registration_id):
+def update_registration_status_bkg(registration_id) -> None:
     """Background task to update registration status with delay.
 
     Args:
@@ -239,7 +239,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
             + _(
                 "You must pay at least <b>%(amount).2f %(currency)s</b> by %(deadline)d days. "
                 "Make your payment <a href='%(url)s'>on this page</a>. If we do not receive "
-                "payment by the deadline, your registration may be cancelled."
+                "payment by the deadline, your registration may be cancelled.",
             )
             % template_data
         )
@@ -250,7 +250,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
         + _(
             "<i>Payment due</i> - You must pay <b>%(amount).2f %(currency)s</b> as soon as "
             "possible. Make your payment <a href='%(url)s'>on this page</a>. If we do not "
-            "receive payment, your registration may be cancelled."
+            "receive payment, your registration may be cancelled.",
         )
         % template_data
     )
@@ -436,7 +436,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
             my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
-def send_pre_registration_confirmation_email(pre_registration):
+def send_pre_registration_confirmation_email(pre_registration) -> None:
     """Handle pre-registration pre-save notifications.
 
     Args:

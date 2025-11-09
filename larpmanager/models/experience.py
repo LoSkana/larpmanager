@@ -48,7 +48,12 @@ class AbilityTypePx(BaseConceptModel):
 
 class AbilityPx(BaseConceptModel):
     typ = models.ForeignKey(
-        AbilityTypePx, on_delete=models.CASCADE, blank=True, null=True, related_name="abilities", verbose_name=_("Type")
+        AbilityTypePx,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="abilities",
+        verbose_name=_("Type"),
     )
 
     cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
@@ -136,7 +141,7 @@ class RulePx(BaseConceptModel):
         blank=True,
         help_text=_(
             "The rule will be applied, only one time, if the character has any of the abilities. "
-            "If no abilities are chosen, the rule is applied to all characters."
+            "If no abilities are chosen, the rule is applied to all characters.",
         ),
     )
 

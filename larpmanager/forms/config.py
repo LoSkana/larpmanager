@@ -56,7 +56,7 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
                     checked,
                     checkbox_id,
                     option_label,
-                )
+                ),
             )
 
         # Use format_html_join to safely generate the HTML
@@ -94,9 +94,8 @@ class ConfigForm(MyForm):
     @abstractmethod
     def set_configs(self) -> None:
         """No-op method placeholder."""
-        pass
 
-    def set_section(self, section_slug, section_name):
+    def set_section(self, section_slug, section_name) -> None:
         """Set the current section for grouping configuration fields.
 
         Args:
@@ -111,7 +110,7 @@ class ConfigForm(MyForm):
         if self.params.get("jump_section", "") == section_slug:
             self.jump_section = section_name
 
-    def add_configs(self, configuration_key, config_type, field_label, field_help_text, extra_data=None):
+    def add_configs(self, configuration_key, config_type, field_label, field_help_text, extra_data=None) -> None:
         """Add a configuration field to be rendered in the form.
 
         Args:
@@ -133,7 +132,7 @@ class ConfigForm(MyForm):
                 "label": field_label,
                 "help_text": field_help_text,
                 "extra": extra_data,
-            }
+            },
         )
 
     def save(self, commit: bool = True) -> Any:
@@ -166,7 +165,7 @@ class ConfigForm(MyForm):
 
         return instance
 
-    def _get_custom_field(self, field_definition, result_dict):
+    def _get_custom_field(self, field_definition, result_dict) -> None:
         """Extract and format configuration field value from form data.
 
         Args:
@@ -222,7 +221,10 @@ class ConfigForm(MyForm):
             ),
             # Rich text editor field for HTML content
             ConfigType.HTML: lambda: forms.CharField(
-                label=label, widget=TinyMCE(), help_text=help_text, required=False
+                label=label,
+                widget=TinyMCE(),
+                help_text=help_text,
+                required=False,
             ),
             # Numeric input field with integer validation
             ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),

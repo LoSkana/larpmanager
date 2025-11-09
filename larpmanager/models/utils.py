@@ -86,7 +86,7 @@ def decimal_to_str(decimal_value: Decimal) -> str:
     return string_representation.replace(".00", "")
 
 
-def slug_url_validator(val):
+def slug_url_validator(val) -> None:
     """Validate that string contains only lowercase alphanumeric characters.
 
     Args:
@@ -221,7 +221,7 @@ def get_sum(queryset: QuerySet) -> Decimal | int:
 
 @deconstructible
 class UploadToPathAndRename:
-    def __init__(self, sub_path):
+    def __init__(self, sub_path) -> None:
         """Initialize upload path handler with sub-directory."""
         self.sub_path = sub_path
 
@@ -405,7 +405,7 @@ class MLStripper(HTMLParser):
         # Initialize text buffer for content extraction
         self.text = StringIO()
 
-    def handle_data(self, d):
+    def handle_data(self, d) -> None:
         """Handle data by writing it to the internal text buffer."""
         self.text.write(d)
 

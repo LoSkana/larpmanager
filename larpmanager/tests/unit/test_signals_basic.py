@@ -218,5 +218,5 @@ class TestBasicSignals(BaseTestCase):
         registration.save()
 
         # Cache should still be functional
-        cache.set('test_key', 'test_value')
-        self.assertEqual(cache.get('test_key'), 'test_value')
+        cache.set("test_key", "test_value")
+        self.assertEqual(cache.get("test_key"), "test_value")

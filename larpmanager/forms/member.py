@@ -173,7 +173,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             required=True,
             label=_("Authorisation"),
             help_text=_(
-                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy",
             )
             + "?",
         )
@@ -183,7 +183,10 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             public, private = get_recaptcha_secrets(self.request)
             if public and private:
                 self.fields["captcha"] = ReCaptchaField(
-                    widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
+                    widget=ReCaptchaV3,
+                    label="Captcha",
+                    public_key=public,
+                    private_key=private,
                 )
 
         # Reorder fields to place language selection first
@@ -198,7 +201,8 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 
         # Prevent duplicate email registrations
         if User.objects.filter(email__iexact=data).exists():
-            raise ValidationError("Email already used! It seems you already have an account!")
+            msg = "Email already used! It seems you already have an account!"
+            raise ValidationError(msg)
         return data
 
     def save(self, commit: bool = True) -> User:
@@ -237,7 +241,7 @@ class MyPasswordResetConfirmForm(SetPasswordForm):
 class MyPasswordResetForm(PasswordResetForm):
     """Custom password reset form with association-specific handling."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize form with email field constraints.
 
         Args:
@@ -344,16 +348,16 @@ COUNTRY_CHOICES = sorted([(country.alpha_2, country.name) for country in pycount
 
 # noinspection PyUnresolvedReferences
 FULL_PROVINCE_CHOICES = sorted(
-    [(province.code, province.name, province.country_code) for province in pycountry.subdivisions], key=lambda x: x[1]
+    [(province.code, province.name, province.country_code) for province in pycountry.subdivisions],
+    key=lambda x: x[1],
 )
 
 PROVINCE_CHOICES = [("", "----")] + [(province[0], province[1]) for province in FULL_PROVINCE_CHOICES]
 
 country_subdivisions_map = {}
 for province in FULL_PROVINCE_CHOICES:
-    if province[2] == "IT":
-        if re.match(r"^IT-\d{2}", province[0]):
-            continue
+    if province[2] == "IT" and re.match(r"^IT-\d{2}", province[0]):
+        continue
     if province[2] not in country_subdivisions_map:
         country_subdivisions_map[province[2]] = []
     country_subdivisions_map[province[2]].append([province[0], province[1]])
@@ -456,12 +460,12 @@ class ResidenceField(forms.MultiValueField):
 
             # Compress cleaned data into final format
             return self.compress(cleaned_data)
-        except forms.ValidationError as err:
-            raise err
+        except forms.ValidationError:
+            raise
 
 
 class BaseProfileForm(MyForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize base profile form with field filtering based on association settings.
 
         Args:
@@ -547,7 +551,7 @@ class ProfileForm(BaseProfileForm):
             "document_expiration": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize member form with dynamic field validation and configuration.
 
         Sets mandatory fields, handles voting candidates, and adds required
@@ -609,7 +613,7 @@ class ProfileForm(BaseProfileForm):
                 required=True,
                 label=_("Authorisation"),
                 help_text=_(
-                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy",
                 )
                 + "?",
             )
@@ -644,9 +648,8 @@ class ProfileForm(BaseProfileForm):
         cleaned_data = super().clean()
 
         # Check if profile photo is both allowed and mandatory, then validate presence
-        if "profile" in self.allowed and "profile" in self.mandatory:
-            if not self.instance.profile:
-                self.add_error(None, _("Please upload your profile photo") + "!")
+        if "profile" in self.allowed and "profile" in self.mandatory and not self.instance.profile:
+            self.add_error(None, _("Please upload your profile photo") + "!")
 
         return cleaned_data
 
@@ -694,7 +697,7 @@ class MembershipResponseForm(forms.Form):
         required=False,
         max_length=1000,
         help_text=_(
-            "Optional text to be included in the email sent to the participant to notify them of the approval decision"
+            "Optional text to be included in the email sent to the participant to notify them of the approval decision",
         ),
     )
 
@@ -726,7 +729,8 @@ class ExeVolunteerRegistryForm(MyForm):
         # Check for existing volunteer entries for this member and association
         lst = VolunteerRegistry.objects.filter(member=member, association_id=self.params["association_id"])
         if lst.count() > 1:
-            raise ValidationError("Volunteer entry already existing!")
+            msg = "Volunteer entry already existing!"
+            raise ValidationError(msg)
 
         return member
 
@@ -938,7 +942,7 @@ class ExeProfileForm(MyForm):
         model = Association
         fields = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initialize member field configuration form.
 
         Args:

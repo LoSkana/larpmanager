@@ -35,7 +35,7 @@ def clear_association_cache(association_slug: str) -> None:
     cache.delete(key)
 
 
-def cache_association_key(association_slug):
+def cache_association_key(association_slug) -> str:
     """Generate cache key for association data."""
     return f"association_{association_slug}"
 

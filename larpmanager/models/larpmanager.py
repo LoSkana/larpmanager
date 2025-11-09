@@ -186,7 +186,11 @@ class LarpManagerGuide(BaseModel):
     text = HTMLField(blank=True, null=True)
 
     photo = models.ImageField(
-        max_length=500, upload_to=UploadToPathAndRename("albums/"), verbose_name=_("Photo"), blank=True, null=True
+        max_length=500,
+        upload_to=UploadToPathAndRename("albums/"),
+        verbose_name=_("Photo"),
+        blank=True,
+        null=True,
     )
 
     reduced = ImageSpecField(
@@ -269,7 +273,10 @@ class LarpManagerDiscover(BaseModel):
     profile = models.ImageField(upload_to=UploadToPathAndRename("discover/"), blank=True, null=True)
 
     profile_thumb = ImageSpecField(
-        source="profile", processors=[ResizeToFill(500, 500)], format="JPEG", options={"quality": 90}
+        source="profile",
+        processors=[ResizeToFill(500, 500)],
+        format="JPEG",
+        options={"quality": 90},
     )
 
 

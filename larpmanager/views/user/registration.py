@@ -193,7 +193,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
 
 
 @login_required
-def pre_register_remove(request, event_slug):
+def pre_register_remove(request, event_slug: str):
     """Remove user's pre-registration for an event.
 
     Args:
@@ -306,7 +306,12 @@ def save_registration(
 
 
 def save_registration_standard(
-    context: dict, event: Event, form: RegistrationForm, gifted: bool, provisional: bool, reg: Registration
+    context: dict,
+    event: Event,
+    form: RegistrationForm,
+    gifted: bool,
+    provisional: bool,
+    reg: Registration,
 ) -> None:
     """Save standard registration with ticket and payment processing.
 
@@ -341,7 +346,7 @@ def save_registration_standard(
         reg.additionals = int(form.cleaned_data["additionals"])
 
     # Handle quota assignments if present
-    if "quotas" in form.cleaned_data and form.cleaned_data["quotas"]:
+    if form.cleaned_data.get("quotas"):
         reg.quotas = int(form.cleaned_data["quotas"])
 
     # Process ticket selection and validation
@@ -349,24 +354,31 @@ def save_registration_standard(
         try:
             sel = RegistrationTicket.objects.filter(pk=form.cleaned_data["ticket"]).select_related("event").first()
         except Exception as err:
-            raise Http404("RegistrationTicket does not exists") from err
+            msg = "RegistrationTicket does not exists"
+            raise Http404(msg) from err
 
         # Validate ticket exists and belongs to correct event
         if sel and sel.event != event:
-            raise Http404("RegistrationTicket wrong event")
+            msg = "RegistrationTicket wrong event"
+            raise Http404(msg)
 
         # Prevent downgrading ticket price for paid registrations
         if context["tot_payed"] and reg.ticket and reg.ticket.price > 0 and sel.price < reg.ticket.price:
-            raise Http404("lower price")
+            msg = "lower price"
+            raise Http404(msg)
         reg.ticket = sel
 
     # Set custom payment amount if specified
-    if "pay_what" in form.cleaned_data and form.cleaned_data["pay_what"]:
+    if form.cleaned_data.get("pay_what"):
         reg.pay_what = int(form.cleaned_data["pay_what"])
 
 
 def registration_redirect(
-    request: HttpRequest, context: dict, registration: Registration, is_new_registration: bool, run: Run
+    request: HttpRequest,
+    context: dict,
+    registration: Registration,
+    is_new_registration: bool,
+    run: Run,
 ) -> HttpResponse:
     """Handle post-registration redirect logic.
 
@@ -432,7 +444,7 @@ def registration_redirect(
     return redirect("gallery", event_slug=registration.run.get_slug())
 
 
-def save_registration_bring_friend(context: dict, form, reg: Registration, request) -> None:
+def save_registration_bring_friend(context: dict, form, reg: Registration, request: HttpRequest) -> None:
     """Process bring-a-friend discount codes for registration.
 
     This function handles the bring-a-friend functionality by:
@@ -473,7 +485,8 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
     try:
         friend = Registration.objects.get(special_cod=cod)
     except Exception as err:
-        raise Http404("I'm sorry, this friend code was not found") from err
+        msg = "I'm sorry, this friend code was not found"
+        raise Http404(msg) from err
 
     # Create accounting entries atomically for both parties
     with transaction.atomic():
@@ -503,7 +516,7 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
         friend.save()
 
 
-def register_info(request, context, form, registration, discount_info):
+def register_info(request, context, form, registration, discount_info) -> None:
     """Display registration information and status.
 
     Args:
@@ -533,7 +546,8 @@ def register_info(request, context, form, registration, discount_info):
 
     if context["run"].start and "membership" in context["features"]:
         membership_query = AccountingItemMembership.objects.filter(
-            year=context["run"].start.year, member=context["member"]
+            year=context["run"].start.year,
+            member=context["member"],
         )
         if membership_query.count() > 0:
             context["membership_fee"] = "done"
@@ -545,7 +559,7 @@ def register_info(request, context, form, registration, discount_info):
         context["membership_amount"] = get_association_config(context["association_id"], "membership_fee", 0)
 
 
-def init_form_submitted(context, form, request, registration=None):
+def init_form_submitted(context, form, request, registration=None) -> None:
     """Initialize form submission data in context.
 
     Args:
@@ -575,7 +589,11 @@ def init_form_submitted(context, form, request, registration=None):
 
 @login_required
 def register(
-    request: HttpRequest, event_slug: str, secret_code: str = "", discount_code: str = "", ticket_id: int = 0
+    request: HttpRequest,
+    event_slug: str,
+    secret_code: str = "",
+    discount_code: str = "",
+    ticket_id: int = 0,
 ) -> HttpResponse:
     """Handle event registration form display and submission.
 
@@ -628,7 +646,7 @@ def register(
     # Verify user membership status and permissions
     current_membership = context["membership"]
     if current_membership.status in [MembershipStatus.REWOKED]:
-        raise RewokedMembershipError()
+        raise RewokedMembershipError
 
     # Process form submission or display registration form
     if request.method == "POST":
@@ -637,7 +655,12 @@ def register(
         # Validate form and save registration if valid
         if form.is_valid():
             saved_registration = save_registration(
-                request, context, form, current_run, current_event, context["run_reg"]
+                request,
+                context,
+                form,
+                current_run,
+                current_event,
+                context["run_reg"],
             )
             return registration_redirect(request, context, saved_registration, is_new_registration, current_run)
     else:
@@ -704,7 +727,8 @@ def _check_redirect_registration(request, context: dict, event, secret_code: str
     # Validate secret code if secret registration is enabled
     if "registration_secret" in context["features"] and secret_code:
         if context["run"].registration_secret != secret_code:
-            raise Http404("wrong registration code")
+            msg = "wrong registration code"
+            raise Http404(msg)
         return None
 
     # Redirect to external registration link if configured
@@ -775,7 +799,7 @@ def register_reduced(request: HttpRequest, event_slug: str) -> JsonResponse:
 
 
 @login_required
-def register_conditions(request: HttpRequest, event_slug: str = None) -> HttpResponse:
+def register_conditions(request: HttpRequest, event_slug: str | None = None) -> HttpResponse:
     """Render registration conditions page with event and association terms.
 
     Args:
@@ -912,9 +936,9 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         {
             "res": "ok",
             "msg": _(
-                "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed"
+                "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed",
             ),
-        }
+        },
     )
 
 
@@ -1061,7 +1085,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
 
 
 @login_required
-def unregister(request, event_slug):
+def unregister(request, event_slug: str):
     """Handle user self-unregistration from an event.
 
     Args:
@@ -1078,7 +1102,8 @@ def unregister(request, event_slug):
     try:
         reg = Registration.objects.get(run=context["run"], member=context["member"], cancellation_date__isnull=True)
     except ObjectDoesNotExist as err:
-        raise Http404("Registration does not exist") from err
+        msg = "Registration does not exist"
+        raise Http404(msg) from err
 
     if request.method == "POST":
         cancel_reg(reg)
@@ -1119,7 +1144,10 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Filter registrations for current user with redeem codes (gift registrations)
     context["list"] = Registration.objects.filter(
-        run=context["run"], member=context["member"], redeem_code__isnull=False, cancellation_date__isnull=True
+        run=context["run"],
+        member=context["member"],
+        redeem_code__isnull=False,
+        cancellation_date__isnull=True,
     )
 
     # Load accounting information (payments, pending transactions, etc.)
@@ -1145,11 +1173,12 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/gift.html", context)
 
 
-def check_registration_open(context: dict, request) -> None:
+def check_registration_open(context: dict, request: HttpRequest) -> None:
     """Check if registrations are open, redirect to home if closed."""
     if not context["run"].status["open"]:
         messages.warning(request, _("Registrations not open!"))
-        raise RedirectError("home")
+        msg = "home"
+        raise RedirectError(msg)
 
 
 @login_required
@@ -1213,7 +1242,7 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
     return render(request, "larpmanager/event/gift_edit.html", context)
 
 
-def get_registration_gift(context: dict, registration_id: int | None, request) -> Registration | None:
+def get_registration_gift(context: dict, registration_id: int | None, request: HttpRequest) -> Registration | None:
     """Get a registration with gift redeem code for the current user.
 
     Args:
@@ -1243,7 +1272,8 @@ def get_registration_gift(context: dict, registration_id: int | None, request) -
             )
         except Exception as error:
             # Convert any lookup error to 404 for security
-            raise Http404("what are you trying to do?") from error
+            msg = "what are you trying to do?"
+            raise Http404(msg) from error
 
     return registration
 
@@ -1287,7 +1317,8 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
             run__event__association_id=context["association_id"],
         )
     except Exception as err:
-        raise Http404("registration not found") from err
+        msg = "registration not found"
+        raise Http404(msg) from err
 
     # Process POST request - complete the gift redemption
     if request.method == "POST":

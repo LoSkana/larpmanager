@@ -366,12 +366,17 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> 
         context["sheet_faction"] = context["factions"][num]
     else:
         # Faction number not found in cache
-        raise Http404("Faction does not exist")
+        msg = "Faction does not exist"
+        raise Http404(msg)
 
     # Load custom faction fields configured for this event
     # Only visible fields are included in the PDF
     context["fact"] = get_writing_element_fields(
-        context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
+        context,
+        "faction",
+        QuestionApplicable.FACTION,
+        context["sheet_faction"]["id"],
+        only_visible=True,
     )
 
     # Generate and return the faction sheet PDF (force=True for fresh generation)

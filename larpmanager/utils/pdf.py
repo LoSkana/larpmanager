@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import contextlib
 import io
 import logging
 import os
@@ -118,7 +119,8 @@ def return_pdf(file_path, filename):
         response["Content-Disposition"] = f"inline;filename={fix_filename(filename)}.pdf"
         return response
     except FileNotFoundError as err:
-        raise Http404("File not found") from err
+        msg = "File not found"
+        raise Http404(msg) from err
 
 
 def link_callback(uri: str, rel: str) -> str:
@@ -185,7 +187,11 @@ def add_pdf_instructions(context: dict) -> None:
     # Extract PDF configuration from event settings
     for instruction_key in ["page_css", "header_content", "footer_content"]:
         context[instruction_key] = get_event_config(
-            context["event"].id, instruction_key, "", context, bypass_cache=True
+            context["event"].id,
+            instruction_key,
+            "",
+            context,
+            bypass_cache=True,
         )
 
     # Build replacement codes dictionary with event and character data
@@ -421,7 +427,7 @@ def print_gallery(context: dict, force: bool = False) -> object:
         context["first_aid"] = []
 
         # Iterate through all characters to find those with first aid
-        for _character_number, character_element in context["chars"].items():
+        for character_element in context["chars"].values():
             if "first_aid" in character_element and character_element["first_aid"] == "y":
                 context["first_aid"].append(character_element)
 
@@ -497,7 +503,7 @@ def print_volunteer_registry(context: dict) -> str:
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
-def cleanup_handout_pdfs_before_delete(handout):
+def cleanup_handout_pdfs_before_delete(handout) -> None:
     """Handle handout pre-delete PDF cleanup.
 
     Args:
@@ -508,7 +514,7 @@ def cleanup_handout_pdfs_before_delete(handout):
         safe_remove(handout.get_filepath(event_run))
 
 
-def cleanup_handout_pdfs_after_save(instance):
+def cleanup_handout_pdfs_after_save(instance) -> None:
     """Handle handout post-save PDF cleanup.
 
     Args:
@@ -519,7 +525,7 @@ def cleanup_handout_pdfs_after_save(instance):
         safe_remove(instance.get_filepath(run))
 
 
-def cleanup_handout_template_pdfs_before_delete(handout_template):
+def cleanup_handout_template_pdfs_before_delete(handout_template) -> None:
     """Handle handout template pre-delete PDF cleanup.
 
     Args:
@@ -530,7 +536,7 @@ def cleanup_handout_template_pdfs_before_delete(handout_template):
         safe_remove(handout_template.get_filepath(event_run))
 
 
-def cleanup_handout_template_pdfs_after_save(instance):
+def cleanup_handout_template_pdfs_after_save(instance) -> None:
     """Handle handout template post-save PDF cleanup.
 
     Args:
@@ -544,10 +550,8 @@ def cleanup_handout_template_pdfs_after_save(instance):
 
 def safe_remove(file_path: str) -> None:
     """Remove a file, ignoring if it doesn't exist."""
-    try:
+    with contextlib.suppress(FileNotFoundError):
         os.remove(file_path)
-    except FileNotFoundError:
-        pass
 
 
 def remove_run_pdf(event: Event) -> None:
@@ -580,7 +584,7 @@ def delete_character_pdf_files(instance, single=None, runs=None) -> None:
         safe_remove(instance.get_relationships_filepath(run))
 
 
-def cleanup_character_pdfs_before_delete(character):
+def cleanup_character_pdfs_before_delete(character) -> None:
     """Handle character pre-delete PDF cleanup.
 
     Args:
@@ -591,7 +595,7 @@ def cleanup_character_pdfs_before_delete(character):
     delete_character_pdf_files(character)
 
 
-def cleanup_character_pdfs_on_save(instance):
+def cleanup_character_pdfs_on_save(instance) -> None:
     """Handle character post-save PDF cleanup.
 
     Args:
@@ -602,7 +606,7 @@ def cleanup_character_pdfs_on_save(instance):
     delete_character_pdf_files(instance)
 
 
-def cleanup_relationship_pdfs_before_delete(instance):
+def cleanup_relationship_pdfs_before_delete(instance) -> None:
     """Handle player relationship pre-delete PDF cleanup.
 
     Args:
@@ -613,7 +617,7 @@ def cleanup_relationship_pdfs_before_delete(instance):
         delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
 
 
-def cleanup_relationship_pdfs_after_save(instance):
+def cleanup_relationship_pdfs_after_save(instance) -> None:
     """Handle player relationship post-save PDF cleanup.
 
     Args:
@@ -624,7 +628,7 @@ def cleanup_relationship_pdfs_after_save(instance):
         delete_character_pdf_files(el.character, instance.reg.run)
 
 
-def cleanup_faction_pdfs_before_delete(instance):
+def cleanup_faction_pdfs_before_delete(instance) -> None:
     """Handle faction pre-delete PDF cleanup.
 
     Args:
@@ -635,7 +639,7 @@ def cleanup_faction_pdfs_before_delete(instance):
         delete_character_pdf_files(character)
 
 
-def cleanup_faction_pdfs_on_save(instance):
+def cleanup_faction_pdfs_on_save(instance) -> None:
     """Handle faction post-save PDF cleanup.
 
     Args:
@@ -660,7 +664,7 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
         delete_character_pdf_files(character, trait_instance.run)
 
 
-def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created):
+def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created) -> None:
     """Handle assignment trait post-save PDF cleanup.
 
     Args:
@@ -762,7 +766,6 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
         print_handout_go(context, handout_number)
 
 
-
 def clean_tag(tag):
     """Clean XML tag by removing namespace prefix.
 
@@ -779,7 +782,7 @@ def clean_tag(tag):
     return tag
 
 
-def replace_data(template_path, character_data):
+def replace_data(template_path, character_data) -> None:
     """Replace character data placeholders in template file.
 
     Args:
@@ -820,7 +823,8 @@ def get_trait_character(run: Run, number: int) -> Character | None:
 
         # Find the character registered for this member in the run
         registration_character_rels = RegistrationCharacterRel.objects.filter(
-            reg__run=run, reg__member=member
+            reg__run=run,
+            reg__member=member,
         ).select_related("character")
 
         if not registration_character_rels.exists():
@@ -954,7 +958,11 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
 
                 # Load custom faction fields for the sheet
                 context["fact"] = get_writing_element_fields(
-                    context, "faction", QuestionApplicable.FACTION, context["sheet_faction"]["id"], only_visible=True
+                    context,
+                    "faction",
+                    QuestionApplicable.FACTION,
+                    context["sheet_faction"]["id"],
+                    only_visible=True,
                 )
 
                 filepath = context["faction"].get_sheet_filepath(context["run"])

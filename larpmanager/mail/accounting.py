@@ -164,7 +164,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     )
 
     # Get token and credit names for the association
-    token_name, credit_name = get_token_credit_name(expense_item.association_id)
+    _token_name, credit_name = get_token_credit_name(expense_item.association_id)
 
     # Add credit information if run has token_credit feature enabled
     if expense_item.run and "token_credit" in get_event_features(expense_item.run.event_id):
@@ -178,7 +178,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
             " "
             + _(
                 "Alternatively, you can request to receive it with a formal request in the <a "
-                "href='%(url)s'>your accounting.</a>."
+                "href='%(url)s'>your accounting.</a>.",
             )
             % {"url": get_url("accounting", expense_item)}
             + "</i>"
@@ -411,7 +411,10 @@ def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run:
 
 
 def notify_pay_money(
-    currency_symbol: str, payment_instance: AccountingItemPayment, paying_member: Member, event_run: Run
+    currency_symbol: str,
+    payment_instance: AccountingItemPayment,
+    paying_member: Member,
+    event_run: Run,
 ) -> None:
     """Send money payment notifications to user and organizers.
 
@@ -539,7 +542,7 @@ def notify_refund(credit_name: str, instance: AccountingItemOther) -> None:
     # Construct notification body with refund details
     email_body = (
         _(
-            "A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f %(elements)s have been marked as used"
+            "A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f %(elements)s have been marked as used",
         )
         % {
             "amount": instance.value,
@@ -736,7 +739,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
     # Build email body with donation amount and currency information
     email_body = _(
         "We confirm we received the donation of %(amount)d %(currency)s. We thank you for your "
-        "support, and for believing in us!"
+        "support, and for believing in us!",
     ) % {"amount": instance.value, "currency": instance.association.get_currency_symbol()}
 
     # Send the confirmation email to the donor
@@ -775,7 +778,7 @@ def send_collection_activation_email(instance: AccountingItemCollection, created
     email_body = (
         _(
             "We confirm that the collection for '%(recipient)s' has been activated. <a "
-            "href='%(url)s'>Manage it here!</a>"
+            "href='%(url)s'>Manage it here!</a>",
         )
         % email_context
     )
@@ -784,7 +787,7 @@ def send_collection_activation_email(instance: AccountingItemCollection, created
     my_send_mail(email_subject, email_body, instance.organizer, instance)
 
 
-def send_gift_collection_notification_email(instance: AccountingItemCollection):
+def send_gift_collection_notification_email(instance: AccountingItemCollection) -> None:
     """Send notification emails when gift collection participation is saved.
 
     Args:
@@ -794,7 +797,7 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection):
     if not instance.pk:
         activate(instance.member.language)
         subject = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
-            "recipient": instance.collection.display_member()
+            "recipient": instance.collection.display_member(),
         }
         email_body = _("Thank you for participating") + "!"
         my_send_mail(subject, email_body, instance.member, instance.collection)

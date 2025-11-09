@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import contextlib
 import logging
 import os
 import re
@@ -150,7 +151,7 @@ def tooltip_fields(character, tooltip):
     if character["title"]:
         tooltip += " - <b class='title'>" + character["title"] + "</b>"
 
-    if "pronoun" in character and character["pronoun"]:
+    if character.get("pronoun"):
         tooltip += " (" + character["pronoun"] + ")"
 
     tooltip += "</span>"
@@ -330,7 +331,8 @@ def _remove_unimportant_prefix(text: str) -> str:
             # Match empty HTML tags like <p></p>, <div></div>, <span></span>, etc.
             # Also match \r, \n, &nbsp; and other whitespace characters inside tags
             empty_tag_match = re.match(
-                r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>", text_without_leading_whitespace
+                r"^<(\w+)(?:\s[^>]*)?>(?:\s|&nbsp;|\r|\n)*</\1>",
+                text_without_leading_whitespace,
             )
 
             # If empty tag found, remove it and continue loop
@@ -394,7 +396,13 @@ def show_char(context: dict, element: dict | str | None, run: Run, tooltip: bool
 
 
 def go_trait(
-    context: dict, search: str, trait_number: int, text: str, run, include_tooltip: bool, simple: bool = False
+    context: dict,
+    search: str,
+    trait_number: int,
+    text: str,
+    run,
+    include_tooltip: bool,
+    simple: bool = False,
 ) -> str:
     """Replace trait reference with character link.
 
@@ -571,9 +579,8 @@ def get_deep_field(form, key1, key2):
         any: Nested value or empty string if not found
 
     """
-    if key1 in form:
-        if key2 in form[key1]:
-            return form[key1][key2]
+    if key1 in form and key2 in form[key1]:
+        return form[key1][key2]
     return ""
 
 
@@ -811,7 +818,7 @@ def get_char_profile(context, char):
         str: URL to character profile image or default avatar
 
     """
-    if "player_prof" in char and char["player_prof"]:
+    if char.get("player_prof"):
         return char["player_prof"]
     if "cover" in context["features"]:
         if "cover_orig" in context and "cover" in char:
@@ -846,9 +853,9 @@ def get_login_url(context: dict, provider: str, **params) -> str:
     query = dict(params)
 
     # Extract and validate authentication-specific parameters
-    auth_params = query.get("auth_params", None)
-    scope = query.get("scope", None)
-    process = query.get("process", None)
+    auth_params = query.get("auth_params")
+    scope = query.get("scope")
+    process = query.get("process")
 
     # Clean up empty string parameters to avoid cluttering the URL
     if scope == "":
@@ -920,10 +927,8 @@ def get_character_field(value, options):
         return value
     result = []
     for idx in value:
-        try:
+        with contextlib.suppress(IndexError, KeyError, TypeError):
             result.append(options[idx]["name"])
-        except (IndexError, KeyError, TypeError):
-            pass
     return ", ".join(result)
 
 
@@ -996,7 +1001,7 @@ def abs_value(value):
 
 
 @register.filter
-def concat(val1, val2):
+def concat(val1, val2) -> str:
     """Template filter to concatenate two values.
 
     Args:

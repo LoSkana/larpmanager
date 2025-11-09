@@ -71,7 +71,8 @@ def util(request: HttpRequest, util_cod: str) -> HttpResponseRedirect:
         # Redirect to download URL
         return HttpResponseRedirect(u.download())
     except Exception as err:
-        raise Http404("not found") from err
+        msg = "not found"
+        raise Http404(msg) from err
 
 
 def help_red(request: HttpRequest, run_id: int) -> HttpResponseRedirect:
@@ -83,7 +84,8 @@ def help_red(request: HttpRequest, run_id: int) -> HttpResponseRedirect:
     try:
         context["run"] = Run.objects.get(pk=run_id, event__association_id=context["association_id"])
     except ObjectDoesNotExist as err:
-        raise Http404("Run does not exist") from err
+        msg = "Run does not exist"
+        raise Http404(msg) from err
 
     # Redirect to help page with run slug
     return redirect("help", event_slug=context["run"].get_slug())
@@ -105,10 +107,7 @@ def user_help(request: HttpRequest, event_slug: str | None = None) -> HttpRespon
 
     """
     # Initialize context based on whether this is event-specific or general help
-    if event_slug:
-        context = get_event_context(request, event_slug, include_status=True)
-    else:
-        context = get_context(request)
+    context = get_event_context(request, event_slug, include_status=True) if event_slug else get_context(request)
 
     # Handle form submission for new help questions
     if request.method == "POST":
@@ -168,11 +167,13 @@ def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRed
     try:
         hp = HelpQuestion.objects.get(pk=attachment_id)
     except ObjectDoesNotExist as err:
-        raise Http404("HelpQuestion does not exist") from err
+        msg = "HelpQuestion does not exist"
+        raise Http404(msg) from err
 
     # Check access permissions: owner or association role required
     if hp.member != context["member"] and not context["association_role"]:
-        raise Http404("illegal access")
+        msg = "illegal access"
+        raise Http404(msg)
 
     # Redirect to attachment URL for authorized users
     return redirect(hp.attachment.url)
@@ -211,7 +212,7 @@ def album_aux(request, context, parent_album):
 
     """
     context["subs"] = Album.objects.filter(run=context["run"], parent=parent_album, is_visible=True).order_by(
-        "-created"
+        "-created",
     )
     if parent_album is not None:
         upload_list = AlbumUpload.objects.filter(album=context["album"]).order_by("-created")
@@ -223,12 +224,12 @@ def album_aux(request, context, parent_album):
             upload_list = paginator.page(1)  # If page is not an integer, deliver first
         except EmptyPage:
             upload_list = paginator.page(
-                paginator.num_pages
+                paginator.num_pages,
             )  # If page is out of range (e.g.  9999), deliver last page of results.
         context["page"] = upload_list
-        context["name"] = f"{context['album']} - {str(context['run'])}"
+        context["name"] = f"{context['album']} - {context['run']!s}"
     else:
-        context["name"] = f"Album - {str(context['run'])}"
+        context["name"] = f"Album - {context['run']!s}"
     context["parent"] = parent_album
     return render(request, "larpmanager/event/album.html", context)
 
@@ -411,7 +412,7 @@ def shuttle(request):
                 status=ShuttleStatus.DONE,
                 association_id=context["association_id"],
             ).order_by("status", "date", "time"),
-        }
+        },
     )
     return render(request, "larpmanager/general/shuttle.html", context)
 

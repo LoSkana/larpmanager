@@ -111,7 +111,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
         if "saved" in context and num == 0:
             # Automatically add requesting user as event organizer
             # Get or create organizer role (number=1 is standard organizer role)
-            (er, created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
+            (er, _created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
             if not er.name:
                 er.name = "Organizer"
             # Add current user's member profile to organizer role
@@ -201,7 +201,7 @@ def exe_templates_roles(request: HttpRequest, event_id: int, num: int | None) ->
 
 
 @login_required
-def exe_pre_registrations(request) -> HttpResponse:
+def exe_pre_registrations(request: HttpRequest) -> HttpResponse:
     """Display pre-registration statistics for all association events.
 
     This function retrieves and displays pre-registration data for all events

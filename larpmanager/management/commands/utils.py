@@ -44,4 +44,5 @@ def check_branch() -> None:
 
     # Raise error if on main branch
     if current_branch_name == "main":
-        raise CommandError("This command cannot be executed while on 'main'")
+        msg = "This command cannot be executed while on 'main'"
+        raise CommandError(msg)

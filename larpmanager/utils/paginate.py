@@ -85,7 +85,11 @@ def paginate(
 
     # Get filtered elements and count based on search/filter criteria
     filtered_elements, filtered_records_count = _get_elements_query(
-        model_queryset, context, request, pagination_model, exe
+        model_queryset,
+        context,
+        request,
+        pagination_model,
+        exe,
     )
 
     # Get total count of all records (unfiltered)
@@ -103,7 +107,7 @@ def paginate(
             "recordsTotal": total_records_count,
             "recordsFiltered": filtered_records_count,
             "data": datatables_rows,
-        }
+        },
     )
 
 
@@ -194,7 +198,7 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
             logger.error(f"Column index out of bounds in _get_ordering: {column_filters} {context['fields']}")
 
         # Extract field and name from context fields
-        field_name, display_name = context["fields"][column_index - 1]
+        field_name, _display_name = context["fields"][column_index - 1]
 
         # Handle special case for run field with search capability
         if field_name == "run":
@@ -207,10 +211,7 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
             continue
 
         # Map field to search fields using field_map or use as single field
-        if field_name in field_map:
-            search_fields = field_map[field_name]
-        else:
-            search_fields = [field_name]
+        search_fields = field_map.get(field_name, [field_name])
 
         # Build OR query for all mapped fields with case-insensitive search
         q_filter = Q()
@@ -254,17 +255,14 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
         # Validate column index is within bounds
         if column_index_int >= len(context["fields"]):
             logger.error(f"Column index out of bounds in _get_ordering: {column_order} {context['fields']}")
-        field_name, display_name = context["fields"][column_index_int - 1]
+        field_name, _display_name = context["fields"][column_index_int - 1]
 
         # Skip callback fields as they can't be used for database ordering
         if field_name in context.get("callbacks", {}):
             continue
 
         # Map field name if transformation exists, otherwise use as-is
-        if field_name in field_map:
-            mapped_fields = field_map[field_name]
-        else:
-            mapped_fields = [field_name]
+        mapped_fields = field_map.get(field_name, [field_name])
 
         # Add ordering fields with proper direction prefix
         for mapped_field in mapped_fields:
@@ -417,7 +415,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
                 When(status=PaymentStatus.SUBMITTED, then=Value(0)),
                 default=Value(1),
                 output_field=IntegerField(),
-            )
+            ),
         )
         elements = elements.order_by("is_submitted", "-created")
 
@@ -428,7 +426,8 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
 
         # Subquery to get the latest membership credit for each member
         latest_membership_subquery = Membership.objects.filter(
-            member_id=OuterRef("member_id"), association_id=context["association_id"]
+            member_id=OuterRef("member_id"),
+            association_id=context["association_id"],
         ).order_by("id")[:1]
         elements = elements.annotate(credits=Subquery(latest_membership_subquery.values("credit")))
 
@@ -440,7 +439,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
         decimal_field = DecimalField(max_digits=value_field.max_digits, decimal_places=value_field.decimal_places)
 
         # Define zero value with proper decimal field type
-        zero_value = Value(Decimal("0"), output_field=decimal_field)
+        zero_value = Value(Decimal(0), output_field=decimal_field)
 
         # Subquery to calculate total transaction value per invoice
         transaction_total_subquery = (
