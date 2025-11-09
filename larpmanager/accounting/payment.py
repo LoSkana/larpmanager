@@ -24,6 +24,7 @@ import logging
 import math
 import re
 from datetime import datetime
+from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -79,7 +80,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def get_payment_fee(association_id, slug):
+def get_payment_fee(association_id: int, slug: str) -> float:
     """Get payment processing fee for a specific payment method.
 
     Args:
@@ -98,7 +99,7 @@ def get_payment_fee(association_id, slug):
     return float(payment_details[fee_key].replace(",", "."))
 
 
-def unique_invoice_cod(length=16):
+def unique_invoice_cod(length: int = 16) -> str:
     """Generate a unique invoice code.
 
     Args:
@@ -264,7 +265,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     invoice.causal = re.sub(placeholder_pattern, replace_placeholder, custom_reason_template)
 
 
-def round_up_to_two_decimals(value_to_round):
+def round_up_to_two_decimals(value_to_round: float) -> float:
     """Round number up to two decimal places.
 
     Args:
@@ -277,11 +278,12 @@ def round_up_to_two_decimals(value_to_round):
     return math.ceil(value_to_round * 100) / 100
 
 
-def update_invoice_gross_fee(request: HttpRequest, invoice, amount, association_id, payment_method):
+def update_invoice_gross_fee(
+    invoice: PaymentInvoice, amount: Decimal, association_id: int, payment_method: PaymentMethod
+) -> float:
     """Update invoice with gross amount including payment processing fees.
 
     Args:
-        request: Django HTTP request object
         invoice: PaymentInvoice instance to update
         amount (Decimal): Base amount before fees
         association_id: Association instance ID
@@ -373,11 +375,11 @@ def get_payment_form(
     set_data_invoice(request, context, invoice, form, association_id)
 
     # Calculate final amount including fees and update invoice
-    payment_amount = update_invoice_gross_fee(request, invoice, payment_amount, association_id, payment_method)
+    payment_amount = update_invoice_gross_fee(invoice, payment_amount, association_id, payment_method)
     context["invoice"] = invoice
 
     # Check if receipt is required for manual payments (applies to all payment types)
-    require_receipt = get_association_config(association_id, "payment_require_receipt", False)
+    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", False)
     context["require_receipt"] = require_receipt
 
     # Prepare gateway-specific forms based on selected payment method
@@ -406,7 +408,7 @@ def get_payment_form(
         get_satispay_form(request, context, invoice, payment_amount)
 
 
-def payment_received(invoice) -> bool:
+def payment_received(invoice: PaymentInvoice) -> bool:
     """Process a received payment and update related records.
 
     Args:
@@ -420,7 +422,7 @@ def payment_received(invoice) -> bool:
     payment_fee = get_payment_fee(invoice.association_id, invoice.method.slug)
 
     if payment_fee > 0 and not AccountingItemTransaction.objects.filter(inv=invoice).exists():
-        _process_fee(association_features, payment_fee, invoice)
+        _process_fee(payment_fee, invoice)
 
     if invoice.typ == PaymentType.REGISTRATION:
         _process_payment(invoice)
@@ -488,7 +490,7 @@ def _process_membership(invoice: PaymentInvoice) -> None:
         accounting_item.save()
 
 
-def _process_payment(invoice) -> None:
+def _process_payment(invoice: PaymentInvoice) -> None:
     """Process a payment from an invoice and create accounting entries.
 
     Args:
@@ -515,7 +517,7 @@ def _process_payment(invoice) -> None:
             process_payment(invoice.id)
 
 
-def _process_fee(features, fee_percentage: float, invoice) -> None:
+def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
     """Process payment processing fee for an invoice.
 
     Creates an accounting transaction to track payment processing fees
@@ -550,7 +552,7 @@ def _process_fee(features, fee_percentage: float, invoice) -> None:
         accounting_transaction.save()
 
 
-def process_payment_invoice_status_change(invoice) -> None:
+def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
     """Process payment invoice status changes and trigger payment received.
 
     Args:

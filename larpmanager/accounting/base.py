@@ -27,7 +27,12 @@ from cryptography.fernet import Fernet, InvalidToken
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction, Collection
+from larpmanager.models.accounting import (
+    AccountingItemCollection,
+    AccountingItemPayment,
+    AccountingItemTransaction,
+    Collection,
+)
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 from larpmanager.models.registration import Registration
@@ -186,7 +191,7 @@ def handle_collection_pre_save(instance: Collection) -> None:
         instance.total += el.value
 
 
-def handle_accounting_item_collection_post_save(instance) -> None:
+def handle_accounting_item_collection_post_save(instance: AccountingItemCollection) -> None:
     """Update collection total when items are added.
 
     Args:

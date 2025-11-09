@@ -28,7 +28,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_payment(pw_page):
+def test_user_signup_payment(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,7 +40,7 @@ def test_user_signup_payment(pw_page):
     characters(page, live_server)
 
 
-def prepare(page, live_server):
+def prepare(page, live_server) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
 
@@ -76,7 +76,7 @@ def prepare(page, live_server):
     submit_confirm(page)
 
 
-def signup(page, live_server):
+def signup(page, live_server) -> None:
     # Signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
@@ -120,7 +120,7 @@ def signup(page, live_server):
     expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
 
 
-def characters(page, live_server):
+def characters(page, live_server) -> None:
     # Activate characters
     go_to(page, live_server, "/test/1/manage/features/character/on")
 

@@ -17,14 +17,14 @@ from pathlib import Path
 class FunctionAnalyzer(ast.NodeVisitor):
     """AST visitor to collect function definitions and their invocations."""
 
-    def __init__(self, path):
+    def __init__(self, path) -> None:
         self.path = path
         self.functions = []  # List of (function_name, function_number) tuples
         self.function_counts = defaultdict(int)  # Track count of each function name
         self.invocations = []  # List of function names called in this file
         self.current_function = None
 
-    def visit_FunctionDef(self, node):
+    def visit_FunctionDef(self, node) -> None:
         """Visit function definitions."""
         # Count occurrence of this function name in this file
         self.function_counts[node.name] += 1
@@ -43,11 +43,11 @@ class FunctionAnalyzer(ast.NodeVisitor):
         # Restore previous function context
         self.current_function = previous_function
 
-    def visit_AsyncFunctionDef(self, node):
+    def visit_AsyncFunctionDef(self, node) -> None:
         """Visit async function definitions."""
         self.visit_FunctionDef(node)
 
-    def visit_Call(self, node):
+    def visit_Call(self, node) -> None:
         """Visit function calls."""
         # Only count calls that happen inside a function
         if self.current_function is not None:
@@ -123,7 +123,7 @@ def find_python_files(root_dir):
         yield py_file
 
 
-def main():
+def main() -> None:
     """Main function to run the analysis."""
     # Get the project root (parent of refactor directory)
     script_dir = Path.cwd()

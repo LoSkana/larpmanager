@@ -143,7 +143,7 @@ def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
     return len(substantial_lines) > 0, substantial_lines
 
 
-def main():
+def main() -> None:
     """Main function to analyze git changes."""
     print("Analyzing uncommitted changes for substantial (non-documentation) modifications...\n")
 

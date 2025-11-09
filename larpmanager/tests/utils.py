@@ -28,6 +28,7 @@ from urllib.parse import urlparse
 
 import pandas as pd
 from playwright.sync_api import expect
+from typing import NoReturn
 
 logger = logging.getLogger(__name__)
 
@@ -36,20 +37,20 @@ orga_user = "orga@test.it"
 test_user = "user@test.it"
 
 
-def logout(page):
+def logout(page) -> None:
     page.locator("a#menu-open").click()
     page.get_by_role("link", name="Logout").click()
 
 
-def login_orga(page, live_server):
+def login_orga(page, live_server) -> None:
     login(page, live_server, orga_user)
 
 
-def login_user(page, live_server):
+def login_user(page, live_server) -> None:
     login(page, live_server, test_user)
 
 
-def login(page, live_server, name):
+def login(page, live_server, name) -> None:
     go_to(page, live_server, "/login")
 
     page.locator("#id_username").fill(name)
@@ -58,7 +59,7 @@ def login(page, live_server, name):
     expect(page.locator("#banner")).not_to_contain_text("Login")
 
 
-def handle_error(page, e, test_name):
+def handle_error(page, e, test_name) -> NoReturn:
     logger.error(f"Error on {test_name}: {page.url}\n")
     logger.error(e)
 
@@ -68,7 +69,7 @@ def handle_error(page, e, test_name):
     raise e
 
 
-def print_text(page):
+def print_text(page) -> None:
     visible_text = page.evaluate("""
         () => {
             function getVisibleText(element) {
@@ -85,11 +86,11 @@ def print_text(page):
     logger.debug(visible_text)
 
 
-def go_to(page, live_server, path):
+def go_to(page, live_server, path) -> None:
     go_to_check(page, f"{live_server}/{path}")
 
 
-def go_to_check(page, path):
+def go_to_check(page, path) -> None:
     page.goto(path)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
@@ -97,14 +98,14 @@ def go_to_check(page, path):
     ooops_check(page)
 
 
-def submit(page):
+def submit(page) -> None:
     page.get_by_role("button", name="Submit").click()
     page.wait_for_load_state("networkidle")
     page.wait_for_load_state("load")
     ooops_check(page)
 
 
-def ooops_check(page):
+def ooops_check(page) -> None:
     banner = page.locator("#banner")
     if banner.count() > 0:
         expect(banner).not_to_contain_text("Oops!")
@@ -156,7 +157,7 @@ def check_download(page, link: str) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text, show=True, timeout=10000):
+def fill_tinymce(page, iframe_id, text, show=True, timeout=10000) -> None:
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
@@ -187,7 +188,7 @@ def fill_tinymce(page, iframe_id, text, show=True, timeout=10000):
     )
 
 
-def _checkboxes(page, check=True):
+def _checkboxes(page, check=True) -> None:
     checkboxes = page.locator('input[type="checkbox"]')
     count = checkboxes.count()
     for i in range(count):
@@ -202,14 +203,14 @@ def _checkboxes(page, check=True):
     submit_confirm(page)
 
 
-def submit_confirm(page):
+def submit_confirm(page) -> None:
     submit_btn = page.get_by_role("button", name="Confirm", exact=True)
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click()
 
 
-def add_links_to_visit(links_to_visit, page, visited_links):
+def add_links_to_visit(links_to_visit, page, visited_links) -> None:
     new_links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
     for link in new_links:
         if "logout" in link:
@@ -225,17 +226,17 @@ def add_links_to_visit(links_to_visit, page, visited_links):
             links_to_visit.add(link)
 
 
-def check_feature(page, name):
+def check_feature(page, name) -> None:
     block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
     block.get_by_role("checkbox").check()
 
 
-def load_image(page, element_id):
+def load_image(page, element_id) -> None:
     image_path = Path(__file__).parent / "image.jpg"
     upload(page, element_id, image_path)
 
 
-def upload(page, element_id, image_path):
+def upload(page, element_id, image_path) -> None:
     inp = page.locator(element_id)
     inp.scroll_into_view_if_needed()
     expect(inp).to_be_visible(timeout=60000)

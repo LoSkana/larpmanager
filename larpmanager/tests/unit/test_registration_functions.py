@@ -54,7 +54,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestRegistrationCalculationFunctions(BaseTestCase):
     """Test cases for registration fee calculation functions"""
 
-    def test_get_reg_iscr_basic_ticket(self):
+    def test_get_reg_iscr_basic_ticket(self) -> None:
         """Test basic registration fee with ticket only"""
         member = self.get_member()
         run = self.get_run()
@@ -65,7 +65,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("100.00"))
 
-    def test_get_reg_iscr_with_additionals(self):
+    def test_get_reg_iscr_with_additionals(self) -> None:
         """Test registration fee with additional tickets"""
         member = self.get_member()
         run = self.get_run()
@@ -77,7 +77,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         # Base ticket + 2 additionals = 50 + (50*2) = 150
         self.assertEqual(result, Decimal("150.00"))
 
-    def test_get_reg_iscr_with_pay_what(self):
+    def test_get_reg_iscr_with_pay_what(self) -> None:
         """Test registration fee with pay-what-you-want amount"""
         member = self.get_member()
         run = self.get_run()
@@ -89,7 +89,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         # Ticket + pay_what = 50 + 25 = 75
         self.assertEqual(result, Decimal("75.00"))
 
-    def test_get_reg_iscr_with_options(self):
+    def test_get_reg_iscr_with_options(self) -> None:
         """Test registration fee with registration options"""
         member = self.get_member()
         run = self.get_run()
@@ -107,7 +107,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         # Ticket + option = 50 + 10 = 60
         self.assertEqual(result, Decimal("60.00"))
 
-    def test_get_reg_iscr_with_discount(self):
+    def test_get_reg_iscr_with_discount(self) -> None:
         """Test registration fee with discount"""
         member = self.get_member()
         association = self.get_association()
@@ -126,7 +126,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         # Ticket - discount = 100 - 20 = 80
         self.assertEqual(result, Decimal("80.00"))
 
-    def test_get_reg_iscr_with_surcharge(self):
+    def test_get_reg_iscr_with_surcharge(self) -> None:
         """Test registration fee with surcharge"""
         member = self.get_member()
         run = self.get_run()
@@ -141,7 +141,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         # Ticket + surcharge = 100 + 15 = 115
         self.assertEqual(result, Decimal("115.00"))
 
-    def test_get_reg_iscr_gifted_no_discount(self):
+    def test_get_reg_iscr_gifted_no_discount(self) -> None:
         """Test registration fee for gifted (no discount applied)"""
         member = self.get_member()
         association = self.get_association()
@@ -160,7 +160,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         # Gifted registrations don't get discounts
         self.assertEqual(result, Decimal("100.00"))
 
-    def test_get_reg_iscr_minimum_zero(self):
+    def test_get_reg_iscr_minimum_zero(self) -> None:
         """Test registration fee has minimum of zero"""
         member = self.get_member()
         association = self.get_association()
@@ -183,7 +183,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
 class TestPaymentCalculationFunctions(BaseTestCase):
     """Test cases for payment calculation functions"""
 
-    def test_get_reg_payments_basic(self):
+    def test_get_reg_payments_basic(self) -> None:
         """Test basic payment calculation"""
         member = self.get_member()
         association = self.get_association()
@@ -198,7 +198,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("50.00"))
 
-    def test_get_reg_payments_multiple(self):
+    def test_get_reg_payments_multiple(self) -> None:
         """Test payment calculation with multiple payments"""
         member = self.get_member()
         association = self.get_association()
@@ -216,7 +216,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("50.00"))
 
-    def test_get_reg_payments_excludes_hidden(self):
+    def test_get_reg_payments_excludes_hidden(self) -> None:
         """Test payment calculation excludes hidden payments"""
         member = self.get_member()
         association = self.get_association()
@@ -235,7 +235,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         # Should exclude hidden payment
         self.assertEqual(result, Decimal("30.00"))
 
-    def test_get_reg_payments_sets_dictionary(self):
+    def test_get_reg_payments_sets_dictionary(self) -> None:
         """Test payment calculation sets payments dictionary"""
         member = self.get_member()
         association = self.get_association()
@@ -256,7 +256,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         self.assertEqual(registration.payments[PaymentChoices.MONEY], Decimal("30.00"))
         self.assertEqual(registration.payments[PaymentChoices.TOKEN], Decimal("20.00"))
 
-    def test_get_reg_transactions_basic(self):
+    def test_get_reg_transactions_basic(self) -> None:
         """Test transaction fee calculation"""
         member = self.get_member()
         association = self.get_association()
@@ -271,7 +271,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("2.50"))
 
-    def test_get_reg_transactions_excludes_non_user_burden(self):
+    def test_get_reg_transactions_excludes_non_user_burden(self) -> None:
         """Test transaction calculation excludes non-user-burden fees"""
         member = self.get_member()
         association = self.get_association()
@@ -294,7 +294,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
 class TestRegistrationUtilityFunctions(BaseTestCase):
     """Test cases for registration utility functions"""
 
-    def test_registration_payments_status_completed(self):
+    def test_registration_payments_status_completed(self) -> None:
         """Test payment status for completed payment"""
         member = self.get_member()
         run = self.get_run()
@@ -306,7 +306,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(registration.payment_status, "c")
 
-    def test_registration_payments_status_none(self):
+    def test_registration_payments_status_none(self) -> None:
         """Test payment status for no payment"""
         member = self.get_member()
         run = self.get_run()
@@ -318,7 +318,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(registration.payment_status, "n")
 
-    def test_registration_payments_status_partial(self):
+    def test_registration_payments_status_partial(self) -> None:
         """Test payment status for partial payment"""
         member = self.get_member()
         run = self.get_run()
@@ -330,7 +330,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(registration.payment_status, "p")
 
-    def test_registration_payments_status_overpaid(self):
+    def test_registration_payments_status_overpaid(self) -> None:
         """Test payment status for overpayment"""
         member = self.get_member()
         run = self.get_run()
@@ -342,27 +342,27 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(registration.payment_status, "t")
 
-    def test_round_to_nearest_cent_basic(self):
+    def test_round_to_nearest_cent_basic(self) -> None:
         """Test rounding to nearest cent"""
         result = round_to_nearest_cent(10.54)
 
         # 10.54 is outside tolerance from 10.5, returns original
         self.assertEqual(result, 10.54)
 
-    def test_round_to_nearest_cent_within_tolerance(self):
+    def test_round_to_nearest_cent_within_tolerance(self) -> None:
         """Test rounding within tolerance"""
         result = round_to_nearest_cent(10.52)
 
         self.assertEqual(result, 10.5)
 
-    def test_round_to_nearest_cent_exceeds_tolerance(self):
+    def test_round_to_nearest_cent_exceeds_tolerance(self) -> None:
         """Test rounding exceeds tolerance"""
         result = round_to_nearest_cent(10.55)
 
         # Difference from 10.5 is 0.05, exceeds tolerance of 0.03
         self.assertEqual(result, 10.55)
 
-    def test_get_display_choice_found(self):
+    def test_get_display_choice_found(self) -> None:
         """Test getting display name for choice"""
         choices = [("a", "Option A"), ("b", "Option B"), ("c", "Option C")]
 
@@ -370,7 +370,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(result, "Option B")
 
-    def test_get_display_choice_not_found(self):
+    def test_get_display_choice_not_found(self) -> None:
         """Test getting display name for missing choice"""
         choices = [("a", "Option A"), ("b", "Option B")]
 
@@ -378,7 +378,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(result, "")
 
-    def test_get_date_surcharge_no_surcharges(self):
+    def test_get_date_surcharge_no_surcharges(self) -> None:
         """Test date surcharge with no configured surcharges"""
         member = self.get_member()
         run = self.get_run()
@@ -388,7 +388,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(result, 0)
 
-    def test_get_date_surcharge_with_surcharge(self):
+    def test_get_date_surcharge_with_surcharge(self) -> None:
         """Test date surcharge calculation"""
         member = self.get_member()
         run = self.get_run()
@@ -403,7 +403,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("15.00"))
 
-    def test_get_date_surcharge_waiting_tier(self):
+    def test_get_date_surcharge_waiting_tier(self) -> None:
         """Test date surcharge for waiting tier (should be 0)"""
         member = self.get_member()
         run = self.get_run()
@@ -419,7 +419,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         # Waiting tier should not have surcharge
         self.assertEqual(result, 0)
 
-    def test_cancel_reg_basic(self):
+    def test_cancel_reg_basic(self) -> None:
         """Test cancelling a registration"""
         member = self.get_member()
         run = self.get_run()
@@ -430,7 +430,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         registration.refresh_from_db()
         self.assertIsNotNone(registration.cancellation_date)
 
-    def test_cancel_reg_deletes_characters(self):
+    def test_cancel_reg_deletes_characters(self) -> None:
         """Test cancel_reg deletes character assignments"""
         member = self.get_member()
         run = self.get_run()

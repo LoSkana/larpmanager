@@ -23,6 +23,7 @@
 import logging
 from datetime import date, datetime
 from decimal import Decimal
+from typing import Any
 
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -57,14 +58,14 @@ logger = logging.getLogger(__name__)
 
 def get_acc_detail(
     name: str,
-    run,
+    run: Any,
     description: str,
-    model_class,
-    choices,
+    model_class: type,
+    choices: Any,
     type_field: str | None,
-    filters: dict | None = None,
+    filters: dict[str, Any] | None = None,
     filter_by_registration: bool = False,
-) -> dict:
+) -> dict[str, Any]:
     """Get detailed accounting breakdown for a specific accounting item type.
 
     This function calculates totals, counts, and detailed breakdowns by type
@@ -129,7 +130,7 @@ def get_acc_detail(
     return result
 
 
-def get_acc_reg_type(registration) -> tuple[str, str]:
+def get_acc_reg_type(registration: Registration) -> tuple[str, str]:
     """Determine registration type for accounting categorization.
 
     Analyzes a registration instance to categorize it for accounting purposes.
@@ -161,7 +162,7 @@ def get_acc_reg_type(registration) -> tuple[str, str]:
     )
 
 
-def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
+def get_acc_reg_detail(nm: str, run: Run, descr: str) -> dict[str, int | str | dict[str, dict[str, int | str]]]:
     """Get detailed registration accounting breakdown by ticket tier.
 
     Analyzes all non-cancelled registrations for a given run and provides
@@ -207,7 +208,7 @@ def get_acc_reg_detail(nm: str, run, descr: str) -> dict:
     return accounting_data
 
 
-def get_token_details(nm: str, run) -> dict:
+def get_token_details(nm: str, run: Run) -> dict[str, int | dict | str]:
     """Get token accounting details for a run.
 
     Calculates the total value and count of accounting items for a specific run,

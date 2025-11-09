@@ -27,7 +27,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, load_image, login_orga
 pytestmark = pytest.mark.e2e
 
 
-def test_overpay_upload_membership_prologue(pw_page):
+def test_overpay_upload_membership_prologue(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,7 +42,7 @@ def test_overpay_upload_membership_prologue(pw_page):
     upload_membership_fee(page, live_server)
 
 
-def check_overpay(page, live_server):
+def check_overpay(page, live_server) -> None:
     go_to(page, live_server, "/manage")
     # Activate tokens / credits
     page.locator("#exe_features").get_by_role("link", name="Features").click()
@@ -81,7 +81,7 @@ def check_overpay(page, live_server):
     expect(page.locator("#one")).to_contain_text("Admin Test Standard 84060100 60")
 
 
-def check_overpay_2(page, live_server):
+def check_overpay_2(page, live_server) -> None:
     # Add tokens
     page.get_by_role("link", name="Tokens").click()
     page.get_by_role("link", name="New").click()
@@ -128,7 +128,7 @@ def check_overpay_2(page, live_server):
     )
 
 
-def check_special_cod(page, live_server):
+def check_special_cod(page, live_server) -> None:
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Registrations ").click()
@@ -146,7 +146,7 @@ def check_special_cod(page, live_server):
     expect(page.locator("#one")).to_contain_text("Admin Test Standard")
 
 
-def prologues(page):
+def prologues(page) -> None:
     # activate prologues
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Prologues").check()
@@ -176,7 +176,7 @@ def prologues(page):
     expect(page.locator("#one")).to_contain_text("P1 ffff (test) #1 Test Character")
 
 
-def upload_membership(page, live_server):
+def upload_membership(page, live_server) -> None:
     # Activate membership
     go_to(page, live_server, "/manage")
     page.locator("#exe_features").click()
@@ -219,7 +219,7 @@ def upload_membership(page, live_server):
     )
 
 
-def upload_membership_fee(page, live_server):
+def upload_membership_fee(page, live_server) -> None:
     # upload fee
     go_to(page, live_server, "/manage")
     page.locator("#exe_features").get_by_role("link", name="Features").click()

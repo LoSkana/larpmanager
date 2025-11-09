@@ -23,7 +23,7 @@ def convert_path(csv_path: str) -> Path:
     return Path(csv_path)
 
 
-def max_parts():
+def max_parts() -> int:
     return 2
 
 
@@ -348,7 +348,7 @@ def improve_single_function(file_path: str, function_name: str) -> bool:
         return False
 
 
-def process_csv_batch():
+def process_csv_batch() -> None:
     """Process functions from CSV file in batch mode."""
     csv_path = Path.cwd() / "refactor/function_rename.csv"
 
@@ -415,7 +415,7 @@ def process_csv_batch():
             time.sleep(5 * 60)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Improve Python functions using Claude Code CLI")
     parser.add_argument("--file", help="Path to Python file containing the function")
     parser.add_argument("--function", help="Name of the function to improve")

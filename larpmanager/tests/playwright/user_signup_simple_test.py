@@ -28,7 +28,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confir
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_simple(pw_page):
+def test_user_signup_simple(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,7 +40,7 @@ def test_user_signup_simple(pw_page):
     help_questions(live_server, page)
 
 
-def signup(live_server, page):
+def signup(live_server, page) -> None:
     # deactivate registration open
     go_to(page, live_server, "/test/manage/features/registration_open/off")
 
@@ -79,7 +79,7 @@ def signup(live_server, page):
     expect(page.locator("#banner")).not_to_contain_text("Register")
 
 
-def help_questions(live_server, page):
+def help_questions(live_server, page) -> None:
     # test help
     go_to(page, live_server, "/manage/features/help/on")
     page.get_by_role("link", name="Need help?").click()
@@ -109,7 +109,7 @@ def help_questions(live_server, page):
     submit_confirm(page)
 
 
-def pre_register(live_server, page):
+def pre_register(live_server, page) -> None:
     # Set email send
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()

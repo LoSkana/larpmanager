@@ -68,39 +68,34 @@ def extract_function_from_file(file_path: Path, function_name: str, function_num
 
 
 def improve_function_with_claude_code(
-    function_name: str, file_path: Path, function_source: str = None, function_number: int = 1
+    function_name: str, file_path: Path, function_source: str = None, function_number: int = 1, use_haiku: bool = False
 ) -> tuple[bool, str | None]:
     """Call Claude Code CLI to improve the function.
     Returns (success, improved_function_source).
+
+    Args:
+        use_haiku: If True, uses haiku model (cheaper, faster, good for simple type hints)
     """
     if function_source is None:
         function_source = extract_function_from_file(file_path, function_name, function_number)
         if function_source is None:
             return False, None
 
-    # Create the prompt for Claude Code
-    prompt = f"""Migliora questa funzione Python:
+    # Create optimized short prompt for Claude Code (saves tokens)
+    prompt = f"""Add type hints to this Python function (params + return type). Return ONLY the function code, no explanations or imports.
 
 ```python
 {function_source}
-```
-
-1. Aggiungi type hints alla definizione della funzione (parametri e return type), non usare single o double quote per le classi
-2. Migliora il docstring seguendo lo stile Google/NumPy. Se la funzione è più corta di 10 linee, tieni un docstring molto conciso. Se la funzione è più corta di 2 righe, non mettere pydocs, solo un commento
-3. Aggiungi commenti inline ogni 4-5 linee o per ogni blocco logico
-
-IMPORTANTE:
-- Restituisci SOLO il codice della funzione migliorata, senza spiegazioni aggiuntive
-- NON aggiungere MAI import statements
-- MANTIENI esattamente la stessa indentazione della funzione originale
-- Non modificare l'indentazione esistente del codice
-- Non modificare in NESSUN MODO la logica del codice originale
-"""
+```"""
 
     try:
         # Call Claude Code with --print flag for non-interactive mode
+        cmd = ["claude", "--print"]
+        if use_haiku:
+            cmd.extend(["--model", "haiku"])  # Use cheaper/faster model for simple tasks
+
         result = subprocess.run(
-            ["claude", "--print"],
+            cmd,
             check=False,
             input=prompt,
             cwd=Path.cwd(),
@@ -343,7 +338,7 @@ def improve_single_function(file_path: str, function_name: str) -> bool:
 
 def process_csv_batch() -> None:
     """Process functions from CSV file in batch mode."""
-    csv_path = Path.cwd() / "refactor/function_pydocs.csv"
+    csv_path = Path.cwd() / "refactor/missing_type_hints.csv"
 
     while True:
         # Read all rows from CSV
@@ -357,8 +352,8 @@ def process_csv_batch() -> None:
 
         # Process first row
         row = rows[0]
-        function_name = row["name"]
-        csv_file_path = row["path"]
+        function_name = row.get("function") or row.get("name")  # Support both CSV formats
+        csv_file_path = row.get("file") or row.get("path")  # Support both CSV formats
         function_number = int(row.get("number", 1))  # Default to 1 for backward compatibility
 
         print(f"\nProcessing: {function_name} #{function_number} in {csv_file_path}")
@@ -382,9 +377,16 @@ def process_csv_batch() -> None:
                 print(f"  📝 Found function at lines {start_line}-{end_line}")
 
                 # Call Claude Code to improve
-                print("  🤖 Calling Claude Code...")
                 original_function = extract_function_from_file(file_path, function_name, function_number)
-                success, improved_code = improve_function_with_claude_code(function_name, file_path, original_function, function_number)
+
+                # Use haiku for simple functions (< 20 lines) to save credits
+                use_haiku = original_function and len(original_function.split("\n")) < 20
+                model_name = "haiku (cheaper)" if use_haiku else "sonnet"
+                print(f"  🤖 Calling Claude Code ({model_name})...")
+
+                success, improved_code = improve_function_with_claude_code(
+                    function_name, file_path, original_function, function_number, use_haiku=use_haiku
+                )
                 if success and improved_code and original_function:
                     if replace_function_in_file(file_path, function_name, improved_code, original_function, function_number):
                         print(f"  ✅ Successfully processed {function_name} #{function_number}")

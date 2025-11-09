@@ -27,7 +27,7 @@ from larpmanager.tests.utils import check_download, check_feature, go_to, login_
 pytestmark = pytest.mark.e2e
 
 
-def test_upload_download(pw_page):
+def test_upload_download(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -67,7 +67,7 @@ def test_upload_download(pw_page):
     full(page)
 
 
-def abilities(page):
+def abilities(page) -> None:
     # add type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
@@ -96,7 +96,7 @@ def abilities(page):
     check_download(page, "Download")
 
 
-def full(page):
+def full(page) -> None:
     page.get_by_role("link", name="Dashboard").click()
 
     # there will be quick setup just confirm
@@ -105,7 +105,7 @@ def full(page):
     check_download(page, "Full backup")
 
 
-def relationships(page):
+def relationships(page) -> None:
     page.get_by_role("link", name="Features").click()
     check_feature(page, "Relationships")
     submit_confirm(page)
@@ -122,7 +122,7 @@ def relationships(page):
     )
 
 
-def plots(live_server, page):
+def plots(live_server, page) -> None:
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -144,7 +144,7 @@ def plots(live_server, page):
     check_download(page, "Download")
 
 
-def quest_trait(page):
+def quest_trait(page) -> None:
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -173,7 +173,7 @@ def quest_trait(page):
     check_download(page, "Download")
 
 
-def registrations(page):
+def registrations(page) -> None:
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -185,7 +185,7 @@ def registrations(page):
     check_download(page, "Download")
 
 
-def reg_form(page):
+def reg_form(page) -> None:
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -203,7 +203,7 @@ def reg_form(page):
     check_download(page, "Download")
 
 
-def characters(page):
+def characters(page) -> None:
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -217,7 +217,7 @@ def characters(page):
     check_download(page, "Download")
 
 
-def factions(page):
+def factions(page) -> None:
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -229,7 +229,7 @@ def factions(page):
     check_download(page, "Download")
 
 
-def char_form(page):
+def char_form(page) -> None:
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -262,7 +262,7 @@ def char_form(page):
     )
 
 
-def check_user_fee(live_server, page):
+def check_user_fee(live_server, page) -> None:
     go_to(page, live_server, "/manage/")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     check_feature(page, "Payments")

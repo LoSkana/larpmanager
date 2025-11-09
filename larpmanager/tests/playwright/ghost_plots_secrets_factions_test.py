@@ -27,7 +27,7 @@ from larpmanager.tests.utils import go_to, load_image, submit, login_orga, fill_
 pytestmark = pytest.mark.e2e
 
 
-def test_ghost_plots_secret_factions(pw_page):
+def test_ghost_plots_secret_factions(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)

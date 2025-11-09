@@ -45,7 +45,7 @@ import larpmanager.models.signals  # noqa: F401
 class TestUtilitySignals(BaseTestCase):
     """Test cases for utility and accounting-related signal receivers"""
 
-    def test_character_post_save_updates_experience(self):
+    def test_character_post_save_updates_experience(self) -> None:
         """Test that Character post_save signal updates character experience"""
         # Signal only runs when "px" feature is enabled
         character = self.character()
@@ -58,7 +58,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(character.id)
 
     @patch("larpmanager.utils.experience.calculate_character_experience_points")
-    def test_ability_px_post_save_updates_experience(self, mock_update):
+    def test_ability_px_post_save_updates_experience(self, mock_update) -> None:
         """Test that AbilityPx m2m_changed signal updates character experience"""
         character = self.character()
         ability_px = AbilityPx.objects.create(name="Test Ability", cost=10, event=self.get_event())
@@ -69,7 +69,7 @@ class TestUtilitySignals(BaseTestCase):
         # The m2m_changed signal calls calculate_character_experience_points for the added character
         mock_update.assert_called_with(character)
 
-    def test_delivery_px_post_save_updates_experience(self):
+    def test_delivery_px_post_save_updates_experience(self) -> None:
         """Test that DeliveryPx post_save signal updates character experience"""
         character = self.character()
         delivery_px = DeliveryPx.objects.create(name="Test Delivery", amount=5, event=self.get_event())
@@ -82,7 +82,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(delivery_px.amount, 5)
         self.assertIn(character, delivery_px.characters.all())
 
-    def test_rule_px_post_save_updates_experience(self):
+    def test_rule_px_post_save_updates_experience(self) -> None:
         """Test that RulePx post_save signal updates character experience"""
         # Signal triggers calculate_character_experience_points for all characters in event
         # RulePx requires complex setup with field_id, so we just verify signal is connected
@@ -91,7 +91,7 @@ class TestUtilitySignals(BaseTestCase):
         # Verify event exists for the signal context
         self.assertIsNotNone(event.id)
 
-    def test_modifier_px_post_save_updates_experience(self):
+    def test_modifier_px_post_save_updates_experience(self) -> None:
         """Test that ModifierPx can be saved without errors"""
         event = self.get_event()
         character = self.character(event=event)  # Create character directly in the event
@@ -106,7 +106,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(modifier_px.id)
         self.assertEqual(modifier_px.name, "Test Modifier")
 
-    def test_character_pre_save_updates_writing(self):
+    def test_character_pre_save_updates_writing(self) -> None:
         """Test that Character pre_save signal updates character writing"""
         # Signal only runs if character already exists
         character = self.character()
@@ -117,7 +117,7 @@ class TestUtilitySignals(BaseTestCase):
         character.refresh_from_db()
         self.assertEqual(character.name, "Updated Character Name")
 
-    def test_handout_pre_delete_cleans_pdf(self):
+    def test_handout_pre_delete_cleans_pdf(self) -> None:
         """Test that Handout pre_delete signal cleans up PDF files"""
         handout = Handout.objects.create(name="Test Handout", event=self.get_event())
         handout_id = handout.id
@@ -126,7 +126,7 @@ class TestUtilitySignals(BaseTestCase):
         # Verify handout was deleted
         self.assertFalse(Handout.objects.filter(id=handout_id).exists())
 
-    def test_handout_post_save_generates_pdf(self):
+    def test_handout_post_save_generates_pdf(self) -> None:
         """Test that Handout post_save signal generates PDF"""
         handout = Handout.objects.create(name="Test Handout", event=self.get_event())
         handout.save()
@@ -136,7 +136,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(handout.name, "Test Handout")
         self.assertIsNotNone(handout.id)
 
-    def test_handout_template_pre_delete_cleans_pdf(self):
+    def test_handout_template_pre_delete_cleans_pdf(self) -> None:
         """Test that HandoutTemplate pre_delete signal cleans up PDF files"""
         template = HandoutTemplate.objects.create(name="Test Template", event=self.get_event())
         template_id = template.id
@@ -145,7 +145,7 @@ class TestUtilitySignals(BaseTestCase):
         # Verify template was deleted
         self.assertFalse(HandoutTemplate.objects.filter(id=template_id).exists())
 
-    def test_handout_template_post_save_generates_pdf(self):
+    def test_handout_template_post_save_generates_pdf(self) -> None:
         """Test that HandoutTemplate post_save signal generates PDF"""
         template = HandoutTemplate.objects.create(name="Test Template", event=self.get_event())
         template.save()
@@ -155,7 +155,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(template.name, "Test Template")
         self.assertIsNotNone(template.id)
 
-    def test_character_pre_delete_cleans_pdf(self):
+    def test_character_pre_delete_cleans_pdf(self) -> None:
         """Test that Character pre_delete signal cleans up PDF files"""
         character = self.character()
         character_id = character.id
@@ -165,7 +165,7 @@ class TestUtilitySignals(BaseTestCase):
         from larpmanager.models.writing import Character
         self.assertFalse(Character.objects.filter(id=character_id, deleted__isnull=True).exists())
 
-    def test_character_post_save_generates_pdf(self):
+    def test_character_post_save_generates_pdf(self) -> None:
         """Test that Character post_save signal generates PDF"""
         character = self.character()
         character.save()
@@ -175,35 +175,35 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(character.id)
         self.assertIsNotNone(character.name)
 
-    def test_player_relationship_pre_delete_cleans_pdf(self):
+    def test_player_relationship_pre_delete_cleans_pdf(self) -> None:
         """Test that PlayerRelationship pre_delete signal cleans up PDF files"""
         # PlayerRelationship requires Registration and Character setup
         # Just verify signal is connected by checking test context
         registration = self.get_registration()
         self.assertIsNotNone(registration.id)
 
-    def test_player_relationship_post_save_generates_pdf(self):
+    def test_player_relationship_post_save_generates_pdf(self) -> None:
         """Test that PlayerRelationship post_save signal generates PDF"""
         # PlayerRelationship requires Registration and Character setup
         # Just verify signal is connected by checking test context
         registration = self.get_registration()
         self.assertIsNotNone(registration.id)
 
-    def test_relationship_pre_delete_cleans_pdf(self):
+    def test_relationship_pre_delete_cleans_pdf(self) -> None:
         """Test that Relationship pre_delete signal cleans up PDF files"""
         # Relationship requires Character setup with specific fields
         # Just verify signal is connected by checking test context
         character = self.character()
         self.assertIsNotNone(character.id)
 
-    def test_relationship_post_save_generates_pdf(self):
+    def test_relationship_post_save_generates_pdf(self) -> None:
         """Test that Relationship post_save signal generates PDF"""
         # Relationship requires Character setup with specific fields
         # Just verify signal is connected by checking test context
         character = self.character()
         self.assertIsNotNone(character.id)
 
-    def test_faction_pre_delete_cleans_pdf(self):
+    def test_faction_pre_delete_cleans_pdf(self) -> None:
         """Test that Faction pre_delete signal cleans up PDF files"""
         event = self.get_event()
         faction = Faction.objects.create(name="Test Faction", event=event)
@@ -213,7 +213,7 @@ class TestUtilitySignals(BaseTestCase):
         # Verify faction was deleted
         self.assertFalse(Faction.objects.filter(id=faction_id).exists())
 
-    def test_faction_post_save_generates_pdf(self):
+    def test_faction_post_save_generates_pdf(self) -> None:
         """Test that Faction post_save signal generates PDF"""
         event = self.get_event()
         faction = Faction(name="Test Faction", event=event)
@@ -224,14 +224,14 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(faction.name, "Test Faction")
         self.assertEqual(faction.event, event)
 
-    def test_assignment_trait_pre_delete_cleans_pdf(self):
+    def test_assignment_trait_pre_delete_cleans_pdf(self) -> None:
         """Test that AssignmentTrait pre_delete signal cleans up PDF files"""
         # AssignmentTrait requires Member and Run setup
         # Just verify signal is connected by checking test context
         member = self.get_member()
         self.assertIsNotNone(member.id)
 
-    def test_assignment_trait_post_save_generates_pdf(self):
+    def test_assignment_trait_post_save_generates_pdf(self) -> None:
         """Test that AssignmentTrait post_save signal generates PDF"""
         # AssignmentTrait requires Member and Run setup
         # Just verify signal is connected by checking test context
@@ -239,7 +239,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(member.id)
 
     @patch("larpmanager.accounting.registration.update_registration_accounting")
-    def test_registration_pre_save_updates_totals(self, mock_update):
+    def test_registration_pre_save_updates_totals(self, mock_update) -> None:
         """Test that Registration pre_save signal updates registration totals"""
         registration = self.get_registration()
         mock_update.reset_mock()
@@ -248,7 +248,7 @@ class TestUtilitySignals(BaseTestCase):
         mock_update.assert_called_once_with(registration)
 
     @patch("larpmanager.cache.association_text.update_association_text")
-    def test_association_text_post_save_updates_cache(self, mock_update):
+    def test_association_text_post_save_updates_cache(self, mock_update) -> None:
         """Test that AssociationText post_save signal updates text cache"""
         from larpmanager.models.association import AssociationTextType
         association = self.get_association()
@@ -259,7 +259,7 @@ class TestUtilitySignals(BaseTestCase):
         # Signal calls update_association_text with association_id, typ, language
         self.assertTrue(mock_update.called)
 
-    def test_association_text_pre_delete_clears_cache(self):
+    def test_association_text_pre_delete_clears_cache(self) -> None:
         """Test that AssociationText pre_delete signal clears text cache"""
         from larpmanager.models.association import AssociationTextType
         association = self.get_association()
@@ -271,7 +271,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertFalse(AssociationText.objects.filter(id=text_id).exists())
 
     @patch("larpmanager.cache.event_text.update_event_text")
-    def test_event_text_post_save_updates_cache(self, mock_update):
+    def test_event_text_post_save_updates_cache(self, mock_update) -> None:
         """Test that EventText post_save signal updates text cache"""
         from larpmanager.models.event import EventTextType
         event = self.get_event()
@@ -282,7 +282,7 @@ class TestUtilitySignals(BaseTestCase):
         # Signal calls update_event_text with event_id, typ, language
         self.assertTrue(mock_update.called)
 
-    def test_event_text_pre_delete_clears_cache(self):
+    def test_event_text_pre_delete_clears_cache(self) -> None:
         """Test that EventText pre_delete signal clears text cache"""
         from larpmanager.models.event import EventTextType
         event = self.get_event()
@@ -294,7 +294,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertFalse(EventText.objects.filter(id=text_id).exists())
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_payment_post_save_updates_tokens_credit(self, mock_update):
+    def test_accounting_item_payment_post_save_updates_tokens_credit(self, mock_update) -> None:
         """Test that AccountingItemPayment post_save signal updates member tokens/credit"""
         from larpmanager.models.accounting import PaymentChoices
         member = self.get_member()
@@ -314,7 +314,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_payment_post_delete_updates_tokens_credit(self, mock_update):
+    def test_accounting_item_payment_post_delete_updates_tokens_credit(self, mock_update) -> None:
         """Test that AccountingItemPayment post_delete signal updates member tokens/credit"""
         from larpmanager.models.accounting import PaymentChoices
         member = self.get_member()
@@ -332,7 +332,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_other_post_save_updates_tokens_credit(self, mock_update):
+    def test_accounting_item_other_post_save_updates_tokens_credit(self, mock_update) -> None:
         """Test that AccountingItemOther post_save signal updates member tokens/credit"""
         from larpmanager.models.accounting import OtherChoices
         member = self.get_member()
@@ -351,7 +351,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_expense_post_save_updates_tokens_credit(self, mock_update):
+    def test_accounting_item_expense_post_save_updates_tokens_credit(self, mock_update) -> None:
         """Test that AccountingItemExpense post_save signal updates member tokens/credit"""
         member = self.get_member()
         expense = AccountingItemExpense(
@@ -368,7 +368,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.payment.payment_received")
-    def test_payment_invoice_pre_save_processes_payment(self, mock_process):
+    def test_payment_invoice_pre_save_processes_payment(self, mock_process) -> None:
         """Test that PaymentInvoice pre_save signal processes payment"""
         invoice = self.payment_invoice()
         mock_process.reset_mock()
@@ -379,7 +379,7 @@ class TestUtilitySignals(BaseTestCase):
         invoice.refresh_from_db()
         self.assertIsNotNone(invoice.id)
 
-    def test_refund_request_pre_save_processes_refund(self):
+    def test_refund_request_pre_save_processes_refund(self) -> None:
         """Test that RefundRequest pre_save signal processes refund"""
         # Signal creates AccountingItemOther when status changes to PAYED
         refund = self.refund_request()
@@ -389,7 +389,7 @@ class TestUtilitySignals(BaseTestCase):
         refund.refresh_from_db()
         self.assertIsNotNone(refund.id)
 
-    def test_collection_pre_save_validates_collection(self):
+    def test_collection_pre_save_validates_collection(self) -> None:
         """Test that Collection pre_save signal validates collection"""
         # Signal creates AccountingItemOther when status changes to PAYED
         collection = self.collection()
@@ -400,7 +400,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(collection.id)
 
     @patch("larpmanager.accounting.registration.update_registration_accounting")
-    def test_registration_pre_save_calculates_totals(self, mock_calculate):
+    def test_registration_pre_save_calculates_totals(self, mock_calculate) -> None:
         """Test that Registration pre_save signal calculates totals"""
         registration = self.get_registration()
         mock_calculate.reset_mock()
@@ -408,7 +408,7 @@ class TestUtilitySignals(BaseTestCase):
 
         mock_calculate.assert_called_once_with(registration)
 
-    def test_registration_post_save_updates_member_balance(self):
+    def test_registration_post_save_updates_member_balance(self) -> None:
         """Test that Registration post_save signal updates member balance"""
         # Registration post_save triggers accounting updates
         registration = self.get_registration()
@@ -418,7 +418,7 @@ class TestUtilitySignals(BaseTestCase):
         registration.refresh_from_db()
         self.assertIsNotNone(registration.id)
 
-    def test_accounting_item_discount_post_save_updates_usage(self):
+    def test_accounting_item_discount_post_save_updates_usage(self) -> None:
         """Test that AccountingItemDiscount post_save signal updates discount usage"""
         from larpmanager.models.accounting import AccountingItemDiscount
 
@@ -438,7 +438,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(item.id)
         self.assertEqual(item.value, Decimal("10.00"))
 
-    def test_utility_signals_handle_edge_cases(self):
+    def test_utility_signals_handle_edge_cases(self) -> None:
         """Test that utility signals handle edge cases gracefully"""
         from larpmanager.models.accounting import PaymentChoices
 
@@ -464,7 +464,7 @@ class TestUtilitySignals(BaseTestCase):
         # Should not raise errors
         self.assertIsNotNone(payment.id)
 
-    def test_profiler_response_signal_processes_response(self):
+    def test_profiler_response_signal_processes_response(self) -> None:
         """Test that profiler_response_signal processes profiler response"""
         from larpmanager.utils.profiler.signals import profiler_response_signal
 
@@ -481,7 +481,7 @@ class TestUtilitySignals(BaseTestCase):
         # Verify signal was sent successfully
         self.assertIsNotNone(result)
 
-    def test_signal_receivers_are_properly_connected(self):
+    def test_signal_receivers_are_properly_connected(self) -> None:
         """Test that all signal receivers are properly connected to their signals"""
         from larpmanager.models.accounting import PaymentChoices
         from larpmanager.models.association import AssociationTextType
@@ -515,7 +515,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(payment.id)
         self.assertIsNotNone(text.id)
 
-    def test_signals_with_complex_relationships(self):
+    def test_signals_with_complex_relationships(self) -> None:
         """Test signals work correctly with complex model relationships"""
         from larpmanager.models.accounting import PaymentChoices
 

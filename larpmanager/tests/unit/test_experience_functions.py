@@ -35,7 +35,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestExperienceUtilityFunctions(BaseTestCase):
     """Test cases for experience utility functions"""
 
-    def test_get_free_abilities_empty(self):
+    def test_get_free_abilities_empty(self) -> None:
         """Test get_free_abilities with no free abilities"""
         character = MagicMock()
         character.get_config.return_value = "[]"
@@ -44,7 +44,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
 
         self.assertEqual(result, [])
 
-    def test_get_free_abilities_with_list(self):
+    def test_get_free_abilities_with_list(self) -> None:
         """Test get_free_abilities with abilities"""
         character = MagicMock()
         character.get_config.return_value = "[1, 2, 3]"
@@ -53,7 +53,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
 
         self.assertEqual(result, [1, 2, 3])
 
-    def test_set_free_abilities_basic(self):
+    def test_set_free_abilities_basic(self) -> None:
         """Test set_free_abilities stores list"""
         from unittest.mock import call
 
@@ -68,7 +68,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
             self.assertEqual(args[1], "free_abilities")
             self.assertEqual(args[2], "[1, 2, 3]")
 
-    def test_check_available_ability_px_no_prereq(self):
+    def test_check_available_ability_px_no_prereq(self) -> None:
         """Test check_available_ability_px with no prerequisites"""
         ability = MagicMock()
         ability.prerequisites.all.return_value = []
@@ -78,7 +78,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
 
         self.assertTrue(result)
 
-    def test_check_available_ability_px_prereq_met(self):
+    def test_check_available_ability_px_prereq_met(self) -> None:
         """Test check_available_ability_px with prerequisites met"""
         prereq1 = MagicMock()
         prereq1.id = 1
@@ -94,7 +94,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
 
         self.assertTrue(result)
 
-    def test_check_available_ability_px_prereq_not_met(self):
+    def test_check_available_ability_px_prereq_not_met(self) -> None:
         """Test check_available_ability_px with prerequisites not met"""
         prereq1 = MagicMock()
         prereq1.id = 1
@@ -111,7 +111,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Missing prerequisite 5
         self.assertFalse(result)
 
-    def test_check_available_ability_px_requirements_met(self):
+    def test_check_available_ability_px_requirements_met(self) -> None:
         """Test check_available_ability_px with requirements met"""
         req1 = MagicMock()
         req1.id = 10
@@ -127,7 +127,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
 
         self.assertTrue(result)
 
-    def test_check_available_ability_px_requirements_not_met(self):
+    def test_check_available_ability_px_requirements_not_met(self) -> None:
         """Test check_available_ability_px with requirements not met"""
         req1 = MagicMock()
         req1.id = 10
@@ -144,7 +144,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Missing requirement 25
         self.assertFalse(result)
 
-    def test_apply_modifier_cost_no_modifiers(self):
+    def test_apply_modifier_cost_no_modifiers(self) -> None:
         """Test apply_modifier_cost with no modifiers"""
         ability = MagicMock()
         ability.id = 1
@@ -156,7 +156,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Cost should remain unchanged
         self.assertEqual(ability.cost, 100)
 
-    def test_apply_modifier_cost_basic(self):
+    def test_apply_modifier_cost_basic(self) -> None:
         """Test apply_modifier_cost with basic modifier"""
         ability = MagicMock()
         ability.id = 1
@@ -170,7 +170,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Cost should be modified to 50
         self.assertEqual(ability.cost, 50)
 
-    def test_apply_modifier_cost_prereq_not_met(self):
+    def test_apply_modifier_cost_prereq_not_met(self) -> None:
         """Test apply_modifier_cost with prerequisite not met"""
         ability = MagicMock()
         ability.id = 1
@@ -185,7 +185,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Cost should remain unchanged (prereq not met)
         self.assertEqual(ability.cost, 100)
 
-    def test_apply_modifier_cost_prereq_met(self):
+    def test_apply_modifier_cost_prereq_met(self) -> None:
         """Test apply_modifier_cost with prerequisite met"""
         ability = MagicMock()
         ability.id = 1
@@ -200,7 +200,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Cost should be modified (prereq met)
         self.assertEqual(ability.cost, 50)
 
-    def test_apply_modifier_cost_requirement_not_met(self):
+    def test_apply_modifier_cost_requirement_not_met(self) -> None:
         """Test apply_modifier_cost with requirement not met"""
         ability = MagicMock()
         ability.id = 1
@@ -215,7 +215,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Cost should remain unchanged (req not met)
         self.assertEqual(ability.cost, 100)
 
-    def test_apply_modifier_cost_requirement_met(self):
+    def test_apply_modifier_cost_requirement_met(self) -> None:
         """Test apply_modifier_cost with requirement met"""
         ability = MagicMock()
         ability.id = 1
@@ -230,7 +230,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Cost should be modified (req met)
         self.assertEqual(ability.cost, 50)
 
-    def test_apply_modifier_cost_first_valid_wins(self):
+    def test_apply_modifier_cost_first_valid_wins(self) -> None:
         """Test apply_modifier_cost uses first valid modifier"""
         ability = MagicMock()
         ability.id = 1
@@ -244,7 +244,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Should use first valid modifier (30)
         self.assertEqual(ability.cost, 30)
 
-    def test_apply_modifier_cost_skip_invalid_use_valid(self):
+    def test_apply_modifier_cost_skip_invalid_use_valid(self) -> None:
         """Test apply_modifier_cost skips invalid and uses first valid"""
         ability = MagicMock()
         ability.id = 1
@@ -259,7 +259,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         # Should skip first (prereq 99 not met) and use second (50)
         self.assertEqual(ability.cost, 50)
 
-    def test_apply_modifier_cost_multiple_prereqs_and_reqs(self):
+    def test_apply_modifier_cost_multiple_prereqs_and_reqs(self) -> None:
         """Test apply_modifier_cost with both prerequisites and requirements"""
         ability = MagicMock()
         ability.id = 1

@@ -25,7 +25,7 @@ from larpmanager.tests.utils import check_feature, go_to, login_orga, login_user
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_event_role(pw_page):
+def test_orga_event_role(pw_page) -> None:
     page, live_server, _ = pw_page
 
     login_user(page, live_server)

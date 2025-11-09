@@ -23,11 +23,12 @@
 import logging
 import math
 from collections.abc import Iterable
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
@@ -44,7 +45,7 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.casting import AssignmentTrait
-from larpmanager.models.event import DevelopStatus
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
@@ -61,7 +62,7 @@ from larpmanager.utils.tasks import background_auto
 logger = logging.getLogger(__name__)
 
 
-def get_reg_iscr(registration) -> int:
+def get_reg_iscr(registration: Registration) -> int:
     """Calculate total registration signup fee including discounts.
 
     Computes the total registration fee by summing base ticket price, additional
@@ -113,7 +114,9 @@ def get_reg_iscr(registration) -> int:
     return max(0, total_registration_fee)
 
 
-def get_reg_payments(registration, accounting_payments=None):
+def get_reg_payments(
+    registration: Registration, accounting_payments: QuerySet[AccountingItemPayment] | None = None
+) -> int:
     """Calculate total payments made for a registration.
 
     Args:
@@ -144,7 +147,7 @@ def get_reg_payments(registration, accounting_payments=None):
     return total_paid
 
 
-def get_reg_transactions(registration):
+def get_reg_transactions(registration: Registration) -> int:
     """Calculate total transaction fees for a registration.
 
     Args:
@@ -164,7 +167,7 @@ def get_reg_transactions(registration):
     return total_transaction_fees
 
 
-def get_accounting_refund(registration) -> None:
+def get_accounting_refund(registration: Registration) -> None:
     """Get refund information for a registration.
 
     Args:
@@ -192,7 +195,7 @@ def get_accounting_refund(registration) -> None:
         registration.refunds[accounting_item_other.oth] += accounting_item_other.value
 
 
-def quota_check(reg, start, alert, association_id) -> None:
+def quota_check(reg: Registration, start: date, alert: int, association_id: int) -> None:
     """Check payment quotas and deadlines for a registration.
 
     Calculates payment quotas based on event start date and registration timing.
@@ -337,7 +340,9 @@ def installment_check(reg: "Registration", alert: int, association_id: int) -> N
         reg.quota = reg.tot_iscr - reg.tot_payed
 
 
-def _get_deadline_installment(association_id, installment, registration):
+def _get_deadline_installment(
+    association_id: int, installment: RegistrationInstallment, registration: Registration
+) -> int | None:
     """Calculate deadline for a specific installment.
 
     Args:
@@ -358,7 +363,7 @@ def _get_deadline_installment(association_id, installment, registration):
     return deadline
 
 
-def get_payment_deadline(registration, days_to_add, association_id):
+def get_payment_deadline(registration: Registration, days_to_add: int, association_id: int) -> int:
     """Calculate payment deadline based on registration and membership dates.
 
     Args:
@@ -378,7 +383,7 @@ def get_payment_deadline(registration, days_to_add, association_id):
     return days_since_registration + days_to_add
 
 
-def registration_payments_status(registration) -> None:
+def registration_payments_status(registration: Registration) -> None:
     """Determine registration payment status and balance.
 
     Args:
@@ -400,7 +405,7 @@ def registration_payments_status(registration) -> None:
             registration.payment_status = "t"
 
 
-def cancel_run(instance) -> None:
+def cancel_run(instance: Run) -> None:
     """Cancel all registrations for a run and process refunds.
 
     Args:
@@ -439,7 +444,7 @@ def cancel_run(instance) -> None:
         r.save()
 
 
-def cancel_reg(registration) -> None:
+def cancel_reg(registration: Registration) -> None:
     """Cancel a specific registration and clean up related data.
 
     Args:
@@ -469,7 +474,7 @@ def cancel_reg(registration) -> None:
     reset_event_links(registration.member_id, registration.run.event.association_id)
 
 
-def get_display_choice(choices, key):
+def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
     """Get display name for a choice field value.
 
     Args:
@@ -486,7 +491,7 @@ def get_display_choice(choices, key):
     return ""
 
 
-def round_to_nearest_cent(amount):
+def round_to_nearest_cent(amount: float | int) -> float:
     """Round a number to the nearest cent with tolerance for small differences.
 
     Args:

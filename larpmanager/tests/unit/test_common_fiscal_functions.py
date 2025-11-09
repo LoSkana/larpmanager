@@ -40,7 +40,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestCommonUtilityFunctions(BaseTestCase):
     """Test cases for common utility functions"""
 
-    def test_cantor_basic(self):
+    def test_cantor_basic(self) -> None:
         """Test cantor pairing function with basic values"""
         result = cantor(5, 7)
 
@@ -48,20 +48,20 @@ class TestCommonUtilityFunctions(BaseTestCase):
         expected = ((5 + 7) * (5 + 7 + 1)) // 2 + 7
         self.assertEqual(result, expected)
 
-    def test_cantor_zero_values(self):
+    def test_cantor_zero_values(self) -> None:
         """Test cantor with zero values"""
         result = cantor(0, 0)
 
         self.assertEqual(result, 0)
 
-    def test_cantor_one_zero(self):
+    def test_cantor_one_zero(self) -> None:
         """Test cantor with one zero value"""
         result = cantor(5, 0)
 
         expected = ((5 + 0) * (5 + 0 + 1)) // 2 + 0
         self.assertEqual(result, expected)
 
-    def test_cantor_large_values(self):
+    def test_cantor_large_values(self) -> None:
         """Test cantor with large values"""
         result = cantor(100, 200)
 
@@ -69,7 +69,7 @@ class TestCommonUtilityFunctions(BaseTestCase):
         self.assertGreater(result, 0)
         self.assertIsInstance(result, float)
 
-    def test_cantor_uniqueness(self):
+    def test_cantor_uniqueness(self) -> None:
         """Test cantor produces unique values for different pairs"""
         result1 = cantor(3, 5)
         result2 = cantor(5, 3)
@@ -77,7 +77,7 @@ class TestCommonUtilityFunctions(BaseTestCase):
         # Different pairs should produce different results
         self.assertNotEqual(result1, result2)
 
-    def test_get_channel_basic(self):
+    def test_get_channel_basic(self) -> None:
         """Test get_channel creates unique ID"""
         result = get_channel(123, 456)
 
@@ -85,14 +85,14 @@ class TestCommonUtilityFunctions(BaseTestCase):
         self.assertIsInstance(result, int)
         self.assertGreater(result, 0)
 
-    def test_get_channel_same_ids(self):
+    def test_get_channel_same_ids(self) -> None:
         """Test get_channel with same IDs"""
         result = get_channel(100, 100)
 
         self.assertIsInstance(result, int)
         self.assertGreater(result, 0)
 
-    def test_check_already_no_match(self):
+    def test_check_already_no_match(self) -> None:
         """Test check_already when no match found"""
         params = {"user": "test@example.com", "name": "Test User"}
 
@@ -100,7 +100,7 @@ class TestCommonUtilityFunctions(BaseTestCase):
 
         self.assertFalse(result)
 
-    def test_check_already_email_match(self):
+    def test_check_already_email_match(self) -> None:
         """Test check_already matches task params"""
         from background_task.models import Task
         from datetime import datetime
@@ -115,7 +115,7 @@ class TestCommonUtilityFunctions(BaseTestCase):
 
         self.assertTrue(result)
 
-    def test_check_already_no_match_different_params(self):
+    def test_check_already_no_match_different_params(self) -> None:
         """Test check_already with different params"""
         from background_task.models import Task
         from datetime import datetime
@@ -133,19 +133,19 @@ class TestCommonUtilityFunctions(BaseTestCase):
 class TestFiscalCodeFunctions(BaseTestCase):
     """Test cases for Italian fiscal code calculation"""
 
-    def test_calculate_consonants_basic(self):
+    def test_calculate_consonants_basic(self) -> None:
         """Test extracting consonants from string"""
         result = _calculate_consonants("MARIO")
 
         self.assertEqual(result, "MR")
 
-    def test_calculate_consonants_all_vowels(self):
+    def test_calculate_consonants_all_vowels(self) -> None:
         """Test consonants with all vowels"""
         result = _calculate_consonants("AEIOU")
 
         self.assertEqual(result, "")
 
-    def test_calculate_consonants_mixed(self):
+    def test_calculate_consonants_mixed(self) -> None:
         """Test consonants with mixed characters"""
         result = _calculate_consonants("BIANCHI")
 
@@ -153,32 +153,32 @@ class TestFiscalCodeFunctions(BaseTestCase):
         self.assertIn("B", result)
         self.assertIn("N", result)
 
-    def test_calculate_vowels_basic(self):
+    def test_calculate_vowels_basic(self) -> None:
         """Test extracting vowels from string"""
         result = _calculate_vowels("MARIO")
 
         self.assertEqual(result, "AIO")
 
-    def test_calculate_vowels_no_vowels(self):
+    def test_calculate_vowels_no_vowels(self) -> None:
         """Test vowels with no vowels"""
         result = _calculate_vowels("BCDFG")
 
         self.assertEqual(result, "")
 
-    def test_calculate_vowels_mixed(self):
+    def test_calculate_vowels_mixed(self) -> None:
         """Test vowels with mixed characters"""
         result = _calculate_vowels("BIANCHI")
 
         self.assertEqual(result, "IAI")
 
-    def test_extract_last_name_long(self):
+    def test_extract_last_name_long(self) -> None:
         """Test extracting last name code with enough consonants"""
         result = _extract_last_name("ROSSI")
 
         # Should use first 3 consonants: RSS
         self.assertEqual(result, "RSS")
 
-    def test_extract_last_name_short(self):
+    def test_extract_last_name_short(self) -> None:
         """Test extracting last name code with few consonants"""
         result = _extract_last_name("RE")
 
@@ -186,27 +186,27 @@ class TestFiscalCodeFunctions(BaseTestCase):
         self.assertEqual(len(result), 3)
         self.assertIn("X", result)
 
-    def test_extract_first_name_long(self):
+    def test_extract_first_name_long(self) -> None:
         """Test extracting first name code with 4+ consonants"""
         result = _extract_first_name("ALESSANDRO")
 
         # Should use 1st, 3rd, 4th consonants
         self.assertEqual(len(result), 3)
 
-    def test_extract_first_name_three_consonants(self):
+    def test_extract_first_name_three_consonants(self) -> None:
         """Test extracting first name with exactly 3 consonants"""
         result = _extract_first_name("MARIO")
 
         self.assertEqual(result, "MRA")
 
-    def test_extract_first_name_short(self):
+    def test_extract_first_name_short(self) -> None:
         """Test extracting first name with few consonants"""
         result = _extract_first_name("IO")
 
         # Should pad with X
         self.assertEqual(len(result), 3)
 
-    def test_extract_birth_date_male(self):
+    def test_extract_birth_date_male(self) -> None:
         """Test extracting birth date code for male"""
         birth_date = date(1990, 3, 15)
         result = _extract_birth_date(birth_date, male=True)
@@ -215,7 +215,7 @@ class TestFiscalCodeFunctions(BaseTestCase):
         # 1990 -> 90, March -> C, 15 -> 15
         self.assertEqual(result, "90C15")
 
-    def test_extract_birth_date_female(self):
+    def test_extract_birth_date_female(self) -> None:
         """Test extracting birth date code for female"""
         birth_date = date(1990, 3, 15)
         result = _extract_birth_date(birth_date, male=False)
@@ -224,7 +224,7 @@ class TestFiscalCodeFunctions(BaseTestCase):
         # 1990 -> 90, March -> C, 15+40 -> 55
         self.assertEqual(result, "90C55")
 
-    def test_extract_birth_date_single_digit_day(self):
+    def test_extract_birth_date_single_digit_day(self) -> None:
         """Test birth date with single digit day"""
         birth_date = date(2000, 1, 5)
         result = _extract_birth_date(birth_date, male=True)
@@ -232,27 +232,27 @@ class TestFiscalCodeFunctions(BaseTestCase):
         # Should pad day with zero: 05
         self.assertEqual(result, "00A05")
 
-    def test_clean_birth_place_basic(self):
+    def test_clean_birth_place_basic(self) -> None:
         """Test cleaning birth place string"""
         result = _clean_birth_place("Roma")
 
         # _clean_birth_place only removes parentheses, doesn't uppercase
         self.assertEqual(result, "Roma")
 
-    def test_clean_birth_place_with_apostrophe(self):
+    def test_clean_birth_place_with_apostrophe(self) -> None:
         """Test cleaning birth place with apostrophe"""
         result = _clean_birth_place("Sant'Angelo")
 
         # _clean_birth_place only removes parentheses, not apostrophes
         self.assertIn("'", result)
 
-    def test_slugify_basic(self):
+    def test_slugify_basic(self) -> None:
         """Test slugifying text"""
         result = _slugify("Hello World")
 
         self.assertEqual(result, "hello-world")
 
-    def test_slugify_special_chars(self):
+    def test_slugify_special_chars(self) -> None:
         """Test slugifying with special characters"""
         result = _slugify("Città di Roma!")
 
@@ -260,7 +260,7 @@ class TestFiscalCodeFunctions(BaseTestCase):
         self.assertNotIn("!", result)
         self.assertNotIn("à", result)
 
-    def test_calculate_fiscal_code_basic(self):
+    def test_calculate_fiscal_code_basic(self) -> None:
         """Test calculating complete fiscal code"""
         member = MagicMock()
         member.name = "MARIO"
@@ -282,7 +282,7 @@ class TestFiscalCodeFunctions(BaseTestCase):
             # Should start with last name code
             self.assertTrue(result["calculated_cf"].startswith("RSS"))
 
-    def test_calculate_fiscal_code_female(self):
+    def test_calculate_fiscal_code_female(self) -> None:
         """Test _extract_birth_date for female with day+40"""
         # Test the helper directly
         birth_date = date(1985, 6, 20)
@@ -291,7 +291,7 @@ class TestFiscalCodeFunctions(BaseTestCase):
         # For female, day + 40 (20 + 40 = 60)
         self.assertEqual(result, "85H60")
 
-    def test_calculate_fiscal_code_missing_data(self):
+    def test_calculate_fiscal_code_missing_data(self) -> None:
         """Test fiscal code calculation with missing data"""
         member = MagicMock()
         member.nationality = "us"  # Non-Italian

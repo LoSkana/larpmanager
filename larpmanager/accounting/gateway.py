@@ -38,7 +38,7 @@ from Crypto.Cipher import DES3
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.http import Http404, HttpRequest
+from django.http import Http404, HttpRequest, HttpResponse
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.models import ST_PP_COMPLETED
@@ -221,7 +221,7 @@ def satispay_webhook(request: HttpRequest) -> None:
     satispay_verify(context, payment_id)
 
 
-def get_paypal_form(request: HttpRequest, context: dict, invoice, amount) -> None:
+def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: float) -> None:
     """Create PayPal payment form.
 
     Args:
@@ -248,7 +248,7 @@ def get_paypal_form(request: HttpRequest, context: dict, invoice, amount) -> Non
     context["paypal_form"] = PayPalPaymentsForm(initial=paypal_payment_data)
 
 
-def handle_valid_paypal_ipn(ipn_obj):
+def handle_valid_paypal_ipn(ipn_obj: Any) -> PaymentInvoice | None:
     """Handle valid PayPal IPN notifications.
 
     Args:
@@ -277,7 +277,7 @@ def handle_valid_paypal_ipn(ipn_obj):
     return None
 
 
-def handle_invalid_paypal_ipn(invalid_ipn_object) -> None:
+def handle_invalid_paypal_ipn(invalid_ipn_object: Any) -> None:
     """Handle invalid PayPal IPN notifications.
 
     Args:
@@ -292,7 +292,12 @@ def handle_invalid_paypal_ipn(invalid_ipn_object) -> None:
     notify_admins("paypal ko", formatted_ipn_body)
 
 
-def get_stripe_form(request: HttpRequest, context: dict, invoice, amount: float) -> None:
+def get_stripe_form(
+    request: HttpRequest,
+    context: dict[str, Any],
+    invoice: PaymentInvoice,
+    amount: float,
+) -> None:
     """Create Stripe payment form and session.
 
     Creates a Stripe product and price for the given invoice amount, then
@@ -345,7 +350,7 @@ def get_stripe_form(request: HttpRequest, context: dict, invoice, amount: float)
     invoice.save()
 
 
-def stripe_webhook(request: HttpRequest):
+def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
     """Handle Stripe webhook events for payment processing.
 
     Args:
@@ -787,7 +792,7 @@ class RedSysClient:
             self.redsys_url = "https://sis.redsys.es/sis/realizarPago"
 
     @staticmethod
-    def decode_parameters(merchant_parameters):
+    def decode_parameters(merchant_parameters: str) -> dict:
         """Given the Ds_MerchantParameters from Redsys, decode it and eval the json file.
 
         :param merchant_parameters: Base 64 encoded json structure returned by
@@ -799,7 +804,7 @@ class RedSysClient:
             raise TypeError(msg)
         return json.loads(base64.b64decode(merchant_parameters).decode())
 
-    def encrypt_order(self, order):
+    def encrypt_order(self, order: str) -> bytes:
         """Create a unique key for every request using Triple DES encryption.
 
         Based on the Ds_Merchant_Order and the shared secret (SERMEPA_SECRET_KEY).
@@ -817,7 +822,7 @@ class RedSysClient:
         return triple_des_cipher.encrypt(padded_order)
 
     @staticmethod
-    def sign_hmac256(encrypted_order, merchant_parameters):
+    def sign_hmac256(encrypted_order: bytes, merchant_parameters: bytes) -> bytes:
         """Use the encrypted_order to sign merchant data using HMAC SHA256 and encode with Base64.
 
         :param encrypted_order: Encrypted Ds_Merchant_Order
@@ -833,7 +838,7 @@ class RedSysClient:
         hmac_signature = hmac.new(encrypted_order, merchant_parameters, hashlib.sha256).digest()
         return base64.b64encode(hmac_signature)
 
-    def redsys_generate_request(self, params):
+    def redsys_generate_request(self, params: dict[str, Any]) -> dict[str, str]:
         """Generate Redsys Ds_MerchantParameters and Ds_Signature.
 
         :param params: dict with all transaction parameters

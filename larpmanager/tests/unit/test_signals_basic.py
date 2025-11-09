@@ -33,11 +33,11 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestBasicSignals(BaseTestCase):
     """Test basic signal functionality without mocking"""
 
-    def setUp(self):
+    def setUp(self) -> None:
         super().setUp()
         cache.clear()
 
-    def test_member_save_signal(self):
+    def test_member_save_signal(self) -> None:
         """Test that Member save operations work correctly"""
         # Create a fresh member using BaseTestCase helper that avoids conflicts
         member = self.get_member()
@@ -50,7 +50,7 @@ class TestBasicSignals(BaseTestCase):
         self.assertIsNotNone(member.id)
         self.assertEqual(member.name, "Updated")
 
-    def test_character_save_signal(self):
+    def test_character_save_signal(self) -> None:
         """Test that Character save operations work correctly"""
         character = self.character()
 
@@ -60,7 +60,7 @@ class TestBasicSignals(BaseTestCase):
         # Verify saved correctly
         self.assertIsNotNone(character.id)
 
-    def test_character_delete_signal(self):
+    def test_character_delete_signal(self) -> None:
         """Test that Character delete operations work correctly"""
         character = self.character()
         character.save()
@@ -73,7 +73,7 @@ class TestBasicSignals(BaseTestCase):
         with self.assertRaises(Character.DoesNotExist):
             Character.objects.get(id=character_id)
 
-    def test_accounting_payment_save_signal(self):
+    def test_accounting_payment_save_signal(self) -> None:
         """Test that AccountingItemPayment save operations work correctly"""
         member = self.get_member()
         registration = self.get_registration()
@@ -93,7 +93,7 @@ class TestBasicSignals(BaseTestCase):
         self.assertIsNotNone(payment.id)
         self.assertEqual(payment.value, Decimal("50.00"))
 
-    def test_accounting_payment_delete_signal(self):
+    def test_accounting_payment_delete_signal(self) -> None:
         """Test that AccountingItemPayment delete operations work correctly"""
         member = self.get_member()
         registration = self.get_registration()
@@ -113,7 +113,7 @@ class TestBasicSignals(BaseTestCase):
         # Verify deleted correctly
         self.assertFalse(AccountingItemPayment.objects.filter(id=payment_id).exists())
 
-    def test_accounting_discount_save_signal(self):
+    def test_accounting_discount_save_signal(self) -> None:
         """Test that AccountingItemDiscount save operations work correctly"""
         member = self.get_member()
         discount = self.discount()
@@ -133,7 +133,7 @@ class TestBasicSignals(BaseTestCase):
         self.assertIsNotNone(item.id)
         self.assertEqual(item.value, Decimal("10.00"))
 
-    def test_accounting_other_save_signal(self):
+    def test_accounting_other_save_signal(self) -> None:
         """Test that AccountingItemOther save operations work correctly"""
         member = self.get_member()
 
@@ -153,7 +153,7 @@ class TestBasicSignals(BaseTestCase):
         self.assertIsNotNone(item.id)
         self.assertEqual(item.value, Decimal("25.00"))
 
-    def test_registration_save_signal(self):
+    def test_registration_save_signal(self) -> None:
         """Test that Registration save operations work correctly"""
         registration = self.get_registration()
 
@@ -163,7 +163,7 @@ class TestBasicSignals(BaseTestCase):
         # Verify saved correctly
         self.assertIsNotNone(registration.id)
 
-    def test_event_save_signal(self):
+    def test_event_save_signal(self) -> None:
         """Test that Event save operations work correctly"""
         event = self.get_event()
 
@@ -173,7 +173,7 @@ class TestBasicSignals(BaseTestCase):
         # Verify saved correctly
         self.assertIsNotNone(event.id)
 
-    def test_signal_chain_integration(self):
+    def test_signal_chain_integration(self) -> None:
         """Test that multiple related signals work together"""
         # Create a chain of related objects
         member = self.get_member()
@@ -205,7 +205,7 @@ class TestBasicSignals(BaseTestCase):
         self.assertEqual(payment.member, member)
         self.assertEqual(payment.reg, registration)
 
-    def test_cache_operations_dont_break(self):
+    def test_cache_operations_dont_break(self) -> None:
         """Test that cache operations triggered by signals don't break"""
         # Create various objects that should trigger cache updates
         member = self.get_member()

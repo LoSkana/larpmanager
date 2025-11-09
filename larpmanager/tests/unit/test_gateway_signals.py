@@ -36,7 +36,7 @@ class TestGatewaySignals(BaseTestCase):
 
     # PaymentGateway and PaymentTransaction tests removed - models no longer exist
 
-    def test_signal_integration_with_real_models(self):
+    def test_signal_integration_with_real_models(self) -> None:
         """Test signal integration with real model operations"""
         # Test complete workflow: member -> registration -> payment
         member = self.get_member()
@@ -63,7 +63,7 @@ class TestGatewaySignals(BaseTestCase):
         self.assertIsNotNone(payment.id)
         self.assertEqual(payment.member, member)
 
-    def test_signal_edge_cases(self):
+    def test_signal_edge_cases(self) -> None:
         """Test signal handling of edge cases and boundary conditions"""
         # Test with zero values
         member = self.get_member()
@@ -88,7 +88,7 @@ class TestGatewaySignals(BaseTestCase):
 
         self.assertEqual(large_payment.value, Decimal("999999.99"))
 
-    def test_signal_concurrency_safety(self):
+    def test_signal_concurrency_safety(self) -> None:
         """Test that signals handle concurrent operations safely"""
         member = self.get_member()
 
@@ -104,7 +104,7 @@ class TestGatewaySignals(BaseTestCase):
         for i, payment in enumerate(payments):
             self.assertEqual(payment.value, Decimal(f"{i * 10}.00"))
 
-    def test_signal_error_recovery(self):
+    def test_signal_error_recovery(self) -> None:
         """Test that signals recover gracefully from errors"""
         member = self.get_member()
 
@@ -127,7 +127,7 @@ class TestGatewaySignals(BaseTestCase):
         another_valid_payment.save()
         self.assertIsNotNone(another_valid_payment.id)
 
-    def test_signal_chain_reactions(self):
+    def test_signal_chain_reactions(self) -> None:
         """Test that signals can trigger chain reactions correctly"""
         # Create a registration which should trigger multiple signals
         registration = self.get_registration()
@@ -157,7 +157,7 @@ class TestGatewaySignals(BaseTestCase):
         self.assertEqual(rel.reg, registration)
         self.assertEqual(payment.reg, registration)
 
-    def test_signal_performance_characteristics(self):
+    def test_signal_performance_characteristics(self) -> None:
         """Test signal performance characteristics"""
         # Measure basic signal performance by creating multiple objects
         import time
@@ -179,7 +179,7 @@ class TestGatewaySignals(BaseTestCase):
         self.assertLess(elapsed_time, 10.0)  # 10 seconds max for 20 objects
         self.assertEqual(objects_created, 20)
 
-    def test_signal_data_consistency(self):
+    def test_signal_data_consistency(self) -> None:
         """Test that signals maintain data consistency"""
         member = self.get_member()
         original_credit = (
@@ -206,7 +206,7 @@ class TestGatewaySignals(BaseTestCase):
             # We just verify the signal executed without checking exact business logic
             self.assertIsNotNone(member.membership.credit)
 
-    def test_signal_rollback_scenarios(self):
+    def test_signal_rollback_scenarios(self) -> None:
         """Test that signals handle database rollback scenarios correctly"""
         from django.db import transaction
 
@@ -232,7 +232,7 @@ class TestGatewaySignals(BaseTestCase):
         # Second payment should succeed
         self.assertIsNotNone(payment2.id)
 
-    def test_all_signal_receivers_are_tested(self):
+    def test_all_signal_receivers_are_tested(self) -> None:
         """Meta-test to ensure we have comprehensive signal coverage"""
         # This test documents that we've created tests for the major signal categories:
 
@@ -268,7 +268,7 @@ class TestGatewaySignals(BaseTestCase):
         self.assertIn("text_field_signals", signal_categories_tested)
         self.assertIn("gateway_signals", signal_categories_tested)
 
-    def test_signal_documentation_compliance(self):
+    def test_signal_documentation_compliance(self) -> None:
         """Test that signals comply with expected behavior patterns"""
         # Test that signals follow consistent patterns:
 

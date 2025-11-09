@@ -50,7 +50,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestAccDetailFunctions(BaseTestCase):
     """Test cases for accounting detail calculation functions"""
 
-    def test_get_acc_detail_with_payments(self):
+    def test_get_acc_detail_with_payments(self) -> None:
         """Test getting detailed accounting breakdown for payments"""
         run = self.get_run()
         member = self.get_member()
@@ -75,7 +75,7 @@ class TestAccDetailFunctions(BaseTestCase):
         self.assertEqual(result["tot"], Decimal("150.00"))
         self.assertIn(PaymentChoices.MONEY, result["detail"])
 
-    def test_get_acc_detail_with_expenses(self):
+    def test_get_acc_detail_with_expenses(self) -> None:
         """Test getting detailed accounting breakdown for expenses"""
         run = self.get_run()
         member = self.get_member()
@@ -98,7 +98,7 @@ class TestAccDetailFunctions(BaseTestCase):
         self.assertIn(ExpenseChoices.LOCAT, result["detail"])
         self.assertIn(ExpenseChoices.COST, result["detail"])
 
-    def test_get_acc_detail_with_filters(self):
+    def test_get_acc_detail_with_filters(self) -> None:
         """Test get_acc_detail with additional filters"""
         run = self.get_run()
         member = self.get_member()
@@ -126,7 +126,7 @@ class TestAccDetailFunctions(BaseTestCase):
         self.assertEqual(result["num"], 1)
         self.assertEqual(result["tot"], Decimal("50.00"))
 
-    def test_get_acc_detail_empty(self):
+    def test_get_acc_detail_empty(self) -> None:
         """Test get_acc_detail with no items"""
         run = self.get_run()
 
@@ -142,7 +142,7 @@ class TestAccDetailFunctions(BaseTestCase):
 class TestRegDetailFunctions(BaseTestCase):
     """Test cases for registration detail functions"""
 
-    def test_get_acc_reg_type_cancelled(self):
+    def test_get_acc_reg_type_cancelled(self) -> None:
         """Test registration type for cancelled registration"""
         member = self.get_member()
         run = self.get_run()
@@ -157,7 +157,7 @@ class TestRegDetailFunctions(BaseTestCase):
         self.assertEqual(typ, "can")
         self.assertEqual(descr, "Disdetta")
 
-    def test_get_acc_reg_type_with_ticket(self):
+    def test_get_acc_reg_type_with_ticket(self) -> None:
         """Test registration type with ticket tier"""
         member = self.get_member()
         run = self.get_run()
@@ -169,7 +169,7 @@ class TestRegDetailFunctions(BaseTestCase):
         self.assertEqual(typ, TicketTier.PATRON)
         self.assertIsNotNone(descr)
 
-    def test_get_acc_reg_type_no_ticket(self):
+    def test_get_acc_reg_type_no_ticket(self) -> None:
         """Test registration type without ticket"""
         member = self.get_member()
         run = self.get_run()
@@ -180,7 +180,7 @@ class TestRegDetailFunctions(BaseTestCase):
         self.assertEqual(typ, "")
         self.assertEqual(descr, "")
 
-    def test_get_acc_reg_detail(self):
+    def test_get_acc_reg_detail(self) -> None:
         """Test getting registration detail breakdown"""
         run = self.get_run()
         member1 = self.get_member()
@@ -205,7 +205,7 @@ class TestRunAccountingFunctions(BaseTestCase):
     """Test cases for run accounting calculation"""
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_basic(self, mock_features):
+    def test_get_run_accounting_basic(self, mock_features) -> None:
         """Test basic run accounting calculation"""
         mock_features.return_value = {"payment": True}
 
@@ -231,7 +231,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(run.revenue, Decimal("0.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_with_expenses(self, mock_features):
+    def test_get_run_accounting_with_expenses(self, mock_features) -> None:
         """Test run accounting with expenses"""
         mock_features.return_value = {"payment": True, "expense": True}
 
@@ -256,7 +256,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertEqual(run.costs, Decimal("50.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_with_tokens_credits(self, mock_features):
+    def test_get_run_accounting_with_tokens_credits(self, mock_features) -> None:
         """Test run accounting with tokens and credits"""
         mock_features.return_value = {"payment": True, "token_credit": True}
 
@@ -286,7 +286,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertEqual(run.costs, Decimal("50.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_with_discounts(self, mock_features):
+    def test_get_run_accounting_with_discounts(self, mock_features) -> None:
         """Test run accounting with discounts"""
         mock_features.return_value = {"payment": True, "discount": True}
 
@@ -311,7 +311,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertEqual(result["dis"]["tot"], Decimal("20.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_calculates_balance(self, mock_features):
+    def test_get_run_accounting_calculates_balance(self, mock_features) -> None:
         """Test run accounting calculates correct balance"""
         mock_features.return_value = {"payment": True, "expense": True}
 
@@ -342,7 +342,7 @@ class TestRunAccountingFunctions(BaseTestCase):
 class TestAssocAccountingFunctions(BaseTestCase):
     """Test cases for association accounting functions"""
 
-    def test_association_accounting_data_basic(self):
+    def test_association_accounting_data_basic(self) -> None:
         """Test basic association accounting data gathering"""
         association = self.get_association()
         context = {"association_id": association.id}
@@ -356,7 +356,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertIn("in_sum", context)
         self.assertIn("out_sum", context)
 
-    def test_association_accounting_data_with_year_filter(self):
+    def test_association_accounting_data_with_year_filter(self) -> None:
         """Test association accounting data with year filter"""
         association = self.get_association()
         context = {"association_id": association.id}
@@ -366,7 +366,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertIn("membership_sum", context)
         # Should only include items from 2024
 
-    def test_association_accounting_calculates_totals(self):
+    def test_association_accounting_calculates_totals(self) -> None:
         """Test association accounting calculates correct totals"""
         association = self.get_association()
         context = {"association_id": association.id}
@@ -380,7 +380,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertIn("global_sum", context)
         self.assertIn("bank_sum", context)
 
-    def test_association_accounting_includes_member_balances(self):
+    def test_association_accounting_includes_member_balances(self) -> None:
         """Test association accounting includes member token/credit balances"""
         association = self.get_association()
         member = self.get_member()
@@ -396,7 +396,7 @@ class TestAssocAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(context["tokens_sum"], Decimal("50.00"))
         self.assertGreaterEqual(context["credits_sum"], Decimal("30.00"))
 
-    def test_association_accounting_includes_run_balances(self):
+    def test_association_accounting_includes_run_balances(self) -> None:
         """Test association accounting includes completed run balances"""
         association = self.get_association()
         run = self.get_run()

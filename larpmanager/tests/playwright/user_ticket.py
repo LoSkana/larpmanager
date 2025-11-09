@@ -26,7 +26,7 @@ from larpmanager.tests.utils import go_to, load_image, login_user, submit_confir
 pytestmark = pytest.mark.e2e
 
 
-def test_user_ticket(pw_page):
+def test_user_ticket(pw_page) -> None:
     page, live_server, _ = pw_page
 
     go_to(page, live_server, "/")

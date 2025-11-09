@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -69,7 +70,7 @@ class Command(BaseCommand):
 
     help = "Automate processes "
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:
         """Handle command execution with exception handling.
 
         Args:

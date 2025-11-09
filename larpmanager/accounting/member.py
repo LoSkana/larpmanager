@@ -41,8 +41,8 @@ from larpmanager.models.accounting import (
     RefundStatus,
 )
 from larpmanager.models.event import DevelopStatus
-from larpmanager.models.form import RegistrationChoice
-from larpmanager.models.member import get_user_membership
+from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
+from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
 
 
@@ -119,7 +119,12 @@ def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
     _info_token_credit(context, member)
 
 
-def _init_regs(registration_choices, context, pending_invoices, registration) -> None:
+def _init_regs(
+    registration_choices: dict[int, dict],
+    context: dict,
+    pending_invoices: dict,
+    registration,
+) -> None:
     """Initialize registration options and payment status tracking.
 
     Args:
@@ -150,7 +155,7 @@ def _init_regs(registration_choices, context, pending_invoices, registration) ->
         context["registration_years"][registration.run.start.year] = 1
 
 
-def _init_pending(member):
+def _init_pending(member: Member) -> dict[int, list[PaymentInvoice]]:
     """Initialize pending payment tracking for a member.
 
     Args:
@@ -173,7 +178,7 @@ def _init_pending(member):
     return pending_payments_by_registration
 
 
-def _init_choices(member):
+def _init_choices(member: Member) -> dict[int, dict[int, dict[str, RegistrationQuestion | list[RegistrationOption]]]]:
     """Initialize registration choice tracking for a member.
 
     Args:
@@ -200,7 +205,7 @@ def _init_choices(member):
     return choices
 
 
-def _info_token_credit(context, member) -> None:
+def _info_token_credit(context: dict, member: Member) -> None:
     """Get token and credit balance information for a member.
 
     Args:
@@ -233,7 +238,7 @@ def _info_token_credit(context, member) -> None:
     context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
 
 
-def _info_collections(context, member, request: HttpRequest) -> None:
+def _info_collections(context: dict, member: Member, request: HttpRequest) -> None:
     """Get collection information if collections feature is enabled.
 
     Args:
@@ -255,7 +260,7 @@ def _info_collections(context, member, request: HttpRequest) -> None:
     )
 
 
-def _info_donations(context, member, request: HttpRequest) -> None:
+def _info_donations(context: dict, member: Member, request: HttpRequest) -> None:
     """Get donation history if donations feature is enabled.
 
     Args:
@@ -274,7 +279,7 @@ def _info_donations(context, member, request: HttpRequest) -> None:
     context["donations"] = donation_queryset.order_by("-created")
 
 
-def _info_membership(context: dict, member, request: HttpRequest) -> None:
+def _info_membership(context: dict, member: Member, request: HttpRequest) -> None:
     """Get membership fee information if membership feature is enabled.
 
     Retrieves and adds membership-related information to the context dictionary,

@@ -40,21 +40,21 @@ from larpmanager.tests.unit.base import BaseTestCase
 class TestIDGenerationFunctions(BaseTestCase):
     """Test cases for ID generation utility functions"""
 
-    def test_generate_id_creates_id(self):
+    def test_generate_id_creates_id(self) -> None:
         """Test generate_id creates an ID of specified length"""
         result = generate_id(10)
 
         self.assertEqual(len(result), 10)
         self.assertTrue(result.isalnum())
 
-    def test_generate_id_is_unique(self):
+    def test_generate_id_is_unique(self) -> None:
         """Test generate_id generates unique IDs"""
         id1 = generate_id(10)
         id2 = generate_id(10)
 
         self.assertNotEqual(id1, id2)
 
-    def test_generate_id_different_lengths(self):
+    def test_generate_id_different_lengths(self) -> None:
         """Test generate_id with different lengths"""
         id5 = generate_id(5)
         id20 = generate_id(20)
@@ -62,25 +62,25 @@ class TestIDGenerationFunctions(BaseTestCase):
         self.assertEqual(len(id5), 5)
         self.assertEqual(len(id20), 20)
 
-    def test_my_uuid_default_length(self):
+    def test_my_uuid_default_length(self) -> None:
         """Test my_uuid with default length (32 hex chars)"""
         result = my_uuid()
 
         self.assertEqual(len(result), 32)
 
-    def test_my_uuid_custom_length(self):
+    def test_my_uuid_custom_length(self) -> None:
         """Test my_uuid with custom length"""
         result = my_uuid(length=12)
 
         self.assertEqual(len(result), 12)
 
-    def test_my_uuid_short(self):
+    def test_my_uuid_short(self) -> None:
         """Test my_uuid_short generates 12 character ID"""
         result = my_uuid_short()
 
         self.assertEqual(len(result), 12)
 
-    def test_my_uuid_miny(self):
+    def test_my_uuid_miny(self) -> None:
         """Test my_uuid_miny generates 5 character ID (letter + 4)"""
         result = my_uuid_miny()
 
@@ -92,38 +92,38 @@ class TestIDGenerationFunctions(BaseTestCase):
 class TestStringUtilityFunctions(BaseTestCase):
     """Test cases for string manipulation utility functions"""
 
-    def test_decimal_to_str_basic(self):
+    def test_decimal_to_str_basic(self) -> None:
         """Test decimal_to_str converts decimal to string"""
         result = decimal_to_str(Decimal("10.50"))
 
         # Function only removes .00, not all trailing zeros
         self.assertEqual(result, "10.50")
 
-    def test_decimal_to_str_with_trailing_zeros(self):
+    def test_decimal_to_str_with_trailing_zeros(self) -> None:
         """Test decimal_to_str removes .00"""
         result = decimal_to_str(Decimal("10.00"))
 
         self.assertEqual(result, "10")
 
-    def test_decimal_to_str_integer(self):
+    def test_decimal_to_str_integer(self) -> None:
         """Test decimal_to_str with integer value"""
         result = decimal_to_str(Decimal("100"))
 
         self.assertEqual(result, "100")
 
-    def test_decimal_to_str_many_decimals(self):
+    def test_decimal_to_str_many_decimals(self) -> None:
         """Test decimal_to_str with many decimal places"""
         result = decimal_to_str(Decimal("10.123456"))
 
         self.assertIn("10.12", result)
 
-    def test_remove_non_ascii_no_special_chars(self):
+    def test_remove_non_ascii_no_special_chars(self) -> None:
         """Test remove_non_ascii with plain ASCII"""
         result = remove_non_ascii("Hello World")
 
         self.assertEqual(result, "Hello World")
 
-    def test_remove_non_ascii_with_accents(self):
+    def test_remove_non_ascii_with_accents(self) -> None:
         """Test remove_non_ascii removes accented characters"""
         result = remove_non_ascii("Café résumé")
 
@@ -131,7 +131,7 @@ class TestStringUtilityFunctions(BaseTestCase):
         self.assertNotIn("é", result)
         self.assertIn("Caf", result)
 
-    def test_remove_non_ascii_with_special_symbols(self):
+    def test_remove_non_ascii_with_special_symbols(self) -> None:
         """Test remove_non_ascii removes special symbols"""
         result = remove_non_ascii("Hello™ World®")
 
@@ -140,31 +140,31 @@ class TestStringUtilityFunctions(BaseTestCase):
         self.assertIn("Hello", result)
         self.assertIn("World", result)
 
-    def test_strip_tags_no_tags(self):
+    def test_strip_tags_no_tags(self) -> None:
         """Test strip_tags with plain text"""
         result = strip_tags("Hello World")
 
         self.assertEqual(result, "Hello World")
 
-    def test_strip_tags_simple_tags(self):
+    def test_strip_tags_simple_tags(self) -> None:
         """Test strip_tags removes HTML tags"""
         result = strip_tags("<p>Hello</p> <b>World</b>")
 
         self.assertEqual(result, "Hello World")
 
-    def test_strip_tags_nested_tags(self):
+    def test_strip_tags_nested_tags(self) -> None:
         """Test strip_tags with nested HTML"""
         result = strip_tags("<div><p>Hello <strong>World</strong></p></div>")
 
         self.assertEqual(result, "Hello World")
 
-    def test_strip_tags_with_attributes(self):
+    def test_strip_tags_with_attributes(self) -> None:
         """Test strip_tags removes tags with attributes"""
         result = strip_tags('<a href="http://example.com">Link</a>')
 
         self.assertEqual(result, "Link")
 
-    def test_strip_tags_preserves_entities(self):
+    def test_strip_tags_preserves_entities(self) -> None:
         """Test strip_tags handles HTML entities"""
         result = strip_tags("<p>Hello &amp; Goodbye</p>")
 
@@ -176,7 +176,7 @@ class TestStringUtilityFunctions(BaseTestCase):
 class TestDataAggregationFunctions(BaseTestCase):
     """Test cases for data aggregation utility functions"""
 
-    def test_get_sum_empty_queryset(self):
+    def test_get_sum_empty_queryset(self) -> None:
         """Test get_sum with empty queryset"""
         from larpmanager.models.accounting import AccountingItemPayment
 
@@ -185,7 +185,7 @@ class TestDataAggregationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("0"))
 
-    def test_get_sum_single_item(self):
+    def test_get_sum_single_item(self) -> None:
         """Test get_sum with single item"""
         from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 
@@ -202,7 +202,7 @@ class TestDataAggregationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("100.00"))
 
-    def test_get_sum_multiple_items(self):
+    def test_get_sum_multiple_items(self) -> None:
         """Test get_sum aggregates multiple items"""
         from larpmanager.models.accounting import AccountingItemPayment, PaymentChoices
 
@@ -225,7 +225,7 @@ class TestDataAggregationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("100.00"))
 
-    def test_get_attr_simple_attribute(self):
+    def test_get_attr_simple_attribute(self) -> None:
         """Test get_attr retrieves simple attribute"""
 
         class TestObj:
@@ -236,7 +236,7 @@ class TestDataAggregationFunctions(BaseTestCase):
 
         self.assertEqual(result, "Test")
 
-    def test_get_attr_nested_attribute(self):
+    def test_get_attr_nested_attribute(self) -> None:
         """Test get_attr doesn't support nested attributes"""
 
         class Inner:
@@ -252,7 +252,7 @@ class TestDataAggregationFunctions(BaseTestCase):
         # Should return the Inner object itself
         self.assertIsNotNone(result)
 
-    def test_get_attr_missing_attribute(self):
+    def test_get_attr_missing_attribute(self) -> None:
         """Test get_attr with missing attribute"""
 
         class TestObj:
@@ -264,18 +264,18 @@ class TestDataAggregationFunctions(BaseTestCase):
         # Returns None for missing attributes
         self.assertIsNone(result)
 
-    def test_get_attr_none_object(self):
+    def test_get_attr_none_object(self) -> None:
         """Test get_attr with None object"""
         result = get_attr(None, "name")
 
         # Returns None for None object
         self.assertIsNone(result)
 
-    def test_get_attr_callable(self):
+    def test_get_attr_callable(self) -> None:
         """Test get_attr with callable attribute"""
 
         class TestObj:
-            def get_name(self):
+            def get_name(self) -> str:
                 return "Callable Result"
 
         obj = TestObj()

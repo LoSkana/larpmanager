@@ -56,7 +56,7 @@ def analyze_codebase(root_dir="."):
     return all_functions
 
 
-def main():
+def main() -> None:
     """Run the main analysis."""
     print("Analyzing codebase...")
 
