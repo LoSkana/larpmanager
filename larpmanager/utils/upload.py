@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import io
+import logging
 import os
 import shutil
 from datetime import datetime
@@ -67,6 +68,8 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
+
+logger = logging.getLogger(__name__)
 
 
 def go_upload(request, context, upload_form_data):
@@ -155,7 +158,7 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
             return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
         except Exception as parsing_error:
             # Log error and continue to next encoding
-            print(parsing_error)
+            logger.debug(f"Failed to parse CSV with encoding {encoding}: {parsing_error}")
             continue
 
     # Return None if all encodings failed
@@ -1149,7 +1152,7 @@ def cover_load(context, z_obj):
         for el in filenames:
             num = os.path.splitext(el)[0]
             covers[num] = os.path.join(root, el)
-    print(covers)
+    logger.debug(f"Extracted covers: {covers}")
     upload_to = UploadToPathAndRename("character/cover/")
     # cicle characters
     for c in context["run"].event.get_elements(Character):

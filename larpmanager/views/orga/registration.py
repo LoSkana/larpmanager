@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import time
 from datetime import date
 from random import shuffle
@@ -85,6 +86,8 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import _orga_registrations_acc, download
 from larpmanager.views.orga.member import member_field_correct
+
+logger = logging.getLogger(__name__)
 
 
 def check_time(times, step, start=None):
@@ -856,7 +859,7 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
 
     # Trigger background registration checks
     check_registration_background(reg_ids)
-    # print(f"@@@@ orga_registrations_reload {request} {datetime.now()}")
+    # logger.debug(f"Reloading registrations for {request} at {datetime.now()}")
     return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
 

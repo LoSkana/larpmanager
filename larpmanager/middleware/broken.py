@@ -18,12 +18,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import re
 from collections.abc import Callable
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+
+logger = logging.getLogger(__name__)
 
 
 class BrokenLinkEmailsMiddleware:
@@ -93,8 +96,8 @@ class BrokenLinkEmailsMiddleware:
                 return None
 
         # Handle domain redirection for larpmanager.com with $ separator
-        # print(domain)
-        # print(path)
+        # logger.debug(f"Domain: {domain}")
+        # logger.debug(f"Path: {path}")
         if domain == "larpmanager.com" and "$" in path:
             path_parts = path.split("$")
             # print (at)

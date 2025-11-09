@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
 import re
 
@@ -41,6 +42,7 @@ from larpmanager.utils.common import html_clean
 from larpmanager.utils.pdf import get_trait_character
 
 register = template.Library()
+logger = logging.getLogger(__name__)
 
 
 @register.filter
@@ -791,7 +793,7 @@ def template_trans(text):
     try:
         return _(text)
     except Exception as e:
-        print(e)
+        logger.debug(f"Translation failed for text: {e}")
         return text
 
 

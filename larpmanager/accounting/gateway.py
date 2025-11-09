@@ -644,14 +644,14 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
     # ~ context['merchant_parameters'] = msg.decode('ascii')
 
     # ~ # 3DES encryption between the merchant key (decoded in BASE 64) and the order
-    # ~ #print(context['redsys_secret_key'])
+    # ~ # logger.debug(f"Redsys secret key: {context['redsys_secret_key']}")
     # ~ key = base64.b64decode(context['redsys_secret_key'])
-    # ~ #print(key.hex())
-    # ~ #print(key)
+    # ~ # logger.debug(f"Key hex: {key.hex()}")
+    # ~ # logger.debug(f"Key: {key}")
     # ~ code = invoice.cod
     # ~ while len(code) % 8 != 0:
     # ~ code += "\0"
-    # ~ #print(code)
+    # ~ # logger.debug(f"Code: {code}")
     # ~ k = pyDes.triple_des(key, pyDes.CBC, b"\0\0\0\0\0\0\0\0", "\0")
     # ~ ds = k.encrypt(code)
     # logger.debug(f"DS: {ds}")

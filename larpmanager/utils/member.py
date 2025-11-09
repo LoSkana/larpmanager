@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import logging
 from datetime import date
 
 from django.conf import settings as conf_settings
@@ -28,6 +29,8 @@ from django.http import Http404, HttpRequest
 
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email
+
+logger = logging.getLogger(__name__)
 
 
 def count_differences(first_string: str, second_string: str) -> int | bool:
@@ -174,7 +177,7 @@ def assign_badge(member: Member, badge_code: str) -> None:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(member)
     except Exception as e:
-        print(e)
+        logger.exception(f"Failed to assign badge {badge_code} to member {member}: {e}")
 
 
 def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:

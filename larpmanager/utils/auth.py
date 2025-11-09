@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.models import SocialLogin
 from django.contrib.auth.models import User
@@ -27,6 +29,8 @@ from django.forms import Form
 from django.http import Http404, HttpRequest
 
 from larpmanager.models.access import EventPermission
+
+logger = logging.getLogger(__name__)
 
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -57,7 +61,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         """
         # Extract extra data from social login account
         social_provider_data = sociallogin.account.extra_data
-        # print(social_provider_data)
+        # logger.debug(f"Social provider data: {social_provider_data}")
 
         # Update name field if it's empty and given_name is available
         if "given_name" in social_provider_data and len(user.member.name) == 0:

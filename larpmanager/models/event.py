@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import inspect
+import logging
 import os
 from typing import Any
 
@@ -46,6 +47,8 @@ from larpmanager.models.utils import (
     my_uuid_short,
     show_thumb,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class Event(BaseModel):
@@ -303,7 +306,7 @@ class Event(BaseModel):
             return self.cover_thumb.url
         except Exception as e:
             # Log error and return None if cover_thumb is not available
-            print(e)
+            logger.debug(f"Cover thumbnail not available for event {self.id}: {e}")
             return None
 
     def get_name(self) -> str:

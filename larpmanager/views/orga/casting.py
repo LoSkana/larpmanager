@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import json
+import logging
 import random
 
 from django.contrib import messages
@@ -49,6 +50,8 @@ from larpmanager.views.user.casting import (
     casting_preferences_characters,
     casting_preferences_traits,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -160,7 +163,7 @@ def assign_casting(request: HttpRequest, context: dict, assignment_type: int) ->
 
         except Exception as exception:
             # Collect any errors that occur during processing
-            print(exception)
+            logger.exception(f"Error processing casting assignment: {exception}")
             error_messages += str(exception)
 
     # Display collected errors to user if any occurred

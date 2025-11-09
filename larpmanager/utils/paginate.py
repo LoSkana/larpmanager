@@ -1,3 +1,4 @@
+import logging
 from decimal import Decimal
 from typing import Any
 
@@ -32,6 +33,8 @@ from larpmanager.models.accounting import (
     RefundRequest,
 )
 from larpmanager.models.member import Membership
+
+logger = logging.getLogger(__name__)
 
 
 def paginate(
@@ -188,7 +191,7 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
 
         # Validate column index is within bounds
         if column_index >= len(context["fields"]):
-            print(f"this shouldn't happen! _get_ordering {column_filters} {context['fields']}")
+            logger.error(f"Column index out of bounds in _get_ordering: {column_filters} {context['fields']}")
 
         # Extract field and name from context fields
         field_name, display_name = context["fields"][column_index - 1]
@@ -250,7 +253,7 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
         # Validate column index is within bounds
         if column_index_int >= len(context["fields"]):
-            print(f"this shouldn't happen! _get_ordering {column_order} {context['fields']}")
+            logger.error(f"Column index out of bounds in _get_ordering: {column_order} {context['fields']}")
         field_name, display_name = context["fields"][column_index_int - 1]
 
         # Skip callback fields as they can't be used for database ordering

@@ -20,6 +20,7 @@
 import base64
 import hashlib
 import json
+import logging
 import os
 import random
 import string
@@ -40,6 +41,8 @@ from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
+
+logger = logging.getLogger(__name__)
 
 
 def generate_id(id_length):
@@ -283,8 +286,8 @@ class UploadToPathAndRename:
                 bkp_fn = f"{instance.pk}_{datetime.now()}.{ext}"
                 bkp_fn = os.path.join(str(bkp), bkp_fn)
                 current_fn = os.path.join(conf_settings.MEDIA_ROOT, path, el)
-                # print(bkp)
-                # print(bkp_fn)
+                # logger.debug(f"Backup: {bkp}")
+                # logger.debug(f"Backup filename: {bkp_fn}")
                 os.rename(current_fn, bkp_fn)
 
         return new_fn

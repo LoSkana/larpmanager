@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import json
+import logging
 import os
 import random
 import shutil
@@ -37,6 +38,8 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+
+logger = logging.getLogger(__name__)
 
 
 def upload_albums_dir(main, cache_subs: dict, name: str):
@@ -160,7 +163,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     # Complete the file path with unique filename
     destination_path = os.path.join(destination_path, unique_filename)
-    print(destination_path)
+    logger.debug(f"Uploading album image to: {destination_path}")
 
     # Move file from extraction path to final destination
     os.rename(os.path.join(o_path, name), destination_path)

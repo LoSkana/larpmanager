@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
 
 from django.conf import settings as conf_settings
@@ -37,6 +38,8 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.codes import countries
+
+logger = logging.getLogger(__name__)
 
 
 class GenderChoices(models.TextChoices):
@@ -491,7 +494,7 @@ class Membership(BaseModel):
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
         except Exception as exception:
-            print(exception)
+            logger.debug(f"Request file not available for membership {self.id}: {exception}")
             return ""
 
     def get_document_filepath(self):
@@ -500,7 +503,7 @@ class Membership(BaseModel):
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
         except Exception as error:
-            print(error)
+            logger.debug(f"Document file not available for membership {self.id}: {error}")
             return ""
 
 

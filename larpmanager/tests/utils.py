@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import io
+import logging
 import os
 import zipfile
 from datetime import datetime
@@ -27,6 +28,8 @@ from urllib.parse import urlparse
 
 import pandas as pd
 from playwright.sync_api import expect
+
+logger = logging.getLogger(__name__)
 
 password = "banana"
 orga_user = "orga@test.it"
@@ -56,8 +59,8 @@ def login(page, live_server, name):
 
 
 def handle_error(page, e, test_name):
-    print(f"Error on {test_name}: {page.url}\n")
-    print(e)
+    logger.error(f"Error on {test_name}: {page.url}\n")
+    logger.error(e)
 
     uid = datetime.now().strftime("%Y%m%d_%H%M%S")
     page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
@@ -79,7 +82,7 @@ def print_text(page):
         }
     """)
 
-    print(visible_text)
+    logger.debug(visible_text)
 
 
 def go_to(page, live_server, path):
@@ -147,7 +150,7 @@ def check_download(page, link: str) -> None:
             return
 
         except Exception as err:
-            print(err)
+            logger.warning(f"Download attempt {current_try + 1}/{max_tries} failed: {err}")
             current_try += 1
             if current_try >= max_tries:
                 raise

@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -56,6 +58,8 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import copy_class
+
+logger = logging.getLogger(__name__)
 
 
 def correct_rels_many(e_id, cls_p, cls, field, rel_field="number"):
@@ -153,13 +157,13 @@ def correct_relationship(e_id, p_id):
 
     # copy complicated
     # Relationship
-    # print(source_character_id_to_number)
-    # print(target_character_number_to_id)
+    # logger.debug(f"Source character ID to number: {source_character_id_to_number}")
+    # logger.debug(f"Target character number to ID: {target_character_number_to_id}")
     for relationship in Relationship.objects.filter(source__event_id=p_id):
-        # print(relationship)
+        # logger.debug(f"Processing relationship: {relationship}")
 
         new_source_id = relationship.source_id
-        # print(relationship.source_id)
+        # logger.debug(f"Relationship source ID: {relationship.source_id}")
         if new_source_id not in source_character_id_to_number:
             continue
         new_source_id = source_character_id_to_number[new_source_id]
