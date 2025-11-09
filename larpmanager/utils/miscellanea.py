@@ -460,9 +460,9 @@ def _check_new(file_field, instance, sender) -> bool:
                 # Compare file names and check if no new file data is present
                 if file_field.name == existing_file_name and not getattr(file_field, "file", None):
                     return True
-        except Exception:
+        except Exception as e:
             # Silently handle any database or attribute errors
-            pass
+            logger.debug(f"Error checking file field for instance pk={instance.pk}: {e}")
 
     # Default to treating as new file upload
     return False

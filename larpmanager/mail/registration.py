@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import time
 
 from django.utils.translation import activate
@@ -35,6 +36,8 @@ from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
+
+logger = logging.getLogger(__name__)
 
 
 @background_auto(queue="acc")
@@ -382,8 +385,8 @@ def send_registration_cancellation_email(instance: Registration) -> None:
     if instance.pk:
         try:
             previous_registration = Registration.objects.get(pk=instance.pk)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Registration pk={instance.pk} not found in pre-save: {e}")
 
     # Send cancellation email only when registration is newly cancelled
     if previous_registration and instance.cancellation_date and not previous_registration.cancellation_date:

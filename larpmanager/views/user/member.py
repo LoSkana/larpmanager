@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import math
 import os
 import random
@@ -74,6 +75,8 @@ from larpmanager.utils.member import get_leaderboard
 from larpmanager.utils.pdf import get_membership_request
 from larpmanager.utils.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
+
+logger = logging.getLogger(__name__)
 
 
 def language(request: HttpRequest) -> HttpResponse:
@@ -569,8 +572,8 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
         try:
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Social contact validation failed for member={member_id}: {e}")
 
     return render(request, "larpmanager/member/public.html", context)
 
@@ -836,9 +839,9 @@ def vote(request: HttpRequest) -> HttpResponse:
         try:
             idx = int(mb)
             context["candidates"].append(Member.objects.get(pk=idx))
-        except Exception:
+        except Exception as e:
             # Skip invalid candidate IDs
-            pass
+            logger.debug(f"Invalid candidate ID or member not found: {mb}: {e}")
 
     # Randomize candidate order to prevent position bias
     random.shuffle(context["candidates"])

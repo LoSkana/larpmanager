@@ -36,7 +36,8 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum
 from django.utils.deconstruct import deconstructible
-from django.utils.safestring import SafeString, mark_safe
+from django.utils.html import format_html
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
@@ -181,11 +182,8 @@ def show_thumb(height: int, image_url: str) -> SafeString:
         '<img style="height:100px" src="/media/image.jpg" />'
 
     """
-    # Generate HTML img tag with inline height styling
-    html_img_tag = f'<img style="height:{height}px" src="{image_url}" />'
-
-    # Return as SafeString to prevent HTML escaping in templates
-    return mark_safe(html_img_tag)
+    # Generate HTML img tag with inline height styling using format_html for safety
+    return format_html('<img style="height:{}px" src="{}" />', height, image_url)
 
 
 def get_attr(obj: object, attr_name: str) -> str | None:

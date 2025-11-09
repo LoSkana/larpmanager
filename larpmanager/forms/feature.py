@@ -21,7 +21,7 @@ from typing import Any
 
 from django import forms
 from django.db.models import Q
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html_join
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
@@ -58,33 +58,42 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
                 HTML string containing feature checkboxes with tooltips and help icons
 
         """
-        output = []
         value = value or []
 
         # Get localized text for help tooltip
         know_more = _("click on the icon to open the tutorial")
 
-        # Generate HTML for each feature option
+        # Build list of checkbox elements as tuples for format_html_join
+        checkbox_elements = []
         for i, (option_value, option_label) in enumerate(self.choices):
             # Create unique checkbox ID and determine checked state
             checkbox_id = f"{attrs.get('id', name)}_{i}"
             checked = "checked" if str(option_value) in value else ""
 
-            # Build individual HTML components
-            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            label_html = f'<label for="{checkbox_id}">{option_label}</label>'
-            link_html = f'<a href="#" feat="{option_value}"><i class="fas fa-question-circle"></i></a>'
-
-            # Get help text for this feature and build tooltip
+            # Get help text for this feature
             help_text = self.feature_help.get(option_value, "")
-            output.append(f"""
-                <div class="feature_checkbox lm_tooltip">
-                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
-                    {checkbox_html} {label_html} {link_html}
-                </div>
-            """)
 
-        return mark_safe("\n".join(output))
+            # Add tuple with all the data needed for this checkbox
+            checkbox_elements.append(
+                (
+                    help_text,
+                    know_more,
+                    name,
+                    option_value,
+                    checkbox_id,
+                    checked,
+                    checkbox_id,
+                    option_label,
+                    option_value,
+                )
+            )
+
+        # Use format_html_join to safely generate the HTML
+        return format_html_join(
+            "\n",
+            '<div class="feature_checkbox lm_tooltip"><span class="hide lm_tooltiptext">{} ({})</span><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label> <a href="#" feat="{}"><i class="fas fa-question-circle"></i></a></div>',
+            checkbox_elements,
+        )
 
 
 class FeatureForm(MyForm):

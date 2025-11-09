@@ -4,8 +4,7 @@ from typing import Any
 
 from django import forms
 from django.forms import Textarea
-from django.utils.html import escape
-from django.utils.safestring import mark_safe
+from django.utils.html import escape, format_html_join
 from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
@@ -37,10 +36,10 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
             Safe HTML string containing the rendered checkbox elements
 
         """
-        output = []
         value = value or []
 
-        # Iterate through each choice option to create checkbox elements
+        # Build list of checkbox elements as tuples for format_html_join
+        checkbox_elements = []
         for i, (option_value, option_label) in enumerate(self.choices):
             # Generate unique ID for each checkbox using the base name and index
             checkbox_id = f"{escape(attrs.get('id', name))}_{i}"
@@ -48,16 +47,24 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
             # Check if current option value is in the selected values list
             checked = "checked" if str(option_value) in value else ""
 
-            # Create the checkbox input element with proper escaping
-            checkbox_html = f'<input type="checkbox" name="{escape(name)}" value="{escape(option_value)}" id="{checkbox_id}" {checked}>'
+            # Build the complete HTML for this checkbox
+            checkbox_elements.append(
+                (
+                    name,
+                    option_value,
+                    checkbox_id,
+                    checked,
+                    checkbox_id,
+                    option_label,
+                )
+            )
 
-            # Create the associated label element
-            link_html = f'<label for="{checkbox_id}">{escape(option_label)}</label>'
-
-            # Wrap checkbox and label in a container div
-            output.append(f'<div class="feature_checkbox">{checkbox_html} {link_html}</div>')
-
-        return mark_safe("\n".join(output))
+        # Use format_html_join to safely generate the HTML
+        return format_html_join(
+            "\n",
+            '<div class="feature_checkbox"><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label></div>',
+            checkbox_elements,
+        )
 
 
 class ConfigForm(MyForm):

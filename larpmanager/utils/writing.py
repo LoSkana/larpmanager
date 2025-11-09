@@ -21,6 +21,7 @@
 import csv
 import io
 import json
+import logging
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -64,6 +65,8 @@ from larpmanager.utils.common import check_field, compute_diff
 from larpmanager.utils.download import download
 from larpmanager.utils.edit import _setup_char_finder
 from larpmanager.utils.exceptions import ReturnNowError
+
+logger = logging.getLogger(__name__)
 
 
 def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
@@ -499,8 +502,8 @@ def _prepare_writing_list(context, request):
             .filter(applicable=context["writing_typ"], typ=WritingQuestionType.NAME)
         )
         context["name_que_id"] = name_question.values_list("id", flat=True)[0]
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Name question not found for writing type {context['writing_typ']}: {e}")
 
     model_name = context["label_typ"].lower()
     context["default_fields"] = context["member"].get_config(f"open_{model_name}_{context['event'].id}", "[]")

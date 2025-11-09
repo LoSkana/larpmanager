@@ -484,8 +484,8 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
         )
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Membership fee not found for member={context['member'].id}, year={year}: {e}")
 
     # Set up context variables for template rendering
     context["year"] = year

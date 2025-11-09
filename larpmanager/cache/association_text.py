@@ -17,11 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import logging
+
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.utils.translation import get_language
 
 from larpmanager.models.association import AssociationText
+
+logger = logging.getLogger(__name__)
 
 
 def association_text_key(association_id: int, text_type: str, language: str) -> str:
@@ -45,9 +49,9 @@ def update_association_text(association_id: int, typ: str, lang: str) -> str:
     try:
         # Retrieve association text from database
         text_content = AssociationText.objects.get(association_id=association_id, typ=typ, language=lang).text
-    except Exception:
+    except Exception as e:
         # Return empty string if text not found
-        pass
+        logger.debug(f"Association text not found for {association_id}, {typ}, {lang}: {e}")
 
     # Cache the result for one day
     cache.set(association_text_key(association_id, typ, lang), text_content, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -98,8 +102,8 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
         default_text = (
             AssociationText.objects.filter(association_id=association_id, typ=text_type, default=True).first().text
         )
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Default association text not found for {association_id}, {text_type}: {e}")
 
     # Cache the result for one day
     cache.set(

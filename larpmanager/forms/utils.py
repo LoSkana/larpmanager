@@ -24,8 +24,7 @@ from typing import Any
 from django import forms
 from django.db.models import Q, QuerySet
 from django.forms.widgets import Widget
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
@@ -142,14 +141,14 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
             Safe HTML string containing the complete checkbox widget markup
 
         """
-        output = []
         # Ensure value is a list for membership checking
         value = value or []
 
         # Localized text for help icon tooltip
         know_more = _("click on the icon to open the tutorial")
 
-        # Generate HTML for each checkbox option
+        # Build list of checkbox elements as tuples for format_html_join
+        checkbox_elements = []
         for i, (option_value, option_label) in enumerate(self.choices):
             # Create unique ID for each checkbox using index
             checkbox_id = f"{attrs.get('id', name)}_{i}"
@@ -157,23 +156,31 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
             # Determine if this option should be checked
             checked = "checked" if option_value in value else ""
 
-            # Build individual HTML components
-            checkbox_html = f'<input type="checkbox" name="{name}" value="{option_value}" id="{checkbox_id}" {checked}>'
-            label_html = f'<label for="{checkbox_id}">{option_label}</label>'
-            link_html = f'<a href="#" feat="{self.feature_map.get(option_value, "")}"><i class="fas fa-question-circle"></i></a>'
-
             # Get help text for this specific feature option
             help_text = self.feature_help.get(option_value, "")
+            feature_value = self.feature_map.get(option_value, "")
 
-            # Combine all components into a single checkbox div
-            output.append(f"""
-                <div class="feature_checkbox lm_tooltip">
-                    <span class="hide lm_tooltiptext">{help_text} ({know_more})</span>
-                    {checkbox_html} {label_html} {link_html}
-                </div>
-            """)
+            # Add tuple with all the data needed for this checkbox
+            checkbox_elements.append(
+                (
+                    help_text,
+                    know_more,
+                    name,
+                    option_value,
+                    checkbox_id,
+                    checked,
+                    checkbox_id,
+                    option_label,
+                    feature_value,
+                )
+            )
 
-        return mark_safe("\n".join(output))
+        # Use format_html_join to safely generate the HTML
+        return format_html_join(
+            "\n",
+            '<div class="feature_checkbox lm_tooltip"><span class="hide lm_tooltiptext">{} ({})</span><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label> <a href="#" feat="{}"><i class="fas fa-question-circle"></i></a></div>',
+            checkbox_elements,
+        )
 
 
 class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
@@ -255,8 +262,7 @@ def prepare_permissions_role(form, typ) -> None:
         field_name = f"perm_{module.pk}"
 
         # Create module label with icon markup
-        label = _(module.name)
-        label = mark_safe(f"<i class='fa-solid fa-{module.icon}'></i> {label}")
+        label = format_html("<i class='fa-solid fa-{}'></i> {}", module.icon, _(module.name))
 
         # Determine which permissions should be initially selected
         module_permission_ids = [permission.pk for permission in module_permissions]

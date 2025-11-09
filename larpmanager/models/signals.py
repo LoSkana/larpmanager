@@ -1619,6 +1619,6 @@ def handle_request_exception(sender, request, **kwargs):
     """
     try:
         create_error_ticket(request)
-    except Exception:
+    except Exception as e:
         # Don't let ticket creation failure break the error handling
-        pass
+        log.debug(f"Failed to create error ticket: {e}")

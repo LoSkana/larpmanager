@@ -22,7 +22,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, MemberFilter, reduced
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership, VolunteerRegistry, Vote
@@ -55,7 +55,7 @@ class MyUserAdmin(UserAdmin):
     def character_link(instance) -> str:
         """Generate admin link for member."""
         url = reverse("admin:larpmanager_member_change", args=[instance.member.id])
-        return mark_safe(f"<a href='{url}'>{instance.member}</a>")
+        return format_html('<a href="{}">{}</a>', url, instance.member)
 
 
 admin.site.unregister(User)
@@ -83,7 +83,7 @@ class MemberAdmin(DefModelAdmin):
     def user_link(instance) -> str:
         """Generate HTML link to admin page for the user."""
         url = reverse("admin:auth_user_change", args=[instance.user.id])
-        return mark_safe(f"<a href='{url}'>{instance.user}</a>")
+        return format_html('<a href="{}">{}</a>', url, instance.user)
 
     @staticmethod
     def diet_red(instance):

@@ -20,6 +20,7 @@
 
 """Payment processing and management utilities."""
 
+import logging
 import math
 import re
 from datetime import datetime
@@ -72,6 +73,8 @@ from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import fetch_payment_details, update_payment_details
 from larpmanager.utils.einvoice import process_payment
 from larpmanager.utils.member import assign_badge
+
+logger = logging.getLogger(__name__)
 
 
 def get_payment_fee(association_id, slug):
@@ -333,9 +336,9 @@ def get_payment_form(
     if invoice_key is not None:
         try:
             invoice = PaymentInvoice.objects.get(key=invoice_key, status=PaymentStatus.CREATED)
-        except Exception:
+        except Exception as e:
             # Invoice not found or invalid, will create new one
-            pass
+            logger.debug(f"Invoice {invoice_key} not found or invalid: {e}")
 
     # Create new invoice if existing one not found or invalid
     if not invoice:
