@@ -610,8 +610,7 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
 def _clean(html_content: str | None) -> str:
     """Strip HTML tags and normalize whitespace."""
     soup = BeautifulSoup(str(html_content), features="lxml")
-    cleaned_text = soup.get_text("\n").replace("\n", " ")
-    return cleaned_text
+    return soup.get_text("\n").replace("\n", " ")
 
 
 def _download_prepare(context: dict, model_name: str, queryset, type_config: dict) -> object:

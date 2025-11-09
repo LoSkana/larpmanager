@@ -166,7 +166,7 @@ def _get_values_mapping(element) -> dict[str, callable]:
 
     """
     # Basic text and content fields
-    mapping = {
+    return {
         "text": lambda: element.text,
         "teaser": lambda: element.teaser,
         "name": lambda: element.name,
@@ -174,7 +174,6 @@ def _get_values_mapping(element) -> dict[str, callable]:
         # Related faction names joined by comma
         "faction": lambda: ", ".join([faction.name for faction in element.factions_list.all()]),
     }
-    return mapping
 
 
 def check_run(element, context, accessor_field=None):

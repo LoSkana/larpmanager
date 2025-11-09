@@ -547,8 +547,7 @@ def _get_features_map(run: Run, context: dict):
         features_map = {}
     if run.event_id not in features_map:
         features_map[run.event_id] = get_event_features(run.event_id)
-    event_features = features_map[run.event_id]
-    return event_features
+    return features_map[run.event_id]
 
 
 def registration_find(run: Run, member: Member, context: dict | None = None):

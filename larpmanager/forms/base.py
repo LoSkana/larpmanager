@@ -677,9 +677,7 @@ class BaseRegistrationForm(MyFormRun):
 
         """
         # Generate unique key using option ID for tracking purposes
-        tracking_key = f"option_{option.id}"
-
-        return tracking_key
+        return f"option_{option.id}"
 
     def init_orga_fields(self, registration_section: str | None = None) -> list[str]:
         """Initialize form fields for organizer view with registration questions.

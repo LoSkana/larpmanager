@@ -133,8 +133,7 @@ def _clean_birth_place(birth_place: str | None) -> str:
     if not birth_place:
         return ""
     # Remove everything in parenthesis
-    birth_place_without_parentheses = re.sub(r"\(.*?\)", "", birth_place)
-    return birth_place_without_parentheses
+    return re.sub(r"\(.*?\)", "", birth_place)
 
 
 def _slugify(input_text):
@@ -162,8 +161,7 @@ def _slugify(input_text):
     # Replace any sequence of whitespace or hyphens with a single hyphen
     normalized_text = re.sub(r"[\s-]+", "-", normalized_text)
     # Strip leading and trailing hyphens
-    normalized_text = normalized_text.strip("-")
-    return normalized_text
+    return normalized_text.strip("-")
 
 
 def _extract_municipality_code(birth_place: str) -> str:
@@ -323,8 +321,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
             weighted_sum += odd_position_values[character]
 
     # Convert the modulo 26 result to a letter (A=0, B=1, ..., Z=25)
-    check_digit = chr((weighted_sum % 26) + ord("A"))
-    return check_digit
+    return chr((weighted_sum % 26) + ord("A"))
 
 
 def _go(member: Member, male: bool = True) -> dict[str, Any]:

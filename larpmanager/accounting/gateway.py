@@ -269,6 +269,7 @@ def handle_valid_paypal_ipn(ipn_obj):
         # logger.debug(f"IPN gross: {ipn_obj.mc_gross}")
 
         return invoice_received_money(ipn_obj.invoice, ipn_obj.mc_gross, ipn_obj.mc_fee, ipn_obj.txn_id)
+    return None
 
 
 def handle_invalid_paypal_ipn(invalid_ipn_object):
@@ -386,7 +387,7 @@ def stripe_webhook(request):
     # ~ elif event['type'] == 'checkout.session.async_payment_succeeded':
     # ~ return True
     return True
-        # raise Exception('Unhandled event type {}'.format(event['type']))
+    # raise Exception('Unhandled event type {}'.format(event['type']))
 
 
 def get_sumup_form(

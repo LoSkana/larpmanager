@@ -930,6 +930,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Add newly selected characters
         for ch in new - old:
             RegistrationCharacterRel.objects.create(character_id=ch, reg_id=instance.pk)
+        return None
 
     def clean_characters_new(self):
         """Validate that new character assignments don't conflict with existing registrations.

@@ -845,8 +845,7 @@ def get_members_queryset(association_id):
     """
     allowed_statuses = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
     queryset = Member.objects.prefetch_related("memberships")
-    queryset = queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
-    return queryset
+    return queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
 class WritingTinyMCE(TinyMCE):

@@ -441,8 +441,7 @@ class ResidenceField(forms.MultiValueField):
         """
         # Handle empty/None input by creating default values for all fields
         if not value:
-            value = self.compress([None] * len(self.fields))
-            return value
+            return self.compress([None] * len(self.fields))
 
         try:
             cleaned_data = []

@@ -80,6 +80,4 @@ class CorrectUrlMiddleware:
                 return redirect(path.strip(char))
 
         # No URL issues found, continue with normal request processing
-        response = self.get_response(request)
-
-        return response
+        return self.get_response(request)

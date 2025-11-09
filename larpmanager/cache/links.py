@@ -68,6 +68,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         )
 
     context.update(navigation_context)
+    return None
 
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:

@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 """Token and credit balance management for member registrations."""
+
 from decimal import Decimal
 
 from django.db import transaction
@@ -190,9 +191,7 @@ def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Regi
 
     # Filter for significant payment differences (> 0.05 absolute value)
     # Excludes small differences that might be due to rounding or minor errors
-    registration_queryset = registration_queryset.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
-
-    return registration_queryset
+    return registration_queryset.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
 
 
 def get_regs(association: Association) -> QuerySet[Registration]:

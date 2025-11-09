@@ -770,11 +770,12 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpRes
     return render(request, "larpmanager/member/acc_collection_redeem.html", context)
 
 
-def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse:
+def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:
     """Handle PayPal webhook for invoice payment confirmation."""
     # Temporary fix until PayPal fees are better understood
     if invoice_received_money(s):
         return JsonResponse({"res": "ok"})
+    return None
 
 
 @csrf_exempt

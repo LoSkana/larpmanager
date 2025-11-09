@@ -237,8 +237,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
     def get_option_key_count(self, option) -> str:
         """Return cache key for tracking option character count."""
-        cache_key = f"option_char_{option.id}"
-        return cache_key
+        return f"option_char_{option.id}"
 
     def save(self, commit: bool = True) -> Any:
         """Save the form and handle registration questions if present.

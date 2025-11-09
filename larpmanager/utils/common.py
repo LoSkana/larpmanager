@@ -648,8 +648,7 @@ def html_clean(text: str | None) -> str:
     # Remove all HTML tags from the text
     text = strip_tags(text)
     # Unescape HTML entities (e.g., &amp; -> &, &lt; -> <)
-    text = html.unescape(text)
-    return text
+    return html.unescape(text)
 
 
 def dump(obj: object) -> str:
@@ -844,11 +843,9 @@ def normalize_string(input_string: str) -> str:
     normalized_string = normalized_string.replace(" ", "")
 
     # Remove accented characters using Unicode normalization
-    normalized_string = "".join(
+    return "".join(
         char for char in unicodedata.normalize("NFD", normalized_string) if unicodedata.category(char) != "Mn"
     )
-
-    return normalized_string
 
 
 def copy_class(target_event_id, source_event_id, model_class):
@@ -935,8 +932,7 @@ def clean(s):
     s = re.sub(r"[^\w]", " ", s)  # remove symbols
     s = re.sub(r"\s", " ", s)  # replace whitespaces with spaces
     s = re.sub(r" +", "", s)  # remove spaces
-    s = s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
-    return s
+    return s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
 
 
 def _search_char_reg(context: dict, character, search_result: dict) -> None:

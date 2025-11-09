@@ -109,9 +109,7 @@ def get_reg_iscr(registration) -> int:
     total_registration_fee += registration.surcharge
 
     # Ensure fee is never negative
-    total_registration_fee = max(0, total_registration_fee)
-
-    return total_registration_fee
+    return max(0, total_registration_fee)
 
 
 def get_reg_payments(registration, accounting_payments=None):

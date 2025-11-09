@@ -112,8 +112,7 @@ def get_payment_details(association: Association) -> dict:
         decrypted_bytes = cipher.decrypt(encrypted_data)
 
         # Convert decrypted bytes to JSON dictionary
-        decrypted_payment_details = json.loads(decrypted_bytes.decode("utf-8"))
-        return decrypted_payment_details
+        return json.loads(decrypted_bytes.decode("utf-8"))
     except InvalidToken as invalid_token_error:
         # Notify administrators of decryption failure and return empty dict
         notify_admins(f"invalid token for {association.slug}", f"{invalid_token_error}")

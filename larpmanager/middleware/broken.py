@@ -128,3 +128,4 @@ class BrokenLinkEmailsMiddleware:
             f"{vars(request)}",
             fail_silently=True,
         )
+        return None

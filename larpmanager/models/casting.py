@@ -40,8 +40,7 @@ class QuestType(Writing):
     def show(self, run: Run | None = None) -> dict:
         """Return serialized data excluding commented quest list."""
         # Return base serialized data (commented quest list excluded)
-        js = super().show(run)
-        return js
+        return super().show(run)
 
     class Meta:
         indexes = [

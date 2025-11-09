@@ -395,7 +395,7 @@ def _add_in_iframe_param(url: str) -> str:
     updated_query_string = urlencode(existing_query_params, doseq=True)
 
     # Reconstruct the complete URL with the modified query string
-    modified_url = urlunparse(
+    return urlunparse(
         (
             parsed_url.scheme,
             parsed_url.netloc,
@@ -405,8 +405,6 @@ def _add_in_iframe_param(url: str) -> str:
             parsed_url.fragment,
         )
     )
-
-    return modified_url
 
 
 @require_POST

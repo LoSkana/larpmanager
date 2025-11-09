@@ -49,8 +49,7 @@ class LocaleAdvMiddleware:
         """
         request.LANGUAGE_CODE = self.get_lang(request)
         translation.activate(request.LANGUAGE_CODE)
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
 
     @staticmethod
     def get_lang(request) -> str:

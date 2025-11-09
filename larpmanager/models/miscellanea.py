@@ -228,6 +228,7 @@ class Album(BaseModel):
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
+        return None
 
 
 class AlbumUpload(BaseModel):
@@ -277,6 +278,7 @@ class AlbumImage(BaseModel):
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
+        return None
 
     def original_url(self) -> str:
         """Extract the original media URL path from the full URL."""
@@ -841,8 +843,7 @@ class OneTimeContent(BaseModel):
             OneTimeAccessToken: The newly created token
 
         """
-        token = OneTimeAccessToken.objects.create(content=self, note=note)
-        return token
+        return OneTimeAccessToken.objects.create(content=self, note=note)
 
     def get_token_stats(self):
         """Get statistics about tokens for this content.

@@ -294,6 +294,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Add newly selected factions
         for ch in new - old:
             instance.factions_list.add(ch)
+        return None
 
     def clean(self) -> dict:
         """Clean and validate form data.

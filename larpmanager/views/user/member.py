@@ -949,8 +949,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
 
 def get_user_backend() -> str:
     """Return the authentication backend path for allauth."""
-    authentication_backend = "allauth.account.auth_backends.AuthenticationBackend"
-    return authentication_backend
+    return "allauth.account.auth_backends.AuthenticationBackend"
 
 
 @login_required

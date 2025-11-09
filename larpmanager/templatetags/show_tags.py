@@ -866,8 +866,7 @@ def get_login_url(context: dict, provider: str, **params) -> str:
 
     # Construct the final URL with provider endpoint and encoded parameters
     url = reverse(provider + "_login")
-    url = url + "?" + urlencode(query)
-    return url
+    return url + "?" + urlencode(query)
 
 
 @register.filter

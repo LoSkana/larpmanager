@@ -769,8 +769,7 @@ def _reg_template(
         row_values.append(value_mapping[field_type])
 
     # Create export tuple with template name, keys, and values
-    exports = [(f"{template_type} - template", column_keys, [row_values])]
-    return exports
+    return [(f"{template_type} - template", column_keys, [row_values])]
 
 
 def _writing_template(

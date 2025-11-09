@@ -814,7 +814,7 @@ def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQu
 def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
     """Return list of writing elements with their display names and applicable types."""
     # Define available writing elements with their identifiers, translated names, and applicable types
-    writing_elements = [
+    return [
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
         ("plot", _("Plots"), QuestionApplicable.PLOT),
@@ -822,7 +822,6 @@ def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
         ("prologue", _("Prologues"), QuestionApplicable.PROLOGUE),
     ]
-    return writing_elements
 
 
 def _get_writing_mapping() -> dict[str, str]:
@@ -833,7 +832,7 @@ def _get_writing_mapping() -> dict[str, str]:
 
     """
     # Core writing type mappings
-    writing_type_to_module_mapping = {
+    return {
         "character": "character",
         "faction": "faction",
         "plot": "plot",
@@ -841,4 +840,3 @@ def _get_writing_mapping() -> dict[str, str]:
         "trait": "questbuilder",
         "prologue": "prologue",
     }
-    return writing_type_to_module_mapping

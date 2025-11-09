@@ -344,6 +344,7 @@ def copy(
 
     # Notify user of successful completion
     messages.success(request, _("Copy done"))
+    return None
 
 
 def copy_event(context, target_event_id, elements_to_copy, target_event, source_event_id, source_event):

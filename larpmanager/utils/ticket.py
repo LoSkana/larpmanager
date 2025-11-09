@@ -255,12 +255,10 @@ def create_error_ticket(request):
         return None
 
     # Create the error ticket
-    ticket = LarpManagerTicket.objects.create(
+    return LarpManagerTicket.objects.create(
         association=association,
         reason="error",
         email="system@larpmanager.com",
         content=f"[{error_identifier}]\n\n{content}",
         member=None,  # System-generated ticket
     )
-
-    return ticket

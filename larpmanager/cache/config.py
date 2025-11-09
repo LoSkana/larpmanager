@@ -227,8 +227,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
     model_class_name = model_instance.__class__.__name__
 
     # Return the corresponding foreign key field name
-    foreign_key_field_name = foreign_key_field_map.get(model_class_name)
-    return foreign_key_field_name
+    return foreign_key_field_map.get(model_class_name)
 
 
 def get_element_config(element, config_name: str, default_value, bypass_cache: bool = False):

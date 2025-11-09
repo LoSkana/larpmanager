@@ -103,8 +103,7 @@ def prepare_xml(invoice, electronic_invoice_config) -> str:
 
     # Decode bytes to string for return
     # noinspection PyUnresolvedReferences
-    xml_string = xml_bytes_buffer.getvalue().decode("utf-8")
-    return xml_string
+    return xml_bytes_buffer.getvalue().decode("utf-8")
 
 
 def _einvoice_header(

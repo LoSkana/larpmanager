@@ -83,8 +83,7 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
         )
 
     # Return the processed text and original length
-    result = (cleaned_text, original_length)
-    return result
+    return (cleaned_text, original_length)
 
 
 # Writing

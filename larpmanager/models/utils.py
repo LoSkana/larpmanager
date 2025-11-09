@@ -79,8 +79,7 @@ def decimal_to_str(decimal_value: Decimal) -> str:
     # Convert decimal to string representation
     string_representation = str(decimal_value)
     # Remove trailing .00 for cleaner display of whole numbers
-    string_representation = string_representation.replace(".00", "")
-    return string_representation
+    return string_representation.replace(".00", "")
 
 
 def slug_url_validator(val):

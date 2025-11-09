@@ -387,6 +387,7 @@ class Character(Writing):
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(200, self.thumb.url)
+        return None
 
     def relationships(self):
         """Return queryset of relationships where this character is the source."""

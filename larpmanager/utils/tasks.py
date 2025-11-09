@@ -227,8 +227,7 @@ def clean_sender(sender_name):
     sender_name = sender_name.replace(":", " ")
     sender_name = sender_name.split(",")[0]
     sender_name = re.sub(r"[^a-zA-Z0-9\s\-\']", "", sender_name)
-    sender_name = re.sub(r"\s+", " ", sender_name).strip()
-    return sender_name
+    return re.sub(r"\s+", " ", sender_name).strip()
 
 
 def my_send_simple_mail(
