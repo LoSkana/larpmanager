@@ -20,6 +20,7 @@
 
 import logging
 import os
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -390,9 +391,9 @@ class Member(BaseModel):
         # Format: street number, city (province), country_code (country)
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 
-    def get_config(self, name, default_value=None, bypass_cache=False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
         """Get configuration value for this member."""
-        return get_element_config(self, name, default_value, bypass_cache)
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class MemberConfig(BaseModel):

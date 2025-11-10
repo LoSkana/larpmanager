@@ -321,7 +321,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         """Set the association ID for this widget."""
         self.association_id = association_id
 
-    def set_exclude(self, exclude_value: bool) -> None:
+    def set_exclude(self, exclude_value: int) -> None:
         """Set the exclude flag."""
         self.excl = exclude_value
 
@@ -350,7 +350,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         """Set the association ID for this widget."""
         self.association_id = association_id
 
-    def set_exclude(self, exclude: bool) -> None:
+    def set_exclude(self, exclude: int) -> None:
         """Set the exclude flag."""
         self.exclude = exclude
 
@@ -361,7 +361,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
 
         # Exclude specific event if specified
         if hasattr(self, "excl"):
-            queryset = queryset.exclude(pk=self.fexcl)
+            queryset = queryset.exclude(pk=self.exclude)
 
         return queryset
 
@@ -473,7 +473,7 @@ def get_association_people(association_id):
     return ls
 
 
-def get_run_choices(self, past=False) -> None:
+def get_run_choices(self, *, past=False) -> None:
     """Generate run choices for form fields.
 
     Args:

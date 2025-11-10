@@ -129,7 +129,9 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
         context["assignments"][registration_character_rel.character.number] = registration_character_rel
 
     # Get event configuration for hiding uncasted characters
-    hide_uncasted_characters = get_event_config(context["event"].id, "gallery_hide_uncasted_characters", False, context)
+    hide_uncasted_characters = get_event_config(
+        context["event"].id, "gallery_hide_uncasted_characters", default_value=False, context=context
+    )
 
     # Get list of assigned character IDs for mirror filtering
     assigned_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
@@ -167,7 +169,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     return cache_result
 
 
-def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) -> None:
+def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = True) -> None:
     """Retrieve and cache writing fields for characters in an event.
 
     This function populates character data with their associated writing field
@@ -242,6 +244,7 @@ def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) 
 def get_character_element_fields(
     context: dict,
     character_id: int,
+    *,
     only_visible: bool = True,
 ) -> dict:
     """Get writing element fields for a character."""
@@ -259,6 +262,7 @@ def get_writing_element_fields(
     feature_name: str,
     applicable,
     element_id: int,
+    *,
     only_visible: bool = True,
 ) -> dict:
     """Get writing fields for a specific element with visibility filtering.

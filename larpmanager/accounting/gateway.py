@@ -691,7 +691,7 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
     # ~ context['signature'] = sig
 
 
-def redsys_webhook(request: HttpRequest, ok: bool = True) -> bool:
+def redsys_webhook(request: HttpRequest) -> bool:
     """Handle RedSys payment webhook notifications.
 
     Processes incoming webhook requests from RedSys payment gateway,
@@ -699,7 +699,6 @@ def redsys_webhook(request: HttpRequest, ok: bool = True) -> bool:
 
     Args:
         request: Django HTTP request object containing webhook data
-        ok: Boolean flag indicating expected success state (default: True)
 
     Returns:
         bool: True if payment was successfully processed, False otherwise
@@ -768,7 +767,7 @@ class RedSysClient:
 
     ALPHANUMERIC_CHARACTERS = re.compile(b"[^a-zA-Z0-9]")
 
-    def __init__(self, business_code: str, secret_key: str, sandbox: bool = False) -> None:
+    def __init__(self, business_code: str, secret_key: str, *, sandbox: bool = False) -> None:
         """Initialize Redsys payment gateway with merchant credentials.
 
         Args:

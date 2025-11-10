@@ -194,10 +194,10 @@ def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character data
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     # Generate and return the character sheet PDF
-    return print_character(context, True)
+    return print_character(context, force=True)
 
 
 @login_required
@@ -217,7 +217,7 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, num: int) 
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character data
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     # Configure context for PDF rendering
     context["pdf"] = True
@@ -235,9 +235,9 @@ def orga_characters_friendly_pdf(request: HttpRequest, event_slug: str, num: int
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
-    return print_character_friendly(context, True)
+    return print_character_friendly(context, force=True)
 
 
 @login_required
@@ -257,7 +257,7 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, num: in
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character, ensuring user has access
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     # Populate context with character sheet data
     get_character_sheet(context)
@@ -272,10 +272,10 @@ def orga_characters_relationships_pdf(request: HttpRequest, event_slug: str, num
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character data
-    get_char_check(request, context, num, False, True)
+    get_char_check(request, context, num, bypass_access_checks=True)
 
     # Generate and return relationship PDF
-    return print_character_rel(context, True)
+    return print_character_rel(context, force=True)
 
 
 @login_required
@@ -295,7 +295,7 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, nu
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate character access and retrieve character data
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     # Populate context with character sheet and relationship data
     get_character_sheet(context)
@@ -308,7 +308,7 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, nu
 def orga_gallery_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Generate PDF version of event character gallery for organizers."""
     context = check_event_context(request, event_slug, "orga_characters_pdf")
-    return print_gallery(context, True)
+    return print_gallery(context, force=True)
 
 
 @login_required
@@ -325,7 +325,7 @@ def orga_profiles_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Generate and return the profiles PDF
-    return print_profiles(context, True)
+    return print_profiles(context, force=True)
 
 
 @login_required
@@ -380,4 +380,4 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> 
     )
 
     # Generate and return the faction sheet PDF (force=True for fresh generation)
-    return print_faction(context, True)
+    return print_faction(context, force=True)

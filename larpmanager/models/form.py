@@ -638,7 +638,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration, features, params=None, is_organizer=False) -> bool:
+    def skip(self, registration, features, params=None, *, is_organizer=False) -> bool:
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,

@@ -41,7 +41,7 @@ def cache_registration_counts_key(run_id) -> str:
     return f"registration_counts_{run_id}"
 
 
-def get_reg_counts(run: Run, reset_cache: bool = False) -> dict:
+def get_reg_counts(run: Run, *, reset_cache: bool = False) -> dict:
     """Get registration counts for a run, with caching support.
 
     Args:
@@ -168,7 +168,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
         clear_registration_counts_cache(run_id)
 
     # Trigger registration updates if character approval is enabled
-    if get_event_config(instance.event_id, "user_character_approval", False):
+    if get_event_config(instance.event_id, "user_character_approval", default_value=False):
         for registration_character_relation in RegistrationCharacterRel.objects.filter(character=instance):
             registration_character_relation.reg.save()
 

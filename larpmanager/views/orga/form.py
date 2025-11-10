@@ -94,7 +94,7 @@ def orga_registration_tickets_edit(request: HttpRequest, event_slug: str, num: i
 
 
 @login_required
-def orga_registration_tickets_order(request: HttpRequest, event_slug: str, num: int, order: str) -> HttpResponse:
+def orga_registration_tickets_order(request: HttpRequest, event_slug: str, num: int, order: int) -> HttpResponse:
     """Reorder registration tickets for an event."""
     context = check_event_context(request, event_slug, "orga_registration_tickets")
     exchange_order(context, RegistrationTicket, num, order)
@@ -124,7 +124,7 @@ def orga_registration_sections_order(
     request: HttpRequest,
     event_slug: str,
     num: int,
-    order: str,
+    order: int,
 ) -> HttpResponse:
     """Reorder registration sections within an event.
 
@@ -213,7 +213,7 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
     context = check_event_context(request, event_slug, perm)
 
     # Process form submission using backend edit helper
-    if backend_edit(request, context, OrgaRegistrationQuestionForm, num, is_association_based=False):
+    if backend_edit(request, context, OrgaRegistrationQuestionForm, num, is_association=False):
         # Set suggestion flag for the current permission
         set_suggestion(context, perm)
 
@@ -251,7 +251,7 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
 
 
 @login_required
-def orga_registration_form_order(request: HttpRequest, event_slug: str, num: int, order: str) -> HttpResponse:
+def orga_registration_form_order(request: HttpRequest, event_slug: str, num: int, order: int) -> HttpResponse:
     """Reorders registration form questions for an event."""
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_registration_form")
@@ -315,7 +315,7 @@ def registration_option_edit(context, option_number, request):
         HttpResponse: Redirect to next step or rendered edit form
 
     """
-    if backend_edit(request, context, OrgaRegistrationOptionForm, option_number, is_association_based=False):
+    if backend_edit(request, context, OrgaRegistrationOptionForm, option_number, is_association=False):
         redirect_target = "orga_registration_form_edit"
         if "continue" in request.POST:
             redirect_target = "orga_registration_options_new"
@@ -329,7 +329,7 @@ def orga_registration_options_order(
     request: HttpRequest,
     event_slug: str,
     num: int,
-    order: str,
+    order: int,
 ) -> HttpResponse:
     """Reorder registration options within a form question.
 
@@ -337,7 +337,7 @@ def orga_registration_options_order(
         request: The HTTP request object
         event_slug: Event/run slug identifier
         num: Question ID containing the options to reorder
-        order: Direction to move the option ('up' or 'down')
+        order: Direction to move the option (1 or 0)
 
     Returns:
         Redirect to the registration form edit page

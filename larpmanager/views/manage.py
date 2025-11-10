@@ -91,7 +91,7 @@ def _get_registration_status_code(run):
         return "external", run.event.register_link
 
     # Check pre-registration
-    if not run.registration_open and get_event_config(run.event_id, "pre_register_active", False):
+    if not run.registration_open and get_event_config(run.event_id, "pre_register_active", default_value=False):
         return "preregister", None
 
     # Check registration opening time
@@ -209,7 +209,9 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
         return redirect("exe_events_edit", num=0)
 
     # Redirect to quick setup if not completed
-    if not get_association_config(context["association_id"], "exe_quick_suggestion", False, context=context):
+    if not get_association_config(
+        context["association_id"], "exe_quick_suggestion", default_value=False, context=context
+    ):
         setup_message = _(
             "Before accessing the organization dashboard, please complete the quick setup by selecting "
             "the features most useful for your organization",
@@ -273,7 +275,9 @@ def _exe_suggestions(context) -> None:
     }
 
     for permission_key, suggestion_text in suggestions.items():
-        if get_association_config(context["association_id"], f"{permission_key}_suggestion", context=context):
+        if get_association_config(
+            context["association_id"], f"{permission_key}_suggestion", default_value=False, context=context
+        ):
             continue
         _add_suggestion(context, suggestion_text, permission_key)
 
@@ -384,11 +388,14 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) ->
         if not get_association_text(context["association_id"], AssociationTextType.MEMBERSHIP):
             _add_priority(context, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if len(get_association_config(context["association_id"], "membership_fee", "", context=context)) == 0:
+        if (
+            len(get_association_config(context["association_id"], "membership_fee", default_value="", context=context))
+            == 0
+        ):
             _add_priority(context, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
     if "vote" in enabled_features:
-        if not get_association_config(context["association_id"], "vote_candidates", "", context=context):
+        if not get_association_config(context["association_id"], "vote_candidates", default_value="", context=context):
             _add_priority(
                 context,
                 _("Set up the voting configuration"),
@@ -422,7 +429,9 @@ def _exe_accounting_actions(request: HttpRequest, context: dict, enabled_feature
         )
 
     if "organization_tax" in enabled_features:
-        if not get_association_config(context["association_id"], "organization_tax_perc", "", context=context):
+        if not get_association_config(
+            context["association_id"], "organization_tax_perc", default_value="", context=context
+        ):
             _add_priority(
                 context,
                 _("Set up the organization tax configuration"),
@@ -431,8 +440,10 @@ def _exe_accounting_actions(request: HttpRequest, context: dict, enabled_feature
             )
 
     if "vat" in enabled_features:
-        vat_ticket = get_association_config(context["association_id"], "vat_ticket", "", context=context)
-        vat_options = get_association_config(context["association_id"], "vat_options", "", context=context)
+        vat_ticket = get_association_config(context["association_id"], "vat_ticket", default_value="", context=context)
+        vat_options = get_association_config(
+            context["association_id"], "vat_options", default_value="", context=context
+        )
         if not vat_ticket or not vat_options:
             _add_priority(
                 context,
@@ -468,7 +479,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
         return redirect("orga_run", event_slug=event_slug)
 
     # Ensure quick setup is complete
-    if not get_event_config(context["event"].id, "orga_quick_suggestion", False, context=context):
+    if not get_event_config(context["event"].id, "orga_quick_suggestion", default_value=False, context=context):
         message = _(
             "Before accessing the event dashboard, please complete the quick setup by selecting "
             "the features most useful for your event",
@@ -478,8 +489,8 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Load permissions and navigation
     get_index_event_permissions(request, context, event_slug)
-    if get_association_config(context["association_id"], "interface_admin_links", False, context=context):
-        get_index_association_permissions(context, request, context["association_id"], check=False)
+    if get_association_config(context["association_id"], "interface_admin_links", default_value=False, context=context):
+        get_index_association_permissions(context, request, context["association_id"], enforce_check=False)
 
     # Load registration status
     context["registration_status"] = _get_registration_status(context["run"])
@@ -507,7 +518,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     _compile(request, context)
 
     # Mobile shortcuts handling
-    if get_event_config(context["event"].id, "show_shortcuts_mobile", False, context=context):
+    if get_event_config(context["event"].id, "show_shortcuts_mobile", default_value=False, context=context):
         origin_id = request.GET.get("origin", "")
         should_open_shortcuts = False
         if origin_id:
@@ -567,7 +578,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
     # Check if user_character feature needs configuration
     if (
         "user_character" in enabled_features
-        and get_event_config(context["event"].id, "user_character_max", "", context=context) == ""
+        and get_event_config(context["event"].id, "user_character_max", default_value="", context=context) == ""
     ):
         _add_priority(
             context,
@@ -594,7 +605,9 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
         )
 
     # Check for pending expense approvals (if not disabled for organizers)
-    if not get_association_config(context["event"].association_id, "expense_disable_orga", False, context=context):
+    if not get_association_config(
+        context["event"].association_id, "expense_disable_orga", default_value=False, context=context
+    ):
         pending_expenses_count = AccountingItemExpense.objects.filter(run=context["run"], is_approved=False).count()
         if pending_expenses_count:
             _add_action(
@@ -692,7 +705,7 @@ def _orga_casting_actions(context, enabled_features) -> None:
     adding appropriate priority suggestions for event organizers.
     """
     if "casting" in enabled_features:
-        if not get_event_config(context["event"].id, "casting_min", 0, context=context):
+        if not get_event_config(context["event"].id, "casting_min", default_value=0, context=context):
             _add_priority(
                 context,
                 _("Set the casting options in the configuration panel"),
@@ -748,7 +761,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         return
 
     # Check if experience points configuration is missing
-    if not get_event_config(context["event"].id, "px_start", 0, context=context):
+    if not get_event_config(context["event"].id, "px_start", default_value=0, context=context):
         _add_priority(
             context,
             _("Set the experience points configuration"),
@@ -859,7 +872,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
 
     # Handle reduced tickets feature configuration
     if "reduced" in enabled_features:
-        if not get_event_config(context["event"].id, "reduced_ratio", 0, context=context):
+        if not get_event_config(context["event"].id, "reduced_ratio", default_value=0, context=context):
             _add_priority(
                 context,
                 _("Set up configuration for Patron and Reduced tickets"),
@@ -898,7 +911,9 @@ def _orga_reg_actions(context, enabled_features) -> None:
     if "custom_character" in enabled_features:
         is_configured = False
         for field_name in ["pronoun", "song", "public", "private", "profile"]:
-            if get_event_config(context["event"].id, "custom_character_" + field_name, False, context=context):
+            if get_event_config(
+                context["event"].id, "custom_character_" + field_name, default_value=False, context=context
+            ):
                 is_configured = True
 
         if not is_configured:
@@ -923,7 +938,7 @@ def _orga_suggestions(context) -> None:
     }
 
     for permission_slug, suggestion_text in priorities.items():
-        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, context=context):
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
             continue
         _add_priority(context, suggestion_text, permission_slug)
 
@@ -938,7 +953,7 @@ def _orga_suggestions(context) -> None:
     }
 
     for permission_slug, suggestion_text in suggestions.items():
-        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", False, context=context):
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
             continue
         _add_suggestion(context, suggestion_text, permission_slug)
 
@@ -1112,14 +1127,16 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
     config_key = "intro_driver"
 
     # Skip if user has already seen the intro driver
-    if member.get_config(config_key, False):
+    if member.get_config(config_key, default_value=False):
         return
 
     # Enable intro driver in template context
     context["intro_driver"] = True
 
 
-def orga_redirect(request: HttpRequest, event_slug: str, run_number: int, path: str | None = None) -> HttpResponsePermanentRedirect:
+def orga_redirect(
+    request: HttpRequest, event_slug: str, run_number: int, path: str | None = None
+) -> HttpResponsePermanentRedirect:
     """Optimized redirect from /slug/number/path to /slug-number/path format.
 
     Redirects URLs like /event-slug/2/some/path to /event-slug-2/some/path.

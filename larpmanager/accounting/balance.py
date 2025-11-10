@@ -64,6 +64,7 @@ def get_acc_detail(
     choices: Any,
     type_field: str | None,
     filters: dict[str, Any] | None = None,
+    *,
     filter_by_registration: bool = False,
 ) -> dict[str, Any]:
     """Get detailed accounting breakdown for a specific accounting item type.
@@ -239,7 +240,7 @@ def get_token_details(nm: str, run: Run) -> dict[str, int | dict | str]:
     return dc
 
 
-def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> dict:
+def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) -> dict:
     """Generate comprehensive accounting report for a run.
 
     Calculates revenue, costs, and balance for a run based on enabled features.
@@ -410,7 +411,9 @@ def get_run_accounting(run: Run, context: dict, perform_update: bool = True) -> 
 
     # Apply organization tax if enabled
     if "organization_tax" in features:
-        tax_percentage = int(get_association_config(run.event.association_id, "organization_tax_perc", "10"))
+        tax_percentage = int(
+            get_association_config(run.event.association_id, "organization_tax_perc", default_value="10")
+        )
         run.tax = run.revenue * tax_percentage / 100
 
     # Persist the calculated financial data

@@ -130,7 +130,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         character_approval_enabled = get_event_config(
             self.params["event"].id,
             "user_character_approval",
-            False,
+            default_value=False,
             context=self.params,
         )
         if not character_approval_enabled:
@@ -198,7 +198,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 self.reorder_field(field_key)
 
             # Add access token field for external writing access
-            if get_event_config(event.id, "writing_external_access", False, context=self.params) and self.instance.pk:
+            if (
+                get_event_config(event.id, "writing_external_access", default_value=False, context=self.params)
+                and self.instance.pk
+            ):
                 fields_default.add("access_token")
                 self.reorder_field("access_token")
 
@@ -208,7 +211,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
             del self.fields[field_label]
 
         # Add character completion proposal field for user approval workflow
-        if not self.orga and get_event_config(event.id, "user_character_approval", False, context=self.params):
+        if not self.orga and get_event_config(
+            event.id, "user_character_approval", default_value=False, context=self.params
+        ):
             if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
                 self.fields["propose"] = forms.BooleanField(
                     required=False,
@@ -349,7 +354,9 @@ class OrgaCharacterForm(CharacterForm):
 
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
-            get_event_config(self.params["event"].id, "writing_relationship_length", 10000, context=self.params),
+            get_event_config(
+                self.params["event"].id, "writing_relationship_length", default_value=10000, context=self.params
+            ),
         )
 
         # Skip additional initialization for new instances
@@ -377,7 +384,9 @@ class OrgaCharacterForm(CharacterForm):
         else:
             self.delete_field("player")
 
-        if not get_event_config(self.params["event"].id, "user_character_approval", False, context=self.params):
+        if not get_event_config(
+            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+        ):
             self.delete_field("status")
 
         if "mirror" in self.fields:
@@ -395,7 +404,7 @@ class OrgaCharacterForm(CharacterForm):
             )
             # Set initial value - default to True unless character has inactive config
             if self.instance.pk:
-                is_inactive = self.instance.get_config("inactive", False)
+                is_inactive = self.instance.get_config("inactive", default_value=False)
                 self.initial["active"] = not (is_inactive == "True" or is_inactive is True)
             else:
                 self.initial["active"] = True
@@ -602,7 +611,7 @@ class OrgaCharacterForm(CharacterForm):
                     continue
                 # else delete
                 rel = self._get_rel(ch_id, instance, rel_type)
-                save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], True)
+                save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], to_delete=True)
                 rel.delete()
                 continue
 
@@ -644,7 +653,7 @@ class OrgaCharacterForm(CharacterForm):
             (relationship, _created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)
         return relationship
 
-    def save(self, commit: bool = True) -> object:
+    def save(self, commit: bool = True) -> object:  # noqa: FBT001, FBT002
         """Save the form instance and handle related data.
 
         Args:
@@ -824,7 +833,9 @@ class OrgaWritingQuestionForm(MyForm):
     def _init_editable(self) -> None:
         """Initialize the editable field based on character approval configuration."""
         # Check if character approval feature is enabled for this event
-        if not get_event_config(self.params["event"].id, "user_character_approval", False, context=self.params):
+        if not get_event_config(
+            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+        ):
             self.delete_field("editable")
         else:
             # Create multiple choice field for character status selection

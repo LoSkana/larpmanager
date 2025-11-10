@@ -135,7 +135,7 @@ class ConfigForm(MyForm):
             },
         )
 
-    def save(self, commit: bool = True) -> Any:
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save the form instance with configuration values.
 
         Args:

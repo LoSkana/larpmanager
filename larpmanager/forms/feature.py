@@ -102,11 +102,11 @@ class FeatureForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, is_association_level) -> None:
+    def _init_features(self, *, is_association) -> None:
         """Initialize feature selection fields organized by modules.
 
         Args:
-            is_association_level: If True, initialize association-level features;
+            is_association: If True, initialize association-level features;
                                  if False, initialize event-level features
 
         Side effects:
@@ -119,13 +119,13 @@ class FeatureForm(MyForm):
             selected_feature_ids = [str(v) for v in self.instance.features.values_list("pk", flat=True)]
 
         feature_modules = FeatureModule.objects.exclude(order=0).order_by("order")
-        if is_association_level:
+        if is_association:
             feature_modules = feature_modules.filter(
                 Q(nationality__isnull=True) | Q(nationality=self.instance.nationality),
             )
         for feature_module in feature_modules:
             module_features = feature_module.features.filter(
-                overall=is_association_level,
+                overall=is_association,
                 placeholder=False,
                 hidden=False,
             ).order_by("order")
@@ -200,10 +200,12 @@ class QuickSetupForm(MyForm):
                 label=field_label,
                 help_text=field_help_text + "?",
             )
-            initial_value = config_key in features if is_feature_flag else self.instance.get_config(config_key, False)
+            initial_value = (
+                config_key in features if is_feature_flag else self.instance.get_config(config_key, default_value=False)
+            )
             self.initial[config_key] = initial_value
 
-    def save(self, commit: bool = True) -> Association:
+    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
         """Save form data and update feature assignments and configurations.
 
         Processes form data to handle both feature flags and configuration settings.

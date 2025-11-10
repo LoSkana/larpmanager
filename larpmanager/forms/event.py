@@ -277,9 +277,9 @@ class OrgaFeatureForm(FeatureForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and features."""
         super().__init__(*args, **kwargs)
-        self._init_features(False)
+        self._init_features(is_association=False)
 
-    def save(self, commit: bool = True) -> EventConfig:
+    def save(self, commit: bool = True) -> EventConfig:  # noqa: FBT001, FBT002
         """Save the form instance and update event features cache.
 
         Args:
@@ -1043,7 +1043,7 @@ class OrgaAppearanceForm(MyCssForm):
         for m in dl:
             del self.fields[m]
 
-    def save(self, commit: bool = True) -> AssociationSkin:
+    def save(self, commit: bool = True) -> AssociationSkin:  # noqa: FBT001, FBT002
         """Save the form and generate a unique CSS code for the skin."""
         # Generate unique 32-character identifier for CSS code
         self.instance.css_code = generate_id(32)
@@ -1107,7 +1107,7 @@ class OrgaEventTextForm(MyForm):
         if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
-        if not get_event_config(self.params["event"].id, "user_character_approval", False):
+        if not get_event_config(self.params["event"].id, "user_character_approval", default_value=False):
             delete_choice.extend(
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW],
             )
@@ -1198,7 +1198,7 @@ class OrgaEventRoleForm(MyForm):
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
-    def save(self, commit: bool = True) -> Any:
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save form instance and update role permissions."""
         instance = super().save()
         save_permissions_role(instance, self)
@@ -1304,7 +1304,7 @@ class OrgaRunForm(ConfigForm):
         if "character" not in self.params["features"]:
             return config_list
 
-        if not get_event_config(self.params["event"].id, "writing_field_visibility", False):
+        if not get_event_config(self.params["event"].id, "writing_field_visibility", default_value=False):
             return None
 
         help_text = _(
@@ -1442,7 +1442,7 @@ class ExeEventForm(OrgaEventForm):
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()
 
-    def save(self, commit: bool = True) -> Event:
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
         """Save event with optional template copying.
 
         Args:
@@ -1488,9 +1488,9 @@ class ExeTemplateForm(FeatureForm):
         """Initialize the instance and configure the feature system."""
         # Initialize parent class and feature system
         super().__init__(*args, **kwargs)
-        self._init_features(False)
+        self._init_features(is_association=False)
 
-    def save(self, commit: bool = True) -> Event:
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
         """Save the form instance, setting template and association defaults.
 
         Args:
@@ -1763,11 +1763,11 @@ class OrgaPreferencesForm(ExePreferencesForm):
         # Add character-specific configuration options
         if writing_section[0] == "character":
             # Add player field if character limit is set
-            if get_event_config(self.params["event"].id, "user_character_max", 0):
+            if get_event_config(self.params["event"].id, "user_character_max", default_value=0):
                 extra_config_options.append(("player", _("Player")))
 
             # Add status field if character approval is enabled
-            if get_event_config(self.params["event"].id, "user_character_approval", False):
+            if get_event_config(self.params["event"].id, "user_character_approval", default_value=False):
                 extra_config_options.append(("status", _("Status")))
 
             # Define character feature fields with their config keys and labels

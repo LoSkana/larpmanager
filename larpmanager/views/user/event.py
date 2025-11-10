@@ -296,7 +296,7 @@ def get_pre_registrations_dict(association_id: int, member) -> dict:
     return event_id_to_pre_registration
 
 
-def get_coming_runs(association_id: int | None, future: bool = True) -> QuerySet[Run]:
+def get_coming_runs(association_id: int | None, *, future: bool = True) -> QuerySet[Run]:
     """Get upcoming or past runs for an association with optimized queries.
 
     Args:
@@ -579,8 +579,12 @@ def check_gallery_visibility(request: HttpRequest, context: dict) -> bool:
     if "manage" in context:
         return True
 
-    hide_gallery_for_non_signup = get_event_config(context["event"].id, "gallery_hide_signup", False, context)
-    hide_gallery_for_non_login = get_event_config(context["event"].id, "gallery_hide_login", False, context)
+    hide_gallery_for_non_signup = get_event_config(
+        context["event"].id, "gallery_hide_signup", default_value=False, context=context
+    )
+    hide_gallery_for_non_login = get_event_config(
+        context["event"].id, "gallery_hide_login", default_value=False, context=context
+    )
 
     if hide_gallery_for_non_login and not request.user.is_authenticated:
         context["hide_login"] = True
@@ -626,19 +630,23 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check if user has permission to view gallery content
     if check_gallery_visibility(request, context):
         # Load character cache if writing fields are visible or character display is forced
-        if not get_event_config(context["event"].id, "writing_field_visibility", False, context) or context.get(
+        if not get_event_config(
+            context["event"].id, "writing_field_visibility", default_value=False, context=context
+        ) or context.get(
             "show_character",
         ):
             get_event_cache_all(context)
 
         # Check configuration for hiding uncasted players
-        hide_uncasted_players = get_event_config(context["event"].id, "gallery_hide_uncasted_players", False, context)
+        hide_uncasted_players = get_event_config(
+            context["event"].id, "gallery_hide_uncasted_players", default_value=False, context=context
+        )
         if not hide_uncasted_players:
             # Get registrations that have assigned characters
             que = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id)
 
             # Filter by character approval status if required
-            if get_event_config(context["event"].id, "user_character_approval", False, context):
+            if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
                 que = que.filter(character__status__in=[CharacterStatus.APPROVED])
             assigned = que.values_list("reg_id", flat=True)
 

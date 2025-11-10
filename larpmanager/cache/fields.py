@@ -122,7 +122,7 @@ def get_event_fields_cache(event_id: int) -> dict:
     return cached_event_fields
 
 
-def visible_writing_fields(context: dict, applicable: QuestionApplicable, only_visible: bool = True) -> None:
+def visible_writing_fields(context: dict, applicable: QuestionApplicable, *, only_visible: bool = True) -> None:
     """Filter and cache visible writing fields based on visibility settings.
 
     This function processes writing fields from the context and filters them based on

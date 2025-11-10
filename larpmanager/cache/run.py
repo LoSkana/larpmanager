@@ -174,14 +174,16 @@ def init_cache_config_run(run) -> dict:
     context = {
         "buttons": get_event_button_cache(run.event_id),
     }
-    context["limitations"] = get_event_config(run.event_id, "show_limitations", False, context)
-    context["user_character_max"] = get_event_config(run.event_id, "user_character_max", 0, context)
-    context["cover_orig"] = get_event_config(run.event_id, "cover_orig", False, context)
-    context["px_user"] = get_event_config(run.event_id, "px_user", False, context)
+    context["limitations"] = get_event_config(run.event_id, "show_limitations", default_value=False, context=context)
+    context["user_character_max"] = get_event_config(
+        run.event_id, "user_character_max", default_value=0, context=context
+    )
+    context["cover_orig"] = get_event_config(run.event_id, "cover_orig", default_value=False, context=context)
+    context["px_user"] = get_event_config(run.event_id, "px_user", default_value=False, context=context)
 
     # Handle parent event inheritance for px_user setting
     if run.event.parent:
-        context["px_user"] = get_event_config(run.event.parent.id, "px_user", False, context)
+        context["px_user"] = get_event_config(run.event.parent.id, "px_user", default_value=False, context=context)
 
     # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
@@ -192,14 +194,14 @@ def init_cache_config_run(run) -> dict:
 
         # Parse and convert list configuration to dictionary lookup
         config_display_dict = {}
-        config_value = run.get_config("show_" + config_name, "[]")
+        config_value = run.get_config("show_" + config_name, default_value="[]")
         for element in ast.literal_eval(config_value):
             config_display_dict[element] = 1
         context["show_" + config_name] = config_display_dict
 
     # Process additional display configurations
     additional_display_dict = {}
-    additional_config_value = run.get_config("show_addit", "[]")
+    additional_config_value = run.get_config("show_addit", default_value="[]")
     for element in ast.literal_eval(additional_config_value):
         additional_display_dict[element] = 1
     context["show_addit"] = additional_display_dict

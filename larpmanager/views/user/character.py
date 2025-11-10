@@ -151,7 +151,9 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         context["pref"] = get_casting_preferences(context["char"]["id"], context, 0)
 
     # Set character approval configuration for template rendering
-    context["approval"] = get_event_config(context["event"].id, "user_character_approval", False, context)
+    context["approval"] = get_event_config(
+        context["event"].id, "user_character_approval", default_value=False, context=context
+    )
 
     return render(request, "larpmanager/event/character.html", context)
 
@@ -179,7 +181,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
     context = get_event_context(request, event_slug)
 
     # Check if external access feature is enabled for this event
-    if not get_event_config(context["event"].id, "writing_external_access", False, context):
+    if not get_event_config(context["event"].id, "writing_external_access", default_value=False, context=context):
         msg = "external access not active"
         raise Http404(msg)
 
@@ -359,8 +361,8 @@ def character_form(
     context["hide_unavailable"] = get_event_config(
         context["event"].id,
         "character_form_hide_unavailable",
-        False,
-        context,
+        default_value=False,
+        context=context,
     )
 
     return render(request, "larpmanager/event/character/edit.html", context)
@@ -389,7 +391,7 @@ def _update_character(context: dict, character: Character, form: Form, message: 
         character.player = context["member"]
 
     # Check if character approval is enabled for this event
-    if get_event_config(context["event"].id, "user_character_approval", False, context):
+    if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
         # Update status to proposed if character is in creation/review and user clicked propose
         if character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
             character.status = CharacterStatus.PROPOSED
@@ -419,7 +421,7 @@ def character_customize(request: HttpRequest, event_slug: str, num):
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
 
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
@@ -429,7 +431,7 @@ def character_customize(request: HttpRequest, event_slug: str, num):
         if rgr.custom_profile:
             context["custom_profile"] = rgr.profile_thumb.url
 
-        if get_event_config(context["event"].id, "custom_character_profile", False, context):
+        if get_event_config(context["event"].id, "custom_character_profile", default_value=False, context=context):
             context["avatar_form"] = AvatarForm()
 
         return character_form(request, context, event_slug, rgr, RegistrationCharacterRelForm)
@@ -471,7 +473,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, num: int) ->
     # Get event context and validate user permissions
     context = get_event_context(request, event_slug, signup=True)
     registration_find(context["run"], context["member"], None)
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     # Retrieve character registration relationship
     try:
@@ -517,7 +519,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
     """
     # Get event context and validate character access permissions
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     # Retrieve character registration relationship with related objects
     try:
@@ -575,7 +577,9 @@ def character_list(request: HttpRequest, event_slug: str):
 
     check, _max_chars = check_character_maximum(context["event"], context["member"])
     context["char_maximum"] = check
-    context["approval"] = get_event_config(context["event"].id, "user_character_approval", False, context)
+    context["approval"] = get_event_config(
+        context["event"].id, "user_character_approval", default_value=False, context=context
+    )
     context["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).count()
     return render(request, "larpmanager/event/character/list.html", context)
 
@@ -617,7 +621,7 @@ def character_edit(request: HttpRequest, event_slug: str, num):
 
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True)
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
     return character_form(request, context, event_slug, context["character"], CharacterForm)
 
 
@@ -667,7 +671,7 @@ def character_assign(request: HttpRequest, event_slug: str, num):
 
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
     if RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).exists():
         messages.warning(request, _("You already have an assigned character"))
     elif not context["character"].is_active:
@@ -762,12 +766,12 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_num: i
     event_id = context["event"].parent_id or context["event"].id
 
     # Check if user ability selection is enabled for this event
-    if not get_event_config(event_id, "px_user", False):
+    if not get_event_config(event_id, "px_user", default_value=False):
         msg = "ehm."
         raise Http404(msg)
 
     # Validate character access permissions
-    get_char_check(request, context, character_num, True)
+    get_char_check(request, context, character_num, restrict_non_owners=True)
 
     return context
 
@@ -848,9 +852,9 @@ def get_undo_abilities(request: HttpRequest, context: dict, char, new_ability_id
         list: List of ability IDs that can be undone
 
     """
-    undo_window_hours = int(get_event_config(context["event"].id, "px_undo", 0, context))
+    undo_window_hours = int(get_event_config(context["event"].id, "px_undo", default_value=0, context=context))
     config_key = f"added_px_{char.id}"
-    stored_config_value = char.get_config(config_key, "{}")
+    stored_config_value = char.get_config(config_key, default_value="{}")
     ability_timestamp_map = ast.literal_eval(stored_config_value)
     current_timestamp = int(time.time())
     # clean from abilities out of the undo time windows
@@ -890,7 +894,7 @@ def character_relationships(request: HttpRequest, event_slug: str, num: int) -> 
     """
     # Get event context and validate user access to event and character
     context = get_event_context(request, event_slug, include_status=True, signup=True)
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     # Load all cached event data for performance
     get_event_cache_all(context)
@@ -942,7 +946,7 @@ def character_relationships_edit(request: HttpRequest, event_slug: str, num, oth
 
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True)
-    get_char_check(request, context, num, True)
+    get_char_check(request, context, num, restrict_non_owners=True)
 
     context["relationship"] = None
     if other_character_id != 0:

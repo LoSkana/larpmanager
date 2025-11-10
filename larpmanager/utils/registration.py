@@ -446,7 +446,7 @@ def registration_status(
         return
 
     # check pre-register
-    if get_event_config(run.event_id, "pre_register_active", False, context=context):
+    if get_event_config(run.event_id, "pre_register_active", default_value=False, context=context):
         _status_preregister(run, member, context)
 
     current_datetime = datetime.today()
@@ -622,7 +622,7 @@ def check_character_maximum(event, member) -> tuple[bool, int]:
     current_character_count = characters.exclude(id__in=inactive_character_ids).count()
 
     # Get the maximum allowed characters from event configuration
-    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max", 0))
+    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max", default_value=0))
 
     # Return whether limit is reached and the maximum allowed
     return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
@@ -658,7 +658,7 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
         registration_character_rels = query.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
-    approval_required = get_event_config(run.event_id, "user_character_approval", False, context=context)
+    approval_required = get_event_config(run.event_id, "user_character_approval", default_value=False, context=context)
 
     # Build list of character links with names and approval status
     character_links = []
@@ -684,10 +684,12 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
     elif len(character_links) > 1:
         run.status["details"] += _("Your characters are") + ": " + ", ".join(character_links)
 
-    _status_approval(character_links, features, run)
+    is_assigned = len(character_links) == 0
+
+    _status_approval(run, features, is_character_assigned=is_assigned)
 
 
-def _status_approval(is_character_assigned: bool, features: dict, run: Any) -> None:
+def _status_approval(run: Run, features: dict, *, is_character_assigned: bool) -> None:
     """Add character creation/selection links to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
@@ -695,9 +697,9 @@ def _status_approval(is_character_assigned: bool, features: dict, run: Any) -> N
     links to the run status details.
 
     Args:
-        is_character_assigned: Boolean indicating if character is already assigned
-        features: Dictionary of enabled features for the event
         run: Run object containing registration and event information
+        features: Dictionary of enabled features for the event
+        is_character_assigned: Boolean indicating if character is already assigned
 
     Returns:
         None: Modifies run.status["details"] in place
@@ -892,7 +894,7 @@ def get_reduced_available_count(run) -> int:
 
     """
     # Get the ratio for reduced tickets per patron registrations
-    reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio", 10))
+    reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio", default_value=10))
 
     # Count current reduced and patron registrations (excluding cancelled)
     reduced_registrations_count = Registration.objects.filter(

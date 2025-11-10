@@ -194,7 +194,8 @@ def get_index_association_permissions(
     context: dict,
     request: HttpRequest,
     association_id: int,
-    check: bool = True,
+    *,
+    enforce_check: bool = True,
 ) -> None:
     """Get and set association permissions for index pages.
 
@@ -205,7 +206,7 @@ def get_index_association_permissions(
         context: Context dictionary to populate with permission data
         request: HTTP request object containing user and session data
         association_id: ID of the association to get permissions for
-        check: Whether to raise PermissionError on access denial
+        enforce_check: Whether to raise PermissionError on access denial
 
     Raises:
         PermissionError: When user lacks permissions and check=True
@@ -216,7 +217,7 @@ def get_index_association_permissions(
 
     # Check if user has any roles or admin privileges
     if not role_names and not is_admin:
-        if check:
+        if enforce_check:
             raise UserPermissionError
         return
 
@@ -230,9 +231,9 @@ def get_index_association_permissions(
     context["association_pms"] = get_index_permissions(
         context,
         features,
-        is_admin,
         user_association_permissions,
         "association",
+        has_default=is_admin,
     )
 
     # Set sidebar state from user session
@@ -412,7 +413,7 @@ def has_event_permission(request: HttpRequest, context: dict, event_slug: str, p
 
 
 def get_index_event_permissions(
-    request: HttpRequest, context: dict, event_slug: str, enforce_check: bool = True
+    request: HttpRequest, context: dict, event_slug: str, *, enforce_check: bool = True
 ) -> None:
     """Load event permissions and roles for management interface.
 
@@ -437,10 +438,12 @@ def get_index_event_permissions(
     if role_names:
         context["role_names"] = role_names
     event_features = context.get("features") or get_event_features(context["event"].id)
-    context["event_pms"] = get_index_permissions(context, event_features, is_organizer, user_event_permissions, "event")
+    context["event_pms"] = get_index_permissions(
+        context, event_features, user_event_permissions, "event", has_default=is_organizer
+    )
 
 
-def check_managed(context: dict, permission: str, is_association: bool = True) -> bool:
+def check_managed(context: dict, permission: str, *, is_association: bool = True) -> bool:
     """Check if permission is restricted for managed association skins.
 
     This function determines whether a permission should be restricted based on
@@ -489,9 +492,10 @@ def check_managed(context: dict, permission: str, is_association: bool = True) -
 def get_index_permissions(
     context: dict,
     features: dict,
-    has_default: bool,
     permissions: dict,
     permission_type: str,
+    *,
+    has_default: bool,
 ) -> dict[tuple[str, str], list[dict]]:
     """Build index permissions structure based on user access and features.
 
@@ -502,9 +506,9 @@ def get_index_permissions(
     Args:
         context: Context dictionary containing association information
         features: Dict of available feature slugs for the user
-        has_default: Whether user has default permissions (bypasses specific checks)
         permissions: Dict of specific permission slugs the user has
         permission_type: Permission type to filter (e.g., 'association', 'event')
+        has_default: Whether user has default permissions (bypasses specific checks)
 
     Returns:
         Dictionary mapping module info tuples (name, icon) to lists of

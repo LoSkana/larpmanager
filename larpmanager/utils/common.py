@@ -207,7 +207,7 @@ def get_event_template(context, template_id) -> None:
         raise NotFoundError from err
 
 
-def get_char(context, character_identifier, by_number=False) -> None:
+def get_char(context, character_identifier, *, by_number=False) -> None:
     """Get character by ID or number and add to context.
 
     Args:
@@ -216,7 +216,7 @@ def get_char(context, character_identifier, by_number=False) -> None:
         by_number: Whether to search by number instead of ID
 
     """
-    get_element(context, character_identifier, "character", Character, by_number)
+    get_element(context, character_identifier, "character", Character, by_number=by_number)
 
 
 def get_registration(context, registration_id) -> None:
@@ -552,6 +552,7 @@ def get_element(
     primary_key: int | str,
     context_key_name: str,
     model_class: type[BaseModel],
+    *,
     by_number: bool = False,
 ) -> None:
     """Retrieve a model instance and add it to the context dictionary.
@@ -786,7 +787,7 @@ def round_to_two_significant_digits(number: float) -> int:
     return int(rounded_decimal)
 
 
-def exchange_order(context: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
+def exchange_order(context: dict, model_class: type, element_id: int, move_up: int, elements=None) -> None:
     """Exchange ordering positions between two elements in a sequence.
 
     This function moves an element up or down in the ordering sequence by swapping
@@ -797,7 +798,7 @@ def exchange_order(context: dict, model_class: type, element_id: int, move_up: b
         context: Context dictionary to store the current element after operation.
         model_class: Model class of elements to reorder.
         element_id: Primary key of the element to move.
-        move_up: Direction to move - True for up (increase order), False for down (decrease order).
+        move_up: Direction to move - 1 for up (increase order), 0 for down (decrease order).
         elements: Optional queryset of elements. Defaults to event elements if None.
 
     Returns:

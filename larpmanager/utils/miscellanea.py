@@ -258,12 +258,14 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
         template_context[config_key] = get_association_config(
             context["association_id"],
             config_key,
-            None,
-            template_context,
+            default_value=None,
+            context=template_context,
         )
 
     # Award badge to user if configured for this association
-    badge_code = get_association_config(context["association_id"], "centauri_badge", None, template_context)
+    badge_code = get_association_config(
+        context["association_id"], "centauri_badge", default_value=None, context=template_context
+    )
     if badge_code:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(context["member"])
@@ -314,7 +316,9 @@ def get_warehouse_optionals(context, default_columns) -> None:
     optionals = {}
     has_active_optional = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_association_config(context["association_id"], f"warehouse_{field}", False, context)
+        optionals[field] = get_association_config(
+            context["association_id"], f"warehouse_{field}", default_value=False, context=context
+        )
         if optionals[field]:
             has_active_optional = 1
     context["optionals"] = optionals

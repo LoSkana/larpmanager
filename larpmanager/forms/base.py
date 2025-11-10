@@ -149,7 +149,7 @@ class MyForm(forms.ModelForm):
         available_runs = Run.objects.filter(event=self.params["event"])
 
         # If campaign switch is active, expand to include related events
-        if get_association_config(self.params["event"].association_id, "campaign_switch", False):
+        if get_association_config(self.params["event"].association_id, "campaign_switch", default_value=False):
             # Start with current event ID
             related_event_ids = {self.params["event"].id}
 
@@ -275,7 +275,7 @@ class MyForm(forms.ModelForm):
 
         return field_value
 
-    def save(self, commit: bool = True) -> BaseModel:
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save form instance with custom field handling.
 
         Args:
@@ -717,7 +717,7 @@ class BaseRegistrationForm(MyFormRun):
         # Process each registration question for field creation
         for question in self.questions:
             # Skip questions that don't meet visibility/permission criteria
-            if question.skip(self.instance, self.params["features"], self.params, True):
+            if question.skip(self.instance, self.params["features"], self.params, is_organizer=True):
                 continue
 
             # Create form field for this question (organizer context)
@@ -747,6 +747,7 @@ class BaseRegistrationForm(MyFormRun):
         self,
         question: WritingQuestion,
         registration_counts: dict[str, Any] | None = None,
+        *,
         is_organizer: bool = True,
     ) -> str | None:
         """Initialize form field for a writing question.
@@ -773,7 +774,7 @@ class BaseRegistrationForm(MyFormRun):
 
         # Set default field states for organizer context
         is_field_active = True
-        is_field_required = False
+        is_required = False
 
         # Apply user-specific field logic when not in organizer mode
         if not is_organizer:
@@ -790,10 +791,12 @@ class BaseRegistrationForm(MyFormRun):
                 is_field_active = False
             else:
                 # Set field as required based on question status
-                is_field_required = question.status == QuestionStatus.MANDATORY
+                is_required = question.status == QuestionStatus.MANDATORY
 
         # Initialize field type and apply type-specific configuration
-        field_key = self.init_type(field_key, is_organizer, question, registration_counts, is_field_required)
+        field_key = self.init_type(
+            field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+        )
         if not field_key:
             return field_key
 
@@ -819,9 +822,10 @@ class BaseRegistrationForm(MyFormRun):
     def init_type(
         self,
         field_key: str,
-        is_organization_level: bool,
         question: BaseModel,
         registration_counts: dict,
+        *,
+        is_organizer: bool,
         is_required: bool,
     ) -> str:
         """Initialize form field based on question type.
@@ -832,7 +836,7 @@ class BaseRegistrationForm(MyFormRun):
 
         Args:
             field_key: Field key identifier used to reference the form field
-            is_organization_level: Organization context flag indicating organizational scope
+            is_organizer: Organization context flag indicating organizational scope
             question: Question object containing type and configuration information
             registration_counts: Dictionary containing registration count data for choices
             is_required: Whether the field should be marked as required
@@ -847,27 +851,29 @@ class BaseRegistrationForm(MyFormRun):
         """
         # Handle multiple choice questions (checkboxes, multi-select)
         if question.typ == BaseQuestionType.MULTIPLE:
-            self.init_multiple(field_key, is_organization_level, question, registration_counts, is_required)
+            self.init_multiple(field_key, is_organizer, question, registration_counts, is_required=is_required)
 
         # Handle single choice questions (radio buttons, dropdowns)
         elif question.typ == BaseQuestionType.SINGLE:
-            self.init_single(field_key, is_organization_level, question, registration_counts, is_required)
+            self.init_single(
+                field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+            )
 
         # Handle simple text input fields
         elif question.typ == BaseQuestionType.TEXT:
-            self.init_text(field_key, question, is_required)
+            self.init_text(field_key, question, is_required=is_required)
 
         # Handle multi-line text areas
         elif question.typ == BaseQuestionType.PARAGRAPH:
-            self.init_paragraph(field_key, question, is_required)
+            self.init_paragraph(field_key, question, is_required=is_required)
 
         # Handle rich text editor fields
         elif question.typ == BaseQuestionType.EDITOR:
-            self.init_editor(field_key, question, is_required)
+            self.init_editor(field_key, question, is_required=is_required)
 
         # Handle special question types (custom implementations)
         else:
-            field_key = self.init_special(question, is_required)
+            field_key = self.init_special(question, is_required=is_required)
 
         # Assign the key attribute to the created field for reference
         if field_key:
@@ -875,7 +881,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_key
 
-    def init_special(self, question: BaseModel, required: bool) -> str | None:
+    def init_special(self, question: BaseModel, *, is_required: bool) -> str | None:
         """Initialize special form field configurations.
 
         Configures special form fields based on the question type, mapping certain
@@ -885,7 +891,7 @@ class BaseRegistrationForm(MyFormRun):
         Args:
             question: Question object containing type, name, description, and
                      validation configuration data
-            required: Whether the field should be marked as required
+            is_required: Whether the field should be marked as required
 
         Returns:
             The field key if successfully initialized, None if the field
@@ -914,7 +920,7 @@ class BaseRegistrationForm(MyFormRun):
         self.fields[field_key].label = question.name
         self.fields[field_key].help_text = question.description
         self.reorder_field(field_key)
-        self.fields[field_key].required = required
+        self.fields[field_key].required = is_required
 
         # Apply length validation for text-based fields
         if field_key in ["name", "teaser", "text"]:
@@ -924,7 +930,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_key
 
-    def init_editor(self, field_key: str, question: BaseModel, is_required: bool) -> None:
+    def init_editor(self, field_key: str, question: BaseModel, *, is_required: bool) -> None:
         """Initialize a TinyMCE editor field for a form question.
 
         Args:
@@ -952,7 +958,7 @@ class BaseRegistrationForm(MyFormRun):
         # Add field to show_link list for frontend handling
         self.show_link.append(f"id_{field_key}")
 
-    def init_paragraph(self, field_key: str, question_config, is_required: bool) -> None:
+    def init_paragraph(self, field_key: str, question_config: BaseModel, *, is_required: bool) -> None:
         """Initialize a paragraph text field for the form.
 
         Args:
@@ -977,7 +983,7 @@ class BaseRegistrationForm(MyFormRun):
         if question_config.id in self.answers:
             self.initial[field_key] = self.answers[question_config.id].text
 
-    def init_text(self, field_key: str, form_question, is_required: bool) -> None:
+    def init_text(self, field_key: str, form_question, *, is_required: bool) -> None:
         """Initialize a text field with validators and initial values."""
         # Create validators based on max_length constraint
         field_validators = [max_length_validator(form_question.max_length)] if form_question.max_length else []
@@ -997,16 +1003,17 @@ class BaseRegistrationForm(MyFormRun):
     def init_single(
         self,
         field_key: str,
-        is_organizational_context: bool,
         question: Any,
         registration_counts: dict,
+        *,
+        is_organizer,
         is_required: bool,
     ) -> None:
         """Initialize single choice form field.
 
         Args:
             field_key: Form field key for the choice field
-            is_organizational_context: Whether this is an organizational form context
+            is_organizer: Whether this is an organizational form context
             question: Question object containing choices configuration and metadata
             registration_counts: Registration counts dictionary for quota tracking
             is_required: Whether the field is required for form validation
@@ -1016,7 +1023,7 @@ class BaseRegistrationForm(MyFormRun):
             - Sets initial value in self.initial if a previous selection exists
 
         """
-        if is_organizational_context:
+        if is_organizer:
             # Get choice options for organizational context
             (available_choices, help_text) = self.get_choice_options(self.choices, question)
 
@@ -1052,9 +1059,10 @@ class BaseRegistrationForm(MyFormRun):
     def init_multiple(
         self,
         field_key: str,
-        is_organizational_form: bool,
         question: Any,
         registration_counts: dict,
+        *,
+        is_organizer: bool,
         is_required: bool,
     ) -> None:
         """Set up multiple choice form field handling.
@@ -1065,10 +1073,10 @@ class BaseRegistrationForm(MyFormRun):
 
         Args:
             field_key: Form field identifier used as the field name
-            is_organizational_form: True if this is an organizational form, False for regular forms
             question: Question object containing choices configuration and metadata
             registration_counts: Dictionary mapping registration types to their current counts
                        for quota tracking purposes
+            is_organizer: True if this is an organizational form, False for regular forms
             is_required: True if the field must be filled, False if optional
 
         Side Effects:
@@ -1078,7 +1086,7 @@ class BaseRegistrationForm(MyFormRun):
 
         """
         # Process choice options differently for organizational vs regular forms
-        if is_organizational_form:
+        if is_organizer:
             (available_choices, help_text) = self.get_choice_options(self.choices, question)
         else:
             previously_selected_choices = []
@@ -1116,16 +1124,16 @@ class BaseRegistrationForm(MyFormRun):
         field = self.fields.pop(field_name)
         self.fields[field_name] = field
 
-    def save_reg_questions(self, instance, orga=True) -> None:
+    def save_reg_questions(self, instance, *, is_organizer=True) -> None:
         """Save registration question answers to database.
 
         Args:
             instance: Registration instance to save answers for
-            orga (bool): Whether to save organizational questions
+            is_organizer (bool): Whether to save organizational questions
 
         """
         for q in self.questions:
-            if q.skip(instance, self.params["features"], self.params, orga):
+            if q.skip(instance, self.params["features"], self.params, is_organizer=is_organizer):
                 continue
 
             k = "q" + str(q.id)
@@ -1263,7 +1271,7 @@ class MyCssForm(MyForm):
                 css = css.split(css_delimeter)[0]
             self.initial[self.get_input_css()] = css
 
-    def save(self, commit: bool = True) -> Any:
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save form instance with generated CSS code and custom CSS file.
 
         Args:
@@ -1370,6 +1378,6 @@ class BaseAccForm(forms.Form):
         self.context["user_fees"] = get_association_config(
             self.context["association_id"],
             "payment_fees_user",
-            False,
-            self.context,
+            default_value=False,
+            context=self.context,
         )

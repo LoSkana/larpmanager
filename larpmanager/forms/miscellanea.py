@@ -129,7 +129,7 @@ class HelpQuestionForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with run choices and optional run parameter."""
         super().__init__(*args, **kwargs)
-        get_run_choices(self, True)
+        get_run_choices(self, past=True)
 
         # Set initial run value from params if provided
         if "run" in self.params:
@@ -275,7 +275,7 @@ def _delete_optionals_warehouse(warehouse_form) -> None:
         if not get_association_config(
             warehouse_form.params["association_id"],
             f"warehouse_{optional_field_name}",
-            False,
+            default_value=False,
         ):
             warehouse_form.delete_field(optional_field_name)
 

@@ -114,7 +114,7 @@ def update_registration_status(instance) -> None:
     association_id = instance.run.event.association_id
 
     # Handle new registration notifications to organizers
-    if instance.modified == 1 and get_association_config(association_id, "mail_signup_new", False):
+    if instance.modified == 1 and get_association_config(association_id, "mail_signup_new", default_value=False):
         for organizer in get_event_organizers(instance.run.event):
             activate(organizer.language)
             email_subject = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % email_context
@@ -123,7 +123,7 @@ def update_registration_status(instance) -> None:
             my_send_mail(email_subject, email_body, organizer, instance.run)
 
     # Handle registration update notifications to organizers
-    elif get_association_config(association_id, "mail_signup_update", False):
+    elif get_association_config(association_id, "mail_signup_update", default_value=False):
         for organizer in get_event_organizers(instance.run.event):
             activate(organizer.language)
             email_subject = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % email_context
@@ -256,7 +256,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
     )
 
 
-def send_character_assignment_email(instance, created: bool) -> None:
+def send_character_assignment_email(instance) -> None:
     """Send character assignment email when registration-character relation is created.
 
     This function sends an email notification to a member when they are assigned
@@ -265,16 +265,11 @@ def send_character_assignment_email(instance, created: bool) -> None:
 
     Args:
         instance: RegistrationCharacterRel instance representing the assignment
-        created: Whether the instance was just created (True) or updated (False)
 
     Returns:
         None
 
     """
-    # Early return if this is an update, not a creation
-    if not created:
-        return
-
     # Set the language context for email localization
     activate(instance.reg.member.language)
 
@@ -283,7 +278,7 @@ def send_character_assignment_email(instance, created: bool) -> None:
         return
 
     # Check if character assignment emails are disabled for this event
-    if get_event_config(instance.reg.run.event_id, "mail_character", False):
+    if get_event_config(instance.reg.run.event_id, "mail_character", default_value=False):
         return
 
     # Prepare context data for email template
@@ -352,7 +347,7 @@ def update_registration_cancellation(instance: Registration) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Send notification emails to organizers if feature is enabled
-    if get_association_config(instance.run.event.association_id, "mail_signup_del", False):
+    if get_association_config(instance.run.event.association_id, "mail_signup_del", default_value=False):
         # Iterate through all organizers for this event
         for organizer in get_event_organizers(instance.run.event):
             activate(organizer.language)
@@ -427,7 +422,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Check if organization wants to receive deletion notifications
-    if get_association_config(instance.run.event.association_id, "mail_signup_del", False):
+    if get_association_config(instance.run.event.association_id, "mail_signup_del", default_value=False):
         # Send notification to all event organizers
         for organizer in get_event_organizers(instance.run.event):
             activate(organizer.language)

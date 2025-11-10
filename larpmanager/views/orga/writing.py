@@ -122,7 +122,7 @@ def orga_plots_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResp
 
 
 @login_required
-def orga_plots_order(request: HttpRequest, event_slug: str, num: int, order: str) -> HttpResponseRedirect:
+def orga_plots_order(request: HttpRequest, event_slug: str, num: int, order: int) -> HttpResponseRedirect:
     """Reorder plots in event's plot list."""
     # Verify user has permission to manage plots
     context = check_event_context(request, event_slug, "orga_plots")
@@ -134,7 +134,7 @@ def orga_plots_order(request: HttpRequest, event_slug: str, num: int, order: str
 
 
 @login_required
-def orga_plots_rels_order(request: HttpRequest, event_slug: str, num: int, order: str) -> HttpResponse:
+def orga_plots_rels_order(request: HttpRequest, event_slug: str, num: int, order: int) -> HttpResponse:
     """Reorder plot character relationships for event organization.
 
     Args:
@@ -781,7 +781,7 @@ def orga_progress_steps_order(
     request: HttpRequest,
     event_slug: str,
     num: int,
-    order: str,
+    order: int,
 ) -> HttpResponse:
     """Reorder progress steps for an event."""
     # Verify user has permission to modify progress steps
@@ -927,7 +927,7 @@ def orga_export(request: HttpRequest, event_slug: str, export_name: str) -> Http
 
     # Export model data and prepare context
     context["nm"] = export_name
-    export = export_data(context, model, True)[0]
+    export = export_data(context, model, member_cover=True)[0]
     _model, context["key"], context["vals"] = export
 
     return render(request, "larpmanager/orga/export.html", context)

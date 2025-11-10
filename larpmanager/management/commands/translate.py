@@ -104,7 +104,7 @@ class Command(BaseCommand):
             po_file_path = join(locale_path, locale_code, "LC_MESSAGES", "django.po")
 
             with open(po_file_path) as file_input:
-                file_lines = file_input.read().splitlines(True)
+                file_lines = file_input.read().splitlines(keepends=True)
             first_empty_line_index = file_lines.index("\n")
             file_lines = file_lines[first_empty_line_index:]
             file_lines = ['msgid ""\n', 'msgstr ""\n', '"Content-Type: text/plain; charset=UTF-8"\n', *file_lines]

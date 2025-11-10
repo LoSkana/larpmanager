@@ -87,7 +87,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
 
-        px_user = get_event_config(self.params["event"].id, "px_user", False)
+        px_user = get_event_config(self.params["event"].id, "px_user", default_value=False)
 
         # Set ability type choices from event-specific elements
         self.fields["typ"].choices = [

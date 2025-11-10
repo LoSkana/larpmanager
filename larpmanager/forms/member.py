@@ -205,7 +205,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             raise ValidationError(msg)
         return data
 
-    def save(self, commit: bool = True) -> User:
+    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002
         """Save user and update associated member profile with form data.
 
         Args:
@@ -587,7 +587,9 @@ class ProfileForm(BaseProfileForm):
 
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            vote_cands = get_association_config(self.params["association_id"], "vote_candidates", "").split(",")
+            vote_cands = get_association_config(
+                self.params["association_id"], "vote_candidates", default_value=""
+            ).split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
@@ -630,7 +632,7 @@ class ProfileForm(BaseProfileForm):
         features = self.params["features"]
 
         if "membership" in features:
-            min_age = get_association_config(association_id, "membership_age", "")
+            min_age = get_association_config(association_id, "membership_age", default_value="")
             if min_age:
                 try:
                     min_age = int(min_age)
@@ -653,7 +655,7 @@ class ProfileForm(BaseProfileForm):
 
         return cleaned_data
 
-    def save(self, commit: bool = True) -> BaseModel:
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save form instance with residence address if provided."""
         instance = super().save(commit=False)
 
@@ -1027,7 +1029,7 @@ class ExeProfileForm(MyForm):
 
         return available_fields
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Member:  # noqa: FBT001, FBT002
         """Save form data and update member field configurations.
 
         Args:

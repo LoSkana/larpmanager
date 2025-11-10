@@ -433,7 +433,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
             # Calculate important plot count (excluding $unimportant entries)
             unimportant_plot_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
                 unimportant_plot_count = sum(
                     1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
                 )
@@ -442,7 +442,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
             cache_event_id = event.id if event else char.event_id
-            if get_event_config(cache_event_id, "campaign_faction_indep", False):
+            if get_event_config(cache_event_id, "campaign_faction_indep", default_value=False):
                 # Use the cache event for independent faction lookup
                 faction_event_id = cache_event_id
             else:
@@ -468,7 +468,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
             # Calculate important relationship count (excluding $unimportant entries)
             unimportant_relationship_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
                 unimportant_relationship_count = sum(
                     1
                     for relationship in character_relationships

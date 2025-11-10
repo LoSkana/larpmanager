@@ -246,9 +246,9 @@ class Character(Writing):
     def __str__(self) -> str:
         return f"#{self.number} {self.name}"
 
-    def get_config(self, name, default_value=None, bypass_cache=False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
         """Get configuration value for this character."""
-        return get_element_config(self, name, default_value, bypass_cache)
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
     @property
     def is_active(self) -> bool:
@@ -258,7 +258,7 @@ class Character(Writing):
             True if character is active (no inactive config), False otherwise.
 
         """
-        is_inactive = self.get_config("inactive", False)
+        is_inactive = self.get_config("inactive", default_value=False)
         return not (is_inactive == "True" or is_inactive is True)
 
     def show(self, run=None):
@@ -296,7 +296,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval", False):
+        if get_event_config(self.event_id, "user_character_approval", default_value=False):
             if self.status not in [CharacterStatus.APPROVED]:
                 js["hide"] = True
 
@@ -893,7 +893,7 @@ def replace_character_names(instance) -> None:
         return
 
     # Early return if event doesn't have character substitution enabled
-    if not get_event_config(instance.event_id, "writing_substitute", False):
+    if not get_event_config(instance.event_id, "writing_substitute", default_value=False):
         return
 
     # Build character name to number mapping for replacement

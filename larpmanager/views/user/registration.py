@@ -95,7 +95,7 @@ def _check_pre_register_redirect(context: dict, event_slug: str) -> HttpResponse
 
     """
     # Check if pre-registration is active for this specific event
-    if not get_event_config(context["event"].id, "pre_register_active", False):
+    if not get_event_config(context["event"].id, "pre_register_active", default_value=False):
         return redirect("register", event_slug=event_slug)
 
     # Check if registration is open and we're past the open date
@@ -147,7 +147,9 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     context["already"] = []  # Events user has already pre-registered for
 
     # Check if preference ordering is enabled
-    context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences", False)
+    context["preferences"] = get_association_config(
+        context["association_id"], "pre_reg_preferences", default_value=False
+    )
 
     # Build set of already pre-registered event IDs
     ch = {}
@@ -159,7 +161,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     # Find events available for pre-registration
     for r in Event.objects.filter(association_id=context["association_id"], template=False):
         # Skip if pre-registration not active for this event
-        if not get_event_config(r.id, "pre_register_active", False):
+        if not get_event_config(r.id, "pre_register_active", default_value=False):
             continue
 
         # Skip if user already pre-registered
@@ -235,8 +237,9 @@ def save_registration(
     run: Run,
     event: Event,
     reg: Registration | None,
+    *,
     gifted: bool = False,
-) -> "Registration":
+) -> Registration:
     """Save registration data and handle payment processing.
 
     This function creates or updates a registration record within a database transaction,
@@ -277,10 +280,10 @@ def save_registration(
         provisional = is_reg_provisional(reg)
 
         # Save standard registration fields and data
-        save_registration_standard(context, event, form, gifted, provisional, reg)
+        save_registration_standard(context, event, form, reg, gifted=gifted, provisional=provisional)
 
         # Process and save registration-specific questions
-        form.save_reg_questions(reg, False)
+        form.save_reg_questions(reg, is_organizer=False)
 
         # Confirm and finalize any pending discounts for this member/run
         que = AccountingItemDiscount.objects.filter(member=context["member"], run=reg.run)
@@ -309,9 +312,10 @@ def save_registration_standard(
     context: dict,
     event: Event,
     form: RegistrationForm,
+    reg: Registration,
+    *,
     gifted: bool,
     provisional: bool,
-    reg: Registration,
 ) -> None:
     """Save standard registration with ticket and payment processing.
 
@@ -377,8 +381,9 @@ def registration_redirect(
     request: HttpRequest,
     context: dict,
     registration: Registration,
-    is_new_registration: bool,
     run: Run,
+    *,
+    is_new_registration: bool,
 ) -> HttpResponse:
     """Handle post-registration redirect logic.
 
@@ -390,8 +395,8 @@ def registration_redirect(
         request: Django HTTP request object containing user and association data
         context: Dict context data
         registration: Registration instance for the current user's registration
-        is_new_registration: Whether this is a new registration (True) or an update (False)
         run: Run instance representing the event run being registered for
+        is_new_registration: Whether this is a new registration (True) or an update (False)
 
     Returns:
         HttpResponse: Redirect response to the appropriate next step:
@@ -536,8 +541,12 @@ def register_info(request: HttpRequest, context: dict, form, registration, disco
     context["custom_text"] = get_event_text(context["event"].id, EventTextType.REGISTER)
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
     context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
-    context["hide_unavailable"] = get_event_config(context["event"].id, "registration_hide_unavailable", False, context)
-    context["no_provisional"] = get_event_config(context["event"].id, "payment_no_provisional", False, context)
+    context["hide_unavailable"] = get_event_config(
+        context["event"].id, "registration_hide_unavailable", default_value=False, context=context
+    )
+    context["no_provisional"] = get_event_config(
+        context["event"].id, "payment_no_provisional", default_value=False, context=context
+    )
 
     init_form_submitted(context, form, request, registration)
 
@@ -556,7 +565,9 @@ def register_info(request: HttpRequest, context: dict, form, registration, disco
         else:
             context["membership_fee"] = "todo"
 
-        context["membership_amount"] = get_association_config(context["association_id"], "membership_fee", 0)
+        context["membership_amount"] = get_association_config(
+            context["association_id"], "membership_fee", default_value=0
+        )
 
 
 def init_form_submitted(context, form, request, registration=None) -> None:
@@ -662,7 +673,9 @@ def register(
                 current_event,
                 context["run_reg"],
             )
-            return registration_redirect(request, context, saved_registration, is_new_registration, current_run)
+            return registration_redirect(
+                request, context, saved_registration, current_run, is_new_registration=is_new_registration
+            )
     else:
         # Display empty form for GET requests
         form = RegistrationForm(context=context, instance=context["run_reg"])
@@ -698,7 +711,9 @@ def _apply_ticket(context: dict, ticket_id: int | None) -> None:
         pass
 
 
-def _check_redirect_registration(request: HttpRequest, context: dict, event, secret_code: str | None) -> HttpResponse | None:
+def _check_redirect_registration(
+    request: HttpRequest, context: dict, event, secret_code: str | None
+) -> HttpResponse | None:
     """Check if registration should be redirected based on event status and settings.
 
     This function performs various checks to determine if a user's registration
@@ -741,7 +756,9 @@ def _check_redirect_registration(request: HttpRequest, context: dict, event, sec
     if "registration_open" in context["features"]:
         if not context["run"].registration_open or context["run"].registration_open > timezone_now():
             # Redirect to pre-registration if available and active
-            if "pre_register" in context["features"] and get_event_config(event.id, "pre_register_active", False):
+            if "pre_register" in context["features"] and get_event_config(
+                event.id, "pre_register_active", default_value=False
+            ):
                 return redirect("pre_register", event_slug=context["event"].slug)
             return render(request, "larpmanager/event/not_open.html", context)
 
@@ -755,7 +772,9 @@ def _add_bring_friend_discounts(context: dict) -> None:
 
     # Retrieve discount configuration for both directions (to/from)
     for discount_config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-        context[discount_config_name] = get_event_config(context["event"].id, discount_config_name, 0, context)
+        context[discount_config_name] = get_event_config(
+            context["event"].id, discount_config_name, default_value=0, context=context
+        )
 
 
 def _register_prepare(context, registration):

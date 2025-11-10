@@ -113,7 +113,7 @@ def download(context, typ, nm):
     return zip_exports(context, exports, nm.capitalize())
 
 
-def export_data(context: dict, model_type: type, member_cover: bool = False) -> list[tuple[str, list, list]]:
+def export_data(context: dict, model_type: type, *, member_cover: bool = False) -> list[tuple[str, list, list]]:
     """Export model data to structured format with questions and answers.
 
     Processes data export for various model types with question handling,
@@ -143,7 +143,7 @@ def export_data(context: dict, model_type: type, member_cover: bool = False) -> 
     for record in queryset:
         # Handle applicable records or registration-specific processing
         if context["applicable"] or model_name == "registration":
-            row_data, headers = _get_applicable_row(context, record, model_name, member_cover)
+            row_data, headers = _get_applicable_row(context, record, model_name, member_cover=member_cover)
         else:
             row_data, headers = _get_standard_row(context, record)
         data_rows.append(row_data)
@@ -308,7 +308,7 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
     context["questions"] = applicable_question_list
 
 
-def _get_applicable_row(context: dict, el: object, model: str, member_cover: bool = False) -> tuple[list, list]:
+def _get_applicable_row(context: dict, element: object, model: str, *, member_cover: bool = False) -> tuple[list, list]:
     """Build row data for export with question answers and element information.
 
     This function constructs export data by combining element metadata with
@@ -320,7 +320,7 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
             - answers: Dict mapping question IDs to element answers
             - choices: Dict mapping question IDs to element choice selections
             - applicable: QuestionApplicable enum value
-        el: Element instance (registration, character, etc.) to extract data from
+        element: Element instance (registration, character, etc.) to extract data from
         model: Model type identifier ('registration', 'character', etc.)
         member_cover: Whether to include member profile images in export, by default False
 
@@ -332,15 +332,15 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
     column_headers = []
 
     # Build base headers and values for the element
-    _row_header(context, el, column_headers, member_cover, model, row_values)
+    _row_header(context, element, column_headers, model, row_values, member_cover=member_cover)
 
     # Add context-specific fields based on applicable type
     if context["applicable"] == QuestionApplicable.QUEST:
         column_headers.append("typ")
-        row_values.append(el.typ.name if el.typ else "")
+        row_values.append(element.typ.name if element.typ else "")
     elif context["applicable"] == QuestionApplicable.TRAIT:
         column_headers.append("quest")
-        row_values.append(el.quest.name if el.quest else "")
+        row_values.append(element.quest.name if element.quest else "")
 
     # Extract answers and choices from context
     question_answers = context["answers"]
@@ -351,7 +351,7 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
         column_headers.append(question.name)
 
         # Get element-specific value mapping for special question types
-        question_type_mapping = _get_values_mapping(el)
+        question_type_mapping = _get_values_mapping(element)
         cell_value = ""
 
         # Handle mapped question types (direct element attributes)
@@ -359,12 +359,12 @@ def _get_applicable_row(context: dict, el: object, model: str, member_cover: boo
             cell_value = question_type_mapping[question.typ]()
         # Handle text-based question types (paragraph, text, email)
         elif question.typ in {"p", "t", "e"}:
-            if question.id in question_answers and el.id in question_answers[question.id]:
-                cell_value = question_answers[question.id][el.id]
+            if question.id in question_answers and element.id in question_answers[question.id]:
+                cell_value = question_answers[question.id][element.id]
         # Handle choice-based question types (single, multiple)
         elif question.typ in {"s", "m"}:
-            if question.id in question_choices and el.id in question_choices[question.id]:
-                cell_value = ", ".join(question_choices[question.id][el.id])
+            if question.id in question_choices and element.id in question_choices[question.id]:
+                cell_value = ", ".join(question_choices[question.id][element.id])
 
         # Clean value for export format (remove tabs, convert newlines)
         cell_value = cell_value.replace("\t", "").replace("\n", "<br />")
@@ -377,9 +377,10 @@ def _row_header(
     context: dict,
     el: object,
     header_columns: list,
-    member_cover: bool,
     model: str,
     row_values: list,
+    *,
+    member_cover: bool,
 ) -> None:
     """Build header row data with member information and basic element data.
 

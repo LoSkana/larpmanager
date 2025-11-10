@@ -70,7 +70,7 @@ def is_reg_provisional(
         features = get_event_features(event.id)
 
     # Check if provisional payments are disabled for this event
-    if get_event_config(event.id, "payment_no_provisional", False, context=context):
+    if get_event_config(event.id, "payment_no_provisional", default_value=False, context=context):
         return False
 
     # Check if payment feature is enabled and registration has outstanding balance

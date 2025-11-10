@@ -293,7 +293,7 @@ class Event(BaseModel):
         if self.parent and model_class in inheritable_elements:
             # Verify that campaign independence is not enabled for this element type
             # If independence is disabled (False), use parent's elements
-            if not self.get_config(f"campaign_{model_class}_indep", False):
+            if not self.get_config(f"campaign_{model_class}_indep", default_value=False):
                 return self.parent
 
         # Return self if no parent exists, element not inheritable, or independence enabled
@@ -387,9 +387,9 @@ class Event(BaseModel):
         os.makedirs(pdf_directory_path, exist_ok=True)
         return pdf_directory_path
 
-    def get_config(self, name: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
-        """Get configuration value for this instance."""
-        return get_element_config(self, name, default_value, bypass_cache)
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+        """Get configuration value for this event."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class EventConfig(BaseModel):
@@ -674,9 +674,9 @@ class Run(BaseModel):
         """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, config_key: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
-        """Get configuration value for this object."""
-        return get_element_config(self, config_key, default_value, bypass_cache)
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+        """Get configuration value for this run."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class RunConfig(BaseModel):

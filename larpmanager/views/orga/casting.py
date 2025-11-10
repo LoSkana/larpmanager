@@ -276,7 +276,9 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int]
 def check_player_skip_characters(registration_character_rel: RegistrationCharacterRel, context: dict) -> bool:
     """Check if registration has reached maximum allowed characters."""
     # Get max characters allowed from event config
-    max_characters_allowed = int(get_event_config(context["event"].id, "casting_characters", 1, context))
+    max_characters_allowed = int(
+        get_event_config(context["event"].id, "casting_characters", default_value=1, context=context)
+    )
 
     # Check if current character count meets or exceeds limit
     return RegistrationCharacterRel.objects.filter(reg=registration_character_rel).count() >= max_characters_allowed
@@ -473,7 +475,9 @@ def get_casting_data(
 
     # Load priority configuration for algorithm weighting
     for priority_key in ("reg_priority", "pay_priority"):
-        context[priority_key] = int(get_event_config(context["event"].id, f"casting_{priority_key}", 0, context))
+        context[priority_key] = int(
+            get_event_config(context["event"].id, f"casting_{priority_key}", default_value=0, context=context)
+        )
 
 
 def _casting_prepare(context: dict, request, typ: str) -> tuple[int, dict[int, str], dict[int, list]]:

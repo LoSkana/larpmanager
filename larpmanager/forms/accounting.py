@@ -117,7 +117,7 @@ class OrgaExpenseForm(MyFormRun):
             self.delete_field("balance")
 
         # Remove approval field if organization has disabled expense approval
-        if get_association_config(self.params["event"].association_id, "expense_disable_orga", False):
+        if get_association_config(self.params["event"].association_id, "expense_disable_orga", default_value=False):
             self.delete_field("is_approved")
 
 
@@ -648,7 +648,7 @@ class ExePaymentSettingsForm(MyForm):
                 data_string = self.mask_string(data_string)
             self.initial[el] = data_string
 
-    def save(self, commit: bool = True) -> PaymentInvoice:
+    def save(self, commit: bool = True) -> PaymentInvoice:  # noqa: FBT001, FBT002
         """Save payment form with details masking and change tracking.
 
         This method saves the payment form instance, processes payment details

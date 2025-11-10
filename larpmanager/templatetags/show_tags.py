@@ -224,6 +224,7 @@ def go_character(
     character_number: int,
     text: str,
     run,
+    *,
     include_tooltip: bool,
     simple: bool = False,
 ) -> str:
@@ -347,7 +348,7 @@ def _remove_unimportant_prefix(text: str) -> str:
 
 
 @register.simple_tag(takes_context=True)
-def show_char(context: dict, element: dict | str | None, run: Run, tooltip: bool) -> str:
+def show_char(context: dict, element: dict | str | None, run: Run, *, include_tooltip: bool) -> str:
     """Template tag to process text and convert character references to links.
 
     This function processes text content and converts character references (prefixed with
@@ -358,7 +359,7 @@ def show_char(context: dict, element: dict | str | None, run: Run, tooltip: bool
         context: Template context dictionary containing rendering state
         element: Text element to process - can be a string, dict with 'text' key, or None
         run: Run instance used for character lookup and event context
-        tooltip: Whether to include character tooltips in generated links
+        include_tooltip: Whether to include character tooltips in generated links
 
     Returns:
         Safe HTML string with character references converted to links and unimportant
@@ -384,9 +385,15 @@ def show_char(context: dict, element: dict | str | None, run: Run, tooltip: bool
     # Process character references in descending order to avoid partial matches
     # #XX creates relationships, @XX counts as character in faction/plot, ^XX is simple reference
     for character_number in range(context["max_ch_number"], 0, -1):
-        text = go_character(context, f"#{character_number}", character_number, text, run, tooltip)
-        text = go_character(context, f"@{character_number}", character_number, text, run, tooltip)
-        text = go_character(context, f"^{character_number}", character_number, text, run, tooltip, simple=True)
+        text = go_character(
+            context, f"#{character_number}", character_number, text, run, include_tooltip=include_tooltip
+        )
+        text = go_character(
+            context, f"@{character_number}", character_number, text, run, include_tooltip=include_tooltip
+        )
+        text = go_character(
+            context, f"^{character_number}", character_number, text, run, include_tooltip=include_tooltip, simple=True
+        )
 
     # Clean up unimportant tags by removing $unimportant prefix and empty tags
     text = _remove_unimportant_prefix(text)
@@ -401,6 +408,7 @@ def go_trait(
     trait_number: int,
     text: str,
     run,
+    *,
     include_tooltip: bool,
     simple: bool = False,
 ) -> str:
@@ -495,9 +503,9 @@ def show_trait(context, text, run, tooltip):
 
     # replace #XX (create relationships / count as character in faction / plot)
     for trait_number in range(context["max_trait"], 0, -1):
-        text = go_trait(context, f"#{trait_number}", trait_number, text, run, tooltip)
-        text = go_trait(context, f"@{trait_number}", trait_number, text, run, tooltip)
-        text = go_trait(context, f"^{trait_number}", trait_number, text, run, tooltip, simple=True)
+        text = go_trait(context, f"#{trait_number}", trait_number, text, run, include_tooltip=tooltip)
+        text = go_trait(context, f"@{trait_number}", trait_number, text, run, include_tooltip=tooltip)
+        text = go_trait(context, f"^{trait_number}", trait_number, text, run, include_tooltip=tooltip, simple=True)
 
     # Text is already HTML-safe from trait link processing, so we can mark it as such
     return format_html("{}", format_html(text))
@@ -562,7 +570,7 @@ def get_field_show_char(context, form, name, run, tooltip):
     """
     if name in form:
         v = form[name]
-        return show_char(context, v, run, tooltip)
+        return show_char(context, v, run, include_tooltip=tooltip)
     return ""
 
 

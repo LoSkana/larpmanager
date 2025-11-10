@@ -176,7 +176,9 @@ def casting_details(context: dict, casting_type: int) -> dict:
     context["typ"] = casting_type
     for config_key, default_value in (("add", 0), ("min", 5), ("max", 5)):
         context[f"casting_{config_key}"] = int(
-            get_event_config(context["event"].id, f"casting_{config_key}", default_value, context),
+            get_event_config(
+                context["event"].id, f"casting_{config_key}", default_value=default_value, context=context
+            ),
         )
 
     # Set boolean casting preferences from event configuration
@@ -184,8 +186,8 @@ def casting_details(context: dict, casting_type: int) -> dict:
         context["casting_" + preference_name] = get_event_config(
             context["event"].id,
             "casting_" + preference_name,
-            False,
-            context,
+            default_value=False,
+            context=context,
         )
 
     return context
@@ -332,7 +334,7 @@ def _check_already_done(context: dict, request, assignment_type: int) -> None:
     """
     # Check if character assignment already done (type 0)
     if assignment_type == 0:
-        casting_chars = int(get_event_config(context["run"].event_id, "casting_characters", 1))
+        casting_chars = int(get_event_config(context["run"].event_id, "casting_characters", default_value=1))
         if context["run"].reg.rcrs.count() >= casting_chars:
             # Collect names of all assigned characters
             character_names = []

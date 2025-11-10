@@ -217,7 +217,7 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
     return email
 
 
-def create_member_profile_for_user(user: User, is_newly_created: bool) -> None:
+def create_member_profile_for_user(user: User, *, is_newly_created: bool) -> None:
     """Create member profile and sync email when user is saved.
 
     This function handles the creation of a Member profile for newly created users

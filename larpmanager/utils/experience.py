@@ -136,7 +136,7 @@ def _apply_modifier_cost(
 def get_free_abilities(char: Character) -> list:
     """Return the list of free abilities for a character."""
     config_name = _free_abilities_cache_key()
-    config_value = char.get_config(config_name, "[]")
+    config_value = char.get_config(config_name, default_value="[]")
     return ast.literal_eval(config_value)
 
 
@@ -161,7 +161,7 @@ def calculate_character_experience_points(character) -> None:
     if "px" not in get_event_features(character.event_id):
         return
 
-    starting_experience_points = get_event_config(character.event_id, "px_start", 0)
+    starting_experience_points = get_event_config(character.event_id, "px_start", default_value=0)
 
     _handle_free_abilities(character)
 

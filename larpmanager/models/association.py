@@ -275,9 +275,9 @@ class Association(BaseModel):
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
-    def get_config(self, name, default_value=None, bypass_cache=False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
         """Get configuration value for this association."""
-        return get_element_config(self, name, default_value, bypass_cache)
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
     def promoter_dict(self) -> dict[str, str]:
         """Return a dictionary with promoter information including slug, name, and optional thumbnail URL."""

@@ -115,7 +115,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
             return self.text[:100]
         return ""
 
-    def as_dict(self, many_to_many: bool = True) -> dict[str, any]:
+    def as_dict(self, *, many_to_many: bool = True) -> dict[str, any]:
         """Convert model instance to dictionary representation.
 
         This method serializes a Django model instance into a dictionary format,

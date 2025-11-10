@@ -782,7 +782,7 @@ def update_registration_accounting(reg: Registration) -> None:
     handle_tokes_credits(association_id, event_features, reg, remaining_balance)
 
     # Get payment alert threshold from event configuration
-    alert_days_threshold = int(get_event_config(reg.run.event_id, "payment_alert", 30, bypass_cache=True))
+    alert_days_threshold = int(get_event_config(reg.run.event_id, "payment_alert", default_value=30, bypass_cache=True))
 
     # Calculate payment schedule based on feature flags
     if "reg_installments" in event_features:

@@ -282,7 +282,7 @@ class ExeAssociationRoleForm(MyForm):
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
 
-    def save(self, commit: bool = True) -> Any:
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save form instance and update related role permissions."""
         instance = super().save(commit=commit)
         save_permissions_role(instance, self)
@@ -340,9 +340,9 @@ class ExeFeatureForm(FeatureForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and its features configuration."""
         super().__init__(*args, **kwargs)
-        self._init_features(True)
+        self._init_features(is_association=True)
 
-    def save(self, commit: bool = True) -> Association:
+    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
         """Save form and reset association features cache."""
         # Save form without committing to database yet
         instance = super().save(commit=False)

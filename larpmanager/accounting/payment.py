@@ -181,7 +181,7 @@ def set_data_invoice(
         }
 
     # Apply special code prefix if configured for this association
-    if get_association_config(association_id, "payment_special_code", False):
+    if get_association_config(association_id, "payment_special_code", default_value=False):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
@@ -295,7 +295,7 @@ def update_invoice_gross_fee(
     payment_fee_percentage = get_payment_fee(association_id, payment_method.slug)
 
     if payment_fee_percentage is not None:
-        if get_association_config(association_id, "payment_fees_user", False):
+        if get_association_config(association_id, "payment_fees_user", default_value=False):
             amount = (amount * 100) / (100 - payment_fee_percentage)
             amount = round_up_to_two_decimals(amount)
 
@@ -379,7 +379,7 @@ def get_payment_form(
     context["invoice"] = invoice
 
     # Check if receipt is required for manual payments (applies to all payment types)
-    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", False)
+    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", default_value=False)
     context["require_receipt"] = require_receipt
 
     # Prepare gateway-specific forms based on selected payment method
@@ -541,7 +541,7 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
     accounting_transaction.association_id = invoice.association_id
 
     # Check if payment fees should be charged to user instead of organization
-    if get_association_config(invoice.association_id, "payment_fees_user", False):
+    if get_association_config(invoice.association_id, "payment_fees_user", default_value=False):
         accounting_transaction.user_burden = True
     accounting_transaction.save()
 

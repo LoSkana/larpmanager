@@ -435,7 +435,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
     # Load association configuration for payment display
     context["association"] = Association.objects.get(pk=context["association_id"])
-    context["hide_amount"] = context["association"].get_config("payment_hide_amount", False)
+    context["hide_amount"] = context["association"].get_config("payment_hide_amount", default_value=False)
 
     # Pre-select payment method if specified
     if method:
@@ -515,7 +515,7 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
 
     # Add form and membership fee to context for template
     context["form"] = form
-    context["membership_fee"] = get_association_config(context["association_id"], "membership_fee", 0)
+    context["membership_fee"] = get_association_config(context["association_id"], "membership_fee", default_value=0)
 
     return render(request, "larpmanager/member/acc_membership.html", context)
 
@@ -960,7 +960,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
         return redirect("accounting")
 
     # Check if receipt is required for manual payments
-    require_receipt = get_association_config(context["association_id"], "payment_require_receipt", False)
+    require_receipt = get_association_config(context["association_id"], "payment_require_receipt", default_value=False)
 
     # Select appropriate form based on payment type
     if payment_method in {"wire", "paypal_nf"}:
@@ -1041,7 +1041,7 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
 
     # Check if user is appointed treasurer
     if "treasurer" in get_association_features(association_id):
-        for mb in get_association_config(association_id, "treasurer_appointees", "").split(", "):
+        for mb in get_association_config(association_id, "treasurer_appointees", default_value="").split(", "):
             if not mb:
                 continue
             if context["member"].id == int(mb):
@@ -1062,7 +1062,7 @@ def acc_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     return redirect("home")
 
 
-def add_runs(ls: dict, lis: list, future: bool = True) -> None:
+def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     """Add runs from events to dictionary, optionally filtering past runs."""
     for e in lis:
         # Filter and add runs to dictionary by ID

@@ -335,11 +335,13 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
     context["year"] = current_year
 
     # Get membership day configuration (default: January 1st)
-    membership_day = get_association_config(context["association_id"], "membership_day", "01-01", context)
+    membership_day = get_association_config(
+        context["association_id"], "membership_day", default_value="01-01", context=context
+    )
     if membership_day:
         # Get grace period in months (default: 0 months)
         membership_grace_period_months = int(
-            get_association_config(context["association_id"], "membership_grazing", "0", context),
+            get_association_config(context["association_id"], "membership_grazing", default_value="0", context=context),
         )
 
         # Build full date string with current year
