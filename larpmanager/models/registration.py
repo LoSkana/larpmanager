@@ -87,8 +87,8 @@ class RegistrationTicket(BaseModel):
 
     description = models.CharField(
         max_length=500,
+        default="",
         blank=True,
-        null=True,
         verbose_name=_("Description"),
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
@@ -176,8 +176,8 @@ class RegistrationSection(BaseModel):
 
     description = HTMLField(
         max_length=5000,
+        default="",
         blank=True,
-        null=True,
         help_text=_("Description - will be displayed at the beginning of the section"),
     )
 
@@ -337,7 +337,7 @@ class Registration(BaseModel):
         db_index=True,
     )
 
-    redeem_code = models.CharField(max_length=16, null=True, blank=True)
+    redeem_code = models.CharField(max_length=16, blank=True, default="")
 
     # Date when first full payment is detected
     payment_date = models.DateTimeField(null=True, blank=True)
@@ -412,7 +412,7 @@ class RegistrationCharacterRel(BaseModel):
     custom_name = models.CharField(
         max_length=150,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Character name"),
         help_text=_(
             "Specify your custom character name (depending on the event you can choose the "
@@ -423,7 +423,7 @@ class RegistrationCharacterRel(BaseModel):
     custom_pronoun = models.CharField(
         max_length=15,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Pronoun"),
         help_text=_("If you wish, indicate a pronoun for your character"),
     )
@@ -431,7 +431,7 @@ class RegistrationCharacterRel(BaseModel):
     custom_song = models.URLField(
         max_length=100,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Song"),
         help_text=_("Indicate a song you want to dedicate to your character"),
     )
@@ -439,7 +439,7 @@ class RegistrationCharacterRel(BaseModel):
     custom_public = models.TextField(
         max_length=5000,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Public"),
         help_text=_("Indicates public information about your character, which will be shown to all other participants"),
     )
@@ -447,7 +447,7 @@ class RegistrationCharacterRel(BaseModel):
     custom_private = models.TextField(
         max_length=5000,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Private"),
         help_text=_(
             "Indicates public information about your character, which will be shown only to you and the organizers",

@@ -150,7 +150,7 @@ class Util(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    cod = models.CharField(max_length=16, null=True)
+    cod = models.CharField(max_length=16, default="", blank=True)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
@@ -480,8 +480,8 @@ class WarehouseMovement(BaseModel):
 
     notes = models.CharField(
         max_length=1000,
+        default="",
         blank=True,
-        null=True,
         help_text=_("Where it has been placed? When it is expected to come back?"),
     )
 
@@ -580,7 +580,8 @@ class ShuttleService(BaseModel):
         help_text=_(
             "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival",
         ),
-        null=True,
+        default="",
+        blank=True,
     )
 
     status = models.CharField(max_length=1, choices=ShuttleStatus.choices, default=ShuttleStatus.OPEN, db_index=True)
@@ -738,7 +739,7 @@ class Email(BaseModel):
 
     body = models.TextField()
 
-    reply_to = models.CharField(max_length=170, blank=True, null=True)
+    reply_to = models.CharField(max_length=170, blank=True, default="")
 
     sent = models.DateTimeField(blank=True, null=True)
 

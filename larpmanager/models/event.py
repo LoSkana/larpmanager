@@ -56,8 +56,8 @@ class Event(BaseModel):
         max_length=30,
         validators=[AlphanumericValidator],
         db_index=True,
+        default="",
         blank=True,
-        null=True,
         verbose_name=_("URL identifier"),
         help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
     )
@@ -68,18 +68,18 @@ class Event(BaseModel):
 
     tagline = models.CharField(
         max_length=500,
+        default="",
         blank=True,
-        null=True,
         verbose_name=_("Tagline"),
         help_text=_("A short tagline, slogan"),
     )
 
-    where = models.CharField(max_length=500, blank=True, null=True, help_text=_("Where it is held"))
+    where = models.CharField(max_length=500, blank=True, default="", help_text=_("Where it is held"))
 
     authors = models.CharField(
         max_length=500,
+        default="",
         blank=True,
-        null=True,
         verbose_name=_("Authors"),
         help_text=_("Names of the collaborators who are organizing it"),
     )
@@ -476,7 +476,7 @@ class EventTextType(models.TextChoices):
 class EventText(BaseModel):
     number = models.IntegerField(null=True, blank=True)
 
-    text = HTMLField(blank=True, null=True)
+    text = HTMLField(blank=True, default="")
 
     typ = models.CharField(max_length=2, choices=EventTextType.choices, verbose_name=_("Type"))
 
@@ -484,7 +484,7 @@ class EventText(BaseModel):
         max_length=3,
         choices=conf_settings.LANGUAGES,
         default="en",
-        null=True,
+        blank=True,
         verbose_name=_("Language"),
         help_text=_("Text language"),
     )
@@ -576,7 +576,7 @@ class Run(BaseModel):
 
     paid = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
-    plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
+    plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, default="")
 
     class Meta:
         indexes = [

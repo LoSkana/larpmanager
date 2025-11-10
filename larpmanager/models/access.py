@@ -52,7 +52,7 @@ class AssociationPermission(BaseModel):
 
     hidden = models.BooleanField(default=False)
 
-    config = models.TextField(max_length=100, blank=True, null=True)
+    config = models.TextField(max_length=100, blank=True, default="")
 
     def __str__(self) -> str:
         """Return string representation of the object."""
@@ -162,7 +162,7 @@ class EventPermission(BaseModel):
 
     hidden = models.BooleanField(default=False)
 
-    config = models.TextField(max_length=100, blank=True, null=True)
+    config = models.TextField(max_length=100, blank=True, default="")
 
     def __str__(self) -> str:
         """Return string representation."""

@@ -176,7 +176,7 @@ class FeatureModule(BaseModel):
 
     order = models.IntegerField()
 
-    nationality = models.CharField(max_length=2, choices=FeatureNationality.choices, blank=True, null=True)
+    nationality = models.CharField(max_length=2, choices=FeatureNationality.choices, blank=True, default="")
 
 
 class Feature(BaseModel):
@@ -200,9 +200,9 @@ class Feature(BaseModel):
         related_name="features",
     )
 
-    after_link = models.TextField(max_length=100, blank=True, null=True)
+    after_link = models.TextField(max_length=100, blank=True, default="")
 
-    after_text = models.TextField(max_length=300, blank=True, null=True)
+    after_text = models.TextField(max_length=300, blank=True, default="")
 
     # If the feature is a placeholder (used to indicate the permissions that does not require a true feature)
     placeholder = models.BooleanField(default=False)
@@ -227,7 +227,7 @@ class PaymentMethod(BaseModel):
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
 
-    instructions = HTMLField(blank=True, null=True)
+    instructions = HTMLField(blank=True, default="")
 
     fields = models.CharField(max_length=500)
 

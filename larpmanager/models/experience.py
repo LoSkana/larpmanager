@@ -58,7 +58,7 @@ class AbilityPx(BaseConceptModel):
 
     cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
 
-    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
+    descr = HTMLField(max_length=5000, blank=True, default="", verbose_name=_("Description"))
 
     visible = models.BooleanField(
         default=True,

@@ -41,7 +41,7 @@ class LarpManagerTutorial(BaseModel):
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, blank=True)
 
-    descr = HTMLField(blank=True, null=True)
+    descr = HTMLField(blank=True, default="")
 
     order = models.IntegerField()
 
@@ -81,7 +81,7 @@ class LarpManagerFaq(BaseModel):
 
     question = models.CharField(max_length=1000)
 
-    answer = HTMLField(blank=True, null=True)
+    answer = HTMLField(blank=True, default="")
 
     typ = models.ForeignKey(
         LarpManagerFaqType,
@@ -103,7 +103,7 @@ class LarpManagerShowcase(BaseModel):
 
     title = models.CharField(max_length=1000)
 
-    text = HTMLField(blank=True, null=True)
+    text = HTMLField(blank=True, default="")
 
     info = models.CharField(max_length=1000)
 
@@ -179,11 +179,11 @@ class LarpManagerGuide(BaseModel):
 
     title = models.CharField(max_length=1000)
 
-    description = models.CharField(max_length=1000, null=True)
+    description = models.CharField(max_length=1000, blank=True, default="")
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
 
-    text = HTMLField(blank=True, null=True)
+    text = HTMLField(blank=True, default="")
 
     photo = models.ImageField(
         max_length=500,
@@ -289,12 +289,9 @@ class LarpManagerTicket(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    reason = models.CharField(max_length=100, null=True)
+    reason = models.CharField(max_length=100)
 
-    email = models.EmailField(
-        null=True,
-        help_text=_("How can we contact you"),
-    )
+    email = models.EmailField(help_text=_("How can we contact you"))
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True)
 

@@ -502,7 +502,7 @@ class PlotCharacterRel(BaseModel):
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
 
-    text = models.TextField(max_length=5000, null=True)
+    text = models.TextField(max_length=5000, blank=True, default="")
 
     def __str__(self) -> str:
         return f"{self.plot} - {self.character}"
@@ -676,7 +676,7 @@ class HandoutTemplate(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    css = models.TextField(blank=True, null=True)
+    css = models.TextField(blank=True, default="")
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="handout_templates")
 

@@ -76,7 +76,7 @@ class Member(BaseModel):
         max_length=3,
         choices=conf_settings.LANGUAGES,
         default="en",
-        null=True,
+        blank=True,
         verbose_name=_("Navigation language"),
         help_text=_("Preferred navigation language"),
     )
@@ -100,8 +100,8 @@ class Member(BaseModel):
     legal_name = models.CharField(
         max_length=100,
         verbose_name=_("Legal name"),
+        default="",
         blank=True,
-        null=True,
         help_text=_(
             "If for whatever reason the first and last name shown on your documents is "
             "different from the one you prefer to use, then write it here. It will only be "
@@ -114,15 +114,15 @@ class Member(BaseModel):
         max_length=20,
         verbose_name=_("Pronouns"),
         help_text=_("Indicate the pronouns you wish to be used to refer to you"),
+        default="",
         blank=True,
-        null=True,
     )
 
     nationality = models.CharField(
         max_length=2,
         choices=countries,
+        default="",
         blank=True,
-        null=True,
         verbose_name=_("Nationality"),
         help_text=_("Indicate the country of which you are a citizen"),
     )
@@ -133,7 +133,7 @@ class Member(BaseModel):
         default=GenderChoices.OTHER,
         verbose_name=_("Gender"),
         help_text=_("Indicates what gender you identify yourself as"),
-        null=True,
+        blank=True,
     )
 
     phone_contact = PhoneNumberField(
@@ -151,8 +151,8 @@ class Member(BaseModel):
             "Indicates a way for other participants to contact you. It can be an email, a social "
             "profile, whatever you want. It will be made public to others participants",
         ),
+        default="",
         blank=True,
-        null=True,
     )
 
     first_aid = models.CharField(
@@ -164,18 +164,18 @@ class Member(BaseModel):
             "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to intervene in "
             "case accidents occur during the event?",
         ),
-        null=True,
+        blank=True,
     )
 
     birth_date = models.DateField(verbose_name=_("Birth date"), blank=True, null=True)
 
-    birth_place = models.CharField(max_length=150, verbose_name=_("Birth place"), blank=True, null=True)
+    birth_place = models.CharField(max_length=150, verbose_name=_("Birth place"), blank=True, default="")
 
     fiscal_code = models.CharField(
         max_length=16,
         verbose_name=_("Fiscal code"),
+        default="",
         blank=True,
-        null=True,
         help_text=_("If you are an Italian citizen, indicate your tax code; otherwise leave blank"),
     )
 
@@ -184,15 +184,15 @@ class Member(BaseModel):
         choices=DocumentChoices.choices,
         default=DocumentChoices.IDENT,
         verbose_name=_("Document type"),
-        null=True,
+        blank=True,
         help_text=_("Indicates a type of identification document issued by the nation in which you reside"),
     )
 
     document = models.CharField(
         max_length=16,
         verbose_name=_("Document number"),
+        default="",
         blank=True,
-        null=True,
         help_text=_("Enter the number or code of the identification document indicated above"),
     )
 
@@ -210,13 +210,13 @@ class Member(BaseModel):
     residence_address = models.CharField(
         max_length=500,
         verbose_name=_("Residence address"),
+        default="",
         blank=True,
-        null=True,
     )
 
     accessibility = models.CharField(
         max_length=500,
-        null=True,
+        default="",
         blank=True,
         verbose_name=_("Accessibility"),
         help_text=_("Fill in this field if you have accessibility needs"),
@@ -224,7 +224,7 @@ class Member(BaseModel):
 
     diet = models.CharField(
         max_length=500,
-        null=True,
+        default="",
         blank=True,
         verbose_name=_("Diet"),
         help_text=_(
@@ -236,7 +236,7 @@ class Member(BaseModel):
 
     safety = models.CharField(
         max_length=500,
-        null=True,
+        default="",
         blank=True,
         verbose_name=_("Safety"),
         help_text=_(
@@ -258,7 +258,7 @@ class Member(BaseModel):
         default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
         help_text=_("Do you wish to be always updated on our events") + "?",
-        null=True,
+        blank=True,
     )
 
     profile = models.ImageField(
@@ -285,7 +285,7 @@ class Member(BaseModel):
         max_length=500,
         verbose_name=_("Presentation"),
         help_text=_("If you are a candidate for the Board, please write an introduction here!"),
-        null=True,
+        default="",
         blank=True,
     )
 
@@ -457,7 +457,7 @@ class Membership(BaseModel):
 
     date = models.DateField(blank=True, null=True)
 
-    password_reset = models.CharField(max_length=100, blank=True, null=True)
+    password_reset = models.CharField(max_length=100, blank=True, default="")
 
     newsletter = models.CharField(
         max_length=1,

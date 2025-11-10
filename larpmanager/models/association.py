@@ -70,8 +70,8 @@ class AssociationSkin(BaseModel):
     default_nation = models.CharField(
         max_length=2,
         choices=FeatureNationality.choices,
+        default="",
         blank=True,
-        null=True,
     )
 
     managed = models.BooleanField(default=False)
@@ -119,7 +119,7 @@ class Association(BaseModel):
 
     main_mail = models.EmailField(
         blank=True,
-        null=True,
+        default="",
         help_text="(" + _("Optional") + ") " + _("Indicate an organization contact address for sending communications"),
     )
 
@@ -140,7 +140,6 @@ class Association(BaseModel):
         choices=Currency.choices,
         default=Currency.EUR,
         blank=True,
-        null=True,
         verbose_name=_("Payment currency"),
         help_text=_("Indicates the currency in which to receive payments"),
     )
@@ -240,9 +239,8 @@ class Association(BaseModel):
     nationality = models.CharField(
         max_length=2,
         choices=FeatureNationality.choices,
-        blank=True,
-        null=True,
         default="",
+        blank=True,
         verbose_name=_("Nationality"),
         help_text="("
         + _("Optional")
@@ -339,7 +337,7 @@ class AssociationTextType(models.TextChoices):
 class AssociationText(BaseModel):
     number = models.IntegerField(null=True, blank=True)
 
-    text = HTMLField(blank=True, null=True)
+    text = HTMLField(blank=True, default="")
 
     typ = models.CharField(
         max_length=2,
@@ -352,7 +350,7 @@ class AssociationText(BaseModel):
         max_length=3,
         choices=conf_settings.LANGUAGES,
         default="en",
-        null=True,
+        blank=True,
         verbose_name=_("Language"),
         help_text=_("Text language"),
     )
@@ -438,8 +436,8 @@ class AssociationTranslation(BaseModel):
 
     context = models.CharField(
         max_length=200,
+        default="",
         blank=True,
-        null=True,
         verbose_name=_("Context"),
         help_text=_("Optional context for disambiguation when the same text has different meanings (msgctxt)"),
     )

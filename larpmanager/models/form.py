@@ -283,7 +283,6 @@ class WritingQuestion(BaseModel):
     editable = models.CharField(
         default="",
         max_length=20,
-        null=True,
         blank=True,
         verbose_name=_("Editable"),
         help_text=_(

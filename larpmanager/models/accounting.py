@@ -61,7 +61,7 @@ class PaymentInvoice(BaseModel):
         help_text=_("Statement issued by the bank as proof of the issuance of the transfer (as pdf file)"),
     )
 
-    text = models.TextField(null=True, blank=True)
+    text = models.TextField(blank=True, default="")
 
     status = models.CharField(max_length=1, choices=PaymentStatus.choices, default=PaymentStatus.CREATED, db_index=True)
 
@@ -86,7 +86,7 @@ class PaymentInvoice(BaseModel):
 
     idx = models.IntegerField(default=0)
 
-    txn_id = models.CharField(max_length=50, null=True, blank=True)
+    txn_id = models.CharField(max_length=50, blank=True, default="")
 
     causal = models.CharField(max_length=200)
 
@@ -106,7 +106,7 @@ class PaymentInvoice(BaseModel):
 
     hide = models.BooleanField(default=False)
 
-    key = models.CharField(max_length=500, null=True)
+    key = models.CharField(max_length=500, blank=True, default="")
 
     class Meta:
         indexes = [
@@ -187,9 +187,9 @@ class ElectronicInvoice(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    xml = models.TextField(blank=True, null=True)
+    xml = models.TextField(blank=True, default="")
 
-    response = models.TextField(blank=True, null=True)
+    response = models.TextField(blank=True, default="")
 
     class Meta:
         constraints = [
@@ -386,7 +386,7 @@ class AccountingItemPayment(AccountingItem):
         blank=True,
     )
 
-    info = models.CharField(max_length=150, null=True, blank=True)
+    info = models.CharField(max_length=150, blank=True, default="")
 
     vat_ticket = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
@@ -415,7 +415,7 @@ class AccountingItemExpense(AccountingItem):
         choices=BalanceChoices.choices,
         verbose_name=_("Balance"),
         help_text=_("Indicate how spending is allocated at the budget level"),
-        null=True,
+        default="",
         blank=False,
     )
 
@@ -464,7 +464,7 @@ class AccountingItemOutflow(AccountingItemFlow):
         choices=BalanceChoices.choices,
         verbose_name=_("Balance"),
         help_text=_("Indicate how spending is allocated at the budget level"),
-        null=True,
+        default="",
         blank=False,
     )
 
@@ -610,13 +610,13 @@ class CollectionStatus(models.TextChoices):
 
 
 class Collection(BaseModel):
-    name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100)
 
     status = models.CharField(max_length=1, choices=CollectionStatus.choices, default=CollectionStatus.OPEN)
 
-    contribute_code = models.CharField(max_length=16, null=True, db_index=True)
+    contribute_code = models.CharField(max_length=16, blank=True, default="", db_index=True)
 
-    redeem_code = models.CharField(max_length=16, null=True, db_index=True)
+    redeem_code = models.CharField(max_length=16, blank=True, default="", db_index=True)
 
     member = models.ForeignKey(
         Member,
