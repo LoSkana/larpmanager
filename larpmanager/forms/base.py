@@ -851,7 +851,9 @@ class BaseRegistrationForm(MyFormRun):
         """
         # Handle multiple choice questions (checkboxes, multi-select)
         if question.typ == BaseQuestionType.MULTIPLE:
-            self.init_multiple(field_key, is_organizer, question, registration_counts, is_required=is_required)
+            self.init_multiple(
+                field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+            )
 
         # Handle single choice questions (radio buttons, dropdowns)
         elif question.typ == BaseQuestionType.SINGLE:
