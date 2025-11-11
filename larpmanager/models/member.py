@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import os
@@ -374,7 +375,7 @@ class Member(BaseModel):
 
     def join(self, association: Association) -> None:
         """Join an association if not already a member."""
-        membership = get_user_membership(self, association.id)  # type: ignore
+        membership = get_user_membership(self, association.id)  # type: ignore[arg-type]
         if membership.status == MembershipStatus.EMPTY:
             membership.status = MembershipStatus.JOINED
             membership.save()

@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from collections import defaultdict
 from datetime import datetime, timedelta
 from typing import Any
@@ -829,11 +831,7 @@ class RedirectForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         # Build enumerated choices from slugs list
-        cho = []
-        counter = 0
-        for el in slugs:
-            cho.append((counter, el))
-            counter += 1
+        cho = [(counter, el) for counter, el in enumerate(slugs)]
 
         # Add dynamic slug field with enumerated choices
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")

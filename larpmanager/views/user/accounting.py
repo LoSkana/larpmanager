@@ -18,8 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
 import logging
-from datetime import date, datetime
+from datetime import datetime, timezone
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -1067,6 +1069,6 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     for e in lis:
         # Filter and add runs to dictionary by ID
         for r in e.runs.all():
-            if future and r.end < date.today():
+            if future and r.end < datetime.now(timezone.utc).date():
                 continue
             ls[r.id] = r

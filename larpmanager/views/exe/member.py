@@ -20,7 +20,7 @@
 
 import csv
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -636,8 +636,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
     split_two_names = 2
 
     # Set current year and calculate year start date
-    context["year"] = datetime.today().year
-    start = datetime(context["year"], 1, 1)
+    context["year"] = datetime.now(timezone.utc).year
+    start = datetime(context["year"], 1, 1, tzinfo=timezone.utc)
 
     # Build cache of member enrollment dates from accounting items
     cache = {}

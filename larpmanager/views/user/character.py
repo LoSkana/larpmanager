@@ -18,11 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
 import ast
 import json
 import os
 import time
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -32,7 +35,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import transaction
-from django.forms import Form
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -79,6 +81,9 @@ from larpmanager.utils.registration import (
 from larpmanager.utils.writing import char_add_addit
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
+
+if TYPE_CHECKING:
+    from django.forms import Form
 
 
 def character(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
@@ -542,7 +547,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
 
     # Generate unique filename and save rotated image
     ext = path.split(".")[-1]
-    n_path = f"{os.path.dirname(path)}/{rgr.pk}_{uuid4().hex}.{ext}"
+    n_path = f"{Path(path).parent}/{rgr.pk}_{uuid4().hex}.{ext}"
     out.save(n_path)
 
     # Update database with new image path atomically

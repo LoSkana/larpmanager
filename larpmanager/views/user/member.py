@@ -23,6 +23,7 @@ import math
 import os
 import random
 from datetime import date, datetime
+from pathlib import Path
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -299,15 +300,12 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
     path = os.path.join(conf_settings.MEDIA_ROOT, path)
     im = Image.open(path)
 
-    # Rotate image based on direction parameter
-    if rotation_angle == 1:
-        out = im.rotate(90)  # Clockwise rotation
-    else:
-        out = im.rotate(-90)  # Counterclockwise rotation
+    # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
+    out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
     # Extract file extension and generate new unique filename
     ext = path.split(".")[-1]
-    n_path = f"{os.path.dirname(path)}/{request.user.member.pk}_{uuid4().hex}.{ext}"
+    n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
     # Save rotated image and update member profile
     out.save(n_path)

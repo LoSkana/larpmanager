@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import html
 import logging
@@ -27,14 +28,13 @@ import unicodedata
 from datetime import date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
 from django.http import Http404, HttpRequest
@@ -69,6 +69,14 @@ from larpmanager.models.writing import (
     SpeedLarp,
 )
 from larpmanager.utils.exceptions import NotFoundError
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
+
+
+class DelimiterNotFoundError(ValueError):
+    """Raised when CSV delimiter cannot be detected."""
+
 
 logger = logging.getLogger(__name__)
 
@@ -906,7 +914,7 @@ def copy_class(target_event_id, source_event_id, model_class) -> None:
             for field_name, related_values in many_to_many_data.items():
                 getattr(source_object, field_name).set(related_values)
         except Exception as error:
-            logging.warning(f"found exp: {error}")
+            logger.warning("found exp: %s", error)
 
 
 def get_payment_methods_ids(context):
@@ -932,7 +940,7 @@ def detect_delimiter(content):
         str: Detected delimiter character
 
     Raises:
-        Exception: If no delimiter is found
+        DelimiterNotFoundError: If no delimiter is found
 
     """
     header_line = content.split("\n")[0]
@@ -940,7 +948,7 @@ def detect_delimiter(content):
         if delimiter in header_line:
             return delimiter
     msg = "no delimiter"
-    raise Exception(msg)
+    raise DelimiterNotFoundError(msg)
 
 
 def clean(s):

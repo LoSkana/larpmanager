@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import base64
 import hashlib
 import json
@@ -25,9 +27,9 @@ import os
 import random
 import string
 from datetime import datetime
-from decimal import Decimal
 from html.parser import HTMLParser
 from io import StringIO
+from pathlib import Path
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
@@ -37,10 +39,13 @@ from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum
 from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
-from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
+    from decimal import Decimal
+
+    from django.utils.safestring import SafeString
+
     from larpmanager.models.association import Association
 
 logger = logging.getLogger(__name__)
@@ -265,28 +270,27 @@ class UploadToPathAndRename:
         # Handle backup of existing files for updates
         if instance.pk:
             bkp_tomove = []
-            path_bkp = os.path.join(conf_settings.MEDIA_ROOT, path)
+            path_bkp = Path(conf_settings.MEDIA_ROOT) / path
 
             # Find existing files that match this instance
-            if os.path.exists(path_bkp):
-                for fn in os.listdir(str(path_bkp)):
-                    if fn.startswith(f"{instance.pk}_"):
-                        bkp_tomove.append(fn)
+            if path_bkp.exists():
+                for file_entry in path_bkp.iterdir():
+                    if file_entry.name.startswith(f"{instance.pk}_"):
+                        bkp_tomove.append(file_entry.name)
 
             # Move existing files to backup directory
             for el in bkp_tomove:
                 # Create backup directory if it doesn't exist
-                bkp = os.path.join(conf_settings.MEDIA_ROOT, "bkp", path)
-                if not os.path.exists(bkp):
-                    os.makedirs(bkp)
+                bkp = Path(conf_settings.MEDIA_ROOT) / "bkp" / path
+                bkp.mkdir(parents=True, exist_ok=True)
 
                 # Generate timestamped backup filename and move file
                 bkp_fn = f"{instance.pk}_{datetime.now()}.{ext}"
-                bkp_fn = os.path.join(str(bkp), bkp_fn)
-                current_fn = os.path.join(conf_settings.MEDIA_ROOT, path, el)
+                bkp_fn = bkp / bkp_fn
+                current_fn = Path(conf_settings.MEDIA_ROOT) / path / el
                 # logger.debug(f"Backup: {bkp}")
                 # logger.debug(f"Backup filename: {bkp_fn}")
-                os.rename(current_fn, bkp_fn)
+                current_fn.rename(bkp_fn)
 
         return new_fn
 
@@ -297,7 +301,7 @@ def _key_id(fernet_key: bytes) -> str:
     return hashlib.sha256(decoded_key).hexdigest()[:12]
 
 
-def get_payment_details_path(association: "Association") -> str:
+def get_payment_details_path(association: Association) -> str:
     """Get encrypted payment details file path for association.
 
     Constructs a secure file path for storing encrypted payment configuration
@@ -331,7 +335,7 @@ def get_payment_details_path(association: "Association") -> str:
     return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, filename)
 
 
-def save_payment_details(association: "Association", payment_details: dict) -> None:
+def save_payment_details(association: Association, payment_details: dict) -> None:
     """Encrypt and save payment details for association.
 
     Args:

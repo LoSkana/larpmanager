@@ -18,12 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import date
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -40,6 +42,9 @@ from larpmanager.utils.common import _get_help_questions, format_email_body
 from larpmanager.utils.member import get_mail
 from larpmanager.utils.paginate import orga_paginate
 from larpmanager.utils.tasks import send_mail_exec
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
 
 
 @login_required
@@ -198,7 +203,9 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get members already registered for current or future runs
     already = list(
-        Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
+        Registration.objects.filter(
+            run__event=context["event"], run__end__gte=datetime.now(timezone.utc).date()
+        ).values_list(
             "member_id",
             flat=True,
         ),
@@ -249,7 +256,9 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get list of members already registered for current/future runs
     already = list(
-        Registration.objects.filter(run__event=context["event"], run__end__gte=date.today()).values_list(
+        Registration.objects.filter(
+            run__event=context["event"], run__end__gte=datetime.now(timezone.utc).date()
+        ).values_list(
             "member_id",
             flat=True,
         ),

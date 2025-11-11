@@ -647,7 +647,7 @@ class OrgaCharacterForm(CharacterForm):
         """
         # Create direct relationship (instance -> character)
         if relationship_type == "direct":
-            (relationship, created) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=character_id)
+            (relationship, _created) = Relationship.objects.get_or_create(source_id=instance.pk, target_id=character_id)
         # Create reverse relationship (character -> instance)
         else:
             (relationship, _created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)

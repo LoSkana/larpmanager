@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -148,7 +148,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "e": run.event.slug,
             "r": run.number,
             "s": str(run),
-            "k": (run.start if run.start else datetime.max.date()),
+            "k": (run.start if run.start else datetime.max.replace(tzinfo=timezone.utc).date()),
         }
 
         # Categorize as open or past run

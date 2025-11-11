@@ -17,18 +17,22 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from allauth.socialaccount.models import SocialLogin
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
-from django.forms import Form
 from django.http import Http404, HttpRequest
 
 from larpmanager.models.access import EventPermission
+
+if TYPE_CHECKING:
+    from allauth.socialaccount.models import SocialLogin
+    from django.forms import Form
 
 logger = logging.getLogger(__name__)
 
@@ -176,12 +180,9 @@ def is_lm_admin(request: HttpRequest) -> bool:
         return False
 
     # Superusers always have admin privileges
-    if request.user.is_superuser:
-        return True
-
     # TODO: Implement admin group membership check
     # This should verify if user belongs to LarpManager admin group
-    return False
+    return request.user.is_superuser
 
 
 def check_lm_admin(request: HttpRequest) -> dict[str, int]:

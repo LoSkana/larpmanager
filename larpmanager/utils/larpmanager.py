@@ -61,12 +61,9 @@ def auto_assign_faq_sequential_number(faq: LarpManagerFaq) -> None:
     max_number = LarpManagerFaq.objects.filter(typ=faq.typ).aggregate(Max("number"))["number__max"]
 
     # Handle first FAQ of this type (no existing numbers)
-    if not max_number:
-        next_number = 1
-    else:
-        # Calculate next number in sequence (increments of 10)
-        # Example: if max is 25, next will be 30
-        next_number = ((max_number // 10) + 1) * 10
+    # Calculate next number in sequence (increments of 10)
+    # Example: if max is 25, next will be 30
+    next_number = 1 if not max_number else ((max_number // 10) + 1) * 10
 
     # Assign the calculated number to the FAQ
     faq.number = next_number

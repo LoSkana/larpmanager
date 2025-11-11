@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import json
 
@@ -48,14 +49,9 @@ def get_client_ip(request: HttpRequest) -> str:
 
     """
     x_forwarded_for_header = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for_header:
-        # X-Forwarded-For may contain multiple IPs (client, proxy1, proxy2...)
-        # The first IP is the original client
-        client_ip = x_forwarded_for_header.split(",")[0]
-    else:
-        # Direct connection without proxy
-        client_ip = request.META.get("REMOTE_ADDR")
-    return client_ip
+    # X-Forwarded-For may contain multiple IPs (client, proxy1, proxy2...)
+    # The first IP is the original client, otherwise use REMOTE_ADDR for direct connections
+    return x_forwarded_for_header.split(",")[0] if x_forwarded_for_header else request.META.get("REMOTE_ADDR")
 
 
 def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_status: int, events_count: int = 0) -> None:

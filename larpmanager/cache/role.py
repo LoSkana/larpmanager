@@ -482,11 +482,8 @@ def check_managed(context: dict, permission: str, *, is_association: bool = True
 
     # Only restrict permissions with "def" placeholder
     # Other placeholder types may have different restriction rules
-    if placeholder != "def":
-        return False
-
     # Permission should be restricted for managed skins
-    return True
+    return placeholder == "def"
 
 
 def get_index_permissions(

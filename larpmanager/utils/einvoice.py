@@ -61,7 +61,7 @@ def process_payment(invoice_id: int) -> None:
     # Save the generated XML to the electronic invoice
     electronic_invoice.xml = xml_content
     electronic_invoice.save()
-    # TODO sends XML and track track
+    # TODO: sends XML and track track
 
 
 def prepare_xml(invoice, electronic_invoice_config) -> str:

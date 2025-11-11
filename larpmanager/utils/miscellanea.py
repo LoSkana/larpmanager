@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -24,13 +26,14 @@ import random
 import shutil
 import zipfile
 from io import BytesIO
+from pathlib import Path
+from typing import TYPE_CHECKING
 from uuid import uuid4
 from zipfile import ZipFile
 
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
 from django.db import models
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from PIL import Image as PILImage
 from PIL import ImageOps
@@ -38,6 +41,9 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -62,12 +68,16 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
 
     """
     # Extract directory path, removing filename component
-    directory_path = os.path.dirname(name)
+    path_obj = Path(name)
+    directory_path = str(path_obj.parent) if path_obj.parent != Path() else ""
 
     # Check if this directory path is already cached
     if directory_path not in cache_subs:
         # Determine parent directory for hierarchy creation
-        parent_directory_path = os.path.dirname(directory_path)
+        parent_path_obj = Path(directory_path) if directory_path else Path()
+        parent_directory_path = (
+            str(parent_path_obj.parent) if directory_path and parent_path_obj.parent != Path() else ""
+        )
         if not parent_directory_path or parent_directory_path == "":
             parent_album = main
         else:
@@ -75,7 +85,7 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
 
         # Search for existing sub-album with matching name
         existing_album = None
-        album_name = os.path.basename(directory_path)
+        album_name = path_obj.parent.name if path_obj.parent != Path() else ""
 
         # Query existing sub-albums to avoid duplicates
         for sub_album in parent_album.sub_albums.all():
@@ -166,7 +176,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     logger.debug("Uploading album image to: %s", destination_path)
 
     # Move file from extraction path to final destination
-    os.rename(os.path.join(o_path, name), destination_path)
+    Path(o_path, name).rename(destination_path)
 
     # Store file path and extract image dimensions
     album_image.original = destination_path
@@ -419,7 +429,7 @@ def _get_extension(uploaded_file, image) -> str:
 
     """
     # Extract file extension and normalize to lowercase
-    file_extension = os.path.splitext(uploaded_file.name)[1].lower()
+    file_extension = Path(uploaded_file.name).suffix.lower()
 
     # Get image format, defaulting to empty string if None
     image_format = (image.format or "").upper()

@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -322,10 +323,11 @@ def get_event(request: HttpRequest, event_slug: str, run_number=None):
 
         context["show_available_chars"] = _("Show available characters")
 
-        return context
     except ObjectDoesNotExist as error:
         msg = "Event does not exist"
         raise Http404(msg) from error
+    else:
+        return context
 
 
 def get_event_context(

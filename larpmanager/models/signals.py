@@ -250,7 +250,6 @@ from larpmanager.utils.writing import replace_character_names_before_save
 log = logging.getLogger(__name__)
 
 # ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
-# ruff: noqa: ARG001 (Do not check unused-function-argument)
 
 
 # Generic signal handlers (no specific sender)

@@ -17,7 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import ast
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -26,9 +29,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
+
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
 
 
 def reset_cache_run(association: Association, slug: str) -> None:
@@ -83,9 +88,10 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
             event__slug=event_slug,
             number=run_number,
         )
-        return run.id
     except ObjectDoesNotExist:
         return None
+    else:
+        return run.id
 
 
 def on_run_pre_save_invalidate_cache(instance) -> None:

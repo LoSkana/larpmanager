@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import io
 import logging
@@ -24,16 +25,14 @@ import os
 import shutil
 from datetime import datetime
 from decimal import Decimal
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
-from django.forms import Form
-from django.http import HttpRequest
 
-from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.experience import AbilityPx, AbilityTypePx
 from larpmanager.models.form import (
@@ -68,6 +67,13 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+    from django.forms import Form
+    from django.http import HttpRequest
+
+    from larpmanager.models.base import BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -797,7 +803,7 @@ def _writing_question_load(
         writing_element.text = field_value
     elif question_type == WritingQuestionType.TITLE:
         writing_element.title = field_value
-    # TODO implement
+    # TODO: implement
     # elif question_type == QuestionType.COVER:
     #     writing_element.cover = field_value
     # elif question_type == QuestionType.PROGRESS:
@@ -1177,7 +1183,7 @@ def cover_load(context, z_obj) -> None:
     # get images
     for root, _dirnames, filenames in os.walk(fpath):
         for el in filenames:
-            num = os.path.splitext(el)[0]
+            num = Path(el).stem
             covers[num] = os.path.join(root, el)
     logger.debug("Extracted covers: %s", covers)
     upload_to = UploadToPathAndRename("character/cover/")
@@ -1189,7 +1195,7 @@ def cover_load(context, z_obj) -> None:
         fn = upload_to.__call__(c, covers[num])
         c.cover = fn
         c.save()
-        os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
+        Path(covers[num]).rename(Path(conf_settings.MEDIA_ROOT) / fn)
 
 
 def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:

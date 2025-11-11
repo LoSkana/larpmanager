@@ -18,13 +18,16 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import time
-from os import listdir
-from os.path import isdir, join
+from pathlib import Path
 
 import deepl
 import polib
 from django.conf import settings as conf_settings
 from django.core.management.base import BaseCommand
+
+
+class DeepLLimitExceededError(Exception):
+    """Raised when DeepL API usage limit is exceeded."""
 
 
 class Command(BaseCommand):
@@ -53,7 +56,7 @@ class Command(BaseCommand):
             target_language (str): Target language code (e.g., 'EN', 'PT')
 
         Raises:
-            Exception: When DeepL API usage limit is exceeded
+            DeepLLimitExceededError: When DeepL API usage limit is exceeded
             deepl.exceptions.DeepLException: When DeepL API encounters an error
 
         """
@@ -61,7 +64,7 @@ class Command(BaseCommand):
         usage = self.translator.get_usage()
         if usage.any_limit_reached:
             msg = "LIMIT EXCEEDED!"
-            raise Exception(msg)
+            raise DeepLLimitExceededError(msg)
 
         try:
             # Display the original text to be translated
@@ -94,14 +97,14 @@ class Command(BaseCommand):
         Iterates through all locale directories and translates untranslated
         msgid entries using the DeepL translation service.
         """
-        locale_path = "larpmanager/locale"
-        locale_directories = [directory for directory in listdir(locale_path) if isdir(join(locale_path, directory))]
+        locale_path = Path("larpmanager/locale")
+        locale_directories = [directory.name for directory in locale_path.iterdir() if directory.is_dir()]
 
         for locale_code in locale_directories:
             if locale_code.lower() == "en":
                 continue
 
-            po_file_path = join(locale_path, locale_code, "LC_MESSAGES", "django.po")
+            po_file_path = locale_path / locale_code / "LC_MESSAGES" / "django.po"
 
             with open(po_file_path) as file_input:
                 file_lines = file_input.read().splitlines(keepends=True)

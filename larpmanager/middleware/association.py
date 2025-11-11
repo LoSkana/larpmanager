@@ -17,13 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import os
-from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
@@ -31,6 +31,11 @@ from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.skin import get_cache_skin
 from larpmanager.models.association import AssociationTextType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from django.http import HttpRequest, HttpResponse
 
 
 class AssociationIdentifyMiddleware:
@@ -81,7 +86,7 @@ class AssociationIdentifyMiddleware:
         base_domain = ".".join(request_host.split(".")[-2:])
 
         # Determine environment based on host characteristics
-        if os.getenv("env") == "prod":
+        if os.getenv("ENV") == "prod":
             request.enviro = "prod"
         elif "xyz" in request_host:
             request.enviro = "staging"

@@ -125,7 +125,9 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
         # Skip if character data not found
         if character_id not in character_data_by_id:
             logger.debug(
-                f"Character index {character_id} not found in data keys: {list(character_data_by_id.keys())[:5]}...",
+                "Character index %s not found in data keys: %s...",
+                character_id,
+                list(character_data_by_id.keys())[:5],
             )
             continue
 

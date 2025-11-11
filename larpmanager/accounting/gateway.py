@@ -20,6 +20,8 @@
 
 """Payment gateway integration for PayPal, Stripe, and Redsys."""
 
+from __future__ import annotations
+
 import base64
 import hashlib
 import hmac
@@ -27,9 +29,8 @@ import json
 import logging
 import math
 import re
-from decimal import Decimal
 from pprint import pformat
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import requests
 import satispaython
@@ -52,6 +53,9 @@ from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import get_context, update_payment_details
 from larpmanager.utils.common import generate_number
 from larpmanager.utils.tasks import my_send_mail, notify_admins
+
+if TYPE_CHECKING:
+    from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
@@ -286,7 +290,7 @@ def handle_invalid_paypal_ipn(invalid_ipn_object: Any) -> None:
     """
     if invalid_ipn_object:
         logger.info("PayPal IPN object: %s", invalid_ipn_object)
-    # TODO send mail
+    # TODO: send mail
     formatted_ipn_body = pformat(invalid_ipn_object)
     logger.info("PayPal IPN body: %s", formatted_ipn_body)
     notify_admins("paypal ko", formatted_ipn_body)
@@ -367,14 +371,8 @@ def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
     signature_header = request.META["HTTP_STRIPE_SIGNATURE"]
     endpoint_secret = context["stripe_webhook_secret"]
 
-    try:
-        event = stripe.Webhook.construct_event(payload, signature_header, endpoint_secret)
-    except ValueError:
-        # Invalid payload
-        raise
-    except stripe.error.SignatureVerificationError:
-        # Invalid signature
-        raise
+    # Construct event from webhook payload - raises ValueError or SignatureVerificationError on failure
+    event = stripe.Webhook.construct_event(payload, signature_header, endpoint_secret)
 
     # Handle the event
     if event["type"] == "checkout.session.completed" or event["type"] == "checkout.session.async_payment_succeeded":

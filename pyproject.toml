@@ -19,7 +19,7 @@ extend-exclude = ["main"]
 quote-style = "double"
 
 [tool.ruff.lint]
-select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D", "R", "W", "T", "S", "Q", "ANN", "DJ", "FBT", "G"]
+select = ["ALL"]
 
 ignore = [
 	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
@@ -43,6 +43,28 @@ ignore = [
     "ANN204",  # TODO remove Missing return type annotation for special method
     "ANN205",  # TODO remove Missing return type annotation for staticmethod
     "ANN206",  # TODO remove Missing return type annotation for classmethod
+    "RUF012",  # TODO remove 	mutable-class-default
+    "ERA001",  # TODO remove 	commented-out-code
+    "ARG001",  # TODO remove 	unused-function-argument
+    "SLF001",  # TODO remove	private-member-access
+    "ARG002",  # TODO remove 	unused-method-argument
+    "PTH118",  # TODO remove 	os-path-join
+    "DTZ005",  # TODO remove 	call-datetime-now-without-tzinfo
+    "BLE001",  # TODO remove 	blind-except
+    "C901",  # TODO remove   	complex-structure
+    "PERF401",  # TODO remove	manual-list-comprehension
+    "SIM102",  # TODO remove 	collapsible-if
+    "DTZ002",  # TODO remove 	call-datetime-today
+    "PTH110",  # TODO remove 	os-path-exists
+    "INP001",  # TODO remove 	implicit-namespace-package
+    "TRY401",  # TODO remove 	verbose-log-message
+    "PERF203",  # TODO remove	try-except-in-loop
+    "PTH123",  # TODO remove 	builtin-open
+    "PTH103",  # TODO remove 	os-makedirs
+    "RUF001",  # TODO remove 	ambiguous-unicode-character-string
+    "PTH119",  # TODO remove  os-path-basename
+    "ARG004",  # TODO remove  	unused-static-method-argument
+    "ARG005",  # TODO remove 	unused-lambda-argument
 ]
 
 [tool.ruff.lint.pydocstyle]

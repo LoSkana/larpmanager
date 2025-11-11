@@ -20,17 +20,16 @@
 
 """Payment processing and management utilities."""
 
+from __future__ import annotations
+
 import logging
 import math
 import re
 from datetime import datetime
-from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
-from django.forms import Form
-from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.gateway import (
@@ -67,7 +66,6 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationQuestion,
 )
-from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import fetch_payment_details, update_payment_details
@@ -76,6 +74,11 @@ from larpmanager.utils.member import assign_badge
 
 if TYPE_CHECKING:
     from decimal import Decimal
+
+    from django.forms import Form
+    from django.http import HttpRequest
+
+    from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
 

@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import os
 
@@ -103,7 +104,7 @@ class Command(BaseCommand):
         # Validate that the field is actually a many-to-many field
         if not isinstance(many_to_many_field, ManyToManyField):
             msg = f"{field_name} not m2m on {model_label}"
-            raise ValueError(msg)
+            raise TypeError(msg)
 
         # Get the related model and separate integer IDs from string slugs
         related_model = many_to_many_field.remote_field.model

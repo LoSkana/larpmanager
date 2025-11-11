@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
 import json
 import logging
 import random
@@ -119,7 +121,7 @@ def assign_casting(request: HttpRequest, context: dict, assignment_type: int) ->
         No exceptions are raised, but errors are collected and displayed as messages
 
     """
-    # TODO Assign member to mirror_inv
+    # TODO: Assign member to mirror_inv
     # Check if mirror character feature is enabled
     mirror_enabled = "mirror" in context["features"]
 
@@ -366,7 +368,7 @@ def get_casting_data(
     request: HttpRequest,
     context: dict,
     casting_type: int,
-    form: "OrganizerCastingOptionsForm",
+    form: OrganizerCastingOptionsForm,
 ) -> None:
     """Retrieve and process casting data for automated character assignment algorithm.
 

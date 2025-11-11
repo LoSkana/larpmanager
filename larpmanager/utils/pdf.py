@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import contextlib
 import io
 import logging
@@ -25,7 +27,8 @@ import os.path
 import re
 import zipfile
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -44,9 +47,7 @@ from larpmanager.cache.character import get_event_cache_all, get_writing_element
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
-from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
@@ -59,6 +60,10 @@ from larpmanager.utils.character import get_char_check, get_character_relationsh
 from larpmanager.utils.common import get_element, get_handout
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
+
+if TYPE_CHECKING:
+    from larpmanager.models.event import Event, Run
+    from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
 
@@ -90,11 +95,12 @@ def reprint(file_path):
     if conf_settings.DEBUG:
         return True
 
-    if not os.path.isfile(file_path):
+    path_obj = Path(file_path)
+    if not path_obj.is_file():
         return True
 
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=1)
-    modification_time = datetime.fromtimestamp(os.path.getmtime(file_path), timezone.utc)
+    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, timezone.utc)
     return modification_time < cutoff_date
 
 
@@ -113,14 +119,14 @@ def return_pdf(file_path, filename):
 
     """
     try:
-        pdf_file = open(file_path, "rb")
-        response = HttpResponse(pdf_file.read(), content_type="application/pdf")
-        pdf_file.close()
+        with open(file_path, "rb") as pdf_file:
+            response = HttpResponse(pdf_file.read(), content_type="application/pdf")
         response["Content-Disposition"] = f"inline;filename={fix_filename(filename)}.pdf"
-        return response
     except FileNotFoundError as err:
         msg = "File not found"
         raise Http404(msg) from err
+    else:
+        return response
 
 
 def link_callback(uri: str, rel: str) -> str:
@@ -158,7 +164,7 @@ def link_callback(uri: str, rel: str) -> str:
         return ""
 
     # Verify the file actually exists on the filesystem
-    if not os.path.isfile(path):
+    if not Path(path).is_file():
         return ""
 
     return path
@@ -551,7 +557,7 @@ def cleanup_handout_template_pdfs_after_save(instance) -> None:
 def safe_remove(file_path: str) -> None:
     """Remove a file, ignoring if it doesn't exist."""
     with contextlib.suppress(FileNotFoundError):
-        os.remove(file_path)
+        Path(file_path).unlink()
 
 
 def remove_run_pdf(event: Event) -> None:

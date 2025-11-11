@@ -17,14 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import os
 import re
 from collections import OrderedDict
-from collections.abc import Generator
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pycountry
 from dateutil.relativedelta import relativedelta
@@ -66,6 +66,9 @@ from larpmanager.models.member import (
 from larpmanager.utils.common import get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.validators import FileTypeValidator
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -447,21 +450,18 @@ class ResidenceField(forms.MultiValueField):
         if not value:
             return self.compress([None] * len(self.fields))
 
-        try:
-            cleaned_data = []
-            # Process each field value individually
-            for i, field in enumerate(self.fields):
-                # Special handling for second field (index 1) - allow empty strings
-                if i == 1 and (value[i] in (None, "")):
-                    cleaned_data.append("")
-                else:
-                    # Apply field-specific validation and cleaning
-                    cleaned_data.append(field.clean(value[i]))
+        cleaned_data = []
+        # Process each field value individually
+        for i, field in enumerate(self.fields):
+            # Special handling for second field (index 1) - allow empty strings
+            if i == 1 and (value[i] in (None, "")):
+                cleaned_data.append("")
+            else:
+                # Apply field-specific validation and cleaning
+                cleaned_data.append(field.clean(value[i]))
 
-            # Compress cleaned data into final format
-            return self.compress(cleaned_data)
-        except forms.ValidationError:
-            raise
+        # Compress cleaned data into final format
+        return self.compress(cleaned_data)
 
 
 class BaseProfileForm(MyForm):

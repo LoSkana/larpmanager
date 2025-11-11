@@ -174,9 +174,10 @@ def update_event_features(ev_id):
             for feature_slug in config_feature_slugs:
                 if event.get_config(f"{config_type}_{feature_slug}", default_value=False):
                     features_dict[feature_slug] = 1
-        return features_dict
     except ObjectDoesNotExist:
         return {}
+    else:
+        return features_dict
 
 
 def on_association_post_save_reset_features_cache(instance) -> None:

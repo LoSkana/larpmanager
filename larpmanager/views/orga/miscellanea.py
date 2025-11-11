@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from django.contrib import messages
@@ -370,8 +370,12 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     def _assigned_updated(assignment_item: Any) -> Any:
         """Extract assignment update timestamp for sorting."""
         if getattr(assignment_item, "assigned", None):
-            return assignment_item.assigned.get("updated") or getattr(assignment_item, "updated", None) or datetime.min
-        return datetime.min
+            return (
+                assignment_item.assigned.get("updated")
+                or getattr(assignment_item, "updated", None)
+                or datetime.min.replace(tzinfo=timezone.utc)
+            )
+        return datetime.min.replace(tzinfo=timezone.utc)
 
     # Sort items: assigned items first, then by recent updates, name, and ID
     ordered_items = sorted(
