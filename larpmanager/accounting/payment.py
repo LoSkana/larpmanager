@@ -354,7 +354,7 @@ def get_payment_form(
             invoice = PaymentInvoice.objects.get(key=invoice_key, status=PaymentStatus.CREATED)
         except Exception as e:
             # Invoice not found or invalid, will create new one
-            logger.debug(f"Invoice {invoice_key} not found or invalid: {e}")
+            logger.debug("Invoice %s not found or invalid: %s", invoice_key, e)
 
     # Create new invoice if existing one not found or invalid
     if not invoice:

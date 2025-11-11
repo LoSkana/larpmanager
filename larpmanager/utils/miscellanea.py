@@ -163,7 +163,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     # Complete the file path with unique filename
     destination_path = os.path.join(destination_path, unique_filename)
-    logger.debug(f"Uploading album image to: {destination_path}")
+    logger.debug("Uploading album image to: %s", destination_path)
 
     # Move file from extraction path to final destination
     os.rename(os.path.join(o_path, name), destination_path)
@@ -466,7 +466,7 @@ def _check_new(file_field, instance, sender) -> bool:
                     return True
         except Exception as e:
             # Silently handle any database or attribute errors
-            logger.debug(f"Error checking file field for instance pk={instance.pk}: {e}")
+            logger.debug("Error checking file field for instance pk=%s: %s", instance.pk, e)
 
     # Default to treating as new file upload
     return False

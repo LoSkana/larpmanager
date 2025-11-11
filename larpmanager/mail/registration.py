@@ -381,7 +381,7 @@ def send_registration_cancellation_email(instance: Registration) -> None:
         try:
             previous_registration = Registration.objects.get(pk=instance.pk)
         except Exception as e:
-            logger.debug(f"Registration pk={instance.pk} not found in pre-save: {e}")
+            logger.debug("Registration pk=%s not found in pre-save: %s", instance.pk, e)
 
     # Send cancellation email only when registration is newly cancelled
     if previous_registration and instance.cancellation_date and not previous_registration.cancellation_date:

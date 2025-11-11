@@ -502,7 +502,7 @@ class Membership(BaseModel):
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
         except Exception as exception:
-            logger.debug(f"Request file not available for membership {self.id}: {exception}")
+            logger.debug("Request file not available for membership %s: %s", self.id, exception)
             return ""
 
     def get_document_filepath(self):
@@ -511,7 +511,7 @@ class Membership(BaseModel):
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
         except Exception as error:
-            logger.debug(f"Document file not available for membership {self.id}: {error}")
+            logger.debug("Document file not available for membership %s: %s", self.id, error)
             return ""
 
 

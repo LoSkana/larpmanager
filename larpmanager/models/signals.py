@@ -250,6 +250,7 @@ from larpmanager.utils.writing import replace_character_names_before_save
 log = logging.getLogger(__name__)
 
 # ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
+# ruff: noqa: ARG001 (Do not check unused-function-argument)
 
 
 # Generic signal handlers (no specific sender)
@@ -1631,4 +1632,4 @@ def handle_request_exception(sender, request, **kwargs) -> None:
         create_error_ticket(request)
     except Exception as e:
         # Don't let ticket creation failure break the error handling
-        log.debug(f"Failed to create error ticket: {e}")
+        log.debug("Failed to create error ticket: %s", e)

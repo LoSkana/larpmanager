@@ -197,7 +197,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         """Validate username field and check for duplicate email addresses."""
         # Extract and normalize username input
         data = self.cleaned_data["username"].strip()
-        logger.debug(f"Validating username/email: {data}")
+        logger.debug("Validating username/email: %s", data)
 
         # Prevent duplicate email registrations
         if User.objects.filter(email__iexact=data).exists():
@@ -308,7 +308,7 @@ class MyPasswordResetForm(PasswordResetForm):
                 pass
 
         # Log password reset attempt for debugging
-        logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
+        logger.debug("Password reset context: domain=%s, uid=%s", context.get("domain"), context.get("uid"))
 
         # Send the email using custom mail function
         my_send_mail(subject, body, to_email, association)
@@ -623,7 +623,7 @@ class ProfileForm(BaseProfileForm):
     def clean_birth_date(self):
         """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]
-        logger.debug(f"Validating birth date: {data}")
+        logger.debug("Validating birth date: %s", data)
 
         # Use cached association
         association_id = self.params["association_id"]
@@ -636,12 +636,12 @@ class ProfileForm(BaseProfileForm):
             if min_age:
                 try:
                     min_age = int(min_age)
-                    logger.debug(f"Checking minimum age {min_age} against birth date {data}")
+                    logger.debug("Checking minimum age %s against birth date %s", min_age, data)
                     age_diff = relativedelta(datetime.now(), data).years
                     if age_diff < min_age:
                         raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
                 except (ValueError, TypeError) as e:
-                    logger.warning(f"Invalid membership_age config: {min_age}, error: {e}")
+                    logger.warning("Invalid membership_age config: %s, error: %s", min_age, e)
 
         return data
 

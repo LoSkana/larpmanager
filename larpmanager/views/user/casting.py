@@ -236,7 +236,10 @@ def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> Htt
     # Load casting details and options for the specified type
     casting_details(context, casting_type)
     logger.debug(
-        f"Casting context for casting_type {casting_type}: {context.get('gl_name', 'Unknown')}, features: {list(context.get('features', {}).keys())}",
+        "Casting context for casting_type %s: %s, features: %s",
+        casting_type,
+        context.get("gl_name", "Unknown"),
+        list(context.get("features", {}).keys()),
     )
 
     # Set template path for rendering
@@ -535,7 +538,7 @@ def casting_preferences_characters(context: dict) -> None:
                 character_castings = castings_by_character[character.id]
 
             # Log character processing for debugging
-            logger.debug(f"Character {character.id} casting preferences: {len(character_castings)} entries")
+            logger.debug("Character %s casting preferences: %s entries", character.id, len(character_castings))
 
             # Build character entry with faction, name, and preferences
             character_entry = {
@@ -779,7 +782,9 @@ def casting_history_traits(context: dict) -> None:
 
     # Log processing statistics for debugging
     logger.debug(
-        f"Casting history context for typ {context.get('typ', 0)}: {len(context.get('list', []))} registrations processed",
+        "Casting history context for typ %s: %s registrations processed",
+        context.get("typ", 0),
+        len(context.get("list", [])),
     )
 
 

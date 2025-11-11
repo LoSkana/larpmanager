@@ -108,9 +108,9 @@ def mail_error(subject, email_body, exception=None) -> None:
         Prints error details and sends error notification to admins
 
     """
-    logger.error(f"Mail error: {exception}")
-    logger.error(f"Subject: {subject}")
-    logger.error(f"Body: {email_body}")
+    logger.error("Mail error: %s", exception)
+    logger.error("Subject: %s", subject)
+    logger.error("Body: %s", email_body)
     if exception:
         error_notification_body = f"{traceback.format_exc()} <br /><br /> {subject} <br /><br /> {email_body}"
     else:
@@ -391,9 +391,9 @@ def my_send_simple_mail(
 
         # Log email details in debug mode for troubleshooting
         if conf_settings.DEBUG:
-            logger.info(f"Sending email to: {m_email}")
-            logger.info(f"Subject: {subj}")
-            logger.debug(f"Body: {body}")
+            logger.info("Sending email to: %s", m_email)
+            logger.info("Subject: %s", subj)
+            logger.debug("Body: %s", body)
 
     except Exception as email_sending_exception:
         # Log the error and re-raise for caller handling

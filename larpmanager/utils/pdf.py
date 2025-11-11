@@ -223,7 +223,7 @@ def add_pdf_instructions(context: dict) -> None:
             utility_code = utility_code_match.replace("#", "")
             util = get_object_or_404(Util, cod=utility_code)
             context[section_key] = context[section_key].replace(utility_code_match, util.util.url)
-        logger.debug(f"Processed PDF context for key '{section_key}': {len(context[section_key])} characters")
+        logger.debug("Processed PDF context for key '%s': %s characters", section_key, len(context[section_key]))
 
 
 def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: bool = False) -> None:

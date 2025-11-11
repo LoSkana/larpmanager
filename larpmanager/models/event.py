@@ -306,7 +306,7 @@ class Event(BaseModel):
             return self.cover_thumb.url
         except Exception as e:
             # Log error and return None if cover_thumb is not available
-            logger.debug(f"Cover thumbnail not available for event {self.id}: {e}")
+            logger.debug("Cover thumbnail not available for event %s: %s", self.id, e)
             return None
 
     def get_name(self) -> str:

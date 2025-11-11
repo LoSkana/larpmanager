@@ -166,7 +166,7 @@ def assign_casting(request: HttpRequest, context: dict, assignment_type: int) ->
 
         except Exception as exception:
             # Collect any errors that occur during processing
-            logger.exception(f"Error processing casting assignment: {exception}")
+            logger.exception("Error processing casting assignment: %s", exception)
             error_messages += str(exception)
 
     # Display collected errors to user if any occurred

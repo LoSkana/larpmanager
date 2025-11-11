@@ -478,11 +478,11 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
     # Early return if no bring_friend field in form data
     if "bring_friend" not in form.cleaned_data:
         return
-    logger.debug(f"Bring friend form data: {form.cleaned_data}")
+    logger.debug("Bring friend form data: %s", form.cleaned_data)
 
     # Extract and validate the friend code from form
     cod = form.cleaned_data["bring_friend"]
-    logger.debug(f"Processing bring friend code: {cod}")
+    logger.debug("Processing bring friend code: %s", cod)
     if not cod:
         return
 
@@ -922,7 +922,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     try:
         disc = Discount.objects.get(runs__in=[context["run"]], cod=cod)
     except ObjectDoesNotExist:
-        logger.warning(f"Discount code not found: {cod}")
+        logger.warning("Discount code not found: %s", cod)
         logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 

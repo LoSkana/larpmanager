@@ -348,7 +348,7 @@ def _remove_unimportant_prefix(text: str) -> str:
 
 
 @register.simple_tag(takes_context=True)
-def show_char(context: dict, element: dict | str | None, run: Run, include_tooltip: bool) -> str:  # noqa: FBT001, FBT002
+def show_char(context: dict, element: dict | str | None, run: Run, include_tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert character references to links.
 
     This function processes text content and converts character references (prefixed with
@@ -810,7 +810,7 @@ def template_trans(text):
     try:
         return _(text)
     except Exception as e:
-        logger.debug(f"Translation failed for text: {e}")
+        logger.debug("Translation failed for text: %s", e)
         return text
 
 

@@ -507,7 +507,7 @@ def _prepare_writing_list(context, request: HttpRequest) -> None:
         )
         context["name_que_id"] = name_question.values_list("id", flat=True)[0]
     except Exception as e:
-        logger.debug(f"Name question not found for writing type {context['writing_typ']}: {e}")
+        logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()
     context["default_fields"] = context["member"].get_config(

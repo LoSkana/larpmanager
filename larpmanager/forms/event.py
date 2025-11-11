@@ -241,7 +241,7 @@ class OrgaEventForm(MyForm):
 
         """
         data = self.cleaned_data["slug"]
-        logger.debug(f"Validating event slug: {data}")
+        logger.debug("Validating event slug: %s", data)
 
         # Check if slug is already used by another event
         lst = Event.objects.filter(slug=data)

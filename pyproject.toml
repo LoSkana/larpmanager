@@ -19,7 +19,7 @@ extend-exclude = ["main"]
 quote-style = "double"
 
 [tool.ruff.lint]
-select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D", "R", "W", "T", "S", "Q", "ANN", "DJ", "FBT"]
+select = ["F", "E", "B", "UP", "I", "N", "PL", "A", "D", "R", "W", "T", "S", "Q", "ANN", "DJ", "FBT", "G"]
 
 ignore = [
 	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
@@ -29,6 +29,11 @@ ignore = [
 	"D104", # Missing docstring in public package
 	"D105", # Missing docstring in magic method
 	"D106", # Missing docstring in public nested class, would be useless on Meta
+    "ANN401",  # Dynamically typed expressions (Any) are disallowed
+    "COM812",  # Trailing comma missing (conflicts with formatter)
+    "TD002",   # Missing author in TODO
+    "TD003",   # Missing issue link in TODO
+    "FIX002",  # Line contains TODO
     "DJ001",  # TODO remove django-nullable-model-string-field
     "ANN001",  # TODO remove Missing type annotation for functions
     "ANN002",  # TODO remove Missing type annotation for *args
@@ -38,11 +43,6 @@ ignore = [
     "ANN204",  # TODO remove Missing return type annotation for special method
     "ANN205",  # TODO remove Missing return type annotation for staticmethod
     "ANN206",  # TODO remove Missing return type annotation for classmethod
-    "ANN401",  # Dynamically typed expressions (Any) are disallowed
-    "COM812",  # Trailing comma missing (conflicts with formatter)
-    "TD002",   # Missing author in TODO
-    "TD003",   # Missing issue link in TODO
-    "FIX002",  # Line contains TODO
 ]
 
 [tool.ruff.lint.pydocstyle]

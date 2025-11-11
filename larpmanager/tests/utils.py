@@ -60,7 +60,7 @@ def login(page, live_server, name) -> None:
 
 
 def handle_error(page, e, test_name) -> NoReturn:
-    logger.error(f"Error on {test_name}: {page.url}\n")
+    logger.error("Error on %s: %s\n", test_name, page.url)
     logger.error(e)
 
     uid = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -151,7 +151,7 @@ def check_download(page, link: str) -> None:
             return
 
         except Exception as err:
-            logger.warning(f"Download attempt {current_try + 1}/{max_tries} failed: {err}")
+            logger.warning("Download attempt %s/%s failed: %s", current_try + 1, max_tries, err)
             current_try += 1
             if current_try >= max_tries:
                 raise

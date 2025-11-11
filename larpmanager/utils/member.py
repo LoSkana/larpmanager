@@ -177,7 +177,7 @@ def assign_badge(member: Member, badge_code: str) -> None:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(member)
     except Exception as e:
-        logger.exception(f"Failed to assign badge {badge_code} to member {member}: {e}")
+        logger.exception("Failed to assign badge %s to member %s: %s", badge_code, member, e)
 
 
 def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:

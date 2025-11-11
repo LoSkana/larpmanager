@@ -476,7 +476,7 @@ def check_run_accounting(run: Run) -> None:
     get_run_accounting(run, {})
 
     # Log the accounting operation for debugging
-    logger.debug(f"Recording accounting for run: {run}")
+    logger.debug("Recording accounting for run: %s", run)
 
     # Create audit record with current balance (bank_sum set to 0 as default)
     RecordAccounting.objects.create(association=run.event.association, run=run, global_sum=run.balance, bank_sum=0)

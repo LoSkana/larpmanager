@@ -237,7 +237,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
             traits.append(trait)
         except Exception as error:
-            logger.warning(f"Error getting trait {trait_number}: {error}")
+            logger.warning("Error getting trait %s: %s", trait_number, error)
 
     # Extract all @number patterns for validation (not added to return list)
     trait_numbers_to_validate = re.findall(r"@([\d]+)", instance.text, re.IGNORECASE)
@@ -247,7 +247,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
         except Exception as error:
-            logger.warning(f"Error getting trait {trait_number} in assignment: {error}")
+            logger.warning("Error getting trait %s in assignment: %s", trait_number, error)
 
     return traits
 

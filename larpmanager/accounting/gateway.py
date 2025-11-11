@@ -174,17 +174,17 @@ def satispay_verify(context: dict, payment_code: str) -> None:
     try:
         invoice = PaymentInvoice.objects.get(cod=payment_code)
     except ObjectDoesNotExist:
-        logger.warning(f"Not found - invoice {payment_code}")
+        logger.warning("Not found - invoice %s", payment_code)
         return
 
     # Validate that invoice uses Satispay payment method
     if invoice.method.slug != "satispay":
-        logger.warning(f"Wrong slug method - invoice {payment_code}")
+        logger.warning("Wrong slug method - invoice %s", payment_code)
         return
 
     # Check if payment is still in created status (not already processed)
     if invoice.status != PaymentStatus.CREATED:
-        logger.warning(f"Already confirmed - invoice {payment_code}")
+        logger.warning("Already confirmed - invoice %s", payment_code)
         return
 
     # Load Satispay API credentials and private key for authentication
@@ -285,10 +285,10 @@ def handle_invalid_paypal_ipn(invalid_ipn_object: Any) -> None:
 
     """
     if invalid_ipn_object:
-        logger.info(f"PayPal IPN object: {invalid_ipn_object}")
+        logger.info("PayPal IPN object: %s", invalid_ipn_object)
     # TODO send mail
     formatted_ipn_body = pformat(invalid_ipn_object)
-    logger.info(f"PayPal IPN body: {formatted_ipn_body}")
+    logger.info("PayPal IPN body: %s", formatted_ipn_body)
     notify_admins("paypal ko", formatted_ipn_body)
 
 
@@ -937,7 +937,7 @@ class RedSysClient:
         if signature != computed_signature:
             error_message = f"Different signature redsys: {signature} vs {computed_signature}"
             error_message += pformat(merchant_parameters)
-            logger.error(f"Redsys signature verification failed: {error_message}")
+            logger.error("Redsys signature verification failed: %s", error_message)
             # Send critical security alert to system admins
             for _admin_name, admin_email in conf_settings.ADMINS:
                 my_send_mail("redsys signature", error_message, admin_email)

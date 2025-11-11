@@ -317,7 +317,7 @@ def installment_check(reg: "Registration", alert: int, association_id: int) -> N
         # Calculate outstanding amount for this installment
         reg.quota = max(cumulative_amount - reg.tot_payed, 0)
 
-        logger.debug(f"Registration {reg.id} installment quota calculated: {reg.quota}")
+        logger.debug("Registration %s installment quota calculated: %s", reg.id, reg.quota)
 
         # Skip if nothing is due for this installment
         if reg.quota <= 0:
@@ -491,7 +491,7 @@ def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
     return ""
 
 
-def round_to_nearest_cent(amount: float | int) -> float:
+def round_to_nearest_cent(amount: float) -> float:
     """Round a number to the nearest cent with tolerance for small differences.
 
     Args:
@@ -626,7 +626,7 @@ def log_registration_ticket_saved(ticket) -> None:
         ticket: RegistrationTicket instance that was saved
 
     """
-    logger.debug(f"RegistrationTicket saved: {ticket} at {datetime.now()}")
+    logger.debug("RegistrationTicket saved: %s at %s", ticket, datetime.now())
     check_reg_events(ticket.event)
 
 
@@ -637,7 +637,7 @@ def process_registration_option_post_save(option) -> None:
         option: RegistrationOption instance that was saved
 
     """
-    logger.debug(f"RegistrationOption saved: {option} at {datetime.now()}")
+    logger.debug("RegistrationOption saved: %s at %s", option, datetime.now())
     check_reg_events(option.question.event)
 
 

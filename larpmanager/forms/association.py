@@ -873,7 +873,7 @@ class FirstAssociationForm(MyForm):
 
         """
         data: str = self.cleaned_data["slug"]
-        logger.debug(f"Validating association slug: {data}")
+        logger.debug("Validating association slug: %s", data)
 
         # Check if slug is already used by other associations
         lst = Association.objects.filter(slug=data)

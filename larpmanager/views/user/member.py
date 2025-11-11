@@ -576,7 +576,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
         except Exception as e:
-            logger.debug(f"Social contact validation failed for member={member_id}: {e}")
+            logger.debug("Social contact validation failed for member=%s: %s", member_id, e)
 
     return render(request, "larpmanager/member/public.html", context)
 
@@ -846,7 +846,7 @@ def vote(request: HttpRequest) -> HttpResponse:
             context["candidates"].append(Member.objects.get(pk=idx))
         except Exception as e:
             # Skip invalid candidate IDs
-            logger.debug(f"Invalid candidate ID or member not found: {mb}: {e}")
+            logger.debug("Invalid candidate ID or member not found: %s: %s", mb, e)
 
     # Randomize candidate order to prevent position bias
     random.shuffle(context["candidates"])
