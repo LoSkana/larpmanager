@@ -131,7 +131,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     """
     # Check if file already exists in album to avoid duplicates
-    upload_name = os.path.basename(name)
+    upload_name = Path(name).name
     for existing_upload in alb.uploads.all():
         if existing_upload.name == upload_name:
             return
@@ -169,7 +169,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     for directory_id in parent_directories:
         destination_path = os.path.join(destination_path, str(directory_id))
         if not os.path.exists(destination_path):
-            os.makedirs(destination_path)
+            Path(destination_path).mkdir(parents=True, exist_ok=True)
 
     # Complete the file path with unique filename
     destination_path = os.path.join(destination_path, unique_filename)
@@ -410,7 +410,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     output_buffer.seek(0)
 
     # Replace the original photo with the rotated version
-    original_filename = os.path.basename(photo_file.name) or photo_file.name
+    original_filename = Path(photo_file.name).name or photo_file.name
     instance.photo = ContentFile(output_buffer.read(), name=original_filename)
 
 

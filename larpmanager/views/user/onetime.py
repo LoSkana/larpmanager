@@ -17,11 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-import os
 import re
-from collections.abc import Generator
-from typing import Any, BinaryIO
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, BinaryIO
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, StreamingHttpResponse
@@ -32,6 +32,9 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
 
 from larpmanager.models.miscellanea import OneTimeAccessToken
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 def file_iterator(
@@ -260,7 +263,7 @@ def onetime_stream(request: HttpRequest, token: str) -> StreamingHttpResponse:
     response["X-Content-Type-Options"] = "nosniff"
 
     # Set content disposition header with original filename
-    filename = os.path.basename(content.file.name)
+    filename = Path(content.file.name).name
     response["Content-Disposition"] = f'inline; filename="{filename}"'
 
     return response

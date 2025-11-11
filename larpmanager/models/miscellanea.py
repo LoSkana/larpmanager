@@ -18,9 +18,9 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import os
 import random
 import secrets
+from pathlib import Path
 from typing import Any
 
 from django.db import models
@@ -171,8 +171,7 @@ class Util(BaseModel):
         """Return the base filename from the util URL or empty string if no util."""
         if not self.util:
             return ""
-        # noinspection PyUnresolvedReferences
-        return os.path.basename(self.util.url)
+        return Path(self.util.url).name
 
 
 class UrlShortner(BaseModel):

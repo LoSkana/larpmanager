@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 import os
+from pathlib import Path
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -366,7 +367,7 @@ class Member(BaseModel):
         # Add member-specific subdirectory using ID
         member_pdf_directory = os.path.join(member_pdf_directory, str(self.id))
         # Ensure directory exists
-        os.makedirs(member_pdf_directory, exist_ok=True)
+        Path(member_pdf_directory).mkdir(parents=True, exist_ok=True)
         return member_pdf_directory
 
     def get_request_filepath(self):

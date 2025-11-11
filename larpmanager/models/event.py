@@ -17,18 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import inspect
 import logging
 import os
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
-from django.http import HttpResponse
 from django.utils import formats
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -47,6 +48,9 @@ from larpmanager.models.utils import (
     my_uuid_short,
     show_thumb,
 )
+
+if TYPE_CHECKING:
+    from django.http import HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -384,7 +388,7 @@ class Event(BaseModel):
         # Build path to PDF directory using object slug
         pdf_directory_path = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
         # Ensure directory exists
-        os.makedirs(pdf_directory_path, exist_ok=True)
+        Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
         return pdf_directory_path
 
     def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
@@ -662,7 +666,7 @@ class Run(BaseModel):
         run_media_path = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
 
         # Ensure directory exists
-        os.makedirs(run_media_path, exist_ok=True)
+        Path(run_media_path).mkdir(parents=True, exist_ok=True)
 
         return run_media_path
 

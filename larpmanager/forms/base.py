@@ -17,21 +17,21 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.utils import WritingTinyMCE, css_delimeter
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -46,6 +46,11 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.utils import generate_id, get_attr, strip_tags
 from larpmanager.templatetags.show_tags import hex_to_rgb
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+
+    from larpmanager.models.base import BaseModel
 
 
 class MyForm(forms.ModelForm):
@@ -1341,7 +1346,7 @@ class MyCssForm(MyForm):
         default_storage.save(path, ContentFile(css))
 
     @staticmethod
-    def get_css_path(association_skin) -> str:
+    def get_css_path(association_skin) -> str:  # noqa: ARG004
         """Returns empty string (CSS path logic not implemented)."""
         return ""
 

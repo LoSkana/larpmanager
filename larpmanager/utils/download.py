@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import csv
 import io
@@ -1024,10 +1025,10 @@ def _get_column_names(context: dict) -> None:
                 + (_("If not found, the option will be skipped"))
                 + ")</i>",
                 "name": _("The name of the option"),
-                "description": _("Optional – Additional information about the option, displayed below the question"),
-                "price": _("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
+                "description": _("Optional - Additional information about the option, displayed below the question"),
+                "price": _("Optional - Amount added to the registration fee if selected (0 = no extra cost)"),
                 "max_available": _(
-                    "Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)",
+                    "Optional - Maximum number of times it can be selected across all registrations (0 = unlimited)",
                 ),
             },
         ]
@@ -1057,8 +1058,8 @@ def _get_column_names(context: dict) -> None:
                 + (_("If not found, the option will be skipped"))
                 + ")</i>",
                 "name": _("The name of the option"),
-                "description": _("Optional – Additional information about the option, displayed below the question"),
-                "max_available": _("Optional – Maximum number of times it can be selected (0 = unlimited)"),
+                "description": _("Optional - Additional information about the option, displayed below the question"),
+                "max_available": _("Optional - Maximum number of times it can be selected (0 = unlimited)"),
             },
         ]
 

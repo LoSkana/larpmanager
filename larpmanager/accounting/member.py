@@ -356,4 +356,4 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = datetime.now() < membership_deadline_date
+        context["grazing"] = datetime.now(timezone.utc) < membership_deadline_date

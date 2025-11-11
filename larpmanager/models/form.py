@@ -333,12 +333,12 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event_instance, enabled_features):
+    def get_instance_questions(event_instance, enabled_features):  # noqa: ARG004
         """Get all writing questions for the event instance ordered by order field."""
         return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
-    def skip(registration, features, params=None, *, is_organizer=False) -> bool:
+    def skip(registration, features, params=None, *, is_organizer=False) -> bool:  # noqa: ARG004
         """Default behavior: never skip processing."""
         return False
 
@@ -383,12 +383,12 @@ class WritingOption(BaseModel):
         blank=True,
         default="",
         verbose_name=_("Description"),
-        help_text=_("Optional – Additional information about the option, displayed below the question"),
+        help_text=_("Optional - Additional information about the option, displayed below the question"),
     )
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Optional – Maximum number of times it can be selected across all characters (0 = unlimited)"),
+        help_text=_("Optional - Maximum number of times it can be selected across all characters (0 = unlimited)"),
     )
 
     order = models.IntegerField(default=0)
@@ -690,7 +690,7 @@ class RegistrationOption(BaseModel):
         blank=True,
         default="",
         verbose_name=_("Description"),
-        help_text=_("Optional – Additional information about the option, displayed below the question"),
+        help_text=_("Optional - Additional information about the option, displayed below the question"),
     )
 
     price = models.DecimalField(
@@ -698,13 +698,13 @@ class RegistrationOption(BaseModel):
         decimal_places=2,
         default=0,
         verbose_name=_("Price"),
-        help_text=_("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
+        help_text=_("Optional - Amount added to the registration fee if selected (0 = no extra cost)"),
     )
 
     max_available = models.IntegerField(
         default=0,
         verbose_name=_("Maximum number"),
-        help_text=_("Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)"),
+        help_text=_("Optional - Maximum number of times it can be selected across all registrations (0 = unlimited)"),
     )
 
     order = models.IntegerField(default=0)

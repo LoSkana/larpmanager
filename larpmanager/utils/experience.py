@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import ast
 import json
 from collections import defaultdict
@@ -432,7 +434,7 @@ def apply_rules_computed(char) -> None:
         field_id = rule.field.id
         computed_field_values[field_id] = operations.get(
             rule.operation,
-            lambda current_value, rule_amount: current_value,
+            lambda current_value, _rule_amount: current_value,
         )(computed_field_values[field_id], rule.amount)
 
     # Save computed values as WritingAnswer objects with clean formatting

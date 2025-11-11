@@ -142,7 +142,7 @@ def check_download(page, link: str) -> None:
                 return
 
             # if plain CSV, read with pandas
-            lower_name = str(os.path.basename(download.suggested_filename or download_path).lower())
+            lower_name = str(Path(download.suggested_filename or download_path).name.lower())
             if lower_name.endswith(".csv"):
                 df = pd.read_csv(io.BytesIO(content))
                 assert not df.empty, f"Empty csv {lower_name}"

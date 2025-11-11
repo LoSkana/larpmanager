@@ -323,13 +323,13 @@ def get_payment_details_path(association: Association) -> str:
 
     """
     # Ensure payment settings directory exists
-    os.makedirs(conf_settings.PAYMENT_SETTING_FOLDER, exist_ok=True)
+    Path(conf_settings.PAYMENT_SETTING_FOLDER).mkdir(parents=True, exist_ok=True)
 
     # Generate key identifier for filename security
     key_identifier = _key_id(association.key)
 
     # Create secure filename with association slug and key ID
-    filename = f"{os.path.basename(association.slug)}.{key_identifier}.enc"
+    filename = f"{Path(association.slug).name}.{key_identifier}.enc"
 
     # Return full path to encrypted payment file
     return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, filename)

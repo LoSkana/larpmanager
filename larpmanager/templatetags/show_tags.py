@@ -17,11 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import contextlib
 import logging
-import os
 import re
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from allauth.utils import get_request_param
 from django import template
@@ -36,11 +38,13 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.pdf import get_trait_character
+
+if TYPE_CHECKING:
+    from larpmanager.models.event import Run
 
 register = template.Library()
 logger = logging.getLogger(__name__)
@@ -74,7 +78,7 @@ def basename(file_path):
     """
     if not file_path:
         return ""
-    return os.path.basename(file_path)
+    return Path(file_path).name
 
 
 @register.filter

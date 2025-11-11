@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from decimal import Decimal
 from typing import Any
@@ -383,7 +385,7 @@ def _prepare_data_json(
 
         # Add data for each configured field, starting from column 1
         for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):
-            row_data[str(column_index)] = field_to_formatter.get(field_name, lambda model_object: "")(model_object)
+            row_data[str(column_index)] = field_to_formatter.get(field_name, lambda _model_object: "")(model_object)
 
         table_rows_data.append(row_data)
 
