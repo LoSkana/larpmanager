@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from typing import Any
 
 from django.apps import apps
@@ -336,25 +338,8 @@ class WritingQuestion(BaseModel):
         return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
-    def skip(
-        instance: Any,
-        available_features: dict[str, Any],
-        processing_parameters: dict[str, Any],
-        organization: Any,
-    ) -> bool:
-        """Determine whether to skip processing for the given instance.
-
-        Args:
-            instance: The object instance to check for skipping
-            available_features: Dictionary containing available features and their settings
-            processing_parameters: Dictionary of parameters for processing configuration
-            organization: Organization object containing context information
-
-        Returns:
-            bool: Always returns False, indicating no skipping should occur
-
-        """
-        # Default behavior: never skip processing
+    def skip(registration, features, params=None, *, is_organizer=False) -> bool:
+        """Default behavior: never skip processing."""
         return False
 
     def get_editable(self):
