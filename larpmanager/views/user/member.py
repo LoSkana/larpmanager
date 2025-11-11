@@ -837,14 +837,9 @@ def vote(request: HttpRequest) -> HttpResponse:
         return redirect(request.path_info)
 
     # Build list of candidate objects for display
-    context["candidates"] = []
-    for mb in context["vote_cands"]:
-        try:
-            idx = int(mb)
-            context["candidates"].append(Member.objects.get(pk=idx))
-        except Exception as e:
-            # Skip invalid candidate IDs
-            logger.debug("Invalid candidate ID or member not found: %s: %s", mb, e)
+    valid_ids = [int(mb) for mb in context["vote_cands"] if str(mb).isdigit()]
+    members = Member.objects.filter(pk__in=valid_ids)
+    context["candidates"].extend(members)
 
     # Randomize candidate order to prevent position bias
     random.shuffle(context["candidates"])
