@@ -837,19 +837,19 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
         logs: List to append error messages to
 
     """
-    names = [n.strip() for n in value.split(",") if n.strip()]
-    factions = Faction.objects.filter(event=context["event"], name__iexact__in=names)
-    found = {f.name.lower(): f for f in factions}
+    # Process each faction name in the comma-separated list
+    for faction_name in value.split(","):
+        try:
+            # Find faction by case-insensitive name match for the event
+            faction = Faction.objects.get(name__iexact=faction_name.strip(), event=context["event"])
 
-    element.save()
-    for name in names:
-        key = name.lower()
-        if key in found:
-            faction = found[key]
+            # Save element and add to faction's characters
+            element.save()  # to be sure
             faction.characters.add(element)
             faction.save()
-        else:
-            logs.append(f"Faction not found: {name}")
+        except ObjectDoesNotExist:
+            # Log faction not found errors
+            logs.append(f"Faction not found: {faction_name}")
 
 
 def form_load(context: dict, form, *, is_registration: bool = True) -> list[str]:
@@ -1418,17 +1418,17 @@ def _assign_prereq(
         value: Comma-separated prerequisite ability names
 
     """
-    names = [n.strip() for n in value.split(",") if n.strip()]
-    abilities = context["event"].get_elements(AbilityPx).filter(name__iexact__in=names)
-    found = {a.name.lower(): a for a in abilities}
+    # Parse each prerequisite name from the comma-separated string
+    for prerequisite_name in value.split(","):
+        try:
+            # Look up prerequisite ability by name (case-insensitive)
+            prerequisite_element = context["event"].get_elements(AbilityPx).get(name__iexact=prerequisite_name.strip())
 
-    element.save()
-    for name in names:
-        key = name.lower()
-        if key in found:
-            element.prerequisites.add(found[key])
-        else:
-            logs.append(f"Prerequisite not found: {name}")
+            # Ensure element is saved before adding M2M relationship
+            element.save()
+            element.prerequisites.add(prerequisite_element)
+        except ObjectDoesNotExist:
+            logs.append(f"Prerequisite not found: {prerequisite_name}")
 
 
 def _assign_requirements(
@@ -1446,13 +1446,14 @@ def _assign_requirements(
         requirement_names: Comma-separated string of requirement names
 
     """
-    names = [n.strip() for n in requirement_names.split(",") if n.strip()]
-    options = context["event"].get_elements(WritingOption).filter(name__iexact__in=names)
-    found_names = {o.name.lower() for o in options}
+    # Process each requirement name from comma-separated string
+    for requirement_name in requirement_names.split(","):
+        try:
+            # Look up writing option by case-insensitive name match
+            writing_option = context["event"].get_elements(WritingOption).get(name__iexact=requirement_name.strip())
+            writing_element.save()  # to be sure
 
-    for name in names:
-        if name.lower() in found_names:
-            writing_element.save()
-            writing_element.requirements.add(next(o for o in options if o.name.lower() == name.lower()))
-        else:
-            error_logs.append(f"requirements not found: {name}")
+            # Add the requirement to the writing element
+            writing_element.requirements.add(writing_option)
+        except ObjectDoesNotExist:
+            error_logs.append(f"requirements not found: {requirement_name}")
