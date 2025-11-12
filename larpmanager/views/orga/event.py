@@ -17,8 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import logging
-import traceback
 from collections import defaultdict
 
 from django.contrib import messages
@@ -576,8 +577,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
 
             except Exception as exp:
                 # Log the full traceback and show error to user
-                logger.exception("Upload error: %s", exp)
-                logger.exception(traceback.format_exc())
+                logger.exception("Upload error")
                 messages.error(request, _("Unknow error on upload") + f": {exp}")
 
             # Redirect back to the main page on error or completion

@@ -21,6 +21,7 @@
 from datetime import datetime, timedelta
 
 from django.db.models import Count
+from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
@@ -60,7 +61,7 @@ def get_membership_fee_year(association_id, year=None):
 
     """
     if not year:
-        year = datetime.now().year
+        year = timezone.now().year
     return set(
         AccountingItemMembership.objects.filter(association_id=association_id, year=year).values_list(
             "member_id",

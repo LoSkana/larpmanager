@@ -26,7 +26,7 @@ import os
 import os.path
 import re
 import zipfile
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -38,6 +38,7 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Template
 from django.template.loader import get_template
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
@@ -99,7 +100,7 @@ def reprint(file_path):
     if not path_obj.is_file():
         return True
 
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=1)
+    cutoff_date = timezone.now() - timedelta(days=1)
     modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, timezone.utc)
     return modification_time < cutoff_date
 

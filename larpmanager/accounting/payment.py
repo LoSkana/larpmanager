@@ -25,11 +25,11 @@ from __future__ import annotations
 import logging
 import math
 import re
-from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.gateway import (
@@ -485,7 +485,7 @@ def _process_membership(invoice: PaymentInvoice) -> None:
     if not AccountingItemMembership.objects.filter(inv=invoice).exists():
         # Create and populate new membership accounting item
         accounting_item = AccountingItemMembership()
-        accounting_item.year = datetime.now().year
+        accounting_item.year = timezone.now().year
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross

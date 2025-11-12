@@ -91,7 +91,7 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     satispay_rsa_key = load_key("main/satispay/private.pem")
 
     # Future implementation for payment expiration
-    # expiration_date = datetime.now(timezone.utc) + timedelta(hours=1)
+    # expiration_date = timezone.now() + timedelta(hours=1)
     # expiration_date = format_datetime(expiration_date)
 
     # Prepare body parameters with callback URL

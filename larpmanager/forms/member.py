@@ -37,7 +37,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
-from django.utils import translation
+from django.utils import timezone, translation
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
@@ -824,7 +824,7 @@ class ExeMembershipFeeForm(forms.Form):
     def clean_member(self) -> Member:
         """Validate that the member doesn't already have a membership fee for the current year."""
         member = self.cleaned_data["member"]
-        year = datetime.today().year
+        year = timezone.now().year
 
         # Check if membership fee already exists for this year
         if AccountingItemMembership.objects.filter(member=member, year=year).exists():

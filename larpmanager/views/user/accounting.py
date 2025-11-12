@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -29,6 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
@@ -486,7 +487,7 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
-    year = datetime.now().year
+    year = timezone.now().year
     try:
         AccountingItemMembership.objects.get(
             year=year,
@@ -1069,6 +1070,6 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     for e in lis:
         # Filter and add runs to dictionary by ID
         for r in e.runs.all():
-            if future and r.end < datetime.now(timezone.utc).date():
+            if future and r.end < timezone.now().date():
                 continue
             ls[r.id] = r

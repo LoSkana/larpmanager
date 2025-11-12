@@ -1,4 +1,5 @@
-from datetime import datetime
+from __future__ import annotations
+
 from typing import Any
 
 from django.contrib import messages
@@ -8,6 +9,7 @@ from django.forms import ChoiceField, Form
 from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_select2.forms import Select2Widget
 from slugify import slugify
@@ -95,7 +97,7 @@ def _get_registration_status_code(run):
         return "preregister", None
 
     # Check registration opening time
-    current_datetime = datetime.today()
+    current_datetime = timezone.now().date()
     if "registration_open" in features:
         if not run.registration_open:
             return "not_set", None
@@ -305,7 +307,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     runs_to_conclude = Run.objects.filter(
         event__association_id=context["association_id"],
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
-        end__lt=datetime.today(),
+        end__lt=timezone.now().date(),
     ).values_list("search", flat=True)
 
     # Add action for past runs still open

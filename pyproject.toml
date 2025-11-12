@@ -54,10 +54,7 @@ ignore = [
     "C901",  # TODO remove   	complex-structure
     "PERF401",  # TODO remove	manual-list-comprehension
     "SIM102",  # TODO remove 	collapsible-if
-    "DTZ002",  # TODO remove 	call-datetime-today
     "PTH110",  # TODO remove 	os-path-exists
-    "INP001",  # TODO remove 	implicit-namespace-package
-    "TRY401",  # TODO remove 	verbose-log-message
     "PERF203",  # TODO remove	try-except-in-loop
     "PTH123",  # TODO remove 	builtin-open
 ]

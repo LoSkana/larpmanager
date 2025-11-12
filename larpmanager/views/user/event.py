@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import json
 from datetime import datetime, timedelta
@@ -26,6 +27,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
@@ -735,7 +737,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["no_robots"] = (
         context["run"].development != DevelopStatus.SHOW
         or not context["run"].end
-        or datetime.today().date() > context["run"].end
+        or timezone.now().date() > context["run"].end
     )
 
     return render(request, "larpmanager/event/event.html", context)

@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 from datetime import datetime, timedelta
 from typing import Any
@@ -25,6 +26,7 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import connection
+from django.utils import timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
@@ -225,7 +227,7 @@ class Command(BaseCommand):
         events_by_id = {}
 
         # Process past events for participation badges
-        for run in Run.objects.filter(end__lt=datetime.today(), event__association=association):
+        for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
             # Get all non-cancelled registrations
             registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
 
@@ -239,7 +241,7 @@ class Command(BaseCommand):
             events_by_id[run.event_id] = run.event
 
         # Process future events for friend referral tracking
-        for run in Run.objects.filter(end__gt=datetime.today()):
+        for run in Run.objects.filter(end__gt=timezone.now().date()):
             # Get confirmed registrations (excluding waiting list)
             for registration in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
                 ticket__tier=TicketTier.WAITING,
@@ -690,7 +692,7 @@ class Command(BaseCommand):
 
         """
         # Get current year for membership fee validation
-        current_year = datetime.today().year
+        current_year = timezone.now().year
 
         # Skip if registration is not for current year
         if current_year != registration.run.end.year:

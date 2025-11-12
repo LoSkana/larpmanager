@@ -36,6 +36,7 @@ from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
@@ -472,7 +473,7 @@ def membership(request: HttpRequest) -> HttpResponse:
     # Check if membership fee has been paid for current year
     context["fee_payed"] = AccountingItemMembership.objects.filter(
         association_id=context["association_id"],
-        year=datetime.now().year,
+        year=timezone.now().year,
         member_id=context["member"].id,
     ).exists()
 
@@ -689,7 +690,7 @@ def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
         context["list"].append(el)
 
     # Shuffle members using deterministic daily seed
-    v = datetime.today().date() - date(1970, 1, 1)
+    v = timezone.now().date() - date(1970, 1, 1)
     random.Random(v.days).shuffle(context["list"])  # noqa: S311
 
     return render(request, "larpmanager/general/badge.html", context)
@@ -792,7 +793,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     check_association_feature(request, context, "vote")
 
     # Set current year for membership and voting validation
-    context["year"] = datetime.now().year
+    context["year"] = timezone.now().year
 
     # Check if membership payment is required and completed
     if "membership" in context["features"]:

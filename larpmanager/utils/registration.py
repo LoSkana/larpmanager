@@ -17,15 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import math
-from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
-from django.http import HttpRequest
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
@@ -46,6 +45,10 @@ from larpmanager.models.registration import Registration, RegistrationCharacterR
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+    from django.http import HttpRequest
 
 
 def registration_available(run: Run, features: dict, context: dict | None = None) -> None:
@@ -449,7 +452,7 @@ def registration_status(
     if get_event_config(run.event_id, "pre_register_active", default_value=False, context=context):
         _status_preregister(run, member, context)
 
-    current_datetime = datetime.today()
+    current_datetime = timezone.now().date()
     # check registration open
     if "registration_open" in features:
         if not run.registration_open:

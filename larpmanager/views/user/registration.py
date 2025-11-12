@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import traceback
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any
 
 from django.contrib import messages
@@ -29,7 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models, transaction
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.utils.timezone import now as timezone_now
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -100,7 +101,7 @@ def _check_pre_register_redirect(context: dict, event_slug: str) -> HttpResponse
 
     # Check if registration is open and we're past the open date
     if "registration_open" in context["features"]:
-        if context["run"].registration_open and context["run"].registration_open <= timezone_now():
+        if context["run"].registration_open and context["run"].registration_open <= timezone.now():
             return redirect("register", event_slug=event_slug)
 
     return None
@@ -560,7 +561,7 @@ def register_info(request: HttpRequest, context: dict, form, registration, disco
         )
         if membership_query.count() > 0:
             context["membership_fee"] = "done"
-        elif datetime.today().year != context["run"].start.year:
+        elif timezone.now().year != context["run"].start.year:
             context["membership_fee"] = "future"
         else:
             context["membership_fee"] = "todo"
@@ -754,7 +755,7 @@ def _check_redirect_registration(
 
     # Check registration timing and pre-registration options
     if "registration_open" in context["features"]:
-        if not context["run"].registration_open or context["run"].registration_open > timezone_now():
+        if not context["run"].registration_open or context["run"].registration_open > timezone.now():
             # Redirect to pre-registration if available and active
             if "pre_register" in context["features"] and get_event_config(
                 event.id, "pre_register_active", default_value=False
@@ -927,7 +928,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         return error(_("Discount code not valid"))
 
     # Clean up expired discount reservations
-    now = timezone_now()
+    now = timezone.now()
     AccountingItemDiscount.objects.filter(expires__lte=now).delete()
 
     # Extract context variables for discount validation
@@ -1075,7 +1076,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
     """
     # Get the event run context from the request and identifier
     context = get_event_context(request, event_slug)
-    now = timezone_now()
+    now = timezone.now()
 
     # Bulk delete expired discount items for this user and run
     AccountingItemDiscount.objects.filter(member=context["member"], run=context["run"], expires__lte=now).delete()

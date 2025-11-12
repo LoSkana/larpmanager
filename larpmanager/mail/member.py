@@ -24,6 +24,7 @@ from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
 from django.http import HttpRequest
+from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -188,7 +189,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
     # Process each registration for payment requirements
     for registration in member_registrations:
         features = get_event_features(registration.run.event_id)
-        run_starts_this_year = registration.run.start and registration.run.start.year == datetime.today().year
+        run_starts_this_year = registration.run.start and registration.run.start.year == timezone.now().year
 
         # Check if membership fee is required for this event
         if run_starts_this_year and "laog" not in features:

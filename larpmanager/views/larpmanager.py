@@ -32,6 +32,7 @@ from django.db.models import Avg, Count, Min, Sum
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import override
 from django.views.decorators.cache import cache_page
@@ -918,7 +919,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     context["totals"] = {}
 
     # Calculate yearly payment totals from current year to oldest
-    for year in list(range(datetime.today().year, que["oldest_date"].year - 1, -1)):
+    for year in list(range(timezone.now().year, que["oldest_date"].year - 1, -1)):
         start_of_year = date(year, 1, 1)
         end_of_year = date(year, 12, 31)
 

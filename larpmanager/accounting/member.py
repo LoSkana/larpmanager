@@ -22,10 +22,11 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import (
@@ -313,7 +314,7 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
         return
 
     # Get current year for membership calculations
-    current_year = datetime.now().year
+    current_year = timezone.now().year
 
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
@@ -356,4 +357,4 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = datetime.now(timezone.utc) < membership_deadline_date
+        context["grazing"] = timezone.now() < membership_deadline_date

@@ -38,6 +38,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
 from django.http import Http404, HttpRequest
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
@@ -335,7 +336,7 @@ def get_plot(context: dict, plot_id: int) -> None:
         raise Http404(msg) from err
 
 
-def get_quest_type(context: dict, quest_number: int) -> QuestType:
+def get_quest_type(context: dict, quest_number: int) -> None:
     """Get quest type from context by number."""
     get_element(context, quest_number, "quest_type", QuestType)
 
@@ -345,7 +346,7 @@ def get_quest(context: dict, quest_number: int) -> None:
     get_element(context, quest_number, "quest", Quest)
 
 
-def get_trait(character_context: dict, trait_name: str) -> Trait:
+def get_trait(character_context: dict, trait_name: str) -> None:
     """Get trait from character context by name."""
     get_element(character_context, trait_name, "trait", Trait)
 
@@ -638,7 +639,7 @@ def get_player_relationship(context: dict, other_player_number: int) -> None:
         raise Http404(msg) from err
 
 
-def get_time_diff(start_datetime: datetime, end_datetime: datetime) -> int:
+def get_time_diff(start_datetime: date, end_datetime: date) -> int:
     """Calculate the difference in days between two datetimes."""
     return (start_datetime - end_datetime).days
 
@@ -660,7 +661,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     if isinstance(target_date, datetime):
         target_date = target_date.date()
 
-    return get_time_diff(target_date, datetime.today().date())
+    return get_time_diff(target_date, timezone.now().date())
 
 
 def generate_number(length: int) -> str:

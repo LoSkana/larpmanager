@@ -250,8 +250,8 @@ def create_error_ticket(request: HttpRequest):
         content += f"Context: {context_info}\n\n"
     content += f"Traceback:\n{error_traceback}"
 
-    # Truncate if too long (max 1000 chars for content field)
-    max_length = 950
+    # Truncate if too long (max 5000 chars for content field)
+    max_length = 4000
     if len(content) > max_length:
         content = content[:max_length] + "\n...(truncated)"
 
@@ -277,5 +277,5 @@ def create_error_ticket(request: HttpRequest):
         reason="error",
         email="system@larpmanager.com",
         content=f"[{error_identifier}]\n\n{content}",
-        member=None,  # System-generated ticket
+        member=None,
     )

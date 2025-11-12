@@ -52,7 +52,7 @@ class Command(BaseCommand):
             # Future payment gateway checks can be added here
         except Exception as e:
             notify_admins("Check Payments", "Error checking payments", e)
-            logger.exception("Error in check_payments command: %s", e)
+            logger.exception("Error in check_payments command")
 
     def check_satispay_payments(self) -> None:
         """Check all pending Satispay payments and verify their status.
