@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from typing import Any
 
 from django.contrib import messages
@@ -26,6 +26,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -164,7 +165,7 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     workshops = context["event"].workshops.all()
 
     # Set time limit for workshop completion (365 days ago)
-    limit = datetime.now() - timedelta(days=365)
+    limit = timezone.now() - timedelta(days=365)
 
     # Initialize context lists for template rendering
     context["pinocchio"] = []  # Members who haven't completed all workshops

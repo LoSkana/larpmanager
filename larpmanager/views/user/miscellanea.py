@@ -17,9 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -27,6 +28,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.miscellanea import (
@@ -273,7 +275,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
         dt = workshop.show()
 
         # Set completion check limit to 365 days ago
-        limit = datetime.now() - timedelta(days=365)
+        limit = timezone.now() - timedelta(days=365)
         logger.debug("Workshop completion limit date: %s", limit)
 
         # Check if user has completed this workshop within the time limit
@@ -400,7 +402,7 @@ def shuttle(request: HttpRequest):
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
     # get last shuttle requests
-    ref = datetime.now() - timedelta(days=5)
+    ref = timezone.now() - timedelta(days=5)
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)

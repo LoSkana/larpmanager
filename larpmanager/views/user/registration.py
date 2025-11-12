@@ -856,7 +856,7 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
 # ~ if friend.run.event != context['event']:
 # ~ Return Jsonresonse ({'res': 'ko', 'msg': _ ('Code applicable only to run of the same event!')})
 # ~ # check future run
-# ~ if friend.run.end < datetime.now().date():
+# ~ if friend.run.end < timezone.now().date():
 # ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Code not valid for runs passed!')})
 # ~ # get discount friend
 # ~ disc = Discount.objects.get(typ=DiscountType.FRIEND, runs__in=[context['run']])
@@ -882,7 +882,7 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
 # ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.PLAYAGAIN).count() > 0:
 # ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Discount not comulary with Play Again')})
 # ~ # all green! proceed
-# ~ now = datetime.now()
+# ~ now = timezone.now()
 # ~ AccountingItemDiscount.objects.create(disc=disc, value=disc.value, member=context["member"], expires=now + timedelta(minutes = 15), run=context['run'], detail=friend.id, association_id=context['association_id'])
 # ~ Return Jsonresonse ({'res': 'ok', 'msg': _ ('The facility has been added! It was reserved for you for 15 minutes, after which it will be removed')})
 

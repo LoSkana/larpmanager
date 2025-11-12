@@ -49,7 +49,6 @@ ignore = [
     "SLF001",  # TODO remove	private-member-access
     "ARG002",  # TODO remove 	unused-method-argument
     "PTH118",  # TODO remove 	os-path-join
-    "DTZ005",  # TODO remove 	call-datetime-now-without-tzinfo
     "BLE001",  # TODO remove 	blind-except
     "C901",  # TODO remove   	complex-structure
     "PERF401",  # TODO remove	manual-list-comprehension

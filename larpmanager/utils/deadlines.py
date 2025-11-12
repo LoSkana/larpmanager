@@ -106,7 +106,7 @@ def check_run_deadlines(runs: list) -> list:
 
     # Check membership feature
     association_id = runs[0].event.association_id
-    now = datetime.now()
+    now = timezone.now()
     uses_membership = "membership" in get_association_features(association_id)
 
     # Load memberships and fees

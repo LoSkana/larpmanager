@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -160,7 +160,7 @@ class Command(BaseCommand):
         Cleans up abandoned payment attempts to prevent database bloat.
         """
         # delete old payment invoice
-        reference_date = datetime.now() - timedelta(days=60)
+        reference_date = timezone.now() - timedelta(days=60)
         payment_invoices_query = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
         for payment_invoice in payment_invoices_query.filter(created__lte=reference_date.date()):
             payment_invoice.delete()
@@ -612,7 +612,7 @@ class Command(BaseCommand):
         registrations_queryset = get_regs(association)
 
         # Calculate reference date (3 days from now) to filter out immediate events
-        minimum_start_date = datetime.now() + timedelta(days=3)
+        minimum_start_date = timezone.now() + timedelta(days=3)
 
         # Filter registrations to exclude events without start dates or starting too soon
         registrations_queryset = registrations_queryset.exclude(run__start__isnull=True).exclude(
@@ -776,7 +776,7 @@ class Command(BaseCommand):
             return
 
         # Calculate reference date (7 days ago) and skip if run is too old or has no start date
-        reference_date = datetime.now() - timedelta(days=7)
+        reference_date = timezone.now() - timedelta(days=7)
         if not run.start or run.start < reference_date.date():
             return
 

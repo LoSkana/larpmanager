@@ -155,7 +155,7 @@ def _init_regs(
     elif registration.quota > 0:
         context["payments_todo"].append(registration)
     if registration.run.start:
-        if registration.run.start < datetime.now().date():
+        if registration.run.start < timezone.now().date():
             return
         context["registration_years"][registration.run.start.year] = 1
 

@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime
 
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -181,7 +180,7 @@ def notify_membership_approved(member: "Member", resp: str) -> None:
     association_id = member.membership.association_id
     member_registrations = member.registrations.filter(
         run__event__association_id=association_id,
-        run__start__gte=datetime.now().date(),
+        run__start__gte=timezone.now().date(),
     )
     requires_membership_fee = False
     unpaid_registration_links = []

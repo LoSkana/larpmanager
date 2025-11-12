@@ -22,7 +22,7 @@ import logging
 import math
 import os
 import random
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 from uuid import uuid4
 
@@ -633,7 +633,7 @@ def chat(request: HttpRequest, member_id):
                     association_id=context["association_id"],
                 )
             your_contact.num_unread += 1
-            your_contact.last_message = datetime.now()
+            your_contact.last_message = timezone.now()
             your_contact.save()
             mine_contact = get_contact(my_member_id, member_id)
             if not mine_contact:
@@ -643,7 +643,7 @@ def chat(request: HttpRequest, member_id):
                     channel=get_channel(my_member_id, member_id),
                     association_id=context["association_id"],
                 )
-            mine_contact.last_message = datetime.now()
+            mine_contact.last_message = timezone.now()
             mine_contact.save()
             messages.success(request, _("Message sent!"))
             return redirect(request.path_info)

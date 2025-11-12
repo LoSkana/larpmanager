@@ -17,11 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import time
-from datetime import date
 from random import shuffle
+from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -86,6 +87,9 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.download import _orga_registrations_acc, download
 from larpmanager.views.orga.member import member_field_correct
+
+if TYPE_CHECKING:
+    from datetime import date
 
 logger = logging.getLogger(__name__)
 
@@ -875,7 +879,7 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
 
     # Trigger background registration checks
     check_registration_background(reg_ids)
-    # logger.debug(f"Reloading registrations for {request} at {datetime.now()}")
+    # logger.debug(f"Reloading registrations for {request} at {timezone.now()}")
     return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
 

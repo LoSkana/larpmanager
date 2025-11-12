@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -116,7 +116,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
     if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
-        cutoff_date = datetime.now() - timedelta(days=3)
+        cutoff_date = timezone.now() - timedelta(days=3)
 
         member = context["member"]
 
@@ -320,11 +320,11 @@ def get_coming_runs(association_id: int | None, *, future: bool = True) -> Query
     # Apply date filtering and ordering based on future/past requirement
     if future:
         # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        reference_date = datetime.now() - timedelta(days=3)
+        reference_date = timezone.now() - timedelta(days=3)
         runs = runs.filter(end__gte=reference_date.date()).order_by("end")
     else:
         # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        reference_date = datetime.now() + timedelta(days=3)
+        reference_date = timezone.now() + timedelta(days=3)
         runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
 
     return runs
@@ -388,7 +388,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
     # Cache to track processed events and set reference date (3 days ago)
     cache = {}
-    ref = (datetime.now() - timedelta(days=3)).date()
+    ref = (timezone.now() - timedelta(days=3)).date()
 
     # Query runs from current association, excluding development/cancelled events
     # Order by end date descending to show most recent first
@@ -472,7 +472,7 @@ def event_register(request: HttpRequest, event_slug: str):
     context = get_event(request, event_slug)
     # check future runs
     runs = (
-        Run.objects.filter(event=context["event"], end__gte=datetime.now())
+        Run.objects.filter(event=context["event"], end__gte=timezone.now())
         .exclude(development=DevelopStatus.START)
         .exclude(event__visible=False)
         .order_by("end")
@@ -710,7 +710,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get all runs for the event and set reference date (3 days ago)
     runs = Run.objects.filter(event=context["event"])
-    ref = datetime.now() - timedelta(days=3)
+    ref = timezone.now() - timedelta(days=3)
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}

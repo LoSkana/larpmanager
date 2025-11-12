@@ -23,7 +23,6 @@ import io
 import logging
 import os
 import shutil
-from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -32,6 +31,7 @@ import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.experience import AbilityPx, AbilityTypePx
@@ -1151,7 +1151,7 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
         Path(tmp_file).mkdir(parents=True, exist_ok=True)
 
     # Generate timestamped filename
-    tmp_file = os.path.join(tmp_file, datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
+    tmp_file = os.path.join(tmp_file, timezone.now().strftime("%Y-%m-%d-%H:%M:%S"))
 
     # Write uploaded file chunks to temporary file
     with open(tmp_file, "wb") as destination:

@@ -17,13 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -52,7 +53,7 @@ def check_holiday() -> bool:
 
     """
     # Get current date
-    today = datetime.now().date()
+    today = timezone.now().date()
 
     # Check holidays in major countries
     for country_code in ["US", "IT", "CN", "UK"]:

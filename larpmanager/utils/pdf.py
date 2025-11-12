@@ -885,7 +885,7 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
 
     # Generate timestamped filename for download
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
     response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_pdfs_{timestamp}.zip"'
 
     return response

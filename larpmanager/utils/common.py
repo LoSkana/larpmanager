@@ -1048,7 +1048,7 @@ def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list
 
     # For non-POST requests, limit to questions from last 90 days
     if request.method != "POST":
-        base_queryset = base_queryset.filter(created__gte=datetime.now() - timedelta(days=90))
+        base_queryset = base_queryset.filter(created__gte=timezone.now() - timedelta(days=90))
 
     # Find the latest creation timestamp for each member
     latest_created_per_member = (

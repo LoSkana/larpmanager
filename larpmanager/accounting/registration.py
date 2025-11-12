@@ -20,15 +20,16 @@
 
 """Registration accounting utilities for ticket pricing and payment calculation."""
 
+from __future__ import annotations
+
 import logging
 import math
-from collections.abc import Iterable
-from datetime import date, datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
+from django.utils import timezone
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
@@ -58,6 +59,12 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.common import get_time_diff, get_time_diff_today
 from larpmanager.utils.tasks import background_auto
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from datetime import date
+
+    from django.db.models import QuerySet
 
 logger = logging.getLogger(__name__)
 
@@ -259,7 +266,7 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
         return
 
 
-def installment_check(reg: "Registration", alert: int, association_id: int) -> None:
+def installment_check(reg: Registration, alert: int, association_id: int) -> None:
     """Check installment payment schedule for a registration.
 
     Processes configured installments for the event and determines
@@ -455,7 +462,7 @@ def cancel_reg(registration: Registration) -> None:
         bonus items, and resets event links
 
     """
-    registration.cancellation_date = datetime.now()
+    registration.cancellation_date = timezone.now()
     registration.save()
 
     # delete characters related
@@ -535,7 +542,7 @@ def get_date_surcharge(registration, event):
         if ticket_tier in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
             return 0
 
-    reference_date = datetime.now().date()
+    reference_date = timezone.now().date()
     if registration and registration.created:
         reference_date = registration.created
 
@@ -626,7 +633,7 @@ def log_registration_ticket_saved(ticket) -> None:
         ticket: RegistrationTicket instance that was saved
 
     """
-    logger.debug("RegistrationTicket saved: %s at %s", ticket, datetime.now())
+    logger.debug("RegistrationTicket saved: %s at %s", ticket, timezone.now())
     check_reg_events(ticket.event)
 
 
@@ -637,7 +644,7 @@ def process_registration_option_post_save(option) -> None:
         option: RegistrationOption instance that was saved
 
     """
-    logger.debug("RegistrationOption saved: %s at %s", option, datetime.now())
+    logger.debug("RegistrationOption saved: %s at %s", option, timezone.now())
     check_reg_events(option.question.event)
 
 
@@ -764,7 +771,7 @@ def update_registration_accounting(reg: Registration) -> None:
     remaining_balance = reg.tot_iscr - reg.tot_payed
     if -max_rounding_tolerance < remaining_balance <= max_rounding_tolerance:
         if not reg.payment_date:
-            reg.payment_date = datetime.now()
+            reg.payment_date = timezone.now()
         return
 
     # Skip further processing if registration is cancelled

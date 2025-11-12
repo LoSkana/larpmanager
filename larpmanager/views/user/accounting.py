@@ -21,7 +21,6 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -998,7 +997,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
         # Mark as submitted and generate transaction ID
         inv.status = PaymentStatus.SUBMITTED
-        inv.txn_id = datetime.now().timestamp()
+        inv.txn_id = timezone.now().timestamp()
         inv.save()
 
     # Send notification for invoice review

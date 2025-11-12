@@ -18,12 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
@@ -167,7 +167,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     chs = context["event"].get_elements(Character)
 
     # Iterate through all future runs of the event
-    for run in Run.objects.filter(event=context["event"], end__gte=datetime.now()):
+    for run in Run.objects.filter(event=context["event"], end__gte=timezone.now()):
         # Generate PDF for each character in each run
         for ch in chs:
             print_character_bkg(context["event"].association.slug, run.get_slug(), ch.number)

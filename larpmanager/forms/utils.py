@@ -20,12 +20,13 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any
 
 from django import forms
 from django.db.models import Q, QuerySet
 from django.forms.widgets import Widget
+from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
@@ -492,7 +493,7 @@ def get_run_choices(self, *, past=False) -> None:
         Run.objects.filter(event__association_id=self.params["association_id"]).select_related("event").order_by("-end")
     )
     if past:
-        reference_date = datetime.now() - timedelta(days=30)
+        reference_date = timezone.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
     for run in runs:
         choices.append((run.id, str(run)))

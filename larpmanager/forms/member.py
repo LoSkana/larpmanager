@@ -23,7 +23,6 @@ import logging
 import os
 import re
 from collections import OrderedDict
-from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 import pycountry
@@ -637,7 +636,7 @@ class ProfileForm(BaseProfileForm):
                 try:
                     min_age = int(min_age)
                     logger.debug("Checking minimum age %s against birth date %s", min_age, data)
-                    age_diff = relativedelta(datetime.now(), data).years
+                    age_diff = relativedelta(timezone.now(), data).years
                     if age_diff < min_age:
                         raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
                 except (ValueError, TypeError) as e:

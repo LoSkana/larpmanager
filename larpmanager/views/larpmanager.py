@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import random
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -227,7 +227,7 @@ def choose_run(request: HttpRequest, redirect_path, event_ids):
     available_runs = []
     run_display_names = []
 
-    for run in Run.objects.filter(event_id__in=event_ids, end__gte=datetime.now()):
+    for run in Run.objects.filter(event_id__in=event_ids, end__gte=timezone.now()):
         available_runs.append(run)
         run_display_names.append(f"{run.search} - {run.event.association.slug}")
 
@@ -1032,7 +1032,7 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
     context = check_lm_admin(request)
 
     # Set time threshold to 7 days ago (168 hours)
-    st = datetime.now() - timedelta(hours=168)
+    st = timezone.now() - timedelta(hours=168)
 
     # Aggregate data from individual executions by domain and view_func_name
     # Calculate average duration and total calls directly from execution records
