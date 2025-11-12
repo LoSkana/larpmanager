@@ -17,11 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import logging
-from datetime import date
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
-from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
@@ -29,6 +31,9 @@ from django.http import Http404, HttpRequest
 
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -177,7 +182,7 @@ def assign_badge(member: Member, badge_code: str) -> None:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(member)
     except Exception as e:
-        logger.exception(f"Failed to assign badge {badge_code} to member {member}: {e}")
+        logger.exception("Failed to assign badge %s to member %s: %s", badge_code, member, e)
 
 
 def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
@@ -217,7 +222,7 @@ def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
     return email
 
 
-def create_member_profile_for_user(user: User, is_newly_created: bool) -> None:
+def create_member_profile_for_user(user: User, *, is_newly_created: bool) -> None:
     """Create member profile and sync email when user is saved.
 
     This function handles the creation of a Member profile for newly created users
@@ -273,7 +278,7 @@ def process_membership_status_updates(membership: Membership) -> None:
 
         # Set current date if not already set
         if not membership.date:
-            membership.date = date.today()
+            membership.date = datetime.now(timezone.utc).date()
 
     # Handle EMPTY status: clear card number and date
     if membership.status == MembershipStatus.EMPTY:

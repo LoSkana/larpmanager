@@ -51,7 +51,7 @@ def update_event_text(event_id: int, text_type: str, language: str) -> str:
     try:
         event_text = EventText.objects.get(event_id=event_id, typ=text_type, language=language).text
     except Exception as e:
-        logger.debug(f"Event text not found for event_id={event_id}, type={text_type}, language={language}: {e}")
+        logger.debug("Event text not found for event_id=%s, type=%s, language=%s: %s", event_id, text_type, language, e)
 
     # Cache the result for 1 day
     cache.set(event_text_key(event_id, text_type, language), event_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -103,7 +103,7 @@ def update_event_text_def(event_id: int, typ: str) -> str:
         default_text = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
     except Exception as e:
         # Return empty string if no default text found or any error occurs
-        logger.debug(f"Default event text not found for event_id={event_id}, type={typ}: {e}")
+        logger.debug("Default event text not found for event_id=%s, type=%s: %s", event_id, typ, e)
 
     # Cache the result for one day
     cache.set(event_text_key_def(event_id, typ), default_text, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)

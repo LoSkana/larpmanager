@@ -17,15 +17,16 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import os
 import re
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -36,6 +37,9 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
+
+if TYPE_CHECKING:
+    from django.http import HttpResponse
 
 
 class Writing(BaseConceptModel):
@@ -246,9 +250,9 @@ class Character(Writing):
     def __str__(self) -> str:
         return f"#{self.number} {self.name}"
 
-    def get_config(self, name, default_value=None, bypass_cache=False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
         """Get configuration value for this character."""
-        return get_element_config(self, name, default_value, bypass_cache)
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
     @property
     def is_active(self) -> bool:
@@ -258,7 +262,7 @@ class Character(Writing):
             True if character is active (no inactive config), False otherwise.
 
         """
-        is_inactive = self.get_config("inactive", False)
+        is_inactive = self.get_config("inactive", default_value=False)
         return not (is_inactive == "True" or is_inactive is True)
 
     def show(self, run=None):
@@ -296,7 +300,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval", False):
+        if get_event_config(self.event_id, "user_character_approval", default_value=False):
             if self.status not in [CharacterStatus.APPROVED]:
                 js["hide"] = True
 
@@ -353,7 +357,7 @@ class Character(Writing):
         # Build the path to the characters directory for this run
         directory_path = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
         # Ensure the directory exists
-        os.makedirs(directory_path, exist_ok=True)
+        Path(directory_path).mkdir(parents=True, exist_ok=True)
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
@@ -556,7 +560,7 @@ class Faction(Writing):
     )
 
     @staticmethod
-    def get_faction_filepath(run: "Run") -> str:
+    def get_faction_filepath(run: Run) -> str:
         """Get the directory path for storing faction PDF files for a specific run.
 
         Creates the faction directory structure within the event's media directory
@@ -581,11 +585,11 @@ class Faction(Writing):
         directory_path = os.path.join(run.event.get_media_filepath(), "factions", f"{run.number}/")
 
         # Ensure directory exists, creating parent directories as needed
-        os.makedirs(directory_path, exist_ok=True)
+        Path(directory_path).mkdir(parents=True, exist_ok=True)
 
         return directory_path
 
-    def get_sheet_filepath(self, run: "Run") -> str:
+    def get_sheet_filepath(self, run: Run) -> str:
         """Get the complete file path for this faction's PDF sheet.
 
         Constructs the full filesystem path where the faction sheet PDF should be
@@ -736,7 +740,7 @@ class Handout(Writing):
         """
         # Build handouts directory path within event media
         handouts_directory = os.path.join(run.event.get_media_filepath(), "handouts")
-        os.makedirs(handouts_directory, exist_ok=True)
+        Path(handouts_directory).mkdir(parents=True, exist_ok=True)
 
         # Generate PDF filename using handout number
         return os.path.join(handouts_directory, f"H{self.number}.pdf")
@@ -893,7 +897,7 @@ def replace_character_names(instance) -> None:
         return
 
     # Early return if event doesn't have character substitution enabled
-    if not get_event_config(instance.event_id, "writing_substitute", False):
+    if not get_event_config(instance.event_id, "writing_substitute", default_value=False):
         return
 
     # Build character name to number mapping for replacement

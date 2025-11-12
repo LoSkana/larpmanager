@@ -46,7 +46,7 @@ from larpmanager.utils.experience import add_char_addit
 logger = logging.getLogger(__name__)
 
 
-def get_character_relationships(context: dict, restrict: bool = True) -> None:
+def get_character_relationships(context: dict, *, restrict: bool = True) -> None:
     """Get character relationships with faction and player input data.
 
     Retrieves and processes character relationships from both system-defined
@@ -125,7 +125,9 @@ def get_character_relationships(context: dict, restrict: bool = True) -> None:
         # Skip if character data not found
         if character_id not in character_data_by_id:
             logger.debug(
-                f"Character index {character_id} not found in data keys: {list(character_data_by_id.keys())[:5]}...",
+                "Character index %s not found in data keys: %s...",
+                character_id,
+                list(character_data_by_id.keys())[:5],
             )
             continue
 
@@ -396,6 +398,7 @@ def get_char_check(
     request,
     context: dict,
     character_id: int,
+    *,
     restrict_non_owners: bool = False,
     bypass_access_checks: bool = False,
 ) -> None:
@@ -432,7 +435,7 @@ def get_char_check(
     # Allow access if bypassing checks or user has character access permissions
     if bypass_access_checks or (request.user.is_authenticated and has_access_character(request, context)):
         # Load full character data and mark as having elevated access
-        get_char(context, character_id, True)
+        get_char(context, character_id, by_number=True)
         context["check"] = 1
         return
 

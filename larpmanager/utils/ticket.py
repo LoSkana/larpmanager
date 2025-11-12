@@ -36,6 +36,18 @@ from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.tasks import background_auto, my_send_mail
 
 
+class ClaudeNotAvailableError(ConnectionError):
+    """Raised when Claude AI service is not available."""
+
+
+class TicketNotFoundError(LookupError):
+    """Raised when a ticket cannot be found."""
+
+
+class ClaudeAnalysisError(RuntimeError):
+    """Raised when Claude AI analysis fails."""
+
+
 @background_auto(queue="analyze_ticket")
 def analyze_ticket_bgk(ticket_id) -> None:
     """Analyze a ticket and send result email to admins and maintainers.
@@ -44,13 +56,14 @@ def analyze_ticket_bgk(ticket_id) -> None:
         ticket_id: ID of the ticket to analyze
 
     Raises:
-        Exception: If Claude is not available or ticket not found
+        ClaudeNotAvailableError: If Claude is not available
+        TicketNotFoundError: If ticket not found
 
     """
     # Verify connection
     if not _test_connection():
         msg = "Claude not available!"
-        raise Exception(msg)
+        raise ClaudeNotAvailableError(msg)
 
     try:
         ticket = LarpManagerTicket.objects.get(id=ticket_id)
@@ -64,7 +77,7 @@ def analyze_ticket_bgk(ticket_id) -> None:
         _send_analysis_result_email(ticket)
     except ObjectDoesNotExist as err:
         msg = f"Ticket #{ticket_id} not found"
-        raise Exception(msg) from err
+        raise TicketNotFoundError(msg) from err
 
 
 def _analyze_ticket(ticket):
@@ -116,7 +129,7 @@ def _analyze_ticket(ticket):
 
     if result.returncode != 0:
         msg = f"Claude Error: {result.stderr} - {output} - {analysis_dir}"
-        raise Exception(msg)
+        raise ClaudeAnalysisError(msg)
 
     # Extract JSON from response
     json_match = re.search(r"\{.*\}", output, re.DOTALL)

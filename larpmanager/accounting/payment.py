@@ -20,17 +20,16 @@
 
 """Payment processing and management utilities."""
 
+from __future__ import annotations
+
 import logging
 import math
 import re
 from datetime import datetime
-from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
-from django.forms import Form
-from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.gateway import (
@@ -67,7 +66,6 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationQuestion,
 )
-from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import fetch_payment_details, update_payment_details
@@ -76,6 +74,11 @@ from larpmanager.utils.member import assign_badge
 
 if TYPE_CHECKING:
     from decimal import Decimal
+
+    from django.forms import Form
+    from django.http import HttpRequest
+
+    from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
 
@@ -181,7 +184,7 @@ def set_data_invoice(
         }
 
     # Apply special code prefix if configured for this association
-    if get_association_config(association_id, "payment_special_code", False):
+    if get_association_config(association_id, "payment_special_code", default_value=False):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
@@ -295,7 +298,7 @@ def update_invoice_gross_fee(
     payment_fee_percentage = get_payment_fee(association_id, payment_method.slug)
 
     if payment_fee_percentage is not None:
-        if get_association_config(association_id, "payment_fees_user", False):
+        if get_association_config(association_id, "payment_fees_user", default_value=False):
             amount = (amount * 100) / (100 - payment_fee_percentage)
             amount = round_up_to_two_decimals(amount)
 
@@ -354,7 +357,7 @@ def get_payment_form(
             invoice = PaymentInvoice.objects.get(key=invoice_key, status=PaymentStatus.CREATED)
         except Exception as e:
             # Invoice not found or invalid, will create new one
-            logger.debug(f"Invoice {invoice_key} not found or invalid: {e}")
+            logger.debug("Invoice %s not found or invalid: %s", invoice_key, e)
 
     # Create new invoice if existing one not found or invalid
     if not invoice:
@@ -379,7 +382,7 @@ def get_payment_form(
     context["invoice"] = invoice
 
     # Check if receipt is required for manual payments (applies to all payment types)
-    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", False)
+    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", default_value=False)
     context["require_receipt"] = require_receipt
 
     # Prepare gateway-specific forms based on selected payment method
@@ -541,7 +544,7 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
     accounting_transaction.association_id = invoice.association_id
 
     # Check if payment fees should be charged to user instead of organization
-    if get_association_config(invoice.association_id, "payment_fees_user", False):
+    if get_association_config(invoice.association_id, "payment_fees_user", default_value=False):
         accounting_transaction.user_burden = True
     accounting_transaction.save()
 

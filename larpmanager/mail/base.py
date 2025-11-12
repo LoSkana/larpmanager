@@ -327,7 +327,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     my_send_mail(email_subject, email_body, reg.member, reg.run)
 
 
-def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> None:
+def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     """Notify member when a trait is assigned to them.
 
     Deactivates related casting preferences and sends assignment notification email
@@ -335,7 +335,6 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
 
     Args:
         instance: AssignmentTrait instance that was saved
-        created: Whether this is a new assignment (True) or an update (False)
 
     Returns:
         None
@@ -346,10 +345,6 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
         - Sets language context to member's preferred language
 
     """
-    # Early return if no member or not a new assignment
-    if not instance.member or not created:
-        return
-
     # Deactivate related casting preferences for this member and run
     casting_preferences = Casting.objects.filter(member_id=instance.member_id, run_id=instance.run_id, typ=instance.typ)
     for casting in casting_preferences:
@@ -360,7 +355,7 @@ def send_trait_assignment_email(instance: AssignmentTrait, created: bool) -> Non
     activate(instance.member.language)
 
     # Skip email if character mail is disabled for this event
-    if get_event_config(instance.run.event_id, "mail_character", False):
+    if get_event_config(instance.run.event_id, "mail_character", default_value=False):
         return
 
     # Get trait and quest display information for the current run
@@ -466,7 +461,7 @@ def send_character_status_update_email(instance: Character) -> None:
 
     """
     # Early return if character approval feature is disabled for this event
-    if not get_event_config(instance.event_id, "user_character_approval", False):
+    if not get_event_config(instance.event_id, "user_character_approval", default_value=False):
         return
 
     # Only proceed if character exists in DB and has an assigned player

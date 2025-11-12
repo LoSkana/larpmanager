@@ -20,11 +20,12 @@
 
 """Member accounting utilities for managing membership fees and credits."""
 
-from datetime import datetime
-from typing import Any
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING, Any
 
 from dateutil.relativedelta import relativedelta
-from django.http import HttpRequest
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import (
@@ -44,6 +45,9 @@ from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
@@ -335,19 +339,21 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
     context["year"] = current_year
 
     # Get membership day configuration (default: January 1st)
-    membership_day = get_association_config(context["association_id"], "membership_day", "01-01", context)
+    membership_day = get_association_config(
+        context["association_id"], "membership_day", default_value="01-01", context=context
+    )
     if membership_day:
         # Get grace period in months (default: 0 months)
         membership_grace_period_months = int(
-            get_association_config(context["association_id"], "membership_grazing", "0", context),
+            get_association_config(context["association_id"], "membership_grazing", default_value="0", context=context),
         )
 
         # Build full date string with current year
         membership_day += f"-{current_year}"
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y")
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=timezone.utc)
 
         # Add grace period months to membership date
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = datetime.now() < membership_deadline_date
+        context["grazing"] = datetime.now(timezone.utc) < membership_deadline_date

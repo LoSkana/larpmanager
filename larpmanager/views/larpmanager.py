@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import random
 from datetime import date, datetime, timedelta
@@ -825,12 +826,11 @@ def about_us(request: HttpRequest):
     return render(request, "larpmanager/larpmanager/about_us.html", context)
 
 
-def get_lm_contact(request: HttpRequest, check_main_site=True):
+def get_lm_contact(request: HttpRequest):
     """Get base context for LarpManager contact pages.
 
     Args:
         request: Django HTTP request object
-        check_main_site: Whether to check if user is on main site (default True)
 
     Returns:
         dict: Base context with contact form and platform info
@@ -1165,7 +1165,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     )
 
     # Create test admin user with demo credentials
-    (demo_user, created) = User.objects.get_or_create(
+    (demo_user, _created) = User.objects.get_or_create(
         email=f"test{new_primary_key}@demo.it",
         username=f"test{new_primary_key}",
     )

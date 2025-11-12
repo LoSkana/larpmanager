@@ -246,7 +246,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     context["add_another"] = False
 
     # Process form submission and handle feature activation
-    if backend_edit(request, context, ExeFeatureForm, None, additional_field=None, is_association_based=True):
+    if backend_edit(request, context, ExeFeatureForm, None, additional_field=None, is_association=True):
         # Get newly activated features that have after-links
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features,
@@ -278,13 +278,13 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/exe/edit.html", context)
 
 
-def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature:
+def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) -> Feature:
     """Activate or deactivate an overall feature for an association.
 
     Args:
         request: The HTTP request object containing user and association context
         slug: The unique identifier of the feature to toggle
-        on: Whether to activate (True) or deactivate (False) the feature
+        to_active: Whether to activate (True) or deactivate (False) the feature
 
     Returns:
         Feature: The feature object that was toggled
@@ -307,7 +307,7 @@ def exe_features_go(request: HttpRequest, slug: str, on: bool = True) -> Feature
     association = Association.objects.get(pk=context["association_id"])
 
     # Handle feature activation
-    if on:
+    if to_active:
         if slug not in context["features"]:
             association.features.add(feature_id)
             message = _("Feature %(name)s activated") + "!"
@@ -355,14 +355,14 @@ def _exe_feature_after_link(feature: Feature) -> str:
 @login_required
 def exe_features_on(request: HttpRequest, slug: str) -> HttpResponseRedirect:
     """Enable feature and redirect to the appropriate page."""
-    feature = exe_features_go(request, slug, on=True)
+    feature = exe_features_go(request, slug, to_active=True)
     return redirect(_exe_feature_after_link(feature))
 
 
 @login_required
 def exe_features_off(request: HttpRequest, slug: str) -> HttpResponse:
     """Disable features and redirect to management page."""
-    exe_features_go(request, slug, on=False)
+    exe_features_go(request, slug, to_active=False)
     return redirect("manage")
 
 

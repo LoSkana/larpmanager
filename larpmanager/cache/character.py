@@ -18,8 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import os
 import shutil
+from pathlib import Path
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -48,14 +48,14 @@ def delete_all_in_path(path) -> None:
         path (str): Directory path to clean
 
     """
-    if os.path.exists(path):
+    path_obj = Path(path)
+    if path_obj.exists():
         # Remove all contents inside the path
-        for entry_name in os.listdir(path):
-            entry_path = os.path.join(path, entry_name)
-            if os.path.isfile(entry_path) or os.path.islink(entry_path):
-                os.remove(entry_path)
-            elif os.path.isdir(entry_path):
-                shutil.rmtree(entry_path)
+        for entry in path_obj.iterdir():
+            if entry.is_file() or entry.is_symlink():
+                entry.unlink()
+            elif entry.is_dir():
+                shutil.rmtree(entry)
 
 
 def get_event_cache_all_key(event_run) -> str:
@@ -129,7 +129,9 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
         context["assignments"][registration_character_rel.character.number] = registration_character_rel
 
     # Get event configuration for hiding uncasted characters
-    hide_uncasted_characters = get_event_config(context["event"].id, "gallery_hide_uncasted_characters", False, context)
+    hide_uncasted_characters = get_event_config(
+        context["event"].id, "gallery_hide_uncasted_characters", default_value=False, context=context
+    )
 
     # Get list of assigned character IDs for mirror filtering
     assigned_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
@@ -167,7 +169,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     return cache_result
 
 
-def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) -> None:
+def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = True) -> None:
     """Retrieve and cache writing fields for characters in an event.
 
     This function populates character data with their associated writing field
@@ -242,6 +244,7 @@ def get_event_cache_fields(context: dict, res: dict, only_visible: bool = True) 
 def get_character_element_fields(
     context: dict,
     character_id: int,
+    *,
     only_visible: bool = True,
 ) -> dict:
     """Get writing element fields for a character."""
@@ -259,6 +262,7 @@ def get_writing_element_fields(
     feature_name: str,
     applicable,
     element_id: int,
+    *,
     only_visible: bool = True,
 ) -> dict:
     """Get writing fields for a specific element with visibility filtering.
@@ -302,8 +306,7 @@ def get_writing_element_fields(
     # Retrieve text answers for visible questions
     # Query WritingAnswer model for text-based responses
     text_answers_query = WritingAnswer.objects.filter(element_id=element_id, question_id__in=visible_question_ids)
-    for question_id, answer_text in text_answers_query.values_list("question_id", "text"):
-        question_id_to_value[question_id] = answer_text
+    question_id_to_value.update(dict(text_answers_query.values_list("question_id", "text")))
 
     # Retrieve choice answers for visible questions
     # Group multiple choice options into lists per question

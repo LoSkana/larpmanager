@@ -108,9 +108,9 @@ def mail_error(subject, email_body, exception=None) -> None:
         Prints error details and sends error notification to admins
 
     """
-    logger.error(f"Mail error: {exception}")
-    logger.error(f"Subject: {subject}")
-    logger.error(f"Body: {email_body}")
+    logger.error("Mail error: %s", exception)
+    logger.error("Subject: %s", subject)
+    logger.error("Body: %s", email_body)
     if exception:
         error_notification_body = f"{traceback.format_exc()} <br /><br /> {subject} <br /><br /> {email_body}"
     else:
@@ -282,7 +282,7 @@ def my_send_simple_mail(
             event_smtp_host_user = get_event_config(
                 event.id,
                 "mail_server_host_user",
-                "",
+                default_value="",
                 context=cache_context,
                 bypass_cache=True,
             )
@@ -294,26 +294,30 @@ def my_send_simple_mail(
 
                 # Create custom SMTP connection for event
                 smtp_connection = get_connection(
-                    host=get_event_config(event.id, "mail_server_host", "", context=cache_context, bypass_cache=True),
-                    port=get_event_config(event.id, "mail_server_port", "", context=cache_context, bypass_cache=True),
+                    host=get_event_config(
+                        event.id, "mail_server_host", default_value="", context=cache_context, bypass_cache=True
+                    ),
+                    port=get_event_config(
+                        event.id, "mail_server_port", default_value="", context=cache_context, bypass_cache=True
+                    ),
                     username=get_event_config(
                         event.id,
                         "mail_server_host_user",
-                        "",
+                        default_value="",
                         context=cache_context,
                         bypass_cache=True,
                     ),
                     password=get_event_config(
                         event.id,
                         "mail_server_host_password",
-                        "",
+                        default_value="",
                         context=cache_context,
                         bypass_cache=True,
                     ),
                     use_tls=get_event_config(
                         event.id,
                         "mail_server_use_tls",
-                        False,
+                        default_value=False,
                         context=cache_context,
                         bypass_cache=True,
                     ),
@@ -325,11 +329,13 @@ def my_send_simple_mail(
             association = Association.objects.get(pk=association_id)
 
             # Add association main email to BCC if configured
-            if association.get_config("mail_cc", False, bypass_cache=True) and association.main_mail:
+            if association.get_config("mail_cc", default_value=False, bypass_cache=True) and association.main_mail:
                 bcc_recipients.append(association.main_mail)
 
             # Apply custom SMTP settings if configured (only if event settings not already applied)
-            association_smtp_host_user = association.get_config("mail_server_host_user", "", bypass_cache=True)
+            association_smtp_host_user = association.get_config(
+                "mail_server_host_user", default_value="", bypass_cache=True
+            )
 
             # Check if association has custom SMTP and event settings aren't active
             if association_smtp_host_user:
@@ -339,11 +345,13 @@ def my_send_simple_mail(
 
                     # Create custom SMTP connection for association
                     smtp_connection = get_connection(
-                        host=association.get_config("mail_server_host", "", bypass_cache=True),
-                        port=association.get_config("mail_server_port", "", bypass_cache=True),
-                        username=association.get_config("mail_server_host_user", "", bypass_cache=True),
-                        password=association.get_config("mail_server_host_password", "", bypass_cache=True),
-                        use_tls=association.get_config("mail_server_use_tls", False, bypass_cache=True),
+                        host=association.get_config("mail_server_host", default_value="", bypass_cache=True),
+                        port=association.get_config("mail_server_port", default_value="", bypass_cache=True),
+                        username=association.get_config("mail_server_host_user", default_value="", bypass_cache=True),
+                        password=association.get_config(
+                            "mail_server_host_password", default_value="", bypass_cache=True
+                        ),
+                        use_tls=association.get_config("mail_server_use_tls", default_value=False, bypass_cache=True),
                     )
             # Use standard LarpManager subdomain sender if no custom SMTP configured
             elif not event_settings_applied:
@@ -383,9 +391,9 @@ def my_send_simple_mail(
 
         # Log email details in debug mode for troubleshooting
         if conf_settings.DEBUG:
-            logger.info(f"Sending email to: {m_email}")
-            logger.info(f"Subject: {subj}")
-            logger.debug(f"Body: {body}")
+            logger.info("Sending email to: %s", m_email)
+            logger.info("Subject: %s", subj)
+            logger.debug("Body: %s", body)
 
     except Exception as email_sending_exception:
         # Log the error and re-raise for caller handling

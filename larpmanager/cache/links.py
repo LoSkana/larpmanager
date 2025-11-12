@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -136,7 +136,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
         if run.event.deleted:
             continue
 
-        roles = _determine_run_roles(run, is_admin, event_roles)
+        roles = _determine_run_roles(run, event_roles, is_admin=is_admin)
         if not roles:
             continue
 
@@ -148,7 +148,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "e": run.event.slug,
             "r": run.number,
             "s": str(run),
-            "k": (run.start if run.start else datetime.max.date()),
+            "k": (run.start if run.start else datetime.max.replace(tzinfo=timezone.utc).date()),
         }
 
         # Categorize as open or past run
@@ -158,7 +158,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
     return result
 
 
-def _determine_run_roles(run, is_admin: bool, event_roles_by_slug: dict) -> list:
+def _determine_run_roles(run, event_roles_by_slug: dict, *, is_admin: bool) -> list:
     """Determine user roles for a specific run."""
     if is_admin:
         return [1]

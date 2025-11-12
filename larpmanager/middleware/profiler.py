@@ -82,7 +82,7 @@ class ProfilerMiddleware:
                     )
                 except Exception as err:
                     # Fail silently in production, but log for debugging
-                    logger.warning(f"ProfilerMiddleware fail: {err}")
+                    logger.warning("ProfilerMiddleware fail: %s", err)
 
         return response
 

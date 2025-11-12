@@ -562,7 +562,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Handle filler ticket visibility based on event config and member status
         elif ticket.tier == TicketTier.FILLER:
-            filler_alway = get_event_config(event.id, "filler_always", False)
+            filler_alway = get_event_config(event.id, "filler_always", default_value=False)
             if filler_alway:
                 # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
@@ -755,12 +755,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields["pay_what"].label = get_event_config(
             self.params["run"].event_id,
             "pay_what_you_want_label",
-            _("Free donation"),
+            default_value=_("Free donation"),
         )
         self.fields["pay_what"].help_text = get_event_config(
             self.params["run"].event_id,
             "pay_what_you_want_descr",
-            _("Freely indicate the amount of your donation"),
+            default_value=_("Freely indicate the amount of your donation"),
         )
 
     def init_ticket(self, registration_section: Any) -> None:
@@ -981,7 +981,7 @@ class RegistrationCharacterRelForm(MyForm):
 
         # Check event config for each custom character field and mark for deletion if disabled
         for s in ["name", "pronoun", "song", "public", "private"]:
-            if not get_event_config(self.params["event"].id, "custom_character_" + s, False):
+            if not get_event_config(self.params["event"].id, "custom_character_" + s, default_value=False):
                 dl.append(s)
 
         # Set default custom_name from character if not already in initial data
@@ -1080,7 +1080,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
             # Skip ticket tiers that require configuration options not set
             if tier_value in ticket_configs:
-                if not get_event_config(event.id, f"ticket_{ticket_configs[tier_value]}", False):
+                if not get_event_config(event.id, f"ticket_{ticket_configs[tier_value]}", default_value=False):
                     continue
 
             # Add tier to available options if all checks pass
@@ -1308,8 +1308,8 @@ class PreRegistrationForm(forms.Form):
         if self.context.get("event") and get_association_config(
             self.context["event"].association_id,
             "pre_reg_preferences",
-            False,
-            self.context,
+            default_value=False,
+            context=self.context,
         ):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,

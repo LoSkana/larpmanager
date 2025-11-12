@@ -23,6 +23,7 @@ import math
 import os
 import random
 from datetime import date, datetime
+from pathlib import Path
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -205,7 +206,9 @@ def profile(request: HttpRequest):
 
     # Add vote configuration only if voting is enabled
     if "vote" in association_features:
-        context["vote_open"] = get_association_config(context["membership"].association_id, "vote_open", False, context)
+        context["vote_open"] = get_association_config(
+            context["membership"].association_id, "vote_open", default_value=False, context=context
+        )
 
     return render(request, "larpmanager/member/profile.html", context)
 
@@ -297,15 +300,12 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
     path = os.path.join(conf_settings.MEDIA_ROOT, path)
     im = Image.open(path)
 
-    # Rotate image based on direction parameter
-    if rotation_angle == 1:
-        out = im.rotate(90)  # Clockwise rotation
-    else:
-        out = im.rotate(-90)  # Counterclockwise rotation
+    # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
+    out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
     # Extract file extension and generate new unique filename
     ext = path.split(".")[-1]
-    n_path = f"{os.path.dirname(path)}/{request.user.member.pk}_{uuid4().hex}.{ext}"
+    n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
     # Save rotated image and update member profile
     out.save(n_path)
@@ -541,7 +541,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
 
     # Add LARP history if enabled in association configuration
     association_id = context["association_id"]
-    if get_association_config(association_id, "player_larp_history", False):
+    if get_association_config(association_id, "player_larp_history", default_value=False):
         # Fetch registrations with related run and event data
         context["regs"] = (
             Registration.objects.filter(
@@ -574,7 +574,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
         except Exception as e:
-            logger.debug(f"Social contact validation failed for member={member_id}: {e}")
+            logger.debug("Social contact validation failed for member=%s: %s", member_id, e)
 
     return render(request, "larpmanager/member/public.html", context)
 
@@ -810,10 +810,12 @@ def vote(request: HttpRequest) -> HttpResponse:
     # Retrieve voting configuration from association settings
     association_id = context["association_id"]
 
-    context["vote_open"] = get_association_config(association_id, "vote_open", False, context)
-    context["vote_cands"] = get_association_config(association_id, "vote_candidates", "", context).split(",")
-    context["vote_min"] = get_association_config(association_id, "vote_min", "1", context)
-    context["vote_max"] = get_association_config(association_id, "vote_max", "1", context)
+    context["vote_open"] = get_association_config(association_id, "vote_open", default_value=False, context=context)
+    context["vote_cands"] = get_association_config(
+        association_id, "vote_candidates", default_value="", context=context
+    ).split(",")
+    context["vote_min"] = get_association_config(association_id, "vote_min", default_value="1", context=context)
+    context["vote_max"] = get_association_config(association_id, "vote_max", default_value="1", context=context)
 
     # Process vote submission if POST request
     if request.method == "POST":
@@ -842,7 +844,7 @@ def vote(request: HttpRequest) -> HttpResponse:
             context["candidates"].append(Member.objects.get(pk=idx))
         except Exception as e:
             # Skip invalid candidate IDs
-            logger.debug(f"Invalid candidate ID or member not found: {mb}: {e}")
+            logger.debug("Invalid candidate ID or member not found: %s: %s", mb, e)
 
     # Randomize candidate order to prevent position bias
     random.shuffle(context["candidates"])

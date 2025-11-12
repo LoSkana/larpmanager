@@ -60,7 +60,7 @@ def login(page, live_server, name) -> None:
 
 
 def handle_error(page, e, test_name) -> NoReturn:
-    logger.error(f"Error on {test_name}: {page.url}\n")
+    logger.error("Error on %s: %s\n", test_name, page.url)
     logger.error(e)
 
     uid = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -142,7 +142,7 @@ def check_download(page, link: str) -> None:
                 return
 
             # if plain CSV, read with pandas
-            lower_name = str(os.path.basename(download.suggested_filename or download_path).lower())
+            lower_name = str(Path(download.suggested_filename or download_path).name.lower())
             if lower_name.endswith(".csv"):
                 df = pd.read_csv(io.BytesIO(content))
                 assert not df.empty, f"Empty csv {lower_name}"
@@ -151,7 +151,7 @@ def check_download(page, link: str) -> None:
             return
 
         except Exception as err:
-            logger.warning(f"Download attempt {current_try + 1}/{max_tries} failed: {err}")
+            logger.warning("Download attempt %s/%s failed: %s", current_try + 1, max_tries, err)
             current_try += 1
             if current_try >= max_tries:
                 raise

@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import os
+from pathlib import Path
 
 import magic
 from django.core.exceptions import ValidationError
@@ -79,7 +79,7 @@ class FileTypeValidator:
         detected_type = magic.from_buffer(fileobj.read(READ_SIZE), mime=True)
 
         # Extract file extension from filename
-        _root, extension = os.path.splitext(fileobj.name.lower())
+        extension = Path(fileobj.name.lower()).suffix
 
         # Reset file position to beginning for subsequent reads
         fileobj.seek(0)

@@ -141,8 +141,8 @@ def get_event_context(
 **Parameters:**
 - `request` - HTTP request object
 - `event_slug` - Event identifier from URL
-- `signup` - If True, validates user can sign up for the event
 - `feature_slug` - Optional feature slug to verify is enabled
+- `signup` - If True, validates user can sign up for the event
 - `include_status` - If True, includes detailed registration status
 
 **Returns:** Dictionary with event context and optional validation

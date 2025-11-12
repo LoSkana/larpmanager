@@ -140,10 +140,10 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Load event data and configuration settings
     get_event_cache_all(context)
     for config_name in ["user_character_approval", "writing_external_access"]:
-        context[config_name] = get_event_config(context["event"].id, config_name, False, context)
+        context[config_name] = get_event_config(context["event"].id, config_name, default_value=False, context=context)
 
     # Enable export functionality if configured
-    if get_event_config(context["event"].id, "show_export", False, context):
+    if get_event_config(context["event"].id, "show_export", default_value=False, context=context):
         context["export"] = "character"
 
     return writing_list(request, context, Character, "character")
@@ -601,7 +601,9 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
         el.options_list = el.options.order_by("order")
 
     # Set approval configuration and status flags for template rendering
-    context["approval"] = get_event_config(context["event"].id, "user_character_approval", False, context)
+    context["approval"] = get_event_config(
+        context["event"].id, "user_character_approval", default_value=False, context=context
+    )
     context["status"] = "user_character" in context["features"] and writing_type.lower() == "character"
 
     return render(request, "larpmanager/orga/characters/form.html", context)
@@ -638,7 +640,7 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
     check_writing_form_type(context, writing_type)
 
     # Process form submission using backend edit utility
-    if backend_edit(request, context, OrgaWritingQuestionForm, num, is_association_based=False):
+    if backend_edit(request, context, OrgaWritingQuestionForm, num, is_association=False):
         # Set permission suggestion for future operations
         set_suggestion(context, perm)
 
@@ -692,7 +694,7 @@ def orga_writing_form_order(
     event_slug: str,
     writing_type: str,
     num: int,
-    order: str,
+    order: int,
 ) -> HttpResponse:
     """Reorder writing form questions by swapping positions.
 
@@ -765,7 +767,7 @@ def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type
 def writing_option_edit(context: dict, option_number: int, request: HttpRequest, option_type: str) -> HttpResponse:
     """Edit a writing option and handle form submission with redirect logic."""
     # Process form submission and save changes
-    if backend_edit(request, context, OrgaWritingOptionForm, option_number, is_association_based=False):
+    if backend_edit(request, context, OrgaWritingOptionForm, option_number, is_association=False):
         redirect_target = "orga_writing_form_edit"
 
         # Check if user wants to continue adding more options
@@ -1180,6 +1182,7 @@ def _get_excel_form(
     request: HttpRequest,
     event_slug: str,
     element_type: str,
+    *,
     is_submit: bool = False,
 ) -> dict[str, Any]:
     """Prepare Excel form context for bulk editing operations.

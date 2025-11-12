@@ -28,11 +28,11 @@ def calculate_fiscal_code(member):
     if member.fiscal_code and member.fiscal_code.lower() == "n/a":
         return {}
 
-    primary_validation_result = _go(member, True)
+    primary_validation_result = _go(member, male=True)
 
     # If the first try didn't work, try if the user has to indicate the gender female
     if not primary_validation_result["correct_cf"]:
-        secondary_validation_result = _go(member, False)
+        secondary_validation_result = _go(member, male=False)
         if secondary_validation_result["correct_cf"]:
             return secondary_validation_result
 
@@ -93,7 +93,7 @@ def _extract_first_name(first_name: str) -> str:
     return (consonants + vowels + "XXX")[:3]
 
 
-def _extract_birth_date(birth_date: date | None, male: bool) -> str:
+def _extract_birth_date(birth_date: date | None, *, male: bool) -> str:
     """Extract birth date in fiscal code format.
 
     Args:
@@ -324,7 +324,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
     return chr((weighted_sum % 26) + ord("A"))
 
 
-def _go(member: Member, male: bool = True) -> dict[str, Any]:
+def _go(member: Member, *, male: bool = True) -> dict[str, Any]:
     """Generate Italian fiscal code for a member and validate against existing code.
 
     Implements the complete fiscal code algorithm including name/surname processing,
@@ -364,7 +364,7 @@ def _go(member: Member, male: bool = True) -> dict[str, Any]:
     # Extract fiscal code components using helper functions
     last_name_code = _extract_last_name(member.surname)
     first_name_code = _extract_first_name(member.name)
-    birth_date_code = _extract_birth_date(member.birth_date, male)
+    birth_date_code = _extract_birth_date(member.birth_date, male=male)
 
     # Process birth place and get municipality code
     cleaned_birth_place = _clean_birth_place(member.birth_place)

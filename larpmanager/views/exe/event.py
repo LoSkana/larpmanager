@@ -223,12 +223,14 @@ def exe_pre_registrations(request: HttpRequest) -> HttpResponse:
     context["seen"] = []
 
     # Get preference configuration for the association
-    context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences", False)
+    context["preferences"] = get_association_config(
+        context["association_id"], "pre_reg_preferences", default_value=False
+    )
 
     # Iterate through all non-template events for this association
     for event in Event.objects.filter(association_id=context["association_id"], template=False):
         # Skip events that don't have pre-registration active
-        if not get_event_config(event.id, "pre_register_active", False):
+        if not get_event_config(event.id, "pre_register_active", default_value=False):
             continue
 
         # Get pre-registration data for current event

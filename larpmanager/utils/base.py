@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -51,7 +52,7 @@ from larpmanager.utils.exceptions import (
 from larpmanager.utils.registration import check_signup, registration_status
 
 
-def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
+def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     """Build context with commonly used elements.
 
     Constructs a comprehensive context dictionary containing user information,
@@ -108,10 +109,12 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict:
         context["membership"] = get_user_membership(context["member"], context["association_id"])
 
         # Get association permissions for the user
-        get_index_association_permissions(context, request, context["association_id"], check=False)
+        get_index_association_permissions(context, request, context["association_id"], enforce_check=False)
 
         # Add user interface preferences and staff status
-        context["interface_collapse_sidebar"] = context["member"].get_config("interface_collapse_sidebar", False)
+        context["interface_collapse_sidebar"] = context["member"].get_config(
+            "interface_collapse_sidebar", default_value=False
+        )
         context["is_staff"] = request.user.is_staff
 
     # Set default names for token/credit system if feature enabled
@@ -320,17 +323,19 @@ def get_event(request: HttpRequest, event_slug: str, run_number=None):
 
         context["show_available_chars"] = _("Show available characters")
 
-        return context
     except ObjectDoesNotExist as error:
         msg = "Event does not exist"
         raise Http404(msg) from error
+    else:
+        return context
 
 
 def get_event_context(
     request,
     event_slug: str,
-    signup: bool = False,
     feature_slug: str | None = None,
+    *,
+    signup: bool = False,
     include_status: bool = False,
 ) -> dict:
     """Get comprehensive event run context with permissions and features.
@@ -408,7 +413,9 @@ def prepare_run(context) -> None:
     """
     run_configuration = get_cache_config_run(context["run"])
 
-    if "staff" in context or not get_event_config(context["event"].id, "writing_field_visibility", False, context):
+    if "staff" in context or not get_event_config(
+        context["event"].id, "writing_field_visibility", default_value=False, context=context
+    ):
         context["show_all"] = "1"
 
         for writing_element in ["character", "faction", "quest", "trait"]:

@@ -1,5 +1,6 @@
 import os
 from difflib import SequenceMatcher
+from pathlib import Path
 from typing import Any
 
 import deepl
@@ -36,7 +37,7 @@ def _save_index(index_dir: str, schema) -> object:
     """
     # Create directory if it doesn't exist and return new index
     if not os.path.exists(index_dir):
-        os.makedirs(index_dir, exist_ok=True)
+        Path(index_dir).mkdir(parents=True, exist_ok=True)
         return create_in(index_dir, schema, "MAIN")
 
     # Open existing index directory

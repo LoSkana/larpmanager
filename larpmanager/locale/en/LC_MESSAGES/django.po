@@ -3252,12 +3252,12 @@ msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
 
 msgid ""
-"Optional – Additional information about the option, displayed below the "
+"Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
 
 msgid ""
-"Optional – Maximum number of times it can be selected across all characters "
+"Optional - Maximum number of times it can be selected across all characters "
 "(0 = unlimited)"
 msgstr ""
 
@@ -3324,12 +3324,12 @@ msgid "Price"
 msgstr ""
 
 msgid ""
-"Optional – Amount added to the registration fee if selected (0 = no extra "
+"Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
 
 msgid ""
-"Optional – Maximum number of times it can be selected across all "
+"Optional - Maximum number of times it can be selected across all "
 "registrations (0 = unlimited)"
 msgstr ""
 
@@ -3818,7 +3818,7 @@ msgid "Ticket name (keep it short)"
 msgstr ""
 
 msgid ""
-"Optional – Maximum number of times it can be requested across all signups (0 "
+"Optional - Maximum number of times it can be requested across all signups (0 "
 "= unlimited)"
 msgstr ""
 
@@ -3826,7 +3826,7 @@ msgid "Is it selectable by participants"
 msgstr ""
 
 msgid ""
-"Optional – Casting priority granted by this option (e.g., 1 = low, 5 = "
+"Optional - Casting priority granted by this option (e.g., 1 = low, 5 = "
 "medium, 25 = high)"
 msgstr ""
 
@@ -8820,7 +8820,7 @@ msgstr ""
 msgid "The question visibility to participants, allowed values are"
 msgstr ""
 
-msgid "Optional – Maximum number of times it can be selected (0 = unlimited)"
+msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""
 
 msgid "Optional - Other options as requirements, comma-separated"

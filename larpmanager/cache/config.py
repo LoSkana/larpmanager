@@ -230,7 +230,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
     return foreign_key_field_map.get(model_class_name)
 
 
-def get_element_config(element, config_name: str, default_value, bypass_cache: bool = False):
+def get_element_config(element, config_name: str, default_value, *, bypass_cache: bool = False):
     """Get configuration value with type conversion and default fallback.
 
     Retrieves a configuration value from an element's aux_configs, handling
@@ -267,7 +267,7 @@ def get_element_config(element, config_name: str, default_value, bypass_cache: b
     return evaluate_config(element.aux_configs, config_name, default_value)
 
 
-def _get_cached_config(element_id, element_type, config_name, default_value=None, context=None, bypass_cache=False):
+def _get_cached_config(element_id, element_type, config_name, *, default_value=None, context=None, bypass_cache=False):
     """Get cached configuration for any element type."""
     cache_key = f"{element_type}_configs"
 
@@ -288,20 +288,30 @@ def _get_cached_config(element_id, element_type, config_name, default_value=None
     return evaluate_config(element_configs, config_name, default_value)
 
 
-def get_association_config(association_id, config_name, default_value=None, context=None, bypass_cache=False):
+def get_association_config(association_id, config_name, *, default_value=None, context=None, bypass_cache=False):
     """Get configuration value for association."""
-    return _get_cached_config(association_id, "association", config_name, default_value, context, bypass_cache)
+    return _get_cached_config(
+        association_id,
+        "association",
+        config_name,
+        default_value=default_value,
+        context=context,
+        bypass_cache=bypass_cache,
+    )
 
 
 def get_event_config(
     event_id: int,
     config_name: str,
+    *,
     default_value: Any = None,
     context: dict[str, Any] | None = None,
     bypass_cache: bool = False,
 ) -> Any:
     """Get event configuration value from cache or database."""
-    return _get_cached_config(event_id, "event", config_name, default_value, context, bypass_cache)
+    return _get_cached_config(
+        event_id, "event", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
+    )
 
 
 def evaluate_config(configurations: dict, configuration_name: str, default_value: any) -> any:

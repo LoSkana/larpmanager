@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import ast
 import json
 from collections import defaultdict
@@ -136,7 +138,7 @@ def _apply_modifier_cost(
 def get_free_abilities(char: Character) -> list:
     """Return the list of free abilities for a character."""
     config_name = _free_abilities_cache_key()
-    config_value = char.get_config(config_name, "[]")
+    config_value = char.get_config(config_name, default_value="[]")
     return ast.literal_eval(config_value)
 
 
@@ -161,7 +163,7 @@ def calculate_character_experience_points(character) -> None:
     if "px" not in get_event_features(character.event_id):
         return
 
-    starting_experience_points = get_event_config(character.event_id, "px_start", 0)
+    starting_experience_points = get_event_config(character.event_id, "px_start", default_value=0)
 
     _handle_free_abilities(character)
 
@@ -432,7 +434,7 @@ def apply_rules_computed(char) -> None:
         field_id = rule.field.id
         computed_field_values[field_id] = operations.get(
             rule.operation,
-            lambda current_value, rule_amount: current_value,
+            lambda current_value, _rule_amount: current_value,
         )(computed_field_values[field_id], rule.amount)
 
     # Save computed values as WritingAnswer objects with clean formatting

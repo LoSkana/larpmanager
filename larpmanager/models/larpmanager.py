@@ -141,7 +141,7 @@ class LarpManagerShowcase(BaseModel):
         """
         return self.text[:100]
 
-    def as_dict(self, include_many_to_many: bool = True) -> dict:
+    def as_dict(self, *, many_to_many: bool = True) -> dict:
         """Convert model instance to dictionary with image URL.
 
         Converts the model instance to a dictionary representation, including
@@ -149,7 +149,7 @@ class LarpManagerShowcase(BaseModel):
         image URL if the instance has a reduced image available.
 
         Args:
-            include_many_to_many: Whether to include many-to-many relationships in the
+            many_to_many: Whether to include many-to-many relationships in the
                          resulting dictionary. Defaults to True.
 
         Returns:
@@ -158,7 +158,7 @@ class LarpManagerShowcase(BaseModel):
 
         """
         # Get base dictionary representation from parent class
-        result_dict = super().as_dict(include_many_to_many)
+        result_dict = super().as_dict(many_to_many=many_to_many)
 
         # Add reduced image URL if available
         if self.reduced:

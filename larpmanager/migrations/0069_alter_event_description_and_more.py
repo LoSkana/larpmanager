@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 blank=True,
                 default="",
-                help_text="Optional – Additional information about the option, displayed below the question",
+                help_text="Optional - Additional information about the option, displayed below the question",
                 max_length=500,
                 verbose_name="Description",
             ),
@@ -84,7 +84,7 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 blank=True,
                 default="",
-                help_text="Optional – Additional information about the option, displayed below the question",
+                help_text="Optional - Additional information about the option, displayed below the question",
                 max_length=500,
                 verbose_name="Description",
             ),

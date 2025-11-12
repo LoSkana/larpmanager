@@ -84,6 +84,7 @@ def full_event_edit(
     request: HttpRequest,
     event: Event,
     run: Run,
+    *,
     is_executive: bool = False,
 ) -> HttpResponse:
     """Comprehensive event editing with validation.
@@ -291,7 +292,7 @@ def orga_features(request: HttpRequest, event_slug: str):
     """
     context = check_event_context(request, event_slug, "orga_features")
     context["add_another"] = False
-    if backend_edit(request, context, OrgaFeatureForm, None, additional_field=None, is_association_based=False):
+    if backend_edit(request, context, OrgaFeatureForm, None, additional_field=None, is_association=False):
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features,
             after_link__isnull=False,
@@ -313,14 +314,14 @@ def orga_features(request: HttpRequest, event_slug: str):
     return render(request, "larpmanager/orga/edit.html", context)
 
 
-def orga_features_go(request: HttpRequest, context: dict, slug: str, on: bool = True) -> Feature:
+def orga_features_go(request: HttpRequest, context: dict, slug: str, *, to_active: bool = True) -> Feature:
     """Toggle a feature for an event.
 
     Args:
         request: The HTTP request object
         context: Context dictionary containing event and feature information
         slug: The feature slug to toggle
-        on: Whether to activate (True) or deactivate (False) the feature
+        to_active: Whether to activate (True) or deactivate (False) the feature
 
     Returns:
         The feature object that was toggled
@@ -345,7 +346,7 @@ def orga_features_go(request: HttpRequest, context: dict, slug: str, on: bool = 
     clear_run_cache_and_media(context["run"])
 
     # Handle feature activation/deactivation logic
-    if on:
+    if to_active:
         if target_feature_id not in current_event_feature_ids:
             context["event"].features.add(target_feature_id)
             message = _("Feature %(name)s activated") + "!"
@@ -403,7 +404,7 @@ def orga_features_on(
     context = check_event_context(request, event_slug, "orga_features")
 
     # Enable the feature
-    feature = orga_features_go(request, context, slug, on=True)
+    feature = orga_features_go(request, context, slug, to_active=True)
 
     # Redirect to appropriate page
     return redirect(_orga_feature_after_link(feature, event_slug))
@@ -413,7 +414,7 @@ def orga_features_on(
 def orga_features_off(request: HttpRequest, event_slug: str, slug: str) -> HttpResponse:
     """Disable a feature for an event."""
     context = check_event_context(request, event_slug, "orga_features")
-    orga_features_go(request, context, slug, on=False)
+    orga_features_go(request, context, slug, to_active=False)
     return redirect("manage", event_slug=event_slug)
 
 
@@ -575,7 +576,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
 
             except Exception as exp:
                 # Log the full traceback and show error to user
-                logger.exception(f"Upload error: {exp}")
+                logger.exception("Upload error: %s", exp)
                 logger.exception(traceback.format_exc())
                 messages.error(request, _("Unknow error on upload") + f": {exp}")
 

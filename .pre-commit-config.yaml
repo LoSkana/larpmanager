@@ -47,7 +47,7 @@ repos:
     rev: v0.12.11
     hooks:
       - id: ruff
-        args: [--fix]
+        args: [--fix, --unsafe-fixes]
         exclude: ^(larpmanager/tests/|larpmanager/migrations/|refactor/|scripts/)
       - id: ruff-format
         exclude: ^(larpmanager/tests/|larpmanager/migrations/|refactor/|scripts/)

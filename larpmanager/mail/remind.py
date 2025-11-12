@@ -25,6 +25,7 @@ from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
+from larpmanager.models.registration import Registration
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.tasks import my_send_mail
 
@@ -118,10 +119,10 @@ def remember_pay(registration) -> None:
     """
     activate(registration.member.language)
 
-    is_provisional_registration = is_reg_provisional(registration)
+    is_provisional = is_reg_provisional(registration)
     email_context = {"event": registration.run}
 
-    if is_provisional_registration:
+    if is_provisional:
         email_subject = hdr(registration.run.event) + _("Confirm registration to %(event)s") % email_context
     else:
         email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
@@ -129,12 +130,12 @@ def remember_pay(registration) -> None:
     email_body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_PAY,
-    ) or get_remember_pay_body(email_context, is_provisional_registration, registration)
+    ) or get_remember_pay_body(email_context, registration, is_provisional=is_provisional)
 
     my_send_mail(email_subject, email_body, registration.member, registration.run)
 
 
-def get_remember_pay_body(context: dict, is_provisional_registration: bool, registration) -> str:
+def get_remember_pay_body(context: dict, registration: Registration, *, is_provisional: bool) -> str:
     """Generate default payment reminder email body text.
 
     Creates an HTML-formatted email body for payment reminders, handling both
@@ -143,15 +144,15 @@ def get_remember_pay_body(context: dict, is_provisional_registration: bool, regi
 
     Args:
         context: Email context dictionary containing event information
-        is_provisional_registration: Whether the registration is provisional or confirmed
         registration: Registration instance containing payment details and run information
+        is_provisional: Whether the registration is provisional or confirmed
 
     Returns:
         HTML formatted string containing the complete email body for payment reminder
 
     Example:
         >>> context = {'event': 'Summer LARP 2024'}
-        >>> body = get_remember_pay_body(context, False, registration_obj)
+        >>> body = get_remember_pay_body(context, registration, is_provisional=True)
         >>> print(body)  # Returns formatted HTML email body
 
     """
@@ -163,7 +164,7 @@ def get_remember_pay_body(context: dict, is_provisional_registration: bool, regi
     payment_url = f"{base_payment_url}/{registration.run.event.slug}/{registration.id}"
 
     # Generate appropriate greeting based on registration type
-    if is_provisional_registration:
+    if is_provisional:
         intro_message = _("Hello! We are reaching out regarding your provisional registration for <b>%(event)s</b>")
     else:
         intro_message = _("Hello! We are reaching out regarding your registration for <b>%(event)s</b>")

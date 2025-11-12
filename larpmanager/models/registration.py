@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from typing import Any
 
 from django.db import models
@@ -97,14 +99,14 @@ class RegistrationTicket(BaseModel):
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Optional – Maximum number of times it can be requested across all signups (0 = unlimited)"),
+        help_text=_("Optional - Maximum number of times it can be requested across all signups (0 = unlimited)"),
     )
 
     visible = models.BooleanField(default=True, help_text=_("Is it selectable by participants") + "?")
 
     casting_priority = models.IntegerField(
         default=1,
-        help_text=_("Optional – Casting priority granted by this option (e.g., 1 = low, 5 = medium, 25 = high)"),
+        help_text=_("Optional - Casting priority granted by this option (e.g., 1 = low, 5 = medium, 25 = high)"),
     )
 
     giftable = models.BooleanField(

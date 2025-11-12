@@ -17,14 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import os
 import re
 from collections import OrderedDict
-from collections.abc import Generator
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pycountry
 from dateutil.relativedelta import relativedelta
@@ -66,6 +66,9 @@ from larpmanager.models.member import (
 from larpmanager.utils.common import get_recaptcha_secrets
 from larpmanager.utils.tasks import my_send_mail
 from larpmanager.utils.validators import FileTypeValidator
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -197,7 +200,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         """Validate username field and check for duplicate email addresses."""
         # Extract and normalize username input
         data = self.cleaned_data["username"].strip()
-        logger.debug(f"Validating username/email: {data}")
+        logger.debug("Validating username/email: %s", data)
 
         # Prevent duplicate email registrations
         if User.objects.filter(email__iexact=data).exists():
@@ -205,7 +208,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             raise ValidationError(msg)
         return data
 
-    def save(self, commit: bool = True) -> User:
+    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002
         """Save user and update associated member profile with form data.
 
         Args:
@@ -308,7 +311,7 @@ class MyPasswordResetForm(PasswordResetForm):
                 pass
 
         # Log password reset attempt for debugging
-        logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
+        logger.debug("Password reset context: domain=%s, uid=%s", context.get("domain"), context.get("uid"))
 
         # Send the email using custom mail function
         my_send_mail(subject, body, to_email, association)
@@ -447,21 +450,18 @@ class ResidenceField(forms.MultiValueField):
         if not value:
             return self.compress([None] * len(self.fields))
 
-        try:
-            cleaned_data = []
-            # Process each field value individually
-            for i, field in enumerate(self.fields):
-                # Special handling for second field (index 1) - allow empty strings
-                if i == 1 and (value[i] in (None, "")):
-                    cleaned_data.append("")
-                else:
-                    # Apply field-specific validation and cleaning
-                    cleaned_data.append(field.clean(value[i]))
+        cleaned_data = []
+        # Process each field value individually
+        for i, field in enumerate(self.fields):
+            # Special handling for second field (index 1) - allow empty strings
+            if i == 1 and (value[i] in (None, "")):
+                cleaned_data.append("")
+            else:
+                # Apply field-specific validation and cleaning
+                cleaned_data.append(field.clean(value[i]))
 
-            # Compress cleaned data into final format
-            return self.compress(cleaned_data)
-        except forms.ValidationError:
-            raise
+        # Compress cleaned data into final format
+        return self.compress(cleaned_data)
 
 
 class BaseProfileForm(MyForm):
@@ -587,7 +587,9 @@ class ProfileForm(BaseProfileForm):
 
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            vote_cands = get_association_config(self.params["association_id"], "vote_candidates", "").split(",")
+            vote_cands = get_association_config(
+                self.params["association_id"], "vote_candidates", default_value=""
+            ).split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
@@ -621,7 +623,7 @@ class ProfileForm(BaseProfileForm):
     def clean_birth_date(self):
         """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]
-        logger.debug(f"Validating birth date: {data}")
+        logger.debug("Validating birth date: %s", data)
 
         # Use cached association
         association_id = self.params["association_id"]
@@ -630,16 +632,16 @@ class ProfileForm(BaseProfileForm):
         features = self.params["features"]
 
         if "membership" in features:
-            min_age = get_association_config(association_id, "membership_age", "")
+            min_age = get_association_config(association_id, "membership_age", default_value="")
             if min_age:
                 try:
                     min_age = int(min_age)
-                    logger.debug(f"Checking minimum age {min_age} against birth date {data}")
+                    logger.debug("Checking minimum age %s against birth date %s", min_age, data)
                     age_diff = relativedelta(datetime.now(), data).years
                     if age_diff < min_age:
                         raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
                 except (ValueError, TypeError) as e:
-                    logger.warning(f"Invalid membership_age config: {min_age}, error: {e}")
+                    logger.warning("Invalid membership_age config: %s, error: %s", min_age, e)
 
         return data
 
@@ -653,7 +655,7 @@ class ProfileForm(BaseProfileForm):
 
         return cleaned_data
 
-    def save(self, commit: bool = True) -> BaseModel:
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save form instance with residence address if provided."""
         instance = super().save(commit=False)
 
@@ -1027,7 +1029,7 @@ class ExeProfileForm(MyForm):
 
         return available_fields
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> Member:  # noqa: FBT001, FBT002
         """Save form data and update member field configurations.
 
         Args:

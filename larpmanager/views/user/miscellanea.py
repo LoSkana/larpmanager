@@ -274,7 +274,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
 
         # Set completion check limit to 365 days ago
         limit = datetime.now() - timedelta(days=365)
-        logger.debug(f"Workshop completion limit date: {limit}")
+        logger.debug("Workshop completion limit date: %s", limit)
 
         # Check if user has completed this workshop within the time limit
         dt["done"] = (

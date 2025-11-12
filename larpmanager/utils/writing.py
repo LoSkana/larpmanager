@@ -218,9 +218,9 @@ def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model
 
     # Render content based on element type (traits/quests vs characters)
     if typ in [Trait, Quest]:
-        html_content += show_trait(context, getattr(writing_element, attribute_type), context["run"], 1)
+        html_content += show_trait(context, getattr(writing_element, attribute_type), context["run"], include_tooltip=1)
     else:
-        html_content += show_char(context, getattr(writing_element, attribute_type), context["run"], 1)
+        html_content += show_char(context, getattr(writing_element, attribute_type), context["run"], include_tooltip=1)
 
     return JsonResponse({"k": 1, "v": html_content})
 
@@ -507,19 +507,25 @@ def _prepare_writing_list(context, request: HttpRequest) -> None:
         )
         context["name_que_id"] = name_question.values_list("id", flat=True)[0]
     except Exception as e:
-        logger.debug(f"Name question not found for writing type {context['writing_typ']}: {e}")
+        logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()
-    context["default_fields"] = context["member"].get_config(f"open_{model_name}_{context['event'].id}", "[]")
+    context["default_fields"] = context["member"].get_config(
+        f"open_{model_name}_{context['event'].id}", default_value="[]"
+    )
     if context["default_fields"] == "[]" and model_name in context["writing_fields"]:
         question_field_list = [
             f"q_{question_id}" for name, question_id in context["writing_fields"][model_name]["ids"].items()
         ]
         context["default_fields"] = json.dumps(question_field_list)
 
-    context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", False, context)
+    context["auto_save"] = not get_event_config(
+        context["event"].id, "writing_disable_auto", default_value=False, context=context
+    )
 
-    context["writing_unimportant"] = get_event_config(context["event"].id, "writing_unimportant", False, context)
+    context["writing_unimportant"] = get_event_config(
+        context["event"].id, "writing_unimportant", default_value=False, context=context
+    )
 
 
 def writing_list_plot(context) -> None:

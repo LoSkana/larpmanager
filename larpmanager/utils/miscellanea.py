@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -24,13 +26,14 @@ import random
 import shutil
 import zipfile
 from io import BytesIO
+from pathlib import Path
+from typing import TYPE_CHECKING
 from uuid import uuid4
 from zipfile import ZipFile
 
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
 from django.db import models
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from PIL import Image as PILImage
 from PIL import ImageOps
@@ -38,6 +41,9 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -62,12 +68,16 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
 
     """
     # Extract directory path, removing filename component
-    directory_path = os.path.dirname(name)
+    path_obj = Path(name)
+    directory_path = str(path_obj.parent) if path_obj.parent != Path() else ""
 
     # Check if this directory path is already cached
     if directory_path not in cache_subs:
         # Determine parent directory for hierarchy creation
-        parent_directory_path = os.path.dirname(directory_path)
+        parent_path_obj = Path(directory_path) if directory_path else Path()
+        parent_directory_path = (
+            str(parent_path_obj.parent) if directory_path and parent_path_obj.parent != Path() else ""
+        )
         if not parent_directory_path or parent_directory_path == "":
             parent_album = main
         else:
@@ -75,7 +85,7 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
 
         # Search for existing sub-album with matching name
         existing_album = None
-        album_name = os.path.basename(directory_path)
+        album_name = path_obj.parent.name if path_obj.parent != Path() else ""
 
         # Query existing sub-albums to avoid duplicates
         for sub_album in parent_album.sub_albums.all():
@@ -121,7 +131,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     """
     # Check if file already exists in album to avoid duplicates
-    upload_name = os.path.basename(name)
+    upload_name = Path(name).name
     for existing_upload in alb.uploads.all():
         if existing_upload.name == upload_name:
             return
@@ -159,14 +169,14 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     for directory_id in parent_directories:
         destination_path = os.path.join(destination_path, str(directory_id))
         if not os.path.exists(destination_path):
-            os.makedirs(destination_path)
+            Path(destination_path).mkdir(parents=True, exist_ok=True)
 
     # Complete the file path with unique filename
     destination_path = os.path.join(destination_path, unique_filename)
-    logger.debug(f"Uploading album image to: {destination_path}")
+    logger.debug("Uploading album image to: %s", destination_path)
 
     # Move file from extraction path to final destination
-    os.rename(os.path.join(o_path, name), destination_path)
+    Path(o_path, name).rename(destination_path)
 
     # Store file path and extract image dimensions
     album_image.original = destination_path
@@ -258,12 +268,14 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
         template_context[config_key] = get_association_config(
             context["association_id"],
             config_key,
-            None,
-            template_context,
+            default_value=None,
+            context=template_context,
         )
 
     # Award badge to user if configured for this association
-    badge_code = get_association_config(context["association_id"], "centauri_badge", None, template_context)
+    badge_code = get_association_config(
+        context["association_id"], "centauri_badge", default_value=None, context=template_context
+    )
     if badge_code:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(context["member"])
@@ -314,7 +326,9 @@ def get_warehouse_optionals(context, default_columns) -> None:
     optionals = {}
     has_active_optional = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_association_config(context["association_id"], f"warehouse_{field}", False, context)
+        optionals[field] = get_association_config(
+            context["association_id"], f"warehouse_{field}", default_value=False, context=context
+        )
         if optionals[field]:
             has_active_optional = 1
     context["optionals"] = optionals
@@ -396,7 +410,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     output_buffer.seek(0)
 
     # Replace the original photo with the rotated version
-    original_filename = os.path.basename(photo_file.name) or photo_file.name
+    original_filename = Path(photo_file.name).name or photo_file.name
     instance.photo = ContentFile(output_buffer.read(), name=original_filename)
 
 
@@ -415,7 +429,7 @@ def _get_extension(uploaded_file, image) -> str:
 
     """
     # Extract file extension and normalize to lowercase
-    file_extension = os.path.splitext(uploaded_file.name)[1].lower()
+    file_extension = Path(uploaded_file.name).suffix.lower()
 
     # Get image format, defaulting to empty string if None
     image_format = (image.format or "").upper()
@@ -462,7 +476,7 @@ def _check_new(file_field, instance, sender) -> bool:
                     return True
         except Exception as e:
             # Silently handle any database or attribute errors
-            logger.debug(f"Error checking file field for instance pk={instance.pk}: {e}")
+            logger.debug("Error checking file field for instance pk=%s: %s", instance.pk, e)
 
     # Default to treating as new file upload
     return False

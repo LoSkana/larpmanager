@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from django.contrib import messages
@@ -370,8 +370,12 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     def _assigned_updated(assignment_item: Any) -> Any:
         """Extract assignment update timestamp for sorting."""
         if getattr(assignment_item, "assigned", None):
-            return assignment_item.assigned.get("updated") or getattr(assignment_item, "updated", None) or datetime.min
-        return datetime.min
+            return (
+                assignment_item.assigned.get("updated")
+                or getattr(assignment_item, "updated", None)
+                or datetime.min.replace(tzinfo=timezone.utc)
+            )
+        return datetime.min.replace(tzinfo=timezone.utc)
 
     # Sort items: assigned items first, then by recent updates, name, and ID
     ordered_items = sorted(
@@ -462,7 +466,7 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
     # Check if warehouse quantities have been committed for this event
     # This flag controls UI elements for the commit functionality
-    context["warehouse_committed"] = context["event"].get_config("warehouse_committed", False)
+    context["warehouse_committed"] = context["event"].get_config("warehouse_committed", default_value=False)
 
     # Iterate through all warehouse item assignments for this event
     # Group items by their assigned areas for organized manifest display
@@ -662,7 +666,7 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
     # Prevent re-committing quantities - this is a one-time operation per event
-    if context["event"].get_config("warehouse_committed", False):
+    if context["event"].get_config("warehouse_committed", default_value=False):
         messages.warning(request, _("Warehouse quantities already committed for this event"))
         return redirect("orga_warehouse_manifest", event_slug=event_slug)
 
@@ -748,7 +752,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
     # Prevent re-committing quantities - this is a one-time destructive operation
-    if context["event"].get_config("warehouse_committed", False):
+    if context["event"].get_config("warehouse_committed", default_value=False):
         messages.warning(request, _("Warehouse quantities already committed for this event"))
         return redirect("orga_warehouse_manifest", event_slug=event_slug)
 

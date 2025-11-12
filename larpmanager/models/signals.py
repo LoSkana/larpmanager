@@ -249,6 +249,8 @@ from larpmanager.utils.writing import replace_character_names_before_save
 
 log = logging.getLogger(__name__)
 
+# ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
+
 
 # Generic signal handlers (no specific sender)
 @receiver(pre_save)
@@ -351,7 +353,8 @@ def post_save_accounting_item_expense(
     **kwargs: Any,
 ) -> None:
     """Send expense notification and update credit balance."""
-    send_expense_notification_email(instance, created)
+    if created:
+        send_expense_notification_email(instance)
     update_credit_on_expense_save(instance)
 
 
@@ -452,10 +455,10 @@ def post_save_assignment_trait(
     clear_run_cache_and_media(instance.run)
 
     # Notify relevant users about trait assignment
-    send_trait_assignment_email(instance, created)
-
-    # Remove outdated PDF files if necessary
-    cleanup_pdfs_on_trait_assignment(instance, created)
+    if created and instance.member:
+        send_trait_assignment_email(instance)
+        # Remove outdated PDF files if necessary
+        cleanup_pdfs_on_trait_assignment(instance)
 
 
 @receiver(post_delete, sender=AssignmentTrait)
@@ -704,7 +707,8 @@ def post_save_collection_activation_email(
     **kwargs: Any,
 ) -> None:
     """Send collection activation email after save signal."""
-    send_collection_activation_email(instance, created)
+    if created:
+        send_collection_activation_email(instance)
 
 
 # DeliveryPx signals
@@ -1320,7 +1324,9 @@ def post_save_registration_character_rel_savereg(
 ) -> None:
     """Reset character cache and send assignment email notification."""
     reset_character_registration_cache(instance)
-    send_character_assignment_email(instance, created)
+
+    if created:
+        send_character_assignment_email(instance)
 
 
 @receiver(post_delete, sender=RegistrationCharacterRel)
@@ -1524,7 +1530,7 @@ def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> 
 @receiver(post_save, sender=User)
 def post_save_user_profile(sender: type, instance: User, created: bool, **kwargs: Any) -> None:
     """Create member profile when user is created."""
-    create_member_profile_for_user(instance, created)
+    create_member_profile_for_user(instance, is_newly_created=created)
 
 
 # WarehouseItem signals
@@ -1625,4 +1631,4 @@ def handle_request_exception(sender, request, **kwargs) -> None:
         create_error_ticket(request)
     except Exception as e:
         # Don't let ticket creation failure break the error handling
-        log.debug(f"Failed to create error ticket: {e}")
+        log.debug("Failed to create error ticket: %s", e)

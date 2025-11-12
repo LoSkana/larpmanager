@@ -597,14 +597,14 @@ class Command(BaseCommand):
 
         """
         # Check if reminders should be sent during holidays
-        send_reminders_during_holidays = association.get_config("remind_holidays", True)
+        send_reminders_during_holidays = association.get_config("remind_holidays", default_value=True)
 
         # Skip processing if it's a holiday and holiday reminders are disabled
         if not send_reminders_during_holidays and check_holiday():
             return
 
         # Get the number of days before event to send reminders
-        reminder_days_before_event = int(association.get_config("remind_days", 5))
+        reminder_days_before_event = int(association.get_config("remind_days", default_value=5))
 
         # Get all registrations for this association
         registrations_queryset = get_regs(association)
@@ -779,7 +779,7 @@ class Command(BaseCommand):
             return
 
         # Get deadline interval configuration for the association
-        deadline_interval_days = int(get_association_config(run.event.association_id, "deadline_days", 0))
+        deadline_interval_days = int(get_association_config(run.event.association_id, "deadline_days", default_value=0))
         if not deadline_interval_days:
             return
 

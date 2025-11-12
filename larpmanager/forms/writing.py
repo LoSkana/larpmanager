@@ -146,7 +146,7 @@ class PlayerRelationshipForm(MyForm):
 
         return cleaned_data
 
-    def save(self, commit: bool = True) -> Any:
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save the form instance, setting registration if new.
 
         Args:
@@ -238,7 +238,7 @@ class BaseWritingForm(BaseRegistrationForm):
         """Return cache key for tracking option character count."""
         return f"option_char_{option.id}"
 
-    def save(self, commit: bool = True) -> Any:
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save the form and handle registration questions if present.
 
         Args:
@@ -257,7 +257,7 @@ class BaseWritingForm(BaseRegistrationForm):
             orga = True
             if hasattr(self, "orga"):
                 orga = self.orga
-            self.save_reg_questions(instance, orga=orga)
+            self.save_reg_questions(instance, is_organizer=orga)
 
         return instance
 
@@ -342,7 +342,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         # Remove relations for characters not in the current selection
         PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
-    def save(self, commit: bool = True) -> PlotCharacterRel:
+    def save(self, commit: bool = True) -> PlotCharacterRel:  # noqa: FBT001, FBT002
         """Save the form instance and update plot-character relationships.
 
         Args:

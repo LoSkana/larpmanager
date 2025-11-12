@@ -51,7 +51,7 @@ def update_association_text(association_id: int, typ: str, lang: str) -> str:
         text_content = AssociationText.objects.get(association_id=association_id, typ=typ, language=lang).text
     except Exception as e:
         # Return empty string if text not found
-        logger.debug(f"Association text not found for {association_id}, {typ}, {lang}: {e}")
+        logger.debug("Association text not found for %s, %s, %s: %s", association_id, typ, lang, e)
 
     # Cache the result for one day
     cache.set(association_text_key(association_id, typ, lang), text_content, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -103,7 +103,7 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
             AssociationText.objects.filter(association_id=association_id, typ=text_type, default=True).first().text
         )
     except Exception as e:
-        logger.debug(f"Default association text not found for {association_id}, {text_type}: {e}")
+        logger.debug("Default association text not found for %s, %s: %s", association_id, text_type, e)
 
     # Cache the result for one day
     cache.set(

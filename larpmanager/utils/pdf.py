@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import contextlib
 import io
 import logging
@@ -25,7 +27,8 @@ import os.path
 import re
 import zipfile
 from datetime import datetime, timedelta, timezone
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -44,9 +47,7 @@ from larpmanager.cache.character import get_event_cache_all, get_writing_element
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
-from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Util
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
@@ -59,6 +60,10 @@ from larpmanager.utils.character import get_char_check, get_character_relationsh
 from larpmanager.utils.common import get_element, get_handout
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
+
+if TYPE_CHECKING:
+    from larpmanager.models.event import Event, Run
+    from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
 
@@ -90,11 +95,12 @@ def reprint(file_path):
     if conf_settings.DEBUG:
         return True
 
-    if not os.path.isfile(file_path):
+    path_obj = Path(file_path)
+    if not path_obj.is_file():
         return True
 
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=1)
-    modification_time = datetime.fromtimestamp(os.path.getmtime(file_path), timezone.utc)
+    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, timezone.utc)
     return modification_time < cutoff_date
 
 
@@ -113,14 +119,14 @@ def return_pdf(file_path, filename):
 
     """
     try:
-        pdf_file = open(file_path, "rb")
-        response = HttpResponse(pdf_file.read(), content_type="application/pdf")
-        pdf_file.close()
+        with open(file_path, "rb") as pdf_file:
+            response = HttpResponse(pdf_file.read(), content_type="application/pdf")
         response["Content-Disposition"] = f"inline;filename={fix_filename(filename)}.pdf"
-        return response
     except FileNotFoundError as err:
         msg = "File not found"
         raise Http404(msg) from err
+    else:
+        return response
 
 
 def link_callback(uri: str, rel: str) -> str:
@@ -158,7 +164,7 @@ def link_callback(uri: str, rel: str) -> str:
         return ""
 
     # Verify the file actually exists on the filesystem
-    if not os.path.isfile(path):
+    if not Path(path).is_file():
         return ""
 
     return path
@@ -189,8 +195,8 @@ def add_pdf_instructions(context: dict) -> None:
         context[instruction_key] = get_event_config(
             context["event"].id,
             instruction_key,
-            "",
-            context,
+            default_value="",
+            context=context,
             bypass_cache=True,
         )
 
@@ -223,10 +229,10 @@ def add_pdf_instructions(context: dict) -> None:
             utility_code = utility_code_match.replace("#", "")
             util = get_object_or_404(Util, cod=utility_code)
             context[section_key] = context[section_key].replace(utility_code_match, util.util.url)
-        logger.debug(f"Processed PDF context for key '{section_key}': {len(context[section_key])} characters")
+        logger.debug("Processed PDF context for key '%s': %s characters", section_key, len(context[section_key]))
 
 
-def xhtml_pdf(context: dict, template_path: str, output_filename: str, html: bool = False) -> None:
+def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: bool = False) -> None:
     """Generate PDF from Django template using xhtml2pdf library.
 
     This function renders a Django template (or raw HTML string) with the provided
@@ -288,7 +294,7 @@ def get_membership_request(context: dict, member: Member) -> HttpResponse:
     return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": member})
 
 
-def print_character(context: dict, force: bool = False) -> HttpResponse:
+def print_character(context: dict, *, force: bool = False) -> HttpResponse:
     """Generate character sheet PDF with optional force regeneration.
 
     Args:
@@ -313,7 +319,7 @@ def print_character(context: dict, force: bool = False) -> HttpResponse:
     return return_pdf(file_path, f"{context['character']}")
 
 
-def print_character_friendly(context: dict, force: bool = False) -> HttpResponse:
+def print_character_friendly(context: dict, *, force: bool = False) -> HttpResponse:
     """Generate and return a lightweight character sheet PDF.
 
     Args:
@@ -337,7 +343,7 @@ def print_character_friendly(context: dict, force: bool = False) -> HttpResponse
     return return_pdf(file_path, f"{context['character']} - " + _("Lightweight"))
 
 
-def print_faction(context: dict, force: bool = False) -> HttpResponse:
+def print_faction(context: dict, *, force: bool = False) -> HttpResponse:
     """Generate and return a faction sheet PDF with optional force regeneration.
 
     Creates a PDF document containing the faction sheet using the xhtml2pdf engine.
@@ -376,7 +382,7 @@ def print_faction(context: dict, force: bool = False) -> HttpResponse:
     return return_pdf(file_path, f"{context['faction']}")
 
 
-def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
+def print_character_rel(context: dict, *, force: bool = False) -> HttpResponse:
     """Generate and return character relationships PDF.
 
     Args:
@@ -400,7 +406,7 @@ def print_character_rel(context: dict, force: bool = False) -> HttpResponse:
     return return_pdf(filepath, f"{context['character']} - " + _("Relationships"))
 
 
-def print_gallery(context: dict, force: bool = False) -> object:
+def print_gallery(context: dict, *, force: bool = False) -> HttpResponse:
     """Generate and return a PDF gallery of character portraits.
 
     Creates a PDF containing character portraits for characters with first aid
@@ -441,7 +447,7 @@ def print_gallery(context: dict, force: bool = False) -> object:
     return return_pdf(filepath, str(context["run"]) + " - " + _("Portraits"))
 
 
-def print_profiles(context: dict, force: bool = False) -> HttpResponse:
+def print_profiles(context: dict, *, force: bool = False) -> HttpResponse:
     """Generate and return PDF profiles for the event run.
 
     Args:
@@ -466,7 +472,7 @@ def print_profiles(context: dict, force: bool = False) -> HttpResponse:
     return return_pdf(filepath, str(context["run"]) + " - " + _("Profiles"))
 
 
-def print_handout(context: dict, force: bool = True) -> Any:
+def print_handout(context: dict, *, force: bool = True) -> Any:
     """Generate and return a PDF handout for the given context.
 
     Args:
@@ -551,7 +557,7 @@ def cleanup_handout_template_pdfs_after_save(instance) -> None:
 def safe_remove(file_path: str) -> None:
     """Remove a file, ignoring if it doesn't exist."""
     with contextlib.suppress(FileNotFoundError):
-        os.remove(file_path)
+        Path(file_path).unlink()
 
 
 def remove_run_pdf(event: Event) -> None:
@@ -664,7 +670,7 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
         delete_character_pdf_files(character, trait_instance.run)
 
 
-def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created) -> None:
+def cleanup_pdfs_on_trait_assignment(assignment_trait_instance) -> None:
     """Handle assignment trait post-save PDF cleanup.
 
     Args:
@@ -672,7 +678,7 @@ def cleanup_pdfs_on_trait_assignment(assignment_trait_instance, is_newly_created
         is_newly_created: Boolean indicating if instance was created
 
     """
-    if not assignment_trait_instance.member or not is_newly_created:
+    if not assignment_trait_instance.member:
         return
 
     deactivate_castings_and_remove_pdfs(assignment_trait_instance)
@@ -717,12 +723,12 @@ def print_character_go(context: dict, character) -> None:
     """Print character information, handling missing character gracefully."""
     try:
         # Validate character access and retrieve character data
-        get_char_check(None, context, character, False, True)
+        get_char_check(None, context, character, bypass_access_checks=True)
 
         # Generate and cache character print outputs
-        print_character(context, True)
-        print_character_friendly(context, True)
-        print_character_rel(context, True)
+        print_character(context, force=True)
+        print_character_friendly(context, force=True)
+        print_character_rel(context, force=True)
     except Http404:
         pass
     except NotFoundError:
@@ -912,7 +918,7 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
 
                 # Generate PDF if it doesn't exist or is outdated
                 if not os.path.exists(filepath) or reprint(filepath):
-                    print_handout(context, True)
+                    print_handout(context, force=True)
 
                 # Add to ZIP if generation succeeded
                 if os.path.exists(filepath):
@@ -969,7 +975,7 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
 
                 # Generate PDF if it doesn't exist or is outdated
                 if not os.path.exists(filepath) or reprint(filepath):
-                    print_faction(context, True)
+                    print_faction(context, force=True)
 
                 # Add to ZIP if generation succeeded
                 if os.path.exists(filepath):
@@ -1003,12 +1009,12 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
         if request.POST.get(f"character_{character.id}"):
             try:
                 # Load and validate character data
-                get_char_check(request, context, character.number, True)
+                get_char_check(request, context, character.number, restrict_non_owners=True)
                 filepath = context["character"].get_sheet_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated
                 if not os.path.exists(filepath) or reprint(filepath):
-                    print_character(context, True)
+                    print_character(context, force=True)
 
                 # Add to ZIP if generation succeeded
                 if os.path.exists(filepath):
@@ -1042,7 +1048,7 @@ def _bulk_profiles(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
 
             # Generate PDF if it doesn't exist or is outdated
             if not os.path.exists(filepath) or reprint(filepath):
-                print_profiles(context, True)
+                print_profiles(context, force=True)
 
             # Add to ZIP if generation succeeded
             if os.path.exists(filepath):
@@ -1076,7 +1082,7 @@ def _bulk_gallery(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile
 
             # Generate PDF if it doesn't exist or is outdated
             if not os.path.exists(filepath) or reprint(filepath):
-                print_gallery(context, True)
+                print_gallery(context, force=True)
 
             # Add to ZIP if generation succeeded
             if os.path.exists(filepath):

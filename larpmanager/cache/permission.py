@@ -144,7 +144,7 @@ def update_event_permission_feature(permission_slug: str) -> tuple[str, str, str
         # Fetch permission with related feature to avoid additional queries
         event_permission = EventPermission.objects.select_related("feature").get(slug=permission_slug)
     except ObjectDoesNotExist:
-        logger.warning(f"Permission slug does not exist: {permission_slug}")
+        logger.warning("Permission slug does not exist: %s", permission_slug)
         return "", "", ""
 
     # Extract feature from permission

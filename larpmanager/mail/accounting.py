@@ -42,7 +42,7 @@ from larpmanager.models.member import Member
 from larpmanager.utils.tasks import my_send_mail
 
 
-def send_expense_notification_email(instance: AccountingItemExpense, created: bool) -> None:
+def send_expense_notification_email(instance: AccountingItemExpense) -> None:
     """Send email notification to event organizers when an expense is created.
 
     This function handles post-save events for expense accounting items by sending
@@ -51,7 +51,6 @@ def send_expense_notification_email(instance: AccountingItemExpense, created: bo
 
     Args:
         instance: The AccountingItemExpense instance that was saved
-        created: Boolean indicating if the instance was newly created (True) or updated (False)
 
     Returns:
         None
@@ -63,7 +62,7 @@ def send_expense_notification_email(instance: AccountingItemExpense, created: bo
 
     # Only send email notifications for newly created expenses
     # that are associated with a run and event
-    if created and instance.run and instance.run.event:
+    if instance.run and instance.run.event:
         # Iterate through all organizers for the event
         for organizer in get_event_organizers(instance.run.event):
             # Set the language context for the organizer
@@ -206,8 +205,12 @@ def get_token_credit_name(association_id: int) -> tuple[str, str]:
     association_config_cache = {}
 
     # Retrieve custom token and credit names from association config
-    token_name = get_association_config(association_id, "token_credit_token_name", None, association_config_cache)
-    credit_name = get_association_config(association_id, "token_credit_credit_name", None, association_config_cache)
+    token_name = get_association_config(
+        association_id, "token_credit_token_name", default_value=None, context=association_config_cache
+    )
+    credit_name = get_association_config(
+        association_id, "token_credit_credit_name", default_value=None, context=association_config_cache
+    )
 
     # Apply default translated names if custom names not configured
     if not token_name:
@@ -248,7 +251,7 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
     registered_member = payment_item.reg.member
 
     # Check if payment notifications are enabled for this association
-    if not get_association_config(event_run.event.association_id, "mail_payment", False):
+    if not get_association_config(event_run.event.association_id, "mail_payment", default_value=False):
         return
 
     # Get localized names for tokens and credits
@@ -746,7 +749,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance)
 
 
-def send_collection_activation_email(instance: AccountingItemCollection, created: bool) -> None:
+def send_collection_activation_email(instance: AccountingItemCollection) -> None:
     """Handle post-save events for collection instances.
 
     Sends an activation email to the organizer when a new collection instance
@@ -760,10 +763,6 @@ def send_collection_activation_email(instance: AccountingItemCollection, created
         None
 
     """
-    # Early return if this is an update, not a creation
-    if not created:
-        return
-
     # Prepare email context with recipient and management URL
     email_context = {
         "recipient": instance.display_member(),
@@ -826,7 +825,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
 
     """
     # Check if payment notifications are enabled for this organization
-    if not get_association_config(inv.association_id, "mail_payment", False):
+    if not get_association_config(inv.association_id, "mail_payment", default_value=False):
         return
 
     # Get organization features to determine notification recipients
@@ -835,7 +834,9 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     # If treasurer feature is enabled, send notifications to treasurer appointees
     if "treasurer" in features:
         # Parse comma-separated list of treasurer member IDs
-        treasurer_list = get_association_config(inv.association_id, "treasurer_appointees", "").split(", ")
+        treasurer_list = get_association_config(inv.association_id, "treasurer_appointees", default_value="").split(
+            ", "
+        )
         for treasurer_member_id in treasurer_list:
             member_id = int(treasurer_member_id)
             organizer = Member.objects.get(pk=member_id)

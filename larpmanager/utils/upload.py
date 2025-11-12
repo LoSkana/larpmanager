@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import io
 import logging
@@ -24,16 +25,14 @@ import os
 import shutil
 from datetime import datetime
 from decimal import Decimal
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
-from django.forms import Form
-from django.http import HttpRequest
 
-from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.experience import AbilityPx, AbilityTypePx
 from larpmanager.models.form import (
@@ -69,6 +68,13 @@ from larpmanager.models.writing import (
 from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
 
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+    from django.forms import Form
+    from django.http import HttpRequest
+
+    from larpmanager.models.base import BaseModel
+
 logger = logging.getLogger(__name__)
 
 
@@ -96,9 +102,9 @@ def go_upload(request: HttpRequest, context: dict, upload_form_data):
     upload_type = context["typ"]
 
     if upload_type == "registration_form":
-        return form_load(request, context, upload_form_data, is_registration=True)
+        return form_load(context, upload_form_data, is_registration=True)
     if upload_type == "character_form":
-        return form_load(request, context, upload_form_data, is_registration=False)
+        return form_load(context, upload_form_data, is_registration=False)
     if upload_type == "registration":
         return registrations_load(request, context, upload_form_data)
     if upload_type == "px_abilitie":
@@ -158,7 +164,7 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
             return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
         except Exception as parsing_error:
             # Log error and continue to next encoding
-            logger.debug(f"Failed to parse CSV with encoding {encoding}: {parsing_error}")
+            logger.debug("Failed to parse CSV with encoding %s: %s", encoding, parsing_error)
             continue
 
     # Return None if all encodings failed
@@ -603,6 +609,7 @@ def _assign_choice_answer(
     field_value,
     available_questions,
     error_logs,
+    *,
     is_registration=False,
 ) -> None:
     """Assign choice answers to form elements during bulk import.
@@ -796,7 +803,7 @@ def _writing_question_load(
         writing_element.text = field_value
     elif question_type == WritingQuestionType.TITLE:
         writing_element.title = field_value
-    # TODO implement
+    # TODO: implement
     # elif question_type == QuestionType.COVER:
     #     writing_element.cover = field_value
     # elif question_type == QuestionType.PROGRESS:
@@ -845,14 +852,13 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
             logs.append(f"Faction not found: {faction_name}")
 
 
-def form_load(request: HttpRequest, context: dict, form, is_registration: bool = True) -> list[str]:
+def form_load(context: dict, form, *, is_registration: bool = True) -> list[str]:
     """Load form questions and options from uploaded files.
 
     Processes uploaded CSV/Excel files to create form questions and their
     associated options. Handles both registration and writing question types.
 
     Args:
-        request: HTTP request object containing the upload request
         context: Context dictionary containing event data and configuration
         form: Upload form instance with cleaned file data
         is_registration: Flag indicating whether to load registration questions
@@ -877,7 +883,7 @@ def form_load(request: HttpRequest, context: dict, form, is_registration: bool =
         if questions_dataframe is not None:
             # Create question objects from each row in the DataFrame
             for question_row in questions_dataframe.to_dict(orient="records"):
-                log_messages.append(_questions_load(context, question_row, is_registration))
+                log_messages.append(_questions_load(context, question_row, is_registration=is_registration))
 
     # Process options file upload
     options_file = form.cleaned_data.get("second", None)
@@ -898,7 +904,9 @@ def form_load(request: HttpRequest, context: dict, form, is_registration: bool =
 
             # Create option objects for each row, linking to existing questions
             for option_row in options_dataframe.to_dict(orient="records"):
-                options_log_messages.append(_options_load(context, option_row, questions_by_name, is_registration))
+                options_log_messages.append(
+                    _options_load(context, option_row, questions_by_name, is_registration=is_registration)
+                )
 
         # Combine logs from options processing with existing logs
         log_messages.extend(options_log_messages)
@@ -911,7 +919,7 @@ def invert_dict(dictionary: dict[str, str]) -> dict[str, str]:
     return {value.lower().strip(): key for key, value in dictionary.items()}
 
 
-def _questions_load(context: dict, row_data: dict, is_registration: bool) -> str:
+def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> str:
     """Load and validate question data from upload files.
 
     Processes question configurations for registration or character forms,
@@ -933,7 +941,7 @@ def _questions_load(context: dict, row_data: dict, is_registration: bool) -> str
         return "ERR - name not found"
 
     # Get field validation mappings for the question type
-    field_mappings = _get_mappings(is_registration)
+    field_mappings = _get_mappings(is_registration=is_registration)
 
     if is_registration:
         # Create or get registration question instance
@@ -986,7 +994,7 @@ def _questions_load(context: dict, row_data: dict, is_registration: bool) -> str
     return f"OK - Created {question_name}" if was_created else f"OK - Updated {question_name}"
 
 
-def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
+def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
     """Generate mappings for question field types and attributes.
 
     Args:
@@ -1020,7 +1028,7 @@ def _get_mappings(is_registration: bool) -> dict[str, dict[str, str]]:
     return mappings
 
 
-def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: dict, is_registration: bool) -> str:
+def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: dict, *, is_registration: bool) -> str:
     """Load question options from CSV row for bulk import.
 
     Creates or updates question options with proper validation,
@@ -1140,7 +1148,7 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
 
     # Ensure directory exists
     if not os.path.exists(tmp_file):
-        os.makedirs(tmp_file)
+        Path(tmp_file).mkdir(parents=True, exist_ok=True)
 
     # Generate timestamped filename
     tmp_file = os.path.join(tmp_file, datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
@@ -1175,9 +1183,9 @@ def cover_load(context, z_obj) -> None:
     # get images
     for root, _dirnames, filenames in os.walk(fpath):
         for el in filenames:
-            num = os.path.splitext(el)[0]
+            num = Path(el).stem
             covers[num] = os.path.join(root, el)
-    logger.debug(f"Extracted covers: {covers}")
+    logger.debug("Extracted covers: %s", covers)
     upload_to = UploadToPathAndRename("character/cover/")
     # cicle characters
     for c in context["run"].event.get_elements(Character):
@@ -1187,7 +1195,7 @@ def cover_load(context, z_obj) -> None:
         fn = upload_to.__call__(c, covers[num])
         c.cover = fn
         c.save()
-        os.rename(covers[num], os.path.join(conf_settings.MEDIA_ROOT, fn))
+        Path(covers[num]).rename(Path(conf_settings.MEDIA_ROOT) / fn)
 
 
 def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:

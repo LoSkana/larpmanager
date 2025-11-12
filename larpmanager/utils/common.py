@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import html
 import logging
@@ -27,14 +28,13 @@ import unicodedata
 from datetime import date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytz
 from background_task.models import Task
 from diff_match_patch import diff_match_patch
 from django.conf import settings as conf_settings
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
 from django.http import Http404, HttpRequest
@@ -69,6 +69,14 @@ from larpmanager.models.writing import (
     SpeedLarp,
 )
 from larpmanager.utils.exceptions import NotFoundError
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import User
+
+
+class DelimiterNotFoundError(ValueError):
+    """Raised when CSV delimiter cannot be detected."""
+
 
 logger = logging.getLogger(__name__)
 
@@ -207,7 +215,7 @@ def get_event_template(context, template_id) -> None:
         raise NotFoundError from err
 
 
-def get_char(context, character_identifier, by_number=False) -> None:
+def get_char(context, character_identifier, *, by_number=False) -> None:
     """Get character by ID or number and add to context.
 
     Args:
@@ -216,7 +224,7 @@ def get_char(context, character_identifier, by_number=False) -> None:
         by_number: Whether to search by number instead of ID
 
     """
-    get_element(context, character_identifier, "character", Character, by_number)
+    get_element(context, character_identifier, "character", Character, by_number=by_number)
 
 
 def get_registration(context, registration_id) -> None:
@@ -552,6 +560,7 @@ def get_element(
     primary_key: int | str,
     context_key_name: str,
     model_class: type[BaseModel],
+    *,
     by_number: bool = False,
 ) -> None:
     """Retrieve a model instance and add it to the context dictionary.
@@ -786,7 +795,7 @@ def round_to_two_significant_digits(number: float) -> int:
     return int(rounded_decimal)
 
 
-def exchange_order(context: dict, model_class: type, element_id: int, move_up: bool, elements=None) -> None:
+def exchange_order(context: dict, model_class: type, element_id: int, move_up: int, elements=None) -> None:
     """Exchange ordering positions between two elements in a sequence.
 
     This function moves an element up or down in the ordering sequence by swapping
@@ -797,7 +806,7 @@ def exchange_order(context: dict, model_class: type, element_id: int, move_up: b
         context: Context dictionary to store the current element after operation.
         model_class: Model class of elements to reorder.
         element_id: Primary key of the element to move.
-        move_up: Direction to move - True for up (increase order), False for down (decrease order).
+        move_up: Direction to move - 1 for up (increase order), 0 for down (decrease order).
         elements: Optional queryset of elements. Defaults to event elements if None.
 
     Returns:
@@ -905,7 +914,7 @@ def copy_class(target_event_id, source_event_id, model_class) -> None:
             for field_name, related_values in many_to_many_data.items():
                 getattr(source_object, field_name).set(related_values)
         except Exception as error:
-            logging.warning(f"found exp: {error}")
+            logger.warning("found exp: %s", error)
 
 
 def get_payment_methods_ids(context):
@@ -931,7 +940,7 @@ def detect_delimiter(content):
         str: Detected delimiter character
 
     Raises:
-        Exception: If no delimiter is found
+        DelimiterNotFoundError: If no delimiter is found
 
     """
     header_line = content.split("\n")[0]
@@ -939,7 +948,7 @@ def detect_delimiter(content):
         if delimiter in header_line:
             return delimiter
     msg = "no delimiter"
-    raise Exception(msg)
+    raise DelimiterNotFoundError(msg)
 
 
 def clean(s):

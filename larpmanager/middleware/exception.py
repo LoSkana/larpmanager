@@ -17,7 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from collections.abc import Callable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -44,6 +46,9 @@ from larpmanager.utils.exceptions import (
     UserPermissionError,
     WaitingError,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class ExceptionHandlingMiddleware:
@@ -76,13 +81,13 @@ class ExceptionHandlingMiddleware:
         # Define exception type to handler mappings for clean separation of concerns
         handlers = [
             # Permission-related errors - show appropriate error pages
-            (UserPermissionError, lambda ex: render(request, "exception/permission.html")),
-            (NotFoundError, lambda ex: render(request, "exception/notfound.html")),
+            (UserPermissionError, lambda _ex: render(request, "exception/permission.html")),
+            (NotFoundError, lambda _ex: render(request, "exception/notfound.html")),
             (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
             # Run-related errors - show available runs for the current association
             (
                 UnknowRunError,
-                lambda ex: render(
+                lambda _ex: render(
                     request,
                     "exception/runs.html",
                     {
@@ -135,7 +140,7 @@ class ExceptionHandlingMiddleware:
             ),
             (
                 RewokedMembershipError,
-                lambda ex: self._redirect_with_message(request, _("You're not allowed to sign up") + "!", "home", []),
+                lambda _ex: self._redirect_with_message(request, _("You're not allowed to sign up") + "!", "home", []),
             ),
         ]
 

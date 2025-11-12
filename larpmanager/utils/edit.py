@@ -46,12 +46,12 @@ from larpmanager.utils.common import html_clean
 from larpmanager.utils.exceptions import NotFoundError
 
 
-def save_log(member: Member, cls: type, el: Any, dl: bool = False) -> None:
+def save_log(member: Member, cls: type, element: Any, *, to_delete: bool = False) -> None:
     """Create a log entry for model instance changes."""
-    Log.objects.create(member=member, cls=cls.__name__, eid=el.id, dl=dl, dct=el.as_dict())
+    Log.objects.create(member=member, cls=cls.__name__, eid=element.id, dl=to_delete, dct=element.as_dict())
 
 
-def save_version(el, tp: str, mb, dl: bool = False) -> None:
+def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:
     """Manage versioning of text content.
 
     Creates and saves new versions of editable text elements with author tracking,
@@ -59,17 +59,17 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
     character associations, and question-based text fields.
 
     Args:
-        el: The element object to create a version for
-        tp: Type identifier for the content being versioned
-        mb: Member object representing the author of this version
-        dl: Whether this version should be marked for deletion, defaults to False
+        element: The element object to create a version for
+        model_type: Type identifier for the content being versioned
+        member: Member object representing the author of this version
+        to_delete: Whether this version should be marked for deletion, defaults to False
 
     Returns:
         None
 
     """
     # Get the highest version number for this element and increment it
-    n = TextVersion.objects.filter(tp=tp, eid=el.id).aggregate(Max("version"))["version__max"]
+    n = TextVersion.objects.filter(tp=model_type, eid=element.id).aggregate(Max("version"))["version__max"]
     if n is None:
         n = 1
     else:
@@ -77,20 +77,20 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
 
     # Create new TextVersion instance with basic metadata
     tv = TextVersion()
-    tv.eid = el.id
-    tv.tp = tp
+    tv.eid = element.id
+    tv.tp = model_type
     tv.version = n
-    tv.member = mb
-    tv.dl = dl
+    tv.member = member
+    tv.dl = to_delete
 
     # Handle question-based content types by aggregating answers
-    if tp in QuestionApplicable.values:
+    if model_type in QuestionApplicable.values:
         texts = []
-        query = el.event.get_elements(WritingQuestion)
+        query = element.event.get_elements(WritingQuestion)
 
         # Collect all applicable questions and their values
-        for que in query.filter(applicable=tp).order_by("order"):
-            value = _get_field_value(el, que)
+        for que in query.filter(applicable=model_type).order_by("order"):
+            value = _get_field_value(element, que)
             if not value:
                 continue
             value = html_clean(value)
@@ -99,19 +99,19 @@ def save_version(el, tp: str, mb, dl: bool = False) -> None:
         tv.text = "\n".join(texts)
     else:
         # For non-question types, use the element's text directly
-        tv.text = el.text
+        tv.text = element.text
 
     # Add character relationships if this is a character type
-    if tp == QuestionApplicable.CHARACTER:
-        rels = Relationship.objects.filter(source=el)
+    if model_type == QuestionApplicable.CHARACTER:
+        rels = Relationship.objects.filter(source=element)
         if rels:
             tv.text += "\nRelationships\n"
             for rel in rels:
                 tv.text += f"{rel.target}: {html_clean(rel.text)}\n"
 
     # Add plot character associations if this is a plot type
-    if tp == QuestionApplicable.PLOT:
-        chars = PlotCharacterRel.objects.filter(plot=el)
+    if model_type == QuestionApplicable.PLOT:
+        chars = PlotCharacterRel.objects.filter(plot=element)
         if chars:
             tv.text += "\nCharacters\n"
             for rel in chars:
@@ -333,7 +333,8 @@ def backend_edit(
     form_type: type[ModelForm],
     element_id: int | None,
     additional_field: str | None = None,
-    is_association_based: bool = False,
+    *,
+    is_association: bool = False,
     quiet: bool = False,
 ) -> bool:
     """Handle backend editing operations for various content types.
@@ -348,7 +349,7 @@ def backend_edit(
         form_type: Django ModelForm class for handling the specific model
         element_id: Element ID for editing existing objects, None for new objects
         additional_field: Optional additional field parameter for specialized handling
-        is_association_based: Flag indicating association-based vs event-based operation
+        is_association: Flag indicating association-based vs event-based operation
         quiet: Flag to suppress success messages when True
 
     Returns:
@@ -361,7 +362,7 @@ def backend_edit(
     context["request"] = request
 
     # Handle association-based operations vs event-based operations
-    if is_association_based:
+    if is_association:
         context["exe"] = True
         if element_id is None:
             element_id = context["association_id"]
@@ -391,9 +392,9 @@ def backend_edit(
                 messages.success(request, _("Operation completed") + "!")
 
             # Handle deletion if delete flag is set in POST data
-            should_delete = "delete" in request.POST and request.POST["delete"] == "1"
-            save_log(context["member"], form_type, saved_object, should_delete)
-            if should_delete:
+            to_delete = "delete" in request.POST and request.POST["delete"] == "1"
+            save_log(context["member"], form_type, saved_object, to_delete=to_delete)
+            if to_delete:
                 saved_object.delete()
 
             # Store saved object in context and return success
@@ -451,7 +452,7 @@ def orga_edit(
 
     # Process the edit operation using backend edit handler
     # Returns True if edit was successful and should redirect
-    if backend_edit(request, context, form_type, entity_id, additional_field=None, is_association_based=False):
+    if backend_edit(request, context, form_type, entity_id, additional_field=None, is_association=False):
         # Set suggestion context for successful edit
         set_suggestion(context, permission)
 
@@ -511,7 +512,7 @@ def exe_edit(
         form_type,
         entity_id,
         additional_field=additional_field,
-        is_association_based=True,
+        is_association=True,
     ):
         # Set permission suggestion for UI feedback
         set_suggestion(context, permission)
@@ -547,7 +548,7 @@ def set_suggestion(context: dict, permission: str) -> None:
 
     # Build the configuration key for this permission's suggestion
     config_key = f"{permission}_suggestion"
-    existing_suggestion = target_object.get_config(config_key, False)
+    existing_suggestion = target_object.get_config(config_key, default_value=False)
 
     # Exit early if suggestion already exists
     if existing_suggestion:
@@ -628,7 +629,9 @@ def writing_edit(
     context["continue_add"] = "continue" in request.POST
 
     # Set auto-save behavior based on event configuration
-    context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", False, context)
+    context["auto_save"] = not get_event_config(
+        context["event"].id, "writing_disable_auto", default_value=False, context=context
+    )
     context["download"] = 1
 
     # Set up character finder functionality for the element type
@@ -653,7 +656,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
 
     """
     # Check if character finder is disabled for this event
-    if get_event_config(context["event"].id, "writing_disable_char_finder", False, context):
+    if get_event_config(context["event"].id, "writing_disable_char_finder", default_value=False, context=context):
         return
 
     # Select appropriate widget class based on type
@@ -715,7 +718,7 @@ def _writing_save(
 
     # Create version history or log operation based on type parameter
     if tp:
-        save_version(p, tp, context["member"], dl)
+        save_version(p, tp, context["member"], to_delete=dl)
     else:
         save_log(context["member"], form_type, p)
 

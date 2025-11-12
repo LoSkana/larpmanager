@@ -17,9 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import os
+from pathlib import Path
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -364,7 +367,7 @@ class Member(BaseModel):
         # Add member-specific subdirectory using ID
         member_pdf_directory = os.path.join(member_pdf_directory, str(self.id))
         # Ensure directory exists
-        os.makedirs(member_pdf_directory, exist_ok=True)
+        Path(member_pdf_directory).mkdir(parents=True, exist_ok=True)
         return member_pdf_directory
 
     def get_request_filepath(self):
@@ -373,7 +376,7 @@ class Member(BaseModel):
 
     def join(self, association: Association) -> None:
         """Join an association if not already a member."""
-        membership = get_user_membership(self, association.id)  # type: ignore
+        membership = get_user_membership(self, association.id)  # type: ignore[arg-type]
         if membership.status == MembershipStatus.EMPTY:
             membership.status = MembershipStatus.JOINED
             membership.save()
@@ -390,9 +393,9 @@ class Member(BaseModel):
         # Format: street number, city (province), country_code (country)
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 
-    def get_config(self, name, default_value=None, bypass_cache=False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
         """Get configuration value for this member."""
-        return get_element_config(self, name, default_value, bypass_cache)
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class MemberConfig(BaseModel):
@@ -501,7 +504,7 @@ class Membership(BaseModel):
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
         except Exception as exception:
-            logger.debug(f"Request file not available for membership {self.id}: {exception}")
+            logger.debug("Request file not available for membership %s: %s", self.id, exception)
             return ""
 
     def get_document_filepath(self):
@@ -510,7 +513,7 @@ class Membership(BaseModel):
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
         except Exception as error:
-            logger.debug(f"Document file not available for membership {self.id}: {error}")
+            logger.debug("Document file not available for membership %s: %s", self.id, error)
             return ""
 
 

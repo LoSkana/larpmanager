@@ -17,7 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import ast
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -26,9 +29,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
+
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
 
 
 def reset_cache_run(association: Association, slug: str) -> None:
@@ -83,9 +88,10 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
             event__slug=event_slug,
             number=run_number,
         )
-        return run.id
     except ObjectDoesNotExist:
         return None
+    else:
+        return run.id
 
 
 def on_run_pre_save_invalidate_cache(instance) -> None:
@@ -174,14 +180,16 @@ def init_cache_config_run(run) -> dict:
     context = {
         "buttons": get_event_button_cache(run.event_id),
     }
-    context["limitations"] = get_event_config(run.event_id, "show_limitations", False, context)
-    context["user_character_max"] = get_event_config(run.event_id, "user_character_max", 0, context)
-    context["cover_orig"] = get_event_config(run.event_id, "cover_orig", False, context)
-    context["px_user"] = get_event_config(run.event_id, "px_user", False, context)
+    context["limitations"] = get_event_config(run.event_id, "show_limitations", default_value=False, context=context)
+    context["user_character_max"] = get_event_config(
+        run.event_id, "user_character_max", default_value=0, context=context
+    )
+    context["cover_orig"] = get_event_config(run.event_id, "cover_orig", default_value=False, context=context)
+    context["px_user"] = get_event_config(run.event_id, "px_user", default_value=False, context=context)
 
     # Handle parent event inheritance for px_user setting
     if run.event.parent:
-        context["px_user"] = get_event_config(run.event.parent.id, "px_user", False, context)
+        context["px_user"] = get_event_config(run.event.parent.id, "px_user", default_value=False, context=context)
 
     # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
@@ -192,14 +200,14 @@ def init_cache_config_run(run) -> dict:
 
         # Parse and convert list configuration to dictionary lookup
         config_display_dict = {}
-        config_value = run.get_config("show_" + config_name, "[]")
+        config_value = run.get_config("show_" + config_name, default_value="[]")
         for element in ast.literal_eval(config_value):
             config_display_dict[element] = 1
         context["show_" + config_name] = config_display_dict
 
     # Process additional display configurations
     additional_display_dict = {}
-    additional_config_value = run.get_config("show_addit", "[]")
+    additional_config_value = run.get_config("show_addit", default_value="[]")
     for element in ast.literal_eval(additional_config_value):
         additional_display_dict[element] = 1
     context["show_addit"] = additional_display_dict

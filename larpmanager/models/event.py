@@ -17,18 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import inspect
 import logging
 import os
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
-from django.http import HttpResponse
 from django.utils import formats
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext_lazy
@@ -47,6 +48,9 @@ from larpmanager.models.utils import (
     my_uuid_short,
     show_thumb,
 )
+
+if TYPE_CHECKING:
+    from django.http import HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -293,7 +297,7 @@ class Event(BaseModel):
         if self.parent and model_class in inheritable_elements:
             # Verify that campaign independence is not enabled for this element type
             # If independence is disabled (False), use parent's elements
-            if not self.get_config(f"campaign_{model_class}_indep", False):
+            if not self.get_config(f"campaign_{model_class}_indep", default_value=False):
                 return self.parent
 
         # Return self if no parent exists, element not inheritable, or independence enabled
@@ -306,7 +310,7 @@ class Event(BaseModel):
             return self.cover_thumb.url
         except Exception as e:
             # Log error and return None if cover_thumb is not available
-            logger.debug(f"Cover thumbnail not available for event {self.id}: {e}")
+            logger.debug("Cover thumbnail not available for event %s: %s", self.id, e)
             return None
 
     def get_name(self) -> str:
@@ -384,12 +388,12 @@ class Event(BaseModel):
         # Build path to PDF directory using object slug
         pdf_directory_path = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
         # Ensure directory exists
-        os.makedirs(pdf_directory_path, exist_ok=True)
+        Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
         return pdf_directory_path
 
-    def get_config(self, name: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
-        """Get configuration value for this instance."""
-        return get_element_config(self, name, default_value, bypass_cache)
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+        """Get configuration value for this event."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class EventConfig(BaseModel):
@@ -662,7 +666,7 @@ class Run(BaseModel):
         run_media_path = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
 
         # Ensure directory exists
-        os.makedirs(run_media_path, exist_ok=True)
+        Path(run_media_path).mkdir(parents=True, exist_ok=True)
 
         return run_media_path
 
@@ -674,9 +678,9 @@ class Run(BaseModel):
         """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, config_key: str, default_value: Any = None, bypass_cache: bool = False) -> Any:
-        """Get configuration value for this object."""
-        return get_element_config(self, config_key, default_value, bypass_cache)
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+        """Get configuration value for this run."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class RunConfig(BaseModel):

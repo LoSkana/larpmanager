@@ -162,21 +162,21 @@ def _init_features(association: Association, cache_element: dict) -> None:
     # Configure custom mail server settings if feature is enabled
     if "custom_mail" in cache_element["features"]:
         config_key = "mail_server_use_tls"
-        cache_element[config_key] = association.get_config(config_key, False)
+        cache_element[config_key] = association.get_config(config_key, default_value=False)
 
         # Add mail server connection parameters
         for setting in ["host", "port", "host_user", "host_password"]:
             config_key = "mail_server_" + setting
-            cache_element[config_key] = association.get_config(config_key)
+            cache_element[config_key] = association.get_config(config_key, default_value="")
 
     # Configure token and credit naming if feature is enabled
     if "token_credit" in cache_element["features"]:
         for setting in ["token_name", "credit_name"]:
-            cache_element[setting] = association.get_config("token_credit_" + setting, None)
+            cache_element[setting] = association.get_config("token_credit_" + setting, default_value=None)
 
     # Configure Centauri probability settings if feature is enabled
     if "centauri" in cache_element["features"]:
-        probability = association.get_config("centauri_prob")
+        probability = association.get_config("centauri_prob", default_value=0)
         if probability:
             cache_element["centauri_prob"] = probability
 

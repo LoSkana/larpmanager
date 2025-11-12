@@ -93,7 +93,7 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Retrieve event configuration for user PX management permissions
-    context["px_user"] = get_event_config(context["event"].id, "px_user", False, context)
+    context["px_user"] = get_event_config(context["event"].id, "px_user", default_value=False, context=context)
 
     # Query and prepare abilities list with optimized database access
     context["list"] = (
@@ -172,7 +172,7 @@ def orga_px_rules_order(
     request: HttpRequest,
     event_slug: str,
     num: int,
-    order: str,
+    order: int,
 ) -> HttpResponse:
     """Reorder PX rules for an event."""
     # Check permissions and get event context
@@ -207,7 +207,7 @@ def orga_px_modifiers_order(
     request: HttpRequest,
     event_slug: str,
     num: int,
-    order: str,
+    order: int,
 ) -> HttpResponse:
     """Reorder experience modifiers in the organizer interface."""
     # Check permissions and get context

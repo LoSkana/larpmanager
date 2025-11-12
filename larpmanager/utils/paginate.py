@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from decimal import Decimal
 from typing import Any
@@ -43,7 +45,8 @@ def paginate(
     pagination_model: type[Model],
     template_name: str,
     view_name: str,
-    exe: bool = True,
+    *,
+    is_executive: bool = True,
 ) -> HttpResponse | JsonResponse:
     """Handle pagination for DataTables AJAX requests and initial page rendering.
 
@@ -57,7 +60,7 @@ def paginate(
         pagination_model: The Django model class to paginate
         template_name: Template path for initial page rendering
         view_name: View name used for generating edit URLs
-        exe: Whether this is an organization-wide view (True) or event-specific (False)
+        is_executive: Whether this is an organization-wide view (True) or event-specific (False)
 
     Returns:
         HttpResponse: Rendered template for GET requests
@@ -72,7 +75,7 @@ def paginate(
     # Handle initial page load (GET request)
     if request.method != "POST":
         # Generate unique table name based on context
-        if exe:
+        if is_executive:
             context["table_name"] = f"{model_name}_{context['association_id']}"
         else:
             context["table_name"] = f"{model_name}_{context['run'].get_slug()}"
@@ -89,7 +92,7 @@ def paginate(
         context,
         request,
         pagination_model,
-        exe,
+        is_executive=is_executive,
     )
 
     # Get total count of all records (unfiltered)
@@ -98,7 +101,7 @@ def paginate(
     # Prepare localized edit button text
     edit_label = _("Edit")
     # Transform elements into DataTables-compatible format
-    datatables_rows = _prepare_data_json(context, filtered_elements, view_name, edit_label, exe)
+    datatables_rows = _prepare_data_json(context, filtered_elements, view_name, edit_label, is_executive=is_executive)
 
     # Return DataTables-expected JSON response
     return JsonResponse(
@@ -111,7 +114,7 @@ def paginate(
     )
 
 
-def _get_elements_query(cls, context: dict, request, model_type, is_executive: bool = True) -> tuple[any, int]:
+def _get_elements_query(cls, context: dict, request, model_type, *, is_executive: bool = True) -> tuple[any, int]:
     """Get filtered and paginated query elements based on context and request parameters.
 
     Args:
@@ -195,7 +198,7 @@ def _set_filtering(context: dict, queryset, column_filters: dict):
 
         # Validate column index is within bounds
         if column_index >= len(context["fields"]):
-            logger.error(f"Column index out of bounds in _get_ordering: {column_filters} {context['fields']}")
+            logger.error("Column index out of bounds in _get_ordering: %s %s", column_filters, context["fields"])
 
         # Extract field and name from context fields
         field_name, _display_name = context["fields"][column_index - 1]
@@ -254,7 +257,7 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
         # Validate column index is within bounds
         if column_index_int >= len(context["fields"]):
-            logger.error(f"Column index out of bounds in _get_ordering: {column_order} {context['fields']}")
+            logger.error("Column index out of bounds in _get_ordering: %s %s", column_order, context["fields"])
         field_name, _display_name = context["fields"][column_index_int - 1]
 
         # Skip callback fields as they can't be used for database ordering
@@ -325,7 +328,9 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
     return start, length, order, filters
 
 
-def _prepare_data_json(context: dict, elements: list, view: str, edit: str, exe: bool = True) -> list[dict[str, str]]:
+def _prepare_data_json(
+    context: dict, elements: list, view: str, edit: str, *, is_executive: bool = True
+) -> list[dict[str, str]]:
     """Prepare data for JSON response in DataTables format.
 
     Args:
@@ -333,7 +338,7 @@ def _prepare_data_json(context: dict, elements: list, view: str, edit: str, exe:
         elements: List of model objects to process
         view: View name for generating edit URLs
         edit: Tooltip text for edit links
-        exe: Whether to use executive view URLs (True) or organization view URLs (False)
+        is_executive: Whether to use executive view URLs (True) or organization view URLs (False)
 
     Returns:
         List of dictionaries where each dict represents a row with string keys
@@ -369,7 +374,7 @@ def _prepare_data_json(context: dict, elements: list, view: str, edit: str, exe:
     # Process each element and build row data
     for model_object in elements:
         # Generate appropriate URL based on view type (exe vs orga)
-        if exe:
+        if is_executive:
             edit_url = reverse(view, args=[model_object.id])
         else:
             # For orga views, we need both slug and ID
@@ -380,7 +385,7 @@ def _prepare_data_json(context: dict, elements: list, view: str, edit: str, exe:
 
         # Add data for each configured field, starting from column 1
         for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):
-            row_data[str(column_index)] = field_to_formatter.get(field_name, lambda model_object: "")(model_object)
+            row_data[str(column_index)] = field_to_formatter.get(field_name, lambda _model_object: "")(model_object)
 
         table_rows_data.append(row_data)
 
@@ -473,20 +478,20 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
 def exe_paginate(
     request: HttpRequest,
     context: dict[str, Any],
-    pagination_type: str,
+    pagination_model: type[Model],
     template_name: str,
     view_name: str,
 ) -> HttpResponse:
     """Paginate content for organization-wide executive views."""
-    return paginate(request, context, pagination_type, template_name, view_name, True)
+    return paginate(request, context, pagination_model, template_name, view_name, is_executive=True)
 
 
 def orga_paginate(
     request: HttpRequest,
     context: dict,
-    pagination_type: str,
+    pagination_model: type[Model],
     template_name: str,
     view_name: str,
 ) -> HttpResponse:
     """Paginate items for organization views."""
-    return paginate(request, context, pagination_type, template_name, view_name, False)
+    return paginate(request, context, pagination_model, template_name, view_name, is_executive=False)

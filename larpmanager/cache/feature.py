@@ -105,7 +105,7 @@ def update_association_features(association_id: int) -> dict[str, int]:
             "tagline",
         ]:
             # Add calendar features based on configuration
-            if association.get_config("calendar_" + sl, False):
+            if association.get_config("calendar_" + sl, default_value=False):
                 res[sl] = 1
 
         # Check field-based features (safety and diet)
@@ -172,11 +172,12 @@ def update_event_features(ev_id):
         }
         for config_type, config_feature_slugs in extra_features_mapping.items():
             for feature_slug in config_feature_slugs:
-                if event.get_config(f"{config_type}_{feature_slug}", False):
+                if event.get_config(f"{config_type}_{feature_slug}", default_value=False):
                     features_dict[feature_slug] = 1
-        return features_dict
     except ObjectDoesNotExist:
         return {}
+    else:
+        return features_dict
 
 
 def on_association_post_save_reset_features_cache(instance) -> None:

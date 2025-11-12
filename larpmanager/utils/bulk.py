@@ -420,7 +420,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
         )
 
     # Add status assignment operation if enabled
-    if get_event_config(context["event"].id, "user_character_approval", False, context):
+    if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
         status_choices = [{"id": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
         context["bulk"].append(
             {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices},

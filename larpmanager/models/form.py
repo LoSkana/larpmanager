@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from typing import Any
 
 from django.apps import apps
@@ -331,30 +333,13 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event_instance, enabled_features):
+    def get_instance_questions(event_instance, enabled_features):  # noqa: ARG004
         """Get all writing questions for the event instance ordered by order field."""
         return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
-    def skip(
-        instance: Any,
-        available_features: dict[str, Any],
-        processing_parameters: dict[str, Any],
-        organization: Any,
-    ) -> bool:
-        """Determine whether to skip processing for the given instance.
-
-        Args:
-            instance: The object instance to check for skipping
-            available_features: Dictionary containing available features and their settings
-            processing_parameters: Dictionary of parameters for processing configuration
-            organization: Organization object containing context information
-
-        Returns:
-            bool: Always returns False, indicating no skipping should occur
-
-        """
-        # Default behavior: never skip processing
+    def skip(registration, features, params=None, *, is_organizer=False) -> bool:  # noqa: ARG004
+        """Default behavior: never skip processing."""
         return False
 
     def get_editable(self):
@@ -398,12 +383,12 @@ class WritingOption(BaseModel):
         blank=True,
         default="",
         verbose_name=_("Description"),
-        help_text=_("Optional – Additional information about the option, displayed below the question"),
+        help_text=_("Optional - Additional information about the option, displayed below the question"),
     )
 
     max_available = models.IntegerField(
         default=0,
-        help_text=_("Optional – Maximum number of times it can be selected across all characters (0 = unlimited)"),
+        help_text=_("Optional - Maximum number of times it can be selected across all characters (0 = unlimited)"),
     )
 
     order = models.IntegerField(default=0)
@@ -638,7 +623,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration, features, params=None, is_organizer=False) -> bool:
+    def skip(self, registration, features, params=None, *, is_organizer=False) -> bool:
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
@@ -705,7 +690,7 @@ class RegistrationOption(BaseModel):
         blank=True,
         default="",
         verbose_name=_("Description"),
-        help_text=_("Optional – Additional information about the option, displayed below the question"),
+        help_text=_("Optional - Additional information about the option, displayed below the question"),
     )
 
     price = models.DecimalField(
@@ -713,13 +698,13 @@ class RegistrationOption(BaseModel):
         decimal_places=2,
         default=0,
         verbose_name=_("Price"),
-        help_text=_("Optional – Amount added to the registration fee if selected (0 = no extra cost)"),
+        help_text=_("Optional - Amount added to the registration fee if selected (0 = no extra cost)"),
     )
 
     max_available = models.IntegerField(
         default=0,
         verbose_name=_("Maximum number"),
-        help_text=_("Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)"),
+        help_text=_("Optional - Maximum number of times it can be selected across all registrations (0 = unlimited)"),
     )
 
     order = models.IntegerField(default=0)

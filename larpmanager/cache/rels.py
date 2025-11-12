@@ -65,7 +65,7 @@ def clear_event_relationships_cache(event_id: int) -> None:
     # Clear cache for the main event
     cache_key = get_event_rels_key(event_id)
     cache.delete(cache_key)
-    logger.debug(f"Reset cache for event {event_id}")
+    logger.debug("Reset cache for event %s", event_id)
 
     # Invalidate cache for all child events to maintain consistency
     for child_event_id in Event.objects.filter(parent_id=event_id).values_list("pk", flat=True):
@@ -101,7 +101,7 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
         cached_event_data = cache.get(cache_key)
 
         if cached_event_data is None:
-            logger.debug(f"Cache miss during {section_name} update for event {event_id}, reinitializing")
+            logger.debug("Cache miss during %s update for event %s, reinitializing", section_name, event_id)
             # We need to get the event to reinitialize
             event = Event.objects.get(id=event_id)
             init_event_rels_all(event)
@@ -112,10 +112,10 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
 
         cached_event_data[section_name][section_id] = data
         cache.set(cache_key, cached_event_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug(f"Updated {section_name} {section_id} relationships in cache")
+        logger.debug("Updated %s %s relationships in cache", section_name, section_id)
 
     except Exception as e:
-        logger.error(f"Error updating {section_name} {section_id} relationships: {e}", exc_info=True)
+        logger.exception("Error updating %s %s relationships: %s", section_name, section_id, e)
         clear_event_relationships_cache(event_id)
 
 
@@ -134,9 +134,9 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
         if cached_data and section_name in cached_data and section_id in cached_data[section_name]:
             del cached_data[section_name][section_id]
             cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-            logger.debug(f"Removed {section_name} {section_id} from cache")
+            logger.debug("Removed %s %s from cache", section_name, section_id)
     except Exception as error:
-        logger.error(f"Error removing {section_name} {section_id} from cache: {error}", exc_info=True)
+        logger.exception("Error removing %s %s from cache: %s", section_name, section_id, error)
         clear_event_relationships_cache(event_id)
 
 
@@ -193,7 +193,7 @@ def update_m2m_related_characters(instance, character_ids, action: str, update_f
                     character = Character.objects.get(id=character_id)
                     affected_characters.append(character)
                 except ObjectDoesNotExist:
-                    logger.warning(f"Character {character_id} not found during relationship update")
+                    logger.warning("Character %s not found during relationship update", character_id)
         elif action == "post_clear":
             # For post_clear, get all characters that were related
             if hasattr(instance, "characters"):
@@ -243,7 +243,7 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
 
     # Initialize cache if no data found
     if cached_relationships is None:
-        logger.debug(f"Cache miss for event {event.id}, initializing")
+        logger.debug("Cache miss for event %s, initializing", event.id)
         cached_relationships = init_event_rels_all(event)
 
     return cached_relationships
@@ -324,16 +324,16 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
                 else:
                     relationship_cache[cache_key_plural][element.id] = get_relationships_function(element)
 
-            logger.debug(f"Initialized {len(elements)} {feature_name} relationships for event {event.id}")
+            logger.debug("Initialized %s %s relationships for event %s", len(elements), feature_name, event.id)
 
         # Cache the complete relationship data structure
         cache_key = get_event_rels_key(event.id)
         cache.set(cache_key, relationship_cache, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug(f"Cached relationships for event {event.id}")
+        logger.debug("Cached relationships for event %s", event.id)
 
     except Exception as exception:
         # Log the error with full traceback and return empty result
-        logger.error(f"Error initializing relationships for event {event.id}: {exception}", exc_info=True)
+        logger.exception("Error initializing relationships for event %s: %s", event.id, exception)
         relationship_cache = {}
 
     return relationship_cache
@@ -370,7 +370,7 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
 
         # If cache doesn't exist, initialize it for the entire event
         if cached_relationships is None:
-            logger.debug(f"Cache miss during character update for event {event}, reinitializing")
+            logger.debug("Cache miss during character update for event %s, reinitializing", event)
             init_event_rels_all(event)
             return
 
@@ -384,11 +384,11 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
 
         # Save updated cache with 1-day timeout
         cache.set(cache_key, cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug(f"Updated character {char.id} relationships in cache")
+        logger.debug("Updated character %s relationships in cache", char.id)
 
     except Exception as e:
         # Log error and clear cache to prevent inconsistent state
-        logger.error(f"Error updating character {char.id} relationships: {e}", exc_info=True)
+        logger.exception("Error updating character %s relationships: %s", char.id, e)
         clear_event_relationships_cache(event.id)
 
 
@@ -433,7 +433,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
             # Calculate important plot count (excluding $unimportant entries)
             unimportant_plot_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
                 unimportant_plot_count = sum(
                     1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
                 )
@@ -442,7 +442,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
             cache_event_id = event.id if event else char.event_id
-            if get_event_config(cache_event_id, "campaign_faction_indep", False):
+            if get_event_config(cache_event_id, "campaign_faction_indep", default_value=False):
                 # Use the cache event for independent faction lookup
                 faction_event_id = cache_event_id
             else:
@@ -468,7 +468,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
             # Calculate important relationship count (excluding $unimportant entries)
             unimportant_relationship_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", False):
+            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
                 unimportant_relationship_count = sum(
                     1
                     for relationship in character_relationships
@@ -492,7 +492,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
 
     except Exception as error:
         # Log the error with full traceback and return empty dict as fallback
-        logger.error(f"Error getting relationships for character {char.id}: {error}", exc_info=True)
+        logger.exception("Error getting relationships for character %s: %s", char.id, error)
         relations = {}
 
     return relations
@@ -542,7 +542,7 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
 
     except Exception as error:
         # Log error with full traceback for debugging
-        logger.error(f"Error getting relationships for faction {faction.id}: {error}", exc_info=True)
+        logger.exception("Error getting relationships for faction %s: %s", faction.id, error)
 
         # Return empty dict on error to prevent downstream issues
         faction_relations = {}
@@ -589,7 +589,7 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
 
     except Exception as error:
         # Log error with full traceback for debugging
-        logger.error(f"Error getting relationships for plot {plot.id}: {error}", exc_info=True)
+        logger.exception("Error getting relationships for plot %s: %s", plot.id, error)
 
         # Return empty dict on any error to maintain consistent return type
         relationships = {}
@@ -634,7 +634,7 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
 
     except Exception as error:
         # Log the error with full traceback for debugging
-        logger.error(f"Error getting relationships for speedlarp {speedlarp.id}: {error}", exc_info=True)
+        logger.exception("Error getting relationships for speedlarp %s: %s", speedlarp.id, error)
         relationships = {}
 
     return relationships
@@ -686,7 +686,7 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
 
     except Exception as error:
         # Log error with full traceback for debugging while preventing crashes
-        logger.error(f"Error getting relationships for prologue {prologue.id}: {error}", exc_info=True)
+        logger.exception("Error getting relationships for prologue %s: %s", prologue.id, error)
         relationships = {}
 
     return relationships
@@ -729,7 +729,7 @@ def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
 
     except Exception as error:
         # Log error details for debugging while maintaining function stability
-        logger.exception(f"Error getting relationships for quest {quest.id}: {error}")
+        logger.exception("Error getting relationships for quest %s: %s", quest.id, error)
         relationships = {}
 
     return relationships
@@ -771,7 +771,7 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
 
     except Exception as exception:
         # Log error and return empty dict on failure
-        logger.exception(f"Error getting relationships for questtype {questtype.id}: {exception}")
+        logger.exception("Error getting relationships for questtype %s: %s", questtype.id, exception)
         relationships = {}
 
     return relationships

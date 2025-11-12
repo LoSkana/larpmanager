@@ -237,7 +237,7 @@ def update_token_credit_on_payment_save(instance, created) -> None:
 
     """
     if not created and instance.reg:
-        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
+        update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
 def update_token_credit_on_payment_delete(instance) -> None:
@@ -248,7 +248,7 @@ def update_token_credit_on_payment_delete(instance) -> None:
 
     """
     if instance.reg:
-        update_token_credit(instance, instance.pay == PaymentChoices.TOKEN)
+        update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
 def update_token_credit_on_other_save(accounting_item) -> None:
@@ -261,7 +261,7 @@ def update_token_credit_on_other_save(accounting_item) -> None:
     if not accounting_item.member:
         return
 
-    update_token_credit(accounting_item, accounting_item.oth == OtherChoices.TOKEN)
+    update_token_credit(accounting_item, token=accounting_item.oth == OtherChoices.TOKEN)
 
 
 def update_credit_on_expense_save(expense_item) -> None:
@@ -274,10 +274,10 @@ def update_credit_on_expense_save(expense_item) -> None:
     if not expense_item.member or not expense_item.is_approved:
         return
 
-    update_token_credit(expense_item, False)
+    update_token_credit(expense_item, token=False)
 
 
-def update_token_credit(instance, token: bool = True) -> None:
+def update_token_credit(instance, *, token: bool = True) -> None:
     """Update member's token or credit balance based on accounting items.
 
     Recalculates and updates membership token or credit balance by summing
@@ -381,7 +381,9 @@ def handle_tokes_credits(
 
     """
     # Skip if token credits are disabled globally or for this event
-    if "token_credit" not in features or get_event_config(registration.run.event_id, "token_credit_disable_t", False):
+    if "token_credit" not in features or get_event_config(
+        registration.run.event_id, "token_credit_disable_t", default_value=False
+    ):
         return
 
     # Handle positive balance by using available token credits
