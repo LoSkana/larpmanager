@@ -47,7 +47,6 @@ ignore = [
     "ERA001",  # TODO remove 	commented-out-code
     "ARG001",  # TODO remove 	unused-function-argument
     "SLF001",  # TODO remove	private-member-access
-    "ARG002",  # TODO remove 	unused-method-argument
     "PTH118",  # TODO remove 	os-path-join
     "BLE001",  # TODO remove 	blind-except
     "C901",  # TODO remove   	complex-structure

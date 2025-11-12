@@ -33,7 +33,7 @@ class DeepLLimitExceededError(Exception):
 class Command(BaseCommand):
     """Translate elements in .po file untraslated, or with fuzzy translation, using deepl."""
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args, **options) -> None:  # noqa: ARG002
         """Handle the translation command by initializing translator and processing translations."""
         # Initialize DeepL translator and display initial usage
         self.translator = deepl.Translator(conf_settings.DEEPL_API_KEY)

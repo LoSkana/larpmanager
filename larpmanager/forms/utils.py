@@ -125,7 +125,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:
+    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:  # noqa: ARG002
         """Render checkbox widget with tooltips and help links.
 
         Generates HTML for a checkbox widget where each option includes:

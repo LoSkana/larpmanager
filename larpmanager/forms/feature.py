@@ -17,7 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.db.models import Q
@@ -26,8 +28,10 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.base import MyForm
-from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
+
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
 
 
 class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
@@ -37,7 +41,7 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_help = kwargs.pop("help_text", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:
+    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:  # noqa: ARG002
         """Render feature checkboxes with tooltips and help links.
 
         Generates HTML for a set of feature checkboxes, each with an associated tooltip

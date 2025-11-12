@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
@@ -223,7 +224,7 @@ class OneTimeAccessTokenInline(admin.TabularInline):
     fields = ("note", "token", "used", "used_at", "used_by", "ip_address")
     can_delete = True
 
-    def has_add_permission(self, request, obj=None) -> bool:
+    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:  # noqa: ARG002
         """Allow adding new tokens."""
         return True
 
@@ -356,6 +357,6 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
 
     token_short.short_description = "Token"
 
-    def has_add_permission(self, request: HttpRequest) -> bool:
+    def has_add_permission(self, request: HttpRequest) -> bool:  # noqa: ARG002
         """Prevent adding tokens through admin - they should be generated via the content."""
         return True

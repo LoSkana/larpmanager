@@ -415,12 +415,12 @@ class WritingOption(BaseModel):
     def __str__(self) -> str:
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
+    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:  # noqa: ARG002
         """Return the display name for this ticket tier."""
-        show_data = self.show(run)
+        show_data = self.show()
         return show_data["name"]
 
-    def show(self, run=None) -> dict[str, Any]:
+    def show(self) -> dict[str, Any]:
         """Return JSON representation with available fields and attributes.
 
         Args:
@@ -716,10 +716,10 @@ class RegistrationOption(BaseModel):
         """Return the option price."""
         return self.price
 
-    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
+    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:  # noqa: ARG002
         """Return formatted text with name and optional price."""
         # Get display data for the current instance
-        display_data = self.show(run)
+        display_data = self.show()
         formatted_text = display_data["name"]
 
         # Append formatted price with currency symbol if applicable
@@ -731,11 +731,8 @@ class RegistrationOption(BaseModel):
 
         return formatted_text
 
-    def show(self, run: Run | None = None) -> dict[str, Any]:
+    def show(self) -> dict[str, Any]:
         """Return ticket tier display data as dictionary.
-
-        Args:
-            run: Optional Run instance (currently unused).
 
         Returns:
             Dictionary with tier name, price, description, question, and max availability.

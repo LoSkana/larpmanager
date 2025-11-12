@@ -585,7 +585,7 @@ class Badge(BaseModel):
             return show_thumb(100, self.img_thumb.url)
         return ""
 
-    def show(self, lang: str) -> dict:
+    def show(self) -> dict:
         """Return a dictionary representation for display purposes.
 
         Args:

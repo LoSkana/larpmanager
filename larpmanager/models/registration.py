@@ -124,7 +124,7 @@ class RegistrationTicket(BaseModel):
             f"({self.price}{self.event.association.get_currency_symbol()})"
         )
 
-    def show(self, run: Run | None = None) -> dict[str, Any]:
+    def show(self) -> dict[str, Any]:
         """Return JSON representation of ticket tier with availability and attributes."""
         js = {"max_available": self.max_available}
         # Update JSON with name, price, and description attributes

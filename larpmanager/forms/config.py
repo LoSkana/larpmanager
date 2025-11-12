@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from enum import IntEnum
 from typing import Any
@@ -23,7 +25,7 @@ class ConfigType(IntEnum):
 
 
 class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
-    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer=None) -> str:
+    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer=None) -> str:  # noqa: ARG002
         """Render the checkbox widget as HTML.
 
         Args:

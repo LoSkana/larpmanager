@@ -72,7 +72,7 @@ class Command(BaseCommand):
 
     help = "Automate processes "
 
-    def handle(self, *args: Any, **options: Any) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle command execution with exception handling.
 
         Args:

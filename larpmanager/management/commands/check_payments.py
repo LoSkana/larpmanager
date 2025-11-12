@@ -39,7 +39,7 @@ class Command(BaseCommand):
 
     help = "Check status of pending payments across all payment gateways"
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args, **options) -> None:  # noqa: ARG002
         """Handle command execution with exception handling.
 
         Args:

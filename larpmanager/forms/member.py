@@ -207,7 +207,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             raise ValidationError(msg)
         return data
 
-    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002, ARG002
         """Save user and update associated member profile with form data.
 
         Args:
@@ -265,9 +265,9 @@ class MyPasswordResetForm(PasswordResetForm):
         subject_template_name: str,
         email_template_name: str,
         context: dict,
-        from_email: str,
+        from_email: str,  # noqa: ARG002
         to_email: str,
-        html_email_template_name: str | None = None,
+        html_email_template_name: str | None = None,  # noqa: ARG002
     ) -> None:
         """Send a django.core.mail.EmailMultiAlternatives to `to_email`.
 

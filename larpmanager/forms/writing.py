@@ -146,7 +146,7 @@ class PlayerRelationshipForm(MyForm):
 
         return cleaned_data
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance, setting registration if new.
 
         Args:
@@ -238,7 +238,7 @@ class BaseWritingForm(BaseRegistrationForm):
         """Return cache key for tracking option character count."""
         return f"option_char_{option.id}"
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save the form and handle registration questions if present.
 
         Args:
@@ -334,7 +334,7 @@ class PlotForm(WritingForm, BaseWritingForm):
                 reverse_args = [self.params["run"].get_slug(), ch[0]]
                 self.field_link[id_field] = reverse("orga_characters_edit", args=reverse_args)
 
-    def _save_multi(self, s: str, instance: Plot) -> None:
+    def _save_multi(self, field: str, instance: Plot) -> None:  # noqa: ARG002
         """Delete plot-character relations for unselected characters."""
         # Extract character IDs from cleaned form data
         self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
@@ -342,7 +342,7 @@ class PlotForm(WritingForm, BaseWritingForm):
         # Remove relations for characters not in the current selection
         PlotCharacterRel.objects.filter(plot_id=instance.pk).exclude(character_id__in=self.chars_id).delete()
 
-    def save(self, commit: bool = True) -> PlotCharacterRel:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> PlotCharacterRel:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update plot-character relationships.
 
         Args:
