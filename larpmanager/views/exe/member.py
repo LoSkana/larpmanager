@@ -21,6 +21,7 @@
 import csv
 from collections import defaultdict
 from datetime import datetime
+from datetime import timezone as dt_timezone
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -638,7 +639,7 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
 
     # Set current year and calculate year start date
     context["year"] = timezone.now().year
-    start = datetime(context["year"], 1, 1, tzinfo=timezone.utc)
+    start = datetime(context["year"], 1, 1, tzinfo=dt_timezone.utc)
 
     # Build cache of member enrollment dates from accounting items
     cache = {}

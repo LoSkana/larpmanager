@@ -20,6 +20,7 @@
 
 import logging
 from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -149,7 +150,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "e": run.event.slug,
             "r": run.number,
             "s": str(run),
-            "k": (run.start if run.start else datetime.max.replace(tzinfo=timezone.utc).date()),
+            "k": (run.start if run.start else datetime.max.replace(tzinfo=dt_timezone.utc).date()),
         }
 
         # Categorize as open or past run

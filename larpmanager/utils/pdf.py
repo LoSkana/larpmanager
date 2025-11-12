@@ -27,6 +27,7 @@ import os.path
 import re
 import zipfile
 from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -101,7 +102,7 @@ def reprint(file_path):
         return True
 
     cutoff_date = timezone.now() - timedelta(days=1)
-    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, timezone.utc)
+    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, dt_timezone.utc)
     return modification_time < cutoff_date
 
 

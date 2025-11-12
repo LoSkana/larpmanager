@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 from typing import Any
 
 from django.contrib import messages
@@ -374,9 +375,9 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
             return (
                 assignment_item.assigned.get("updated")
                 or getattr(assignment_item, "updated", None)
-                or datetime.min.replace(tzinfo=timezone.utc)
+                or datetime.min.replace(tzinfo=dt_timezone.utc)
             )
-        return datetime.min.replace(tzinfo=timezone.utc)
+        return datetime.min.replace(tzinfo=dt_timezone.utc)
 
     # Sort items: assigned items first, then by recent updates, name, and ID
     ordered_items = sorted(
