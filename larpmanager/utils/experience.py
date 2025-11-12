@@ -316,11 +316,11 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
 
 
 def on_experience_characters_m2m_changed(
-    sender,
+    sender,  # noqa: ARG001
     instance: DeliveryPx | None,
     action: str,
     pk_set: set | None,
-    **kwargs,
+    **kwargs,  # noqa: ARG001
 ) -> None:
     """Handle m2m changes for experience-character relationships."""
     # Only process relevant m2m actions
@@ -340,11 +340,11 @@ def on_experience_characters_m2m_changed(
 
 
 def on_rule_abilities_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: RulePx,
     action: str,
-    pk_set: set[int] | None,
-    **kwargs,
+    pk_set: set[int] | None,  # noqa: ARG001
+    **kwargs,  # noqa: ARG001
 ) -> None:
     """Handle changes to rule abilities many-to-many relationships.
 
@@ -364,11 +364,11 @@ def on_rule_abilities_m2m_changed(
 
 
 def on_modifier_abilities_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: ModifierPx,
     action: str,
-    pk_set: set[int] | None,
-    **kwargs,
+    pk_set: set[int] | None,  # noqa: ARG001
+    **kwargs,  # noqa: ARG001
 ) -> None:
     """Handle modifier abilities m2m changes by recalculating character experience."""
     # Only process relevant m2m actions

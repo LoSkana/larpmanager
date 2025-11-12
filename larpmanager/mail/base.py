@@ -95,7 +95,7 @@ def join_email(association) -> None:
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender, **kwargs) -> None:
+def on_association_roles_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.
@@ -180,7 +180,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
                 my_send_mail(subj, body, m, instance.association)
 
 
-def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
+def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:  # noqa: ARG001
     """Handle event role changes and send notifications.
 
     Args:

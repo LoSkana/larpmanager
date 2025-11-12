@@ -547,7 +547,7 @@ class BaseRegistrationForm(MyFormRun):
         # Process each available option for the question
         for option in available_options:
             # Generate display text with pricing information
-            option_display_name = option.get_form_text(event_run, currency_symbol=self.params["currency_symbol"])
+            option_display_name = option.get_form_text(currency_symbol=self.params["currency_symbol"])
 
             # Check availability constraints if registration counts provided
             if registration_count and option.max_available > 0:

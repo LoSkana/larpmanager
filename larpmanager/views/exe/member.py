@@ -911,7 +911,7 @@ def exe_read_mail(request: HttpRequest, mail_id: str) -> HttpResponse:
     context["exe"] = True
 
     # Retrieve and add email data to context
-    context["email"] = get_mail(request, context, mail_id)
+    context["email"] = get_mail(context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 

@@ -757,7 +757,8 @@ class Command(BaseCommand):
         # Send payment reminder if all conditions are met
         remember_pay(reg)
 
-    def check_deadline(self, run: Run) -> None:
+    @staticmethod
+    def check_deadline(run: Run) -> None:
         """Check and send deadline notifications for run.
 
         This function performs deadline checking for a specific run, considering holidays,

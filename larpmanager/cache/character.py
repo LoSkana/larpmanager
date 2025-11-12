@@ -693,7 +693,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         clear_event_cache_all_runs(char.event)
 
 
-def on_character_factions_m2m_changed(sender, **kwargs) -> None:
+def on_character_factions_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
     """Clear event cache when character factions change."""
     # Check if action is one that affects the relationship
     action = kwargs.pop("action", None)

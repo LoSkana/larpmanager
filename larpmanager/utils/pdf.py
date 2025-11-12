@@ -130,7 +130,7 @@ def return_pdf(file_path, filename):
         return response
 
 
-def link_callback(uri: str, rel: str) -> str:
+def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
     """Convert HTML URIs to absolute system paths for xhtml2pdf.
 
     Resolves static and media URLs to absolute file paths so the PDF
@@ -672,13 +672,7 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
 
 
 def cleanup_pdfs_on_trait_assignment(assignment_trait_instance) -> None:
-    """Handle assignment trait post-save PDF cleanup.
-
-    Args:
-        assignment_trait_instance: AssignmentTrait instance that was saved
-        is_newly_created: Boolean indicating if instance was created
-
-    """
+    """Handle assignment trait post-save PDF cleanup."""
     if not assignment_trait_instance.member:
         return
 

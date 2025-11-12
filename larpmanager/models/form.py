@@ -30,7 +30,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
 from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
@@ -415,21 +415,13 @@ class WritingOption(BaseModel):
     def __str__(self) -> str:
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:  # noqa: ARG002
+    def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
         """Return the display name for this ticket tier."""
         show_data = self.show()
         return show_data["name"]
 
     def show(self) -> dict[str, Any]:
-        """Return JSON representation with available fields and attributes.
-
-        Args:
-            run: Optional run instance for context (unused).
-
-        Returns:
-            Dictionary containing max_available and updated attributes.
-
-        """
+        """Return JSON representation with available fields and attributes."""
         # Initialize response with max available count
         js = {"max_available": self.max_available}
 
@@ -716,7 +708,7 @@ class RegistrationOption(BaseModel):
         """Return the option price."""
         return self.price
 
-    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:  # noqa: ARG002
+    def get_form_text(self, currency_symbol: str | None = None) -> str:
         """Return formatted text with name and optional price."""
         # Get display data for the current instance
         display_data = self.show()

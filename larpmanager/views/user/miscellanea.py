@@ -59,13 +59,13 @@ from larpmanager.utils.pdf import (
 logger = logging.getLogger(__name__)
 
 
-def url_short(request: HttpRequest, url_cod: str) -> HttpResponseRedirect:
+def url_short(request: HttpRequest, url_cod: str) -> HttpResponseRedirect:  # noqa: ARG001
     """Redirect to the URL associated with the given shortened code."""
     el = get_object_or_404(UrlShortner, cod=url_cod)
     return redirect(el.url)
 
 
-def util(request: HttpRequest, util_cod: str) -> HttpResponseRedirect:
+def util(request: HttpRequest, util_cod: str) -> HttpResponseRedirect:  # noqa: ARG001
     """Redirect to download URL for the specified utility."""
     try:
         # Retrieve utility object by code

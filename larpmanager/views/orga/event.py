@@ -568,7 +568,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
         if form.is_valid():
             try:
                 # Process the uploaded file and get processing logs
-                context["logs"] = go_upload(request, context, form)
+                context["logs"] = go_upload(context, form)
                 context["redr"] = redr
 
                 # Show success message and render results page

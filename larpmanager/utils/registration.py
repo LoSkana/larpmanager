@@ -48,7 +48,6 @@ from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, Wa
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
-    from django.http import HttpRequest
 
 
 def registration_available(run: Run, features: dict, context: dict | None = None) -> None:
@@ -802,7 +801,7 @@ def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
     return event.get_elements(Character).filter(player=member).order_by("-updated")
 
 
-def get_player_signup(request: HttpRequest, context: dict) -> Registration | None:
+def get_player_signup(context: dict) -> Registration | None:
     """Get active registration for current user in the given run context."""
     # Filter registrations for current run and user, excluding cancelled ones
     active_registrations = Registration.objects.filter(
@@ -818,11 +817,10 @@ def get_player_signup(request: HttpRequest, context: dict) -> Registration | Non
     return None
 
 
-def check_signup(request: HttpRequest, context: dict) -> None:
+def check_signup(context: dict) -> None:
     """Check if player signup is valid and not in waiting status.
 
     Args:
-        request: HTTP request object
         context: Context dictionary containing run information
 
     Raises:
@@ -831,7 +829,7 @@ def check_signup(request: HttpRequest, context: dict) -> None:
 
     """
     # Get player registration for current run
-    registration = get_player_signup(request, context)
+    registration = get_player_signup(context)
     if not registration:
         raise SignupError(context["run"].get_slug())
 
@@ -840,14 +838,13 @@ def check_signup(request: HttpRequest, context: dict) -> None:
         raise WaitingError(context["run"].get_slug())
 
 
-def check_assign_character(request: HttpRequest, context: dict) -> None:
+def check_assign_character(context: dict) -> None:
     """Check and assign a character to player signup if conditions are met.
 
     Automatically assigns the first available character to a player's signup
     if they have exactly one character and no existing character assignments.
 
     Args:
-        request: HTTP request object containing user information
         context: Context dictionary containing event data
 
     Returns:
@@ -855,7 +852,7 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
 
     """
     # Get the player's registration for this event
-    registration = get_player_signup(request, context)
+    registration = get_player_signup(context)
     if not registration:
         return
 

@@ -911,11 +911,11 @@ def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
 
 
 def on_faction_characters_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: Faction,
     action: str,
     pk_set: set[int] | None,
-    **kwargs: dict,
+    **kwargs: dict,  # noqa: ARG001
 ) -> None:
     """Handle faction-character relationship changes.
 
@@ -946,11 +946,11 @@ def on_faction_characters_m2m_changed(
 
 
 def on_plot_characters_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: Plot,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,
+    **kwargs,  # noqa: ARG001
 ) -> None:
     """Handle plot-character relationship changes.
 
@@ -965,11 +965,11 @@ def on_plot_characters_m2m_changed(
 
 
 def on_speedlarp_characters_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: SpeedLarp,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,
+    **kwargs,  # noqa: ARG001
 ) -> None:
     """Handle speedlarp-character relationship changes.
 
@@ -1000,11 +1000,11 @@ def on_speedlarp_characters_m2m_changed(
 
 
 def on_prologue_characters_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: Prologue,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,
+    **kwargs,  # noqa: ARG001
 ) -> None:
     """Handle prologue-character relationship changes.
 

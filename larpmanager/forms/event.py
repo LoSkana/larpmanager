@@ -1810,7 +1810,8 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_options,
         )
 
-    def _compile_configs(self, basic_question_types, compiled_options, field_definitions) -> None:
+    @staticmethod
+    def _compile_configs(basic_question_types, compiled_options, field_definitions) -> None:
         """Compile configuration options from field definitions.
 
         Args:

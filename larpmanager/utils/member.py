@@ -26,7 +26,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
-from django.http import Http404, HttpRequest
+from django.http import Http404
 from django.utils import timezone
 
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus
@@ -185,11 +185,10 @@ def assign_badge(member: Member, badge_code: str) -> None:
         logger.exception("Failed to assign badge %s to member %s", badge_code, member)
 
 
-def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
+def get_mail(context: dict, email_id: int) -> Email:
     """Retrieve an email object with proper authorization checks.
 
     Args:
-        request: HTTP request object containing association information
         context: Context dictionary that may contain run information
         email_id: Primary key of the email to retrieve
 

@@ -125,7 +125,6 @@ def unique_invoice_cod(length: int = 16) -> str:
 
 
 def set_data_invoice(
-    request: HttpRequest,
     context: dict,
     invoice: PaymentInvoice,
     form: Form,
@@ -137,7 +136,6 @@ def set_data_invoice(
     and applies special formatting if configured for the association.
 
     Args:
-        request: Django HTTP request object containing user information
         context: Context dictionary with registration, year, or collection data
         invoice: PaymentInvoice instance to update with causal information
         form: Form containing cleaned invoice data (used for donations)
@@ -342,8 +340,8 @@ def get_payment_form(
     association_id: int = context["association_id"]
 
     # Extract and store payment details from form data
-    payment_amount: Decimal = form.cleaned_data["amount"]
-    context["am"] = payment_amount
+    initial_amount: Decimal = form.cleaned_data["amount"]
+    context["am"] = initial_amount
     payment_method_slug: str = form.cleaned_data["method"]
     context["method"] = payment_method_slug
 
@@ -375,10 +373,10 @@ def get_payment_form(
 
     # Update payment context and invoice data with current details
     update_payment_details(context)
-    set_data_invoice(request, context, invoice, form, association_id)
+    set_data_invoice(context, invoice, form, association_id)
 
     # Calculate final amount including fees and update invoice
-    payment_amount = update_invoice_gross_fee(invoice, payment_amount, association_id, payment_method)
+    payment_amount = update_invoice_gross_fee(invoice, initial_amount, association_id, payment_method)
     context["invoice"] = invoice
 
     # Check if receipt is required for manual payments (applies to all payment types)
@@ -528,7 +526,6 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
     organization or passed through to the user based on configuration.
 
     Args:
-        features: Feature configuration object
         fee_percentage: Fee percentage to apply to the invoice gross amount
         invoice: Invoice object containing payment details
 

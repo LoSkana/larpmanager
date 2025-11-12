@@ -379,12 +379,11 @@ def _orga_registrations_custom_character(context) -> None:
         context["custom_info"].append(field_name)
 
 
-def _orga_registrations_prepare(context, request: HttpRequest) -> None:
+def _orga_registrations_prepare(context) -> None:
     """Prepare registration data including characters, tickets, and questions.
 
     Args:
         context: Context dictionary to populate with registration data
-        request: HTTP request object
 
     """
     context["reg_chars"] = {}
@@ -520,7 +519,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     get_event_cache_all(context)
 
     # Prepare registration context with characters, tickets, and questions
-    _orga_registrations_prepare(context, request)
+    _orga_registrations_prepare(context)
 
     # Load discount information for all registered members
     _orga_registrations_discount(context)
@@ -1170,7 +1169,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     return redirect("manage", event_slug=context["run"].get_slug())
 
 
-def lottery_info(request: HttpRequest, context: dict) -> None:
+def lottery_info(request: HttpRequest, context: dict) -> None:  # noqa: ARG001
     """Add lottery-related information to the context dictionary.
 
     Args:

@@ -633,7 +633,8 @@ class OrgaCharacterForm(CharacterForm):
             rel.text = value
             rel.save()
 
-    def _get_rel(self, character_id: int, instance, relationship_type: str) -> Relationship:
+    @staticmethod
+    def _get_rel(character_id: int, instance, relationship_type: str) -> Relationship:
         """Get or create a relationship between characters based on type.
 
         Args:

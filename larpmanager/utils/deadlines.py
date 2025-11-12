@@ -161,7 +161,7 @@ def check_run_deadlines(runs: list) -> list:
                     tolerance,
                 )
             else:
-                deadlines_profile(deadline_violations, features, memberships, now, registration, run, tolerance)
+                deadlines_profile(deadline_violations, memberships, now, registration, run, tolerance)
 
             # Check payment deadlines
             deadlines_payment(deadline_violations, features, registration, tolerance)
@@ -177,7 +177,6 @@ def check_run_deadlines(runs: list) -> list:
 
 def deadlines_profile(
     deadline_violations,
-    features,
     memberships,
     current_datetime,
     registration,
@@ -188,7 +187,6 @@ def deadlines_profile(
 
     Args:
         deadline_violations (dict): Dictionary to collect deadline violations
-        features (dict): Event features
         memberships (dict): Member ID to membership mapping
         current_datetime (datetime): Current datetime
         registration: Registration instance

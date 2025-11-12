@@ -111,7 +111,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         return redirect("home")
 
     # Populate main user's accounting information
-    info_accounting(request, context)
+    info_accounting(context)
 
     # Initialize delegated members tracking
     context["delegated_todo"] = False
@@ -124,7 +124,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         # Process accounting info for each delegated member
         for el in context["delegated"]:
             del_ctx = {"member": el, "association_id": context["association_id"]}
-            info_accounting(request, del_ctx)
+            info_accounting(del_ctx)
 
             # Attach context to member object for template access
             el.context = del_ctx
@@ -788,7 +788,7 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpRes
     return render(request, "larpmanager/member/acc_collection_redeem.html", context)
 
 
-def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:
+def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:  # noqa: ARG001
     """Handle PayPal webhook for invoice payment confirmation."""
     # Temporary fix until PayPal fees are better understood
     if invoice_received_money(s):

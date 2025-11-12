@@ -232,7 +232,6 @@ def register_exclusive(request: HttpRequest, event_slug: str, secret_code="", di
 
 
 def save_registration(
-    request: HttpRequest,
     context: dict[str, Any],
     form: Any,  # Registration form instance
     run: Run,
@@ -247,7 +246,6 @@ def save_registration(
     handling standard registration data, questions, discounts, and special features.
 
     Args:
-        request: Django HTTP request object containing user information
         context: Context dictionary with form data, event info, and feature flags
         form: Registration form instance with cleaned data
         run: Run instance being registered for
@@ -299,9 +297,9 @@ def save_registration(
 
         # Handle special feature processing based on context flags
         if "user_character" in context["features"]:
-            check_assign_character(request, context)
+            check_assign_character(context)
         if "bring_friend" in context["features"]:
-            save_registration_bring_friend(context, form, reg, request)
+            save_registration_bring_friend(context, form, reg)
 
     # Send background notification email for registration update
     update_registration_status_bkg(reg.id)
@@ -450,7 +448,7 @@ def registration_redirect(
     return redirect("gallery", event_slug=registration.run.get_slug())
 
 
-def save_registration_bring_friend(context: dict, form, reg: Registration, request: HttpRequest) -> None:
+def save_registration_bring_friend(context: dict, form, reg: Registration) -> None:
     """Process bring-a-friend discount codes for registration.
 
     This function handles the bring-a-friend functionality by:
@@ -467,7 +465,6 @@ def save_registration_bring_friend(context: dict, form, reg: Registration, reque
             - a_id: Association ID
         form: Registration form with bring_friend field containing the friend code
         reg: Registration instance for the current registrant
-        request: Django HTTP request object containing user information
 
     Raises:
         Http404: When the provided friend code is not found in the database
@@ -667,7 +664,6 @@ def register(
         # Validate form and save registration if valid
         if form.is_valid():
             saved_registration = save_registration(
-                request,
                 context,
                 form,
                 current_run,
@@ -1171,7 +1167,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Load accounting information (payments, pending transactions, etc.)
-    info_accounting(request, context)
+    info_accounting(context)
 
     # Attach payment and accounting info to each registration
     for reg in context["list"]:
@@ -1228,7 +1224,7 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
     check_registration_open(context, request)
 
     # Retrieve the specific gift registration and prepare form context
-    reg = get_registration_gift(context, gift_id, request)
+    reg = get_registration_gift(context, gift_id)
     _register_prepare(context, reg)
 
     # Handle POST requests for form submission (save or delete operations)
@@ -1243,7 +1239,7 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
                 messages.success(request, _("Gift card cancelled!"))
             else:
                 # Save the updated registration data
-                save_registration(request, context, form, context["run"], context["event"], reg, gifted=True)
+                save_registration(context, form, context["run"], context["event"], reg, gifted=True)
                 messages.success(request, _("Operation completed") + "!")
 
             # Redirect back to gift list after successful operation
@@ -1262,13 +1258,12 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
     return render(request, "larpmanager/event/gift_edit.html", context)
 
 
-def get_registration_gift(context: dict, registration_id: int | None, request: HttpRequest) -> Registration | None:
+def get_registration_gift(context: dict, registration_id: int | None) -> Registration | None:
     """Get a registration with gift redeem code for the current user.
 
     Args:
         context: Context dictionary containing run information
         registration_id: Registration primary key to lookup
-        request: HTTP request object with authenticated user
 
     Returns:
         Registration object if found and valid, None otherwise

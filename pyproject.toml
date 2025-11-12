@@ -45,7 +45,6 @@ ignore = [
     "ANN206",  # TODO remove Missing return type annotation for classmethod
     "RUF012",  # TODO remove 	mutable-class-default
     "ERA001",  # TODO remove 	commented-out-code
-    "ARG001",  # TODO remove 	unused-function-argument
     "SLF001",  # TODO remove	private-member-access
     "PTH118",  # TODO remove 	os-path-join
     "BLE001",  # TODO remove 	blind-except

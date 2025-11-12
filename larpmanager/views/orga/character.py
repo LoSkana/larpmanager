@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import contextlib
 from typing import Any
 
@@ -515,7 +517,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
 
 @login_required
-def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:  # noqa: ARG001
     """Redirect to writing form view with character type."""
     return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 

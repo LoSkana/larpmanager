@@ -586,15 +586,7 @@ class Badge(BaseModel):
         return ""
 
     def show(self) -> dict:
-        """Return a dictionary representation for display purposes.
-
-        Args:
-            lang: Language code for localization
-
-        Returns:
-            Dictionary with id, number, name, description and optional image URL
-
-        """
+        """Return a dictionary representation for display purposes."""
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
 

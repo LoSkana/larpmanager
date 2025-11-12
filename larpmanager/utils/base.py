@@ -369,7 +369,7 @@ def get_event_context(
 
     # Validate user signup eligibility if requested
     if signup:
-        check_signup(request, context)
+        check_signup(context)
 
     # Verify feature access permissions for specific functionality
     if feature_slug:

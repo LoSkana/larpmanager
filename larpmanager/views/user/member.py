@@ -214,7 +214,7 @@ def profile(request: HttpRequest):
     return render(request, "larpmanager/member/profile.html", context)
 
 
-def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:
+def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:  # noqa: ARG001
     """Save uploaded profile image and return thumbnail URL."""
     # Generate unique filename and save to member profile
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
@@ -683,7 +683,7 @@ def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
     badge = get_badge(badge_id, context)
 
     # Initialize context with badge data
-    context.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
+    context.update({"badge": badge.show(), "list": []})
 
     # Collect all badge members
     for el in badge.members.all():
@@ -951,7 +951,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
     # Add accounting information for each delegated account
     for el in context["list"]:
         del_ctx = {"member": el, "association_id": context["association_id"]}
-        info_accounting(request, del_ctx)
+        info_accounting(del_ctx)
         el.context = del_ctx
     return render(request, "larpmanager/member/delegated.html", context)
 

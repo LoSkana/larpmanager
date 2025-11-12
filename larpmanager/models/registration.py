@@ -136,14 +136,13 @@ class RegistrationTicket(BaseModel):
         """Return the tier price."""
         return self.price
 
-    def get_form_text(self, run: Run = None, currency_symbol: str | None = None) -> str:
+    def get_form_text(self, currency_symbol: str | None = None) -> str:
         """Generate formatted text representation for form display.
 
         Creates a text string combining the ticket name, price (if available),
         and availability count (if the ticket has an available attribute).
 
         Args:
-            run: Optional run parameter passed to show method
             currency_symbol: Currency symbol string. If not provided, will be fetched
                 from the event's association
 
@@ -152,7 +151,7 @@ class RegistrationTicket(BaseModel):
 
         """
         # Get ticket display information from show method
-        ticket_data = self.show(run)
+        ticket_data = self.show()
         formatted_text = ticket_data["name"]
 
         # Add price information if available

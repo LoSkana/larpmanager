@@ -17,12 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
-from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +35,9 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member
 from larpmanager.utils.tasks import my_send_mail
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 def send_membership_confirm(request: HttpRequest, membership) -> None:
@@ -128,7 +132,7 @@ def handle_badge_assignment_notifications(instance, pk_set) -> None:
         my_send_mail(subject, body, member, instance)
 
 
-def on_member_badges_m2m_changed(sender, **kwargs) -> None:
+def on_member_badges_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
     """Handle badge assignment notifications.
 
     Args:
@@ -149,7 +153,7 @@ def on_member_badges_m2m_changed(sender, **kwargs) -> None:
     handle_badge_assignment_notifications(instance, pk_set)
 
 
-def notify_membership_approved(member: "Member", resp: str) -> None:
+def notify_membership_approved(member: Member, resp: str) -> None:
     """Send notification when membership application is approved.
 
     Args:

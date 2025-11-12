@@ -743,7 +743,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/event.html", context)
 
 
-def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:  # noqa: ARG001
     """Redirect to the event detail view with the given slug."""
     return redirect("event", event_slug=event_slug)
 

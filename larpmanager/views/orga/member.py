@@ -535,7 +535,7 @@ def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpR
     context = check_event_context(request, event_slug, "orga_archive_email")
 
     # Retrieve the specific email for display
-    context["email"] = get_mail(request, context, mail_id)
+    context["email"] = get_mail(context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 

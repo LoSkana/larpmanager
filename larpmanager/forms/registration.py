@@ -367,7 +367,7 @@ class RegistrationForm(BaseRegistrationForm):
         # Process each available ticket to create form choices and help text
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
-            ticket_display_name = ticket.get_form_text(run, currency_symbol=self.params["currency_symbol"])
+            ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
             ticket_choices.append((ticket.id, ticket_display_name))
 
             # Add ticket description to help text if available
