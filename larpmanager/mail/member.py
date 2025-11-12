@@ -123,7 +123,7 @@ def handle_badge_assignment_notifications(instance, pk_set) -> None:
     for member_id in pk_set:
         member = Member.objects.get(pk=member_id)
         activate(member.language)
-        badge = instance.show(member.language)
+        badge = instance.show()
         subject = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
         body = _("You have been awarded an achievement") + "!" + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
