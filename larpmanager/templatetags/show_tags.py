@@ -403,7 +403,7 @@ def show_char(context: dict, element: dict | str | None, run: Run, include_toolt
     text = _remove_unimportant_prefix(text)
 
     # Text is already HTML-safe from character link processing, so we can mark it as such
-    return format_html("{}", format_html(text))
+    return format_html("{}", text)
 
 
 def go_trait(
@@ -512,7 +512,7 @@ def show_trait(context, text, run, tooltip):
         text = go_trait(context, f"^{trait_number}", trait_number, text, run, include_tooltip=tooltip, simple=True)
 
     # Text is already HTML-safe from trait link processing, so we can mark it as such
-    return format_html("{}", format_html(text))
+    return format_html("{}", text)
 
 
 @register.simple_tag
