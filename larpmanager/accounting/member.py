@@ -23,6 +23,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from datetime import timezone as dt_timezone
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -45,6 +46,7 @@ from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
+from larpmanager.utils.common import get_now
 
 
 def info_accounting(context: dict) -> None:
@@ -344,12 +346,11 @@ def _info_membership(context: dict, member: Member) -> None:
         # Build full date string with current year
         membership_day += f"-{current_year}"
 
-        # Get membership deadline date
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y")  # noqa: DTZ007
-        membership_deadline_date = timezone.make_aware(membership_deadline_date)
+        # Parse and make aware with explicit UTC
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=dt_timezone.utc)
 
         # Add grace period months
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = timezone.now() < membership_deadline_date
+        context["grazing"] = get_now() < membership_deadline_date
