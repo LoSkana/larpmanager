@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import logging
 import random
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -52,7 +53,6 @@ from larpmanager.views.user.casting import (
     casting_preferences_characters,
     casting_preferences_traits,
 )
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

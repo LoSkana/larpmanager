@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -32,7 +32,6 @@ from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
-from typing import Any
 
 if TYPE_CHECKING:
     from django.forms import Form

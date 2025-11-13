@@ -21,6 +21,7 @@
 """Tests for membership accounting, modification, and automatic value updates"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
 from larpmanager.models.accounting import (
@@ -32,7 +33,6 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.tests.unit.base import BaseTestCase
-from typing import Any
 
 
 class TestMembershipCreation(BaseTestCase):

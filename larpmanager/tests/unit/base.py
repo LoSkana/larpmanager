@@ -20,6 +20,8 @@
 
 """Base test case for unit tests with common methods"""
 
+from typing import Any
+
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -29,7 +31,6 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
-from typing import Any
 
 
 @pytest.mark.django_db

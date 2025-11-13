@@ -12,6 +12,7 @@ from tinymce.widgets import TinyMCE
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, get_members_queryset
+from larpmanager.models.base import BaseModel
 
 
 class ConfigType(IntEnum):
@@ -97,7 +98,7 @@ class ConfigForm(MyForm):
     def set_configs(self) -> None:
         """No-op method placeholder."""
 
-    def set_section(self, section_slug: Any, section_name: Any) -> None:
+    def set_section(self, section_slug: str, section_name: str) -> None:
         """Set the current section for grouping configuration fields.
 
         Args:
@@ -113,7 +114,12 @@ class ConfigForm(MyForm):
             self.jump_section = section_name
 
     def add_configs(
-        self, configuration_key: Any, config_type: Any, field_label: Any, field_help_text: Any, extra_data: Any = None
+        self,
+        configuration_key: str,
+        config_type: ConfigType,
+        field_label: str,
+        field_help_text: str,
+        extra_data: Any = None,
     ) -> None:
         """Add a configuration field to be rendered in the form.
 
@@ -139,7 +145,7 @@ class ConfigForm(MyForm):
             },
         )
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save the form instance with configuration values.
 
         Args:
@@ -169,7 +175,7 @@ class ConfigForm(MyForm):
 
         return instance
 
-    def _get_custom_field(self, field_definition: Any, result_dict: Any) -> None:
+    def _get_custom_field(self, field_definition: dict, result_dict: dict) -> None:
         """Extract and format configuration field value from form data.
 
         Args:
@@ -311,7 +317,7 @@ class ConfigForm(MyForm):
                 initial_value = initial_value == "True"
             self.initial[field_key] = initial_value
 
-    def _get_all_element_configs(self) -> Any:
+    def _get_all_element_configs(self) -> dict[str, str]:
         """Get all existing configuration values for the instance.
 
         Returns:

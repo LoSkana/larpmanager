@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -35,7 +35,6 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member
 from larpmanager.utils.tasks import my_send_mail
-from typing import Any
 
 if TYPE_CHECKING:
     from django.http import HttpRequest

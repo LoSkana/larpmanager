@@ -399,7 +399,7 @@ class CollectionForm(BaseAccForm):
 class PaymentForm(BaseAccForm):
     amount = forms.DecimalField()
 
-    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with registration-specific amount field."""
         # Extract registration instance from kwargs
         self.reg = kwargs.pop("reg")
@@ -648,7 +648,7 @@ class ExePaymentSettingsForm(MyForm):
                 data_string = self.mask_string(data_string)
             self.initial[el] = data_string
 
-    def save(self, commit: bool = True) -> PaymentInvoice:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
         """Save payment form with details masking and change tracking.
 
         This method saves the payment form instance, processes payment details
@@ -751,7 +751,7 @@ class ExePaymentSettingsForm(MyForm):
             return first_three_chars + masked_middle_section + last_three_chars
         return input_string
 
-    def clean(self) -> dict[str, any]:
+    def clean(self) -> dict[str, Any]:
         """Validate and normalize fee field values.
 
         Processes form fields identified as fee fields, converting string values

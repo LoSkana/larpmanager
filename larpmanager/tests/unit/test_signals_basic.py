@@ -32,7 +32,6 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.writing import Character
-from larpmanager.models.member import Member
 from larpmanager.tests.unit.base import BaseTestCase
 
 

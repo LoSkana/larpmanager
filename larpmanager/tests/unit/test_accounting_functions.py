@@ -21,10 +21,8 @@
 """Tests for critical accounting functions"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
-
-from django.db.models import signals
-from factory.django import mute_signals
 
 from larpmanager.accounting.registration import (
     get_reg_iscr,
@@ -41,14 +39,13 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Discount,
+    DiscountType,
     OtherChoices,
     PaymentChoices,
-    DiscountType,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.tests.unit.base import BaseTestCase
-from typing import Any
 
 
 class TestRegistrationTokenCreditFunctions(BaseTestCase):

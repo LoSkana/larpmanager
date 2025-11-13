@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -55,7 +56,6 @@ from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.pdf import (
     print_handout,
 )
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

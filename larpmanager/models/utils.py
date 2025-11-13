@@ -29,7 +29,7 @@ import string
 from html.parser import HTMLParser
 from io import StringIO
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from cryptography.fernet import Fernet
@@ -40,7 +40,6 @@ from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
-from typing import Any
 
 if TYPE_CHECKING:
     from decimal import Decimal

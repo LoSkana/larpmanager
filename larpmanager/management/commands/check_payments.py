@@ -19,13 +19,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+from typing import Any
 
 from django.core.management.base import BaseCommand
 
 from larpmanager.accounting.gateway import satispay_verify
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.tasks import notify_admins
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

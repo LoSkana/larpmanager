@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from datetime import timedelta
+from typing import Any
 
 import holidays
 from django.conf import settings as conf_settings
@@ -39,7 +40,6 @@ from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.tasks import my_send_mail
-from typing import Any
 
 
 def check_holiday() -> bool:

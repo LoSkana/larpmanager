@@ -3,10 +3,10 @@
 Prints only substantial code changes.
 """
 
-import subprocess
 import re
+import subprocess
 import sys
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 
 
 def run_git_command(cmd: List[str]) -> str:

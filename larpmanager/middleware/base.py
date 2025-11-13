@@ -17,9 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 from django.conf import settings as conf_settings
 from django.http import HttpRequest
-from typing import Any
 
 
 def is_ajax(http_request: Any) -> Any:

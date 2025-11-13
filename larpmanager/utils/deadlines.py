@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
+from typing import Any
 
 from django.db.models import Count
 from django.utils import timezone
@@ -29,7 +30,6 @@ from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
-from typing import Any
 
 
 def get_users_data(member_ids: Any) -> Any:

@@ -25,7 +25,7 @@ import os
 import shutil
 from decimal import Decimal
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 from django.conf import settings as conf_settings
@@ -67,7 +67,6 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
-from typing import Any
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -170,7 +169,7 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
     return None
 
 
-def _get_file(context: dict, file: Any, column_id: str | None = None) -> tuple[any, list[str]]:
+def _get_file(context: dict, file: object, column_id: str | None = None) -> tuple[any, list[str]]:
     """Get file path and save uploaded file to media directory.
 
     Args:
@@ -310,7 +309,7 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
 
 def _reg_field_load(
-    context: Any, registration: Any, field_name: Any, field_value: Any, registration_questions: Any, error_logs: Any
+    context: dict[str, Any], registration: Any, field_name: Any, field_value: Any, registration_questions: Any, error_logs: Any
 ) -> None:
     """Load individual registration field from CSV data.
 
@@ -768,7 +767,7 @@ def _writing_load_field(context: dict, element: BaseModel, field: str, value: an
 
 
 def _writing_question_load(
-    context: Any,
+    context: dict[str, Any],
     writing_element: Any,
     question_field: Any,
     question_type: Any,
@@ -1093,7 +1092,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
     return f"OK - Updated {option_name}"
 
 
-def _get_option(context: Any, is_registration: Any, option_name: Any, parent_question_id: Any) -> Any:
+def _get_option(context: dict[str, Any], is_registration: Any, option_name: Any, parent_question_id: Any) -> Any:
     """Get or create a question option for registration or writing forms.
 
     Args:
@@ -1157,7 +1156,7 @@ def get_csv_upload_tmp(csv_upload: Any, run: Any) -> str:
     return tmp_file
 
 
-def cover_load(context: Any, z_obj: Any) -> None:
+def cover_load(context: dict[str, Any], z_obj: Any) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
     Args:

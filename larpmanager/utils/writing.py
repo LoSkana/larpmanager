@@ -140,7 +140,7 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
     context["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]
 
 
-def writing_popup_question(context: Any, idx: Any, question_idx: Any) -> Any:
+def writing_popup_question(context: dict[str, Any], idx: Any, question_idx: Any) -> Any:
     """Get writing question data for popup display.
 
     Args:
@@ -225,7 +225,7 @@ def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model
     return JsonResponse({"k": 1, "v": html_content})
 
 
-def writing_example(context: Any, typ: Any) -> Any:
+def writing_example(context: dict[str, Any], typ: Any) -> Any:
     """Generate example writing content for a given type.
 
     Args:
@@ -365,7 +365,7 @@ def writing_list(
     return render(request, "larpmanager/orga/writing/" + template_name + "s.html", context)
 
 
-def writing_bulk(context: Any, request: Any, typ: Any) -> None:
+def writing_bulk(context: dict[str, Any], request: HttpRequest, typ: Any) -> None:
     """Handle bulk operations for different writing element types.
 
     Args:
@@ -383,7 +383,7 @@ def writing_bulk(context: Any, request: Any, typ: Any) -> None:
         type_to_bulk_handler[typ](request, context)
 
 
-def _get_custom_form(context: Any) -> None:
+def _get_custom_form(context: dict[str, Any]) -> None:
     """Set up custom form questions and field names for writing elements.
 
     Args:
@@ -453,7 +453,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
     return deferred_text_fields, is_writing_model
 
 
-def writing_list_text_fields(context: Any, text_fields: Any, writing_element_type: Any) -> None:
+def writing_list_text_fields(context: dict[str, Any], text_fields: Any, writing_element_type: Any) -> None:
     """Add editor-type question fields to text fields list and retrieve cached data.
 
     Args:
@@ -470,7 +470,7 @@ def writing_list_text_fields(context: Any, text_fields: Any, writing_element_typ
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
 
-def retrieve_cache_text_field(context: Any, text_fields: Any, element_type: Any) -> None:
+def retrieve_cache_text_field(context: dict[str, Any], text_fields: Any, element_type: Any) -> None:
     """Retrieve and attach cached text field data to writing elements.
 
     Args:
@@ -491,7 +491,7 @@ def retrieve_cache_text_field(context: Any, text_fields: Any, element_type: Any)
             setattr(element, field_name + "_ln", line_count)
 
 
-def _prepare_writing_list(context: Any) -> None:
+def _prepare_writing_list(context: dict[str, Any]) -> None:
     """Prepare context data for writing list display and configuration."""
     try:
         name_question = (
@@ -522,7 +522,7 @@ def _prepare_writing_list(context: Any) -> None:
     )
 
 
-def writing_list_plot(context: Any) -> None:
+def writing_list_plot(context: dict[str, Any]) -> None:
     """Build character associations for plot list display.
 
     Args:
@@ -655,7 +655,7 @@ def writing_list_char(context: dict) -> None:
     char_add_addit(context)
 
 
-def char_add_addit(context: Any) -> None:
+def char_add_addit(context: dict[str, Any]) -> None:
     """Add additional configuration data to all characters in the context list.
 
     Args:
@@ -761,7 +761,7 @@ def writing_versions(request: HttpRequest, context: dict, element_name: Any, ver
     return render(request, "larpmanager/orga/writing/versions.html", context)
 
 
-def replace_character_names_before_save(instance: Any) -> None:
+def replace_character_names_before_save(instance: object) -> None:
     """Django signal handler to replace character names before saving."""
     if not instance.pk:
         return

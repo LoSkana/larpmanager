@@ -24,6 +24,7 @@ import os
 import random
 from datetime import date
 from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -77,7 +78,6 @@ from larpmanager.utils.member import get_leaderboard
 from larpmanager.utils.pdf import get_membership_request
 from larpmanager.utils.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

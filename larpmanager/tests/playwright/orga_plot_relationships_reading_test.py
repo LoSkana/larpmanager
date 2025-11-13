@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -29,7 +30,6 @@ from larpmanager.tests.utils import (
     login_orga,
     submit_confirm,
 )
-from typing import Any
 
 pytestmark = pytest.mark.e2e
 

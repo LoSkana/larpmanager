@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from io import StringIO
+from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.urls import path
@@ -29,7 +30,6 @@ from larpmanager.cache.association import get_cache_association
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.larpmanager import LarpManagerGuide
-from typing import Any
 
 translation.activate("en")
 

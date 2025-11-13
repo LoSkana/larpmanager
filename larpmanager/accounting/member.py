@@ -24,6 +24,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from datetime import timezone as dt_timezone
+from typing import Any
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -47,7 +48,6 @@ from larpmanager.models.form import RegistrationChoice, RegistrationOption, Regi
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.common import get_now
-from typing import Any
 
 
 def info_accounting(context: dict) -> None:

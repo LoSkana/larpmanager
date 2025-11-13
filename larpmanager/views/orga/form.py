@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
@@ -50,7 +52,6 @@ from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import exchange_order
 from larpmanager.utils.download import orga_registration_form_download, orga_tickets_download
 from larpmanager.utils.edit import backend_edit, orga_edit, set_suggestion
-from typing import Any
 
 
 @login_required

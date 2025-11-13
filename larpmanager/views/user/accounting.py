@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -78,7 +79,6 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

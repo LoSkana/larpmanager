@@ -32,7 +32,6 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
-from django.http import HttpRequest
 from django.test.utils import ContextList
 from playwright.sync_api import BrowserContext, BrowserType, Page, Response
 from pytest_django.fixtures import SettingsWrapper

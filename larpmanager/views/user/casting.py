@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -41,7 +41,6 @@ from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters
 from larpmanager.utils.exceptions import check_event_feature
 from larpmanager.utils.registration import registration_status
-from typing import Any
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet

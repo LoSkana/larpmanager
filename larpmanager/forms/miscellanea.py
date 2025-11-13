@@ -261,7 +261,7 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
-def _delete_optionals_warehouse(warehouse_form: Any) -> None:
+def _delete_optionals_warehouse(warehouse_form: MyForm) -> None:
     """Remove optional warehouse fields not enabled in association configuration.
 
     Args:

@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -59,7 +59,6 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import copy_class
-from typing import Any
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponseRedirect
@@ -368,12 +367,12 @@ def copy(
 
 
 def copy_event(
-    context: Any,
+    context: dict[str, Any],
     target_event_id: Any,
     elements_to_copy: Any,
-    target_event: Any,
+    target_event: object,
     source_event_id: Any,
-    source_event: Any,
+    source_event: object,
 ) -> None:
     """Copy event data and related objects from parent to new event.
 
@@ -403,7 +402,7 @@ def copy_event(
             copy_actions[element_type]()
 
 
-def _copy_event_fields(context: Any, event: Any, parent_event: Any) -> None:
+def _copy_event_fields(context: dict[str, Any], event: object, parent_event: object) -> None:
     """Copy basic event fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaEventForm, context):
         if field_name == "slug":
@@ -413,7 +412,7 @@ def _copy_event_fields(context: Any, event: Any, parent_event: Any) -> None:
     event.name = "copy - " + event.name
 
 
-def _copy_appearance_fields(context: Any, child_event: Any, parent_event: Any) -> None:
+def _copy_appearance_fields(context: dict[str, Any], child_event: object, parent_event: object) -> None:
     """Copy appearance fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaAppearanceForm, context):
         if field_name == "event_css":
@@ -423,7 +422,7 @@ def _copy_appearance_fields(context: Any, child_event: Any, parent_event: Any) -
             setattr(child_event, field_name, field_value)
 
 
-def _copy_features(event: Any, parent: Any) -> None:
+def _copy_features(event: object, parent: Any) -> None:
     """Copy features from parent to child event."""
     for feature in parent.features.all():
         event.features.add(feature)
@@ -535,7 +534,7 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         correct_workshop(target_event_id, parent_event_id)
 
 
-def copy_css(context: Any, event: Any, parent: Any) -> None:
+def copy_css(context: dict[str, Any], event: object, parent: Any) -> None:
     """Copy CSS file from parent event to current event.
 
     Args:
@@ -592,7 +591,7 @@ def orga_copy(request: HttpRequest, event_slug: str) -> Any:
     return render(request, "larpmanager/orga/copy.html", context)
 
 
-def get_all_fields_from_form(form_class: Any, context: Any) -> Any:
+def get_all_fields_from_form(form_class: Any, context: dict[str, Any]) -> Any:
     """Return names of all available fields from given Form instance."""
     fields = list(form_class(context=context).base_fields)
 

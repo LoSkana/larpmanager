@@ -47,7 +47,6 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
-from larpmanager.models.association import AssociationSkin
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -160,7 +159,7 @@ class OrgaEventForm(MyForm):
 
         widgets = {"slug": SlugInput, "parent": CampaignS2Widget}
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event form with field configuration based on context.
 
         Configures form fields dynamically based on activated features and
@@ -279,7 +278,7 @@ class OrgaFeatureForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(is_association=False)
 
-    def save(self, commit: bool = True) -> EventConfig:  # noqa: FBT001, FBT002, ARG002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update event features cache.
 
         Args:
@@ -1022,7 +1021,7 @@ class OrgaAppearanceForm(MyCssForm):
         help_text=_("These CSS commands will be carried over to all pages in your Association space"),
     )
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with conditional field handling based on carousel feature."""
         super().__init__(*args, **kwargs)
 
@@ -1043,7 +1042,7 @@ class OrgaAppearanceForm(MyCssForm):
         for m in dl:
             del self.fields[m]
 
-    def save(self, commit: bool = True) -> AssociationSkin:  # noqa: FBT001, FBT002, ARG002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form and generate a unique CSS code for the skin."""
         # Generate unique 32-character identifier for CSS code
         self.instance.css_code = generate_id(32)
@@ -1064,7 +1063,7 @@ class OrgaAppearanceForm(MyCssForm):
         return "event_css"
 
     @staticmethod
-    def get_css_path(event_instance: Any) -> str:
+    def get_css_path(event_instance: Event) -> str:
         """Generate CSS file path for event styling.
 
         Args:
@@ -1198,7 +1197,7 @@ class OrgaEventRoleForm(MyForm):
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
+    def save(self, commit: bool = True) -> EventRole:  # noqa: FBT001, FBT002, ARG002
         """Save form instance and update role permissions."""
         instance = super().save()
         save_permissions_role(instance, self)
@@ -1293,7 +1292,7 @@ class OrgaRunForm(ConfigForm):
 
         self.show_sections = True
 
-    def set_configs(self) -> Any:
+    def set_configs(self) -> None:
         """Configure event-specific form fields and sections.
 
         Sets up various event features and their configuration options
@@ -1375,7 +1374,7 @@ class OrgaRunForm(ConfigForm):
 
         return config_list
 
-    def clean(self) -> dict[str, any]:
+    def clean(self) -> dict[str, Any]:
         """Validate that end date is defined and not before start date.
 
         Returns:
@@ -1718,7 +1717,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_fields,
         )
 
-    def add_writing_configs(self, basics: dict, event_id: int, help_text: str, writing_section: tuple) -> None:
+    def add_writing_configs(self, basics: set, event_id: int, help_text: str, writing_section: tuple) -> None:
         """Add writing-related configuration fields to the event form.
 
         This method adds configuration fields for writing elements (characters, factions,
@@ -1811,7 +1810,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         )
 
     @staticmethod
-    def _compile_configs(basic_question_types: Any, compiled_options: Any, field_definitions: Any) -> None:
+    def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: dict) -> None:
         """Compile configuration options from field definitions.
 
         Args:
@@ -1828,7 +1827,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
             compiled_options.append((toggle_key, field["name"]))
 
-    def add_feature_extra(self, extra_fields: Any, feature_field_definitions: Any) -> None:
+    def add_feature_extra(self, extra_fields: list, feature_field_definitions: list) -> None:
         """Add feature-specific extra fields to configuration.
 
         Args:

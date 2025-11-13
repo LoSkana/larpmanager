@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -28,7 +30,6 @@ from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.registration import Registration
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.tasks import my_send_mail
-from typing import Any
 
 
 def remember_membership(registration: Any) -> None:

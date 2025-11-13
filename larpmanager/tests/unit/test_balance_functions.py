@@ -21,6 +21,7 @@
 """Tests for balance calculation and accounting summary functions"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
 from larpmanager.accounting.balance import (
@@ -36,17 +37,15 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
     AccountingItemPayment,
-    AccountingItemTransaction,
     Discount,
+    DiscountType,
     ExpenseChoices,
     OtherChoices,
     PaymentChoices,
-    DiscountType,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.registration import TicketTier
 from larpmanager.tests.unit.base import BaseTestCase
-from typing import Any
 
 
 class TestAccDetailFunctions(BaseTestCase):

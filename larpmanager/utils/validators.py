@@ -19,12 +19,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from pathlib import Path
+from typing import Any
 
 import magic
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
-from typing import Any
 
 READ_SIZE = 2048
 

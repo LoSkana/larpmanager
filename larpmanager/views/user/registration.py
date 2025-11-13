@@ -233,7 +233,7 @@ def register_exclusive(request: HttpRequest, event_slug: str, secret_code: Any =
 
 def save_registration(
     context: dict[str, Any],
-    form: Any,  # Registration form instance
+    form: object,  # Registration form instance
     run: Run,
     event: Event,
     reg: Registration | None,
@@ -448,7 +448,7 @@ def registration_redirect(
     return redirect("gallery", event_slug=registration.run.get_slug())
 
 
-def save_registration_bring_friend(context: dict, form: Any, reg: Registration) -> None:
+def save_registration_bring_friend(context: dict, form: object, reg: Registration) -> None:
     """Process bring-a-friend discount codes for registration.
 
     This function handles the bring-a-friend functionality by:
@@ -519,7 +519,7 @@ def save_registration_bring_friend(context: dict, form: Any, reg: Registration) 
         friend.save()
 
 
-def register_info(request: HttpRequest, context: dict, form: Any, registration: Any, discount_info: Any) -> None:
+def register_info(request: HttpRequest, context: dict, form: object, registration: Any, discount_info: Any) -> None:
     """Display registration information and status.
 
     Args:
@@ -568,7 +568,7 @@ def register_info(request: HttpRequest, context: dict, form: Any, registration: 
         )
 
 
-def init_form_submitted(context: Any, form: Any, request: Any, registration: Any = None) -> None:
+def init_form_submitted(context: dict[str, Any], form: object, request: HttpRequest, registration: Any = None) -> None:
     """Initialize form submission data in context.
 
     Args:
@@ -774,7 +774,7 @@ def _add_bring_friend_discounts(context: dict) -> None:
         )
 
 
-def _register_prepare(context: Any, registration: Any) -> Any:
+def _register_prepare(context: dict[str, Any], registration: Any) -> Any:
     """Prepare registration context with payment information and locks.
 
     Args:

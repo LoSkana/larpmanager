@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -28,7 +30,6 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import AlphanumericValidator, BaseModel
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, show_thumb
-from typing import Any
 
 
 class LarpManagerTutorial(BaseModel):

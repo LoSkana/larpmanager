@@ -32,7 +32,6 @@ from larpmanager.accounting.token_credit import (
 )
 from larpmanager.models.accounting import (
     AccountingItemPayment,
-    OtherChoices,
     PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus

@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+from typing import Any
+
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest
@@ -50,7 +52,6 @@ from larpmanager.utils.exceptions import (
     check_event_feature,
 )
 from larpmanager.utils.registration import check_signup, registration_status
-from typing import Any
 
 
 def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:

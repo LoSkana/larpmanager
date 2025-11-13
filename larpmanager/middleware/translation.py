@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from gettext import GNUTranslations
+from typing import Any
 
 from django.http import HttpRequest
 from django.utils import translation as dj_translation
@@ -26,7 +27,6 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import trans_real
 
 from larpmanager.cache.association_translation import get_association_translation_cache
-from typing import Any
 
 
 class AssociationTranslationMiddleware(MiddlewareMixin):

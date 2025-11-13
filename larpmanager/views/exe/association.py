@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django.contrib import messages
@@ -53,7 +54,6 @@ from larpmanager.utils.common import clear_messages, get_feature
 from larpmanager.utils.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
-from typing import Any
 
 
 @login_required

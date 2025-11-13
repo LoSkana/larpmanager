@@ -23,14 +23,12 @@ import logging
 import os
 import zipfile
 from pathlib import Path
+from typing import Any, NoReturn
 from urllib.parse import urlparse
 
-from django.utils import timezone
-
 import pandas as pd
+from django.utils import timezone
 from playwright.sync_api import expect
-from typing import NoReturn
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

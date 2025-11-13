@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.conf import (
     settings as conf_settings,
 )
@@ -33,7 +35,6 @@ from .lm import urlpatterns as lm_urls
 from .orga import urlpatterns as orga_urls
 from .sitemap import urlpatterns as sitemap_urls
 from .user import urlpatterns as user_urls
-from typing import Any
 
 static_urls = static(
     conf_settings.MEDIA_URL,

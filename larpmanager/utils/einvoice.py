@@ -20,7 +20,7 @@
 
 import io
 import xml.etree.ElementTree as ET
-from typing import IO
+from typing import IO, Any
 
 from django.utils import timezone
 
@@ -28,7 +28,6 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.models.member import Member
 from larpmanager.utils.tasks import background_auto
-from typing import Any
 
 
 @background_auto(queue="e-invoice")

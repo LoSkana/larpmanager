@@ -23,7 +23,7 @@ import contextlib
 import logging
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from allauth.utils import get_request_param
 from django import template
@@ -42,7 +42,6 @@ from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.pdf import get_trait_character
-from typing import Any
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Run

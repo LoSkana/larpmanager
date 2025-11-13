@@ -20,6 +20,7 @@
 
 import logging
 import re
+from typing import Any
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -29,7 +30,6 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Writing
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

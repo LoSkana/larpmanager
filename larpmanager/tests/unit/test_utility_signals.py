@@ -21,8 +21,11 @@
 """Tests for utility and accounting-related signal receivers"""
 
 from decimal import Decimal
-from unittest.mock import Mock, patch
+from typing import Any
+from unittest.mock import patch
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
@@ -30,17 +33,9 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import AssociationText
 from larpmanager.models.event import EventText
-from larpmanager.models.casting import AssignmentTrait, Trait
-from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
-from larpmanager.models.form import WritingQuestion
-from larpmanager.models.writing import Handout, HandoutTemplate
-from larpmanager.models.miscellanea import PlayerRelationship
-from larpmanager.models.writing import Faction, Relationship
+from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx
+from larpmanager.models.writing import Faction, Handout, HandoutTemplate
 from larpmanager.tests.unit.base import BaseTestCase
-
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
-from typing import Any
 
 
 class TestUtilitySignals(BaseTestCase):

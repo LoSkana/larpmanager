@@ -522,7 +522,7 @@ def cleanup_handout_pdfs_before_delete(handout: Any) -> None:
         safe_remove(handout.get_filepath(event_run))
 
 
-def cleanup_handout_pdfs_after_save(instance: Any) -> None:
+def cleanup_handout_pdfs_after_save(instance: object) -> None:
     """Handle handout post-save PDF cleanup.
 
     Args:
@@ -544,7 +544,7 @@ def cleanup_handout_template_pdfs_before_delete(handout_template: Any) -> None:
         safe_remove(handout_template.get_filepath(event_run))
 
 
-def cleanup_handout_template_pdfs_after_save(instance: Any) -> None:
+def cleanup_handout_template_pdfs_after_save(instance: object) -> None:
     """Handle handout template post-save PDF cleanup.
 
     Args:
@@ -570,7 +570,7 @@ def remove_run_pdf(event: Event) -> None:
         safe_remove(event_run.get_gallery_filepath())
 
 
-def delete_character_pdf_files(instance: Any, single: Any = None, runs: Any = None) -> None:
+def delete_character_pdf_files(instance: object, single: Any = None, runs: Any = None) -> None:
     """Delete PDF files for a character across specified runs.
 
     Args:
@@ -603,7 +603,7 @@ def cleanup_character_pdfs_before_delete(character: Any) -> None:
     delete_character_pdf_files(character)
 
 
-def cleanup_character_pdfs_on_save(instance: Any) -> None:
+def cleanup_character_pdfs_on_save(instance: object) -> None:
     """Handle character post-save PDF cleanup.
 
     Args:
@@ -614,7 +614,7 @@ def cleanup_character_pdfs_on_save(instance: Any) -> None:
     delete_character_pdf_files(instance)
 
 
-def cleanup_relationship_pdfs_before_delete(instance: Any) -> None:
+def cleanup_relationship_pdfs_before_delete(instance: object) -> None:
     """Handle player relationship pre-delete PDF cleanup.
 
     Args:
@@ -625,7 +625,7 @@ def cleanup_relationship_pdfs_before_delete(instance: Any) -> None:
         delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
 
 
-def cleanup_relationship_pdfs_after_save(instance: Any) -> None:
+def cleanup_relationship_pdfs_after_save(instance: object) -> None:
     """Handle player relationship post-save PDF cleanup.
 
     Args:
@@ -636,7 +636,7 @@ def cleanup_relationship_pdfs_after_save(instance: Any) -> None:
         delete_character_pdf_files(el.character, instance.reg.run)
 
 
-def cleanup_faction_pdfs_before_delete(instance: Any) -> None:
+def cleanup_faction_pdfs_before_delete(instance: object) -> None:
     """Handle faction pre-delete PDF cleanup.
 
     Args:
@@ -647,7 +647,7 @@ def cleanup_faction_pdfs_before_delete(instance: Any) -> None:
         delete_character_pdf_files(character)
 
 
-def cleanup_faction_pdfs_on_save(instance: Any) -> None:
+def cleanup_faction_pdfs_on_save(instance: object) -> None:
     """Handle faction post-save PDF cleanup.
 
     Args:

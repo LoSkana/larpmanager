@@ -78,7 +78,7 @@ from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, w
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
-def get_character_optimized(context: Any, num: Any) -> None:
+def get_character_optimized(context: dict[str, Any], num: Any) -> None:
     """Get character with optimized queries for editing.
 
     Args:
@@ -184,7 +184,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
     return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
-def _characters_relationships(context: Any) -> None:
+def _characters_relationships(context: dict[str, Any]) -> None:
     """Set up character relationships data and widgets for editing.
 
     Args:
@@ -897,7 +897,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/writing/check.html", context)
 
 
-def check_relations(character_cache: Any, validation_checks: Any, character_numbers: Any, context: Any, number_to_id_map: Any) -> None:
+def check_relations(character_cache: Any, validation_checks: Any, character_numbers: Any, context: dict[str, Any], number_to_id_map: Any) -> None:
     """Check character relationships for missing and extinct references.
 
     Args:
@@ -936,7 +936,7 @@ def check_relations(character_cache: Any, validation_checks: Any, character_numb
                 )
 
 
-def check_writings(cache: Any, checks: Any, character_numbers: Any, context: Any, character_id_to_number_map: Any) -> None:
+def check_writings(cache: Any, checks: Any, character_numbers: Any, context: dict[str, Any], character_id_to_number_map: Any) -> None:
     """Validate writing submissions and requirements for different element types.
 
     Args:
@@ -982,7 +982,7 @@ def check_writings(cache: Any, checks: Any, character_numbers: Any, context: Any
                 # cache[nm][f.number] = (str(f), from_text)
 
 
-def check_speedlarp(checks: Any, context: Any, id_number_map: Any) -> None:
+def check_speedlarp(checks: Any, context: dict[str, Any], id_number_map: Any) -> None:
     """Validate speedlarp character configurations.
 
     Args:

@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 
 from larpmanager.tests.utils import (
@@ -26,7 +28,6 @@ from larpmanager.tests.utils import (
     go_to_check,
     login_orga,
 )
-from typing import Any
 
 pytestmark = pytest.mark.e2e
 

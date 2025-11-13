@@ -22,11 +22,14 @@
 
 from datetime import date
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
 from django.db import models
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.accounting import (
     AccountingItemCollection,
@@ -44,10 +47,6 @@ from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import CharacterConfig, Faction, Plot, Prologue, SpeedLarp
 from larpmanager.tests.unit.base import BaseTestCase
-
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
-from typing import Any
 
 
 class TestModelSignals(BaseTestCase):

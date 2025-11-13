@@ -19,11 +19,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, submit, login_orga, fill_tinymce, login_user
-from typing import Any
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, login_user
 
 pytestmark = pytest.mark.e2e
 

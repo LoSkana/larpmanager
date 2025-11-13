@@ -21,10 +21,13 @@
 """Tests for mail-related signal receivers"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
 from django.utils import timezone
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemMembership,
@@ -32,17 +35,11 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     Collection,
 )
-from larpmanager.models.casting import AssignmentTrait, Trait
-from larpmanager.models.miscellanea import ChatMessage
-from larpmanager.models.miscellanea import HelpQuestion
+from larpmanager.models.casting import Trait
 from larpmanager.models.event import PreRegistration
-from larpmanager.models.registration import Registration, RegistrationCharacterRel
-from larpmanager.models.writing import Character
+from larpmanager.models.miscellanea import ChatMessage, HelpQuestion
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.tests.unit.base import BaseTestCase
-
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
-from typing import Any
 
 
 class TestMailSignals(BaseTestCase):
@@ -62,7 +59,6 @@ class TestMailSignals(BaseTestCase):
     @patch("larpmanager.mail.base.my_send_mail")
     def test_character_can_be_updated(self, mock_mail: Any) -> None:
         """Test that Character can be updated"""
-        from larpmanager.models.writing import Character
 
         character = self.character()
         original_status = character.status
@@ -78,7 +74,6 @@ class TestMailSignals(BaseTestCase):
     def test_accounting_item_membership_can_be_created(self, mock_mail: Any) -> None:
         """Test that AccountingItemMembership can be created"""
         member = self.get_member()
-        from datetime import datetime
 
         item = AccountingItemMembership(
             member=member, value=Decimal("100.00"), association=self.get_association(), year=timezone.now().year

@@ -1,6 +1,7 @@
+from typing import Any
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import migrations, models
-from typing import Any
 
 
 def remove_obsolete_features(apps: Any, schema_editor: Any) -> Any:

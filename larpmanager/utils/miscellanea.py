@@ -27,7 +27,7 @@ import shutil
 import zipfile
 from io import BytesIO
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -40,7 +40,6 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
-from typing import Any
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse

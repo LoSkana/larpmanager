@@ -20,7 +20,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -917,7 +920,7 @@ def on_faction_characters_m2m_changed(
     instance: Faction,
     action: str,
     pk_set: set[int] | None,
-    **kwargs: dict,  # noqa: ARG001
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle faction-character relationship changes.
 
@@ -952,7 +955,7 @@ def on_plot_characters_m2m_changed(
     instance: Plot,
     action: str,
     pk_set: set[int] | None,
-    **kwargs: Any,  # noqa: ARG001
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle plot-character relationship changes.
 
@@ -971,7 +974,7 @@ def on_speedlarp_characters_m2m_changed(
     instance: SpeedLarp,
     action: str,
     pk_set: set[int] | None,
-    **kwargs: Any,  # noqa: ARG001
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle speedlarp-character relationship changes.
 
@@ -1006,7 +1009,7 @@ def on_prologue_characters_m2m_changed(
     instance: Prologue,
     action: str,
     pk_set: set[int] | None,
-    **kwargs: Any,  # noqa: ARG001
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle prologue-character relationship changes.
 

@@ -21,11 +21,14 @@
 """Tests for cache-related signal receivers"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
 from django.core.cache import cache
 from safedelete import HARD_DELETE
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -34,16 +37,11 @@ from larpmanager.models.accounting import (
     OtherChoices,
     PaymentChoices,
 )
-from larpmanager.models.association import AssociationSkin
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Faction, Plot
 from larpmanager.tests.unit.base import BaseTestCase
-
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
-from typing import Any
 
 
 class TestCacheSignals(BaseTestCase):

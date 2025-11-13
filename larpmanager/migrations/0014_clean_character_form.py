@@ -1,5 +1,6 @@
-from django.db import migrations
 from typing import Any
+
+from django.db import migrations
 
 
 def remove_obsolete_features(apps: Any, schema_editor: Any) -> Any:

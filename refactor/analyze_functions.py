@@ -9,7 +9,6 @@ Output format: CSV file with columns: name, path, invocation_count, function_num
 """
 
 import ast
-import os
 from collections import defaultdict
 from pathlib import Path
 from typing import Any

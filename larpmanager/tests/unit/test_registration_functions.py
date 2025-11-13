@@ -20,9 +20,8 @@
 
 """Tests for registration accounting functions"""
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from decimal import Decimal
-from unittest.mock import patch
 
 from larpmanager.accounting.registration import (
     cancel_reg,
@@ -36,12 +35,11 @@ from larpmanager.accounting.registration import (
 )
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
-    AccountingItemOther,
     AccountingItemPayment,
     AccountingItemTransaction,
     Discount,
-    PaymentChoices,
     DiscountType,
+    PaymentChoices,
 )
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.registration import (

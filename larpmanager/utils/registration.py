@@ -735,7 +735,7 @@ def _status_approval(run: Run, features: dict, *, is_character_assigned: bool) -
         run.status["details"] += f"<a href='{url}'>{message}</a>"
 
 
-def get_registration_options(instance: Any) -> list[tuple[str, str]]:
+def get_registration_options(instance: object) -> list[tuple[str, str]]:
     """Get formatted list of registration options and answers for display.
 
     This function retrieves all registration questions for a given event run,

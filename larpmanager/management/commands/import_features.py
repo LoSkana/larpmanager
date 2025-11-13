@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import os
+from typing import Any
 
 import yaml
 from django.apps import apps
@@ -28,7 +29,6 @@ from django.core.exceptions import FieldDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.db.models import ForeignKey, ManyToManyField
-from typing import Any
 
 
 class Command(BaseCommand):

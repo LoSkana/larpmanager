@@ -20,11 +20,11 @@
 
 import os
 from collections.abc import Callable
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.http import HttpRequest
 from django.utils import translation
-from typing import Any
 
 
 class LocaleAdvMiddleware:

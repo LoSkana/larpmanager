@@ -126,8 +126,12 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         super().__init__(*args, **kwargs)
 
     def render(
-        self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer: Any = None
-    ) -> str:  # noqa: ARG002
+        self,
+        name: str,
+        value: list[str] | None,
+        attrs: dict[str, str] | None = None,
+        renderer: Any = None,  # noqa: ARG002
+    ) -> str:
         """Render checkbox widget with tooltips and help links.
 
         Generates HTML for a checkbox widget where each option includes:
@@ -322,7 +326,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -351,7 +355,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         """Return string representation of the given object."""
         return str(obj)
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -376,7 +380,7 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -393,7 +397,7 @@ class AssocMS2:
         "user__email__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -535,7 +539,7 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -560,7 +564,7 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -738,7 +742,7 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -768,7 +772,7 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -791,7 +795,7 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id: Any) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 

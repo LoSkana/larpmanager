@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import random
 from datetime import date, timedelta
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -66,7 +67,6 @@ from larpmanager.utils.base import get_context, get_event_context
 from larpmanager.utils.exceptions import UserPermissionError
 from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.views.user.member import get_user_backend
-from typing import Any
 
 
 def lm_home(request: HttpRequest) -> Any:

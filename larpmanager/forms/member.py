@@ -25,6 +25,9 @@ import re
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Any
 
+if TYPE_CHECKING:
+    import datetime
+
 import pycountry
 from dateutil.relativedelta import relativedelta
 from django import forms
@@ -619,7 +622,7 @@ class ProfileForm(BaseProfileForm):
                 + "?",
             )
 
-    def clean_birth_date(self) -> Any:
+    def clean_birth_date(self) -> datetime.date:
         """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]
         logger.debug("Validating birth date: %s", data)

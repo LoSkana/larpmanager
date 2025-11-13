@@ -21,6 +21,7 @@
 """Tests for payment, invoice and VAT calculation functions"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 from larpmanager.accounting.invoice import invoice_received_money
@@ -33,11 +34,9 @@ from larpmanager.accounting.vat import calculate_payment_vat, get_previous_sum
 from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,
-    PaymentInvoice,
     PaymentStatus,
 )
 from larpmanager.tests.unit.base import BaseTestCase
-from typing import Any
 
 
 class TestPaymentFunctions(BaseTestCase):

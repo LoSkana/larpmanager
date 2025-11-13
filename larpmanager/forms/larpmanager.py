@@ -78,7 +78,7 @@ class LarpManagerContact(LarpManagerCheck):
         """Initialize delete association form."""
         super().__init__(*args, **kwargs)
 
-    def clean_verification(self) -> Any:
+    def clean_verification(self) -> str:
         """Validate that the verification field contains 'larp'."""
         verification = self.cleaned_data.get("verification", "")
         if verification.strip().lower() != "larp":

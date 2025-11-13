@@ -31,10 +31,10 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Run
 from larpmanager.models.form import _get_writing_mapping
-from typing import Any
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
+    from larpmanager.models.event import Event
 
 
 def reset_cache_run(association: Association, slug: str) -> None:
@@ -95,7 +95,7 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
         return run.id
 
 
-def on_run_pre_save_invalidate_cache(instance: Any) -> None:
+def on_run_pre_save_invalidate_cache(instance: Run) -> None:
     """Handle run pre-save cache invalidation.
 
     Args:
@@ -106,7 +106,7 @@ def on_run_pre_save_invalidate_cache(instance: Any) -> None:
         reset_cache_run(instance.event.association_id, instance.get_slug())
 
 
-def on_event_pre_save_invalidate_cache(instance: Any) -> None:
+def on_event_pre_save_invalidate_cache(instance: Event) -> None:
     """Handle event pre-save cache invalidation.
 
     Args:
@@ -153,7 +153,7 @@ def get_cache_config_run(run: Run) -> dict:
     return cached_config
 
 
-def init_cache_config_run(run: Any) -> dict:
+def init_cache_config_run(run: Run) -> dict:
     """Initialize and build cache configuration data for a run.
 
     This function creates a cache configuration context containing UI elements,
@@ -216,7 +216,7 @@ def init_cache_config_run(run: Any) -> dict:
     return context
 
 
-def on_run_post_save_reset_config_cache(instance: Any) -> None:
+def on_run_post_save_reset_config_cache(instance: Run) -> None:
     """Handle run post-save cache reset.
 
     Args:
@@ -227,7 +227,7 @@ def on_run_post_save_reset_config_cache(instance: Any) -> None:
         reset_cache_config_run(instance)
 
 
-def on_event_post_save_reset_config_cache(instance: Any) -> None:
+def on_event_post_save_reset_config_cache(instance: Event) -> None:
     """Handle event post-save cache reset.
 
     Args:

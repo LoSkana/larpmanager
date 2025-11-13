@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import secrets
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
@@ -40,7 +40,6 @@ from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.utils.tutorial_query import query_index
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
-from typing import Any
 
 if TYPE_CHECKING:
     from django.forms import Form

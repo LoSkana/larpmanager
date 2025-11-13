@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 from datetime import timedelta
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -74,7 +75,6 @@ from larpmanager.utils.base import get_context, get_event, get_event_context
 from larpmanager.utils.common import get_element
 from larpmanager.utils.exceptions import HiddenError
 from larpmanager.utils.registration import registration_status
-from typing import Any
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:

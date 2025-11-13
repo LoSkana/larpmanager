@@ -21,11 +21,11 @@
 import logging
 import re
 from collections.abc import Callable
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

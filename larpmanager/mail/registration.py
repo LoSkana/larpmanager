@@ -20,6 +20,7 @@
 
 import logging
 import time
+from typing import Any
 
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -36,7 +37,6 @@ from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
-from typing import Any
 
 logger = logging.getLogger(__name__)
 

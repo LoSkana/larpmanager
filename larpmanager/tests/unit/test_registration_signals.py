@@ -22,18 +22,21 @@
 
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemPayment,
     AccountingItemTransaction,
     Discount,
-    PaymentChoices,
     DiscountType,
+    PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus
-from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.registration import (
     Registration,
     RegistrationInstallment,
@@ -42,10 +45,6 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.tests.unit.base import BaseTestCase
-
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
-from typing import Any
 
 
 class TestRegistrationCreation(BaseTestCase):

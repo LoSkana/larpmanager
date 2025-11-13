@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
 from django.http import HttpRequest
@@ -42,7 +44,6 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.common import copy_class
-from typing import Any
 
 
 def get_character_filter(character: Any, character_registrations: Any, active_filters: Any) -> bool:
@@ -62,7 +63,7 @@ def get_character_filter(character: Any, character_registrations: Any, active_fi
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context: Any, character_filters: Any) -> None:
+def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -222,7 +223,7 @@ def create_default_event_setup(event: Any) -> None:
     clear_event_fields_cache(event.id)
 
 
-def save_event_tickets(features: Any, instance: Any) -> None:
+def save_event_tickets(features: Any, instance: object) -> None:
     """Create default registration tickets for event.
 
     Args:
@@ -243,7 +244,7 @@ def save_event_tickets(features: Any, instance: Any) -> None:
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
-def save_event_character_form(features: dict, instance: Any) -> None:
+def save_event_character_form(features: dict, instance: object) -> None:
     """Create character form questions based on enabled features.
 
     This function initializes character form questions for an event based on the
@@ -314,7 +315,7 @@ def save_event_character_form(features: dict, instance: Any) -> None:
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
-def _init_writing_element(instance: Any, default_question_types: Any, question_applicables: Any) -> None:
+def _init_writing_element(instance: object, default_question_types: Any, question_applicables: Any) -> None:
     """Initialize writing questions for specific applicables in an event instance.
 
     Args:
@@ -347,7 +348,7 @@ def _init_character_form_questions(
     custom_types: set,
     default_types: dict,
     features: set,
-    instance: Any,
+    instance: object,
 ) -> None:
     """Initialize character form questions during model setup.
 
@@ -412,7 +413,7 @@ def _init_character_form_questions(
             WritingQuestion.objects.filter(event=instance, typ=question_type).delete()
 
 
-def save_event_registration_form(features: dict, instance: Any) -> None:
+def save_event_registration_form(features: dict, instance: object) -> None:
     """Create registration form questions based on enabled features.
 
     This function manages the creation and deletion of registration questions
@@ -493,7 +494,7 @@ def save_event_registration_form(features: dict, instance: Any) -> None:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
 
 
-def _activate_orga_lang(instance: Any) -> None:
+def _activate_orga_lang(instance: object) -> None:
     """Activate the most common language among event organizers.
 
     Determines the most frequently used language among all organizers

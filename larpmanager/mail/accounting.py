@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -40,7 +42,6 @@ from larpmanager.models.association import get_url, hdr
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
 from larpmanager.utils.tasks import my_send_mail
-from typing import Any
 
 
 def send_expense_notification_email(instance: AccountingItemExpense) -> None:

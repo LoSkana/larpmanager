@@ -95,7 +95,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args: Any, **kwargs: dict[str, Any]) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize character form with custom fields and configuration.
 
         Args:
@@ -116,7 +116,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
-    def check_editable(self, question: Any) -> bool:
+    def check_editable(self, question: WritingQuestion) -> bool:
         """Check if a question is editable based on event config and instance status.
 
         Args:

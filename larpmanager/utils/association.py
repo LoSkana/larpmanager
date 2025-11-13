@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 from cryptography.fernet import Fernet
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -24,7 +26,6 @@ from django.db.models import Max
 
 from larpmanager.models.access import AssociationPermission
 from larpmanager.models.association import Association
-from typing import Any
 
 
 def generate_association_encryption_key(association: Any) -> None:

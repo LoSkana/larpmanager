@@ -8,7 +8,6 @@ Strategy:
 4. Use shorter, optimized prompts
 """
 
-import csv
 import subprocess
 import sys
 from pathlib import Path

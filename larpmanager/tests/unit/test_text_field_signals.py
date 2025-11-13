@@ -20,19 +20,18 @@
 
 """Tests for text field and cache-related signal receivers"""
 
+from typing import Any
 from unittest.mock import patch
 
 from django.db import models
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
-
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
-from typing import Any
 
 
 class TestTextFieldSignals(BaseTestCase):

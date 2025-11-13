@@ -203,7 +203,7 @@ class RegistrationForm(BaseRegistrationForm):
             help_text=help_text_message % {"amount": self.params.get("bring_friend_discount_from", 0)},
         )
 
-    def init_questions(self, event: Any, reg_counts: Any) -> None:
+    def init_questions(self, event: Event, reg_counts: dict[str, Any]) -> None:
         """Initialize registration questions and ticket mapping.
 
         Args:
@@ -247,7 +247,7 @@ class RegistrationForm(BaseRegistrationForm):
             if tm:
                 self.tickets_map[k] = tm
 
-    def init_surcharge(self, event: Any) -> None:
+    def init_surcharge(self, event: Event) -> None:
         """Initialize date-based surcharge field if applicable.
 
         Args:
@@ -486,7 +486,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         return available_tickets
 
-    def skip_ticket_reduced(self, run: Any, ticket: Any) -> bool:
+    def skip_ticket_reduced(self, run: Run, ticket: RegistrationTicket) -> bool:
         """Check if reduced ticket should be skipped due to availability.
 
         Args:
@@ -912,7 +912,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         character_registrations = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
         return character_registrations.values_list("character_id", flat=True)
 
-    def _save_multi(self, field: str, instance: Any) -> None:
+    def _save_multi(self, field: str, instance: Registration) -> None:
         """Save multi-character relationships for registration.
 
         Args:
@@ -1029,7 +1029,7 @@ class OrgaRegistrationTicketForm(MyForm):
             self.delete_field("giftable")
 
     @staticmethod
-    def get_tier_available(event: Any) -> list[tuple[str, str]]:
+    def get_tier_available(event: Event) -> list[tuple[str, str]]:
         """Get available ticket tiers based on event features and configuration.
 
         Filters ticket tiers by checking if required features are enabled for the event

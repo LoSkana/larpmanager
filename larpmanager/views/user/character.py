@@ -811,7 +811,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, num: Any, id_
     return redirect("character_abilities", event_slug=context["run"].get_slug(), num=context["character"].number)
 
 
-def _save_character_abilities(context: Any, request: HttpRequest) -> None:
+def _save_character_abilities(context: dict[str, Any], request: HttpRequest) -> None:
     """Process character ability selection and save to character.
 
     Args:

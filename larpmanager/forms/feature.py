@@ -108,7 +108,7 @@ class FeatureForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, *, is_association: Any) -> None:
+    def _init_features(self, *, is_association: bool) -> None:
         """Initialize feature selection fields organized by modules.
 
         Args:
@@ -151,7 +151,7 @@ class FeatureForm(MyForm):
             if selected_feature_ids:
                 self.initial[f"mod_{feature_module.id}"] = selected_feature_ids
 
-    def _save_features(self, instance: Any) -> None:
+    def _save_features(self, instance: Association | Event) -> None:
         """Save selected features to the instance.
 
         Args:
@@ -187,7 +187,7 @@ class QuickSetupForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features: Any) -> None:
+    def init_fields(self, features: list[str]) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:

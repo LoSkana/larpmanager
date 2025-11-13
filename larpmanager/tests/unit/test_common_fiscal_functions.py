@@ -23,6 +23,7 @@
 from datetime import date
 from unittest.mock import MagicMock, patch
 
+from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.common import cantor, check_already, get_channel
 from larpmanager.utils.fiscal_code import (
     _calculate_consonants,
@@ -34,7 +35,6 @@ from larpmanager.utils.fiscal_code import (
     _slugify,
     calculate_fiscal_code,
 )
-from larpmanager.tests.unit.base import BaseTestCase
 
 
 class TestCommonUtilityFunctions(BaseTestCase):
@@ -102,9 +102,10 @@ class TestCommonUtilityFunctions(BaseTestCase):
 
     def test_check_already_email_match(self) -> None:
         """Test check_already matches task params"""
-        from background_task.models import Task
         from datetime import datetime
+
         import pytz
+        from background_task.models import Task
 
         # check_already checks if a background task exists with matching params
         # It compares task_name and task_params
@@ -117,9 +118,10 @@ class TestCommonUtilityFunctions(BaseTestCase):
 
     def test_check_already_no_match_different_params(self) -> None:
         """Test check_already with different params"""
-        from background_task.models import Task
         from datetime import datetime
+
         import pytz
+        from background_task.models import Task
 
         params1 = '["test@example.com", "Test User"]'
         params2 = '["other@example.com", "Other User"]'

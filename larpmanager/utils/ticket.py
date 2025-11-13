@@ -25,6 +25,7 @@ import subprocess
 import sys
 import traceback
 from pathlib import Path
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -34,7 +35,6 @@ from django.utils import timezone
 from larpmanager.models.association import Association
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.tasks import background_auto, my_send_mail
-from typing import Any
 
 
 class ClaudeNotAvailableError(ConnectionError):

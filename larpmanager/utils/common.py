@@ -90,7 +90,7 @@ utc = pytz.UTC
 
 
 # ## PROFILING CHECK
-def check_already(nm: Any, params: Any) -> Any:
+def check_already(nm: str, params: str) -> bool:
     """Check if a background task is already queued.
 
     Args:
@@ -105,7 +105,7 @@ def check_already(nm: Any, params: Any) -> Any:
     return q.exists()
 
 
-def get_channel(first_entity_id: Any, second_entity_id: Any) -> Any:
+def get_channel(first_entity_id: int, second_entity_id: int) -> int:
     """Generate unique channel ID for two entities.
 
     Args:
@@ -123,7 +123,7 @@ def get_channel(first_entity_id: Any, second_entity_id: Any) -> Any:
     return int(cantor(second_entity_id, first_entity_id))
 
 
-def cantor(first_integer: Any, second_integer: Any) -> Any:
+def cantor(first_integer: int, second_integer: int) -> float:
     """Cantor pairing function to map two integers to a unique integer.
 
     Args:
@@ -137,7 +137,7 @@ def cantor(first_integer: Any, second_integer: Any) -> Any:
     return ((first_integer + second_integer) * (first_integer + second_integer + 1) / 2) + second_integer
 
 
-def compute_diff(self: Any, other: Any) -> None:
+def compute_diff(self: object, other: object) -> None:
     """Compute differences between this instance and another.
 
     Args:
@@ -148,7 +148,7 @@ def compute_diff(self: Any, other: Any) -> None:
     check_diff(self, other.text, self.text)
 
 
-def check_diff(self: Any, old_text: Any, new_text: Any) -> None:
+def check_diff(self: object, old_text: str, new_text: str) -> None:
     """Generate HTML diff between two text strings.
 
     Args:
@@ -186,7 +186,7 @@ def get_member(member_id: int) -> Member:
         raise Http404(msg) from err
 
 
-def get_contact(member_id: Any, other_member_id: Any) -> Any:
+def get_contact(member_id: int, other_member_id: int) -> object | None:
     """Get contact relationship between two members.
 
     Args:
@@ -203,7 +203,7 @@ def get_contact(member_id: Any, other_member_id: Any) -> Any:
         return None
 
 
-def get_event_template(context: Any, template_id: Any) -> None:
+def get_event_template(context: dict[str, Any], template_id: int) -> None:
     """Get event template by ID and add to context.
 
     Args:
@@ -217,7 +217,7 @@ def get_event_template(context: Any, template_id: Any) -> None:
         raise NotFoundError from err
 
 
-def get_char(context: Any, character_identifier: Any, *, by_number: Any = False) -> None:
+def get_char(context: dict[str, Any], character_identifier: int | str, *, by_number: bool = False) -> None:
     """Get character by ID or number and add to context.
 
     Args:
@@ -229,7 +229,7 @@ def get_char(context: Any, character_identifier: Any, *, by_number: Any = False)
     get_element(context, character_identifier, "character", Character, by_number=by_number)
 
 
-def get_registration(context: Any, registration_id: Any) -> None:
+def get_registration(context: dict[str, Any], registration_id: int) -> None:
     """Get registration by ID and add to context.
 
     Args:
@@ -248,7 +248,7 @@ def get_registration(context: Any, registration_id: Any) -> None:
         raise Http404(msg) from err
 
 
-def get_discount(context: Any, discount_id: Any) -> None:
+def get_discount(context: dict[str, Any], discount_id: int) -> None:
     """Get discount by ID and add to context.
 
     Args:
@@ -267,7 +267,7 @@ def get_discount(context: Any, discount_id: Any) -> None:
         raise Http404(msg) from err
 
 
-def get_album(context: Any, album_id: Any) -> None:
+def get_album(context: dict[str, Any], album_id: int) -> None:
     """Get album by ID and add to context.
 
     Args:
@@ -797,7 +797,9 @@ def round_to_two_significant_digits(number: float) -> int:
     return int(rounded_decimal)
 
 
-def exchange_order(context: dict, model_class: type, element_id: int, move_up: int, elements: Any = None) -> None:
+def exchange_order(
+    context: dict, model_class: type, element_id: int, move_up: int, elements: object | None = None
+) -> None:
     """Exchange ordering positions between two elements in a sequence.
 
     This function moves an element up or down in the ordering sequence by swapping
@@ -882,7 +884,7 @@ def normalize_string(input_string: str) -> str:
     )
 
 
-def copy_class(target_event_id: Any, source_event_id: Any, model_class: Any) -> None:
+def copy_class(target_event_id: int, source_event_id: int, model_class: type) -> None:
     """Copy all objects of a given class from source event to target event.
 
     Args:
@@ -919,7 +921,7 @@ def copy_class(target_event_id: Any, source_event_id: Any, model_class: Any) -> 
             logger.warning("found exp: %s", error)
 
 
-def get_payment_methods_ids(context: Any) -> Any:
+def get_payment_methods_ids(context: dict[str, Any]) -> set[int]:
     """Get set of payment method IDs for an association.
 
     Args:
@@ -932,7 +934,7 @@ def get_payment_methods_ids(context: Any) -> Any:
     return set(Association.objects.get(pk=context["association_id"]).payment_methods.values_list("pk", flat=True))
 
 
-def detect_delimiter(content: Any) -> Any:
+def detect_delimiter(content: str) -> str:
     """Detect CSV delimiter from content header line.
 
     Args:
@@ -953,7 +955,7 @@ def detect_delimiter(content: Any) -> Any:
     raise DelimiterNotFoundError(msg)
 
 
-def clean(s: Any) -> Any:
+def clean(s: str) -> str:
     """Clean and normalize string by removing symbols, spaces, and accents.
 
     Args:
@@ -970,7 +972,7 @@ def clean(s: Any) -> Any:
     return s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
 
 
-def _search_char_reg(context: dict, character: Any, search_result: dict) -> None:
+def _search_char_reg(context: dict, character: object, search_result: dict) -> None:
     """Populate character search result with registration and player data.
 
     This function extracts character and player information from registration data
@@ -1114,7 +1116,7 @@ def welcome_user(request: HttpRequest, user: User) -> None:
     messages.success(request, _("Welcome") + ", " + user.get_username() + "!")
 
 
-def format_email_body(email: Any) -> str:
+def format_email_body(email: object) -> str:
     """Format email body for display by cleaning HTML and truncating text.
 
     Args:
@@ -1138,7 +1140,7 @@ def format_email_body(email: Any) -> str:
     return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned
 
 
-def get_now() -> Any:
+def get_now() -> object:
     """Get current time - if executed in debug/test, without timezone, add it."""
     now = timezone.now()
     if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:
