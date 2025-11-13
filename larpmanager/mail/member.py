@@ -35,12 +35,13 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member
 from larpmanager.utils.tasks import my_send_mail
+from typing import Any
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
 
-def send_membership_confirm(request: HttpRequest, membership) -> None:
+def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
     """Send confirmation email when membership application is submitted.
 
     Args:
@@ -88,7 +89,7 @@ def send_membership_confirm(request: HttpRequest, membership) -> None:
     my_send_mail(email_subject, email_body, member_profile, membership)
 
 
-def send_membership_payment_notification_email(membership_item) -> None:
+def send_membership_payment_notification_email(membership_item: Any) -> None:
     """Send notification when membership fee payment is received.
 
     Args:
@@ -109,7 +110,7 @@ def send_membership_payment_notification_email(membership_item) -> None:
     my_send_mail(subject, body, membership_item.member, membership_item)
 
 
-def handle_badge_assignment_notifications(instance, pk_set) -> None:
+def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:
     """Handle badge assignment notifications for a set of members.
 
     Args:
@@ -132,7 +133,7 @@ def handle_badge_assignment_notifications(instance, pk_set) -> None:
         my_send_mail(subject, body, member, instance)
 
 
-def on_member_badges_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
+def on_member_badges_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle badge assignment notifications.
 
     Args:
@@ -229,7 +230,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     my_send_mail(subject, body, member, member.membership)
 
 
-def notify_membership_reject(member, resp) -> None:
+def notify_membership_reject(member: Any, resp: Any) -> None:
     """Send notification when membership application is rejected.
 
     Args:
@@ -250,7 +251,7 @@ def notify_membership_reject(member, resp) -> None:
     my_send_mail(subject, body, member, member.membership)
 
 
-def send_help_question_notification_email(instance) -> None:
+def send_help_question_notification_email(instance: Any) -> None:
     """Send notifications for help questions and answers.
 
     Args:
@@ -298,7 +299,7 @@ def send_help_question_notification_email(instance) -> None:
         my_send_mail(subject, body, member, instance)
 
 
-def get_help_email(help_question):
+def get_help_email(help_question: Any) -> Any:
     """Generate subject and body for help question notification.
 
     Args:
@@ -314,7 +315,7 @@ def get_help_email(help_question):
     return subject, email_body
 
 
-def send_chat_message_notification_email(instance) -> None:
+def send_chat_message_notification_email(instance: Any) -> None:
     """Send notification for new chat messages.
 
     Args:
@@ -337,7 +338,7 @@ def send_chat_message_notification_email(instance) -> None:
 REGISTRATION_SALT = getattr(conf_settings, "REGISTRATION_SALT", "registration")
 
 
-def get_activation_key(user):
+def get_activation_key(user: Any) -> Any:
     """Generate the activation key which will be emailed to the user.
 
     Args:
@@ -353,7 +354,7 @@ def get_activation_key(user):
     return signing.dumps(obj=user.get_username(), salt=REGISTRATION_SALT)
 
 
-def get_email_context(activation_key, request):
+def get_email_context(activation_key: Any, request: Any) -> Any:
     """Build the template context used for the activation email.
 
     Args:
@@ -376,7 +377,7 @@ def get_email_context(activation_key, request):
     }
 
 
-def send_password_reset_remainder(membership) -> None:
+def send_password_reset_remainder(membership: Any) -> None:
     """Send password reset reminder to association executives and admins.
 
     Args:
@@ -394,7 +395,7 @@ def send_password_reset_remainder(membership) -> None:
         my_send_mail(subject, body, admin_email, association)
 
 
-def get_password_reminder_email(membership):
+def get_password_reminder_email(membership: Any) -> Any:
     """Generate subject and body for password reset reminder.
 
     Args:

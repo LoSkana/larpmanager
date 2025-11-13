@@ -25,6 +25,7 @@ from django.core.management.base import BaseCommand
 from larpmanager.accounting.gateway import satispay_verify
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.tasks import notify_admins
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ class Command(BaseCommand):
 
     help = "Check status of pending payments across all payment gateways"
 
-    def handle(self, *args, **options) -> None:  # noqa: ARG002
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle command execution with exception handling.
 
         Args:

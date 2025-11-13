@@ -160,7 +160,7 @@ def _get_field_value(element: Any, question: Any) -> str | None:
     return None
 
 
-def _get_values_mapping(element) -> dict[str, callable]:
+def _get_values_mapping(element: Any) -> dict[str, callable]:
     """Return a mapping of field names to their value extraction functions.
 
     Args:
@@ -181,7 +181,7 @@ def _get_values_mapping(element) -> dict[str, callable]:
     }
 
 
-def check_run(element, context, accessor_field=None) -> None:
+def check_run(element: Any, context: Any, accessor_field: Any = None) -> None:
     """Validate that element belongs to the correct run and event.
 
     Args:
@@ -867,7 +867,7 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, element
 
 
 @require_POST
-def working_ticket(request: HttpRequest):
+def working_ticket(request: HttpRequest) -> Any:
     """Handle working ticket requests to prevent concurrent editing conflicts.
 
     Args:

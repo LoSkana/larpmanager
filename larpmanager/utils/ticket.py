@@ -34,6 +34,7 @@ from django.utils import timezone
 from larpmanager.models.association import Association
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.tasks import background_auto, my_send_mail
+from typing import Any
 
 
 class ClaudeNotAvailableError(ConnectionError):
@@ -49,7 +50,7 @@ class ClaudeAnalysisError(RuntimeError):
 
 
 @background_auto(queue="analyze_ticket")
-def analyze_ticket_bgk(ticket_id) -> None:
+def analyze_ticket_bgk(ticket_id: Any) -> None:
     """Analyze a ticket and send result email to admins and maintainers.
 
     Args:
@@ -80,7 +81,7 @@ def analyze_ticket_bgk(ticket_id) -> None:
         raise TicketNotFoundError(msg) from err
 
 
-def _analyze_ticket(ticket):
+def _analyze_ticket(ticket: Any) -> Any:
     """Analyzes the ticket using Claude in a separate analysis directory."""
     # Get the analysis directory (sibling to the current project directory)
     current_dir = Path(__file__).resolve().parent.parent.parent
@@ -154,13 +155,13 @@ def _analyze_ticket(ticket):
     return output, 0.5
 
 
-def _test_connection():
+def _test_connection() -> Any:
     """Verify that Claude is installed and configured."""
     result = subprocess.run(["claude", "--version"], check=False, capture_output=True, text=True, timeout=5)  # noqa: S607
     return result.returncode == 0
 
 
-def _send_analysis_result_email(ticket) -> None:
+def _send_analysis_result_email(ticket: Any) -> None:
     """Send analysis result email to admins and association maintainers.
 
     Args:
@@ -202,7 +203,7 @@ def _send_analysis_result_email(ticket) -> None:
     #     my_send_mail(subject, body, maintainer.email)
 
 
-def create_error_ticket(request: HttpRequest):
+def create_error_ticket(request: HttpRequest) -> Any:
     """Create an error ticket automatically when an error occurs.
 
     Only creates one ticket per day for the same error to avoid spam.

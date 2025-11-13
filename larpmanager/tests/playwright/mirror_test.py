@@ -23,11 +23,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_mirror(pw_page) -> None:
+def test_orga_mirror(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -74,7 +75,7 @@ def test_orga_mirror(pw_page) -> None:
     casting(live_server, page)
 
 
-def casting(live_server, page) -> None:
+def casting(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
     page.locator("#id_casting_characters").click()

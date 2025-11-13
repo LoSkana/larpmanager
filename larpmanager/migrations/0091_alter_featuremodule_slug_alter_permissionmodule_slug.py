@@ -7,9 +7,10 @@ from django.conf import settings as conf_settings
 from django.db import migrations, models
 
 from larpmanager.models.utils import _key_id
+from typing import Any
 
 
-def move_enc_files(apps, schema_editor):
+def move_enc_files(apps: Any, schema_editor: Any) -> Any:
     if not os.path.isdir(conf_settings.PAYMENT_SETTING_FOLDER):
         return
     Association = apps.get_model("larpmanager", "Association")

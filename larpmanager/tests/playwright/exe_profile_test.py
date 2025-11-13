@@ -20,11 +20,12 @@
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_profile(pw_page) -> None:
+def test_exe_profile(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)

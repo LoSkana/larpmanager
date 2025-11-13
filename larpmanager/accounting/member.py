@@ -47,6 +47,7 @@ from larpmanager.models.form import RegistrationChoice, RegistrationOption, Regi
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.common import get_now
+from typing import Any
 
 
 def info_accounting(context: dict) -> None:
@@ -125,7 +126,7 @@ def _init_regs(
     registration_choices: dict[int, dict],
     context: dict,
     pending_invoices: dict,
-    registration,
+    registration: Any,
 ) -> None:
     """Initialize registration options and payment status tracking.
 

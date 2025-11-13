@@ -431,7 +431,7 @@ def member_add_accountingitemother(context: dict, member: Member) -> None:
 
 
 @login_required
-def exe_membership_status(request: HttpRequest, num):
+def exe_membership_status(request: HttpRequest, num: Any) -> Any:
     """Edit membership status and details for a specific member.
 
     Args:
@@ -581,7 +581,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_membership_document(request: HttpRequest):
+def exe_membership_document(request: HttpRequest) -> Any:
     """Handle membership document upload and approval process.
 
     Args:
@@ -1034,7 +1034,7 @@ def exe_questions_close(request: HttpRequest, member_id: int) -> HttpResponse:
 
 
 @login_required
-def exe_newsletter(request: HttpRequest):
+def exe_newsletter(request: HttpRequest) -> Any:
     """Display newsletter subscription management for association members.
 
     Args:

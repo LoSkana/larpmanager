@@ -32,6 +32,7 @@ from larpmanager.cache.permission import (
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.utils.auth import get_allowed_managed, is_lm_admin
 from larpmanager.utils.exceptions import UserPermissionError
+from typing import Any
 
 
 def cache_association_role_key(association_role_id: int) -> str:
@@ -364,7 +365,7 @@ def get_event_roles(request: HttpRequest, context: dict, slug: str) -> tuple[boo
     return is_organizer, permission_slugs, role_names
 
 
-def has_event_permission(request: HttpRequest, context: dict, event_slug: str, permission_name=None) -> bool:
+def has_event_permission(request: HttpRequest, context: dict, event_slug: str, permission_name: Any = None) -> bool:
     """Check if user has permission for a specific event.
 
     Args:

@@ -1,8 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import migrations
+from typing import Any
 
 
-def remove_obsolete_features(apps, schema_editor):
+def remove_obsolete_features(apps: Any, schema_editor: Any) -> Any:
     Feature = apps.get_model("larpmanager", "Feature")
     EventConfig = apps.get_model("larpmanager", "EventConfig")
     features = {137: "paste_text", 147: "working_ticket"}

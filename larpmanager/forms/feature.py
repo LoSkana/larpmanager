@@ -41,7 +41,9 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_help = kwargs.pop("help_text", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:  # noqa: ARG002
+    def render(
+        self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer: Any = None
+    ) -> str:  # noqa: ARG002
         """Render feature checkboxes with tooltips and help links.
 
         Generates HTML for a set of feature checkboxes, each with an associated tooltip
@@ -106,7 +108,7 @@ class FeatureForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, *, is_association) -> None:
+    def _init_features(self, *, is_association: Any) -> None:
         """Initialize feature selection fields organized by modules.
 
         Args:
@@ -149,7 +151,7 @@ class FeatureForm(MyForm):
             if selected_feature_ids:
                 self.initial[f"mod_{feature_module.id}"] = selected_feature_ids
 
-    def _save_features(self, instance) -> None:
+    def _save_features(self, instance: Any) -> None:
         """Save selected features to the instance.
 
         Args:
@@ -185,7 +187,7 @@ class QuickSetupForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features) -> None:
+    def init_fields(self, features: Any) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:

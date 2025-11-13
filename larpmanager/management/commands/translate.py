@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import time
 from pathlib import Path
+from typing import Any
 
 import deepl
 import polib
@@ -33,7 +34,7 @@ class DeepLLimitExceededError(Exception):
 class Command(BaseCommand):
     """Translate elements in .po file untraslated, or with fuzzy translation, using deepl."""
 
-    def handle(self, *args, **options) -> None:  # noqa: ARG002
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle the translation command by initializing translator and processing translations."""
         # Initialize DeepL translator and display initial usage
         self.translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
@@ -48,7 +49,7 @@ class Command(BaseCommand):
         # Display final usage statistics
         self.stdout.write(str(self.translator.get_usage()))
 
-    def translate_entry(self, entry, target_language: str) -> None:
+    def translate_entry(self, entry: Any, target_language: str) -> None:
         """Translate a single entry using DeepL API.
 
         Args:

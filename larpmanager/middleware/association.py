@@ -31,6 +31,7 @@ from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.skin import get_cache_skin
 from larpmanager.models.association import AssociationTextType
+from typing import Any
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -49,7 +50,7 @@ class AssociationIdentifyMiddleware:
         """Initialize middleware with Django response handler."""
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: Any) -> Any:
         """Process request through association middleware.
 
         Args:

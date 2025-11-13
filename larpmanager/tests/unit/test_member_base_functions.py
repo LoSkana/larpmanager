@@ -36,6 +36,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.tests.unit.base import BaseTestCase
+from typing import Any
 
 
 class TestMemberAccountingFunctions(BaseTestCase):
@@ -161,52 +162,60 @@ class TestBaseUtilityFunctions(BaseTestCase):
     """Test cases for base utility functions"""
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_no_payment_feature(self, mock_features) -> None:
+    def test_is_reg_provisional_no_payment_feature(self, mock_features: Any) -> None:
         """Test is_reg_provisional when payment feature is disabled"""
         mock_features.return_value = {}
 
         member = self.get_member()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+        )
 
         result = is_reg_provisional(registration)
 
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_fully_paid(self, mock_features) -> None:
+    def test_is_reg_provisional_fully_paid(self, mock_features: Any) -> None:
         """Test is_reg_provisional when fully paid"""
         mock_features.return_value = {"payment": True}
 
         member = self.get_member()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("100.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("100.00")
+        )
 
         result = is_reg_provisional(registration)
 
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_no_cost(self, mock_features) -> None:
+    def test_is_reg_provisional_no_cost(self, mock_features: Any) -> None:
         """Test is_reg_provisional with no cost registration"""
         mock_features.return_value = {"payment": True}
 
         member = self.get_member()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("0.00"), tot_payed=Decimal("0.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("0.00"), tot_payed=Decimal("0.00")
+        )
 
         result = is_reg_provisional(registration)
 
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.base.get_event_features")
-    def test_is_reg_provisional_partial_payment(self, mock_features) -> None:
+    def test_is_reg_provisional_partial_payment(self, mock_features: Any) -> None:
         """Test is_reg_provisional with partial payment"""
         mock_features.return_value = {"payment": True}
 
         member = self.get_member()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("50.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("50.00")
+        )
 
         result = is_reg_provisional(registration)
 

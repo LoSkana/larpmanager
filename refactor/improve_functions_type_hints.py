@@ -389,7 +389,9 @@ def process_csv_batch() -> None:
                     function_name, file_path, original_function, function_number, use_haiku=use_haiku
                 )
                 if success and improved_code and original_function:
-                    if replace_function_in_file(file_path, function_name, improved_code, original_function, function_number):
+                    if replace_function_in_file(
+                        file_path, function_name, improved_code, original_function, function_number
+                    ):
                         print(f"  ✅ Successfully processed {function_name} #{function_number}")
                         success = True
                     else:

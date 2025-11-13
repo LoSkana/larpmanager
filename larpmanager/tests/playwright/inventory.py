@@ -23,11 +23,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_inventory(pw_page) -> None:
+def test_inventory(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -41,7 +42,7 @@ def test_inventory(pw_page) -> None:
     checks(page)
 
 
-def prepare(page) -> None:
+def prepare(page: Any) -> None:
     # Activate feature inventory
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Warehouse").check()
@@ -82,7 +83,7 @@ def prepare(page) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def add_items(page) -> None:
+def add_items(page: Any) -> None:
     # add new items
     page.get_by_role("link", name="Items").click()
     page.get_by_role("link", name="New").click()
@@ -125,7 +126,7 @@ def add_items(page) -> None:
     )
 
 
-def bulk(page) -> None:
+def bulk(page: Any) -> None:
     # test bulk
     page.get_by_role("link", name="Bulk").click()
     page.locator("td:nth-child(5)").first.click()
@@ -162,7 +163,7 @@ def bulk(page) -> None:
     expect(page.locator("#one")).to_contain_text("Item 3sa maintenance")
 
 
-def area_assigmenents(page) -> None:
+def area_assigmenents(page: Any) -> None:
     page.get_by_role("link", name="Area").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -218,7 +219,7 @@ def area_assigmenents(page) -> None:
     page.wait_for_timeout(2000)
 
 
-def checks(page) -> None:
+def checks(page: Any) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
     expect(page.locator("#one")).to_contain_text("New Kitchen Position: ss Description: sds")

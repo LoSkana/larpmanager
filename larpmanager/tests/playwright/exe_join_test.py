@@ -23,11 +23,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, submit
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_join(pw_page) -> None:
+def test_exe_join(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     go_to(page, live_server, "/debug")

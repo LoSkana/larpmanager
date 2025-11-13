@@ -29,6 +29,7 @@ from larpmanager.cache.association import get_cache_association
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.larpmanager import LarpManagerGuide
+from typing import Any
 
 translation.activate("en")
 
@@ -78,7 +79,7 @@ def _render_sitemap(urls: list[str]) -> StringIO:
     return xml_stream
 
 
-def _organization_sitemap(association_id) -> list[str]:
+def _organization_sitemap(association_id: Any) -> list[str]:
     """Generate sitemap URLs for an organization's events and runs.
 
     Args:

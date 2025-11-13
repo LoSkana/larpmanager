@@ -243,7 +243,7 @@ class MyPasswordResetConfirmForm(SetPasswordForm):
 class MyPasswordResetForm(PasswordResetForm):
     """Custom password reset form with association-specific handling."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with email field constraints.
 
         Args:
@@ -464,7 +464,7 @@ class ResidenceField(forms.MultiValueField):
 
 
 class BaseProfileForm(MyForm):
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize base profile form with field filtering based on association settings.
 
         Args:
@@ -550,7 +550,7 @@ class ProfileForm(BaseProfileForm):
             "document_expiration": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize member form with dynamic field validation and configuration.
 
         Sets mandatory fields, handles voting candidates, and adds required
@@ -619,7 +619,7 @@ class ProfileForm(BaseProfileForm):
                 + "?",
             )
 
-    def clean_birth_date(self):
+    def clean_birth_date(self) -> Any:
         """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]
         logger.debug("Validating birth date: %s", data)
@@ -644,7 +644,7 @@ class ProfileForm(BaseProfileForm):
 
         return data
 
-    def clean(self) -> dict[str, any]:
+    def clean(self) -> dict[str, Any]:
         """Validate profile photo requirements based on form configuration."""
         cleaned_data = super().clean()
 
@@ -943,7 +943,7 @@ class ExeProfileForm(MyForm):
         model = Association
         fields = ()
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize member field configuration form.
 
         Args:

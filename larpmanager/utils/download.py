@@ -22,6 +22,7 @@ from __future__ import annotations
 import csv
 import io
 import zipfile
+from typing import Any
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -56,7 +57,7 @@ from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
 
-def _temp_csv_file(column_headers, data_rows):
+def _temp_csv_file(column_headers: Any, data_rows: Any) -> Any:
     """Create CSV content from keys and values.
 
     Args:
@@ -74,7 +75,7 @@ def _temp_csv_file(column_headers, data_rows):
     return buffer.getvalue()
 
 
-def zip_exports(context, exports, filename):
+def zip_exports(context: Any, exports: Any, filename: Any) -> Any:
     """Create ZIP file containing multiple CSV exports.
 
     Args:
@@ -98,7 +99,7 @@ def zip_exports(context, exports, filename):
     return response
 
 
-def download(context, typ, nm):
+def download(context: Any, typ: Any, nm: Any) -> Any:
     """Generate downloadable ZIP export for model type.
 
     Args:
@@ -169,7 +170,7 @@ def export_data(context: dict, model_type: type, *, member_cover: bool = False) 
     return exports
 
 
-def export_plot_rels(context):
+def export_plot_rels(context: Any) -> Any:
     """Export plot-character relationships.
 
     Args:
@@ -198,7 +199,7 @@ def export_plot_rels(context):
     return [("plot_rels", column_keys, relationship_values)]
 
 
-def export_relationships(context):
+def export_relationships(context: Any) -> Any:
     """Export character relationships.
 
     Args:
@@ -618,7 +619,7 @@ def _clean(html_content: str | None) -> str:
     return soup.get_text("\n").replace("\n", " ")
 
 
-def _download_prepare(context: dict, model_name: str, queryset, type_config: dict) -> object:
+def _download_prepare(context: dict, model_name: str, queryset: Any, type_config: dict) -> object:
     """Prepare and filter query for CSV download based on type and context.
 
     Processes a queryset by applying appropriate filters based on the model type
@@ -845,7 +846,7 @@ def export_character_form(context: dict) -> list[tuple[str, list, list]]:
     return exports
 
 
-def _orga_registrations_acc(context, registrations=None):
+def _orga_registrations_acc(context: Any, registrations: Any = None) -> Any:
     """Process registration accounting data for organizer reports.
 
     Args:
@@ -870,7 +871,7 @@ def _orga_registrations_acc(context, registrations=None):
     return cached_data
 
 
-def _orga_registrations_acc_reg(reg, context: dict, cache_aip: dict) -> dict:
+def _orga_registrations_acc_reg(reg: Any, context: dict, cache_aip: dict) -> dict:
     """Process registration accounting data for organizer downloads.
 
     Calculates payment breakdowns, remaining balances, and ticket pricing
@@ -1177,7 +1178,7 @@ def export_tickets(context: dict) -> list[tuple[str, list[str], list]]:
     return [("tickets", field_keys, extracted_values)]
 
 
-def export_event(context):
+def export_event(context: Any) -> Any:
     """Export event configuration and features data.
 
     Args:
@@ -1205,7 +1206,7 @@ def export_event(context):
     return export_data
 
 
-def export_abilities(context):
+def export_abilities(context: Any) -> Any:
     """Export abilities data for an event.
 
     Args:

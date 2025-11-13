@@ -12,7 +12,7 @@ from larpmanager.models.member import Member
 from larpmanager.utils.member import almost_equal, count_differences
 
 
-def calculate_fiscal_code(member):
+def calculate_fiscal_code(member: Any) -> Any:
     """Calculate and validate Italian fiscal code for a member.
 
     Args:
@@ -136,7 +136,7 @@ def _clean_birth_place(birth_place: str | None) -> str:
     return re.sub(r"\(.*?\)", "", birth_place)
 
 
-def _slugify(input_text):
+def _slugify(input_text: Any) -> Any:
     """Normalize text for fiscal code generation by removing accents and special characters.
 
     Args:

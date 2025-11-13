@@ -40,6 +40,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 
 # Import signals module to register signal handlers
 import larpmanager.models.signals  # noqa: F401
+from typing import Any
 
 
 class TestUtilitySignals(BaseTestCase):
@@ -58,7 +59,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(character.id)
 
     @patch("larpmanager.utils.experience.calculate_character_experience_points")
-    def test_ability_px_post_save_updates_experience(self, mock_update) -> None:
+    def test_ability_px_post_save_updates_experience(self, mock_update: Any) -> None:
         """Test that AbilityPx m2m_changed signal updates character experience"""
         character = self.character()
         ability_px = AbilityPx.objects.create(name="Test Ability", cost=10, event=self.get_event())
@@ -96,11 +97,7 @@ class TestUtilitySignals(BaseTestCase):
         event = self.get_event()
         character = self.character(event=event)  # Create character directly in the event
 
-        modifier_px = ModifierPx.objects.create(
-            name="Test Modifier",
-            cost=8,
-            event=event
-        )
+        modifier_px = ModifierPx.objects.create(name="Test Modifier", cost=8, event=event)
 
         # Verify modifier was created successfully
         self.assertIsNotNone(modifier_px.id)
@@ -163,6 +160,7 @@ class TestUtilitySignals(BaseTestCase):
 
         # Verify character was deleted (soft delete keeps the record)
         from larpmanager.models.writing import Character
+
         self.assertFalse(Character.objects.filter(id=character_id, deleted__isnull=True).exists())
 
     def test_character_post_save_generates_pdf(self) -> None:
@@ -239,7 +237,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(member.id)
 
     @patch("larpmanager.accounting.registration.update_registration_accounting")
-    def test_registration_pre_save_updates_totals(self, mock_update) -> None:
+    def test_registration_pre_save_updates_totals(self, mock_update: Any) -> None:
         """Test that Registration pre_save signal updates registration totals"""
         registration = self.get_registration()
         mock_update.reset_mock()
@@ -248,9 +246,10 @@ class TestUtilitySignals(BaseTestCase):
         mock_update.assert_called_once_with(registration)
 
     @patch("larpmanager.cache.association_text.update_association_text")
-    def test_association_text_post_save_updates_cache(self, mock_update) -> None:
+    def test_association_text_post_save_updates_cache(self, mock_update: Any) -> None:
         """Test that AssociationText post_save signal updates text cache"""
         from larpmanager.models.association import AssociationTextType
+
         association = self.get_association()
         text = AssociationText(association=association, typ=AssociationTextType.HOME, text="Test Value")
         mock_update.reset_mock()
@@ -262,6 +261,7 @@ class TestUtilitySignals(BaseTestCase):
     def test_association_text_pre_delete_clears_cache(self) -> None:
         """Test that AssociationText pre_delete signal clears text cache"""
         from larpmanager.models.association import AssociationTextType
+
         association = self.get_association()
         text = AssociationText.objects.create(association=association, typ=AssociationTextType.HOME, text="Test Value")
         text_id = text.id
@@ -271,9 +271,10 @@ class TestUtilitySignals(BaseTestCase):
         self.assertFalse(AssociationText.objects.filter(id=text_id).exists())
 
     @patch("larpmanager.cache.event_text.update_event_text")
-    def test_event_text_post_save_updates_cache(self, mock_update) -> None:
+    def test_event_text_post_save_updates_cache(self, mock_update: Any) -> None:
         """Test that EventText post_save signal updates text cache"""
         from larpmanager.models.event import EventTextType
+
         event = self.get_event()
         text = EventText(event=event, typ=EventTextType.INTRO, text="Test Value")
         mock_update.reset_mock()
@@ -285,6 +286,7 @@ class TestUtilitySignals(BaseTestCase):
     def test_event_text_pre_delete_clears_cache(self) -> None:
         """Test that EventText pre_delete signal clears text cache"""
         from larpmanager.models.event import EventTextType
+
         event = self.get_event()
         text = EventText.objects.create(event=event, typ=EventTextType.INTRO, text="Test Value")
         text_id = text.id
@@ -294,9 +296,10 @@ class TestUtilitySignals(BaseTestCase):
         self.assertFalse(EventText.objects.filter(id=text_id).exists())
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_payment_post_save_updates_tokens_credit(self, mock_update) -> None:
+    def test_accounting_item_payment_post_save_updates_tokens_credit(self, mock_update: Any) -> None:
         """Test that AccountingItemPayment post_save signal updates member tokens/credit"""
         from larpmanager.models.accounting import PaymentChoices
+
         member = self.get_member()
         payment = AccountingItemPayment.objects.create(
             member=member,
@@ -314,9 +317,10 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_payment_post_delete_updates_tokens_credit(self, mock_update) -> None:
+    def test_accounting_item_payment_post_delete_updates_tokens_credit(self, mock_update: Any) -> None:
         """Test that AccountingItemPayment post_delete signal updates member tokens/credit"""
         from larpmanager.models.accounting import PaymentChoices
+
         member = self.get_member()
         payment = AccountingItemPayment.objects.create(
             member=member,
@@ -332,9 +336,10 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_other_post_save_updates_tokens_credit(self, mock_update) -> None:
+    def test_accounting_item_other_post_save_updates_tokens_credit(self, mock_update: Any) -> None:
         """Test that AccountingItemOther post_save signal updates member tokens/credit"""
         from larpmanager.models.accounting import OtherChoices
+
         member = self.get_member()
         item = AccountingItemOther(
             member=member,
@@ -351,7 +356,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.token_credit.update_token_credit")
-    def test_accounting_item_expense_post_save_updates_tokens_credit(self, mock_update) -> None:
+    def test_accounting_item_expense_post_save_updates_tokens_credit(self, mock_update: Any) -> None:
         """Test that AccountingItemExpense post_save signal updates member tokens/credit"""
         member = self.get_member()
         expense = AccountingItemExpense(
@@ -359,7 +364,7 @@ class TestUtilitySignals(BaseTestCase):
             value=Decimal("30.00"),
             association=self.get_association(),
             descr="Test expense",
-            is_approved=True  # Required for signal to trigger
+            is_approved=True,  # Required for signal to trigger
         )
         mock_update.reset_mock()
         expense.save()
@@ -368,7 +373,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertTrue(mock_update.called)
 
     @patch("larpmanager.accounting.payment.payment_received")
-    def test_payment_invoice_pre_save_processes_payment(self, mock_process) -> None:
+    def test_payment_invoice_pre_save_processes_payment(self, mock_process: Any) -> None:
         """Test that PaymentInvoice pre_save signal processes payment"""
         invoice = self.payment_invoice()
         mock_process.reset_mock()
@@ -400,7 +405,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertIsNotNone(collection.id)
 
     @patch("larpmanager.accounting.registration.update_registration_accounting")
-    def test_registration_pre_save_calculates_totals(self, mock_calculate) -> None:
+    def test_registration_pre_save_calculates_totals(self, mock_calculate: Any) -> None:
         """Test that Registration pre_save signal calculates totals"""
         registration = self.get_registration()
         mock_calculate.reset_mock()
@@ -470,12 +475,7 @@ class TestUtilitySignals(BaseTestCase):
 
         # Send signal with correct parameters - should not raise errors
         result = profiler_response_signal.send(
-            sender=None,
-            domain="test.com",
-            path="/test",
-            method="GET",
-            view_func_name="test_view",
-            duration=1.5
+            sender=None, domain="test.com", path="/test", method="GET", view_func_name="test_view", duration=1.5
         )
 
         # Verify signal was sent successfully

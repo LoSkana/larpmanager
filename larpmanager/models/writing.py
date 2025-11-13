@@ -250,7 +250,7 @@ class Character(Writing):
     def __str__(self) -> str:
         return f"#{self.number} {self.name}"
 
-    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
         """Get configuration value for this character."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
@@ -265,7 +265,7 @@ class Character(Writing):
         is_inactive = self.get_config("inactive", default_value=False)
         return not (is_inactive == "True" or is_inactive is True)
 
-    def show(self, run: Run | None = None):
+    def show(self, run: Run | None = None) -> Any:
         """Generate display dictionary with character information and media URLs.
 
         Creates a comprehensive dictionary containing character details, player info,
@@ -378,26 +378,26 @@ class Character(Writing):
 
         return os.path.join(character_directory, sheet_filename)
 
-    def get_sheet_friendly_filepath(self, character_run=None):
+    def get_sheet_friendly_filepath(self, character_run: Any = None) -> Any:
         """Return filepath for the light PDF version of the character sheet."""
         return os.path.join(self.get_character_filepath(character_run), f"#{self.number}-light.pdf")
 
-    def get_relationships_filepath(self, run=None):
+    def get_relationships_filepath(self, run: Any = None) -> Any:
         """Return filepath for the relationships PDF."""
         return os.path.join(self.get_character_filepath(run), f"#{self.number}-rels.pdf")
 
-    def show_thumb(self):
+    def show_thumb(self) -> Any:
         """Return HTML for displaying character thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(200, self.thumb.url)
         return None
 
-    def relationships(self):
+    def relationships(self) -> Any:
         """Return queryset of relationships where this character is the source."""
         return Relationship.objects.filter(source_id=self.pk)
 
-    def get_plot_characters(self):
+    def get_plot_characters(self) -> Any:
         """Return queryset of plot-character relations for this character."""
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
@@ -492,7 +492,7 @@ class Plot(Writing):
     def __str__(self) -> str:
         return self.name
 
-    def get_plot_characters(self):
+    def get_plot_characters(self) -> Any:
         """Return queryset of plot-character relations for this plot."""
         return (
             PlotCharacterRel.objects.filter(plot_id=self.pk).select_related("character").order_by("character__number")
@@ -869,7 +869,7 @@ def replace_chars_element(element: Any, character_names: dict[str, str]) -> None
         element.teaser = replace_char_names(element.teaser, character_names)
 
 
-def replace_character_names(instance) -> None:
+def replace_character_names(instance: Any) -> None:
     """Replace character names in writing content with character numbers.
 
     This function substitutes character names with their corresponding numbers

@@ -74,6 +74,7 @@ from larpmanager.utils.base import get_context, get_event, get_event_context
 from larpmanager.utils.common import get_element
 from larpmanager.utils.exceptions import HiddenError
 from larpmanager.utils.registration import registration_status
+from typing import Any
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
@@ -178,7 +179,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", context)
 
 
-def get_character_rels_dict(registrations_by_run_dict: dict, member) -> dict:
+def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dict:
     """Get character relations dictionary grouped by registration ID.
 
     Precalculates RegistrationCharacterRel data for all runs to optimize queries
@@ -220,7 +221,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member) -> dict:
     return character_relations_by_registration_dict
 
 
-def get_payment_invoices_dict(registrations_by_id: dict, member) -> dict:
+def get_payment_invoices_dict(registrations_by_id: dict, member: Any) -> dict:
     """Get payment invoices organized by registration ID for the given member.
 
     Precalculates PaymentInvoice data for all registrations to optimize database queries
@@ -261,7 +262,7 @@ def get_payment_invoices_dict(registrations_by_id: dict, member) -> dict:
     return payment_invoices_by_registration
 
 
-def get_pre_registrations_dict(association_id: int, member) -> dict:
+def get_pre_registrations_dict(association_id: int, member: Any) -> dict:
     """Get pre-registrations for a member organized by event ID.
 
     Precalculates PreRegistration data for all events to optimize queries
@@ -420,7 +421,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def share(request: HttpRequest):
+def share(request: HttpRequest) -> Any:
     """Handle member data sharing consent for organization.
 
     Args:
@@ -458,7 +459,7 @@ def legal_notice(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def event_register(request: HttpRequest, event_slug: str):
+def event_register(request: HttpRequest, event_slug: str) -> Any:
     """Display event registration options for future runs.
 
     Args:
@@ -806,7 +807,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/search.html", context)
 
 
-def get_fact(factions_queryset) -> list[dict]:
+def get_fact(factions_queryset: Any) -> list[dict]:
     """Filter queryset to return only factions with characters.
 
     Args:
@@ -878,7 +879,7 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request: HttpRequest, event_slug: str, faction_id):
+def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
     """Display detailed information for a specific faction.
 
     Args:
@@ -947,7 +948,7 @@ def quests(request: HttpRequest, event_slug: str, quest_type_id: str | None = No
     return render(request, "larpmanager/event/quests.html", context)
 
 
-def quest(request: HttpRequest, event_slug: str, quest_id):
+def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
     """Display individual quest details and associated traits.
 
     Args:
@@ -1032,7 +1033,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/limitations.html", context)
 
 
-def export(request: HttpRequest, event_slug: str, export_type):
+def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     """Export event elements as JSON for external consumption.
 
     Args:

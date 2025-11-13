@@ -3,9 +3,10 @@
 from django.db import migrations, models
 
 from larpmanager.models.form import QuestionApplicable
+from typing import Any
 
 
-def set_default(apps, schema_editor):
+def set_default(apps: Any, schema_editor: Any) -> Any:
     WritingQuestion = apps.get_model("larpmanager", "WritingQuestion")
 
     for el in WritingQuestion.objects.all():

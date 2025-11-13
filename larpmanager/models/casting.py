@@ -29,6 +29,7 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Writing
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -252,7 +253,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     return traits
 
 
-def refresh_all_instance_traits(instance) -> None:
+def refresh_all_instance_traits(instance: Any) -> None:
     """Refresh traits for an instance by updating and synchronizing with calculated traits."""
     if instance.id is None:
         return

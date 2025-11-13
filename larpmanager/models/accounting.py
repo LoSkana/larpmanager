@@ -30,6 +30,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, generate_id, my_uuid_short
+from typing import Any
 
 
 class PaymentType(models.TextChoices):
@@ -213,7 +214,7 @@ class ElectronicInvoice(BaseModel):
             ),
         ]
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Save the ElectronicInvoice instance with auto-generated progressive and number.
 
         Automatically assigns progressive and number values if not already set:

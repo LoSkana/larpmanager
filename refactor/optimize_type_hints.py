@@ -12,6 +12,7 @@ import csv
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 
 def run_ruff_autofixes() -> bool | None:
@@ -38,7 +39,7 @@ def run_ruff_autofixes() -> bool | None:
         return False
 
 
-def get_remaining_violations():
+def get_remaining_violations() -> Any:
     """Get list of functions that still have type hint violations after ruff fixes."""
     try:
         result = subprocess.run(
@@ -52,6 +53,7 @@ def get_remaining_violations():
             return None
 
         import json
+
         errors = json.loads(result.stdout)
 
         # Group by file and function
@@ -71,7 +73,7 @@ def get_remaining_violations():
         return None
 
 
-def extract_function_name_at_line(file_path, line_number):
+def extract_function_name_at_line(file_path: Any, line_number: Any) -> Any:
     """Extract function name from source file at given line number."""
     try:
         with open(file_path, encoding="utf-8") as f:
@@ -79,12 +81,12 @@ def extract_function_name_at_line(file_path, line_number):
 
         # Look backwards from target line to find function definition
         start_line = max(0, line_number - 10)
-        relevant_lines = lines[start_line:line_number + 1]
+        relevant_lines = lines[start_line : line_number + 1]
 
         for i in range(len(relevant_lines) - 1, -1, -1):
             line = relevant_lines[i].strip()
             if line.startswith("def "):
-                func_name = line[4:line.index("(")].strip()
+                func_name = line[4 : line.index("(")].strip()
                 return func_name
 
         return None
@@ -92,7 +94,7 @@ def extract_function_name_at_line(file_path, line_number):
         return None
 
 
-def update_csv_with_remaining(csv_path, remaining_violations):
+def update_csv_with_remaining(csv_path: Any, remaining_violations: Any) -> Any:
     """Update CSV to only include functions that still need type hints."""
     print(f"\n📝 Step 2: Updating CSV with remaining violations...")
 
@@ -101,10 +103,7 @@ def update_csv_with_remaining(csv_path, remaining_violations):
     for violation in remaining_violations:
         func_name = extract_function_name_at_line(violation["file"], violation["line"])
         if func_name:
-            remaining_functions.append({
-                "file": violation["file"],
-                "function": func_name
-            })
+            remaining_functions.append({"file": violation["file"], "function": func_name})
 
     # Remove duplicates
     seen = set()

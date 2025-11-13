@@ -6,9 +6,10 @@ import django.core.validators
 import django.db.models.deletion
 import model_clone.mixin
 from django.db import migrations, models
+from typing import Any
 
 
-def create_default_skin(apps, schema_editor):
+def create_default_skin(apps: Any, schema_editor: Any) -> Any:
     AssociationSkin = apps.get_model("larpmanager", "AssociationSkin")
     AssociationSkin.objects.create(
         id=1,
@@ -21,7 +22,7 @@ def create_default_skin(apps, schema_editor):
     )
 
 
-def trigger_save_assocs(apps, schema_editor):
+def trigger_save_assocs(apps: Any, schema_editor: Any) -> Any:
     Association = apps.get_model("larpmanager", "Association")
     for assoc in Association.objects.all():
         assoc.save()

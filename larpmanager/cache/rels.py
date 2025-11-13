@@ -952,7 +952,7 @@ def on_plot_characters_m2m_changed(
     instance: Plot,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,  # noqa: ARG001
+    **kwargs: Any,  # noqa: ARG001
 ) -> None:
     """Handle plot-character relationship changes.
 
@@ -971,7 +971,7 @@ def on_speedlarp_characters_m2m_changed(
     instance: SpeedLarp,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,  # noqa: ARG001
+    **kwargs: Any,  # noqa: ARG001
 ) -> None:
     """Handle speedlarp-character relationship changes.
 
@@ -1006,7 +1006,7 @@ def on_prologue_characters_m2m_changed(
     instance: Prologue,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,  # noqa: ARG001
+    **kwargs: Any,  # noqa: ARG001
 ) -> None:
     """Handle prologue-character relationship changes.
 

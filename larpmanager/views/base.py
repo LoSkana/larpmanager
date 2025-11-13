@@ -40,6 +40,7 @@ from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.utils.tutorial_query import query_index
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
+from typing import Any
 
 if TYPE_CHECKING:
     from django.forms import Form
@@ -124,7 +125,7 @@ def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
     return render(request, "404.html", {"exe": exception})
 
 
-def error_500(request: HttpRequest):
+def error_500(request: HttpRequest) -> Any:
     """Handle 500 errors with custom template.
 
     Args:

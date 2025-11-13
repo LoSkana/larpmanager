@@ -167,7 +167,7 @@ def _get_inv_items(warehouse_item_ids: list[int], context: dict) -> list[int]:
 
 
 def exec_add_item_tag(
-    context,
+    context: Any,
     target: int,
     ids: list[int],
 ) -> None:
@@ -183,7 +183,7 @@ def exec_del_item_tag(context: dict[str, Any], target: int, ids: str) -> None:
 
 
 def exec_move_item_box(
-    context,
+    context: Any,
     target: int,
     ids: list[int],
 ) -> None:
@@ -245,7 +245,7 @@ def _get_chars(context: dict, character_ids: list) -> list:
     return context["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
 
 
-def exec_add_char_fact(context: dict, target, ids) -> None:
+def exec_add_char_fact(context: dict, target: Any, ids: Any) -> None:
     """Add characters to a faction."""
     fact = context["event"].get_elements(Faction).get(pk=target)
     fact.characters.add(*_get_chars(context, ids))

@@ -114,7 +114,7 @@ def paginate(
     )
 
 
-def _get_elements_query(cls, context: dict, request, model_type, *, is_executive: bool = True) -> tuple[any, int]:
+def _get_elements_query(cls: Any, context: dict, request: Any, model_type: Any, *, is_executive: bool = True) -> tuple[Any, int]:
     """Get filtered and paginated query elements based on context and request parameters.
 
     Args:
@@ -177,7 +177,7 @@ def _get_elements_query(cls, context: dict, request, model_type, *, is_executive
     return query_elements, filtered_records_count
 
 
-def _set_filtering(context: dict, queryset, column_filters: dict):
+def _set_filtering(context: dict, queryset: Any, column_filters: dict) -> Any:
     """Apply filtering to queryset elements based on provided filters.
 
     Args:

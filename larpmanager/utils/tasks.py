@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
 
-def background_auto(schedule=0, **background_kwargs):
+def background_auto(schedule: Any = 0, **background_kwargs: Any) -> Any:
     """Conditionally run functions as background tasks.
 
     Creates a decorator that can run functions either synchronously
@@ -96,7 +96,7 @@ def background_auto(schedule=0, **background_kwargs):
 # MAIL
 
 
-def mail_error(subject, email_body, exception=None) -> None:
+def mail_error(subject: Any, email_body: Any, exception: Any = None) -> None:
     """Handle email sending errors and notify administrators.
 
     Args:
@@ -189,7 +189,7 @@ def send_mail_exec(
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(email_pk) -> None:
+def my_send_mail_bkg(email_pk: Any) -> None:
     """Background task to send a queued email.
 
     Args:
@@ -214,7 +214,7 @@ def my_send_mail_bkg(email_pk) -> None:
     email.save()
 
 
-def clean_sender(sender_name):
+def clean_sender(sender_name: Any) -> Any:
     """Clean sender name for email headers by removing special characters.
 
     Args:
@@ -401,7 +401,7 @@ def my_send_simple_mail(
         raise
 
 
-def add_unsubscribe_body(association):
+def add_unsubscribe_body(association: Any) -> Any:
     """Add unsubscribe footer to email body.
 
     Args:
@@ -504,7 +504,7 @@ def my_send_mail(
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subject, message_text, exception=None) -> None:
+def notify_admins(subject: Any, message_text: Any, exception: Any = None) -> None:
     """Send notification email to system administrators.
 
     Args:

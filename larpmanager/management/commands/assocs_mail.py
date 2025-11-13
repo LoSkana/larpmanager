@@ -22,12 +22,13 @@ from django.conf import settings as conf_settings
 from django.core.management.base import BaseCommand
 
 from larpmanager.models.association import Association
+from typing import Any
 
 
 class Command(BaseCommand):
     help = "List of all assocs mails"
 
-    def handle(self, *args, **options) -> None:  # noqa: ARG002
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Print email mappings for associations and admin."""
         # Get associations with valid email addresses, excluding demo accounts
         lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(demo=True)

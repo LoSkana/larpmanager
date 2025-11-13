@@ -2,26 +2,29 @@ import ast
 import csv
 import os
 from collections import defaultdict
+from typing import Any
 
 
-def get_function_length(node):
+def get_function_length(node: Any) -> int:
     if not hasattr(node, "body") or not node.body:
         return 0
     last_line = node.body[-1].lineno if hasattr(node.body[-1], "lineno") else node.lineno
     return last_line - node.lineno + 1
 
 
-def has_docstring(node):
+def has_docstring(node: Any) -> bool:
     """Check if a function has a docstring."""
     if not node.body:
         return False
     first_stmt = node.body[0]
-    return (isinstance(first_stmt, ast.Expr) and
-            isinstance(first_stmt.value, ast.Constant) and
-            isinstance(first_stmt.value.value, str))
+    return (
+        isinstance(first_stmt, ast.Expr)
+        and isinstance(first_stmt.value, ast.Constant)
+        and isinstance(first_stmt.value.value, str)
+    )
 
 
-def analyze_file(filepath):
+def analyze_file(filepath: Any) -> list:
     with open(filepath, encoding="utf-8") as f:
         try:
             tree = ast.parse(f.read(), filename=filepath)
@@ -53,7 +56,7 @@ def analyze_file(filepath):
     return results
 
 
-def main(folder=".") -> None:
+def main(folder: str = ".") -> None:
     all_results = []
     for root, _dirs, files in os.walk(folder):
         if any(excluded in root for excluded in ("venv", "tests", "migrations")):

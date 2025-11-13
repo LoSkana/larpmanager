@@ -74,11 +74,11 @@ class LarpManagerContact(LarpManagerCheck):
         widget=forms.TextInput(attrs={"placeholder": _("The name of our hobby, four letters")}),
     )
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize delete association form."""
         super().__init__(*args, **kwargs)
 
-    def clean_verification(self):
+    def clean_verification(self) -> Any:
         """Validate that the verification field contains 'larp'."""
         verification = self.cleaned_data.get("verification", "")
         if verification.strip().lower() != "larp":

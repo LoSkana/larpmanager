@@ -59,7 +59,7 @@ from larpmanager.models.writing import (
 css_delimeter = "/*@#§*/"
 
 
-def render_js(cls):
+def render_js(cls: Any) -> Any:
     """Render JavaScript includes with defer attribute for forms.
 
     Args:
@@ -113,7 +113,7 @@ class SlugInput(forms.TextInput):
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
     """Custom checkbox widget for role permission selection with help text."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize widget with feature help text and mapping.
 
         Args:
@@ -125,7 +125,9 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:  # noqa: ARG002
+    def render(
+        self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer: Any = None
+    ) -> str:  # noqa: ARG002
         """Render checkbox widget with tooltips and help links.
 
         Generates HTML for a checkbox widget where each option includes:
@@ -189,7 +191,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     """Model multiple choice field with translated labels."""
 
-    def label_from_instance(self, obj):
+    def label_from_instance(self, obj: Any) -> Any:
         """Get translated label for model instance.
 
         Args:
@@ -202,7 +204,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return _(obj.name)
 
 
-def prepare_permissions_role(form, typ) -> None:
+def prepare_permissions_role(form: Any, typ: Any) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
@@ -289,7 +291,7 @@ def prepare_permissions_role(form, typ) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance, form) -> None:
+def save_permissions_role(instance: Any, form: Any) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -320,7 +322,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -349,7 +351,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         """Return string representation of the given object."""
         return str(obj)
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -374,7 +376,7 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -391,7 +393,7 @@ class AssocMS2:
         "user__email__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -458,7 +460,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return f"{obj.display_real()} - {obj.email}"
 
 
-def get_association_people(association_id):
+def get_association_people(association_id: Any) -> Any:
     """Get list of people associated with an association for form choices.
 
     Args:
@@ -476,7 +478,7 @@ def get_association_people(association_id):
     return ls
 
 
-def get_run_choices(self, *, past=False) -> None:
+def get_run_choices(self: Any, *, past: Any = False) -> None:
     """Generate run choices for form fields.
 
     Args:
@@ -533,7 +535,7 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -558,7 +560,7 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -736,7 +738,7 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -766,7 +768,7 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -789,7 +791,7 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: Any) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -806,7 +808,7 @@ class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
     pass
 
 
-def remove_choice(choices, type_to_remove):
+def remove_choice(choices: Any, type_to_remove: Any) -> Any:
     """Remove a specific choice from a list of choices.
 
     Args:
@@ -838,7 +840,7 @@ class RedirectForm(forms.Form):
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")
 
 
-def get_members_queryset(association_id):
+def get_members_queryset(association_id: Any) -> Any:
     """Get queryset of members for an association with accepted status.
 
     Args:

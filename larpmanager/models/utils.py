@@ -40,6 +40,7 @@ from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from typing import Any
 
 if TYPE_CHECKING:
     from decimal import Decimal
@@ -51,7 +52,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def generate_id(id_length):
+def generate_id(id_length: Any) -> Any:
     """Generate random alphanumeric ID string.
 
     Args:
@@ -91,7 +92,7 @@ def decimal_to_str(decimal_value: Decimal) -> str:
     return string_representation.replace(".00", "")
 
 
-def slug_url_validator(val) -> None:
+def slug_url_validator(val: Any) -> None:
     """Validate that string contains only lowercase alphanumeric characters.
 
     Args:
@@ -130,12 +131,12 @@ def remove_non_ascii(text: str) -> str:
     return "".join(char for char in text if ord(char) < max_ascii)
 
 
-def my_uuid_miny():
+def my_uuid_miny() -> Any:
     """Generate tiny UUID with letter prefix and 4 characters."""
     return random.choice(string.ascii_letters) + my_uuid(4)  # noqa: S311
 
 
-def my_uuid_short():
+def my_uuid_short() -> Any:
     """Generate short UUID string of 12 characters.
 
     Returns:
@@ -153,7 +154,7 @@ def my_uuid(length: int | None = None) -> str:
     return uuid_hex_string[:length]
 
 
-def download_d(session):
+def download_d(session: Any) -> Any:
     """Alias for download function."""
     return download(session)
 
@@ -226,11 +227,11 @@ def get_sum(queryset: QuerySet) -> Decimal | int:
 
 @deconstructible
 class UploadToPathAndRename:
-    def __init__(self, sub_path) -> None:
+    def __init__(self, sub_path: Any) -> None:
         """Initialize upload path handler with sub-directory."""
         self.sub_path = sub_path
 
-    def __call__(self, instance, filename: str) -> str:
+    def __call__(self, instance: Any, filename: str) -> str:
         """Generate upload path for file with backup handling.
 
         Creates a unique filename using UUID and organizes files into directories
@@ -409,10 +410,10 @@ class MLStripper(HTMLParser):
         # Initialize text buffer for content extraction
         self.text = StringIO()
 
-    def handle_data(self, d) -> None:
+    def handle_data(self, d: Any) -> None:
         """Handle data by writing it to the internal text buffer."""
         self.text.write(d)
 
-    def get_data(self):
+    def get_data(self) -> Any:
         """Return the accumulated text data."""
         return self.text.getvalue()

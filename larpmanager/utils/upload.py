@@ -67,6 +67,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.download import _get_column_names
 from larpmanager.utils.edit import save_log
+from typing import Any
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -77,7 +78,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def go_upload(context: dict, upload_form_data):
+def go_upload(context: dict, upload_form_data: Any) -> Any:
     """Route uploaded files to appropriate processing functions.
 
     Args:
@@ -112,7 +113,7 @@ def go_upload(context: dict, upload_form_data):
     return writing_load(context, upload_form_data)
 
 
-def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
+def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
     """Read CSV file with multiple encoding fallbacks.
 
     Attempts to read a CSV file using various character encodings to handle
@@ -169,7 +170,7 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
     return None
 
 
-def _get_file(context: dict, file, column_id: str | None = None) -> tuple[any, list[str]]:
+def _get_file(context: dict, file: Any, column_id: str | None = None) -> tuple[any, list[str]]:
     """Get file path and save uploaded file to media directory.
 
     Args:
@@ -218,7 +219,7 @@ def _get_file(context: dict, file, column_id: str | None = None) -> tuple[any, l
     return input_dataframe, []
 
 
-def registrations_load(context: dict, uploaded_file_form):
+def registrations_load(context: dict, uploaded_file_form: Any) -> Any:
     """Load registration data from uploaded CSV file.
 
     Args:
@@ -308,7 +309,9 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
     return status_message
 
 
-def _reg_field_load(context, registration, field_name, field_value, registration_questions, error_logs) -> None:
+def _reg_field_load(
+    context: Any, registration: Any, field_name: Any, field_value: Any, registration_questions: Any, error_logs: Any
+) -> None:
     """Load individual registration field from CSV data.
 
     Args:
@@ -428,7 +431,7 @@ def _reg_assign_characters(
         RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
 
 
-def writing_load(context: dict, form) -> list[str]:
+def writing_load(context: dict, form: Any) -> list[str]:
     """Load writing data from uploaded files and process relationships.
 
     Processes uploaded files containing writing elements and their relationships.
@@ -599,13 +602,13 @@ def _get_questions(questions_queryset: QuerySet) -> dict:
 
 
 def _assign_choice_answer(
-    target_element,
-    field_name,
-    field_value,
-    available_questions,
-    error_logs,
+    target_element: Any,
+    field_name: Any,
+    field_value: Any,
+    available_questions: Any,
+    error_logs: Any,
     *,
-    is_registration=False,
+    is_registration: Any = False,
 ) -> None:
     """Assign choice answers to form elements during bulk import.
 
@@ -765,13 +768,13 @@ def _writing_load_field(context: dict, element: BaseModel, field: str, value: an
 
 
 def _writing_question_load(
-    context,
-    writing_element,
-    question_field,
-    question_type,
-    processing_logs,
-    questions_dict,
-    field_value,
+    context: Any,
+    writing_element: Any,
+    question_field: Any,
+    question_type: Any,
+    processing_logs: Any,
+    questions_dict: Any,
+    field_value: Any,
 ) -> None:
     """Process and load writing question values into element fields.
 
@@ -846,7 +849,7 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
             logs.append(f"Faction not found: {faction_name}")
 
 
-def form_load(context: dict, form, *, is_registration: bool = True) -> list[str]:
+def form_load(context: dict, form: Any, *, is_registration: bool = True) -> list[str]:
     """Load form questions and options from uploaded files.
 
     Processes uploaded CSV/Excel files to create form questions and their
@@ -1090,7 +1093,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
     return f"OK - Updated {option_name}"
 
 
-def _get_option(context, is_registration, option_name, parent_question_id):
+def _get_option(context: Any, is_registration: Any, option_name: Any, parent_question_id: Any) -> Any:
     """Get or create a question option for registration or writing forms.
 
     Args:
@@ -1120,7 +1123,7 @@ def _get_option(context, is_registration, option_name, parent_question_id):
     return was_created, option_instance
 
 
-def get_csv_upload_tmp(csv_upload, run) -> str:
+def get_csv_upload_tmp(csv_upload: Any, run: Any) -> str:
     """Create a temporary file for CSV upload processing.
 
     Creates a temporary directory structure under MEDIA_ROOT/tmp/event_slug/
@@ -1154,7 +1157,7 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
     return tmp_file
 
 
-def cover_load(context, z_obj) -> None:
+def cover_load(context: Any, z_obj: Any) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
     Args:
@@ -1275,7 +1278,7 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
     return f"OK - Created {ticket}" if was_created else f"OK - Updated {ticket}"
 
 
-def abilities_load(context: dict, form) -> list:
+def abilities_load(context: dict, form: Any) -> list:
     """Load abilities from uploaded file and process each row.
 
     Args:

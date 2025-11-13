@@ -24,11 +24,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_simple(pw_page) -> None:
+def test_user_signup_simple(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,7 +41,7 @@ def test_user_signup_simple(pw_page) -> None:
     help_questions(live_server, page)
 
 
-def signup(live_server, page) -> None:
+def signup(live_server: Any, page: Any) -> None:
     # deactivate registration open
     go_to(page, live_server, "/test/manage/features/registration_open/off")
 
@@ -79,7 +80,7 @@ def signup(live_server, page) -> None:
     expect(page.locator("#banner")).not_to_contain_text("Register")
 
 
-def help_questions(live_server, page) -> None:
+def help_questions(live_server: Any, page: Any) -> None:
     # test help
     go_to(page, live_server, "/manage/features/help/on")
     page.get_by_role("link", name="Need help?").click()
@@ -109,7 +110,7 @@ def help_questions(live_server, page) -> None:
     submit_confirm(page)
 
 
-def pre_register(live_server, page) -> None:
+def pre_register(live_server: Any, page: Any) -> None:
     # Set email send
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()

@@ -24,11 +24,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, login_user, submit, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_user_registration_form_gift(pw_page) -> None:
+def test_user_registration_form_gift(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -44,7 +45,7 @@ def test_user_registration_form_gift(pw_page) -> None:
     gift(page, live_server)
 
 
-def prepare(page, live_server) -> None:
+def prepare(page: Any, live_server: Any) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
 
@@ -78,7 +79,7 @@ def prepare(page, live_server) -> None:
     go_to(page, live_server, "/test/manage/form/")
 
 
-def field_choice(page, live_server) -> None:
+def field_choice(page: Any, live_server: Any) -> None:
     # create single choice
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -110,7 +111,7 @@ def field_choice(page, live_server) -> None:
     submit_confirm(page)
 
 
-def field_multiple(page, live_server) -> None:
+def field_multiple(page: Any, live_server: Any) -> None:
     # create multiple choice
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("m")
@@ -154,7 +155,7 @@ def field_multiple(page, live_server) -> None:
     page.get_by_role("link", name="New").click()
 
 
-def field_text(page, live_server) -> None:
+def field_text(page: Any, live_server: Any) -> None:
     # create text
     page.locator("#id_typ").select_option("t")
     page.locator("#id_description").click()
@@ -196,7 +197,7 @@ def field_text(page, live_server) -> None:
     expect(page.get_by_label("choice")).to_contain_text("secondas")
 
 
-def gift(page, live_server) -> None:
+def gift(page: Any, live_server: Any) -> None:
     # make ticket giftable
     go_to(page, live_server, "/test/manage/tickets/")
     page.get_by_role("link", name="").click()

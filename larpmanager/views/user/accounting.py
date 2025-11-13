@@ -78,6 +78,7 @@ from larpmanager.utils.common import (
 )
 from larpmanager.utils.exceptions import check_association_feature
 from larpmanager.utils.fiscal_code import calculate_fiscal_code
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -853,7 +854,7 @@ def acc_cancelled(request: HttpRequest) -> HttpResponse:
     return redirect("accounting")
 
 
-def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> HttpResponse:
+def acc_profile_check(request: HttpRequest, success_message: str, invoice: Any) -> HttpResponse:
     """Check if user profile is compiled and redirect appropriately.
 
     Validates that the user's membership profile is complete. If not compiled,

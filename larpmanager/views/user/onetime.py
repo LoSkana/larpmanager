@@ -97,7 +97,7 @@ def file_iterator(
 
 @never_cache
 @require_http_methods(["GET", "POST"])
-def onetime_access(request: HttpRequest, token):
+def onetime_access(request: HttpRequest, token: Any) -> Any:
     """Public view to access one-time content via token.
 
     Security features:

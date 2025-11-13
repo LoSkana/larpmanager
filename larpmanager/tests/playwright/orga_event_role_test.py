@@ -21,11 +21,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import check_feature, go_to, login_orga, login_user, logout, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_event_role(pw_page) -> None:
+def test_orga_event_role(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_user(page, live_server)

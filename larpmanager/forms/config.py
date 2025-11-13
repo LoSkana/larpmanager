@@ -25,7 +25,7 @@ class ConfigType(IntEnum):
 
 
 class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
-    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer=None) -> str:  # noqa: ARG002
+    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer: Any = None) -> str:  # noqa: ARG002
         """Render the checkbox widget as HTML.
 
         Args:
@@ -70,7 +70,7 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class ConfigForm(MyForm):
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form with configuration fields and custom elements.
 
         Args:
@@ -97,7 +97,7 @@ class ConfigForm(MyForm):
     def set_configs(self) -> None:
         """No-op method placeholder."""
 
-    def set_section(self, section_slug, section_name) -> None:
+    def set_section(self, section_slug: Any, section_name: Any) -> None:
         """Set the current section for grouping configuration fields.
 
         Args:
@@ -112,7 +112,9 @@ class ConfigForm(MyForm):
         if self.params.get("jump_section", "") == section_slug:
             self.jump_section = section_name
 
-    def add_configs(self, configuration_key, config_type, field_label, field_help_text, extra_data=None) -> None:
+    def add_configs(
+        self, configuration_key: Any, config_type: Any, field_label: Any, field_help_text: Any, extra_data: Any = None
+    ) -> None:
         """Add a configuration field to be rendered in the form.
 
         Args:
@@ -167,7 +169,7 @@ class ConfigForm(MyForm):
 
         return instance
 
-    def _get_custom_field(self, field_definition, result_dict) -> None:
+    def _get_custom_field(self, field_definition: Any, result_dict: Any) -> None:
         """Extract and format configuration field value from form data.
 
         Args:
@@ -193,7 +195,7 @@ class ConfigForm(MyForm):
         result_dict[field_key] = field_value
 
     @staticmethod
-    def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra=None) -> forms.Field | None:
+    def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra: Any = None) -> forms.Field | None:
         """Create appropriate Django form field based on configuration type.
 
         Args:
@@ -309,7 +311,7 @@ class ConfigForm(MyForm):
                 initial_value = initial_value == "True"
             self.initial[field_key] = initial_value
 
-    def _get_all_element_configs(self):
+    def _get_all_element_configs(self) -> Any:
         """Get all existing configuration values for the instance.
 
         Returns:

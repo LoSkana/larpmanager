@@ -3,9 +3,10 @@
 from django.db import migrations
 
 from larpmanager.models.form import QuestionStatus
+from typing import Any
 
 
-def clean_cocreation(apps, schema_editor):
+def clean_cocreation(apps: Any, schema_editor: Any) -> Any:
     # create question and answer to save data in "cocreation"
     WritingQuestion = apps.get_model("larpmanager", "WritingQuestion")
     WritingAnswer = apps.get_model("larpmanager", "WritingAnswer")

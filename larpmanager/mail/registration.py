@@ -36,12 +36,13 @@ from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
 @background_auto(queue="acc")
-def update_registration_status_bkg(registration_id) -> None:
+def update_registration_status_bkg(registration_id: Any) -> None:
     """Background task to update registration status with delay.
 
     Args:
@@ -53,7 +54,7 @@ def update_registration_status_bkg(registration_id) -> None:
     update_registration_status(registration)
 
 
-def update_registration_status(instance) -> None:
+def update_registration_status(instance: Any) -> None:
     """Send email notifications for registration status changes.
 
     Handles automated emails for registration confirmations and updates,
@@ -132,7 +133,7 @@ def update_registration_status(instance) -> None:
             my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
-def registration_options(registration_instance) -> str:
+def registration_options(registration_instance: Any) -> str:
     """Generate email content for registration options.
 
     Creates formatted text showing selected tickets and registration choices,
@@ -431,7 +432,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
             my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
-def send_pre_registration_confirmation_email(pre_registration) -> None:
+def send_pre_registration_confirmation_email(pre_registration: Any) -> None:
     """Handle pre-registration pre-save notifications.
 
     Args:

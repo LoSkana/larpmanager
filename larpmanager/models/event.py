@@ -257,7 +257,7 @@ class Event(BaseModel):
             queryset = queryset.order_by("number")
         return queryset
 
-    def get_class_parent(self, model_class: type[BaseModel] | str):
+    def get_class_parent(self, model_class: type[BaseModel] | str) -> Any:
         """Get the parent event for inheriting elements of a specific model class.
 
         This method determines whether to use the parent event's elements or the current
@@ -391,7 +391,7 @@ class Event(BaseModel):
         Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
         return pdf_directory_path
 
-    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
         """Get configuration value for this event."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
@@ -678,7 +678,7 @@ class Run(BaseModel):
         """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
         """Get configuration value for this run."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 

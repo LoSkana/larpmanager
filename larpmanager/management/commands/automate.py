@@ -277,7 +277,7 @@ class Command(BaseCommand):
         # Award badge to member by adding to many-to-many relationship
         badge.members.add(member)
 
-    def check_event_badge(self, event, m, cache) -> None:
+    def check_event_badge(self, event: Any, m: Any, cache: Any) -> None:
         """Award event-specific badge to member.
 
         Args:
@@ -354,7 +354,7 @@ class Command(BaseCommand):
     def get_count(
         counter_name: str,
         activity_cache: dict[str, dict[int, int]],
-        member,
+        member: Any,
         increment_value: int = 1,
     ) -> int:
         """Track and increment member activity counters.

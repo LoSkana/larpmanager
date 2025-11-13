@@ -32,6 +32,7 @@ from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
+from typing import Any
 
 if TYPE_CHECKING:
     from django.forms import Form
@@ -111,7 +112,7 @@ class MyRegistrationView(RegistrationView):
         # Fall back to success_url attribute or default home page
         return self.success_url or reverse("home")
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> Any:
         """Get keyword arguments for form initialization.
 
         Returns:

@@ -275,7 +275,7 @@ class Association(BaseModel):
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
-    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
         """Get configuration value for this association."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
@@ -494,7 +494,7 @@ def hdr(association_or_related_object: Association | Any) -> str:
     return "[LarpManager] "
 
 
-def get_association_maintainers(association: Association):
+def get_association_maintainers(association: Association) -> Any:
     """Get all maintainers for an association.
 
     Args:

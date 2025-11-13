@@ -3,9 +3,10 @@
 import django.core.validators
 from django.db import migrations, models
 from django.utils.text import slugify
+from typing import Any
 
 
-def update_slugs(apps, schema_editor):
+def update_slugs(apps: Any, schema_editor: Any) -> Any:
     FeatureModule = apps.get_model("larpmanager", "FeatureModule")
     for mod in FeatureModule.objects.all():
         mod.slug = slugify(mod.name)

@@ -120,7 +120,7 @@ def update_configs(element_id: int, model_name: str) -> dict[str, str]:
     return {config.name: config.value for config in config_queryset}
 
 
-def save_all_element_configs(obj, dct: dict[str, str]) -> None:
+def save_all_element_configs(obj: Any, dct: dict[str, str]) -> None:
     """Save multiple configuration values for an element.
 
     Updates existing configurations with new values and creates new configurations
@@ -233,7 +233,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
     return foreign_key_field_map.get(model_class_name)
 
 
-def get_element_config(element, config_name: str, default_value, *, bypass_cache: bool = False):
+def get_element_config(element: Any, config_name: str, default_value: Any, *, bypass_cache: bool = False) -> Any:
     """Get configuration value with type conversion and default fallback.
 
     Retrieves a configuration value from an element's aux_configs, handling

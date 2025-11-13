@@ -124,7 +124,7 @@ class MyForm(forms.ModelForm):
         self.unavail = {}
         self.max_lengths = {}
 
-    def get_automatic_field(self):
+    def get_automatic_field(self) -> Any:
         """Get list of fields that should be automatically populated.
 
         Returns:
@@ -215,7 +215,7 @@ class MyForm(forms.ModelForm):
         typ = self.params["elementTyp"]
         return self.params["event"].get_class_parent(typ)
 
-    def clean_association(self):
+    def clean_association(self) -> Any:
         """Return association from params."""
         return Association.objects.get(pk=self.params["association_id"])
 
@@ -308,7 +308,7 @@ class MyForm(forms.ModelForm):
 
         return instance
 
-    def _save_multi(self, field: str, instance) -> None:
+    def _save_multi(self, field: str, instance: Any) -> None:
         """Save many-to-many field relationships for a model instance.
 
         Compares the initial values with cleaned form data to determine
@@ -506,16 +506,16 @@ class BaseRegistrationForm(MyFormRun):
         """Initialize questions for the given event."""
         self.questions = self.question_class.get_instance_questions(event, self.params["features"])
 
-    def get_options_query(self, event) -> QuerySet:
+    def get_options_query(self, event: Any) -> QuerySet:
         """Return ordered options for questions in the given event."""
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
     def get_choice_options(
         self,
         all_options: dict,
-        question,
-        chosen_options=None,
-        registration_count=None,
+        question: Any,
+        chosen_options: Any = None,
+        registration_count: Any = None,
     ) -> tuple[list[tuple], str]:
         """Build form choice options for a question with availability and ticket validation.
 
@@ -571,7 +571,7 @@ class BaseRegistrationForm(MyFormRun):
         return choices, help_text
 
     def check_option(
-        self, previously_chosen_options: list, display_name: str, option, registration_count_by_option: dict
+        self, previously_chosen_options: list, display_name: str, option: Any, registration_count_by_option: dict
     ) -> tuple[str, bool]:
         """Check option availability and update display name with availability info.
 
@@ -980,7 +980,7 @@ class BaseRegistrationForm(MyFormRun):
         if question_config.id in self.answers:
             self.initial[field_key] = self.answers[question_config.id].text
 
-    def init_text(self, field_key: str, form_question, *, is_required: bool) -> None:
+    def init_text(self, field_key: str, form_question: Any, *, is_required: bool) -> None:
         """Initialize a text field with validators and initial values."""
         # Create validators based on max_length constraint
         field_validators = [max_length_validator(form_question.max_length)] if form_question.max_length else []
@@ -1003,7 +1003,7 @@ class BaseRegistrationForm(MyFormRun):
         question: Any,
         registration_counts: dict,
         *,
-        is_organizer,
+        is_organizer: Any,
         is_required: bool,
     ) -> None:
         """Initialize single choice form field.
@@ -1121,7 +1121,7 @@ class BaseRegistrationForm(MyFormRun):
         field = self.fields.pop(field_name)
         self.fields[field_name] = field
 
-    def save_reg_questions(self, instance, *, is_organizer=True) -> None:
+    def save_reg_questions(self, instance: Any, *, is_organizer: Any = True) -> None:
         """Save registration question answers to database.
 
         Args:
@@ -1336,7 +1336,7 @@ class MyCssForm(MyForm):
         default_storage.save(path, ContentFile(css))
 
     @staticmethod
-    def get_css_path(association_skin) -> str:  # noqa: ARG004
+    def get_css_path(association_skin: Any) -> str:  # noqa: ARG004
         """Returns empty string (CSS path logic not implemented)."""
         return ""
 

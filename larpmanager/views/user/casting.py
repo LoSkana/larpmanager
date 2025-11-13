@@ -41,6 +41,7 @@ from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters
 from larpmanager.utils.exceptions import check_event_feature
 from larpmanager.utils.registration import registration_status
+from typing import Any
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -363,7 +364,7 @@ def _check_already_done(context: dict, assignment_type: int) -> None:
             pass
 
 
-def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> None:
+def _casting_update(context: dict, prefs: dict[str, int], request: Any, typ: int) -> None:
     """Update casting preferences for a member and send confirmation email.
 
     This function handles the complete casting preference workflow: clearing existing

@@ -29,11 +29,12 @@ from larpmanager.tests.utils import (
     logout,
     submit_confirm,
 )
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_manual_excel_save_external(pw_page) -> None:
+def test_manual_excel_save_external(pw_page: Any) -> None:
     page, server, context = pw_page
 
     login_orga(page, server)
@@ -101,7 +102,7 @@ def test_manual_excel_save_external(pw_page) -> None:
     working_ticket_event(page, server, context)
 
 
-def excel(page, live_server) -> None:
+def excel(page: Any, live_server: Any) -> None:
     # test char finder on excel edit
     page.get_by_role("cell", name="Test Text ff").dblclick()
     frame = page.locator('iframe[title="Rich Text Area"]').content_frame
@@ -138,7 +139,7 @@ def excel(page, live_server) -> None:
     expect(page.locator("#one")).to_contain_text("Text (*) Show <p>ciaoooo</p>")
 
 
-def external(page, live_server) -> None:
+def external(page: Any, live_server: Any) -> None:
     # enable external access
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Writing ").click()
@@ -157,7 +158,7 @@ def external(page, live_server) -> None:
     )
 
 
-def working_ticket(page, server, context) -> None:
+def working_ticket(page: Any, server: Any, context: Any) -> None:
     login_orga(page, server)
 
     go_to(page, server, "/test/manage")
@@ -172,7 +173,7 @@ def working_ticket(page, server, context) -> None:
     )
 
 
-def working_ticket_event(page, server, context) -> None:
+def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     login_orga(page, server)
 
     go_to(page, server, "/test/manage/config")

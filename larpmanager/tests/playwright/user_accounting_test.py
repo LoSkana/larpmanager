@@ -24,11 +24,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_user_accounting(pw_page) -> None:
+def test_user_accounting(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,7 +43,7 @@ def test_user_accounting(pw_page) -> None:
     collections(page, live_server)
 
 
-def prepare(page, live_server) -> None:
+def prepare(page: Any, live_server: Any) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
 
@@ -72,7 +73,7 @@ def prepare(page, live_server) -> None:
     submit_confirm(page)
 
 
-def donation(page, live_server) -> None:
+def donation(page: Any, live_server: Any) -> None:
     # test donation
     go_to(page, live_server, "/manage/features/donate/on")
 
@@ -102,7 +103,7 @@ def donation(page, live_server) -> None:
     expect(page.locator("#one")).to_contain_text("(10.00€)")
 
 
-def membership_fees(page, live_server) -> None:
+def membership_fees(page: Any, live_server: Any) -> None:
     # test membership fees
     go_to(page, live_server, "/manage/features/membership/on")
 
@@ -159,7 +160,7 @@ def membership_fees(page, live_server) -> None:
     expect(page.locator("#one")).not_to_contain_text("Payment membership fee")
 
 
-def collections(page, live_server) -> None:
+def collections(page: Any, live_server: Any) -> None:
     # test collections
     go_to(page, live_server, "/manage/features/collection/on")
 

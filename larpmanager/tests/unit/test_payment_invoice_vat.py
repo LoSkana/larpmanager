@@ -37,6 +37,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
 )
 from larpmanager.tests.unit.base import BaseTestCase
+from typing import Any
 
 
 class TestPaymentFunctions(BaseTestCase):
@@ -51,7 +52,7 @@ class TestPaymentFunctions(BaseTestCase):
         self.assertEqual(result, 0.0)
 
     @patch("larpmanager.accounting.payment.fetch_payment_details")
-    def test_get_payment_fee_with_fee(self, mock_get_details) -> None:
+    def test_get_payment_fee_with_fee(self, mock_get_details: Any) -> None:
         """Test get_payment_fee with configured fee"""
         mock_get_details.return_value = {"paypal_fee": "2.5"}
 
@@ -61,7 +62,7 @@ class TestPaymentFunctions(BaseTestCase):
         self.assertEqual(result, 2.5)
 
     @patch("larpmanager.accounting.payment.fetch_payment_details")
-    def test_get_payment_fee_with_comma_separator(self, mock_get_details) -> None:
+    def test_get_payment_fee_with_comma_separator(self, mock_get_details: Any) -> None:
         """Test get_payment_fee handles comma as decimal separator"""
         mock_get_details.return_value = {"stripe_fee": "3,75"}
 
@@ -126,7 +127,7 @@ class TestInvoiceFunctions(BaseTestCase):
     """Test cases for invoice processing functions"""
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_basic(self, mock_get) -> None:
+    def test_invoice_received_money_basic(self, mock_get: Any) -> None:
         """Test invoice_received_money processes payment"""
         mock_invoice = MagicMock()
         mock_invoice.status = PaymentStatus.SUBMITTED
@@ -141,7 +142,7 @@ class TestInvoiceFunctions(BaseTestCase):
         self.assertEqual(mock_invoice.mc_fee, 2.5)
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_with_txn_id(self, mock_get) -> None:
+    def test_invoice_received_money_with_txn_id(self, mock_get: Any) -> None:
         """Test invoice_received_money with transaction ID"""
         mock_invoice = MagicMock()
         mock_invoice.status = PaymentStatus.SUBMITTED
@@ -153,7 +154,7 @@ class TestInvoiceFunctions(BaseTestCase):
         self.assertEqual(mock_invoice.txn_id, "TXN789")
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_not_found(self, mock_get) -> None:
+    def test_invoice_received_money_not_found(self, mock_get: Any) -> None:
         """Test invoice_received_money when invoice not found"""
         from django.core.exceptions import ObjectDoesNotExist
 
@@ -164,7 +165,7 @@ class TestInvoiceFunctions(BaseTestCase):
         self.assertFalse(result)
 
     @patch("larpmanager.accounting.invoice.PaymentInvoice.objects.get")
-    def test_invoice_received_money_already_confirmed(self, mock_get) -> None:
+    def test_invoice_received_money_already_confirmed(self, mock_get: Any) -> None:
         """Test invoice_received_money skips already confirmed"""
         mock_invoice = MagicMock()
         mock_invoice.status = PaymentStatus.CONFIRMED

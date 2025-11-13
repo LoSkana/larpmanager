@@ -1,7 +1,8 @@
 from django.db import migrations
+from typing import Any
 
 
-def remove_obsolete_features(apps, schema_editor):
+def remove_obsolete_features(apps: Any, schema_editor: Any) -> Any:
     Feature = apps.get_model("larpmanager", "Feature")
     Feature.objects.filter(id__in=[1, 5, 14, 17, 23]).delete()
 

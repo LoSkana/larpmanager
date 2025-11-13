@@ -256,7 +256,7 @@ def get_allowed_managed() -> list[str]:
     ]
 
 
-def auto_assign_event_permission_number(event_permission) -> None:
+def auto_assign_event_permission_number(event_permission: Any) -> None:
     """Assign number to event permission if not set.
 
     Args:

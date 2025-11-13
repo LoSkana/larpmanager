@@ -50,6 +50,7 @@ from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import exchange_order
 from larpmanager.utils.download import orga_registration_form_download, orga_tickets_download
 from larpmanager.utils.edit import backend_edit, orga_edit, set_suggestion
+from typing import Any
 
 
 @login_required
@@ -303,7 +304,7 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str, num: in
     return registration_option_edit(context, 0, request)
 
 
-def registration_option_edit(context, option_number, request):
+def registration_option_edit(context: Any, option_number: Any, request: Any) -> Any:
     """Handle editing of registration option with form processing and redirect logic.
 
     Args:

@@ -42,6 +42,7 @@ from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.pdf import get_trait_character
+from typing import Any
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Run
@@ -51,7 +52,7 @@ logger = logging.getLogger(__name__)
 
 
 @register.filter
-def modulo(num, val):
+def modulo(num: Any, val: Any) -> Any:
     """Template filter to calculate modulo operation.
 
     Args:
@@ -66,7 +67,7 @@ def modulo(num, val):
 
 
 @register.filter
-def basename(file_path):
+def basename(file_path: Any) -> Any:
     """Template filter to extract basename from file path.
 
     Args:
@@ -82,7 +83,7 @@ def basename(file_path):
 
 
 @register.filter
-def clean_tags(tx):
+def clean_tags(tx: Any) -> Any:
     """Template filter to clean HTML tags from text.
 
     Args:
@@ -97,7 +98,7 @@ def clean_tags(tx):
 
 
 @register.filter
-def get(value, arg):
+def get(value: Any, arg: Any) -> Any:
     """Template filter to get dictionary value by key.
 
     Args:
@@ -113,7 +114,7 @@ def get(value, arg):
     return ""
 
 
-def get_tooltip(context, character):
+def get_tooltip(context: Any, character: Any) -> Any:
     """Generate HTML tooltip for character display.
 
     Args:
@@ -139,7 +140,7 @@ def get_tooltip(context, character):
     return tooltip
 
 
-def tooltip_fields(character, tooltip):
+def tooltip_fields(character: Any, tooltip: Any) -> Any:
     """Add character name, title, and player information to tooltip.
 
     Args:
@@ -166,7 +167,7 @@ def tooltip_fields(character, tooltip):
     return tooltip
 
 
-def tooltip_factions(character, context, tooltip):
+def tooltip_factions(character: Any, context: Any, tooltip: Any) -> Any:
     """Add faction information to character tooltip.
 
     Args:
@@ -193,7 +194,7 @@ def tooltip_factions(character, context, tooltip):
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context, text, limit=200):
+def replace_chars(context: Any, text: Any, limit: Any = 200) -> Any:
     """Template tag to replace character number references with names.
 
     Replaces #XX, @XX, and ^XX patterns with character names in text.
@@ -227,7 +228,7 @@ def go_character(
     search_pattern: str,
     character_number: int,
     text: str,
-    run,
+    run: Any,
     *,
     include_tooltip: bool,
     simple: bool = False,
@@ -411,7 +412,7 @@ def go_trait(
     search: str,
     trait_number: int,
     text: str,
-    run,
+    run: Any,
     *,
     include_tooltip: bool,
     simple: bool = False,
@@ -486,7 +487,7 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context, text, run, tooltip):
+def show_trait(context: Any, text: Any, run: Any, tooltip: Any) -> Any:
     """Template tag to process text and convert trait references to character links.
 
     Args:
@@ -516,7 +517,7 @@ def show_trait(context, text, run, tooltip):
 
 
 @register.simple_tag
-def key(d, key_name, s_key_name=None):
+def key(d: Any, key_name: Any, s_key_name: Any = None) -> Any:
     """Template tag to safely get dictionary value by key.
 
     Args:
@@ -541,7 +542,7 @@ def key(d, key_name, s_key_name=None):
 
 
 @register.simple_tag
-def get_field(form, field_name):
+def get_field(form: Any, field_name: Any) -> Any:
     """Template tag to safely get form field by name.
 
     Args:
@@ -558,7 +559,7 @@ def get_field(form, field_name):
 
 
 @register.simple_tag(takes_context=True)
-def get_field_show_char(context, form, name, run, tooltip):
+def get_field_show_char(context: Any, form: Any, name: Any, run: Any, tooltip: Any) -> Any:
     """Template tag to get form field and process character references.
 
     Args:
@@ -579,7 +580,7 @@ def get_field_show_char(context, form, name, run, tooltip):
 
 
 @register.simple_tag
-def get_deep_field(form, key1, key2):
+def get_deep_field(form: Any, key1: Any, key2: Any) -> Any:
     """Template tag to get nested form field value.
 
     Args:
@@ -597,7 +598,7 @@ def get_deep_field(form, key1, key2):
 
 
 @register.filter
-def get_form_field(form, name):
+def get_form_field(form: Any, name: Any) -> Any:
     """Template filter to get form field by name.
 
     Args:
@@ -614,7 +615,7 @@ def get_form_field(form, name):
 
 
 @register.simple_tag
-def lookup(obj, prop):
+def lookup(obj: Any, prop: Any) -> Any:
     """Template tag to safely get object attribute.
 
     Args:
@@ -633,7 +634,7 @@ def lookup(obj, prop):
 
 
 @register.simple_tag
-def get_registration_option(reg, number):
+def get_registration_option(reg: Any, number: Any) -> Any:
     """Template tag to get registration option form text.
 
     Args:
@@ -651,7 +652,7 @@ def get_registration_option(reg, number):
 
 
 @register.simple_tag
-def gt(value, arg):
+def gt(value: Any, arg: Any) -> Any:
     """Template tag for greater than comparison.
 
     Args:
@@ -666,7 +667,7 @@ def gt(value, arg):
 
 
 @register.simple_tag
-def lt(value, arg):
+def lt(value: Any, arg: Any) -> Any:
     """Template tag for less than comparison.
 
     Args:
@@ -681,7 +682,7 @@ def lt(value, arg):
 
 
 @register.simple_tag
-def gte(value, arg):
+def gte(value: Any, arg: Any) -> Any:
     """Template tag for greater than or equal comparison.
 
     Args:
@@ -696,7 +697,7 @@ def gte(value, arg):
 
 
 @register.simple_tag
-def lte(value, arg):
+def lte(value: Any, arg: Any) -> Any:
     """Template tag for less than or equal comparison.
 
     Args:
@@ -711,7 +712,7 @@ def lte(value, arg):
 
 
 @register.simple_tag
-def length_gt(value, arg):
+def length_gt(value: Any, arg: Any) -> Any:
     """Template tag for length greater than comparison.
 
     Args:
@@ -726,7 +727,7 @@ def length_gt(value, arg):
 
 
 @register.simple_tag
-def length_lt(value, arg):
+def length_lt(value: Any, arg: Any) -> Any:
     """Template tag for length less than comparison.
 
     Args:
@@ -741,7 +742,7 @@ def length_lt(value, arg):
 
 
 @register.simple_tag
-def length_gte(value, arg):
+def length_gte(value: Any, arg: Any) -> Any:
     """Template tag for length greater than or equal comparison.
 
     Args:
@@ -756,7 +757,7 @@ def length_gte(value, arg):
 
 
 @register.simple_tag
-def length_lte(value, arg):
+def length_lte(value: Any, arg: Any) -> Any:
     """Template tag for length less than or equal comparison.
 
     Args:
@@ -771,7 +772,7 @@ def length_lte(value, arg):
 
 
 @register.filter
-def hex_to_rgb(hex_color):
+def hex_to_rgb(hex_color: Any) -> Any:
     """Template filter to convert hex color to RGB values.
 
     Args:
@@ -787,7 +788,7 @@ def hex_to_rgb(hex_color):
 
 
 @register.simple_tag
-def define(val=None):
+def define(val: Any = None) -> Any:
     """Template tag to define/store a value in templates.
 
     Args:
@@ -801,7 +802,7 @@ def define(val=None):
 
 
 @register.filter(name="template_trans")
-def template_trans(text):
+def template_trans(text: Any) -> Any:
     """Template filter for safe translation of text.
 
     Args:
@@ -819,7 +820,7 @@ def template_trans(text):
 
 
 @register.simple_tag(takes_context=True)
-def get_char_profile(context, char):
+def get_char_profile(context: Any, char: Any) -> Any:
     """Template tag to get character profile image URL.
 
     Args:
@@ -841,7 +842,7 @@ def get_char_profile(context, char):
 
 
 @register.simple_tag(takes_context=True)
-def get_login_url(context: dict, provider: str, **params) -> str:
+def get_login_url(context: dict, provider: str, **params: Any) -> str:
     """Template tag to generate OAuth login URL with parameters.
 
     This function constructs a complete OAuth login URL by combining the provider's
@@ -893,7 +894,7 @@ def get_login_url(context: dict, provider: str, **params) -> str:
 
 
 @register.filter
-def replace_underscore(value):
+def replace_underscore(value: Any) -> Any:
     """Template filter to replace underscores with spaces.
 
     Args:
@@ -907,7 +908,7 @@ def replace_underscore(value):
 
 
 @register.filter
-def remove(value, args):
+def remove(value: Any, args: Any) -> Any:
     """Template filter to remove specific text from string.
 
     Args:
@@ -924,7 +925,7 @@ def remove(value, args):
 
 
 @register.simple_tag
-def get_character_field(value, options):
+def get_character_field(value: Any, options: Any) -> Any:
     """Template tag to format character field values using options.
 
     Args:
@@ -945,7 +946,7 @@ def get_character_field(value, options):
 
 
 @register.filter
-def format_decimal(decimal_value):
+def format_decimal(decimal_value: Any) -> Any:
     """Template filter to format decimal values for display.
 
     Args:
@@ -967,7 +968,7 @@ def format_decimal(decimal_value):
 
 
 @register.filter
-def get_attributes(obj):
+def get_attributes(obj: Any) -> Any:
     """Template filter to get object attributes as dictionary.
 
     Args:
@@ -981,7 +982,7 @@ def get_attributes(obj):
 
 
 @register.filter
-def not_in(value, arg):
+def not_in(value: Any, arg: Any) -> Any:
     """Template filter to check if value is not in comma-separated list.
 
     Args:
@@ -996,7 +997,7 @@ def not_in(value, arg):
 
 
 @register.filter
-def abs_value(value):
+def abs_value(value: Any) -> Any:
     """Template filter to get absolute value.
 
     Args:
@@ -1013,7 +1014,7 @@ def abs_value(value):
 
 
 @register.filter
-def concat(val1, val2) -> str:
+def concat(val1: Any, val2: Any) -> str:
     """Template filter to concatenate two values.
 
     Args:

@@ -28,9 +28,10 @@ from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.registration import Registration
 from larpmanager.utils.deadlines import check_run_deadlines
 from larpmanager.utils.tasks import my_send_mail
+from typing import Any
 
 
-def remember_membership(registration) -> None:
+def remember_membership(registration: Any) -> None:
     """Send membership reminder email to registered user.
 
     Args:
@@ -54,7 +55,7 @@ def remember_membership(registration) -> None:
     my_send_mail(subject, body, registration.member, registration.run)
 
 
-def get_remember_membership_body(registration) -> str:
+def get_remember_membership_body(registration: Any) -> str:
     """Generate default membership reminder email body text.
 
     Creates an HTML-formatted email body for reminding users to complete their
@@ -107,7 +108,7 @@ def get_remember_membership_body(registration) -> str:
     return email_body
 
 
-def remember_pay(registration) -> None:
+def remember_pay(registration: Any) -> None:
     """Send payment reminder email to registered user.
 
     Args:
@@ -204,7 +205,7 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
     return email_body
 
 
-def remember_profile(registration) -> None:
+def remember_profile(registration: Any) -> None:
     """Send profile completion reminder email to registered user.
 
     Args:
@@ -227,7 +228,7 @@ def remember_profile(registration) -> None:
     my_send_mail(subject, body, registration.member, registration.run)
 
 
-def get_remember_profile_body(email_context):
+def get_remember_profile_body(email_context: Any) -> Any:
     """Generate default profile completion reminder email body text.
 
     Args:
@@ -245,7 +246,7 @@ def get_remember_profile_body(email_context):
     )
 
 
-def remember_membership_fee(registration) -> None:
+def remember_membership_fee(registration: Any) -> None:
     """Send membership fee reminder email to registered user.
 
     Args:
@@ -268,7 +269,7 @@ def remember_membership_fee(registration) -> None:
     my_send_mail(subject, body, registration.member, registration.run)
 
 
-def get_remember_membership_fee_body(context: dict, registration) -> str:
+def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     """Generate default membership fee reminder email body text.
 
     Creates an HTML-formatted email body for reminding users about unpaid
@@ -316,7 +317,7 @@ def get_remember_membership_fee_body(context: dict, registration) -> str:
     return email_body
 
 
-def notify_deadlines(run) -> None:
+def notify_deadlines(run: Any) -> None:
     """Send deadline notification emails to event organizers.
 
     Args:

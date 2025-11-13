@@ -28,6 +28,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.models.member import Member
 from larpmanager.utils.tasks import background_auto
+from typing import Any
 
 
 @background_auto(queue="e-invoice")
@@ -65,7 +66,7 @@ def process_payment(invoice_id: int) -> None:
     # TODO: sends XML and track track
 
 
-def prepare_xml(invoice, electronic_invoice_config) -> str:
+def prepare_xml(invoice: Any, electronic_invoice_config: Any) -> str:
     """Generate XML structure for Italian electronic invoice.
 
     This function creates a compliant XML structure according to the Italian
@@ -259,7 +260,7 @@ def _einvoice_header(
     ET.SubElement(customer_address, "Nazione").text = address_components[0]
 
 
-def _einvoice_body(einvoice, invoice, xml_root) -> None:
+def _einvoice_body(einvoice: Any, invoice: Any, xml_root: Any) -> None:
     """Build the body section of electronic invoice XML structure.
 
     Args:

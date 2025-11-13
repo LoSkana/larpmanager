@@ -94,7 +94,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         # Use parent class implementation as final fallback
         return super().__str__()
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> Any:
         """Get absolute URL for the model instance.
 
         Returns:
@@ -104,7 +104,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         # noinspection PyUnresolvedReferences
         return reverse("event", kwargs={"event_slug": self.slug})
 
-    def small_text(self):
+    def small_text(self) -> Any:
         """Get truncated text preview.
 
         Returns:
@@ -246,7 +246,7 @@ class PaymentMethod(BaseModel):
         options={"quality": 90},
     )
 
-    def as_dict(self, **kwargs):  # noqa: ARG002
+    def as_dict(self, **kwargs: Any) -> Any:  # noqa: ARG002
         """Convert payment method to dictionary with profile image.
 
         Args:
@@ -281,7 +281,7 @@ class PublisherApiKey(BaseModel):
         return f"{self.name} ({'Active' if self.active else 'Inactive'})"
 
 
-def auto_assign_sequential_numbers(instance) -> None:
+def auto_assign_sequential_numbers(instance: Any) -> None:
     """Auto-populate number and order fields for model instances.
 
     Args:
@@ -305,7 +305,7 @@ def auto_assign_sequential_numbers(instance) -> None:
                     setattr(instance, field_name, max_value + 1)
 
 
-def update_model_search_field(model_instance) -> None:
+def update_model_search_field(model_instance: Any) -> None:
     """Update search field for model instances that have one.
 
     Args:

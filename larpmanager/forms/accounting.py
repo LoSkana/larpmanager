@@ -587,7 +587,7 @@ class ExePaymentSettingsForm(MyForm):
             "payment_methods": forms.CheckboxSelectMultiple,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize PaymentMethodForm with dynamic payment method configuration.
 
         Args:

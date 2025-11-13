@@ -155,7 +155,7 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/roles.html", context)
 
 
-def prepare_roles_list(context, permission_type, role_queryset, default_callback) -> None:
+def prepare_roles_list(context: Any, permission_type: Any, role_queryset: Any, default_callback: Any) -> None:
     """Prepare role list with permissions organized by module for display.
 
     Builds a formatted list of roles with their members and grouped permissions,
@@ -280,7 +280,7 @@ def orga_config(
 
 
 @login_required
-def orga_features(request: HttpRequest, event_slug: str):
+def orga_features(request: HttpRequest, event_slug: str) -> Any:
     """Manage event features activation and configuration.
 
     Args:
@@ -661,7 +661,7 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
     return zip_exports(context, exports, "template")
 
 
-def _ability_template(context):
+def _ability_template(context: Any) -> Any:
     """Generate template for ability uploads with example data.
 
     Args:

@@ -22,11 +22,12 @@ import re
 import pytest
 
 from larpmanager.tests.utils import check_download, fill_tinymce, go_to, load_image, login_orga, submit, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_mail_generation(pw_page) -> None:
+def test_mail_generation(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,7 +43,7 @@ def test_mail_generation(pw_page) -> None:
     expense(live_server, page)
 
 
-def expense(live_server, page) -> None:
+def expense(live_server: Any, page: Any) -> None:
     # approve it
     go_to(page, live_server, "/manage/membership/")
     page.get_by_role("link", name="Request").click()
@@ -64,7 +65,7 @@ def expense(live_server, page) -> None:
     page.get_by_role("link", name="Approve").click()
 
 
-def resubmit_membership(live_server, page) -> None:
+def resubmit_membership(live_server: Any, page: Any) -> None:
     # refute it
     go_to(page, live_server, "/manage/membership/")
     page.get_by_role("link", name="Request").click()
@@ -105,7 +106,7 @@ def resubmit_membership(live_server, page) -> None:
     submit(page)
 
 
-def submit_membership(live_server, page) -> None:
+def submit_membership(live_server: Any, page: Any) -> None:
     # Test membership
     go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/texts")
@@ -136,7 +137,7 @@ def submit_membership(live_server, page) -> None:
     submit(page)
 
 
-def badge(live_server, page) -> None:
+def badge(live_server: Any, page: Any) -> None:
     # Test badge
     go_to(page, live_server, "/manage/features/badge/on")
     go_to(page, live_server, "/manage/badges")
@@ -161,7 +162,7 @@ def badge(live_server, page) -> None:
     submit_confirm(page)
 
 
-def chat(live_server, page) -> None:
+def chat(live_server: Any, page: Any) -> None:
     # Test chat
     go_to(page, live_server, "/manage/features/chat/on")
     go_to(page, live_server, "/public/3/")

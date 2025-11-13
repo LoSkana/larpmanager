@@ -1064,7 +1064,7 @@ class OrgaAppearanceForm(MyCssForm):
         return "event_css"
 
     @staticmethod
-    def get_css_path(event_instance) -> str:
+    def get_css_path(event_instance: Any) -> str:
         """Generate CSS file path for event styling.
 
         Args:
@@ -1089,7 +1089,7 @@ class OrgaEventTextForm(MyForm):
         model = EventText
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event text form with feature-based field filtering.
 
         Filters available text types based on activated features and
@@ -1232,7 +1232,7 @@ class OrgaRunForm(ConfigForm):
             "registration_open": DateTimePickerInput,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize RunForm with event-specific configuration and field setup.
 
         Args:
@@ -1293,7 +1293,7 @@ class OrgaRunForm(ConfigForm):
 
         self.show_sections = True
 
-    def set_configs(self):
+    def set_configs(self) -> Any:
         """Configure event-specific form fields and sections.
 
         Sets up various event features and their configuration options
@@ -1415,7 +1415,7 @@ class OrgaProgressStepForm(MyForm):
 class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize ExeEventForm with template event selection.
 
         Args:
@@ -1522,7 +1522,7 @@ class ExeTemplateForm(FeatureForm):
 class ExeTemplateRolesForm(OrgaEventRoleForm):
     """Form for managing template event roles with optional members."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize template roles form with optional member requirement.
 
         Args:
@@ -1545,7 +1545,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
         model = Event
         fields = []
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize OrgaQuickSetupForm with event feature configuration.
 
         Args:
@@ -1811,7 +1811,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         )
 
     @staticmethod
-    def _compile_configs(basic_question_types, compiled_options, field_definitions) -> None:
+    def _compile_configs(basic_question_types: Any, compiled_options: Any, field_definitions: Any) -> None:
         """Compile configuration options from field definitions.
 
         Args:
@@ -1828,7 +1828,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
             compiled_options.append((toggle_key, field["name"]))
 
-    def add_feature_extra(self, extra_fields, feature_field_definitions) -> None:
+    def add_feature_extra(self, extra_fields: Any, feature_field_definitions: Any) -> None:
         """Add feature-specific extra fields to configuration.
 
         Args:

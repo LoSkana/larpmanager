@@ -50,7 +50,7 @@ def is_docstring_or_comment_line(line: str) -> bool:
         return True
 
     # Check for docstrings (triple quotes)
-    if ('"""' in content or "'''" in content):
+    if '"""' in content or "'''" in content:
         return True
 
     # Check for single-line string literals that look like docstrings
@@ -173,9 +173,9 @@ def main() -> None:
 
     # Only print files with substantial changes
     for file_path, substantial_lines in files_with_substantial_changes:
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         print(f"Analyzing: {file_path}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         print(f"✗ SUBSTANTIAL CHANGES DETECTED ({len(substantial_lines)} lines)")
         print("\nSubstantial changes:")
         for line in substantial_lines[:20]:  # Limit to first 20 lines
@@ -184,9 +184,9 @@ def main() -> None:
             print(f"  ... and {len(substantial_lines) - 20} more lines")
         print()
 
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print("SUMMARY:")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     if substantial_changes_found:
         print("❌ FILES WITH SUBSTANTIAL CHANGES FOUND!")

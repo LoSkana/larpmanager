@@ -40,7 +40,8 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     AccountingItemTransaction,
     Discount,
-    PaymentChoices, DiscountType,
+    PaymentChoices,
+    DiscountType,
 )
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.registration import (
@@ -116,10 +117,17 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket)
 
         discount = Discount.objects.create(
-            name="Test Discount", value=Decimal("20.00"), max_redeem=10, typ=DiscountType.STANDARD, event=run.event, number=1
+            name="Test Discount",
+            value=Decimal("20.00"),
+            max_redeem=10,
+            typ=DiscountType.STANDARD,
+            event=run.event,
+            number=1,
         )
         discount.runs.add(run)
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), association=association)
+        AccountingItemDiscount.objects.create(
+            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+        )
 
         result = get_reg_iscr(registration)
 
@@ -150,10 +158,17 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket, redeem_code="GIFT123")
 
         discount = Discount.objects.create(
-            name="Test Discount", value=Decimal("20.00"), max_redeem=10, typ=DiscountType.STANDARD, event=run.event, number=1
+            name="Test Discount",
+            value=Decimal("20.00"),
+            max_redeem=10,
+            typ=DiscountType.STANDARD,
+            event=run.event,
+            number=1,
         )
         discount.runs.add(run)
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), association=association)
+        AccountingItemDiscount.objects.create(
+            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+        )
 
         result = get_reg_iscr(registration)
 
@@ -169,10 +184,17 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run, ticket=ticket)
 
         discount = Discount.objects.create(
-            name="Large Discount", value=Decimal("100.00"), max_redeem=10, typ=DiscountType.STANDARD, event=run.event, number=1
+            name="Large Discount",
+            value=Decimal("100.00"),
+            max_redeem=10,
+            typ=DiscountType.STANDARD,
+            event=run.event,
+            number=1,
         )
         discount.runs.add(run)
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("100.00"), association=association)
+        AccountingItemDiscount.objects.create(
+            member=member, run=run, disc=discount, value=Decimal("100.00"), association=association
+        )
 
         result = get_reg_iscr(registration)
 
@@ -227,7 +249,12 @@ class TestPaymentCalculationFunctions(BaseTestCase):
             member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00"), hide=True
+            member=member,
+            association=association,
+            reg=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("20.00"),
+            hide=True,
         )
 
         result = get_reg_payments(registration)

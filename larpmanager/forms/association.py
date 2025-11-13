@@ -314,7 +314,7 @@ class ExeAppearanceForm(MyCssForm):
         self.show_link = ["id_association_css"]
 
     @staticmethod
-    def get_css_path(instance) -> str:
+    def get_css_path(instance: Any) -> str:
         """Return CSS file path for instance."""
         return f"css/{instance.slug}_{instance.css_code}.css"
 
@@ -899,7 +899,7 @@ class ExeQuickSetupForm(QuickSetupForm):
         model = Association
         fields = []
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize association setup form with feature configuration options.
 
         Sets up available features and configuration options based on

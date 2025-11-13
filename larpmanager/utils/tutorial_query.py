@@ -24,7 +24,7 @@ TUTORIAL_INDEX = "data/whoosh/tutorial_index"
 GUIDE_INDEX = "data/whoosh/GUIDE_INDEX"
 
 
-def _save_index(index_dir: str, schema) -> object:
+def _save_index(index_dir: str, schema: Any) -> object:
     """Create or open a Whoosh index directory.
 
     Args:
@@ -157,7 +157,7 @@ def get_or_create_index_guide(index_directory_path: str) -> object:
 
 
 @background_auto(queue="whoosh")
-def add_guide_to_search_index(guide_id) -> None:
+def add_guide_to_search_index(guide_id: Any) -> None:
     """Index a guide document for search functionality.
 
     Args:

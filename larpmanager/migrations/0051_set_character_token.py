@@ -3,9 +3,10 @@
 from django.db import migrations
 
 from larpmanager.models.utils import my_uuid_short
+from typing import Any
 
 
-def gen_uuid(apps, schema_editor):
+def gen_uuid(apps: Any, schema_editor: Any) -> Any:
     Character = apps.get_model("larpmanager", "Character")
     for row in Character.objects.all():
         row.access_token = my_uuid_short()

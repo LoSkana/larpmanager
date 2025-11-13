@@ -568,7 +568,7 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
     cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def update_event_cache_all_character_reg(character_registration, cache_result: dict, event_run) -> None:
+def update_event_cache_all_character_reg(character_registration: Any, cache_result: dict, event_run: Any) -> None:
     """Update character registration cache data for an event.
 
     Args:

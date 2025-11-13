@@ -24,9 +24,10 @@ from django.db.models import Max
 
 from larpmanager.models.access import AssociationPermission
 from larpmanager.models.association import Association
+from typing import Any
 
 
-def generate_association_encryption_key(association) -> None:
+def generate_association_encryption_key(association: Any) -> None:
     """Generate Fernet encryption key for new associations.
 
     Args:
@@ -37,7 +38,7 @@ def generate_association_encryption_key(association) -> None:
         association.key = Fernet.generate_key()
 
 
-def auto_assign_association_permission_number(association_permission) -> None:
+def auto_assign_association_permission_number(association_permission: Any) -> None:
     """Assign number to association permission if not set.
 
     Args:

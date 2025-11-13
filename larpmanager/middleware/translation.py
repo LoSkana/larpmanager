@@ -26,6 +26,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import trans_real
 
 from larpmanager.cache.association_translation import get_association_translation_cache
+from typing import Any
 
 
 class AssociationTranslationMiddleware(MiddlewareMixin):
@@ -74,7 +75,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
         # Replace the thread-local active translation with our custom one
         trans_real._active.value = assoc_trans
 
-    def process_response(self, request, response):  # noqa: ARG002
+    def process_response(self, request: Any, response: Any) -> Any:  # noqa: ARG002
         """Clean up translation overrides after processing the request.
 
         Args:
@@ -107,7 +108,7 @@ class AssociationTranslations(GNUTranslations):
 
     """
 
-    def __init__(self, base_translation, overrides: dict[str, str]) -> None:
+    def __init__(self, base_translation: Any, overrides: dict[str, str]) -> None:
         """Initialize the translation wrapper with base translations and overrides.
 
         Args:

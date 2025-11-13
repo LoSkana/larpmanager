@@ -23,11 +23,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, login_user, logout, submit_confirm
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_registration_form(pw_page) -> None:
+def test_orga_registration_form(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -52,7 +53,7 @@ def test_orga_registration_form(pw_page) -> None:
     user_signup(live_server, page)
 
 
-def add_text(page) -> None:
+def add_text(page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").select_option("s")
@@ -78,7 +79,7 @@ def add_text(page) -> None:
     submit_confirm(page)
 
 
-def add_single(page) -> None:
+def add_single(page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("choice")
@@ -109,7 +110,7 @@ def add_single(page) -> None:
     add_single_options(page)
 
 
-def add_single_options(page) -> None:
+def add_single_options(page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("few")
@@ -146,7 +147,7 @@ def add_single_options(page) -> None:
     submit_confirm(page)
 
 
-def add_multiple(page) -> None:
+def add_multiple(page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("m")
     page.locator("#id_name").click()
@@ -187,7 +188,7 @@ def add_multiple(page) -> None:
     submit_confirm(page)
 
 
-def add_special(page) -> None:
+def add_special(page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
     page.locator("#id_typ").press("Tab")
@@ -206,7 +207,7 @@ def add_special(page) -> None:
     submit_confirm(page)
 
 
-def signup_first(live_server, page) -> None:
+def signup_first(live_server: Any, page: Any) -> None:
     # sign up as first user
     go_to(page, live_server, "/test/register")
     page.get_by_role("textbox", name="short text").click()
@@ -240,7 +241,7 @@ def signup_first(live_server, page) -> None:
     submit_confirm(page)
 
 
-def signup_check(live_server, page) -> None:
+def signup_check(live_server: Any, page: Any) -> None:
     # check values
     go_to(page, live_server, "/test/register")
     expect(page.locator("#register_form")).to_contain_text("short description")
@@ -273,7 +274,7 @@ def signup_check(live_server, page) -> None:
     submit_confirm(page)
 
 
-def orga_check(live_server, page) -> None:
+def orga_check(live_server: Any, page: Any) -> None:
     # check signups
     go_to(page, live_server, "/test/manage/registrations/")
     page.get_by_role("link", name="").click()
@@ -298,7 +299,7 @@ def orga_check(live_server, page) -> None:
     expect(page.locator("#id_q8")).to_have_value("asdsadsa")
 
 
-def user_signup(live_server, page) -> None:
+def user_signup(live_server: Any, page: Any) -> None:
     # signup as user
     logout(page)
     login_user(page, live_server)

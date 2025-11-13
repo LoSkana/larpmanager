@@ -40,6 +40,7 @@ from larpmanager.models.association import get_url, hdr
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
 from larpmanager.utils.tasks import my_send_mail
+from typing import Any
 
 
 def send_expense_notification_email(instance: AccountingItemExpense) -> None:
@@ -650,7 +651,7 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
     return subject, body
 
 
-def notify_token(instance, token_name: str) -> None:
+def notify_token(instance: Any, token_name: str) -> None:
     """Send token notification emails to user and event organizers."""
     # Send notification to the token recipient
     activate(instance.member.language)
@@ -886,7 +887,7 @@ def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:
     return subj, body
 
 
-def get_invoice_email(invoice) -> tuple[str, str]:
+def get_invoice_email(invoice: Any) -> tuple[str, str]:
     """Generate email subject and body for invoice payment verification.
 
     Args:

@@ -194,7 +194,7 @@ def _init_member_fields(association: Association, el: dict[str, Any]) -> None:
         el["members_fields"].add(field)
 
 
-def _init_payments(association, payment_info: dict) -> None:
+def _init_payments(association: Any, payment_info: dict) -> None:
     """Initialize payment information for the given association element.
 
     Args:

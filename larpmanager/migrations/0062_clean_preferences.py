@@ -2,9 +2,10 @@
 
 
 from django.db import migrations
+from typing import Any
 
 
-def clean(apps, schema_editor):
+def clean(apps: Any, schema_editor: Any) -> Any:
     EventPermission = apps.get_model("larpmanager", "EventPermission")
     EventPermission.objects.filter(pk=78).delete()
 

@@ -23,11 +23,12 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, submit, login_orga, fill_tinymce, login_user
+from typing import Any
 
 pytestmark = pytest.mark.e2e
 
 
-def test_ghost_plots_secret_factions(pw_page) -> None:
+def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -143,7 +144,9 @@ def test_ghost_plots_secret_factions(pw_page) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="teeeeest").click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character 211 Test Teaser Test Text eefqq gggerwe first qweeerr")
+    expect(page.locator("#one")).to_contain_text(
+        "#1 Test Character 211 Test Teaser Test Text eefqq gggerwe first qweeerr"
+    )
 
     # change teaser
     page.get_by_role("cell", name="Test Teaser").dblclick()
@@ -157,7 +160,9 @@ def test_ghost_plots_secret_factions(pw_page) -> None:
     page.get_by_role("link", name="teeeeest").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr")
+    expect(page.locator("#one")).to_contain_text(
+        "#1 Test Character 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr"
+    )
 
     # change new field value
     page.get_by_role("cell", name="#1 Test Character").dblclick()
@@ -171,7 +176,9 @@ def test_ghost_plots_secret_factions(pw_page) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="teeeeest").click()
-    expect(page.locator("#one")).to_contain_text("Test Character3 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr")
+    expect(page.locator("#one")).to_contain_text(
+        "Test Character3 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr"
+    )
 
     # check secret factions
     login_user(page, live_server)
@@ -182,7 +189,9 @@ def test_ghost_plots_secret_factions(pw_page) -> None:
     expect(page.locator("#wrapper")).not_to_contain_text("gggerwe")
 
     page.get_by_role("link", name="eefqq").click()
-    expect(page.locator("#one")).to_contain_text("Characters Test Character3 Presentation: Test Teaser2 Factions: eefqq")
+    expect(page.locator("#one")).to_contain_text(
+        "Characters Test Character3 Presentation: Test Teaser2 Factions: eefqq"
+    )
 
     # if i try to go to secret faction, blocked
     page.goto(f"{live_server}/test/faction/2/")

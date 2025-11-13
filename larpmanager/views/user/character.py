@@ -213,7 +213,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
     return _character_sheet(request, context)
 
 
-def character_your_link(context: dict, character, path: str | None = None) -> str:
+def character_your_link(context: dict, character: Any, path: str | None = None) -> str:
     """Generate a URL link for a character page.
 
     Args:
@@ -408,7 +408,7 @@ def _update_character(context: dict, character: Character, form: Form, message: 
 
 
 @login_required
-def character_customize(request: HttpRequest, event_slug: str, num):
+def character_customize(request: HttpRequest, event_slug: str, num: Any) -> Any:
     """Handle character customization form with profile and custom fields.
 
     Args:
@@ -558,7 +558,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
 
 
 @login_required
-def character_list(request: HttpRequest, event_slug: str):
+def character_list(request: HttpRequest, event_slug: str) -> Any:
     """Display list of player's characters for an event with customization fields.
 
     Args:
@@ -589,7 +589,7 @@ def character_list(request: HttpRequest, event_slug: str):
 
 
 @login_required
-def character_create(request: HttpRequest, event_slug: str):
+def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation.
 
     Args:
@@ -612,7 +612,7 @@ def character_create(request: HttpRequest, event_slug: str):
 
 
 @login_required
-def character_edit(request: HttpRequest, event_slug: str, num):
+def character_edit(request: HttpRequest, event_slug: str, num: Any) -> Any:
     """Handle character editing form for specific character.
 
     Args:
@@ -662,7 +662,7 @@ def get_options_dependencies(context: dict) -> None:
 
 
 @login_required
-def character_assign(request: HttpRequest, event_slug: str, num):
+def character_assign(request: HttpRequest, event_slug: str, num: Any) -> Any:
     """Assign character to user's registration if not already assigned.
 
     Args:
@@ -781,7 +781,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_num: i
 
 
 @login_required
-def character_abilities_del(request: HttpRequest, event_slug: str, num, id_del):
+def character_abilities_del(request: HttpRequest, event_slug: str, num: Any, id_del: Any) -> Any:
     """Remove character ability with validation and dependency handling.
 
     Args:
@@ -811,7 +811,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, num, id_del):
     return redirect("character_abilities", event_slug=context["run"].get_slug(), num=context["character"].number)
 
 
-def _save_character_abilities(context, request: HttpRequest) -> None:
+def _save_character_abilities(context: Any, request: HttpRequest) -> None:
     """Process character ability selection and save to character.
 
     Args:
@@ -843,7 +843,7 @@ def _save_character_abilities(context, request: HttpRequest) -> None:
     get_undo_abilities(context, context["character"], selected_id)
 
 
-def get_undo_abilities(context: dict, char, new_ability_id=None):
+def get_undo_abilities(context: dict, char: Any, new_ability_id: Any = None) -> Any:
     """Get list of recently acquired abilities that can be undone.
 
     Args:
@@ -935,7 +935,7 @@ def character_relationships(request: HttpRequest, event_slug: str, num: int) -> 
 
 
 @login_required
-def character_relationships_edit(request: HttpRequest, event_slug: str, num, other_character_id):
+def character_relationships_edit(request: HttpRequest, event_slug: str, num: Any, other_character_id: Any) -> Any:
     """Handle editing of character relationship with another character.
 
     Args:

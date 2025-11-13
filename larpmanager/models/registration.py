@@ -50,7 +50,7 @@ class TicketTier(models.TextChoices):
     SELLER = "s", _("Seller")
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of ticket tier values to string identifiers."""
         return {
             TicketTier.STANDARD: "Standard",
@@ -132,7 +132,7 @@ class RegistrationTicket(BaseModel):
             self.upd_js_attr(js, s)
         return js
 
-    def get_price(self):
+    def get_price(self) -> Any:
         """Return the tier price."""
         return self.price
 
@@ -353,7 +353,7 @@ class Registration(BaseModel):
     def __str__(self) -> str:
         return f"{self.run} - {self.member}"
 
-    def display_run(self):
+    def display_run(self) -> Any:
         """Return string representation of the associated run."""
         return str(self.run)
 

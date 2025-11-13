@@ -33,6 +33,7 @@ from .lm import urlpatterns as lm_urls
 from .orga import urlpatterns as orga_urls
 from .sitemap import urlpatterns as sitemap_urls
 from .user import urlpatterns as user_urls
+from typing import Any
 
 static_urls = static(
     conf_settings.MEDIA_URL,
@@ -65,7 +66,7 @@ handler404 = "larpmanager.views.error_404"
 handler500 = "larpmanager.views.error_500"
 
 
-def walk_patterns(patterns) -> set[str]:
+def walk_patterns(patterns: Any) -> set[str]:
     """Extract URL prefixes from Django URL patterns.
 
     Args:

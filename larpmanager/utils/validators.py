@@ -24,6 +24,7 @@ import magic
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
+from typing import Any
 
 READ_SIZE = 2048
 
@@ -57,7 +58,7 @@ class FileTypeValidator:
         self.allowed_mimes = self._normalize(allowed_types)
         self.allowed_exts = allowed_extensions
 
-    def __call__(self, fileobj) -> None:
+    def __call__(self, fileobj: Any) -> None:
         """Validate file type and extension against allowed types.
 
         Validates the uploaded file by checking both its MIME type (using libmagic)
@@ -112,7 +113,7 @@ class FileTypeValidator:
                 code="invalid_extension",
             )
 
-    def _normalize(self, allowed_types):
+    def _normalize(self, allowed_types: Any) -> Any:
         """Validate and transforms given allowed types.
 
         e.g; wildcard character specification will be normalized as text/* -> text.
@@ -139,7 +140,7 @@ class FileTypeValidator:
         return allowed_mime_types
 
     @staticmethod
-    def _check_word_or_excel(file_object, detected_mime_type: str, file_extension: str) -> str:
+    def _check_word_or_excel(file_object: Any, detected_mime_type: str, file_extension: str) -> str:
         """Return proper mimetype in case of word or excel files.
 
         Args:

@@ -52,6 +52,7 @@ from larpmanager.views.user.casting import (
     casting_preferences_characters,
     casting_preferences_traits,
 )
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -300,7 +301,7 @@ def check_player_skip_quests(registration: Registration, trait_type: str) -> boo
 
 def check_casting_player(
     context: dict,
-    registration,
+    registration: Any,
     casting_filter_options: dict,
     casting_type: int,
     cached_membership_statuses: dict,

@@ -308,7 +308,7 @@ def post_save_accounting_item_collection(
     sender: type,
     instance: AccountingItemCollection,
     created: bool,
-    **kwargs,
+    **kwargs: Any,
 ) -> None:
     """Handle post-save signal for accounting item collection."""
     handle_accounting_item_collection_post_save(instance)
@@ -317,7 +317,7 @@ def post_save_accounting_item_collection(
 # AccountingItemDiscount signals
 @receiver(post_save, sender=AccountingItemDiscount)
 def post_save_discount_accounting_cache(
-    sender: type, instance: AccountingItemDiscount, created: bool, **kwargs
+    sender: type, instance: AccountingItemDiscount, created: bool, **kwargs: Any
 ) -> None:
     """Update accounting caches when a discount is saved."""
     # Process discount changes in accounting system
@@ -411,7 +411,9 @@ def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayme
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_payment_accounting_cache(sender, instance: AccountingItemPayment, created: bool, **kwargs) -> None:
+def post_save_payment_accounting_cache(
+    sender: Any, instance: AccountingItemPayment, created: bool, **kwargs: Any
+) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
     # Update registration and member accounting cache if payment has associated registration
     if instance.reg and instance.reg.run:
@@ -475,7 +477,7 @@ def post_delete_assignment_trait_reset(sender: type, instance: Any, **kwargs: An
 
 # AssociationPermission signals
 @receiver(pre_save, sender=AssociationPermission)
-def pre_save_association_permission(sender, instance, **kwargs) -> None:
+def pre_save_association_permission(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Auto-assign number to association permission before save."""
     auto_assign_association_permission_number(instance)
 
@@ -527,26 +529,26 @@ def post_save_association_role_reset(sender: type, instance: AssociationRole, **
 
 # AssocText signals
 @receiver(pre_delete, sender=AssociationText)
-def pre_delete_association_text(sender, instance, **kwargs) -> None:
+def pre_delete_association_text(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Clear association text cache before deletion."""
     clear_association_text_cache_on_delete(instance)
 
 
 @receiver(post_save, sender=AssociationText)
-def post_save_association_text(sender, instance, created, **kwargs) -> None:
+def post_save_association_text(sender: Any, instance: Any, created: Any, **kwargs: Any) -> None:
     """Update association text cache after save."""
     update_association_text_cache_on_save(instance)
 
 
 # AssociationTranslation signals
 @receiver(post_save, sender=AssociationTranslation)
-def post_save_association_translation(sender, instance, created, **kwargs) -> None:
+def post_save_association_translation(sender: Any, instance: Any, created: Any, **kwargs: Any) -> None:
     """Clear cache when association translation is saved."""
     clear_association_translation_cache(instance.association_id, instance.language)
 
 
 @receiver(pre_delete, sender=AssociationTranslation)
-def pre_delete_association_translation(sender, instance, **kwargs) -> None:
+def pre_delete_association_translation(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Clear cache when association translation is deleted."""
     clear_association_translation_cache(instance.association_id, instance.language)
 
@@ -560,7 +562,7 @@ def pre_save_association_set_skin_features(sender: type, instance: Association, 
 
 
 @receiver(post_save, sender=Association)
-def post_save_association_reset_lm_home(sender, instance, **kwargs) -> None:
+def post_save_association_reset_lm_home(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Reset caches and apply features when an association is saved."""
     # Clear global home cache
     clear_larpmanager_home_cache()
@@ -577,13 +579,13 @@ def post_save_association_reset_lm_home(sender, instance, **kwargs) -> None:
 
 # AssociationConfig signals
 @receiver(post_save, sender=AssociationConfig)
-def post_save_reset_association_config(sender, instance, **kwargs) -> None:
+def post_save_reset_association_config(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Clear association config cache after save."""
     clear_config_cache(instance.association)
 
 
 @receiver(post_delete, sender=AssociationConfig)
-def post_delete_reset_association_config(sender, instance, **kwargs) -> None:
+def post_delete_reset_association_config(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Clear association config cache after deletion."""
     clear_config_cache(instance.association)
 
@@ -623,7 +625,7 @@ def post_character_update_px(sender: type, instance: Character, *args: Any, **kw
 
 
 @receiver(post_save, sender=Character)
-def post_save_character(sender: type, instance: Character, **kwargs) -> None:
+def post_save_character(sender: type, instance: Character, **kwargs: Any) -> None:
     """Handle post-save operations for Character model instances.
 
     This signal handler performs several maintenance tasks after a Character
@@ -744,7 +746,7 @@ def pre_save_event(sender: type, instance: Event, **kwargs: Any) -> None:
 
 
 @receiver(post_save, sender=Event)
-def post_save_event_update(sender: type, instance: Event, **kwargs) -> None:
+def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None:
     """Handle post-save operations for Event model instances.
 
     This function is triggered after an Event instance is saved and performs
@@ -877,7 +879,7 @@ def pre_save_faction(sender: type, instance: Faction, *args: Any, **kwargs: Any)
 
 
 @receiver(post_save, sender=Faction)
-def post_save_faction_reset_rels(sender, instance: Faction, **kwargs) -> None:
+def post_save_faction_reset_rels(sender: Any, instance: Faction, **kwargs: Any) -> None:
     """Reset faction relationships and update character caches after faction save.
 
     Args:
@@ -905,7 +907,7 @@ def pre_delete_faction(sender: type, instance: Faction, **kwargs: dict) -> None:
 
 
 @receiver(post_delete, sender=Faction)
-def post_delete_faction_reset_rels(sender, instance, **kwargs) -> None:
+def post_delete_faction_reset_rels(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Reset character relationships when a faction is deleted."""
     # Update cache for all characters that were in this faction
     for char in instance.characters.all():
@@ -1117,7 +1119,7 @@ def post_save_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> No
 
 
 @receiver(post_delete, sender=Plot)
-def post_delete_plot_reset_rels(sender, instance: Plot, **kwargs: Any) -> None:
+def post_delete_plot_reset_rels(sender: Any, instance: Plot, **kwargs: Any) -> None:
     """Reset character relationships and cache when a plot is deleted."""
     # Update cache for all characters that were in this plot
     for char_rel in instance.get_plot_characters():
@@ -1142,7 +1144,7 @@ def pre_save_prologue(sender: type, instance: Any, *args: Any, **kwargs: Any) ->
 
 
 @receiver(post_save, sender=Prologue)
-def post_save_prologue_reset_rels(sender, instance: Prologue, **kwargs: Any) -> None:
+def post_save_prologue_reset_rels(sender: Any, instance: Prologue, **kwargs: Any) -> None:
     """Reset relationship cache for prologue and associated characters."""
     # Update prologue cache
     refresh_event_prologue_relationships(instance)
@@ -1153,7 +1155,7 @@ def post_save_prologue_reset_rels(sender, instance: Prologue, **kwargs: Any) -> 
 
 
 @receiver(post_delete, sender=Prologue)
-def post_delete_prologue_reset_rels(sender, instance, **kwargs) -> None:
+def post_delete_prologue_reset_rels(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Reset character relationships and cache when prologue is deleted."""
     # Update cache for all characters that were in this prologue
     for char in instance.characters.all():
@@ -1171,7 +1173,7 @@ def pre_save_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
 
 
 @receiver(post_save, sender=Quest)
-def post_save_quest_reset_rels(sender, instance: Quest, **kwargs: Any) -> None:
+def post_save_quest_reset_rels(sender: Any, instance: Quest, **kwargs: Any) -> None:
     """Update quest and questtype cache relationships after quest save."""
     # Update quest cache
     refresh_event_quest_relationships(instance)
@@ -1188,7 +1190,7 @@ def pre_delete_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
 
 
 @receiver(post_delete, sender=Quest)
-def post_delete_quest_reset_rels(sender, instance, **kwargs) -> None:
+def post_delete_quest_reset_rels(sender: Any, instance: Any, **kwargs: Any) -> None:
     """Reset quest relationships after quest deletion.
 
     Args:
@@ -1241,7 +1243,7 @@ def pre_delete_quest_type_reset(sender: type, instance: QuestType, **kwargs: dic
 
 
 @receiver(post_delete, sender=QuestType)
-def post_delete_questtype_reset_rels(sender, instance: QuestType, **kwargs) -> None:
+def post_delete_questtype_reset_rels(sender: Any, instance: QuestType, **kwargs: Any) -> None:
     """Reset quest relationships when a quest type is deleted."""
     # Update cache for all quests that were of this type
     for quest in instance.quests.all():
@@ -1273,7 +1275,7 @@ def pre_save_registration_switch_event(sender: type, instance: Registration, **k
 
 
 @receiver(post_save, sender=Registration)
-def post_save_registration_cache(sender: type, instance: Registration, created: bool, **kwargs) -> None:
+def post_save_registration_cache(sender: type, instance: Registration, created: bool, **kwargs: Any) -> None:
     """Handle post-save operations for Registration instances.
 
     This signal handler performs various cache updates and business logic
@@ -1309,7 +1311,7 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 
 
 @receiver(pre_delete, sender=Registration)
-def pre_delete_registration(sender: type, instance: Registration, *args, **kwargs) -> None:
+def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
     """Send email notification before registration is deleted."""
     send_registration_deletion_email(instance)
 
@@ -1490,7 +1492,7 @@ def post_save_speedlarp_reset_rels(sender: type, instance: Any, **kwargs: Any) -
 
 
 @receiver(post_delete, sender=SpeedLarp)
-def post_delete_speedlarp_reset_rels(sender, instance: SpeedLarp, **kwargs: Any) -> None:
+def post_delete_speedlarp_reset_rels(sender: Any, instance: SpeedLarp, **kwargs: Any) -> None:
     """Reset character relationships and cache when speedlarp is deleted."""
     # Update cache for all characters that were in this speedlarp
     for char in instance.characters.all():
@@ -1541,7 +1543,7 @@ def post_save_user_profile(sender: type, instance: User, created: bool, **kwargs
 
 # WarehouseItem signals
 @receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
-def pre_save_warehouse_item(sender: type[WarehouseItem], instance: WarehouseItem, **kwargs) -> None:
+def pre_save_warehouse_item(sender: type[WarehouseItem], instance: WarehouseItem, **kwargs: Any) -> None:
     """Rotate vertical photos before saving warehouse item."""
     auto_rotate_vertical_photos(instance, sender)
 
@@ -1594,7 +1596,7 @@ m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
 
 
 @receiver(valid_ipn_received)
-def paypal_webhook(sender, **kwargs):
+def paypal_webhook(sender: Any, **kwargs: Any) -> Any:
     """Handle valid PayPal IPN notifications.
 
     Args:
@@ -1609,7 +1611,7 @@ def paypal_webhook(sender, **kwargs):
 
 
 @receiver(invalid_ipn_received)
-def paypal_ko_webhook(sender, **kwargs) -> None:
+def paypal_ko_webhook(sender: Any, **kwargs: Any) -> None:
     """Handle invalid PayPal IPN notifications.
 
     Args:
@@ -1621,7 +1623,7 @@ def paypal_ko_webhook(sender, **kwargs) -> None:
 
 
 @receiver(got_request_exception)
-def handle_request_exception(sender, request, **kwargs) -> None:
+def handle_request_exception(sender: Any, request: Any, **kwargs: Any) -> None:
     """Handle request exceptions and create error tickets automatically.
 
     This signal handler is triggered when an exception occurs during request processing.

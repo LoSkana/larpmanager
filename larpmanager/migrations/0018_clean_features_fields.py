@@ -1,8 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import migrations, models
+from typing import Any
 
 
-def remove_obsolete_features(apps, schema_editor):
+def remove_obsolete_features(apps: Any, schema_editor: Any) -> Any:
     """
     Django migration function to remove obsolete features and migrate data.
 

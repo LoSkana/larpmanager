@@ -77,6 +77,7 @@ from larpmanager.utils.member import get_leaderboard
 from larpmanager.utils.pdf import get_membership_request
 from larpmanager.utils.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +140,7 @@ def language(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def profile(request: HttpRequest):
+def profile(request: HttpRequest) -> Any:
     """Display and manage user profile information.
 
     Handles profile editing, privacy settings, and personal information updates,
@@ -214,7 +215,7 @@ def profile(request: HttpRequest):
     return render(request, "larpmanager/member/profile.html", context)
 
 
-def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:  # noqa: ARG001
+def load_profile(request: HttpRequest, img: Any, ext: str) -> JsonResponse:  # noqa: ARG001
     """Save uploaded profile image and return thumbnail URL."""
     # Generate unique filename and save to member profile
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
@@ -600,7 +601,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request: HttpRequest, member_id):
+def chat(request: HttpRequest, member_id: Any) -> Any:
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions
