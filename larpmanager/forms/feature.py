@@ -32,6 +32,7 @@ from larpmanager.models.base import Feature, FeatureModule
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
+    from larpmanager.models.event import Event
 
 
 class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
