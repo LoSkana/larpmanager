@@ -23,6 +23,8 @@
 from decimal import Decimal
 from unittest.mock import patch
 
+from django.utils import timezone
+
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemMembership,
@@ -77,7 +79,7 @@ class TestMailSignals(BaseTestCase):
         from datetime import datetime
 
         item = AccountingItemMembership(
-            member=member, value=Decimal("100.00"), association=self.get_association(), year=datetime.now().year
+            member=member, value=Decimal("100.00"), association=self.get_association(), year=timezone.now().year
         )
         item.save()
 

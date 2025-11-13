@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth.models import User
@@ -184,7 +184,7 @@ def is_lm_admin(request: HttpRequest) -> bool:
     return request.user.is_superuser
 
 
-def check_lm_admin(request: HttpRequest) -> dict[str, int]:
+def check_lm_admin(request: HttpRequest) -> dict[str, Any]:
     """Verify user is LM admin and return admin context.
 
     This function validates that the current user has LM (LarpManager) administrator

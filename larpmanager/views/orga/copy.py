@@ -17,15 +17,16 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import IntegrityError, transaction
-from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
@@ -58,6 +59,9 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.base import check_event_context
 from larpmanager.utils.common import copy_class
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponseRedirect
 
 logger = logging.getLogger(__name__)
 
@@ -155,7 +159,6 @@ def correct_relationship(e_id, p_id) -> None:
     # copy complicated
     # Relationship
     for relationship in Relationship.objects.filter(source__event_id=p_id):
-
         new_source_id = relationship.source_id
         if new_source_id not in source_character_id_to_number:
             continue
@@ -569,12 +572,7 @@ def orga_copy(request: HttpRequest, event_slug: str):
 
 
 def get_all_fields_from_form(form_class, context):
-    """Return names of all available fields from given Form instance.
-
-    :arg form_class: Form instance
-    :returns list of field names
-    :rtype: list
-    """
+    """Return names of all available fields from given Form instance."""
     fields = list(form_class(context=context).base_fields)
 
     for field_name in list(form_class(context=context).declared_fields):

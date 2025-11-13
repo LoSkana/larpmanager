@@ -23,7 +23,6 @@ import io
 import logging
 import os
 import shutil
-from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -32,6 +31,7 @@ import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.experience import AbilityPx, AbilityTypePx
@@ -71,18 +71,16 @@ from larpmanager.utils.edit import save_log
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from django.forms import Form
-    from django.http import HttpRequest
 
     from larpmanager.models.base import BaseModel
 
 logger = logging.getLogger(__name__)
 
 
-def go_upload(request: HttpRequest, context: dict, upload_form_data):
+def go_upload(context: dict, upload_form_data):
     """Route uploaded files to appropriate processing functions.
 
     Args:
-        request: Django HTTP request object
         context: Context dictionary with upload type and settings
         upload_form_data: Uploaded file form data
 
@@ -99,12 +97,12 @@ def go_upload(request: HttpRequest, context: dict, upload_form_data):
     if upload_type == "character_form":
         return form_load(context, upload_form_data, is_registration=False)
     if upload_type == "registration":
-        return registrations_load(request, context, upload_form_data)
+        return registrations_load(context, upload_form_data)
     if upload_type == "px_abilitie":
-        return abilities_load(request, context, upload_form_data)
+        return abilities_load(context, upload_form_data)
     if upload_type == "registration_ticket":
-        return tickets_load(request, context, upload_form_data)
-    return writing_load(request, context, upload_form_data)
+        return tickets_load(context, upload_form_data)
+    return writing_load(context, upload_form_data)
 
 
 def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
@@ -213,11 +211,10 @@ def _get_file(context: dict, file, column_id: str | None = None) -> tuple[any, l
     return input_dataframe, []
 
 
-def registrations_load(request: HttpRequest, context: dict, uploaded_file_form):
+def registrations_load(context: dict, uploaded_file_form):
     """Load registration data from uploaded CSV file.
 
     Args:
-        request: Django HTTP request object
         context: Context dictionary with event and form settings
         uploaded_file_form: Form data containing uploaded CSV file
 
@@ -232,18 +229,17 @@ def registrations_load(request: HttpRequest, context: dict, uploaded_file_form):
 
     if input_dataframe is not None:
         for registration_row in input_dataframe.to_dict(orient="records"):
-            processing_logs.append(_reg_load(request, context, registration_row, questions_mapping))
+            processing_logs.append(_reg_load(context, registration_row, questions_mapping))
     return processing_logs
 
 
-def _reg_load(request: HttpRequest, context: dict, csv_row: dict, registration_questions: list) -> str:
+def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str:
     """Load registration data from CSV row for bulk import.
 
     Creates or updates registrations with field validation, membership checks,
     and question processing for event registration imports.
 
     Args:
-        request: HTTP request object containing user information
         context: Context dictionary containing event and run information
         csv_row: Dictionary representing a CSV row with registration data
         registration_questions: List of registration questions for the event
@@ -425,14 +421,13 @@ def _reg_assign_characters(
         RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
 
 
-def writing_load(request: HttpRequest, context: dict, form) -> list[str]:  # noqa: C901 - Complex file upload processing with format detection
+def writing_load(context: dict, form) -> list[str]:
     """Load writing data from uploaded files and process relationships.
 
     Processes uploaded files containing writing elements and their relationships.
     Handles both character and plot types with their respective relationship data.
 
     Args:
-        request: HTTP request object containing user and session data
         context: Context dictionary containing event, writing_typ, and typ keys
         form: Django form object with cleaned_data containing uploaded files
 
@@ -463,47 +458,87 @@ def writing_load(request: HttpRequest, context: dict, form) -> list[str]:  # noq
         # Process each row of writing data
         if input_dataframe is not None:
             for row in input_dataframe.to_dict(orient="records"):
-                logs.append(element_load(request, context, row, questions_dict))
+                logs.append(element_load(context, row, questions_dict))
 
     # Process character relationships if type is character
     if context["typ"] == "character":
-        uploaded_file = form.cleaned_data.get("second", None)
-        if uploaded_file:
-            # Load relationships file and get character mapping
-            (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
-            character_name_to_id = {
-                element["name"].lower(): element["id"]
-                for element in context["event"].get_elements(Character).values("id", "name")
-            }
-
-            # Process each relationship row
-            if input_dataframe is not None:
-                for row in input_dataframe.to_dict(orient="records"):
-                    new_logs.append(_relationships_load(row, character_name_to_id))
-            logs.extend(new_logs)
+        _writing_load_relationships(context, form, logs)
 
     # Process plot relationships if type is plot
     if context["typ"] == "plot":
-        uploaded_file = form.cleaned_data.get("second", None)
-        if uploaded_file:
-            # Load plot relationships file and get character/plot mappings
-            (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
-            character_name_to_id = {
-                element["name"].lower(): element["id"]
-                for element in context["event"].get_elements(Character).values("id", "name")
-            }
-            plot_name_to_id = {
-                element["name"].lower(): element["id"]
-                for element in context["event"].get_elements(Plot).values("id", "name")
-            }
-
-            # Process each plot relationship row
-            if input_dataframe is not None:
-                for row in input_dataframe.to_dict(orient="records"):
-                    new_logs.append(_plot_rels_load(row, character_name_to_id, plot_name_to_id))
-            logs.extend(new_logs)
+        _writing_load_plot_rels(context, form, logs)
 
     return logs
+
+
+def _writing_load_relationships(context: dict, form: Form, logs: list[str]) -> None:
+    """Load character relationships from uploaded file.
+
+    Processes an uploaded CSV/Excel file containing character relationship data,
+    creating or updating CharacterRel objects to link characters with relationship
+    descriptions.
+
+    Args:
+        context: View context dictionary containing event and other request data
+        form: Form object with cleaned_data containing the uploaded file
+        logs: List to append processing status messages to
+
+    Side Effects:
+        - Creates or updates CharacterRel objects in the database
+        - Appends status messages to the logs list
+
+    """
+    uploaded_file = form.cleaned_data.get("second", None)
+    if uploaded_file:
+        # Load relationships file and get character mapping
+        (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
+        character_name_to_id = {
+            element["name"].lower(): element["id"]
+            for element in context["event"].get_elements(Character).values("id", "name")
+        }
+
+        # Process each relationship row
+        if input_dataframe is not None:
+            for row in input_dataframe.to_dict(orient="records"):
+                new_logs.append(_relationships_load(row, character_name_to_id))
+        logs.extend(new_logs)
+
+
+def _writing_load_plot_rels(context: dict, form: Form, logs: list[str]) -> None:
+    """Load plot-character relationships from uploaded file.
+
+    Processes an uploaded CSV/Excel file containing plot-character relationship data,
+    creating or updating PlotCharacterRel objects to link characters to plots with
+    optional descriptive text.
+
+    Args:
+        context: View context dictionary containing event and other request data
+        form: Form object with cleaned_data containing the uploaded file
+        logs: List to append processing status messages to
+
+    Side Effects:
+        - Creates or updates PlotCharacterRel objects in the database
+        - Appends status messages to the logs list
+
+    """
+    uploaded_file = form.cleaned_data.get("second", None)
+    if uploaded_file:
+        # Load plot relationships file and get character/plot mappings
+        (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
+        character_name_to_id = {
+            element["name"].lower(): element["id"]
+            for element in context["event"].get_elements(Character).values("id", "name")
+        }
+        plot_name_to_id = {
+            element["name"].lower(): element["id"]
+            for element in context["event"].get_elements(Plot).values("id", "name")
+        }
+
+        # Process each plot relationship row
+        if input_dataframe is not None:
+            for row in input_dataframe.to_dict(orient="records"):
+                new_logs.append(_plot_rels_load(row, character_name_to_id, plot_name_to_id))
+        logs.extend(new_logs)
 
 
 def _plot_rels_load(row: dict, chars: dict[str, int], plots: dict[str, int]) -> str:
@@ -576,7 +611,7 @@ def _relationships_load(row: dict, chars: dict) -> str:
     return f"OK - Relationship {source_character_name} {target_character_name}"
 
 
-def _get_questions(questions_queryset: QuerySet) -> dict[str, dict[str, int | str | dict[str, int]]]:
+def _get_questions(questions_queryset: QuerySet) -> dict:
     """Build a dictionary mapping question names to their metadata.
 
     Args:
@@ -654,14 +689,13 @@ def _assign_choice_answer(
                 )
 
 
-def element_load(request: HttpRequest, context: dict, csv_row: dict, element_questions: list) -> str:
+def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
     """Load generic element data from CSV row for bulk import.
 
     Processes element creation or updates with field validation,
     question processing, and proper logging for various element types.
 
     Args:
-        request: HTTP request object containing user information
         context: Context dictionary with field_name, typ, event, and fields
         csv_row: CSV row data as dictionary with field names and values
         element_questions: List of questions for element processing
@@ -1138,7 +1172,7 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
         Path(tmp_file).mkdir(parents=True, exist_ok=True)
 
     # Generate timestamped filename
-    tmp_file = str(Path(tmp_file) / datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
+    tmp_file = str(Path(tmp_file) / timezone.now().strftime("%Y-%m-%d-%H:%M:%S"))
 
     # Write uploaded file chunks to temporary file
     with Path(tmp_file).open("wb") as destination:
@@ -1185,11 +1219,10 @@ def cover_load(context, z_obj) -> None:
         Path(covers[num]).rename(Path(conf_settings.MEDIA_ROOT) / fn)
 
 
-def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:
+def tickets_load(context: dict, form: Form) -> list[str]:
     """Load tickets from uploaded file data.
 
     Args:
-        request: The HTTP request object
         context: Context dictionary containing processing state
         form: Form containing cleaned file data
 
@@ -1204,18 +1237,17 @@ def tickets_load(request: HttpRequest, context: dict, form: Form) -> list[str]:
     if uploaded_dataframe is not None:
         # Convert dataframe to dictionary records and process each ticket
         for ticket_row in uploaded_dataframe.to_dict(orient="records"):
-            log_messages.append(_ticket_load(request, context, ticket_row))
+            log_messages.append(_ticket_load(context, ticket_row))
     return log_messages
 
 
-def _ticket_load(request: HttpRequest, context: dict, csv_row: dict) -> str:
+def _ticket_load(context: dict, csv_row: dict) -> str:
     """Load ticket data from CSV row for bulk import.
 
     Creates or updates RegistrationTicket objects with proper validation,
     price handling, and relationship setup for event registration.
 
     Args:
-        request: HTTP request object containing user context
         context: Context dictionary containing event and other bulk import data
         csv_row: Dictionary representing a single CSV row with ticket data
 
@@ -1270,11 +1302,10 @@ def _ticket_load(request: HttpRequest, context: dict, csv_row: dict) -> str:
     return f"OK - Created {ticket}" if was_created else f"OK - Updated {ticket}"
 
 
-def abilities_load(request: HttpRequest, context: dict, form) -> list:
+def abilities_load(context: dict, form) -> list:
     """Load abilities from uploaded file and process each row.
 
     Args:
-        request: HTTP request object
         context: Context dictionary containing processing state
         form: Form object with cleaned data containing file reference
 
@@ -1289,18 +1320,17 @@ def abilities_load(request: HttpRequest, context: dict, form) -> list:
     if input_dataframe is not None:
         for ability_row in input_dataframe.to_dict(orient="records"):
             # Load individual ability and collect processing logs
-            processing_logs.append(_ability_load(request, context, ability_row))
+            processing_logs.append(_ability_load(context, ability_row))
     return processing_logs
 
 
-def _ability_load(request: HttpRequest, context: dict, csv_row: dict) -> str:
+def _ability_load(context: dict, csv_row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
     Creates or updates ability objects with comprehensive field validation,
     type assignment, prerequisite parsing, and requirement processing.
 
     Args:
-        request: HTTP request object containing user information
         context: Context dictionary containing event and related data
         csv_row: Dictionary representing a CSV row with ability data
 

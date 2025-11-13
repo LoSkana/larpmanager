@@ -20,8 +20,9 @@
 
 import io
 import xml.etree.ElementTree as ET
-from datetime import datetime
 from typing import IO
+
+from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
@@ -50,7 +51,7 @@ def process_payment(invoice_id: int) -> None:
         # Create new electronic invoice if none exists
         electronic_invoice = ElectronicInvoice(
             inv=payment_invoice,
-            year=datetime.now().year,
+            year=timezone.now().year,
             association=payment_invoice.association,
         )
         electronic_invoice.save()

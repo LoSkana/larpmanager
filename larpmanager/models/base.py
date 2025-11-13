@@ -246,7 +246,7 @@ class PaymentMethod(BaseModel):
         options={"quality": 90},
     )
 
-    def as_dict(self, **kwargs):
+    def as_dict(self, **kwargs):  # noqa: ARG002
         """Convert payment method to dictionary with profile image.
 
         Args:

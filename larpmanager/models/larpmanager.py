@@ -300,7 +300,7 @@ class LarpManagerTicket(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True)
 
-    content = models.CharField(max_length=1000, verbose_name=_("Request"), help_text=_("Describe how we can help you"))
+    content = models.TextField(max_length=5000, verbose_name=_("Request"), help_text=_("Describe how we can help you"))
 
     screenshot = models.ImageField(
         max_length=500,

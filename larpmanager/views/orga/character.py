@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import contextlib
 from typing import Any
 
@@ -515,7 +517,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
 
 @login_required
-def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:  # noqa: ARG001
     """Redirect to writing form view with character type."""
     return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 
@@ -660,7 +662,10 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
         # For choice questions, ensure at least one option exists
-        elif context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE] and not WritingOption.objects.filter(question_id=context["saved"].id).exists():
+        elif (
+            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+            and not WritingOption.objects.filter(question_id=context["saved"].id).exists()
+        ):
             edit_option = True
             messages.warning(
                 request,
@@ -1099,13 +1104,14 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
     # Initialize character counter HTML for length validation
     counter = ""
-    if context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"] and context["question"].max_length:
+    if (
+        context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]
+        and context["question"].max_length
+    ):
         # Set appropriate label for multiple choice vs text fields
         name = _("options") if context["question"].typ == "m" else "text length"
         # Generate counter display with current/max length format
-        counter = (
-            f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
-        )
+        counter = f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
 
     # Prepare localized labels and form field references
     confirm = _("Confirm")

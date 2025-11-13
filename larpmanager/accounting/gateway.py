@@ -30,7 +30,7 @@ import logging
 import math
 import re
 from pprint import pformat
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
 import requests
 import satispaython
@@ -53,9 +53,6 @@ from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import get_context, update_payment_details
 from larpmanager.utils.common import generate_number
 from larpmanager.utils.tasks import my_send_mail, notify_admins
-
-if TYPE_CHECKING:
-    from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
@@ -125,11 +122,10 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     context["pay_id"] = response_data["id"]
 
 
-def satispay_check(request: HttpRequest, context: dict) -> None:
+def satispay_check(context: dict) -> None:
     """Check status of pending Satispay payments.
 
     Args:
-        request: Django HTTP request object
         context: Context dictionary with payment configuration
 
     """
@@ -381,7 +377,7 @@ def get_sumup_form(
     request: HttpRequest,
     context: dict[str, Any],
     invoice: PaymentInvoice,
-    amount: float | Decimal,
+    amount: float,
 ) -> None:
     """Generate SumUp payment form for invoice processing.
 
@@ -515,7 +511,7 @@ def redsys_invoice_cod() -> str:
     raise ValueError(msg)
 
 
-def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: Decimal) -> None:
+def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
     """Create Redsys payment form with encrypted parameters.
 
     Generates a secure payment form for Redsys payment gateway by creating
@@ -700,13 +696,7 @@ class RedSysClient:
         return json.loads(base64.b64decode(merchant_parameters).decode())
 
     def encrypt_order(self, order: str) -> bytes:
-        """Create a unique key for every request using Triple DES encryption.
-
-        Based on the Ds_Merchant_Order and the shared secret (SERMEPA_SECRET_KEY).
-
-        :param Ds_Merchant_Order: dict with all merchant parameters
-        :return  order_encrypted: The encrypted order.
-        """
+        """Create a unique key for every request using Triple DES encryption."""
         if not isinstance(order, str):
             msg = f"order must be str, got {type(order)}"
             raise TypeError(msg)

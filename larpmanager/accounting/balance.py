@@ -20,12 +20,15 @@
 
 """Member balance calculation and management utilities."""
 
+from __future__ import annotations
+
 import logging
-from datetime import date, datetime
+from datetime import date
 from decimal import Decimal
 from typing import Any
 
 from django.db.models import Q
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import get_display_choice
@@ -693,7 +696,7 @@ def association_accounting(context: dict) -> None:
     # Build year range dictionary from current year to association creation
     association = Association.objects.only("created").get(pk=context["association_id"])
     start_year = int(association.created.year)
-    end_year = int(datetime.now().date().year)
+    end_year = int(timezone.now().date().year)
     context["sum_year"] = {}
     while end_year >= start_year:
         context["sum_year"][end_year] = 1

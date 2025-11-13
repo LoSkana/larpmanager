@@ -29,7 +29,6 @@ from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING
 from uuid import uuid4
-from zipfile import ZipFile
 
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
@@ -107,14 +106,13 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
     return cache_subs[directory_path]
 
 
-def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Model, o_path: str) -> None:
+def upload_albums_el(alb: models.Model, name: str, main: models.Model, o_path: str) -> None:
     """Upload individual file from zip archive to album.
 
     Processes a single file from a zip archive, creates album upload and image records,
     and moves the file to the appropriate media directory structure.
 
     Args:
-        f: Zip file object containing the archive being processed
         alb: Album instance to upload the file to
         name: File name from zip archive (including path if nested)
         main: Main album instance containing run and event references
@@ -206,7 +204,7 @@ def upload_albums(main, el) -> None:
             album = upload_albums_dir(main, cache_subalbums, filename)
             if file_info.is_dir():
                 continue
-            upload_albums_el(zip_file, album, filename, main, extraction_path)
+            upload_albums_el(album, filename, main, extraction_path)
 
     shutil.rmtree(extraction_path)
 

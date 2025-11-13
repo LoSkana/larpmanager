@@ -94,7 +94,7 @@ class Writing(BaseConceptModel):
             self.upd_js_attr(js, s)
         return js
 
-    def show(self, run: Any | None = None) -> dict[str, Any]:
+    def show(self, run: Run | None = None) -> dict[str, Any]:  # noqa: ARG002
         """Generate a display dictionary with basic writing information and teaser.
 
         Builds upon the reduced representation from show_red() by adding the teaser
@@ -263,7 +263,7 @@ class Character(Writing):
         is_inactive = self.get_config("inactive", default_value=False)
         return not (is_inactive == "True" or is_inactive is True)
 
-    def show(self, run=None):
+    def show(self, run: Run | None = None):
         """Generate display dictionary with character information and media URLs.
 
         Creates a comprehensive dictionary containing character details, player info,
@@ -298,7 +298,9 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval", default_value=False) and self.status not in [CharacterStatus.APPROVED]:
+        if get_event_config(self.event_id, "user_character_approval", default_value=False) and self.status not in [
+            CharacterStatus.APPROVED
+        ]:
             js["hide"] = True
 
         return js

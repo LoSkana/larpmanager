@@ -17,12 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from datetime import datetime
 from io import StringIO
 
 from django.http import HttpRequest, HttpResponse
 from django.urls import path
-from django.utils import translation
+from django.utils import timezone, translation
 from django.utils.xmlutils import SimplerXMLGenerator
 from django.views.decorators.cache import cache_page
 
@@ -111,7 +110,7 @@ def _organization_sitemap(association_id) -> list[str]:
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
         .filter(event__association_id=association_id)
-        .filter(end__gte=datetime.now())
+        .filter(end__gte=timezone.now())
         .select_related("event", "event__association")
         .order_by("-end")
     )

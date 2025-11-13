@@ -21,7 +21,6 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -29,6 +28,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
@@ -111,7 +111,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         return redirect("home")
 
     # Populate main user's accounting information
-    info_accounting(request, context)
+    info_accounting(context)
 
     # Initialize delegated members tracking
     context["delegated_todo"] = False
@@ -124,7 +124,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         # Process accounting info for each delegated member
         for el in context["delegated"]:
             del_ctx = {"member": el, "association_id": context["association_id"]}
-            info_accounting(request, del_ctx)
+            info_accounting(del_ctx)
 
             # Attach context to member object for template access
             el.context = del_ctx
@@ -486,7 +486,7 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
-    year = datetime.now().year
+    year = timezone.now().year
     try:
         AccountingItemMembership.objects.get(
             year=year,
@@ -788,7 +788,7 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpRes
     return render(request, "larpmanager/member/acc_collection_redeem.html", context)
 
 
-def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:
+def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:  # noqa: ARG001
     """Handle PayPal webhook for invoice payment confirmation."""
     # Temporary fix until PayPal fees are better understood
     if invoice_received_money(s):
@@ -993,7 +993,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
         # Mark as submitted and generate transaction ID
         inv.status = PaymentStatus.SUBMITTED
-        inv.txn_id = datetime.now().timestamp()
+        inv.txn_id = timezone.now().timestamp()
         inv.save()
 
     # Send notification for invoice review
@@ -1065,6 +1065,6 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     for e in lis:
         # Filter and add runs to dictionary by ID
         for r in e.runs.all():
-            if future and r.end < datetime.now(timezone.utc).date():
+            if future and r.end < timezone.now().date():
                 continue
             ls[r.id] = r

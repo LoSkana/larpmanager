@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import random
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -32,6 +32,7 @@ from django.db.models import Avg, Count, Min, Sum
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import override
 from django.views.decorators.cache import cache_page
@@ -226,7 +227,7 @@ def choose_run(request: HttpRequest, redirect_path, event_ids):
     available_runs = []
     run_display_names = []
 
-    for run in Run.objects.filter(event_id__in=event_ids, end__gte=datetime.now()):
+    for run in Run.objects.filter(event_id__in=event_ids, end__gte=timezone.now()):
         available_runs.append(run)
         run_display_names.append(f"{run.search} - {run.event.association.slug}")
 
@@ -917,7 +918,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     context["totals"] = {}
 
     # Calculate yearly payment totals from current year to oldest
-    for year in list(range(datetime.today().year, que["oldest_date"].year - 1, -1)):
+    for year in list(range(timezone.now().year, que["oldest_date"].year - 1, -1)):
         start_of_year = date(year, 1, 1)
         end_of_year = date(year, 12, 31)
 
@@ -1030,7 +1031,7 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
     context = check_lm_admin(request)
 
     # Set time threshold to 7 days ago (168 hours)
-    st = datetime.now() - timedelta(hours=168)
+    st = timezone.now() - timedelta(hours=168)
 
     # Aggregate data from individual executions by domain and view_func_name
     # Calculate average duration and total calls directly from execution records

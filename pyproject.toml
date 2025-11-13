@@ -43,12 +43,6 @@ ignore = [
     "ANN204",  # TODO remove Missing return type annotation for special method
     "ANN205",  # TODO remove Missing return type annotation for staticmethod
     "ANN206",  # TODO remove Missing return type annotation for classmethod
-    "ARG001",  # TODO remove 	unused-function-argument
-    "ARG002",  # TODO remove 	unused-method-argument
-    "DTZ005",  # TODO remove 	call-datetime-now-without-tzinfo
-    "DTZ002",  # TODO remove 	call-datetime-today
-    "INP001",  # TODO remove 	implicit-namespace-package
-    "TRY401",  # TODO remove 	verbose-log-message
 ]
 
 [tool.ruff.lint.pydocstyle]

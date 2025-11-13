@@ -17,15 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import math
-from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
-from django.http import HttpRequest
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
@@ -46,6 +45,9 @@ from larpmanager.models.registration import Registration, RegistrationCharacterR
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
 from larpmanager.utils.common import format_datetime, get_time_diff_today
 from larpmanager.utils.exceptions import RewokedMembershipError, SignupError, WaitingError
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 
 def registration_available(run: Run, features: dict, context: dict | None = None) -> None:
@@ -448,7 +450,7 @@ def registration_status(  # noqa: C901 - Complex registration status determinati
     if get_event_config(run.event_id, "pre_register_active", default_value=False, context=context):
         _status_preregister(run, member, context)
 
-    current_datetime = datetime.today()
+    current_datetime = timezone.now().date()
     # check registration open
     if "registration_open" in features:
         if not run.registration_open:
@@ -798,7 +800,7 @@ def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
     return event.get_elements(Character).filter(player=member).order_by("-updated")
 
 
-def get_player_signup(request: HttpRequest, context: dict) -> Registration | None:
+def get_player_signup(context: dict) -> Registration | None:
     """Get active registration for current user in the given run context."""
     # Filter registrations for current run and user, excluding cancelled ones
     active_registrations = Registration.objects.filter(
@@ -814,11 +816,10 @@ def get_player_signup(request: HttpRequest, context: dict) -> Registration | Non
     return None
 
 
-def check_signup(request: HttpRequest, context: dict) -> None:
+def check_signup(context: dict) -> None:
     """Check if player signup is valid and not in waiting status.
 
     Args:
-        request: HTTP request object
         context: Context dictionary containing run information
 
     Raises:
@@ -827,7 +828,7 @@ def check_signup(request: HttpRequest, context: dict) -> None:
 
     """
     # Get player registration for current run
-    registration = get_player_signup(request, context)
+    registration = get_player_signup(context)
     if not registration:
         raise SignupError(context["run"].get_slug())
 
@@ -836,14 +837,13 @@ def check_signup(request: HttpRequest, context: dict) -> None:
         raise WaitingError(context["run"].get_slug())
 
 
-def check_assign_character(request: HttpRequest, context: dict) -> None:
+def check_assign_character(context: dict) -> None:
     """Check and assign a character to player signup if conditions are met.
 
     Automatically assigns the first available character to a player's signup
     if they have exactly one character and no existing character assignments.
 
     Args:
-        request: HTTP request object containing user information
         context: Context dictionary containing event data
 
     Returns:
@@ -851,7 +851,7 @@ def check_assign_character(request: HttpRequest, context: dict) -> None:
 
     """
     # Get the player's registration for this event
-    registration = get_player_signup(request, context)
+    registration = get_player_signup(context)
     if not registration:
         return
 

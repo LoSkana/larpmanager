@@ -357,7 +357,7 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
         writing_list_text_fields(context, text_fields, writing_type)
 
         # Prepare final context elements for rendering
-        _prepare_writing_list(context, request)
+        _prepare_writing_list(context)
         _setup_char_finder(context, writing_type)
         _get_custom_form(context)
 
@@ -491,14 +491,8 @@ def retrieve_cache_text_field(context, text_fields, element_type) -> None:
             setattr(element, field_name + "_ln", line_count)
 
 
-def _prepare_writing_list(context, request: HttpRequest) -> None:
-    """Prepare context data for writing list display and configuration.
-
-    Args:
-        context: Template context dictionary to update
-        request: HTTP request object with user information
-
-    """
+def _prepare_writing_list(context) -> None:
+    """Prepare context data for writing list display and configuration."""
     try:
         name_question = (
             context["event"]
@@ -768,15 +762,7 @@ def writing_versions(request: HttpRequest, context: dict, element_name, version_
 
 
 def replace_character_names_before_save(instance) -> None:
-    """Django signal handler to replace character names before saving.
-
-    Args:
-        sender: Model class sending the signal
-        instance: Character instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-
-    """
+    """Django signal handler to replace character names before saving."""
     if not instance.pk:
         return
 

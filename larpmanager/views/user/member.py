@@ -21,7 +21,7 @@
 import logging
 import math
 import random
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 from uuid import uuid4
 
@@ -29,13 +29,14 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.contrib.auth import login, user_logged_in
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User, update_last_login
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
@@ -213,7 +214,7 @@ def profile(request: HttpRequest):
     return render(request, "larpmanager/member/profile.html", context)
 
 
-def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:
+def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:  # noqa: ARG001
     """Save uploaded profile image and return thumbnail URL."""
     # Generate unique filename and save to member profile
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
@@ -472,7 +473,7 @@ def membership(request: HttpRequest) -> HttpResponse:
     # Check if membership fee has been paid for current year
     context["fee_payed"] = AccountingItemMembership.objects.filter(
         association_id=context["association_id"],
-        year=datetime.now().year,
+        year=timezone.now().year,
         member_id=context["member"].id,
     ).exists()
 
@@ -632,7 +633,7 @@ def chat(request: HttpRequest, member_id):
                     association_id=context["association_id"],
                 )
             your_contact.num_unread += 1
-            your_contact.last_message = datetime.now()
+            your_contact.last_message = timezone.now()
             your_contact.save()
             mine_contact = get_contact(my_member_id, member_id)
             if not mine_contact:
@@ -642,7 +643,7 @@ def chat(request: HttpRequest, member_id):
                     channel=get_channel(my_member_id, member_id),
                     association_id=context["association_id"],
                 )
-            mine_contact.last_message = datetime.now()
+            mine_contact.last_message = timezone.now()
             mine_contact.save()
             messages.success(request, _("Message sent!"))
             return redirect(request.path_info)
@@ -682,14 +683,14 @@ def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
     badge = get_badge(badge_id, context)
 
     # Initialize context with badge data
-    context.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
+    context.update({"badge": badge.show(), "list": []})
 
     # Collect all badge members
     for el in badge.members.all():
         context["list"].append(el)
 
     # Shuffle members using deterministic daily seed
-    v = datetime.today().date() - date(1970, 1, 1)
+    v = timezone.now().date() - date(1970, 1, 1)
     random.Random(v.days).shuffle(context["list"])  # noqa: S311
 
     return render(request, "larpmanager/general/badge.html", context)
@@ -792,7 +793,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     check_association_feature(request, context, "vote")
 
     # Set current year for membership and voting validation
-    context["year"] = datetime.now().year
+    context["year"] = timezone.now().year
 
     # Check if membership payment is required and completed
     if "membership" in context["features"]:
@@ -950,7 +951,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
     # Add accounting information for each delegated account
     for el in context["list"]:
         del_ctx = {"member": el, "association_id": context["association_id"]}
-        info_accounting(request, del_ctx)
+        info_accounting(del_ctx)
         el.context = del_ctx
     return render(request, "larpmanager/member/delegated.html", context)
 

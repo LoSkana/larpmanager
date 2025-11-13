@@ -20,14 +20,14 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
-from django.http import Http404, HttpRequest
+from django.http import Http404
+from django.utils import timezone
 
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email
@@ -181,15 +181,14 @@ def assign_badge(member: Member, badge_code: str) -> None:
     try:
         badge = Badge.objects.get(cod=badge_code)
         badge.members.add(member)
-    except Exception as e:
-        logger.exception("Failed to assign badge %s to member %s: %s", badge_code, member, e)
+    except Exception:
+        logger.exception("Failed to assign badge %s to member %s", badge_code, member)
 
 
-def get_mail(request: HttpRequest, context: dict, email_id: int) -> Email:
+def get_mail(context: dict, email_id: int) -> Email:
     """Retrieve an email object with proper authorization checks.
 
     Args:
-        request: HTTP request object containing association information
         context: Context dictionary that may contain run information
         email_id: Primary key of the email to retrieve
 
@@ -278,7 +277,7 @@ def process_membership_status_updates(membership: Membership) -> None:
 
         # Set current date if not already set
         if not membership.date:
-            membership.date = datetime.now(timezone.utc).date()
+            membership.date = timezone.now().date()
 
     # Handle EMPTY status: clear card number and date
     if membership.status == MembershipStatus.EMPTY:

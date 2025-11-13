@@ -17,9 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import shutil
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -28,7 +30,6 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
-from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -36,9 +37,12 @@ from larpmanager.models.form import (
     WritingAnswer,
     WritingChoice,
 )
-from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
+
+if TYPE_CHECKING:
+    from larpmanager.models.base import BaseModel
+    from larpmanager.models.member import Member
 
 
 def delete_all_in_path(path) -> None:
@@ -534,22 +538,22 @@ def reset_event_cache_all(run: Run) -> None:
     cache.delete(cache_key)
 
 
-def update_character_fields(instance, character_data: dict) -> None:
+def update_character_fields(character: Character, character_data: dict) -> None:
     """Update character fields with event-specific data if character features are enabled.
 
     Args:
-        instance: Event instance with event_id attribute
+        character: Character instance with event_id attribute
         character_data: Dictionary to update with character element fields
 
     """
     # Check if character features are enabled for this event
-    enabled_features = get_event_features(instance.event_id)
+    enabled_features = get_event_features(character.event_id)
     if "character" not in enabled_features:
         return
 
     # Build context and update data with character element fields
-    template_context = {"features": enabled_features, "event": instance.event}
-    character_data.update(get_character_element_fields(template_context, instance.pk, only_visible=False))
+    template_context = {"features": enabled_features, "event": character.event}
+    character_data.update(get_character_element_fields(template_context, character.pk, only_visible=False))
 
 
 def update_event_cache_all(run: Run, instance: BaseModel) -> None:
@@ -718,7 +722,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         clear_event_cache_all_runs(char.event)
 
 
-def on_character_factions_m2m_changed(sender, **kwargs) -> None:
+def on_character_factions_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
     """Clear event cache when character factions change."""
     # Check if action is one that affects the relationship
     action = kwargs.pop("action", None)

@@ -26,6 +26,7 @@ import re
 import string
 import unicodedata
 from datetime import date, datetime, timedelta
+from datetime import timezone as dt_timezone
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -38,6 +39,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
 from django.http import Http404, HttpRequest
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
@@ -335,7 +337,7 @@ def get_plot(context: dict, plot_id: int) -> None:
         raise Http404(msg) from err
 
 
-def get_quest_type(context: dict, quest_number: int) -> QuestType:
+def get_quest_type(context: dict, quest_number: int) -> None:
     """Get quest type from context by number."""
     get_element(context, quest_number, "quest_type", QuestType)
 
@@ -345,7 +347,7 @@ def get_quest(context: dict, quest_number: int) -> None:
     get_element(context, quest_number, "quest", Quest)
 
 
-def get_trait(character_context: dict, trait_name: str) -> Trait:
+def get_trait(character_context: dict, trait_name: str) -> None:
     """Get trait from character context by name."""
     get_element(character_context, trait_name, "trait", Trait)
 
@@ -638,7 +640,7 @@ def get_player_relationship(context: dict, other_player_number: int) -> None:
         raise Http404(msg) from err
 
 
-def get_time_diff(start_datetime: datetime, end_datetime: datetime) -> int:
+def get_time_diff(start_datetime: date, end_datetime: date) -> int:
     """Calculate the difference in days between two datetimes."""
     return (start_datetime - end_datetime).days
 
@@ -660,7 +662,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     if isinstance(target_date, datetime):
         target_date = target_date.date()
 
-    return get_time_diff(target_date, datetime.today().date())
+    return get_time_diff(target_date, timezone.now().date())
 
 
 def generate_number(length: int) -> str:
@@ -1047,7 +1049,7 @@ def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list
 
     # For non-POST requests, limit to questions from last 90 days
     if request.method != "POST":
-        base_queryset = base_queryset.filter(created__gte=datetime.now() - timedelta(days=90))
+        base_queryset = base_queryset.filter(created__gte=timezone.now() - timedelta(days=90))
 
     # Find the latest creation timestamp for each member
     latest_created_per_member = (
@@ -1134,3 +1136,12 @@ def format_email_body(email) -> str:
     # Truncate text if longer than cutoff
     cutoff = 200
     return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned
+
+
+def get_now():
+    """Get current time - if executed in debug/test, without timezone, add it."""
+    now = timezone.now()
+    if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:
+        # If timezone.now() returns naive, make it aware
+        now = now.replace(tzinfo=dt_timezone.utc)
+    return now

@@ -566,7 +566,7 @@ class Discount(BaseModel):
             s += self.event.association.get_currency_symbol()
         return s
 
-    def show(self, run=None) -> dict:
+    def show(self) -> dict:
         """Return dictionary representation with value, max_redeem, and name attributes."""
         js = {"value": self.value, "max_redeem": self.max_redeem}
         for s in ["name"]:

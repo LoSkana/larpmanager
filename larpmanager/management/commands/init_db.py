@@ -31,7 +31,7 @@ from larpmanager.models.base import Feature
 class Command(BaseCommand):
     help = "Init DB"
 
-    def handle(self, *args: tuple, **options: dict) -> None:
+    def handle(self, *args: tuple, **options: dict) -> None:  # noqa: ARG002
         """Handle the reset command to load test fixtures and configure test environment.
 
         This command resets the database with test data, including:

@@ -183,9 +183,7 @@ class EventPermission(BaseModel):
 class EventRole(BaseConceptModel):
     members = models.ManyToManyField(Member, related_name="event_roles")
 
-    permissions: ClassVar[Any] = models.ManyToManyField(EventPermission, related_name="roles", blank=True)
-
-    _clone_m2m_fields: ClassVar[list] = ["permissions"]
+    permissions = models.ManyToManyField(EventPermission, related_name="roles", blank=True)
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]

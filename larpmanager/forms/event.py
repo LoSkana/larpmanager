@@ -194,7 +194,11 @@ class OrgaEventForm(MyForm):
 
         # Build list of fields to delete based on disabled features
         # Check each display-related feature and mark fields for removal if disabled
-        dl = [s for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"] if s not in self.params["features"]]
+        dl = [
+            s
+            for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]
+            if s not in self.params["features"]
+        ]
 
         # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
@@ -275,7 +279,7 @@ class OrgaFeatureForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(is_association=False)
 
-    def save(self, commit: bool = True) -> EventConfig:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> EventConfig:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update event features cache.
 
         Args:
@@ -1039,7 +1043,7 @@ class OrgaAppearanceForm(MyCssForm):
         for m in dl:
             del self.fields[m]
 
-    def save(self, commit: bool = True) -> AssociationSkin:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> AssociationSkin:  # noqa: FBT001, FBT002, ARG002
         """Save the form and generate a unique CSS code for the skin."""
         # Generate unique 32-character identifier for CSS code
         self.instance.css_code = generate_id(32)
@@ -1194,7 +1198,7 @@ class OrgaEventRoleForm(MyForm):
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save form instance and update role permissions."""
         instance = super().save()
         save_permissions_role(instance, self)
@@ -1280,10 +1284,13 @@ class OrgaRunForm(ConfigForm):
             for value, label in self.fields["development"].choices
         )
 
-        dl.extend([
-            s for s in ["registration_open", "registration_secret"]
-            if not self.instance.pk or not self.instance.event or s not in self.params["features"]
-        ])
+        dl.extend(
+            [
+                s
+                for s in ["registration_open", "registration_secret"]
+                if not self.instance.pk or not self.instance.event or s not in self.params["features"]
+            ]
+        )
 
         for s in dl:
             del self.fields[s]
@@ -1439,7 +1446,7 @@ class ExeEventForm(OrgaEventForm):
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()
 
-    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save event with optional template copying.
 
         Args:
@@ -1486,7 +1493,7 @@ class ExeTemplateForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(is_association=False)
 
-    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance, setting template and association defaults.
 
         Args:
@@ -1806,7 +1813,8 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_options,
         )
 
-    def _compile_configs(self, basic_question_types, compiled_options, field_definitions) -> None:
+    @staticmethod
+    def _compile_configs(basic_question_types, compiled_options, field_definitions) -> None:
         """Compile configuration options from field definitions.
 
         Args:

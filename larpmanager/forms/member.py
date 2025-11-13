@@ -23,7 +23,6 @@ import logging
 import os
 import re
 from collections import OrderedDict
-from datetime import datetime
 from typing import TYPE_CHECKING, Any, ClassVar
 
 import pycountry
@@ -37,7 +36,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
-from django.utils import translation
+from django.utils import timezone, translation
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
@@ -208,7 +207,7 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
             raise ValidationError(msg)
         return data
 
-    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002, ARG002
         """Save user and update associated member profile with form data.
 
         Args:
@@ -266,9 +265,9 @@ class MyPasswordResetForm(PasswordResetForm):
         subject_template_name: str,
         email_template_name: str,
         context: dict,
-        from_email: str,
+        from_email: str,  # noqa: ARG002
         to_email: str,
-        html_email_template_name: str | None = None,
+        html_email_template_name: str | None = None,  # noqa: ARG002
     ) -> None:
         """Send a django.core.mail.EmailMultiAlternatives to `to_email`.
 
@@ -630,7 +629,7 @@ class ProfileForm(BaseProfileForm):
                 try:
                     min_age = int(min_age)
                     logger.debug("Checking minimum age %s against birth date %s", min_age, data)
-                    age_diff = relativedelta(datetime.now(), data).years
+                    age_diff = relativedelta(timezone.now(), data).years
                     if age_diff < min_age:
                         raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
                 except (ValueError, TypeError) as e:
@@ -817,7 +816,7 @@ class ExeMembershipFeeForm(forms.Form):
     def clean_member(self) -> Member:
         """Validate that the member doesn't already have a membership fee for the current year."""
         member = self.cleaned_data["member"]
-        year = datetime.today().year
+        year = timezone.now().year
 
         # Check if membership fee already exists for this year
         if AccountingItemMembership.objects.filter(member=member, year=year).exists():

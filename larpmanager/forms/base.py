@@ -297,18 +297,18 @@ class MyForm(forms.ModelForm):
         self.full_clean()
 
         # Process each field in the form
-        for s in self.fields:
+        for field in self.fields:
             # Skip custom fields if they exist
-            if hasattr(self, "custom_field") and s in self.custom_field:
+            if hasattr(self, "custom_field") and field in self.custom_field:
                 continue
 
             # Handle multi-select widgets specially
-            if isinstance(self.fields[s].widget, s2forms.ModelSelect2MultipleWidget):
-                self._save_multi(s, instance)
+            if isinstance(self.fields[field].widget, s2forms.ModelSelect2MultipleWidget):
+                self._save_multi(field, instance)
 
         return instance
 
-    def _save_multi(self, s: str, instance) -> None:
+    def _save_multi(self, field: str, instance) -> None:
         """Save many-to-many field relationships for a model instance.
 
         Compares the initial values with cleaned form data to determine
@@ -316,14 +316,14 @@ class MyForm(forms.ModelForm):
         accordingly.
 
         Args:
-            s: The field name for the many-to-many relationship
+            field: The field name for the many-to-many relationship
             instance: The model instance to update
 
         """
         # Get the initial set of related object primary keys
-        if s in self.initial:
+        if field in self.initial:
             old = set()
-            for el in self.initial[s]:
+            for el in self.initial[field]:
                 if hasattr(el, "pk"):
                     old.add(el.pk)
                 else:
@@ -332,10 +332,10 @@ class MyForm(forms.ModelForm):
             old = set()
 
         # Get the new set of primary keys from cleaned form data
-        new = set(self.cleaned_data[s].values_list("pk", flat=True))
+        new = set(self.cleaned_data[field].values_list("pk", flat=True))
 
         # Get the attribute manager for the many-to-many field
-        attr = get_attr(instance, s)
+        attr = get_attr(instance, field)
 
         # Remove relationships that are no longer selected
         for ch in old - new:
@@ -547,16 +547,12 @@ class BaseRegistrationForm(MyFormRun):
         # Process each available option for the question
         for option in available_options:
             # Generate display text with pricing information
-            option_display_name = option.get_form_text(event_run, currency_symbol=self.params["currency_symbol"])
+            option_display_name = option.get_form_text(currency_symbol=self.params["currency_symbol"])
 
             # Check availability constraints if registration counts provided
             if registration_count and option.max_available > 0:
                 option_display_name, is_valid = self.check_option(
-                    chosen_options,
-                    option_display_name,
-                    option,
-                    registration_count,
-                    event_run,
+                    chosen_options, option_display_name, option, registration_count
                 )
                 if not is_valid:
                     continue
@@ -575,12 +571,7 @@ class BaseRegistrationForm(MyFormRun):
         return choices, help_text
 
     def check_option(
-        self,
-        previously_chosen_options: list,
-        display_name: str,
-        option,
-        registration_count_by_option: dict,
-        run,
+        self, previously_chosen_options: list, display_name: str, option, registration_count_by_option: dict
     ) -> tuple[str, bool]:
         """Check option availability and update display name with availability info.
 
@@ -592,7 +583,6 @@ class BaseRegistrationForm(MyFormRun):
             display_name: Display name for the option to be potentially modified
             option: Option instance to check for availability
             registration_count_by_option: Dictionary containing registration count data by option key
-            run: Run instance for the current event
 
         Returns:
             tuple[str, bool]: A tuple containing:
@@ -764,7 +754,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_keys
 
-    def check_editable(self, registration_question: RegistrationQuestion) -> bool:
+    def check_editable(self, registration_question: RegistrationQuestion) -> bool:  # noqa: ARG002
         """Always allow editing."""
         return True
 
@@ -1298,7 +1288,7 @@ class MyCssForm(MyForm):
                 css = css.split(css_delimeter)[0]
             self.initial[self.get_input_css()] = css
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save form instance with generated CSS code and custom CSS file.
 
         Args:

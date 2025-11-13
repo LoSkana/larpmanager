@@ -189,7 +189,9 @@ def export_plot_rels(context):
             plot_character_relationship.character.name,
             plot_character_relationship.text,
         ]
-        for plot_character_relationship in PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character").order_by("order")
+        for plot_character_relationship in PlotCharacterRel.objects.filter(plot__event_id=event_id)
+        .prefetch_related("plot", "character")
+        .order_by("order")
     ]
 
     return [("plot_rels", column_keys, relationship_values)]
@@ -361,7 +363,11 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
             if question.id in question_answers and element.id in question_answers[question.id]:
                 cell_value = question_answers[question.id][element.id]
         # Handle choice-based question types (single, multiple)
-        elif question.typ in {"s", "m"} and question.id in question_choices and element.id in question_choices[question.id]:
+        elif (
+            question.typ in {"s", "m"}
+            and question.id in question_choices
+            and element.id in question_choices[question.id]
+        ):
             cell_value = ", ".join(question_choices[question.id][element.id])
 
         # Clean value for export format (remove tabs, convert newlines)
@@ -1224,9 +1230,14 @@ def export_abilities(context):
     )
     ability_rows = []
     for ability in ability_queryset:
-        row_data = [ability.name, ability.cost, ability.typ.name if ability.typ else "", ability.descr]
-        row_data.append(", ".join([prereq.name for prereq in ability.prerequisites.all()]))
-        row_data.append(", ".join([req.name for req in ability.requirements.all()]))
+        row_data = [
+            ability.name,
+            ability.cost,
+            ability.typ.name if ability.typ else "",
+            ability.descr,
+            ", ".join([prereq.name for prereq in ability.prerequisites.all()]),
+            ", ".join([req.name for req in ability.requirements.all()]),
+        ]
         ability_rows.append(row_data)
 
     return [("abilities", column_headers, ability_rows)]

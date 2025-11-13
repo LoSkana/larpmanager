@@ -17,23 +17,21 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import time
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
-from django.forms import Form, ModelForm, forms
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config, get_event_config
-from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
@@ -44,6 +42,13 @@ from larpmanager.utils.auth import is_lm_admin
 from larpmanager.utils.base import check_association_context, check_event_context
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.exceptions import NotFoundError
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from django.forms import Form, ModelForm, forms
+
+    from larpmanager.forms.base import MyForm
 
 
 def save_log(member: Member, cls: type, element: Any, *, to_delete: bool = False) -> None:
@@ -274,7 +279,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
             should_delete = "delete" in request.POST and request.POST["delete"] == "1"
 
             # Log the operation (save or delete)
-            save_log(context["member"], form_type, saved_instance, should_delete)
+            save_log(context["member"], form_type, saved_instance, to_delete=should_delete)
 
             # Delete the instance if deletion was requested
             if should_delete:
@@ -704,7 +709,7 @@ def _writing_save(
     if "ajax" in request.POST:
         # Check if element exists in context before processing
         if nm in context:
-            return writing_edit_save_ajax(form, request, context)
+            return writing_edit_save_ajax(form, request)
         return JsonResponse({"res": "ko"})
 
     # Process normal form submission
@@ -747,7 +752,7 @@ def writing_edit_cache_key(event_id: int, writing_type: str) -> str:
     return f"orga_edit_{event_id}_{writing_type}"
 
 
-def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "JsonResponse":
+def writing_edit_save_ajax(form: Form, request: HttpRequest) -> JsonResponse:
     """Handle AJAX save requests for writing elements with locking validation.
 
     This function processes AJAX requests to save writing elements while validating
@@ -757,7 +762,6 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
     Args:
         form: Django form instance containing the data to save
         request: HTTP request object containing POST data and user information
-        context: Context dictionary for additional data (currently unused)
 
     Returns:
         JsonResponse: JSON response containing either success status or warning message

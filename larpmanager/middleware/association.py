@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
@@ -33,8 +33,6 @@ from larpmanager.cache.skin import get_cache_skin
 from larpmanager.models.association import AssociationTextType
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
     from django.http import HttpRequest, HttpResponse
 
 
@@ -110,7 +108,12 @@ class AssociationIdentifyMiddleware:
         association_data = get_cache_association(association_slug)
         if association_data:
             # Check for domain mismatch requiring redirect
-            if "main_domain" in association_data and association_data["main_domain"] != base_domain and request.enviro == "prod" and not configured_slug:
+            if (
+                "main_domain" in association_data
+                and association_data["main_domain"] != base_domain
+                and request.enviro == "prod"
+                and not configured_slug
+            ):
                 association_slug = association_data["slug"]
                 association_domain = association_data["main_domain"]
                 return redirect(f"https://{association_slug}.{association_domain}{request.get_full_path()}")
@@ -141,7 +144,11 @@ class AssociationIdentifyMiddleware:
         # Check for demo user logout requirement - skip if already in post-login flow
         # Demo users should be logged out when visiting main domain
         current_user = request.user
-        if not request.path.startswith("/after_login/") and current_user.is_authenticated and current_user.email.lower().endswith("demo.it"):
+        if (
+            not request.path.startswith("/after_login/")
+            and current_user.is_authenticated
+            and current_user.email.lower().endswith("demo.it")
+        ):
             logout(request)
             return redirect(request.path)
 

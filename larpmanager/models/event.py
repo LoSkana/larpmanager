@@ -295,7 +295,11 @@ class Event(BaseModel):
         # Check if inheritance conditions are met
         # Verify that campaign independence is not enabled for this element type
         # If independence is disabled (False), use parent's elements
-        if self.parent and model_class in inheritable_elements and not self.get_config(f"campaign_{model_class}_indep", default_value=False):
+        if (
+            self.parent
+            and model_class in inheritable_elements
+            and not self.get_config(f"campaign_{model_class}_indep", default_value=False)
+        ):
             return self.parent
 
         # Return self if no parent exists, element not inheritable, or independence enabled

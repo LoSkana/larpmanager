@@ -24,7 +24,8 @@ import io
 import logging
 import re
 import zipfile
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -36,6 +37,7 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Template
 from django.template.loader import get_template
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
@@ -97,8 +99,8 @@ def reprint(file_path):
     if not path_obj.is_file():
         return True
 
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=1)
-    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, timezone.utc)
+    cutoff_date = timezone.now() - timedelta(days=1)
+    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, dt_timezone.utc)
     return modification_time < cutoff_date
 
 
@@ -127,7 +129,7 @@ def return_pdf(file_path, filename):
         return response
 
 
-def link_callback(uri: str, rel: str) -> str:
+def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
     """Convert HTML URIs to absolute system paths for xhtml2pdf.
 
     Resolves static and media URLs to absolute file paths so the PDF
@@ -669,13 +671,7 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
 
 
 def cleanup_pdfs_on_trait_assignment(assignment_trait_instance) -> None:
-    """Handle assignment trait post-save PDF cleanup.
-
-    Args:
-        assignment_trait_instance: AssignmentTrait instance that was saved
-        is_newly_created: Boolean indicating if instance was created
-
-    """
+    """Handle assignment trait post-save PDF cleanup."""
     if not assignment_trait_instance.member:
         return
 
@@ -882,7 +878,7 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
 
     # Generate timestamped filename for download
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
     response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_pdfs_{timestamp}.zip"'
 
     return response

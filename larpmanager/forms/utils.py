@@ -20,12 +20,13 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any, ClassVar
 
 from django import forms
 from django.db.models import Q, QuerySet
 from django.forms.widgets import Widget
+from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
@@ -124,7 +125,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:
+    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:  # noqa: ARG002
         """Render checkbox widget with tooltips and help links.
 
         Generates HTML for a checkbox widget where each option includes:
@@ -469,8 +470,7 @@ def get_association_people(association_id):
     """
     que = Membership.objects.select_related("member").filter(association_id=association_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
-    ls = [(f.member_id, f"{f.member!s} - {f.member.email}") for f in que]
-    return ls
+    return [(f.member_id, f"{f.member!s} - {f.member.email}") for f in que]
 
 
 def get_run_choices(self, *, past=False) -> None:
@@ -490,7 +490,7 @@ def get_run_choices(self, *, past=False) -> None:
         Run.objects.filter(event__association_id=self.params["association_id"]).select_related("event").order_by("-end")
     )
     if past:
-        reference_date = datetime.now() - timedelta(days=30)
+        reference_date = timezone.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
     choices.extend([(run.id, str(run)) for run in runs])
 

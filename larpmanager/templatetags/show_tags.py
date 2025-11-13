@@ -31,7 +31,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.db.models import Max
 from django.templatetags.static import static
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
@@ -403,7 +403,7 @@ def show_char(context: dict, element: dict | str | None, run: Run, include_toolt
     text = _remove_unimportant_prefix(text)
 
     # Text is already HTML-safe from character link processing, so we can mark it as such
-    return format_html("{}", format_html(text))
+    return format_html("{}", mark_safe(text))  # noqa: S308
 
 
 def go_trait(
@@ -511,7 +511,7 @@ def show_trait(context, text, run, tooltip):
         text = go_trait(context, f"^{trait_number}", trait_number, text, run, include_tooltip=tooltip, simple=True)
 
     # Text is already HTML-safe from trait link processing, so we can mark it as such
-    return format_html("{}", format_html(text))
+    return format_html("{}", mark_safe(text))  # noqa: S308
 
 
 @register.simple_tag

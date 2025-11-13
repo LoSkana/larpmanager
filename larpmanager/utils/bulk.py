@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
 from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -37,6 +38,9 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot, Prologue
 from larpmanager.utils.exceptions import ReturnNowError
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 
 def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[int], int, int]:
@@ -145,7 +149,7 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict) -> J
 
     try:
         # Execute the bulk operation using the mapped handler function
-        operation_mapping[operation_name](request, context, operation_target, object_ids)
+        operation_mapping[operation_name](context, operation_target, object_ids)
     except ObjectDoesNotExist:
         # Handle case where target objects don't exist
         return JsonResponse({"error": "not found"}, status=400)
@@ -163,7 +167,6 @@ def _get_inv_items(warehouse_item_ids: list[int], context: dict) -> list[int]:
 
 
 def exec_add_item_tag(
-    request,
     context,
     target: int,
     ids: list[int],
@@ -173,14 +176,13 @@ def exec_add_item_tag(
     tag.items.add(*_get_inv_items(ids, context))
 
 
-def exec_del_item_tag(request: HttpRequest, context: dict[str, Any], target: int, ids: str) -> None:
+def exec_del_item_tag(context: dict[str, Any], target: int, ids: str) -> None:
     """Remove items from a warehouse tag."""
     tag = WarehouseTag.objects.get(association_id=context["association_id"], pk=target)
     tag.items.remove(*_get_inv_items(ids, context))
 
 
 def exec_move_item_box(
-    request,
     context,
     target: int,
     ids: list[int],
@@ -243,32 +245,31 @@ def _get_chars(context: dict, character_ids: list) -> list:
     return context["event"].get_elements(Character).filter(pk__in=character_ids).values_list("pk", flat=True)
 
 
-def exec_add_char_fact(request: HttpRequest, context: dict, target, ids) -> None:
+def exec_add_char_fact(context: dict, target, ids) -> None:
     """Add characters to a faction."""
     fact = context["event"].get_elements(Faction).get(pk=target)
     fact.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_fact(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_fact(context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a faction."""
     fact = context["event"].get_elements(Faction).get(pk=target)
     fact.characters.remove(*_get_chars(context, ids))
 
 
-def exec_add_char_plot(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
+def exec_add_char_plot(context: dict, target: int, ids: list[int]) -> None:
     """Add characters to a plot element."""
     plot = context["event"].get_elements(Plot).get(pk=target)
     plot.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_plot(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_plot(context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from a plot element."""
     plot = context["event"].get_elements(Plot).get(pk=target)
     plot.characters.remove(*_get_chars(context, ids))
 
 
 def exec_add_char_delivery(
-    request: HttpRequest,
     context: dict[str, Any],
     target: int | str,
     ids: list[int] | str,
@@ -278,20 +279,19 @@ def exec_add_char_delivery(
     delivery.characters.add(*_get_chars(context, ids))
 
 
-def exec_del_char_delivery(request: HttpRequest, context: dict, target: int, ids: list[int]) -> None:
+def exec_del_char_delivery(context: dict, target: int, ids: list[int]) -> None:
     """Remove characters from delivery."""
     delivery = context["event"].get_elements(DeliveryPx).get(pk=target)
     delivery.characters.remove(*_get_chars(context, ids))
 
 
-def exec_add_char_prologue(request: HttpRequest, context: dict[str, Any], target: int, ids: list[int]) -> None:
+def exec_add_char_prologue(context: dict[str, Any], target: int, ids: list[int]) -> None:
     """Add characters to a prologue."""
     prologue = context["event"].get_elements(Prologue).get(pk=target)
     prologue.characters.add(*_get_chars(context, ids))
 
 
 def exec_del_char_prologue(
-    request: HttpRequest,
     context: dict[str, Any],
     target: int,
     ids: list[int],
@@ -302,7 +302,6 @@ def exec_del_char_prologue(
 
 
 def exec_set_char_progress(
-    request,
     context: dict,
     target: int,
     ids: list[int],
@@ -312,13 +311,13 @@ def exec_set_char_progress(
     context["event"].get_elements(Character).filter(pk__in=ids).update(progress=progress_step)
 
 
-def exec_set_char_assigned(request: HttpRequest, context: dict[str, Any], target: str, ids: list[int]) -> None:
+def exec_set_char_assigned(context: dict[str, Any], target: str, ids: list[int]) -> None:
     """Assign characters to a member."""
     member = Member.objects.get(pk=target)
     context["event"].get_elements(Character).filter(pk__in=ids).update(assigned=member)
 
 
-def exec_set_char_status(request: HttpRequest, context: dict, target: str, ids: list[int]) -> None:
+def exec_set_char_status(context: dict, target: str, ids: list[int]) -> None:
     """Update character status for specified characters in the event."""
     context["event"].get_elements(Character).filter(pk__in=ids).update(status=target)
 
@@ -428,7 +427,6 @@ def handle_bulk_characters(request: HttpRequest, context: dict[str, Any]) -> Non
 
 
 def exec_set_quest_type(
-    request: HttpRequest,
     context: dict[str, Any],
     target: int,
     ids: list[int],
@@ -460,7 +458,6 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
 
 
 def exec_set_quest(
-    request: HttpRequest,
     context: dict[str, Any],
     target: int,
     ids: list[int],
@@ -488,7 +485,6 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
 
 
 def exec_set_ability_type(
-    request: HttpRequest,
     context: dict[str, Any],
     target: str | int,
     ids: list[int] | QuerySet,

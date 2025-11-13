@@ -757,7 +757,6 @@ def send_collection_activation_email(instance: AccountingItemCollection) -> None
 
     Args:
         instance: Collection instance that was saved
-        created: Boolean indicating if instance was created (True for new instances)
 
     Returns:
         None
