@@ -538,7 +538,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
         for badge in (
             context["member_public"].badges.filter(association_id=context["association_id"]).order_by("number")
         ):
-            context["badges"].append(badge.show(request.LANGUAGE_CODE))
+            context["badges"].append(badge.show())
 
     # Add LARP history if enabled in association configuration
     association_id = context["association_id"]
@@ -668,7 +668,7 @@ def badges(request: HttpRequest) -> HttpResponse:
 
     # Fetch and add badges to context, ordered by number
     for badge in Badge.objects.filter(association_id=context["association_id"]).order_by("number"):
-        context["badges"].append(badge.show(request.LANGUAGE_CODE))
+        context["badges"].append(badge.show())
 
     # Set page identifier and render template
     context["page"] = "badges"
