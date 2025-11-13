@@ -17,13 +17,16 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-from larpmanager.models.base import BaseModel
+if TYPE_CHECKING:
+    from larpmanager.models.base import BaseModel
 
 
 def clear_config_cache(config_element: Any) -> None:
@@ -43,7 +46,7 @@ def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
     return f"configs_{config_model_name}_{config_owner_id}"
 
 
-def get_configs(model_instance: Any) -> dict:
+def get_configs(model_instance: Any) -> dict[str, Any]:
     """Get configuration dictionary for a Django model instance."""
     # noinspection PyProtectedMember
     return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
@@ -138,16 +141,16 @@ def save_all_element_configs(obj, dct: dict[str, str]) -> None:
 
     """
     # Get the foreign key field name for linking configs to the parent object
-    fk_field = _get_fkey_config(obj)
+    fk_field: str = _get_fkey_config(obj)
 
     # Build a lookup dictionary of existing configurations by name
-    existing_configs = {config.name: config for config in obj.configs.all()}
-    incoming_names = set(dct.keys())
+    existing_configs: dict[str, Any] = {config.name: config for config in obj.configs.all()}
+    incoming_names: set[str] = set(dct.keys())
 
     # Update existing configs with new values if they differ
     for name, config in existing_configs.items():
         if name in dct:
-            new_value = dct[name]
+            new_value: str = dct[name]
             # Only save if the value has actually changed
             if config.value != new_value:
                 config.value = new_value
@@ -265,7 +268,15 @@ def get_element_config(element, config_name: str, default_value, *, bypass_cache
     return evaluate_config(element.aux_configs, config_name, default_value)
 
 
-def _get_cached_config(element_id, element_type, config_name, *, default_value=None, context=None, bypass_cache=False):
+def _get_cached_config(
+    element_id: int,
+    element_type: str,
+    config_name: str,
+    *,
+    default_value: any | None = None,
+    context: dict | None = None,
+    bypass_cache: bool = False,
+) -> any:
     """Get cached configuration for any element type."""
     cache_key = f"{element_type}_configs"
 
@@ -286,7 +297,14 @@ def _get_cached_config(element_id, element_type, config_name, *, default_value=N
     return evaluate_config(element_configs, config_name, default_value)
 
 
-def get_association_config(association_id, config_name, *, default_value=None, context=None, bypass_cache=False):
+def get_association_config(
+    association_id: int,
+    config_name: str,
+    *,
+    default_value: Any = None,
+    context: dict | None = None,
+    bypass_cache: bool = False,
+) -> Any:
     """Get configuration value for association."""
     return _get_cached_config(
         association_id,
@@ -303,7 +321,7 @@ def get_event_config(
     config_name: str,
     *,
     default_value: Any = None,
-    context: dict[str, Any] | None = None,
+    context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
     """Get event configuration value from cache or database."""

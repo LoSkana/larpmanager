@@ -34,7 +34,7 @@ from larpmanager.utils.auth import get_allowed_managed, is_lm_admin
 from larpmanager.utils.exceptions import UserPermissionError
 
 
-def cache_association_role_key(association_role_id) -> str:
+def cache_association_role_key(association_role_id: int) -> str:
     """Generate cache key for association role."""
     return f"association_role_{association_role_id}"
 
@@ -245,7 +245,7 @@ def cache_event_role_key(assignment_role_id: int) -> str:
     return f"event_role_{assignment_role_id}"
 
 
-def get_event_role(assignment_role) -> tuple[str, list[str]]:
+def get_event_role(assignment_role: EventRole) -> tuple[str, list[str]]:
     """Get event role name and available permission slugs.
 
     Args:

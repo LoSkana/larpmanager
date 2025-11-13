@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Callable
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -171,7 +171,9 @@ def refresh_character_related_caches(character: Character) -> None:
         refresh_event_prologue_relationships(prologue)
 
 
-def update_m2m_related_characters(instance, character_ids, action: str, update_func) -> None:
+def update_m2m_related_characters(
+    instance: Plot | Faction | SpeedLarp, character_ids: set[int], action: str, update_func: Callable
+) -> None:
     """Update character caches for M2M relationship changes.
 
     Args:

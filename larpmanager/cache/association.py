@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -35,7 +37,7 @@ def clear_association_cache(association_slug: str) -> None:
     cache.delete(key)
 
 
-def cache_association_key(association_slug) -> str:
+def cache_association_key(association_slug: str) -> str:
     """Generate cache key for association data."""
     return f"association_{association_slug}"
 
@@ -129,7 +131,7 @@ def init_cache_association(a_slug: str) -> dict | None:
     return association_dict
 
 
-def _init_skin(association, element_context: dict) -> None:
+def _init_skin(association: Association, element_context: dict) -> None:
     """Initialize skin-related properties in the element dictionary."""
     # Set CSS and domain configuration from association skin
     element_context["skin_css"] = association.skin.default_css

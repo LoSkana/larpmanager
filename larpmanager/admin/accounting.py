@@ -42,6 +42,8 @@ from larpmanager.models.accounting import (
     RecordAccounting,
     RefundRequest,
 )
+from larpmanager.models.event import Run
+from larpmanager.models.registration import Registration
 
 
 class InvoiceFilter(AutocompleteFilter):
@@ -56,7 +58,7 @@ class AccountingItemAdmin(DefModelAdmin):
     search_fields = ("search",)
 
     @admin.display(ordering="reg__run", description="Run")
-    def get_run(self, registration):
+    def get_run(self, registration: Registration) -> Run:
         """Get run from registration for admin display."""
         return registration.reg.run
 

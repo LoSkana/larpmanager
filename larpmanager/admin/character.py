@@ -24,6 +24,7 @@ from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
 from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
+from larpmanager.models.base import BaseModel
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 from larpmanager.models.form import (
     WritingAnswer,
@@ -68,7 +69,7 @@ class WritingQuestionAdmin(DefModelAdmin):
     list_filter = (EventFilter, "applicable")
 
     @staticmethod
-    def description_red(instance):
+    def description_red(instance: BaseModel) -> str:
         """Return reduced description for admin display."""
         return reduced(instance.description)
 
@@ -82,7 +83,7 @@ class WritingOptionAdmin(DefModelAdmin):
     list_filter = (WritingQuestionFilter, EventFilter)
 
     @staticmethod
-    def details_red(instance):
+    def details_red(instance: BaseModel) -> str:
         """Return reduced details for admin display."""
         return reduced(instance.description)
 
@@ -101,7 +102,7 @@ class WritingAnswerAdmin(DefModelAdmin):
     list_filter = (WritingQuestionFilter,)
 
     @staticmethod
-    def text_red(instance):
+    def text_red(instance: BaseModel) -> str:
         """Return reduced text for admin display."""
         return reduced(instance.text)
 

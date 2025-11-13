@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
 
 from django.core.cache import cache
 from django.db.models import Count
@@ -36,7 +37,7 @@ def clear_registration_counts_cache(run_id: int) -> None:
     cache.delete(cache_registration_counts_key(run_id))
 
 
-def cache_registration_counts_key(run_id) -> str:
+def cache_registration_counts_key(run_id: int) -> str:
     """Generate cache key for registration counts."""
     return f"registration_counts_{run_id}"
 
@@ -84,7 +85,7 @@ def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1)
     counter_dict[parameter_name] += increment_value
 
 
-def update_reg_counts(run) -> dict[str, int]:
+def update_reg_counts(run: Run) -> dict[str, int]:
     """Update registration counts cache for the given run.
 
     Calculates and returns registration statistics including counts by ticket tier,
@@ -173,7 +174,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
             registration_character_relation.reg.save()
 
 
-def search_player(character, json_output: dict, context: dict) -> None:
+def search_player(character: Character, json_output: dict[str, Any], context: dict[str, Any]) -> None:
     """Search for players in registration cache and populate results.
 
     This function attempts to find player registration data for a given character,

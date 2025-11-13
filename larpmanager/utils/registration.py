@@ -450,7 +450,7 @@ def registration_status(  # noqa: C901 - Complex registration status determinati
     if get_event_config(run.event_id, "pre_register_active", default_value=False, context=context):
         _status_preregister(run, member, context)
 
-    current_datetime = timezone.now().date()
+    current_datetime = timezone.now()
     # check registration open
     if "registration_open" in features:
         if not run.registration_open:
