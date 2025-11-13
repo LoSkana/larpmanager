@@ -682,8 +682,9 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
 
     # Aggregate total assigned quantities per item across all areas
     # Key: item_id, Value: sum of all quantities assigned to that item
+    # Only process items with "loaded" status for this event
     item_assignments: dict[int, int] = {}
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"]):
+    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"], loaded=True):
         if el.quantity:
             item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
 
@@ -768,8 +769,9 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
 
     # Aggregate total assigned quantities per item across all areas
     # Key: item_id, Value: sum of all quantities assigned to that item
+    # Only process items with "loaded" status for this event
     item_assignments: dict[int, int] = {}
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"]):
+    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"], loaded=True):
         if el.quantity:
             item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
 
