@@ -83,6 +83,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Payment fee constants
+MAX_PAYMENT_FEE_PERCENTAGE = 100  # Maximum allowed payment fee percentage
+
 
 def get_payment_fee(association_id: int, slug: str) -> float:
     """Get payment processing fee for a specific payment method.
@@ -303,18 +306,19 @@ def update_invoice_gross_fee(
     if payment_fee_percentage is not None:
         if get_association_config(association_id, "payment_fees_user", default_value=False):
             # Validate payment fee percentage to prevent division by zero
-            if payment_fee_percentage >= 100:
+            if payment_fee_percentage >= MAX_PAYMENT_FEE_PERCENTAGE:
                 logger.error(
-                    "Invalid payment fee percentage %.2f for association %d (must be < 100)",
+                    "Invalid payment fee percentage %.2f for association %d (must be < %d)",
                     payment_fee_percentage,
                     association_id,
+                    MAX_PAYMENT_FEE_PERCENTAGE,
                 )
                 payment_fee_percentage = 0  # Use 0% fee as fallback
             else:
-                amount = (amount * 100) / (100 - payment_fee_percentage)
+                amount = (amount * MAX_PAYMENT_FEE_PERCENTAGE) / (MAX_PAYMENT_FEE_PERCENTAGE - payment_fee_percentage)
                 amount = round_up_to_two_decimals(amount)
 
-        invoice.mc_fee = round_up_to_two_decimals(amount * payment_fee_percentage / 100.0)
+        invoice.mc_fee = round_up_to_two_decimals(amount * payment_fee_percentage / MAX_PAYMENT_FEE_PERCENTAGE)
 
     invoice.mc_gross = amount
     invoice.save()
