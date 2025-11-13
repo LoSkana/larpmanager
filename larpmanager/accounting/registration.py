@@ -222,6 +222,11 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
     if not start:
         return
 
+    # Validate quotas to prevent division by zero
+    if reg.quotas == 0:
+        logger.error("Registration %s has zero quotas, cannot calculate payment schedule", reg.pk)
+        return
+
     reg.days_event = get_time_diff_today(start)
     reg.tot_days = get_time_diff(start, reg.created.date())
 

@@ -378,6 +378,11 @@ def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
         )
 
         line_items = session.line_items
+        # Validate that line items exist
+        if not line_items.get("data") or len(line_items["data"]) == 0:
+            logger.error("Stripe session %s has no line items", session.id)
+            return False
+
         # assume only one
         first_line_item = line_items["data"][0]
         # logger.debug(f"Processing item: {first_line_item}")

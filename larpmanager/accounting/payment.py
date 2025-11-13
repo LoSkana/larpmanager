@@ -28,6 +28,7 @@ import re
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -99,7 +100,11 @@ def get_payment_fee(association_id: int, slug: str) -> float:
     if fee_key not in payment_details or not payment_details[fee_key]:
         return 0.0
 
-    return float(payment_details[fee_key].replace(",", "."))
+    fee_value = payment_details[fee_key]
+    # Handle both string and numeric fee values
+    if isinstance(fee_value, str):
+        return float(fee_value.replace(",", "."))
+    return float(fee_value)
 
 
 def unique_invoice_cod(length: int = 16) -> str:
@@ -297,8 +302,17 @@ def update_invoice_gross_fee(
 
     if payment_fee_percentage is not None:
         if get_association_config(association_id, "payment_fees_user", default_value=False):
-            amount = (amount * 100) / (100 - payment_fee_percentage)
-            amount = round_up_to_two_decimals(amount)
+            # Validate payment fee percentage to prevent division by zero
+            if payment_fee_percentage >= 100:
+                logger.error(
+                    "Invalid payment fee percentage %.2f for association %d (must be < 100)",
+                    payment_fee_percentage,
+                    association_id,
+                )
+                payment_fee_percentage = 0  # Use 0% fee as fallback
+            else:
+                amount = (amount * 100) / (100 - payment_fee_percentage)
+                amount = round_up_to_two_decimals(amount)
 
         invoice.mc_fee = round_up_to_two_decimals(amount * payment_fee_percentage / 100.0)
 
@@ -562,18 +576,21 @@ def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
     if not invoice.pk:
         return
 
-    try:
-        previous_invoice = PaymentInvoice.objects.get(pk=invoice.pk)
-    except Exception:
-        return
+    # Use transaction and lock to prevent race conditions during status change
+    with transaction.atomic():
+        try:
+            # Lock the invoice to prevent concurrent modifications
+            previous_invoice = PaymentInvoice.objects.select_for_update().get(pk=invoice.pk)
+        except ObjectDoesNotExist:
+            return
 
-    if previous_invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
-        return
+        if previous_invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+            return
 
-    if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
-        return
+        if invoice.status not in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+            return
 
-    payment_received(invoice)
+        payment_received(invoice)
 
 
 def process_refund_request_status_change(refund_request: HttpRequest) -> None:

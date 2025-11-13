@@ -71,6 +71,9 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
         member = reg.member
         membership = get_user_membership(member, association_id)
 
+        # Track if registration was modified
+        registration_modified = False
+
         # Apply tokens first if available
         if membership.tokens > 0:
             tokens_to_use = min(remaining, membership.tokens)
@@ -87,6 +90,7 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
                 association_id=association_id,
             )
             remaining -= tokens_to_use
+            registration_modified = True
 
         # Apply credits if still have remaining balance and credits available
         if membership.credit > 0:
@@ -103,6 +107,11 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
                 reg=reg,
                 association_id=association_id,
             )
+            registration_modified = True
+
+        # Save registration if it was modified
+        if registration_modified:
+            reg.save()
 
 
 def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, association_id: int) -> None:
