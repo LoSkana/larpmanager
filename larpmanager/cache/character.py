@@ -20,6 +20,7 @@
 
 import shutil
 from pathlib import Path
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -41,7 +42,7 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
 
 
-def delete_all_in_path(path) -> None:
+def delete_all_in_path(path: str) -> None:
     """Recursively delete all contents within a directory path.
 
     Args:
@@ -58,7 +59,7 @@ def delete_all_in_path(path) -> None:
                 shutil.rmtree(entry)
 
 
-def get_event_cache_all_key(event_run) -> str:
+def get_event_cache_all_key(event_run: Run) -> str:
     """Generate cache key for event data.
 
     Args:
@@ -260,11 +261,11 @@ def get_character_element_fields(
 def get_writing_element_fields(
     context: dict,
     feature_name: str,
-    applicable,
+    applicable: QuestionApplicable,
     element_id: int,
     *,
     only_visible: bool = True,
-) -> dict:
+) -> dict[str, dict]:
     """Get writing fields for a specific element with visibility filtering.
 
     Retrieves writing questions, options, and field values for a given element,
@@ -509,11 +510,11 @@ def reset_event_cache_all(run: Run) -> None:
     cache.delete(cache_key)
 
 
-def update_character_fields(instance, character_data: dict) -> None:
+def update_character_fields(instance: Character, character_data: dict) -> None:
     """Update character fields with event-specific data if character features are enabled.
 
     Args:
-        instance: Event instance with event_id attribute
+        instance: Character instance with event_id attribute
         character_data: Dictionary to update with character element fields
 
     """
@@ -623,7 +624,7 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
     res["chars"][instance.number].update(character_display_data)
 
 
-def update_event_cache_all_faction(instance, res: dict) -> None:
+def update_event_cache_all_faction(instance: Faction, res: dict[str, dict]) -> None:
     """Update or add faction data in the cache result dictionary."""
     faction_data = instance.show()
     if instance.number in res["factions"]:
@@ -693,7 +694,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         clear_event_cache_all_runs(char.event)
 
 
-def on_character_factions_m2m_changed(sender, **kwargs) -> None:
+def on_character_factions_m2m_changed(sender: type, **kwargs: Any) -> None:
     """Clear event cache when character factions change."""
     # Check if action is one that affects the relationship
     action = kwargs.pop("action", None)
@@ -782,19 +783,19 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
         clear_event_cache_all_runs(instance.event)
 
 
-def update_event_cache_all_runs(event, instance) -> None:
+def update_event_cache_all_runs(event: Event, instance: BaseModel) -> None:
     """Update event cache for all runs of the given event."""
     for run in event.runs.all():
         update_event_cache_all(run, instance)
 
 
-def reset_character_registration_cache(character) -> None:
+def reset_character_registration_cache(rcr: RegistrationCharacterRel) -> None:
     """Reset cache for character's registration and run."""
     # Save registration to trigger cache invalidation
-    if character.reg:
-        character.reg.save()
+    if rcr.reg:
+        rcr.reg.save()
     # Clear run-level cache and media
-    clear_run_cache_and_media(character.reg.run)
+    clear_run_cache_and_media(rcr.reg.run)
 
 
 def clear_event_cache_all_runs(event: Event) -> None:

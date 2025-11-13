@@ -42,12 +42,12 @@ class LarpManagerFaqAdmin(DefModelAdmin):
     autocomplete_fields = ["typ"]
 
     @staticmethod
-    def question_red(instance):
+    def question_red(instance: LarpManagerFaq) -> str:
         """Return truncated question for admin display."""
         return instance.question[:100]
 
     @staticmethod
-    def answer_red(instance):
+    def answer_red(instance: LarpManagerFaq) -> str:
         """Return truncated answer for admin display."""
         return instance.answer[:100]
 
@@ -63,7 +63,7 @@ class LarpManagerTutorial(DefModelAdmin):
     list_display = ("name", "slug", "order", "descr_red")
 
     @staticmethod
-    def descr_red(instance):
+    def descr_red(instance: LarpManagerTutorial) -> str:
         """Return truncated description for admin display."""
         return instance.descr[:100]
 
@@ -88,12 +88,12 @@ class LarpManagerDiscoverAdmin(DefModelAdmin):
     list_display = ("name", "order", "text_red", "text_len")
 
     @staticmethod
-    def text_red(instance):
+    def text_red(instance: LarpManagerDiscover) -> str:
         """Return truncated text for admin display."""
         return instance.text[:100]
 
     @staticmethod
-    def text_len(instance):
+    def text_len(instance: LarpManagerDiscover) -> int:
         """Return text length for admin display."""
         return len(instance.text)
 
@@ -108,7 +108,7 @@ class LarpManagerTicketAdmin(DefModelAdmin):
     list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb")
 
     @staticmethod
-    def content_red(instance):
+    def content_red(instance: LarpManagerTicket) -> str:
         """Return truncated content for admin display."""
         return instance.content[:100]
 

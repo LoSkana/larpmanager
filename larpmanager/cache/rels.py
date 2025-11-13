@@ -17,9 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Callable
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -170,7 +171,9 @@ def refresh_character_related_caches(character: Character) -> None:
         refresh_event_prologue_relationships(prologue)
 
 
-def update_m2m_related_characters(instance, character_ids, action: str, update_func) -> None:
+def update_m2m_related_characters(
+    instance: Plot | Faction | SpeedLarp, character_ids: set[int], action: str, update_func: Callable
+) -> None:
     """Update character caches for M2M relationship changes.
 
     Args:
@@ -946,7 +949,7 @@ def on_faction_characters_m2m_changed(
 
 def on_plot_characters_m2m_changed(
     sender: type,
-    instance: "Plot",
+    instance: Plot,
     action: str,
     pk_set: set[int] | None,
     **kwargs,
@@ -965,7 +968,7 @@ def on_plot_characters_m2m_changed(
 
 def on_speedlarp_characters_m2m_changed(
     sender: type,
-    instance: "SpeedLarp",
+    instance: SpeedLarp,
     action: str,
     pk_set: set[int] | None,
     **kwargs,

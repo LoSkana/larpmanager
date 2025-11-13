@@ -33,7 +33,7 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.registration import Registration
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
 
@@ -256,7 +256,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
     )
 
 
-def send_character_assignment_email(instance) -> None:
+def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     """Send character assignment email when registration-character relation is created.
 
     This function sends an email notification to a member when they are assigned

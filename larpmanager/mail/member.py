@@ -149,7 +149,7 @@ def on_member_badges_m2m_changed(sender, **kwargs) -> None:
     handle_badge_assignment_notifications(instance, pk_set)
 
 
-def notify_membership_approved(member: "Member", resp: str) -> None:
+def notify_membership_approved(member: Member, resp: str) -> None:
     """Send notification when membership application is approved.
 
     Args:

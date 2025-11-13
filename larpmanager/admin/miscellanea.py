@@ -17,10 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
-from django.http import HttpRequest
 from django.utils.html import format_html
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, RunFilter, reduced
@@ -48,6 +50,9 @@ from larpmanager.models.miscellanea import (
     WorkshopOption,
     WorkshopQuestion,
 )
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 @admin.register(Contact)
@@ -191,12 +196,12 @@ class PlayerRelationshipAdmin(DefModelAdmin):
     autocomplete_fields = ["target", "reg"]
 
     @staticmethod
-    def text_red(instance):
+    def text_red(instance: PlayerRelationship) -> str:
         """Return reduced text for admin display."""
         return reduced(instance.text)
 
     @staticmethod
-    def reg_red(instance) -> str:
+    def reg_red(instance: PlayerRelationship) -> str:
         """Return registration with run number for admin display."""
         return f"{instance.reg} ({instance.reg.run.number})"
 
@@ -209,7 +214,7 @@ class EmailAdmin(DefModelAdmin):
     search_fields = ["subj", "body", "recipient"]
 
     @staticmethod
-    def body_red(instance):
+    def body_red(instance: Email) -> str:
         """Return reduced body text for admin display."""
         return reduced(instance.body)
 
@@ -223,7 +228,7 @@ class OneTimeAccessTokenInline(admin.TabularInline):
     fields = ("note", "token", "used", "used_at", "used_by", "ip_address")
     can_delete = True
 
-    def has_add_permission(self, request, obj=None) -> bool:
+    def has_add_permission(self, request: object, obj: object | None = None) -> bool:
         """Allow adding new tokens."""
         return True
 
@@ -270,7 +275,7 @@ class OneTimeContentAdmin(DefModelAdmin):
         ),
     )
 
-    def file_display(self, obj):
+    def file_display(self, obj: OneTimeContent) -> str:
         """Display file name."""
         if obj.file:
             return obj.file.name.split("/")[-1]
@@ -278,7 +283,7 @@ class OneTimeContentAdmin(DefModelAdmin):
 
     file_display.short_description = "File"
 
-    def file_size_display(self, obj) -> str:
+    def file_size_display(self, obj: OneTimeContent) -> str:
         """Display human-readable file size."""
         if not obj.file_size:
             return "-"
@@ -292,7 +297,7 @@ class OneTimeContentAdmin(DefModelAdmin):
 
     file_size_display.short_description = "File size"
 
-    def token_count(self, obj):
+    def token_count(self, obj: OneTimeContent) -> str:
         """Display token statistics."""
         stats = obj.get_token_stats()
         return format_html(
@@ -350,7 +355,7 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
         ),
     )
 
-    def token_short(self, obj) -> str:
+    def token_short(self, obj: OneTimeAccessToken) -> str:
         """Display shortened token."""
         return f"{obj.token[:12]}..."
 

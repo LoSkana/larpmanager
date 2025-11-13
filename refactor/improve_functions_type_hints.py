@@ -82,7 +82,7 @@ def improve_function_with_claude_code(
             return False, None
 
     # Create optimized short prompt for Claude Code (saves tokens)
-    prompt = f"""Add type hints to this Python function (params + return type). Return ONLY the function code, no explanations or imports.
+    prompt = f"""Add type hints to this Python function (params + return type). Return ONLY the function code, no explanations or imports. Don't use quotes.
 
 ```python
 {function_source}
@@ -275,8 +275,9 @@ def replace_function_in_file(
         original_indentation = get_function_indentation(original_function)
         normalized_code = normalize_function_indentation(new_function_code, original_indentation)
 
-        # Replace the function
-        new_lines = lines[:start_line] + [normalized_code + "\n"] + lines[end_line:]
+        # Replace the function - split normalized code into lines
+        normalized_lines = [line + "\n" for line in normalized_code.split("\n")]
+        new_lines = lines[:start_line] + normalized_lines + lines[end_line:]
 
         # Write back to file
         with open(file_path, "w", encoding="utf-8") as f:
