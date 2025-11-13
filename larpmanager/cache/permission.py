@@ -20,16 +20,12 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.access import AssociationPermission, EventPermission
-
-if TYPE_CHECKING:
-    from larpmanager.models.association import Association
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +109,7 @@ def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict
     return cached_feature_data
 
 
-def clear_association_permission_cache(association: Association) -> None:
+def clear_association_permission_cache(association: AssociationPermission) -> None:
     """Clear the association permission cache for the given association."""
     cache.delete(association_permission_feature_key(association.slug))
 

@@ -20,13 +20,16 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest
+from django.utils import timezone
 
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
@@ -79,7 +82,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
-    cutoff_date = (datetime.now() - timedelta(days=10)).date()
+    cutoff_date = (timezone.now() - timedelta(days=10)).date()
     member = context["member"]
     association_id = context["association_id"]
     navigation_context = {}
@@ -154,7 +157,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "e": run.event.slug,
             "r": run.number,
             "s": str(run),
-            "k": (run.start if run.start else datetime.max.replace(tzinfo=timezone.utc).date()),
+            "k": (run.start if run.start else datetime.max.replace(tzinfo=dt_timezone.utc).date()),
         }
 
         # Categorize as open or past run

@@ -336,11 +336,11 @@ def character_form(
             with transaction.atomic():
                 character = form.save(commit=False)
                 # Update character with additional processing and context
-                success_message = _update_character(context, character, form, success_message, request)
+                success_message = _update_character(context, character, form, success_message)
                 character.save()
 
                 # Handle character assignment logic
-                check_assign_character(request, context)
+                check_assign_character(context)
 
             # Display success message to user
             if success_message:
@@ -373,7 +373,7 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
-def _update_character(context: dict, character: Character, form: Form, message: str, request: HttpRequest) -> str:
+def _update_character(context: dict, character: Character, form: Form, message: str) -> str:
     """Update character status based on form data and event configuration.
 
     Args:
@@ -381,7 +381,6 @@ def _update_character(context: dict, character: Character, form: Form, message: 
         character: Character instance to update
         form: Form instance with cleaned data
         message: Initial message string
-        request: HTTP request object containing user information
 
     Returns:
         Updated message string or original message if no changes
@@ -743,7 +742,7 @@ def character_abilities(request: HttpRequest, event_slug: str, num: int) -> Http
     }
 
     # Add undo functionality for recent ability changes
-    context["undo_abilities"] = get_undo_abilities(request, context, context["character"])
+    context["undo_abilities"] = get_undo_abilities(context, context["character"])
 
     # Render the abilities template with all context data
     return render(request, "larpmanager/event/character/abilities.html", context)
@@ -799,7 +798,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, num, id_del):
 
     """
     context = check_char_abilities(request, event_slug, num)
-    undo_abilities = get_undo_abilities(request, context, context["character"])
+    undo_abilities = get_undo_abilities(context, context["character"])
     if id_del not in undo_abilities:
         msg = "ability out of undo window"
         raise Http404(msg)
@@ -841,14 +840,13 @@ def _save_character_abilities(context, request: HttpRequest) -> None:
         context["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
-    get_undo_abilities(request, context, context["character"], selected_id)
+    get_undo_abilities(context, context["character"], selected_id)
 
 
-def get_undo_abilities(request: HttpRequest, context: dict, char, new_ability_id=None):
+def get_undo_abilities(context: dict, char, new_ability_id=None):
     """Get list of recently acquired abilities that can be undone.
 
     Args:
-        request: HTTP request object
         context: Context dictionary containing event data
         char: Character object
         new_ability_id: ID of newly acquired ability to track (optional)

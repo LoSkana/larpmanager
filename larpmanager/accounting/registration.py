@@ -24,12 +24,12 @@ from __future__ import annotations
 
 import logging
 import math
-from datetime import date, datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
@@ -63,6 +63,7 @@ from larpmanager.utils.tasks import background_auto
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from datetime import date
 
     from django.db.models import QuerySet
 
@@ -462,7 +463,7 @@ def cancel_reg(registration: Registration) -> None:
         bonus items, and resets event links
 
     """
-    registration.cancellation_date = datetime.now()
+    registration.cancellation_date = timezone.now()
     registration.save()
 
     # delete characters related
@@ -542,7 +543,7 @@ def get_date_surcharge(registration: Registration | None, event: Event) -> int:
         if ticket_tier in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
             return 0
 
-    reference_date = datetime.now().date()
+    reference_date = timezone.now().date()
     if registration and registration.created:
         reference_date = registration.created
 
@@ -633,7 +634,7 @@ def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:
         ticket: RegistrationTicket instance that was saved
 
     """
-    logger.debug("RegistrationTicket saved: %s at %s", ticket, datetime.now())
+    logger.debug("RegistrationTicket saved: %s at %s", ticket, timezone.now())
     check_reg_events(ticket.event)
 
 
@@ -644,7 +645,7 @@ def process_registration_option_post_save(option: RegistrationOption) -> None:
         option: RegistrationOption instance that was saved
 
     """
-    logger.debug("RegistrationOption saved: %s at %s", option, datetime.now())
+    logger.debug("RegistrationOption saved: %s at %s", option, timezone.now())
     check_reg_events(option.question.event)
 
 
@@ -771,7 +772,7 @@ def update_registration_accounting(reg: Registration) -> None:
     remaining_balance = reg.tot_iscr - reg.tot_payed
     if -max_rounding_tolerance < remaining_balance <= max_rounding_tolerance:
         if not reg.payment_date:
-            reg.payment_date = datetime.now()
+            reg.payment_date = timezone.now()
         return
 
     # Skip further processing if registration is cancelled

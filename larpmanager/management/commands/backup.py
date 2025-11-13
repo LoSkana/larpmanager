@@ -37,7 +37,7 @@ class Command(BaseCommand):
         """Add command line arguments for the backup command."""
         parser.add_argument("--path", type=str, required=True, help="Backup path")
 
-    def handle(self, *args: tuple, **options: dict) -> None:
+    def handle(self, *args: tuple, **options: dict) -> None:  # noqa: ARG002
         """Database backup command with compression.
 
         Creates compressed backup files for all active runs (non-DONE, non-CANCELLED)

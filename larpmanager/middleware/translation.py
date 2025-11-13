@@ -74,7 +74,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
         # Replace the thread-local active translation with our custom one
         trans_real._active.value = assoc_trans
 
-    def process_response(self, request, response):
+    def process_response(self, request, response):  # noqa: ARG002
         """Clean up translation overrides after processing the request.
 
         Args:

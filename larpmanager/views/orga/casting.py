@@ -168,7 +168,7 @@ def assign_casting(request: HttpRequest, context: dict, assignment_type: int) ->
 
         except Exception as exception:
             # Collect any errors that occur during processing
-            logger.exception("Error processing casting assignment: %s", exception)
+            logger.exception("Error processing casting assignment")
             error_messages += str(exception)
 
     # Display collected errors to user if any occurred
@@ -365,7 +365,6 @@ def check_casting_player(
 
 
 def get_casting_data(
-    request: HttpRequest,
     context: dict,
     casting_type: int,
     form: OrganizerCastingOptionsForm,
@@ -377,7 +376,6 @@ def get_casting_data(
     for client-side casting algorithm execution with priority weighting.
 
     Args:
-        request: HTTP request object for association context
         context: Context dictionary to populate with casting data
         casting_type: Casting type (0 for characters, other for quest traits)
         form: Form with filtering options (tickets, membership, payment status)
@@ -416,7 +414,7 @@ def get_casting_data(
         (available_choices, taken_characters, mirror_characters) = get_casting_choices_quests(context)
 
     # Load cached membership and casting preference data
-    cache_aim, cache_memberships, casting_submissions = _casting_prepare(context, request, casting_type)
+    cache_aim, cache_memberships, casting_submissions = _casting_prepare(context, casting_type)
 
     # Process each registration to build player preferences
     registrations_query = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
@@ -482,12 +480,11 @@ def get_casting_data(
         )
 
 
-def _casting_prepare(context: dict, request, typ: str) -> tuple[int, dict[int, str], dict[int, list]]:
+def _casting_prepare(context: dict, typ: str) -> tuple[int, dict[int, str], dict[int, list]]:
     """Prepare casting data for a specific run and type.
 
     Args:
         context: Context dictionary containing run information
-        request: HTTP request object with association data
         typ: Type of casting to filter
 
     Returns:
@@ -691,7 +688,7 @@ def orga_casting(
     casting_details(context, casting_type)
 
     # Get casting data and populate form with current selections
-    get_casting_data(request, context, casting_type, form)
+    get_casting_data(context, casting_type, form)
 
     # Add form to context and render template
     context["form"] = form

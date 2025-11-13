@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import logging
 from typing import Any
 
@@ -151,7 +153,6 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Collection,
-    Discount,
     PaymentInvoice,
     RefundRequest,
 )
@@ -250,6 +251,7 @@ from larpmanager.utils.writing import replace_character_names_before_save
 log = logging.getLogger(__name__)
 
 # ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
+# ruff: noqa: ARG001 Unused function argument
 
 
 # Generic signal handlers (no specific sender)
@@ -314,7 +316,9 @@ def post_save_accounting_item_collection(
 
 # AccountingItemDiscount signals
 @receiver(post_save, sender=AccountingItemDiscount)
-def post_save_discount_accounting_cache(sender: type, instance: Discount, created: bool, **kwargs) -> None:
+def post_save_discount_accounting_cache(
+    sender: type, instance: AccountingItemDiscount, created: bool, **kwargs
+) -> None:
     """Update accounting caches when a discount is saved."""
     # Process discount changes in accounting system
     process_accounting_discount_post_save(instance)
@@ -333,7 +337,9 @@ def post_delete_discount_accounting_cache(sender: type, instance: Any, **kwargs:
 
 # AccountingItemDonation signals
 @receiver(pre_save, sender=AccountingItemDonation)
-def pre_save_accounting_item_donation(sender: type, instance: AccountingItem, *args: Any, **kwargs: Any) -> None:
+def pre_save_accounting_item_donation(
+    sender: type, instance: AccountingItemDonation, *args: Any, **kwargs: Any
+) -> None:
     """Send confirmation email to donor."""
     send_donation_confirmation_email(instance)
 
@@ -367,7 +373,7 @@ def pre_save_accounting_item_membership(sender: type, instance: AccountingItem, 
 
 # AccountingItemOther signals
 @receiver(pre_save, sender=AccountingItemOther)
-def pre_save_accounting_item_other(sender: type, instance: AccountingItem, **kwargs: Any) -> None:
+def pre_save_accounting_item_other(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
     """Send token credit notification email when accounting item is saved."""
     send_token_credit_notification_email(instance)
 
@@ -405,7 +411,7 @@ def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayme
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_payment_accounting_cache(sender, instance: PaymentInvoice, created: bool, **kwargs) -> None:
+def post_save_payment_accounting_cache(sender, instance: AccountingItemPayment, created: bool, **kwargs) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
     # Update registration and member accounting cache if payment has associated registration
     if instance.reg and instance.reg.run:
@@ -413,7 +419,7 @@ def post_save_payment_accounting_cache(sender, instance: PaymentInvoice, created
         refresh_member_accounting_cache(instance.reg.run, instance.member_id)
 
     # Update token credits based on payment changes
-    update_token_credit_on_payment_save(instance, created)
+    update_token_credit_on_payment_save(instance, created=created)
 
     # Calculate and update VAT information for the payment
     calculate_payment_vat(instance)
@@ -1201,7 +1207,7 @@ def post_delete_quest_reset_rels(sender, instance, **kwargs) -> None:
 
 # QuestType signals
 @receiver(pre_save, sender=QuestType)
-def pre_save_questtype_reset(sender: type, instance: object, **kwargs: dict) -> None:
+def pre_save_questtype_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
     """Signal handler that updates cache when a quest type is modified."""
     on_quest_type_pre_save_update_cache(instance)
 
@@ -1496,7 +1502,7 @@ def post_delete_speedlarp_reset_rels(sender, instance: SpeedLarp, **kwargs: Any)
 
 # Trait signals
 @receiver(pre_save, sender=Trait)
-def pre_save_trait_reset(sender: type, instance: object, **kwargs: dict) -> None:
+def pre_save_trait_reset(sender: type, instance: Trait, **kwargs: dict) -> None:
     """Update cache before saving trait."""
     on_trait_pre_save_update_cache(instance)
 

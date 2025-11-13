@@ -28,13 +28,13 @@ from larpmanager.utils.profiler.signals import profiler_response_signal
 
 @receiver(profiler_response_signal)
 def handle_profiler_response(
-    sender: object,
+    sender: object,  # noqa: ARG001
     domain: str,
     path: str,
     method: str,
     view_func_name: str,
     duration: float,
-    **kwargs: object,
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle profiler signal to record individual execution data.
 

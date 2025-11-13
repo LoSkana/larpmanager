@@ -33,7 +33,7 @@ class DeepLLimitExceededError(Exception):
 class Command(BaseCommand):
     """Translate elements in .po file untraslated, or with fuzzy translation, using deepl."""
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args, **options) -> None:  # noqa: ARG002
         """Handle the translation command by initializing translator and processing translations."""
         # Initialize DeepL translator and display initial usage
         self.translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
@@ -141,7 +141,8 @@ class Command(BaseCommand):
 
             self.save_po(po_file, po_file_path)
 
-    def save_po(self, po: polib.POFile, po_path: str) -> None:
+    @staticmethod
+    def save_po(po: polib.POFile, po_path: str) -> None:
         """Save a PO file with sorted and deduplicated entries.
 
         Args:

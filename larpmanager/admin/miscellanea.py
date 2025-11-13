@@ -228,7 +228,7 @@ class OneTimeAccessTokenInline(admin.TabularInline):
     fields = ("note", "token", "used", "used_at", "used_by", "ip_address")
     can_delete = True
 
-    def has_add_permission(self, request: object, obj: object | None = None) -> bool:
+    def has_add_permission(self, request: object, obj: object | None = None) -> bool:  # noqa: ARG002
         """Allow adding new tokens."""
         return True
 
@@ -361,6 +361,6 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
 
     token_short.short_description = "Token"
 
-    def has_add_permission(self, request: HttpRequest) -> bool:
+    def has_add_permission(self, request: HttpRequest) -> bool:  # noqa: ARG002
         """Prevent adding tokens through admin - they should be generated via the content."""
         return True

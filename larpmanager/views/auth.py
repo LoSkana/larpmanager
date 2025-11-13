@@ -17,13 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordResetConfirmView
-from django.forms import Form
-from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
@@ -31,6 +32,10 @@ from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
+
+if TYPE_CHECKING:
+    from django.forms import Form
+    from django.http import HttpResponse
 
 
 class MyRegistrationView(RegistrationView):
@@ -76,7 +81,7 @@ class MyRegistrationView(RegistrationView):
 
         return new_user
 
-    def get_success_url(self, user: Member | None = None) -> str:
+    def get_success_url(self, user: Member | None = None) -> str:  # noqa: ARG002
         """Get URL to redirect to after successful registration.
 
         Determines the appropriate redirect URL after a user successfully completes

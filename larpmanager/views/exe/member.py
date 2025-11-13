@@ -20,13 +20,15 @@
 
 import csv
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime
+from datetime import timezone as dt_timezone
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Case, Count, IntegerField, Value, When
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.payment import unique_invoice_cod
@@ -114,13 +116,13 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     fees = set(
         AccountingItemMembership.objects.filter(
             association_id=context["association_id"],
-            year=datetime.now().year,
+            year=timezone.now().year,
         ).values_list("member_id", flat=True),
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
-        Run.objects.filter(event__association_id=context["association_id"], end__gt=datetime.today()).values_list(
+        Run.objects.filter(event__association_id=context["association_id"], end__gt=timezone.now().date()).values_list(
             "pk",
             "search",
         ),
@@ -636,8 +638,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
     split_two_names = 2
 
     # Set current year and calculate year start date
-    context["year"] = datetime.now(timezone.utc).year
-    start = datetime(context["year"], 1, 1, tzinfo=timezone.utc)
+    context["year"] = timezone.now().year
+    start = datetime(context["year"], 1, 1, tzinfo=dt_timezone.utc)
 
     # Build cache of member enrollment dates from accounting items
     cache = {}
@@ -741,7 +743,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
     )
 
     # Generate current date string for filename
-    context["date"] = datetime.today().strftime("%Y-%m-%d")
+    context["date"] = timezone.now().date().strftime("%Y-%m-%d")
 
     # Generate the PDF file using the context data
     fp = print_volunteer_registry(context)
@@ -770,7 +772,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_vote")
-    context["year"] = datetime.today().year
+    context["year"] = timezone.now().year
     association_id = context["association_id"]
 
     # Parse candidate IDs from association configuration
@@ -910,7 +912,7 @@ def exe_read_mail(request: HttpRequest, mail_id: str) -> HttpResponse:
     context["exe"] = True
 
     # Retrieve and add email data to context
-    context["email"] = get_mail(request, context, mail_id)
+    context["email"] = get_mail(context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 

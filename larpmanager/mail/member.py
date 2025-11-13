@@ -17,13 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from datetime import datetime
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
-from django.http import HttpRequest
+from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -34,6 +35,9 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member
 from larpmanager.utils.tasks import my_send_mail
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 def send_membership_confirm(request: HttpRequest, membership) -> None:
@@ -119,7 +123,7 @@ def handle_badge_assignment_notifications(instance, pk_set) -> None:
     for member_id in pk_set:
         member = Member.objects.get(pk=member_id)
         activate(member.language)
-        badge = instance.show(member.language)
+        badge = instance.show()
         subject = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
         body = _("You have been awarded an achievement") + "!" + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
@@ -128,7 +132,7 @@ def handle_badge_assignment_notifications(instance, pk_set) -> None:
         my_send_mail(subject, body, member, instance)
 
 
-def on_member_badges_m2m_changed(sender, **kwargs) -> None:
+def on_member_badges_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
     """Handle badge assignment notifications.
 
     Args:
@@ -180,7 +184,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     association_id = member.membership.association_id
     member_registrations = member.registrations.filter(
         run__event__association_id=association_id,
-        run__start__gte=datetime.now().date(),
+        run__start__gte=timezone.now().date(),
     )
     requires_membership_fee = False
     unpaid_registration_links = []
@@ -188,7 +192,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     # Process each registration for payment requirements
     for registration in member_registrations:
         features = get_event_features(registration.run.event_id)
-        run_starts_this_year = registration.run.start and registration.run.start.year == datetime.today().year
+        run_starts_this_year = registration.run.start and registration.run.start.year == timezone.now().year
 
         # Check if membership fee is required for this event
         if run_starts_this_year and "laog" not in features:

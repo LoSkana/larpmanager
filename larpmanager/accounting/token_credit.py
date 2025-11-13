@@ -234,7 +234,7 @@ def get_regs(association: Association) -> QuerySet[Registration]:
     return registrations_queryset
 
 
-def update_token_credit_on_payment_save(instance: AccountingItemPayment, created: bool) -> None:
+def update_token_credit_on_payment_save(instance: AccountingItemPayment, *, created: bool) -> None:
     """Handle accounting item payment post-save token/credit updates.
 
     Args:
@@ -375,7 +375,7 @@ def update_token_credit(
 
 def handle_tokes_credits(
     association_id: int,
-    features: list[str],
+    features: dict[str, int],
     registration: Registration,
     remaining_balance: Decimal,
 ) -> None:

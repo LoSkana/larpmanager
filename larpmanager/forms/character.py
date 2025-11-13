@@ -259,7 +259,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(faction_data[0])
 
-    def _save_multi(self, s: str, instance) -> None:
+    def _save_multi(self, field: str, instance) -> None:
         """Save multi-select field data for the given instance.
 
         Handles special processing for factions_list field by managing
@@ -267,7 +267,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         add/remove faction associations.
 
         Args:
-            s: The field name being processed
+            field: The field name being processed
             instance: The model instance being saved
 
         Returns:
@@ -275,12 +275,12 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         """
         # Skip plots field - it's handled separately in _save_plot()
-        if s == "plots":
+        if field == "plots":
             return None
 
         # Handle non-faction fields using parent implementation
-        if s != "factions_list":
-            return super()._save_multi(s, instance)
+        if field != "factions_list":
+            return super()._save_multi(field, instance)
 
         # Only process factions if the factions_list field is present in the form
         if "factions_list" not in self.cleaned_data:
@@ -633,7 +633,8 @@ class OrgaCharacterForm(CharacterForm):
             rel.text = value
             rel.save()
 
-    def _get_rel(self, character_id: int, instance, relationship_type: str) -> Relationship:
+    @staticmethod
+    def _get_rel(character_id: int, instance, relationship_type: str) -> Relationship:
         """Get or create a relationship between characters based on type.
 
         Args:
@@ -653,7 +654,7 @@ class OrgaCharacterForm(CharacterForm):
             (relationship, _created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)
         return relationship
 
-    def save(self, commit: bool = True) -> object:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> object:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and handle related data.
 
         Args:

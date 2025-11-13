@@ -26,7 +26,6 @@ import logging
 import os
 import random
 import string
-from datetime import datetime
 from html.parser import HTMLParser
 from io import StringIO
 from pathlib import Path
@@ -37,6 +36,7 @@ from cryptography.fernet import Fernet
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum
+from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -285,7 +285,7 @@ class UploadToPathAndRename:
                 bkp.mkdir(parents=True, exist_ok=True)
 
                 # Generate timestamped backup filename and move file
-                bkp_fn = f"{instance.pk}_{datetime.now()}.{ext}"
+                bkp_fn = f"{instance.pk}_{timezone.now()}.{ext}"
                 bkp_fn = bkp / bkp_fn
                 current_fn = Path(conf_settings.MEDIA_ROOT) / path / el
                 # logger.debug(f"Backup: {bkp}")

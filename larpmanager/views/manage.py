@@ -1,4 +1,5 @@
-from datetime import datetime
+from __future__ import annotations
+
 from typing import Any
 
 from django.contrib import messages
@@ -8,6 +9,7 @@ from django.forms import ChoiceField, Form
 from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_select2.forms import Select2Widget
 from slugify import slugify
@@ -95,7 +97,7 @@ def _get_registration_status_code(run):
         return "preregister", None
 
     # Check registration opening time
-    current_datetime = datetime.today()
+    current_datetime = timezone.now().date()
     if "registration_open" in features:
         if not run.registration_open:
             return "not_set", None
@@ -249,7 +251,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
     # Compile final context and check for intro driver
     _compile(request, context)
-    _check_intro_driver(request, context)
+    _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/exe.html", context)
 
@@ -305,7 +307,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     runs_to_conclude = Run.objects.filter(
         event__association_id=context["association_id"],
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
-        end__lt=datetime.today(),
+        end__lt=timezone.now().date(),
     ).values_list("search", flat=True)
 
     # Add action for past runs still open
@@ -368,7 +370,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         )
 
     # Process accounting-specific actions
-    _exe_accounting_actions(request, context, association_features)
+    _exe_accounting_actions(context, association_features)
 
     # Process user-specific actions
     _exe_users_actions(request, context, association_features)
@@ -412,11 +414,10 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) ->
             )
 
 
-def _exe_accounting_actions(request: HttpRequest, context: dict, enabled_features) -> None:
+def _exe_accounting_actions(context: dict, enabled_features) -> None:
     """Process accounting-related setup actions for executives.
 
     Args:
-        request: request instance
         context: Context dictionary to populate with priority actions
         enabled_features: Set of enabled features for the association
 
@@ -525,7 +526,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
             should_open_shortcuts = str(context["run"].id) != origin_id
         context["open_shortcuts"] = should_open_shortcuts
 
-    _check_intro_driver(request, context)
+    _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/orga.html", context)
 
@@ -1121,7 +1122,7 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: EventPerm
     return redirect("manage", event_slug=event_slug)
 
 
-def _check_intro_driver(request: HttpRequest, context: dict) -> None:
+def _check_intro_driver(context: dict) -> None:
     """Check if intro driver should be shown and update context."""
     member = context["member"]
     config_key = "intro_driver"
@@ -1135,7 +1136,10 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
 
 
 def orga_redirect(
-    request: HttpRequest, event_slug: str, run_number: int, path: str | None = None
+    request: HttpRequest,  # noqa: ARG001
+    event_slug: str,
+    run_number: int,
+    path: str | None = None,
 ) -> HttpResponsePermanentRedirect:
     """Optimized redirect from /slug/number/path to /slug-number/path format.
 
@@ -1205,7 +1209,8 @@ class WhatWouldYouLikeForm(Form):
         # Create the choice field with populated options and Select2 widget
         self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
 
-    def _add_guides_tutorials(self, content_choices: list[tuple[str, str]]) -> None:
+    @staticmethod
+    def _add_guides_tutorials(content_choices: list[tuple[str, str]]) -> None:
         """Add guide entries to content choices list."""
         # Add guides with formatted titles and preview snippets
         for guide_data in get_guides_cache():
@@ -1213,7 +1218,8 @@ class WhatWouldYouLikeForm(Form):
                 (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}"),
             )
 
-    def _add_tutorials_choices(self, choices: list[tuple[str, str]]) -> None:
+    @staticmethod
+    def _add_tutorials_choices(choices: list[tuple[str, str]]) -> None:
         """Add tutorial entries to choices list with formatted titles and previews."""
         # Add tutorials (including sections)
         for tutorial in get_tutorials_cache():
@@ -1230,7 +1236,8 @@ class WhatWouldYouLikeForm(Form):
                 (f"tutorial|{tutorial_choice_value}", f"{tutorial_title} [TUTORIAL] - {tutorial['content_preview']}"),
             )
 
-    def _add_features_choices(self, choices: list[tuple[str, str]]) -> None:
+    @staticmethod
+    def _add_features_choices(choices: list[tuple[str, str]]) -> None:
         """Add feature entries to tutorial choices list."""
         # Add features recap
         for feature in get_features_cache():

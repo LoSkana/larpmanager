@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import date, datetime
+from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -26,6 +26,7 @@ from django.db.models import Sum
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import (
@@ -265,7 +266,7 @@ def exe_donations_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_credits(request: HttpRequest) -> dict:
+def exe_credits(request: HttpRequest) -> HttpResponse:
     """Display and manage credits for an association.
 
     This view function handles the display of accounting credits for an organization,
@@ -275,8 +276,7 @@ def exe_credits(request: HttpRequest) -> dict:
         request: The HTTP request object containing user session and parameters.
 
     Returns:
-        dict: A dictionary containing the rendered HTML response with credits data
-              and pagination controls.
+        HttpResponse: The rendered HTML response with credits data and pagination controls.
 
     """
     # Check user permissions for credits management
@@ -677,7 +677,7 @@ def exe_collections_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_refunds(request: HttpRequest) -> dict:
+def exe_refunds(request: HttpRequest) -> HttpResponse:
     """Handle refund requests management for organization executives.
 
     This view displays a paginated list of refund requests with status information
@@ -687,7 +687,7 @@ def exe_refunds(request: HttpRequest) -> dict:
         request: HttpRequest object containing the user's request data
 
     Returns:
-        dict: Context dictionary for rendering the refunds template with pagination
+        HttpResponse: For rendering the refunds template with pagination
 
     Raises:
         PermissionDenied: If user lacks exe_refunds permission
@@ -873,7 +873,7 @@ def check_year(request: HttpRequest, context: dict) -> int:
     """
     # Get association and generate valid years range
     association = Association.objects.get(pk=context["association_id"])
-    context["years"] = list(range(datetime.today().year, association.created.year - 1, -1))
+    context["years"] = list(range(timezone.now().year, association.created.year - 1, -1))
 
     # Process POST data if present
     if request.POST:

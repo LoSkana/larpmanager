@@ -510,22 +510,22 @@ def reset_event_cache_all(run: Run) -> None:
     cache.delete(cache_key)
 
 
-def update_character_fields(instance: Character, character_data: dict) -> None:
+def update_character_fields(character: Character, character_data: dict) -> None:
     """Update character fields with event-specific data if character features are enabled.
 
     Args:
-        instance: Character instance with event_id attribute
+        character: Character instance with event_id attribute
         character_data: Dictionary to update with character element fields
 
     """
     # Check if character features are enabled for this event
-    enabled_features = get_event_features(instance.event_id)
+    enabled_features = get_event_features(character.event_id)
     if "character" not in enabled_features:
         return
 
     # Build context and update data with character element fields
-    template_context = {"features": enabled_features, "event": instance.event}
-    character_data.update(get_character_element_fields(template_context, instance.pk, only_visible=False))
+    template_context = {"features": enabled_features, "event": character.event}
+    character_data.update(get_character_element_fields(template_context, character.pk, only_visible=False))
 
 
 def update_event_cache_all(run: Run, instance: BaseModel) -> None:
@@ -694,7 +694,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         clear_event_cache_all_runs(char.event)
 
 
-def on_character_factions_m2m_changed(sender: type, **kwargs: Any) -> None:
+def on_character_factions_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
     """Clear event cache when character factions change."""
     # Check if action is one that affects the relationship
     action = kwargs.pop("action", None)

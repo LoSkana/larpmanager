@@ -17,9 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import json
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -39,7 +40,6 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
 )
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
     RegistrationOption,
@@ -59,6 +59,9 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.registration import get_reduced_available_count
+
+if TYPE_CHECKING:
+    from larpmanager.models.event import Event, Run
 
 
 class RegistrationForm(BaseRegistrationForm):
@@ -364,7 +367,7 @@ class RegistrationForm(BaseRegistrationForm):
         # Process each available ticket to create form choices and help text
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
-            ticket_display_name = ticket.get_form_text(run, currency_symbol=self.params["currency_symbol"])
+            ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
             ticket_choices.append((ticket.id, ticket_display_name))
 
             # Add ticket description to help text if available
@@ -427,7 +430,7 @@ class RegistrationForm(BaseRegistrationForm):
         event: Event,
         registration_counts: dict,
         run: Run,
-    ) -> list["RegistrationTicket"] | list:
+    ) -> list[RegistrationTicket] | list:
         """Get list of available tickets for registration.
 
         Returns tickets available for the current user based on their status,
@@ -909,16 +912,16 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         character_registrations = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
         return character_registrations.values_list("character_id", flat=True)
 
-    def _save_multi(self, s: str, instance) -> None:
+    def _save_multi(self, field: str, instance) -> None:
         """Save multi-character relationships for registration.
 
         Args:
-            s: Field name being saved
+            field: Field name being saved
             instance: Registration instance
 
         """
-        if s != "characters_new":
-            return super()._save_multi(s, instance)
+        if field != "characters_new":
+            return super()._save_multi(field, instance)
 
         # Get current and new character sets
         old = set(self.get_init_multi_character())

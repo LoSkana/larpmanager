@@ -27,7 +27,7 @@ from larpmanager.models.association import Association
 class Command(BaseCommand):
     help = "List of all assocs mails"
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args, **options) -> None:  # noqa: ARG002
         """Print email mappings for associations and admin."""
         # Get associations with valid email addresses, excluding demo accounts
         lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(demo=True)

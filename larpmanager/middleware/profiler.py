@@ -90,8 +90,8 @@ class ProfilerMiddleware:
         self,
         request: HttpRequest,
         view_func: Callable,
-        view_args: tuple,
-        view_kwargs: dict,
+        view_args: tuple,  # noqa: ARG002
+        view_kwargs: dict,  # noqa: ARG002
     ) -> None:
         """Store the view function name in the request for profiling."""
         request._profiler_func_name = self._extract_view_func_name(view_func)
