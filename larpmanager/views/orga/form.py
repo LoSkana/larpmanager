@@ -228,13 +228,12 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
         # For choice questions, ensure at least one option exists
-        elif context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-            if not RegistrationOption.objects.filter(question_id=context["saved"].id).exists():
-                edit_option = True
-                messages.warning(
-                    request,
-                    _("You must define at least one option before saving a single-choice or multiple-choice question"),
-                )
+        elif context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE] and not RegistrationOption.objects.filter(question_id=context["saved"].id).exists():
+            edit_option = True
+            messages.warning(
+                request,
+                _("You must define at least one option before saving a single-choice or multiple-choice question"),
+            )
 
         # Redirect to option creation if needed, otherwise back to form list
         if edit_option:

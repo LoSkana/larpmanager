@@ -17,7 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from datetime import timedelta
+from typing import TYPE_CHECKING
 
 import holidays
 from django.conf import settings as conf_settings
@@ -36,9 +39,11 @@ from larpmanager.models.association import Association, get_association_maintain
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
-from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.tasks import my_send_mail
+
+if TYPE_CHECKING:
+    from larpmanager.models.registration import Registration
 
 
 def check_holiday() -> bool:
@@ -151,33 +156,54 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
 
         # Process each member being added to the role
         for mid in pk_set:
-            mb = Member.objects.get(pk=mid)
-            # Trigger member association join process
-            mb.join(instance.association)
-            # Invalidate cached permissions for this member
-            reset_event_links(mb.id, instance.association_id)
+            _add_member_association_role(exes, instance, mid)
 
-            # Send role approval notification to the member
-            # Set language context for proper localization
-            activate(mb.language)
-            subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
-            url = get_url("manage", instance.association)
-            body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
-            my_send_mail(subj, body, mb, instance.association)
 
-            # Notify existing executives about the new role assignment
-            # Skip notification to the member who just received the role
-            for m in exes:
-                if m.pk == int(mid):
-                    continue
-                # Set language context for each executive
-                activate(m.language)
-                subj = hdr(instance.association) + _("Approval %(user)s as %(role)s") % {
-                    "user": mb,
-                    "role": instance.name,
-                }
-                body = _("The user has been assigned the specified role") + "."
-                my_send_mail(subj, body, m, instance.association)
+def _add_member_association_role(exes: list[Member], instance: AssociationRole, mid: int | str) -> None:
+    """Add a member to an association role and send notifications.
+
+    Processes a new association role assignment by adding the member to the association,
+    invalidating cached permissions, and sending notification emails to both the new
+    member and existing executives.
+
+    Args:
+        exes: List of executive members who should be notified of the role assignment
+        instance: AssociationRole instance representing the role being assigned
+        mid: Member ID (int or str) of the member receiving the role
+
+    Side Effects:
+        - Adds member to association via join() method
+        - Invalidates cached permissions for the member
+        - Sends email notification to the new role holder
+        - Sends email notifications to all other executives about the assignment
+
+    """
+    mb = Member.objects.get(pk=mid)
+    # Trigger member association join process
+    mb.join(instance.association)
+    # Invalidate cached permissions for this member
+    reset_event_links(mb.id, instance.association_id)
+    # Send role approval notification to the member
+    # Set language context for proper localization
+    activate(mb.language)
+    subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
+    url = get_url("manage", instance.association)
+    body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
+    my_send_mail(subj, body, mb, instance.association)
+
+    # Notify existing executives about the new role assignment
+    # Skip notification to the member who just received the role
+    for m in exes:
+        if m.pk == int(mid):
+            continue
+        # Set language context for each executive
+        activate(m.language)
+        subj = hdr(instance.association) + _("Approval %(user)s as %(role)s") % {
+            "user": mb,
+            "role": instance.name,
+        }
+        body = _("The user has been assigned the specified role") + "."
+        my_send_mail(subj, body, m, instance.association)
 
 
 def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:  # noqa: ARG001

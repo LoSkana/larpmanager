@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -267,12 +267,12 @@ class ExeAssociationRoleForm(MyForm):
 
     page_info = _("Manage association roles")
 
-    load_templates = ["share"]
+    load_templates: ClassVar[list] = ["share"]
 
     class Meta:
         model = AssociationRole
         fields = ("name", "members", "association")
-        widgets = {"members": AssociationMemberS2WidgetMulti}
+        widgets: ClassVar[dict] = {"members": AssociationMemberS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
@@ -331,11 +331,11 @@ class ExeFeatureForm(FeatureForm):
         "Manage features activated for the organization and all its events (click on a feature to show its description)",
     )
 
-    load_js = ["feature-search"]
+    load_js: ClassVar[list] = ["feature-search"]
 
     class Meta:
         model = Association
-        fields = []
+        fields: ClassVar[list] = []
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and its features configuration."""
@@ -361,9 +361,9 @@ class ExeConfigForm(ConfigForm):
 
     section_replace = True
 
-    load_js = ["config-search"]
+    load_js: ClassVar[list] = ["config-search"]
 
-    istr = []
+    istr: ClassVar[list] = []
 
     class Meta:
         model = Association
@@ -858,7 +858,7 @@ class FirstAssociationForm(MyForm):
     class Meta:
         model = Association
         fields = ("name", "profile", "slug")
-        widgets = {
+        widgets: ClassVar[dict] = {
             "slug": SlugInput,
         }
 
@@ -897,7 +897,7 @@ class ExeQuickSetupForm(QuickSetupForm):
 
     class Meta:
         model = Association
-        fields = []
+        fields: ClassVar[list] = []
 
     def __init__(self, *args, **kwargs) -> None:
         """Initialize association setup form with feature configuration options.

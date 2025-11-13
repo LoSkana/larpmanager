@@ -776,10 +776,11 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     association_id = context["association_id"]
 
     # Parse candidate IDs from association configuration
-    idxs = []
-    for el in get_association_config(association_id, "vote_candidates", default_value="").split(","):
-        if el.strip():
-            idxs.append(el.strip())
+    idxs = [
+        el.strip()
+        for el in get_association_config(association_id, "vote_candidates", default_value="").split(",")
+        if el.strip()
+    ]
 
     # Fetch candidate member objects and build candidates dictionary
     context["candidates"] = {}

@@ -100,7 +100,7 @@ def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_stat
         api_key.usage_count += 1
         api_key.save()
 
-    except Exception as err:
+    except Exception as err:  # noqa: BLE001 - Logging must never disrupt API functionality
         # Log errors to admin notification system but don't break API functionality
         # This prevents logging failures from affecting the actual API response
         notify_admins("log_api_access", "Failed to log API access", err)
@@ -138,7 +138,7 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
 
 
 @require_GET
-def published_events(request: HttpRequest) -> JsonResponse:
+def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901 - Complex event data aggregation for API
     """Get upcoming runs from associations with publisher feature enabled.
 
     This endpoint returns a list of upcoming LARP events from associations that have
@@ -238,7 +238,7 @@ def published_events(request: HttpRequest) -> JsonResponse:
 
         return JsonResponse(response_data)
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - Top-level API handler must catch all errors
         # Notify administrators of API errors
         notify_admins("error api publisher", "", e)
 

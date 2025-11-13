@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 import logging
 import re
 
@@ -43,7 +45,7 @@ class QuestType(Writing):
         return super().show(run)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="qtype_evt_act"),
         ]
@@ -59,11 +61,11 @@ class Quest(Writing):
     )
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="quest_evt_act"),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_quest_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -107,11 +109,11 @@ class Trait(Writing):
     traits = models.ManyToManyField("self", symmetrical=False, blank=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="trait_evt_act"),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_trait_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -236,7 +238,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
             traits.append(trait)
-        except Exception as error:
+        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
             logger.warning("Error getting trait %s: %s", trait_number, error)
 
     # Extract all @number patterns for validation (not added to return list)
@@ -246,7 +248,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     for trait_number in set(trait_numbers_to_validate):
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
-        except Exception as error:
+        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
             logger.warning("Error getting trait %s in assignment: %s", trait_number, error)
 
     return traits

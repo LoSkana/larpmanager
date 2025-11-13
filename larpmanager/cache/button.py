@@ -54,14 +54,11 @@ def update_event_button(event_id: int) -> list[tuple[str, str, str]]:
         Updates the cache with current button data using a 1-day timeout.
 
     """
-    buttons_data = []
-
-    # Query event buttons ordered by number field
-    for button in EventButton.objects.filter(event_id=event_id).order_by("number"):
-        # Extract button data as tuple
-        buttons_data.append((button.name, button.tooltip, button.link))
-
-    return buttons_data
+    # Query event buttons ordered by number field and extract button data as tuples
+    return [
+        (button.name, button.tooltip, button.link)
+        for button in EventButton.objects.filter(event_id=event_id).order_by("number")
+    ]
 
 
 def get_event_button_cache(event_id: int) -> list[tuple[str, str, str]]:

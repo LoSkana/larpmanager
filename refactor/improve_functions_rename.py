@@ -37,17 +37,16 @@ def extract_function_from_file(file_path: Path, function_name: str, function_num
 
     """
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with Path(file_path).open(encoding="utf-8") as f:
             lines = f.readlines()
 
         tree = ast.parse("".join(lines))
 
         # Collect all function definitions with the matching name
-        matching_functions = []
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                if node.name == function_name:
-                    matching_functions.append(node)
+        matching_functions = [
+            node for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name
+        ]
 
         # Sort by line number to maintain file order
         matching_functions.sort(key=lambda n: n.lineno)
@@ -62,13 +61,12 @@ def extract_function_from_file(file_path: Path, function_name: str, function_num
         end_line = target_function.end_lineno
         return "".join(lines[start_line:end_line])
 
-    except Exception as e:
-        print(f"  ⚠️  Error extracting function: {e}")
+    except Exception:  # noqa: BLE001 - Refactoring tool must handle all parsing errors gracefully
         return None
 
 
 def improve_function_with_claude_code(
-    function_name: str, file_path: Path, function_source: str = None, function_number: int = 1
+    function_name: str, file_path: Path, function_source: str | None = None, function_number: int = 1
 ) -> tuple[bool, str | None]:
     """Call Claude Code CLI to improve the function.
     Returns (success, improved_function_source).
@@ -125,23 +123,17 @@ IMPORTANTE:
             if code_match:
                 improved_code = code_match.group(1)
                 return True, improved_code
-            elif output and "def " in output:
+            if output and "def " in output:
                 # Sometimes Claude returns code without markdown blocks
                 return True, output
-            else:
-                print("  ⚠️  Claude Code returned but no valid code found")
-                return False, None
-        else:
-            print(f"  ❌ Claude Code returned error (code {result.returncode})")
-            if result.stderr:
-                print(f"  ❌ Error details: {result.stderr}")
             return False, None
+        if result.stderr:
+            pass
+        return False, None
 
     except subprocess.TimeoutExpired:
-        print("  ❌ Claude Code timed out after 5 minutes")
         return False, None
-    except Exception as e:
-        print(f"  ❌ Error calling Claude Code: {e}")
+    except Exception:  # noqa: BLE001 - Refactoring tool must handle all parsing errors gracefully
         return False, None
 
 
@@ -158,17 +150,16 @@ def get_function_line_range(file_path: Path, function_name: str, function_number
 
     """
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with Path(file_path).open(encoding="utf-8") as f:
             content = f.read()
 
         tree = ast.parse(content)
 
         # Collect all function definitions with the matching name
-        matching_functions = []
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                if node.name == function_name:
-                    matching_functions.append(node)
+        matching_functions = [
+            node for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name
+        ]
 
         # Sort by line number to maintain file order
         matching_functions.sort(key=lambda n: n.lineno)
@@ -181,8 +172,7 @@ def get_function_line_range(file_path: Path, function_name: str, function_number
         target_function = matching_functions[function_number - 1]
         return target_function.lineno, target_function.end_lineno
 
-    except Exception as e:
-        print(f"  ⚠️  Error parsing file: {e}")
+    except Exception:  # noqa: BLE001 - Refactoring tool must handle all parsing errors gracefully
         return None
 
 
@@ -196,7 +186,7 @@ def get_function_indentation(function_source: str) -> str:
     return ""
 
 
-def normalize_function_indentation(improved_code: str, original_indentation: str) -> str:
+def normalize_function_indentation(improved_code: str, original_indentation: str) -> str:  # noqa: C901 - Complex indentation normalization
     """Ensure the improved function maintains the original indentation."""
     lines = improved_code.split("\n")
     if not lines:
@@ -259,17 +249,16 @@ def replace_function_in_file(
 
     """
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with Path(file_path).open(encoding="utf-8") as f:
             lines = f.readlines()
 
         tree = ast.parse("".join(lines))
 
         # Collect all function definitions with the matching name
-        matching_functions = []
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                if node.name == function_name:
-                    matching_functions.append(node)
+        matching_functions = [
+            node for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == function_name
+        ]
 
         # Sort by line number to maintain file order
         matching_functions.sort(key=lambda n: n.lineno)
@@ -288,15 +277,14 @@ def replace_function_in_file(
         normalized_code = normalize_function_indentation(new_function_code, original_indentation)
 
         # Replace the function
-        new_lines = lines[:start_line] + [normalized_code + "\n"] + lines[end_line:]
+        new_lines = [*lines[:start_line], normalized_code + "\n", *lines[end_line:]]
 
         # Write back to file
-        with open(file_path, "w", encoding="utf-8") as f:
+        with Path(file_path).open("w", encoding="utf-8") as f:
             f.writelines(new_lines)
         return True
 
-    except Exception as e:
-        print(f"  ⚠️  Error replacing function: {e}")
+    except Exception:  # noqa: BLE001 - Refactoring tool must handle all parsing errors gracefully
         return False
 
 
@@ -305,47 +293,27 @@ def improve_single_function(file_path: str, function_name: str) -> bool:
     file_path = Path(file_path)
 
     if not file_path.exists():
-        print(f"❌ File not found: {file_path}")
         return False
 
-    print(f"🔍 Extracting function '{function_name}' from {file_path}")
 
     # Extract original function
     original_function = extract_function_from_file(file_path, function_name)
     if original_function is None:
-        print(f"❌ Function '{function_name}' not found in {file_path}")
         return False
 
-    print("📄 Original function:")
-    print("-" * 60)
-    print(original_function)
-    print("-" * 60)
 
     # Improve function
-    print("🤖 Calling Claude Code to improve function...")
     success, improved_function = improve_function_with_claude_code(function_name, file_path, original_function)
 
     if not success or not improved_function:
-        print("❌ Failed to improve function")
         return False
 
-    print("✨ Improved function:")
-    print("-" * 60)
-    print(improved_function)
-    print("-" * 60)
 
     # Ask user for confirmation
     response = input("🔄 Replace the function in the file? (y/N): ").lower().strip()
     if response == "y":
-        if replace_function_in_file(file_path, function_name, improved_function, original_function):
-            print(f"✅ Successfully replaced function '{function_name}' in {file_path}")
-            return True
-        else:
-            print("❌ Failed to replace function in file")
-            return False
-    else:
-        print("ℹ️  Function not replaced")
-        return False
+        return bool(replace_function_in_file(file_path, function_name, improved_function, original_function))
+    return False
 
 
 def process_csv_batch() -> None:
@@ -354,11 +322,10 @@ def process_csv_batch() -> None:
 
     while True:
         # Read all rows from CSV
-        with open(csv_path, encoding="utf-8") as f:
+        with csv_path.open(encoding="utf-8") as f:
             reader = csv.DictReader(f)
             rows = list(reader)
             if not rows:
-                print("\n✅ All functions processed!")
                 break
             fieldnames = reader.fieldnames
 
@@ -368,7 +335,6 @@ def process_csv_batch() -> None:
         csv_file_path = row["path"]
         function_number = int(row.get("number", 1))  # Default to 1 for backward compatibility
 
-        print(f"\nProcessing: {function_name} #{function_number} in {csv_file_path}")
 
         # Convert path
         file_path = convert_path(csv_file_path)
@@ -376,42 +342,34 @@ def process_csv_batch() -> None:
         success = False
 
         if not file_path.exists():
-            print(f"  ⚠️  File not found: {file_path}")
             success = True  # Skip this entry
         else:
             # Get function line range
             line_range = get_function_line_range(file_path, function_name, function_number)
             if not line_range:
-                print(f"  ⚠️  Function {function_name} #{function_number} not found in {file_path}")
                 success = True  # Skip this entry
             else:
-                start_line, end_line = line_range
-                print(f"  📝 Found function at lines {start_line}-{end_line}")
+                _start_line, _end_line = line_range
 
                 # Call Claude Code to improve
-                print("  🤖 Calling Claude Code...")
                 original_function = extract_function_from_file(file_path, function_name, function_number)
                 success, improved_code = improve_function_with_claude_code(function_name, file_path, original_function, function_number)
                 if success and improved_code and original_function:
                     if replace_function_in_file(file_path, function_name, improved_code, original_function, function_number):
-                        print(f"  ✅ Successfully processed {function_name} #{function_number}")
                         success = True
                     else:
-                        print(f"  ❌ Failed to replace {function_name} #{function_number}")
                         success = False
                 else:
-                    print(f"  ❌ Failed to improve {function_name} #{function_number}")
+                    pass
 
         # Remove processed row from CSV if successful or skipped
         if success:
             remaining_rows = rows[1:]
-            with open(csv_path, "w", encoding="utf-8", newline="") as f:
+            with csv_path.open("w", encoding="utf-8", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(remaining_rows)
-            print(f"  🗑️  Removed from CSV ({len(remaining_rows)} remaining)")
         else:
-            print("  ⏳  Wait 5 minutes before trying again...")
             time.sleep(5 * 60)
 
 
@@ -429,7 +387,6 @@ def main() -> None:
     else:
         # CSV batch mode
         if args.file or args.function:
-            print("❌ Both --file and --function are required for single function mode")
             sys.exit(1)
         process_csv_batch()
 

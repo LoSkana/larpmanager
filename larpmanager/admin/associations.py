@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.contrib import admin
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin
@@ -33,24 +35,24 @@ from larpmanager.models.association import (
 @admin.register(Association)
 class AssociationAdmin(DefModelAdmin):
     list_display = ("name", "slug", "created")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
 
-    autocomplete_fields = ["payment_methods", "features", "maintainers"]
+    autocomplete_fields: ClassVar[list] = ["payment_methods", "features", "maintainers"]
 
 
 @admin.register(AssociationConfig)
 class AssociationConfigAdmin(DefModelAdmin):
     list_display = ("association", "name", "value")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
     list_filter = (AssociationFilter,)
-    autocomplete_fields = ["association"]
+    autocomplete_fields: ClassVar[list] = ["association"]
 
 
 @admin.register(AssociationText)
 class AssociationTextAdmin(DefModelAdmin):
-    list_display = ("association", "typ", "language", "default")
+    list_display: ClassVar[tuple] = ("association", "typ", "language", "default")
     list_filter = (AssociationFilter, "typ", "language")
-    autocomplete_fields = ["association"]
+    autocomplete_fields: ClassVar[list] = ["association"]
 
 
 @admin.register(AssociationTranslation)
@@ -64,9 +66,9 @@ class AssociationTranslationAdmin(DefModelAdmin):
     """
 
     list_display = ("association", "language", "msgid_preview", "msgstr_preview", "active")
-    list_filter = (AssociationFilter, "language", "active")
+    list_filter: ClassVar[tuple] = (AssociationFilter, "language", "active")
     search_fields = ("msgid", "msgstr")
-    autocomplete_fields = ["association"]
+    autocomplete_fields: ClassVar[list] = ["association"]
     list_editable = ("active",)
 
     def msgid_preview(self, obj: AssociationTranslation) -> str:
@@ -103,8 +105,8 @@ class AssociationTranslationAdmin(DefModelAdmin):
 @admin.register(AssociationSkin)
 class AssociationSkinAdmin(DefModelAdmin):
     list_display = ("name",)
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
 
-    autocomplete_fields = [
+    autocomplete_fields: ClassVar[list] = [
         "default_features",
     ]

@@ -56,7 +56,7 @@ def save_log(member: Member, cls: type, element: Any, *, to_delete: bool = False
     Log.objects.create(member=member, cls=cls.__name__, eid=element.id, dl=to_delete, dct=element.as_dict())
 
 
-def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:
+def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:  # noqa: C901 - Complex versioning logic with multiple model types
     """Manage versioning of text content.
 
     Creates and saves new versions of editable text elements with author tracking,
@@ -332,7 +332,7 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
     context["name"] = str(element)
 
 
-def backend_edit(
+def backend_edit(  # noqa: C901 - Complex editing logic with form validation and POST processing
     request: HttpRequest,
     context: dict[str, Any],
     form_type: type[ModelForm],
@@ -672,7 +672,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
     widget.set_event(context["event"])
 
     # Set up context variables for template rendering
-    context["finder_typ"] = model_type._meta.model_name
+    context["finder_typ"] = model_type._meta.model_name  # noqa: SLF001  # Django model metadata
     context["char_finder"] = widget.render(name="char_finder", value="")
     context["char_finder_media"] = widget.media
 

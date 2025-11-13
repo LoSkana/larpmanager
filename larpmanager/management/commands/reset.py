@@ -63,7 +63,7 @@ class Command(BaseCommand):
             with connection.cursor() as cursor:
                 # Truncate all tables with CASCADE to handle foreign keys
                 for model in apps.get_models():
-                    table = model._meta.db_table
+                    table = model._meta.db_table  # noqa: SLF001  # Django model metadata
                     cursor.execute(f'TRUNCATE TABLE "{table}" RESTART IDENTITY CASCADE')
 
         # Handle SQLite database reset
@@ -74,7 +74,7 @@ class Command(BaseCommand):
 
                 # Delete all data and reset auto-increment sequences
                 for model in apps.get_models():
-                    table = model._meta.db_table
+                    table = model._meta.db_table  # noqa: SLF001  # Django model metadata
                     cursor.execute(f'DELETE FROM "{table}";')  # noqa: S608
                     cursor.execute(f'DELETE FROM sqlite_sequence WHERE name="{table}";')  # noqa: S608
 

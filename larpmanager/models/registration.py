@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q
@@ -199,8 +199,8 @@ class RegistrationQuota(BaseModel):
     surcharge = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ["-created"]
-        constraints = [
+        ordering: ClassVar[list] = ["-created"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_registraion_quota_with_optional",
@@ -246,8 +246,8 @@ class RegistrationInstallment(BaseModel):
     )
 
     class Meta:
-        ordering = ["-created"]
-        constraints = [
+        ordering: ClassVar[list] = ["-created"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_registration_installment_with_optional",
@@ -273,8 +273,8 @@ class RegistrationSurcharge(BaseModel):
     date = models.DateField(help_text=_("Date from when the surcharge is applied"))
 
     class Meta:
-        ordering = ["-created"]
-        constraints = [
+        ordering: ClassVar[list] = ["-created"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_registration_surcharge_with_optional",
@@ -368,7 +368,7 @@ class Registration(BaseModel):
         return self.member.display_profile()
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["run", "member", "cancellation_date"]),
             models.Index(
                 fields=["member", "run", "cancellation_date", "redeem_code"],
@@ -390,9 +390,9 @@ class Registration(BaseModel):
             ),
         ]
 
-        ordering = ["-created"]
+        ordering: ClassVar[list] = ["-created"]
 
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["run", "member", "cancellation_date", "redeem_code", "deleted"],
                 name="unique_registraion_with_optional",

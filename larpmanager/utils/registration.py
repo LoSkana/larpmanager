@@ -212,7 +212,7 @@ def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
     return None
 
 
-def registration_status_signed(
+def registration_status_signed(  # noqa: C901 - Complex registration status logic with feature checks
     run: Run,
     reg: Registration,
     member: Member,
@@ -282,10 +282,9 @@ def registration_status_signed(
             return
 
     # Handle payment feature processing and related status updates
-    if "payment" in features:
-        # Process payment status and return if payment handling is complete
-        if _status_payment(registration_text, run, context):
-            return
+    # Process payment status and return if payment handling is complete
+    if "payment" in features and _status_payment(registration_text, run, context):
+        return
 
     # Check for incomplete user profile and prompt completion
     if not user_membership.compiled:
@@ -400,7 +399,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
     return False
 
 
-def registration_status(
+def registration_status(  # noqa: C901 - Complex registration status determination with event rules
     run: Run,
     member: Member,
     context: dict,
@@ -907,7 +906,6 @@ def get_reduced_available_count(run) -> int:
         ticket__tier=TicketTier.PATRON,
         cancellation_date__isnull=True,
     ).count()
-    # silv = Registration.objects.filter(run=run, ticket__tier=RegistrationTicket.SILVER).count()
 
     # Calculate available reduced slots: floor(patron_count * ratio / 10) - used_reduced
     return (

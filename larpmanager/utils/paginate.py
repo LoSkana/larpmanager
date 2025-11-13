@@ -70,7 +70,7 @@ def paginate(
     model_queryset = pagination_model.objects
     # Extract model name for table identification
     # noinspection PyProtectedMember
-    model_name = pagination_model._meta.model_name
+    model_name = pagination_model._meta.model_name  # noqa: SLF001  # Django model metadata
 
     # Handle initial page load (GET request)
     if request.method != "POST":
@@ -138,7 +138,7 @@ def _get_elements_query(cls, context: dict, request, model_type, *, is_executive
     if not is_executive and "run" in context:
         # Check which relation field exists on the model to filter by run/event
         # noinspection PyProtectedMember
-        field_names = [f.name for f in model_type._meta.get_fields()]
+        field_names = [f.name for f in model_type._meta.get_fields()]  # noqa: SLF001  # Django model metadata
         if "run" in field_names:
             query_elements = query_elements.filter(run=context["run"])
         elif "reg" in field_names:
@@ -148,7 +148,7 @@ def _get_elements_query(cls, context: dict, request, model_type, *, is_executive
 
     # Filter out hidden elements if the model supports it
     # noinspection PyProtectedMember
-    if "hide" in [f.name for f in model_type._meta.get_fields()]:
+    if "hide" in [f.name for f in model_type._meta.get_fields()]:  # noqa: SLF001  # Django model metadata
         query_elements = query_elements.filter(hide=False)
 
     # Apply select_related optimization if specified in context
@@ -440,7 +440,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
     elif issubclass(typ, AccountingItemPayment):
         # Get field definition for proper decimal handling
         # noinspection PyUnresolvedReferences, PyProtectedMember
-        value_field = AccountingItemPayment._meta.get_field("value")
+        value_field = AccountingItemPayment._meta.get_field("value")  # noqa: SLF001  # Django model metadata
         decimal_field = DecimalField(max_digits=value_field.max_digits, decimal_places=value_field.decimal_places)
 
         # Define zero value with proper decimal field type

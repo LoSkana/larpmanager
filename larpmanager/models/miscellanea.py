@@ -21,7 +21,7 @@
 import random
 import secrets
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -113,8 +113,8 @@ class Contact(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ["me", "you"]
-        constraints = [
+        ordering: ClassVar[list] = ["me", "you"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["me", "you", "deleted"], name="unique_contact_with_optional"),
             UniqueConstraint(
                 fields=["me", "you"],
@@ -164,7 +164,6 @@ class Util(BaseModel):
         """Download the utility file."""
         # noinspection PyUnresolvedReferences
         s = self.util.url
-        # s = s.replace("media/", "", 1)
         return download(s)
 
     def file_name(self) -> str:
@@ -238,7 +237,7 @@ class AlbumUpload(BaseModel):
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="uploads")
 
     PHOTO = "p"
-    TYPE_CHOICES = [
+    TYPE_CHOICES: ClassVar[list] = [
         (PHOTO, _("Photo")),
     ]
     typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
@@ -314,7 +313,7 @@ class CompetenceMemberRel(BaseModel):
         return f"{self.member} - {self.competence} ({self.exp})"
 
     class Meta:
-        unique_together = ["competence", "member", "deleted"]
+        unique_together: ClassVar[list] = ["competence", "member", "deleted"]
 
 
 class WorkshopModule(BaseModel):
@@ -383,7 +382,7 @@ class WorkshopQuestion(BaseModel):
         return js
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=["module", "number", "deleted"], name="unique workshop question")]
+        constraints: ClassVar[list] = [models.UniqueConstraint(fields=["module", "number", "deleted"], name="unique workshop question")]
 
 
 class WorkshopOption(BaseModel):
@@ -515,7 +514,7 @@ class WarehouseItemAssignment(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["area", "item", "deleted"],
                 name="unique_warehouse_item_assignment_with_optional",
@@ -709,11 +708,11 @@ class PlayerRelationship(BaseModel):
         return f"{self.reg} - {self.target} ({self.reg.run.number})"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
             models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="prel_target_act"),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["reg", "target", "deleted"],
                 name="unique_player_relationship_with_optional",
@@ -806,7 +805,7 @@ class OneTimeContent(BaseModel):
     )
 
     class Meta:
-        ordering = ["-created"]
+        ordering: ClassVar[list] = ["-created"]
         verbose_name = _("One-Time Content")
         verbose_name_plural = _("One-Time Contents")
 
@@ -924,7 +923,7 @@ class OneTimeAccessToken(BaseModel):
     )
 
     class Meta:
-        ordering = ["-created"]
+        ordering: ClassVar[list] = ["-created"]
         verbose_name = _("One-Time Access Token")
         verbose_name_plural = _("One-Time Access Tokens")
 

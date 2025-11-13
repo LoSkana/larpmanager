@@ -142,7 +142,7 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
     for key_name, value_type in mappings.items():
         for element in context["event"].get_elements(value_type):
             # Create dict entry with name and type for template rendering
-            context["list"][f"{key_name}_{element.id}"] = {"name": element.name, "type": value_type._meta.model_name}
+            context["list"][f"{key_name}_{element.id}"] = {"name": element.name, "type": value_type._meta.model_name}  # noqa: SLF001  # Django model metadata
 
     # Render selection form
     return render(request, "larpmanager/orga/characters/pdf_bulk.html", context)

@@ -2,6 +2,7 @@ import ast
 import csv
 import os
 from collections import defaultdict
+from pathlib import Path
 
 
 def get_function_length(node):
@@ -22,7 +23,7 @@ def has_docstring(node):
 
 
 def analyze_file(filepath):
-    with open(filepath, encoding="utf-8") as f:
+    with Path(filepath).open(encoding="utf-8") as f:
         try:
             tree = ast.parse(f.read(), filename=filepath)
         except SyntaxError:
@@ -32,10 +33,7 @@ def analyze_file(filepath):
     function_counts = defaultdict(int)  # Track count of each function name
 
     # Collect all function definitions first, sorted by line number
-    functions = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
-            functions.append(node)
+    functions = [node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)]
 
     # Sort by line number to maintain file order
     functions.sort(key=lambda n: n.lineno)
@@ -60,10 +58,10 @@ def main(folder=".") -> None:
             continue
         for file in files:
             if file.endswith(".py"):
-                path = os.path.join(root, file)
+                path = str(Path(root) / file)
                 all_results.extend(analyze_file(path))
 
-    with open("refactor/function_pydocs.csv", "w", newline="", encoding="utf-8") as csvfile:
+    with Path("refactor/function_pydocs.csv").open("w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["name", "path", "length", "number"])
         writer.writerows(all_results)

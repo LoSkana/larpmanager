@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.db import models
 from django.db.models import Q, QuerySet, UniqueConstraint
 
@@ -59,7 +61,7 @@ class AssociationPermission(BaseModel):
         return self.name
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["slug"], condition=Q(deleted__isnull=True), name="aperm_slug_act"),
         ]
 
@@ -76,7 +78,7 @@ class AssociationRole(BaseModel):
     permissions = models.ManyToManyField(AssociationPermission, related_name="association_roles", blank=True)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["association", "number", "deleted"],
                 name="unique_association_role_with_optional",
@@ -173,7 +175,7 @@ class EventPermission(BaseModel):
         return self.name
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["slug"], condition=Q(deleted__isnull=True), name="eperm_slug_act"),
         ]
 
@@ -183,11 +185,9 @@ class EventRole(BaseConceptModel):
 
     permissions = models.ManyToManyField(EventPermission, related_name="roles", blank=True)
 
-    _clone_m2m_fields = ["permissions"]
-
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_event_role_with_optional",

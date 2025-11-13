@@ -72,7 +72,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
         assoc_trans = AssociationTranslations(base_translation, overrides)
 
         # Replace the thread-local active translation with our custom one
-        trans_real._active.value = assoc_trans
+        trans_real._active.value = assoc_trans  # noqa: SLF001  # Django translation internal
 
     def process_response(self, request, response):  # noqa: ARG002
         """Clean up translation overrides after processing the request.
@@ -86,7 +86,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
 
         """
         # Restore default translation behavior for the next request
-        trans_real._active.value = None
+        trans_real._active.value = None  # noqa: SLF001  # Django translation internal
         dj_translation.deactivate_all()
         return response
 

@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
@@ -109,7 +111,7 @@ class PaymentInvoice(BaseModel):
     key = models.CharField(max_length=500, null=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["key", "status"]),
             models.Index(fields=["association", "cod"]),
             models.Index(fields=["reg", "status", "-created"]),
@@ -192,7 +194,7 @@ class ElectronicInvoice(BaseModel):
     response = models.TextField(blank=True, null=True)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["number", "year", "association", "deleted"],
                 name="unique_number_with_optional",
@@ -321,7 +323,7 @@ class AccountingItemMembership(AccountingItem):
     year = models.IntegerField()
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(
                 fields=["association", "year"],
                 condition=Q(deleted__isnull=True),
@@ -352,7 +354,7 @@ class AccountingItemOther(AccountingItem):
     ref_addit = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        indexes = [models.Index(fields=["run", "oth"])]
+        indexes: ClassVar[list] = [models.Index(fields=["run", "oth"])]
 
     def __str__(self) -> str:
         """Return string representation based on other type and member."""
@@ -393,7 +395,7 @@ class AccountingItemPayment(AccountingItem):
     vat_options = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["pay", "reg"])]
+        indexes: ClassVar[list] = [models.Index(fields=["pay", "reg"])]
 
 
 class AccountingItemExpense(AccountingItem):
@@ -541,7 +543,7 @@ class Discount(BaseModel):
     number = models.IntegerField()
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_discount_with_optional",

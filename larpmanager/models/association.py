@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from typing import Any, ClassVar
 
 from babel.numbers import get_currency_symbol
 from colorfield.fields import ColorField
@@ -261,7 +261,7 @@ class Association(BaseModel):
     )
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_association_with_optional"),
             UniqueConstraint(
                 fields=["slug"],
@@ -301,10 +301,10 @@ class AssociationConfig(BaseModel):
         return f"{self.association} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["association", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["association", "name", "deleted"],
                 name="unique_association_config_with_optional",
@@ -367,7 +367,7 @@ class AssociationText(BaseModel):
         return f"{self.get_typ_display()} {self.get_language_display()}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["association", "typ", "language", "deleted"],
                 name="unique_association_text_with_optional",
@@ -460,7 +460,7 @@ class AssociationTranslation(BaseModel):
         return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             # Ensure unique translations including soft-deleted records
             UniqueConstraint(
                 fields=["association", "language", "msgid", "context", "deleted"],
@@ -473,7 +473,7 @@ class AssociationTranslation(BaseModel):
                 name="unique_assoc_translation_without_deleted",
             ),
         ]
-        indexes = [
+        indexes: ClassVar[list] = [
             # Composite index for fast translation lookups
             models.Index(fields=["association", "language", "msgid"]),
             # Index for filtering active/inactive translations

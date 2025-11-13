@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
@@ -57,27 +59,27 @@ class RegistrationQuestionFilter(AutocompleteFilter):
 @admin.register(Registration)
 class RegistrationAdmin(DefModelAdmin):
     exclude = ("search",)
-    list_display = ("id", "run", "member", "ticket", "quotas", "cancellation_date")
+    list_display: ClassVar[tuple] = ("id", "run", "member", "ticket", "quotas", "cancellation_date")
     search_fields = ("search",)
-    autocomplete_fields = ["run", "member", "ticket"]
+    autocomplete_fields: ClassVar[list] = ["run", "member", "ticket"]
     list_filter = (RunFilter, MemberFilter, "cancellation_date")
 
 
 @admin.register(RegistrationTicket)
 class RegistrationTicketAdmin(DefModelAdmin):
-    exclude = ("name",)
+    exclude: ClassVar[tuple] = ("name",)
     search_fields = ("search",)
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter,)
 
 
 @admin.register(RegistrationSection)
 class RegistrationSectionAdmin(DefModelAdmin):
-    exclude = ("search",)
+    exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search",)
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter,)
-    inlines = [
+    inlines: ClassVar[list] = [
         RegistrationQuestionInline,
     ]
 
@@ -85,27 +87,27 @@ class RegistrationSectionAdmin(DefModelAdmin):
 @admin.register(RegistrationQuestion)
 class RegistrationQuestionAdmin(DefModelAdmin):
     exclude = ("search",)
-    search_fields = ("search",)
+    search_fields: ClassVar[tuple] = ("search",)
     list_display = ("typ", "event", "name", "status", "description")
-    autocomplete_fields = ["event", "section", "factions", "tickets", "allowed"]
-    list_filter = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event", "section", "factions", "tickets", "allowed"]
+    list_filter: ClassVar[tuple] = (EventFilter,)
 
-    inlines = [
+    inlines: ClassVar[list] = [
         RegistrationOptionInline,
     ]
 
 
 @admin.register(RegistrationOption)
 class RegistrationOptionAdmin(DefModelAdmin):
-    exclude = ("search",)
+    exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search",)
-    autocomplete_fields = ["question", "event"]
+    autocomplete_fields: ClassVar[list] = ["question", "event"]
     list_filter = (RegistrationQuestionFilter,)
 
 
 @admin.register(RegistrationChoice)
 class RegistrationChoiceAdmin(DefModelAdmin):
-    autocomplete_fields = ["question", "option", "reg"]
+    autocomplete_fields: ClassVar[list] = ["question", "option", "reg"]
     list_filter = (
         RegistrationFilter,
         RegistrationQuestionFilter,
@@ -114,7 +116,7 @@ class RegistrationChoiceAdmin(DefModelAdmin):
 
 @admin.register(RegistrationAnswer)
 class RegistrationAnswerAdmin(DefModelAdmin):
-    autocomplete_fields = ["question", "reg"]
+    autocomplete_fields: ClassVar[list] = ["question", "reg"]
     list_filter = (
         RegistrationFilter,
         RegistrationQuestionFilter,
@@ -123,7 +125,7 @@ class RegistrationAnswerAdmin(DefModelAdmin):
 
 @admin.register(RegistrationCharacterRel)
 class RegistrationCharacterRelAdmin(DefModelAdmin):
-    list_display = ("character", "reg")
-    search_fields = ["character", "reg"]
-    autocomplete_fields = ["character", "reg"]
+    list_display: ClassVar[tuple] = ("character", "reg")
+    search_fields: ClassVar[list] = ["character", "reg"]
+    autocomplete_fields: ClassVar[list] = ["character", "reg"]
     list_filter = (CharacterFilter, RegistrationFilter)
