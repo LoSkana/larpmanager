@@ -43,6 +43,9 @@ ignore = [
     "ANN204",  # TODO remove Missing return type annotation for special method
     "ANN205",  # TODO remove Missing return type annotation for staticmethod
     "ANN206",  # TODO remove Missing return type annotation for classmethod
+    "ERA001",  # Commented-out code - prevent ruff from deleting comments
+    "RUF012",  # Mutable class default
+    "SLF001",  # Private member access
 ]
 
 [tool.ruff.lint.pydocstyle]
