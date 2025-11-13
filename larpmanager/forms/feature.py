@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.db.models import Q
@@ -178,7 +178,7 @@ class FeatureForm(MyForm):
 
 
 class QuickSetupForm(MyForm):
-    setup = {}
+    setup: ClassVar[dict] = {}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and prevent cancellation."""

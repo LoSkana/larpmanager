@@ -156,23 +156,10 @@ def correct_relationship(e_id, p_id) -> None:
         target_character_number_to_id[character.number] = character.id
     # ~ field = 'character_id'
     # ~ for obj in Registration.objects.filter(run_id=context['run'].id):
-    # ~ v = getattr(obj, field)
-    # ~ if v not in source_character_id_to_number:
-    # ~ continue
-    # ~ v = source_character_id_to_number[v]
-    # ~ v = target_character_number_to_id[v]
-    # ~ setattr(obj, field, v)
-    # ~ obj.save()
-
     # copy complicated
     # Relationship
-    # logger.debug(f"Source character ID to number: {source_character_id_to_number}")
-    # logger.debug(f"Target character number to ID: {target_character_number_to_id}")
     for relationship in Relationship.objects.filter(source__event_id=p_id):
-        # logger.debug(f"Processing relationship: {relationship}")
-
         new_source_id = relationship.source_id
-        # logger.debug(f"Relationship source ID: {relationship.source_id}")
         if new_source_id not in source_character_id_to_number:
             continue
         new_source_id = source_character_id_to_number[new_source_id]

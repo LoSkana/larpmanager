@@ -21,9 +21,8 @@ from __future__ import annotations
 
 import inspect
 import logging
-import os
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
@@ -226,7 +225,7 @@ class Event(BaseModel):
     template = models.BooleanField(default=False)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_event_with_optional"),
             UniqueConstraint(
                 fields=["slug"],
@@ -294,11 +293,14 @@ class Event(BaseModel):
         ]
 
         # Check if inheritance conditions are met
-        if self.parent and model_class in inheritable_elements:
-            # Verify that campaign independence is not enabled for this element type
-            # If independence is disabled (False), use parent's elements
-            if not self.get_config(f"campaign_{model_class}_indep", default_value=False):
-                return self.parent
+        # Verify that campaign independence is not enabled for this element type
+        # If independence is disabled (False), use parent's elements
+        if (
+            self.parent
+            and model_class in inheritable_elements
+            and not self.get_config(f"campaign_{model_class}_indep", default_value=False)
+        ):
+            return self.parent
 
         # Return self if no parent exists, element not inheritable, or independence enabled
         return self
@@ -308,7 +310,7 @@ class Event(BaseModel):
         try:
             # noinspection PyUnresolvedReferences
             return self.cover_thumb.url
-        except Exception as e:
+        except (ValueError, AttributeError) as e:
             # Log error and return None if cover_thumb is not available
             logger.debug("Cover thumbnail not available for event %s: %s", self.id, e)
             return None
@@ -386,7 +388,7 @@ class Event(BaseModel):
     def get_media_filepath(self) -> str:
         """Get the media directory path for this object's PDFs, creating it if needed."""
         # Build path to PDF directory using object slug
-        pdf_directory_path = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
+        pdf_directory_path = str(Path(conf_settings.MEDIA_ROOT) / f"pdf/{self.slug}/")
         # Ensure directory exists
         Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
         return pdf_directory_path
@@ -408,10 +410,10 @@ class EventConfig(BaseModel):
         return f"{self.event} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "name", "deleted"],
                 name="unique_event_config_with_optional",
@@ -433,7 +435,7 @@ class BaseConceptModel(BaseModel):
 
     class Meta:
         abstract = True
-        ordering = ["event", "number"]
+        ordering: ClassVar[list] = ["event", "number"]
 
     def get_name(self) -> str:
         """Get the name attribute."""
@@ -450,8 +452,8 @@ class EventButton(BaseConceptModel):
     link = models.URLField(max_length=150)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_event_button_with_optional",
@@ -498,7 +500,7 @@ class EventText(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="texts")
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "typ", "language", "deleted"],
                 name="unique_event_text_with_optional",
@@ -515,8 +517,8 @@ class ProgressStep(BaseConceptModel):
     order = models.IntegerField(default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_ProgressStep_with_optional",
@@ -583,11 +585,11 @@ class Run(BaseModel):
     plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["id", "deleted"]),
             models.Index(fields=["event", "deleted"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_run_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -663,7 +665,7 @@ class Run(BaseModel):
         """
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
-        run_media_path = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
+        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}/")
 
         # Ensure directory exists
         Path(run_media_path).mkdir(parents=True, exist_ok=True)
@@ -695,10 +697,10 @@ class RunConfig(BaseModel):
         return f"{self.run} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["run", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["run", "name", "deleted"],
                 name="unique_run_config_with_optional",
@@ -725,7 +727,7 @@ class PreRegistration(BaseModel):
         return f"{self.event} {self.member}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "member", "deleted"],
                 name="unique_prereg_with_optional",

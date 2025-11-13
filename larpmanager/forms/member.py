@@ -23,7 +23,7 @@ import logging
 import os
 import re
 from collections import OrderedDict
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import pycountry
 from dateutil.relativedelta import relativedelta
@@ -77,7 +77,7 @@ class MyAuthForm(AuthenticationForm):
 
     class Meta:
         model = User
-        fields = ["username", "password"]
+        fields: ClassVar[list] = ["username", "password"]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form with custom widget configurations.
@@ -138,8 +138,8 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         self.fields["lang"] = forms.ChoiceField(
             required=True,
             choices=conf_settings.LANGUAGES,
-            label=Member._meta.get_field("language").verbose_name,
-            help_text=Member._meta.get_field("language").help_text,
+            label=Member._meta.get_field("language").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("language").help_text,  # noqa: SLF001  # Django model metadata
             initial=translation.get_language(),
         )
 
@@ -151,22 +151,22 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
         # Add name and surname fields from Member model metadata
         self.fields["name"] = forms.CharField(
             required=True,
-            label=Member._meta.get_field("name").verbose_name,
-            help_text=Member._meta.get_field("name").help_text,
+            label=Member._meta.get_field("name").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("name").help_text,  # noqa: SLF001  # Django model metadata
         )
 
         self.fields["surname"] = forms.CharField(
             required=True,
-            label=Member._meta.get_field("surname").verbose_name,
-            help_text=Member._meta.get_field("surname").help_text,
+            label=Member._meta.get_field("surname").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("surname").help_text,  # noqa: SLF001  # Django model metadata
         )
 
         # Configure newsletter subscription preferences
         self.fields["newsletter"] = forms.ChoiceField(
             required=True,
             choices=NewsletterChoices.choices,
-            label=Member._meta.get_field("newsletter").verbose_name,
-            help_text=Member._meta.get_field("newsletter").help_text,
+            label=Member._meta.get_field("newsletter").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("newsletter").help_text,  # noqa: SLF001  # Django model metadata
             initial=NewsletterChoices.ALL,
         )
 
@@ -257,7 +257,7 @@ class MyPasswordResetForm(PasswordResetForm):
     def get_users(self, email: str) -> Generator:
         """Return active users matching the given email (case-insensitive)."""
         # noinspection PyProtectedMember
-        active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)
+        active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)  # noqa: SLF001  # Django model manager
         return (u for u in active_users)
 
     def send_mail(
@@ -314,13 +314,6 @@ class MyPasswordResetForm(PasswordResetForm):
 
         # Send the email using custom mail function
         my_send_mail(subject, body, to_email, association)
-
-    # ~ email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
-    # ~ if html_email_template_name is not None:
-    # ~ html_email = loader.render_to_string(html_email_template_name, context)
-    # ~ email_message.attach_alternative(html_email, 'text/html')
-
-    # ~ email_message.send()
 
 
 class AvatarForm(forms.Form):
@@ -541,7 +534,7 @@ class ProfileForm(BaseProfileForm):
             "phone_contact",
         )
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "diet": Textarea(attrs={"rows": 5}),
             "safety": Textarea(attrs={"rows": 5}),
             "presentation": Textarea(attrs={"rows": 5}),
@@ -550,7 +543,7 @@ class ProfileForm(BaseProfileForm):
             "document_expiration": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs) -> None:  # noqa: C901 - Complex form initialization with dynamic field setup
         """Initialize member form with dynamic field validation and configuration.
 
         Sets mandatory fields, handles voting candidates, and adds required
@@ -710,9 +703,9 @@ class ExeVolunteerRegistryForm(MyForm):
 
     class Meta:
         model = VolunteerRegistry
-        exclude = []
+        exclude: ClassVar[list] = []
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "member": AssociationMemberS2Widget,
             "start": DatePickerInput,
             "end": DatePickerInput,
@@ -746,7 +739,7 @@ class ExeMemberForm(BaseProfileForm):
     class Meta:
         model = Member
         fields = "__all__"
-        widgets = {
+        widgets: ClassVar[dict] = {
             "birth_date": DatePickerInput,
         }
 
@@ -760,7 +753,7 @@ class ExeMemberForm(BaseProfileForm):
 class ExeMembershipForm(MyForm):
     page_info = _("Manage member membership status")
 
-    load_templates = ["membership"]
+    load_templates: ClassVar[list] = ["membership"]
 
     class Meta:
         model = Membership
@@ -924,7 +917,7 @@ class ExeBadgeForm(MyForm):
         model = Badge
         exclude = ("number",)
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "members": AssociationMemberS2WidgetMulti,
         }
 
@@ -1014,7 +1007,7 @@ class ExeProfileForm(MyForm):
 
         # Iterate through all fields in the Member model
         # noinspection PyUnresolvedReferences,PyProtectedMember
-        for field in Member._meta.get_fields():
+        for field in Member._meta.get_fields():  # noqa: SLF001  # Django model metadata
             # Filter only fields that belong to the Member model
             if not str(field).startswith("larpmanager.Member."):
                 continue

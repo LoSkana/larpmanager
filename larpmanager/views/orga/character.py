@@ -662,13 +662,15 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
         # For choice questions, ensure at least one option exists
-        elif context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-            if not WritingOption.objects.filter(question_id=context["saved"].id).exists():
-                edit_option = True
-                messages.warning(
-                    request,
-                    _("You must define at least one option before saving a single-choice or multiple-choice question"),
-                )
+        elif (
+            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+            and not WritingOption.objects.filter(question_id=context["saved"].id).exists()
+        ):
+            edit_option = True
+            messages.warning(
+                request,
+                _("You must define at least one option before saving a single-choice or multiple-choice question"),
+            )
 
         # Redirect to option editing if needed, otherwise back to form list
         if edit_option:
@@ -979,7 +981,6 @@ def check_writings(cache, checks, character_numbers, context, character_id_to_nu
                 checks[element_name + "_missing"].append((element, missing_character))
             for interloper_character in list(set(characters_from_relations) - set(characters_from_text)):
                 checks[element_name + "_interloper"].append((element, interloper_character))
-                # cache[nm][f.number] = (str(f), from_text)
 
 
 def check_speedlarp(checks, context, id_number_map) -> None:
@@ -1103,14 +1104,14 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
     # Initialize character counter HTML for length validation
     counter = ""
-    if context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]:
-        if context["question"].max_length:
-            # Set appropriate label for multiple choice vs text fields
-            name = _("options") if context["question"].typ == "m" else "text length"
-            # Generate counter display with current/max length format
-            counter = (
-                f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
-            )
+    if (
+        context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]
+        and context["question"].max_length
+    ):
+        # Set appropriate label for multiple choice vs text fields
+        name = _("options") if context["question"].typ == "m" else "text length"
+        # Generate counter display with current/max length format
+        counter = f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
 
     # Prepare localized labels and form field references
     confirm = _("Confirm")

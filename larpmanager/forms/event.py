@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.conf import settings as conf_settings
@@ -136,7 +136,7 @@ class OrgaEventForm(MyForm):
 
     page_info = _("Manage event settings")
 
-    load_templates = ["event"]
+    load_templates: ClassVar[list] = ["event"]
 
     class Meta:
         model = Event
@@ -158,7 +158,7 @@ class OrgaEventForm(MyForm):
             "association",
         )
 
-        widgets = {"slug": SlugInput, "parent": CampaignS2Widget}
+        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget}
 
     def __init__(self, *args: object, **kwargs: object) -> None:
         """Initialize event form with field configuration based on context.
@@ -193,12 +193,12 @@ class OrgaEventForm(MyForm):
             self.fields["slug"].required = True
 
         # Build list of fields to delete based on disabled features
-        dl = []
-
         # Check each display-related feature and mark fields for removal if disabled
-        for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]:
-            if s not in self.params["features"]:
-                dl.append(s)
+        dl = [
+            s
+            for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]
+            if s not in self.params["features"]
+        ]
 
         # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
@@ -268,11 +268,11 @@ class OrgaFeatureForm(FeatureForm):
         "Manage features activated for this event and all its runs (click on a feature to show its description)",
     )
 
-    load_js = ["feature-search"]
+    load_js: ClassVar[list] = ["feature-search"]
 
     class Meta:
         model = Event
-        fields = []
+        fields: ClassVar[list] = []
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and features."""
@@ -310,7 +310,7 @@ class OrgaConfigForm(ConfigForm):
 
     section_replace = True
 
-    load_js = ["config-search"]
+    load_js: ClassVar[list] = ["config-search"]
 
     class Meta:
         model = Event
@@ -1183,12 +1183,12 @@ class OrgaEventRoleForm(MyForm):
 
     page_info = _("Manage event access roles")
 
-    load_templates = ["share"]
+    load_templates: ClassVar[list] = ["share"]
 
     class Meta:
         model = EventRole
         fields = ("name", "members", "event")
-        widgets = {"members": AssociationMemberS2WidgetMulti}
+        widgets: ClassVar[dict] = {"members": AssociationMemberS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure members widget with association context."""
@@ -1226,7 +1226,7 @@ class OrgaRunForm(ConfigForm):
         model = Run
         exclude = ("balance", "number", "plan", "paid")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "start": DatePickerInput,
             "end": DatePickerInput,
             "registration_open": DateTimePickerInput,
@@ -1284,16 +1284,20 @@ class OrgaRunForm(ConfigForm):
             for value, label in self.fields["development"].choices
         )
 
-        for s in ["registration_open", "registration_secret"]:
-            if not self.instance.pk or not self.instance.event or s not in self.params["features"]:
-                dl.append(s)
+        dl.extend(
+            [
+                s
+                for s in ["registration_open", "registration_secret"]
+                if not self.instance.pk or not self.instance.event or s not in self.params["features"]
+            ]
+        )
 
         for s in dl:
             del self.fields[s]
 
         self.show_sections = True
 
-    def set_configs(self):
+    def set_configs(self):  # noqa: C901 - Complex form configuration with feature-dependent field setup
         """Configure event-specific form fields and sections.
 
         Sets up various event features and their configuration options
@@ -1455,18 +1459,17 @@ class ExeEventForm(OrgaEventForm):
         instance = super().save(commit=False)
 
         # Copy template event data if template feature enabled and event is new
-        if "template" in self.params["features"] and not self.instance.pk:
-            if self.cleaned_data.get("template_event"):
-                event_id = self.cleaned_data["template_event"].id
-                event = Event.objects.get(pk=event_id)
+        if "template" in self.params["features"] and not self.instance.pk and self.cleaned_data.get("template_event"):
+            event_id = self.cleaned_data["template_event"].id
+            event = Event.objects.get(pk=event_id)
 
-                # Save instance first to get pk for M2M and FK relations
-                instance.save()
+            # Save instance first to get pk for M2M and FK relations
+            instance.save()
 
-                # Copy features and configurations from template
-                instance.features.add(*event.features.all())
-                copy_class(instance.id, event_id, EventConfig)
-                copy_class(instance.id, event_id, EventRole)
+            # Copy features and configurations from template
+            instance.features.add(*event.features.all())
+            copy_class(instance.id, event_id, EventConfig)
+            copy_class(instance.id, event_id, EventRole)
 
         instance.save()
 
@@ -1482,7 +1485,7 @@ class ExeTemplateForm(FeatureForm):
 
     class Meta:
         model = Event
-        fields = ["name"]
+        fields: ClassVar[list] = ["name"]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the instance and configure the feature system."""
@@ -1543,7 +1546,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     class Meta:
         model = Event
-        fields = []
+        fields: ClassVar[list] = []
 
     def __init__(self, *args, **kwargs) -> None:
         """Initialize OrgaQuickSetupForm with event feature configuration.

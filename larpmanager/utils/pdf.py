@@ -22,8 +22,6 @@ from __future__ import annotations
 import contextlib
 import io
 import logging
-import os
-import os.path
 import re
 import zipfile
 from datetime import datetime, timedelta
@@ -121,7 +119,7 @@ def return_pdf(file_path, filename):
 
     """
     try:
-        with open(file_path, "rb") as pdf_file:
+        with Path(file_path).open("rb") as pdf_file:
             response = HttpResponse(pdf_file.read(), content_type="application/pdf")
         response["Content-Disposition"] = f"inline;filename={fix_filename(filename)}.pdf"
     except FileNotFoundError as err:
@@ -157,10 +155,10 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
 
     # Check if URI is a media URL and build corresponding file path
     if uri.startswith(m_url):
-        path = os.path.join(m_root, uri.replace(m_url, ""))
+        path = str(Path(m_root) / uri.replace(m_url, ""))
     # Check if URI is a static URL and build corresponding file path
     elif uri.startswith(s_url):
-        path = os.path.join(s_root, uri.replace(s_url, ""))
+        path = str(Path(s_root) / uri.replace(s_url, ""))
     # Return empty string for unrecognized URI patterns
     else:
         return ""
@@ -271,7 +269,7 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         html_content = template.render(context)
 
     # Generate PDF file from rendered HTML
-    with open(output_filename, "wb") as pdf_file:
+    with Path(output_filename).open("wb") as pdf_file:
         # Convert HTML to PDF using xhtml2pdf library
         pdf_result = pisa.CreatePDF(html_content, dest=pdf_file, link_callback=link_callback)
 
@@ -500,7 +498,7 @@ def print_handout(context: dict, *, force: bool = True) -> Any:
 def print_volunteer_registry(context: dict) -> str:
     """Generate volunteer registry PDF and return file path."""
     # Build file path for volunteer registry PDF
-    file_path = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{context['association'].slug}.pdf")
+    file_path = str(Path(conf_settings.MEDIA_ROOT) / f"volunteer_registry/{context['association'].slug}.pdf")
 
     # Generate PDF from template
     xhtml_pdf(context, "pdf/volunteer_registry.html", file_path)
@@ -792,7 +790,7 @@ def replace_data(template_path, character_data) -> None:
         character_data: Character data dictionary with replacement values
 
     """
-    with open(template_path) as template_file:
+    with Path(template_path).open() as template_file:
         file_content = template_file.read()
 
     for placeholder_key in ["number", "name", "title"]:
@@ -801,7 +799,7 @@ def replace_data(template_path, character_data) -> None:
         file_content = file_content.replace(f"#{placeholder_key}#", str(character_data[placeholder_key]))
 
     # Write the file out again
-    with open(template_path, "w") as template_file:
+    with Path(template_path).open("w") as template_file:
         template_file.write(file_content)
 
 
@@ -913,13 +911,13 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
                 filepath = context["handout"].get_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated
-                if not os.path.exists(filepath) or reprint(filepath):
+                if not Path(filepath).exists() or reprint(filepath):
                     print_handout(context, force=True)
 
                 # Add to ZIP if generation succeeded
-                if os.path.exists(filepath):
+                if Path(filepath).exists():
                     zip_file.write(filepath, f"handout_{handout.number}_{handout.name}.pdf")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
                 # Notify user of failure but continue processing other handouts
                 messages.warning(request, _("Failed to add handout") + f" #{handout.number}: {e}")
 
@@ -970,13 +968,13 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
                 filepath = context["faction"].get_sheet_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated
-                if not os.path.exists(filepath) or reprint(filepath):
+                if not Path(filepath).exists() or reprint(filepath):
                     print_faction(context, force=True)
 
                 # Add to ZIP if generation succeeded
-                if os.path.exists(filepath):
+                if Path(filepath).exists():
                     zip_file.write(filepath, f"faction_{faction.number}_{faction.name}.pdf")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
                 # Notify user of failure but continue processing other factions
                 messages.warning(request, _("Failed to add faction") + f" #{faction.number}: {e}")
 
@@ -1009,13 +1007,13 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
                 filepath = context["character"].get_sheet_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated
-                if not os.path.exists(filepath) or reprint(filepath):
+                if not Path(filepath).exists() or reprint(filepath):
                     print_character(context, force=True)
 
                 # Add to ZIP if generation succeeded
-                if os.path.exists(filepath):
+                if Path(filepath).exists():
                     zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
                 # Notify user of failure but continue processing other characters
                 messages.warning(request, _("Failed to add character") + f" #{character.number}: {e}")
 
@@ -1043,13 +1041,13 @@ def _bulk_profiles(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
             filepath = context["run"].get_profiles_filepath()
 
             # Generate PDF if it doesn't exist or is outdated
-            if not os.path.exists(filepath) or reprint(filepath):
+            if not Path(filepath).exists() or reprint(filepath):
                 print_profiles(context, force=True)
 
             # Add to ZIP if generation succeeded
-            if os.path.exists(filepath):
+            if Path(filepath).exists():
                 zip_file.write(filepath, "profiles.pdf")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
             # Notify user of failure
             messages.warning(request, _("Failed to add profiles") + f": {e}")
 
@@ -1077,12 +1075,12 @@ def _bulk_gallery(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile
             filepath = context["run"].get_gallery_filepath()
 
             # Generate PDF if it doesn't exist or is outdated
-            if not os.path.exists(filepath) or reprint(filepath):
+            if not Path(filepath).exists() or reprint(filepath):
                 print_gallery(context, force=True)
 
             # Add to ZIP if generation succeeded
-            if os.path.exists(filepath):
+            if Path(filepath).exists():
                 zip_file.write(filepath, "gallery.pdf")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
             # Notify user of failure
             messages.warning(request, _("Failed to add gallery") + f": {e}")

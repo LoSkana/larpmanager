@@ -230,7 +230,7 @@ def clean_sender(sender_name):
     return re.sub(r"\s+", " ", sender_name).strip()
 
 
-def my_send_simple_mail(
+def my_send_simple_mail(  # noqa: C901 - Complex email sending with multiple format and attachment options
     subj: str,
     body: str,
     m_email: str,
@@ -416,7 +416,7 @@ def add_unsubscribe_body(association):
     return html_footer
 
 
-def my_send_mail(
+def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachment handling
     subject: str,
     body: str,
     recipient: str | Member,

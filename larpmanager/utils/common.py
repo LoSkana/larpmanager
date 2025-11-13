@@ -781,7 +781,7 @@ def check_field(model_class: type, field_name: str) -> bool:
 
     """
     # Iterate through all fields including hidden ones
-    return any(field.name == field_name for field in model_class._meta.get_fields(include_hidden=True))
+    return any(field.name == field_name for field in model_class._meta.get_fields(include_hidden=True))  # noqa: SLF001  # Django model metadata
 
 
 def round_to_two_significant_digits(number: float) -> int:
@@ -915,13 +915,13 @@ def copy_class(target_event_id, source_event_id, model_class) -> None:
             many_to_many_data = {}
 
             # noinspection PyProtectedMember
-            for field in source_object._meta.many_to_many:
+            for field in source_object._meta.many_to_many:  # noqa: SLF001  # Django model metadata
                 many_to_many_data[field.name] = list(getattr(source_object, field.name).all())
 
             source_object.pk = None
             source_object.event_id = target_event_id
             # noinspection PyProtectedMember
-            source_object._state.adding = True
+            source_object._state.adding = True  # noqa: SLF001  # Django model state
             for field_name, generation_function in {"access_token": my_uuid_short}.items():
                 if not hasattr(source_object, field_name):
                     continue
@@ -931,7 +931,7 @@ def copy_class(target_event_id, source_event_id, model_class) -> None:
             # copy m2m relations
             for field_name, related_values in many_to_many_data.items():
                 getattr(source_object, field_name).set(related_values)
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001 - Complex object cloning may fail in many ways, log and continue
             logger.warning("found exp: %s", error)
 
 
@@ -1036,7 +1036,7 @@ def _search_char_reg(context: dict, character, search_result: dict) -> None:
 def clear_messages(request: HttpRequest) -> None:
     """Clear all queued messages from the request."""
     if hasattr(request, "_messages"):
-        request._messages._queued_messages.clear()
+        request._messages._queued_messages.clear()  # noqa: SLF001  # Django messages internal
 
 
 def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list]:

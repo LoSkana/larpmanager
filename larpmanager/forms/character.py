@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -72,7 +72,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
     class Meta:
         model = Character
-        fields = [
+        fields: ClassVar[list] = [
             "progress",
             "name",
             "assigned",
@@ -88,7 +88,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "access_token",
         ]
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
             "player": AssociationMemberS2Widget,
@@ -211,21 +211,22 @@ class CharacterForm(WritingForm, BaseWritingForm):
             del self.fields[field_label]
 
         # Add character completion proposal field for user approval workflow
-        if not self.orga and get_event_config(
-            event.id, "user_character_approval", default_value=False, context=self.params
+        if (
+            not self.orga
+            and get_event_config(event.id, "user_character_approval", default_value=False, context=self.params)
+            and (not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW])
         ):
-            if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
-                self.fields["propose"] = forms.BooleanField(
-                    required=False,
-                    label=_("Complete"),
-                    help_text=_(
-                        "Click here to confirm that you have completed the character and are ready to "
-                        "propose it to the staff. Be careful: some fields may no longer be editable. "
-                        "Leave the field blank to save your changes and to be able to continue them in "
-                        "the future.",
-                    ),
-                    widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
-                )
+            self.fields["propose"] = forms.BooleanField(
+                required=False,
+                label=_("Complete"),
+                help_text=_(
+                    "Click here to confirm that you have completed the character and are ready to "
+                    "propose it to the staff. Be careful: some fields may no longer be editable. "
+                    "Leave the field blank to save your changes and to be able to continue them in "
+                    "the future.",
+                ),
+                widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
+            )
 
     def _init_character(self) -> None:
         """Initialize character-specific form data."""
@@ -340,11 +341,11 @@ class OrgaCharacterForm(CharacterForm):
 
     page_title = _("Character")
 
-    load_templates = ["char"]
+    load_templates: ClassVar[list] = ["char"]
 
-    load_js = ["characters-choices", "characters-relationships", "factions-choices"]
+    load_js: ClassVar[list] = ["characters-choices", "characters-relationships", "factions-choices"]
 
-    load_form = ["characters-relationships"]
+    load_form: ClassVar[list] = ["characters-relationships"]
 
     orga = True
 
@@ -616,9 +617,12 @@ class OrgaCharacterForm(CharacterForm):
                 continue
 
             # if the value is present, and is the same as before, do nothing
-            if ch_id in self.params["relationships"] and rel_type in self.params["relationships"][ch_id]:
-                if value == self.params["relationships"][ch_id][rel_type]:
-                    continue
+            if (
+                ch_id in self.params["relationships"]
+                and rel_type in self.params["relationships"][ch_id]
+                and value == self.params["relationships"][ch_id][rel_type]
+            ):
+                continue
 
             # Check text length against configuration using centralized value
             # Use strip_tags to get plain text length from HTML content
@@ -709,8 +713,8 @@ class OrgaWritingQuestionForm(MyForm):
 
     class Meta:
         model = WritingQuestion
-        exclude = ["order"]
-        widgets = {
+        exclude: ClassVar[list] = ["order"]
+        widgets: ClassVar[dict] = {
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
@@ -817,9 +821,8 @@ class OrgaWritingQuestionForm(MyForm):
                     continue
 
                 # Check feature activation for non-default types
-                if choice[0] not in ["name", "teaser", "text"]:
-                    if choice[0] not in self.params["features"]:
-                        continue
+                if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
+                    continue
 
             # Handle character type 'c' - requires 'px' feature
             elif choice[0] == "c" and "px" not in self.params["features"]:
@@ -873,8 +876,8 @@ class OrgaWritingOptionForm(MyForm):
 
     class Meta:
         model = WritingOption
-        exclude = ["order"]
-        widgets = {
+        exclude: ClassVar[list] = ["order"]
+        widgets: ClassVar[dict] = {
             "requirements": EventWritingOptionS2WidgetMulti,
             "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,

@@ -141,16 +141,14 @@ def reset_features_cache() -> None:
 
 def _build_guides_cache() -> list[dict]:
     """Build cache data for guides."""
-    published_guides = []
-
-    for published_guide in LarpManagerGuide.objects.filter(published=True).order_by("number"):
-        published_guides.append(
-            {
-                "slug": published_guide.slug,
-                "title": published_guide.title,
-                "content_preview": _get_content_preview(published_guide.text, 100),
-            },
-        )
+    published_guides = [
+        {
+            "slug": published_guide.slug,
+            "title": published_guide.title,
+            "content_preview": _get_content_preview(published_guide.text, 100),
+        }
+        for published_guide in LarpManagerGuide.objects.filter(published=True).order_by("number")
+    ]
 
     return published_guides
 
@@ -179,21 +177,17 @@ def _build_tutorials_cache() -> list[dict]:
 
 def _build_features_cache() -> list[dict]:
     """Build cache data for features with tutorials."""
-    feature_list = []
-
-    for feature in (
-        Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False)
+    feature_list = [
+        {
+            "tutorial": feature.tutorial,
+            "name": feature.name,
+            "module_name": feature.module.name if feature.module else None,
+            "descr": feature.descr,
+        }
+        for feature in Feature.objects.filter(placeholder=False, hidden=False, tutorial__isnull=False)
         .exclude(tutorial__exact="", module__order=0)
         .select_related("module")
-    ):
-        feature_list.append(
-            {
-                "tutorial": feature.tutorial,
-                "name": feature.name,
-                "module_name": feature.module.name if feature.module else None,
-                "descr": feature.descr,
-            },
-        )
+    ]
 
     return feature_list
 

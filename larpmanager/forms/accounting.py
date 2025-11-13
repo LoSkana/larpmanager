@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from decimal import Decimal, InvalidOperation
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.utils import timezone
@@ -103,7 +103,7 @@ class OrgaExpenseForm(MyFormRun):
     class Meta:
         model = AccountingItemExpense
         exclude = ("inv", "hide")
-        widgets = {"member": RunMemberS2Widget}
+        widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure fields based on run features and association config."""
@@ -131,7 +131,7 @@ class OrgaTokenForm(MyFormRun):
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
-        widgets = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
+        widgets: ClassVar[dict] = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with token-specific page information and field configuration."""
@@ -152,7 +152,7 @@ class OrgaCreditForm(MyFormRun):
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
-        widgets = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
+        widgets: ClassVar[dict] = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize credit form with page title and run-specific member field."""
@@ -178,7 +178,7 @@ class OrgaPaymentForm(MyFormRun):
     class Meta:
         model = AccountingItemPayment
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
-        widgets = {"reg": EventRegS2Widget}
+        widgets: ClassVar[dict] = {"reg": EventRegS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure registration field for the event."""
@@ -197,7 +197,7 @@ class ExeOutflowForm(MyForm):
         model = AccountingItemOutflow
         exclude = ("member", "inv", "hide")
 
-        widgets = {"payment_date": DatePickerInput, "run": RunS2Widget}
+        widgets: ClassVar[dict] = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with association-specific run widget, default payment date, and conditional fields."""
@@ -237,7 +237,7 @@ class ExeInflowForm(MyForm):
         model = AccountingItemInflow
         exclude = ("member", "inv", "hide")
 
-        widgets = {"payment_date": DatePickerInput, "run": RunS2Widget}
+        widgets: ClassVar[dict] = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with auto-populated run and payment date fields."""
@@ -268,7 +268,7 @@ class ExeDonationForm(MyForm):
     class Meta:
         model = AccountingItemDonation
         exclude = ("inv", "hide")
-        widgets = {"member": AssociationMemberS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set association for member field widget."""
@@ -284,7 +284,7 @@ class ExePaymentForm(MyForm):
     class Meta:
         model = AccountingItemPayment
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
-        widgets = {"reg": AssocRegS2Widget}
+        widgets: ClassVar[dict] = {"reg": AssocRegS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with association-specific field configuration."""
@@ -306,7 +306,7 @@ class ExeInvoiceForm(MyForm):
     class Meta:
         model = PaymentInvoice
         exclude = ("hide", "reg", "key", "idx", "txn_id")
-        widgets = {"member": AssociationMemberS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
@@ -320,7 +320,7 @@ class ExeCreditForm(MyForm):
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
-        widgets = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with credit assignment configuration."""
@@ -343,7 +343,7 @@ class ExeTokenForm(MyForm):
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
-        widgets = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with page title, info, and field configurations."""
@@ -371,7 +371,7 @@ class ExeExpenseForm(MyForm):
     class Meta:
         model = AccountingItemExpense
         exclude = ("inv", "hide")
-        widgets = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with run choices and association-specific widget configuration."""
@@ -418,7 +418,7 @@ class CollectionNewForm(MyForm):
     class Meta:
         model = Collection
         fields = ("name",)
-        widgets = {"cod": forms.HiddenInput()}
+        widgets: ClassVar[dict] = {"cod": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize collection new form."""
@@ -431,7 +431,7 @@ class ExeCollectionForm(CollectionNewForm):
     class Meta:
         model = Collection
         fields = ("name", "member", "status", "contribute_code", "redeem_code")
-        widgets = {"member": AssociationMemberS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member field widget with association."""
@@ -503,7 +503,7 @@ class WireInvoiceSubmitForm(InvoiceSubmitForm):
                 ],
             ),
         ],
-        label=PaymentInvoice._meta.get_field("invoice").verbose_name,
+        label=PaymentInvoice._meta.get_field("invoice").verbose_name,  # noqa: SLF001  # Django model metadata
         help_text=_("Upload a PDF file or image (JPG, PNG, etc.)"),
     )
 
@@ -564,7 +564,7 @@ class ExeRefundRequestForm(MyForm):
     class Meta:
         model = RefundRequest
         exclude = ("status", "hide")
-        widgets = {"member": AssociationMemberS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
@@ -577,13 +577,13 @@ class ExePaymentSettingsForm(MyForm):
 
     page_info = _("Manage payment methods")
 
-    load_js = ["payment-details"]
+    load_js: ClassVar[list] = ["payment-details"]
 
     class Meta:
         model = Association
         fields = ("payment_methods",)
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "payment_methods": forms.CheckboxSelectMultiple,
         }
 
@@ -687,16 +687,15 @@ class ExePaymentSettingsForm(MyForm):
                     data_string = orig_value if el.endswith(("_descr", "_fee")) else self.mask_string(orig_value)
 
                     # Track changes only when values actually differ
-                    if input_value != data_string:
-                        # Ensure we don't track trivial empty-to-empty changes
-                        if input_value not in [None, ""] or orig_value not in [None, ""]:
-                            # Update with new value
-                            res[el] = input_value
+                    # Ensure we don't track trivial empty-to-empty changes
+                    if input_value != data_string and (input_value not in [None, ""] or orig_value not in [None, ""]):
+                        # Update with new value
+                        res[el] = input_value
 
-                            # Create timestamped backup of old value
-                            now = timezone.now()
-                            old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
-                            res[old_key] = orig_value
+                        # Create timestamped backup of old value
+                        now = timezone.now()
+                        old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
+                        res[old_key] = orig_value
 
         # Persist updated payment details to storage
         save_payment_details(self.instance, res)
@@ -728,10 +727,14 @@ class ExePaymentSettingsForm(MyForm):
 
             # Parse custom fields from comma-separated string
             normalized_fields = payment_method.fields.replace(" ", "")
-            for custom_field in normalized_fields.split(","):
-                # Add custom field if non-empty, prefixed with payment method slug
-                if custom_field:
-                    field_names.append(payment_method.slug + "_" + custom_field)
+            # Add custom fields if non-empty, prefixed with payment method slug
+            field_names.extend(
+                [
+                    payment_method.slug + "_" + custom_field
+                    for custom_field in normalized_fields.split(",")
+                    if custom_field
+                ]
+            )
 
             # Store field list for this payment method
             payment_method_fields[payment_method.slug] = field_names
