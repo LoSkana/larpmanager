@@ -113,7 +113,7 @@ class FileTypeValidator:
                 code="invalid_extension",
             )
 
-    def _normalize(self, allowed_types: Any) -> Any:
+    def _normalize(self, allowed_types: list[str]) -> list[str]:
         """Validate and transforms given allowed types.
 
         e.g; wildcard character specification will be normalized as text/* -> text.
@@ -144,7 +144,7 @@ class FileTypeValidator:
         """Return proper mimetype in case of word or excel files.
 
         Args:
-            file_object: File object to analyze
+            file_object: File object to analyze (must support read() and seek())
             detected_mime_type: Initially detected MIME type
             file_extension: File extension (e.g., '.doc', '.xlsx')
 

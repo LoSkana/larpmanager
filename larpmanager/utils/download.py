@@ -619,7 +619,7 @@ def _clean(html_content: str | None) -> str:
     return soup.get_text("\n").replace("\n", " ")
 
 
-def _download_prepare(context: dict, model_name: str, queryset: Any, type_config: dict) -> object:
+def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], type_config: dict) -> QuerySet[Any]:
     """Prepare and filter query for CSV download based on type and context.
 
     Processes a queryset by applying appropriate filters based on the model type

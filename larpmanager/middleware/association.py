@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
@@ -49,7 +49,7 @@ class AssociationIdentifyMiddleware:
         """Initialize middleware with Django response handler."""
         self.get_response = get_response
 
-    def __call__(self, request: Any) -> Any:
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """Process request through association middleware.
 
         Args:

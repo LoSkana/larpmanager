@@ -51,7 +51,7 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import get_time_diff_today
@@ -277,13 +277,13 @@ class Command(BaseCommand):
         # Award badge to member by adding to many-to-many relationship
         badge.members.add(member)
 
-    def check_event_badge(self, event: Any, m: Any, cache: Any) -> None:
+    def check_event_badge(self, event: Event, m: Member, cache: dict[str, Any]) -> None:
         """Award event-specific badge to member.
 
         Args:
             event: Event instance to derive badge from
             m: Member instance to award badge to
-            cache (dict): Badge cache for performance
+            cache: Badge cache for performance
 
         """
         self.add_member_badge(event.slug, m, cache)
@@ -354,7 +354,7 @@ class Command(BaseCommand):
     def get_count(
         counter_name: str,
         activity_cache: dict[str, dict[int, int]],
-        member: Any,
+        member: Member,
         increment_value: int = 1,
     ) -> int:
         """Track and increment member activity counters.

@@ -49,7 +49,7 @@ class Command(BaseCommand):
         # Display final usage statistics
         self.stdout.write(str(self.translator.get_usage()))
 
-    def translate_entry(self, entry: Any, target_language: str) -> None:
+    def translate_entry(self, entry: polib.POEntry, target_language: str) -> None:
         """Translate a single entry using DeepL API.
 
         Args:

@@ -20,10 +20,9 @@
 
 import os
 from collections.abc import Callable
-from typing import Any
 
 from django.conf import settings as conf_settings
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.utils import translation
 
 
@@ -39,7 +38,7 @@ class LocaleAdvMiddleware:
         self.get_response = get_response
         # One-time configuration and initialization.
 
-    def __call__(self, request: Any) -> Any:
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """Activate language for request based on user/browser preferences.
 
         Args:

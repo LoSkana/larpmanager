@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 
-def clear_config_cache(config_element: Any) -> None:
+def clear_config_cache(config_element: BaseModel) -> None:
     """Clear the cache for a configuration element."""
     # noinspection PyProtectedMember
     cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))
@@ -46,13 +46,13 @@ def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
     return f"configs_{config_model_name}_{config_owner_id}"
 
 
-def get_configs(model_instance: Any) -> dict[str, Any]:
+def get_configs(model_instance: BaseModel) -> dict[str, Any]:
     """Get configuration dictionary for a Django model instance."""
     # noinspection PyProtectedMember
     return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())
 
 
-def get_element_configs(element_id: int, model_name: str) -> dict:
+def get_element_configs(element_id: int, model_name: str) -> dict[str, Any]:
     """Get element configurations from cache or database.
 
     Args:
@@ -120,7 +120,7 @@ def update_configs(element_id: int, model_name: str) -> dict[str, str]:
     return {config.name: config.value for config in config_queryset}
 
 
-def save_all_element_configs(obj: Any, dct: dict[str, str]) -> None:
+def save_all_element_configs(obj: BaseModel, dct: dict[str, str]) -> None:
     """Save multiple configuration values for an element.
 
     Updates existing configurations with new values and creates new configurations

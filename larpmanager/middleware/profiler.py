@@ -20,7 +20,6 @@
 
 import logging
 from collections.abc import Callable
-from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.utils.timezone import now
@@ -97,7 +96,7 @@ class ProfilerMiddleware:
         request._profiler_func_name = self._extract_view_func_name(view_func)
 
     @staticmethod
-    def _extract_view_func_name(view_function: Any) -> str:
+    def _extract_view_func_name(view_function: Callable[..., HttpResponse]) -> str:
         """Extract the name from a Django view function or class-based view.
 
         Args:

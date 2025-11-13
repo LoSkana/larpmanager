@@ -50,7 +50,7 @@ class ClaudeAnalysisError(RuntimeError):
 
 
 @background_auto(queue="analyze_ticket")
-def analyze_ticket_bgk(ticket_id: Any) -> None:
+def analyze_ticket_bgk(ticket_id: int) -> None:
     """Analyze a ticket and send result email to admins and maintainers.
 
     Args:
@@ -81,7 +81,7 @@ def analyze_ticket_bgk(ticket_id: Any) -> None:
         raise TicketNotFoundError(msg) from err
 
 
-def _analyze_ticket(ticket: Any) -> Any:
+def _analyze_ticket(ticket: LarpManagerTicket) -> tuple[str, int]:
     """Analyzes the ticket using Claude in a separate analysis directory."""
     # Get the analysis directory (sibling to the current project directory)
     current_dir = Path(__file__).resolve().parent.parent.parent

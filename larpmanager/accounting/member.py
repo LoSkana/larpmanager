@@ -24,7 +24,6 @@ from __future__ import annotations
 
 from datetime import datetime
 from datetime import timezone as dt_timezone
-from typing import Any
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -126,7 +125,7 @@ def _init_regs(
     registration_choices: dict[int, dict],
     context: dict,
     pending_invoices: dict,
-    registration: Any,
+    registration: Registration,
 ) -> None:
     """Initialize registration options and payment status tracking.
 

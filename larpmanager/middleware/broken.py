@@ -21,7 +21,6 @@
 import logging
 import re
 from collections.abc import Callable
-from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
@@ -62,11 +61,11 @@ class BrokenLinkEmailsMiddleware:
         return response
 
     @staticmethod
-    def is_ignorable_404(request_uri: Any) -> Any:
+    def is_ignorable_404(request_uri: str) -> bool:
         """Return True if a 404 at the given URL *shouldn't* notify the site managers."""
         return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
-    def check(self, request: Any, response: Any) -> HttpResponseRedirect | None:
+    def check(self, request: HttpRequest, response: HttpResponse) -> HttpResponseRedirect | None:
         """Middleware for detecting and logging broken links.
 
         Monitors for 404 errors and tracks problematic URLs for debugging,

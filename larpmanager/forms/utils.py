@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import timedelta
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.db.models import Q, QuerySet
@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
-from larpmanager.models.access import EventRole, PermissionModule
+from larpmanager.models.access import AssociationRole, EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
     DevelopStatus,
@@ -54,12 +54,15 @@ from larpmanager.models.writing import (
     Plot,
 )
 
+if TYPE_CHECKING:
+    from django.forms import Form
+
 # defer script loaded by form
 
 css_delimeter = "/*@#§*/"
 
 
-def render_js(cls: Any) -> Any:
+def render_js(cls: Any) -> list[str]:
     """Render JavaScript includes with defer attribute for forms.
 
     Args:
@@ -195,7 +198,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     """Model multiple choice field with translated labels."""
 
-    def label_from_instance(self, obj: Any) -> Any:
+    def label_from_instance(self, obj: Any) -> str:
         """Get translated label for model instance.
 
         Args:
@@ -208,7 +211,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return _(obj.name)
 
 
-def prepare_permissions_role(form: Any, typ: Any) -> None:
+def prepare_permissions_role(form: Form, typ: type) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
@@ -295,7 +298,7 @@ def prepare_permissions_role(form: Any, typ: Any) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance: Any, form: Any) -> None:
+def save_permissions_role(instance: EventRole | AssociationRole, form: Form) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -464,7 +467,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return f"{obj.display_real()} - {obj.email}"
 
 
-def get_association_people(association_id: Any) -> Any:
+def get_association_people(association_id: int) -> list[tuple[int, str]]:
     """Get list of people associated with an association for form choices.
 
     Args:
@@ -482,7 +485,7 @@ def get_association_people(association_id: Any) -> Any:
     return ls
 
 
-def get_run_choices(self: Any, *, past: Any = False) -> None:
+def get_run_choices(self: Any, *, past: bool = False) -> None:
     """Generate run choices for form fields.
 
     Args:
@@ -812,7 +815,7 @@ class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
     pass
 
 
-def remove_choice(choices: Any, type_to_remove: Any) -> Any:
+def remove_choice(choices: list[tuple[str, str]], type_to_remove: str) -> list[tuple[str, str]]:
     """Remove a specific choice from a list of choices.
 
     Args:
@@ -844,7 +847,7 @@ class RedirectForm(forms.Form):
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")
 
 
-def get_members_queryset(association_id: Any) -> Any:
+def get_members_queryset(association_id: int) -> QuerySet[Member]:
     """Get queryset of members for an association with accepted status.
 
     Args:

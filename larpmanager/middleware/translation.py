@@ -21,7 +21,7 @@
 from gettext import GNUTranslations
 from typing import Any
 
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.utils import translation as dj_translation
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import trans_real
@@ -75,7 +75,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
         # Replace the thread-local active translation with our custom one
         trans_real._active.value = assoc_trans
 
-    def process_response(self, request: Any, response: Any) -> Any:  # noqa: ARG002
+    def process_response(self, request: HttpRequest, response: HttpResponse) -> HttpResponse:  # noqa: ARG002
         """Clean up translation overrides after processing the request.
 
         Args:

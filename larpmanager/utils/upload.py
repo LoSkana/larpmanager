@@ -73,6 +73,7 @@ if TYPE_CHECKING:
     from django.forms import Form
 
     from larpmanager.models.base import BaseModel
+    from larpmanager.models.event import Run
 
 logger = logging.getLogger(__name__)
 
@@ -169,7 +170,7 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
     return None
 
 
-def _get_file(context: dict, file: object, column_id: str | None = None) -> tuple[any, list[str]]:
+def _get_file(context: dict, file: Any, column_id: str | None = None) -> tuple[pd.DataFrame | None, list[str]]:
     """Get file path and save uploaded file to media directory.
 
     Args:
@@ -218,7 +219,7 @@ def _get_file(context: dict, file: object, column_id: str | None = None) -> tupl
     return input_dataframe, []
 
 
-def registrations_load(context: dict, uploaded_file_form: Any) -> Any:
+def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
     """Load registration data from uploaded CSV file.
 
     Args:
@@ -226,7 +227,7 @@ def registrations_load(context: dict, uploaded_file_form: Any) -> Any:
         uploaded_file_form: Form data containing uploaded CSV file
 
     Returns:
-        str: HTML formatted result message with processing statistics
+        list[str]: Processing log messages with statistics
 
     """
     (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
@@ -309,7 +310,12 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
 
 def _reg_field_load(
-    context: dict[str, Any], registration: Any, field_name: Any, field_value: Any, registration_questions: Any, error_logs: Any
+    context: dict[str, Any],
+    registration: Registration,
+    field_name: str,
+    field_value: str,
+    registration_questions: dict[str, Any],
+    error_logs: list[str],
 ) -> None:
     """Load individual registration field from CSV data.
 
@@ -347,11 +353,11 @@ def _reg_field_load(
 
 def _assign_elem(
     context: dict,
-    target_object: object,
+    target_object: Any,
     field_name: str,
     lookup_value: str,
     model_type: type,
-    error_logs: list,
+    error_logs: list[str],
 ) -> None:
     """Assign an element to an object field based on value lookup.
 
@@ -430,7 +436,7 @@ def _reg_assign_characters(
         RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
 
 
-def writing_load(context: dict, form: Any) -> list[str]:
+def writing_load(context: dict, form: Form) -> list[str]:
     """Load writing data from uploaded files and process relationships.
 
     Processes uploaded files containing writing elements and their relationships.
@@ -601,13 +607,13 @@ def _get_questions(questions_queryset: QuerySet) -> dict:
 
 
 def _assign_choice_answer(
-    target_element: Any,
-    field_name: Any,
-    field_value: Any,
-    available_questions: Any,
-    error_logs: Any,
+    target_element: Registration | Character,
+    field_name: str,
+    field_value: str,
+    available_questions: dict[str, Any],
+    error_logs: list[str],
     *,
-    is_registration: Any = False,
+    is_registration: bool = False,
 ) -> None:
     """Assign choice answers to form elements during bulk import.
 
@@ -714,7 +720,9 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
     return f"OK - Updated {element_name}"
 
 
-def _writing_load_field(context: dict, element: BaseModel, field: str, value: any, questions: dict, logs: list) -> None:
+def _writing_load_field(
+    context: dict, element: BaseModel, field: str, value: str, questions: dict, logs: list[str]
+) -> None:
     """Load writing field data during upload processing.
 
     Processes individual field values from upload data and updates the writing element
@@ -768,12 +776,12 @@ def _writing_load_field(context: dict, element: BaseModel, field: str, value: an
 
 def _writing_question_load(
     context: dict[str, Any],
-    writing_element: Any,
-    question_field: Any,
-    question_type: Any,
-    processing_logs: Any,
-    questions_dict: Any,
-    field_value: Any,
+    writing_element: Character | Plot | Faction,
+    question_field: str,
+    question_type: WritingQuestionType,
+    processing_logs: list[str],
+    questions_dict: dict[str, Any],
+    field_value: str,
 ) -> None:
     """Process and load writing question values into element fields.
 
@@ -848,7 +856,7 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
             logs.append(f"Faction not found: {faction_name}")
 
 
-def form_load(context: dict, form: Any, *, is_registration: bool = True) -> list[str]:
+def form_load(context: dict, form: Form, *, is_registration: bool = True) -> list[str]:
     """Load form questions and options from uploaded files.
 
     Processes uploaded CSV/Excel files to create form questions and their
@@ -1092,7 +1100,9 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
     return f"OK - Updated {option_name}"
 
 
-def _get_option(context: dict[str, Any], is_registration: Any, option_name: Any, parent_question_id: Any) -> Any:
+def _get_option(
+    context: dict[str, Any], is_registration: bool, option_name: str, parent_question_id: int
+) -> tuple[bool, RegistrationOption | WritingOption]:
     """Get or create a question option for registration or writing forms.
 
     Args:
@@ -1122,7 +1132,7 @@ def _get_option(context: dict[str, Any], is_registration: Any, option_name: Any,
     return was_created, option_instance
 
 
-def get_csv_upload_tmp(csv_upload: Any, run: Any) -> str:
+def get_csv_upload_tmp(csv_upload: Any, run: Run) -> str:
     """Create a temporary file for CSV upload processing.
 
     Creates a temporary directory structure under MEDIA_ROOT/tmp/event_slug/
@@ -1277,7 +1287,7 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
     return f"OK - Created {ticket}" if was_created else f"OK - Updated {ticket}"
 
 
-def abilities_load(context: dict, form: Any) -> list:
+def abilities_load(context: dict, form: Form) -> list[str]:
     """Load abilities from uploaded file and process each row.
 
     Args:

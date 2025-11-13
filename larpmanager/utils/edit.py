@@ -679,7 +679,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
 
 def _writing_save(
     context: dict,
-    form: Any,
+    form: Form,
     form_type: type,
     nm: str,
     redr: Callable | None,

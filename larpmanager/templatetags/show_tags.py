@@ -44,6 +44,8 @@ from larpmanager.utils.common import html_clean
 from larpmanager.utils.pdf import get_trait_character
 
 if TYPE_CHECKING:
+    from django.forms import BoundField, Form
+
     from larpmanager.models.event import Run
 
 register = template.Library()
@@ -51,7 +53,7 @@ logger = logging.getLogger(__name__)
 
 
 @register.filter
-def modulo(num: Any, val: Any) -> Any:
+def modulo(num: int, val: int) -> int:
     """Template filter to calculate modulo operation.
 
     Args:
@@ -66,7 +68,7 @@ def modulo(num: Any, val: Any) -> Any:
 
 
 @register.filter
-def basename(file_path: Any) -> Any:
+def basename(file_path: str | Path) -> str:
     """Template filter to extract basename from file path.
 
     Args:
@@ -82,7 +84,7 @@ def basename(file_path: Any) -> Any:
 
 
 @register.filter
-def clean_tags(tx: Any) -> Any:
+def clean_tags(tx: str) -> str:
     """Template filter to clean HTML tags from text.
 
     Args:
@@ -97,7 +99,7 @@ def clean_tags(tx: Any) -> Any:
 
 
 @register.filter
-def get(value: Any, arg: Any) -> Any:
+def get(value: dict[str, Any], arg: str) -> Any:
     """Template filter to get dictionary value by key.
 
     Args:
@@ -113,7 +115,7 @@ def get(value: Any, arg: Any) -> Any:
     return ""
 
 
-def get_tooltip(context: Any, character: Any) -> Any:
+def get_tooltip(context: dict[str, Any], character: dict[str, Any]) -> str:
     """Generate HTML tooltip for character display.
 
     Args:
@@ -139,7 +141,7 @@ def get_tooltip(context: Any, character: Any) -> Any:
     return tooltip
 
 
-def tooltip_fields(character: Any, tooltip: Any) -> Any:
+def tooltip_fields(character: dict[str, Any], tooltip: str) -> str:
     """Add character name, title, and player information to tooltip.
 
     Args:
@@ -166,7 +168,7 @@ def tooltip_fields(character: Any, tooltip: Any) -> Any:
     return tooltip
 
 
-def tooltip_factions(character: Any, context: Any, tooltip: Any) -> Any:
+def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip: str) -> str:
     """Add faction information to character tooltip.
 
     Args:
@@ -193,7 +195,7 @@ def tooltip_factions(character: Any, context: Any, tooltip: Any) -> Any:
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context: Any, text: Any, limit: Any = 200) -> Any:
+def replace_chars(context: dict[str, Any], text: str, limit: int = 200) -> str:
     """Template tag to replace character number references with names.
 
     Replaces #XX, @XX, and ^XX patterns with character names in text.
@@ -227,7 +229,7 @@ def go_character(
     search_pattern: str,
     character_number: int,
     text: str,
-    run: Any,
+    run: Run,
     *,
     include_tooltip: bool,
     simple: bool = False,
@@ -411,7 +413,7 @@ def go_trait(
     search: str,
     trait_number: int,
     text: str,
-    run: Any,
+    run: Run,
     *,
     include_tooltip: bool,
     simple: bool = False,
@@ -486,7 +488,7 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: Any, text: Any, run: Any, tooltip: Any) -> Any:
+def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> str:
     """Template tag to process text and convert trait references to character links.
 
     Args:
@@ -541,7 +543,7 @@ def key(d: Any, key_name: Any, s_key_name: Any = None) -> Any:
 
 
 @register.simple_tag
-def get_field(form: Any, field_name: Any) -> Any:
+def get_field(form: Form, field_name: str) -> BoundField | str:
     """Template tag to safely get form field by name.
 
     Args:
@@ -558,7 +560,7 @@ def get_field(form: Any, field_name: Any) -> Any:
 
 
 @register.simple_tag(takes_context=True)
-def get_field_show_char(context: Any, form: Any, name: Any, run: Any, tooltip: Any) -> Any:
+def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip: bool) -> str:
     """Template tag to get form field and process character references.
 
     Args:
@@ -579,7 +581,7 @@ def get_field_show_char(context: Any, form: Any, name: Any, run: Any, tooltip: A
 
 
 @register.simple_tag
-def get_deep_field(form: Any, key1: Any, key2: Any) -> Any:
+def get_deep_field(form: Form | dict, key1: str, key2: str) -> Any:
     """Template tag to get nested form field value.
 
     Args:
@@ -597,7 +599,7 @@ def get_deep_field(form: Any, key1: Any, key2: Any) -> Any:
 
 
 @register.filter
-def get_form_field(form: Any, name: Any) -> Any:
+def get_form_field(form: Form, name: str) -> BoundField | str:
     """Template filter to get form field by name.
 
     Args:
@@ -614,7 +616,7 @@ def get_form_field(form: Any, name: Any) -> Any:
 
 
 @register.simple_tag
-def lookup(obj: Any, prop: Any) -> Any:
+def lookup(obj: Any, prop: str) -> Any:
     """Template tag to safely get object attribute.
 
     Args:
@@ -967,7 +969,7 @@ def format_decimal(decimal_value: Any) -> Any:
 
 
 @register.filter
-def get_attributes(obj: Any) -> Any:
+def get_attributes(obj: Any) -> dict[str, Any]:
     """Template filter to get object attributes as dictionary.
 
     Args:

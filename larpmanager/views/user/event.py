@@ -807,7 +807,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/search.html", context)
 
 
-def get_fact(factions_queryset: Any) -> list[dict]:
+def get_fact(factions_queryset: QuerySet[Faction]) -> list[dict[str, Any]]:
     """Filter queryset to return only factions with characters.
 
     Args:

@@ -78,7 +78,7 @@ from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, w
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
-def get_character_optimized(context: dict[str, Any], num: Any) -> None:
+def get_character_optimized(context: dict[str, Any], num: int) -> None:
     """Get character with optimized queries for editing.
 
     Args:
@@ -897,7 +897,9 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/writing/check.html", context)
 
 
-def check_relations(character_cache: Any, validation_checks: Any, character_numbers: Any, context: dict[str, Any], number_to_id_map: Any) -> None:
+def check_relations(
+    character_cache: Any, validation_checks: Any, character_numbers: Any, context: dict[str, Any], number_to_id_map: Any
+) -> None:
     """Check character relationships for missing and extinct references.
 
     Args:
@@ -936,7 +938,9 @@ def check_relations(character_cache: Any, validation_checks: Any, character_numb
                 )
 
 
-def check_writings(cache: Any, checks: Any, character_numbers: Any, context: dict[str, Any], character_id_to_number_map: Any) -> None:
+def check_writings(
+    cache: Any, checks: Any, character_numbers: Any, context: dict[str, Any], character_id_to_number_map: Any
+) -> None:
     """Validate writing submissions and requirements for different element types.
 
     Args:

@@ -191,9 +191,7 @@ def _reload_fixtures() -> None:
 
 
 @pytest.fixture(autouse=True, scope="function")
-def _e2e_db_setup(
-    request: pytest.FixtureRequest, django_db_blocker: _DatabaseBlocker
-) -> Generator[None, None, None]:
+def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: _DatabaseBlocker) -> Generator[None, None, None]:
     """Set up database for e2e tests with single database per worker."""
     with django_db_blocker.unblock():
         if not _database_has_tables():

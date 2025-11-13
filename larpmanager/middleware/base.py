@@ -17,13 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
-
 from django.conf import settings as conf_settings
 from django.http import HttpRequest
 
 
-def is_ajax(http_request: Any) -> Any:
+def is_ajax(http_request: HttpRequest) -> bool:
     """Check if request is an AJAX request.
 
     Args:
@@ -36,6 +34,6 @@ def is_ajax(http_request: Any) -> Any:
     return http_request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
 
 
-def show_toolbar(request: HttpRequest) -> Any:
+def show_toolbar(request: HttpRequest) -> bool:
     """Determine whether to show the toolbar on a given page."""
     return getattr(conf_settings, "DEBUG_TOOLBAR", False) and not is_ajax(request)
