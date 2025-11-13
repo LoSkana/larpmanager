@@ -276,7 +276,7 @@ def _get_cached_config(
     config_name: str,
     *,
     default_value: any | None = None,
-    context: dict,
+    context: dict | None = None,
     bypass_cache: bool = False,
 ) -> any:
     """Get cached configuration for any element type."""
@@ -304,7 +304,7 @@ def get_association_config(
     config_name: str,
     *,
     default_value: Any = None,
-    context: dict,
+    context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
     """Get configuration value for association."""
@@ -323,7 +323,7 @@ def get_event_config(
     config_name: str,
     *,
     default_value: Any = None,
-    context: dict[str, Any] | None = None,
+    context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
     """Get event configuration value from cache or database."""
