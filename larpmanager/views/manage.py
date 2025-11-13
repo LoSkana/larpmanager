@@ -97,7 +97,7 @@ def _get_registration_status_code(run):
         return "preregister", None
 
     # Check registration opening time
-    current_datetime = timezone.now().date()
+    current_datetime = timezone.now()
     if "registration_open" in features:
         if not run.registration_open:
             return "not_set", None
