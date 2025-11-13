@@ -78,6 +78,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.utils.base import check_association_context
 from larpmanager.utils.common import (
     _get_help_questions,
+    ensure_timezone_aware,
     format_email_body,
     get_member,
     normalize_string,
@@ -665,7 +666,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         member.last_enrolment = cache[member.id]
 
         # Calculate enrollment order based on days from year start
-        member.order = (member.last_enrolment - start).days
+        # Ensure both datetimes are timezone-aware for comparison
+        member.order = (ensure_timezone_aware(member.last_enrolment) - start).days
 
         # Parse and format member legal name if available
         if member.legal_name:
