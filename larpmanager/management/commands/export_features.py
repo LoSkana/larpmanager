@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
 
 import yaml
 from django.core.management.base import BaseCommand
@@ -32,7 +31,7 @@ class Command(BaseCommand):
     help = "Export features to yaml"
 
     # noinspection PyProtectedMember
-    def handle(self, *args: tuple[Any, ...], **options: dict[str, Any]) -> None:
+    def handle(self, *args: tuple, **options: dict) -> None:  # noqa: ARG002
         """Export features and related data to YAML fixture files.
 
         This Django management command exports system configuration data including

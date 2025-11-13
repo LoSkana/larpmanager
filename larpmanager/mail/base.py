@@ -17,13 +17,14 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -52,7 +53,7 @@ def check_holiday() -> bool:
 
     """
     # Get current date
-    today = datetime.now().date()
+    today = timezone.now().date()
 
     # Check holidays in major countries
     for country_code in ["US", "IT", "CN", "UK"]:
@@ -94,7 +95,7 @@ def join_email(association) -> None:
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender, **kwargs) -> None:
+def on_association_roles_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.
@@ -179,7 +180,7 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
                 my_send_mail(subj, body, m, instance.association)
 
 
-def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
+def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:  # noqa: ARG001
     """Handle event role changes and send notifications.
 
     Args:

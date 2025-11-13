@@ -17,14 +17,16 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import connection
+from django.utils import timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
@@ -70,7 +72,7 @@ class Command(BaseCommand):
 
     help = "Automate processes "
 
-    def handle(self, *args: Any, **options: Any) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle command execution with exception handling.
 
         Args:
@@ -158,7 +160,7 @@ class Command(BaseCommand):
         Cleans up abandoned payment attempts to prevent database bloat.
         """
         # delete old payment invoice
-        reference_date = datetime.now() - timedelta(days=60)
+        reference_date = timezone.now() - timedelta(days=60)
         payment_invoices_query = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
         for payment_invoice in payment_invoices_query.filter(created__lte=reference_date.date()):
             payment_invoice.delete()
@@ -225,7 +227,7 @@ class Command(BaseCommand):
         events_by_id = {}
 
         # Process past events for participation badges
-        for run in Run.objects.filter(end__lt=datetime.today(), event__association=association):
+        for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
             # Get all non-cancelled registrations
             registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
 
@@ -239,7 +241,7 @@ class Command(BaseCommand):
             events_by_id[run.event_id] = run.event
 
         # Process future events for friend referral tracking
-        for run in Run.objects.filter(end__gt=datetime.today()):
+        for run in Run.objects.filter(end__gt=timezone.now().date()):
             # Get confirmed registrations (excluding waiting list)
             for registration in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
                 ticket__tier=TicketTier.WAITING,
@@ -610,7 +612,7 @@ class Command(BaseCommand):
         registrations_queryset = get_regs(association)
 
         # Calculate reference date (3 days from now) to filter out immediate events
-        minimum_start_date = datetime.now() + timedelta(days=3)
+        minimum_start_date = timezone.now() + timedelta(days=3)
 
         # Filter registrations to exclude events without start dates or starting too soon
         registrations_queryset = registrations_queryset.exclude(run__start__isnull=True).exclude(
@@ -690,7 +692,7 @@ class Command(BaseCommand):
 
         """
         # Get current year for membership fee validation
-        current_year = datetime.today().year
+        current_year = timezone.now().year
 
         # Skip if registration is not for current year
         if current_year != registration.run.end.year:
@@ -755,7 +757,8 @@ class Command(BaseCommand):
         # Send payment reminder if all conditions are met
         remember_pay(reg)
 
-    def check_deadline(self, run: Run) -> None:
+    @staticmethod
+    def check_deadline(run: Run) -> None:
         """Check and send deadline notifications for run.
 
         This function performs deadline checking for a specific run, considering holidays,
@@ -774,7 +777,7 @@ class Command(BaseCommand):
             return
 
         # Calculate reference date (7 days ago) and skip if run is too old or has no start date
-        reference_date = datetime.now() - timedelta(days=7)
+        reference_date = timezone.now() - timedelta(days=7)
         if not run.start or run.start < reference_date.date():
             return
 

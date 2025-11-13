@@ -30,7 +30,7 @@ class Command(BaseCommand):
     help = "Reset DB"
 
     # noinspection PyProtectedMember
-    def handle(self, *args: tuple, **options: dict) -> None:
+    def handle(self, *args: tuple, **options: dict) -> None:  # noqa: ARG002
         """Database reset command with fixtures loading.
 
         Truncates all database tables and reloads initial fixtures. Supports

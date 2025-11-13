@@ -17,16 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import secrets
 import uuid
-from datetime import datetime
+from typing import TYPE_CHECKING
 
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.core.files.storage import default_storage
-from django.forms import Form
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -38,6 +40,9 @@ from larpmanager.utils.miscellanea import check_centauri
 from larpmanager.utils.tutorial_query import query_index
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
+
+if TYPE_CHECKING:
+    from django.forms import Form
 
 
 class MyLoginView(LoginView):
@@ -209,7 +214,7 @@ def upload_media(request: HttpRequest) -> JsonResponse:
         file = request.FILES["file"]
 
         # Generate timestamp and unique filename
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
         filename = f"{timestamp}_{uuid.uuid4().hex}{file.name[file.name.rfind('.') :]}"
 
         # Save file to association-specific directory

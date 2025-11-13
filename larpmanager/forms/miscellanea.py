@@ -18,11 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime
 from typing import Any
 
 from django import forms
 from django.forms import Textarea
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from tinymce.widgets import TinyMCE
 
@@ -396,13 +396,13 @@ class ShuttleServiceForm(MyForm):
         """Initialize form with default time value if not provided."""
         super().__init__(*args, **kwargs)
         # ~ if 'date' not in self.initial or not self.initial['date']:
-        # ~ self.initial['date'] = datetime.now().date().isoformat()
+        # ~ self.initial['date'] = timezone.now().date().isoformat()
         # ~ else:
         # ~ self.initial['date'] = self.instance.date.isoformat()
 
         # Set default time to current time if not already set
         if "time" not in self.initial or not self.initial["time"]:
-            self.initial["time"] = datetime.now().time()
+            self.initial["time"] = timezone.now().time()
 
 
 class ShuttleServiceEditForm(ShuttleServiceForm):

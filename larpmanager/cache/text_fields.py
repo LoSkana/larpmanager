@@ -17,16 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -37,6 +36,10 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing
+
+if TYPE_CHECKING:
+    from larpmanager.models.base import BaseModel
+    from larpmanager.models.event import Event, Run
 
 
 def cache_text_field_key(model_type: type, model_instance: object) -> str:
@@ -83,7 +86,7 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
         )
 
     # Return the processed text and original length
-    return (cleaned_text, original_length)
+    return cleaned_text, original_length
 
 
 # Writing

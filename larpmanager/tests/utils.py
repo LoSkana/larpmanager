@@ -22,9 +22,10 @@ import io
 import logging
 import os
 import zipfile
-from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
+
+from django.utils import timezone
 
 import pandas as pd
 from playwright.sync_api import expect
@@ -63,7 +64,7 @@ def handle_error(page, e, test_name) -> NoReturn:
     logger.error("Error on %s: %s\n", test_name, page.url)
     logger.error(e)
 
-    uid = datetime.now().strftime("%Y%m%d_%H%M%S")
+    uid = timezone.now().strftime("%Y%m%d_%H%M%S")
     page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
 
     raise e

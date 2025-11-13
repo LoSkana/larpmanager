@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import logging
 from typing import Any
 
@@ -250,6 +252,7 @@ from larpmanager.utils.writing import replace_character_names_before_save
 log = logging.getLogger(__name__)
 
 # ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
+# ruff: noqa: ARG001 Unused function argument
 
 
 # Generic signal handlers (no specific sender)

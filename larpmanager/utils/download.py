@@ -1227,9 +1227,14 @@ def export_abilities(context):
     )
     ability_rows = []
     for ability in ability_queryset:
-        row_data = [ability.name, ability.cost, ability.typ.name if ability.typ else "", ability.descr]
-        row_data.append(", ".join([prereq.name for prereq in ability.prerequisites.all()]))
-        row_data.append(", ".join([req.name for req in ability.requirements.all()]))
+        row_data = [
+            ability.name,
+            ability.cost,
+            ability.typ.name if ability.typ else "",
+            ability.descr,
+            ", ".join([prereq.name for prereq in ability.prerequisites.all()]),
+            ", ".join([req.name for req in ability.requirements.all()]),
+        ]
         ability_rows.append(row_data)
 
     return [("abilities", column_headers, ability_rows)]

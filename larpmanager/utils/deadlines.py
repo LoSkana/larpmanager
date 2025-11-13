@@ -21,6 +21,7 @@
 from datetime import datetime, timedelta
 
 from django.db.models import Count
+from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
@@ -60,7 +61,7 @@ def get_membership_fee_year(association_id, year=None):
 
     """
     if not year:
-        year = datetime.now().year
+        year = timezone.now().year
     return set(
         AccountingItemMembership.objects.filter(association_id=association_id, year=year).values_list(
             "member_id",
@@ -105,7 +106,7 @@ def check_run_deadlines(runs: list) -> list:
 
     # Check membership feature
     association_id = runs[0].event.association_id
-    now = datetime.now()
+    now = timezone.now()
     uses_membership = "membership" in get_association_features(association_id)
 
     # Load memberships and fees
@@ -160,7 +161,7 @@ def check_run_deadlines(runs: list) -> list:
                     tolerance,
                 )
             else:
-                deadlines_profile(deadline_violations, features, memberships, now, registration, run, tolerance)
+                deadlines_profile(deadline_violations, memberships, now, registration, run, tolerance)
 
             # Check payment deadlines
             deadlines_payment(deadline_violations, features, registration, tolerance)
@@ -176,7 +177,6 @@ def check_run_deadlines(runs: list) -> list:
 
 def deadlines_profile(
     deadline_violations,
-    features,
     memberships,
     current_datetime,
     registration,
@@ -187,7 +187,6 @@ def deadlines_profile(
 
     Args:
         deadline_violations (dict): Dictionary to collect deadline violations
-        features (dict): Event features
         memberships (dict): Member ID to membership mapping
         current_datetime (datetime): Current datetime
         registration: Registration instance

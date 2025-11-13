@@ -17,14 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import json
 import logging
+from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -40,6 +41,9 @@ from larpmanager.utils.common import get_element
 from larpmanager.utils.event import get_event_filter_characters
 from larpmanager.utils.exceptions import check_event_feature
 from larpmanager.utils.registration import registration_status
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 logger = logging.getLogger(__name__)
 
@@ -246,7 +250,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> Htt
     red = "larpmanager/event/casting/casting.html"
 
     # Check if user has already completed casting assignments
-    _check_already_done(context, request, casting_type)
+    _check_already_done(context, casting_type)
 
     # If assignments are already done, render read-only view
     if "assigned" in context:
@@ -323,7 +327,7 @@ def _get_previous(context: dict, request: HttpRequest, typ: int) -> None:
         pass
 
 
-def _check_already_done(context: dict, request, assignment_type: int) -> None:
+def _check_already_done(context: dict, assignment_type: int) -> None:
     """Check if assignment already exists and update context accordingly.
 
     For character assignments (type 0), checks if max characters reached and lists assigned characters.
@@ -331,7 +335,6 @@ def _check_already_done(context: dict, request, assignment_type: int) -> None:
 
     Args:
         context: View context dictionary to update with assignment info
-        request: HTTP request object
         assignment_type: 0 for character assignment, other values for trait types
 
     """

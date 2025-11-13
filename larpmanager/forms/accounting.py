@@ -18,11 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
 from django import forms
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
@@ -209,7 +209,7 @@ class ExeOutflowForm(MyForm):
 
         # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
-            self.initial["payment_date"] = datetime.now().date().isoformat()
+            self.initial["payment_date"] = timezone.now().date().isoformat()
             # ~ else:
             # ~ self.initial['payment_date'] = self.instance.payment_date.isoformat()
 
@@ -249,7 +249,7 @@ class ExeInflowForm(MyForm):
 
         # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
-            self.initial["payment_date"] = datetime.now().date().isoformat()
+            self.initial["payment_date"] = timezone.now().date().isoformat()
 
         # Invoice field is always required
         self.fields["invoice"].required = True
@@ -694,7 +694,7 @@ class ExePaymentSettingsForm(MyForm):
                             res[el] = input_value
 
                             # Create timestamped backup of old value
-                            now = datetime.now()
+                            now = timezone.now()
                             old_key = f"old-{el}-{now.strftime('%Y%m%d%H%M%S')}"
                             res[old_key] = orig_value
 

@@ -342,7 +342,7 @@ class ExeFeatureForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(is_association=True)
 
-    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002, ARG002
         """Save form and reset association features cache."""
         # Save form without committing to database yet
         instance = super().save(commit=False)

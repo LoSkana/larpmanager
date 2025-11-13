@@ -20,13 +20,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -203,9 +203,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get members already registered for current or future runs
     already = list(
-        Registration.objects.filter(
-            run__event=context["event"], run__end__gte=datetime.now(timezone.utc).date()
-        ).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.now().date()).values_list(
             "member_id",
             flat=True,
         ),
@@ -256,9 +254,7 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get list of members already registered for current/future runs
     already = list(
-        Registration.objects.filter(
-            run__event=context["event"], run__end__gte=datetime.now(timezone.utc).date()
-        ).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.now().date()).values_list(
             "member_id",
             flat=True,
         ),
@@ -539,7 +535,7 @@ def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpR
     context = check_event_context(request, event_slug, "orga_archive_email")
 
     # Retrieve the specific email for display
-    context["email"] = get_mail(request, context, mail_id)
+    context["email"] = get_mail(context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 
