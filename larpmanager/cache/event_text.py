@@ -21,6 +21,7 @@ import logging
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import get_language
 
 from larpmanager.models.event import EventText
@@ -50,7 +51,7 @@ def update_event_text(event_id: int, text_type: str, language: str) -> str:
     # Try to get event text from database
     try:
         event_text = EventText.objects.get(event_id=event_id, typ=text_type, language=language).text
-    except Exception as e:
+    except (ObjectDoesNotExist, AttributeError) as e:
         logger.debug("Event text not found for event_id=%s, type=%s, language=%s: %s", event_id, text_type, language, e)
 
     # Cache the result for 1 day
@@ -101,7 +102,7 @@ def update_event_text_def(event_id: int, typ: str) -> str:
     try:
         # Get default event text for the specified event and type
         default_text = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
-    except Exception as e:
+    except (ObjectDoesNotExist, AttributeError) as e:
         # Return empty string if no default text found or any error occurs
         logger.debug("Default event text not found for event_id=%s, type=%s: %s", event_id, typ, e)
 

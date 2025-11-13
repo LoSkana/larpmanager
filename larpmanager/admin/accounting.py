@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
@@ -50,7 +52,7 @@ class InvoiceFilter(AutocompleteFilter):
 class AccountingItemAdmin(DefModelAdmin):
     exclude = ("search",)
     list_display = ("id", "member", "value")
-    autocomplete_fields = ["member", "inv", "association"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
     search_fields = ("search",)
 
     @admin.display(ordering="reg__run", description="Run")
@@ -62,14 +64,14 @@ class AccountingItemAdmin(DefModelAdmin):
 @admin.register(AccountingItemTransaction)
 class AccountingItemTransactionAdmin(AccountingItemAdmin):
     list_display = ("id", "inv", "member", "value", "created", "updated")
-    autocomplete_fields = ["member", "inv", "association", "reg"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
     list_filter = (MemberFilter, AssociationFilter, RegistrationFilter)
 
 
 @admin.register(AccountingItemDiscount)
 class AccountingItemDiscountAdmin(AccountingItemAdmin):
     list_display = ("id", "disc", "run", "member", "value", "created", "updated")
-    autocomplete_fields = ["member", "inv", "association", "run", "disc"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "run", "disc"]
     list_filter = (MemberFilter, AssociationFilter, RunFilter)
 
 
@@ -77,14 +79,14 @@ class AccountingItemDiscountAdmin(AccountingItemAdmin):
 class AccountingItemDonationAdmin(AccountingItemAdmin):
     list_display = ("id", "member", "value", "descr", "created", "updated")
     list_filter = (MemberFilter, AssociationFilter)
-    autocomplete_fields = ["member", "inv", "association"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
 
 @admin.register(AccountingItemCollection)
 class AccountingItemCollectionAdmin(AccountingItemAdmin):
     list_display = ("id", "member", "value", "created", "updated")
     list_filter = (MemberFilter, AssociationFilter)
-    autocomplete_fields = ["member", "inv", "association"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
 
 @admin.register(AccountingItemExpense)
@@ -132,7 +134,7 @@ class AccountingItemInflowAdmin(AccountingItemAdmin):
         "created",
         "updated",
     )
-    autocomplete_fields = ["member", "inv", "association", "run"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "run"]
     list_filter = (RunFilter, AssociationFilter)
     search_fields = ("search", "descr")
 
@@ -149,7 +151,7 @@ class AccountingItemPaymentAdmin(AccountingItemAdmin):
         "updated",
         "inv",
     )
-    autocomplete_fields = ["member", "inv", "association", "reg"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
     list_filter = (MemberFilter, AssociationFilter, RegistrationFilter, "pay", "created")
 
 
@@ -166,7 +168,7 @@ class AccountingItemMembershipAdmin(AccountingItemAdmin):
         "updated",
     )
     list_filter = (MemberFilter, AssociationFilter)
-    autocomplete_fields = ["member", "inv", "association"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
 
 @admin.register(AccountingItemOther)
@@ -215,16 +217,15 @@ class ElectronicInvoiceAdmin(DefModelAdmin):
 @admin.register(Discount)
 class DiscountAdmin(DefModelAdmin):
     list_display = ("name", "value", "max_redeem", "cod", "typ", "show_event")
-    # filter_horizontal = ['runs']
-    autocomplete_fields = ["event", "runs", "runs"]
-    search_fields = ["name"]
+    autocomplete_fields: ClassVar[list] = ["event", "runs", "runs"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(RecordAccounting)
 class RecordAccountingAdmin(DefModelAdmin):
     list_display = ("run", "association", "global_sum", "bank_sum")
     list_filter = (RunFilter, AssociationFilter)
-    autocomplete_fields = ["run", "association"]
+    autocomplete_fields: ClassVar[list] = ["run", "association"]
 
 
 @admin.register(RefundRequest)
@@ -237,5 +238,5 @@ class RefundRequestAdmin(DefModelAdmin):
 @admin.register(Collection)
 class CollectionAdmin(DefModelAdmin):
     list_display = ("id", "member", "organizer", "total")
-    autocomplete_fields = ["member", "run", "organizer", "association"]
-    search_fields = ["name"]
+    autocomplete_fields: ClassVar[list] = ["member", "run", "organizer", "association"]
+    search_fields: ClassVar[list] = ["name"]

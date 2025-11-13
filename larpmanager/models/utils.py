@@ -23,7 +23,6 @@ import base64
 import hashlib
 import json
 import logging
-import os
 import random
 import string
 from datetime import datetime
@@ -257,26 +256,24 @@ class UploadToPathAndRename:
         # Build directory path based on instance attributes
         path = self.sub_path
         if hasattr(instance, "event") and instance.event:
-            path = os.path.join(path, instance.event.slug)
+            path = str(Path(path) / instance.event.slug)
         if hasattr(instance, "run") and instance.run:
-            path = os.path.join(path, instance.run.event.slug, str(instance.run.number))
+            path = str(Path(path) / instance.run.event.slug / str(instance.run.number))
         if hasattr(instance, "album") and instance.album:
-            path = os.path.join(path, instance.album.slug)
+            path = str(Path(path) / instance.album.slug)
 
         # Construct final file path
-        new_fn = os.path.join(path, filename)
-        # true_fn = os.path.join(conf_settings.MEDIA_ROOT, new_fn)
+        new_fn = str(Path(path) / filename)
 
         # Handle backup of existing files for updates
         if instance.pk:
-            bkp_tomove = []
             path_bkp = Path(conf_settings.MEDIA_ROOT) / path
 
             # Find existing files that match this instance
             if path_bkp.exists():
-                for file_entry in path_bkp.iterdir():
-                    if file_entry.name.startswith(f"{instance.pk}_"):
-                        bkp_tomove.append(file_entry.name)
+                bkp_tomove = [file_entry.name for file_entry in path_bkp.iterdir() if file_entry.name.startswith(f"{instance.pk}_")]
+            else:
+                bkp_tomove = []
 
             # Move existing files to backup directory
             for el in bkp_tomove:
@@ -288,8 +285,6 @@ class UploadToPathAndRename:
                 bkp_fn = f"{instance.pk}_{datetime.now()}.{ext}"
                 bkp_fn = bkp / bkp_fn
                 current_fn = Path(conf_settings.MEDIA_ROOT) / path / el
-                # logger.debug(f"Backup: {bkp}")
-                # logger.debug(f"Backup filename: {bkp_fn}")
                 current_fn.rename(bkp_fn)
 
         return new_fn
@@ -332,7 +327,7 @@ def get_payment_details_path(association: Association) -> str:
     filename = f"{Path(association.slug).name}.{key_identifier}.enc"
 
     # Return full path to encrypted payment file
-    return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, filename)
+    return str(Path(conf_settings.PAYMENT_SETTING_FOLDER) / filename)
 
 
 def save_payment_details(association: Association, payment_details: dict) -> None:
@@ -364,7 +359,7 @@ def save_payment_details(association: Association, payment_details: dict) -> Non
     encrypted_file_path = get_payment_details_path(association)
 
     # Write encrypted data to file
-    with open(encrypted_file_path, "wb") as f:
+    with Path(encrypted_file_path).open("wb") as f:
         f.write(encrypted_data)
 
 

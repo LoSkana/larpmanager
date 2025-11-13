@@ -99,9 +99,8 @@ def _check_pre_register_redirect(context: dict, event_slug: str) -> HttpResponse
         return redirect("register", event_slug=event_slug)
 
     # Check if registration is open and we're past the open date
-    if "registration_open" in context["features"]:
-        if context["run"].registration_open and context["run"].registration_open <= timezone_now():
-            return redirect("register", event_slug=event_slug)
+    if "registration_open" in context["features"] and context["run"].registration_open and context["run"].registration_open <= timezone_now():
+        return redirect("register", event_slug=event_slug)
 
     return None
 
@@ -262,8 +261,6 @@ def save_registration(
         and bring_friend functionality based on context feature flags.
 
     """
-    # pprint(form.cleaned_data)  # Debug output for form data
-
     # Create or update registration within atomic transaction
     with transaction.atomic():
         # Initialize new registration if none provided
@@ -429,12 +426,11 @@ def registration_redirect(
             return redirect("membership")
 
     # Check if payment feature is enabled and payment is required
-    if "payment" in context["features"]:
-        # Redirect to payment page if registration has outstanding payment alert
-        if registration.alert:
-            message = _("To confirm your registration, please pay the amount indicated") + "."
-            messages.success(request, message)
-            return redirect("acc_reg", reg_id=registration.id)
+    # Redirect to payment page if registration has outstanding payment alert
+    if "payment" in context["features"] and registration.alert:
+        message = _("To confirm your registration, please pay the amount indicated") + "."
+        messages.success(request, message)
+        return redirect("acc_reg", reg_id=registration.id)
 
     # All requirements satisfied - show success message and redirect to event gallery
     context = {"event": run}
@@ -748,19 +744,17 @@ def _check_redirect_registration(
 
     # Redirect to external registration link if configured
     # Skip redirect for staff and NPC tiers who register internally
-    if "register_link" in context["features"] and event.register_link:
-        if "tier" not in context or context["tier"] not in [TicketTier.STAFF, TicketTier.NPC]:
-            return redirect(event.register_link)
+    if "register_link" in context["features"] and event.register_link and ("tier" not in context or context["tier"] not in [TicketTier.STAFF, TicketTier.NPC]):
+        return redirect(event.register_link)
 
     # Check registration timing and pre-registration options
-    if "registration_open" in context["features"]:
-        if not context["run"].registration_open or context["run"].registration_open > timezone_now():
-            # Redirect to pre-registration if available and active
-            if "pre_register" in context["features"] and get_event_config(
-                event.id, "pre_register_active", default_value=False
-            ):
-                return redirect("pre_register", event_slug=context["event"].slug)
-            return render(request, "larpmanager/event/not_open.html", context)
+    if "registration_open" in context["features"] and (not context["run"].registration_open or context["run"].registration_open > timezone_now()):
+        # Redirect to pre-registration if available and active
+        if "pre_register" in context["features"] and get_event_config(
+            event.id, "pre_register_active", default_value=False
+        ):
+            return redirect("pre_register", event_slug=context["event"].slug)
+        return render(request, "larpmanager/event/not_open.html", context)
 
     return None
 
@@ -879,13 +873,6 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
 # ~ except Exception as e:
 # ~ pass
 # ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.PLAYAGAIN).count() > 0:
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Discount not comulary with Play Again')})
-# ~ # all green! proceed
-# ~ now = datetime.now()
-# ~ AccountingItemDiscount.objects.create(disc=disc, value=disc.value, member=context["member"], expires=now + timedelta(minutes = 15), run=context['run'], detail=friend.id, association_id=context['association_id'])
-# ~ Return Jsonresonse ({'res': 'ok', 'msg': _ ('The facility has been added! It was reserved for you for 15 minutes, after which it will be removed')})
-
-
 @login_required
 @require_POST
 def discount(request: HttpRequest, event_slug: str) -> JsonResponse:

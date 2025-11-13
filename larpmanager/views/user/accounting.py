@@ -495,7 +495,7 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
         )
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
-    except Exception as e:
+    except AccountingItemMembership.DoesNotExist as e:
         logger.debug("Membership fee not found for member=%s, year=%s: %s", context["member"].id, year, e)
 
     # Set up context variables for template rendering
@@ -831,9 +831,6 @@ def acc_webhook_redsys(request: HttpRequest) -> JsonResponse:
 @csrf_exempt
 def acc_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
     """Handle failed Redsys payment callback."""
-    # printpretty_request(request))
-    # err_paypal(pretty_request(request))
-
     # Notify user about payment failure
     messages.error(request, _("The payment has not been completed"))
     return redirect("accounting")
@@ -974,7 +971,6 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
     # Validate form data and uploaded files
     if not form.is_valid():
-        # logger.debug(f"Form errors: {form.errors}")
         mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
         return redirect("/" + redirect_path)

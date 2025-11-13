@@ -212,7 +212,7 @@ def search_player(character, json_output: dict, context: dict) -> None:
             )
             character.reg = character.rcr.reg
             character.member = character.reg.member
-        except Exception:
+        except RegistrationCharacterRel.DoesNotExist:
             # Registration not found or database error
             character.rcr = None
             character.reg = None

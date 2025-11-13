@@ -188,7 +188,7 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
                 # Remove cache entry if it belongs to this run and member
                 if registration.run_id == run.id:
                     cached_accounting_data.pop(registration_id, None)
-            except ObjectDoesNotExist:
+            except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip deleted registrations
                 # Skip if registration no longer exists
                 pass
     else:

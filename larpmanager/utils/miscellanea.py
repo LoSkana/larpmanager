@@ -153,9 +153,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     unique_filename = f"{uuid4().hex}.{file_extension}"
 
     # Build destination path starting from media root
-    destination_path = os.path.join(conf_settings.MEDIA_ROOT, "albums")
-    destination_path = os.path.join(destination_path, main.run.event.slug)
-    destination_path = os.path.join(destination_path, str(main.run.number))
+    destination_path = Path(conf_settings.MEDIA_ROOT) / "albums" / main.run.event.slug / str(main.run.number)
 
     # Traverse album hierarchy to build nested directory structure
     parent_album = alb.parent
@@ -167,12 +165,12 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     # Create directory structure for nested albums
     for directory_id in parent_directories:
-        destination_path = os.path.join(destination_path, str(directory_id))
-        if not os.path.exists(destination_path):
-            Path(destination_path).mkdir(parents=True, exist_ok=True)
+        destination_path = destination_path / str(directory_id)
+        if not destination_path.exists():
+            destination_path.mkdir(parents=True, exist_ok=True)
 
     # Complete the file path with unique filename
-    destination_path = os.path.join(destination_path, unique_filename)
+    destination_path = destination_path / unique_filename
     logger.debug("Uploading album image to: %s", destination_path)
 
     # Move file from extraction path to final destination
@@ -198,8 +196,7 @@ def upload_albums(main, el) -> None:
     """
     cache_subalbums = {}
 
-    extraction_path = os.path.join(conf_settings.MEDIA_ROOT, "zip")
-    extraction_path = os.path.join(extraction_path, uuid4().hex)
+    extraction_path = Path(conf_settings.MEDIA_ROOT) / "zip" / uuid4().hex
 
     with zipfile.ZipFile(el, "r") as zip_file:
         zip_file.extractall(extraction_path)
@@ -227,9 +224,10 @@ def zipdir(path, ziph) -> None:
     """
     for root, _dirs, files in os.walk(path):
         for file in files:
+            file_path = Path(root) / file
             ziph.write(
-                os.path.join(root, file),
-                os.path.relpath(str(os.path.join(root, file)), os.path.join(path, "..")),
+                str(file_path),
+                str(file_path.relative_to(Path(path).parent)),
             )
 
 
@@ -360,10 +358,10 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     # Validate that the instance has a photo ImageField
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
-        photo_field = instance._meta.get_field("photo")
+        photo_field = instance._meta.get_field("photo")  # noqa: SLF001  # Django model metadata
         if not isinstance(photo_field, models.ImageField):
             return
-    except Exception:
+    except (AttributeError, LookupError):
         return
 
     # Get the photo file object from the instance
@@ -380,7 +378,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     try:
         file_object.seek(0)
         image = PILImage.open(file_object)
-    except Exception:
+    except (OSError, AttributeError):
         return
 
     # Apply EXIF orientation and get image dimensions
@@ -474,7 +472,7 @@ def _check_new(file_field, instance, sender) -> bool:
                 # Compare file names and check if no new file data is present
                 if file_field.name == existing_file_name and not getattr(file_field, "file", None):
                     return True
-        except Exception as e:
+        except (sender.DoesNotExist, AttributeError) as e:
             # Silently handle any database or attribute errors
             logger.debug("Error checking file field for instance pk=%s: %s", instance.pk, e)
 

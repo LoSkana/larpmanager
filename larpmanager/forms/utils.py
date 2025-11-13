@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.db.models import Q, QuerySet
@@ -315,7 +315,7 @@ def save_permissions_role(instance, form) -> None:
 
 
 class EventS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -340,7 +340,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
 
 
 class CampaignS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -369,7 +369,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
 
 
 class TemplateS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -383,7 +383,7 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
 
 
 class AssocMS2:
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
         "nickname__icontains",
@@ -413,7 +413,7 @@ class AssociationMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
 
 
 class RunMemberS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
         "nickname__icontains",
@@ -467,11 +467,9 @@ def get_association_people(association_id):
         list: List of (member_id, display_string) tuples
 
     """
-    ls = []
     que = Membership.objects.select_related("member").filter(association_id=association_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
-    for f in que:
-        ls.append((f.member_id, f"{f.member!s} - {f.member.email}"))
+    ls = [(f.member_id, f"{f.member!s} - {f.member.email}") for f in que]
     return ls
 
 
@@ -494,8 +492,7 @@ def get_run_choices(self, *, past=False) -> None:
     if past:
         reference_date = datetime.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
-    for run in runs:
-        choices.append((run.id, str(run)))
+    choices.extend([(run.id, str(run)) for run in runs])
 
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
@@ -506,7 +503,7 @@ def get_run_choices(self, *, past=False) -> None:
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "search__icontains",
     ]
 
@@ -528,7 +525,7 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
 
 
 class AssocRegS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "search__icontains",
     ]
 
@@ -553,7 +550,7 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
 
 
 class RunS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "search__icontains",
     ]
 
@@ -567,7 +564,7 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
 
 
 class EventCharacterS2:
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -596,7 +593,7 @@ class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
 
 
 class EventPlotS2:
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -620,7 +617,7 @@ class EventPlotS2Widget(EventPlotS2, s2forms.ModelSelect2Widget):
 
 
 class EventTraitS2:
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -644,7 +641,7 @@ class EventTraitS2Widget(EventTraitS2, s2forms.ModelSelect2Widget):
 
 
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
@@ -659,7 +656,7 @@ class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -681,7 +678,7 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -695,7 +692,7 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -709,7 +706,7 @@ class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
         "nickname__icontains",
@@ -730,7 +727,7 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
@@ -745,7 +742,7 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
 
 
 class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
@@ -760,7 +757,7 @@ class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
 
 
 class WarehouseItemS2(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
@@ -783,7 +780,7 @@ class WarehouseItemS2Widget(WarehouseItemS2, s2forms.ModelSelect2Widget):
 
 
 class WarehouseTagS2(s2forms.ModelSelect2Widget):
-    search_fields = [
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]

@@ -758,7 +758,7 @@ def post_save_event_update(sender: type, instance: Event, **kwargs) -> None:
     clear_event_features_cache(instance.id)
 
     # Setup campaign inheritance if not explicitly skipped
-    if not getattr(instance, "_skip_campaign_setup", False):
+    if not getattr(instance, "_skip_campaign_setup", False):  # noqa: SLF001  # Internal flag to prevent recursion
         copy_parent_event_to_campaign(instance)
 
     # Clear run and registration related caches
@@ -1629,6 +1629,6 @@ def handle_request_exception(sender, request, **kwargs) -> None:
     """
     try:
         create_error_ticket(request)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - Error handler must never fail and disrupt error reporting
         # Don't let ticket creation failure break the error handling
         log.debug("Failed to create error ticket: %s", e)

@@ -141,7 +141,7 @@ def _init_element_cache_text_field(
 
     # Get applicable writing questions for this element type
     # noinspection PyProtectedMember
-    applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)
+    applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)  # noqa: SLF001  # Django model metadata
     questions = element.event.get_elements(WritingQuestion).filter(applicable=applicable)
 
     # Process editor-type questions and cache their answers
@@ -274,7 +274,7 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
                 field_key,
                 answer_text,
             )
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip missing answers
             pass
 
 

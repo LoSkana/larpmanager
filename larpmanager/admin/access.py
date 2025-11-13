@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 """Django admin configuration for access control models."""
 
+from typing import ClassVar
+
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -46,7 +48,7 @@ class PermissionModuleResource(resources.ModelResource):
 class PermissionModuleAdmin(ImportExportModelAdmin):
     """Django admin for PermissionModule model."""
 
-    resource_classes = [PermissionModuleResource]
+    resource_classes: ClassVar[list] = [PermissionModuleResource]
     list_display = ("name", "icon")
     search_fields = ("name",)
 
@@ -56,7 +58,7 @@ class AssociationRoleAdmin(DefModelAdmin):
     """Django admin for AssociationRole model."""
 
     list_display = ("name", "association", "number")
-    autocomplete_fields = ["members", "association", "permissions"]
+    autocomplete_fields: ClassVar[list] = ["members", "association", "permissions"]
     search_fields = ("name",)
 
 
@@ -73,10 +75,10 @@ class AssociationPermissionResource(resources.ModelResource):
 class AssociationPermissionAdmin(ImportExportModelAdmin):
     """Django admin for AssociationPermission model."""
 
-    resource_classes = [AssociationPermissionResource]
+    resource_classes: ClassVar[list] = [AssociationPermissionResource]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)
-    autocomplete_fields = ["feature", "module"]
+    autocomplete_fields: ClassVar[list] = ["feature", "module"]
 
 
 @admin.register(EventRole)
@@ -84,7 +86,7 @@ class EventRoleAdmin(DefModelAdmin):
     """Django admin for EventRole model."""
 
     list_display = ("name", "event", "number")
-    autocomplete_fields = ["members", "event", "permissions"]
+    autocomplete_fields: ClassVar[list] = ["members", "event", "permissions"]
     search_fields = ("name",)
 
 
@@ -101,7 +103,7 @@ class EventPermissionResource(resources.ModelResource):
 class EventPermissionAdmin(ImportExportModelAdmin):
     """Django admin for EventPermission model."""
 
-    resource_classes = [EventPermissionResource]
-    autocomplete_fields = ["feature", "module"]
+    resource_classes: ClassVar[list] = [EventPermissionResource]
+    autocomplete_fields: ClassVar[list] = ["feature", "module"]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)

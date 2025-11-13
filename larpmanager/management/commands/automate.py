@@ -80,7 +80,7 @@ class Command(BaseCommand):
         """
         try:
             self.go()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - Top-level handler must catch all errors to notify admins
             notify_admins("Automate", "", e)
 
     def go(self) -> None:
@@ -174,9 +174,9 @@ class Command(BaseCommand):
         for payment_invoice in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
             try:
                 notify_invoice_check(payment_invoice)
-            except ObjectDoesNotExist:
+            except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling with different actions per exception type
                 payment_invoice.delete()
-            except Exception as exception:
+            except Exception as exception:  # noqa: BLE001 - Batch operation must continue and notify admins on any error
                 notify_admins("notify_invoice_check fail", payment_invoice.idx, exception)
 
     @staticmethod
@@ -200,7 +200,6 @@ class Command(BaseCommand):
         Runs SQL cleanup commands defined in CLEAN_DB setting to maintain
         database performance and remove stale data.
         """
-        # PaymentInvoice.objects.filter(txn_id__isnull=True).delete()
         with connection.cursor() as database_cursor:
             for cleanup_sql_query in conf_settings.CLEAN_DB:
                 database_cursor.execute(cleanup_sql_query)
@@ -307,9 +306,7 @@ class Command(BaseCommand):
         # Check if member's badges are already cached
         if member.id not in cache["players"]:
             # Build list of badge codes from member's badges
-            badge_codes = []
-            for badge in member.badges.all():
-                badge_codes.append(badge.cod)
+            badge_codes = [badge.cod for badge in member.badges.all()]
 
             # Cache the badge codes for this member
             cache["players"][member.id] = badge_codes
@@ -344,8 +341,8 @@ class Command(BaseCommand):
 
             # Return cached badge instance
             return badge_cache["badges"][badge_code]
-        except Exception:
-            # Return None on any error (badge not found, cache issues, etc.)
+        except Badge.DoesNotExist:
+            # Return None if badge not found
             return None
 
     @staticmethod

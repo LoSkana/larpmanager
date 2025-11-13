@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.contrib import admin
 
 from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, MemberFilter, RunFilter, TraitFilter
@@ -39,69 +41,69 @@ from larpmanager.models.writing import (
 @admin.register(TextVersion)
 class TextVersionAdmin(DefModelAdmin):
     list_display = ("id", "tp", "eid", "version", "dl")
-    list_filter = ("tp",)
+    list_filter: ClassVar[tuple] = ("tp",)
     search_fields = ("eid",)
-    autocomplete_fields = ["member"]
+    autocomplete_fields: ClassVar[list] = ["member"]
 
 
 @admin.register(Plot)
 class PlotAdmin(DefModelAdmin):
-    list_display = ("id", "name", "event")
-    list_filter = (EventFilter,)
-    autocomplete_fields = ["characters", "event", "progress", "assigned"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("id", "name", "event")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(PlotCharacterRel)
 class PlotCharacterRelAdmin(DefModelAdmin):
-    list_display = ("plot", "character")
+    list_display: ClassVar[tuple] = ("plot", "character")
     list_filter = (CharacterFilter, PlotFilter)
-    autocomplete_fields = ["plot", "character"]
+    autocomplete_fields: ClassVar[list] = ["plot", "character"]
 
 
 @admin.register(Faction)
 class FactionAdmin(DefModelAdmin):
-    list_display = ("name", "event", "number")
-    list_filter = (EventFilter,)
-    autocomplete_fields = ["characters", "event", "progress", "assigned"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("name", "event", "number")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(Trait)
 class TraitAdmin(DefModelAdmin):
     list_display = ("number", "name", "event", "quest")
-    list_filter = (EventFilter,)
+    list_filter: ClassVar[tuple] = (EventFilter,)
     search_fields = ("name",)
-    autocomplete_fields = ["quest", "traits", "event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["quest", "traits", "event", "progress", "assigned"]
 
 
 @admin.register(Handout)
 class HandoutAdmin(DefModelAdmin):
-    list_display = ("event", "name", "number")
+    list_display: ClassVar[tuple] = ("event", "name", "number")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
 
 
 @admin.register(HandoutTemplate)
 class HandoutTemplateAdmin(DefModelAdmin):
-    list_display = ("event", "name", "number")
+    list_display: ClassVar[tuple] = ("event", "name", "number")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
 
 
 @admin.register(Prologue)
 class PrologueAdmin(DefModelAdmin):
-    list_display = ("number", "typ", "event")
+    list_display: ClassVar[tuple] = ("number", "typ", "event")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["typ", "characters", "event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["typ", "characters", "event", "progress", "assigned"]
 
 
 @admin.register(PrologueType)
 class PrologueTypeAdmin(DefModelAdmin):
-    list_display = ("name", "event")
-    list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "progress", "assigned"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("name", "event")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(AssignmentTrait)
@@ -114,4 +116,4 @@ class AssignmentTraitAdmin(DefModelAdmin):
 @admin.register(SpeedLarp)
 class SpeedLarpAdmin(DefModelAdmin):
     list_display = ("name", "event", "typ", "station")
-    autocomplete_fields = ["characters", "event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]

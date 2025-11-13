@@ -796,8 +796,7 @@ def _reg_template(
     column_keys.extend(context["fields"])
 
     # Add values for dynamic fields based on field type mapping
-    for field_type in context["fields"].values():
-        row_values.append(value_mapping[field_type])
+    row_values.extend([value_mapping[field_type] for field_type in context["fields"].values()])
 
     # Create export tuple with template name, keys, and values
     return [(f"{template_type} - template", column_keys, [row_values])]

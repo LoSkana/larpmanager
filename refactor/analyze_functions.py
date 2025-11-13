@@ -9,7 +9,6 @@ Output format: CSV file with columns: name, path, invocation_count, function_num
 """
 
 import ast
-import os
 from collections import defaultdict
 from pathlib import Path
 
@@ -80,7 +79,7 @@ def analyze_file(path):
 
     """
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with Path(path).open(encoding="utf-8") as f:
             content = f.read()
 
         tree = ast.parse(content, filename=str(path))
@@ -88,7 +87,7 @@ def analyze_file(path):
         analyzer.visit(tree)
 
         return analyzer.functions, analyzer.invocations
-    except (SyntaxError, UnicodeDecodeError, Exception) as e:
+    except (SyntaxError, UnicodeDecodeError, Exception):  # noqa: BLE001 - Refactoring tool must skip unparseable files
         # Silently skip files that can't be parsed
         return None, None
 
@@ -107,7 +106,6 @@ def find_python_files(root_dir):
     larpmanager_dir = root_path / "larpmanager"
 
     if not larpmanager_dir.exists():
-        print(f"Warning: larpmanager directory not found at {larpmanager_dir}")
         return
 
     # Directories to skip
@@ -123,13 +121,12 @@ def find_python_files(root_dir):
         yield py_file
 
 
-def main() -> None:
+def main() -> None:  # noqa: C901 - Complex analysis script with sequential processing steps
     """Main function to run the analysis."""
     # Get the project root (parent of refactor directory)
     script_dir = Path.cwd()
     project_root = script_dir
 
-    print(f"Analyzing Python files in larpmanager/")
 
     # First pass: collect all function definitions
     all_defined_functions = {}  # func_name -> list of (path, rel_path, function_number)
@@ -152,16 +149,13 @@ def main() -> None:
             all_defined_functions[func_name].append((str(py_file), rel_path, func_number))
 
         # Store invocations
-        for func_name in invocations:
-            all_invocations.append((func_name, rel_path))
+        all_invocations.extend([(func_name, rel_path) for func_name in invocations])
 
-    print(f"Analyzed {file_count} Python files in larpmanager/")
-    print(f"Found {len(all_defined_functions)} unique function names defined in larpmanager")
 
     # Second pass: count invocations only for functions defined in larpmanager
     invocation_counts = defaultdict(int)
 
-    for func_name, from_file in all_invocations:
+    for func_name, _from_file in all_invocations:
         # Only count if this function is defined in larpmanager
         if func_name in all_defined_functions:
             invocation_counts[func_name] += 1
@@ -172,7 +166,7 @@ def main() -> None:
     for func_name, count in invocation_counts.items():
         if count >= 1:
             # A function might be defined in multiple files (same name)
-            for abs_path, rel_path, func_number in all_defined_functions[func_name]:
+            for _abs_path, rel_path, func_number in all_defined_functions[func_name]:
                 results.append({
                     "name": func_name,
                     "path": rel_path,
@@ -185,7 +179,7 @@ def main() -> None:
 
     # Write results to CSV file
     output_file = Path("refactor/function_invocations.csv")
-    with open(output_file, "w", encoding="utf-8") as f:
+    with output_file.open("w", encoding="utf-8") as f:
         # Write header
         f.write("name,path,invocation_count,function_number\n")
 
@@ -198,13 +192,10 @@ def main() -> None:
 
             f.write(f"{result['name']},{path},{result['invocation_count']},{result['function_number']}\n")
 
-    print(f"\nResults written to: {output_file}")
-    print(f"Total larpmanager functions with at least 1 invocation: {len(results)}")
 
     # Print top 20 most invoked functions
-    print("\nTop 20 most invoked larpmanager functions:")
-    for i, result in enumerate(results[:20], 1):
-        print(f"{i}. {result['name']} ({result['path']}) #{result['function_number']}: {result['invocation_count']} invocations")
+    for _i, result in enumerate(results[:20], 1):
+        pass
 
 
 if __name__ == "__main__":

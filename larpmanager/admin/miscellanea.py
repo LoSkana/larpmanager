@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from django.http import HttpRequest
@@ -53,7 +55,7 @@ from larpmanager.models.miscellanea import (
 @admin.register(Contact)
 class ContactAdmin(DefModelAdmin):
     list_display = ("me", "you", "channel")
-    autocomplete_fields = ["me", "you", "association"]
+    autocomplete_fields: ClassVar[list] = ["me", "you", "association"]
 
 
 @admin.register(ChatMessage)
@@ -64,9 +66,9 @@ class ChatMessageAdmin(DefModelAdmin):
 
 @admin.register(Album)
 class AlbumAdmin(DefModelAdmin):
-    list_display = ("name", "parent", "run", "show_thumb")
-    autocomplete_fields = ["parent", "run", "association"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("name", "parent", "run", "show_thumb")
+    autocomplete_fields: ClassVar[list] = ["parent", "run", "association"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(AlbumImage)
@@ -77,7 +79,7 @@ class AlbumImageAdmin(DefModelAdmin):
 @admin.register(AlbumUpload)
 class AlbumUploadAdmin(DefModelAdmin):
     list_display = ("id", "album")
-    autocomplete_fields = ["album"]
+    autocomplete_fields: ClassVar[list] = ["album"]
 
 
 class WorkshopQuestionInline(admin.TabularInline):
@@ -88,12 +90,12 @@ class WorkshopQuestionInline(admin.TabularInline):
 
 @admin.register(WorkshopModule)
 class WorkshopModuleAdmin(DefModelAdmin):
-    search_fields = ("search",)
+    search_fields: ClassVar[tuple] = ("search",)
     list_display = ("name", "event", "number", "is_generic")
-    inlines = [
+    inlines: ClassVar[list] = [
         WorkshopQuestionInline,
     ]
-    autocomplete_fields = ["event", "members"]
+    autocomplete_fields: ClassVar[list] = ["event", "members"]
 
 
 class WorkshopModuleFilter(AutocompleteFilter):
@@ -110,9 +112,9 @@ class WorkshopOptionInline(admin.TabularInline):
 class WorkshopQuestionAdmin(DefModelAdmin):
     search_fields = ("search",)
     list_display = ("name", "number", "module")
-    autocomplete_fields = ("module", "event")
+    autocomplete_fields: ClassVar[tuple] = ("module", "event")
     list_filter = (WorkshopModuleFilter,)
-    inlines = [
+    inlines: ClassVar[list] = [
         WorkshopOptionInline,
     ]
 
@@ -137,58 +139,58 @@ class WorkshopMemberRelAdmin(DefModelAdmin):
 @admin.register(HelpQuestion)
 class HelpQuestionAdmin(DefModelAdmin):
     list_display = ("member", "is_user", "small_text")
-    autocomplete_fields = ["member", "run", "association"]
+    autocomplete_fields: ClassVar[list] = ["member", "run", "association"]
 
 
 @admin.register(WarehouseContainer)
 class WarehouseContainerAdmin(DefModelAdmin):
-    list_display = ("name", "position")
-    autocomplete_fields = ["association"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("name", "position")
+    autocomplete_fields: ClassVar[list] = ["association"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(WarehouseTag)
 class WarehouseTagAdmin(DefModelAdmin):
     list_display = ("name", "description")
-    search_fields = ["name"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(WarehouseItem)
 class WarehouseItemAdmin(DefModelAdmin):
-    list_display = ("name", "quantity", "container", "description")
-    autocomplete_fields = ["association", "container", "tags"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("name", "quantity", "container", "description")
+    autocomplete_fields: ClassVar[list] = ["association", "container", "tags"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(WarehouseArea)
 class WarehouseAreaAdmin(DefModelAdmin):
     list_display = ("name", "position", "description")
-    search_fields = ["name"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(WarehouseItemAssignment)
 class WarehouseItemAssignmentAdmin(DefModelAdmin):
     list_display = ("area", "quantity", "item", "notes")
-    autocomplete_fields = ["event", "item", "area"]
+    autocomplete_fields: ClassVar[list] = ["event", "item", "area"]
 
 
 @admin.register(ShuttleService)
 class ShuttleServiceAdmin(DefModelAdmin):
     list_display = ("member", "passengers", "address", "info", "working")
-    autocomplete_fields = ["member", "working", "association"]
+    autocomplete_fields: ClassVar[list] = ["member", "working", "association"]
 
 
 @admin.register(Util)
 class UtilAdmin(DefModelAdmin):
     list_display = ("name", "cod", "event")
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
 
 
 @admin.register(PlayerRelationship)
 class PlayerRelationshipAdmin(DefModelAdmin):
-    list_display = ("reg_red", "target", "text_red")
+    list_display: ClassVar[tuple] = ("reg_red", "target", "text_red")
     list_filter = (TargetFilter,)
-    autocomplete_fields = ["target", "reg"]
+    autocomplete_fields: ClassVar[list] = ["target", "reg"]
 
     @staticmethod
     def text_red(instance):
@@ -203,10 +205,10 @@ class PlayerRelationshipAdmin(DefModelAdmin):
 
 @admin.register(Email)
 class EmailAdmin(DefModelAdmin):
-    list_display = ("id", "association", "run", "recipient", "sent", "subj", "body_red")
-    list_filter = (AssociationFilter, RunFilter)
-    autocomplete_fields = ["association", "run"]
-    search_fields = ["subj", "body", "recipient"]
+    list_display: ClassVar[tuple] = ("id", "association", "run", "recipient", "sent", "subj", "body_red")
+    list_filter: ClassVar[tuple] = (AssociationFilter, RunFilter)
+    autocomplete_fields: ClassVar[list] = ["association", "run"]
+    search_fields: ClassVar[list] = ["subj", "body", "recipient"]
 
     @staticmethod
     def body_red(instance):
@@ -243,10 +245,10 @@ class OneTimeContentAdmin(DefModelAdmin):
         "created",
     )
     list_filter = ("event", "active", "created")
-    search_fields = ("name", "description", "event__name")
-    readonly_fields = ("content_type", "file_size", "created", "updated")
-    inlines = [OneTimeAccessTokenInline]
-    autocomplete_fields = ["event"]
+    search_fields: ClassVar[tuple] = ("name", "description", "event__name")
+    readonly_fields: ClassVar[tuple] = ("content_type", "file_size", "created", "updated")
+    inlines: ClassVar[list] = [OneTimeAccessTokenInline]
+    autocomplete_fields: ClassVar[list] = ["event"]
 
     fieldsets = (
         (
@@ -319,9 +321,9 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
         "created",
     )
     list_filter = ("used", "used_at", "created", "content__event")
-    search_fields = ("token", "note", "content__name", "used_by__name", "ip_address")
+    search_fields: ClassVar[tuple] = ("token", "note", "content__name", "used_by__name", "ip_address")
     readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent", "created", "updated")
-    autocomplete_fields = ["content", "used_by"]
+    autocomplete_fields: ClassVar[list] = ["content", "used_by"]
 
     fieldsets = (
         (

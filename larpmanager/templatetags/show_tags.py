@@ -505,7 +505,6 @@ def show_trait(context, text, run, tooltip):
     if not context["max_trait"]:
         context["max_trait"] = 0
 
-    # replace #XX (create relationships / count as character in faction / plot)
     for trait_number in range(context["max_trait"], 0, -1):
         text = go_trait(context, f"#{trait_number}", trait_number, text, run, include_tooltip=tooltip)
         text = go_trait(context, f"@{trait_number}", trait_number, text, run, include_tooltip=tooltip)
@@ -813,7 +812,7 @@ def template_trans(text):
     """
     try:
         return _(text)
-    except Exception as e:
+    except (TypeError, ValueError, AttributeError) as e:
         logger.debug("Translation failed for text: %s", e)
         return text
 

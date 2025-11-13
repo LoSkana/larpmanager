@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.forms import Textarea
@@ -122,7 +122,7 @@ class HelpQuestionForm(MyForm):
         model = HelpQuestion
         fields = ("text", "attachment", "run")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "text": Textarea(attrs={"rows": 5}),
         }
 
@@ -145,7 +145,7 @@ class OrgaHelpQuestionForm(MyForm):
         model = HelpQuestion
         fields = ("text", "attachment")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "text": Textarea(attrs={"rows": 5}),
         }
 
@@ -212,7 +212,7 @@ class OrgaProblemForm(MyForm):
         model = Problem
         exclude = ("number",)
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "where": Textarea(attrs={"rows": 3}),
             "when": Textarea(attrs={"rows": 3}),
             "what": Textarea(attrs={"rows": 3}),
@@ -287,7 +287,7 @@ class ExeCompetenceForm(MyForm):
         model = Competence
         exclude = ("number", "members")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "descr": Textarea(attrs={"rows": 5}),
         }
 
@@ -387,7 +387,7 @@ class ShuttleServiceForm(MyForm):
         model = ShuttleService
         exclude = ("member", "working", "notes", "status")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "date": DatePickerInput,
             "time": TimePickerInput,
         }
@@ -410,7 +410,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
         model = ShuttleService
         fields = "__all__"
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "date": DatePickerInput,
             "time": TimePickerInput,
             "working": AssociationMemberS2Widget,
@@ -521,7 +521,7 @@ class OneTimeContentForm(MyForm):
         model = OneTimeContent
         fields = ("name", "description", "file", "active", "event")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 3}),
         }
 
@@ -535,6 +535,6 @@ class OneTimeAccessTokenForm(MyForm):
         model = OneTimeAccessToken
         fields = ("note", "content")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "note": Textarea(attrs={"rows": 2}),
         }

@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from import_export import resources
@@ -30,9 +32,9 @@ from larpmanager.models.member import Log
 # SET JQUERY
 class DefModelAdmin(ImportExportModelAdmin):
     class Media:
-        css = {"all": ("larpmanager/assets/css/admin.css",)}
+        css: ClassVar[dict] = {"all": ("larpmanager/assets/css/admin.css",)}
 
-    ordering = ["-updated"]
+    ordering: ClassVar[list] = ["-updated"]
 
 
 def reduced(value: str | None) -> str:
@@ -106,15 +108,15 @@ class RegistrationFilter(AutocompleteFilter):
 
 @admin.register(Log)
 class LogAdmin(DefModelAdmin):
-    list_display = ("member", "cls", "eid", "created", "dl")
+    list_display: ClassVar[tuple] = ("member", "cls", "eid", "created", "dl")
     search_fields = ("member", "cls", "dl")
-    autocomplete_fields = ["member"]
+    autocomplete_fields: ClassVar[list] = ["member"]
 
 
 @admin.register(FeatureModule)
 class FeatureModuleAdmin(DefModelAdmin):
     list_display = ("name", "order")
-    search_fields = ["name"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 class FeatureResource(resources.ModelResource):
@@ -124,14 +126,14 @@ class FeatureResource(resources.ModelResource):
 
 @admin.register(Feature)
 class FeatureAdmin(DefModelAdmin):
-    list_display = ("name", "overall", "order", "module", "slug", "tutorial", "descr", "placeholder", "after_link")
-    list_filter = ("module",)
-    autocomplete_fields = ["module", "associations", "events"]
-    search_fields = ["name"]
-    resource_classes = [FeatureResource]
+    list_display: ClassVar[tuple] = ("name", "overall", "order", "module", "slug", "tutorial", "descr", "placeholder", "after_link")
+    list_filter: ClassVar[tuple] = ("module",)
+    autocomplete_fields: ClassVar[list] = ["module", "associations", "events"]
+    search_fields: ClassVar[list] = ["name"]
+    resource_classes: ClassVar[list] = [FeatureResource]
 
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(DefModelAdmin):
     list_display = ("name", "slug")
-    search_fields = ["name"]
+    search_fields: ClassVar[list] = ["name"]

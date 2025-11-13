@@ -460,10 +460,11 @@ def _orga_registrations_text_fields(context) -> None:
 
     """
     # add editor type questions
-    text_field_ids = []
     questions = RegistrationQuestion.objects.filter(event=context["event"])
-    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        text_field_ids.append(str(question_id))
+    text_field_ids = [
+        str(question_id)
+        for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True)
+    ]
 
     cached_registration_fields = get_cache_reg_field(context["run"])
     for registration in context["registration_list"]:
@@ -542,9 +543,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Batch-load membership statuses for all registered members
     context["memberships"] = {}
     if "membership" in context["features"]:
-        members_id = []
-        for r in context["registration_list"]:
-            members_id.append(r.member_id)
+        members_id = [r.member_id for r in context["registration_list"]]
         # Create lookup dictionary for efficient membership access
         for el in Membership.objects.filter(association_id=context["association_id"], member_id__in=members_id):
             context["memberships"][el.member_id] = el
@@ -594,7 +593,7 @@ def orga_registrations_accounting(request: HttpRequest, event_slug: str) -> Json
 
 
 @login_required
-def orga_registration_form_list(request: HttpRequest, event_slug: str):
+def orga_registration_form_list(request: HttpRequest, event_slug: str):  # noqa: C901 - Complex form list management with POST handling
     """Handle registration form list management for event organizers.
 
     Args:
@@ -869,13 +868,10 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Collect all registration IDs for the current run
-    reg_ids = []
-    for reg in Registration.objects.filter(run=context["run"]):
-        reg_ids.append(str(reg.id))
+    reg_ids = [str(reg.id) for reg in Registration.objects.filter(run=context["run"])]
 
     # Trigger background registration checks
     check_registration_background(reg_ids)
-    # logger.debug(f"Reloading registrations for {request} at {datetime.now()}")
     return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
 
@@ -1343,7 +1339,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
             continue
 
         # Get field metadata and value for display
-        field_label = member_cls._meta.get_field(field_name).verbose_name
+        field_label = member_cls._meta.get_field(field_name).verbose_name  # noqa: SLF001  # Django model metadata
         value = getattr(member, field_name)
 
         # Only display fields with actual values

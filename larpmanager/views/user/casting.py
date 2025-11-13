@@ -340,9 +340,10 @@ def _check_already_done(context: dict, request, assignment_type: int) -> None:
         casting_chars = int(get_event_config(context["run"].event_id, "casting_characters", default_value=1))
         if context["run"].reg.rcrs.count() >= casting_chars:
             # Collect names of all assigned characters
-            character_names = []
-            for character_number in context["run"].reg.rcrs.values_list("character__number", flat=True):
-                character_names.append(context["chars"][character_number]["name"])
+            character_names = [
+                context["chars"][character_number]["name"]
+                for character_number in context["run"].reg.rcrs.values_list("character__number", flat=True)
+            ]
             context["assigned"] = ", ".join(character_names)
     else:
         # Check if trait assignment already exists
@@ -429,7 +430,6 @@ def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> 
             preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
 
     # Send confirmation email with updated preferences
-    # mail_confirm_casting_bkg(context["member"].id, context['run'].id, context['gl_name'], preference_names_list)
     mail_confirm_casting(context["member"], context["run"], context["gl_name"], preference_names_list, avoidance_text)
 
 

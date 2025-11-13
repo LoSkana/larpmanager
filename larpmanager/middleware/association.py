@@ -110,11 +110,10 @@ class AssociationIdentifyMiddleware:
         association_data = get_cache_association(association_slug)
         if association_data:
             # Check for domain mismatch requiring redirect
-            if "main_domain" in association_data and association_data["main_domain"] != base_domain:
-                if request.enviro == "prod" and not configured_slug:
-                    association_slug = association_data["slug"]
-                    association_domain = association_data["main_domain"]
-                    return redirect(f"https://{association_slug}.{association_domain}{request.get_full_path()}")
+            if "main_domain" in association_data and association_data["main_domain"] != base_domain and request.enviro == "prod" and not configured_slug:
+                association_slug = association_data["slug"]
+                association_domain = association_data["main_domain"]
+                return redirect(f"https://{association_slug}.{association_domain}{request.get_full_path()}")
             return cls.load_association(request, association_data)
 
         # Fallback to main domain handling
@@ -140,12 +139,11 @@ class AssociationIdentifyMiddleware:
 
         """
         # Check for demo user logout requirement - skip if already in post-login flow
+        # Demo users should be logged out when visiting main domain
         current_user = request.user
-        if not request.path.startswith("/after_login/"):
-            # Demo users should be logged out when visiting main domain
-            if current_user.is_authenticated and current_user.email.lower().endswith("demo.it"):
-                logout(request)
-                return redirect(request.path)
+        if not request.path.startswith("/after_login/") and current_user.is_authenticated and current_user.email.lower().endswith("demo.it"):
+            logout(request)
+            return redirect(request.path)
 
         # Attempt to load association skin for the base domain
         association_skin = get_cache_skin(base_domain)

@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -355,7 +355,7 @@ class WritingQuestion(BaseModel):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(
                 fields=["event", "applicable", "status"],
                 condition=Q(deleted__isnull=True),
@@ -453,7 +453,7 @@ class WritingChoice(BaseModel):
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wch_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wch_elem_act"),
         ]
@@ -472,7 +472,7 @@ class WritingAnswer(BaseModel):
         return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wan_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wan_elem_act"),
         ]
@@ -623,7 +623,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration, features, params=None, *, is_organizer=False) -> bool:
+    def skip(self, registration, features, params=None, *, is_organizer=False) -> bool:  # noqa: C901 - Complex question skip logic with feature checks
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
@@ -658,15 +658,13 @@ class RegistrationQuestion(BaseModel):
             run_id = params["run"].id
             is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
             # noinspection PyUnresolvedReferences
-            if not is_run_organizer and self.allowed_map[0]:
-                # noinspection PyUnresolvedReferences
-                if params["member"].id not in self.allowed_map:
-                    return True
+            if not is_run_organizer and self.allowed_map[0] and params["member"].id not in self.allowed_map:
+                return True
 
         return False
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="rq_evt_act"),
             models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="rq_evt_stat_act"),
         ]
@@ -755,7 +753,7 @@ class RegistrationOption(BaseModel):
         return js
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ro_evt_act"),
             models.Index(fields=["question"], condition=Q(deleted__isnull=True), name="ro_quest_act"),
         ]
@@ -774,7 +772,7 @@ class RegistrationChoice(BaseModel):
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
             models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
         ]
@@ -793,7 +791,7 @@ class RegistrationAnswer(BaseModel):
         return f"{self.reg} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
             models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
         ]

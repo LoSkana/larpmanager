@@ -69,7 +69,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
         # The username field allows '@' characters so email addresses could
         # potentially exist in either field, even for different users
         # noinspection PyProtectedMember
-        matching_users = user_model._default_manager.filter(
+        matching_users = user_model._default_manager.filter(  # noqa: SLF001  # Django model manager
             Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username),
         )
 

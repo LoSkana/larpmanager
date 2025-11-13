@@ -46,7 +46,7 @@ from larpmanager.utils.experience import add_char_addit
 logger = logging.getLogger(__name__)
 
 
-def get_character_relationships(context: dict, *, restrict: bool = True) -> None:
+def get_character_relationships(context: dict, *, restrict: bool = True) -> None:  # noqa: C901 - Complex relationship data aggregation
     """Get character relationships with faction and player input data.
 
     Retrieves and processes character relationships from both system-defined
@@ -290,7 +290,7 @@ def get_character_sheet_plots(context: dict) -> None:
         context["sheet_plots"].append({"name": plot_relation.plot.name, "text": combined_text})
 
 
-def get_character_sheet_factions(context: dict[str, Any]) -> None:
+def get_character_sheet_factions(context: dict[str, Any]) -> None:  # noqa: C901 - Complex faction data processing with feature checks
     """Retrieve and process faction data for character sheet display.
 
     Fetches factions associated with a character, along with their writing answers

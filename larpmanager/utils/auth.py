@@ -65,7 +65,6 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         """
         # Extract extra data from social login account
         social_provider_data = sociallogin.account.extra_data
-        # logger.debug(f"Social provider data: {social_provider_data}")
 
         # Update name field if it's empty and given_name is available
         if "given_name" in social_provider_data and len(user.member.name) == 0:

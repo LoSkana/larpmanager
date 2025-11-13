@@ -46,7 +46,7 @@ def process_payment(invoice_id: int) -> None:
     # Get or create electronic invoice record
     try:
         electronic_invoice = payment_invoice.electronicinvoice
-    except Exception:
+    except ElectronicInvoice.DoesNotExist:
         # Create new electronic invoice if none exists
         electronic_invoice = ElectronicInvoice(
             inv=payment_invoice,

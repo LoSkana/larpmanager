@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from pathlib import Path
 from typing import Any
 
 import yaml
@@ -32,7 +33,7 @@ class Command(BaseCommand):
     help = "Export features to yaml"
 
     # noinspection PyProtectedMember
-    def handle(self, *args: tuple[Any, ...], **options: dict[str, Any]) -> None:
+    def handle(self, *args: tuple[Any, ...], **options: dict[str, Any]) -> None:  # noqa: C901 - Complex export logic with multiple model types
         """Export features and related data to YAML fixture files.
 
         This Django management command exports system configuration data including
@@ -103,12 +104,12 @@ class Command(BaseCommand):
             data = []
 
             # Categorize fields by Django field type for proper serialization handling
-            m2m_fields = [f.name for f in model_class._meta.many_to_many if f.name in field_names]
+            m2m_fields = [f.name for f in model_class._meta.many_to_many if f.name in field_names]  # noqa: SLF001  # Django model metadata
             fk_fields = [
-                f.name for f in model_class._meta.fields if isinstance(f, ForeignKey) and f.name in field_names
+                f.name for f in model_class._meta.fields if isinstance(f, ForeignKey) and f.name in field_names  # noqa: SLF001  # Django model metadata
             ]
             img_fields = [
-                f.name for f in model_class._meta.fields if isinstance(f, ImageField) and f.name in field_names
+                f.name for f in model_class._meta.fields if isinstance(f, ImageField) and f.name in field_names  # noqa: SLF001  # Django model metadata
             ]
 
             # Regular fields are all remaining fields except 'id' which is handled separately
@@ -139,7 +140,7 @@ class Command(BaseCommand):
                         if slug_val is None:
                             try:
                                 slug_val = str(rel_obj)
-                            except Exception:
+                            except (TypeError, AttributeError):
                                 # Final fallback to foreign key ID
                                 slug_val = getattr(obj, f"{field}_id")
                         entry_fields[field] = slug_val
@@ -155,12 +156,12 @@ class Command(BaseCommand):
 
                 # Build Django fixture format entry with model identifier
                 entry = {
-                    "model": f"{model_class._meta.app_label}.{model_class._meta.model_name}",
+                    "model": f"{model_class._meta.app_label}.{model_class._meta.model_name}",  # noqa: SLF001  # Django model metadata
                     "fields": entry_fields,
                 }
                 data.append(entry)
 
             # Write fixture data to YAML file with readable formatting
             fixture_path = f"larpmanager/fixtures/{model_name}.yaml"
-            with open(fixture_path, "w") as f:
+            with Path(fixture_path).open("w") as f:
                 yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)

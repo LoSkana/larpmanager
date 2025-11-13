@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.contrib import admin
 
 from larpmanager.admin.base import DefModelAdmin
@@ -37,9 +39,9 @@ from larpmanager.models.larpmanager import (
 
 @admin.register(LarpManagerFaq)
 class LarpManagerFaqAdmin(DefModelAdmin):
-    list_display = ("question_red", "typ", "number", "answer_red")
+    list_display: ClassVar[tuple] = ("question_red", "typ", "number", "answer_red")
     list_filter = ("typ",)
-    autocomplete_fields = ["typ"]
+    autocomplete_fields: ClassVar[list] = ["typ"]
 
     @staticmethod
     def question_red(instance):
@@ -55,7 +57,7 @@ class LarpManagerFaqAdmin(DefModelAdmin):
 @admin.register(LarpManagerFaqType)
 class LarpManagerFaqTypeAdmin(DefModelAdmin):
     list_display = ("name", "order")
-    search_fields = ["name"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(LarpManagerTutorial)

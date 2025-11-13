@@ -91,13 +91,6 @@ def go_upload(request: HttpRequest, context: dict, upload_form_data):
 
     """
     # FIX
-    # if request.POST.get("upload") == "cover":
-    #     # check extension
-    #     if zipfile.is_zipfile(upload_form_data[0]):
-    #         with zipfile.ZipFile(upload_form_data[0]) as z_obj:
-    #             cover_load(context, z_obj)
-    #         z_obj.close()
-    #         return ""
 
     upload_type = context["typ"]
 
@@ -162,7 +155,7 @@ def _read_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
 
             # Parse CSV with automatic delimiter detection
             return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
-        except Exception as parsing_error:
+        except Exception as parsing_error:  # noqa: PERF203, BLE001 - Must try all encodings on any parsing error
             # Log error and continue to next encoding
             logger.debug("Failed to parse CSV with encoding %s: %s", encoding, parsing_error)
             continue
@@ -432,7 +425,7 @@ def _reg_assign_characters(
         RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
 
 
-def writing_load(request: HttpRequest, context: dict, form) -> list[str]:
+def writing_load(request: HttpRequest, context: dict, form) -> list[str]:  # noqa: C901 - Complex file upload processing with format detection
     """Load writing data from uploaded files and process relationships.
 
     Processes uploaded files containing writing elements and their relationships.
@@ -804,12 +797,6 @@ def _writing_question_load(
     elif question_type == WritingQuestionType.TITLE:
         writing_element.title = field_value
     # TODO: implement
-    # elif question_type == QuestionType.COVER:
-    #     writing_element.cover = field_value
-    # elif question_type == QuestionType.PROGRESS:
-    #     writing_element.cover = field_value
-    # elif question_type == QuestionType.ASSIGNED:
-    #     writing_element.cover = field_value
     else:
         _assign_choice_answer(writing_element, question_field, field_value, questions_dict, processing_logs)
 
@@ -847,7 +834,7 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
             element.save()  # to be sure
             faction.characters.add(element)
             faction.save()
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
             # Log faction not found errors
             logs.append(f"Faction not found: {faction_name}")
 
@@ -1028,7 +1015,7 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
     return mappings
 
 
-def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: dict, *, is_registration: bool) -> str:
+def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: dict, *, is_registration: bool) -> str:  # noqa: C901 - Complex CSV option parsing logic
     """Load question options from CSV row for bulk import.
 
     Creates or updates question options with proper validation,
@@ -1141,20 +1128,20 @@ def get_csv_upload_tmp(csv_upload, run) -> str:
 
     """
     # Create base temporary directory path
-    tmp_file = os.path.join(conf_settings.MEDIA_ROOT, "tmp")
+    tmp_file = str(Path(conf_settings.MEDIA_ROOT) / "tmp")
 
     # Add event-specific subdirectory
-    tmp_file = os.path.join(tmp_file, run.event.slug)
+    tmp_file = str(Path(tmp_file) / run.event.slug)
 
     # Ensure directory exists
-    if not os.path.exists(tmp_file):
+    if not Path(tmp_file).exists():
         Path(tmp_file).mkdir(parents=True, exist_ok=True)
 
     # Generate timestamped filename
-    tmp_file = os.path.join(tmp_file, datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
+    tmp_file = str(Path(tmp_file) / datetime.now().strftime("%Y-%m-%d-%H:%M:%S"))
 
     # Write uploaded file chunks to temporary file
-    with open(tmp_file, "wb") as destination:
+    with Path(tmp_file).open("wb") as destination:
         destination.writelines(csv_upload.chunks())
 
     return tmp_file
@@ -1173,10 +1160,10 @@ def cover_load(context, z_obj) -> None:
 
     """
     # extract images
-    fpath = os.path.join(conf_settings.MEDIA_ROOT, "cover_load")
-    fpath = os.path.join(fpath, context["run"].event.slug)
-    fpath = os.path.join(fpath, str(context["run"].number))
-    if os.path.exists(fpath):
+    fpath = str(Path(conf_settings.MEDIA_ROOT) / "cover_load")
+    fpath = str(Path(fpath) / context["run"].event.slug)
+    fpath = str(Path(fpath) / str(context["run"].number))
+    if Path(fpath).exists():
         shutil.rmtree(fpath)
     z_obj.extractall(path=fpath)
     covers = {}
@@ -1184,7 +1171,7 @@ def cover_load(context, z_obj) -> None:
     for root, _dirnames, filenames in os.walk(fpath):
         for el in filenames:
             num = Path(el).stem
-            covers[num] = os.path.join(root, el)
+            covers[num] = str(Path(root) / el)
     logger.debug("Extracted covers: %s", covers)
     upload_to = UploadToPathAndRename("character/cover/")
     # cicle characters
@@ -1427,7 +1414,7 @@ def _assign_prereq(
             # Ensure element is saved before adding M2M relationship
             element.save()
             element.prerequisites.add(prerequisite_element)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
             logs.append(f"Prerequisite not found: {prerequisite_name}")
 
 
@@ -1455,5 +1442,5 @@ def _assign_requirements(
 
             # Add the requirement to the writing element
             writing_element.requirements.add(writing_option)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
             error_logs.append(f"requirements not found: {requirement_name}")

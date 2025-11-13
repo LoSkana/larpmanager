@@ -96,11 +96,8 @@ class BrokenLinkEmailsMiddleware:
                 return None
 
         # Handle domain redirection for larpmanager.com with $ separator
-        # logger.debug(f"Domain: {domain}")
-        # logger.debug(f"Path: {path}")
         if domain == "larpmanager.com" and "$" in path:
             path_parts = path.split("$")
-            # print (at)
             url = "https://" + path_parts[1] + ".larpmanager.com/" + path_parts[0]
             return HttpResponseRedirect(url)
 

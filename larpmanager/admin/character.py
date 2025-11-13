@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
@@ -44,25 +46,25 @@ class WritingQuestionFilter(AutocompleteFilter):
 @admin.register(Character)
 class CharacterAdmin(DefModelAdmin):
     list_display = ("number", "name", "teaser", "event")
-    search_fields = ("name", "teaser")
+    search_fields: ClassVar[tuple] = ("name", "teaser")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "characters", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["event", "characters", "progress", "assigned"]
 
 
 @admin.register(CharacterConfig)
 class CharacterConfigAdmin(DefModelAdmin):
     list_display = ("character", "name", "value")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
     list_filter = (CharacterFilter,)
-    autocomplete_fields = ["character"]
+    autocomplete_fields: ClassVar[list] = ["character"]
 
 
 @admin.register(WritingQuestion)
 class WritingQuestionAdmin(DefModelAdmin):
     list_display = ("event", "typ", "name", "description_red", "order", "status", "visibility", "applicable")
-    exclude = ("search",)
+    exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search", "name")
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter, "applicable")
 
     @staticmethod
@@ -74,9 +76,9 @@ class WritingQuestionAdmin(DefModelAdmin):
 @admin.register(WritingOption)
 class WritingOptionAdmin(DefModelAdmin):
     list_display = ("question", "name", "event", "details_red", "max_available", "order")
-    exclude = ("search",)
+    exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search", "name")
-    autocomplete_fields = ["question", "event"]
+    autocomplete_fields: ClassVar[list] = ["question", "event"]
     list_filter = (WritingQuestionFilter, EventFilter)
 
     @staticmethod
@@ -88,14 +90,14 @@ class WritingOptionAdmin(DefModelAdmin):
 @admin.register(WritingChoice)
 class WritingChoiceAdmin(DefModelAdmin):
     list_display = ("id", "question", "option", "element_id")
-    autocomplete_fields = ["question", "option"]
+    autocomplete_fields: ClassVar[list] = ["question", "option"]
     list_filter = (WritingQuestionFilter,)
 
 
 @admin.register(WritingAnswer)
 class WritingAnswerAdmin(DefModelAdmin):
     list_display = ("id", "question", "text_red", "element_id")
-    autocomplete_fields = ["question"]
+    autocomplete_fields: ClassVar[list] = ["question"]
     list_filter = (WritingQuestionFilter,)
 
     @staticmethod
@@ -116,32 +118,32 @@ class TargetFilter(AutocompleteFilter):
 
 @admin.register(Relationship)
 class RelationshipAdmin(DefModelAdmin):
-    list_display = ("source", "target", "text")
+    list_display: ClassVar[tuple] = ("source", "target", "text")
     list_filter = (SourceFilter, TargetFilter)
-    autocomplete_fields = ["source", "target"]
+    autocomplete_fields: ClassVar[list] = ["source", "target"]
 
 
 @admin.register(AbilityTypePx)
 class AbilityTypePxAdmin(DefModelAdmin):
-    list_display = ("event", "name")
-    list_filter = (EventFilter,)
-    autocomplete_fields = ["event"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("event", "name")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(AbilityPx)
 class AbilityPxAdmin(DefModelAdmin):
-    list_display = ("name", "typ", "cost", "event")
-    list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "characters", "typ", "prerequisites", "requirements"]
-    search_fields = ["name"]
+    list_display: ClassVar[tuple] = ("name", "typ", "cost", "event")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event", "characters", "typ", "prerequisites", "requirements"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(DeliveryPx)
 class DeliveryPxAdmin(DefModelAdmin):
-    list_display = ("event", "name", "amount")
+    list_display: ClassVar[tuple] = ("event", "name", "amount")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["characters"]
+    autocomplete_fields: ClassVar[list] = ["characters"]
 
 
 class PlotFilter(AutocompleteFilter):

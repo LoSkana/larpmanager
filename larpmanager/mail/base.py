@@ -94,7 +94,7 @@ def join_email(association) -> None:
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender, **kwargs) -> None:
+def on_association_roles_m2m_changed(sender, **kwargs) -> None:  # noqa: C901 - Complex role change handling with notifications
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.

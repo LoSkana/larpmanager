@@ -83,7 +83,8 @@ def pw_page(pytestconfig, browser_type, live_server):
     def on_response(response) -> None:
         error_status = 500
         if response.status == error_status:
-            raise AssertionError(f"HTTP 500 su {response.url}")
+            msg = f"HTTP 500 su {response.url}"
+            raise AssertionError(msg)
 
     page.on("response", on_response)
 
@@ -167,7 +168,8 @@ def _load_test_db_sql() -> None:
     sql_path = Path(__file__).parent / "larpmanager" / "tests" / "test_db.sql"
 
     if not sql_path.exists():
-        raise FileNotFoundError(f"Test database SQL file not found: {sql_path}")
+        msg = f"Test database SQL file not found: {sql_path}"
+        raise FileNotFoundError(msg)
 
     # Clean the database first
     clean_db(host, env, name, user)
@@ -181,7 +183,7 @@ def _reload_fixtures() -> None:
     call_command("init_db")
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(autouse=True)
 def _e2e_db_setup(request: HttpRequest, django_db_blocker):
     """Set up database for e2e tests with single database per worker."""
     with django_db_blocker.unblock():
@@ -192,7 +194,6 @@ def _e2e_db_setup(request: HttpRequest, django_db_blocker):
             # Tables exist - truncate and init
             _reload_fixtures()
 
-    yield
 
 
 @pytest.fixture(autouse=True)
