@@ -640,6 +640,22 @@ def get_player_relationship(context: dict, other_player_number: int) -> None:
         raise Http404(msg) from err
 
 
+def ensure_timezone_aware(dt: datetime) -> datetime:
+    """Ensure a datetime object is timezone-aware.
+
+    Converts timezone-naive datetime objects to timezone-aware using the
+    default timezone. Already timezone-aware datetimes are returned unchanged.
+
+    Args:
+        dt: Datetime object to check and potentially convert
+
+    Returns:
+        Timezone-aware datetime object
+
+    """
+    return dt if timezone.is_aware(dt) else timezone.make_aware(dt)
+
+
 def get_time_diff(start_datetime: date, end_datetime: date) -> int:
     """Calculate the difference in days between two datetimes."""
     return (start_datetime - end_datetime).days

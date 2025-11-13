@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import secrets
-from datetime import datetime
 from itertools import chain
 from typing import Any
 
@@ -26,6 +25,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Max
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from model_clone import CloneMixin
@@ -39,7 +39,7 @@ AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowe
 
 
 class BaseModel(CloneMixin, SafeDeleteModel):
-    created = models.DateTimeField(default=datetime.now, editable=False)
+    created = models.DateTimeField(default=timezone.now, editable=False)
 
     updated = models.DateTimeField(auto_now=True)
 
