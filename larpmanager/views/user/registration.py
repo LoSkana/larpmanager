@@ -346,11 +346,13 @@ def save_registration_standard(
 
     # Process additional participants count
     if "additionals" in form.cleaned_data:
-        reg.additionals = int(form.cleaned_data["additionals"])
+        additionals_value = form.cleaned_data["additionals"]
+        reg.additionals = int(additionals_value) if additionals_value else 0
 
     # Handle quota assignments if present
     if form.cleaned_data.get("quotas"):
-        reg.quotas = int(form.cleaned_data["quotas"])
+        quotas_value = form.cleaned_data["quotas"]
+        reg.quotas = int(quotas_value) if quotas_value else 0
 
     # Process ticket selection and validation
     if "ticket" in form.cleaned_data:
