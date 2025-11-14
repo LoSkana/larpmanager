@@ -46,6 +46,8 @@ if TYPE_CHECKING:
 
 
 class MyLoginView(LoginView):
+    """View for MyLogin."""
+
     template_name = "registration/login.html"
     authentication_form = MyAuthForm
 

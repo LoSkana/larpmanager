@@ -29,6 +29,8 @@ from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Export features to yaml"
 
     # noinspection PyProtectedMember

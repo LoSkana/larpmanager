@@ -25,6 +25,8 @@ from larpmanager.models.association import Association
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "List of all assocs mails"
 
     def handle(self, *args, **options) -> None:  # noqa: ARG002

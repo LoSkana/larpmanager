@@ -129,6 +129,8 @@ class Contact(BaseModel):
 
 
 class ChatMessage(BaseModel):
+    """Represents ChatMessage model."""
+
     message = models.TextField(max_length=1000)
 
     channel = models.IntegerField(db_index=True)
@@ -146,6 +148,8 @@ class ChatMessage(BaseModel):
 
 
 class Util(BaseModel):
+    """Represents Util model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150)
@@ -174,6 +178,8 @@ class Util(BaseModel):
 
 
 class UrlShortner(BaseModel):
+    """Represents UrlShortner model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150)
@@ -185,10 +191,14 @@ class UrlShortner(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"U{self.number} {self.name}"
 
 
 class Album(BaseModel):
+    """Represents Album model."""
+
     name = models.CharField(max_length=70)
 
     cover = models.ImageField(max_length=500, upload_to=UploadToPathAndRename("albums/cover/"), blank=True)
@@ -269,6 +279,8 @@ class AlbumImage(BaseModel):
     height = models.IntegerField(default=0)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return self.upload.name
 
     def show_thumb(self):
@@ -310,6 +322,8 @@ class CompetenceMemberRel(BaseModel):
     info = models.TextField(max_length=5000)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.member} - {self.competence} ({self.exp})"
 
     class Meta:
@@ -332,6 +346,8 @@ class WorkshopModule(BaseModel):
     members = models.ManyToManyField(Member, related_name="workshops", through="WorkshopMemberRel")
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return self.name
 
     def show(self) -> dict[str, Any]:
@@ -343,15 +359,21 @@ class WorkshopModule(BaseModel):
 
 
 class WorkshopMemberRel(BaseModel):
+    """Represents WorkshopMemberRel model."""
+
     workshop = models.ForeignKey(WorkshopModule, on_delete=models.CASCADE)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.workshop} - {self.member}"
 
 
 class WorkshopQuestion(BaseModel):
+    """Represents WorkshopQuestion model."""
+
     search = models.CharField(max_length=200, editable=False)
 
     name = models.CharField(max_length=200)
@@ -363,6 +385,8 @@ class WorkshopQuestion(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshop_questions")
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return self.name
 
     def show(self) -> dict[str, any]:
@@ -386,6 +410,8 @@ class WorkshopQuestion(BaseModel):
 
 
 class WorkshopOption(BaseModel):
+    """Represents WorkshopOption model."""
+
     search = models.CharField(max_length=500, editable=False)
 
     question = models.ForeignKey(WorkshopQuestion, on_delete=models.CASCADE, related_name="options")
@@ -399,6 +425,8 @@ class WorkshopOption(BaseModel):
     number = models.IntegerField(blank=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.question} {self.name} ({self.is_correct})"
 
     def show(self) -> dict[str, Any]:
@@ -419,6 +447,8 @@ class WorkshopOption(BaseModel):
 
 
 class WarehouseContainer(BaseModel):
+    """Represents WarehouseContainer model."""
+
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
     position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, default="")
@@ -429,6 +459,8 @@ class WarehouseContainer(BaseModel):
 
 
 class WarehouseTag(BaseModel):
+    """Represents WarehouseTag model."""
+
     name = models.CharField(max_length=100)
 
     description = models.CharField(max_length=1000, blank=True, default="")
@@ -437,6 +469,8 @@ class WarehouseTag(BaseModel):
 
 
 class WarehouseItem(BaseModel):
+    """Represents WarehouseItem model."""
+
     name = models.CharField(max_length=100)
 
     quantity = models.IntegerField(blank=True, null=True)
@@ -472,6 +506,8 @@ class WarehouseItem(BaseModel):
 
 
 class WarehouseMovement(BaseModel):
+    """Represents WarehouseMovement model."""
+
     quantity = models.IntegerField(blank=True, null=True)
 
     item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="movements")
@@ -489,6 +525,8 @@ class WarehouseMovement(BaseModel):
 
 
 class WarehouseArea(BaseModel):
+    """Represents WarehouseArea model."""
+
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
 
     position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, default="")
@@ -499,6 +537,8 @@ class WarehouseArea(BaseModel):
 
 
 class WarehouseItemAssignment(BaseModel):
+    """Represents WarehouseItemAssignment model."""
+
     quantity = models.IntegerField(blank=True, null=True)
 
     item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="assignments")
@@ -528,12 +568,16 @@ class WarehouseItemAssignment(BaseModel):
 
 
 class ShuttleStatus(models.TextChoices):
+    """Represents ShuttleStatus model."""
+
     OPEN = "0", _("Waiting list")
     COMING = "1", _("We're coming")
     DONE = "2", _("Arrived safe and sound")
 
 
 class ShuttleService(BaseModel):
+    """Represents ShuttleService model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="shuttle_services_requests")
 
     passengers = models.IntegerField(
@@ -586,16 +630,22 @@ class ShuttleService(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.member} ({self.date} {self.time}) {self.status}"
 
 
 class ProblemStatus(models.TextChoices):
+    """Represents ProblemStatus model."""
+
     OPEN = "o", "1 - OPEN"
     WORKING = "w", "2 - WORKING"
     CLOSED = "c", "3 - CLOSED"
 
 
 class ProblemSeverity(models.TextChoices):
+    """Represents ProblemSeverity model."""
+
     RED = "r", "1 - RED"
     ORANGE = "o", "2 - ORANGE"
     YELLOW = "y", "3 - YELLOW"
@@ -603,6 +653,8 @@ class ProblemSeverity(models.TextChoices):
 
 
 class Problem(BaseModel):
+    """Represents Problem model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     number = models.IntegerField()
@@ -696,6 +748,8 @@ class Problem(BaseModel):
 
 
 class PlayerRelationship(BaseModel):
+    """Represents PlayerRelationship model."""
+
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE)
 
     target = models.ForeignKey(Character, related_name="target_players", on_delete=models.CASCADE)
@@ -726,6 +780,8 @@ class PlayerRelationship(BaseModel):
 
 
 class Email(BaseModel):
+    """Represents Email model."""
+
     association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
@@ -743,6 +799,8 @@ class Email(BaseModel):
     search = models.CharField(max_length=500, blank=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.recipient} - {self.subj}"
 
 
@@ -810,6 +868,8 @@ class OneTimeContent(BaseModel):
         verbose_name_plural = _("One-Time Contents")
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.name} ({self.event.name})"
 
     def save(self, *args, **kwargs) -> None:

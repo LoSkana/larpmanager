@@ -28,12 +28,16 @@ from larpmanager.models.event import Event, EventConfig, EventText, PreRegistrat
 
 @admin.register(ProgressStep)
 class ProgressStepAdmin(DefModelAdmin):
+    """Admin interface for ProgressStep model."""
+
     search_fields = ("name",)
     autocomplete_fields: ClassVar[list] = ["event"]
 
 
 @admin.register(Event)
 class EventAdmin(DefModelAdmin):
+    """Admin interface for Event model."""
+
     list_display = ("name", "thumb", "slug", "association")
     search_fields: ClassVar[tuple] = ("name",)
     list_filter = (AssociationFilter,)
@@ -42,6 +46,8 @@ class EventAdmin(DefModelAdmin):
 
 @admin.register(EventConfig)
 class EventConfigAdmin(DefModelAdmin):
+    """Admin interface for EventConfig model."""
+
     list_display = ("event", "name", "value")
     search_fields: ClassVar[tuple] = ("name",)
     list_filter = (EventFilter,)
@@ -50,6 +56,8 @@ class EventConfigAdmin(DefModelAdmin):
 
 @admin.register(Run)
 class RunAdmin(DefModelAdmin):
+    """Admin interface for Run model."""
+
     exclude = ("search",)
     search_fields: ClassVar[tuple] = ("search",)
     list_display = ("id", "event", "number", "start", "end")
@@ -59,6 +67,8 @@ class RunAdmin(DefModelAdmin):
 
 @admin.register(RunConfig)
 class RunConfigAdmin(DefModelAdmin):
+    """Admin interface for RunConfig model."""
+
     list_display = ("run", "name", "value")
     search_fields: ClassVar[tuple] = ("name",)
     list_filter = (RunFilter,)
@@ -67,6 +77,8 @@ class RunConfigAdmin(DefModelAdmin):
 
 @admin.register(EventText)
 class EventTextAdmin(DefModelAdmin):
+    """Admin interface for EventText model."""
+
     list_display: ClassVar[tuple] = ("event", "typ", "language", "default")
     list_filter = (EventFilter, "typ", "language")
     autocomplete_fields: ClassVar[list] = ["event"]
@@ -74,6 +86,8 @@ class EventTextAdmin(DefModelAdmin):
 
 @admin.register(PreRegistration)
 class PreRegistrationAdmin(DefModelAdmin):
+    """Admin interface for PreRegistration model."""
+
     list_display: ClassVar[tuple] = ("event", "member", "pref")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "member"]

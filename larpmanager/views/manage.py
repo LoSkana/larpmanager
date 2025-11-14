@@ -1177,6 +1177,8 @@ def orga_redirect(
 
 
 class WhatWouldYouLikeForm(Form):
+    """Form for WhatWouldYouLike."""
+
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
         """Initialize the form with context and populate choice field options.
 

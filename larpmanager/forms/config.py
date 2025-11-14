@@ -15,6 +15,8 @@ from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, get_members_
 
 
 class ConfigType(IntEnum):
+    """Represents ConfigType model."""
+
     CHAR = 1
     BOOL = 2
     HTML = 3
@@ -25,6 +27,8 @@ class ConfigType(IntEnum):
 
 
 class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
+    """Represents MultiCheckboxWidget model."""
+
     def render(self, name: str, value: list | None, attrs: dict | None = None, renderer=None) -> str:  # noqa: ARG002
         """Render the checkbox widget as HTML.
 
@@ -70,6 +74,8 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class ConfigForm(MyForm):
+    """Form for Config."""
+
     def __init__(self, *args, **kwargs) -> None:
         """Initialize the form with configuration fields and custom elements.
 

@@ -39,6 +39,8 @@ from larpmanager.models.larpmanager import (
 
 @admin.register(LarpManagerFaq)
 class LarpManagerFaqAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerFaq model."""
+
     list_display: ClassVar[tuple] = ("question_red", "typ", "number", "answer_red")
     list_filter = ("typ",)
     autocomplete_fields: ClassVar[list] = ["typ"]
@@ -56,12 +58,16 @@ class LarpManagerFaqAdmin(DefModelAdmin):
 
 @admin.register(LarpManagerFaqType)
 class LarpManagerFaqTypeAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerFaqType model."""
+
     list_display = ("name", "order")
     search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(LarpManagerTutorial)
 class LarpManagerTutorial(DefModelAdmin):
+    """Admin interface for LarpManagerTutorial model."""
+
     list_display = ("name", "slug", "order", "descr_red")
 
     @staticmethod
@@ -72,21 +78,29 @@ class LarpManagerTutorial(DefModelAdmin):
 
 @admin.register(LarpManagerGuide)
 class LarpManagerBlogAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerGuide model."""
+
     list_display = ("title", "slug", "number", "published", "text_red", "show_thumb")
 
 
 @admin.register(LarpManagerShowcase)
 class LarpManagerShowcaseAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerShowcase model."""
+
     list_display = ("title", "number", "text_red", "show_reduced")
 
 
 @admin.register(LarpManagerProfiler)
 class LarpManagerProfilerAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerProfiler model."""
+
     list_display = ("id", "view_func_name", "domain", "duration", "created")
 
 
 @admin.register(LarpManagerDiscover)
 class LarpManagerDiscoverAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerDiscover model."""
+
     list_display = ("name", "order", "text_red", "text_len")
 
     @staticmethod
@@ -102,11 +116,15 @@ class LarpManagerDiscoverAdmin(DefModelAdmin):
 
 @admin.register(LarpManagerReview)
 class LMReviewAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerReview model."""
+
     list_display = ("text", "author")
 
 
 @admin.register(LarpManagerTicket)
 class LarpManagerTicketAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerTicket model."""
+
     list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb")
 
     @staticmethod
@@ -117,4 +135,6 @@ class LarpManagerTicketAdmin(DefModelAdmin):
 
 @admin.register(PublisherApiKey)
 class PublisherApiKeyAdmin(DefModelAdmin):
+    """Admin interface for PublisherApiKey model."""
+
     list_display = ("name", "key", "active", "last_used", "usage_count")

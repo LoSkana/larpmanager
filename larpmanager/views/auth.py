@@ -39,6 +39,8 @@ if TYPE_CHECKING:
 
 
 class MyRegistrationView(RegistrationView):
+    """View for MyRegistration."""
+
     def register(self, form: Form) -> User:
         """Register a new user and set up membership if needed.
 
@@ -124,6 +126,8 @@ class MyRegistrationView(RegistrationView):
 
 
 class MyPasswordResetConfirmView(PasswordResetConfirmView):
+    """View for MyPasswordResetConfirm."""
+
     def form_valid(self, form: Form) -> HttpResponse:
         """Handle valid password reset form submission.
 

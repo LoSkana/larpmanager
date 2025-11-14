@@ -219,4 +219,6 @@ class ReturnNowError(Exception):
 
 
 class RewokedMembershipError(Exception):
+    """Exception for RewokedMembershipError."""
+
     pass

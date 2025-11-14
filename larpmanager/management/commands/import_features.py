@@ -31,6 +31,8 @@ from django.db.models import ForeignKey, ManyToManyField
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Reload features from yaml"
 
     def handle(self, *args, **options) -> None:  # noqa: ARG002

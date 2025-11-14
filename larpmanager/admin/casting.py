@@ -27,6 +27,8 @@ from larpmanager.models.casting import Casting, CastingAvoid, Quest, QuestType, 
 
 
 class TraitInline(admin.TabularInline):
+    """Inline admin for Trait model within Quest admin."""
+
     model = Trait
     fields = (
         "number",
@@ -36,6 +38,8 @@ class TraitInline(admin.TabularInline):
 
 @admin.register(Quest)
 class QuestAdmin(DefModelAdmin):
+    """Admin interface for Quest model."""
+
     list_display = ("number", "name", "event")
     inlines: ClassVar[list] = [
         TraitInline,
@@ -47,6 +51,8 @@ class QuestAdmin(DefModelAdmin):
 
 @admin.register(QuestType)
 class QuestTypeAdmin(DefModelAdmin):
+    """Admin interface for QuestType model."""
+
     list_display: ClassVar[tuple] = ("name", "event")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
@@ -55,6 +61,8 @@ class QuestTypeAdmin(DefModelAdmin):
 
 @admin.register(Casting)
 class CastingAdmin(DefModelAdmin):
+    """Admin interface for Casting model."""
+
     list_display = ("run", "member", "element", "pref", "typ", "created", "updated")
     autocomplete_fields = (
         "run",
@@ -65,6 +73,8 @@ class CastingAdmin(DefModelAdmin):
 
 @admin.register(CastingAvoid)
 class CastingAvoidAdmin(DefModelAdmin):
+    """Admin interface for CastingAvoid model."""
+
     list_display = ("run", "member", "typ", "text")
     autocomplete_fields = (
         "run",

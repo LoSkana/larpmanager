@@ -36,7 +36,11 @@ logger = logging.getLogger(__name__)
 
 
 class QuestType(Writing):
+    """Represents QuestType model."""
+
     def __str__(self) -> str:
+        """Return string representation."""
+
         return self.name
 
     def show(self, run: Run | None = None) -> dict:
@@ -52,6 +56,8 @@ class QuestType(Writing):
 
 
 class Quest(Writing):
+    """Represents Quest model."""
+
     typ = models.ForeignKey(
         QuestType,
         on_delete=models.CASCADE,
@@ -104,6 +110,8 @@ class Quest(Writing):
 
 
 class Trait(Writing):
+    """Represents Trait model."""
+
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, null=True, related_name="traits")
 
     traits = models.ManyToManyField("self", symmetrical=False, blank=True)
@@ -143,6 +151,8 @@ class Trait(Writing):
 
 
 class AssignmentTrait(BaseModel):
+    """Represents AssignmentTrait model."""
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="assignments", blank=True, null=True)
 
     member = models.ForeignKey(
@@ -164,10 +174,14 @@ class AssignmentTrait(BaseModel):
     typ = models.IntegerField()
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.run} ({self.member}) {self.trait}"
 
 
 class Casting(BaseModel):
+    """Represents Casting model."""
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
@@ -188,6 +202,8 @@ class Casting(BaseModel):
 
 
 class CastingAvoid(BaseModel):
+    """Represents CastingAvoid model."""
+
     run = models.ForeignKey(
         Run,
         on_delete=models.CASCADE,

@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Django admin configuration for association and organization models.
+
+This module provides admin interfaces for managing associations, their
+configurations, custom texts, translations, and visual themes.
+"""
+
 from typing import ClassVar
 
 from django.contrib import admin
@@ -34,6 +40,8 @@ from larpmanager.models.association import (
 
 @admin.register(Association)
 class AssociationAdmin(DefModelAdmin):
+    """Admin interface for LARP organizations and associations."""
+
     list_display = ("name", "slug", "created")
     search_fields: ClassVar[tuple] = ("name",)
 
@@ -42,6 +50,8 @@ class AssociationAdmin(DefModelAdmin):
 
 @admin.register(AssociationConfig)
 class AssociationConfigAdmin(DefModelAdmin):
+    """Admin interface for association-specific configuration key-value pairs."""
+
     list_display = ("association", "name", "value")
     search_fields: ClassVar[tuple] = ("name",)
     list_filter = (AssociationFilter,)
@@ -50,6 +60,8 @@ class AssociationConfigAdmin(DefModelAdmin):
 
 @admin.register(AssociationText)
 class AssociationTextAdmin(DefModelAdmin):
+    """Admin interface for association custom text content by language and type."""
+
     list_display: ClassVar[tuple] = ("association", "typ", "language", "default")
     list_filter = (AssociationFilter, "typ", "language")
     autocomplete_fields: ClassVar[list] = ["association"]
@@ -104,6 +116,8 @@ class AssociationTranslationAdmin(DefModelAdmin):
 
 @admin.register(AssociationSkin)
 class AssociationSkinAdmin(DefModelAdmin):
+    """Admin interface for association visual themes and skins."""
+
     list_display = ("name",)
     search_fields: ClassVar[tuple] = ("name",)
 

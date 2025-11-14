@@ -66,6 +66,8 @@ from larpmanager.utils.edit import save_version
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
+    """Form for Character."""
+
     orga = False
 
     page_title = _("Character")
@@ -337,6 +339,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
 
 class OrgaCharacterForm(CharacterForm):
+    """Form for OrgaCharacter."""
+
     page_info = _("Manage characters")
 
     page_title = _("Character")
@@ -707,6 +711,8 @@ class OrgaCharacterForm(CharacterForm):
 
 
 class OrgaWritingQuestionForm(MyForm):
+    """Form for OrgaWritingQuestion."""
+
     page_info = _("Manage form questions for writing elements")
 
     page_title = _("Writing Question")
@@ -870,6 +876,8 @@ class OrgaWritingQuestionForm(MyForm):
 
 
 class OrgaWritingOptionForm(MyForm):
+    """Form for OrgaWritingOption."""
+
     page_info = _("Manage options in form questions for writing elements")
 
     page_title = _("Writing option")

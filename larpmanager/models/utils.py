@@ -225,6 +225,8 @@ def get_sum(queryset: QuerySet) -> Decimal | int:
 
 @deconstructible
 class UploadToPathAndRename:
+    """Represents UploadToPathAndRename model."""
+
     def __init__(self, sub_path) -> None:
         """Initialize upload path handler with sub-directory."""
         self.sub_path = sub_path
@@ -397,6 +399,8 @@ def strip_tags(html: str | None) -> str:
 
 
 class MLStripper(HTMLParser):
+    """Represents MLStripper model."""
+
     def __init__(self) -> None:
         """Initialize the HTML parser with default settings."""
         super().__init__()
