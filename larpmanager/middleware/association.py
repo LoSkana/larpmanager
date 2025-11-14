@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
@@ -33,6 +33,8 @@ from larpmanager.cache.skin import get_cache_skin
 from larpmanager.models.association import AssociationTextType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from django.http import HttpRequest, HttpResponse
 
 
