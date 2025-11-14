@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 from django.core.cache import cache
 from django.db.models import Count
@@ -104,15 +105,13 @@ def _get_reviews() -> list[dict]:
 
     """
     # Convert each review object to dictionary representation
-    reviews = [review.as_dict() for review in LarpManagerReview.objects.all()]
-    return reviews
+    return [review.as_dict() for review in LarpManagerReview.objects.all()]
 
 
 def _get_showcases() -> list[dict]:
     """Return all showcases as a list of dictionaries ordered by number."""
     # Iterate through showcases ordered by number and convert to dict
-    showcases = [showcase.as_dict() for showcase in LarpManagerShowcase.objects.order_by("number")]
-    return showcases
+    return [showcase.as_dict() for showcase in LarpManagerShowcase.objects.order_by("number")]
 
 
 def _get_promoters() -> list[dict]:
@@ -127,5 +126,4 @@ def _get_promoters() -> list[dict]:
     associations_queryset = associations_queryset.exclude(promoter__exact="")
 
     # Convert each association's promoter to dictionary format
-    promoters_list = [association.promoter_dict() for association in associations_queryset]
-    return promoters_list
+    return [association.promoter_dict() for association in associations_queryset]

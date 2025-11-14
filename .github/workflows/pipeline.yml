@@ -60,6 +60,10 @@ jobs:
         npm install
         cd ../../
 
+    - name: Run ruff linting check
+      run: |
+        ruff check .
+
     - name: Copy media fixtures
       run: |
         mkdir -p ../media/
