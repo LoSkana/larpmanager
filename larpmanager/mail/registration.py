@@ -114,23 +114,50 @@ def update_registration_status(instance: Any) -> None:
     # Send notifications to event organizers based on configuration
     association_id = instance.run.event.association_id
 
+    # Check if digest mode is enabled for this event
+    from larpmanager.models.notification import (
+        OrganizerNotificationQueue,
+        queue_organizer_notification,
+        should_queue_notification,
+    )
+
+    digest_mode = should_queue_notification(instance.run.event)
+
     # Handle new registration notifications to organizers
     if instance.modified == 1 and get_association_config(association_id, "mail_signup_new", default_value=False):
-        for organizer in get_event_organizers(instance.run.event):
-            activate(organizer.language)
-            email_subject = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % email_context
-            email_body = _("The user has confirmed its registration for this event") + "!"
-            email_body += registration_options(instance)
-            my_send_mail(email_subject, email_body, organizer, instance.run)
+        if digest_mode:
+            # Queue notification for daily summary
+            queue_organizer_notification(
+                event=instance.run.event,
+                notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_NEW,
+                registration=instance,
+            )
+        else:
+            # Send immediate emails
+            for organizer in get_event_organizers(instance.run.event):
+                activate(organizer.language)
+                email_subject = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % email_context
+                email_body = _("The user has confirmed its registration for this event") + "!"
+                email_body += registration_options(instance)
+                my_send_mail(email_subject, email_body, organizer, instance.run)
 
     # Handle registration update notifications to organizers
     elif get_association_config(association_id, "mail_signup_update", default_value=False):
-        for organizer in get_event_organizers(instance.run.event):
-            activate(organizer.language)
-            email_subject = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % email_context
-            email_body = _("The user has updated their registration for this event") + "!"
-            email_body += registration_options(instance)
-            my_send_mail(email_subject, email_body, organizer, instance.run)
+        if digest_mode:
+            # Queue notification for daily summary
+            queue_organizer_notification(
+                event=instance.run.event,
+                notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_UPDATE,
+                registration=instance,
+            )
+        else:
+            # Send immediate emails
+            for organizer in get_event_organizers(instance.run.event):
+                activate(organizer.language)
+                email_subject = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % email_context
+                email_body = _("The user has updated their registration for this event") + "!"
+                email_body += registration_options(instance)
+                my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
 def registration_options(registration_instance: Any) -> str:
@@ -349,14 +376,37 @@ def update_registration_cancellation(instance: Registration) -> None:
 
     # Send notification emails to organizers if feature is enabled
     if get_association_config(instance.run.event.association_id, "mail_signup_del", default_value=False):
-        # Iterate through all organizers for this event
-        for organizer in get_event_organizers(instance.run.event):
-            activate(organizer.language)
-            email_subject = (
-                hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % email_context
+        # Check if digest mode is enabled for this event
+        from larpmanager.models.notification import (
+            OrganizerNotificationQueue,
+            queue_organizer_notification,
+            should_queue_notification,
+        )
+
+        digest_mode = should_queue_notification(instance.run.event)
+
+        if digest_mode:
+            # Queue notification for daily summary
+            # Store member and ticket info in details since registration might be deleted
+            queue_organizer_notification(
+                event=instance.run.event,
+                notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_CANCEL,
+                registration=instance,
+                details={
+                    "member_name": instance.member.username,
+                    "ticket_name": instance.ticket.name if instance.ticket else _("No ticket"),
+                },
             )
-            email_body = _("The registration for this event has been cancelled") + "."
-            my_send_mail(email_subject, email_body, organizer, instance.run)
+        else:
+            # Send immediate emails
+            # Iterate through all organizers for this event
+            for organizer in get_event_organizers(instance.run.event):
+                activate(organizer.language)
+                email_subject = (
+                    hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % email_context
+                )
+                email_body = _("The registration for this event has been cancelled") + "."
+                my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
 def send_registration_cancellation_email(instance: Registration) -> None:
@@ -424,12 +474,35 @@ def send_registration_deletion_email(instance: Registration) -> None:
 
     # Check if organization wants to receive deletion notifications
     if get_association_config(instance.run.event.association_id, "mail_signup_del", default_value=False):
-        # Send notification to all event organizers
-        for organizer in get_event_organizers(instance.run.event):
-            activate(organizer.language)
-            email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
-            email_body = _("The registration for this event has been cancelled") + "."
-            my_send_mail(email_subject, email_body, organizer, instance.run)
+        # Check if digest mode is enabled for this event
+        from larpmanager.models.notification import (
+            OrganizerNotificationQueue,
+            queue_organizer_notification,
+            should_queue_notification,
+        )
+
+        digest_mode = should_queue_notification(instance.run.event)
+
+        if digest_mode:
+            # Queue notification for daily summary
+            # Store member and ticket info in details since registration is being deleted
+            queue_organizer_notification(
+                event=instance.run.event,
+                notification_type=OrganizerNotificationQueue.NotificationType.REGISTRATION_CANCEL,
+                registration=None,  # Registration will be deleted, can't reference it
+                details={
+                    "member_name": instance.member.username,
+                    "ticket_name": instance.ticket.name if instance.ticket else _("No ticket"),
+                },
+            )
+        else:
+            # Send immediate emails
+            # Send notification to all event organizers
+            for organizer in get_event_organizers(instance.run.event):
+                activate(organizer.language)
+                email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % context
+                email_body = _("The registration for this event has been cancelled") + "."
+                my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
 def send_pre_registration_confirmation_email(pre_registration: Any) -> None:
