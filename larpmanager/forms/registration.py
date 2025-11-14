@@ -993,7 +993,9 @@ class RegistrationCharacterRelForm(MyForm):
             [
                 s
                 for s in ["name", "pronoun", "song", "public", "private"]
-                if not get_event_config(self.params["event"].id, "custom_character_" + s, default_value=False, context=self.params)
+                if not get_event_config(
+                    self.params["event"].id, "custom_character_" + s, default_value=False, context=self.params
+                )
             ]
         )
 
@@ -1040,8 +1042,7 @@ class OrgaRegistrationTicketForm(MyForm):
         if "gift" not in self.params["features"]:
             self.delete_field("giftable")
 
-    @staticmethod
-    def get_tier_available(event: Event) -> list[tuple[str, str]]:
+    def get_tier_available(self, event: Event) -> list[tuple[str, str]]:
         """Get available ticket tiers based on event features and configuration.
 
         Filters ticket tiers by checking if required features are enabled for the event
