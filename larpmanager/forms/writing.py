@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -101,11 +101,11 @@ class PlayerRelationshipForm(MyForm):
 
     class Meta:
         model = PlayerRelationship
-        exclude = ["reg"]
-        widgets = {
+        exclude: ClassVar[list] = ["reg"]
+        widgets: ClassVar[dict] = {
             "target": EventCharacterS2Widget,
         }
-        labels = {"target": _("Character")}
+        labels: ClassVar[dict] = {"target": _("Character")}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure target field for the event."""
@@ -168,7 +168,7 @@ class PlayerRelationshipForm(MyForm):
 
 
 class UploadElementsForm(forms.Form):
-    allowed_types = [
+    allowed_types: ClassVar[list] = [
         "application/csv",
         "text/csv",
         "text/plain",
@@ -218,7 +218,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
         # Get applicable questions for this model type
         # noinspection PyProtectedMember
-        self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)
+        self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)  # noqa: SLF001  # Django model metadata
 
     def _init_questions(self, event: Event) -> None:
         """Initialize questions filtered by applicable type."""
@@ -263,9 +263,9 @@ class BaseWritingForm(BaseRegistrationForm):
 
 
 class PlotForm(WritingForm, BaseWritingForm):
-    load_templates = ["plot"]
+    load_templates: ClassVar[list] = ["plot"]
 
-    load_js = ["characters-choices", "plot-roles"]
+    load_js: ClassVar[list] = ["characters-choices", "plot-roles"]
 
     page_title = _("Plot")
 
@@ -274,7 +274,7 @@ class PlotForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide", "order")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "characters": EventCharacterS2WidgetMulti,
         }
 
@@ -377,9 +377,9 @@ class PlotForm(WritingForm, BaseWritingForm):
 
 
 class FactionForm(WritingForm, BaseWritingForm):
-    load_templates = ["faction"]
+    load_templates: ClassVar[list] = ["faction"]
 
-    load_js = ["characters-choices"]
+    load_js: ClassVar[list] = ["characters-choices"]
 
     page_title = _("Faction")
 
@@ -388,7 +388,7 @@ class FactionForm(WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide", "order")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "characters": EventCharacterS2WidgetMulti,
         }
 
@@ -422,9 +422,9 @@ class QuestTypeForm(WritingForm):
 
     class Meta:
         model = QuestType
-        fields = ["name", "teaser", "event"]
+        fields: ClassVar[list] = ["name", "teaser", "event"]
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
         }
@@ -453,7 +453,7 @@ class QuestForm(WritingForm, BaseWritingForm):
 class TraitForm(WritingForm, BaseWritingForm):
     page_title = _("Trait")
 
-    load_templates = ["trait"]
+    load_templates: ClassVar[list] = ["trait"]
 
     class Meta:
         model = Trait
@@ -477,9 +477,9 @@ class HandoutForm(WritingForm):
 
     class Meta:
         model = Handout
-        fields = ["template", "name", "text", "event"]
+        fields: ClassVar[list] = ["template", "name", "text", "event"]
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "text": WritingTinyMCE(),
         }
 
@@ -493,13 +493,15 @@ class HandoutForm(WritingForm):
 
 
 class HandoutTemplateForm(WritingForm):
-    load_templates = ["handout-template"]
+    load_templates: ClassVar[list] = ["handout-template"]
 
     class Meta:
         model = HandoutTemplate
-        exclude = ["number"]
+        exclude: ClassVar[list] = ["number"]
 
-        widgets = {"template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"})}
+        widgets: ClassVar[dict] = {
+            "template": forms.FileInput(attrs={"accept": "application/vnd.oasis.opendocument.text"})
+        }
 
 
 class PrologueTypeForm(WritingForm):
@@ -507,20 +509,20 @@ class PrologueTypeForm(WritingForm):
 
     class Meta:
         model = PrologueType
-        fields = ["name", "event"]
+        fields: ClassVar[list] = ["name", "event"]
 
 
 class PrologueForm(WritingForm, BaseWritingForm):
     page_title = _("Prologue")
 
-    load_js = ["characters-choices"]
+    load_js: ClassVar[list] = ["characters-choices"]
 
     class Meta:
         model = Prologue
 
         exclude = ("number", "teaser", "temp", "hide")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "characters": EventCharacterS2WidgetMulti,
         }
 
@@ -541,13 +543,13 @@ class PrologueForm(WritingForm, BaseWritingForm):
 class SpeedLarpForm(WritingForm):
     page_title = _("Speed larp")
 
-    load_js = ["characters-choices"]
+    load_js: ClassVar[list] = ["characters-choices"]
 
     class Meta:
         model = SpeedLarp
         exclude = ("teaser", "temp", "hide")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "characters": EventCharacterS2WidgetMulti,
             "text": WritingTinyMCE(),
         }

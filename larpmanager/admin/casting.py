@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.contrib import admin
 
 from larpmanager.admin.base import DefModelAdmin, EventFilter, MemberFilter, RunFilter
@@ -35,19 +37,19 @@ class TraitInline(admin.TabularInline):
 @admin.register(Quest)
 class QuestAdmin(DefModelAdmin):
     list_display = ("number", "name", "event")
-    inlines = [
+    inlines: ClassVar[list] = [
         TraitInline,
     ]
     list_filter = (EventFilter,)
-    autocomplete_fields = ["typ", "event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["typ", "event", "progress", "assigned"]
     search_fields = ("name",)
 
 
 @admin.register(QuestType)
 class QuestTypeAdmin(DefModelAdmin):
-    list_display = ("name", "event")
+    list_display: ClassVar[tuple] = ("name", "event")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
     search_fields = ("name",)
 
 

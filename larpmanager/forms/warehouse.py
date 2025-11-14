@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -50,8 +50,8 @@ class ExeWarehouseItemForm(MyForm):
 
     class Meta:
         model = WarehouseItem
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 5}),
             "container": WarehouseContainerS2Widget,
             "tags": WarehouseTagS2WidgetMulti,
@@ -83,8 +83,8 @@ class ExeWarehouseContainerForm(MyForm):
 
     class Meta:
         model = WarehouseContainer
-        exclude = []
-        widgets = {"description": Textarea(attrs={"rows": 5})}
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {"description": Textarea(attrs={"rows": 5})}
 
 
 class ExeWarehouseTagForm(MyForm):
@@ -94,8 +94,8 @@ class ExeWarehouseTagForm(MyForm):
 
     class Meta:
         model = WarehouseTag
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 5}),
         }
 
@@ -126,8 +126,8 @@ class ExeWarehouseMovementForm(MyForm):
 
     class Meta:
         model = WarehouseMovement
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "notes": Textarea(attrs={"rows": 5}),
             "item": WarehouseItemS2Widget,
         }
@@ -149,8 +149,8 @@ class OrgaWarehouseAreaForm(MyForm):
 
     class Meta:
         model = WarehouseArea
-        exclude = []
-        widgets = {"description": Textarea(attrs={"rows": 5})}
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {"description": Textarea(attrs={"rows": 5})}
 
 
 class OrgaWarehouseItemAssignmentForm(MyForm):
@@ -160,8 +160,8 @@ class OrgaWarehouseItemAssignmentForm(MyForm):
 
     class Meta:
         model = WarehouseItemAssignment
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 5}),
             "area": WarehouseAreaS2Widget,
             "item": WarehouseItemS2Widget,

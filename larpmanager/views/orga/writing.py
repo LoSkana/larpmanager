@@ -997,7 +997,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
     for typ in [Character, Plot, Faction, Quest, Trait, Prologue, SpeedLarp]:
         # Get model name from Django model metadata
         # noinspection PyUnresolvedReferences, PyProtectedMember
-        model_name = typ._meta.model_name
+        model_name = typ._meta.model_name  # noqa: SLF001  # Django model metadata
 
         # Skip this type if its feature is not enabled for the event
         if mapping.get(model_name) not in context["features"]:

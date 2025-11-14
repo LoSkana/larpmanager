@@ -18,16 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from pathlib import Path
+
 import yaml
 
 # Get text from features, assoc permission, event permission
 trans_path = "larpmanager/templates/trans.html"
 
-with open(trans_path, "w") as f:
+with Path(trans_path).open("w") as f:
     f.writelines("{% load i18n %}\n")
 
     for fixture_file in ["module", "feature", "association_permission", "event_permission", "permission_module"]:
-        with open(f"larpmanager/fixtures/{fixture_file}.yaml", encoding="utf-8") as fixture:
+        with Path(f"larpmanager/fixtures/{fixture_file}.yaml").open(encoding="utf-8") as fixture:
             data = yaml.safe_load(fixture)
 
             for el in data:

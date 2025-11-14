@@ -198,7 +198,7 @@ def update_m2m_related_characters(
                 try:
                     character = Character.objects.get(id=character_id)
                     affected_characters.append(character)
-                except ObjectDoesNotExist:
+                except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
                     logger.warning("Character %s not found during relationship update", character_id)
         elif action == "post_clear":
             # For post_clear, get all characters that were related
@@ -398,6 +398,82 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
         clear_event_relationships_cache(event.id)
 
 
+def _build_plot_relations(char: Character) -> dict[str, Any]:
+    """Build plot relationships for a character.
+
+    Args:
+        char: Character to build plot relationships for
+
+    Returns:
+        Dictionary with plot relationship data including important count
+    """
+    related_plots = char.get_plot_characters()
+    plot_list = [(plot_rel.plot_id, plot_rel.plot.name) for plot_rel in related_plots]
+    plot_rels = build_relationship_dict(plot_list)
+
+    # Calculate important plot count (excluding $unimportant entries)
+    unimportant_plot_count = 0
+    if get_event_config(char.event_id, "writing_unimportant", default_value=False):
+        unimportant_plot_count = sum(
+            1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
+        )
+    plot_rels["important"] = plot_rels["count"] - unimportant_plot_count
+    return plot_rels
+
+
+def _build_faction_relations(char: Character, event: Event) -> dict[str, Any]:
+    """Build faction relationships for a character.
+
+    Args:
+        char: Character to build faction relationships for
+        event: Event for faction independence configuration
+
+    Returns:
+        Dictionary with faction relationship data
+    """
+    cache_event_id = event.id if event else char.event_id
+    if get_event_config(cache_event_id, "campaign_faction_indep", default_value=False):
+        # Use the cache event for independent faction lookup
+        faction_event_id = cache_event_id
+    else:
+        # Use the parent event for inherited faction lookup
+        faction_event_id = char.event.get_class_parent("faction").id
+
+    # Build faction list based on determined event
+    if faction_event_id:
+        character_factions = char.factions_list.filter(event_id=faction_event_id)
+        faction_list = [(faction.id, faction.name) for faction in character_factions]
+    else:
+        faction_list = []
+
+    return build_relationship_dict(faction_list)
+
+
+def _build_character_relations(char: Character) -> dict[str, Any]:
+    """Build character-to-character relationships.
+
+    Args:
+        char: Character to build relationships for
+
+    Returns:
+        Dictionary with character relationship data including important count
+    """
+    character_relationships = Relationship.objects.filter(deleted=None, source=char)
+    relationship_list = [(relationship.target.id, relationship.target.name) for relationship in character_relationships]
+    relationships_rels = build_relationship_dict(relationship_list)
+
+    # Calculate important relationship count (excluding $unimportant entries)
+    unimportant_relationship_count = 0
+    if get_event_config(char.event_id, "writing_unimportant", default_value=False):
+        unimportant_relationship_count = sum(
+            1
+            for relationship in character_relationships
+            if strip_tags(relationship.text).lstrip().startswith("$unimportant")
+        )
+    relationships_rels["important"] = relationships_rels["count"] - unimportant_relationship_count
+    return relationships_rels
+
+
 def get_event_char_rels(char: Character, features: dict[str, Any], event: Event) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
@@ -433,56 +509,15 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
     try:
         # Handle plot relationships if plot feature is enabled
         if "plot" in features:
-            related_plots = char.get_plot_characters()
-            plot_list = [(plot_rel.plot_id, plot_rel.plot.name) for plot_rel in related_plots]
-            relations["plot_rels"] = build_relationship_dict(plot_list)
-
-            # Calculate important plot count (excluding $unimportant entries)
-            unimportant_plot_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
-                unimportant_plot_count = sum(
-                    1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
-                )
-            relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_plot_count
+            relations["plot_rels"] = _build_plot_relations(char)
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
-            cache_event_id = event.id if event else char.event_id
-            if get_event_config(cache_event_id, "campaign_faction_indep", default_value=False):
-                # Use the cache event for independent faction lookup
-                faction_event_id = cache_event_id
-            else:
-                # Use the parent event for inherited faction lookup
-                faction_event_id = char.event.get_class_parent("faction").id
-
-            # Build faction list based on determined event
-            if faction_event_id:
-                character_factions = char.factions_list.filter(event_id=faction_event_id)
-                faction_list = [(faction.id, faction.name) for faction in character_factions]
-            else:
-                faction_list = []
-
-            relations["faction_rels"] = build_relationship_dict(faction_list)
+            relations["faction_rels"] = _build_faction_relations(char, event)
 
         # Handle character-to-character relationships if relationships feature is enabled
         if "relationships" in features:
-            character_relationships = Relationship.objects.filter(deleted=None, source=char)
-            relationship_list = [
-                (relationship.target.id, relationship.target.name) for relationship in character_relationships
-            ]
-            relations["relationships_rels"] = build_relationship_dict(relationship_list)
-
-            # Calculate important relationship count (excluding $unimportant entries)
-            unimportant_relationship_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
-                unimportant_relationship_count = sum(
-                    1
-                    for relationship in character_relationships
-                    if strip_tags(relationship.text).lstrip().startswith("$unimportant")
-                )
-            relations["relationships_rels"]["important"] = (
-                relations["relationships_rels"]["count"] - unimportant_relationship_count
-            )
+            relations["relationships_rels"] = _build_character_relations(char)
 
         # Handle speedlarp relationships if speedlarp feature is enabled
         if "speedlarp" in features:

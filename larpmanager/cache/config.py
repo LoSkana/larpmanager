@@ -32,12 +32,12 @@ if TYPE_CHECKING:
 def clear_config_cache(config_element: BaseModel) -> None:
     """Clear the cache for a configuration element."""
     # noinspection PyProtectedMember
-    cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))
+    cache.delete(cache_configs_key(config_element.id, config_element._meta.model_name.lower()))  # noqa: SLF001  # Django model metadata
 
 
 def reset_element_configs(element: BaseModel) -> None:
     """Delete cached configs for the given element."""
-    cache_key = cache_configs_key(element.id, element._meta.model_name.lower())
+    cache_key = cache_configs_key(element.id, element._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
     cache.delete(cache_key)
 
 
@@ -49,7 +49,7 @@ def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
 def get_configs(model_instance: BaseModel) -> dict[str, Any]:
     """Get configuration dictionary for a Django model instance."""
     # noinspection PyProtectedMember
-    return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())
+    return get_element_configs(model_instance.id, model_instance._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
 
 
 def get_element_configs(element_id: int, model_name: str) -> dict[str, Any]:
@@ -156,8 +156,6 @@ def save_all_element_configs(obj: BaseModel, dct: dict[str, str]) -> None:
                 config.value = new_value
                 config.save()
         # Note: Commented out deletion to preserve existing configs
-        # else:
-        #     config.delete()
 
     # Create new configuration records for names not already present
     for name in incoming_names - set(existing_configs.keys()):
@@ -261,7 +259,7 @@ def get_element_config(element: Any, config_name: str, default_value: Any, *, by
     if not hasattr(element, "aux_configs"):
         if bypass_cache:
             # Fetch directly from database for background processes to avoid stale cache
-            element.aux_configs = update_configs(element.id, element._meta.model_name.lower())
+            element.aux_configs = update_configs(element.id, element._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
         else:
             # Use cached configurations for better performance
             element.aux_configs = get_configs(element)

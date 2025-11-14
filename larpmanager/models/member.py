@@ -20,9 +20,8 @@
 from __future__ import annotations
 
 import logging
-import os
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -296,7 +295,7 @@ class Member(BaseModel):
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="delegated")
 
     class Meta:
-        ordering = ["surname", "name"]
+        ordering: ClassVar[list] = ["surname", "name"]
 
     def __str__(self) -> str:
         if self.nickname:
@@ -362,17 +361,14 @@ class Member(BaseModel):
 
         """
         # Build base PDF members directory path
-        member_pdf_directory = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
-        # noinspection PyUnresolvedReferences
-        # Add member-specific subdirectory using ID
-        member_pdf_directory = os.path.join(member_pdf_directory, str(self.id))
+        member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / str(self.id))
         # Ensure directory exists
         Path(member_pdf_directory).mkdir(parents=True, exist_ok=True)
         return member_pdf_directory
 
     def get_request_filepath(self) -> Any:
         """Return the full file path for member request PDF."""
-        return os.path.join(self.get_member_filepath(), "request.pdf")
+        return str(Path(self.get_member_filepath()) / "request.pdf")
 
     def join(self, association: Association) -> None:
         """Join an association if not already a member."""
@@ -409,10 +405,10 @@ class MemberConfig(BaseModel):
         return f"{self.member} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["member", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["member", "name", "deleted"],
                 name="unique_member_config_with_optional",
@@ -471,7 +467,7 @@ class Membership(BaseModel):
     )
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(
                 fields=["association", "member"],
                 condition=Q(deleted__isnull=True),
@@ -483,7 +479,7 @@ class Membership(BaseModel):
                 name="memb_association_stat_act",
             ),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["member", "association", "deleted"],
                 name="unique_membership_number_with_optional",
@@ -503,7 +499,7 @@ class Membership(BaseModel):
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
-        except Exception as exception:
+        except (ValueError, AttributeError) as exception:
             logger.debug("Request file not available for membership %s: %s", self.id, exception)
             return ""
 
@@ -512,7 +508,7 @@ class Membership(BaseModel):
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
-        except Exception as error:
+        except (ValueError, AttributeError) as error:
             logger.debug("Document file not available for membership %s: %s", self.id, error)
             return ""
 
@@ -527,7 +523,7 @@ class VolunteerRegistry(BaseModel):
     end = models.DateField(blank=True, null=True)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["member", "association", "deleted"],
                 name="unique_volunteer_registry_with_optional",
@@ -628,7 +624,7 @@ class Vote(BaseModel):
     candidate = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="votes_received")
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["member", "association", "year", "number", "deleted"],
                 name="unique_vote_number_with_optional",

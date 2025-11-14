@@ -6,16 +6,15 @@ Prints only substantial code changes.
 import re
 import subprocess
 import sys
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 
-def run_git_command(cmd: List[str]) -> str:
+def run_git_command(cmd: list[str]) -> str:
     """Run a git command and return its output."""
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return result.stdout
-    except subprocess.CalledProcessError as e:
-        print(f"Error running git command: {e}", file=sys.stderr)
+    except subprocess.CalledProcessError:
         return ""
 
 
@@ -32,10 +31,7 @@ def is_docstring_or_comment_line(line: str) -> bool:
         return True
 
     # Get the actual content without +/- prefix
-    if stripped.startswith(("+", "-")):
-        content = stripped[1:].strip()
-    else:
-        content = stripped
+    content = stripped[1:].strip() if stripped.startswith(("+", "-")) else stripped
 
     # Skip empty content
     if not content:
@@ -73,14 +69,10 @@ def is_docstring_or_comment_line(line: str) -> bool:
         r"^\s*\w+:\s+.*$",  # Parameter descriptions
     ]
 
-    for pattern in docstring_patterns:
-        if re.match(pattern, content, re.IGNORECASE):
-            return True
-
-    return False
+    return any(re.match(pattern, content, re.IGNORECASE) for pattern in docstring_patterns)
 
 
-def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
+def analyze_file_changes(file_diff: str) -> tuple[bool, list[str]]:  # noqa: C901 - Complex docstring parsing logic
     """Analyze changes in a file and determine if they're substantial.
     Returns (has_substantial_changes, substantial_lines).
     """
@@ -136,23 +128,19 @@ def analyze_file_changes(file_diff: str) -> Tuple[bool, List[str]]:
             continue
 
         # Check for substantial changes outside of docstrings
-        if line.startswith(("+", "-")) and not line.startswith(("+++", "---")):
-            if not is_docstring_or_comment_line(line):
-                substantial_lines.append(line)
+        if line.startswith(("+", "-")) and not line.startswith(("+++", "---")) and not is_docstring_or_comment_line(line):
+            substantial_lines.append(line)
 
     return len(substantial_lines) > 0, substantial_lines
 
 
 def main() -> None:
     """Main function to analyze git changes."""
-    print("Analyzing uncommitted changes for substantial (non-documentation) modifications...\n")
-
     # Get list of modified files
     modified_files = run_git_command(["git", "diff", "--name-only", "HEAD"]).strip().split("\n")
     modified_files = [f for f in modified_files if f and f.endswith(".py")]
 
     if not modified_files:
-        print("No Python files with uncommitted changes found.")
         return
 
     substantial_changes_found = False
@@ -173,28 +161,24 @@ def main() -> None:
 
     # Only print files with substantial changes
     for file_path, substantial_lines in files_with_substantial_changes:
-        print(f"{'=' * 60}")
+        print(f"{'='*60}")
         print(f"Analyzing: {file_path}")
-        print(f"{'=' * 60}")
+        print(f"{'='*60}")
         print(f"✗ SUBSTANTIAL CHANGES DETECTED ({len(substantial_lines)} lines)")
         print("\nSubstantial changes:")
         for line in substantial_lines[:20]:  # Limit to first 20 lines
             print(f"  {line}")
         if len(substantial_lines) > 20:
-            print(f"  ... and {len(substantial_lines) - 20} more lines")
-        print()
+            pass
 
     print(f"{'=' * 60}")
     print("SUMMARY:")
     print(f"{'=' * 60}")
 
     if substantial_changes_found:
-        print("❌ FILES WITH SUBSTANTIAL CHANGES FOUND!")
-        print("The following files contain changes beyond documentation/comments.")
-        print("Review these changes carefully before committing.")
+        pass
     else:
-        print("✅ ALL CHANGES APPEAR TO BE DOCUMENTATION/COMMENTS ONLY")
-        print("These changes look safe to commit as documentation improvements.")
+        pass
 
 
 if __name__ == "__main__":

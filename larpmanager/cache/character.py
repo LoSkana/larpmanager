@@ -17,10 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import shutil
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -29,7 +30,6 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
-from larpmanager.models.base import BaseModel
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -37,9 +37,12 @@ from larpmanager.models.form import (
     WritingAnswer,
     WritingChoice,
 )
-from larpmanager.models.member import Member
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType
+
+if TYPE_CHECKING:
+    from larpmanager.models.base import BaseModel
+    from larpmanager.models.member import Member
 
 
 def delete_all_in_path(path: str) -> None:
@@ -396,6 +399,42 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         result["factions_typ"][faction.typ].append(faction.number)
 
 
+def _build_trait_relationships(event: Event) -> dict:
+    """Build mapping of trait relationships (traits that reference other traits).
+
+    Args:
+        event: Event to get traits for
+
+    Returns:
+        Dictionary mapping trait numbers to lists of related trait numbers
+    """
+    trait_relationships = {}
+    for trait in Trait.objects.filter(event=event).prefetch_related("traits"):
+        trait_relationships[trait.number] = []
+        # Add related trait numbers, excluding self-references
+        for associated_trait in trait.traits.all():
+            if associated_trait.number == trait.number:
+                continue
+            trait_relationships[trait.number].append(associated_trait.number)
+    return trait_relationships
+
+
+def _find_character_by_member_id(chars: dict, member_id: int) -> dict | None:
+    """Find a character in the cache by member ID.
+
+    Args:
+        chars: Dictionary of characters from cache
+        member_id: Member ID to search for
+
+    Returns:
+        Character dictionary if found, None otherwise
+    """
+    for character in chars.values():
+        if "player_id" in character and character["player_id"] == member_id:
+            return character
+    return None
+
+
 def get_event_cache_traits(context: dict, res: dict) -> None:
     """Build cached trait and quest data for events.
 
@@ -429,14 +468,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
         res["quests"][quest.number] = quest.show()
 
     # Build trait relationships mapping (traits that reference other traits)
-    trait_relationships = {}
-    for trait in Trait.objects.filter(event=context["event"]).prefetch_related("traits"):
-        trait_relationships[trait.number] = []
-        # Add related trait numbers, excluding self-references
-        for associated_trait in trait.traits.all():
-            if associated_trait.number == trait.number:
-                continue
-            trait_relationships[trait.number].append(associated_trait.number)
+    trait_relationships = _build_trait_relationships(context["event"])
 
     # Build main traits mapping with character assignments
     res["traits"] = {}
@@ -450,11 +482,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
         trait_data["traits"] = trait_relationships[assignment_trait.trait.number]
 
         # Find the character this trait is assigned to
-        found_character = None
-        for character in res["chars"].values():
-            if "player_id" in character and character["player_id"] == assignment_trait.member_id:
-                found_character = character
-                break
+        found_character = _find_character_by_member_id(res["chars"], assignment_trait.member_id)
 
         # Skip if character not found in cache
         if not found_character:
@@ -689,8 +717,8 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         else:
             # Update cache with new character data
             update_event_cache_all_runs(char.event, char)
-    except Exception:
-        # Fallback: clear cache on any error
+    except Character.DoesNotExist:
+        # Fallback: clear cache if character not found
         clear_event_cache_all_runs(char.event)
 
 

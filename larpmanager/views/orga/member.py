@@ -607,7 +607,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
         if field_name in ["diet", "safety", "profile", "newsletter", "language"]:
             continue
         # noinspection PyUnresolvedReferences, PyProtectedMember
-        context["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name
+        context["fields"][field_name] = member_cls._meta.get_field(field_name).verbose_name  # noqa: SLF001  # Django model metadata
 
     # Sort members by display name for consistent ordering
     context["list"] = sorted(context["list"], key=lambda x: x.display_member())

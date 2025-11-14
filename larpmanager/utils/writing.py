@@ -137,7 +137,7 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
                 context["progress_assigned_map"][key] += 1
 
     # Store simplified model type name for template usage
-    context["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]
+    context["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]  # noqa: SLF001  # Django model metadata
 
 
 def writing_popup_question(context: dict[str, Any], idx: Any, question_idx: Any) -> Any:
@@ -275,7 +275,7 @@ def writing_post(request: HttpRequest, context: dict, writing_element_type: Any,
         raise ReturnNowError(writing_popup(request, context, writing_element_type))
 
 
-def writing_list(
+def writing_list(  # noqa: C901 - Complex writing list building with feature-dependent filtering
     request: HttpRequest,
     context: dict[str, Any],
     writing_type: type[Model],
@@ -344,7 +344,7 @@ def writing_list(
     # Setup writing-specific context if writing elements exist
     if writing:
         # noinspection PyProtectedMember, PyUnresolvedReferences
-        context["label_typ"] = writing_type._meta.model_name
+        context["label_typ"] = writing_type._meta.model_name  # noqa: SLF001  # Django model metadata
         context["writing_typ"] = QuestionApplicable.get_applicable(context["label_typ"])
 
         # Configure upload/download paths if writing type is applicable
@@ -500,7 +500,7 @@ def _prepare_writing_list(context: dict[str, Any]) -> None:
             .filter(applicable=context["writing_typ"], typ=WritingQuestionType.NAME)
         )
         context["name_que_id"] = name_question.values_list("id", flat=True)[0]
-    except Exception as e:
+    except IndexError as e:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()
@@ -588,7 +588,7 @@ def writing_list_questtype(context: dict) -> None:
         quest_type.quest_rels = quest_type_relationships.get(quest_type.id, {}).get("quest_rels", [])
 
 
-def writing_list_char(context: dict) -> None:
+def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character enhancement with multiple feature integrations
     """Enhance character list with feature-specific data and relationships.
 
     This function modifies the character list in the context by adding feature-specific

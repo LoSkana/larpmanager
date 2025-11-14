@@ -17,13 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import re
 import traceback
-from collections.abc import Callable
 from functools import wraps
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from background_task import background
 from django.conf import settings as conf_settings
@@ -38,6 +38,9 @@ from larpmanager.models.association import Association, AssociationTextType, get
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Email
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -230,7 +233,7 @@ def clean_sender(sender_name: Any) -> Any:
     return re.sub(r"\s+", " ", sender_name).strip()
 
 
-def my_send_simple_mail(
+def my_send_simple_mail(  # noqa: C901 - Complex email sending with multiple format and attachment options
     subj: str,
     body: str,
     m_email: str,
@@ -416,7 +419,7 @@ def add_unsubscribe_body(association: Any) -> Any:
     return html_footer
 
 
-def my_send_mail(
+def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachment handling
     subject: str,
     body: str,
     recipient: str | Member,

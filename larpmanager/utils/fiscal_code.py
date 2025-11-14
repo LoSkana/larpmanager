@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 import csv
-import os
 import re
 import unicodedata
-from datetime import date
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.models.member import Member
 from larpmanager.utils.member import almost_equal, count_differences
+
+if TYPE_CHECKING:
+    from datetime import date
+
+    from larpmanager.models.member import Member
 
 
 def calculate_fiscal_code(member: Any) -> Any:
@@ -186,8 +191,8 @@ def _extract_municipality_code(birth_place: str) -> str:
     slugified_birth_place = _slugify(birth_place)
 
     # First search: Look for exact matches in nations data
-    nations_file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-nations.csv")
-    with open(nations_file_path) as nations_file:
+    nations_file_path = Path(conf_settings.BASE_DIR) / ".." / "data" / "istat-nations.csv"
+    with nations_file_path.open() as nations_file:
         nations_reader = csv.reader(nations_file)
         # Search for exact nation name matches
         for nation_row in nations_reader:
@@ -195,8 +200,8 @@ def _extract_municipality_code(birth_place: str) -> str:
                 return nation_row[1]
 
     # Second search: Look in municipality codes file
-    municipalities_file_path = os.path.join(conf_settings.BASE_DIR, "../data/istat-codes.csv")
-    with open(municipalities_file_path) as municipalities_file:
+    municipalities_file_path = Path(conf_settings.BASE_DIR) / ".." / "data" / "istat-codes.csv"
+    with municipalities_file_path.open() as municipalities_file:
         municipalities_reader = csv.reader(municipalities_file)
         # First pass: Search for exact matches in split municipality names
         for municipality_row in municipalities_reader:
@@ -324,7 +329,7 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
     return chr((weighted_sum % 26) + ord("A"))
 
 
-def _go(member: Member, *, male: bool = True) -> dict[str, Any]:
+def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 - Complex fiscal code generation algorithm
     """Generate Italian fiscal code for a member and validate against existing code.
 
     Implements the complete fiscal code algorithm including name/surname processing,

@@ -1057,7 +1057,6 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     else:
         msg = "wrong type"
         raise Http404(msg)
-    # r = Run(event=context["event"])
     aux = {}
     for el in lst:
         aux[el.number] = el.show(context["run"])

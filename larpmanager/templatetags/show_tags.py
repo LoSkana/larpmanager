@@ -488,7 +488,7 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> str:
+def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert trait references to character links.
 
     Args:
@@ -507,7 +507,6 @@ def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> s
     if not context["max_trait"]:
         context["max_trait"] = 0
 
-    # replace #XX (create relationships / count as character in faction / plot)
     for trait_number in range(context["max_trait"], 0, -1):
         text = go_trait(context, f"#{trait_number}", trait_number, text, run, include_tooltip=tooltip)
         text = go_trait(context, f"@{trait_number}", trait_number, text, run, include_tooltip=tooltip)
@@ -560,7 +559,7 @@ def get_field(form: Form, field_name: str) -> BoundField | str:
 
 
 @register.simple_tag(takes_context=True)
-def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip: bool) -> str:
+def get_field_show_char(context: dict, form: Form, name: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to get form field and process character references.
 
     Args:
@@ -815,7 +814,7 @@ def template_trans(text: Any) -> Any:
     """
     try:
         return _(text)
-    except Exception as e:
+    except (TypeError, ValueError, AttributeError) as e:
         logger.debug("Translation failed for text: %s", e)
         return text
 

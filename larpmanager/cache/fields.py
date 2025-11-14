@@ -41,6 +41,20 @@ def clear_event_fields_cache(event_id: int) -> None:
     cache.delete(event_fields_key(event_id))
 
 
+def _ensure_cache_structure(cached_fields: dict, applicability_label: str, section: str) -> None:
+    """Ensure the nested cache structure exists for given applicability and section.
+
+    Args:
+        cached_fields: The cache dictionary to update
+        applicability_label: The applicability label key
+        section: The section name (e.g., 'questions', 'options', 'names', 'ids')
+    """
+    if applicability_label not in cached_fields:
+        cached_fields[applicability_label] = {}
+    if section not in cached_fields[applicability_label]:
+        cached_fields[applicability_label][section] = {}
+
+
 def update_event_fields(event_id: int) -> dict:
     """Update cached event fields including writing questions and registration data.
 
@@ -72,22 +86,14 @@ def update_event_fields(event_id: int) -> dict:
     )
     for question_data in visible_questions.values("id", "name", "typ", "printable", "visibility", "applicable"):
         applicability_label = QuestionApplicable(question_data["applicable"]).label
-        # Initialize nested dictionary structure for each applicability type
-        if applicability_label not in cached_fields:
-            cached_fields[applicability_label] = {}
-        if "questions" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["questions"] = {}
+        _ensure_cache_structure(cached_fields, applicability_label, "questions")
         cached_fields[applicability_label]["questions"][question_data["id"]] = question_data
 
     # Fetch writing options and group by parent question's applicability
     writing_options = event.get_elements(WritingOption).order_by("order")
     for option_data in writing_options.values("id", "name", "question_id", "question__applicable"):
         applicability_label = QuestionApplicable(option_data["question__applicable"]).label
-        # Ensure options section exists in the nested structure
-        if applicability_label not in cached_fields:
-            cached_fields[applicability_label] = {}
-        if "options" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["options"] = {}
+        _ensure_cache_structure(cached_fields, applicability_label, "options")
         cached_fields[applicability_label]["options"][option_data["id"]] = option_data
 
     # Create name and ID mappings for default writing question types
@@ -95,14 +101,9 @@ def update_event_fields(event_id: int) -> dict:
     for question_data in default_type_questions.values("id", "typ", "name", "applicable"):
         applicability_label = QuestionApplicable(question_data["applicable"]).label
         question_type = question_data["typ"]
-        # Initialize names and ids dictionaries for quick type-based lookups
-        if applicability_label not in cached_fields:
-            cached_fields[applicability_label] = {}
-        if "names" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["names"] = {}
+        _ensure_cache_structure(cached_fields, applicability_label, "names")
+        _ensure_cache_structure(cached_fields, applicability_label, "ids")
         cached_fields[applicability_label]["names"][question_type] = question_data["name"]
-        if "ids" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["ids"] = {}
         cached_fields[applicability_label]["ids"][question_type] = question_data["id"]
 
     # Cache the complete result structure with 1-day timeout
@@ -120,6 +121,41 @@ def get_event_fields_cache(event_id: int) -> dict:
         cached_event_fields = update_event_fields(event_id)
 
     return cached_event_fields
+
+
+def _process_visible_questions(
+    writing_fields_data: dict, only_visible: bool
+) -> tuple[dict, list[int], list[int]]:
+    """Process questions and return visible ones with tracking lists.
+
+    Args:
+        writing_fields_data: Writing fields data containing questions
+        only_visible: If True, filter to public and searchable only
+
+    Returns:
+        Tuple of (questions_dict, visible_question_ids, searchable_question_ids)
+    """
+    questions = {}
+    visible_question_ids = []
+    searchable_question_ids = []
+
+    if "questions" not in writing_fields_data:
+        return questions, visible_question_ids, searchable_question_ids
+
+    for question_id, question_data in writing_fields_data["questions"].items():
+        # Filter based on visibility settings
+        if not only_visible or question_data["visibility"] in [
+            QuestionVisibility.PUBLIC,
+            QuestionVisibility.SEARCHABLE,
+        ]:
+            questions[question_id] = question_data
+            visible_question_ids.append(question_data["id"])
+
+        # Track searchable questions separately
+        if question_data["visibility"] == QuestionVisibility.SEARCHABLE:
+            searchable_question_ids.append(question_data["id"])
+
+    return questions, visible_question_ids, searchable_question_ids
 
 
 def visible_writing_fields(context: dict, applicable: QuestionApplicable, *, only_visible: bool = True) -> None:
@@ -155,24 +191,11 @@ def visible_writing_fields(context: dict, applicable: QuestionApplicable, *, onl
     # Get the relevant writing fields data
     writing_fields_data = context["writing_fields"][applicable_type_key]
 
-    # Initialize tracking lists for question and searchable IDs
-    visible_question_ids = []
-    searchable_question_ids = []
-
-    # Process questions if they exist in the data
-    if "questions" in writing_fields_data:
-        for question_id, question_data in writing_fields_data["questions"].items():
-            # Filter based on visibility settings
-            if not only_visible or question_data["visibility"] in [
-                QuestionVisibility.PUBLIC,
-                QuestionVisibility.SEARCHABLE,
-            ]:
-                context["questions"][question_id] = question_data
-                visible_question_ids.append(question_data["id"])
-
-            # Track searchable questions separately
-            if question_data["visibility"] == QuestionVisibility.SEARCHABLE:
-                searchable_question_ids.append(question_data["id"])
+    # Process questions and get tracking lists
+    questions, visible_question_ids, searchable_question_ids = _process_visible_questions(
+        writing_fields_data, only_visible
+    )
+    context["questions"] = questions
 
     # Process options if they exist, linking them to visible questions
     if "options" in writing_fields_data:

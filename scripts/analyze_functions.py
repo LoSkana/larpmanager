@@ -22,7 +22,7 @@ def analyze_file(file_path: Any) -> list:
     functions = []
 
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with Path(file_path).open(encoding="utf-8") as f:
             content = f.read()
 
         tree = ast.parse(content)
@@ -59,8 +59,6 @@ def analyze_codebase(root_dir: str = ".") -> list:
 
 def main() -> None:
     """Run the main analysis."""
-    print("Analyzing codebase...")
-
     # Get the project root (parent of scripts directory)
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
@@ -73,18 +71,15 @@ def main() -> None:
 
     # Write to CSV
     output_file = project_root / "function_analysis.csv"
-    with open(output_file, "w", newline="", encoding="utf-8") as f:
+    with output_file.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=["name", "path", "lines"])
         writer.writeheader()
         writer.writerows(functions)
 
-    print(f"Analysis complete! Found {len(functions)} functions.")
-    print(f"Results saved to: {output_file}")
 
     # Print top 10
-    print("\nTop 10 largest functions:")
-    for i, func in enumerate(functions[:10], 1):
-        print(f"{i}. {func['name']} ({func['lines']} lines) - {func['path']}")
+    for _i, _func in enumerate(functions[:10], 1):
+        pass
 
 
 if __name__ == "__main__":

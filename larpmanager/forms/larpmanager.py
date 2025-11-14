@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -90,7 +90,7 @@ class LarpManagerTicketForm(MyForm):
     class Meta:
         model = LarpManagerTicket
         fields = ("email", "content", "screenshot")
-        widgets = {"content": Textarea(attrs={"rows": 5})}
+        widgets: ClassVar[dict] = {"content": Textarea(attrs={"rows": 5})}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and setup captcha for unauthenticated users."""
