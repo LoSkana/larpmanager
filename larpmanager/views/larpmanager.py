@@ -572,9 +572,9 @@ def join(request: HttpRequest):
     joined_association = _join_form(context, request)
     if joined_association:
         # send message
-        messages.success(request, _("Welcome to %(name)s!") % {"name": request.association["name"]})
+        messages.success(request, _("Welcome to %(name)s!") % {"name": context["name"]})
         # send email
-        if request.association["skin_id"] == 1:
+        if context["skin_id"] == 1:
             join_email(joined_association)
         # redirect
         return redirect("after_login", subdomain=joined_association.slug, path="manage")
@@ -605,9 +605,9 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
         # Initialize and validate the association creation form
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
-            # Create association with inherited skin from request context
+            # Create association with inherited skin from context
             new_association = form.save(commit=False)
-            new_association.skin_id = request.association["skin_id"]
+            new_association.skin_id = context["skin_id"]
             new_association.save()
 
             # Create admin role for the new association and assign creator

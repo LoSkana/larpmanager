@@ -59,6 +59,11 @@ class MyRegistrationView(RegistrationView):
             AuthenticationError: If user authentication fails after creation.
 
         """
+        # Build context to access association data
+        from larpmanager.utils.base import get_context
+
+        context = get_context(self.request)
+
         # Create new user from validated form data
         new_user = form.save()
 
@@ -76,8 +81,8 @@ class MyRegistrationView(RegistrationView):
         messages.success(self.request, _("Registration completed successfully!"))
 
         # Set membership status to JOINED for non-default associations
-        if self.request.association["id"] > 1:
-            user_membership = get_user_membership(self.request.user.member, self.request.association["id"])
+        if context["association_id"] > 1:
+            user_membership = get_user_membership(self.request.user.member, context["association_id"])
             user_membership.status = MembershipStatus.JOINED
             user_membership.save()
 
