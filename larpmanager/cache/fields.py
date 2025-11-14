@@ -123,9 +123,7 @@ def get_event_fields_cache(event_id: int) -> dict:
     return cached_event_fields
 
 
-def _process_visible_questions(
-    writing_fields_data: dict, only_visible: bool
-) -> tuple[dict, list[int], list[int]]:
+def _process_visible_questions(writing_fields_data: dict, *, only_visible: bool) -> tuple[dict, list[int], list[int]]:
     """Process questions and return visible ones with tracking lists.
 
     Args:
@@ -158,7 +156,7 @@ def _process_visible_questions(
     return questions, visible_question_ids, searchable_question_ids
 
 
-def visible_writing_fields(context: dict, applicable: QuestionApplicable, *, only_visible: bool = True) -> None:
+def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool = True) -> None:
     """Filter and cache visible writing fields based on visibility settings.
 
     This function processes writing fields from the context and filters them based on
@@ -193,7 +191,7 @@ def visible_writing_fields(context: dict, applicable: QuestionApplicable, *, onl
 
     # Process questions and get tracking lists
     questions, visible_question_ids, searchable_question_ids = _process_visible_questions(
-        writing_fields_data, only_visible
+        writing_fields_data, only_visible=only_visible
     )
     context["questions"] = questions
 

@@ -41,6 +41,7 @@ if TYPE_CHECKING:
 
     from larpmanager.models.member import Member
 
+
 logger = logging.getLogger(__name__)
 
 

@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from larpmanager.models.association import Association
 
 
-def registration_tokens_credits_use(reg: Registration, remaining: float, association_id: int) -> None:
+def registration_tokens_credits_use(reg: Registration, remaining: Decimal, association_id: int) -> None:
     """Apply available tokens and credits to a registration payment.
 
     Automatically uses member's available tokens first, then credits
