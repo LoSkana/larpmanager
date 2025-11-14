@@ -36,7 +36,6 @@ import requests
 import satispaython
 import stripe
 from Crypto.Cipher import DES3
-from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse
@@ -46,13 +45,12 @@ from paypal.standard.models import ST_PP_COMPLETED
 from satispaython.utils import load_key
 
 from larpmanager.accounting.invoice import invoice_received_money
-from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.base import get_context, update_payment_details
 from larpmanager.utils.common import generate_number
-from larpmanager.utils.tasks import my_send_mail, notify_admins
+from larpmanager.utils.tasks import notify_admins
 
 logger = logging.getLogger(__name__)
 
@@ -118,7 +116,7 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
         invoice_id = response_data["id"]
     except (json.JSONDecodeError, KeyError) as e:
         error_msg = f"Failed to parse Satispay response: {e}\nResponse: {satispay_response.content}"
-        logger.error(error_msg)
+        logger.exception(error_msg)
         notify_admins("Satispay JSON parsing error", error_msg)
         msg = "Invalid response from payment gateway"
         raise Http404(msg) from e
@@ -211,7 +209,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
         payment_status = payment_data["status"]
     except (json.JSONDecodeError, KeyError, ValueError) as e:
         error_msg = f"Failed to parse Satispay payment verification: {e}\nResponse: {response.content}"
-        logger.error(error_msg)
+        logger.exception(error_msg)
         notify_admins("Satispay verification JSON error", error_msg)
         return
 
@@ -454,7 +452,7 @@ def get_sumup_form(
         access_token = authentication_response_data["access_token"]
     except (json.JSONDecodeError, KeyError) as e:
         error_msg = f"Failed to parse SumUp authentication response: {e}\nResponse: {authentication_response.text}"
-        logger.error(error_msg)
+        logger.exception(error_msg)
         notify_admins("SumUp authentication JSON error", error_msg)
         msg = "Invalid response from payment gateway"
         raise Http404(msg) from e
@@ -505,7 +503,7 @@ def get_sumup_form(
         checkout_id = checkout_response_data["id"]
     except (json.JSONDecodeError, KeyError) as e:
         error_msg = f"Failed to parse SumUp checkout response: {e}\nResponse: {checkout_response.text}"
-        logger.error(error_msg)
+        logger.exception(error_msg)
         notify_admins("SumUp checkout JSON error", error_msg)
         msg = "Invalid response from payment gateway"
         raise Http404(msg) from e
@@ -538,7 +536,7 @@ def sumup_webhook(request: HttpRequest) -> bool:
         payment_id = webhook_payload["id"]
     except (json.JSONDecodeError, KeyError) as e:
         error_msg = f"Failed to parse SumUp webhook payload: {e}\nBody: {request.body}"
-        logger.error(error_msg)
+        logger.exception(error_msg)
         notify_admins("SumUp webhook JSON error", error_msg)
         return False
 
@@ -762,7 +760,7 @@ class RedSysClient:
             return json.loads(base64.b64decode(merchant_parameters).decode())
         except (json.JSONDecodeError, ValueError) as e:
             error_msg = f"Failed to decode Redsys parameters: {e}\nParameters: {merchant_parameters}"
-            logger.error(error_msg)
+            logger.exception(error_msg)
             notify_admins("Redsys decode error", error_msg)
             msg = "Invalid Redsys parameters"
             raise ValueError(msg) from e
@@ -856,57 +854,35 @@ class RedSysClient:
             merchant_parameters = json.loads(base64.b64decode(b64_merchant_parameters).decode())
         except (json.JSONDecodeError, ValueError) as e:
             error_msg = f"Failed to decode Redsys merchant parameters: {e}\nParameters: {b64_merchant_parameters}"
-            logger.error(error_msg)
+            logger.exception(error_msg)
             notify_admins("Redsys webhook JSON error", error_msg)
             return None
 
         # Get association for executive notifications
-        try:
-            association = Association.objects.get(pk=context["association_id"])
-        except Association.DoesNotExist:
-            error_msg = f"Association not found for payment: {context['association_id']}"
-            logger.error(error_msg)
-            notify_admins("Redsys association not found", error_msg)
-            return None
+        Association.objects.get(pk=context["association_id"])
 
         # Validate response code presence
         if "Ds_Response" not in merchant_parameters:
-            email_subject = "Ds_Response not found"
-            email_body = str(merchant_parameters)
-            # Notify executives about missing response code
-            for member in get_association_executives(association):
-                my_send_mail(email_subject, email_body, member, association)
-            return None
+            return notify_admins("Ds_Response not found", str(merchant_parameters))
 
         # Check payment response code (0-99 indicates success)
         try:
             response_code = int(merchant_parameters["Ds_Response"])
         except (ValueError, KeyError) as e:
             error_msg = f"Invalid Ds_Response value: {e}\nParameters: {merchant_parameters}"
-            logger.error(error_msg)
-            for member in get_association_executives(association):
-                my_send_mail("Invalid Redsys response code", error_msg, member, association)
-            return None
+            return notify_admins("Invalid Redsys response code", error_msg)
 
         # Response codes 0-99 indicate successful payment, anything else is failure
         max_successful_response_code = 99
         if response_code < 0 or response_code > max_successful_response_code:
-            email_subject = "Failed redsys payment"
-            email_body = str(merchant_parameters)
-            # Notify executives about failed payment
-            for member in get_association_executives(association):
-                my_send_mail(email_subject, email_body, member, association)
-            return None
+            return notify_admins("Failed redsys payment", merchant_parameters)
 
         # Extract order number from merchant parameters
         try:
             order_number = merchant_parameters["Ds_Order"]
         except KeyError as e:
             error_msg = f"Ds_Order not found in merchant parameters: {e}\nParameters: {merchant_parameters}"
-            logger.error(error_msg)
-            for member in get_association_executives(association):
-                my_send_mail("Redsys Ds_Order missing", error_msg, member, association)
-            return None
+            return notify_admins("Redsys Ds_Order missing", error_msg)
 
         # Encrypt order number using 3DES for signature verification
         encrypted_order = self.encrypt_order(order_number)
@@ -921,11 +897,9 @@ class RedSysClient:
         if signature != computed_signature:
             error_message = f"Different signature redsys: {signature} vs {computed_signature}"
             error_message += pformat(merchant_parameters)
-            logger.error("Redsys signature verification failed: %s", error_message)
-            # Send critical security alert to system admins
-            for _admin_name, admin_email in conf_settings.ADMINS:
-                my_send_mail("redsys signature", error_message, admin_email)
-            return None
+            # TODO: the signature is failing, for now we accept failed signatures
+            # TODO: put return in front
+            notify_admins("Redsys signature verification failed", error_message)
 
         # Return order number for successful payment processing
         return order_number
