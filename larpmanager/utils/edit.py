@@ -742,7 +742,7 @@ def _writing_save(
         return redirect_func(context)
 
     # Default redirect to list view
-    return redirect_func("orga_" + nm + "s", event_slug=context["run"].get_slug())
+    return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
 
 
 def writing_edit_cache_key(event_id: int | str, writing_type: str) -> str:
