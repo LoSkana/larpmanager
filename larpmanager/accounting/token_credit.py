@@ -59,7 +59,13 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
 
     Side Effects:
         Creates AccountingItemPayment records and updates membership balances.
-        Updates reg.tot_payed with applied amounts.
+        Updates reg.tot_payed in memory (caller must persist changes).
+
+    Note:
+        This function updates reg.tot_payed in memory but does NOT save the
+        registration to avoid infinite recursion. The caller (typically
+        handle_registration_accounting_updates) is responsible for persisting
+        changes via bulk update to prevent triggering post_save signals.
 
     """
     # Early return if no outstanding balance
@@ -70,9 +76,6 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
         # Get member and their membership for the association
         member = reg.member
         membership = get_user_membership(member, association_id)
-
-        # Track if registration was modified
-        registration_modified = False
 
         # Apply tokens first if available
         if membership.tokens > 0:
@@ -90,7 +93,6 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
                 association_id=association_id,
             )
             remaining -= tokens_to_use
-            registration_modified = True
 
         # Apply credits if still have remaining balance and credits available
         if membership.credit > 0:
@@ -107,11 +109,8 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
                 reg=reg,
                 association_id=association_id,
             )
-            registration_modified = True
-
-        # Save registration if it was modified
-        if registration_modified:
-            reg.save()
+        # Note: reg.tot_payed is updated in memory but NOT saved here
+        # to prevent infinite recursion via post_save signal
 
 
 def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, association_id: int) -> None:
