@@ -17,9 +17,12 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
 
-from django.http import HttpRequest
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 class FeatureError(Exception):
@@ -220,5 +223,3 @@ class ReturnNowError(Exception):
 
 class RewokedMembershipError(Exception):
     """Exception for RewokedMembershipError."""
-
-    pass
