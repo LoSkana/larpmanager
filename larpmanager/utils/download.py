@@ -181,20 +181,19 @@ def export_plot_rels(context: Any) -> Any:
 
     """
     column_keys = ["plot", "character", "text"]
-    relationship_values = []
 
     event_id = context["event"].get_class_parent(Plot)
 
-    for plot_character_relationship in (
-        PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character").order_by("order")
-    ):
-        relationship_values.append(
-            [
-                plot_character_relationship.plot.name,
-                plot_character_relationship.character.name,
-                plot_character_relationship.text,
-            ],
-        )
+    relationship_values = [
+        [
+            plot_character_relationship.plot.name,
+            plot_character_relationship.character.name,
+            plot_character_relationship.text,
+        ]
+        for plot_character_relationship in PlotCharacterRel.objects.filter(plot__event_id=event_id)
+        .prefetch_related("plot", "character")
+        .order_by("order")
+    ]
 
     return [("plot_rels", column_keys, relationship_values)]
 
@@ -210,12 +209,13 @@ def export_relationships(context: Any) -> Any:
 
     """
     column_headers = ["source", "target", "text"]
-    relationship_rows = []
 
     event_id = context["event"].get_class_parent(Character)
 
-    for relationship in Relationship.objects.filter(source__event_id=event_id).prefetch_related("source", "target"):
-        relationship_rows.append([relationship.source.name, relationship.target.name, relationship.text])
+    relationship_rows = [
+        [relationship.source.name, relationship.target.name, relationship.text]
+        for relationship in Relationship.objects.filter(source__event_id=event_id).prefetch_related("source", "target")
+    ]
 
     return [("relationships", column_headers, relationship_rows)]
 
@@ -364,9 +364,12 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
             if question.id in question_answers and element.id in question_answers[question.id]:
                 cell_value = question_answers[question.id][element.id]
         # Handle choice-based question types (single, multiple)
-        elif question.typ in {"s", "m"}:
-            if question.id in question_choices and element.id in question_choices[question.id]:
-                cell_value = ", ".join(question_choices[question.id][element.id])
+        elif (
+            question.typ in {"s", "m"}
+            and question.id in question_choices
+            and element.id in question_choices[question.id]
+        ):
+            cell_value = ", ".join(question_choices[question.id][element.id])
 
         # Clean value for export format (remove tabs, convert newlines)
         cell_value = cell_value.replace("\t", "").replace("\n", "<br />")
@@ -405,10 +408,9 @@ def _row_header(
     member = None
     if model == "registration":
         member = el.member
-    elif model == "character":
-        # Check if character has assignment in context
-        if el.id in context["assignments"]:
-            member = context["assignments"][el.id]
+    # Check if character has assignment in context
+    elif model == "character" and el.id in context["assignments"]:
+        member = context["assignments"][el.id]
 
     # Add profile image column if requested
     if member_cover:
@@ -1197,10 +1199,11 @@ def export_event(context: Any) -> Any:
     export_data = [("configuration", column_names, configuration_values)]
 
     column_names = ["name", "slug"]
-    feature_values = []
-    for element in [context["event"], association]:
-        for feature in element.features.all():
-            feature_values.append((feature.name, feature.slug))
+    feature_values = [
+        (feature.name, feature.slug)
+        for element in [context["event"], association]
+        for feature in element.features.all()
+    ]
     export_data.append(("features", column_names, feature_values))
 
     return export_data

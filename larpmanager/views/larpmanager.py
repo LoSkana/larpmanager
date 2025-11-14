@@ -636,7 +636,6 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
                 }
                 my_send_mail(subject, body, admin_email)
 
-            # return redirect('first', association=new_association.slug)
             return new_association
     else:
         # Initialize empty form for GET requests

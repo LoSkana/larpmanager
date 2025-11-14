@@ -97,7 +97,7 @@ def _get_registration_status_code(run: Run) -> tuple[str, Any]:
         return "preregister", None
 
     # Check registration opening time
-    current_datetime = timezone.now().date()
+    current_datetime = timezone.now()
     if "registration_open" in features:
         if not run.registration_open:
             return "not_set", None
@@ -396,13 +396,14 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: di
         ):
             _add_priority(context, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
-    if "vote" in enabled_features:
-        if not get_association_config(context["association_id"], "vote_candidates", default_value="", context=context):
-            _add_priority(
-                context,
-                _("Set up the voting configuration"),
-                "exe_config",
-            )
+    if "vote" in enabled_features and not get_association_config(
+        context["association_id"], "vote_candidates", default_value="", context=context
+    ):
+        _add_priority(
+            context,
+            _("Set up the voting configuration"),
+            "exe_config",
+        )
 
     if "help" in enabled_features:
         _closed_questions, open_questions = _get_help_questions(context, request)
@@ -429,16 +430,15 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
             "exe_methods",
         )
 
-    if "organization_tax" in enabled_features:
-        if not get_association_config(
-            context["association_id"], "organization_tax_perc", default_value="", context=context
-        ):
-            _add_priority(
-                context,
-                _("Set up the organization tax configuration"),
-                "exe_accounting",
-                "config/organization_tax",
-            )
+    if "organization_tax" in enabled_features and not get_association_config(
+        context["association_id"], "organization_tax_perc", default_value="", context=context
+    ):
+        _add_priority(
+            context,
+            _("Set up the organization tax configuration"),
+            "exe_accounting",
+            "config/organization_tax",
+        )
 
     if "vat" in enabled_features:
         vat_ticket = get_association_config(context["association_id"], "vat_ticket", default_value="", context=context)
@@ -454,7 +454,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
             )
 
 
-def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
+def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa: C901 - Complex dashboard view with feature checks
     """Event organizer management dashboard view.
 
     Args:
@@ -531,7 +531,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
+def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex priority determination logic
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
@@ -705,14 +705,15 @@ def _orga_casting_actions(context: dict[str, Any], enabled_features: dict[str, A
     Checks for missing casting configurations and quest/trait relationships,
     adding appropriate priority suggestions for event organizers.
     """
-    if "casting" in enabled_features:
-        if not get_event_config(context["event"].id, "casting_min", default_value=0, context=context):
-            _add_priority(
-                context,
-                _("Set the casting options in the configuration panel"),
-                "orga_casting",
-                "config/casting",
-            )
+    if "casting" in enabled_features and not get_event_config(
+        context["event"].id, "casting_min", default_value=0, context=context
+    ):
+        _add_priority(
+            context,
+            _("Set the casting options in the configuration panel"),
+            "orga_casting",
+            "config/casting",
+        )
 
     if "questbuilder" in enabled_features:
         if not context["event"].get_elements(QuestType).count():
@@ -872,14 +873,15 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
                 )
 
     # Handle reduced tickets feature configuration
-    if "reduced" in enabled_features:
-        if not get_event_config(context["event"].id, "reduced_ratio", default_value=0, context=context):
-            _add_priority(
-                context,
-                _("Set up configuration for Patron and Reduced tickets"),
-                "orga_registration_tickets",
-                "config/reduced",
-            )
+    if "reduced" in enabled_features and not get_event_config(
+        context["event"].id, "reduced_ratio", default_value=0, context=context
+    ):
+        _add_priority(
+            context,
+            _("Set up configuration for Patron and Reduced tickets"),
+            "orga_registration_tickets",
+            "config/reduced",
+        )
 
 
 def _orga_reg_actions(context: dict[str, Any], enabled_features: dict[str, Any]) -> None:
@@ -1066,7 +1068,7 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
     return reverse(view_name, args=[context["run"].get_slug()])
 
 
-def _compile(request: HttpRequest, context: dict) -> None:
+def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex dashboard compilation with feature-dependent sections
     """Compile management dashboard with suggestions, actions, and priorities.
 
     Processes and organizes management content sections, handling empty states
@@ -1183,6 +1185,8 @@ def orga_redirect(
 
 
 class WhatWouldYouLikeForm(Form):
+    """Form for WhatWouldYouLike."""
+
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
         """Initialize the form with context and populate choice field options.
 
@@ -1221,10 +1225,12 @@ class WhatWouldYouLikeForm(Form):
     def _add_guides_tutorials(content_choices: list[tuple[str, str]]) -> None:
         """Add guide entries to content choices list."""
         # Add guides with formatted titles and preview snippets
-        for guide_data in get_guides_cache():
-            content_choices.append(
-                (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}"),
-            )
+        content_choices.extend(
+            [
+                (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}")
+                for guide_data in get_guides_cache()
+            ]
+        )
 
     @staticmethod
     def _add_tutorials_choices(choices: list[tuple[str, str]]) -> None:
@@ -1267,8 +1273,12 @@ class WhatWouldYouLikeForm(Form):
         all_runs = {**self.context.get("open_runs", {}), **self.context.get("past_runs", {})}
 
         # Add run dashboard choices for each accessible run
-        for run_data in all_runs.values():
-            choices.append((f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard")))
+        choices.extend(
+            [
+                (f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard"))
+                for run_data in all_runs.values()
+            ]
+        )
 
         # Add association dashboard choice if user has association role
         if self.context.get("association_role", None):

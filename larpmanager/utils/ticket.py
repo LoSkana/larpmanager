@@ -198,9 +198,6 @@ def _send_analysis_result_email(ticket: Any) -> None:
         my_send_mail(subject, body, admin_email)
 
     # Disable for now
-    # Send to association maintainers
-    # for maintainer in get_association_maintainers(ticket.association):
-    #     my_send_mail(subject, body, maintainer.email)
 
 
 def create_error_ticket(request: HttpRequest) -> Any:

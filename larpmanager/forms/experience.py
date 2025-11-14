@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +34,8 @@ from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
 class PxBaseForm(MyForm):
+    """Form for PxBase."""
+
     class Meta:
         abstract = True
 
@@ -49,7 +51,9 @@ class PxBaseForm(MyForm):
 
 
 class OrgaDeliveryPxForm(PxBaseForm):
-    load_js = ["characters-choices"]
+    """Form for OrgaDeliveryPx."""
+
+    load_js: ClassVar[list] = ["characters-choices"]
 
     page_title = _("Delivery")
 
@@ -59,11 +63,13 @@ class OrgaDeliveryPxForm(PxBaseForm):
         model = DeliveryPx
         exclude = ("number",)
 
-        widgets = {"characters": EventCharacterS2WidgetMulti}
+        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti}
 
 
 class OrgaAbilityPxForm(PxBaseForm):
-    load_js = ["characters-choices"]
+    """Form for OrgaAbilityPx."""
+
+    load_js: ClassVar[list] = ["characters-choices"]
 
     page_title = _("Ability")
 
@@ -73,7 +79,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         model = AbilityPx
         exclude = ("number",)
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
@@ -102,6 +108,8 @@ class OrgaAbilityPxForm(PxBaseForm):
 
 
 class OrgaAbilityTypePxForm(MyForm):
+    """Form for OrgaAbilityTypePx."""
+
     page_title = _("Ability type")
 
     page_info = _("Manage experience point ability types")
@@ -112,6 +120,8 @@ class OrgaAbilityTypePxForm(MyForm):
 
 
 class OrgaRulePxForm(MyForm):
+    """Form for OrgaRulePx."""
+
     page_title = _("Rule")
 
     page_info = _("Manage rules for computed fields")
@@ -119,7 +129,7 @@ class OrgaRulePxForm(MyForm):
     class Meta:
         model = RulePx
         exclude = ("number", "order")
-        widgets = {"abilities": AbilityS2WidgetMulti}
+        widgets: ClassVar[dict] = {"abilities": AbilityS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form, configure fields for abilities and writing questions."""
@@ -135,6 +145,8 @@ class OrgaRulePxForm(MyForm):
 
 
 class OrgaModifierPxForm(MyForm):
+    """Form for OrgaModifierPx."""
+
     page_title = _("Rule")
 
     page_info = _(
@@ -145,7 +157,7 @@ class OrgaModifierPxForm(MyForm):
     class Meta:
         model = ModifierPx
         exclude = ("number", "order")
-        widgets = {
+        widgets: ClassVar[dict] = {
             "abilities": AbilityS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
@@ -162,6 +174,8 @@ class OrgaModifierPxForm(MyForm):
 
 
 class SelectNewAbility(forms.Form):
+    """Represents SelectNewAbility model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with dynamic choice field from context."""
         # Extract context parameters from kwargs

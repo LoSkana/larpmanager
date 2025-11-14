@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -317,6 +317,7 @@ class WritingQuestion(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -355,7 +356,7 @@ class WritingQuestion(BaseModel):
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(
                 fields=["event", "applicable", "status"],
                 condition=Q(deleted__isnull=True),
@@ -366,6 +367,8 @@ class WritingQuestion(BaseModel):
 
 
 class WritingOption(BaseModel):
+    """Represents WritingOption model."""
+
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="char_options")
@@ -413,6 +416,7 @@ class WritingOption(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.question} {self.name}"
 
     def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
@@ -433,6 +437,8 @@ class WritingOption(BaseModel):
 
 
 class WritingChoice(BaseModel):
+    """Choices for WritingChoice."""
+
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="choices")
 
     option = models.ForeignKey(WritingOption, on_delete=models.CASCADE, related_name="choices")
@@ -440,18 +446,21 @@ class WritingChoice(BaseModel):
     element_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
         # Return string representation showing element ID, question name, and option name
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wch_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wch_elem_act"),
         ]
 
 
 class WritingAnswer(BaseModel):
+    """Represents WritingAnswer model."""
+
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=100000)
@@ -464,13 +473,15 @@ class WritingAnswer(BaseModel):
         return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wan_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wan_elem_act"),
         ]
 
 
 class RegistrationQuestion(BaseModel):
+    """Represents RegistrationQuestion model."""
+
     typ = models.CharField(
         max_length=50,
         choices=RegistrationQuestionType.choices,
@@ -578,6 +589,7 @@ class RegistrationQuestion(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -615,7 +627,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:
+    def skip(self, registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: C901 - Complex question skip logic with feature checks
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
@@ -650,21 +662,21 @@ class RegistrationQuestion(BaseModel):
             run_id = params["run"].id
             is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
             # noinspection PyUnresolvedReferences
-            if not is_run_organizer and self.allowed_map[0]:
-                # noinspection PyUnresolvedReferences
-                if params["member"].id not in self.allowed_map:
-                    return True
+            if not is_run_organizer and self.allowed_map[0] and params["member"].id not in self.allowed_map:
+                return True
 
         return False
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="rq_evt_act"),
             models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="rq_evt_stat_act"),
         ]
 
 
 class RegistrationOption(BaseModel):
+    """Represents RegistrationOption model."""
+
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="options")
@@ -702,6 +714,7 @@ class RegistrationOption(BaseModel):
     order = models.IntegerField(default=0)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.question} {self.name[:30]} ({self.price}€)"
 
     def get_price(self) -> Any:
@@ -744,13 +757,15 @@ class RegistrationOption(BaseModel):
         return js
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ro_evt_act"),
             models.Index(fields=["question"], condition=Q(deleted__isnull=True), name="ro_quest_act"),
         ]
 
 
 class RegistrationChoice(BaseModel):
+    """Choices for RegistrationChoice."""
+
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="choices")
 
     option = models.ForeignKey(RegistrationOption, on_delete=models.CASCADE, related_name="choices")
@@ -763,13 +778,15 @@ class RegistrationChoice(BaseModel):
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
             models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
         ]
 
 
 class RegistrationAnswer(BaseModel):
+    """Represents RegistrationAnswer model."""
+
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=5000)
@@ -782,7 +799,7 @@ class RegistrationAnswer(BaseModel):
         return f"{self.reg} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
             models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
         ]

@@ -147,7 +147,6 @@ def on_member_badges_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: A
     if action != "post_add":
         return
     instance: Badge | None = kwargs.pop("instance", None)
-    # model = kwargs.pop("model", None)
     pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
     handle_badge_assignment_notifications(instance, pk_set)

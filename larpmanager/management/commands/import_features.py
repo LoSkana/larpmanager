@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import os
+from pathlib import Path
 from typing import Any
 
 import yaml
@@ -32,6 +32,8 @@ from django.db.models import ForeignKey, ManyToManyField
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Reload features from yaml"
 
     def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
@@ -49,8 +51,8 @@ class Command(BaseCommand):
             "payment_methods",
             "skin",
         ]:
-            fixture_path = os.path.join(conf_settings.BASE_DIR, "..", "larpmanager", "fixtures", f"{fixture}.yaml")
-            with open(fixture_path, encoding="utf-8") as f:
+            fixture_path = Path(conf_settings.BASE_DIR) / ".." / "larpmanager" / "fixtures" / f"{fixture}.yaml"
+            with fixture_path.open(encoding="utf-8") as f:
                 data = yaml.safe_load(f)
 
             for obj in data:
@@ -97,7 +99,7 @@ class Command(BaseCommand):
         # Get the M2M field from the model metadata
         try:
             # noinspection PyUnresolvedReferences, PyProtectedMember
-            many_to_many_field = model._meta.get_field(field_name)
+            many_to_many_field = model._meta.get_field(field_name)  # noqa: SLF001  # Django model metadata
         except FieldDoesNotExist as err:
             msg = f"{field_name} not found on {model_label}"
             raise ValueError(msg) from err
@@ -168,7 +170,7 @@ class Command(BaseCommand):
             # Check if field exists in model
             try:
                 # noinspection PyUnresolvedReferences, PyProtectedMember
-                field_object = model._meta.get_field(field_name)
+                field_object = model._meta.get_field(field_name)  # noqa: SLF001  # Django model metadata
             except FieldDoesNotExist:
                 continue
 

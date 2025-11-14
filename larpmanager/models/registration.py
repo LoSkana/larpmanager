@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q
@@ -37,6 +37,8 @@ from larpmanager.models.writing import Character
 
 
 class TicketTier(models.TextChoices):
+    """Represents TicketTier model."""
+
     STANDARD = "b", _("Standard")
     NEW_PLAYER = "y", _("New player")
     LOTTERY = "l", _("Lottery")
@@ -68,6 +70,8 @@ class TicketTier(models.TextChoices):
 
 
 class RegistrationTicket(BaseModel):
+    """Represents RegistrationTicket model."""
+
     search = models.CharField(max_length=150, editable=False)
 
     number = models.IntegerField()
@@ -169,6 +173,8 @@ class RegistrationTicket(BaseModel):
 
 
 class RegistrationSection(BaseModel):
+    """Represents RegistrationSection model."""
+
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="sections")
@@ -186,6 +192,8 @@ class RegistrationSection(BaseModel):
 
 
 class RegistrationQuota(BaseModel):
+    """Represents RegistrationQuota model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="quotas")
 
     number = models.IntegerField()
@@ -199,8 +207,8 @@ class RegistrationQuota(BaseModel):
     surcharge = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ["-created"]
-        constraints = [
+        ordering: ClassVar[list] = ["-created"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_registraion_quota_with_optional",
@@ -213,10 +221,13 @@ class RegistrationQuota(BaseModel):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.quotas} {self.days_available} ({self.surcharge}€)"
 
 
 class RegistrationInstallment(BaseModel):
+    """Represents RegistrationInstallment model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="installments")
 
     number = models.IntegerField()
@@ -246,8 +257,8 @@ class RegistrationInstallment(BaseModel):
     )
 
     class Meta:
-        ordering = ["-created"]
-        constraints = [
+        ordering: ClassVar[list] = ["-created"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_registration_installment_with_optional",
@@ -260,10 +271,13 @@ class RegistrationInstallment(BaseModel):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.order} {self.amount} ({self.days_deadline} - {self.date_deadline})"
 
 
 class RegistrationSurcharge(BaseModel):
+    """Represents RegistrationSurcharge model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="surcharges")
 
     number = models.IntegerField()
@@ -273,8 +287,8 @@ class RegistrationSurcharge(BaseModel):
     date = models.DateField(help_text=_("Date from when the surcharge is applied"))
 
     class Meta:
-        ordering = ["-created"]
-        constraints = [
+        ordering: ClassVar[list] = ["-created"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_registration_surcharge_with_optional",
@@ -287,10 +301,13 @@ class RegistrationSurcharge(BaseModel):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.amount} ({self.date})"
 
 
 class Registration(BaseModel):
+    """Represents Registration model."""
+
     search = models.CharField(max_length=150, editable=False)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="registrations")
@@ -351,6 +368,7 @@ class Registration(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.run} - {self.member}"
 
     def display_run(self) -> Any:
@@ -368,7 +386,7 @@ class Registration(BaseModel):
         return self.member.display_profile()
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["run", "member", "cancellation_date"]),
             models.Index(
                 fields=["member", "run", "cancellation_date", "redeem_code"],
@@ -390,9 +408,9 @@ class Registration(BaseModel):
             ),
         ]
 
-        ordering = ["-created"]
+        ordering: ClassVar[list] = ["-created"]
 
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["run", "member", "cancellation_date", "redeem_code", "deleted"],
                 name="unique_registraion_with_optional",
@@ -406,6 +424,8 @@ class Registration(BaseModel):
 
 
 class RegistrationCharacterRel(BaseModel):
+    """Represents RegistrationCharacterRel model."""
+
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="rcrs")
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="rcrs")

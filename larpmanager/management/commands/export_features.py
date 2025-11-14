@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from pathlib import Path
 
 import yaml
 from django.core.management.base import BaseCommand
@@ -28,6 +29,8 @@ from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Export features to yaml"
 
     # noinspection PyProtectedMember
@@ -98,68 +101,90 @@ class Command(BaseCommand):
 
         # Process each model type and export to YAML fixture files
         for model_name, model_config in export_models.items():
-            model_class, field_names = model_config
-            data = []
+            self.process(model_name, model_config)
 
-            # Categorize fields by Django field type for proper serialization handling
-            m2m_fields = [f.name for f in model_class._meta.many_to_many if f.name in field_names]
-            fk_fields = [
-                f.name for f in model_class._meta.fields if isinstance(f, ForeignKey) and f.name in field_names
-            ]
-            img_fields = [
-                f.name for f in model_class._meta.fields if isinstance(f, ImageField) and f.name in field_names
-            ]
+    def process(self, model_name: str, model_config: tuple) -> None:
+        """Process and export a Django model to YAML fixture file.
 
-            # Regular fields are all remaining fields except 'id' which is handled separately
-            regular_fields = [
-                f
-                for f in field_names
-                if f not in m2m_fields and f not in fk_fields and f not in img_fields and f != "id"
-            ]
+        Extracts data from the specified model and exports it to a YAML fixture file,
+        handling different field types (regular, foreign key, many-to-many, image) with
+        appropriate serialization strategies.
 
-            # Iterate through all model instances and build fixture data
-            for obj in model_class.objects.all().order_by("pk"):
-                entry_fields = {}
+        Args:
+            model_name: Name for the output fixture file (e.g., 'feature', 'skin')
+            model_config: Tuple containing (model_class, field_names) where:
+                - model_class: Django model class to export
+                - field_names: Tuple of field names to include in the export
 
-                # Export regular scalar fields with direct value assignment
-                for field in regular_fields:
-                    entry_fields[field] = getattr(obj, field)
+        Side Effects:
+            - Creates/overwrites YAML file at larpmanager/fixtures/{model_name}.yaml
+            - Writes fixture data in Django loaddata-compatible format
 
-                # Handle foreign key relationships by extracting slug or string representation
-                for field in fk_fields:
-                    rel_obj = getattr(obj, field)
-                    if rel_obj is None:
-                        entry_fields[field] = None
-                    else:
-                        # Try to get slug from related object, fallback to string representation
-                        slug_val = getattr(rel_obj, "slug", None)
-                        if slug_val is None and hasattr(rel_obj, "get_slug") and callable(rel_obj.get_slug):
-                            slug_val = rel_obj.get_slug()
-                        if slug_val is None:
-                            try:
-                                slug_val = str(rel_obj)
-                            except Exception:
-                                # Final fallback to foreign key ID
-                                slug_val = getattr(obj, f"{field}_id")
-                        entry_fields[field] = slug_val
+        """
+        model_class, field_names = model_config
+        data = []
 
-                # Handle image fields by storing file path or None
-                for field in img_fields:
-                    image = getattr(obj, field)
-                    entry_fields[field] = image.name if image else None
+        # Categorize fields by Django field type for proper serialization handling
+        m2m_fields = [f.name for f in model_class._meta.many_to_many if f.name in field_names]  # noqa: SLF001  # Django model metadata
+        fk_fields = [
+            f.name
+            for f in model_class._meta.fields  # noqa: SLF001
+            if isinstance(f, ForeignKey) and f.name in field_names  # Django model metadata
+        ]
+        img_fields = [
+            f.name
+            for f in model_class._meta.fields  # noqa: SLF001
+            if isinstance(f, ImageField) and f.name in field_names  # Django model metadata
+        ]
 
-                # Handle many-to-many relationships as lists of primary keys
-                for field in m2m_fields:
-                    entry_fields[field] = list(getattr(obj, field).values_list("pk", flat=True))
+        # Regular fields are all remaining fields except 'id' which is handled separately
+        regular_fields = [
+            f for f in field_names if f not in m2m_fields and f not in fk_fields and f not in img_fields and f != "id"
+        ]
 
-                # Build Django fixture format entry with model identifier
-                entry = {
-                    "model": f"{model_class._meta.app_label}.{model_class._meta.model_name}",
-                    "fields": entry_fields,
-                }
-                data.append(entry)
+        # Iterate through all model instances and build fixture data
+        for obj in model_class.objects.all().order_by("pk"):
+            entry_fields = {}
 
-            # Write fixture data to YAML file with readable formatting
-            fixture_path = f"larpmanager/fixtures/{model_name}.yaml"
-            with open(fixture_path, "w") as f:
-                yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+            # Export regular scalar fields with direct value assignment
+            for field in regular_fields:
+                entry_fields[field] = getattr(obj, field)
+
+            # Handle foreign key relationships by extracting slug or string representation
+            for field in fk_fields:
+                rel_obj = getattr(obj, field)
+                if rel_obj is None:
+                    entry_fields[field] = None
+                else:
+                    # Try to get slug from related object, fallback to string representation
+                    slug_val = getattr(rel_obj, "slug", None)
+                    if slug_val is None and hasattr(rel_obj, "get_slug") and callable(rel_obj.get_slug):
+                        slug_val = rel_obj.get_slug()
+                    if slug_val is None:
+                        try:
+                            slug_val = str(rel_obj)
+                        except (TypeError, AttributeError):
+                            # Final fallback to foreign key ID
+                            slug_val = getattr(obj, f"{field}_id")
+                    entry_fields[field] = slug_val
+
+            # Handle image fields by storing file path or None
+            for field in img_fields:
+                image = getattr(obj, field)
+                entry_fields[field] = image.name if image else None
+
+            # Handle many-to-many relationships as lists of primary keys
+            for field in m2m_fields:
+                entry_fields[field] = list(getattr(obj, field).values_list("pk", flat=True))
+
+            # Build Django fixture format entry with model identifier
+            entry = {
+                "model": f"{model_class._meta.app_label}.{model_class._meta.model_name}",  # noqa: SLF001  # Django model metadata
+                "fields": entry_fields,
+            }
+            data.append(entry)
+
+        # Write fixture data to YAML file with readable formatting
+        fixture_path = f"larpmanager/fixtures/{model_name}.yaml"
+        with Path(fixture_path).open("w") as f:
+            yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)

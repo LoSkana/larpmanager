@@ -348,10 +348,13 @@ def check_casting_player(
 
     # Filter by payment status - check current payment state
     registration_payments_status(registration)
-    if "pays" in casting_filter_options and registration.payment_status:
-        # Skip if payment status not in allowed list
-        if registration.payment_status not in casting_filter_options["pays"]:
-            return True
+    # Skip if payment status not in allowed list
+    if (
+        "pays" in casting_filter_options
+        and registration.payment_status
+        and registration.payment_status not in casting_filter_options["pays"]
+    ):
+        return True
 
     # Check for existing assignments based on casting type
     if casting_type == 0:
@@ -609,10 +612,9 @@ def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dic
 
     """
     # Collect all character IDs that are available (not chosen and not taken)
-    available_character_ids = []
-    for character_id in choices:
-        if character_id not in chosen and character_id not in taken:
-            available_character_ids.append(character_id)
+    available_character_ids = [
+        character_id for character_id in choices if character_id not in chosen and character_id not in taken
+    ]
 
     # Sort the available characters for consistent ordering
     available_character_ids.sort()

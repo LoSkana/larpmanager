@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.db.models import Q
@@ -36,6 +36,8 @@ if TYPE_CHECKING:
 
 
 class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
+    """Represents FeatureCheckboxWidget model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with optional feature help text."""
         # Extract and store feature help text from kwargs
@@ -43,8 +45,12 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         super().__init__(*args, **kwargs)
 
     def render(
-        self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer: Any = None
-    ) -> str:  # noqa: ARG002
+        self,
+        name: str,
+        value: list[str] | None,
+        attrs: dict[str, str] | None = None,
+        renderer: Any = None,  # noqa: ARG002
+    ) -> str:
         """Render feature checkboxes with tooltips and help links.
 
         Generates HTML for a set of feature checkboxes, each with an associated tooltip
@@ -104,6 +110,8 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class FeatureForm(MyForm):
+    """Form for Feature."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set cancellation prevention flag."""
         super().__init__(*args, **kwargs)
@@ -181,7 +189,9 @@ class FeatureForm(MyForm):
 
 
 class QuickSetupForm(MyForm):
-    setup = {}
+    """Form for QuickSetup."""
+
+    setup: ClassVar[dict] = {}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and prevent cancellation."""

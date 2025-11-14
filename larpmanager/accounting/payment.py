@@ -243,15 +243,13 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
 
             # Handle single/multiple choice questions
             if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-                selected_option_names = []
                 user_choices = RegistrationChoice.objects.filter(
                     question=registration_question,
                     reg_id=context["reg"].id,
                 )
 
                 # Collect all selected option names
-                for choice in user_choices.select_related("option"):
-                    selected_option_names.append(choice.option.name)
+                selected_option_names = [choice.option.name for choice in user_choices.select_related("option")]
                 answer_value = ",".join(selected_option_names)
             else:
                 # Handle text-based questions
@@ -260,7 +258,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
                     reg_id=context["reg"].id,
                 ).text
             placeholder_values[question_name] = answer_value
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip missing questions
             # Skip missing questions/answers
             pass
 
@@ -325,6 +323,50 @@ def update_invoice_gross_fee(
     return amount
 
 
+def _prepare_gateway_form(
+    request: HttpRequest,
+    context: dict[str, Any],
+    invoice: PaymentInvoice,
+    payment_amount: Decimal,
+    payment_method_slug: str,
+    *,
+    require_receipt: bool,
+) -> None:
+    """Prepare gateway-specific payment forms based on payment method.
+
+    Args:
+        request: HTTP request object
+        context: Context dictionary to be updated with payment forms
+        invoice: Payment invoice object
+        payment_amount: Payment amount
+        payment_method_slug: Payment method identifier
+        require_receipt: Whether receipt upload is required
+    """
+    if payment_method_slug in {"wire", "paypal_nf"}:
+        # Wire transfer or non-financial PayPal forms
+        context["wire_form"] = WireInvoiceSubmitForm(require_receipt=require_receipt)
+        context["wire_form"].set_initial("cod", invoice.cod)
+    elif payment_method_slug == "any":
+        # Generic payment method form
+        context["any_form"] = AnyInvoiceSubmitForm()
+        context["any_form"].set_initial("cod", invoice.cod)
+    elif payment_method_slug == "paypal":
+        # PayPal gateway integration
+        get_paypal_form(request, context, invoice, payment_amount)
+    elif payment_method_slug == "stripe":
+        # Stripe payment gateway
+        get_stripe_form(request, context, invoice, payment_amount)
+    elif payment_method_slug == "sumup":
+        # SumUp payment gateway
+        get_sumup_form(request, context, invoice, payment_amount)
+    elif payment_method_slug == "redsys":
+        # Redsys payment gateway (Spanish banks)
+        get_redsys_form(request, context, invoice, payment_amount)
+    elif payment_method_slug == "satispay":
+        # Satispay mobile payment gateway
+        get_satispay_form(request, context, invoice, payment_amount)
+
+
 def get_payment_form(
     request: HttpRequest,
     form: Form,
@@ -371,7 +413,7 @@ def get_payment_form(
     if invoice_key is not None:
         try:
             invoice = PaymentInvoice.objects.get(key=invoice_key, status=PaymentStatus.CREATED)
-        except Exception as e:
+        except PaymentInvoice.DoesNotExist as e:
             # Invoice not found or invalid, will create new one
             logger.debug("Invoice %s not found or invalid: %s", invoice_key, e)
 
@@ -402,29 +444,9 @@ def get_payment_form(
     context["require_receipt"] = require_receipt
 
     # Prepare gateway-specific forms based on selected payment method
-    if payment_method_slug in {"wire", "paypal_nf"}:
-        # Wire transfer or non-financial PayPal forms
-        context["wire_form"] = WireInvoiceSubmitForm(require_receipt=require_receipt)
-        context["wire_form"].set_initial("cod", invoice.cod)
-    elif payment_method_slug == "any":
-        # Generic payment method form
-        context["any_form"] = AnyInvoiceSubmitForm()
-        context["any_form"].set_initial("cod", invoice.cod)
-    elif payment_method_slug == "paypal":
-        # PayPal gateway integration
-        get_paypal_form(request, context, invoice, payment_amount)
-    elif payment_method_slug == "stripe":
-        # Stripe payment gateway
-        get_stripe_form(request, context, invoice, payment_amount)
-    elif payment_method_slug == "sumup":
-        # SumUp payment gateway
-        get_sumup_form(request, context, invoice, payment_amount)
-    elif payment_method_slug == "redsys":
-        # Redsys payment gateway (Spanish banks)
-        get_redsys_form(request, context, invoice, payment_amount)
-    elif payment_method_slug == "satispay":
-        # Satispay mobile payment gateway
-        get_satispay_form(request, context, invoice, payment_amount)
+    _prepare_gateway_form(
+        request, context, invoice, payment_amount, payment_method_slug, require_receipt=require_receipt
+    )
 
 
 def payment_received(invoice: PaymentInvoice) -> bool:
@@ -552,7 +574,6 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
     accounting_transaction = AccountingItemTransaction()
     accounting_transaction.member_id = invoice.member_id
     accounting_transaction.inv = invoice
-    # accounting_transaction.value = invoice.mc_fee
 
     # Calculate fee amount as percentage of gross invoice value
     accounting_transaction.value = (float(invoice.mc_gross) * fee_percentage) / 100
@@ -612,7 +633,7 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
 
     try:
         previous_refund_request = RefundRequest.objects.get(pk=refund_request.pk)
-    except Exception:
+    except RefundRequest.DoesNotExist:
         return
 
     if previous_refund_request.status == RefundStatus.PAYED:
@@ -660,7 +681,7 @@ def process_collection_status_change(collection: Collection) -> None:
     # Attempt to fetch the previous state of the collection
     try:
         previous_collection = Collection.objects.get(pk=collection.pk)
-    except Exception:
+    except Collection.DoesNotExist:
         # If we can't fetch previous state, safely return to avoid errors
         return
 

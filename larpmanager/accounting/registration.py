@@ -664,10 +664,11 @@ def check_reg_events(event: Event) -> None:
         Queues background task to update accounting for all registrations
 
     """
-    registration_ids: list[str] = []
-    for run in event.runs.all():
-        for registration_id in run.registrations.values_list("id", flat=True):
-            registration_ids.append(str(registration_id))
+    registration_ids = [
+        str(registration_id)
+        for run in event.runs.all()
+        for registration_id in run.registrations.values_list("id", flat=True)
+    ]
     check_registration_background(",".join(registration_ids))
 
 
@@ -725,6 +726,55 @@ def trigger_registration_accounting(registration_id: int | None) -> None:
         return
 
 
+def _should_skip_accounting(reg: Registration) -> bool:
+    """Check if accounting should be skipped for this registration.
+
+    Args:
+        reg: Registration to check
+
+    Returns:
+        True if accounting should be skipped
+    """
+    return reg.run.development in [DevelopStatus.CANC, DevelopStatus.DONE]
+
+
+def _is_payment_complete(reg: Registration, remaining_balance: Decimal, tolerance: float = 0.05) -> bool:
+    """Check if payment is complete within rounding tolerance.
+
+    Args:
+        reg: Registration to check
+        remaining_balance: Remaining balance to pay
+        tolerance: Maximum rounding tolerance
+
+    Returns:
+        True if payment is complete
+    """
+    if -tolerance < remaining_balance <= tolerance:
+        if not reg.payment_date:
+            reg.payment_date = timezone.now()
+        return True
+    return False
+
+
+def _check_membership_requirements(reg: Registration, event_features: dict, association_id: int) -> bool:
+    """Check membership requirements for registration.
+
+    Args:
+        reg: Registration to check
+        event_features: Event features dictionary
+        association_id: Association ID
+
+    Returns:
+        True if membership requirements are met or not applicable
+    """
+    if "membership" in event_features and "laog" not in event_features:
+        if not hasattr(reg, "membership"):
+            reg.membership = get_user_membership(reg.member, association_id)
+        if reg.membership.status != MembershipStatus.ACCEPTED:
+            return False
+    return True
+
+
 def update_registration_accounting(reg: Registration) -> None:
     """Update comprehensive accounting information for a registration.
 
@@ -748,9 +798,8 @@ def update_registration_accounting(reg: Registration) -> None:
 
     """
     # Skip processing for cancelled or completed runs
-    for cancelled_or_done_status in [DevelopStatus.CANC, DevelopStatus.DONE]:
-        if reg.run.development == cancelled_or_done_status:
-            return
+    if _should_skip_accounting(reg):
+        return
 
     max_rounding_tolerance = 0.05
 
@@ -775,9 +824,7 @@ def update_registration_accounting(reg: Registration) -> None:
 
     # Check if payment is complete (within rounding tolerance)
     remaining_balance = reg.tot_iscr - reg.tot_payed
-    if -max_rounding_tolerance < remaining_balance <= max_rounding_tolerance:
-        if not reg.payment_date:
-            reg.payment_date = timezone.now()
+    if _is_payment_complete(reg, remaining_balance, max_rounding_tolerance):
         return
 
     # Skip further processing if registration is cancelled
@@ -785,11 +832,8 @@ def update_registration_accounting(reg: Registration) -> None:
         return
 
     # Handle membership requirements for non-LAOG events
-    if "membership" in event_features and "laog" not in event_features:
-        if not hasattr(reg, "membership"):
-            reg.membership = get_user_membership(reg.member, association_id)
-        if reg.membership.status != MembershipStatus.ACCEPTED:
-            return
+    if not _check_membership_requirements(reg, event_features, association_id):
+        return
 
     # Process tokens and credits
     handle_tokes_credits(association_id, event_features, reg, remaining_balance)

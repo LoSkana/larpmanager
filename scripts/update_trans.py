@@ -32,7 +32,7 @@ subprocess.run(
 # 2: Get untraslated
 po_path = Path("larpmanager/locale/it/LC_MESSAGES/django.po")
 po = polib.pofile(str(po_path))
-untranslated = set([entry.msgid.lower() for entry in po if not entry.translated() or entry.fuzzy])
+untranslated = {entry.msgid.lower() for entry in po if not entry.translated() or entry.fuzzy}
 
 # 3: Git stash .po files
 subprocess.run(["git", "stash", "--include-untracked", "--", "*.po"], check=True)
@@ -42,7 +42,6 @@ po_files = list(Path("larpmanager").rglob("*.po"))
 
 # 5: Process each .po file
 for po_file in po_files:
-    print(f"processing: {po_file}")
     po = polib.pofile(str(po_file))
     changed = False
     for entry in po:

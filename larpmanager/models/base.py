@@ -18,14 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import secrets
-from datetime import datetime
 from itertools import chain
-from typing import Any
+from typing import Any, ClassVar
 
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Max
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from model_clone import CloneMixin
@@ -39,7 +39,9 @@ AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowe
 
 
 class BaseModel(CloneMixin, SafeDeleteModel):
-    created = models.DateTimeField(default=datetime.now, editable=False)
+    """Represents BaseModel model."""
+
+    created = models.DateTimeField(default=timezone.now, editable=False)
 
     updated = models.DateTimeField(auto_now=True)
 
@@ -47,7 +49,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
     class Meta:
         abstract = True
-        ordering = ["-updated"]
+        ordering: ClassVar[list] = ["-updated"]
 
     def upd_js_attr(self, javascript_object: dict, attribute_name: str) -> dict:
         """Update JavaScript object with model attribute value.
@@ -164,10 +166,14 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
 
 class FeatureNationality(models.TextChoices):
+    """Represents FeatureNationality model."""
+
     ITALY = "it", _("Italy")
 
 
 class FeatureModule(BaseModel):
+    """Represents FeatureModule model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
@@ -180,6 +186,8 @@ class FeatureModule(BaseModel):
 
 
 class Feature(BaseModel):
+    """Represents Feature model."""
+
     name = models.CharField(max_length=100)
 
     descr = models.TextField(max_length=500, blank=True)
@@ -210,7 +218,7 @@ class Feature(BaseModel):
     hidden = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["module", "order"]
+        ordering: ClassVar[list] = ["module", "order"]
 
     def __str__(self) -> str:
         """Return string representation of the feature.
@@ -223,6 +231,8 @@ class Feature(BaseModel):
 
 
 class PaymentMethod(BaseModel):
+    """Represents PaymentMethod model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
@@ -261,6 +271,8 @@ class PaymentMethod(BaseModel):
 
 
 class PublisherApiKey(BaseModel):
+    """Represents PublisherApiKey model."""
+
     name = models.CharField(max_length=100, help_text=_("Descriptive name for this API key"))
 
     key = models.CharField(max_length=64, unique=True, db_index=True, editable=False)
@@ -278,6 +290,7 @@ class PublisherApiKey(BaseModel):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.name} ({'Active' if self.active else 'Inactive'})"
 
 

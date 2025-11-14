@@ -63,7 +63,7 @@ def get_character_filter(character: Any, character_registrations: Any, active_fi
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:
+def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -167,11 +167,11 @@ def prepare_campaign_event_data(event_instance: Any) -> None:
     if event_instance.pk:
         try:
             previous_event_instance = Event.objects.get(pk=event_instance.pk)
-            event_instance._old_parent_id = previous_event_instance.parent_id
+            event_instance._old_parent_id = previous_event_instance.parent_id  # noqa: SLF001  # Internal flag for parent change detection
         except ObjectDoesNotExist:
-            event_instance._old_parent_id = None
+            event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
     else:
-        event_instance._old_parent_id = None
+        event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
 
 
 def copy_parent_event_to_campaign(event: Any) -> None:
@@ -181,20 +181,19 @@ def copy_parent_event_to_campaign(event: Any) -> None:
         event: Event instance that was saved
 
     """
-    if event.parent_id:
-        # noinspection PyProtectedMember
-        if event._old_parent_id != event.parent_id:
-            # copy config, texts, roles, features
-            copy_class(event.pk, event.parent_id, EventConfig)
-            copy_class(event.pk, event.parent_id, EventText)
-            copy_class(event.pk, event.parent_id, EventRole)
-            for feature in event.parent.features.all():
-                event.features.add(feature)
+    # noinspection PyProtectedMember
+    if event.parent_id and event._old_parent_id != event.parent_id:  # noqa: SLF001  # Internal flag for parent change detection
+        # copy config, texts, roles, features
+        copy_class(event.pk, event.parent_id, EventConfig)
+        copy_class(event.pk, event.parent_id, EventText)
+        copy_class(event.pk, event.parent_id, EventRole)
+        for feature in event.parent.features.all():
+            event.features.add(feature)
 
             # Use flag to prevent recursion instead of disconnecting signal
-            event._skip_campaign_setup = True
+            event._skip_campaign_setup = True  # noqa: SLF001  # Internal flag to prevent recursion
             event.save()
-            del event._skip_campaign_setup
+            del event._skip_campaign_setup  # noqa: SLF001  # Internal flag to prevent recursion
 
 
 def create_default_event_setup(event: Any) -> None:
@@ -277,7 +276,6 @@ def save_event_character_form(features: dict, instance: object) -> None:
     _activate_orga_lang(instance)
 
     # Define default question types with their properties
-    # (name, status, visibility, max_length)
     def_tps = {
         WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000),
         WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000),

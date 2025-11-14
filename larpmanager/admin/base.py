@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from import_export import resources
@@ -29,10 +31,12 @@ from larpmanager.models.member import Log
 
 # SET JQUERY
 class DefModelAdmin(ImportExportModelAdmin):
-    class Media:
-        css = {"all": ("larpmanager/assets/css/admin.css",)}
+    """Base admin class for LarpManager models with import/export functionality."""
 
-    ordering = ["-updated"]
+    class Media:
+        css: ClassVar[dict] = {"all": ("larpmanager/assets/css/admin.css",)}
+
+    ordering: ClassVar[list] = ["-updated"]
 
 
 def reduced(value: str | None) -> str:
@@ -70,68 +74,92 @@ def reduced(value: str | None) -> str:
 
 
 class AssociationFilter(AutocompleteFilter):
+    """Admin filter for Association autocomplete."""
+
     title = "Association"
     field_name = "association"
 
 
 class CharacterFilter(AutocompleteFilter):
+    """Admin filter for Character autocomplete."""
+
     title = "Character"
     field_name = "character"
 
 
 class EventFilter(AutocompleteFilter):
+    """Admin filter for Event autocomplete."""
+
     title = "Event"
     field_name = "event"
 
 
 class RunFilter(AutocompleteFilter):
+    """Admin filter for Run autocomplete."""
+
     title = "Run"
     field_name = "run"
 
 
 class MemberFilter(AutocompleteFilter):
+    """Admin filter for Member autocomplete."""
+
     title = "Member"
     field_name = "member"
 
 
 class TraitFilter(AutocompleteFilter):
+    """Admin filter for Trait autocomplete."""
+
     title = "Trait"
     field_name = "trait"
 
 
 class RegistrationFilter(AutocompleteFilter):
+    """Admin filter for Registration autocomplete."""
+
     title = "Registration"
     field_name = "reg"
 
 
 @admin.register(Log)
 class LogAdmin(DefModelAdmin):
-    list_display = ("member", "cls", "eid", "created", "dl")
+    """Admin interface for Log model."""
+
+    list_display: ClassVar[tuple] = ("member", "cls", "eid", "created", "dl")
     search_fields = ("member", "cls", "dl")
-    autocomplete_fields = ["member"]
+    autocomplete_fields: ClassVar[list] = ["member"]
 
 
 @admin.register(FeatureModule)
 class FeatureModuleAdmin(DefModelAdmin):
+    """Admin interface for FeatureModule model."""
+
     list_display = ("name", "order")
-    search_fields = ["name"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 class FeatureResource(resources.ModelResource):
+    """Import/export resource for Feature model."""
+
     class Meta:
         model = Feature
 
 
 @admin.register(Feature)
 class FeatureAdmin(DefModelAdmin):
-    list_display = ("name", "overall", "order", "module", "slug", "tutorial", "descr", "placeholder", "after_link")
-    list_filter = ("module",)
-    autocomplete_fields = ["module", "associations", "events"]
-    search_fields = ["name"]
-    resource_classes = [FeatureResource]
+    """Admin interface for Feature model."""
+
+    list_display: ClassVar[tuple] = ("name", "overall", "order", "module", "slug", "tutorial", "descr", "placeholder", "after_link")
+    list_filter: ClassVar[tuple] = ("module",)
+    autocomplete_fields: ClassVar[list] = ["module", "associations", "events"]
+    search_fields: ClassVar[list] = ["name"]
+    resource_classes: ClassVar[list] = [FeatureResource]
 
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(DefModelAdmin):
+    """Admin interface for PaymentMethod model."""
+
     list_display = ("name", "slug")
-    search_fields = ["name"]
+    search_fields: ClassVar[list] = ["name"]

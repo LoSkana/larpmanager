@@ -17,7 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import Any, ClassVar
 
 from babel.numbers import get_currency_symbol
 from colorfield.fields import ColorField
@@ -36,12 +38,16 @@ from larpmanager.utils.validators import FileTypeValidator
 
 
 class MemberFieldType(models.TextChoices):
+    """Represents MemberFieldType model."""
+
     ABSENT = "a", _("Absent")
     OPTIONAL = "o", _("Optional")
     MANDATORY = "m", _("Mandatory")
 
 
 class Currency(models.TextChoices):
+    """Represents Currency model."""
+
     EUR = "e", "EUR"
     USD = "u", "USD"
     GBP = "g", "GBP"
@@ -50,11 +56,15 @@ class Currency(models.TextChoices):
 
 
 class AssociationPlan(models.TextChoices):
+    """Represents AssociationPlan model."""
+
     FREE = "f", _("Free")
     SUPPORT = "p", _("Support")
 
 
 class AssociationSkin(BaseModel):
+    """Represents AssociationSkin model."""
+
     name = models.CharField(max_length=100)
 
     domain = models.CharField(max_length=100)
@@ -78,6 +88,8 @@ class AssociationSkin(BaseModel):
 
 
 class Association(BaseModel):
+    """Represents Association model."""
+
     skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, default=1)
 
     name = models.CharField(max_length=100, help_text=_("Complete name of the Organization"))
@@ -261,7 +273,7 @@ class Association(BaseModel):
     )
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_association_with_optional"),
             UniqueConstraint(
                 fields=["slug"],
@@ -291,6 +303,8 @@ class Association(BaseModel):
 
 
 class AssociationConfig(BaseModel):
+    """Django app configuration for Association."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
@@ -298,13 +312,14 @@ class AssociationConfig(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.association} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["association", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["association", "name", "deleted"],
                 name="unique_association_config_with_optional",
@@ -318,6 +333,8 @@ class AssociationConfig(BaseModel):
 
 
 class AssociationTextType(models.TextChoices):
+    """Represents AssociationTextType model."""
+
     PROFILE = "p", _("Profile")
     HOME = "h", _("Home")
     SIGNUP = "u", _("Registration mail")
@@ -337,6 +354,8 @@ class AssociationTextType(models.TextChoices):
 
 
 class AssociationText(BaseModel):
+    """Represents AssociationText model."""
+
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
@@ -367,7 +386,7 @@ class AssociationText(BaseModel):
         return f"{self.get_typ_display()} {self.get_language_display()}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["association", "typ", "language", "deleted"],
                 name="unique_association_text_with_optional",
@@ -460,7 +479,7 @@ class AssociationTranslation(BaseModel):
         return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             # Ensure unique translations including soft-deleted records
             UniqueConstraint(
                 fields=["association", "language", "msgid", "context", "deleted"],
@@ -473,7 +492,7 @@ class AssociationTranslation(BaseModel):
                 name="unique_assoc_translation_without_deleted",
             ),
         ]
-        indexes = [
+        indexes: ClassVar[list] = [
             # Composite index for fast translation lookups
             models.Index(fields=["association", "language", "msgid"]),
             # Index for filtering active/inactive translations

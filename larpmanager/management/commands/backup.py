@@ -31,6 +31,8 @@ from larpmanager.views.orga.event import _prepare_backup
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Backup events"
 
     def add_arguments(self, parser: ArgumentParser) -> None:

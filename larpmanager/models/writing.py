@@ -19,10 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import os
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django.db import models
 from django.db.models import Q
@@ -43,6 +42,8 @@ if TYPE_CHECKING:
 
 
 class Writing(BaseConceptModel):
+    """Represents Writing model."""
+
     progress = models.ForeignKey(
         ProgressStep,
         on_delete=models.SET_NULL,
@@ -149,7 +150,6 @@ class Writing(BaseConceptModel):
 
         # Define optional feature columns with their descriptions
         optional_feature_columns = [
-            # ('assigned', 'email of the staff members to which to assign this element'),
             ("title", "short text, the title of the element"),
             ("mirror", "number, the number of the element mirroring"),
             ("cover", "url of the element cover"),
@@ -168,6 +168,8 @@ class Writing(BaseConceptModel):
 
 
 class CharacterStatus(models.TextChoices):
+    """Represents CharacterStatus model."""
+
     CREATION = "c", _("Creation")
     PROPOSED = "s", _("Proposed")
     REVIEW = "r", _("Revision")
@@ -175,6 +177,8 @@ class CharacterStatus(models.TextChoices):
 
 
 class Character(Writing):
+    """Represents Character model."""
+
     title = models.CharField(
         max_length=100,
         blank=True,
@@ -248,6 +252,7 @@ class Character(Writing):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"#{self.number} {self.name}"
 
     def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
@@ -300,9 +305,10 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval", default_value=False):
-            if self.status not in [CharacterStatus.APPROVED]:
-                js["hide"] = True
+        if get_event_config(self.event_id, "user_character_approval", default_value=False) and self.status not in [
+            CharacterStatus.APPROVED
+        ]:
+            js["hide"] = True
 
         return js
 
@@ -355,7 +361,7 @@ class Character(Writing):
 
         """
         # Build the path to the characters directory for this run
-        directory_path = os.path.join(run.event.get_media_filepath(), "characters", f"{run.number}/")
+        directory_path = str(Path(run.event.get_media_filepath()) / "characters" / f"{run.number}/")
         # Ensure the directory exists
         Path(directory_path).mkdir(parents=True, exist_ok=True)
         return directory_path
@@ -376,15 +382,15 @@ class Character(Writing):
         # Create sheet filename using character number
         sheet_filename = f"#{self.number}.pdf"
 
-        return os.path.join(character_directory, sheet_filename)
+        return str(Path(character_directory) / sheet_filename)
 
     def get_sheet_friendly_filepath(self, character_run: Any = None) -> Any:
         """Return filepath for the light PDF version of the character sheet."""
-        return os.path.join(self.get_character_filepath(character_run), f"#{self.number}-light.pdf")
+        return str(Path(self.get_character_filepath(character_run)) / f"#{self.number}-light.pdf")
 
     def get_relationships_filepath(self, run: Any = None) -> Any:
         """Return filepath for the relationships PDF."""
-        return os.path.join(self.get_character_filepath(run), f"#{self.number}-rels.pdf")
+        return str(Path(self.get_character_filepath(run)) / f"#{self.number}-rels.pdf")
 
     def show_thumb(self) -> Any:
         """Return HTML for displaying character thumbnail image if available."""
@@ -422,7 +428,7 @@ class Character(Writing):
         return csv_rows
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_character_with_optional",
@@ -433,7 +439,7 @@ class Character(Writing):
                 name="unique_character_without_optional",
             ),
         ]
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="char_evt_stat_act"),
             models.Index(fields=["player", "event"], condition=Q(deleted__isnull=True), name="char_plyr_evt_act"),
@@ -444,6 +450,8 @@ class Character(Writing):
 
 
 class CharacterConfig(BaseModel):
+    """Django app configuration for Character."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=5000)
@@ -451,13 +459,14 @@ class CharacterConfig(BaseModel):
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.character} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["character", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["character", "name", "deleted"],
                 name="unique_character_config_with_optional",
@@ -471,16 +480,18 @@ class CharacterConfig(BaseModel):
 
 
 class Plot(Writing):
+    """Represents Plot model."""
+
     characters = models.ManyToManyField(Character, related_name="plots", through="PlotCharacterRel", blank=True)
 
     order = models.IntegerField(default=0)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="plot_evt_act"),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_plot_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -490,6 +501,7 @@ class Plot(Writing):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
     def get_plot_characters(self) -> Any:
@@ -500,6 +512,8 @@ class Plot(Writing):
 
 
 class PlotCharacterRel(BaseModel):
+    """Represents PlotCharacterRel model."""
+
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
 
     order = models.IntegerField(default=0)
@@ -509,10 +523,11 @@ class PlotCharacterRel(BaseModel):
     text = models.TextField(max_length=5000, null=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.plot} - {self.character}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["plot", "character", "deleted"],
                 name="unique_plot_character_rel_with_optional",
@@ -526,12 +541,16 @@ class PlotCharacterRel(BaseModel):
 
 
 class FactionType(models.TextChoices):
+    """Represents FactionType model."""
+
     PRIM = "s", _("Primary")
     TRASV = "t", _("Transversal")
     SECRET = "g", _("Secret")
 
 
 class Faction(Writing):
+    """Represents Faction model."""
+
     typ = models.CharField(max_length=1, choices=FactionType.choices, default=FactionType.PRIM, verbose_name=_("Type"))
 
     order = models.IntegerField(default=0)
@@ -582,7 +601,7 @@ class Faction(Writing):
 
         """
         # Build directory path: event_media/factions/run_number/
-        directory_path = os.path.join(run.event.get_media_filepath(), "factions", f"{run.number}/")
+        directory_path = str(Path(run.event.get_media_filepath()) / "factions" / f"{run.number}/")
 
         # Ensure directory exists, creating parent directories as needed
         Path(directory_path).mkdir(parents=True, exist_ok=True)
@@ -615,7 +634,7 @@ class Faction(Writing):
         sheet_filename = f"#{self.number}.pdf"
 
         # Return complete path to faction sheet PDF
-        return os.path.join(faction_directory, sheet_filename)
+        return str(Path(faction_directory) / sheet_filename)
 
     def show_red(self) -> dict:
         """Update JavaScript response with 'typ' and 'teaser' attributes."""
@@ -628,38 +647,44 @@ class Faction(Writing):
         return js
 
     def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event", "order"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="fac_evt_act"),
         ]
 
 
 class PrologueType(Writing):
+    """Represents PrologueType model."""
+
     def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ptype_evt_act"),
         ]
 
 
 class Prologue(Writing):
+    """Represents Prologue model."""
+
     typ = models.ForeignKey(PrologueType, on_delete=models.CASCADE, null=True, related_name="prologues")
 
     characters = models.ManyToManyField(Character, related_name="prologues_list", blank=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="prol_evt_act"),
         ]
         ordering = ("event", "number", "typ")
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "typ", "deleted"],
                 name="unique_prologue_with_optional",
@@ -672,10 +697,13 @@ class Prologue(Writing):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"P{self.number} {self.name} ({self.typ})"
 
 
 class HandoutTemplate(BaseModel):
+    """Represents HandoutTemplate model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150)
@@ -685,7 +713,7 @@ class HandoutTemplate(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="handout_templates")
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_ht_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -695,6 +723,7 @@ class HandoutTemplate(BaseModel):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"HT{self.number} {self.name}"
 
     def download_template(self) -> HttpResponse:
@@ -704,16 +733,18 @@ class HandoutTemplate(BaseModel):
 
 
 class Handout(Writing):
+    """Represents Handout model."""
+
     template = models.ForeignKey(HandoutTemplate, on_delete=models.CASCADE, related_name="handouts", null=True)
 
     cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="hand_evt_act"),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_handout_with_optional",
@@ -726,6 +757,7 @@ class Handout(Writing):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"H{self.number} {self.name}"
 
     def get_filepath(self, run: Run) -> str:
@@ -739,14 +771,16 @@ class Handout(Writing):
 
         """
         # Build handouts directory path within event media
-        handouts_directory = os.path.join(run.event.get_media_filepath(), "handouts")
+        handouts_directory = str(Path(run.event.get_media_filepath()) / "handouts")
         Path(handouts_directory).mkdir(parents=True, exist_ok=True)
 
         # Generate PDF filename using handout number
-        return os.path.join(handouts_directory, f"H{self.number}.pdf")
+        return str(Path(handouts_directory) / f"H{self.number}.pdf")
 
 
 class TextVersionChoices(models.TextChoices):
+    """Choices for TextVersionChoices."""
+
     PLOT = "p", "Plot"
     CHARACTER = "c", "Character"
     FACTION = "h", "Faction"
@@ -762,6 +796,8 @@ class TextVersionChoices(models.TextChoices):
 
 
 class TextVersion(BaseModel):
+    """Represents TextVersion model."""
+
     tp = models.CharField(max_length=1, choices=TextVersionChoices.choices)
 
     eid = models.IntegerField()
@@ -775,10 +811,13 @@ class TextVersion(BaseModel):
     dl = models.BooleanField(default=False)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.tp} {self.eid} {self.version}"
 
 
 class SpeedLarp(Writing):
+    """Represents SpeedLarp model."""
+
     typ = models.IntegerField()
 
     station = models.IntegerField()
@@ -797,10 +836,11 @@ class SpeedLarp(Writing):
         return js
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"S{self.number} {self.name} ({self.typ} - {self.station})"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="speed_evt_act"),
         ]
@@ -926,6 +966,8 @@ def replace_character_names(instance: Any) -> None:
 
 
 class Relationship(BaseModel):
+    """Represents Relationship model."""
+
     source = models.ForeignKey(Character, related_name="source", on_delete=models.CASCADE)
 
     target = models.ForeignKey(Character, related_name="target", on_delete=models.CASCADE)
@@ -933,10 +975,11 @@ class Relationship(BaseModel):
     text = HTMLField()
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.source} {self.target}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["source", "target", "deleted"],
                 name="unique_relationship_with_optional",
@@ -947,7 +990,7 @@ class Relationship(BaseModel):
                 name="unique_relationship_without_optional",
             ),
         ]
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["source"], condition=Q(deleted__isnull=True), name="rel_src_act"),
             models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="rel_tgt_act"),
             models.Index(fields=["source", "target"], condition=Q(deleted__isnull=True), name="rel_src_tgt_act"),

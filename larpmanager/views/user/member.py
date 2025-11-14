@@ -20,7 +20,6 @@
 
 import logging
 import math
-import os
 import random
 from datetime import date
 from pathlib import Path
@@ -32,6 +31,7 @@ from django.contrib import messages
 from django.contrib.auth import login, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, update_last_login
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
@@ -299,7 +299,7 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
         return JsonResponse({"res": "ko"})
 
     # Build full filesystem path and open image
-    path = os.path.join(conf_settings.MEDIA_ROOT, path)
+    path = str(Path(conf_settings.MEDIA_ROOT) / path)
     im = Image.open(path)
 
     # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
@@ -503,7 +503,7 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def public(request: HttpRequest, member_id: int) -> HttpResponse:
+def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -539,7 +539,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
         for badge in (
             context["member_public"].badges.filter(association_id=context["association_id"]).order_by("number")
         ):
-            context["badges"].append(badge.show(request.LANGUAGE_CODE))
+            context["badges"].append(badge.show())
 
     # Add LARP history if enabled in association configuration
     association_id = context["association_id"]
@@ -575,7 +575,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
         try:
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
-        except Exception as e:
+        except ValidationError as e:
             logger.debug("Social contact validation failed for member=%s: %s", member_id, e)
 
     return render(request, "larpmanager/member/public.html", context)
@@ -669,7 +669,7 @@ def badges(request: HttpRequest) -> HttpResponse:
 
     # Fetch and add badges to context, ordered by number
     for badge in Badge.objects.filter(association_id=context["association_id"]).order_by("number"):
-        context["badges"].append(badge.show(request.LANGUAGE_CODE))
+        context["badges"].append(badge.show())
 
     # Set page identifier and render template
     context["page"] = "badges"
@@ -844,7 +844,7 @@ def vote(request: HttpRequest) -> HttpResponse:
         try:
             idx = int(mb)
             context["candidates"].append(Member.objects.get(pk=idx))
-        except Exception as e:
+        except (ValueError, Member.DoesNotExist) as e:  # noqa: PERF203 - Need per-item error handling to skip invalid candidates
             # Skip invalid candidate IDs
             logger.debug("Invalid candidate ID or member not found: %s: %s", mb, e)
 

@@ -624,6 +624,39 @@ class BaseRegistrationForm(MyFormRun):
 
         return display_name, is_valid
 
+    def _validate_multiple_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
+        """Validate multiple choice question selections.
+
+        Args:
+            form_data: Form data dictionary
+            question: Question to validate
+            field_key: Form field key for this question
+        """
+        for sel in form_data[field_key]:
+            # Skip empty selections
+            if not sel:
+                continue
+
+            # Check if selected option is unavailable
+            if question.id in self.unavail and int(sel) in self.unavail[question.id]:
+                self.add_error(field_key, _("Option no longer available"))
+
+    def _validate_single_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
+        """Validate single choice question selection.
+
+        Args:
+            form_data: Form data dictionary
+            question: Question to validate
+            field_key: Form field key for this question
+        """
+        # Skip empty selections
+        if not form_data[field_key]:
+            return
+
+        # Check if selected option is unavailable
+        if question.id in self.unavail and int(form_data[field_key]) in self.unavail[question.id]:
+            self.add_error(field_key, _("Option no longer available"))
+
     def clean(self) -> dict:
         """Validate form data and check registration constraints.
 
@@ -652,24 +685,11 @@ class BaseRegistrationForm(MyFormRun):
 
                 # Handle multiple choice questions
                 if q.typ == BaseQuestionType.MULTIPLE:
-                    for sel in form_data[k]:
-                        # Skip empty selections
-                        if not sel:
-                            continue
-
-                        # Check if selected option is unavailable
-                        if q.id in self.unavail and int(sel) in self.unavail[q.id]:
-                            self.add_error(k, _("Option no longer available"))
+                    self._validate_multiple_choice(form_data, q, k)
 
                 # Handle single choice questions
                 elif q.typ == BaseQuestionType.SINGLE:
-                    # Skip empty selections
-                    if not form_data[k]:
-                        continue
-
-                    # Check if selected option is unavailable
-                    if q.id in self.unavail and int(form_data[k]) in self.unavail[q.id]:
-                        self.add_error(k, _("Option no longer available"))
+                    self._validate_single_choice(form_data, q, k)
 
         return form_data
 
@@ -1369,9 +1389,7 @@ class BaseAccForm(forms.Form):
 
         # Build choices list from available payment methods
         self.methods = self.context["methods"]
-        cho = []
-        for s in self.methods:
-            cho.append((s, self.methods[s]["name"]))
+        cho = [(s, self.methods[s]["name"]) for s in self.methods]
         self.fields["method"] = forms.ChoiceField(choices=cho)
 
         # Load payment fees configuration for the association

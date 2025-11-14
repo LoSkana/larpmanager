@@ -91,7 +91,7 @@ def prepare_association_skin_features(instance: Association) -> None:
         return
 
     # Mark instance for skin feature updates
-    instance._update_skin_features = True
+    instance._update_skin_features = True  # noqa: SLF001  # Internal flag for skin feature updates
 
     # Apply skin defaults only to empty/unset fields
     # Set default nationality if not already specified

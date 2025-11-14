@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -49,6 +49,8 @@ def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
 
 
 class LarpManagerCheck(forms.Form):
+    """Represents LarpManagerCheck model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure CAPTCHA if needed."""
         # Extract request from kwargs for CAPTCHA configuration
@@ -58,6 +60,8 @@ class LarpManagerCheck(forms.Form):
 
 
 class LarpManagerContact(LarpManagerCheck):
+    """Represents LarpManagerContact model."""
+
     email = forms.EmailField(required=True, label="", widget=forms.EmailInput(attrs={"placeholder": "Email"}))
 
     content = forms.CharField(
@@ -87,10 +91,12 @@ class LarpManagerContact(LarpManagerCheck):
 
 
 class LarpManagerTicketForm(MyForm):
+    """Form for LarpManagerTicket."""
+
     class Meta:
         model = LarpManagerTicket
         fields = ("email", "content", "screenshot")
-        widgets = {"content": Textarea(attrs={"rows": 5})}
+        widgets: ClassVar[dict] = {"content": Textarea(attrs={"rows": 5})}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and setup captcha for unauthenticated users."""

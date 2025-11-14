@@ -54,7 +54,7 @@ from larpmanager.utils.exceptions import (
 from larpmanager.utils.registration import check_signup, registration_status
 
 
-def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
+def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks
     """Build context with commonly used elements.
 
     Constructs a comprehensive context dictionary containing user information,

@@ -21,9 +21,8 @@ from __future__ import annotations
 
 import inspect
 import logging
-import os
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
@@ -56,6 +55,8 @@ logger = logging.getLogger(__name__)
 
 
 class Event(BaseModel):
+    """Represents Event model."""
+
     slug = models.CharField(
         max_length=30,
         validators=[AlphanumericValidator],
@@ -226,7 +227,7 @@ class Event(BaseModel):
     template = models.BooleanField(default=False)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_event_with_optional"),
             UniqueConstraint(
                 fields=["slug"],
@@ -294,11 +295,14 @@ class Event(BaseModel):
         ]
 
         # Check if inheritance conditions are met
-        if self.parent and model_class in inheritable_elements:
-            # Verify that campaign independence is not enabled for this element type
-            # If independence is disabled (False), use parent's elements
-            if not self.get_config(f"campaign_{model_class}_indep", default_value=False):
-                return self.parent
+        # Verify that campaign independence is not enabled for this element type
+        # If independence is disabled (False), use parent's elements
+        if (
+            self.parent
+            and model_class in inheritable_elements
+            and not self.get_config(f"campaign_{model_class}_indep", default_value=False)
+        ):
+            return self.parent
 
         # Return self if no parent exists, element not inheritable, or independence enabled
         return self
@@ -308,7 +312,7 @@ class Event(BaseModel):
         try:
             # noinspection PyUnresolvedReferences
             return self.cover_thumb.url
-        except Exception as e:
+        except (ValueError, AttributeError) as e:
             # Log error and return None if cover_thumb is not available
             logger.debug("Cover thumbnail not available for event %s: %s", self.id, e)
             return None
@@ -386,7 +390,7 @@ class Event(BaseModel):
     def get_media_filepath(self) -> str:
         """Get the media directory path for this object's PDFs, creating it if needed."""
         # Build path to PDF directory using object slug
-        pdf_directory_path = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
+        pdf_directory_path = str(Path(conf_settings.MEDIA_ROOT) / f"pdf/{self.slug}/")
         # Ensure directory exists
         Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
         return pdf_directory_path
@@ -397,6 +401,8 @@ class Event(BaseModel):
 
 
 class EventConfig(BaseModel):
+    """Django app configuration for Event."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
@@ -408,10 +414,10 @@ class EventConfig(BaseModel):
         return f"{self.event} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "name", "deleted"],
                 name="unique_event_config_with_optional",
@@ -425,6 +431,8 @@ class EventConfig(BaseModel):
 
 
 class BaseConceptModel(BaseModel):
+    """Represents BaseConceptModel model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150, blank=False)
@@ -433,7 +441,7 @@ class BaseConceptModel(BaseModel):
 
     class Meta:
         abstract = True
-        ordering = ["event", "number"]
+        ordering: ClassVar[list] = ["event", "number"]
 
     def get_name(self) -> str:
         """Get the name attribute."""
@@ -445,13 +453,15 @@ class BaseConceptModel(BaseModel):
 
 
 class EventButton(BaseConceptModel):
+    """Represents EventButton model."""
+
     tooltip = models.CharField(max_length=200)
 
     link = models.URLField(max_length=150)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_event_button_with_optional",
@@ -465,6 +475,8 @@ class EventButton(BaseConceptModel):
 
 
 class EventTextType(models.TextChoices):
+    """Represents EventTextType model."""
+
     INTRO = "i", _("Character sheet intro")
     TOC = "t", _("Terms and conditions")
     REGISTER = "r", _("Registration form")
@@ -478,6 +490,8 @@ class EventTextType(models.TextChoices):
 
 
 class EventText(BaseModel):
+    """Represents EventText model."""
+
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
@@ -498,7 +512,7 @@ class EventText(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="texts")
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "typ", "language", "deleted"],
                 name="unique_event_text_with_optional",
@@ -512,11 +526,13 @@ class EventText(BaseModel):
 
 
 class ProgressStep(BaseConceptModel):
+    """Represents ProgressStep model."""
+
     order = models.IntegerField(default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_ProgressStep_with_optional",
@@ -534,6 +550,8 @@ class ProgressStep(BaseConceptModel):
 
 
 class DevelopStatus(models.TextChoices):
+    """Represents DevelopStatus model."""
+
     START = "0", _("Hidden")
     SHOW = "1", _("Visible")
     CANC = "8", _("Cancelled")
@@ -541,6 +559,8 @@ class DevelopStatus(models.TextChoices):
 
 
 class Run(BaseModel):
+    """Represents Run model."""
+
     search = models.CharField(max_length=150, editable=False)
 
     development = models.CharField(
@@ -583,11 +603,11 @@ class Run(BaseModel):
     plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["id", "deleted"]),
             models.Index(fields=["event", "deleted"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_run_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -663,7 +683,7 @@ class Run(BaseModel):
         """
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
-        run_media_path = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
+        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}/")
 
         # Ensure directory exists
         Path(run_media_path).mkdir(parents=True, exist_ok=True)
@@ -684,6 +704,8 @@ class Run(BaseModel):
 
 
 class RunConfig(BaseModel):
+    """Django app configuration for Run."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
@@ -695,10 +717,10 @@ class RunConfig(BaseModel):
         return f"{self.run} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["run", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["run", "name", "deleted"],
                 name="unique_run_config_with_optional",
@@ -712,6 +734,8 @@ class RunConfig(BaseModel):
 
 
 class PreRegistration(BaseModel):
+    """Represents PreRegistration model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="pre_registrations")
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="pre_registrations")
@@ -725,7 +749,7 @@ class PreRegistration(BaseModel):
         return f"{self.event} {self.member}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "member", "deleted"],
                 name="unique_prereg_with_optional",

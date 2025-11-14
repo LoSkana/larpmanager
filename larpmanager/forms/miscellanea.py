@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.forms import Textarea
@@ -66,6 +66,8 @@ PAY_CHOICES = (
 
 
 class SendMailForm(forms.Form):
+    """Form for SendMail."""
+
     players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
     subject = forms.CharField()
     body = forms.CharField(widget=TinyMCE(attrs={"rows": 30}))
@@ -105,6 +107,8 @@ class SendMailForm(forms.Form):
 
 
 class UtilForm(MyForm):
+    """Form for Util."""
+
     class Meta:
         model = Util
         fields = ("name", "util", "cod", "event")
@@ -118,11 +122,13 @@ class UtilForm(MyForm):
 
 
 class HelpQuestionForm(MyForm):
+    """Form for HelpQuestion."""
+
     class Meta:
         model = HelpQuestion
         fields = ("text", "attachment", "run")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "text": Textarea(attrs={"rows": 5}),
         }
 
@@ -137,6 +143,8 @@ class HelpQuestionForm(MyForm):
 
 
 class OrgaHelpQuestionForm(MyForm):
+    """Form for OrgaHelpQuestion."""
+
     page_info = _("Manage participant questions")
 
     page_title = _("Participant questions")
@@ -145,18 +153,22 @@ class OrgaHelpQuestionForm(MyForm):
         model = HelpQuestion
         fields = ("text", "attachment")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "text": Textarea(attrs={"rows": 5}),
         }
 
 
 class WorkshopModuleForm(MyForm):
+    """Form for WorkshopModule."""
+
     class Meta:
         model = WorkshopModule
         exclude = ("members", "number")
 
 
 class WorkshopQuestionForm(MyForm):
+    """Form for WorkshopQuestion."""
+
     class Meta:
         model = WorkshopQuestion
         exclude = ("number",)
@@ -171,6 +183,8 @@ class WorkshopQuestionForm(MyForm):
 
 
 class WorkshopOptionForm(MyForm):
+    """Form for WorkshopOption."""
+
     class Meta:
         model = WorkshopOption
         exclude = ("number",)
@@ -185,6 +199,8 @@ class WorkshopOptionForm(MyForm):
 
 
 class OrgaAlbumForm(MyForm):
+    """Form for OrgaAlbum."""
+
     page_info = _("Manage albums")
 
     page_title = _("Album")
@@ -204,6 +220,8 @@ class OrgaAlbumForm(MyForm):
 
 
 class OrgaProblemForm(MyForm):
+    """Form for OrgaProblem."""
+
     page_info = _("Manage reported problems")
 
     page_title = _("Problems")
@@ -212,7 +230,7 @@ class OrgaProblemForm(MyForm):
         model = Problem
         exclude = ("number",)
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "where": Textarea(attrs={"rows": 3}),
             "when": Textarea(attrs={"rows": 3}),
             "what": Textarea(attrs={"rows": 3}),
@@ -222,10 +240,14 @@ class OrgaProblemForm(MyForm):
 
 
 class UploadAlbumsForm(forms.Form):
+    """Form for UploadAlbums."""
+
     file = forms.FileField(validators=[FileTypeValidator(allowed_types=["application/zip"])])
 
 
 class CompetencesForm(forms.Form):
+    """Form for Competences."""
+
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
         """Initialize form with dynamic fields for each element in the provided list.
 
@@ -252,6 +274,8 @@ class CompetencesForm(forms.Form):
 
 
 class ExeUrlShortnerForm(MyForm):
+    """Form for ExeUrlShortner."""
+
     page_info = _("Manage URL shorteners")
 
     page_title = _("Shorten URL")
@@ -281,18 +305,22 @@ def _delete_optionals_warehouse(warehouse_form: MyForm) -> None:
 
 
 class ExeCompetenceForm(MyForm):
+    """Form for ExeCompetence."""
+
     page_info = _("Manage competencies")
 
     class Meta:
         model = Competence
         exclude = ("number", "members")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "descr": Textarea(attrs={"rows": 5}),
         }
 
 
 class OrganizerCastingOptionsForm(forms.Form):
+    """Form for OrganizerCastingOptions."""
+
     pays = forms.MultipleChoiceField(
         choices=PAY_CHOICES,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
@@ -383,11 +411,13 @@ class OrganizerCastingOptionsForm(forms.Form):
 
 
 class ShuttleServiceForm(MyForm):
+    """Form for ShuttleService."""
+
     class Meta:
         model = ShuttleService
         exclude = ("member", "working", "notes", "status")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "date": DatePickerInput,
             "time": TimePickerInput,
         }
@@ -406,11 +436,13 @@ class ShuttleServiceForm(MyForm):
 
 
 class ShuttleServiceEditForm(ShuttleServiceForm):
+    """Form for ShuttleServiceEdit."""
+
     class Meta:
         model = ShuttleService
         fields = "__all__"
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "date": DatePickerInput,
             "time": TimePickerInput,
             "working": AssociationMemberS2Widget,
@@ -429,6 +461,8 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
 
 
 class OrgaCopyForm(forms.Form):
+    """Form for OrgaCopy."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize organizer copy form with source event choices.
 
@@ -513,6 +547,8 @@ def unique_util_cod() -> str:
 
 
 class OneTimeContentForm(MyForm):
+    """Form for OneTimeContent."""
+
     page_info = _("Manage content that should be accessed only one time with a specific token")
 
     page_title = _("One-time content")
@@ -521,12 +557,14 @@ class OneTimeContentForm(MyForm):
         model = OneTimeContent
         fields = ("name", "description", "file", "active", "event")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 3}),
         }
 
 
 class OneTimeAccessTokenForm(MyForm):
+    """Form for OneTimeAccessToken."""
+
     page_info = _("Manage tokens to access the one-time content")
 
     page_title = _("One-time token")
@@ -535,6 +573,6 @@ class OneTimeAccessTokenForm(MyForm):
         model = OneTimeAccessToken
         fields = ("note", "content")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "note": Textarea(attrs={"rows": 2}),
         }

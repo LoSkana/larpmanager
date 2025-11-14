@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import ast
 import json
-import os
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -395,14 +394,17 @@ def _update_character(context: dict, character: Character, form: Form, message: 
         character.player = context["member"]
 
     # Check if character approval is enabled for this event
-    if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
-        # Update status to proposed if character is in creation/review and user clicked propose
-        if character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
-            character.status = CharacterStatus.PROPOSED
-            message = _(
-                "The character has been proposed to the staff, who will examine it and approve it "
-                "or request changes if necessary.",
-            )
+    # Update status to proposed if character is in creation/review and user clicked propose
+    if (
+        get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context)
+        and character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]
+        and form.cleaned_data["propose"]
+    ):
+        character.status = CharacterStatus.PROPOSED
+        message = _(
+            "The character has been proposed to the staff, who will examine it and approve it "
+            "or request changes if necessary.",
+        )
 
     return message
 
@@ -540,7 +542,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
         return JsonResponse({"res": "ko"})
 
     # Open and rotate the image based on direction parameter
-    path = os.path.join(conf_settings.MEDIA_ROOT, path)
+    path = str(Path(conf_settings.MEDIA_ROOT) / path)
     im = Image.open(path)
     out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 

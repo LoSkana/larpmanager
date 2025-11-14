@@ -21,6 +21,7 @@ import logging
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import get_language
 
 from larpmanager.models.association import AssociationText
@@ -49,7 +50,7 @@ def update_association_text(association_id: int, typ: str, lang: str) -> str:
     try:
         # Retrieve association text from database
         text_content = AssociationText.objects.get(association_id=association_id, typ=typ, language=lang).text
-    except Exception as e:
+    except (ObjectDoesNotExist, AttributeError) as e:
         # Return empty string if text not found
         logger.debug("Association text not found for %s, %s, %s: %s", association_id, typ, lang, e)
 
@@ -102,7 +103,7 @@ def update_association_text_def(association_id: int, text_type: str) -> str:
         default_text = (
             AssociationText.objects.filter(association_id=association_id, typ=text_type, default=True).first().text
         )
-    except Exception as e:
+    except (ObjectDoesNotExist, AttributeError) as e:
         logger.debug("Default association text not found for %s, %s: %s", association_id, text_type, e)
 
     # Cache the result for one day
