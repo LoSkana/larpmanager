@@ -13,7 +13,7 @@ extend_exclude="static/,larpmanager/static/"
 
 [tool.ruff]
 line-length = 120
-extend-exclude = ["main", "*/migrations/*", "*/tests/*", "*/scripts/*"]
+extend-exclude = ["main", "*/migrations/*", "*/tests/*", "scripts/*", "manage.py"]
 
 [tool.ruff.format]
 quote-style = "double"

@@ -20,8 +20,11 @@
 
 """Base accounting utilities and payment gateway integration."""
 
+from __future__ import annotations
+
 import json
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from cryptography.fernet import Fernet, InvalidToken
 
@@ -33,11 +36,13 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     Collection,
 )
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event
-from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_payment_details_path
 from larpmanager.utils.tasks import notify_admins
+
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
+    from larpmanager.models.event import Event
+    from larpmanager.models.registration import Registration
 
 
 def is_reg_provisional(
@@ -75,10 +80,7 @@ def is_reg_provisional(
 
     # Check if payment feature is enabled and registration has outstanding balance
     # Registration is provisional if it has a positive total price but zero or negative payment
-    if "payment" in features and instance.tot_iscr > 0 >= instance.tot_payed:
-        return True
-
-    return False
+    return bool("payment" in features and instance.tot_iscr > 0 >= instance.tot_payed)
 
 
 def get_payment_details(association: Association) -> dict:
