@@ -126,7 +126,7 @@ def casting_quest_traits(context: dict, typ: str) -> None:
         # Collect traits for this quest that aren't already assigned
         for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
             # Skip traits that are already assigned to the current run
-            if AssignmentTrait.objects.filter(trait=trait, run=context["run"]).count() > 0:
+            if AssignmentTrait.objects.filter(trait=trait, run=context["run"]).exists():
                 continue
             available_traits[trait.id] = trait.show()
             total_traits += 1
@@ -589,7 +589,7 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
         # Process each visible trait within the current quest
         for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
             # Skip traits that already have assignments (unless in staff context)
-            if "staff" not in context and AssignmentTrait.objects.filter(trait=trait, run=context["run"]).count() > 0:
+            if "staff" not in context and AssignmentTrait.objects.filter(trait=trait, run=context["run"]).exists():
                 continue
 
             # Build trait preference data structure
