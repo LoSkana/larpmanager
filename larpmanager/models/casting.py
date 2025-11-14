@@ -17,11 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
-from typing import ClassVar
+from __future__ import annotations
 
 import logging
 import re
+from typing import ClassVar
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -75,7 +75,7 @@ class Quest(Writing):
         ]
 
     def __str__(self) -> str:
-        """Rappresentazione testuale con numero e nome della domanda."""
+        """Text version of quest."""
         return f"Q{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:

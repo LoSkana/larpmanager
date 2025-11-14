@@ -1006,12 +1006,12 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build discounts list with visibility filtering
     context["disc"] = []
     for discount in context["run"].discounts.exclude(visible=False):
-        context["disc"].append(discount.show(context["run"]))
+        context["disc"].append(discount.show())
 
     # Build tickets list with availability and usage data
     context["tickets"] = []
     for ticket in RegistrationTicket.objects.filter(event=context["event"], max_available__gt=0, visible=True):
-        dt = ticket.show(context["run"])
+        dt = ticket.show()
         key = f"tk_{ticket.id}"
         # Add usage count if available in registration counts
         if key in counts:
@@ -1022,7 +1022,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["opts"] = []
     que = RegistrationOption.objects.filter(question__event=context["event"], max_available__gt=0)
     for option in que:
-        dt = option.show(context["run"])
+        dt = option.show()
         key = f"option_{option.id}"
         # Add usage count if available in registration counts
         if key in counts:
