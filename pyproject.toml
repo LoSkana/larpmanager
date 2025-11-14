@@ -25,9 +25,7 @@ ignore = [
 	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
 	"E501", # Line too long, ignored to use ruff formatter
 	"D100", # Missing docstring in public module
-	"D101", # Missing docstring in public class, to be removed later,
 	"D104", # Missing docstring in public package
-	"D105", # Missing docstring in magic method
 	"D106", # Missing docstring in public nested class, would be useless on Meta
     "ANN401",  # Dynamically typed expressions (Any) are disallowed
     "COM812",  # Trailing comma missing (conflicts with formatter)

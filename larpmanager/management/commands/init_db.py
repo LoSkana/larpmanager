@@ -29,6 +29,8 @@ from larpmanager.models.base import Feature
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Init DB"
 
     def handle(self, *args: tuple, **options: dict) -> None:  # noqa: ARG002

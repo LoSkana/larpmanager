@@ -105,6 +105,8 @@ def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[int], in
 
 
 class Operations:
+    """Operations constants."""
+
     MOVE_ITEM_BOX = 1
     ADD_ITEM_TAG = 2
     DEL_ITEM_TAG = 3

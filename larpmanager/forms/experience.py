@@ -34,6 +34,8 @@ from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
 class PxBaseForm(MyForm):
+    """Form for PxBase."""
+
     class Meta:
         abstract = True
 
@@ -49,6 +51,8 @@ class PxBaseForm(MyForm):
 
 
 class OrgaDeliveryPxForm(PxBaseForm):
+    """Form for OrgaDeliveryPx."""
+
     load_js: ClassVar[list] = ["characters-choices"]
 
     page_title = _("Delivery")
@@ -63,6 +67,8 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
 
 class OrgaAbilityPxForm(PxBaseForm):
+    """Form for OrgaAbilityPx."""
+
     load_js: ClassVar[list] = ["characters-choices"]
 
     page_title = _("Ability")
@@ -102,6 +108,8 @@ class OrgaAbilityPxForm(PxBaseForm):
 
 
 class OrgaAbilityTypePxForm(MyForm):
+    """Form for OrgaAbilityTypePx."""
+
     page_title = _("Ability type")
 
     page_info = _("Manage experience point ability types")
@@ -112,6 +120,8 @@ class OrgaAbilityTypePxForm(MyForm):
 
 
 class OrgaRulePxForm(MyForm):
+    """Form for OrgaRulePx."""
+
     page_title = _("Rule")
 
     page_info = _("Manage rules for computed fields")
@@ -135,6 +145,8 @@ class OrgaRulePxForm(MyForm):
 
 
 class OrgaModifierPxForm(MyForm):
+    """Form for OrgaModifierPx."""
+
     page_title = _("Rule")
 
     page_info = _(
@@ -162,6 +174,8 @@ class OrgaModifierPxForm(MyForm):
 
 
 class SelectNewAbility(forms.Form):
+    """Represents SelectNewAbility model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with dynamic choice field from context."""
         # Extract context parameters from kwargs

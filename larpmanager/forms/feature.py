@@ -36,6 +36,8 @@ if TYPE_CHECKING:
 
 
 class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
+    """Represents FeatureCheckboxWidget model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with optional feature help text."""
         # Extract and store feature help text from kwargs
@@ -108,6 +110,8 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class FeatureForm(MyForm):
+    """Form for Feature."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set cancellation prevention flag."""
         super().__init__(*args, **kwargs)
@@ -185,6 +189,8 @@ class FeatureForm(MyForm):
 
 
 class QuickSetupForm(MyForm):
+    """Form for QuickSetup."""
+
     setup: ClassVar[dict] = {}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

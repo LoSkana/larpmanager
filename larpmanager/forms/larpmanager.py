@@ -49,6 +49,8 @@ def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
 
 
 class LarpManagerCheck(forms.Form):
+    """Represents LarpManagerCheck model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure CAPTCHA if needed."""
         # Extract request from kwargs for CAPTCHA configuration
@@ -58,6 +60,8 @@ class LarpManagerCheck(forms.Form):
 
 
 class LarpManagerContact(LarpManagerCheck):
+    """Represents LarpManagerContact model."""
+
     email = forms.EmailField(required=True, label="", widget=forms.EmailInput(attrs={"placeholder": "Email"}))
 
     content = forms.CharField(
@@ -87,6 +91,8 @@ class LarpManagerContact(LarpManagerCheck):
 
 
 class LarpManagerTicketForm(MyForm):
+    """Form for LarpManagerTicket."""
+
     class Meta:
         model = LarpManagerTicket
         fields = ("email", "content", "screenshot")

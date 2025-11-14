@@ -30,6 +30,8 @@ logger = logging.getLogger(__name__)
 
 
 class ProfilerMiddleware:
+    """Middleware for Profiler."""
+
     threshold = 0.5
 
     def __init__(self, get_response: Callable) -> None:

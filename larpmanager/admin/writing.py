@@ -40,6 +40,8 @@ from larpmanager.models.writing import (
 
 @admin.register(TextVersion)
 class TextVersionAdmin(DefModelAdmin):
+    """Admin interface for TextVersion model."""
+
     list_display = ("id", "tp", "eid", "version", "dl")
     list_filter: ClassVar[tuple] = ("tp",)
     search_fields = ("eid",)
@@ -48,6 +50,8 @@ class TextVersionAdmin(DefModelAdmin):
 
 @admin.register(Plot)
 class PlotAdmin(DefModelAdmin):
+    """Admin interface for Plot model."""
+
     list_display: ClassVar[tuple] = ("id", "name", "event")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
@@ -56,6 +60,8 @@ class PlotAdmin(DefModelAdmin):
 
 @admin.register(PlotCharacterRel)
 class PlotCharacterRelAdmin(DefModelAdmin):
+    """Admin interface for PlotCharacterRel model."""
+
     list_display: ClassVar[tuple] = ("plot", "character")
     list_filter = (CharacterFilter, PlotFilter)
     autocomplete_fields: ClassVar[list] = ["plot", "character"]
@@ -63,6 +69,8 @@ class PlotCharacterRelAdmin(DefModelAdmin):
 
 @admin.register(Faction)
 class FactionAdmin(DefModelAdmin):
+    """Admin interface for Faction model."""
+
     list_display: ClassVar[tuple] = ("name", "event", "number")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
@@ -71,6 +79,8 @@ class FactionAdmin(DefModelAdmin):
 
 @admin.register(Trait)
 class TraitAdmin(DefModelAdmin):
+    """Admin interface for Trait model."""
+
     list_display = ("number", "name", "event", "quest")
     list_filter: ClassVar[tuple] = (EventFilter,)
     search_fields = ("name",)
@@ -79,6 +89,8 @@ class TraitAdmin(DefModelAdmin):
 
 @admin.register(Handout)
 class HandoutAdmin(DefModelAdmin):
+    """Admin interface for Handout model."""
+
     list_display: ClassVar[tuple] = ("event", "name", "number")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
@@ -86,6 +98,8 @@ class HandoutAdmin(DefModelAdmin):
 
 @admin.register(HandoutTemplate)
 class HandoutTemplateAdmin(DefModelAdmin):
+    """Admin interface for HandoutTemplate model."""
+
     list_display: ClassVar[tuple] = ("event", "name", "number")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event"]
@@ -93,6 +107,8 @@ class HandoutTemplateAdmin(DefModelAdmin):
 
 @admin.register(Prologue)
 class PrologueAdmin(DefModelAdmin):
+    """Admin interface for Prologue model."""
+
     list_display: ClassVar[tuple] = ("number", "typ", "event")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["typ", "characters", "event", "progress", "assigned"]
@@ -100,6 +116,8 @@ class PrologueAdmin(DefModelAdmin):
 
 @admin.register(PrologueType)
 class PrologueTypeAdmin(DefModelAdmin):
+    """Admin interface for PrologueType model."""
+
     list_display: ClassVar[tuple] = ("name", "event")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
@@ -108,6 +126,8 @@ class PrologueTypeAdmin(DefModelAdmin):
 
 @admin.register(AssignmentTrait)
 class AssignmentTraitAdmin(DefModelAdmin):
+    """Admin interface for AssignmentTrait model."""
+
     list_display = ("run", "member", "trait", "typ")
     list_filter = (RunFilter, MemberFilter, TraitFilter)
     autocomplete_fields = ("run", "member", "trait")
@@ -115,5 +135,7 @@ class AssignmentTraitAdmin(DefModelAdmin):
 
 @admin.register(SpeedLarp)
 class SpeedLarpAdmin(DefModelAdmin):
+    """Admin interface for SpeedLarp model."""
+
     list_display = ("name", "event", "typ", "station")
     autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]

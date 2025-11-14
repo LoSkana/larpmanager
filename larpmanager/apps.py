@@ -22,6 +22,8 @@ from django.apps import AppConfig
 
 
 class LarpManagerConfig(AppConfig):
+    """Django app configuration for LarpManager."""
+
     name = "larpmanager"
 
     # Import signals

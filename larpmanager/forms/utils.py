@@ -325,6 +325,8 @@ def save_permissions_role(instance: EventRole | AssociationRole, form: Form) -> 
 
 
 class EventS2Widget(s2forms.ModelSelect2Widget):
+    """Represents EventS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
     ]
@@ -350,6 +352,8 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
 
 
 class CampaignS2Widget(s2forms.ModelSelect2Widget):
+    """Represents CampaignS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
     ]
@@ -379,6 +383,8 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
 
 
 class TemplateS2Widget(s2forms.ModelSelect2Widget):
+    """Represents TemplateS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
     ]
@@ -393,6 +399,8 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
 
 
 class AssocMS2:
+    """Represents AssocMS2 model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
@@ -415,14 +423,16 @@ class AssocMS2:
 
 
 class AssociationMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents AssociationMemberS2WidgetMulti model."""
 
 
 class AssociationMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents AssociationMemberS2Widget model."""
 
 
 class RunMemberS2Widget(s2forms.ModelSelect2Widget):
+    """Represents RunMemberS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
@@ -512,6 +522,8 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):
+    """Represents EventRegS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "search__icontains",
     ]
@@ -534,6 +546,8 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
 
 
 class AssocRegS2Widget(s2forms.ModelSelect2Widget):
+    """Represents AssocRegS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "search__icontains",
     ]
@@ -559,6 +573,8 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
 
 
 class RunS2Widget(s2forms.ModelSelect2Widget):
+    """Represents RunS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "search__icontains",
     ]
@@ -573,6 +589,8 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
 
 
 class EventCharacterS2:
+    """Represents EventCharacterS2 model."""
+
     search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
@@ -594,14 +612,16 @@ class EventCharacterS2:
 
 
 class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents EventCharacterS2WidgetMulti model."""
 
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents EventCharacterS2Widget model."""
 
 
 class EventPlotS2:
+    """Represents EventPlotS2 model."""
+
     search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
@@ -618,14 +638,16 @@ class EventPlotS2:
 
 
 class EventPlotS2WidgetMulti(EventPlotS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents EventPlotS2WidgetMulti model."""
 
 
 class EventPlotS2Widget(EventPlotS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents EventPlotS2Widget model."""
 
 
 class EventTraitS2:
+    """Represents EventTraitS2 model."""
+
     search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
@@ -642,14 +664,16 @@ class EventTraitS2:
 
 
 class EventTraitS2WidgetMulti(EventTraitS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents EventTraitS2WidgetMulti model."""
 
 
 class EventTraitS2Widget(EventTraitS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents EventTraitS2Widget model."""
 
 
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+    """Represents EventWritingOptionS2WidgetMulti model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
@@ -665,6 +689,8 @@ class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+    """Represents FactionS2WidgetMulti model."""
+
     search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
@@ -687,6 +713,8 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+    """Represents AbilityS2WidgetMulti model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
     ]
@@ -701,6 +729,8 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+    """Represents TicketS2WidgetMulti model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
     ]
@@ -715,6 +745,8 @@ class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+    """Represents AllowedS2WidgetMulti model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
@@ -736,6 +768,8 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
+    """Represents WarehouseContainerS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
@@ -751,6 +785,8 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
 
 
 class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
+    """Represents WarehouseAreaS2Widget model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
@@ -766,6 +802,8 @@ class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
 
 
 class WarehouseItemS2(s2forms.ModelSelect2Widget):
+    """Represents WarehouseItemS2 model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
@@ -781,14 +819,16 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
 
 
 class WarehouseItemS2WidgetMulti(WarehouseItemS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents WarehouseItemS2WidgetMulti model."""
 
 
 class WarehouseItemS2Widget(WarehouseItemS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents WarehouseItemS2Widget model."""
 
 
 class WarehouseTagS2(s2forms.ModelSelect2Widget):
+    """Represents WarehouseTagS2 model."""
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
@@ -804,11 +844,11 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
 
 
 class WarehouseTagS2WidgetMulti(WarehouseTagS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents WarehouseTagS2WidgetMulti model."""
 
 
 class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents WarehouseTagS2Widget model."""
 
 
 def remove_choice(choices: list[tuple[str, str]], type_to_remove: str) -> list[tuple[str, str]]:
@@ -831,6 +871,8 @@ def remove_choice(choices: list[tuple[str, str]], type_to_remove: str) -> list[t
 
 
 class RedirectForm(forms.Form):
+    """Form for Redirect."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with dynamic slug choices from provided slugs parameter."""
         slugs = self.params = kwargs.pop("slugs")
@@ -859,6 +901,8 @@ def get_members_queryset(association_id: int) -> QuerySet[Member]:
 
 
 class WritingTinyMCE(TinyMCE):
+    """Represents WritingTinyMCE model."""
+
     def __init__(self) -> None:
         """Initialize TinyMCE widget with custom styling for character markers."""
         super().__init__(attrs={"rows": 20, "content_style": ".char-marker { background: yellow !important; }"})

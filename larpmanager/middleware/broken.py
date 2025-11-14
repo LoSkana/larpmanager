@@ -34,6 +34,8 @@ logger = logging.getLogger(__name__)
 
 
 class BrokenLinkEmailsMiddleware:
+    """Middleware for BrokenLinkEmails."""
+
     def __init__(self, get_response: Callable) -> None:
         """Initialize middleware with the response handler."""
         self.get_response = get_response

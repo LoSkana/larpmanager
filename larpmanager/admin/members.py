@@ -31,6 +31,8 @@ from larpmanager.models.member import Badge, Member, MemberConfig, Membership, V
 
 
 class MyUserAdmin(UserAdmin):
+    """Custom admin interface for Django User model."""
+
     list_display = ("username", "is_staff", "email", "is_superuser", "character_link")
     list_filter = ("is_staff", "is_superuser")
     fieldsets = (
@@ -66,6 +68,8 @@ admin.site.register(User, MyUserAdmin)
 
 @admin.register(Member)
 class MemberAdmin(DefModelAdmin):
+    """Admin interface for Member model."""
+
     search_fields = ("search", "name", "surname", "nickname", "language")
     list_display = (
         "display_member",
@@ -100,6 +104,8 @@ class MemberAdmin(DefModelAdmin):
 
 @admin.register(MemberConfig)
 class MemberConfigAdmin(DefModelAdmin):
+    """Admin interface for MemberConfig model."""
+
     list_display = ("member", "name", "value")
     search_fields: ClassVar[tuple] = ("name",)
     list_filter = (MemberFilter,)
@@ -108,6 +114,8 @@ class MemberConfigAdmin(DefModelAdmin):
 
 @admin.register(Membership)
 class MembershipAdmin(DefModelAdmin):
+    """Admin interface for Membership model."""
+
     list_display: ClassVar[tuple] = ("member", "association", "status", "card_number", "date", "created")
     list_filter = (AssociationFilter, MemberFilter)
     autocomplete_fields: ClassVar[list] = ["member", "association"]
@@ -115,6 +123,8 @@ class MembershipAdmin(DefModelAdmin):
 
 @admin.register(VolunteerRegistry)
 class VolunteerRegistryAdmin(DefModelAdmin):
+    """Admin interface for VolunteerRegistry model."""
+
     list_display: ClassVar[tuple] = ("member", "association", "start", "end")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "association"]
@@ -122,6 +132,8 @@ class VolunteerRegistryAdmin(DefModelAdmin):
 
 @admin.register(Vote)
 class VoteAdmin(DefModelAdmin):
+    """Admin interface for Vote model."""
+
     list_display: ClassVar[tuple] = ("member", "association", "year", "number", "candidate")
     list_filter = (MemberFilter, AssociationFilter, "year")
     autocomplete_fields: ClassVar[list] = ["member", "association", "candidate"]
@@ -129,6 +141,8 @@ class VoteAdmin(DefModelAdmin):
 
 @admin.register(Badge)
 class BadgeAdmin(DefModelAdmin):
+    """Admin interface for Badge model."""
+
     list_display: ClassVar[tuple] = ("name", "cod", "descr", "number", "thumb")
     autocomplete_fields: ClassVar[list] = ["members"]
     search_fields: ClassVar[list] = ["name"]

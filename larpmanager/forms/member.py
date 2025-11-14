@@ -369,6 +369,8 @@ MEMBERSHIP_CHOICES = (
 
 
 class ResidenceWidget(forms.MultiWidget):
+    """Represents ResidenceWidget model."""
+
     template_name = "forms/widgets/residence_widget.html"
 
     def __init__(self, attrs: dict[str, Any] | None = None) -> None:
@@ -402,6 +404,8 @@ def validate_no_pipe(value: str) -> None:
 
 
 class ResidenceField(forms.MultiValueField):
+    """Represents ResidenceField model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the field with residence-specific subfields and widget."""
         # Define subfields for country, province, city, postal code, address, and civic number
@@ -458,6 +462,8 @@ class ResidenceField(forms.MultiValueField):
 
 
 class BaseProfileForm(MyForm):
+    """Form for BaseProfile."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize base profile form with field filtering based on association settings.
 
@@ -509,6 +515,8 @@ class BaseProfileForm(MyForm):
 
 
 class ProfileForm(BaseProfileForm):
+    """Form for Profile."""
+
     class Meta:
         model = Member
         fields = (
@@ -662,6 +670,8 @@ class ProfileForm(BaseProfileForm):
 
 
 class MembershipRequestForm(forms.ModelForm):
+    """Form for MembershipRequest."""
+
     class Meta:
         model = Membership
         fields = ("request", "document")
@@ -680,6 +690,8 @@ class MembershipRequestForm(forms.ModelForm):
 
 
 class MembershipConfirmForm(forms.Form):
+    """Form for MembershipConfirm."""
+
     confirm_1 = forms.BooleanField(required=True, initial=False)
     confirm_2 = forms.BooleanField(required=True, initial=False)
     confirm_3 = forms.BooleanField(required=True, initial=False)
@@ -687,6 +699,8 @@ class MembershipConfirmForm(forms.Form):
 
 
 class MembershipResponseForm(forms.Form):
+    """Form for MembershipResponse."""
+
     is_approved = forms.BooleanField(required=False, initial=True)
     response = forms.CharField(
         required=False,
@@ -698,6 +712,8 @@ class MembershipResponseForm(forms.Form):
 
 
 class ExeVolunteerRegistryForm(MyForm):
+    """Form for ExeVolunteerRegistry."""
+
     page_title = _("Volounteer data")
 
     page_info = _("Manage volunteer entries")
@@ -731,10 +747,14 @@ class ExeVolunteerRegistryForm(MyForm):
 
 
 class MembershipForm(BaseAccForm):
+    """Form for Membership."""
+
     amount = forms.DecimalField(min_value=0.01, max_value=1000, decimal_places=2)
 
 
 class ExeMemberForm(BaseProfileForm):
+    """Form for ExeMember."""
+
     page_info = _("Manage member profiles")
 
     class Meta:
@@ -752,6 +772,8 @@ class ExeMemberForm(BaseProfileForm):
 
 
 class ExeMembershipForm(MyForm):
+    """Form for ExeMembership."""
+
     page_info = _("Manage member membership status")
 
     load_templates: ClassVar[list] = ["membership"]
@@ -772,6 +794,8 @@ class ExeMembershipForm(MyForm):
 
 
 class ExeMembershipFeeForm(forms.Form):
+    """Form for ExeMembershipFee."""
+
     page_info = _("Manage membership fee invoice upload")
 
     page_title = _("Upload membership fee")
@@ -827,6 +851,8 @@ class ExeMembershipFeeForm(forms.Form):
 
 
 class ExeMembershipDocumentForm(forms.Form):
+    """Form for ExeMembershipDocument."""
+
     page_info = (
         _("Manage membership document upload")
         + " - "
@@ -910,6 +936,8 @@ class ExeMembershipDocumentForm(forms.Form):
 
 
 class ExeBadgeForm(MyForm):
+    """Form for ExeBadge."""
+
     page_info = _("Manage badges and user assignments")
 
     page_title = _("Badge")
@@ -929,6 +957,8 @@ class ExeBadgeForm(MyForm):
 
 
 class ExeProfileForm(MyForm):
+    """Form for ExeProfile."""
+
     page_title = _("Profile")
 
     page_info = _("Manage profile fields that participants can fill in")

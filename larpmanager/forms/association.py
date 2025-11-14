@@ -290,6 +290,8 @@ class ExeAssociationRoleForm(MyForm):
 
 
 class ExeAppearanceForm(MyCssForm):
+    """Form for ExeAppearance."""
+
     page_title = _("Appearance")
 
     page_info = _("Manage appearance settings and presentation of the organization")
@@ -325,6 +327,8 @@ class ExeAppearanceForm(MyCssForm):
 
 
 class ExeFeatureForm(FeatureForm):
+    """Form for ExeFeature."""
+
     page_title = _("Features")
 
     page_info = _(
@@ -355,6 +359,8 @@ class ExeFeatureForm(FeatureForm):
 
 
 class ExeConfigForm(ConfigForm):
+    """Form for ExeConfig."""
+
     page_title = _("Configuration")
 
     page_info = _("Manage configuration of activated features")
@@ -891,6 +897,8 @@ class FirstAssociationForm(MyForm):
 
 
 class ExeQuickSetupForm(QuickSetupForm):
+    """Form for ExeQuickSetup."""
+
     page_title = _("Quick Setup")
 
     page_info = _("Manage quick setup of the most important settings for your new organization")
@@ -965,6 +973,8 @@ class ExeQuickSetupForm(QuickSetupForm):
 
 
 class ExePreferencesForm(ConfigForm):
+    """Form for ExePreferences."""
+
     page_title = _("Personal preferences")
 
     page_info = _("Manage your personal interface preferences")

@@ -147,6 +147,8 @@ class OrgaTokenForm(MyFormRun):
 
 
 class OrgaCreditForm(MyFormRun):
+    """Form for OrgaCredit."""
+
     page_info = _("Manage credit assignments")
 
     class Meta:
@@ -189,6 +191,8 @@ class OrgaPaymentForm(MyFormRun):
 
 
 class ExeOutflowForm(MyForm):
+    """Form for ExeOutflow."""
+
     page_title = _("Outflows")
 
     page_info = _("Manage expense items incurred")
@@ -222,6 +226,8 @@ class ExeOutflowForm(MyForm):
 
 
 class OrgaOutflowForm(ExeOutflowForm):
+    """Form for OrgaOutflow."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form with auto_run enabled by default."""
         self.auto_run = True
@@ -229,6 +235,8 @@ class OrgaOutflowForm(ExeOutflowForm):
 
 
 class ExeInflowForm(MyForm):
+    """Form for ExeInflow."""
+
     page_title = _("Inflows")
 
     page_info = _("Manage event revenue other than participants' registration fees")
@@ -256,6 +264,8 @@ class ExeInflowForm(MyForm):
 
 
 class OrgaInflowForm(ExeInflowForm):
+    """Form for OrgaInflow."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with automatic run flag enabled."""
         self.auto_run = True
@@ -263,6 +273,8 @@ class OrgaInflowForm(ExeInflowForm):
 
 
 class ExeDonationForm(MyForm):
+    """Form for ExeDonation."""
+
     page_title = _("Donations")
 
     class Meta:
@@ -277,6 +289,8 @@ class ExeDonationForm(MyForm):
 
 
 class ExePaymentForm(MyForm):
+    """Form for ExePayment."""
+
     page_title = _("Payments")
 
     page_info = _("Manage payment items")
@@ -299,6 +313,8 @@ class ExePaymentForm(MyForm):
 
 
 class ExeInvoiceForm(MyForm):
+    """Form for ExeInvoice."""
+
     page_title = _("Invoices")
 
     page_info = _("Manage invoices")
@@ -315,6 +331,8 @@ class ExeInvoiceForm(MyForm):
 
 
 class ExeCreditForm(MyForm):
+    """Form for ExeCredit."""
+
     page_info = _("Manage credit assignments")
 
     class Meta:
@@ -340,6 +358,8 @@ class ExeCreditForm(MyForm):
 
 
 class ExeTokenForm(MyForm):
+    """Form for ExeToken."""
+
     class Meta:
         model = AccountingItemOther
         exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
@@ -364,6 +384,8 @@ class ExeTokenForm(MyForm):
 
 
 class ExeExpenseForm(MyForm):
+    """Form for ExeExpense."""
+
     page_title = _("Expenses")
 
     page_info = _("Manage expense items for contributors")
@@ -388,15 +410,21 @@ class ExeExpenseForm(MyForm):
 
 
 class DonateForm(MembershipForm):
+    """Form for Donate."""
+
     amount = forms.DecimalField(min_value=0.01, max_value=1000, decimal_places=2)
     descr = forms.CharField(max_length=1000, widget=forms.Textarea(attrs={"rows": 2}))
 
 
 class CollectionForm(BaseAccForm):
+    """Form for Collection."""
+
     amount = forms.DecimalField(min_value=0.01, max_value=1000, decimal_places=2)
 
 
 class PaymentForm(BaseAccForm):
+    """Form for Payment."""
+
     amount = forms.DecimalField()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -415,6 +443,8 @@ class PaymentForm(BaseAccForm):
 
 
 class CollectionNewForm(MyForm):
+    """Form for CollectionNew."""
+
     class Meta:
         model = Collection
         fields = ("name",)
@@ -426,6 +456,8 @@ class CollectionNewForm(MyForm):
 
 
 class ExeCollectionForm(CollectionNewForm):
+    """Form for ExeCollection."""
+
     page_title = _("Collections")
 
     class Meta:
@@ -441,6 +473,8 @@ class ExeCollectionForm(CollectionNewForm):
 
 
 class OrgaDiscountForm(MyForm):
+    """Form for OrgaDiscount."""
+
     page_info = _("Manage discounts")
 
     page_title = _("Discount")
@@ -476,6 +510,8 @@ class OrgaDiscountForm(MyForm):
 
 
 class InvoiceSubmitForm(forms.Form):
+    """Form for InvoiceSubmit."""
+
     cod = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
@@ -487,6 +523,8 @@ class InvoiceSubmitForm(forms.Form):
 
 
 class WireInvoiceSubmitForm(InvoiceSubmitForm):
+    """Form for WireInvoiceSubmit."""
+
     # noinspection PyUnresolvedReferences, PyProtectedMember
     invoice = forms.FileField(
         validators=[
@@ -524,6 +562,8 @@ class WireInvoiceSubmitForm(InvoiceSubmitForm):
 
 
 class AnyInvoiceSubmitForm(InvoiceSubmitForm):
+    """Form for AnyInvoiceSubmit."""
+
     text = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 5, "cols": 20}),
         label=_("Info"),
@@ -538,6 +578,8 @@ class AnyInvoiceSubmitForm(InvoiceSubmitForm):
 
 
 class RefundRequestForm(MyForm):
+    """Form for RefundRequest."""
+
     class Meta:
         model = RefundRequest
         fields = ("details", "value")
@@ -559,6 +601,8 @@ class RefundRequestForm(MyForm):
 
 
 class ExeRefundRequestForm(MyForm):
+    """Form for ExeRefundRequest."""
+
     page_title = _("Request refund")
 
     class Meta:
@@ -573,6 +617,8 @@ class ExeRefundRequestForm(MyForm):
 
 
 class ExePaymentSettingsForm(MyForm):
+    """Form for ExePaymentSettings."""
+
     page_title = _("Payment Methods")
 
     page_info = _("Manage payment methods")

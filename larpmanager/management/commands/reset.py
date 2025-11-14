@@ -27,6 +27,8 @@ from larpmanager.management.commands.utils import check_branch
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Reset DB"
 
     # noinspection PyProtectedMember
