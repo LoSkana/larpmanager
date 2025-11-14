@@ -53,6 +53,8 @@ from larpmanager.utils.validators import FileTypeValidator
 
 
 class WritingForm(MyForm):
+    """Form for Writing."""
+
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
         """Initialize the form with default show_link configuration.
 
@@ -97,6 +99,8 @@ class WritingForm(MyForm):
 
 
 class PlayerRelationshipForm(MyForm):
+    """Form for PlayerRelationship."""
+
     page_title = _("Character Relationship")
 
     class Meta:
@@ -168,6 +172,8 @@ class PlayerRelationshipForm(MyForm):
 
 
 class UploadElementsForm(forms.Form):
+    """Form for UploadElements."""
+
     allowed_types: ClassVar[list] = [
         "application/csv",
         "text/csv",
@@ -198,6 +204,8 @@ class UploadElementsForm(forms.Form):
 
 
 class BaseWritingForm(BaseRegistrationForm):
+    """Form for BaseWriting."""
+
     gift = False
     answer_class = WritingAnswer
     choice_class = WritingChoice
@@ -263,6 +271,8 @@ class BaseWritingForm(BaseRegistrationForm):
 
 
 class PlotForm(WritingForm, BaseWritingForm):
+    """Form for Plot."""
+
     load_templates: ClassVar[list] = ["plot"]
 
     load_js: ClassVar[list] = ["characters-choices", "plot-roles"]
@@ -377,6 +387,8 @@ class PlotForm(WritingForm, BaseWritingForm):
 
 
 class FactionForm(WritingForm, BaseWritingForm):
+    """Form for Faction."""
+
     load_templates: ClassVar[list] = ["faction"]
 
     load_js: ClassVar[list] = ["characters-choices"]
@@ -418,6 +430,8 @@ class FactionForm(WritingForm, BaseWritingForm):
 
 
 class QuestTypeForm(WritingForm):
+    """Form for QuestType."""
+
     page_title = _("Quest type")
 
     class Meta:
@@ -431,6 +445,8 @@ class QuestTypeForm(WritingForm):
 
 
 class QuestForm(WritingForm, BaseWritingForm):
+    """Form for Quest."""
+
     page_title = _("Quest")
 
     class Meta:
@@ -451,6 +467,8 @@ class QuestForm(WritingForm, BaseWritingForm):
 
 
 class TraitForm(WritingForm, BaseWritingForm):
+    """Form for Trait."""
+
     page_title = _("Trait")
 
     load_templates: ClassVar[list] = ["trait"]
@@ -473,6 +491,8 @@ class TraitForm(WritingForm, BaseWritingForm):
 
 
 class HandoutForm(WritingForm):
+    """Form for Handout."""
+
     page_title = _("Handout")
 
     class Meta:
@@ -493,6 +513,8 @@ class HandoutForm(WritingForm):
 
 
 class HandoutTemplateForm(WritingForm):
+    """Form for HandoutTemplate."""
+
     load_templates: ClassVar[list] = ["handout-template"]
 
     class Meta:
@@ -505,6 +527,8 @@ class HandoutTemplateForm(WritingForm):
 
 
 class PrologueTypeForm(WritingForm):
+    """Form for PrologueType."""
+
     page_title = _("Prologue type")
 
     class Meta:
@@ -513,6 +537,8 @@ class PrologueTypeForm(WritingForm):
 
 
 class PrologueForm(WritingForm, BaseWritingForm):
+    """Form for Prologue."""
+
     page_title = _("Prologue")
 
     load_js: ClassVar[list] = ["characters-choices"]
@@ -541,6 +567,8 @@ class PrologueForm(WritingForm, BaseWritingForm):
 
 
 class SpeedLarpForm(WritingForm):
+    """Form for SpeedLarp."""
+
     page_title = _("Speed larp")
 
     load_js: ClassVar[list] = ["characters-choices"]

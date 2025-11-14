@@ -41,23 +41,31 @@ from larpmanager.models.registration import (
 
 
 class RegistrationQuestionInline(admin.TabularInline):
+    """Inline admin for RegistrationQuestion model within parent admin."""
+
     model = RegistrationQuestion
     fields = ("name", "description")
     show_change_link = True
 
 
 class RegistrationOptionInline(admin.TabularInline):
+    """Inline admin for RegistrationOption model within parent admin."""
+
     model = RegistrationOption
     exclude = ("search",)
 
 
 class RegistrationQuestionFilter(AutocompleteFilter):
+    """Admin filter for RegistrationQuestion autocomplete."""
+
     title = "RegistrationQuestion"
     field_name = "question"
 
 
 @admin.register(Registration)
 class RegistrationAdmin(DefModelAdmin):
+    """Admin interface for Registration model."""
+
     exclude = ("search",)
     list_display: ClassVar[tuple] = ("id", "run", "member", "ticket", "quotas", "cancellation_date")
     search_fields = ("search",)
@@ -67,6 +75,8 @@ class RegistrationAdmin(DefModelAdmin):
 
 @admin.register(RegistrationTicket)
 class RegistrationTicketAdmin(DefModelAdmin):
+    """Admin interface for RegistrationTicket model."""
+
     exclude: ClassVar[tuple] = ("name",)
     search_fields = ("search",)
     autocomplete_fields: ClassVar[list] = ["event"]
@@ -75,6 +85,8 @@ class RegistrationTicketAdmin(DefModelAdmin):
 
 @admin.register(RegistrationSection)
 class RegistrationSectionAdmin(DefModelAdmin):
+    """Admin interface for RegistrationSection model."""
+
     exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search",)
     autocomplete_fields: ClassVar[list] = ["event"]
@@ -86,6 +98,8 @@ class RegistrationSectionAdmin(DefModelAdmin):
 
 @admin.register(RegistrationQuestion)
 class RegistrationQuestionAdmin(DefModelAdmin):
+    """Admin interface for RegistrationQuestion model."""
+
     exclude = ("search",)
     search_fields: ClassVar[tuple] = ("search",)
     list_display = ("typ", "event", "name", "status", "description")
@@ -99,6 +113,8 @@ class RegistrationQuestionAdmin(DefModelAdmin):
 
 @admin.register(RegistrationOption)
 class RegistrationOptionAdmin(DefModelAdmin):
+    """Admin interface for RegistrationOption model."""
+
     exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search",)
     autocomplete_fields: ClassVar[list] = ["question", "event"]
@@ -107,6 +123,8 @@ class RegistrationOptionAdmin(DefModelAdmin):
 
 @admin.register(RegistrationChoice)
 class RegistrationChoiceAdmin(DefModelAdmin):
+    """Admin interface for RegistrationChoice model."""
+
     autocomplete_fields: ClassVar[list] = ["question", "option", "reg"]
     list_filter = (
         RegistrationFilter,
@@ -116,6 +134,8 @@ class RegistrationChoiceAdmin(DefModelAdmin):
 
 @admin.register(RegistrationAnswer)
 class RegistrationAnswerAdmin(DefModelAdmin):
+    """Admin interface for RegistrationAnswer model."""
+
     autocomplete_fields: ClassVar[list] = ["question", "reg"]
     list_filter = (
         RegistrationFilter,
@@ -125,6 +145,8 @@ class RegistrationAnswerAdmin(DefModelAdmin):
 
 @admin.register(RegistrationCharacterRel)
 class RegistrationCharacterRelAdmin(DefModelAdmin):
+    """Admin interface for RegistrationCharacterRel model."""
+
     list_display: ClassVar[tuple] = ("character", "reg")
     search_fields: ClassVar[list] = ["character", "reg"]
     autocomplete_fields: ClassVar[list] = ["character", "reg"]

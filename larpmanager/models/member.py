@@ -45,29 +45,39 @@ logger = logging.getLogger(__name__)
 
 
 class GenderChoices(models.TextChoices):
+    """Choices for GenderChoices."""
+
     MALE = "m", _("Male")
     FEMALE = "f", _("Female")
     OTHER = "o", _("Other")
 
 
 class FirstAidChoices(models.TextChoices):
+    """Choices for FirstAidChoices."""
+
     YES = "y", "Yes"
     NO = "n", "No"
 
 
 class NewsletterChoices(models.TextChoices):
+    """Choices for NewsletterChoices."""
+
     ALL = "a", _("Yes, keep me posted!")
     ONLY = "o", _("Only really important communications")
     NO = "n", _("No, I don't want updates")
 
 
 class DocumentChoices(models.TextChoices):
+    """Choices for DocumentChoices."""
+
     IDENT = "i", _("ID Card")
     PATEN = "p", _("Driver's License")
     PASS = "s", _("Passport")
 
 
 class Member(BaseModel):
+    """Represents Member model."""
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
 
     email = models.CharField(max_length=200, editable=False)
@@ -298,6 +308,8 @@ class Member(BaseModel):
         ordering: ClassVar[list] = ["surname", "name"]
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         if self.nickname:
             name = self.display_real()
             nick = self.nickname
@@ -395,6 +407,8 @@ class Member(BaseModel):
 
 
 class MemberConfig(BaseModel):
+    """Django app configuration for Member."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
@@ -402,6 +416,8 @@ class MemberConfig(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.member} {self.name}"
 
     class Meta:
@@ -422,6 +438,8 @@ class MemberConfig(BaseModel):
 
 
 class MembershipStatus(models.TextChoices):
+    """Represents MembershipStatus model."""
+
     EMPTY = "e", _("Absent")
     JOINED = "j", _("Shared")
     UPLOADED = "u", _("Uploaded")
@@ -431,6 +449,8 @@ class MembershipStatus(models.TextChoices):
 
 
 class Membership(BaseModel):
+    """Represents Membership model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="memberships")
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="memberships")
@@ -492,6 +512,8 @@ class Membership(BaseModel):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.member} - {self.association}"
 
     def get_request_filepath(self):
@@ -514,6 +536,8 @@ class Membership(BaseModel):
 
 
 class VolunteerRegistry(BaseModel):
+    """Represents VolunteerRegistry model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="volunteer")
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="volunteers")
@@ -537,6 +561,8 @@ class VolunteerRegistry(BaseModel):
 
 
 class Badge(BaseModel):
+    """Represents Badge model."""
+
     name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Short name"))
 
     name_eng = models.CharField(
@@ -598,6 +624,8 @@ class Badge(BaseModel):
 
 
 class Log(BaseModel):
+    """Represents Log model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
     eid = models.IntegerField()
@@ -609,10 +637,14 @@ class Log(BaseModel):
     dl = models.BooleanField(default=False)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.cls} {self.eid}"
 
 
 class Vote(BaseModel):
+    """Represents Vote model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="votes_given")
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="votes")
@@ -637,6 +669,8 @@ class Vote(BaseModel):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"V{self.number} {self.member} ({self.association} - {self.year})"
 
 

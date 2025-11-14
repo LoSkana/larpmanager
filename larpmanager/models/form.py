@@ -317,6 +317,8 @@ class WritingQuestion(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -366,6 +368,8 @@ class WritingQuestion(BaseModel):
 
 
 class WritingOption(BaseModel):
+    """Represents WritingOption model."""
+
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="char_options")
@@ -413,6 +417,8 @@ class WritingOption(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.question} {self.name}"
 
     def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
@@ -433,6 +439,8 @@ class WritingOption(BaseModel):
 
 
 class WritingChoice(BaseModel):
+    """Choices for WritingChoice."""
+
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="choices")
 
     option = models.ForeignKey(WritingOption, on_delete=models.CASCADE, related_name="choices")
@@ -440,6 +448,8 @@ class WritingChoice(BaseModel):
     element_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         # Return string representation showing element ID, question name, and option name
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
@@ -452,6 +462,8 @@ class WritingChoice(BaseModel):
 
 
 class WritingAnswer(BaseModel):
+    """Represents WritingAnswer model."""
+
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=100000)
@@ -471,6 +483,8 @@ class WritingAnswer(BaseModel):
 
 
 class RegistrationQuestion(BaseModel):
+    """Represents RegistrationQuestion model."""
+
     typ = models.CharField(
         max_length=50,
         choices=RegistrationQuestionType.choices,
@@ -578,6 +592,8 @@ class RegistrationQuestion(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -663,6 +679,8 @@ class RegistrationQuestion(BaseModel):
 
 
 class RegistrationOption(BaseModel):
+    """Represents RegistrationOption model."""
+
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="options")
@@ -700,6 +718,8 @@ class RegistrationOption(BaseModel):
     order = models.IntegerField(default=0)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.question} {self.name[:30]} ({self.price}€)"
 
     def get_price(self):
@@ -749,6 +769,8 @@ class RegistrationOption(BaseModel):
 
 
 class RegistrationChoice(BaseModel):
+    """Choices for RegistrationChoice."""
+
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="choices")
 
     option = models.ForeignKey(RegistrationOption, on_delete=models.CASCADE, related_name="choices")
@@ -768,6 +790,8 @@ class RegistrationChoice(BaseModel):
 
 
 class RegistrationAnswer(BaseModel):
+    """Represents RegistrationAnswer model."""
+
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=5000)

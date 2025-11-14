@@ -30,6 +30,8 @@ from larpmanager.models.member import Member
 
 
 class PermissionModule(BaseModel):
+    """Represents PermissionModule model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
@@ -40,6 +42,8 @@ class PermissionModule(BaseModel):
 
 
 class AssociationPermission(BaseModel):
+    """Represents AssociationPermission model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True, unique=True)
@@ -67,6 +71,8 @@ class AssociationPermission(BaseModel):
 
 
 class AssociationRole(BaseModel):
+    """Represents AssociationRole model."""
+
     name = models.CharField(max_length=100)
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="roles", null=True)
@@ -150,6 +156,8 @@ def get_association_inners(association: Association) -> list[Member]:
 
 
 class EventPermission(BaseModel):
+    """Represents EventPermission model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True, unique=True)
@@ -181,6 +189,8 @@ class EventPermission(BaseModel):
 
 
 class EventRole(BaseConceptModel):
+    """Represents EventRole model."""
+
     members = models.ManyToManyField(Member, related_name="event_roles")
 
     permissions = models.ManyToManyField(EventPermission, related_name="roles", blank=True)

@@ -42,6 +42,8 @@ if TYPE_CHECKING:
 
 
 class Writing(BaseConceptModel):
+    """Represents Writing model."""
+
     progress = models.ForeignKey(
         ProgressStep,
         on_delete=models.SET_NULL,
@@ -166,6 +168,8 @@ class Writing(BaseConceptModel):
 
 
 class CharacterStatus(models.TextChoices):
+    """Represents CharacterStatus model."""
+
     CREATION = "c", _("Creation")
     PROPOSED = "s", _("Proposed")
     REVIEW = "r", _("Revision")
@@ -173,6 +177,8 @@ class CharacterStatus(models.TextChoices):
 
 
 class Character(Writing):
+    """Represents Character model."""
+
     title = models.CharField(
         max_length=100,
         blank=True,
@@ -246,6 +252,8 @@ class Character(Writing):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"#{self.number} {self.name}"
 
     def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
@@ -443,6 +451,8 @@ class Character(Writing):
 
 
 class CharacterConfig(BaseModel):
+    """Django app configuration for Character."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=5000)
@@ -450,6 +460,8 @@ class CharacterConfig(BaseModel):
     character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="configs")
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.character} {self.name}"
 
     class Meta:
@@ -470,6 +482,8 @@ class CharacterConfig(BaseModel):
 
 
 class Plot(Writing):
+    """Represents Plot model."""
+
     characters = models.ManyToManyField(Character, related_name="plots", through="PlotCharacterRel", blank=True)
 
     order = models.IntegerField(default=0)
@@ -489,6 +503,8 @@ class Plot(Writing):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return self.name
 
     def get_plot_characters(self):
@@ -499,6 +515,8 @@ class Plot(Writing):
 
 
 class PlotCharacterRel(BaseModel):
+    """Represents PlotCharacterRel model."""
+
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
 
     order = models.IntegerField(default=0)
@@ -508,6 +526,8 @@ class PlotCharacterRel(BaseModel):
     text = models.TextField(max_length=5000, null=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.plot} - {self.character}"
 
     class Meta:
@@ -525,12 +545,16 @@ class PlotCharacterRel(BaseModel):
 
 
 class FactionType(models.TextChoices):
+    """Represents FactionType model."""
+
     PRIM = "s", _("Primary")
     TRASV = "t", _("Transversal")
     SECRET = "g", _("Secret")
 
 
 class Faction(Writing):
+    """Represents Faction model."""
+
     typ = models.CharField(max_length=1, choices=FactionType.choices, default=FactionType.PRIM, verbose_name=_("Type"))
 
     order = models.IntegerField(default=0)
@@ -627,6 +651,8 @@ class Faction(Writing):
         return js
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return self.name
 
     class Meta:
@@ -637,7 +663,11 @@ class Faction(Writing):
 
 
 class PrologueType(Writing):
+    """Represents PrologueType model."""
+
     def __str__(self) -> str:
+        """Return string representation."""
+
         return self.name
 
     class Meta:
@@ -648,6 +678,8 @@ class PrologueType(Writing):
 
 
 class Prologue(Writing):
+    """Represents Prologue model."""
+
     typ = models.ForeignKey(PrologueType, on_delete=models.CASCADE, null=True, related_name="prologues")
 
     characters = models.ManyToManyField(Character, related_name="prologues_list", blank=True)
@@ -671,10 +703,14 @@ class Prologue(Writing):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"P{self.number} {self.name} ({self.typ})"
 
 
 class HandoutTemplate(BaseModel):
+    """Represents HandoutTemplate model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150)
@@ -694,6 +730,8 @@ class HandoutTemplate(BaseModel):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"HT{self.number} {self.name}"
 
     def download_template(self) -> HttpResponse:
@@ -703,6 +741,8 @@ class HandoutTemplate(BaseModel):
 
 
 class Handout(Writing):
+    """Represents Handout model."""
+
     template = models.ForeignKey(HandoutTemplate, on_delete=models.CASCADE, related_name="handouts", null=True)
 
     cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
@@ -725,6 +765,8 @@ class Handout(Writing):
         ]
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"H{self.number} {self.name}"
 
     def get_filepath(self, run: Run) -> str:
@@ -746,6 +788,8 @@ class Handout(Writing):
 
 
 class TextVersionChoices(models.TextChoices):
+    """Choices for TextVersionChoices."""
+
     PLOT = "p", "Plot"
     CHARACTER = "c", "Character"
     FACTION = "h", "Faction"
@@ -761,6 +805,8 @@ class TextVersionChoices(models.TextChoices):
 
 
 class TextVersion(BaseModel):
+    """Represents TextVersion model."""
+
     tp = models.CharField(max_length=1, choices=TextVersionChoices.choices)
 
     eid = models.IntegerField()
@@ -774,10 +820,14 @@ class TextVersion(BaseModel):
     dl = models.BooleanField(default=False)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.tp} {self.eid} {self.version}"
 
 
 class SpeedLarp(Writing):
+    """Represents SpeedLarp model."""
+
     typ = models.IntegerField()
 
     station = models.IntegerField()
@@ -796,6 +846,8 @@ class SpeedLarp(Writing):
         return js
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"S{self.number} {self.name} ({self.typ} - {self.station})"
 
     class Meta:
@@ -925,6 +977,8 @@ def replace_character_names(instance) -> None:
 
 
 class Relationship(BaseModel):
+    """Represents Relationship model."""
+
     source = models.ForeignKey(Character, related_name="source", on_delete=models.CASCADE)
 
     target = models.ForeignKey(Character, related_name="target", on_delete=models.CASCADE)
@@ -932,6 +986,8 @@ class Relationship(BaseModel):
     text = HTMLField()
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.source} {self.target}"
 
     class Meta:

@@ -39,6 +39,8 @@ AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowe
 
 
 class BaseModel(CloneMixin, SafeDeleteModel):
+    """Represents BaseModel model."""
+
     created = models.DateTimeField(default=timezone.now, editable=False)
 
     updated = models.DateTimeField(auto_now=True)
@@ -164,10 +166,14 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
 
 class FeatureNationality(models.TextChoices):
+    """Represents FeatureNationality model."""
+
     ITALY = "it", _("Italy")
 
 
 class FeatureModule(BaseModel):
+    """Represents FeatureModule model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
@@ -180,6 +186,8 @@ class FeatureModule(BaseModel):
 
 
 class Feature(BaseModel):
+    """Represents Feature model."""
+
     name = models.CharField(max_length=100)
 
     descr = models.TextField(max_length=500, blank=True)
@@ -223,6 +231,8 @@ class Feature(BaseModel):
 
 
 class PaymentMethod(BaseModel):
+    """Represents PaymentMethod model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
@@ -261,6 +271,8 @@ class PaymentMethod(BaseModel):
 
 
 class PublisherApiKey(BaseModel):
+    """Represents PublisherApiKey model."""
+
     name = models.CharField(max_length=100, help_text=_("Descriptive name for this API key"))
 
     key = models.CharField(max_length=64, unique=True, db_index=True, editable=False)
@@ -278,6 +290,8 @@ class PublisherApiKey(BaseModel):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
+        """Return string representation."""
+
         return f"{self.name} ({'Active' if self.active else 'Inactive'})"
 
 

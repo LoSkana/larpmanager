@@ -607,6 +607,8 @@ class RegistrationForm(BaseRegistrationForm):
 
 
 class RegistrationGiftForm(RegistrationForm):
+    """Form for RegistrationGift."""
+
     gift = True
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -629,6 +631,8 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
+    """Form for OrgaRegistration."""
+
     page_info = _("Manage event signups")
 
     page_title = _("Registrations")
@@ -965,6 +969,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
 
 class RegistrationCharacterRelForm(MyForm):
+    """Form for RegistrationCharacterRel."""
+
     class Meta:
         model = RegistrationCharacterRel
         exclude = ("reg", "character")
@@ -999,6 +1005,8 @@ class RegistrationCharacterRelForm(MyForm):
 
 
 class OrgaRegistrationTicketForm(MyForm):
+    """Form for OrgaRegistrationTicket."""
+
     page_info = _("Manage ticket types for participant registration")
 
     page_title = _("Tickets")
@@ -1096,6 +1104,8 @@ class OrgaRegistrationTicketForm(MyForm):
 
 
 class OrgaRegistrationSectionForm(MyForm):
+    """Form for OrgaRegistrationSection."""
+
     page_info = _("Manage signup form sections")
 
     page_title = _("Form section")
@@ -1106,6 +1116,8 @@ class OrgaRegistrationSectionForm(MyForm):
 
 
 class OrgaRegistrationQuestionForm(MyForm):
+    """Form for OrgaRegistrationQuestion."""
+
     page_info = _("Manage signup form questions")
 
     page_title = _("Form element")
@@ -1207,6 +1219,8 @@ class OrgaRegistrationQuestionForm(MyForm):
 
 
 class OrgaRegistrationOptionForm(MyForm):
+    """Form for OrgaRegistrationOption."""
+
     page_info = _("Manage signup form question options")
 
     page_title = _("Form Options")
@@ -1226,6 +1240,8 @@ class OrgaRegistrationOptionForm(MyForm):
 
 
 class OrgaRegistrationQuotaForm(MyForm):
+    """Form for OrgaRegistrationQuota."""
+
     page_info = _("Manage dynamic payment installments for participants")
 
     page_title = _("Dynamic rates")
@@ -1236,6 +1252,8 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
+    """Form for OrgaRegistrationInstallment."""
+
     page_info = _("Manage fixed payment installments for participants")
 
     page_title = _("Fixed instalments")
@@ -1271,6 +1289,8 @@ class OrgaRegistrationInstallmentForm(MyForm):
 
 
 class OrgaRegistrationSurchargeForm(MyForm):
+    """Form for OrgaRegistrationSurcharge."""
+
     page_info = _("Manage registration surcharges")
 
     page_title = _("Surcharge")
@@ -1283,6 +1303,8 @@ class OrgaRegistrationSurchargeForm(MyForm):
 
 
 class PreRegistrationForm(forms.Form):
+    """Form for PreRegistration."""
+
     def __init__(self, *args, **kwargs) -> None:
         """Initialize PreRegistrationForm with context-based field configuration.
 

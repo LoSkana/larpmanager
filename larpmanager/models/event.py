@@ -55,6 +55,8 @@ logger = logging.getLogger(__name__)
 
 
 class Event(BaseModel):
+    """Represents Event model."""
+
     slug = models.CharField(
         max_length=30,
         validators=[AlphanumericValidator],
@@ -399,6 +401,8 @@ class Event(BaseModel):
 
 
 class EventConfig(BaseModel):
+    """Django app configuration for Event."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
@@ -427,6 +431,8 @@ class EventConfig(BaseModel):
 
 
 class BaseConceptModel(BaseModel):
+    """Represents BaseConceptModel model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150, blank=False)
@@ -447,6 +453,8 @@ class BaseConceptModel(BaseModel):
 
 
 class EventButton(BaseConceptModel):
+    """Represents EventButton model."""
+
     tooltip = models.CharField(max_length=200)
 
     link = models.URLField(max_length=150)
@@ -467,6 +475,8 @@ class EventButton(BaseConceptModel):
 
 
 class EventTextType(models.TextChoices):
+    """Represents EventTextType model."""
+
     INTRO = "i", _("Character sheet intro")
     TOC = "t", _("Terms and conditions")
     REGISTER = "r", _("Registration form")
@@ -480,6 +490,8 @@ class EventTextType(models.TextChoices):
 
 
 class EventText(BaseModel):
+    """Represents EventText model."""
+
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
@@ -514,6 +526,8 @@ class EventText(BaseModel):
 
 
 class ProgressStep(BaseConceptModel):
+    """Represents ProgressStep model."""
+
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -536,6 +550,8 @@ class ProgressStep(BaseConceptModel):
 
 
 class DevelopStatus(models.TextChoices):
+    """Represents DevelopStatus model."""
+
     START = "0", _("Hidden")
     SHOW = "1", _("Visible")
     CANC = "8", _("Cancelled")
@@ -543,6 +559,8 @@ class DevelopStatus(models.TextChoices):
 
 
 class Run(BaseModel):
+    """Represents Run model."""
+
     search = models.CharField(max_length=150, editable=False)
 
     development = models.CharField(
@@ -686,6 +704,8 @@ class Run(BaseModel):
 
 
 class RunConfig(BaseModel):
+    """Django app configuration for Run."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
@@ -714,6 +734,8 @@ class RunConfig(BaseModel):
 
 
 class PreRegistration(BaseModel):
+    """Represents PreRegistration model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="pre_registrations")
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="pre_registrations")

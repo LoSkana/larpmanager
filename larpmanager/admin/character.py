@@ -40,12 +40,16 @@ from larpmanager.models.writing import (
 
 
 class WritingQuestionFilter(AutocompleteFilter):
+    """Admin filter for WritingQuestion autocomplete."""
+
     title = "WritingQuestion"
     field_name = "question"
 
 
 @admin.register(Character)
 class CharacterAdmin(DefModelAdmin):
+    """Admin interface for Character model."""
+
     list_display = ("number", "name", "teaser", "event")
     search_fields: ClassVar[tuple] = ("name", "teaser")
     list_filter = (EventFilter,)
@@ -54,6 +58,8 @@ class CharacterAdmin(DefModelAdmin):
 
 @admin.register(CharacterConfig)
 class CharacterConfigAdmin(DefModelAdmin):
+    """Admin interface for CharacterConfig model."""
+
     list_display = ("character", "name", "value")
     search_fields: ClassVar[tuple] = ("name",)
     list_filter = (CharacterFilter,)
@@ -62,6 +68,8 @@ class CharacterConfigAdmin(DefModelAdmin):
 
 @admin.register(WritingQuestion)
 class WritingQuestionAdmin(DefModelAdmin):
+    """Admin interface for WritingQuestion model."""
+
     list_display = ("event", "typ", "name", "description_red", "order", "status", "visibility", "applicable")
     exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search", "name")
@@ -76,6 +84,8 @@ class WritingQuestionAdmin(DefModelAdmin):
 
 @admin.register(WritingOption)
 class WritingOptionAdmin(DefModelAdmin):
+    """Admin interface for WritingOption model."""
+
     list_display = ("question", "name", "event", "details_red", "max_available", "order")
     exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search", "name")
@@ -90,6 +100,8 @@ class WritingOptionAdmin(DefModelAdmin):
 
 @admin.register(WritingChoice)
 class WritingChoiceAdmin(DefModelAdmin):
+    """Admin interface for WritingChoice model."""
+
     list_display = ("id", "question", "option", "element_id")
     autocomplete_fields: ClassVar[list] = ["question", "option"]
     list_filter = (WritingQuestionFilter,)
@@ -97,6 +109,8 @@ class WritingChoiceAdmin(DefModelAdmin):
 
 @admin.register(WritingAnswer)
 class WritingAnswerAdmin(DefModelAdmin):
+    """Admin interface for WritingAnswer model."""
+
     list_display = ("id", "question", "text_red", "element_id")
     autocomplete_fields: ClassVar[list] = ["question"]
     list_filter = (WritingQuestionFilter,)
@@ -108,17 +122,23 @@ class WritingAnswerAdmin(DefModelAdmin):
 
 
 class SourceFilter(AutocompleteFilter):
+    """Admin filter for source Character autocomplete."""
+
     title = "Member"
     field_name = "source"
 
 
 class TargetFilter(AutocompleteFilter):
+    """Admin filter for target Character autocomplete."""
+
     title = "Member"
     field_name = "target"
 
 
 @admin.register(Relationship)
 class RelationshipAdmin(DefModelAdmin):
+    """Admin interface for Relationship model."""
+
     list_display: ClassVar[tuple] = ("source", "target", "text")
     list_filter = (SourceFilter, TargetFilter)
     autocomplete_fields: ClassVar[list] = ["source", "target"]
@@ -126,6 +146,8 @@ class RelationshipAdmin(DefModelAdmin):
 
 @admin.register(AbilityTypePx)
 class AbilityTypePxAdmin(DefModelAdmin):
+    """Admin interface for AbilityTypePx model."""
+
     list_display: ClassVar[tuple] = ("event", "name")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event"]
@@ -134,6 +156,8 @@ class AbilityTypePxAdmin(DefModelAdmin):
 
 @admin.register(AbilityPx)
 class AbilityPxAdmin(DefModelAdmin):
+    """Admin interface for AbilityPx model."""
+
     list_display: ClassVar[tuple] = ("name", "typ", "cost", "event")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "characters", "typ", "prerequisites", "requirements"]
@@ -142,11 +166,15 @@ class AbilityPxAdmin(DefModelAdmin):
 
 @admin.register(DeliveryPx)
 class DeliveryPxAdmin(DefModelAdmin):
+    """Admin interface for DeliveryPx model."""
+
     list_display: ClassVar[tuple] = ("event", "name", "amount")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["characters"]
 
 
 class PlotFilter(AutocompleteFilter):
+    """Admin filter for Plot autocomplete."""
+
     title = "Plot"
     field_name = "plot"

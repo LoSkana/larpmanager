@@ -26,6 +26,8 @@ from larpmanager.management.commands.utils import check_branch
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Dump test db"
 
     def handle(self, *args: tuple, **kwargs: dict) -> None:  # noqa: ARG002
