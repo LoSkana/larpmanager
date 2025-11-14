@@ -294,15 +294,37 @@ def notify_pay_token(instance: AccountingItemPayment, member: Member, run: Run, 
     subject, body = get_pay_token_email(instance, run, token_name)
     my_send_mail(subject, body, member, run)
 
-    # Send notifications to all event organizers
-    for organizer in get_event_organizers(run.event):
-        # Set organizer's preferred language for localized email
-        activate(organizer.language)
-        subject, body = get_pay_token_email(instance, run, token_name)
+    # Check if digest mode is enabled for this event
+    from larpmanager.models.notification import (
+        OrganizerNotificationQueue,
+        queue_organizer_notification,
+        should_queue_notification,
+    )
 
-        # Add member identification to organizer's subject line
-        subject += _(" for %(user)s") % {"user": member}
-        my_send_mail(subject, body, organizer, run)
+    digest_mode = should_queue_notification(run.event)
+
+    # Send notifications to all event organizers
+    if digest_mode:
+        # Queue notification for daily summary
+        queue_organizer_notification(
+            event=run.event,
+            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_TOKEN,
+            payment=instance,
+            details={
+                "member_name": member.username,
+                "token_name": token_name,
+            },
+        )
+    else:
+        # Send immediate emails
+        for organizer in get_event_organizers(run.event):
+            # Set organizer's preferred language for localized email
+            activate(organizer.language)
+            subject, body = get_pay_token_email(instance, run, token_name)
+
+            # Add member identification to organizer's subject line
+            subject += _(" for %(user)s") % {"user": member}
+            my_send_mail(subject, body, organizer, run)
 
 
 def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: str) -> tuple[str, str]:
@@ -367,15 +389,37 @@ def notify_pay_credit(credit_name: str, instance: AccountingItemPayment, member:
     email_subject, email_body = get_pay_credit_email(credit_name, instance, run)
     my_send_mail(email_subject, email_body, member, run)
 
-    # Send notifications to all event organizers
-    for organizer in get_event_organizers(run.event):
-        # Activate organizer's preferred language for localized content
-        activate(organizer.language)
-        email_subject, email_body = get_pay_credit_email(credit_name, instance, run)
+    # Check if digest mode is enabled for this event
+    from larpmanager.models.notification import (
+        OrganizerNotificationQueue,
+        queue_organizer_notification,
+        should_queue_notification,
+    )
 
-        # Add member identification to subject line for organizers
-        email_subject += _(" for %(user)s") % {"user": member}
-        my_send_mail(email_subject, email_body, organizer, run)
+    digest_mode = should_queue_notification(run.event)
+
+    # Send notifications to all event organizers
+    if digest_mode:
+        # Queue notification for daily summary
+        queue_organizer_notification(
+            event=run.event,
+            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_CREDIT,
+            payment=instance,
+            details={
+                "member_name": member.username,
+                "credit_name": credit_name,
+            },
+        )
+    else:
+        # Send immediate emails
+        for organizer in get_event_organizers(run.event):
+            # Activate organizer's preferred language for localized content
+            activate(organizer.language)
+            email_subject, email_body = get_pay_credit_email(credit_name, instance, run)
+
+            # Add member identification to subject line for organizers
+            email_subject += _(" for %(user)s") % {"user": member}
+            my_send_mail(email_subject, email_body, organizer, run)
 
 
 def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run: Run) -> tuple[str, str]:
@@ -442,15 +486,37 @@ def notify_pay_money(
     subject, body = get_pay_money_email(currency_symbol, payment_instance, event_run)
     my_send_mail(subject, body, paying_member, event_run)
 
-    # Send notification emails to all event organizers
-    for organizer in get_event_organizers(event_run.event):
-        # Activate organizer's language for localized email content
-        activate(organizer.language)
-        subject, body = get_pay_money_email(currency_symbol, payment_instance, event_run)
+    # Check if digest mode is enabled for this event
+    from larpmanager.models.notification import (
+        OrganizerNotificationQueue,
+        queue_organizer_notification,
+        should_queue_notification,
+    )
 
-        # Add member identification to subject line for organizers
-        subject += _(" for %(user)s") % {"user": paying_member}
-        my_send_mail(subject, body, organizer, event_run)
+    digest_mode = should_queue_notification(event_run.event)
+
+    # Send notification emails to all event organizers
+    if digest_mode:
+        # Queue notification for daily summary
+        queue_organizer_notification(
+            event=event_run.event,
+            notification_type=OrganizerNotificationQueue.NotificationType.PAYMENT_MONEY,
+            payment=payment_instance,
+            details={
+                "member_name": paying_member.username,
+                "currency_symbol": currency_symbol,
+            },
+        )
+    else:
+        # Send immediate emails
+        for organizer in get_event_organizers(event_run.event):
+            # Activate organizer's language for localized email content
+            activate(organizer.language)
+            subject, body = get_pay_money_email(currency_symbol, payment_instance, event_run)
+
+            # Add member identification to subject line for organizers
+            subject += _(" for %(user)s") % {"user": paying_member}
+            my_send_mail(subject, body, organizer, event_run)
 
 
 def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run) -> tuple[str, str]:
@@ -849,12 +915,35 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
 
     # For registration invoices, notify event organizers when no treasurer feature
     elif inv.typ == PaymentType.REGISTRATION and inv.reg:
-        # Get all organizers for the event associated with this registration
-        for organizer in get_event_organizers(inv.reg.run.event):
-            # Set language context and prepare email content
-            activate(organizer.language)
-            email_subject, email_body = get_invoice_email(inv)
-            my_send_mail(email_subject, email_body, organizer, inv)
+        # Check if digest mode is enabled for this event
+        from larpmanager.models.notification import (
+            OrganizerNotificationQueue,
+            queue_organizer_notification,
+            should_queue_notification,
+        )
+
+        digest_mode = should_queue_notification(inv.reg.run.event)
+
+        if digest_mode:
+            # Queue notification for daily summary
+            queue_organizer_notification(
+                event=inv.reg.run.event,
+                notification_type=OrganizerNotificationQueue.NotificationType.INVOICE_APPROVAL,
+                invoice=inv,
+                details={
+                    "member_name": inv.reg.member.username if inv.reg and inv.reg.member else _("Unknown"),
+                    "invoice_number": inv.pk,
+                    "amount": inv.amount if hasattr(inv, "amount") else 0,
+                },
+            )
+        else:
+            # Send immediate emails
+            # Get all organizers for the event associated with this registration
+            for organizer in get_event_organizers(inv.reg.run.event):
+                # Set language context and prepare email content
+                activate(organizer.language)
+                email_subject, email_body = get_invoice_email(inv)
+                my_send_mail(email_subject, email_body, organizer, inv)
 
     # Fallback: send to main organization email for all other cases
     else:
