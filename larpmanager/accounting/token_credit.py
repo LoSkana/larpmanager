@@ -59,7 +59,13 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
 
     Side Effects:
         Creates AccountingItemPayment records and updates membership balances.
-        Updates reg.tot_payed with applied amounts.
+        Updates reg.tot_payed in memory (caller must persist changes).
+
+    Note:
+        This function updates reg.tot_payed in memory but does NOT save the
+        registration to avoid infinite recursion. The caller (typically
+        handle_registration_accounting_updates) is responsible for persisting
+        changes via bulk update to prevent triggering post_save signals.
 
     """
     # Early return if no outstanding balance
@@ -103,6 +109,8 @@ def registration_tokens_credits_use(reg: Registration, remaining: float, associa
                 reg=reg,
                 association_id=association_id,
             )
+        # Note: reg.tot_payed is updated in memory but NOT saved here
+        # to prevent infinite recursion via post_save signal
 
 
 def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, association_id: int) -> None:
