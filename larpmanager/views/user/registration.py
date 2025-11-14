@@ -199,7 +199,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
 
 
 @login_required
-def pre_register_remove(request: HttpRequest, event_slug: str):
+def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
     """Remove user's pre-registration for an event.
 
     Args:
@@ -218,7 +218,7 @@ def pre_register_remove(request: HttpRequest, event_slug: str):
 
 
 @login_required
-def register_exclusive(request: HttpRequest, event_slug: str, secret_code="", discount_code=""):
+def register_exclusive(request: HttpRequest, event_slug: str, secret_code: Any = "", discount_code: Any = "") -> Any:
     """Handle exclusive event registration (delegates to main register function).
 
     Args:
@@ -236,7 +236,7 @@ def register_exclusive(request: HttpRequest, event_slug: str, secret_code="", di
 
 def save_registration(
     context: dict[str, Any],
-    form: Any,  # Registration form instance
+    form: object,  # Registration form instance
     run: Run,
     event: Event,
     reg: Registration | None,
@@ -450,7 +450,7 @@ def registration_redirect(
     return redirect("gallery", event_slug=registration.run.get_slug())
 
 
-def save_registration_bring_friend(context: dict, form, reg: Registration) -> None:
+def save_registration_bring_friend(context: dict, form: object, reg: Registration) -> None:
     """Process bring-a-friend discount codes for registration.
 
     This function handles the bring-a-friend functionality by:
@@ -521,7 +521,7 @@ def save_registration_bring_friend(context: dict, form, reg: Registration) -> No
         friend.save()
 
 
-def register_info(request: HttpRequest, context: dict, form, registration, discount_info) -> None:
+def register_info(request: HttpRequest, context: dict, form: object, registration: Any, discount_info: Any) -> None:
     """Display registration information and status.
 
     Args:
@@ -570,7 +570,7 @@ def register_info(request: HttpRequest, context: dict, form, registration, disco
         )
 
 
-def init_form_submitted(context, form, request, registration=None) -> None:
+def init_form_submitted(context: dict[str, Any], form: object, request: HttpRequest, registration: Any = None) -> None:
     """Initialize form submission data in context.
 
     Args:
@@ -711,7 +711,7 @@ def _apply_ticket(context: dict, ticket_id: int | None) -> None:
 
 
 def _check_redirect_registration(
-    request: HttpRequest, context: dict, event, secret_code: str | None
+    request: HttpRequest, context: dict, event: Any, secret_code: str | None
 ) -> HttpResponse | None:
     """Check if registration should be redirected based on event status and settings.
 
@@ -780,7 +780,7 @@ def _add_bring_friend_discounts(context: dict) -> None:
         )
 
 
-def _register_prepare(context, registration):
+def _register_prepare(context: dict[str, Any], registration: Any) -> Any:
     """Prepare registration context with payment information and locks.
 
     Args:
@@ -957,7 +957,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     )
 
 
-def _check_discount(discount, member, run, event):
+def _check_discount(discount: Any, member: Any, run: Any, event: Any) -> Any:
     """Validate if a discount can be applied to a member's registration.
 
     Args:
@@ -1100,7 +1100,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
 
 
 @login_required
-def unregister(request: HttpRequest, event_slug: str):
+def unregister(request: HttpRequest, event_slug: str) -> Any:
     """Handle user self-unregistration from an event.
 
     Args:

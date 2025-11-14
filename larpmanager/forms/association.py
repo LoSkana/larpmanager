@@ -78,7 +78,7 @@ class ExeAssociationForm(MyForm):
             "maintainers",
         )
 
-    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form instance with custom field modifications.
 
         Args:
@@ -113,7 +113,7 @@ class ExeAssociationTextForm(MyForm):
         model = AssociationText
         exclude = ("number",)
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize AssociationTextForm with feature-based field configuration.
 
         Configures text type choices based on activated features, removing
@@ -282,7 +282,7 @@ class ExeAssociationRoleForm(MyForm):
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> AssociationRole:  # noqa: FBT001, FBT002
         """Save form instance and update related role permissions."""
         instance = super().save(commit=commit)
         save_permissions_role(instance, self)
@@ -309,14 +309,14 @@ class ExeAppearanceForm(MyCssForm):
         ),
     )
 
-    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with cancel prevention and CSS link visibility."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
         self.show_link = ["id_association_css"]
 
     @staticmethod
-    def get_css_path(instance) -> str:
+    def get_css_path(instance: Association) -> str:
         """Return CSS file path for instance."""
         return f"css/{instance.slug}_{instance.css_code}.css"
 
@@ -907,7 +907,7 @@ class ExeQuickSetupForm(QuickSetupForm):
         model = Association
         fields: ClassVar[list] = []
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize association setup form with feature configuration options.
 
         Sets up available features and configuration options based on

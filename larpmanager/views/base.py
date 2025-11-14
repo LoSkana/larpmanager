@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import secrets
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
@@ -126,7 +126,7 @@ def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
     return render(request, "404.html", {"exe": exception})
 
 
-def error_500(request: HttpRequest):
+def error_500(request: HttpRequest) -> Any:
     """Handle 500 errors with custom template.
 
     Args:

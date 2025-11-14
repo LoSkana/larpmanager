@@ -33,14 +33,6 @@ ignore = [
     "TD003",   # Missing issue link in TODO
     "FIX002",  # Line contains TODO
     "DJ001",  # TODO remove django-nullable-model-string-field
-    "ANN001",  # TODO remove Missing type annotation for functions
-    "ANN002",  # TODO remove Missing type annotation for *args
-    "ANN003",  # TODO remove Missing type annotation for **kwargs
-    "ANN201",  # TODO remove Missing return type annotation for public function
-    "ANN202",  # TODO remove Missing return type annotation for private function
-    "ANN204",  # TODO remove Missing return type annotation for special method
-    "ANN205",  # TODO remove Missing return type annotation for staticmethod
-    "ANN206",  # TODO remove Missing return type annotation for classmethod
 ]
 
 [tool.ruff.lint.pydocstyle]

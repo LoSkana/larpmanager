@@ -21,10 +21,8 @@
 """Tests for critical accounting functions"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
-
-from django.db.models import signals
-from factory.django import mute_signals
 
 from larpmanager.accounting.registration import (
     get_reg_iscr,
@@ -41,8 +39,9 @@ from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
     Discount,
+    DiscountType,
     OtherChoices,
-    PaymentChoices, DiscountType,
+    PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
@@ -53,7 +52,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
     """Test cases for token and credit usage functions"""
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_tokens(self, mock_features) -> None:
+    def test_registration_tokens_credits_use_with_tokens(self, mock_features: Any) -> None:
         """Test using tokens to pay for registration"""
         mock_features.return_value = {"token_credit": True}
 
@@ -78,14 +77,12 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(membership.tokens, Decimal("20.00"))
 
         # Check payment was created
-        token_payments = AccountingItemPayment.objects.filter(
-            member=member, reg=registration, pay=PaymentChoices.TOKEN
-        )
+        token_payments = AccountingItemPayment.objects.filter(member=member, reg=registration, pay=PaymentChoices.TOKEN)
         self.assertEqual(token_payments.count(), 1)
         self.assertEqual(token_payments.first().value, Decimal("30.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_credits(self, mock_features) -> None:
+    def test_registration_tokens_credits_use_with_credits(self, mock_features: Any) -> None:
         """Test using credits to pay for registration
 
         Note: This test verifies the basic credit payment logic.
@@ -101,7 +98,9 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         # Clear both tokens and credits first
         AccountingItemOther.objects.filter(member=member, association=association, oth=OtherChoices.TOKEN).delete()
         AccountingItemPayment.objects.filter(member=member, association=association, pay=PaymentChoices.TOKEN).delete()
-        AccountingItemOther.objects.filter(member=member, association=association, oth__in=[OtherChoices.CREDIT, OtherChoices.REFUND]).delete()
+        AccountingItemOther.objects.filter(
+            member=member, association=association, oth__in=[OtherChoices.CREDIT, OtherChoices.REFUND]
+        ).delete()
         AccountingItemPayment.objects.filter(member=member, association=association, pay=PaymentChoices.CREDIT).delete()
 
         # Give member only credits (no tokens)
@@ -118,7 +117,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_tokens_then_credits(self, mock_features) -> None:
+    def test_registration_tokens_credits_use_tokens_then_credits(self, mock_features: Any) -> None:
         """Test using tokens first, then credits"""
         mock_features.return_value = {"token_credit": True}
 
@@ -148,7 +147,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(membership.credit, Decimal("10.00"))  # 40 of 50 used
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_overpay_removes_credit_first(self, mock_features) -> None:
+    def test_registration_tokens_credits_overpay_removes_credit_first(self, mock_features: Any) -> None:
         """Test overpayment reversal removes credits before tokens"""
         mock_features.return_value = {"token_credit": True}
 
@@ -179,7 +178,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(token_payments.first().value, Decimal("20.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_zero_remaining(self, mock_features) -> None:
+    def test_registration_tokens_credits_use_with_zero_remaining(self, mock_features: Any) -> None:
         """Test that function handles zero remaining correctly
 
         Note: This test verifies the function doesn't crash with zero remaining.
@@ -201,7 +200,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
             self.fail("Function should handle zero remaining gracefully")
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_registration_tokens_credits_use_with_negative_remaining(self, mock_features) -> None:
+    def test_registration_tokens_credits_use_with_negative_remaining(self, mock_features: Any) -> None:
         """Test that function handles negative remaining correctly"""
         mock_features.return_value = {"token_credit": True}
 
@@ -220,7 +219,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
     """Test cases for registration accounting calculation functions"""
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_basic(self, mock_features) -> None:
+    def test_get_reg_iscr_basic(self, mock_features: Any) -> None:
         """Test basic registration cost calculation"""
         mock_features.return_value = {}
 
@@ -239,7 +238,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(total, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_with_additionals(self, mock_features) -> None:
+    def test_get_reg_iscr_with_additionals(self, mock_features: Any) -> None:
         """Test registration cost with additional participants"""
         mock_features.return_value = {}
 
@@ -257,7 +256,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreater(total, Decimal("50.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_with_discount(self, mock_features) -> None:
+    def test_get_reg_iscr_with_discount(self, mock_features: Any) -> None:
         """Test registration cost with discount applied"""
         mock_features.return_value = {}
 
@@ -292,7 +291,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(total, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_with_options(self, mock_features) -> None:
+    def test_get_reg_iscr_with_options(self, mock_features: Any) -> None:
         """Test registration cost with paid options"""
         mock_features.return_value = {}
 
@@ -389,7 +388,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
     @patch("larpmanager.cache.feature.get_event_features")
     @patch("larpmanager.accounting.registration.handle_tokes_credits")
-    def test_update_registration_accounting_basic(self, mock_handle, mock_features) -> None:
+    def test_update_registration_accounting_basic(self, mock_handle: Any, mock_features: Any) -> None:
         """Test basic registration accounting update"""
         mock_features.return_value = {}
         mock_handle.return_value = None
@@ -412,7 +411,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
     @patch("larpmanager.cache.feature.get_event_features")
     @patch("larpmanager.accounting.registration.handle_tokes_credits")
-    def test_update_registration_accounting_with_payment(self, mock_handle, mock_features) -> None:
+    def test_update_registration_accounting_with_payment(self, mock_handle: Any, mock_features: Any) -> None:
         """Test registration accounting update with payment"""
         mock_features.return_value = {}
         mock_handle.return_value = None
@@ -439,7 +438,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(registration.tot_payed, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_update_registration_accounting_cancelled_run(self, mock_features) -> None:
+    def test_update_registration_accounting_cancelled_run(self, mock_features: Any) -> None:
         """Test that cancelled runs don't get accounting updates"""
         mock_features.return_value = {}
 
@@ -488,7 +487,7 @@ class TestAccountingEdgeCases(BaseTestCase):
         self.assertGreaterEqual(total_after, Decimal("0.00"))
 
     @patch("larpmanager.accounting.token_credit.get_association_features")
-    def test_tokens_credits_with_insufficient_balance(self, mock_features) -> None:
+    def test_tokens_credits_with_insufficient_balance(self, mock_features: Any) -> None:
         """Test using more tokens/credits than available"""
         mock_features.return_value = {"token_credit": True}
 
@@ -513,9 +512,7 @@ class TestAccountingEdgeCases(BaseTestCase):
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
         # Check payment is for actual amount used
-        token_payments = AccountingItemPayment.objects.filter(
-            member=member, reg=registration, pay=PaymentChoices.TOKEN
-        )
+        token_payments = AccountingItemPayment.objects.filter(member=member, reg=registration, pay=PaymentChoices.TOKEN)
         self.assertEqual(token_payments.first().value, Decimal("10.00"))
 
     def test_round_to_nearest_cent_with_none(self) -> None:
@@ -530,7 +527,7 @@ class TestAccountingEdgeCases(BaseTestCase):
         self.assertEqual(result, Decimal("0.00"))
 
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_get_reg_iscr_minimum_zero(self, mock_features) -> None:
+    def test_get_reg_iscr_minimum_zero(self, mock_features: Any) -> None:
         """Test that registration cost never goes negative with large discount"""
         mock_features.return_value = {}
 

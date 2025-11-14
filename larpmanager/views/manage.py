@@ -50,7 +50,7 @@ from larpmanager.utils.registration import registration_available
 
 
 @login_required
-def manage(request: HttpRequest, event_slug=None):
+def manage(request: HttpRequest, event_slug: str | None = None) -> HttpResponse | HttpResponseRedirect:
     """Route to the appropriate management dashboard.
 
     Routes to either executive management or organizer management
@@ -72,7 +72,7 @@ def manage(request: HttpRequest, event_slug=None):
     return _exe_manage(request)
 
 
-def _get_registration_status_code(run):
+def _get_registration_status_code(run: Run) -> tuple[str, Any]:
     """Get registration status code for a run with additional value.
 
     Args:
@@ -118,7 +118,7 @@ def _get_registration_status_code(run):
     return "closed", None
 
 
-def _get_registration_status(run_instance) -> str:
+def _get_registration_status(run_instance: Run) -> str:
     """Get human-readable registration status for a run.
 
     This function retrieves the registration status code and returns a localized,
@@ -256,7 +256,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/manage/exe.html", context)
 
 
-def _exe_suggestions(context) -> None:
+def _exe_suggestions(context: dict[str, Any]) -> None:
     """Add priority tasks and suggestions to the executive management context.
 
     Args:
@@ -376,7 +376,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     _exe_users_actions(request, context, association_features)
 
 
-def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) -> None:
+def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: dict[str, Any]) -> None:
     """Process user management actions and setup tasks for executives.
 
     Args:
@@ -415,7 +415,7 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) ->
             )
 
 
-def _exe_accounting_actions(context: dict, enabled_features) -> None:
+def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> None:
     """Process accounting-related setup actions for executives.
 
     Args:
@@ -699,7 +699,7 @@ def _orga_user_actions(
             )
 
 
-def _orga_casting_actions(context, enabled_features) -> None:
+def _orga_casting_actions(context: dict[str, Any], enabled_features: dict[str, Any]) -> None:
     """Add priority actions related to casting and quest builder setup.
 
     Checks for missing casting configurations and quest/trait relationships,
@@ -884,7 +884,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
         )
 
 
-def _orga_reg_actions(context, enabled_features) -> None:
+def _orga_reg_actions(context: dict[str, Any], enabled_features: dict[str, Any]) -> None:
     """Add priority actions for registration management setup.
 
     Checks registration status, required tickets, and registration features
@@ -928,7 +928,7 @@ def _orga_reg_actions(context, enabled_features) -> None:
             )
 
 
-def _orga_suggestions(context) -> None:
+def _orga_suggestions(context: dict[str, Any]) -> None:
     """Add priority suggestions for event organization.
 
     Args:
@@ -961,7 +961,9 @@ def _orga_suggestions(context) -> None:
         _add_suggestion(context, suggestion_text, permission_slug)
 
 
-def _add_item(context, list_name, message_text, permission_key, custom_link) -> None:
+def _add_item(
+    context: dict[str, Any], list_name: str, message_text: str, permission_key: str, custom_link: str | None
+) -> None:
     """Add item to specific list in management context.
 
     Args:
@@ -978,7 +980,9 @@ def _add_item(context, list_name, message_text, permission_key, custom_link) -> 
     context[list_name].append((message_text, permission_key, custom_link))
 
 
-def _add_priority(context, priority_text, permission_key, custom_link=None) -> None:
+def _add_priority(
+    context: dict[str, Any], priority_text: str, permission_key: str, custom_link: str | None = None
+) -> None:
     """Add priority item to management dashboard.
 
     Args:
@@ -991,7 +995,7 @@ def _add_priority(context, priority_text, permission_key, custom_link=None) -> N
     _add_item(context, "priorities_list", priority_text, permission_key, custom_link)
 
 
-def _add_action(context, action_text, permission_key, custom_link=None) -> None:
+def _add_action(context: dict[str, Any], action_text: str, permission_key: str, custom_link: str | None = None) -> None:
     """Add action item to management dashboard.
 
     Args:
@@ -1004,7 +1008,9 @@ def _add_action(context, action_text, permission_key, custom_link=None) -> None:
     _add_item(context, "actions_list", action_text, permission_key, custom_link)
 
 
-def _add_suggestion(context, suggestion_text, permission_key, custom_link=None) -> None:
+def _add_suggestion(
+    context: dict[str, Any], suggestion_text: str, permission_key: str, custom_link: str | None = None
+) -> None:
     """Add suggestion item to management dashboard.
 
     Args:
@@ -1017,7 +1023,7 @@ def _add_suggestion(context, suggestion_text, permission_key, custom_link=None) 
     _add_item(context, "suggestions_list", suggestion_text, permission_key, custom_link)
 
 
-def _has_permission(request: HttpRequest, context: dict, permission):
+def _has_permission(request: HttpRequest, context: dict, permission: str) -> bool:
     """Check if user has required permission for action.
 
     Args:
@@ -1034,7 +1040,9 @@ def _has_permission(request: HttpRequest, context: dict, permission):
     return has_event_permission(request, context, context["event"].slug, permission)
 
 
-def _get_href(context, permission, display_name, custom_link_suffix):
+def _get_href(
+    context: dict[str, Any], permission: str, display_name: str, custom_link_suffix: str | None
+) -> tuple[str, str]:
     """Generate href and title for management dashboard links.
 
     Args:
@@ -1353,7 +1361,7 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
     context["form"] = form
 
 
-def _get_choice_redirect_url(choice, context):
+def _get_choice_redirect_url(choice: str, context: dict[str, Any]) -> str:
     """Get the appropriate redirect URL based on the user's choice.
 
     Args:
@@ -1397,14 +1405,14 @@ def _get_choice_redirect_url(choice, context):
     return redirect_handler()
 
 
-def _handle_event_pms_redirect(choice_value, context):
+def _handle_event_pms_redirect(choice_value: str, context: dict[str, Any]) -> str:
     """Handle event permissions redirect."""
     if "run" not in context:
         raise ValueError(_("Event context not available"))
     return reverse(choice_value, args=[context["run"].get_slug()])
 
 
-def _handle_tutorial_redirect(tutorial_choice_value):
+def _handle_tutorial_redirect(tutorial_choice_value: str) -> str:
     """Handle tutorial redirect with optional section anchor."""
     if "#" in tutorial_choice_value:
         tutorial_slug, section_slug = tutorial_choice_value.split("#", 1)

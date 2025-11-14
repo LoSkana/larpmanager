@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q
@@ -223,7 +223,7 @@ class ElectronicInvoice(BaseModel):
             ),
         ]
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Save the ElectronicInvoice instance with auto-generated progressive and number.
 
         Automatically assigns progressive and number values if not already set:
@@ -507,8 +507,6 @@ class AccountingItemOutflow(AccountingItemFlow):
 
 class AccountingItemInflow(AccountingItemFlow):
     """Represents AccountingItemInflow model."""
-
-    pass
 
 
 class DiscountType(models.TextChoices):

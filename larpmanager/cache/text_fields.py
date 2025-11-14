@@ -47,7 +47,7 @@ def cache_text_field_key(model_type: type, model_instance: object) -> str:
     return f"cache_text_fields_{model_type.__name__}_{model_instance.id}"
 
 
-def remove_html_tags(text):
+def remove_html_tags(text: str) -> str:
     """Remove html tags from a string."""
     html_tag_pattern = re.compile("<.*?>")
     return re.sub(html_tag_pattern, "", text)

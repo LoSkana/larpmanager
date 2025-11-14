@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -25,7 +27,7 @@ from larpmanager.tests.utils import check_feature, go_to, login_orga, login_user
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_event_role(pw_page) -> None:
+def test_orga_event_role(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_user(page, live_server)

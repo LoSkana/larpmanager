@@ -27,7 +27,7 @@ import shutil
 import zipfile
 from io import BytesIO
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -47,7 +47,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def upload_albums_dir(main, cache_subs: dict, name: str):
+def upload_albums_dir(main: Any, cache_subs: dict, name: str) -> Any:
     """Create or find album directory structure for uploaded files.
 
     Creates a hierarchical album structure based on directory paths from zip files.
@@ -181,7 +181,7 @@ def upload_albums_el(alb: models.Model, name: str, main: models.Model, o_path: s
     album_image.save()
 
 
-def upload_albums(main, el) -> None:
+def upload_albums(main: Any, el: Any) -> None:
     """Extract and upload all files from zip archive to album structure.
 
     Args:
@@ -209,7 +209,7 @@ def upload_albums(main, el) -> None:
     shutil.rmtree(extraction_path)
 
 
-def zipdir(path, ziph) -> None:
+def zipdir(path: Any, ziph: Any) -> None:
     """Recursively add directory contents to zip file.
 
     Args:
@@ -308,7 +308,7 @@ def _go_centauri(context: dict) -> bool:
     return not random_value > centauri_probability
 
 
-def get_warehouse_optionals(context, default_columns) -> None:
+def get_warehouse_optionals(context: Any, default_columns: Any) -> None:
     """Get warehouse optional field configuration for display.
 
     Args:
@@ -410,7 +410,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     instance.photo = ContentFile(output_buffer.read(), name=original_filename)
 
 
-def _get_extension(uploaded_file, image) -> str:
+def _get_extension(uploaded_file: Any, image: Any) -> str:
     """Get the appropriate image format extension.
 
     Determines the correct image format based on the file extension and image format.
@@ -444,7 +444,7 @@ def _get_extension(uploaded_file, image) -> str:
     return image_format
 
 
-def _check_new(file_field, instance, sender) -> bool:
+def _check_new(file_field: Any, instance: Any, sender: Any) -> bool:
     """Check if the file field represents a new file upload.
 
     Args:

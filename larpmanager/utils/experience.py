@@ -23,6 +23,7 @@ import ast
 import json
 from collections import defaultdict
 from decimal import Decimal
+from typing import Any
 
 from django.db import transaction
 from django.db.models import Prefetch, Q, Sum
@@ -42,7 +43,7 @@ from larpmanager.models.form import (
 from larpmanager.models.writing import Character, CharacterConfig
 
 
-def _build_px_context(character) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
+def _build_px_context(character: Any) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
     """Build context for character experience point calculations.
 
     Gathers character abilities, choices, and modifiers with optimized queries
@@ -105,7 +106,7 @@ def _build_px_context(character) -> tuple[set[int], set[int], dict[int, list[tup
 
 
 def _apply_modifier_cost(
-    ability,
+    ability: Any,
     modifiers_by_ability_id: dict[int, list[tuple]],
     character_ability_ids: set[int],
     character_choice_ids: set[int],
@@ -153,7 +154,7 @@ def set_free_abilities(char: Character, frees: list[int]) -> None:
     save_single_config(char, config_name, json.dumps(frees))
 
 
-def calculate_character_experience_points(character) -> None:
+def calculate_character_experience_points(character: Any) -> None:
     """Update character experience points and apply ability calculations.
 
     Args:
@@ -185,7 +186,7 @@ def calculate_character_experience_points(character) -> None:
     apply_rules_computed(character)
 
 
-def _handle_free_abilities(character) -> None:
+def _handle_free_abilities(character: Any) -> None:
     """Handle free abilities that characters should automatically receive.
 
     Args:
@@ -237,7 +238,7 @@ def get_current_ability_px(character: Character) -> list[AbilityPx]:
     return abilities_with_modified_costs
 
 
-def check_available_ability_px(ability, current_char_abilities, current_char_choices) -> bool:
+def check_available_ability_px(ability: Any, current_char_abilities: Any, current_char_choices: Any) -> bool:
     """Check if an ability is available based on prerequisites and requirements.
 
     Args:
@@ -259,7 +260,7 @@ def check_available_ability_px(ability, current_char_abilities, current_char_cho
     return prerequisite_ids.issubset(current_char_abilities) and requirement_ids.issubset(current_char_choices)
 
 
-def get_available_ability_px(char, px_avail: int | None = None) -> list:
+def get_available_ability_px(char: Any, px_avail: int | None = None) -> list:
     """Get list of abilities available for purchase with character's PX.
 
     Retrieves all visible abilities that the character can purchase based on their
@@ -316,11 +317,11 @@ def get_available_ability_px(char, px_avail: int | None = None) -> list:
 
 
 def on_experience_characters_m2m_changed(
-    sender,  # noqa: ARG001
+    sender: Any,  # noqa: ARG001
     instance: DeliveryPx | None,
     action: str,
     pk_set: set | None,
-    **kwargs,  # noqa: ARG001
+    **kwargs: Any,  # noqa: ARG001
 ) -> None:
     """Handle m2m changes for experience-character relationships."""
     # Only process relevant m2m actions
@@ -344,7 +345,7 @@ def on_rule_abilities_m2m_changed(
     instance: RulePx,
     action: str,
     pk_set: set[int] | None,  # noqa: ARG001
-    **kwargs,  # noqa: ARG001
+    **kwargs: Any,  # noqa: ARG001
 ) -> None:
     """Handle changes to rule abilities many-to-many relationships.
 
@@ -368,7 +369,7 @@ def on_modifier_abilities_m2m_changed(
     instance: ModifierPx,
     action: str,
     pk_set: set[int] | None,  # noqa: ARG001
-    **kwargs,  # noqa: ARG001
+    **kwargs: Any,  # noqa: ARG001
 ) -> None:
     """Handle modifier abilities m2m changes by recalculating character experience."""
     # Only process relevant m2m actions
@@ -383,7 +384,7 @@ def on_modifier_abilities_m2m_changed(
         calculate_character_experience_points(char)
 
 
-def apply_rules_computed(char) -> None:
+def apply_rules_computed(char: Any) -> None:
     """Apply computed field rules to calculate character statistics.
 
     This function processes all computed writing questions for a character's event,
@@ -445,7 +446,7 @@ def apply_rules_computed(char) -> None:
         writing_answer.save()
 
 
-def add_char_addit(character) -> None:
+def add_char_addit(character: Any) -> None:
     """Add additional configuration data to character object.
 
     Args:
@@ -462,7 +463,7 @@ def add_char_addit(character) -> None:
         character.addit[character_config.name] = character_config.value
 
 
-def remove_char_ability(char, ability_id):
+def remove_char_ability(char: Any, ability_id: Any) -> None:
     """Remove character ability and all dependent abilities.
 
     Args:

@@ -20,12 +20,13 @@
 
 """Tests for member utility and text caching functions"""
 
+from typing import Any
 from unittest.mock import patch
 
-from larpmanager.utils.member import almost_equal, count_differences
 from larpmanager.cache.association_text import association_text_key, association_text_key_def, get_association_text
 from larpmanager.cache.event_text import event_text_key, event_text_key_def, get_event_text
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.utils.member import almost_equal, count_differences
 
 
 class TestMemberUtilityFunctions(BaseTestCase):
@@ -124,7 +125,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.event_text.get_event_text_cache")
     @patch("larpmanager.cache.event_text.get_event_text_cache_def")
     @patch("larpmanager.cache.event_text.get_language")
-    def test_get_event_text_with_lang(self, mock_lang, mock_def, mock_cache) -> None:
+    def test_get_event_text_with_lang(self, mock_lang: Any, mock_def: Any, mock_cache: Any) -> None:
         """Test get_event_text with language"""
         mock_lang.return_value = "en"
         mock_cache.return_value = "Welcome text"
@@ -138,7 +139,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.event_text.get_event_text_cache")
     @patch("larpmanager.cache.event_text.get_event_text_cache_def")
     @patch("larpmanager.cache.event_text.get_language")
-    def test_get_event_text_fallback_to_default(self, mock_lang, mock_def, mock_cache) -> None:
+    def test_get_event_text_fallback_to_default(self, mock_lang: Any, mock_def: Any, mock_cache: Any) -> None:
         """Test get_event_text falls back to default"""
         mock_lang.return_value = "en"
         mock_cache.return_value = None
@@ -152,7 +153,7 @@ class TestTextCachingFunctions(BaseTestCase):
 
     @patch("larpmanager.cache.event_text.get_event_text_cache")
     @patch("larpmanager.cache.event_text.get_language")
-    def test_get_event_text_uses_current_lang(self, mock_lang, mock_cache) -> None:
+    def test_get_event_text_uses_current_lang(self, mock_lang: Any, mock_cache: Any) -> None:
         """Test get_event_text uses current language when not specified"""
         mock_lang.return_value = "it"
         mock_cache.return_value = "Benvenuto"
@@ -165,7 +166,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.association_text.get_association_text_cache")
     @patch("larpmanager.cache.association_text.get_association_text_cache_def")
     @patch("larpmanager.cache.association_text.get_language")
-    def test_get_association_text_with_lang(self, mock_lang, mock_def, mock_cache) -> None:
+    def test_get_association_text_with_lang(self, mock_lang: Any, mock_def: Any, mock_cache: Any) -> None:
         """Test get_association_text with language"""
         mock_lang.return_value = "en"
         mock_cache.return_value = "Terms text"
@@ -179,7 +180,7 @@ class TestTextCachingFunctions(BaseTestCase):
     @patch("larpmanager.cache.association_text.get_association_text_cache")
     @patch("larpmanager.cache.association_text.get_association_text_cache_def")
     @patch("larpmanager.cache.association_text.get_language")
-    def test_get_association_text_fallback_to_default(self, mock_lang, mock_def, mock_cache) -> None:
+    def test_get_association_text_fallback_to_default(self, mock_lang: Any, mock_def: Any, mock_cache: Any) -> None:
         """Test get_association_text falls back to default"""
         mock_lang.return_value = "en"
         mock_cache.return_value = None

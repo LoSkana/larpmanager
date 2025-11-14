@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('larpmanager', '0103_alter_discount_typ'),
+        ("larpmanager", "0103_alter_discount_typ"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='larpmanagerticket',
-            name='content',
-            field=models.TextField(help_text='Describe how we can help you', max_length=5000, verbose_name='Request'),
+            model_name="larpmanagerticket",
+            name="content",
+            field=models.TextField(help_text="Describe how we can help you", max_length=5000, verbose_name="Request"),
         ),
     ]

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from datetime import datetime, timedelta
+from typing import Any
 
 from django.db.models import Count
 from django.utils import timezone
@@ -31,7 +32,7 @@ from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
 
 
-def get_users_data(member_ids):
+def get_users_data(member_ids: Any) -> Any:
     """Get user display names and emails for deadline notifications.
 
     Args:
@@ -49,7 +50,7 @@ def get_users_data(member_ids):
     ]
 
 
-def get_membership_fee_year(association_id, year=None):
+def get_membership_fee_year(association_id: Any, year: Any = None) -> Any:
     """Get set of member IDs who paid membership fee for given year.
 
     Args:
@@ -176,12 +177,12 @@ def check_run_deadlines(runs: list) -> list:
 
 
 def deadlines_profile(
-    deadline_violations,
-    memberships,
-    current_datetime,
-    registration,
-    event_run,
-    tolerance_days,
+    deadline_violations: Any,
+    memberships: Any,
+    current_datetime: Any,
+    registration: Any,
+    event_run: Any,
+    tolerance_days: Any,
 ) -> None:
     """Check profile completion deadlines for registration.
 
@@ -270,7 +271,7 @@ def deadlines_membership(
             violations_by_type["fee"].append(registration.member_id)
 
 
-def deadlines_payment(deadline_violations, event_features, registration, tolerance_days) -> None:
+def deadlines_payment(deadline_violations: Any, event_features: Any, registration: Any, tolerance_days: Any) -> None:
     """Check payment deadlines for registration.
 
     Args:
@@ -293,7 +294,7 @@ def deadlines_payment(deadline_violations, event_features, registration, toleran
         deadline_violations["pay"].append(registration.member_id)
 
 
-def deadlines_casting(collect, features, player_ids, run) -> None:
+def deadlines_casting(collect: Any, features: Any, player_ids: Any, run: Any) -> None:
     """Check casting preference submission for players.
 
     Args:

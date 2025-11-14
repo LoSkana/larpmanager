@@ -47,7 +47,7 @@ class AssociationIdentifyMiddleware:
         """Initialize middleware with Django response handler."""
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """Process request through association middleware.
 
         Args:

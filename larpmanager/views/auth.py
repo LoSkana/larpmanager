@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -113,7 +113,7 @@ class MyRegistrationView(RegistrationView):
         # Fall back to success_url attribute or default home page
         return self.success_url or reverse("home")
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> Any:
         """Get keyword arguments for form initialization.
 
         Returns:

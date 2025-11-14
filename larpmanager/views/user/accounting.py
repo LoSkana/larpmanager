@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -850,7 +851,7 @@ def acc_cancelled(request: HttpRequest) -> HttpResponse:
     return redirect("accounting")
 
 
-def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> HttpResponse:
+def acc_profile_check(request: HttpRequest, success_message: str, invoice: Any) -> HttpResponse:
     """Check if user profile is compiled and redirect appropriately.
 
     Validates that the user's membership profile is complete. If not compiled,

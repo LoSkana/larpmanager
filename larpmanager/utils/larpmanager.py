@@ -17,13 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 from django.db.models import Max
 from slugify import slugify
 
 from larpmanager.models.larpmanager import LarpManagerFaq
 
 
-def generate_tutorial_url_slug(tutorial) -> None:
+def generate_tutorial_url_slug(tutorial: Any) -> None:
     """Generate slug for tutorial if not already set.
 
     Args:

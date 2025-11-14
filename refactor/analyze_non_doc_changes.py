@@ -5,6 +5,8 @@ Prints only substantial code changes.
 
 import re
 import subprocess
+import sys
+from typing import List, Tuple, Dict
 
 
 def run_git_command(cmd: list[str]) -> str:
@@ -44,7 +46,7 @@ def is_docstring_or_comment_line(line: str) -> bool:
         return True
 
     # Check for docstrings (triple quotes)
-    if ('"""' in content or "'''" in content):
+    if '"""' in content or "'''" in content:
         return True
 
     # Check for single-line string literals that look like docstrings
@@ -159,11 +161,19 @@ def main() -> None:
 
     # Only print files with substantial changes
     for file_path, substantial_lines in files_with_substantial_changes:
-        for _line in substantial_lines[:20]:  # Limit to first 20 lines
-            pass
+        print(f"{'='*60}")
+        print(f"Analyzing: {file_path}")
+        print(f"{'='*60}")
+        print(f"✗ SUBSTANTIAL CHANGES DETECTED ({len(substantial_lines)} lines)")
+        print("\nSubstantial changes:")
+        for line in substantial_lines[:20]:  # Limit to first 20 lines
+            print(f"  {line}")
         if len(substantial_lines) > 20:
             pass
 
+    print(f"{'=' * 60}")
+    print("SUMMARY:")
+    print(f"{'=' * 60}")
 
     if substantial_changes_found:
         pass

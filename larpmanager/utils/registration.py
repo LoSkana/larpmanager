@@ -155,7 +155,7 @@ def _available_waiting(registration: Registration, registration_counts: dict) ->
     return False
 
 
-def _available_filler(registration, registration_counts) -> bool:
+def _available_filler(registration: Any, registration_counts: Any) -> bool:
     """Check if filler tickets are available for the given registration.
 
     Args:
@@ -531,7 +531,7 @@ def _status_preregister(run: Run, member: Member, context: dict | None = None) -
         run.status["text"] = f"<a href='{preregister_url}'>{status_message}</a>"
 
 
-def _get_features_map(run: Run, context: dict):
+def _get_features_map(run: Run, context: dict) -> Any:
     """Get features map from context or create it if not available.
 
     Args:
@@ -598,7 +598,7 @@ def registration_find(run: Run, member: Member, context: dict | None = None) -> 
         run.reg = None
 
 
-def check_character_maximum(event, member) -> tuple[bool, int]:
+def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
     """Check if member has reached the maximum character limit for an event.
 
     Args:
@@ -734,7 +734,7 @@ def _status_approval(run: Run, features: dict, *, is_character_assigned: bool) -
         run.status["details"] += f"<a href='{url}'>{message}</a>"
 
 
-def get_registration_options(instance) -> list[tuple[str, str]]:
+def get_registration_options(instance: object) -> list[tuple[str, str]]:
     """Get formatted list of registration options and answers for display.
 
     This function retrieves all registration questions for a given event run,
@@ -882,7 +882,7 @@ def check_assign_character(context: dict) -> None:
     RegistrationCharacterRel.objects.create(character_id=active_characters[0].id, reg=registration)
 
 
-def get_reduced_available_count(run) -> int:
+def get_reduced_available_count(run: Any) -> int:
     """Calculate remaining reduced ticket slots based on patron registrations and ratio.
 
     Args:

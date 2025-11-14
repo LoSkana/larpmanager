@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import random
 from datetime import date, timedelta
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -68,7 +69,7 @@ from larpmanager.utils.tasks import my_send_mail, send_mail_exec
 from larpmanager.views.user.member import get_user_backend
 
 
-def lm_home(request: HttpRequest):
+def lm_home(request: HttpRequest) -> Any:
     """Display the LarpManager home page with promoters and reviews.
 
     Args:
@@ -91,7 +92,7 @@ def lm_home(request: HttpRequest):
     return render(request, "larpmanager/larpmanager/home.html", template_context)
 
 
-def ludomanager(template_context, http_request):
+def ludomanager(template_context: Any, http_request: Any) -> Any:
     """Render the LudoManager skin version of the home page.
 
     Args:
@@ -108,7 +109,7 @@ def ludomanager(template_context, http_request):
 
 
 @csrf_exempt
-def contact(request: HttpRequest):
+def contact(request: HttpRequest) -> Any:
     """Handle contact form submissions and display contact page.
 
     Processes contact form data and sends emails to administrators when valid
@@ -141,7 +142,7 @@ def contact(request: HttpRequest):
     return render(request, "larpmanager/larpmanager/contact.html", context)
 
 
-def go_redirect(request: HttpRequest, slug, path, base_domain="larpmanager.com"):
+def go_redirect(request: HttpRequest, slug: Any, path: Any, base_domain: Any = "larpmanager.com") -> Any:
     """Redirect user to association-specific subdomain or main domain.
 
     Args:
@@ -165,7 +166,7 @@ def go_redirect(request: HttpRequest, slug, path, base_domain="larpmanager.com")
     return redirect(new_path)
 
 
-def choose_association(request: HttpRequest, redirect_path, association_slugs):
+def choose_association(request: HttpRequest, redirect_path: Any, association_slugs: Any) -> Any:
     """Handle association selection when multiple associations are available.
 
     Args:
@@ -197,7 +198,7 @@ def choose_association(request: HttpRequest, redirect_path, association_slugs):
     )
 
 
-def go_redirect_run(run, path):
+def go_redirect_run(run: Any, path: Any) -> Any:
     """Redirect to a specific run's URL on its association's domain.
 
     Args:
@@ -212,7 +213,7 @@ def go_redirect_run(run, path):
     return redirect(full_url)
 
 
-def choose_run(request: HttpRequest, redirect_path, event_ids):
+def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any) -> Any:
     """Handle run selection when multiple runs are available.
 
     Args:
@@ -253,7 +254,7 @@ def choose_run(request: HttpRequest, redirect_path, event_ids):
 
 
 @login_required
-def redr(request: HttpRequest, path):
+def redr(request: HttpRequest, path: Any) -> Any:
     """Handle redirects based on user roles and permissions.
 
     Redirects users to appropriate associations or events based on their
@@ -404,7 +405,7 @@ def activate_feature_event(
     return redirect("gallery", event_slug=event_slug)
 
 
-def toggle_sidebar(request: HttpRequest):
+def toggle_sidebar(request: HttpRequest) -> Any:
     """Toggle the sidebar open/closed state in user session.
 
     Args:
@@ -422,7 +423,7 @@ def toggle_sidebar(request: HttpRequest):
     return JsonResponse({"status": "success"})
 
 
-def debug_mail(request: HttpRequest):
+def debug_mail(request: HttpRequest) -> Any:
     """Send reminder emails to all registrations for debugging.
 
     Only available in development and test environments.
@@ -450,7 +451,7 @@ def debug_mail(request: HttpRequest):
     return redirect("home")
 
 
-def debug_slug(request: HttpRequest, association_slug=""):
+def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
     """Set debug slug in session for development testing.
 
     Only available in development and test environments.
@@ -474,7 +475,7 @@ def debug_slug(request: HttpRequest, association_slug=""):
     return redirect("home")
 
 
-def ticket(request: HttpRequest, reason=""):
+def ticket(request: HttpRequest, reason: Any = "") -> Any:
     """Handle support ticket creation and submission.
 
     Displays ticket form and processes ticket submissions.
@@ -508,7 +509,7 @@ def ticket(request: HttpRequest, reason=""):
     return render(request, "larpmanager/member/ticket.html", context)
 
 
-def is_suspicious_user_agent(user_agent_string):
+def is_suspicious_user_agent(user_agent_string: Any) -> Any:
     """Check if a user agent string appears to be from a bot.
 
     Args:
@@ -523,7 +524,7 @@ def is_suspicious_user_agent(user_agent_string):
 
 
 @ratelimit(key="ip", rate="5/m", block=True)
-def discord(request: HttpRequest):
+def discord(request: HttpRequest) -> Any:
     """Handle Discord invite page with bot protection.
 
     Rate-limited endpoint that blocks bots and provides
@@ -552,7 +553,7 @@ def discord(request: HttpRequest):
 
 
 @login_required
-def join(request: HttpRequest):
+def join(request: HttpRequest) -> Any:
     """Handle user joining an association.
 
     Processes association joining form and sends welcome messages
@@ -646,7 +647,7 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
 
 
 @cache_page(60 * 15)
-def discover(request: HttpRequest):
+def discover(request: HttpRequest) -> Any:
     """Display discovery page with featured content.
 
     Cached for 15 minutes. Shows LarpManager discover items
@@ -726,7 +727,7 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
 
 
 @cache_page(60 * 15)
-def guides(request: HttpRequest):
+def guides(request: HttpRequest) -> Any:
     """Display list of published guides for LarpManager users.
 
     Args:
@@ -742,7 +743,7 @@ def guides(request: HttpRequest):
     return render(request, "larpmanager/larpmanager/guides.html", context)
 
 
-def guide(request: HttpRequest, slug):
+def guide(request: HttpRequest, slug: Any) -> Any:
     """Display a specific guide article by slug.
 
     Args:
@@ -773,7 +774,7 @@ def guide(request: HttpRequest, slug):
 
 
 @cache_page(60 * 15)
-def privacy(request: HttpRequest):
+def privacy(request: HttpRequest) -> Any:
     """Display privacy policy page.
 
     Cached for 15 minutes. Shows association-specific privacy text.
@@ -791,7 +792,7 @@ def privacy(request: HttpRequest):
 
 
 @cache_page(60 * 15)
-def usage(request: HttpRequest):
+def usage(request: HttpRequest) -> Any:
     """Display usage/terms page.
 
     Cached for 15 minutes. Shows usage guidelines and terms.
@@ -809,7 +810,7 @@ def usage(request: HttpRequest):
 
 
 @cache_page(60 * 15)
-def about_us(request: HttpRequest):
+def about_us(request: HttpRequest) -> Any:
     """Display about us page.
 
     Cached for 15 minutes. Shows information about the platform.
@@ -826,7 +827,7 @@ def about_us(request: HttpRequest):
     return render(request, "larpmanager/larpmanager/about_us.html", context)
 
 
-def get_lm_contact(request: HttpRequest):
+def get_lm_contact(request: HttpRequest) -> Any:
     """Get base context for LarpManager contact pages.
 
     Args:
@@ -845,7 +846,7 @@ def get_lm_contact(request: HttpRequest):
 
 
 @login_required
-def lm_list(request: HttpRequest):
+def lm_list(request: HttpRequest) -> Any:
     """Display list of associations for admin users.
 
     Shows associations ordered by total registrations count.
@@ -929,7 +930,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/larpmanager/payments.html", context)
 
 
-def get_run_lm_payment(run) -> None:
+def get_run_lm_payment(run: Any) -> None:
     """Calculate payment details for a run.
 
     Calculates features count, active registrations, and total payment
@@ -955,7 +956,7 @@ def get_run_lm_payment(run) -> None:
 
 
 @login_required
-def lm_payments_confirm(request: HttpRequest, run_id):
+def lm_payments_confirm(request: HttpRequest, run_id: Any) -> Any:
     """Confirm payment for a specific run.
 
     Marks a run as paid with calculated total.
@@ -978,7 +979,7 @@ def lm_payments_confirm(request: HttpRequest, run_id):
 
 
 @login_required
-def lm_send(request: HttpRequest):
+def lm_send(request: HttpRequest) -> Any:
     """Send bulk email to users.
 
     Provides form for sending emails to multiple recipients.
@@ -1055,7 +1056,7 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
 
 
 @ratelimit(key="ip", rate="5/m", block=True)
-def donate(request: HttpRequest):
+def donate(request: HttpRequest) -> Any:
     """Handle donation page with bot protection.
 
     Rate-limited endpoint that blocks bots and provides
@@ -1083,7 +1084,7 @@ def donate(request: HttpRequest):
     return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
-def debug_user(request: HttpRequest, member_id) -> None:
+def debug_user(request: HttpRequest, member_id: Any) -> None:
     """Login as a specific user for debugging purposes.
 
     Allows admin users to login as another user for debugging.
@@ -1103,7 +1104,7 @@ def debug_user(request: HttpRequest, member_id) -> None:
 
 
 @ratelimit(key="ip", rate="5/m", block=True)
-def demo(request: HttpRequest):
+def demo(request: HttpRequest) -> Any:
     """Handle demo organization creation with bot protection.
 
     Rate-limited endpoint that blocks bots and creates

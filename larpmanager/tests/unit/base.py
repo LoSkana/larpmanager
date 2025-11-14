@@ -20,6 +20,8 @@
 
 """Base test case for unit tests with common methods"""
 
+from typing import Any
+
 import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -35,21 +37,21 @@ from larpmanager.models.registration import Registration
 class BaseTestCase(TestCase):
     """Base test case with common test object accessors"""
 
-    def get_association(self):
+    def get_association(self) -> Any:
         """Get the first association from test fixtures, or create one"""
         association = Association.objects.first()
         if not association:
             association = self.create_association()
         return association
 
-    def get_user(self):
+    def get_user(self) -> Any:
         """Get the first user from test fixtures, or create one"""
         user = User.objects.first()
         if not user:
             user = self.create_user()
         return user
 
-    def get_member(self):
+    def get_member(self) -> Any:
         """Get the first member from test fixtures, or create one"""
         from decimal import Decimal
 
@@ -82,14 +84,14 @@ class BaseTestCase(TestCase):
 
         return member
 
-    def get_event(self):
+    def get_event(self) -> Any:
         """Get the first event from test fixtures, or create one"""
         event = Event.objects.first()
         if not event:
             event = self.create_event()
         return event
 
-    def get_run(self):
+    def get_run(self) -> Any:
         """Get the first run from test fixtures, or create one"""
         run = Run.objects.first()
         if not run:
@@ -103,7 +105,7 @@ class BaseTestCase(TestCase):
                 run = self.create_run(event=event)
         return run
 
-    def get_registration(self):
+    def get_registration(self) -> Any:
         """Get the first registration from test fixtures, or create one"""
         registration = Registration.objects.first()
         if not registration:
@@ -111,19 +113,19 @@ class BaseTestCase(TestCase):
         return registration
 
     # Helper methods for creating specific test objects when needed
-    def create_association(self, **kwargs):
+    def create_association(self, **kwargs: Any) -> Any:
         """Create a new association with defaults"""
         defaults = {"name": "Test Association", "slug": "test-association", "email": "test@example.com"}
         defaults.update(kwargs)
         return Association.objects.create(**defaults)
 
-    def create_user(self, **kwargs):
+    def create_user(self, **kwargs: Any) -> Any:
         """Create a new user with defaults"""
         defaults = {"username": "testuser", "email": "test@example.com", "first_name": "Test", "last_name": "User"}
         defaults.update(kwargs)
         return User.objects.create_user(**defaults)
 
-    def create_member(self, user=None, **kwargs):
+    def create_member(self, user: Any = None, **kwargs: Any) -> Any:
         """Create a new member with defaults"""
         from decimal import Decimal
 
@@ -151,7 +153,7 @@ class BaseTestCase(TestCase):
 
         return member
 
-    def create_event(self, association=None, **kwargs):
+    def create_event(self, association: Any = None, **kwargs: Any) -> Any:
         """Create a new event with defaults"""
         if association is None:
             association = self.get_association()
@@ -159,7 +161,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return Event.objects.create(**defaults)
 
-    def create_run(self, event=None, **kwargs):
+    def create_run(self, event: Any = None, **kwargs: Any) -> Any:
         """Create a new run with defaults"""
         if event is None:
             event = self.get_event()
@@ -169,7 +171,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return Run.objects.create(**defaults)
 
-    def create_registration(self, member=None, run=None, **kwargs):
+    def create_registration(self, member: Any = None, run: Any = None, **kwargs: Any) -> Any:
         """Create a new registration with defaults"""
         if member is None:
             member = self.get_member()
@@ -187,7 +189,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return Registration.objects.create(**defaults)
 
-    def payment_invoice(self, **kwargs):
+    def payment_invoice(self, **kwargs: Any) -> Any:
         """Create a payment invoice for testing"""
         from decimal import Decimal
 
@@ -209,7 +211,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return PaymentInvoice(**defaults)
 
-    def payment_item(self, **kwargs):
+    def payment_item(self, **kwargs: Any) -> Any:
         """Create a payment item for testing"""
         from datetime import datetime
         from decimal import Decimal
@@ -227,7 +229,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return AccountingItemPayment(**defaults)
 
-    def other_item_token(self, **kwargs):
+    def other_item_token(self, **kwargs: Any) -> Any:
         """Create an other item for tokens"""
         from decimal import Decimal
 
@@ -244,7 +246,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return AccountingItemOther(**defaults)
 
-    def other_item_credit(self, **kwargs):
+    def other_item_credit(self, **kwargs: Any) -> Any:
         """Create an other item for credits"""
         from decimal import Decimal
 
@@ -261,7 +263,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return AccountingItemOther(**defaults)
 
-    def payment_method(self, **kwargs):
+    def payment_method(self, **kwargs: Any) -> Any:
         """Create a payment method for testing"""
         from larpmanager.models.base import PaymentMethod
 
@@ -269,7 +271,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return PaymentMethod.objects.create(**defaults)
 
-    def ticket(self, event=None, **kwargs):
+    def ticket(self, event: Any = None, **kwargs: Any) -> Any:
         """Create a registration ticket for testing"""
         from decimal import Decimal
 
@@ -288,7 +290,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return RegistrationTicket.objects.create(**defaults)
 
-    def question(self, event=None, **kwargs):
+    def question(self, event: Any = None, **kwargs: Any) -> Any:
         """Create a registration question for testing"""
         from larpmanager.models.form import BaseQuestionType, QuestionStatus, RegistrationQuestion
 
@@ -305,7 +307,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return RegistrationQuestion.objects.create(**defaults)
 
-    def question_with_options(self, event=None, **kwargs):
+    def question_with_options(self, event: Any = None, **kwargs: Any) -> Any:
         """Create a question with multiple choice options for testing"""
         from decimal import Decimal
 
@@ -334,7 +336,7 @@ class BaseTestCase(TestCase):
 
         return question, option1, option2
 
-    def character(self, event=None, **kwargs):
+    def character(self, event: Any = None, **kwargs: Any) -> Any:
         """Create a character for testing"""
         from larpmanager.models.writing import Character
 
@@ -351,7 +353,7 @@ class BaseTestCase(TestCase):
         defaults.update(kwargs)
         return Character.objects.create(**defaults)
 
-    def invoice(self):
+    def invoice(self) -> Any:
         """Get or create a payment invoice for testing"""
         from larpmanager.models.accounting import PaymentInvoice
 
@@ -361,7 +363,7 @@ class BaseTestCase(TestCase):
             invoice.save()
         return invoice
 
-    def accounting_item(self):
+    def accounting_item(self) -> Any:
         """Get or create an accounting item for testing"""
         from decimal import Decimal
 
@@ -370,11 +372,14 @@ class BaseTestCase(TestCase):
         item = AccountingItemExpense.objects.first()
         if not item:
             item = AccountingItemExpense.objects.create(
-                member=self.get_member(), value=Decimal("50.00"), association=self.get_association(), descr="Test expense"
+                member=self.get_member(),
+                value=Decimal("50.00"),
+                association=self.get_association(),
+                descr="Test expense",
             )
         return item
 
-    def collection(self):
+    def collection(self) -> Any:
         """Get or create a collection for testing"""
         from larpmanager.models.accounting import Collection
 
@@ -385,7 +390,7 @@ class BaseTestCase(TestCase):
             )
         return collection
 
-    def collection_item(self):
+    def collection_item(self) -> Any:
         """Get or create a collection item for testing"""
         from decimal import Decimal
 
@@ -401,7 +406,7 @@ class BaseTestCase(TestCase):
             )
         return item
 
-    def organizer(self):
+    def organizer(self) -> Any:
         """Get or create an organizer (member) for testing"""
         from larpmanager.models.member import Member
 
@@ -419,7 +424,7 @@ class BaseTestCase(TestCase):
                 organizer = Member.objects.create(user=organizer_user, name="Organizer", surname="Test", language="en")
         return organizer
 
-    def refund_request(self):
+    def refund_request(self) -> Any:
         """Get or create a refund request for testing"""
         from decimal import Decimal
 
@@ -435,7 +440,7 @@ class BaseTestCase(TestCase):
             )
         return refund
 
-    def other_item_refund(self):
+    def other_item_refund(self) -> Any:
         """Create an other item for refunds"""
         from decimal import Decimal
 
@@ -450,7 +455,7 @@ class BaseTestCase(TestCase):
             descr="Test refund",
         )
 
-    def discount(self):
+    def discount(self) -> Any:
         """Get or create a discount for testing"""
         from decimal import Decimal
 
@@ -470,7 +475,7 @@ class BaseTestCase(TestCase):
             discount.runs.add(self.get_run())
         return discount
 
-    def user_with_permissions(self):
+    def user_with_permissions(self) -> Any:
         """Get or create a user with permissions for testing"""
         # This can return the same as member().user for simplicity
         # or create a specific user with permissions if needed

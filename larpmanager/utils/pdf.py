@@ -68,7 +68,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def fix_filename(filename):
+def fix_filename(filename: Any) -> Any:
     """Remove special characters from filename for safe PDF generation.
 
     Args:
@@ -82,7 +82,7 @@ def fix_filename(filename):
 
 
 # reprint if file not exists, older than 1 day, or debug
-def reprint(file_path):
+def reprint(file_path: Any) -> Any:
     """Determine if PDF file should be regenerated.
 
     Args:
@@ -104,7 +104,7 @@ def reprint(file_path):
     return modification_time < cutoff_date
 
 
-def return_pdf(file_path, filename):
+def return_pdf(file_path: Any, filename: Any) -> Any:
     """Return PDF file as HTTP response.
 
     Args:
@@ -509,7 +509,7 @@ def print_volunteer_registry(context: dict) -> str:
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
-def cleanup_handout_pdfs_before_delete(handout) -> None:
+def cleanup_handout_pdfs_before_delete(handout: Any) -> None:
     """Handle handout pre-delete PDF cleanup.
 
     Args:
@@ -520,7 +520,7 @@ def cleanup_handout_pdfs_before_delete(handout) -> None:
         safe_remove(handout.get_filepath(event_run))
 
 
-def cleanup_handout_pdfs_after_save(instance) -> None:
+def cleanup_handout_pdfs_after_save(instance: object) -> None:
     """Handle handout post-save PDF cleanup.
 
     Args:
@@ -531,7 +531,7 @@ def cleanup_handout_pdfs_after_save(instance) -> None:
         safe_remove(instance.get_filepath(run))
 
 
-def cleanup_handout_template_pdfs_before_delete(handout_template) -> None:
+def cleanup_handout_template_pdfs_before_delete(handout_template: Any) -> None:
     """Handle handout template pre-delete PDF cleanup.
 
     Args:
@@ -542,7 +542,7 @@ def cleanup_handout_template_pdfs_before_delete(handout_template) -> None:
         safe_remove(handout_template.get_filepath(event_run))
 
 
-def cleanup_handout_template_pdfs_after_save(instance) -> None:
+def cleanup_handout_template_pdfs_after_save(instance: object) -> None:
     """Handle handout template post-save PDF cleanup.
 
     Args:
@@ -568,7 +568,7 @@ def remove_run_pdf(event: Event) -> None:
         safe_remove(event_run.get_gallery_filepath())
 
 
-def delete_character_pdf_files(instance, single=None, runs=None) -> None:
+def delete_character_pdf_files(instance: object, single: Any = None, runs: Any = None) -> None:
     """Delete PDF files for a character across specified runs.
 
     Args:
@@ -590,7 +590,7 @@ def delete_character_pdf_files(instance, single=None, runs=None) -> None:
         safe_remove(instance.get_relationships_filepath(run))
 
 
-def cleanup_character_pdfs_before_delete(character) -> None:
+def cleanup_character_pdfs_before_delete(character: Any) -> None:
     """Handle character pre-delete PDF cleanup.
 
     Args:
@@ -601,7 +601,7 @@ def cleanup_character_pdfs_before_delete(character) -> None:
     delete_character_pdf_files(character)
 
 
-def cleanup_character_pdfs_on_save(instance) -> None:
+def cleanup_character_pdfs_on_save(instance: object) -> None:
     """Handle character post-save PDF cleanup.
 
     Args:
@@ -612,7 +612,7 @@ def cleanup_character_pdfs_on_save(instance) -> None:
     delete_character_pdf_files(instance)
 
 
-def cleanup_relationship_pdfs_before_delete(instance) -> None:
+def cleanup_relationship_pdfs_before_delete(instance: object) -> None:
     """Handle player relationship pre-delete PDF cleanup.
 
     Args:
@@ -623,7 +623,7 @@ def cleanup_relationship_pdfs_before_delete(instance) -> None:
         delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
 
 
-def cleanup_relationship_pdfs_after_save(instance) -> None:
+def cleanup_relationship_pdfs_after_save(instance: object) -> None:
     """Handle player relationship post-save PDF cleanup.
 
     Args:
@@ -634,7 +634,7 @@ def cleanup_relationship_pdfs_after_save(instance) -> None:
         delete_character_pdf_files(el.character, instance.reg.run)
 
 
-def cleanup_faction_pdfs_before_delete(instance) -> None:
+def cleanup_faction_pdfs_before_delete(instance: object) -> None:
     """Handle faction pre-delete PDF cleanup.
 
     Args:
@@ -645,7 +645,7 @@ def cleanup_faction_pdfs_before_delete(instance) -> None:
         delete_character_pdf_files(character)
 
 
-def cleanup_faction_pdfs_on_save(instance) -> None:
+def cleanup_faction_pdfs_on_save(instance: object) -> None:
     """Handle faction post-save PDF cleanup.
 
     Args:
@@ -670,7 +670,7 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
         delete_character_pdf_files(character, trait_instance.run)
 
 
-def cleanup_pdfs_on_trait_assignment(assignment_trait_instance) -> None:
+def cleanup_pdfs_on_trait_assignment(assignment_trait_instance: Any) -> None:
     """Handle assignment trait post-save PDF cleanup."""
     if not assignment_trait_instance.member:
         return
@@ -713,7 +713,7 @@ def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -
     print_handout_go(context, handout_id)
 
 
-def print_character_go(context: dict, character) -> None:
+def print_character_go(context: dict, character: Any) -> None:
     """Print character information, handling missing character gracefully."""
     try:
         # Validate character access and retrieve character data
@@ -766,7 +766,7 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
         print_handout_go(context, handout_number)
 
 
-def clean_tag(tag):
+def clean_tag(tag: Any) -> Any:
     """Clean XML tag by removing namespace prefix.
 
     Args:
@@ -782,7 +782,7 @@ def clean_tag(tag):
     return tag
 
 
-def replace_data(template_path, character_data) -> None:
+def replace_data(template_path: Any, character_data: Any) -> None:
     """Replace character data placeholders in template file.
 
     Args:

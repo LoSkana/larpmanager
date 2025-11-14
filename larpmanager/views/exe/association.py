@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django.contrib import messages
@@ -56,7 +57,7 @@ from larpmanager.views.orga.event import prepare_roles_list
 
 
 @login_required
-def exe_association(request: HttpRequest):
+def exe_association(request: HttpRequest) -> Any:
     """Edit association details."""
     return exe_edit(
         request,
@@ -98,7 +99,7 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_roles_edit(request: HttpRequest, num):
+def exe_roles_edit(request: HttpRequest, num: Any) -> Any:
     """Edit specific association role."""
     return exe_edit(request, ExeAssociationRoleForm, num, "exe_roles")
 
@@ -114,7 +115,7 @@ def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse
 
 
 @login_required
-def exe_profile(request: HttpRequest):
+def exe_profile(request: HttpRequest) -> Any:
     """Edit user profile settings."""
     return exe_edit(request, ExeProfileForm, None, "exe_profile", "manage", additional_context={"add_another": False})
 
@@ -136,7 +137,7 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_texts_edit(request: HttpRequest, num):
+def exe_texts_edit(request: HttpRequest, num: Any) -> Any:
     """Edit specific association text."""
     return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
 
@@ -195,7 +196,7 @@ def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_methods(request: HttpRequest):
+def exe_methods(request: HttpRequest) -> Any:
     """Edit payment methods settings."""
     return exe_edit(
         request,
@@ -208,7 +209,7 @@ def exe_methods(request: HttpRequest):
 
 
 @login_required
-def exe_appearance(request: HttpRequest):
+def exe_appearance(request: HttpRequest) -> Any:
     """Edit association appearance settings."""
     return exe_edit(
         request,
@@ -220,7 +221,7 @@ def exe_appearance(request: HttpRequest):
     )
 
 
-def f_k_exe(f_id, r_id) -> str:
+def f_k_exe(f_id: Any, r_id: Any) -> str:
     """Generate feature key for association role."""
     return f"feature_{f_id}_exe_{r_id}_key"
 
@@ -462,13 +463,13 @@ def feature_description(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
-def exe_quick(request: HttpRequest):
+def exe_quick(request: HttpRequest) -> Any:
     """Edit quick setup configuration."""
     return exe_edit(request, ExeQuickSetupForm, None, "exe_quick", "manage", additional_context={"add_another": False})
 
 
 @login_required
-def exe_preferences(request: HttpRequest):
+def exe_preferences(request: HttpRequest) -> Any:
     """Edit user preferences."""
     return exe_edit(
         request,

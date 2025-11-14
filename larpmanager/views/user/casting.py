@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -364,7 +364,7 @@ def _check_already_done(context: dict, assignment_type: int) -> None:
             pass
 
 
-def _casting_update(context: dict, prefs: dict[str, int], request, typ: int) -> None:
+def _casting_update(context: dict, prefs: dict[str, int], request: Any, typ: int) -> None:
     """Update casting preferences for a member and send confirmation email.
 
     This function handles the complete casting preference workflow: clearing existing

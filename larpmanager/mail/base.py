@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import holidays
 from django.conf import settings as conf_settings
@@ -71,7 +71,7 @@ def check_holiday() -> bool:
     return False
 
 
-def join_email(association) -> None:
+def join_email(association: Any) -> None:
     """Send welcome emails to association executives when they join.
 
     Args:
@@ -100,7 +100,7 @@ def join_email(association) -> None:
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender, **kwargs) -> None:  # noqa: ARG001
+def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.
@@ -206,7 +206,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
         my_send_mail(subj, body, m, instance.association)
 
 
-def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:  # noqa: ARG001
+def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle event role changes and send notifications.
 
     Args:
@@ -415,8 +415,8 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
 
 
 def mail_confirm_casting(
-    member,
-    run,
+    member: Any,
+    run: Any,
     preference_category_name: str,
     selected_preferences: list,
     elements_to_avoid: str,
@@ -607,7 +607,7 @@ def get_exec_language(association: Association) -> str:
     return max(language_counts, key=language_counts.get) if language_counts else "en"
 
 
-def send_support_ticket_email(instance) -> None:
+def send_support_ticket_email(instance: Any) -> None:
     """Send ticket notification email to admins and association maintainers.
 
     Args:

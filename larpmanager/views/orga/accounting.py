@@ -239,7 +239,7 @@ def orga_accounting(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_tokens(request: HttpRequest, event_slug) -> dict:
+def orga_tokens(request: HttpRequest, event_slug: str) -> dict:
     """Display and manage accounting tokens for an organization's events.
 
     This view handles the display of accounting tokens (credits/debits) for events

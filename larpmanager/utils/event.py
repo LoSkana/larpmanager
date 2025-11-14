@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
 from django.http import HttpRequest
@@ -44,7 +46,7 @@ from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.common import copy_class
 
 
-def get_character_filter(character, character_registrations, active_filters) -> bool:
+def get_character_filter(character: Any, character_registrations: Any, active_filters: Any) -> bool:
     """Check if character should be included based on filter criteria.
 
     Args:
@@ -61,7 +63,7 @@ def get_character_filter(character, character_registrations, active_filters) -> 
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context, character_filters) -> None:  # noqa: C901 - Complex character filtering with faction organization
+def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -143,7 +145,7 @@ def has_access_character(request: HttpRequest, context: dict) -> bool:
     return bool("player_id" in context["char"] and context["char"]["player_id"] == current_member_id)
 
 
-def update_run_plan_on_event_change(run_instance) -> None:
+def update_run_plan_on_event_change(run_instance: Any) -> None:
     """Set run plan from association default if not already set.
 
     Args:
@@ -155,7 +157,7 @@ def update_run_plan_on_event_change(run_instance) -> None:
         Run.objects.filter(pk=run_instance.pk).update(**plan_updates)
 
 
-def prepare_campaign_event_data(event_instance) -> None:
+def prepare_campaign_event_data(event_instance: Any) -> None:
     """Prepare campaign event data before saving.
 
     Args:
@@ -172,7 +174,7 @@ def prepare_campaign_event_data(event_instance) -> None:
         event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
 
 
-def copy_parent_event_to_campaign(event) -> None:
+def copy_parent_event_to_campaign(event: Any) -> None:
     """Set up campaign event by copying from parent.
 
     Args:
@@ -194,7 +196,7 @@ def copy_parent_event_to_campaign(event) -> None:
             del event._skip_campaign_setup  # noqa: SLF001  # Internal flag to prevent recursion
 
 
-def create_default_event_setup(event) -> None:
+def create_default_event_setup(event: Any) -> None:
     """Set up event with runs, tickets, and forms after save.
 
     Args:
@@ -220,7 +222,7 @@ def create_default_event_setup(event) -> None:
     clear_event_fields_cache(event.id)
 
 
-def save_event_tickets(features, instance) -> None:
+def save_event_tickets(features: Any, instance: object) -> None:
     """Create default registration tickets for event.
 
     Args:
@@ -241,7 +243,7 @@ def save_event_tickets(features, instance) -> None:
             RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
 
 
-def save_event_character_form(features: dict, instance) -> None:
+def save_event_character_form(features: dict, instance: object) -> None:
     """Create character form questions based on enabled features.
 
     This function initializes character form questions for an event based on the
@@ -311,7 +313,7 @@ def save_event_character_form(features: dict, instance) -> None:
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
-def _init_writing_element(instance, default_question_types, question_applicables) -> None:
+def _init_writing_element(instance: object, default_question_types: Any, question_applicables: Any) -> None:
     """Initialize writing questions for specific applicables in an event instance.
 
     Args:
@@ -344,7 +346,7 @@ def _init_character_form_questions(
     custom_types: set,
     default_types: dict,
     features: set,
-    instance,
+    instance: object,
 ) -> None:
     """Initialize character form questions during model setup.
 
@@ -409,7 +411,7 @@ def _init_character_form_questions(
             WritingQuestion.objects.filter(event=instance, typ=question_type).delete()
 
 
-def save_event_registration_form(features: dict, instance) -> None:
+def save_event_registration_form(features: dict, instance: object) -> None:
     """Create registration form questions based on enabled features.
 
     This function manages the creation and deletion of registration questions
@@ -490,7 +492,7 @@ def save_event_registration_form(features: dict, instance) -> None:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
 
 
-def _activate_orga_lang(instance) -> None:
+def _activate_orga_lang(instance: object) -> None:
     """Activate the most common language among event organizers.
 
     Determines the most frequently used language among all organizers
@@ -519,7 +521,7 @@ def _activate_orga_lang(instance) -> None:
     activate(most_common_language)
 
 
-def assign_previous_campaign_character(registration) -> None:
+def assign_previous_campaign_character(registration: Any) -> None:
     """Auto-assign last character from previous campaign run to new registration.
 
     Automatically assigns the character from the most recent campaign run to a new

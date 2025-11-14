@@ -23,6 +23,7 @@ import math
 import random
 from datetime import date
 from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -139,7 +140,7 @@ def language(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def profile(request: HttpRequest):
+def profile(request: HttpRequest) -> Any:
     """Display and manage user profile information.
 
     Handles profile editing, privacy settings, and personal information updates,
@@ -214,7 +215,7 @@ def profile(request: HttpRequest):
     return render(request, "larpmanager/member/profile.html", context)
 
 
-def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:  # noqa: ARG001
+def load_profile(request: HttpRequest, img: Any, ext: str) -> JsonResponse:  # noqa: ARG001
     """Save uploaded profile image and return thumbnail URL."""
     # Generate unique filename and save to member profile
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
@@ -600,7 +601,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request: HttpRequest, member_id):
+def chat(request: HttpRequest, member_id: Any) -> Any:
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions

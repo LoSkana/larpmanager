@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import yaml
 from django.apps import apps
@@ -35,7 +36,7 @@ class Command(BaseCommand):
 
     help = "Reload features from yaml"
 
-    def handle(self, *args, **options) -> None:  # noqa: ARG002
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Import feature system fixtures from YAML files.
 
         Loads modules, features, permissions, and other system configuration

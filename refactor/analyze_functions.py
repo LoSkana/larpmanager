@@ -11,19 +11,20 @@ Output format: CSV file with columns: name, path, invocation_count, function_num
 import ast
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 
 class FunctionAnalyzer(ast.NodeVisitor):
     """AST visitor to collect function definitions and their invocations."""
 
-    def __init__(self, path) -> None:
+    def __init__(self, path: Any) -> None:
         self.path = path
         self.functions = []  # List of (function_name, function_number) tuples
         self.function_counts = defaultdict(int)  # Track count of each function name
         self.invocations = []  # List of function names called in this file
         self.current_function = None
 
-    def visit_FunctionDef(self, node) -> None:
+    def visit_FunctionDef(self, node: Any) -> None:
         """Visit function definitions."""
         # Count occurrence of this function name in this file
         self.function_counts[node.name] += 1
@@ -42,11 +43,11 @@ class FunctionAnalyzer(ast.NodeVisitor):
         # Restore previous function context
         self.current_function = previous_function
 
-    def visit_AsyncFunctionDef(self, node) -> None:
+    def visit_AsyncFunctionDef(self, node: Any) -> None:
         """Visit async function definitions."""
         self.visit_FunctionDef(node)
 
-    def visit_Call(self, node) -> None:
+    def visit_Call(self, node: Any) -> None:
         """Visit function calls."""
         # Only count calls that happen inside a function
         if self.current_function is not None:
@@ -68,7 +69,7 @@ class FunctionAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
 
 
-def analyze_file(path):
+def analyze_file(path: Any) -> Any:
     """Analyze a single Python file for function definitions and invocations.
 
     Args:
@@ -92,7 +93,7 @@ def analyze_file(path):
         return None, None
 
 
-def find_python_files(root_dir):
+def find_python_files(root_dir: Any) -> Any:
     """Find all Python files in the larpmanager directory.
 
     Args:
@@ -109,10 +110,7 @@ def find_python_files(root_dir):
         return
 
     # Directories to skip
-    skip_dirs = {
-        "__pycache__", ".pytest_cache", "migrations", "staticfiles",
-        ".tox", "dist", "build", ".eggs", "tests"
-    }
+    skip_dirs = {"__pycache__", ".pytest_cache", "migrations", "staticfiles", ".tox", "dist", "build", ".eggs", "tests"}
 
     for py_file in larpmanager_dir.rglob("*.py"):
         # Skip files in excluded directories

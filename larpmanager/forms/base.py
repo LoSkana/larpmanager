@@ -40,7 +40,6 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
-    WritingQuestion,
     WritingQuestionType,
     get_writing_max_length,
 )
@@ -124,7 +123,7 @@ class MyForm(forms.ModelForm):
         self.unavail = {}
         self.max_lengths = {}
 
-    def get_automatic_field(self):
+    def get_automatic_field(self) -> Any:
         """Get list of fields that should be automatically populated.
 
         Returns:
@@ -215,7 +214,7 @@ class MyForm(forms.ModelForm):
         typ = self.params["elementTyp"]
         return self.params["event"].get_class_parent(typ)
 
-    def clean_association(self):
+    def clean_association(self) -> Association:
         """Return association from params."""
         return Association.objects.get(pk=self.params["association_id"])
 
@@ -227,7 +226,7 @@ class MyForm(forms.ModelForm):
         """Validate display field uniqueness within event."""
         return self._validate_unique_event("display")
 
-    def _validate_unique_event(self, field_name: str) -> any:
+    def _validate_unique_event(self, field_name: str) -> Any:
         """Validate field uniqueness within event scope.
 
         This method ensures that a field value is unique within the context of a specific
@@ -308,7 +307,7 @@ class MyForm(forms.ModelForm):
 
         return instance
 
-    def _save_multi(self, field: str, instance) -> None:
+    def _save_multi(self, field: str, instance: Any) -> None:
         """Save many-to-many field relationships for a model instance.
 
         Compares the initial values with cleaned form data to determine
@@ -455,7 +454,7 @@ class BaseRegistrationForm(MyFormRun):
         # Store form sections organized by category
         self.sections = {}
 
-    def _init_reg_question(self, instance: Any | None, event: Any) -> None:
+    def _init_reg_question(self, instance: Any | None, event: Event) -> None:
         """Initialize registration questions and answers from existing instance.
 
         Loads existing answers and choices from the database for a given registration
@@ -506,16 +505,16 @@ class BaseRegistrationForm(MyFormRun):
         """Initialize questions for the given event."""
         self.questions = self.question_class.get_instance_questions(event, self.params["features"])
 
-    def get_options_query(self, event) -> QuerySet:
+    def get_options_query(self, event: Event) -> QuerySet:
         """Return ordered options for questions in the given event."""
         return self.option_class.objects.filter(question__event=event).order_by("order")
 
     def get_choice_options(
         self,
         all_options: dict,
-        question,
-        chosen_options=None,
-        registration_count=None,
+        question: RegistrationQuestion,
+        chosen_options: list | None = None,
+        registration_count: dict | None = None,
     ) -> tuple[list[tuple], str]:
         """Build form choice options for a question with availability and ticket validation.
 
@@ -571,7 +570,11 @@ class BaseRegistrationForm(MyFormRun):
         return choices, help_text
 
     def check_option(
-        self, previously_chosen_options: list, display_name: str, option, registration_count_by_option: dict
+        self,
+        previously_chosen_options: list,
+        display_name: str,
+        option: RegistrationOption,
+        registration_count_by_option: dict,
     ) -> tuple[str, bool]:
         """Check option availability and update display name with availability info.
 
@@ -621,7 +624,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return display_name, is_valid
 
-    def _validate_multiple_choice(self, form_data: dict, question, field_key: str) -> None:
+    def _validate_multiple_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
         """Validate multiple choice question selections.
 
         Args:
@@ -638,7 +641,7 @@ class BaseRegistrationForm(MyFormRun):
             if question.id in self.unavail and int(sel) in self.unavail[question.id]:
                 self.add_error(field_key, _("Option no longer available"))
 
-    def _validate_single_choice(self, form_data: dict, question, field_key: str) -> None:
+    def _validate_single_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
         """Validate single choice question selection.
 
         Args:
@@ -760,7 +763,7 @@ class BaseRegistrationForm(MyFormRun):
 
     def _init_field(
         self,
-        question: WritingQuestion,
+        question: RegistrationQuestion,
         registration_counts: dict[str, Any] | None = None,
         *,
         is_organizer: bool = True,
@@ -837,7 +840,7 @@ class BaseRegistrationForm(MyFormRun):
     def init_type(
         self,
         field_key: str,
-        question: BaseModel,
+        question: RegistrationQuestion,
         registration_counts: dict,
         *,
         is_organizer: bool,
@@ -898,7 +901,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_key
 
-    def init_special(self, question: BaseModel, *, is_required: bool) -> str | None:
+    def init_special(self, question: RegistrationQuestion, *, is_required: bool) -> str | None:
         """Initialize special form field configurations.
 
         Configures special form fields based on the question type, mapping certain
@@ -947,7 +950,7 @@ class BaseRegistrationForm(MyFormRun):
 
         return field_key
 
-    def init_editor(self, field_key: str, question: BaseModel, *, is_required: bool) -> None:
+    def init_editor(self, field_key: str, question: RegistrationQuestion, *, is_required: bool) -> None:
         """Initialize a TinyMCE editor field for a form question.
 
         Args:
@@ -975,7 +978,7 @@ class BaseRegistrationForm(MyFormRun):
         # Add field to show_link list for frontend handling
         self.show_link.append(f"id_{field_key}")
 
-    def init_paragraph(self, field_key: str, question_config: BaseModel, *, is_required: bool) -> None:
+    def init_paragraph(self, field_key: str, question_config: RegistrationQuestion, *, is_required: bool) -> None:
         """Initialize a paragraph text field for the form.
 
         Args:
@@ -1000,7 +1003,7 @@ class BaseRegistrationForm(MyFormRun):
         if question_config.id in self.answers:
             self.initial[field_key] = self.answers[question_config.id].text
 
-    def init_text(self, field_key: str, form_question, *, is_required: bool) -> None:
+    def init_text(self, field_key: str, form_question: RegistrationQuestion, *, is_required: bool) -> None:
         """Initialize a text field with validators and initial values."""
         # Create validators based on max_length constraint
         field_validators = [max_length_validator(form_question.max_length)] if form_question.max_length else []
@@ -1020,10 +1023,10 @@ class BaseRegistrationForm(MyFormRun):
     def init_single(
         self,
         field_key: str,
-        question: Any,
+        question: RegistrationQuestion,
         registration_counts: dict,
         *,
-        is_organizer,
+        is_organizer: bool,
         is_required: bool,
     ) -> None:
         """Initialize single choice form field.
@@ -1076,7 +1079,7 @@ class BaseRegistrationForm(MyFormRun):
     def init_multiple(
         self,
         field_key: str,
-        question: Any,
+        question: RegistrationQuestion,
         registration_counts: dict,
         *,
         is_organizer: bool,
@@ -1141,7 +1144,7 @@ class BaseRegistrationForm(MyFormRun):
         field = self.fields.pop(field_name)
         self.fields[field_name] = field
 
-    def save_reg_questions(self, instance, *, is_organizer=True) -> None:
+    def save_reg_questions(self, instance: Any, *, is_organizer: Any = True) -> None:
         """Save registration question answers to database.
 
         Args:
@@ -1356,7 +1359,7 @@ class MyCssForm(MyForm):
         default_storage.save(path, ContentFile(css))
 
     @staticmethod
-    def get_css_path(association_skin) -> str:  # noqa: ARG004
+    def get_css_path(association_skin: Association | Event) -> str:  # noqa: ARG004
         """Returns empty string (CSS path logic not implemented)."""
         return ""
 
