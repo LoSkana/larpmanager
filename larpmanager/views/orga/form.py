@@ -84,7 +84,7 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
     # Fetch registration tickets ordered by their sequence number
     context["list"] = RegistrationTicket.objects.filter(event=context["event"]).order_by("order")
     # Get available ticket tiers for the current event
-    context["tiers"] = OrgaRegistrationTicketForm.get_tier_available(context["event"])
+    context["tiers"] = OrgaRegistrationTicketForm.get_tier_available(context["event"], context)
 
     return render(request, "larpmanager/orga/registration/tickets.html", context)
 

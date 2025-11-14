@@ -190,7 +190,7 @@ def set_data_invoice(
         }
 
     # Apply special code prefix if configured for this association
-    if get_association_config(association_id, "payment_special_code", default_value=False):
+    if get_association_config(association_id, "payment_special_code", default_value=False, context=context):
         invoice.causal = f"{invoice.cod} - {invoice.causal}"
 
 
@@ -215,7 +215,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     invoice.reg = context["reg"]
 
     # Get custom reason template from event configuration
-    custom_reason_template = get_event_config(context["reg"].run.event_id, "payment_custom_reason")
+    custom_reason_template = get_event_config(context["reg"].run.event_id, "payment_custom_reason", context=context)
     if not custom_reason_template:
         return
 
