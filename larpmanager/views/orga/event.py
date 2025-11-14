@@ -176,7 +176,10 @@ def prepare_roles_list(
         "feature__name",
         "name",
     )
-    roles = role_queryset.order_by("number").prefetch_related(Prefetch("permissions", queryset=permissions_queryset))
+    roles = role_queryset.order_by("number").prefetch_related(
+        Prefetch("permissions", queryset=permissions_queryset),
+        "members",
+    )
     context["list"] = []
     if not roles:
         context["list"].append(default_callback(context))

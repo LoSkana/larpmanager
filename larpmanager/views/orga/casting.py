@@ -267,7 +267,7 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int]
         # Process traits for each quest
         for trait in Trait.objects.filter(quest=quest).order_by("number"):
             # Check if trait is already assigned to someone in this run
-            if AssignmentTrait.objects.filter(trait=trait, run=context["run"]).count() > 0:
+            if AssignmentTrait.objects.filter(trait=trait, run=context["run"]).exists():
                 assigned_trait_ids.append(trait.id)
 
             # Build choice label with quest and trait names
