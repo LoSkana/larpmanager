@@ -204,7 +204,7 @@ def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: Any) -> Non
 
 
 @pytest.fixture(autouse=True)
-def _ensure_association_skin(_db: Any) -> None:
+def _ensure_association_skin(db: Any) -> None:  # noqa: ARG001
     """Ensure default AssociationSkin and AssociationRole exist for tests."""
     if not AssociationSkin.objects.filter(pk=1).exists():
         AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
