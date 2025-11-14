@@ -99,10 +99,12 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
                 continue
 
             # Verify payment amount is sufficient (rounded up)
+            # amount_difference > 0 means overpayment (ok), < 0 means underpayment (skip)
             amount_difference: float = math.ceil(float(payment_amount_string)) - math.ceil(
                 float(pending_invoice.mc_gross),
             )
-            if amount_difference > 0:
+            if amount_difference < 0:
+                # Payment is less than invoice amount - skip this invoice
                 continue
 
             # Mark invoice as verified and increment counter

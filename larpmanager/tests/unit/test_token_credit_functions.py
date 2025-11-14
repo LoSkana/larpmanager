@@ -55,8 +55,8 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         # No tokens or credits available, tot_payed should remain unchanged
+        # Note: Function updates in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("0.00"))
 
     def test_registration_tokens_credits_use_tokens_only(self) -> None:
@@ -75,9 +75,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use all 30 tokens
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("30.00"))
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
@@ -97,9 +97,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use all 40 credits
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("40.00"))
         self.assertEqual(membership.credit, Decimal("0.00"))
 
@@ -119,9 +119,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use 30 tokens + 20 credits = 50 total
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("50.00"))
         self.assertEqual(membership.tokens, Decimal("0.00"))
         self.assertEqual(membership.credit, Decimal("20.00"))
@@ -158,9 +158,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("25.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use only 25 tokens
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("25.00"))
         self.assertEqual(membership.tokens, Decimal("75.00"))
 
