@@ -734,7 +734,7 @@ def _writing_save(
 
     # Handle continue editing request
     if "continue" in request.POST:
-        return redirect_func(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
+        return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
 
     # Handle custom redirect function if provided
     if redirect_func:
