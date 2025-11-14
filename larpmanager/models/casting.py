@@ -75,7 +75,7 @@ class Quest(Writing):
         ]
 
     def __str__(self) -> str:
-        """Rappresentazione testuale con numero e nome della domanda."""
+        """Text version of quest."""
         return f"Q{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:
