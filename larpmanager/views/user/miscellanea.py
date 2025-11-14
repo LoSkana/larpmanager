@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -201,7 +202,7 @@ def handout_ext(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
     return print_handout(context)
 
 
-def album_aux(request: HttpRequest, context: dict, parent_album):
+def album_aux(request: HttpRequest, context: dict, parent_album: Any) -> Any:
     """Prepare album context with sub-albums and paginated uploads.
 
     Args:
@@ -290,7 +291,7 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/workshops/index.html", context)
 
 
-def valid_workshop_answer(request: HttpRequest, context: dict):
+def valid_workshop_answer(request: HttpRequest, context: dict) -> Any:
     """Validate workshop quiz answers and determine pass/fail status.
 
     Args:
@@ -389,7 +390,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: i
 
 
 @login_required
-def shuttle(request: HttpRequest):
+def shuttle(request: HttpRequest) -> Any:
     """Display shuttle service requests for the current association.
 
     Args:
@@ -420,7 +421,7 @@ def shuttle(request: HttpRequest):
 
 
 @login_required
-def shuttle_new(request: HttpRequest):
+def shuttle_new(request: HttpRequest) -> Any:
     """Handle creation of new shuttle service requests.
 
     Args:
@@ -450,7 +451,7 @@ def shuttle_new(request: HttpRequest):
 
 
 @login_required
-def shuttle_edit(request: HttpRequest, shuttle_id):
+def shuttle_edit(request: HttpRequest, shuttle_id: Any) -> Any:
     """Edit existing shuttle service request.
 
     Args:

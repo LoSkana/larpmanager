@@ -52,7 +52,7 @@ class BaseQuestionType(models.TextChoices):
     EDITOR = "e", _("Advanced text editor")
 
     @staticmethod
-    def get_answer_types():
+    def get_answer_types() -> Any:
         """Get question types that use text answers.
 
         Returns:
@@ -62,7 +62,7 @@ class BaseQuestionType(models.TextChoices):
         return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
     @staticmethod
-    def get_choice_types():
+    def get_choice_types() -> Any:
         """Get question types that use choice options.
 
         Returns:
@@ -72,7 +72,7 @@ class BaseQuestionType(models.TextChoices):
         return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
     @staticmethod
-    def get_basic_types():
+    def get_basic_types() -> Any:
         """Get all basic question types.
 
         Returns:
@@ -82,7 +82,7 @@ class BaseQuestionType(models.TextChoices):
         return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of question types to string identifiers."""
         return {
             BaseQuestionType.SINGLE: "single-choice",
@@ -93,7 +93,7 @@ class BaseQuestionType(models.TextChoices):
         }
 
 
-def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
+def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]) -> Any:
     """Extend Django TextChoices with additional options.
 
     Args:
@@ -128,7 +128,7 @@ WritingQuestionType = extend_textchoices(
 )
 
 
-def get_def_writing_types():
+def get_def_writing_types() -> Any:
     """Get default writing question types.
 
     Returns:
@@ -138,7 +138,7 @@ def get_def_writing_types():
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
 
 
-def get_writing_max_length():
+def get_writing_max_length() -> Any:
     """Get maximum length for writing content.
 
     Returns:
@@ -178,7 +178,7 @@ class QuestionStatus(models.TextChoices):
     HIDDEN = "h", _("Hidden")
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of question status values to string identifiers."""
         return {
             QuestionStatus.OPTIONAL: "optional",
@@ -197,7 +197,7 @@ class QuestionVisibility(models.TextChoices):
     HIDDEN = "h", _("Hidden")
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of visibility values to string identifiers."""
         return {
             QuestionVisibility.SEARCHABLE: "searchable",
@@ -236,7 +236,7 @@ class QuestionApplicable(models.TextChoices):
         return apps.get_model("larpmanager", model_name)
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of type values to labels."""
         return dict(cls.choices)
 
@@ -318,7 +318,6 @@ class WritingQuestion(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -335,24 +334,24 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event_instance, enabled_features):  # noqa: ARG004
+    def get_instance_questions(event_instance: Any, enabled_features: Any) -> Any:  # noqa: ARG004
         """Get all writing questions for the event instance ordered by order field."""
         return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
-    def skip(registration, features, params=None, *, is_organizer=False) -> bool:  # noqa: ARG004
+    def skip(registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: ARG004
         """Default behavior: never skip processing."""
         return False
 
-    def get_editable(self):
+    def get_editable(self) -> Any:
         """Return list of editable character statuses."""
         return self.editable.split(",") if self.editable else []
 
-    def set_editable(self, editable_list) -> None:
+    def set_editable(self, editable_list: Any) -> None:
         """Set editable character statuses from list."""
         self.editable = ",".join(editable_list)
 
-    def get_editable_display(self):
+    def get_editable_display(self) -> Any:
         """Return comma-separated display of editable character statuses."""
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
@@ -418,7 +417,6 @@ class WritingOption(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.question} {self.name}"
 
     def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
@@ -449,7 +447,6 @@ class WritingChoice(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         # Return string representation showing element ID, question name, and option name
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
@@ -593,7 +590,6 @@ class RegistrationQuestion(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -631,7 +627,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration, features, params=None, *, is_organizer=False) -> bool:  # noqa: C901 - Complex question skip logic with feature checks
+    def skip(self, registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: C901 - Complex question skip logic with feature checks
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
@@ -719,10 +715,9 @@ class RegistrationOption(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.question} {self.name[:30]} ({self.price}€)"
 
-    def get_price(self):
+    def get_price(self) -> Any:
         """Return the option price."""
         return self.price
 

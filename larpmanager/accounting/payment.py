@@ -351,7 +351,7 @@ def _prepare_gateway_form(
 
 def get_payment_form(
     request: HttpRequest,
-    form: Any,
+    form: Form,
     payment_type: str,
     context: dict[str, Any],
     invoice_key: str | None = None,

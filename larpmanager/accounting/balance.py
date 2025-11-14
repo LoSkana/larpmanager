@@ -61,10 +61,10 @@ logger = logging.getLogger(__name__)
 
 def get_acc_detail(
     name: str,
-    run: Any,
+    run: Run,
     description: str,
     model_class: type,
-    choices: Any,
+    choices: list[tuple[str, str]],
     type_field: str | None,
     filters: dict[str, Any] | None = None,
     *,

@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -40,7 +40,6 @@ class QuestType(Writing):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return self.name
 
     def show(self, run: Run | None = None) -> dict:
@@ -175,7 +174,6 @@ class AssignmentTrait(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.run} ({self.member}) {self.trait}"
 
 
@@ -270,7 +268,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     return traits
 
 
-def refresh_all_instance_traits(instance) -> None:
+def refresh_all_instance_traits(instance: Any) -> None:
     """Refresh traits for an instance by updating and synchronizing with calculated traits."""
     if instance.id is None:
         return

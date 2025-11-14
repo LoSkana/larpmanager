@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
@@ -228,7 +230,10 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
         # For choice questions, ensure at least one option exists
-        elif context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE] and not RegistrationOption.objects.filter(question_id=context["saved"].id).exists():
+        elif (
+            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+            and not RegistrationOption.objects.filter(question_id=context["saved"].id).exists()
+        ):
             edit_option = True
             messages.warning(
                 request,
@@ -302,7 +307,7 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str, num: in
     return registration_option_edit(context, 0, request)
 
 
-def registration_option_edit(context, option_number, request):
+def registration_option_edit(context: Any, option_number: Any, request: Any) -> Any:
     """Handle editing of registration option with form processing and redirect logic.
 
     Args:

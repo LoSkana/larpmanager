@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -27,7 +28,7 @@ from larpmanager.tests.utils import go_to, login_orga, submit_confirm
 pytestmark = pytest.mark.e2e
 
 
-def test_user_new_ticket_orga_bulk(pw_page) -> None:
+def test_user_new_ticket_orga_bulk(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -47,7 +48,7 @@ def test_user_new_ticket_orga_bulk(pw_page) -> None:
     bulk_px(live_server, page)
 
 
-def bulk_writing(live_server, page) -> None:
+def bulk_writing(live_server: Any, page: Any) -> None:
     # set feature
     go_to(page, live_server, "test/1/manage/")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
@@ -124,7 +125,7 @@ def bulk_writing(live_server, page) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def bulk_questbuilder(live_server, page) -> None:
+def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create quest
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="New").click()
@@ -166,7 +167,7 @@ def bulk_questbuilder(live_server, page) -> None:
     expect(page.locator("#one")).to_contain_text("T1 t1 Q2 q2")
 
 
-def bulk_px(live_server, page) -> None:
+def bulk_px(live_server: Any, page: Any) -> None:
     # create ability type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
@@ -201,7 +202,7 @@ def bulk_px(live_server, page) -> None:
     expect(page.locator("#one")).to_contain_text("swor t1 1")
 
 
-def bulk_warehouse(live_server, page) -> None:
+def bulk_warehouse(live_server: Any, page: Any) -> None:
     # activate warehouse
     go_to(page, live_server, "manage/")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
@@ -255,7 +256,7 @@ def bulk_warehouse(live_server, page) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def bulk_warehouse2(live_server, page) -> None:
+def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # bulk move to box
     page.get_by_role("link", name="Items").click()
     expect(page.locator("#one")).to_contain_text("item3 box item2 box item1 box")
@@ -295,7 +296,7 @@ def bulk_warehouse2(live_server, page) -> None:
     expect(page.locator("#id_name")).to_have_value("box2")
 
 
-def new_ticket(live_server, page) -> None:
+def new_ticket(live_server: Any, page: Any) -> None:
     # add new ticket feature
 
     page.locator("#orga_features").get_by_role("link", name="Features").click()

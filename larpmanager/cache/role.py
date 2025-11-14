@@ -364,7 +364,9 @@ def get_event_roles(request: HttpRequest, context: dict, slug: str) -> tuple[boo
     return is_organizer, permission_slugs, role_names
 
 
-def has_event_permission(request: HttpRequest, context: dict, event_slug: str, permission_name=None) -> bool:
+def has_event_permission(
+    request: HttpRequest, context: dict, event_slug: str, permission_name: str | list[str] | None = None
+) -> bool:
     """Check if user has permission for a specific event.
 
     Args:

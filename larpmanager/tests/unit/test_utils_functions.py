@@ -20,7 +20,6 @@
 
 """Tests for utility functions in models/utils.py"""
 
-import re
 from decimal import Decimal
 
 from larpmanager.models.utils import (

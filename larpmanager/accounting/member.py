@@ -125,7 +125,7 @@ def _init_regs(
     registration_choices: dict[int, dict],
     context: dict,
     pending_invoices: dict,
-    registration,
+    registration: Registration,
 ) -> None:
     """Initialize registration options and payment status tracking.
 

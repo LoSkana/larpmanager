@@ -23,13 +23,12 @@ import logging
 import os
 import zipfile
 from pathlib import Path
+from typing import Any, NoReturn
 from urllib.parse import urlparse
 
-from django.utils import timezone
-
 import pandas as pd
+from django.utils import timezone
 from playwright.sync_api import expect
-from typing import NoReturn
 
 logger = logging.getLogger(__name__)
 
@@ -38,20 +37,20 @@ orga_user = "orga@test.it"
 test_user = "user@test.it"
 
 
-def logout(page) -> None:
+def logout(page: Any) -> None:
     page.locator("a#menu-open").click()
     page.get_by_role("link", name="Logout").click()
 
 
-def login_orga(page, live_server) -> None:
+def login_orga(page: Any, live_server: Any) -> None:
     login(page, live_server, orga_user)
 
 
-def login_user(page, live_server) -> None:
+def login_user(page: Any, live_server: Any) -> None:
     login(page, live_server, test_user)
 
 
-def login(page, live_server, name) -> None:
+def login(page: Any, live_server: Any, name: Any) -> None:
     go_to(page, live_server, "/login")
 
     page.locator("#id_username").fill(name)
@@ -60,7 +59,7 @@ def login(page, live_server, name) -> None:
     expect(page.locator("#banner")).not_to_contain_text("Login")
 
 
-def handle_error(page, e, test_name) -> NoReturn:
+def handle_error(page: Any, e: Any, test_name: Any) -> NoReturn:
     logger.error("Error on %s: %s\n", test_name, page.url)
     logger.error(e)
 
@@ -70,7 +69,7 @@ def handle_error(page, e, test_name) -> NoReturn:
     raise e
 
 
-def print_text(page) -> None:
+def print_text(page: Any) -> None:
     visible_text = page.evaluate("""
         () => {
             function getVisibleText(element) {
@@ -87,11 +86,11 @@ def print_text(page) -> None:
     logger.debug(visible_text)
 
 
-def go_to(page, live_server, path) -> None:
+def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path}")
 
 
-def go_to_check(page, path) -> None:
+def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
@@ -99,21 +98,21 @@ def go_to_check(page, path) -> None:
     ooops_check(page)
 
 
-def submit(page) -> None:
+def submit(page: Any) -> None:
     page.get_by_role("button", name="Submit").click()
     page.wait_for_load_state("networkidle")
     page.wait_for_load_state("load")
     ooops_check(page)
 
 
-def ooops_check(page) -> None:
+def ooops_check(page: Any) -> None:
     banner = page.locator("#banner")
     if banner.count() > 0:
         expect(banner).not_to_contain_text("Oops!")
         expect(banner).not_to_contain_text("404")
 
 
-def check_download(page, link: str) -> None:
+def check_download(page: Any, link: str) -> None:
     max_tries = 3
     current_try = 0
 
@@ -158,7 +157,7 @@ def check_download(page, link: str) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text, show=True, timeout=10000) -> None:
+def fill_tinymce(page: Any, iframe_id: Any, text: Any, show: Any = True, timeout: Any = 10000) -> None:
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
@@ -189,7 +188,7 @@ def fill_tinymce(page, iframe_id, text, show=True, timeout=10000) -> None:
     )
 
 
-def _checkboxes(page, check=True) -> None:
+def _checkboxes(page: Any, check: Any = True) -> None:
     checkboxes = page.locator('input[type="checkbox"]')
     count = checkboxes.count()
     for i in range(count):
@@ -204,14 +203,14 @@ def _checkboxes(page, check=True) -> None:
     submit_confirm(page)
 
 
-def submit_confirm(page) -> None:
+def submit_confirm(page: Any) -> None:
     submit_btn = page.get_by_role("button", name="Confirm", exact=True)
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click()
 
 
-def add_links_to_visit(links_to_visit, page, visited_links) -> None:
+def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
     new_links = page.eval_on_selector_all("a", "elements => elements.map(e => e.href)")
     for link in new_links:
         if "logout" in link:
@@ -227,17 +226,17 @@ def add_links_to_visit(links_to_visit, page, visited_links) -> None:
             links_to_visit.add(link)
 
 
-def check_feature(page, name) -> None:
+def check_feature(page: Any, name: Any) -> None:
     block = page.locator(".feature_checkbox").filter(has=page.get_by_text(name, exact=True))
     block.get_by_role("checkbox").check()
 
 
-def load_image(page, element_id) -> None:
+def load_image(page: Any, element_id: Any) -> None:
     image_path = Path(__file__).parent / "image.jpg"
     upload(page, element_id, image_path)
 
 
-def upload(page, element_id, image_path) -> None:
+def upload(page: Any, element_id: Any, image_path: Any) -> None:
     inp = page.locator(element_id)
     inp.scroll_into_view_if_needed()
     expect(inp).to_be_visible(timeout=60000)

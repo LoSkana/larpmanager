@@ -17,14 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import re
-from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -63,11 +67,11 @@ class BrokenLinkEmailsMiddleware:
         return response
 
     @staticmethod
-    def is_ignorable_404(request_uri):
+    def is_ignorable_404(request_uri: str) -> bool:
         """Return True if a 404 at the given URL *shouldn't* notify the site managers."""
         return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
-    def check(self, request, response) -> HttpResponseRedirect | None:
+    def check(self, request: HttpRequest, response: HttpResponse) -> HttpResponseRedirect | None:
         """Middleware for detecting and logging broken links.
 
         Monitors for 404 errors and tracks problematic URLs for debugging,

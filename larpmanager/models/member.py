@@ -309,7 +309,6 @@ class Member(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         if self.nickname:
             name = self.display_real()
             nick = self.nickname
@@ -378,7 +377,7 @@ class Member(BaseModel):
         Path(member_pdf_directory).mkdir(parents=True, exist_ok=True)
         return member_pdf_directory
 
-    def get_request_filepath(self):
+    def get_request_filepath(self) -> Any:
         """Return the full file path for member request PDF."""
         return str(Path(self.get_member_filepath()) / "request.pdf")
 
@@ -401,7 +400,7 @@ class Member(BaseModel):
         # Format: street number, city (province), country_code (country)
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 
-    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False):
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
         """Get configuration value for this member."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
@@ -417,7 +416,6 @@ class MemberConfig(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.member} {self.name}"
 
     class Meta:
@@ -513,10 +511,9 @@ class Membership(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.member} - {self.association}"
 
-    def get_request_filepath(self):
+    def get_request_filepath(self) -> Any:
         """Get request file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
@@ -525,7 +522,7 @@ class Membership(BaseModel):
             logger.debug("Request file not available for membership %s: %s", self.id, exception)
             return ""
 
-    def get_document_filepath(self):
+    def get_document_filepath(self) -> Any:
         """Get document file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
@@ -638,7 +635,6 @@ class Log(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.cls} {self.eid}"
 
 
@@ -670,7 +666,6 @@ class Vote(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"V{self.number} {self.member} ({self.association} - {self.year})"
 
 

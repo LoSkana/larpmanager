@@ -285,7 +285,7 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
-def _delete_optionals_warehouse(warehouse_form) -> None:
+def _delete_optionals_warehouse(warehouse_form: MyForm) -> None:
     """Remove optional warehouse fields not enabled in association configuration.
 
     Args:
@@ -463,7 +463,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
 class OrgaCopyForm(forms.Form):
     """Form for OrgaCopy."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize organizer copy form with source event choices.
 
         Args:

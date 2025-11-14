@@ -242,7 +242,7 @@ class BaseWritingForm(BaseRegistrationForm):
         # Annotate with array-aggregated tickets for each option
         return options_queryset.annotate(tickets_map=ArrayAgg("tickets"))
 
-    def get_option_key_count(self, option) -> str:
+    def get_option_key_count(self, option: Any) -> str:
         """Return cache key for tracking option character count."""
         return f"option_char_{option.id}"
 
@@ -288,7 +288,7 @@ class PlotForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize plot form with character relationships and dynamic fields.
 
         Sets up plot editing form with character selection, role text fields,

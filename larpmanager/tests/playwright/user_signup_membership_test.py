@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import check_download, go_to, load_image, login_org
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_membership(pw_page) -> None:
+def test_user_signup_membership(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,7 +41,7 @@ def test_user_signup_membership(pw_page) -> None:
     pay(live_server, page)
 
 
-def signup(live_server, page) -> None:
+def signup(live_server: Any, page: Any) -> None:
     # Activate payments
     go_to(page, live_server, "/manage/features/payment/on")
     # Activate membership
@@ -80,7 +81,7 @@ def signup(live_server, page) -> None:
     submit_confirm(page)
 
 
-def membership(live_server, page) -> None:
+def membership(live_server: Any, page: Any) -> None:
     # send membership
     go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Provisional registration")
@@ -111,7 +112,7 @@ def membership(live_server, page) -> None:
     page.get_by_role("link", name="to confirm it proceed with").click()
 
 
-def pay(live_server, page) -> None:
+def pay(live_server: Any, page: Any) -> None:
     # pay
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect(page.locator("b")).to_contain_text("100")

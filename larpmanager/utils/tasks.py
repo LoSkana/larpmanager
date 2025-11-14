@@ -17,13 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import re
 import traceback
-from collections.abc import Callable
 from functools import wraps
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from background_task import background
 from django.conf import settings as conf_settings
@@ -39,12 +39,15 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Email
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 logger = logging.getLogger(__name__)
 
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
 
-def background_auto(schedule=0, **background_kwargs):
+def background_auto(schedule: Any = 0, **background_kwargs: Any) -> Any:
     """Conditionally run functions as background tasks.
 
     Creates a decorator that can run functions either synchronously
@@ -96,7 +99,7 @@ def background_auto(schedule=0, **background_kwargs):
 # MAIL
 
 
-def mail_error(subject, email_body, exception=None) -> None:
+def mail_error(subject: Any, email_body: Any, exception: Any = None) -> None:
     """Handle email sending errors and notify administrators.
 
     Args:
@@ -189,7 +192,7 @@ def send_mail_exec(
 
 
 @background_auto(queue="mail")
-def my_send_mail_bkg(email_pk) -> None:
+def my_send_mail_bkg(email_pk: Any) -> None:
     """Background task to send a queued email.
 
     Args:
@@ -214,7 +217,7 @@ def my_send_mail_bkg(email_pk) -> None:
     email.save()
 
 
-def clean_sender(sender_name):
+def clean_sender(sender_name: Any) -> Any:
     """Clean sender name for email headers by removing special characters.
 
     Args:
@@ -401,7 +404,7 @@ def my_send_simple_mail(  # noqa: C901 - Complex email sending with multiple for
         raise
 
 
-def add_unsubscribe_body(association):
+def add_unsubscribe_body(association: Any) -> Any:
     """Add unsubscribe footer to email body.
 
     Args:
@@ -504,7 +507,7 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subject, message_text, exception=None) -> None:
+def notify_admins(subject: Any, message_text: Any, exception: Any = None) -> None:
     """Send notification email to system administrators.
 
     Args:

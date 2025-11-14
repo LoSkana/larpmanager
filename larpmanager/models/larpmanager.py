@@ -18,7 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -122,7 +122,7 @@ class LarpManagerShowcase(BaseModel):
         options={"quality": 80},
     )
 
-    def show_reduced(self):
+    def show_reduced(self) -> Any:
         """Generate HTML for displaying reduced-size image.
 
         Returns:
@@ -134,7 +134,7 @@ class LarpManagerShowcase(BaseModel):
             return show_thumb(100, self.reduced.url)
         return ""
 
-    def text_red(self):
+    def text_red(self) -> Any:
         """Get truncated version of showcase text.
 
         Returns:
@@ -211,7 +211,7 @@ class LarpManagerGuide(BaseModel):
 
     published = models.BooleanField(default=False)
 
-    def show_thumb(self):
+    def show_thumb(self) -> Any:
         """Generate HTML for displaying thumbnail image.
 
         Returns:
@@ -223,7 +223,7 @@ class LarpManagerGuide(BaseModel):
             return show_thumb(thumbnail_size=100, image_url=self.thumb.url)
         return ""
 
-    def text_red(self):
+    def text_red(self) -> Any:
         """Get truncated version of text content.
 
         Returns:
@@ -324,7 +324,7 @@ class LarpManagerTicket(BaseModel):
 
     analysis = models.CharField(max_length=10000, verbose_name=_("Analysis"), default="")
 
-    def show_thumb(self):
+    def show_thumb(self) -> Any:
         """Generate HTML for displaying screenshot thumbnail.
 
         Returns:

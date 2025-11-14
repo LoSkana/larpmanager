@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from pathlib import Path
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -27,7 +28,7 @@ from larpmanager.tests.utils import check_download, check_feature, go_to, login_
 pytestmark = pytest.mark.e2e
 
 
-def test_upload_download(pw_page) -> None:
+def test_upload_download(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -67,7 +68,7 @@ def test_upload_download(pw_page) -> None:
     full(page)
 
 
-def abilities(page) -> None:
+def abilities(page: Any) -> None:
     # add type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
@@ -96,7 +97,7 @@ def abilities(page) -> None:
     check_download(page, "Download")
 
 
-def full(page) -> None:
+def full(page: Any) -> None:
     page.get_by_role("link", name="Dashboard").click()
 
     # there will be quick setup just confirm
@@ -105,7 +106,7 @@ def full(page) -> None:
     check_download(page, "Full backup")
 
 
-def relationships(page) -> None:
+def relationships(page: Any) -> None:
     page.get_by_role("link", name="Features").click()
     check_feature(page, "Relationships")
     submit_confirm(page)
@@ -122,7 +123,7 @@ def relationships(page) -> None:
     )
 
 
-def plots(live_server, page) -> None:
+def plots(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -144,7 +145,7 @@ def plots(live_server, page) -> None:
     check_download(page, "Download")
 
 
-def quest_trait(page) -> None:
+def quest_trait(page: Any) -> None:
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -173,7 +174,7 @@ def quest_trait(page) -> None:
     check_download(page, "Download")
 
 
-def registrations(page) -> None:
+def registrations(page: Any) -> None:
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -185,7 +186,7 @@ def registrations(page) -> None:
     check_download(page, "Download")
 
 
-def reg_form(page) -> None:
+def reg_form(page: Any) -> None:
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -203,7 +204,7 @@ def reg_form(page) -> None:
     check_download(page, "Download")
 
 
-def characters(page) -> None:
+def characters(page: Any) -> None:
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -217,7 +218,7 @@ def characters(page) -> None:
     check_download(page, "Download")
 
 
-def factions(page) -> None:
+def factions(page: Any) -> None:
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -229,7 +230,7 @@ def factions(page) -> None:
     check_download(page, "Download")
 
 
-def char_form(page) -> None:
+def char_form(page: Any) -> None:
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -262,7 +263,7 @@ def char_form(page) -> None:
     )
 
 
-def check_user_fee(live_server, page) -> None:
+def check_user_fee(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     check_feature(page, "Payments")
@@ -291,5 +292,5 @@ def check_user_fee(live_server, page) -> None:
     )
 
 
-def get_path(file):
+def get_path(file: Any) -> Any:
     return Path(__file__).parent.parent / "resources" / "test_upload" / file

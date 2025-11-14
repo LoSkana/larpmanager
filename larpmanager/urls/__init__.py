@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.conf import (
     settings as conf_settings,
 )
@@ -65,7 +67,7 @@ handler404 = "larpmanager.views.error_404"
 handler500 = "larpmanager.views.error_500"
 
 
-def walk_patterns(patterns) -> set[str]:
+def walk_patterns(patterns: Any) -> set[str]:
     """Extract URL prefixes from Django URL patterns.
 
     Args:

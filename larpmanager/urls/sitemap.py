@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from io import StringIO
+from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.urls import path
@@ -78,7 +79,7 @@ def _render_sitemap(urls: list[str]) -> StringIO:
     return xml_stream
 
 
-def _organization_sitemap(association_id) -> list[str]:
+def _organization_sitemap(association_id: Any) -> list[str]:
     """Generate sitemap URLs for an organization's events and runs.
 
     Args:

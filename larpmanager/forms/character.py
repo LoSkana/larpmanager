@@ -97,7 +97,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args: Any, **kwargs: dict[str, Any]) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize character form with custom fields and configuration.
 
         Args:
@@ -118,7 +118,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
-    def check_editable(self, question) -> bool:
+    def check_editable(self, question: WritingQuestion) -> bool:
         """Check if a question is editable based on event config and instance status.
 
         Args:
@@ -262,7 +262,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(faction_data[0])
 
-    def _save_multi(self, field: str, instance) -> None:
+    def _save_multi(self, field: str, instance: Any) -> None:
         """Save multi-select field data for the given instance.
 
         Handles special processing for factions_list field by managing
@@ -474,7 +474,7 @@ class OrgaCharacterForm(CharacterForm):
                 reverse_args = [self.params["run"].get_slug(), plot_character.id, "1"]
                 self.ordering_down[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
-    def _save_plot(self, instance) -> None:
+    def _save_plot(self, instance: Any) -> None:
         """Save plot associations for a character.
 
         Args:
@@ -581,7 +581,7 @@ class OrgaCharacterForm(CharacterForm):
         for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(faction_data[0])
 
-    def _save_relationships(self, instance) -> None:
+    def _save_relationships(self, instance: Any) -> None:
         """Save character relationships from form data.
 
         Args:
@@ -642,7 +642,7 @@ class OrgaCharacterForm(CharacterForm):
             rel.save()
 
     @staticmethod
-    def _get_rel(character_id: int, instance, relationship_type: str) -> Relationship:
+    def _get_rel(character_id: int, instance: Any, relationship_type: str) -> Relationship:
         """Get or create a relationship between characters based on type.
 
         Args:
@@ -724,7 +724,7 @@ class OrgaWritingQuestionForm(MyForm):
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize WritingQuestionForm with dynamic field configuration.
 
         Args:
@@ -891,7 +891,7 @@ class OrgaWritingOptionForm(MyForm):
             "tickets": TicketS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with feature-based field customization.
 
         Args:

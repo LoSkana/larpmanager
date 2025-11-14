@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_conf
 pytestmark = pytest.mark.e2e
 
 
-def test_px(pw_page) -> None:
+def test_px(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -46,7 +47,7 @@ def test_px(pw_page) -> None:
     modifiers(page, live_server)
 
 
-def setup(live_server, page) -> None:
+def setup(live_server: Any, page: Any) -> None:
     # activate features
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
@@ -99,7 +100,7 @@ def setup(live_server, page) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def ability(live_server, page) -> None:
+def ability(live_server: Any, page: Any) -> None:
     # set up xp
     go_to(page, live_server, "/test/manage/px/ability_types/")
     page.get_by_role("link", name="New").click()
@@ -130,7 +131,7 @@ def ability(live_server, page) -> None:
     submit_confirm(page)
 
 
-def delivery(live_server, page) -> None:
+def delivery(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -163,7 +164,7 @@ def delivery(live_server, page) -> None:
     expect(page.locator('[id="\\31 "]')).to_contain_text("1")
 
 
-def rules(page) -> None:
+def rules(page: Any) -> None:
     # create first rule - for everyone
     page.get_by_role("link", name="Rules").click()
     page.get_by_role("link", name="New").click()
@@ -210,7 +211,7 @@ def rules(page) -> None:
     submit_confirm(page)
 
 
-def player_choice_undo(page, live_server) -> None:
+def player_choice_undo(page: Any, live_server: Any) -> None:
     # signup
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Registration is open!").click()
@@ -250,7 +251,7 @@ def player_choice_undo(page, live_server) -> None:
     expect(page.locator("#ability_select")).to_contain_text("--- Select abilitydouble shield - 2")
 
 
-def modifiers(page, live_server) -> None:
+def modifiers(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     # add modifier on ability
     page.get_by_role("link", name="Modifiers").click()

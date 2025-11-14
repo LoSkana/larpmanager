@@ -192,7 +192,6 @@ class UrlShortner(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"U{self.number} {self.name}"
 
 
@@ -231,7 +230,7 @@ class Album(BaseModel):
         # noinspection PyUnresolvedReferences
         return self.title
 
-    def show_thumb(self):
+    def show_thumb(self) -> Any:
         """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
@@ -280,10 +279,9 @@ class AlbumImage(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return self.upload.name
 
-    def show_thumb(self):
+    def show_thumb(self) -> Any:
         """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
@@ -323,7 +321,6 @@ class CompetenceMemberRel(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.member} - {self.competence} ({self.exp})"
 
     class Meta:
@@ -347,7 +344,6 @@ class WorkshopModule(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return self.name
 
     def show(self) -> dict[str, Any]:
@@ -367,7 +363,6 @@ class WorkshopMemberRel(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.workshop} - {self.member}"
 
 
@@ -386,7 +381,6 @@ class WorkshopQuestion(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return self.name
 
     def show(self) -> dict[str, any]:
@@ -406,7 +400,9 @@ class WorkshopQuestion(BaseModel):
         return js
 
     class Meta:
-        constraints: ClassVar[list] = [models.UniqueConstraint(fields=["module", "number", "deleted"], name="unique workshop question")]
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(fields=["module", "number", "deleted"], name="unique workshop question")
+        ]
 
 
 class WorkshopOption(BaseModel):
@@ -426,7 +422,6 @@ class WorkshopOption(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.question} {self.name} ({self.is_correct})"
 
     def show(self) -> dict[str, Any]:
@@ -500,7 +495,7 @@ class WarehouseItem(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
 
     @classmethod
-    def get_optional_fields(cls):
+    def get_optional_fields(cls) -> Any:
         """Return list of optional field names."""
         return ["quantity"]
 
@@ -631,7 +626,6 @@ class ShuttleService(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.member} ({self.date} {self.time}) {self.status}"
 
 
@@ -730,19 +724,19 @@ class Problem(BaseModel):
         # Return truncated value (max 100 characters)
         return attribute_value[:100]
 
-    def where_l(self):
+    def where_l(self) -> Any:
         """Return truncated 'where' attribute text."""
         return self.get_small_text("where")
 
-    def when_l(self):
+    def when_l(self) -> Any:
         """Return truncated 'when' attribute text."""
         return self.get_small_text("when")
 
-    def who_l(self):
+    def who_l(self) -> Any:
         """Return truncated 'who' attribute text."""
         return self.get_small_text("who")
 
-    def what_l(self):
+    def what_l(self) -> Any:
         """Return truncated 'what' attribute text."""
         return self.get_small_text("what")
 
@@ -800,7 +794,6 @@ class Email(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.recipient} - {self.subj}"
 
 
@@ -869,10 +862,9 @@ class OneTimeContent(BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-
         return f"{self.name} ({self.event.name})"
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Override save to capture file metadata."""
         if self.file:
             self.file_size = self.file.size
@@ -891,7 +883,7 @@ class OneTimeContent(BaseModel):
                     self.content_type = "application/octet-stream"
         super().save(*args, **kwargs)
 
-    def generate_token(self, note=""):
+    def generate_token(self, note: Any = "") -> Any:
         """Generate a new access token for this content.
 
         Args:
@@ -903,7 +895,7 @@ class OneTimeContent(BaseModel):
         """
         return OneTimeAccessToken.objects.create(content=self, note=note)
 
-    def get_token_stats(self):
+    def get_token_stats(self) -> Any:
         """Get statistics about tokens for this content.
 
         Returns:
@@ -992,14 +984,14 @@ class OneTimeAccessToken(BaseModel):
         status = _("Used") if self.used else _("Unused")
         return f"{self.token[:8]}... - {status}"
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Generate token on creation."""
         if not self.token:
             # Generate a cryptographically secure token
             self.token = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)
 
-    def mark_as_used(self, http_request=None, authenticated_member=None) -> None:
+    def mark_as_used(self, http_request: Any = None, authenticated_member: Any = None) -> None:
         """Mark this token as used and record access information.
 
         Args:

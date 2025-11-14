@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+from typing import Any
+
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest
@@ -285,7 +287,7 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
     return context
 
 
-def get_event(request: HttpRequest, event_slug: str, run_number=None):
+def get_event(request: HttpRequest, event_slug: str, run_number: Any = None) -> Any:
     """Get event context from slug and number.
 
     Args:
@@ -331,7 +333,7 @@ def get_event(request: HttpRequest, event_slug: str, run_number=None):
 
 
 def get_event_context(
-    request,
+    request: Any,
     event_slug: str,
     feature_slug: str | None = None,
     *,
@@ -401,7 +403,7 @@ def get_event_context(
     return context
 
 
-def prepare_run(context) -> None:
+def prepare_run(context: Any) -> None:
     """Prepare run context with visibility and field configurations.
 
     Args:
@@ -436,7 +438,7 @@ def prepare_run(context) -> None:
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
 
-def get_run(context, event_slug) -> None:
+def get_run(context: Any, event_slug: Any) -> None:
     """Load run and event data from cache and database.
 
     Args:

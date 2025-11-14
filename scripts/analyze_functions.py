@@ -7,16 +7,17 @@ Outputs a CSV file with function name, file path, and line count, sorted by line
 import ast
 import csv
 from pathlib import Path
+from typing import Any
 
 
-def count_function_lines(node):
+def count_function_lines(node: Any) -> int:
     """Count the number of lines in a function definition."""
     if hasattr(node, "end_lineno") and hasattr(node, "lineno"):
         return node.end_lineno - node.lineno + 1
     return 0
 
 
-def analyze_file(file_path):
+def analyze_file(file_path: Any) -> list:
     """Extract all functions from a Python file with their line counts."""
     functions = []
 
@@ -37,7 +38,7 @@ def analyze_file(file_path):
     return functions
 
 
-def analyze_codebase(root_dir="."):
+def analyze_codebase(root_dir: str = ".") -> list:
     """Analyze all Python files in the codebase."""
     all_functions = []
     root_path = Path(root_dir)

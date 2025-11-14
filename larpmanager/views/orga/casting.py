@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import logging
 import random
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -300,7 +301,7 @@ def check_player_skip_quests(registration: Registration, trait_type: str) -> boo
 
 def check_casting_player(
     context: dict,
-    registration,
+    registration: Any,
     casting_filter_options: dict,
     casting_type: int,
     cached_membership_statuses: dict,

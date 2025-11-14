@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -27,7 +29,7 @@ from larpmanager.tests.utils import go_to, login_orga
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_reg_form(pw_page) -> None:
+def test_orga_reg_form(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -41,7 +43,7 @@ def test_orga_reg_form(pw_page) -> None:
     check_filler(page, live_server)
 
 
-def prepare_form(page, live_server) -> None:
+def prepare_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
@@ -86,7 +88,7 @@ def prepare_form(page, live_server) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def prepare_surcharge(page, live_server) -> None:
+def prepare_surcharge(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # Add surcharges
     page.get_by_role("link", name="Surcharges").click()
@@ -117,7 +119,7 @@ def prepare_surcharge(page, live_server) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def signup(page, live_server) -> None:
+def signup(page: Any, live_server: Any) -> None:
     # try signup
     go_to(page, live_server, "test/")
     page.get_by_role("link", name="Register").click()
@@ -137,7 +139,7 @@ def signup(page, live_server) -> None:
     )
 
 
-def check_filler(page, live_server) -> None:
+def check_filler(page: Any, live_server: Any) -> None:
     # set up filler
     go_to(page, live_server, "test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
