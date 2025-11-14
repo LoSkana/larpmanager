@@ -264,7 +264,7 @@ def get_character_element_fields(
 def get_writing_element_fields(
     context: dict,
     feature_name: str,
-    applicable: QuestionApplicable,
+    applicable: str,
     element_id: int,
     *,
     only_visible: bool = True,

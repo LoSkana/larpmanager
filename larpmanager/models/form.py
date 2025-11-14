@@ -227,7 +227,7 @@ class QuestionApplicable(models.TextChoices):
         return None
 
     @staticmethod
-    def get_applicable_inverse(question_applicable_type: int) -> type:
+    def get_applicable_inverse(question_applicable_type: str) -> type:
         """Get the Django model class for a QuestionApplicable type."""
         # noinspection PyUnresolvedReferences
         # Get the lowercase label from QuestionApplicable enum

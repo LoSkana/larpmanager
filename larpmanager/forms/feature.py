@@ -198,7 +198,7 @@ class QuickSetupForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features: list[str]) -> None:
+    def init_fields(self, features: dict[str, int]) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:

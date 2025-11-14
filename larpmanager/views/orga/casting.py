@@ -287,7 +287,7 @@ def check_player_skip_characters(registration_character_rel: RegistrationCharact
     return RegistrationCharacterRel.objects.filter(reg=registration_character_rel).count() >= max_characters_allowed
 
 
-def check_player_skip_quests(registration: Registration, trait_type: str) -> bool:
+def check_player_skip_quests(registration: Registration, trait_type: int) -> bool:
     """Check if player has traits allowing quest skipping."""
     return (
         AssignmentTrait.objects.filter(

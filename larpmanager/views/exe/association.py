@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 from typing import Any
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
@@ -110,7 +111,6 @@ def exe_config(request: HttpRequest, section: str | None = None) -> HttpResponse
     # Prepare context with section jump if specified
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
-
     return exe_edit(request, ExeConfigForm, None, "exe_config", "manage", additional_context=add_ctx)
 
 

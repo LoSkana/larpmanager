@@ -82,10 +82,10 @@ from larpmanager.views.user.casting import casting_details, get_casting_preferen
 from larpmanager.views.user.registration import init_form_submitted
 
 if TYPE_CHECKING:
-    from django.forms import Form
+    from larpmanager.forms.base import MyForm
 
 
-def character(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def character_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Return character sheet for specified character in event run.
 
     Args:
@@ -298,7 +298,7 @@ def character_form(
     context: dict[str, Any],
     event_slug: str,
     instance: Character | RegistrationCharacterRel | None,
-    form_class: type[Form],
+    form_class: type[MyForm],
 ) -> HttpResponse:
     """Handle character creation and editing form processing.
 
@@ -372,7 +372,7 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
-def _update_character(context: dict, character: Character, form: Form, message: str) -> str:
+def _update_character(context: dict, character: Any, form: MyForm, message: str) -> str:
     """Update character status based on form data and event configuration.
 
     Args:

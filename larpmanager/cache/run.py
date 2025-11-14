@@ -29,12 +29,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.event import Run
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
-    from larpmanager.models.event import Event
 
 
 def reset_cache_run(association: Association, slug: str) -> None:

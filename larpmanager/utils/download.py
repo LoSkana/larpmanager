@@ -621,7 +621,7 @@ def _clean(html_content: str | None) -> str:
     return soup.get_text("\n").replace("\n", " ")
 
 
-def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], type_config: dict) -> QuerySet[Any]:
+def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], model_type: type) -> QuerySet[Any]:
     """Prepare and filter query for CSV download based on type and context.
 
     Processes a queryset by applying appropriate filters based on the model type
@@ -632,7 +632,7 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], t
         context: Context dictionary containing event/run information and request data
         model_name: Name/type of the model being downloaded (e.g., 'character', 'registration')
         queryset: Initial Django queryset to filter and optimize
-        type_config: Type configuration dictionary containing filtering rules and field specifications
+        model_type: Type configuration dictionary containing filtering rules and field specifications
 
     Returns:
         Filtered and optimized Django queryset ready for CSV export with all
@@ -640,15 +640,15 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], t
 
     """
     # Apply event-based filtering if specified in type configuration
-    if check_field(type_config, "event"):
+    if check_field(model_type, "event"):
         queryset = queryset.filter(event=context["event"])
 
     # Apply run-based filtering if specified in type configuration
-    elif check_field(type_config, "run"):
+    elif check_field(model_type, "run"):
         queryset = queryset.filter(run=context["run"])
 
     # Apply number-based ordering if specified in type configuration
-    if check_field(type_config, "number"):
+    if check_field(model_type, "number"):
         queryset = queryset.order_by("number")
 
     # Optimize character queries by prefetching factions and selecting player data

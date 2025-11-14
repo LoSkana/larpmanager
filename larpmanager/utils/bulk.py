@@ -178,7 +178,7 @@ def exec_add_item_tag(
     tag.items.add(*_get_inv_items(ids, context))
 
 
-def exec_del_item_tag(context: dict[str, Any], target: int, ids: str) -> None:
+def exec_del_item_tag(context: dict[str, Any], target: int, ids: list[int]) -> None:
     """Remove items from a warehouse tag."""
     tag = WarehouseTag.objects.get(association_id=context["association_id"], pk=target)
     tag.items.remove(*_get_inv_items(ids, context))

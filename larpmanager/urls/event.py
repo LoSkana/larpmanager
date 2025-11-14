@@ -46,7 +46,7 @@ urlpatterns = [
     ),
     path(
         "<slug:event_slug>/character/<int:num>/",
-        views_uc.character,
+        views_uc.character_view,
         name="character",
     ),
     path(

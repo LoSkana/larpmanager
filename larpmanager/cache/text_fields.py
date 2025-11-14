@@ -42,7 +42,7 @@ if TYPE_CHECKING:
     from larpmanager.models.event import Event, Run
 
 
-def cache_text_field_key(model_type: type, model_instance: object) -> str:
+def cache_text_field_key(model_type: type[BaseModel], model_instance: object) -> str:
     """Generate cache key for model text fields."""
     return f"cache_text_fields_{model_type.__name__}_{model_instance.id}"
 
@@ -92,7 +92,7 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
 # Writing
 
 
-def init_cache_text_field(model_class: type, event: Event) -> dict:
+def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
     """Initialize cache for text fields of model instances related to an event.
 
     Args:
@@ -157,7 +157,7 @@ def _init_element_cache_text_field(
             result_cache[element.id][field_key] = get_single_cache_text_field(element.id, field_key, answer_text)
 
 
-def get_cache_text_field(field_type: str, event: Event) -> str:
+def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:
     """Get cached text field value for event, initializing if not found."""
     # Generate cache key for the specific type and event
     cache_key = cache_text_field_key(field_type, event)
