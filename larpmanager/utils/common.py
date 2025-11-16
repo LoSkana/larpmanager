@@ -1094,7 +1094,7 @@ def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list
     return closed_questions, open_questions
 
 
-def get_recaptcha_secrets(request: HttpRequest) -> tuple[str | None, str | None]:
+def get_recaptcha_secrets(request: HttpRequest | None) -> tuple[str | None, str | None]:
     """Get reCAPTCHA public and private keys for the current request.
 
     Handles both single-site and multi-site configurations. In multi-site mode,

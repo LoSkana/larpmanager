@@ -430,7 +430,7 @@ class ResidenceField(forms.MultiValueField):
         sanitized_values = [value if value is not None else "" for value in values_list]
         return "|".join(sanitized_values)
 
-    def clean(self, value: list | None) -> list:
+    def clean(self, value: list | None) -> str:
         """Clean and validate field values, handling empty values appropriately.
 
         Args:
@@ -1062,7 +1062,7 @@ class ExeProfileForm(MyForm):
             The saved form instance
 
         """
-        instance = super().save(commit=commit)
+        instance: Member = super().save(commit=commit)
 
         mandatory = []
         optional = []

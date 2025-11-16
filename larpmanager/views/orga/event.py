@@ -239,7 +239,7 @@ def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
         event_slug,
         "orga_event",
         OrgaRunForm,
-        run,
+        run.id,
         "manage",
         additional_context={"add_another": False},
     )

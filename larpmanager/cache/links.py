@@ -61,7 +61,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
     """
     # Skip if not authenticated or no association
     if not context["member"] or context["association_id"] == 0:
-        return {}
+        return
 
     # Return cached data if available
     cache_links_key = get_cache_event_key(context["member"].id, context["association_id"])
@@ -78,7 +78,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         )
 
     context.update(navigation_context)
-    return None
+    return
 
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:

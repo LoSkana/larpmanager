@@ -241,7 +241,7 @@ class QuickSetupForm(MyForm):
 
         """
         # Save the base instance first
-        instance = super().save(commit=commit)
+        instance: Association = super().save(commit=commit)
 
         # Process form fields to separate features from configurations
         features = {}

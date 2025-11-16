@@ -463,7 +463,7 @@ def add_char_addit(character: Any) -> None:
         character.addit[character_config.name] = character_config.value
 
 
-def remove_char_ability(char: Any, ability_id: Any) -> None:
+def remove_char_ability(char: Any, ability_id: Any) -> set:
     """Remove character ability and all dependent abilities.
 
     Args:
