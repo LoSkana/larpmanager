@@ -76,6 +76,167 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         # Base ticket + 2 additionals = 50 + (50*2) = 150
         self.assertEqual(result, Decimal("150.00"))
 
+    def test_get_reg_iscr_with_zero_additionals(self) -> None:
+        """Test registration fee with zero additional tickets"""
+        member = self.get_member()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("50.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket, additionals=0)
+
+        result = get_reg_iscr(registration)
+
+        # Just base ticket
+        self.assertEqual(result, Decimal("50.00"))
+
+    def test_get_reg_iscr_with_one_additional(self) -> None:
+        """Test registration fee with one additional ticket"""
+        member = self.get_member()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("75.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket, additionals=1)
+
+        result = get_reg_iscr(registration)
+
+        # Base ticket + 1 additional = 75 + 75 = 150
+        self.assertEqual(result, Decimal("150.00"))
+
+    def test_get_reg_iscr_with_max_additionals(self) -> None:
+        """Test registration fee with maximum (5) additional tickets"""
+        member = self.get_member()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("60.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket, additionals=5)
+
+        result = get_reg_iscr(registration)
+
+        # Base ticket + 5 additionals = 60 + (60*5) = 360
+        self.assertEqual(result, Decimal("360.00"))
+
+    def test_get_reg_iscr_additionals_with_options(self) -> None:
+        """Test registration fee with both additional tickets and options"""
+        member = self.get_member()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("50.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket, additionals=2)
+
+        # Add registration option
+        question, option1, option2 = self.question_with_options(event=run.event)
+        option1.price = Decimal("15.00")
+        option1.save()
+        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+
+        result = get_reg_iscr(registration)
+
+        # Base + additionals + option = 50 + 100 + 15 = 165
+        self.assertEqual(result, Decimal("165.00"))
+
+    def test_get_reg_iscr_additionals_with_pay_what(self) -> None:
+        """Test registration fee with additional tickets and pay-what-you-want"""
+        member = self.get_member()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("40.00"))
+        registration = self.create_registration(
+            member=member, run=run, ticket=ticket, additionals=3, pay_what=Decimal("20.00")
+        )
+
+        result = get_reg_iscr(registration)
+
+        # Base + additionals + pay_what = 40 + 120 + 20 = 180
+        self.assertEqual(result, Decimal("180.00"))
+
+    def test_get_reg_iscr_additionals_with_discount(self) -> None:
+        """Test registration fee with additional tickets and discount"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("100.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket, additionals=2)
+
+        # Create discount
+        discount = Discount.objects.create(
+            name="Early Bird",
+            value=Decimal("50.00"),
+            max_redeem=10,
+            typ=DiscountType.STANDARD,
+            event=run.event,
+            number=1,
+        )
+        discount.runs.add(run)
+        AccountingItemDiscount.objects.create(
+            member=member, run=run, disc=discount, value=Decimal("50.00"), association=association
+        )
+
+        result = get_reg_iscr(registration)
+
+        # Base + additionals - discount = 100 + 200 - 50 = 250
+        self.assertEqual(result, Decimal("250.00"))
+
+    def test_get_reg_iscr_additionals_with_surcharge(self) -> None:
+        """Test registration fee with additional tickets and surcharge"""
+        member = self.get_member()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("80.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket, additionals=1)
+
+        # Add surcharge
+        registration.surcharge = Decimal("25.00")
+
+        result = get_reg_iscr(registration)
+
+        # Base + additionals + surcharge = 80 + 80 + 25 = 185
+        self.assertEqual(result, Decimal("185.00"))
+
+    def test_get_reg_iscr_additionals_all_features(self) -> None:
+        """Test registration fee with additionals and all pricing features combined"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("60.00"))
+        registration = self.create_registration(
+            member=member, run=run, ticket=ticket, additionals=2, pay_what=Decimal("10.00")
+        )
+
+        # Add registration option
+        question, option1, option2 = self.question_with_options(event=run.event)
+        option1.price = Decimal("20.00")
+        option1.save()
+        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+
+        # Add surcharge
+        registration.surcharge = Decimal("15.00")
+
+        # Add discount
+        discount = Discount.objects.create(
+            name="Combo Discount",
+            value=Decimal("30.00"),
+            max_redeem=10,
+            typ=DiscountType.STANDARD,
+            event=run.event,
+            number=1,
+        )
+        discount.runs.add(run)
+        AccountingItemDiscount.objects.create(
+            member=member, run=run, disc=discount, value=Decimal("30.00"), association=association
+        )
+
+        result = get_reg_iscr(registration)
+
+        # Base + additionals + option + pay_what + surcharge - discount
+        # = 60 + 120 + 20 + 10 + 15 - 30 = 195
+        self.assertEqual(result, Decimal("195.00"))
+
+    def test_get_reg_iscr_additionals_no_ticket(self) -> None:
+        """Test registration fee with additionals but no ticket (edge case)"""
+        member = self.get_member()
+        run = self.get_run()
+        # Create registration without ticket
+        registration = self.create_registration(member=member, run=run, ticket=None, additionals=2)
+
+        result = get_reg_iscr(registration)
+
+        # No ticket means no base price, additionals should not add anything
+        self.assertEqual(result, 0)
+
     def test_get_reg_iscr_with_pay_what(self) -> None:
         """Test registration fee with pay-what-you-want amount"""
         member = self.get_member()
