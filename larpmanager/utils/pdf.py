@@ -57,7 +57,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.base import get_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import get_element, get_handout
+from larpmanager.utils.common import get_element, get_handout, get_now
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 
@@ -99,8 +99,9 @@ def reprint(file_path: Any) -> Any:
     if not path_obj.is_file():
         return True
 
-    cutoff_date = timezone.now() - timedelta(days=1)
-    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, dt_timezone.utc)
+    # Use timezone-aware datetimes for comparison to avoid naive/aware mismatch
+    cutoff_date = get_now() - timedelta(days=1)
+    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, tz=dt_timezone.utc)
     return modification_time < cutoff_date
 
 
