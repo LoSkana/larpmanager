@@ -1,14 +1,17 @@
-# LarpManager Feature Descriptions
+# Feature Descriptions
 
-This document provides concise descriptions of all non-placeholder features in LarpManager, based on code analysis.
+This reference guide documents all non-placeholder features in LarpManager based on code analysis. Each feature description includes its core functionality, permission requirements, key models, and integration points.
 
-## A
+**Related Documentation:**
+- [Features and Permissions Guide](01-features-and-permissions.md) - How to create new features
+- [Roles and Context Guide](02-roles-and-context.md) - Understanding permission contexts
+- [Configuration System Guide](03-configuration-system.md) - Adding feature configurations
+
+---
 
 ### Additional Tickets Feature
 
 Allows participants to reserve extra tickets beyond their own during registration. The number of additional tickets is stored in the registration record and included in capacity calculations, enabling group organizers or parents to handle multiple registrations through a single account.
-
-## B
 
 ### Badge Feature
 
@@ -17,8 +20,6 @@ Gamification system for awarding member achievements with public leaderboard. Ex
 ### Bring Friend Feature
 
 Discount mechanism encouraging participant referrals through the "Friend" discount type. Participants receive special discount codes to share with friends, reducing registration costs for new attendees. Links to the DiscountType.FRIEND enumeration in the discount system. Organizers can set the discount value, maximum redemptions, and track how many times each friend code is used. Helps events grow their player base through word-of-mouth marketing.
-
-## C
 
 ### Campaign Feature
 
@@ -56,8 +57,6 @@ Crowdfunding tool for organizing monetary gifts for members or special purposes.
 
 Allows copying any event element from another event in the same organization. Supports copying event settings, appearance, navigation, features, roles, tickets, registration questions/discounts/quotas/installments/surcharges, characters, factions, quests, prologues, speed larps, plots, handouts, and workshops. Automatically corrects relationships and IDs during copy.
 
-## D
-
 ### Deadlines Feature
 
 Provides a centralized dashboard showing all upcoming deadlines across the organization, including payment installments, membership renewals, form submissions, and casting deadlines. Available at both organization-level (exe_deadlines) and event-level (orga_deadlines) views for tracking participant compliance.
@@ -82,8 +81,6 @@ Organization-wide donation tracking system for monetary contributions outside ev
 
 Implements a dynamic installment system where the total registration fee is automatically split into multiple payments. The number of quotas and surcharges are calculated based on days remaining until the event, with availability thresholds determining when each rate tier becomes active.
 
-## E
-
 ### Event Feature
 
 Organization-wide event management dashboard providing event/run creation, editing, template management, pre-registration tracking, and deadline monitoring. Displays registration status and participant counts for all events. Automatically assigns creators as organizers (EventRole #1), supports quick setup wizard for new events, enables template configuration with role copying, and aggregates pre-registration data across events with preference-based or simple counting.
@@ -103,8 +100,6 @@ Allows configuration of external SMTP mail server instead of the default one. Or
 ### External Registration Feature
 
 Redirects users to an external registration tool instead of using the internal registration form. When enabled, unregistered users are sent to the specified external link, while already-registered users retain normal access to event content and features.
-
-## F
 
 ### Faction Feature
 
@@ -126,13 +121,9 @@ Italian fiscal code validation and calculation system. Automatically computes ex
 
 Enables organizers to define fixed payment installments for registration fees. Allows creating multiple due dates with specific amounts, each with either a fixed deadline date or a deadline calculated in days from enrollment. Installments can be configured per ticket type and support partial payments over time.
 
-## G
-
 ### Gift Feature
 
 Ticket gifting system allowing participants to purchase registrations for others. Tickets marked as giftable=True can be transferred using redeem codes. The recipient uses the redeem_code during registration to claim the gifted ticket. Gift discounts (DiscountType.GIFT) are also supported. Gifted registrations are excluded from standard discount calculations. Useful for introducing new players, birthday presents, or sponsored attendance. Tracked via Registration.redeem_code field.
-
-## H
 
 ### Handout Feature
 
@@ -142,13 +133,9 @@ Generates printable game materials using template-based system. Organizers creat
 
 Provides a question-and-answer system for participant support. Participants can submit help questions to organizers through forms, which appear in organized queues (open/closed). Organizers can view member details, character assignments, and conversation history when answering questions. Supports both event-specific (orga_questions) and organization-wide (exe_questions) help management. Questions can be answered with text and file attachments, then marked as closed. Integrates with character cache to display participant assignments.
 
-## I
-
 ### Inflow Feature
 
 Manual cash inflow tracking for non-registration revenue. Records external money received with description, value, payment date, run association, and optional invoice attachment via AccountingItemInflow. Managed through orga_inflows and exe_inflows views. Common uses include sponsorships, grants, merchandise sales, or event-specific income. Integrates into run accounting breakdowns and annual balance calculations. Provides complete audit trail with downloadable invoice documentation.
-
-## L
 
 ### LAOG Feature
 
@@ -162,13 +149,9 @@ No explicit permission - this is part of event appearance configuration. The car
 
 Creates unlimited free lottery tickets that users can request. Organizers later run a random draw to convert a specified number of lottery registrations into standard tickets. The lottery draw shuffles all lottery registrations and upgrades the selected quantity to the configured ticket tier.
 
-## M
-
 ### Membership Feature
 
 Comprehensive association membership management including application submission, executive approval workflows, membership fee tracking, document uploads, card number assignment, and fiscal code validation. Generates membership registries and enrollment lists. Tracks membership status (submitted, accepted, uploaded), validates duplicates, automatically updates registration payments upon approval, and provides membership fee collection with invoice generation. Supports volunteer registry for RUNTS compliance.
-
-## N
 
 ### New Player Feature
 
@@ -177,8 +160,6 @@ Reserves special tickets exclusively for users who have never participated in an
 ### Newsletter Feature
 
 Multi-faceted communication management system with four components: orga_newsletter displays email lists of non-cancelled/non-waiting participants; orga_spam shows members eligible for promotional emails grouped by language; orga_persuade identifies persuadable members with pre-registration status and event history; exe_newsletter manages organization-wide mailing lists by language and subscription preference. Enables targeted communication campaigns.
-
-## O
 
 ### One-Time Content Feature
 
@@ -195,8 +176,6 @@ Tax configuration and balance sheet categorization system. Works with BalanceCho
 ### Outflow Feature
 
 Manual cash outflow recording for expenses not submitted via reimbursement workflow. Tracks spending with categorization (ExpenseChoices), balance sheet allocation (BalanceChoices), description, payment date, and invoice upload via AccountingItemOutflow. Managed through orga_outflows and exe_outflows. Used for direct organizational expenses, vendor payments, or location costs. Differentiates from expense feature by representing actual payments made rather than reimbursement requests. Includes downloadable invoice documentation.
-
-## P
 
 ### Participant Cancellation Feature
 
@@ -246,13 +225,9 @@ The Prologue feature allows organizers to create introductory texts for each act
 
 Makes upcoming events visible to external sites through public API endpoints. Organizations enable publication of their event calendar data for aggregation on third-party platforms or event discovery services. Uses PublisherApiKey for secure API access with IP tracking and logging.
 
-## Q
-
 ### Quests and Traits Feature
 
 The questbuilder feature introduces a hierarchical system for organizing character sheet content. **QuestType** categorizes quests, **Quest** models (belonging to a QuestType) contain multiple **Trait** objects. Traits can reference other traits using #number syntax and maintain many-to-many relationships. **AssignmentTrait** links traits to specific characters via Members and Runs. Four permissions manage the system: `orga_quest_types`, `orga_quests`, `orga_traits`, and `orga_assignments`. Character sheets display assigned traits with quest context.
-
-## R
 
 ### Receipt Feature
 
@@ -273,8 +248,6 @@ Manages directional character-to-character relationships with rich text descript
 ### Reminder Feature
 
 Performs automated daily checks for approaching payment deadlines and sends reminder emails to participants with outstanding balances. The system tracks installment due dates and registration payment status, triggering notifications based on configured timing thresholds to reduce late payments and cancellations.
-
-## S
 
 ### Safety Feature
 
@@ -300,8 +273,6 @@ Manages pre-event mini-scenes with type and station assignments. Organizers crea
 
 Date-based automatic price increases for late registrations. Organizers define surcharge amounts and effective dates through RegistrationSurcharge model. The system automatically calculates and applies cumulative surcharges based on when participants register via get_date_surcharge(). Surcharges are exempt for waiting list, staff, and NPC ticket tiers. Managed through orga_registration_surcharges view with full CRUD operations. Encourages early registration and covers increased organizational costs.
 
-## T
-
 ### Taxes (VAT) Feature
 
 Value-Added Tax calculation system for tax compliance. Computes VAT on ticket prices (vat_ticket) and registration options (vat_options) when vat feature is enabled. Calculations occur during payment processing via compute_vat_payment(). Only applies to money payments (not tokens/credits). Integrates with balance sheet generation and financial reporting. Displays VAT columns in payment views when enabled. Essential for organizations in jurisdictions requiring VAT collection and reporting.
@@ -322,8 +293,6 @@ Organization-specific translation override system. Allows fine-tuning of word an
 
 Permission and role designation for financial management. Likely controls access to accounting views and sensitive financial operations. Integrates with the feature-based permission system (AssociationPermission/EventPermission). Treasurer role would typically have access to exe_accounting, exe_balance, exe_verification, payment management, and financial reporting. Enables delegation of financial responsibilities while maintaining security and audit controls. Part of the broader role-based access control architecture.
 
-## U
-
 ### URL Shortener Feature
 
 Organization-wide URL shortening service with custom short codes. Creates memorable short links for long URLs with tracking via unique 5-character codes. Each entry has number, name, code, and target URL. Accessible through public short URL redirects for marketing and participant communication.
@@ -331,8 +300,6 @@ Organization-wide URL shortening service with custom short codes. Creates memora
 ### Utility Feature
 
 File hosting system that lets organizers upload and manage files directly on the platform. Files can be made available to staff or participants via secret external links with unique codes. Each utility has a number, name, code, and downloadable file attachment for secure distribution of event materials.
-
-## V
 
 ### Verification Payments Feature
 
@@ -346,8 +313,6 @@ Manages volunteer service records with member information, start/end dates, and 
 
 Election management system for executive committee voting. Organization executives can configure candidates, vote minimums/maximums, and opening status. Members cast votes for configured candidates with randomized ordering to prevent position bias. Validates membership fee payment before voting. Tracks votes by year and displays tallies. Participants see candidate lists and submit ballot selections. Prevents duplicate voting within same year.
 
-## W
-
 ### Waiting List Feature
 
 Activates waiting list tickets that become available only when all primary tickets are sold out. Supports both limited capacity and unlimited waiting spots. When primary tickets free up, waiting list participants can be manually upgraded by organizers.
@@ -359,7 +324,3 @@ Enables comprehensive warehouse management for organizations. Allows creation of
 ### Workshop Feature
 
 Quiz-style workshop system with modules, questions, and multiple-choice options. Participants complete workshops by answering questions correctly, with immediate feedback. Tracks completion within 365 days. Organizers define modules, questions with correct answers, and participant progress. Supports pre-event educational requirements with automated tracking.
-
----
-
-**Total Features Documented:** 77
