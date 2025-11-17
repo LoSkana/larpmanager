@@ -256,7 +256,7 @@ def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice
     context["paypal_form"] = PayPalPaymentsForm(initial=paypal_payment_data)
 
 
-def handle_valid_paypal_ipn(ipn_obj: Any) -> PaymentInvoice | None:
+def handle_valid_paypal_ipn(ipn_obj: Any) -> bool | None:
     """Handle valid PayPal IPN notifications.
 
     Args:

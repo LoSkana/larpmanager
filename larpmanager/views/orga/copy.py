@@ -768,7 +768,7 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         correct_workshop(target_event_id, parent_event_id)
 
 
-def copy_css(context: dict[str, Any], event: object, parent: Any) -> None:
+def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
     """Copy CSS file from parent event to current event.
 
     Args:

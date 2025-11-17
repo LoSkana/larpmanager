@@ -916,7 +916,7 @@ def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
     return render(request, "larpmanager/event/faction.html", context)
 
 
-def quests(request: HttpRequest, event_slug: str, quest_type_id: str | None = None) -> HttpResponse:
+def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = None) -> HttpResponse:
     """Display quest types or quests for a specific type in an event.
 
     Args:

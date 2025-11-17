@@ -439,7 +439,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
 
 
 @login_required
-def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse:
+def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse | None:
     """Generate email data for writing form options by character choices.
 
     This function processes writing form questions and returns email data
@@ -1044,7 +1044,7 @@ def check_speedlarp_prepare(
 
 
 @require_POST
-def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResponse:
+def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResponse | None:
     """Get the number attribute for a Trait or Character element.
 
     Args:

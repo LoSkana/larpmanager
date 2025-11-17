@@ -675,7 +675,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
 
 def _orga_user_actions(
     context: dict[str, Any],
-    features: list[str],
+    features: dict[str, int],
     request: HttpRequest,
 ) -> None:
     """Add action to context if there are unanswered help questions.
@@ -801,7 +801,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
 
-def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
+def _orga_reg_acc_actions(context: dict, enabled_features: dict[str, int]) -> None:
     """Add priority actions related to registration and accounting setup.
 
     Checks for required configurations when certain features are enabled,
@@ -1121,7 +1121,7 @@ def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirec
     return redirect("manage")
 
 
-def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: EventPermission) -> HttpResponseRedirect:
+def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> HttpResponseRedirect:
     """Close a suggestion by setting its status and redirect to manage page."""
     # Check user has permission to access this event
     context = check_event_context(request, event_slug, perm)

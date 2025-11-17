@@ -22,7 +22,7 @@ from __future__ import annotations
 import inspect
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
@@ -47,9 +47,6 @@ from larpmanager.models.utils import (
     my_uuid_short,
     show_thumb,
 )
-
-if TYPE_CHECKING:
-    from django.http import HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -240,7 +237,7 @@ class Event(BaseModel):
         """Return the name of the object as a string."""
         return self.name
 
-    def get_elements(self, element_model_class: type) -> QuerySet:
+    def get_elements(self, element_model_class: type[BaseModel]) -> QuerySet:
         """Get ordered elements of specified type for the parent event.
 
         Args:
@@ -382,7 +379,7 @@ class Event(BaseModel):
         # noinspection PyUnresolvedReferences
         return show_thumb(100, self.cover_thumb.url)
 
-    def download_sheet_template(self) -> HttpResponse:
+    def download_sheet_template(self) -> str:
         """Download the sheet template file."""
         # noinspection PyUnresolvedReferences
         return download(self.sheet_template.path)

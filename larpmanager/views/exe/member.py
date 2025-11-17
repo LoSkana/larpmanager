@@ -391,7 +391,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
     return render(request, "larpmanager/exe/users/member.html", context)
 
 
-def member_add_accountingitempayment(context: dict, member: Member) -> dict:
+def member_add_accountingitempayment(context: dict, member: Member) -> None:
     """Add accounting item payment information to context for a member.
 
     Retrieves non-hidden payments for the member and sets display type based on payment method.
@@ -909,7 +909,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_read_mail(request: HttpRequest, mail_id: str) -> HttpResponse:
+def exe_read_mail(request: HttpRequest, mail_id: int) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
     context = check_association_context(request, "exe_archive_email")
