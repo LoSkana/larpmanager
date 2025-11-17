@@ -855,8 +855,7 @@ class RedSysClient:
         except (json.JSONDecodeError, ValueError) as e:
             error_msg = f"Failed to decode Redsys merchant parameters: {e}\nParameters: {b64_merchant_parameters}"
             logger.exception(error_msg)
-            notify_admins("Redsys webhook JSON error", error_msg)
-            return None
+            return notify_admins("Redsys webhook JSON error", error_msg)
 
         # Get association for executive notifications
         Association.objects.get(pk=context["association_id"])
