@@ -176,7 +176,10 @@ def prepare_roles_list(
         "feature__name",
         "name",
     )
-    roles = role_queryset.order_by("number").prefetch_related(Prefetch("permissions", queryset=permissions_queryset))
+    roles = role_queryset.order_by("number").prefetch_related(
+        Prefetch("permissions", queryset=permissions_queryset),
+        "members",
+    )
     context["list"] = []
     if not roles:
         context["list"].append(default_callback(context))
@@ -233,13 +236,13 @@ def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render the event run edit form with cached run data."""
     # Retrieve cached run data and render edit form
-    run = get_cache_run(request.association["id"], event_slug)
+    run_id = get_cache_run(request.association["id"], event_slug)
     return orga_edit(
         request,
         event_slug,
         "orga_event",
         OrgaRunForm,
-        run,
+        run_id,
         "manage",
         additional_context={"add_another": False},
     )

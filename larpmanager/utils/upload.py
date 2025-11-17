@@ -163,7 +163,7 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
     return None
 
 
-def _get_file(context: dict, file: Any, column_id: str | None = None) -> tuple[pd.DataFrame | None, list[str]]:
+def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[pd.DataFrame | None, list[str]]:
     """Get file path and save uploaded file to media directory.
 
     Args:

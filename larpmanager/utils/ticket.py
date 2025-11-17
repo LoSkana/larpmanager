@@ -81,7 +81,7 @@ def analyze_ticket_bgk(ticket_id: int) -> None:
         raise TicketNotFoundError(msg) from err
 
 
-def _analyze_ticket(ticket: LarpManagerTicket) -> tuple[str, int]:
+def _analyze_ticket(ticket: LarpManagerTicket) -> tuple[str, float]:
     """Analyzes the ticket using Claude in a separate analysis directory."""
     # Get the analysis directory (sibling to the current project directory)
     current_dir = Path(__file__).resolve().parent.parent.parent
@@ -151,8 +151,8 @@ def _analyze_ticket(ticket: LarpManagerTicket) -> tuple[str, int]:
             {analysis_data.get("confidence", 0.0)}
         """
         return response, priority
-    # Fallback: use entire response as text
-    return output, 0.5
+    # Fallsback: use entire response as text
+    return str(output), 0.5
 
 
 def _test_connection() -> Any:
