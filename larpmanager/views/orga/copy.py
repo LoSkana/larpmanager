@@ -184,7 +184,7 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
         new_target_id = target_character_map[new_target_id]
         relationship.target_id = new_target_id
 
-        if Relationship.objects.filter(source_id=relationship.source_id, target_id=relationship.target_id).count() > 0:
+        if Relationship.objects.filter(source_id=relationship.source_id, target_id=relationship.target_id).exists():
             continue
 
         relationship.pk = None
@@ -509,7 +509,7 @@ def correct_plot_character(e_id: Any, p_id: Any) -> None:
     for relationship in PlotCharacterRel.objects.filter(character__event_id=p_id):
         new_character_id = character_id_mapping[relationship.character_id]
         new_plot_id = plot_id_mapping[relationship.plot_id]
-        if PlotCharacterRel.objects.filter(character_id=new_character_id, plot_id=new_plot_id).count() > 0:
+        if PlotCharacterRel.objects.filter(character_id=new_character_id, plot_id=new_plot_id).exists():
             continue
 
         relationship.character_id = new_character_id
