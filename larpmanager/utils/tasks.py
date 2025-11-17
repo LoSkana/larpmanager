@@ -519,6 +519,9 @@ def notify_admins(subject: Any, message_text: Any, exception: Any = None) -> Non
         Sends notification emails to all configured ADMINS
 
     """
+    # Ensure message_text is a string to prevent type errors during concatenation
+    message_text = str(message_text)
+
     if exception:
         traceback_text = "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
         message_text += "\n" + traceback_text
