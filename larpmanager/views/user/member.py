@@ -805,7 +805,7 @@ def vote(request: HttpRequest) -> HttpResponse:
 
     # Check if user has already voted this year
     que = Vote.objects.filter(member=context["member"], association_id=context["association_id"], year=context["year"])
-    if que.count() > 0:
+    if que.exists():
         context["done"] = True
         return render(request, "larpmanager/member/vote.html", context)
 

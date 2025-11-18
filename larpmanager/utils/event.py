@@ -345,7 +345,7 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
 def _init_character_form_questions(
     custom_types: set,
     default_types: dict,
-    features: set,
+    features: dict,
     instance: object,
 ) -> None:
     """Initialize character form questions during model setup.
@@ -358,7 +358,7 @@ def _init_character_form_questions(
         custom_types: Set of custom question types to exclude from processing
         default_types: Dictionary mapping default question types to their configuration
                 (name, status, visibility, max_length)
-        features: Set of enabled feature names
+        features: Dict of enabled feature names
         instance: Event instance to create questions for
 
     Returns:
@@ -492,7 +492,7 @@ def save_event_registration_form(features: dict, instance: object) -> None:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
 
 
-def _activate_orga_lang(instance: object) -> None:
+def _activate_orga_lang(instance: Event) -> None:
     """Activate the most common language among event organizers.
 
     Determines the most frequently used language among all organizers

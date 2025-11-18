@@ -300,6 +300,7 @@ def _delete_optionals_warehouse(warehouse_form: MyForm) -> None:
             warehouse_form.params["association_id"],
             f"warehouse_{optional_field_name}",
             default_value=False,
+            context=warehouse_form.params,
         ):
             warehouse_form.delete_field(optional_field_name)
 

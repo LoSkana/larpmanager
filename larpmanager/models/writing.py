@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q
@@ -36,9 +36,6 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
-
-if TYPE_CHECKING:
-    from django.http import HttpResponse
 
 
 class Writing(BaseConceptModel):
@@ -127,11 +124,11 @@ class Writing(BaseConceptModel):
         return js
 
     @classmethod
-    def get_example_csv(cls, enabled_features: set[str]) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
         """Generate example CSV structure for writing element imports.
 
         Args:
-            enabled_features: Set of enabled feature names to include in the CSV template.
+            enabled_features: Dict of enabled feature names to include in the CSV template.
 
         Returns:
             List of CSV rows: first row contains headers, second row contains example data.
@@ -408,7 +405,7 @@ class Character(Writing):
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
-    def get_example_csv(cls, enabled_features: list) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
         """Extend Writing CSV example with player assignment column.
 
         Args:
@@ -726,7 +723,7 @@ class HandoutTemplate(BaseModel):
         """Return string representation."""
         return f"HT{self.number} {self.name}"
 
-    def download_template(self) -> HttpResponse:
+    def download_template(self) -> str:
         """Download the template file."""
         # noinspection PyUnresolvedReferences
         return download(self.template.path)

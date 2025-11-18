@@ -347,9 +347,9 @@ def get_quest(context: dict, quest_number: int) -> None:
     get_element(context, quest_number, "quest", Quest)
 
 
-def get_trait(character_context: dict, trait_name: str) -> None:
+def get_trait(character_context: dict, trait_number: int) -> None:
     """Get trait from character context by name."""
-    get_element(character_context, trait_name, "trait", Trait)
+    get_element(character_context, trait_number, "trait", Trait)
 
 
 def get_handout(context: dict, handout_id: int) -> None:
@@ -559,7 +559,7 @@ def get_workshop_option(context: dict, m: int) -> None:
 
 def get_element(
     context: dict[str, Any],
-    primary_key: int | str,
+    primary_key: int,
     context_key_name: str,
     model_class: type[BaseModel],
     *,
@@ -576,7 +576,7 @@ def get_element(
             instance that has a `get_class_parent()` method. The retrieved object
             will be added to this dictionary under the key specified by `context_key_name`.
         primary_key: The identifier used to look up the model instance. Either a primary
-            key (int/str) or a number field value depending on `by_number` parameter.
+            key or a number field value depending on `by_number` parameter.
         context_key_name: The key name under which the retrieved object will be stored
             in the context dictionary. Also used in error messages.
         model_class: The Django model class to query. Must have a foreign key relationship
@@ -1094,7 +1094,7 @@ def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list
     return closed_questions, open_questions
 
 
-def get_recaptcha_secrets(request: HttpRequest) -> tuple[str | None, str | None]:
+def get_recaptcha_secrets(request: HttpRequest | None) -> tuple[str | None, str | None]:
     """Get reCAPTCHA public and private keys for the current request.
 
     Handles both single-site and multi-site configurations. In multi-site mode,

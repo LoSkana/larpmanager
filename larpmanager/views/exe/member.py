@@ -391,7 +391,7 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
     return render(request, "larpmanager/exe/users/member.html", context)
 
 
-def member_add_accountingitempayment(context: dict, member: Member) -> dict:
+def member_add_accountingitempayment(context: dict, member: Member) -> None:
     """Add accounting item payment information to context for a member.
 
     Retrieves non-hidden payments for the member and sets display type based on payment method.
@@ -552,7 +552,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
             association_id = context["association_id"]
 
             # Get membership fee amount from association configuration
-            fee = get_association_config(association_id, "membership_fee", default_value="0")
+            fee = get_association_config(association_id, "membership_fee", default_value="0", context=context)
 
             # Create payment invoice record with confirmed status
             payment = PaymentInvoice.objects.create(
@@ -781,7 +781,9 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     # Parse candidate IDs from association configuration
     idxs = [
         el.strip()
-        for el in get_association_config(association_id, "vote_candidates", default_value="").split(",")
+        for el in get_association_config(association_id, "vote_candidates", default_value="", context=context).split(
+            ","
+        )
         if el.strip()
     ]
 
@@ -909,7 +911,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_read_mail(request: HttpRequest, mail_id: str) -> HttpResponse:
+def exe_read_mail(request: HttpRequest, mail_id: int) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
     context = check_association_context(request, "exe_archive_email")

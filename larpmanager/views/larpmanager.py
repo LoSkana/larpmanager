@@ -607,7 +607,7 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
         form = FirstAssociationForm(request.POST, request.FILES)
         if form.is_valid():
             # Create association with inherited skin from request context
-            new_association = form.save(commit=False)
+            new_association: Association = form.save(commit=False)
             new_association.skin_id = request.association["skin_id"]
             new_association.save()
 

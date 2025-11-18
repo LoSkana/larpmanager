@@ -239,7 +239,7 @@ def orga_accounting(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_tokens(request: HttpRequest, event_slug: str) -> dict:
+def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage accounting tokens for an organization's events.
 
     This view handles the display of accounting tokens (credits/debits) for events
@@ -466,7 +466,7 @@ def orga_outflows_edit(request: HttpRequest, event_slug: str, num: int) -> HttpR
 
 
 @login_required
-def orga_inflows(request: HttpRequest, event_slug: str) -> dict:
+def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display paginated list of accounting inflows for organization event management.
 
     This function handles the organization view for accounting inflows, providing
@@ -618,7 +618,9 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
     context = check_event_context(request, event_slug, "orga_expenses")
 
     # Verify that expense functionality is enabled for this association
-    if get_association_config(context["event"].association_id, "expense_disable_orga", default_value=False):
+    if get_association_config(
+        context["event"].association_id, "expense_disable_orga", default_value=False, context=context
+    ):
         msg = "eh no caro mio"
         raise Http404(msg)
 
