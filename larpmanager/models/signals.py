@@ -53,6 +53,7 @@ from larpmanager.accounting.token_credit import (
     update_token_credit_on_payment_save,
 )
 from larpmanager.accounting.vat import calculate_payment_vat
+from larpmanager.cache.ability import on_ability_characters_m2m_changed
 from larpmanager.cache.accounting import clear_registration_accounting_cache, refresh_member_accounting_cache
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.association_text import (
@@ -113,6 +114,7 @@ from larpmanager.cache.run import (
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
+from larpmanager.cache.warehouse import on_warehouse_item_tags_m2m_changed
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
     send_collection_activation_email,
@@ -1583,6 +1585,7 @@ def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any)
 # m2m_changed signals
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryPx.characters.through)
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityPx.characters.through)
+m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityPx.characters.through)
 m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierPx.abilities.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RulePx.abilities.through)
 
@@ -1595,6 +1598,8 @@ m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.mem
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
+
+m2m_changed.connect(on_warehouse_item_tags_m2m_changed, sender=WarehouseItem.tags.through)
 
 
 @receiver(valid_ipn_received)
