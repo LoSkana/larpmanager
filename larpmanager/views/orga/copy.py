@@ -169,6 +169,12 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
     # ~ for obj in Registration.objects.filter(run_id=context['run'].id):
     # copy complicated
     # Relationship
+
+    # Pre-fetch existing relationships to avoid N queries in loop
+    existing_relationships = set(
+        Relationship.objects.filter(source__event_id=e_id).values_list("source_id", "target_id")
+    )
+
     for relationship in Relationship.objects.filter(source__event_id=p_id):
         new_source_id = relationship.source_id
         if new_source_id not in source_character_map:
@@ -188,7 +194,8 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
         new_target_id = target_character_map[new_target_id]
         relationship.target_id = new_target_id
 
-        if Relationship.objects.filter(source_id=relationship.source_id, target_id=relationship.target_id).exists():
+        # Check existence using pre-fetched set instead of query
+        if (relationship.source_id, relationship.target_id) in existing_relationships:
             continue
 
         relationship.pk = None
@@ -510,10 +517,17 @@ def correct_plot_character(e_id: Any, p_id: Any) -> None:
         new_plot_id = Plot.objects.values_list("id").get(event_id=e_id, number=old_plot[1])[0]
         plot_id_mapping[old_plot[0]] = new_plot_id
 
+    # Pre-fetch existing plot-character relationships to avoid N queries
+    existing_plot_character_rels = set(
+        PlotCharacterRel.objects.filter(character__event_id=e_id).values_list("character_id", "plot_id")
+    )
+
     for relationship in PlotCharacterRel.objects.filter(character__event_id=p_id):
         new_character_id = character_id_mapping[relationship.character_id]
         new_plot_id = plot_id_mapping[relationship.plot_id]
-        if PlotCharacterRel.objects.filter(character_id=new_character_id, plot_id=new_plot_id).exists():
+
+        # Check existence using pre-fetched set instead of query
+        if (new_character_id, new_plot_id) in existing_plot_character_rels:
             continue
 
         relationship.character_id = new_character_id
@@ -535,9 +549,15 @@ def copy_character_config(e_id: Any, p_id: Any) -> None:
     for character in Character.objects.filter(event_id=e_id):
         character_id_by_number[character.number] = character.id
 
+    # Pre-fetch all character configs to avoid N queries in nested loop
+    from collections import defaultdict
+    configs_by_character = defaultdict(list)
+    for config in CharacterConfig.objects.filter(character__event_id=p_id).select_related('character'):
+        configs_by_character[config.character_id].append(config)
+
     for parent_character in Character.objects.filter(event_id=p_id):
         target_character_id = character_id_by_number[parent_character.number]
-        for config in CharacterConfig.objects.filter(character=parent_character):
+        for config in configs_by_character[parent_character.id]:
             for retry_attempt in range(2):
                 try:
                     with transaction.atomic():

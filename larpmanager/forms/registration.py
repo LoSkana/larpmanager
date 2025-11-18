@@ -957,11 +957,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 character_id=ch,
                 reg__run=self.params["run"],
                 reg__cancellation_date__isnull=True,
-            )
+            ).select_related("character", "reg__member")
             if self.instance.pk:
                 qs = qs.exclude(reg__id=self.instance.pk)
-            if len(qs) > 0:
-                el = qs.first()
+
+            # Use .first() directly instead of len() check + .first() (reduces queries)
+            el = qs.first()
+            if el:
                 msg = f"Character '{el.character}' already assigned to the player '{el.reg.member}' for this event!"
                 raise ValidationError(
                     msg,
