@@ -64,7 +64,7 @@ def get_acc_detail(
     run: Run,
     description: str,
     model_class: type,
-    choices: list[tuple[str, str]],
+    choices: list[tuple[str, str]] | None,
     type_field: str | None,
     filters: dict[str, Any] | None = None,
     *,

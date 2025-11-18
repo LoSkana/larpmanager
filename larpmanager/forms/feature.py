@@ -198,7 +198,7 @@ class QuickSetupForm(MyForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features: list[str]) -> None:
+    def init_fields(self, features: dict[str, int]) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:
@@ -241,7 +241,7 @@ class QuickSetupForm(MyForm):
 
         """
         # Save the base instance first
-        instance = super().save(commit=commit)
+        instance: Association = super().save(commit=commit)
 
         # Process form fields to separate features from configurations
         features = {}

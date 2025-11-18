@@ -558,7 +558,7 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
             year=context["run"].start.year,
             member=context["member"],
         )
-        if membership_query.count() > 0:
+        if membership_query.exists():
             context["membership_fee"] = "done"
         elif timezone.now().year != context["run"].start.year:
             context["membership_fee"] = "future"

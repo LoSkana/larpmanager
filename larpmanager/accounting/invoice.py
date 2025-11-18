@@ -20,17 +20,22 @@
 
 """Invoice generation and CSV import/export utilities."""
 
+from __future__ import annotations
+
 import csv
 import math
 from io import StringIO
+from typing import TYPE_CHECKING
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import transaction
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.common import clean, detect_delimiter
 from larpmanager.utils.tasks import notify_admins
+
+if TYPE_CHECKING:
+    from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
 def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
@@ -121,7 +126,7 @@ def invoice_received_money(
     gross_amount: float | None = None,
     processing_fee: float | None = None,
     transaction_id: str | None = None,
-) -> bool:
+) -> bool | None:
     """Process received payment for a payment invoice.
 
     Updates payment invoice status and financial details when money is received

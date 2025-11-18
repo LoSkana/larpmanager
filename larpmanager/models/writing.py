@@ -124,11 +124,11 @@ class Writing(BaseConceptModel):
         return js
 
     @classmethod
-    def get_example_csv(cls, enabled_features: set[str]) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
         """Generate example CSV structure for writing element imports.
 
         Args:
-            enabled_features: Set of enabled feature names to include in the CSV template.
+            enabled_features: Dict of enabled feature names to include in the CSV template.
 
         Returns:
             List of CSV rows: first row contains headers, second row contains example data.
@@ -405,7 +405,7 @@ class Character(Writing):
         return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
 
     @classmethod
-    def get_example_csv(cls, enabled_features: list) -> list[list[str]]:
+    def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
         """Extend Writing CSV example with player assignment column.
 
         Args:

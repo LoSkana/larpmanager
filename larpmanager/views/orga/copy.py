@@ -36,7 +36,14 @@ from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import Discount
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText
-from larpmanager.models.form import RegistrationOption, RegistrationQuestion, WritingOption, WritingQuestion
+from larpmanager.models.form import (
+    RegistrationOption,
+    RegistrationQuestion,
+    WritingAnswer,
+    WritingChoice,
+    WritingOption,
+    WritingQuestion,
+)
 from larpmanager.models.miscellanea import WorkshopModule, WorkshopOption, WorkshopQuestion
 from larpmanager.models.registration import (
     RegistrationInstallment,
@@ -148,36 +155,36 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
         p_id: Source parent event ID with original characters
 
     """
-    source_character_id_to_number = {}
-    target_character_number_to_id = {}
+    source_character_map = {}
+    target_character_map = {}
     for character in Character.objects.filter(event_id=p_id):
-        source_character_id_to_number[character.id] = character.number
+        source_character_map[character.id] = character.number
     for character in Character.objects.filter(event_id=e_id):
-        target_character_number_to_id[character.number] = character.id
+        target_character_map[character.number] = character.id
     # ~ field = 'character_id'
     # ~ for obj in Registration.objects.filter(run_id=context['run'].id):
     # copy complicated
     # Relationship
     for relationship in Relationship.objects.filter(source__event_id=p_id):
         new_source_id = relationship.source_id
-        if new_source_id not in source_character_id_to_number:
+        if new_source_id not in source_character_map:
             continue
-        new_source_id = source_character_id_to_number[new_source_id]
-        if new_source_id not in target_character_number_to_id:
+        new_source_id = source_character_map[new_source_id]
+        if new_source_id not in target_character_map:
             continue
-        new_source_id = target_character_number_to_id[new_source_id]
+        new_source_id = target_character_map[new_source_id]
         relationship.source_id = new_source_id
 
         new_target_id = relationship.target_id
-        if new_target_id not in source_character_id_to_number:
+        if new_target_id not in source_character_map:
             continue
-        new_target_id = source_character_id_to_number[new_target_id]
-        if new_target_id not in target_character_number_to_id:
+        new_target_id = source_character_map[new_target_id]
+        if new_target_id not in target_character_map:
             continue
-        new_target_id = target_character_number_to_id[new_target_id]
+        new_target_id = target_character_map[new_target_id]
         relationship.target_id = new_target_id
 
-        if Relationship.objects.filter(source_id=relationship.source_id, target_id=relationship.target_id).count() > 0:
+        if Relationship.objects.filter(source_id=relationship.source_id, target_id=relationship.target_id).exists():
             continue
 
         relationship.pk = None
@@ -243,6 +250,244 @@ def correct_workshop(e_id: int, p_id: int) -> None:
         option.save()
 
 
+def _copy_character_field_values(target_event_id: int, source_event_id: int) -> None:
+    """Copy character answers and choices from source to target event.
+
+    This function copies WritingAnswer and WritingChoice objects associated with
+    characters from a source event to a target event, updating element_id references
+    to point to the corresponding characters in the target event.
+
+    Args:
+        target_event_id: Target event ID to copy answers/choices to
+        source_event_id: Source event ID to copy answers/choices from
+
+    Returns:
+        None
+
+    """
+    # Build mapping cache from source characters (ID -> number)
+    source_character_map = {}
+    for character in Character.objects.filter(event_id=source_event_id):
+        source_character_map[character.id] = character.number
+
+    # Build mapping cache from target characters (number -> ID)
+    target_character_map = {}
+    for character in Character.objects.filter(event_id=target_event_id):
+        target_character_map[character.number] = character.id
+
+    # Build mapping cache from source questions (ID -> name) for question matching
+    source_question_map = {}
+    for question in WritingQuestion.objects.filter(event_id=source_event_id):
+        source_question_map[question.id] = question.name
+
+    # Build mapping cache from target questions (name -> ID)
+    target_question_map = {}
+    for question in WritingQuestion.objects.filter(event_id=target_event_id):
+        target_question_map[question.name] = question.id
+
+    _copy_character_answers(
+        source_character_map, source_event_id, source_question_map, target_character_map, target_question_map
+    )
+
+    _copy_character_choices(
+        source_character_map,
+        source_event_id,
+        source_question_map,
+        target_character_map,
+        target_event_id,
+        target_question_map,
+    )
+
+
+def _copy_character_answers(
+    source_character_map: dict[int, int],
+    source_event_id: int,
+    source_question_map: dict[int, str],
+    target_character_map: dict[int, int],
+    target_question_map: dict[str, int],
+) -> None:
+    """Copy WritingAnswer objects from source event to target event.
+
+    This function iterates through all WritingAnswer objects in the source event
+    and creates copies in the target event, updating character and question references
+    to point to the corresponding objects in the target event.
+
+    Args:
+        source_character_map: Mapping of source character IDs to character numbers
+        source_event_id: Source event ID to copy answers from
+        source_question_map: Mapping of source question IDs to question names
+        target_character_map: Mapping of character numbers to target character IDs
+        target_question_map: Mapping of question names to target question IDs
+
+    Returns:
+        None
+
+    """
+    # Copy WritingAnswer objects
+    for answer in WritingAnswer.objects.filter(question__event_id=source_event_id):
+        # Skip if character doesn't exist in mapping
+        if answer.element_id not in source_character_map:
+            continue
+
+        character_number = source_character_map[answer.element_id]
+
+        # Skip if character doesn't exist in target event
+        if character_number not in target_character_map:
+            continue
+
+        # Skip if question doesn't exist in mapping
+        if answer.question_id not in source_question_map:
+            continue
+
+        question_name = source_question_map[answer.question_id]
+
+        # Skip if question doesn't exist in target event
+        if question_name not in target_question_map:
+            continue
+
+        # Update references to target event
+        answer.element_id = target_character_map[character_number]
+        answer.question_id = target_question_map[question_name]
+
+        # Create new answer object in target event
+        answer.pk = None
+        answer.save()
+
+
+def _build_option_mappings(
+    source_event_id: int,
+    target_event_id: int,
+    source_question_map: dict[int, str],
+    target_question_map: dict[str, int],
+) -> tuple[dict[int, str], dict[str, int]]:
+    """Build option mappings for source and target events.
+
+    Args:
+        source_event_id: Source event ID
+        target_event_id: Target event ID
+        source_question_map: Mapping of source question IDs to question names
+        target_question_map: Mapping of question names to target question IDs
+
+    Returns:
+        Tuple of (source_option_map, target_option_map)
+
+    """
+    # Build mapping cache from source options (ID -> key)
+    source_option_id_to_key = {}
+    for option in WritingOption.objects.filter(event_id=source_event_id):
+        question_name = source_question_map.get(option.question_id)
+        if question_name:
+            source_option_id_to_key[option.id] = f"{question_name}:{option.name}"
+
+    # Build mapping cache from target options (key -> ID)
+    target_option_key_to_id = {}
+    for option in WritingOption.objects.filter(event_id=target_event_id):
+        for name, qid in target_question_map.items():
+            if qid == option.question_id:
+                target_option_key_to_id[f"{name}:{option.name}"] = option.id
+                break
+
+    return source_option_id_to_key, target_option_key_to_id
+
+
+def _copy_character_choices(
+    source_character_map: dict[int, int],
+    source_event_id: int,
+    source_question_map: dict[int, str],
+    target_character_map: dict[int, int],
+    target_event_id: int,
+    target_question_map: dict[str, int],
+) -> None:
+    """Copy WritingChoice objects from source event to target event.
+
+    This function iterates through all WritingChoice objects in the source event
+    and creates copies in the target event, updating character, question, and option
+    references to point to the corresponding objects in the target event.
+
+    Args:
+        source_character_map: Mapping of source character IDs to character numbers
+        source_event_id: Source event ID to copy choices from
+        source_question_map: Mapping of source question IDs to question names
+        target_character_map: Mapping of character numbers to target character IDs
+        target_event_id: Target event ID to copy choices to
+        target_question_map: Mapping of question names to target question IDs
+
+    Returns:
+        None
+
+    """
+    source_option_map, target_option_map = _build_option_mappings(
+        source_event_id, target_event_id, source_question_map, target_question_map
+    )
+
+    # Copy WritingChoice objects
+    for choice in WritingChoice.objects.filter(question__event_id=source_event_id):
+        _copy_single_choice(
+            choice,
+            source_character_map,
+            target_character_map,
+            source_question_map,
+            target_question_map,
+            source_option_map,
+            target_option_map,
+        )
+
+
+def _copy_single_choice(
+    choice: WritingChoice,
+    source_character_map: dict[int, int],
+    target_character_map: dict[int, int],
+    source_question_map: dict[int, str],
+    target_question_map: dict[str, int],
+    source_option_map: dict[int, str],
+    target_option_map: dict[str, int],
+) -> None:
+    """Copy a single WritingChoice to target event if all references are valid.
+
+    Args:
+        choice: WritingChoice object to copy
+        source_character_map: Mapping of source character IDs to character numbers
+        target_character_map: Mapping of character numbers to target character IDs
+        source_question_map: Mapping of source question IDs to question names
+        target_question_map: Mapping of question names to target question IDs
+        source_option_map: Mapping of source option IDs to option keys
+        target_option_map: Mapping of option keys to target option IDs
+
+    Returns:
+        None
+
+    """
+    # Validate and get character number
+    if choice.element_id not in source_character_map:
+        return
+    character_number = source_character_map[choice.element_id]
+    if character_number not in target_character_map:
+        return
+
+    # Validate and get question name
+    if choice.question_id not in source_question_map:
+        return
+    question_name = source_question_map[choice.question_id]
+    if question_name not in target_question_map:
+        return
+
+    # Validate and get option key
+    if choice.option_id not in source_option_map:
+        return
+    option_key = source_option_map[choice.option_id]
+    if option_key not in target_option_map:
+        return
+
+    # Update references to target event
+    choice.element_id = target_character_map[character_number]
+    choice.question_id = target_question_map[question_name]
+    choice.option_id = target_option_map[option_key]
+
+    # Create new choice object in target event
+    choice.pk = None
+    choice.save()
+
+
 def correct_plot_character(e_id: Any, p_id: Any) -> None:
     """Correct plot-character relationships after event copying.
 
@@ -264,7 +509,7 @@ def correct_plot_character(e_id: Any, p_id: Any) -> None:
     for relationship in PlotCharacterRel.objects.filter(character__event_id=p_id):
         new_character_id = character_id_mapping[relationship.character_id]
         new_plot_id = plot_id_mapping[relationship.plot_id]
-        if PlotCharacterRel.objects.filter(character_id=new_character_id, plot_id=new_plot_id).count() > 0:
+        if PlotCharacterRel.objects.filter(character_id=new_character_id, plot_id=new_plot_id).exists():
             continue
 
         relationship.character_id = new_character_id
@@ -482,6 +727,8 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         copy_class(target_event_id, parent_event_id, WritingOption)
         copy_character_config(target_event_id, parent_event_id)
         correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
+        # copy character answers and choices
+        _copy_character_field_values(target_event_id, parent_event_id)
 
     # Copy faction elements
     if "faction" in targets:
@@ -521,7 +768,7 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         correct_workshop(target_event_id, parent_event_id)
 
 
-def copy_css(context: dict[str, Any], event: object, parent: Any) -> None:
+def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
     """Copy CSS file from parent event to current event.
 
     Args:
