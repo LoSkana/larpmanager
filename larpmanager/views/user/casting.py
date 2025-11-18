@@ -118,15 +118,20 @@ def casting_quest_traits(context: dict, typ: str) -> None:
     faction_names = []
     total_traits = 0
 
+    # Pre-fetch all assigned traits for this run to avoid N+1 queries
+    assigned_trait_ids_set = set(
+        AssignmentTrait.objects.filter(run=context["run"]).values_list('trait_id', flat=True)
+    )
+
     # Iterate through quests filtered by event, type, and visibility
-    for quest in Quest.objects.filter(event=context["event"], typ=typ, hide=False).order_by("number"):
+    for quest in Quest.objects.filter(event=context["event"], typ=typ, hide=False).order_by("number").prefetch_related('traits'):
         faction_name = quest.show()["name"]
         available_traits = {}
 
         # Collect traits for this quest that aren't already assigned
-        for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
-            # Skip traits that are already assigned to the current run
-            if AssignmentTrait.objects.filter(trait=trait, run=context["run"]).exists():
+        for trait in quest.traits.filter(hide=False).order_by("number"):
+            # Skip traits that are already assigned using pre-fetched set
+            if trait.id in assigned_trait_ids_set:
                 continue
             available_traits[trait.id] = trait.show()
             total_traits += 1
@@ -421,25 +426,32 @@ def _casting_update(context: dict, prefs: dict, request: Any, typ: int) -> None:
 
     # Build preference list for confirmation email
     preference_names_list = []
-    for casting_preference in Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by(
-        "pref",
-    ):
+    casting_preferences = list(
+        Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by("pref")
+    )
+
+    if casting_preferences:
+        # Batch fetch all characters or traits to avoid N+1 queries
+        element_ids = [cp.element for cp in casting_preferences]
+
         if typ == 0:
-            # Character casting: get character name
-            try:
-                character = Character.objects.get(pk=casting_preference.element)
-                preference_names_list.append(character.show(context["run"])["name"])
-            except ObjectDoesNotExist:
-                # Skip if character was deleted
-                continue
+            # Character casting: batch fetch all characters
+            characters_dict = {
+                char.id: char for char in Character.objects.filter(pk__in=element_ids).select_related('event')
+            }
+            for casting_preference in casting_preferences:
+                character = characters_dict.get(casting_preference.element)
+                if character:
+                    preference_names_list.append(character.show(context["run"])["name"])
         else:
-            # Trait casting: get quest and trait names
-            try:
-                trait = Trait.objects.get(pk=casting_preference.element)
-                preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
-            except ObjectDoesNotExist:
-                # Skip if trait was deleted
-                continue
+            # Trait casting: batch fetch all traits with their quests
+            traits_dict = {
+                trait.id: trait for trait in Trait.objects.filter(pk__in=element_ids).select_related('quest')
+            }
+            for casting_preference in casting_preferences:
+                trait = traits_dict.get(casting_preference.element)
+                if trait:
+                    preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
 
     # Send confirmation email with updated preferences
     mail_confirm_casting(context["member"], context["run"], context["gl_name"], preference_names_list, avoidance_text)
@@ -590,15 +602,20 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
     # Initialize the list to store trait preference data
     context["list"] = []
 
+    # Pre-fetch all assigned traits for this run to avoid N+1 queries
+    assigned_trait_ids_set = set(
+        AssignmentTrait.objects.filter(run=context["run"]).values_list('trait_id', flat=True)
+    )
+
     # Iterate through all visible quests of the specified type
-    for quest in Quest.objects.filter(event=context["event"], typ=quest_type, hide=False).order_by("number"):
+    for quest in Quest.objects.filter(event=context["event"], typ=quest_type, hide=False).order_by("number").prefetch_related('traits'):
         # Get the quest group name for display
         quest_group_name = quest.show()["name"]
 
         # Process each visible trait within the current quest
-        for trait in Trait.objects.filter(quest=quest, hide=False).order_by("number"):
-            # Skip traits that already have assignments (unless in staff context)
-            if "staff" not in context and AssignmentTrait.objects.filter(trait=trait, run=context["run"]).exists():
+        for trait in quest.traits.filter(hide=False).order_by("number"):
+            # Skip traits that already have assignments using pre-fetched set (unless in staff context)
+            if "staff" not in context and trait.id in assigned_trait_ids_set:
                 continue
 
             # Build trait preference data structure

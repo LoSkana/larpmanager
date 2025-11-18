@@ -137,6 +137,7 @@ def correct_rels(
         match_value = getattr(parent_obj, matching_field)
         match_value_to_target_id[match_value] = parent_obj.id
 
+    objects_to_update = []
     for child_obj in child_model_class.objects.filter(event_id=target_event_id):
         source_parent_id = getattr(child_obj, relationship_field_id)
         if source_parent_id not in source_id_to_match_value:
@@ -144,7 +145,10 @@ def correct_rels(
         match_value = source_id_to_match_value[source_parent_id]
         target_parent_id = match_value_to_target_id[match_value]
         setattr(child_obj, relationship_field_id, target_parent_id)
-        child_obj.save()
+        objects_to_update.append(child_obj)
+
+    if objects_to_update:
+        child_model_class.objects.bulk_update(objects_to_update, [relationship_field_id])
 
 
 def correct_relationship(e_id: Any, p_id: Any) -> None:
