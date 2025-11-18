@@ -435,39 +435,97 @@ class MembershipStatus(models.TextChoices):
 
 
 class Membership(BaseModel):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="memberships")
+    member = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        related_name="memberships",
+        verbose_name=_("Member"),
+        help_text=_("The member associated with this membership"),
+    )
 
-    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="memberships")
+    association = models.ForeignKey(
+        Association,
+        on_delete=models.CASCADE,
+        related_name="memberships",
+        verbose_name=_("Association"),
+        help_text=_("The organization this membership belongs to"),
+    )
 
-    compiled = models.BooleanField(default=False)
+    compiled = models.BooleanField(
+        default=False,
+        verbose_name=_("Profile completed"),
+        help_text=_("Indicates whether the member has completed their profile information"),
+    )
 
-    credit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    credit = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name=_("Credit balance"),
+        help_text=_("Available credit balance for event payments and purchases"),
+    )
 
-    tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    tokens = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name=_("Token balance"),
+        help_text=_("Available token balance for event registrations and activities"),
+    )
 
     status = models.CharField(
         max_length=1,
         choices=MembershipStatus.choices,
         default=MembershipStatus.EMPTY,
         db_index=True,
+        verbose_name=_("Membership status"),
+        help_text=_("Current status of the membership application and approval process"),
     )
 
-    request = models.FileField(upload_to=UploadToPathAndRename("request/"), null=True, blank=True)
+    request = models.FileField(
+        upload_to=UploadToPathAndRename("request/"),
+        null=True,
+        blank=True,
+        verbose_name=_("Membership request"),
+        help_text=_("Upload the signed membership application form (PDF or image)"),
+    )
 
-    document = models.FileField(upload_to=UploadToPathAndRename("document/"), null=True, blank=True)
+    document = models.FileField(
+        upload_to=UploadToPathAndRename("document/"),
+        null=True,
+        blank=True,
+        verbose_name=_("Identity document"),
+        help_text=_("Upload a photo or scan of your identity document (PDF or image)"),
+    )
 
-    card_number = models.IntegerField(null=True, blank=True)
+    card_number = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name=_("Membership card number"),
+        help_text=_("Unique membership card number assigned by the organization"),
+    )
 
-    date = models.DateField(blank=True, null=True)
+    date = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("Membership approval date"),
+        help_text=_("Date when the membership was officially approved by the organization"),
+    )
 
-    password_reset = models.CharField(max_length=100, blank=True, null=True)
+    password_reset = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name=_("Password reset token"),
+        help_text=_("Temporary token used for password reset process"),
+    )
 
     newsletter = models.CharField(
         max_length=1,
         choices=NewsletterChoices.choices,
         default=NewsletterChoices.ALL,
-        verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events") + "?",
+        verbose_name=_("Newsletter preferences"),
+        help_text=_("Choose how often you want to receive updates about events and activities"),
     )
 
     class Meta:

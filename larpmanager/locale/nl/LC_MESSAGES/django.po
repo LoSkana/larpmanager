@@ -203,6 +203,9 @@ msgstr "PWYW"
 msgid "Page"
 msgstr "Pagina"
 
+msgid "Paid"
+msgstr "Betaald"
+
 msgid "Plot"
 msgstr "Plot"
 
@@ -459,9 +462,6 @@ msgstr "e-mail"
 msgid "money"
 msgstr "geld"
 
-msgid "other"
-msgstr "meer"
-
 msgid "quick"
 msgstr "snel"
 
@@ -656,6 +656,9 @@ msgstr "Tokens"
 
 msgid "Traits"
 msgstr "Eigenschappen"
+
+msgid "Unpaid"
+msgstr "Onbetaald"
 
 msgid "Unread"
 msgstr "Ongelezen"
@@ -1233,17 +1236,11 @@ msgstr "Workshop"
 msgid "XP avail"
 msgstr "Px Beschikbaar"
 
-msgid "discount"
-msgstr "korting"
-
 msgid "download"
 msgstr "downloaden"
 
 msgid "factions"
 msgstr "facties"
-
-msgid "payments"
-msgstr "betalingen"
 
 msgid "positive"
 msgstr "positief"
@@ -2296,6 +2293,9 @@ msgstr "Ticketvuller"
 msgid "Ticket chosen"
 msgstr "Geselecteerd ticket"
 
+msgid "Token balance"
+msgstr "Token saldo"
+
 msgid "Token expired"
 msgstr "Token verlopen"
 
@@ -2330,9 +2330,6 @@ msgstr "verwijderde items"
 msgid "items updated"
 msgstr "items bijgewerkt"
 
-msgid "personal data"
-msgstr "persoonlijke gegevens"
-
 msgid "registrations"
 msgstr "inschrijvingen"
 
@@ -2365,6 +2362,9 @@ msgstr "Verzamelen voor"
 
 msgid "Communications"
 msgstr "Communicatie"
+
+msgid "Credit balance"
+msgstr "Kredietsaldo"
 
 msgid "Customisations"
 msgstr "Aanpassingen"
@@ -2579,6 +2579,9 @@ msgstr "Credits uitschakelen"
 msgid "Document number"
 msgstr "Documentnummer"
 
+msgid "Edit membership"
+msgstr "Lidmaatschap bewerken"
+
 msgid "Event not found"
 msgstr "Evenement niet gevonden"
 
@@ -2656,6 +2659,9 @@ msgstr "Vertaalde tekst"
 
 msgid "Upload Expenses"
 msgstr "Uitgaven uploaden"
+
+msgid "View accounting"
+msgstr "Boekhouding bekijken"
 
 msgid "Volounteer data"
 msgstr "Vrijwillige gegevens"
@@ -2960,6 +2966,9 @@ msgstr "Geef antwoord"
 msgid "ID document photo"
 msgstr "Foto ID-document"
 
+msgid "Identity document"
+msgstr "Identiteitsbewijs"
+
 msgid "Invoice not found"
 msgstr "Factuur niet gevonden"
 
@@ -2971,6 +2980,9 @@ msgstr "Maximaal beschikbaar"
 
 msgid "Membership fee of"
 msgstr "Lidmaatschap van"
+
+msgid "Membership status"
+msgstr "Lidmaatschap"
 
 msgid "Months free quota"
 msgstr "Maanden vrij quotum"
@@ -3001,6 +3013,9 @@ msgstr "Voorinschrijvingen"
 
 msgid "Pre-register here"
 msgstr "Pre-registreer hier"
+
+msgid "Profile completed"
+msgstr "Profiel voltooid"
 
 msgid "Quests and Traits"
 msgstr "Quests en eigenschappen"
@@ -3172,6 +3187,9 @@ msgstr "Totaal verzonden betaling"
 
 msgid "Transaction totals"
 msgstr "Totaal transacties"
+
+msgid "View registrations"
+msgstr "Registraties bekijken"
 
 msgid "Voluntary donation"
 msgstr "Vrijwillige donatie"
@@ -3422,6 +3440,9 @@ msgstr "Opening op: %(date)s"
 
 msgid "Organization inflows"
 msgstr "Verenigingsinkomsten"
+
+msgid "Password reset token"
+msgstr "Wachtwoord reset token"
 
 msgid "Payment Verification"
 msgstr "Betalingsverificatie"
@@ -3722,8 +3743,14 @@ msgstr "Magazijnitems beheren"
 msgid "Manages event revenues"
 msgstr "Beheren van inkomsten uit evenementen"
 
+msgid "Membership card number"
+msgstr "Lidkaartnummer"
+
 msgid "Modify shuttle request"
 msgstr "Shuttleverzoek wijzigen"
+
+msgid "Newsletter preferences"
+msgstr "Voorkeuren nieuwsbrief"
 
 msgid "Number of partecipants"
 msgstr "Aantal deelnemingen"
@@ -3964,6 +3991,9 @@ msgstr "Vrijwilligers invoeren beheren"
 
 msgid "Manages event's expenses"
 msgstr "Beheert de kosten van het evenement"
+
+msgid "Membership approval date"
+msgstr "Datum goedkeuring lidmaatschap"
 
 msgid "New delegate user added!"
 msgstr "Nieuwe gedelegeerde gebruiker toegevoegd!"
@@ -5481,6 +5511,9 @@ msgstr "Reserveer extra tickets naast je eigen tickets"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Selecteer willekeurig loten om te upgraden"
 
+msgid "The member associated with this membership"
+msgstr "Het lid geassocieerd met dit lidmaatschap"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "De som werd aan jou toegewezen als %(credits)s"
@@ -5552,6 +5585,9 @@ msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
 
 msgid "Set up a value for registration secret link"
 msgstr "Een waarde instellen voor registratie geheime link"
+
+msgid "The organization this membership belongs to"
+msgstr "De organisatie waartoe dit lidmaatschap behoort"
 
 msgid "This access link is invalid or has expired."
 msgstr "Deze toegangslink is ongeldig of verlopen."
@@ -5857,6 +5893,9 @@ msgstr "Geselecteerde elementen worden aan de deelnemers getoond"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Toont het berekende belastingbedrag op elke betaling"
+
+msgid "Temporary token used for password reset process"
+msgstr "Tijdelijk token gebruikt voor het resetten van het wachtwoord"
 
 msgid "The name of the question this option belongs to"
 msgstr "De naam van de vraag waar deze optie bij hoort"
@@ -6358,6 +6397,9 @@ msgstr "De gebruiker heeft zijn registratie voor dit evenement bevestigd"
 msgid "The user has updated their registration for this event"
 msgstr "De gebruiker heeft zijn registratie voor dit evenement bijgewerkt"
 
+msgid "This page shows all event registrations for the member"
+msgstr "Deze pagina toont alle evenementregistraties voor het lid"
+
 msgid "This page shows the collections opened by participants"
 msgstr "Deze pagina toont de collecties die zijn geopend door deelnemers"
 
@@ -6474,6 +6516,9 @@ msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr ""
 "(Optioneel) Andere vaardigheid als voorwaarde, door komma's gescheiden"
 
+msgid "Available credit balance for event payments and purchases"
+msgstr "Beschikbaar kredietsaldo voor betalingen en aankopen voor evenementen"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Inhoud van privacy pagina gelinkt onderaan alle pagina's"
 
@@ -6491,6 +6536,9 @@ msgstr "Selecteer de groepen waarop je de tekens wilt filteren"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Het karakterveld van het berekende type dat wordt bijgewerkt"
+
+msgid "This page shows all accounting information for the member"
+msgstr "Deze pagina toont alle boekhoudkundige informatie voor het lid"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
@@ -6567,6 +6615,9 @@ msgstr ""
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
 msgstr "Totaal van je invoer: <b>%(amount).2f %(currency)s</b>"
+
+msgid "Unique membership card number assigned by the organization"
+msgstr "Uniek lidmaatschapsnummer toegekend door de organisatie"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "U hebt het maximum aantal selecteerbare opties overschreden"
@@ -6676,6 +6727,10 @@ msgstr ""
 "Deze pagina geeft een overzicht van de facties (groepen personages) van het "
 "evenement"
 
+msgid "Upload the signed membership application form (PDF or image)"
+msgstr ""
+"Upload het ondertekende lidmaatschapsaanvraagformulier (PDF of afbeelding)"
+
 msgid "You have already granted data sharing with this organisation"
 msgstr ""
 "Je hebt al toestemming gegeven voor het delen van gegevens met deze "
@@ -6763,6 +6818,10 @@ msgstr "voor geen relatie, alleen om de andere karakternaam weer te geven"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr "Toegevoegd aan de lidmaatschapspagina als paragraaf voor statuutinfo"
+
+msgid "Available token balance for event registrations and activities"
+msgstr ""
+"Beschikbaar tokensaldo voor inschrijvingen voor evenementen en activiteiten"
 
 msgid "Content of legal notice page linked at the bottom of all pages"
 msgstr "Inhoud van de pagina met juridische informatie onderaan alle pagina's"
@@ -6885,6 +6944,9 @@ msgstr ""
 msgid "To be able to pay, your membership application must be approved"
 msgstr "Om te kunnen betalen, moet je lidmaatschapsaanvraag goedgekeurd zijn"
 
+msgid "Upload a photo or scan of your identity document (PDF or image)"
+msgstr "Upload een foto of scan van je identiteitsbewijs (PDF of afbeelding)"
+
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Waarschuwing: er is al een goedgekeurd lid met dezelfde naam"
 
@@ -6979,6 +7041,9 @@ msgstr "Deelnemers kunnen hun eigen registratie op elk moment annuleren"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopieer en plak precies alle gekleurde tekst hieronder in de notities"
+
+msgid "Current status of the membership application and approval process"
+msgstr "Huidige status van de lidmaatschapsaanvraag en goedkeuringsprocedure"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
@@ -7175,12 +7240,19 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Rollen toewijzen aan medewerkers en toegang geven tot specifieke functies"
 
+msgid "Date when the membership was officially approved by the organization"
+msgstr ""
+"Datum waarop het lidmaatschap officieel is goedgekeurd door de organisatie"
+
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Wil je personages beheren die zijn toegewezen aan geregistreerde deelnemers"
 
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Geeft aan of de korting zichtbaar en bruikbaar is voor deelnemers"
+
+msgid "Indicates whether the member has completed their profile information"
+msgstr "Geeft aan of het lid zijn profielinformatie heeft ingevuld"
 
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
@@ -7482,6 +7554,11 @@ msgid ""
 msgstr ""
 "Hiermee kan de organisatie badges toekennen en een openbaar leaderboard "
 "inschakelen"
+
+msgid ""
+"Choose how often you want to receive updates about events and activities"
+msgstr ""
+"Kies hoe vaak je updates over evenementen en activiteiten wilt ontvangen"
 
 msgid ""
 "Content of the receipt created for each payment and sent to participants"

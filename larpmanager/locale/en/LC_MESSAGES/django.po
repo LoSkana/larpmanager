@@ -3542,6 +3542,70 @@ msgstr ""
 msgid "Kicked out"
 msgstr ""
 
+msgid "The member associated with this membership"
+msgstr ""
+
+msgid "The organization this membership belongs to"
+msgstr ""
+
+msgid "Profile completed"
+msgstr ""
+
+msgid "Indicates whether the member has completed their profile information"
+msgstr ""
+
+msgid "Credit balance"
+msgstr ""
+
+msgid "Available credit balance for event payments and purchases"
+msgstr ""
+
+msgid "Token balance"
+msgstr ""
+
+msgid "Available token balance for event registrations and activities"
+msgstr ""
+
+msgid "Membership status"
+msgstr ""
+
+msgid "Current status of the membership application and approval process"
+msgstr ""
+
+msgid "Upload the signed membership application form (PDF or image)"
+msgstr ""
+
+msgid "Identity document"
+msgstr ""
+
+msgid "Upload a photo or scan of your identity document (PDF or image)"
+msgstr ""
+
+msgid "Membership card number"
+msgstr ""
+
+msgid "Unique membership card number assigned by the organization"
+msgstr ""
+
+msgid "Membership approval date"
+msgstr ""
+
+msgid "Date when the membership was officially approved by the organization"
+msgstr ""
+
+msgid "Password reset token"
+msgstr ""
+
+msgid "Temporary token used for password reset process"
+msgstr ""
+
+msgid "Newsletter preferences"
+msgstr ""
+
+msgid ""
+"Choose how often you want to receive updates about events and activities"
+msgstr ""
+
 msgid "Short name"
 msgstr ""
 
@@ -5433,28 +5497,34 @@ msgid ""
 "system"
 msgstr ""
 
-msgid "personal data"
+msgid "View registrations"
 msgstr ""
 
-msgid "registrations"
+msgid "View accounting"
 msgstr ""
 
-msgid "payments"
-msgstr ""
-
-msgid "other"
-msgstr ""
-
-msgid "discount"
+msgid "Edit membership"
 msgstr ""
 
 msgid "Personal data"
 msgstr ""
 
-msgid "Given"
+msgid "This page shows all accounting information for the member"
 msgstr ""
 
 msgid "Detail"
+msgstr ""
+
+msgid "This page shows all event registrations for the member"
+msgstr ""
+
+msgid "Given"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Unpaid"
 msgstr ""
 
 msgid "Members list"
@@ -5811,6 +5881,9 @@ msgid "Dates"
 msgstr ""
 
 msgid "Counts"
+msgstr ""
+
+msgid "registrations"
 msgstr ""
 
 msgid "Feature activated"

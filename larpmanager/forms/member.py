@@ -766,9 +766,6 @@ class ExeMembershipForm(MyForm):
     class Meta:
         model = Membership
         fields = (
-            "compiled",
-            "credit",
-            "tokens",
             "status",
             "request",
             "document",

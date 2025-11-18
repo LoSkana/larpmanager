@@ -9,108 +9,32 @@
 {% block content %}
     <p>Email: {{ member_edit.email }}</p>
     <p>
-        {% trans "Show" %}:
-        <a href="#" class="my_toggle" tog='data'>{% trans "personal data" %}</a>,
-        <a href="#" class="my_toggle" tog='reg'>{% trans "registrations" %}</a>,
-        <a href="#" class="my_toggle" tog='pay'>{% trans "payments" %}</a>,
-        <a href="#" class="my_toggle" tog='oth'>{% trans "other" %}</a>,
-        <a href="#" class="my_toggle" tog='dis'>{% trans "discount" %}</a>
+        <a href="{% url 'exe_member_registrations' member_edit.id %}"
+           qtip="{% trans "View registrations" %}">
+            <i class="fas fa-calendar-check"></i> {% trans "Registrations" %}
+        </a>
+        |
+        <a href="{% url 'exe_member_accounting' member_edit.id %}"
+           qtip="{% trans "View accounting" %}">
+            <i class="fas fa-file-invoice-dollar"></i> {% trans "Accounting" %}
+        </a>
+        |
+        <a href="{% url 'exe_membership_status' member_edit.id %}"
+           qtip="{% trans "Edit membership" %}">
+            <i class="fas fa-id-card"></i> {% trans "Membership" %}
+        </a>
     </p>
     {% include "elements/membership_cf.html" %}
-    <div class="hide data">
-        <h2>{% trans "Personal data" %}</h2>
-        <form action="{{ request.path }}"
-              method="post"
-              enctype="multipart/form-data">
-            {% csrf_token %}
-            <table class="mob  ">
-                {{ form.as_table }}
-            </table>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
-    <div class="hide reg">
-        <h2>{% trans "Registrations" %}</h2>
-        <table class="writing ">
-            <thead>
-                <tr>
-                    <th>{% trans "Event" %}</th>
-                    <th>{% trans "Total" %}</th>
-                    <th>{% trans "Given" %}</th>
-                </tr>
-            </thead>
-            {% for el in regs %}
-                <tr>
-                    <td>{{ el.run.search }}</td>
-                    <td>{{ el.tot_iscr|format_decimal }}</td>
-                    <td>{{ el.tot_payed|format_decimal }}</td>
-                </tr>
-            {% endfor %}
+    <h2>{% trans "Personal data" %}</h2>
+    <form action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="mob  ">
+            {{ form.as_table }}
         </table>
-    </div>
-    <div class="hide pay">
-        <h2>{% trans "Payments" %}</h2>
-        <table id="members_pay" class="writing go_datatable">
-            <thead>
-                <tr>
-                    <th>{% trans "Registration" %}</th>
-                    <th>{% trans "Date" %}</th>
-                    <th>{% trans "Value" %}</th>
-                    <th>{% trans "Type" %}</th>
-                </tr>
-            </thead>
-            {% for el in pays %}
-                <tr>
-                    <td>{{ el.reg.run }}</td>
-                    <td>{{ el.created | date:'Y-m-d' }}</td>
-                    <td>{{ el.value }}</td>
-                    <td>{{ el.typ }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
-    <div class="hide oth">
-        <h2>{% trans "Other" %}</h2>
-        <table id="members_other" class="writing go_datatable">
-            <thead>
-                <tr>
-                    <th>{% trans "Event" %}</th>
-                    <th>{% trans "Date" %}</th>
-                    <th>{% trans "Description" %}</th>
-                    <th>{% trans "Value" %}</th>
-                    <th>{% trans "Type" %}</th>
-                </tr>
-            </thead>
-            {% for el in others %}
-                <tr>
-                    <td>{{ el.run.search }}</td>
-                    <td>{{ el.created | date:'Y-m-d' }}</td>
-                    <td>{{ el.descr }}</td>
-                    <td>{{ el.value }}</td>
-                    <td>{{ el.typ }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
-    <div class="hide dis">
-        <h2>{% trans "Discount" %}</h2>
-        <table id="members_discount" class="writing go_datatable">
-            <thead>
-                <tr>
-                    <th>{% trans "Event" %}</th>
-                    <th>{% trans "Discount" %}</th>
-                    <th>{% trans "Detail" %}</th>
-                </tr>
-            </thead>
-            {% for el in discounts %}
-                <tr>
-                    <td>{{ el.run.search }}</td>
-                    <td>{{ el.disc }}</td>
-                    <td>{{ el.detail }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+        <input type="submit" value="Submit">
+    </form>
     <hr class="c" />
     {% if '.pdf' in doc_path %}
         <embed src="{{ member_edit.membership.get_document_filepath }}"
