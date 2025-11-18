@@ -371,6 +371,77 @@ def _check_already_done(context: dict, assignment_type: int) -> None:
             pass
 
 
+def _handle_casting_avoidance(context: dict, request: Any, typ: int) -> str | None:
+    """Handle casting avoidance preferences update.
+
+    Args:
+        context: Context dictionary with run and member data
+        request: HTTP request object with POST data
+        typ: Casting type identifier
+
+    Returns:
+        Avoidance text if provided, None otherwise
+    """
+    if not context.get("casting_avoid"):
+        return None
+
+    # Clear existing avoidance preferences
+    CastingAvoid.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
+
+    # Get avoidance text from POST data if provided
+    avoidance_text = request.POST.get("avoid", "")
+
+    # Create new avoidance record if text was provided
+    if avoidance_text and len(avoidance_text) > 0:
+        CastingAvoid.objects.create(run=context["run"], member=context["member"], typ=typ, text=avoidance_text)
+        return avoidance_text
+
+    return None
+
+
+def _build_preference_names_list(context: dict, typ: int) -> list[str]:
+    """Build list of preference names for email confirmation.
+
+    Args:
+        context: Context dictionary with run and member data
+        typ: Casting type (0 for characters, other for traits)
+
+    Returns:
+        List of preference names as strings
+    """
+    preference_names_list = []
+    casting_preferences = list(
+        Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by("pref")
+    )
+
+    if not casting_preferences:
+        return preference_names_list
+
+    # Batch fetch all characters or traits to avoid N+1 queries
+    element_ids = [cp.element for cp in casting_preferences]
+
+    if typ == 0:
+        # Character casting: batch fetch all characters
+        characters_dict = {
+            char.id: char for char in Character.objects.filter(pk__in=element_ids).select_related("event")
+        }
+        for casting_preference in casting_preferences:
+            character = characters_dict.get(casting_preference.element)
+            if character:
+                preference_names_list.append(character.show(context["run"])["name"])
+    else:
+        # Trait casting: batch fetch all traits with their quests
+        traits_dict = {
+            trait.id: trait for trait in Trait.objects.filter(pk__in=element_ids).select_related("quest")
+        }
+        for casting_preference in casting_preferences:
+            trait = traits_dict.get(casting_preference.element)
+            if trait:
+                preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
+
+    return preference_names_list
+
+
 def _casting_update(context: dict, prefs: dict, request: Any, typ: int) -> None:
     """Update casting preferences for a member and send confirmation email.
 
@@ -405,53 +476,13 @@ def _casting_update(context: dict, prefs: dict, request: Any, typ: int) -> None:
         )
 
     # Handle casting avoidance preferences if feature is enabled
-    avoidance_text = None
-    if context.get("casting_avoid"):
-        # Clear existing avoidance preferences
-        CastingAvoid.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
-
-        # Process new avoidance text from form submission
-        avoidance_text = ""
-
-        # Get avoidance text from POST data if provided
-        if "avoid" in request.POST:
-            avoidance_text = request.POST["avoid"]
-
-        # Create new avoidance record if text was provided
-        if avoidance_text and len(avoidance_text) > 0:
-            CastingAvoid.objects.create(run=context["run"], member=context["member"], typ=typ, text=avoidance_text)
+    avoidance_text = _handle_casting_avoidance(context, request, typ)
 
     # Show success message to user
     messages.success(request, _("Preferences saved!"))
 
     # Build preference list for confirmation email
-    preference_names_list = []
-    casting_preferences = list(
-        Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).order_by("pref")
-    )
-
-    if casting_preferences:
-        # Batch fetch all characters or traits to avoid N+1 queries
-        element_ids = [cp.element for cp in casting_preferences]
-
-        if typ == 0:
-            # Character casting: batch fetch all characters
-            characters_dict = {
-                char.id: char for char in Character.objects.filter(pk__in=element_ids).select_related("event")
-            }
-            for casting_preference in casting_preferences:
-                character = characters_dict.get(casting_preference.element)
-                if character:
-                    preference_names_list.append(character.show(context["run"])["name"])
-        else:
-            # Trait casting: batch fetch all traits with their quests
-            traits_dict = {
-                trait.id: trait for trait in Trait.objects.filter(pk__in=element_ids).select_related("quest")
-            }
-            for casting_preference in casting_preferences:
-                trait = traits_dict.get(casting_preference.element)
-                if trait:
-                    preference_names_list.append(f"{trait.quest.show()['name']} - {trait.show()['name']}")
+    preference_names_list = _build_preference_names_list(context, typ)
 
     # Send confirmation email with updated preferences
     mail_confirm_casting(context["member"], context["run"], context["gl_name"], preference_names_list, avoidance_text)
