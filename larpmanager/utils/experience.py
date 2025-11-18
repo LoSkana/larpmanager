@@ -454,10 +454,10 @@ def add_char_addit(character: Any) -> None:
 
     """
     character.addit = {}
-    character_configs = CharacterConfig.objects.filter(character__id=character.id)
-    if not character_configs.count():
+    character_configs = list(CharacterConfig.objects.filter(character__id=character.id))
+    if not character_configs:
         calculate_character_experience_points(character)
-        character_configs = CharacterConfig.objects.filter(character__id=character.id)
+        character_configs = list(CharacterConfig.objects.filter(character__id=character.id))
 
     for character_config in character_configs:
         character.addit[character_config.name] = character_config.value
