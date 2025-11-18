@@ -565,7 +565,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Handle filler ticket visibility based on event config and member status
         elif ticket.tier == TicketTier.FILLER:
-            filler_alway = get_event_config(event.id, "filler_always", default_value=False)
+            filler_alway = get_event_config(event.id, "filler_always", default_value=False, context=self.params)
             if filler_alway:
                 # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
@@ -761,11 +761,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.params["run"].event_id,
             "pay_what_you_want_label",
             default_value=_("Free donation"),
+            context=self.params,
         )
         self.fields["pay_what"].help_text = get_event_config(
             self.params["run"].event_id,
             "pay_what_you_want_descr",
             default_value=_("Freely indicate the amount of your donation"),
+            context=self.params,
         )
 
     def init_ticket(self, registration_section: Any) -> None:
@@ -991,7 +993,9 @@ class RegistrationCharacterRelForm(MyForm):
             [
                 s
                 for s in ["name", "pronoun", "song", "public", "private"]
-                if not get_event_config(self.params["event"].id, "custom_character_" + s, default_value=False)
+                if not get_event_config(
+                    self.params["event"].id, "custom_character_" + s, default_value=False, context=self.params
+                )
             ]
         )
 
@@ -1024,7 +1028,7 @@ class OrgaRegistrationTicketForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Configure tier field based on available tiers for the event
-        tiers = self.get_tier_available(self.params["run"].event)
+        tiers = self.get_tier_available(self.params["run"].event, self.params)
         if len(tiers) > 1:
             self.fields["tier"].choices = tiers
         else:
@@ -1039,7 +1043,7 @@ class OrgaRegistrationTicketForm(MyForm):
             self.delete_field("giftable")
 
     @staticmethod
-    def get_tier_available(event: Event) -> list[tuple[str, str]]:
+    def get_tier_available(event: Event, context: dict) -> list[tuple[str, str]]:
         """Get available ticket tiers based on event features and configuration.
 
         Filters ticket tiers by checking if required features are enabled for the event
@@ -1049,6 +1053,7 @@ class OrgaRegistrationTicketForm(MyForm):
         Args:
             event: Event instance to check tier availability for. Must have
                   get_config method and id attribute.
+            context: Dict with context information
 
         Returns:
             List of available ticket tier tuples in format (value, label).
@@ -1093,7 +1098,7 @@ class OrgaRegistrationTicketForm(MyForm):
 
             # Skip ticket tiers that require configuration options not set
             if tier_value in ticket_configs and not get_event_config(
-                event.id, f"ticket_{ticket_configs[tier_value]}", default_value=False
+                event.id, f"ticket_{ticket_configs[tier_value]}", default_value=False, context=context
             ):
                 continue
 

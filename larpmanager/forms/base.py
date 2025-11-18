@@ -153,7 +153,7 @@ class MyForm(forms.ModelForm):
         available_runs = Run.objects.filter(event=self.params["event"])
 
         # If campaign switch is active, expand to include related events
-        if get_association_config(self.params["event"].association_id, "campaign_switch", default_value=False):
+        if get_association_config(self.params["event"].association_id, "campaign_switch", default_value=False, context=self.params):
             # Start with current event ID
             related_event_ids = {self.params["event"].id}
 

@@ -21,7 +21,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q
@@ -36,9 +36,6 @@ from larpmanager.models.base import BaseModel
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
-
-if TYPE_CHECKING:
-    from django.http import HttpResponse
 
 
 class Writing(BaseConceptModel):
@@ -726,7 +723,7 @@ class HandoutTemplate(BaseModel):
         """Return string representation."""
         return f"HT{self.number} {self.name}"
 
-    def download_template(self) -> HttpResponse:
+    def download_template(self) -> str:
         """Download the template file."""
         # noinspection PyUnresolvedReferences
         return download(self.template.path)

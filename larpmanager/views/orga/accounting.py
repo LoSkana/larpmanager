@@ -618,7 +618,9 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
     context = check_event_context(request, event_slug, "orga_expenses")
 
     # Verify that expense functionality is enabled for this association
-    if get_association_config(context["event"].association_id, "expense_disable_orga", default_value=False):
+    if get_association_config(
+        context["event"].association_id, "expense_disable_orga", default_value=False, context=context
+    ):
         msg = "eh no caro mio"
         raise Http404(msg)
 

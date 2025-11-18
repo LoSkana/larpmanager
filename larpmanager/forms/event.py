@@ -1106,7 +1106,9 @@ class OrgaEventTextForm(MyForm):
         if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
-        if not get_event_config(self.params["event"].id, "user_character_approval", default_value=False):
+        if not get_event_config(
+            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+        ):
             delete_choice.extend(
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW],
             )
@@ -1305,7 +1307,9 @@ class OrgaRunForm(ConfigForm):
         if "character" not in self.params["features"]:
             return
 
-        if not get_event_config(self.params["event"].id, "writing_field_visibility", default_value=False):
+        if not get_event_config(
+            self.params["event"].id, "writing_field_visibility", default_value=False, context=self.params
+        ):
             return
 
         help_text = _(
@@ -1761,11 +1765,13 @@ class OrgaPreferencesForm(ExePreferencesForm):
         # Add character-specific configuration options
         if writing_section[0] == "character":
             # Add player field if character limit is set
-            if get_event_config(self.params["event"].id, "user_character_max", default_value=0):
+            if get_event_config(self.params["event"].id, "user_character_max", default_value=0, context=self.params):
                 extra_config_options.append(("player", _("Player")))
 
             # Add status field if character approval is enabled
-            if get_event_config(self.params["event"].id, "user_character_approval", default_value=False):
+            if get_event_config(
+                self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+            ):
                 extra_config_options.append(("status", _("Status")))
 
             # Define character feature fields with their config keys and labels

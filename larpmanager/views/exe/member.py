@@ -552,7 +552,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
             association_id = context["association_id"]
 
             # Get membership fee amount from association configuration
-            fee = get_association_config(association_id, "membership_fee", default_value="0")
+            fee = get_association_config(association_id, "membership_fee", default_value="0", context=context)
 
             # Create payment invoice record with confirmed status
             payment = PaymentInvoice.objects.create(
@@ -781,7 +781,9 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     # Parse candidate IDs from association configuration
     idxs = [
         el.strip()
-        for el in get_association_config(association_id, "vote_candidates", default_value="").split(",")
+        for el in get_association_config(association_id, "vote_candidates", default_value="", context=context).split(
+            ","
+        )
         if el.strip()
     ]
 
