@@ -111,8 +111,15 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
     handle_bulk_items(request, context)
 
     # Get warehouse items for current association with related data
-    context["list"] = WarehouseItem.objects.filter(association_id=context["association_id"])
-    context["list"] = context["list"].select_related("container").prefetch_related("tags")
+    items = WarehouseItem.objects.filter(association_id=context["association_id"])
+    items = items.select_related("container").prefetch_related("tags")
+
+    # Cache tags list to avoid .all() calls in template
+    items_list = []
+    for item in items:
+        item.tags_cached = list(item.tags.all())
+        items_list.append(item)
+    context["list"] = items_list
 
     # Add optional warehouse context data
     get_warehouse_optionals(context, [5])

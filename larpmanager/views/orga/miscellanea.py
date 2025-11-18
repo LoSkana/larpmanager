@@ -356,6 +356,8 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     ):
         # Set initial availability to item's total quantity
         item.available = item.quantity or 0
+        # Cache tags list to avoid .all() calls in template
+        item.tags_cached = list(item.tags.all())
         item_all[item.id] = item
 
     # Process existing warehouse item assignments to calculate availability

@@ -42,7 +42,7 @@
                         <a href="{% url 'exe_warehouse_containers_edit' el.container.id %}">{{ el.container }}</a>
                     </td>
                     <td>
-                        {% for tag in el.tags.all %}
+                        {% for tag in el.tags_cached %}
                             <a href="{% url 'exe_warehouse_tags_edit' tag.id %}">{{ tag }}</a>
                         {% endfor %}
                     </td>
