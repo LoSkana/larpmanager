@@ -49,16 +49,16 @@ def test_additional_tickets_full_workflow(pw_page: Any) -> None:
     enable_additional_tickets_feature(page, live_server)
 
     # Test user registration with 3 additional tickets
-    test_registration_with_additionals(page, live_server)
+    registration_with_additionals(page, live_server)
 
     # Verify organizer can see additional tickets count
     verify_organizer_view(page, live_server)
 
     # Test editing additional tickets
-    test_edit_additionals(page, live_server)
+    edit_additionals(page, live_server)
 
     # Test edge cases
-    test_additional_tickets_edge_cases(page, live_server)
+    additional_tickets_edge_cases(page, live_server)
 
 
 def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
@@ -85,7 +85,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def test_registration_with_additionals(page: Any, live_server: Any) -> None:
+def registration_with_additionals(page: Any, live_server: Any) -> None:
     """Test user registration with additional tickets."""
     # Navigate to registration page
     go_to(page, live_server, "test/")
@@ -117,14 +117,14 @@ def verify_organizer_view(page: Any, live_server: Any) -> None:
     expect(page.locator("#one")).to_contain_text("3")
 
 
-def test_edit_additionals(page: Any, live_server: Any) -> None:
+def edit_additionals(page: Any, live_server: Any) -> None:
     """Test editing additional tickets count after registration."""
     # Open the registration for editing
     go_to(page, live_server, "test/manage/registrations/")
     page.locator('[id="\\31 "]').get_by_role("link", name="").click()
 
     # Change additional tickets from 3 to 2
-    page.get_by_label("Additional").select_option("2")
+    page.locator("#id_additionals").fill("2")
 
     # Save changes
     submit_confirm(page)
@@ -135,7 +135,7 @@ def test_edit_additionals(page: Any, live_server: Any) -> None:
     expect(page.locator("#one")).to_contain_text("2")
 
 
-def test_additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
+def additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
     """Test edge cases for additional tickets feature."""
     # Test with 0 additional tickets (just base ticket)
     logout(page)
@@ -154,8 +154,7 @@ def test_additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
     logout(page)
     login_orga(page, live_server)
 
-    go_to(page, live_server, "test/")
-    page.get_by_role("link", name="Register").click()
+    go_to(page, live_server, "test/register/")
 
     # Select maximum 5 additional tickets
     page.get_by_label("Additional").select_option("5")
@@ -187,7 +186,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Set ticket price
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
-    page.get_by_role("link", name="").click()
+    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("30")
     page.get_by_role("button", name="Confirm").click()
@@ -211,7 +210,8 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Verify in organizer view
     go_to(page, live_server, "test/manage/registrations/")
-    expect(page.locator("table")).to_contain_text("2")
+    page.locator("#one").get_by_role("link", name="Additional").click()
+    expect(page.locator("#one")).to_contain_text("2")
 
 
 def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
