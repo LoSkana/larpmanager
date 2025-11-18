@@ -416,7 +416,9 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
             cho[opt.id] = opt.name
 
         # Process choices and group by element ID
-        for el in WritingChoice.objects.filter(question=question, element_id__in=element_ids).order_by("option__order"):
+        for el in WritingChoice.objects.filter(
+            question=question, element_id__in=element_ids
+        ).select_related("option").order_by("option__order"):
             if el.element_id not in res:
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])

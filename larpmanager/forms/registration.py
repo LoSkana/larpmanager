@@ -951,23 +951,27 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         """
         data = self.cleaned_data["characters_new"]
+        character_ids = list(data.values_list("pk", flat=True))
 
-        for ch in data.values_list("pk", flat=True):
-            qs = RegistrationCharacterRel.objects.filter(
-                character_id=ch,
-                reg__run=self.params["run"],
-                reg__cancellation_date__isnull=True,
-            ).select_related("character", "reg__member")
-            if self.instance.pk:
-                qs = qs.exclude(reg__id=self.instance.pk)
+        # Batch fetch all assigned characters to avoid N queries
+        assigned_qs = RegistrationCharacterRel.objects.filter(
+            character_id__in=character_ids,
+            reg__run=self.params["run"],
+            reg__cancellation_date__isnull=True,
+        ).select_related("character", "reg__member")
 
-            # Use .first() directly instead of len() check + .first() (reduces queries)
-            el = qs.first()
-            if el:
-                msg = f"Character '{el.character}' already assigned to the player '{el.reg.member}' for this event!"
-                raise ValidationError(
-                    msg,
-                )
+        if self.instance.pk:
+            assigned_qs = assigned_qs.exclude(reg__id=self.instance.pk)
+
+        # Create dict of assigned characters for fast lookup
+        assigned_chars = {rel.character_id: rel for rel in assigned_qs}
+
+        # Check each character against batch-fetched assignments
+        for ch_id in character_ids:
+            if ch_id in assigned_chars:
+                rel = assigned_chars[ch_id]
+                msg = f"Character '{rel.character}' already assigned to the player '{rel.reg.member}' for this event!"
+                raise ValidationError(msg)
 
         return data
 
