@@ -345,7 +345,6 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
     get_char(context, num)
 
     # Reload character with prefetched factions and plots to avoid N+1 queries
-    from larpmanager.models.character import Character
     context["character"] = Character.objects.prefetch_related(
         "factions_list__characters",
         "plots__characters"
