@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth.models import User
@@ -65,7 +65,6 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         """
         # Extract extra data from social login account
         social_provider_data = sociallogin.account.extra_data
-        # logger.debug(f"Social provider data: {social_provider_data}")
 
         # Update name field if it's empty and given_name is available
         if "given_name" in social_provider_data and len(user.member.name) == 0:
@@ -185,7 +184,7 @@ def is_lm_admin(request: HttpRequest) -> bool:
     return request.user.is_superuser
 
 
-def check_lm_admin(request: HttpRequest) -> dict[str, int]:
+def check_lm_admin(request: HttpRequest) -> dict[str, Any]:
     """Verify user is LM admin and return admin context.
 
     This function validates that the current user has LM (LarpManager) administrator
@@ -256,7 +255,7 @@ def get_allowed_managed() -> list[str]:
     ]
 
 
-def auto_assign_event_permission_number(event_permission) -> None:
+def auto_assign_event_permission_number(event_permission: Any) -> None:
     """Assign number to event permission if not set.
 
     Args:

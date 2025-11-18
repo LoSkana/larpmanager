@@ -17,9 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -32,6 +33,9 @@ from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -114,8 +118,8 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
         cache.set(cache_key, cached_event_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug("Updated %s %s relationships in cache", section_name, section_id)
 
-    except Exception as e:
-        logger.exception("Error updating %s %s relationships: %s", section_name, section_id, e)
+    except Exception:
+        logger.exception("Error updating %s %s relationships", section_name, section_id)
         clear_event_relationships_cache(event_id)
 
 
@@ -135,8 +139,8 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
             del cached_data[section_name][section_id]
             cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
             logger.debug("Removed %s %s from cache", section_name, section_id)
-    except Exception as error:
-        logger.exception("Error removing %s %s from cache: %s", section_name, section_id, error)
+    except Exception:
+        logger.exception("Error removing %s %s from cache", section_name, section_id)
         clear_event_relationships_cache(event_id)
 
 
@@ -170,7 +174,9 @@ def refresh_character_related_caches(character: Character) -> None:
         refresh_event_prologue_relationships(prologue)
 
 
-def update_m2m_related_characters(instance, character_ids, action: str, update_func) -> None:
+def update_m2m_related_characters(
+    instance: Plot | Faction | SpeedLarp, character_ids: set[int], action: str, update_func: Callable
+) -> None:
     """Update character caches for M2M relationship changes.
 
     Args:
@@ -192,7 +198,7 @@ def update_m2m_related_characters(instance, character_ids, action: str, update_f
                 try:
                     character = Character.objects.get(id=character_id)
                     affected_characters.append(character)
-                except ObjectDoesNotExist:
+                except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
                     logger.warning("Character %s not found during relationship update", character_id)
         elif action == "post_clear":
             # For post_clear, get all characters that were related
@@ -331,9 +337,9 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
         cache.set(cache_key, relationship_cache, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug("Cached relationships for event %s", event.id)
 
-    except Exception as exception:
+    except Exception:
         # Log the error with full traceback and return empty result
-        logger.exception("Error initializing relationships for event %s: %s", event.id, exception)
+        logger.exception("Error initializing relationships for event %s", event.id)
         relationship_cache = {}
 
     return relationship_cache
@@ -386,10 +392,86 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
         cache.set(cache_key, cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
         logger.debug("Updated character %s relationships in cache", char.id)
 
-    except Exception as e:
+    except Exception:
         # Log error and clear cache to prevent inconsistent state
-        logger.exception("Error updating character %s relationships: %s", char.id, e)
+        logger.exception("Error updating character %s relationships", char.id)
         clear_event_relationships_cache(event.id)
+
+
+def _build_plot_relations(char: Character) -> dict[str, Any]:
+    """Build plot relationships for a character.
+
+    Args:
+        char: Character to build plot relationships for
+
+    Returns:
+        Dictionary with plot relationship data including important count
+    """
+    related_plots = char.get_plot_characters()
+    plot_list = [(plot_rel.plot_id, plot_rel.plot.name) for plot_rel in related_plots]
+    plot_rels = build_relationship_dict(plot_list)
+
+    # Calculate important plot count (excluding $unimportant entries)
+    unimportant_plot_count = 0
+    if get_event_config(char.event_id, "writing_unimportant", default_value=False):
+        unimportant_plot_count = sum(
+            1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
+        )
+    plot_rels["important"] = plot_rels["count"] - unimportant_plot_count
+    return plot_rels
+
+
+def _build_faction_relations(char: Character, event: Event) -> dict[str, Any]:
+    """Build faction relationships for a character.
+
+    Args:
+        char: Character to build faction relationships for
+        event: Event for faction independence configuration
+
+    Returns:
+        Dictionary with faction relationship data
+    """
+    cache_event_id = event.id if event else char.event_id
+    if get_event_config(cache_event_id, "campaign_faction_indep", default_value=False):
+        # Use the cache event for independent faction lookup
+        faction_event_id = cache_event_id
+    else:
+        # Use the parent event for inherited faction lookup
+        faction_event_id = char.event.get_class_parent("faction").id
+
+    # Build faction list based on determined event
+    if faction_event_id:
+        character_factions = char.factions_list.filter(event_id=faction_event_id)
+        faction_list = [(faction.id, faction.name) for faction in character_factions]
+    else:
+        faction_list = []
+
+    return build_relationship_dict(faction_list)
+
+
+def _build_character_relations(char: Character) -> dict[str, Any]:
+    """Build character-to-character relationships.
+
+    Args:
+        char: Character to build relationships for
+
+    Returns:
+        Dictionary with character relationship data including important count
+    """
+    character_relationships = Relationship.objects.filter(deleted=None, source=char)
+    relationship_list = [(relationship.target.id, relationship.target.name) for relationship in character_relationships]
+    relationships_rels = build_relationship_dict(relationship_list)
+
+    # Calculate important relationship count (excluding $unimportant entries)
+    unimportant_relationship_count = 0
+    if get_event_config(char.event_id, "writing_unimportant", default_value=False):
+        unimportant_relationship_count = sum(
+            1
+            for relationship in character_relationships
+            if strip_tags(relationship.text).lstrip().startswith("$unimportant")
+        )
+    relationships_rels["important"] = relationships_rels["count"] - unimportant_relationship_count
+    return relationships_rels
 
 
 def get_event_char_rels(char: Character, features: dict[str, Any], event: Event) -> dict[str, Any]:
@@ -427,56 +509,15 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
     try:
         # Handle plot relationships if plot feature is enabled
         if "plot" in features:
-            related_plots = char.get_plot_characters()
-            plot_list = [(plot_rel.plot_id, plot_rel.plot.name) for plot_rel in related_plots]
-            relations["plot_rels"] = build_relationship_dict(plot_list)
-
-            # Calculate important plot count (excluding $unimportant entries)
-            unimportant_plot_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
-                unimportant_plot_count = sum(
-                    1 for plot_rel in related_plots if strip_tags(plot_rel.text).lstrip().startswith("$unimportant")
-                )
-            relations["plot_rels"]["important"] = relations["plot_rels"]["count"] - unimportant_plot_count
+            relations["plot_rels"] = _build_plot_relations(char)
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
-            cache_event_id = event.id if event else char.event_id
-            if get_event_config(cache_event_id, "campaign_faction_indep", default_value=False):
-                # Use the cache event for independent faction lookup
-                faction_event_id = cache_event_id
-            else:
-                # Use the parent event for inherited faction lookup
-                faction_event_id = char.event.get_class_parent("faction").id
-
-            # Build faction list based on determined event
-            if faction_event_id:
-                character_factions = char.factions_list.filter(event_id=faction_event_id)
-                faction_list = [(faction.id, faction.name) for faction in character_factions]
-            else:
-                faction_list = []
-
-            relations["faction_rels"] = build_relationship_dict(faction_list)
+            relations["faction_rels"] = _build_faction_relations(char, event)
 
         # Handle character-to-character relationships if relationships feature is enabled
         if "relationships" in features:
-            character_relationships = Relationship.objects.filter(deleted=None, source=char)
-            relationship_list = [
-                (relationship.target.id, relationship.target.name) for relationship in character_relationships
-            ]
-            relations["relationships_rels"] = build_relationship_dict(relationship_list)
-
-            # Calculate important relationship count (excluding $unimportant entries)
-            unimportant_relationship_count = 0
-            if get_event_config(char.event_id, "writing_unimportant", default_value=False):
-                unimportant_relationship_count = sum(
-                    1
-                    for relationship in character_relationships
-                    if strip_tags(relationship.text).lstrip().startswith("$unimportant")
-                )
-            relations["relationships_rels"]["important"] = (
-                relations["relationships_rels"]["count"] - unimportant_relationship_count
-            )
+            relations["relationships_rels"] = _build_character_relations(char)
 
         # Handle speedlarp relationships if speedlarp feature is enabled
         if "speedlarp" in features:
@@ -490,9 +531,9 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
             prologue_list = [(prologue.id, prologue.name) for prologue in character_prologues]
             relations["prologue_rels"] = build_relationship_dict(prologue_list)
 
-    except Exception as error:
+    except Exception:
         # Log the error with full traceback and return empty dict as fallback
-        logger.exception("Error getting relationships for character %s: %s", char.id, error)
+        logger.exception("Error getting relationships for character %s", char.id)
         relations = {}
 
     return relations
@@ -540,9 +581,9 @@ def get_event_faction_rels(faction: Faction) -> dict[str, Any]:
         # Structure the relationship data using helper function
         faction_relations["character_rels"] = build_relationship_dict(character_id_name_tuples)
 
-    except Exception as error:
+    except Exception:
         # Log error with full traceback for debugging
-        logger.exception("Error getting relationships for faction %s: %s", faction.id, error)
+        logger.exception("Error getting relationships for faction %s", faction.id)
 
         # Return empty dict on error to prevent downstream issues
         faction_relations = {}
@@ -587,9 +628,9 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
         # Build structured relationship dictionary with list and count
         relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
 
-    except Exception as error:
+    except Exception:
         # Log error with full traceback for debugging
-        logger.exception("Error getting relationships for plot %s: %s", plot.id, error)
+        logger.exception("Error getting relationships for plot %s", plot.id)
 
         # Return empty dict on any error to maintain consistent return type
         relationships = {}
@@ -632,9 +673,9 @@ def get_event_speedlarp_rels(speedlarp: SpeedLarp) -> dict[str, Any]:
         # Structure the character data using helper function
         relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
 
-    except Exception as error:
+    except Exception:
         # Log the error with full traceback for debugging
-        logger.exception("Error getting relationships for speedlarp %s: %s", speedlarp.id, error)
+        logger.exception("Error getting relationships for speedlarp %s", speedlarp.id)
         relationships = {}
 
     return relationships
@@ -684,9 +725,9 @@ def get_event_prologue_rels(prologue: Prologue) -> dict[str, Any]:
         # Format character data using helper function to create standardized structure
         relationships["character_rels"] = build_relationship_dict(character_id_name_list)
 
-    except Exception as error:
+    except Exception:
         # Log error with full traceback for debugging while preventing crashes
-        logger.exception("Error getting relationships for prologue %s: %s", prologue.id, error)
+        logger.exception("Error getting relationships for prologue %s", prologue.id)
         relationships = {}
 
     return relationships
@@ -727,9 +768,9 @@ def get_event_quest_rels(quest: Quest) -> dict[str, Any]:
         # Format trait data into standardized relationship dictionary structure
         relationships["trait_rels"] = build_relationship_dict(trait_id_name_pairs)
 
-    except Exception as error:
+    except Exception:
         # Log error details for debugging while maintaining function stability
-        logger.exception("Error getting relationships for quest %s: %s", quest.id, error)
+        logger.exception("Error getting relationships for quest %s", quest.id)
         relationships = {}
 
     return relationships
@@ -769,9 +810,9 @@ def get_event_questtype_rels(questtype: QuestType) -> dict[str, Any]:
         # Format quest relationships using helper function
         relationships["quest_rels"] = build_relationship_dict(quest_id_name_pairs)
 
-    except Exception as exception:
+    except Exception:
         # Log error and return empty dict on failure
-        logger.exception("Error getting relationships for questtype %s: %s", questtype.id, exception)
+        logger.exception("Error getting relationships for questtype %s", questtype.id)
         relationships = {}
 
     return relationships
@@ -910,11 +951,11 @@ def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
 
 
 def on_faction_characters_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: Faction,
     action: str,
     pk_set: set[int] | None,
-    **kwargs: dict,
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle faction-character relationship changes.
 
@@ -945,11 +986,11 @@ def on_faction_characters_m2m_changed(
 
 
 def on_plot_characters_m2m_changed(
-    sender: type,
-    instance: "Plot",
+    sender: type,  # noqa: ARG001
+    instance: Plot,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle plot-character relationship changes.
 
@@ -964,11 +1005,11 @@ def on_plot_characters_m2m_changed(
 
 
 def on_speedlarp_characters_m2m_changed(
-    sender: type,
-    instance: "SpeedLarp",
+    sender: type,  # noqa: ARG001
+    instance: SpeedLarp,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle speedlarp-character relationship changes.
 
@@ -999,11 +1040,11 @@ def on_speedlarp_characters_m2m_changed(
 
 
 def on_prologue_characters_m2m_changed(
-    sender: type,
+    sender: type,  # noqa: ARG001
     instance: Prologue,
     action: str,
     pk_set: set[int] | None,
-    **kwargs,
+    **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle prologue-character relationship changes.
 

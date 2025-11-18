@@ -23,14 +23,18 @@
 import logging
 import os
 import subprocess
+from collections.abc import Generator, Mapping
 from pathlib import Path
+from typing import Any
 
 import pytest
 from django.conf import settings
 from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
-from django.http import HttpRequest
+from django.test.utils import ContextList
+from playwright.sync_api import BrowserContext, BrowserType, Page, Response
+from pytest_django.fixtures import SettingsWrapper
 
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationSkin
@@ -49,12 +53,12 @@ def _env_for_tests() -> None:
 
 
 @pytest.fixture(autouse=True)
-def _email_backend(settings) -> None:
+def _email_backend(settings: SettingsWrapper) -> None:
     settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 
 @pytest.fixture(autouse=True)
-def _cache_isolation(settings) -> None:
+def _cache_isolation(settings: SettingsWrapper) -> None:
     settings.CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -65,7 +69,11 @@ def _cache_isolation(settings) -> None:
 
 
 @pytest.fixture
-def pw_page(pytestconfig, browser_type, live_server):
+def pw_page(
+    pytestconfig: pytest.Config,
+    browser_type: BrowserType,
+    live_server: ContextList,
+) -> Generator[tuple[Page, str, BrowserContext], None, None]:
     """Prepares browser, context and finally page, for playwright tests."""
     headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
 
@@ -80,10 +88,11 @@ def pw_page(pytestconfig, browser_type, live_server):
 
     page.on("dialog", lambda dialog: dialog.accept())
 
-    def on_response(response) -> None:
+    def on_response(response: Response) -> None:
         error_status = 500
         if response.status == error_status:
-            raise AssertionError(f"HTTP 500 su {response.url}")
+            msg = f"HTTP 500 su {response.url}"
+            raise AssertionError(msg)
 
     page.on("response", on_response)
 
@@ -115,12 +124,12 @@ def _truncate_app_tables() -> None:
         END$$;""")
 
 
-def psql(params, env) -> None:
+def psql(params: list[str], env: Mapping[str, str]) -> None:
     """Performs a query on the db."""
     subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)  # noqa: S603
 
 
-def clean_db(host, env, name, user) -> None:
+def clean_db(host: str, env: Mapping[str, str], name: str, user: str) -> None:
     """Drop the schema and recreate it."""
     psql(
         [
@@ -141,7 +150,7 @@ def clean_db(host, env, name, user) -> None:
     )
 
 
-def _database_has_tables():
+def _database_has_tables() -> bool:
     """Check if database has any application tables."""
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -167,7 +176,8 @@ def _load_test_db_sql() -> None:
     sql_path = Path(__file__).parent / "larpmanager" / "tests" / "test_db.sql"
 
     if not sql_path.exists():
-        raise FileNotFoundError(f"Test database SQL file not found: {sql_path}")
+        msg = f"Test database SQL file not found: {sql_path}"
+        raise FileNotFoundError(msg)
 
     # Clean the database first
     clean_db(host, env, name, user)
@@ -181,8 +191,8 @@ def _reload_fixtures() -> None:
     call_command("init_db")
 
 
-@pytest.fixture(autouse=True, scope="function")
-def _e2e_db_setup(request: HttpRequest, django_db_blocker):
+@pytest.fixture(autouse=True)
+def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: Any) -> None:
     """Set up database for e2e tests with single database per worker."""
     with django_db_blocker.unblock():
         if not _database_has_tables():
@@ -192,11 +202,9 @@ def _e2e_db_setup(request: HttpRequest, django_db_blocker):
             # Tables exist - truncate and init
             _reload_fixtures()
 
-    yield
-
 
 @pytest.fixture(autouse=True)
-def _ensure_association_skin(db) -> None:
+def _ensure_association_skin(db: Any) -> None:  # noqa: ARG001
     """Ensure default AssociationSkin and AssociationRole exist for tests."""
     if not AssociationSkin.objects.filter(pk=1).exists():
         AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")

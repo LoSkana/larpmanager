@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -66,13 +66,15 @@ from larpmanager.utils.edit import save_version
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
+    """Form for Character."""
+
     orga = False
 
     page_title = _("Character")
 
     class Meta:
         model = Character
-        fields = [
+        fields: ClassVar[list] = [
             "progress",
             "name",
             "assigned",
@@ -88,14 +90,14 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "access_token",
         ]
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
             "player": AssociationMemberS2Widget,
             "characters": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args: Any, **kwargs: dict[str, Any]) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize character form with custom fields and configuration.
 
         Args:
@@ -116,7 +118,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
-    def check_editable(self, question) -> bool:
+    def check_editable(self, question: WritingQuestion) -> bool:
         """Check if a question is editable based on event config and instance status.
 
         Args:
@@ -211,21 +213,22 @@ class CharacterForm(WritingForm, BaseWritingForm):
             del self.fields[field_label]
 
         # Add character completion proposal field for user approval workflow
-        if not self.orga and get_event_config(
-            event.id, "user_character_approval", default_value=False, context=self.params
+        if (
+            not self.orga
+            and get_event_config(event.id, "user_character_approval", default_value=False, context=self.params)
+            and (not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW])
         ):
-            if not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
-                self.fields["propose"] = forms.BooleanField(
-                    required=False,
-                    label=_("Complete"),
-                    help_text=_(
-                        "Click here to confirm that you have completed the character and are ready to "
-                        "propose it to the staff. Be careful: some fields may no longer be editable. "
-                        "Leave the field blank to save your changes and to be able to continue them in "
-                        "the future.",
-                    ),
-                    widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
-                )
+            self.fields["propose"] = forms.BooleanField(
+                required=False,
+                label=_("Complete"),
+                help_text=_(
+                    "Click here to confirm that you have completed the character and are ready to "
+                    "propose it to the staff. Be careful: some fields may no longer be editable. "
+                    "Leave the field blank to save your changes and to be able to continue them in "
+                    "the future.",
+                ),
+                widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
+            )
 
     def _init_character(self) -> None:
         """Initialize character-specific form data."""
@@ -259,7 +262,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(faction_data[0])
 
-    def _save_multi(self, s: str, instance) -> None:
+    def _save_multi(self, field: str, instance: Any) -> None:
         """Save multi-select field data for the given instance.
 
         Handles special processing for factions_list field by managing
@@ -267,7 +270,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         add/remove faction associations.
 
         Args:
-            s: The field name being processed
+            field: The field name being processed
             instance: The model instance being saved
 
         Returns:
@@ -275,12 +278,12 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         """
         # Skip plots field - it's handled separately in _save_plot()
-        if s == "plots":
+        if field == "plots":
             return None
 
         # Handle non-faction fields using parent implementation
-        if s != "factions_list":
-            return super()._save_multi(s, instance)
+        if field != "factions_list":
+            return super()._save_multi(field, instance)
 
         # Only process factions if the factions_list field is present in the form
         if "factions_list" not in self.cleaned_data:
@@ -336,15 +339,17 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
 
 class OrgaCharacterForm(CharacterForm):
+    """Form for OrgaCharacter."""
+
     page_info = _("Manage characters")
 
     page_title = _("Character")
 
-    load_templates = ["char"]
+    load_templates: ClassVar[list] = ["char"]
 
-    load_js = ["characters-choices", "characters-relationships", "factions-choices"]
+    load_js: ClassVar[list] = ["characters-choices", "characters-relationships", "factions-choices"]
 
-    load_form = ["characters-relationships"]
+    load_form: ClassVar[list] = ["characters-relationships"]
 
     orga = True
 
@@ -469,7 +474,7 @@ class OrgaCharacterForm(CharacterForm):
                 reverse_args = [self.params["run"].get_slug(), plot_character.id, "1"]
                 self.ordering_down[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
 
-    def _save_plot(self, instance) -> None:
+    def _save_plot(self, instance: Any) -> None:
         """Save plot associations for a character.
 
         Args:
@@ -576,7 +581,7 @@ class OrgaCharacterForm(CharacterForm):
         for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
             self.initial["factions_list"].append(faction_data[0])
 
-    def _save_relationships(self, instance) -> None:
+    def _save_relationships(self, instance: Any) -> None:
         """Save character relationships from form data.
 
         Args:
@@ -616,9 +621,12 @@ class OrgaCharacterForm(CharacterForm):
                 continue
 
             # if the value is present, and is the same as before, do nothing
-            if ch_id in self.params["relationships"] and rel_type in self.params["relationships"][ch_id]:
-                if value == self.params["relationships"][ch_id][rel_type]:
-                    continue
+            if (
+                ch_id in self.params["relationships"]
+                and rel_type in self.params["relationships"][ch_id]
+                and value == self.params["relationships"][ch_id][rel_type]
+            ):
+                continue
 
             # Check text length against configuration using centralized value
             # Use strip_tags to get plain text length from HTML content
@@ -633,7 +641,8 @@ class OrgaCharacterForm(CharacterForm):
             rel.text = value
             rel.save()
 
-    def _get_rel(self, character_id: int, instance, relationship_type: str) -> Relationship:
+    @staticmethod
+    def _get_rel(character_id: int, instance: Any, relationship_type: str) -> Relationship:
         """Get or create a relationship between characters based on type.
 
         Args:
@@ -653,7 +662,7 @@ class OrgaCharacterForm(CharacterForm):
             (relationship, _created) = Relationship.objects.get_or_create(target_id=instance.pk, source_id=character_id)
         return relationship
 
-    def save(self, commit: bool = True) -> object:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> object:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and handle related data.
 
         Args:
@@ -702,18 +711,20 @@ class OrgaCharacterForm(CharacterForm):
 
 
 class OrgaWritingQuestionForm(MyForm):
+    """Form for OrgaWritingQuestion."""
+
     page_info = _("Manage form questions for writing elements")
 
     page_title = _("Writing Question")
 
     class Meta:
         model = WritingQuestion
-        exclude = ["order"]
-        widgets = {
+        exclude: ClassVar[list] = ["order"]
+        widgets: ClassVar[dict] = {
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize WritingQuestionForm with dynamic field configuration.
 
         Args:
@@ -816,9 +827,8 @@ class OrgaWritingQuestionForm(MyForm):
                     continue
 
                 # Check feature activation for non-default types
-                if choice[0] not in ["name", "teaser", "text"]:
-                    if choice[0] not in self.params["features"]:
-                        continue
+                if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
+                    continue
 
             # Handle character type 'c' - requires 'px' feature
             elif choice[0] == "c" and "px" not in self.params["features"]:
@@ -866,20 +876,22 @@ class OrgaWritingQuestionForm(MyForm):
 
 
 class OrgaWritingOptionForm(MyForm):
+    """Form for OrgaWritingOption."""
+
     page_info = _("Manage options in form questions for writing elements")
 
     page_title = _("Writing option")
 
     class Meta:
         model = WritingOption
-        exclude = ["order"]
-        widgets = {
+        exclude: ClassVar[list] = ["order"]
+        widgets: ClassVar[dict] = {
             "requirements": EventWritingOptionS2WidgetMulti,
             "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with feature-based field customization.
 
         Args:

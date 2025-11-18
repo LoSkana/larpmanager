@@ -19,7 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 """Token and credit balance management for member registrations."""
 
-from decimal import Decimal
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from django.db import transaction
 from django.db.models import Case, F, IntegerField, Q, QuerySet, Value, When
@@ -33,14 +35,18 @@ from larpmanager.models.accounting import (
     OtherChoices,
     PaymentChoices,
 )
-from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 
+if TYPE_CHECKING:
+    from decimal import Decimal
 
-def registration_tokens_credits_use(reg, remaining: float, association_id: int) -> None:
+    from larpmanager.models.association import Association
+
+
+def registration_tokens_credits_use(reg: Registration, remaining: Decimal, association_id: int) -> None:
     """Apply available tokens and credits to a registration payment.
 
     Automatically uses member's available tokens first, then credits
@@ -53,7 +59,13 @@ def registration_tokens_credits_use(reg, remaining: float, association_id: int) 
 
     Side Effects:
         Creates AccountingItemPayment records and updates membership balances.
-        Updates reg.tot_payed with applied amounts.
+        Updates reg.tot_payed in memory (caller must persist changes).
+
+    Note:
+        This function updates reg.tot_payed in memory but does NOT save the
+        registration to avoid infinite recursion. The caller (typically
+        handle_registration_accounting_updates) is responsible for persisting
+        changes via bulk update to prevent triggering post_save signals.
 
     """
     # Early return if no outstanding balance
@@ -97,6 +109,8 @@ def registration_tokens_credits_use(reg, remaining: float, association_id: int) 
                 reg=reg,
                 association_id=association_id,
             )
+        # Note: reg.tot_payed is updated in memory but NOT saved here
+        # to prevent infinite recursion via post_save signal
 
 
 def registration_tokens_credits_overpay(reg: Registration, overpay: Decimal, association_id: int) -> None:
@@ -228,7 +242,7 @@ def get_regs(association: Association) -> QuerySet[Registration]:
     return registrations_queryset
 
 
-def update_token_credit_on_payment_save(instance, created) -> None:
+def update_token_credit_on_payment_save(instance: AccountingItemPayment, *, created: bool) -> None:
     """Handle accounting item payment post-save token/credit updates.
 
     Args:
@@ -240,7 +254,7 @@ def update_token_credit_on_payment_save(instance, created) -> None:
         update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
-def update_token_credit_on_payment_delete(instance) -> None:
+def update_token_credit_on_payment_delete(instance: AccountingItemPayment) -> None:
     """Handle accounting item payment post-delete token/credit updates.
 
     Args:
@@ -251,7 +265,7 @@ def update_token_credit_on_payment_delete(instance) -> None:
         update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
-def update_token_credit_on_other_save(accounting_item) -> None:
+def update_token_credit_on_other_save(accounting_item: AccountingItemOther) -> None:
     """Handle accounting item other save for token/credit updates.
 
     Args:
@@ -264,7 +278,7 @@ def update_token_credit_on_other_save(accounting_item) -> None:
     update_token_credit(accounting_item, token=accounting_item.oth == OtherChoices.TOKEN)
 
 
-def update_credit_on_expense_save(expense_item) -> None:
+def update_credit_on_expense_save(expense_item: AccountingItemExpense) -> None:
     """Handle accounting item expense save for credit updates.
 
     Args:
@@ -277,7 +291,9 @@ def update_credit_on_expense_save(expense_item) -> None:
     update_token_credit(expense_item, token=False)
 
 
-def update_token_credit(instance, *, token: bool = True) -> None:
+def update_token_credit(
+    instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense, *, token: bool = True
+) -> None:
     """Update member's token or credit balance based on accounting items.
 
     Recalculates and updates membership token or credit balance by summing
@@ -367,7 +383,7 @@ def update_token_credit(instance, *, token: bool = True) -> None:
 
 def handle_tokes_credits(
     association_id: int,
-    features: list[str],
+    features: dict[str, int],
     registration: Registration,
     remaining_balance: Decimal,
 ) -> None:

@@ -27,9 +27,8 @@ import shutil
 import zipfile
 from io import BytesIO
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
-from zipfile import ZipFile
 
 from django.conf import settings as conf_settings
 from django.core.files.base import ContentFile
@@ -48,7 +47,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def upload_albums_dir(main, cache_subs: dict, name: str):
+def upload_albums_dir(main: Any, cache_subs: dict, name: str) -> Any:
     """Create or find album directory structure for uploaded files.
 
     Creates a hierarchical album structure based on directory paths from zip files.
@@ -107,14 +106,13 @@ def upload_albums_dir(main, cache_subs: dict, name: str):
     return cache_subs[directory_path]
 
 
-def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Model, o_path: str) -> None:
+def upload_albums_el(alb: models.Model, name: str, main: models.Model, o_path: str) -> None:
     """Upload individual file from zip archive to album.
 
     Processes a single file from a zip archive, creates album upload and image records,
     and moves the file to the appropriate media directory structure.
 
     Args:
-        f: Zip file object containing the archive being processed
         alb: Album instance to upload the file to
         name: File name from zip archive (including path if nested)
         main: Main album instance containing run and event references
@@ -153,9 +151,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     unique_filename = f"{uuid4().hex}.{file_extension}"
 
     # Build destination path starting from media root
-    destination_path = os.path.join(conf_settings.MEDIA_ROOT, "albums")
-    destination_path = os.path.join(destination_path, main.run.event.slug)
-    destination_path = os.path.join(destination_path, str(main.run.number))
+    destination_path = Path(conf_settings.MEDIA_ROOT) / "albums" / main.run.event.slug / str(main.run.number)
 
     # Traverse album hierarchy to build nested directory structure
     parent_album = alb.parent
@@ -167,12 +163,12 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
 
     # Create directory structure for nested albums
     for directory_id in parent_directories:
-        destination_path = os.path.join(destination_path, str(directory_id))
-        if not os.path.exists(destination_path):
-            Path(destination_path).mkdir(parents=True, exist_ok=True)
+        destination_path = destination_path / str(directory_id)
+        if not destination_path.exists():
+            destination_path.mkdir(parents=True, exist_ok=True)
 
     # Complete the file path with unique filename
-    destination_path = os.path.join(destination_path, unique_filename)
+    destination_path = destination_path / unique_filename
     logger.debug("Uploading album image to: %s", destination_path)
 
     # Move file from extraction path to final destination
@@ -185,7 +181,7 @@ def upload_albums_el(f: ZipFile, alb: models.Model, name: str, main: models.Mode
     album_image.save()
 
 
-def upload_albums(main, el) -> None:
+def upload_albums(main: Any, el: Any) -> None:
     """Extract and upload all files from zip archive to album structure.
 
     Args:
@@ -198,8 +194,7 @@ def upload_albums(main, el) -> None:
     """
     cache_subalbums = {}
 
-    extraction_path = os.path.join(conf_settings.MEDIA_ROOT, "zip")
-    extraction_path = os.path.join(extraction_path, uuid4().hex)
+    extraction_path = Path(conf_settings.MEDIA_ROOT) / "zip" / uuid4().hex
 
     with zipfile.ZipFile(el, "r") as zip_file:
         zip_file.extractall(extraction_path)
@@ -209,12 +204,12 @@ def upload_albums(main, el) -> None:
             album = upload_albums_dir(main, cache_subalbums, filename)
             if file_info.is_dir():
                 continue
-            upload_albums_el(zip_file, album, filename, main, extraction_path)
+            upload_albums_el(album, filename, main, extraction_path)
 
     shutil.rmtree(extraction_path)
 
 
-def zipdir(path, ziph) -> None:
+def zipdir(path: Any, ziph: Any) -> None:
     """Recursively add directory contents to zip file.
 
     Args:
@@ -227,9 +222,10 @@ def zipdir(path, ziph) -> None:
     """
     for root, _dirs, files in os.walk(path):
         for file in files:
+            file_path = Path(root) / file
             ziph.write(
-                os.path.join(root, file),
-                os.path.relpath(str(os.path.join(root, file)), os.path.join(path, "..")),
+                str(file_path),
+                str(file_path.relative_to(Path(path).parent)),
             )
 
 
@@ -312,7 +308,7 @@ def _go_centauri(context: dict) -> bool:
     return not random_value > centauri_probability
 
 
-def get_warehouse_optionals(context, default_columns) -> None:
+def get_warehouse_optionals(context: Any, default_columns: Any) -> None:
     """Get warehouse optional field configuration for display.
 
     Args:
@@ -360,10 +356,10 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     # Validate that the instance has a photo ImageField
     try:
         # noinspection PyProtectedMember, PyUnresolvedReferences
-        photo_field = instance._meta.get_field("photo")
+        photo_field = instance._meta.get_field("photo")  # noqa: SLF001  # Django model metadata
         if not isinstance(photo_field, models.ImageField):
             return
-    except Exception:
+    except (AttributeError, LookupError):
         return
 
     # Get the photo file object from the instance
@@ -380,7 +376,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     try:
         file_object.seek(0)
         image = PILImage.open(file_object)
-    except Exception:
+    except (OSError, AttributeError):
         return
 
     # Apply EXIF orientation and get image dimensions
@@ -414,7 +410,7 @@ def auto_rotate_vertical_photos(instance: object, sender: type) -> None:
     instance.photo = ContentFile(output_buffer.read(), name=original_filename)
 
 
-def _get_extension(uploaded_file, image) -> str:
+def _get_extension(uploaded_file: Any, image: Any) -> str:
     """Get the appropriate image format extension.
 
     Determines the correct image format based on the file extension and image format.
@@ -448,7 +444,7 @@ def _get_extension(uploaded_file, image) -> str:
     return image_format
 
 
-def _check_new(file_field, instance, sender) -> bool:
+def _check_new(file_field: Any, instance: Any, sender: Any) -> bool:
     """Check if the file field represents a new file upload.
 
     Args:
@@ -474,7 +470,7 @@ def _check_new(file_field, instance, sender) -> bool:
                 # Compare file names and check if no new file data is present
                 if file_field.name == existing_file_name and not getattr(file_field, "file", None):
                     return True
-        except Exception as e:
+        except (sender.DoesNotExist, AttributeError) as e:
             # Silently handle any database or attribute errors
             logger.debug("Error checking file field for instance pk=%s: %s", instance.pk, e)
 

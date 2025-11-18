@@ -20,18 +20,19 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from datetime import datetime, timedelta
-from typing import Any
+from datetime import timedelta
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.db.models import Q, QuerySet
 from django.forms.widgets import Widget
+from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
-from larpmanager.models.access import EventRole, PermissionModule
+from larpmanager.models.access import AssociationRole, EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
     DevelopStatus,
@@ -53,12 +54,15 @@ from larpmanager.models.writing import (
     Plot,
 )
 
+if TYPE_CHECKING:
+    from larpmanager.forms.base import MyForm
+
 # defer script loaded by form
 
 css_delimeter = "/*@#§*/"
 
 
-def render_js(cls):
+def render_js(cls: Any) -> list[str]:
     """Render JavaScript includes with defer attribute for forms.
 
     Args:
@@ -112,7 +116,7 @@ class SlugInput(forms.TextInput):
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
     """Custom checkbox widget for role permission selection with help text."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize widget with feature help text and mapping.
 
         Args:
@@ -124,7 +128,13 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         self.feature_map = kwargs.pop("feature_map", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:
+    def render(
+        self,
+        name: str,
+        value: list[str] | None,
+        attrs: dict[str, str] | None = None,
+        renderer: Any = None,  # noqa: ARG002
+    ) -> str:
         """Render checkbox widget with tooltips and help links.
 
         Generates HTML for a checkbox widget where each option includes:
@@ -188,7 +198,7 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
 class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     """Model multiple choice field with translated labels."""
 
-    def label_from_instance(self, obj):
+    def label_from_instance(self, obj: Any) -> str:
         """Get translated label for model instance.
 
         Args:
@@ -201,7 +211,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return _(obj.name)
 
 
-def prepare_permissions_role(form, typ) -> None:
+def prepare_permissions_role(form: MyForm, typ: type) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
@@ -288,7 +298,7 @@ def prepare_permissions_role(form, typ) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance, form) -> None:
+def save_permissions_role(instance: EventRole | AssociationRole, form: MyForm) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -315,11 +325,13 @@ def save_permissions_role(instance, form) -> None:
 
 
 class EventS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents EventS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -340,7 +352,9 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
 
 
 class CampaignS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents CampaignS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -348,7 +362,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         """Return string representation of the given object."""
         return str(obj)
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -369,11 +383,13 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
 
 
 class TemplateS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents TemplateS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -383,14 +399,16 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
 
 
 class AssocMS2:
-    search_fields = [
+    """Represents AssocMS2 model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
         "nickname__icontains",
         "user__email__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -405,15 +423,17 @@ class AssocMS2:
 
 
 class AssociationMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents AssociationMemberS2WidgetMulti model."""
 
 
 class AssociationMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents AssociationMemberS2Widget model."""
 
 
 class RunMemberS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents RunMemberS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
         "nickname__icontains",
@@ -457,7 +477,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return f"{obj.display_real()} - {obj.email}"
 
 
-def get_association_people(association_id):
+def get_association_people(association_id: int) -> list[tuple[int, str]]:
     """Get list of people associated with an association for form choices.
 
     Args:
@@ -467,15 +487,12 @@ def get_association_people(association_id):
         list: List of (member_id, display_string) tuples
 
     """
-    ls = []
     que = Membership.objects.select_related("member").filter(association_id=association_id)
     que = que.exclude(status=MembershipStatus.EMPTY).exclude(status=MembershipStatus.REWOKED)
-    for f in que:
-        ls.append((f.member_id, f"{f.member!s} - {f.member.email}"))
-    return ls
+    return [(f.member_id, f"{f.member!s} - {f.member.email}") for f in que]
 
 
-def get_run_choices(self, *, past=False) -> None:
+def get_run_choices(self: Any, *, past: bool = False) -> None:
     """Generate run choices for form fields.
 
     Args:
@@ -492,10 +509,9 @@ def get_run_choices(self, *, past=False) -> None:
         Run.objects.filter(event__association_id=self.params["association_id"]).select_related("event").order_by("-end")
     )
     if past:
-        reference_date = datetime.now() - timedelta(days=30)
+        reference_date = timezone.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
-    for run in runs:
-        choices.append((run.id, str(run)))
+    choices.extend([(run.id, str(run)) for run in runs])
 
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
@@ -506,7 +522,9 @@ def get_run_choices(self, *, past=False) -> None:
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents EventRegS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "search__icontains",
     ]
 
@@ -528,11 +546,13 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
 
 
 class AssocRegS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents AssocRegS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -553,11 +573,13 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
 
 
 class RunS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents RunS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "search__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -567,7 +589,9 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
 
 
 class EventCharacterS2:
-    search_fields = [
+    """Represents EventCharacterS2 model."""
+
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -588,15 +612,17 @@ class EventCharacterS2:
 
 
 class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents EventCharacterS2WidgetMulti model."""
 
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents EventCharacterS2Widget model."""
 
 
 class EventPlotS2:
-    search_fields = [
+    """Represents EventPlotS2 model."""
+
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -612,15 +638,17 @@ class EventPlotS2:
 
 
 class EventPlotS2WidgetMulti(EventPlotS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents EventPlotS2WidgetMulti model."""
 
 
 class EventPlotS2Widget(EventPlotS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents EventPlotS2Widget model."""
 
 
 class EventTraitS2:
-    search_fields = [
+    """Represents EventTraitS2 model."""
+
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -636,15 +664,17 @@ class EventTraitS2:
 
 
 class EventTraitS2WidgetMulti(EventTraitS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents EventTraitS2WidgetMulti model."""
 
 
 class EventTraitS2Widget(EventTraitS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents EventTraitS2Widget model."""
 
 
 class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    """Represents EventWritingOptionS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
@@ -659,7 +689,9 @@ class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    """Represents FactionS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
         "number__icontains",
         "name__icontains",
         "teaser__icontains",
@@ -681,7 +713,9 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    """Represents AbilityS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -695,7 +729,9 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    """Represents TicketS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
@@ -709,7 +745,9 @@ class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
+    """Represents AllowedS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",
         "nickname__icontains",
@@ -730,12 +768,14 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
 
 
 class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents WarehouseContainerS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -745,7 +785,9 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
 
 
 class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents WarehouseAreaS2Widget model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
@@ -760,12 +802,14 @@ class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
 
 
 class WarehouseItemS2(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents WarehouseItemS2 model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -775,20 +819,22 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
 
 
 class WarehouseItemS2WidgetMulti(WarehouseItemS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents WarehouseItemS2WidgetMulti model."""
 
 
 class WarehouseItemS2Widget(WarehouseItemS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents WarehouseItemS2Widget model."""
 
 
 class WarehouseTagS2(s2forms.ModelSelect2Widget):
-    search_fields = [
+    """Represents WarehouseTagS2 model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
         "description__icontains",
     ]
 
-    def set_association_id(self, association_id) -> None:
+    def set_association_id(self, association_id: int) -> None:
         """Set the association ID for this widget."""
         self.association_id = association_id
 
@@ -798,14 +844,14 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
 
 
 class WarehouseTagS2WidgetMulti(WarehouseTagS2, s2forms.ModelSelect2MultipleWidget):
-    pass
+    """Represents WarehouseTagS2WidgetMulti model."""
 
 
 class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
-    pass
+    """Represents WarehouseTagS2Widget model."""
 
 
-def remove_choice(choices, type_to_remove):
+def remove_choice(choices: list[tuple[str, str]], type_to_remove: str) -> list[tuple[str, str]]:
     """Remove a specific choice from a list of choices.
 
     Args:
@@ -825,6 +871,8 @@ def remove_choice(choices, type_to_remove):
 
 
 class RedirectForm(forms.Form):
+    """Form for Redirect."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with dynamic slug choices from provided slugs parameter."""
         slugs = self.params = kwargs.pop("slugs")
@@ -837,7 +885,7 @@ class RedirectForm(forms.Form):
         self.fields["slug"] = forms.ChoiceField(choices=cho, label="Element")
 
 
-def get_members_queryset(association_id):
+def get_members_queryset(association_id: int) -> QuerySet[Member]:
     """Get queryset of members for an association with accepted status.
 
     Args:
@@ -853,6 +901,8 @@ def get_members_queryset(association_id):
 
 
 class WritingTinyMCE(TinyMCE):
+    """Represents WritingTinyMCE model."""
+
     def __init__(self) -> None:
         """Initialize TinyMCE widget with custom styling for character markers."""
         super().__init__(attrs={"rows": 20, "content_style": ".char-marker { background: yellow !important; }"})

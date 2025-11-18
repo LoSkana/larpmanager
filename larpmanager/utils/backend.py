@@ -17,13 +17,17 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
-from django.http import HttpRequest
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import AbstractUser
+    from django.http import HttpRequest
 
 
 class EmailOrUsernameModelBackend(ModelBackend):
@@ -34,7 +38,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
 
     def authenticate(
         self,
-        request: HttpRequest | None,
+        request: HttpRequest | None,  # noqa: ARG002
         username: str | None = None,
         password: str | None = None,
         **kwargs: Any,
@@ -69,7 +73,7 @@ class EmailOrUsernameModelBackend(ModelBackend):
         # The username field allows '@' characters so email addresses could
         # potentially exist in either field, even for different users
         # noinspection PyProtectedMember
-        matching_users = user_model._default_manager.filter(
+        matching_users = user_model._default_manager.filter(  # noqa: SLF001  # Django model manager
             Q(**{user_model.USERNAME_FIELD: username}) | Q(email__iexact=username),
         )
 

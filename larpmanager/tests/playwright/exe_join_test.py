@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -27,7 +29,7 @@ from larpmanager.tests.utils import go_to, load_image, submit
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_join(pw_page) -> None:
+def test_exe_join(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     go_to(page, live_server, "/debug")

@@ -23,20 +23,19 @@ import base64
 import hashlib
 import json
 import logging
-import os
 import random
 import string
-from datetime import datetime
 from html.parser import HTMLParser
 from io import StringIO
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from cryptography.fernet import Fernet
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum
+from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
@@ -51,7 +50,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def generate_id(id_length):
+def generate_id(id_length: Any) -> Any:
     """Generate random alphanumeric ID string.
 
     Args:
@@ -91,7 +90,7 @@ def decimal_to_str(decimal_value: Decimal) -> str:
     return string_representation.replace(".00", "")
 
 
-def slug_url_validator(val) -> None:
+def slug_url_validator(val: Any) -> None:
     """Validate that string contains only lowercase alphanumeric characters.
 
     Args:
@@ -130,12 +129,12 @@ def remove_non_ascii(text: str) -> str:
     return "".join(char for char in text if ord(char) < max_ascii)
 
 
-def my_uuid_miny():
+def my_uuid_miny() -> Any:
     """Generate tiny UUID with letter prefix and 4 characters."""
     return random.choice(string.ascii_letters) + my_uuid(4)  # noqa: S311
 
 
-def my_uuid_short():
+def my_uuid_short() -> Any:
     """Generate short UUID string of 12 characters.
 
     Returns:
@@ -153,7 +152,7 @@ def my_uuid(length: int | None = None) -> str:
     return uuid_hex_string[:length]
 
 
-def download_d(session):
+def download_d(session: Any) -> Any:
     """Alias for download function."""
     return download(session)
 
@@ -226,11 +225,13 @@ def get_sum(queryset: QuerySet) -> Decimal | int:
 
 @deconstructible
 class UploadToPathAndRename:
-    def __init__(self, sub_path) -> None:
+    """Represents UploadToPathAndRename model."""
+
+    def __init__(self, sub_path: Any) -> None:
         """Initialize upload path handler with sub-directory."""
         self.sub_path = sub_path
 
-    def __call__(self, instance, filename: str) -> str:
+    def __call__(self, instance: Any, filename: str) -> str:
         """Generate upload path for file with backup handling.
 
         Creates a unique filename using UUID and organizes files into directories
@@ -257,26 +258,28 @@ class UploadToPathAndRename:
         # Build directory path based on instance attributes
         path = self.sub_path
         if hasattr(instance, "event") and instance.event:
-            path = os.path.join(path, instance.event.slug)
+            path = str(Path(path) / instance.event.slug)
         if hasattr(instance, "run") and instance.run:
-            path = os.path.join(path, instance.run.event.slug, str(instance.run.number))
+            path = str(Path(path) / instance.run.event.slug / str(instance.run.number))
         if hasattr(instance, "album") and instance.album:
-            path = os.path.join(path, instance.album.slug)
+            path = str(Path(path) / instance.album.slug)
 
         # Construct final file path
-        new_fn = os.path.join(path, filename)
-        # true_fn = os.path.join(conf_settings.MEDIA_ROOT, new_fn)
+        new_fn = str(Path(path) / filename)
 
         # Handle backup of existing files for updates
         if instance.pk:
-            bkp_tomove = []
             path_bkp = Path(conf_settings.MEDIA_ROOT) / path
 
             # Find existing files that match this instance
             if path_bkp.exists():
-                for file_entry in path_bkp.iterdir():
-                    if file_entry.name.startswith(f"{instance.pk}_"):
-                        bkp_tomove.append(file_entry.name)
+                bkp_tomove = [
+                    file_entry.name
+                    for file_entry in path_bkp.iterdir()
+                    if file_entry.name.startswith(f"{instance.pk}_")
+                ]
+            else:
+                bkp_tomove = []
 
             # Move existing files to backup directory
             for el in bkp_tomove:
@@ -285,11 +288,9 @@ class UploadToPathAndRename:
                 bkp.mkdir(parents=True, exist_ok=True)
 
                 # Generate timestamped backup filename and move file
-                bkp_fn = f"{instance.pk}_{datetime.now()}.{ext}"
+                bkp_fn = f"{instance.pk}_{timezone.now()}.{ext}"
                 bkp_fn = bkp / bkp_fn
                 current_fn = Path(conf_settings.MEDIA_ROOT) / path / el
-                # logger.debug(f"Backup: {bkp}")
-                # logger.debug(f"Backup filename: {bkp_fn}")
                 current_fn.rename(bkp_fn)
 
         return new_fn
@@ -332,7 +333,7 @@ def get_payment_details_path(association: Association) -> str:
     filename = f"{Path(association.slug).name}.{key_identifier}.enc"
 
     # Return full path to encrypted payment file
-    return os.path.join(conf_settings.PAYMENT_SETTING_FOLDER, filename)
+    return str(Path(conf_settings.PAYMENT_SETTING_FOLDER) / filename)
 
 
 def save_payment_details(association: Association, payment_details: dict) -> None:
@@ -364,7 +365,7 @@ def save_payment_details(association: Association, payment_details: dict) -> Non
     encrypted_file_path = get_payment_details_path(association)
 
     # Write encrypted data to file
-    with open(encrypted_file_path, "wb") as f:
+    with Path(encrypted_file_path).open("wb") as f:
         f.write(encrypted_data)
 
 
@@ -398,6 +399,8 @@ def strip_tags(html: str | None) -> str:
 
 
 class MLStripper(HTMLParser):
+    """Represents MLStripper model."""
+
     def __init__(self) -> None:
         """Initialize the HTML parser with default settings."""
         super().__init__()
@@ -409,10 +412,10 @@ class MLStripper(HTMLParser):
         # Initialize text buffer for content extraction
         self.text = StringIO()
 
-    def handle_data(self, d) -> None:
+    def handle_data(self, d: Any) -> None:
         """Handle data by writing it to the internal text buffer."""
         self.text.write(d)
 
-    def get_data(self):
+    def get_data(self) -> Any:
         """Return the accumulated text data."""
         return self.text.getvalue()

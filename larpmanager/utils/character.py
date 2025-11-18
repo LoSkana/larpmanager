@@ -46,7 +46,7 @@ from larpmanager.utils.experience import add_char_addit
 logger = logging.getLogger(__name__)
 
 
-def get_character_relationships(context: dict, *, restrict: bool = True) -> None:
+def get_character_relationships(context: dict, *, restrict: bool = True) -> None:  # noqa: C901 - Complex relationship data aggregation
     """Get character relationships with faction and player input data.
 
     Retrieves and processes character relationships from both system-defined
@@ -145,7 +145,7 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
     context["pr"] = player_relationships_by_target_id
 
 
-def get_character_sheet(context) -> None:
+def get_character_sheet(context: dict) -> None:
     """Build complete character sheet data for display.
 
     Args:
@@ -230,7 +230,7 @@ def get_character_sheet_speedlarp(context: dict) -> None:
         context["sheet_speedlarps"].append(speedlarp)
 
 
-def get_character_sheet_questbuilder(context) -> None:
+def get_character_sheet_questbuilder(context: dict) -> None:
     """Build character sheet with quest and trait relationships.
 
     Args:
@@ -290,7 +290,7 @@ def get_character_sheet_plots(context: dict) -> None:
         context["sheet_plots"].append({"name": plot_relation.plot.name, "text": combined_text})
 
 
-def get_character_sheet_factions(context: dict[str, Any]) -> None:
+def get_character_sheet_factions(context: dict[str, Any]) -> None:  # noqa: C901 - Complex faction data processing with feature checks
     """Retrieve and process faction data for character sheet display.
 
     Fetches factions associated with a character, along with their writing answers
@@ -395,7 +395,7 @@ def get_character_sheet_fields(context: dict) -> None:
 
 
 def get_char_check(
-    request,
+    request: Any,
     context: dict,
     character_id: int,
     *,
@@ -504,7 +504,7 @@ def get_chars_relations(text: str, character_numbers: list[int]) -> tuple[list[i
     return active_characters, extinct_characters
 
 
-def check_missing_mandatory(context) -> None:
+def check_missing_mandatory(context: dict) -> None:
     """Check for missing mandatory character writing fields.
 
     Args:

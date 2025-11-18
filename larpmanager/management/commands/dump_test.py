@@ -26,9 +26,11 @@ from larpmanager.management.commands.utils import check_branch
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Dump test db"
 
-    def handle(self, *args: tuple, **kwargs: dict) -> None:
+    def handle(self, *args: tuple, **kwargs: dict) -> None:  # noqa: ARG002
         """Django management command handler to dump test database.
 
         This function resets the database, applies migrations, and creates a clean

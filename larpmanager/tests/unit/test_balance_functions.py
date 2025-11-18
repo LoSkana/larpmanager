@@ -21,6 +21,7 @@
 """Tests for balance calculation and accounting summary functions"""
 
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
 from larpmanager.accounting.balance import (
@@ -36,11 +37,11 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
     AccountingItemPayment,
-    AccountingItemTransaction,
     Discount,
+    DiscountType,
     ExpenseChoices,
     OtherChoices,
-    PaymentChoices, DiscountType,
+    PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus
 from larpmanager.models.registration import TicketTier
@@ -66,7 +67,13 @@ class TestAccDetailFunctions(BaseTestCase):
         )
 
         result = get_acc_detail(
-            "Test Payments", run, "Test description", AccountingItemPayment, PaymentChoices.choices, "pay", filter_by_registration=True
+            "Test Payments",
+            run,
+            "Test description",
+            AccountingItemPayment,
+            PaymentChoices.choices,
+            "pay",
+            filter_by_registration=True,
         )
 
         self.assertEqual(result["name"], "Test Payments")
@@ -83,10 +90,20 @@ class TestAccDetailFunctions(BaseTestCase):
 
         # Create expenses
         AccountingItemExpense.objects.create(
-            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("200.00"), is_approved=True
+            member=member,
+            association=association,
+            run=run,
+            exp=ExpenseChoices.LOCAT,
+            value=Decimal("200.00"),
+            is_approved=True,
         )
         AccountingItemExpense.objects.create(
-            member=member, association=association, run=run, exp=ExpenseChoices.COST, value=Decimal("150.00"), is_approved=True
+            member=member,
+            association=association,
+            run=run,
+            exp=ExpenseChoices.COST,
+            value=Decimal("150.00"),
+            is_approved=True,
         )
 
         result = get_acc_detail(
@@ -106,10 +123,20 @@ class TestAccDetailFunctions(BaseTestCase):
 
         # Create other items with different types
         AccountingItemOther.objects.create(
-            member=member, association=association, run=run, oth=OtherChoices.TOKEN, value=Decimal("50.00"), cancellation=False
+            member=member,
+            association=association,
+            run=run,
+            oth=OtherChoices.TOKEN,
+            value=Decimal("50.00"),
+            cancellation=False,
         )
         AccountingItemOther.objects.create(
-            member=member, association=association, run=run, oth=OtherChoices.CREDIT, value=Decimal("30.00"), cancellation=True
+            member=member,
+            association=association,
+            run=run,
+            oth=OtherChoices.CREDIT,
+            value=Decimal("30.00"),
+            cancellation=True,
         )
 
         # Filter only non-cancelled
@@ -149,6 +176,7 @@ class TestRegDetailFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         from datetime import datetime
+
         registration.cancellation_date = datetime.now()
         registration.save()
 
@@ -205,7 +233,7 @@ class TestRunAccountingFunctions(BaseTestCase):
     """Test cases for run accounting calculation"""
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_basic(self, mock_features) -> None:
+    def test_get_run_accounting_basic(self, mock_features: Any) -> None:
         """Test basic run accounting calculation"""
         mock_features.return_value = {"payment": True}
 
@@ -231,7 +259,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertGreaterEqual(run.revenue, Decimal("0.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_with_expenses(self, mock_features) -> None:
+    def test_get_run_accounting_with_expenses(self, mock_features: Any) -> None:
         """Test run accounting with expenses"""
         mock_features.return_value = {"payment": True, "expense": True}
 
@@ -244,7 +272,12 @@ class TestRunAccountingFunctions(BaseTestCase):
 
         # Create expense
         AccountingItemExpense.objects.create(
-            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("50.00"), is_approved=True
+            member=member,
+            association=association,
+            run=run,
+            exp=ExpenseChoices.LOCAT,
+            value=Decimal("50.00"),
+            is_approved=True,
         )
 
         result = get_run_accounting(run, {})
@@ -256,7 +289,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertEqual(run.costs, Decimal("50.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_with_tokens_credits(self, mock_features) -> None:
+    def test_get_run_accounting_with_tokens_credits(self, mock_features: Any) -> None:
         """Test run accounting with tokens and credits"""
         mock_features.return_value = {"payment": True, "token_credit": True}
 
@@ -269,10 +302,20 @@ class TestRunAccountingFunctions(BaseTestCase):
 
         # Create tokens and credits
         AccountingItemOther.objects.create(
-            member=member, association=association, run=run, oth=OtherChoices.TOKEN, value=Decimal("20.00"), cancellation=False
+            member=member,
+            association=association,
+            run=run,
+            oth=OtherChoices.TOKEN,
+            value=Decimal("20.00"),
+            cancellation=False,
         )
         AccountingItemOther.objects.create(
-            member=member, association=association, run=run, oth=OtherChoices.CREDIT, value=Decimal("30.00"), cancellation=False
+            member=member,
+            association=association,
+            run=run,
+            oth=OtherChoices.CREDIT,
+            value=Decimal("30.00"),
+            cancellation=False,
         )
 
         result = get_run_accounting(run, {"token_name": "Tokens", "credit_name": "Credits"})
@@ -286,7 +329,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertEqual(run.costs, Decimal("50.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_with_discounts(self, mock_features) -> None:
+    def test_get_run_accounting_with_discounts(self, mock_features: Any) -> None:
         """Test run accounting with discounts"""
         mock_features.return_value = {"payment": True, "discount": True}
 
@@ -299,11 +342,18 @@ class TestRunAccountingFunctions(BaseTestCase):
 
         # Create discount
         discount = Discount.objects.create(
-            name="Test Discount", value=Decimal("20.00"), max_redeem=10, typ=DiscountType.STANDARD, event=run.event, number=1
+            name="Test Discount",
+            value=Decimal("20.00"),
+            max_redeem=10,
+            typ=DiscountType.STANDARD,
+            event=run.event,
+            number=1,
         )
         discount.runs.add(run)
 
-        AccountingItemDiscount.objects.create(member=member, run=run, disc=discount, value=Decimal("20.00"), association=association)
+        AccountingItemDiscount.objects.create(
+            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+        )
 
         result = get_run_accounting(run, {})
 
@@ -311,7 +361,7 @@ class TestRunAccountingFunctions(BaseTestCase):
         self.assertEqual(result["dis"]["tot"], Decimal("20.00"))
 
     @patch("larpmanager.accounting.balance.get_event_features")
-    def test_get_run_accounting_calculates_balance(self, mock_features) -> None:
+    def test_get_run_accounting_calculates_balance(self, mock_features: Any) -> None:
         """Test run accounting calculates correct balance"""
         mock_features.return_value = {"payment": True, "expense": True}
 
@@ -328,7 +378,12 @@ class TestRunAccountingFunctions(BaseTestCase):
             member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("200.00")
         )
         AccountingItemExpense.objects.create(
-            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("80.00"), is_approved=True
+            member=member,
+            association=association,
+            run=run,
+            exp=ExpenseChoices.LOCAT,
+            value=Decimal("80.00"),
+            is_approved=True,
         )
 
         result = get_run_accounting(run, {})

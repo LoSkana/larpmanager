@@ -26,6 +26,7 @@ import re
 import string
 import unicodedata
 from datetime import date, datetime, timedelta
+from datetime import timezone as dt_timezone
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -38,6 +39,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max, Subquery
 from django.http import Http404, HttpRequest
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
@@ -88,7 +90,7 @@ utc = pytz.UTC
 
 
 # ## PROFILING CHECK
-def check_already(nm, params):
+def check_already(nm: str, params: str) -> bool:
     """Check if a background task is already queued.
 
     Args:
@@ -103,7 +105,7 @@ def check_already(nm, params):
     return q.exists()
 
 
-def get_channel(first_entity_id, second_entity_id):
+def get_channel(first_entity_id: int, second_entity_id: int) -> int:
     """Generate unique channel ID for two entities.
 
     Args:
@@ -121,7 +123,7 @@ def get_channel(first_entity_id, second_entity_id):
     return int(cantor(second_entity_id, first_entity_id))
 
 
-def cantor(first_integer, second_integer):
+def cantor(first_integer: int, second_integer: int) -> float:
     """Cantor pairing function to map two integers to a unique integer.
 
     Args:
@@ -135,7 +137,7 @@ def cantor(first_integer, second_integer):
     return ((first_integer + second_integer) * (first_integer + second_integer + 1) / 2) + second_integer
 
 
-def compute_diff(self, other) -> None:
+def compute_diff(self: object, other: object) -> None:
     """Compute differences between this instance and another.
 
     Args:
@@ -146,7 +148,7 @@ def compute_diff(self, other) -> None:
     check_diff(self, other.text, self.text)
 
 
-def check_diff(self, old_text, new_text) -> None:
+def check_diff(self: object, old_text: str, new_text: str) -> None:
     """Generate HTML diff between two text strings.
 
     Args:
@@ -184,7 +186,7 @@ def get_member(member_id: int) -> Member:
         raise Http404(msg) from err
 
 
-def get_contact(member_id, other_member_id):
+def get_contact(member_id: int, other_member_id: int) -> object | None:
     """Get contact relationship between two members.
 
     Args:
@@ -201,7 +203,7 @@ def get_contact(member_id, other_member_id):
         return None
 
 
-def get_event_template(context, template_id) -> None:
+def get_event_template(context: dict[str, Any], template_id: int) -> None:
     """Get event template by ID and add to context.
 
     Args:
@@ -215,7 +217,7 @@ def get_event_template(context, template_id) -> None:
         raise NotFoundError from err
 
 
-def get_char(context, character_identifier, *, by_number=False) -> None:
+def get_char(context: dict[str, Any], character_identifier: int | str, *, by_number: bool = False) -> None:
     """Get character by ID or number and add to context.
 
     Args:
@@ -227,7 +229,7 @@ def get_char(context, character_identifier, *, by_number=False) -> None:
     get_element(context, character_identifier, "character", Character, by_number=by_number)
 
 
-def get_registration(context, registration_id) -> None:
+def get_registration(context: dict[str, Any], registration_id: int) -> None:
     """Get registration by ID and add to context.
 
     Args:
@@ -246,7 +248,7 @@ def get_registration(context, registration_id) -> None:
         raise Http404(msg) from err
 
 
-def get_discount(context, discount_id) -> None:
+def get_discount(context: dict[str, Any], discount_id: int) -> None:
     """Get discount by ID and add to context.
 
     Args:
@@ -265,7 +267,7 @@ def get_discount(context, discount_id) -> None:
         raise Http404(msg) from err
 
 
-def get_album(context, album_id) -> None:
+def get_album(context: dict[str, Any], album_id: int) -> None:
     """Get album by ID and add to context.
 
     Args:
@@ -335,7 +337,7 @@ def get_plot(context: dict, plot_id: int) -> None:
         raise Http404(msg) from err
 
 
-def get_quest_type(context: dict, quest_number: int) -> QuestType:
+def get_quest_type(context: dict, quest_number: int) -> None:
     """Get quest type from context by number."""
     get_element(context, quest_number, "quest_type", QuestType)
 
@@ -345,9 +347,9 @@ def get_quest(context: dict, quest_number: int) -> None:
     get_element(context, quest_number, "quest", Quest)
 
 
-def get_trait(character_context: dict, trait_name: str) -> Trait:
+def get_trait(character_context: dict, trait_number: int) -> None:
     """Get trait from character context by name."""
-    get_element(character_context, trait_name, "trait", Trait)
+    get_element(character_context, trait_number, "trait", Trait)
 
 
 def get_handout(context: dict, handout_id: int) -> None:
@@ -557,7 +559,7 @@ def get_workshop_option(context: dict, m: int) -> None:
 
 def get_element(
     context: dict[str, Any],
-    primary_key: int | str,
+    primary_key: int,
     context_key_name: str,
     model_class: type[BaseModel],
     *,
@@ -574,7 +576,7 @@ def get_element(
             instance that has a `get_class_parent()` method. The retrieved object
             will be added to this dictionary under the key specified by `context_key_name`.
         primary_key: The identifier used to look up the model instance. Either a primary
-            key (int/str) or a number field value depending on `by_number` parameter.
+            key or a number field value depending on `by_number` parameter.
         context_key_name: The key name under which the retrieved object will be stored
             in the context dictionary. Also used in error messages.
         model_class: The Django model class to query. Must have a foreign key relationship
@@ -638,7 +640,23 @@ def get_player_relationship(context: dict, other_player_number: int) -> None:
         raise Http404(msg) from err
 
 
-def get_time_diff(start_datetime: datetime, end_datetime: datetime) -> int:
+def ensure_timezone_aware(dt: datetime) -> datetime:
+    """Ensure a datetime object is timezone-aware.
+
+    Converts timezone-naive datetime objects to timezone-aware using the
+    default timezone. Already timezone-aware datetimes are returned unchanged.
+
+    Args:
+        dt: Datetime object to check and potentially convert
+
+    Returns:
+        Timezone-aware datetime object
+
+    """
+    return dt if timezone.is_aware(dt) else timezone.make_aware(dt)
+
+
+def get_time_diff(start_datetime: date, end_datetime: date) -> int:
     """Calculate the difference in days between two datetimes."""
     return (start_datetime - end_datetime).days
 
@@ -660,7 +678,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     if isinstance(target_date, datetime):
         target_date = target_date.date()
 
-    return get_time_diff(target_date, datetime.today().date())
+    return get_time_diff(target_date, timezone.now().date())
 
 
 def generate_number(length: int) -> str:
@@ -763,7 +781,7 @@ def check_field(model_class: type, field_name: str) -> bool:
 
     """
     # Iterate through all fields including hidden ones
-    return any(field.name == field_name for field in model_class._meta.get_fields(include_hidden=True))
+    return any(field.name == field_name for field in model_class._meta.get_fields(include_hidden=True))  # noqa: SLF001  # Django model metadata
 
 
 def round_to_two_significant_digits(number: float) -> int:
@@ -795,7 +813,9 @@ def round_to_two_significant_digits(number: float) -> int:
     return int(rounded_decimal)
 
 
-def exchange_order(context: dict, model_class: type, element_id: int, move_up: int, elements=None) -> None:
+def exchange_order(
+    context: dict, model_class: type, element_id: int, move_up: int, elements: object | None = None
+) -> None:
     """Exchange ordering positions between two elements in a sequence.
 
     This function moves an element up or down in the ordering sequence by swapping
@@ -880,7 +900,7 @@ def normalize_string(input_string: str) -> str:
     )
 
 
-def copy_class(target_event_id, source_event_id, model_class) -> None:
+def copy_class(target_event_id: int, source_event_id: int, model_class: type) -> None:
     """Copy all objects of a given class from source event to target event.
 
     Args:
@@ -897,13 +917,13 @@ def copy_class(target_event_id, source_event_id, model_class) -> None:
             many_to_many_data = {}
 
             # noinspection PyProtectedMember
-            for field in source_object._meta.many_to_many:
+            for field in source_object._meta.many_to_many:  # noqa: SLF001  # Django model metadata
                 many_to_many_data[field.name] = list(getattr(source_object, field.name).all())
 
             source_object.pk = None
             source_object.event_id = target_event_id
             # noinspection PyProtectedMember
-            source_object._state.adding = True
+            source_object._state.adding = True  # noqa: SLF001  # Django model state
             for field_name, generation_function in {"access_token": my_uuid_short}.items():
                 if not hasattr(source_object, field_name):
                     continue
@@ -913,11 +933,11 @@ def copy_class(target_event_id, source_event_id, model_class) -> None:
             # copy m2m relations
             for field_name, related_values in many_to_many_data.items():
                 getattr(source_object, field_name).set(related_values)
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001 - Complex object cloning may fail in many ways, log and continue
             logger.warning("found exp: %s", error)
 
 
-def get_payment_methods_ids(context):
+def get_payment_methods_ids(context: dict[str, Any]) -> set[int]:
     """Get set of payment method IDs for an association.
 
     Args:
@@ -930,7 +950,7 @@ def get_payment_methods_ids(context):
     return set(Association.objects.get(pk=context["association_id"]).payment_methods.values_list("pk", flat=True))
 
 
-def detect_delimiter(content):
+def detect_delimiter(content: str) -> str:
     """Detect CSV delimiter from content header line.
 
     Args:
@@ -951,7 +971,7 @@ def detect_delimiter(content):
     raise DelimiterNotFoundError(msg)
 
 
-def clean(s):
+def clean(s: str) -> str:
     """Clean and normalize string by removing symbols, spaces, and accents.
 
     Args:
@@ -968,7 +988,7 @@ def clean(s):
     return s.replace("ò", "o").replace("ù", "u").replace("à", "a").replace("è", "e").replace("é", "e").replace("ì", "i")
 
 
-def _search_char_reg(context: dict, character, search_result: dict) -> None:
+def _search_char_reg(context: dict, character: object, search_result: dict) -> None:
     """Populate character search result with registration and player data.
 
     This function extracts character and player information from registration data
@@ -1018,7 +1038,7 @@ def _search_char_reg(context: dict, character, search_result: dict) -> None:
 def clear_messages(request: HttpRequest) -> None:
     """Clear all queued messages from the request."""
     if hasattr(request, "_messages"):
-        request._messages._queued_messages.clear()
+        request._messages._queued_messages.clear()  # noqa: SLF001  # Django messages internal
 
 
 def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list]:
@@ -1047,7 +1067,7 @@ def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list
 
     # For non-POST requests, limit to questions from last 90 days
     if request.method != "POST":
-        base_queryset = base_queryset.filter(created__gte=datetime.now() - timedelta(days=90))
+        base_queryset = base_queryset.filter(created__gte=timezone.now() - timedelta(days=90))
 
     # Find the latest creation timestamp for each member
     latest_created_per_member = (
@@ -1074,7 +1094,7 @@ def _get_help_questions(context: dict, request: HttpRequest) -> tuple[list, list
     return closed_questions, open_questions
 
 
-def get_recaptcha_secrets(request: HttpRequest) -> tuple[str | None, str | None]:
+def get_recaptcha_secrets(request: HttpRequest | None) -> tuple[str | None, str | None]:
     """Get reCAPTCHA public and private keys for the current request.
 
     Handles both single-site and multi-site configurations. In multi-site mode,
@@ -1112,7 +1132,7 @@ def welcome_user(request: HttpRequest, user: User) -> None:
     messages.success(request, _("Welcome") + ", " + user.get_username() + "!")
 
 
-def format_email_body(email) -> str:
+def format_email_body(email: object) -> str:
     """Format email body for display by cleaning HTML and truncating text.
 
     Args:
@@ -1134,3 +1154,12 @@ def format_email_body(email) -> str:
     # Truncate text if longer than cutoff
     cutoff = 200
     return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned
+
+
+def get_now() -> object:
+    """Get current time - if executed in debug/test, without timezone, add it."""
+    now = timezone.now()
+    if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:
+        # If timezone.now() returns naive, make it aware
+        now = now.replace(tzinfo=dt_timezone.utc)
+    return now

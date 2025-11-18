@@ -20,8 +20,11 @@
 
 """Base accounting utilities and payment gateway integration."""
 
+from __future__ import annotations
+
 import json
-import os
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 from cryptography.fernet import Fernet, InvalidToken
 
@@ -33,11 +36,13 @@ from larpmanager.models.accounting import (
     AccountingItemTransaction,
     Collection,
 )
-from larpmanager.models.association import Association
-from larpmanager.models.event import Event
-from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_payment_details_path
 from larpmanager.utils.tasks import notify_admins
+
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
+    from larpmanager.models.event import Event
+    from larpmanager.models.registration import Registration
 
 
 def is_reg_provisional(
@@ -74,12 +79,8 @@ def is_reg_provisional(
         return False
 
     # Check if payment feature is enabled and registration has outstanding balance
-    if "payment" in features:
-        # Registration is provisional if it has a positive total price but zero or negative payment
-        if instance.tot_iscr > 0 >= instance.tot_payed:
-            return True
-
-    return False
+    # Registration is provisional if it has a positive total price but zero or negative payment
+    return bool("payment" in features and instance.tot_iscr > 0 >= instance.tot_payed)
 
 
 def get_payment_details(association: Association) -> dict:
@@ -107,11 +108,11 @@ def get_payment_details(association: Association) -> dict:
     encrypted_file_path = get_payment_details_path(association)
 
     # Return empty dict if encrypted file doesn't exist
-    if not os.path.exists(encrypted_file_path):
+    if not Path(encrypted_file_path).exists():
         return {}
 
     # Read encrypted data from file
-    with open(encrypted_file_path, "rb") as encrypted_file:
+    with Path(encrypted_file_path).open("rb") as encrypted_file:
         encrypted_data = encrypted_file.read()
 
     # Attempt to decrypt and parse the data
@@ -154,7 +155,7 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
     prev = AccountingItemPayment.objects.get(pk=instance.pk)
 
     # Flag if value changed to trigger registration updates
-    instance._update_reg = prev.value != instance.value
+    instance._update_reg = prev.value != instance.value  # noqa: SLF001  # Internal flag for registration update
 
     # Update all related transactions if registration changed
     if prev.reg != instance.reg:

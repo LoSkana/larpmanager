@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import inflection
 from django.apps import apps
@@ -794,7 +795,7 @@ def orga_progress_steps_order(
 
 
 @login_required
-def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonResponse:
+def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
     """Handle AJAX requests for available multichoice options for organizers.
 
     This function processes POST requests to retrieve character options that are
@@ -857,7 +858,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
 
 
 @login_required
-def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonResponse:
+def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
     """Return available factions for character assignment via AJAX.
 
     Args:
@@ -997,7 +998,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
     for typ in [Character, Plot, Faction, Quest, Trait, Prologue, SpeedLarp]:
         # Get model name from Django model metadata
         # noinspection PyUnresolvedReferences, PyProtectedMember
-        model_name = typ._meta.model_name
+        model_name = typ._meta.model_name  # noqa: SLF001  # Django model metadata
 
         # Skip this type if its feature is not enabled for the event
         if mapping.get(model_name) not in context["features"]:

@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -29,6 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
@@ -111,7 +112,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         return redirect("home")
 
     # Populate main user's accounting information
-    info_accounting(request, context)
+    info_accounting(context)
 
     # Initialize delegated members tracking
     context["delegated_todo"] = False
@@ -124,7 +125,7 @@ def accounting(request: HttpRequest) -> HttpResponse:
         # Process accounting info for each delegated member
         for el in context["delegated"]:
             del_ctx = {"member": el, "association_id": context["association_id"]}
-            info_accounting(request, del_ctx)
+            info_accounting(del_ctx)
 
             # Attach context to member object for template access
             el.context = del_ctx
@@ -486,7 +487,7 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
-    year = datetime.now().year
+    year = timezone.now().year
     try:
         AccountingItemMembership.objects.get(
             year=year,
@@ -495,7 +496,7 @@ def acc_membership(request: HttpRequest, method: str | None = None) -> HttpRespo
         )
         messages.success(request, _("You have already paid this year's membership fee"))
         return redirect("accounting")
-    except Exception as e:
+    except AccountingItemMembership.DoesNotExist as e:
         logger.debug("Membership fee not found for member=%s, year=%s: %s", context["member"].id, year, e)
 
     # Set up context variables for template rendering
@@ -788,7 +789,7 @@ def acc_collection_redeem(request: HttpRequest, collection_code: str) -> HttpRes
     return render(request, "larpmanager/member/acc_collection_redeem.html", context)
 
 
-def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:
+def acc_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:  # noqa: ARG001
     """Handle PayPal webhook for invoice payment confirmation."""
     # Temporary fix until PayPal fees are better understood
     if invoice_received_money(s):
@@ -831,9 +832,6 @@ def acc_webhook_redsys(request: HttpRequest) -> JsonResponse:
 @csrf_exempt
 def acc_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
     """Handle failed Redsys payment callback."""
-    # printpretty_request(request))
-    # err_paypal(pretty_request(request))
-
     # Notify user about payment failure
     messages.error(request, _("The payment has not been completed"))
     return redirect("accounting")
@@ -853,7 +851,7 @@ def acc_cancelled(request: HttpRequest) -> HttpResponse:
     return redirect("accounting")
 
 
-def acc_profile_check(request: HttpRequest, success_message: str, invoice) -> HttpResponse:
+def acc_profile_check(request: HttpRequest, success_message: str, invoice: Any) -> HttpResponse:
     """Check if user profile is compiled and redirect appropriately.
 
     Validates that the user's membership profile is complete. If not compiled,
@@ -974,7 +972,6 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
     # Validate form data and uploaded files
     if not form.is_valid():
-        # logger.debug(f"Form errors: {form.errors}")
         mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
         return redirect("/" + redirect_path)
@@ -997,7 +994,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
 
         # Mark as submitted and generate transaction ID
         inv.status = PaymentStatus.SUBMITTED
-        inv.txn_id = datetime.now().timestamp()
+        inv.txn_id = timezone.now().timestamp()
         inv.save()
 
     # Send notification for invoice review
@@ -1069,6 +1066,6 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     for e in lis:
         # Filter and add runs to dictionary by ID
         for r in e.runs.all():
-            if future and r.end < datetime.now(timezone.utc).date():
+            if future and r.end < timezone.now().date():
                 continue
             ls[r.id] = r

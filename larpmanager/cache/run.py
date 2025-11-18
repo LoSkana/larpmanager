@@ -29,7 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.event import Run
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
 
 if TYPE_CHECKING:
@@ -47,17 +47,17 @@ def cache_run_key(association_id: int, slug: str) -> str:
     return f"run_{association_id}_{slug}"
 
 
-def get_cache_run(association: Association, slug: str) -> dict:
+def get_cache_run(association_id: int, slug: str) -> int:
     """Get cached run data for association and slug."""
     # Generate cache key for the association and slug
-    cache_key = cache_run_key(association, slug)
+    cache_key = cache_run_key(association_id, slug)
 
     # Try to retrieve cached result
     cached_result = cache.get(cache_key)
 
     # If not cached, initialize and cache the result
     if cached_result is None:
-        cached_result = init_cache_run(association, slug)
+        cached_result = init_cache_run(association_id, slug)
         cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_result
@@ -94,7 +94,7 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
         return run.id
 
 
-def on_run_pre_save_invalidate_cache(instance) -> None:
+def on_run_pre_save_invalidate_cache(instance: Run) -> None:
     """Handle run pre-save cache invalidation.
 
     Args:
@@ -105,7 +105,7 @@ def on_run_pre_save_invalidate_cache(instance) -> None:
         reset_cache_run(instance.event.association_id, instance.get_slug())
 
 
-def on_event_pre_save_invalidate_cache(instance) -> None:
+def on_event_pre_save_invalidate_cache(instance: Event) -> None:
     """Handle event pre-save cache invalidation.
 
     Args:
@@ -152,7 +152,7 @@ def get_cache_config_run(run: Run) -> dict:
     return cached_config
 
 
-def init_cache_config_run(run) -> dict:
+def init_cache_config_run(run: Run) -> dict:
     """Initialize and build cache configuration data for a run.
 
     This function creates a cache configuration context containing UI elements,
@@ -215,7 +215,7 @@ def init_cache_config_run(run) -> dict:
     return context
 
 
-def on_run_post_save_reset_config_cache(instance) -> None:
+def on_run_post_save_reset_config_cache(instance: Run) -> None:
     """Handle run post-save cache reset.
 
     Args:
@@ -226,7 +226,7 @@ def on_run_post_save_reset_config_cache(instance) -> None:
         reset_cache_config_run(instance)
 
 
-def on_event_post_save_reset_config_cache(instance) -> None:
+def on_event_post_save_reset_config_cache(instance: Event) -> None:
     """Handle event post-save cache reset.
 
     Args:

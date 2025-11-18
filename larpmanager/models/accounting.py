@@ -18,10 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any, ClassVar
+
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association
@@ -33,6 +34,8 @@ from larpmanager.models.utils import UploadToPathAndRename, download, generate_i
 
 
 class PaymentType(models.TextChoices):
+    """Represents PaymentType model."""
+
     REGISTRATION = "r", "registration"
     MEMBERSHIP = "m", "membership"
     DONATE = "d", "donation"
@@ -40,6 +43,8 @@ class PaymentType(models.TextChoices):
 
 
 class PaymentStatus(models.TextChoices):
+    """Represents PaymentStatus model."""
+
     CREATED = "r", "Created"
     SUBMITTED = "s", "Submitted"
     CONFIRMED = "c", "Confirmed"
@@ -47,6 +52,8 @@ class PaymentStatus(models.TextChoices):
 
 
 class PaymentInvoice(BaseModel):
+    """Represents PaymentInvoice model."""
+
     search = models.CharField(max_length=500, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
@@ -109,7 +116,7 @@ class PaymentInvoice(BaseModel):
     key = models.CharField(max_length=500, null=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["key", "status"]),
             models.Index(fields=["association", "cod"]),
             models.Index(fields=["reg", "status", "-created"]),
@@ -171,6 +178,8 @@ class PaymentInvoice(BaseModel):
 
 
 class ElectronicInvoice(BaseModel):
+    """Represents ElectronicInvoice model."""
+
     inv = models.OneToOneField(
         PaymentInvoice,
         on_delete=models.SET_NULL,
@@ -192,7 +201,7 @@ class ElectronicInvoice(BaseModel):
     response = models.TextField(blank=True, null=True)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["number", "year", "association", "deleted"],
                 name="unique_number_with_optional",
@@ -213,7 +222,7 @@ class ElectronicInvoice(BaseModel):
             ),
         ]
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Save the ElectronicInvoice instance with auto-generated progressive and number.
 
         Automatically assigns progressive and number values if not already set:
@@ -241,6 +250,8 @@ class ElectronicInvoice(BaseModel):
 
 
 class ExpenseChoices(models.TextChoices):
+    """Choices for ExpenseChoices."""
+
     SCENOGR = "a", _("Set design - staging, materials")
     COST = "b", _("Costumes - make up, cloth, armor")
     PROP = "c", _("Prop - weapons, props")
@@ -254,6 +265,8 @@ class ExpenseChoices(models.TextChoices):
 
 
 class BalanceChoices(models.TextChoices):
+    """Choices for BalanceChoices."""
+
     MATER = "1", _("Raw materials, auxiliaries, consumables and goods")
     SERV = "2", _("Services")
     GODIM = "3", _("Use of third party assets")
@@ -262,6 +275,8 @@ class BalanceChoices(models.TextChoices):
 
 
 class AccountingItem(BaseModel):
+    """Represents AccountingItem model."""
+
     search = models.CharField(max_length=150, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True)
@@ -306,6 +321,8 @@ class AccountingItem(BaseModel):
 
 
 class AccountingItemTransaction(AccountingItem):
+    """Represents AccountingItemTransaction model."""
+
     reg = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
@@ -318,10 +335,12 @@ class AccountingItemTransaction(AccountingItem):
 
 
 class AccountingItemMembership(AccountingItem):
+    """Represents AccountingItemMembership model."""
+
     year = models.IntegerField()
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(
                 fields=["association", "year"],
                 condition=Q(deleted__isnull=True),
@@ -331,16 +350,22 @@ class AccountingItemMembership(AccountingItem):
 
 
 class AccountingItemDonation(AccountingItem):
+    """Represents AccountingItemDonation model."""
+
     descr = models.CharField(max_length=1000)
 
 
 class OtherChoices(models.TextChoices):
+    """Choices for OtherChoices."""
+
     CREDIT = "c", _("Credits")
     TOKEN = "t", _("Tokens")
     REFUND = "r", _("Refund")
 
 
 class AccountingItemOther(AccountingItem):
+    """Represents AccountingItemOther model."""
+
     oth = models.CharField(max_length=1, choices=OtherChoices.choices)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
@@ -352,7 +377,7 @@ class AccountingItemOther(AccountingItem):
     ref_addit = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        indexes = [models.Index(fields=["run", "oth"])]
+        indexes: ClassVar[list] = [models.Index(fields=["run", "oth"])]
 
     def __str__(self) -> str:
         """Return string representation based on other type and member."""
@@ -370,12 +395,16 @@ class AccountingItemOther(AccountingItem):
 
 
 class PaymentChoices(models.TextChoices):
+    """Choices for PaymentChoices."""
+
     MONEY = "a", "Money"
     CREDIT = "b", "Credit"
     TOKEN = "c", "Token"
 
 
 class AccountingItemPayment(AccountingItem):
+    """Represents AccountingItemPayment model."""
+
     pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
     reg = models.ForeignKey(
@@ -393,10 +422,12 @@ class AccountingItemPayment(AccountingItem):
     vat_options = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["pay", "reg"])]
+        indexes: ClassVar[list] = [models.Index(fields=["pay", "reg"])]
 
 
 class AccountingItemExpense(AccountingItem):
+    """Represents AccountingItemExpense model."""
+
     invoice = models.FileField(upload_to=UploadToPathAndRename("invoice/"))
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
@@ -421,13 +452,15 @@ class AccountingItemExpense(AccountingItem):
 
     is_approved = models.BooleanField(default=False)
 
-    def download(self) -> HttpResponse:
+    def download(self) -> str:
         """Download the invoice file."""
         # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
 
 class AccountingItemFlow(AccountingItem):
+    """Represents AccountingItemFlow model."""
+
     class Meta:
         abstract = True
 
@@ -452,6 +485,8 @@ class AccountingItemFlow(AccountingItem):
 
 
 class AccountingItemOutflow(AccountingItemFlow):
+    """Represents AccountingItemOutflow model."""
+
     exp = models.CharField(
         max_length=1,
         choices=ExpenseChoices.choices,
@@ -470,10 +505,12 @@ class AccountingItemOutflow(AccountingItemFlow):
 
 
 class AccountingItemInflow(AccountingItemFlow):
-    pass
+    """Represents AccountingItemInflow model."""
 
 
 class DiscountType(models.TextChoices):
+    """Represents DiscountType model."""
+
     STANDARD = "a", _("Standard")
     PLAYAGAIN = "p", _("Play Again")
     FRIEND = "f", _("Friend")
@@ -482,6 +519,8 @@ class DiscountType(models.TextChoices):
 
 
 class Discount(BaseModel):
+    """Represents Discount model."""
+
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
 
     runs = models.ManyToManyField(
@@ -541,7 +580,7 @@ class Discount(BaseModel):
     number = models.IntegerField()
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_discount_with_optional",
@@ -564,7 +603,7 @@ class Discount(BaseModel):
             s += self.event.association.get_currency_symbol()
         return s
 
-    def show(self, run=None) -> dict:
+    def show(self) -> dict:
         """Return dictionary representation with value, max_redeem, and name attributes."""
         js = {"value": self.value, "max_redeem": self.max_redeem}
         for s in ["name"]:
@@ -577,6 +616,8 @@ class Discount(BaseModel):
 
 
 class AccountingItemDiscount(AccountingItem):
+    """Represents AccountingItemDiscount model."""
+
     run = models.ForeignKey(
         Run,
         on_delete=models.CASCADE,
@@ -604,12 +645,16 @@ class AccountingItemDiscount(AccountingItem):
 
 
 class CollectionStatus(models.TextChoices):
+    """Represents CollectionStatus model."""
+
     OPEN = "o", _("Open")
     DONE = "d", _("Close")
     PAYED = "p", _("Delivered")
 
 
 class Collection(BaseModel):
+    """Represents Collection model."""
+
     name = models.CharField(max_length=100, null=True)
 
     status = models.CharField(max_length=1, choices=CollectionStatus.choices, default=CollectionStatus.OPEN)
@@ -686,15 +731,21 @@ class Collection(BaseModel):
 
 
 class AccountingItemCollection(AccountingItem):
+    """Represents AccountingItemCollection model."""
+
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name="collection_gifts")
 
 
 class RefundStatus(models.TextChoices):
+    """Represents RefundStatus model."""
+
     REQUEST = "r", _("Request")
     PAYED = "p", _("Delivered")
 
 
 class RefundRequest(BaseModel):
+    """Represents RefundRequest model."""
+
     search = models.CharField(max_length=200, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="refund_requests")
@@ -730,6 +781,8 @@ class RefundRequest(BaseModel):
 
 
 class RecordAccounting(BaseModel):
+    """Represents RecordAccounting model."""
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="rec_accs", null=True, blank=True)
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="rec_accs")

@@ -17,15 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta
+from datetime import timedelta
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_reg_provisional
@@ -114,7 +117,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
     if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
-        cutoff_date = datetime.now() - timedelta(days=3)
+        cutoff_date = timezone.now() - timedelta(days=3)
 
         member = context["member"]
 
@@ -176,7 +179,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     return render(request, "larpmanager/general/calendar.html", context)
 
 
-def get_character_rels_dict(registrations_by_run_dict: dict, member) -> dict:
+def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dict:
     """Get character relations dictionary grouped by registration ID.
 
     Precalculates RegistrationCharacterRel data for all runs to optimize queries
@@ -218,7 +221,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member) -> dict:
     return character_relations_by_registration_dict
 
 
-def get_payment_invoices_dict(registrations_by_id: dict, member) -> dict:
+def get_payment_invoices_dict(registrations_by_id: dict, member: Any) -> dict:
     """Get payment invoices organized by registration ID for the given member.
 
     Precalculates PaymentInvoice data for all registrations to optimize database queries
@@ -259,7 +262,7 @@ def get_payment_invoices_dict(registrations_by_id: dict, member) -> dict:
     return payment_invoices_by_registration
 
 
-def get_pre_registrations_dict(association_id: int, member) -> dict:
+def get_pre_registrations_dict(association_id: int, member: Any) -> dict:
     """Get pre-registrations for a member organized by event ID.
 
     Precalculates PreRegistration data for all events to optimize queries
@@ -318,11 +321,11 @@ def get_coming_runs(association_id: int | None, *, future: bool = True) -> Query
     # Apply date filtering and ordering based on future/past requirement
     if future:
         # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        reference_date = datetime.now() - timedelta(days=3)
+        reference_date = timezone.now() - timedelta(days=3)
         runs = runs.filter(end__gte=reference_date.date()).order_by("end")
     else:
         # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        reference_date = datetime.now() + timedelta(days=3)
+        reference_date = timezone.now() + timedelta(days=3)
         runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
 
     return runs
@@ -386,7 +389,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
     # Cache to track processed events and set reference date (3 days ago)
     cache = {}
-    ref = (datetime.now() - timedelta(days=3)).date()
+    ref = (timezone.now() - timedelta(days=3)).date()
 
     # Query runs from current association, excluding development/cancelled events
     # Order by end date descending to show most recent first
@@ -418,7 +421,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def share(request: HttpRequest):
+def share(request: HttpRequest) -> Any:
     """Handle member data sharing consent for organization.
 
     Args:
@@ -456,7 +459,7 @@ def legal_notice(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def event_register(request: HttpRequest, event_slug: str):
+def event_register(request: HttpRequest, event_slug: str) -> Any:
     """Display event registration options for future runs.
 
     Args:
@@ -470,7 +473,7 @@ def event_register(request: HttpRequest, event_slug: str):
     context = get_event(request, event_slug)
     # check future runs
     runs = (
-        Run.objects.filter(event=context["event"], end__gte=datetime.now())
+        Run.objects.filter(event=context["event"], end__gte=timezone.now())
         .exclude(development=DevelopStatus.START)
         .exclude(event__visible=False)
         .order_by("end")
@@ -708,7 +711,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get all runs for the event and set reference date (3 days ago)
     runs = Run.objects.filter(event=context["event"])
-    ref = datetime.now() - timedelta(days=3)
+    ref = timezone.now() - timedelta(days=3)
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
@@ -735,13 +738,13 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["no_robots"] = (
         context["run"].development != DevelopStatus.SHOW
         or not context["run"].end
-        or datetime.today().date() > context["run"].end
+        or timezone.now().date() > context["run"].end
     )
 
     return render(request, "larpmanager/event/event.html", context)
 
 
-def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+def event_redirect(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:  # noqa: ARG001
     """Redirect to the event detail view with the given slug."""
     return redirect("event", event_slug=event_slug)
 
@@ -804,7 +807,7 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/search.html", context)
 
 
-def get_fact(factions_queryset) -> list[dict]:
+def get_fact(factions_queryset: QuerySet[Faction]) -> list[dict[str, Any]]:
     """Filter queryset to return only factions with characters.
 
     Args:
@@ -876,7 +879,7 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request: HttpRequest, event_slug: str, faction_id):
+def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
     """Display detailed information for a specific faction.
 
     Args:
@@ -913,7 +916,7 @@ def faction(request: HttpRequest, event_slug: str, faction_id):
     return render(request, "larpmanager/event/faction.html", context)
 
 
-def quests(request: HttpRequest, event_slug: str, quest_type_id: str | None = None) -> HttpResponse:
+def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = None) -> HttpResponse:
     """Display quest types or quests for a specific type in an event.
 
     Args:
@@ -945,7 +948,7 @@ def quests(request: HttpRequest, event_slug: str, quest_type_id: str | None = No
     return render(request, "larpmanager/event/quests.html", context)
 
 
-def quest(request: HttpRequest, event_slug: str, quest_id):
+def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
     """Display individual quest details and associated traits.
 
     Args:
@@ -1004,12 +1007,12 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build discounts list with visibility filtering
     context["disc"] = []
     for discount in context["run"].discounts.exclude(visible=False):
-        context["disc"].append(discount.show(context["run"]))
+        context["disc"].append(discount.show())
 
     # Build tickets list with availability and usage data
     context["tickets"] = []
     for ticket in RegistrationTicket.objects.filter(event=context["event"], max_available__gt=0, visible=True):
-        dt = ticket.show(context["run"])
+        dt = ticket.show()
         key = f"tk_{ticket.id}"
         # Add usage count if available in registration counts
         if key in counts:
@@ -1020,7 +1023,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["opts"] = []
     que = RegistrationOption.objects.filter(question__event=context["event"], max_available__gt=0)
     for option in que:
-        dt = option.show(context["run"])
+        dt = option.show()
         key = f"option_{option.id}"
         # Add usage count if available in registration counts
         if key in counts:
@@ -1030,7 +1033,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/limitations.html", context)
 
 
-def export(request: HttpRequest, event_slug: str, export_type):
+def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     """Export event elements as JSON for external consumption.
 
     Args:
@@ -1054,7 +1057,6 @@ def export(request: HttpRequest, event_slug: str, export_type):
     else:
         msg = "wrong type"
         raise Http404(msg)
-    # r = Run(event=context["event"])
     aux = {}
     for el in lst:
         aux[el.number] = el.show(context["run"])

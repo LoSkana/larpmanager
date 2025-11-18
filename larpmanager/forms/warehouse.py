@@ -17,7 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -44,14 +44,16 @@ from larpmanager.models.miscellanea import (
 
 
 class ExeWarehouseItemForm(MyForm):
+    """Form for ExeWarehouseItem."""
+
     page_info = _("Manage warehouse items")
 
     page_title = _("Warehouse items")
 
     class Meta:
         model = WarehouseItem
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 5}),
             "container": WarehouseContainerS2Widget,
             "tags": WarehouseTagS2WidgetMulti,
@@ -77,25 +79,29 @@ class ExeWarehouseItemForm(MyForm):
 
 
 class ExeWarehouseContainerForm(MyForm):
+    """Form for ExeWarehouseContainer."""
+
     page_info = _("Manage warehouse containers")
 
     page_title = _("Warehouse containers")
 
     class Meta:
         model = WarehouseContainer
-        exclude = []
-        widgets = {"description": Textarea(attrs={"rows": 5})}
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {"description": Textarea(attrs={"rows": 5})}
 
 
 class ExeWarehouseTagForm(MyForm):
+    """Form for ExeWarehouseTag."""
+
     page_info = _("Manage warehouse item tags")
 
     page_title = _("Warehouse tags")
 
     class Meta:
         model = WarehouseTag
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 5}),
         }
 
@@ -120,14 +126,16 @@ class ExeWarehouseTagForm(MyForm):
 
 
 class ExeWarehouseMovementForm(MyForm):
+    """Form for ExeWarehouseMovement."""
+
     page_info = _("Manage warehouse item movements, loans, and repairs")
 
     page_title = _("Warehouse movements")
 
     class Meta:
         model = WarehouseMovement
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "notes": Textarea(attrs={"rows": 5}),
             "item": WarehouseItemS2Widget,
         }
@@ -143,25 +151,29 @@ class ExeWarehouseMovementForm(MyForm):
 
 
 class OrgaWarehouseAreaForm(MyForm):
+    """Form for OrgaWarehouseArea."""
+
     page_info = _("Manage event areas")
 
     page_title = _("Event area")
 
     class Meta:
         model = WarehouseArea
-        exclude = []
-        widgets = {"description": Textarea(attrs={"rows": 5})}
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {"description": Textarea(attrs={"rows": 5})}
 
 
 class OrgaWarehouseItemAssignmentForm(MyForm):
+    """Form for OrgaWarehouseItemAssignment."""
+
     page_info = _("Manage warehouse item assignments to event areas")
 
     page_title = _("Warehouse assignments")
 
     class Meta:
         model = WarehouseItemAssignment
-        exclude = []
-        widgets = {
+        exclude: ClassVar[list] = []
+        widgets: ClassVar[dict] = {
             "description": Textarea(attrs={"rows": 5}),
             "area": WarehouseAreaS2Widget,
             "item": WarehouseItemS2Widget,

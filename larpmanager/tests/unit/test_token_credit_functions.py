@@ -32,7 +32,6 @@ from larpmanager.accounting.token_credit import (
 )
 from larpmanager.models.accounting import (
     AccountingItemPayment,
-    OtherChoices,
     PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus
@@ -56,8 +55,8 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         # No tokens or credits available, tot_payed should remain unchanged
+        # Note: Function updates in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("0.00"))
 
     def test_registration_tokens_credits_use_tokens_only(self) -> None:
@@ -65,7 +64,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         member = self.get_member()
         association = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+        )
 
         membership = member.membership
         membership.tokens = Decimal("30.00")
@@ -74,9 +75,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use all 30 tokens
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("30.00"))
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
@@ -85,7 +86,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         member = self.get_member()
         association = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+        )
 
         membership = member.membership
         membership.tokens = Decimal("0.00")
@@ -94,9 +97,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use all 40 credits
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("40.00"))
         self.assertEqual(membership.credit, Decimal("0.00"))
 
@@ -105,7 +108,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         member = self.get_member()
         association = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+        )
 
         membership = member.membership
         membership.tokens = Decimal("30.00")
@@ -114,9 +119,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use 30 tokens + 20 credits = 50 total
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("50.00"))
         self.assertEqual(membership.tokens, Decimal("0.00"))
         self.assertEqual(membership.credit, Decimal("20.00"))
@@ -143,7 +148,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
         member = self.get_member()
         association = self.get_association()
         run = self.get_run()
-        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00"))
+        registration = self.create_registration(
+            member=member, run=run, tot_iscr=Decimal("100.00"), tot_payed=Decimal("0.00")
+        )
 
         membership = member.membership
         membership.tokens = Decimal("100.00")
@@ -151,9 +158,9 @@ class TestTokenCreditUseFunctions(BaseTestCase):
 
         registration_tokens_credits_use(registration, Decimal("25.00"), association.id)
 
-        registration.refresh_from_db()
         membership.refresh_from_db()
         # Should use only 25 tokens
+        # Note: registration.tot_payed updated in memory only; caller must persist
         self.assertEqual(registration.tot_payed, Decimal("25.00"))
         self.assertEqual(membership.tokens, Decimal("75.00"))
 
@@ -322,10 +329,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Update fields directly in DB to avoid signal triggers
-        Registration.objects.filter(pk=registration.pk).update(
-            tot_iscr=Decimal("100.00"),
-            tot_payed=Decimal("50.00")
-        )
+        Registration.objects.filter(pk=registration.pk).update(tot_iscr=Decimal("100.00"), tot_payed=Decimal("50.00"))
 
         regs = get_regs_paying_incomplete(association)
 
@@ -341,10 +345,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Update fields directly in DB
-        Registration.objects.filter(pk=registration.pk).update(
-            tot_iscr=Decimal("100.00"),
-            tot_payed=Decimal("100.00")
-        )
+        Registration.objects.filter(pk=registration.pk).update(tot_iscr=Decimal("100.00"), tot_payed=Decimal("100.00"))
 
         regs = get_regs_paying_incomplete(association)
 
@@ -360,10 +361,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Update fields directly in DB
-        Registration.objects.filter(pk=registration.pk).update(
-            tot_iscr=Decimal("100.00"),
-            tot_payed=Decimal("99.98")
-        )
+        Registration.objects.filter(pk=registration.pk).update(tot_iscr=Decimal("100.00"), tot_payed=Decimal("99.98"))
 
         regs = get_regs_paying_incomplete(association)
 
@@ -380,10 +378,7 @@ class TestRegistrationQueryFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         # Update fields directly in DB
-        Registration.objects.filter(pk=registration.pk).update(
-            tot_iscr=Decimal("100.00"),
-            tot_payed=Decimal("110.00")
-        )
+        Registration.objects.filter(pk=registration.pk).update(tot_iscr=Decimal("100.00"), tot_payed=Decimal("110.00"))
 
         regs = get_regs_paying_incomplete(association)
 

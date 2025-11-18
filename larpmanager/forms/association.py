@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -78,7 +78,7 @@ class ExeAssociationForm(MyForm):
             "maintainers",
         )
 
-    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form instance with custom field modifications.
 
         Args:
@@ -113,7 +113,7 @@ class ExeAssociationTextForm(MyForm):
         model = AssociationText
         exclude = ("number",)
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize AssociationTextForm with feature-based field configuration.
 
         Configures text type choices based on activated features, removing
@@ -267,12 +267,12 @@ class ExeAssociationRoleForm(MyForm):
 
     page_info = _("Manage association roles")
 
-    load_templates = ["share"]
+    load_templates: ClassVar[list] = ["share"]
 
     class Meta:
         model = AssociationRole
         fields = ("name", "members", "association")
-        widgets = {"members": AssociationMemberS2WidgetMulti}
+        widgets: ClassVar[dict] = {"members": AssociationMemberS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
@@ -282,7 +282,7 @@ class ExeAssociationRoleForm(MyForm):
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> AssociationRole:  # noqa: FBT001, FBT002
         """Save form instance and update related role permissions."""
         instance = super().save(commit=commit)
         save_permissions_role(instance, self)
@@ -290,6 +290,8 @@ class ExeAssociationRoleForm(MyForm):
 
 
 class ExeAppearanceForm(MyCssForm):
+    """Form for ExeAppearance."""
+
     page_title = _("Appearance")
 
     page_info = _("Manage appearance settings and presentation of the organization")
@@ -307,14 +309,14 @@ class ExeAppearanceForm(MyCssForm):
         ),
     )
 
-    def __init__(self, *args: tuple, **kwargs: dict) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with cancel prevention and CSS link visibility."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
         self.show_link = ["id_association_css"]
 
     @staticmethod
-    def get_css_path(instance) -> str:
+    def get_css_path(instance: Association) -> str:
         """Return CSS file path for instance."""
         return f"css/{instance.slug}_{instance.css_code}.css"
 
@@ -325,24 +327,26 @@ class ExeAppearanceForm(MyCssForm):
 
 
 class ExeFeatureForm(FeatureForm):
+    """Form for ExeFeature."""
+
     page_title = _("Features")
 
     page_info = _(
         "Manage features activated for the organization and all its events (click on a feature to show its description)",
     )
 
-    load_js = ["feature-search"]
+    load_js: ClassVar[list] = ["feature-search"]
 
     class Meta:
         model = Association
-        fields = []
+        fields: ClassVar[list] = []
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and its features configuration."""
         super().__init__(*args, **kwargs)
         self._init_features(is_association=True)
 
-    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002, ARG002
         """Save form and reset association features cache."""
         # Save form without committing to database yet
         instance = super().save(commit=False)
@@ -355,15 +359,17 @@ class ExeFeatureForm(FeatureForm):
 
 
 class ExeConfigForm(ConfigForm):
+    """Form for ExeConfig."""
+
     page_title = _("Configuration")
 
     page_info = _("Manage configuration of activated features")
 
     section_replace = True
 
-    load_js = ["config-search"]
+    load_js: ClassVar[list] = ["config-search"]
 
-    istr = []
+    istr: ClassVar[list] = []
 
     class Meta:
         model = Association
@@ -858,7 +864,7 @@ class FirstAssociationForm(MyForm):
     class Meta:
         model = Association
         fields = ("name", "profile", "slug")
-        widgets = {
+        widgets: ClassVar[dict] = {
             "slug": SlugInput,
         }
 
@@ -891,15 +897,17 @@ class FirstAssociationForm(MyForm):
 
 
 class ExeQuickSetupForm(QuickSetupForm):
+    """Form for ExeQuickSetup."""
+
     page_title = _("Quick Setup")
 
     page_info = _("Manage quick setup of the most important settings for your new organization")
 
     class Meta:
         model = Association
-        fields = []
+        fields: ClassVar[list] = []
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize association setup form with feature configuration options.
 
         Sets up available features and configuration options based on
@@ -965,6 +973,8 @@ class ExeQuickSetupForm(QuickSetupForm):
 
 
 class ExePreferencesForm(ConfigForm):
+    """Form for ExePreferences."""
+
     page_title = _("Personal preferences")
 
     page_info = _("Manage your personal interface preferences")

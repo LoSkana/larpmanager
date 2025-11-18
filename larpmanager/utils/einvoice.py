@@ -20,8 +20,9 @@
 
 import io
 import xml.etree.ElementTree as ET
-from datetime import datetime
-from typing import IO
+from typing import IO, Any
+
+from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
@@ -46,11 +47,11 @@ def process_payment(invoice_id: int) -> None:
     # Get or create electronic invoice record
     try:
         electronic_invoice = payment_invoice.electronicinvoice
-    except Exception:
+    except ElectronicInvoice.DoesNotExist:
         # Create new electronic invoice if none exists
         electronic_invoice = ElectronicInvoice(
             inv=payment_invoice,
-            year=datetime.now().year,
+            year=timezone.now().year,
             association=payment_invoice.association,
         )
         electronic_invoice.save()
@@ -64,7 +65,7 @@ def process_payment(invoice_id: int) -> None:
     # TODO: sends XML and track track
 
 
-def prepare_xml(invoice, electronic_invoice_config) -> str:
+def prepare_xml(invoice: Any, electronic_invoice_config: Any) -> str:
     """Generate XML structure for Italian electronic invoice.
 
     This function creates a compliant XML structure according to the Italian
@@ -258,7 +259,7 @@ def _einvoice_header(
     ET.SubElement(customer_address, "Nazione").text = address_components[0]
 
 
-def _einvoice_body(einvoice, invoice, xml_root) -> None:
+def _einvoice_body(einvoice: Any, invoice: Any, xml_root: Any) -> None:
     """Build the body section of electronic invoice XML structure.
 
     Args:

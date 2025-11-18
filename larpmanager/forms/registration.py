@@ -17,9 +17,10 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import json
-from typing import Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -39,7 +40,6 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
 )
 from larpmanager.models.casting import Trait
-from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
     RegistrationOption,
@@ -60,6 +60,9 @@ from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.common import get_time_diff_today
 from larpmanager.utils.registration import get_reduced_available_count
 
+if TYPE_CHECKING:
+    from larpmanager.models.event import Event, Run
+
 
 class RegistrationForm(BaseRegistrationForm):
     """Form for handling event registration with tickets, quotas, and questions."""
@@ -67,7 +70,7 @@ class RegistrationForm(BaseRegistrationForm):
     class Meta:
         model = Registration
         fields = ("modified",)
-        widgets = {"modified": forms.HiddenInput()}
+        widgets: ClassVar[dict] = {"modified": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize registration form with tickets, questions, and event-specific options.
@@ -142,7 +145,7 @@ class RegistrationForm(BaseRegistrationForm):
         # Combines base help text with dynamic availability information
         self.fields["ticket"].help_text += ticket_help
 
-    def sel_ticket_map(self, ticket) -> None:
+    def sel_ticket_map(self, ticket: Any) -> None:
         """Update question requirements based on selected ticket type.
 
         Args:
@@ -200,7 +203,7 @@ class RegistrationForm(BaseRegistrationForm):
             help_text=help_text_message % {"amount": self.params.get("bring_friend_discount_from", 0)},
         )
 
-    def init_questions(self, event, reg_counts) -> None:
+    def init_questions(self, event: Event, reg_counts: dict[str, Any]) -> None:
         """Initialize registration questions and ticket mapping.
 
         Args:
@@ -216,7 +219,7 @@ class RegistrationForm(BaseRegistrationForm):
             self.init_question(q, reg_counts)
         self.tickets_map = json.dumps(self.tickets_map)
 
-    def init_question(self, question, registration_counts) -> None:
+    def init_question(self, question: Any, registration_counts: Any) -> None:
         """Initialize a single registration question field.
 
         Args:
@@ -244,7 +247,7 @@ class RegistrationForm(BaseRegistrationForm):
             if tm:
                 self.tickets_map[k] = tm
 
-    def init_surcharge(self, event) -> None:
+    def init_surcharge(self, event: Event) -> None:
         """Initialize date-based surcharge field if applicable.
 
         Args:
@@ -364,7 +367,7 @@ class RegistrationForm(BaseRegistrationForm):
         # Process each available ticket to create form choices and help text
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
-            ticket_display_name = ticket.get_form_text(run, currency_symbol=self.params["currency_symbol"])
+            ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
             ticket_choices.append((ticket.id, ticket_display_name))
 
             # Add ticket description to help text if available
@@ -382,7 +385,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         return ticket_help_html
 
-    def has_ticket(self, ticket_tier):
+    def has_ticket(self, ticket_tier: Any) -> Any:
         """Check if registration has ticket of specified tier.
 
         Args:
@@ -394,7 +397,7 @@ class RegistrationForm(BaseRegistrationForm):
         """
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier == ticket_tier
 
-    def has_ticket_primary(self):
+    def has_ticket_primary(self) -> Any:
         """Check if registration has a primary (non-waiting/filler) ticket.
 
         Returns:
@@ -404,7 +407,7 @@ class RegistrationForm(BaseRegistrationForm):
         excluded_ticket_tiers = [TicketTier.WAITING, TicketTier.FILLER]
         return self.instance.pk and self.instance.ticket and self.instance.ticket.tier not in excluded_ticket_tiers
 
-    def check_ticket_visibility(self, registration_ticket) -> bool:
+    def check_ticket_visibility(self, registration_ticket: Any) -> bool:
         """Check if ticket should be visible to current user.
 
         Args:
@@ -427,7 +430,7 @@ class RegistrationForm(BaseRegistrationForm):
         event: Event,
         registration_counts: dict,
         run: Run,
-    ) -> list["RegistrationTicket"] | list:
+    ) -> list[RegistrationTicket] | list:
         """Get list of available tickets for registration.
 
         Returns tickets available for the current user based on their status,
@@ -483,7 +486,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         return available_tickets
 
-    def skip_ticket_reduced(self, run, ticket) -> bool:
+    def skip_ticket_reduced(self, run: Run, ticket: RegistrationTicket) -> bool:
         """Check if reduced ticket should be skipped due to availability.
 
         Args:
@@ -501,7 +504,7 @@ class RegistrationForm(BaseRegistrationForm):
                 return True
         return False
 
-    def skip_ticket_max(self, reg_counts, ticket) -> bool:
+    def skip_ticket_max(self, reg_counts: Any, ticket: Any) -> bool:
         """Check if ticket should be skipped due to maximum limit reached.
 
         Args:
@@ -522,7 +525,7 @@ class RegistrationForm(BaseRegistrationForm):
                 return True
         return False
 
-    def skip_ticket_type(self, event: Event, run: Run, ticket: RegistrationTicket) -> bool:
+    def skip_ticket_type(self, event: Event, run: Run, ticket: RegistrationTicket) -> bool:  # noqa: C901 - Complex ticket eligibility logic
         """Determine if a ticket type should be skipped for the current member.
 
         This method checks various conditions to determine whether a specific ticket
@@ -562,7 +565,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Handle filler ticket visibility based on event config and member status
         elif ticket.tier == TicketTier.FILLER:
-            filler_alway = get_event_config(event.id, "filler_always", default_value=False)
+            filler_alway = get_event_config(event.id, "filler_always", default_value=False, context=self.params)
             if filler_alway:
                 # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
@@ -596,7 +599,7 @@ class RegistrationForm(BaseRegistrationForm):
                 try:
                     # Look for registration with matching special code in same event
                     Registration.objects.get(special_cod=cod, run__event=run.event)
-                except Exception:
+                except Registration.DoesNotExist:
                     # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
 
@@ -604,6 +607,8 @@ class RegistrationForm(BaseRegistrationForm):
 
 
 class RegistrationGiftForm(RegistrationForm):
+    """Form for RegistrationGift."""
+
     gift = True
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -612,9 +617,7 @@ class RegistrationGiftForm(RegistrationForm):
 
         # Build list of fields to keep: base fields plus giftable questions
         keep = ["run", "ticket"]
-        for q in self.questions:
-            if q.giftable:
-                keep.append("q" + str(q.id))
+        keep.extend(["q" + str(q.id) for q in self.questions if q.giftable])
 
         # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]
@@ -628,13 +631,15 @@ class RegistrationGiftForm(RegistrationForm):
 
 
 class OrgaRegistrationForm(BaseRegistrationForm):
+    """Form for OrgaRegistration."""
+
     page_info = _("Manage event signups")
 
     page_title = _("Registrations")
 
-    load_templates = ["share"]
+    load_templates: ClassVar[list] = ["share"]
 
-    load_js = ["characters-reg-choices"]
+    load_js: ClassVar[list] = ["characters-reg-choices"]
 
     class Meta:
         model = Registration
@@ -656,7 +661,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             "payment_date",
         )
 
-        widgets = {"member": AssociationMemberS2Widget}
+        widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def get_automatic_field(self) -> set[str]:
         """Get automatic field names, excluding 'run' from parent's set."""
@@ -727,7 +732,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
 
-    def init_additionals(self, registration_section) -> None:
+    def init_additionals(self, registration_section: Any) -> None:
         """Initialize additional tickets section if feature is enabled."""
         # Check if additional tickets feature is available
         if "additional_tickets" not in self.params["features"]:
@@ -756,11 +761,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.params["run"].event_id,
             "pay_what_you_want_label",
             default_value=_("Free donation"),
+            context=self.params,
         )
         self.fields["pay_what"].help_text = get_event_config(
             self.params["run"].event_id,
             "pay_what_you_want_descr",
             default_value=_("Freely indicate the amount of your donation"),
+            context=self.params,
         )
 
     def init_ticket(self, registration_section: Any) -> None:
@@ -805,7 +812,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.initial["quotas"] = self.instance.quotas
         self.sections["id_quotas"] = registration_section
 
-    def init_character(self, char_section) -> None:
+    def init_character(self, char_section: Any) -> None:  # noqa: C901 - Complex character field initialization with feature-dependent logic
         """Initialize character selection fields in registration forms.
 
         Manages character assignment options based on event configuration
@@ -864,7 +871,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
                 self.fields[qt_id] = forms.ChoiceField(required=True, choices=choices, label=qt["name"])
 
-    def clean_member(self):
+    def clean_member(self) -> Any:
         """Validate member field to prevent duplicate registrations.
 
         Returns:
@@ -893,7 +900,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         return data
 
-    def clean_pay_what(self):
+    def clean_pay_what(self) -> Any:
         """Ensure pay_what has a valid integer value, defaulting to 0 if None or empty.
 
         Returns:
@@ -909,16 +916,16 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         character_registrations = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
         return character_registrations.values_list("character_id", flat=True)
 
-    def _save_multi(self, s: str, instance) -> None:
+    def _save_multi(self, field: str, instance: Registration) -> None:
         """Save multi-character relationships for registration.
 
         Args:
-            s: Field name being saved
+            field: Field name being saved
             instance: Registration instance
 
         """
-        if s != "characters_new":
-            return super()._save_multi(s, instance)
+        if field != "characters_new":
+            return super()._save_multi(field, instance)
 
         # Get current and new character sets
         old = set(self.get_init_multi_character())
@@ -933,7 +940,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             RegistrationCharacterRel.objects.create(character_id=ch, reg_id=instance.pk)
         return None
 
-    def clean_characters_new(self):
+    def clean_characters_new(self) -> Any:
         """Validate that new character assignments don't conflict with existing registrations.
 
         Returns:
@@ -964,6 +971,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
 
 class RegistrationCharacterRelForm(MyForm):
+    """Form for RegistrationCharacterRel."""
+
     class Meta:
         model = RegistrationCharacterRel
         exclude = ("reg", "character")
@@ -980,9 +989,15 @@ class RegistrationCharacterRelForm(MyForm):
         dl = ["profile"]
 
         # Check event config for each custom character field and mark for deletion if disabled
-        for s in ["name", "pronoun", "song", "public", "private"]:
-            if not get_event_config(self.params["event"].id, "custom_character_" + s, default_value=False):
-                dl.append(s)
+        dl.extend(
+            [
+                s
+                for s in ["name", "pronoun", "song", "public", "private"]
+                if not get_event_config(
+                    self.params["event"].id, "custom_character_" + s, default_value=False, context=self.params
+                )
+            ]
+        )
 
         # Set default custom_name from character if not already in initial data
         if "custom_name" not in self.initial or not self.initial["custom_name"]:
@@ -994,6 +1009,8 @@ class RegistrationCharacterRelForm(MyForm):
 
 
 class OrgaRegistrationTicketForm(MyForm):
+    """Form for OrgaRegistrationTicket."""
+
     page_info = _("Manage ticket types for participant registration")
 
     page_title = _("Tickets")
@@ -1002,7 +1019,7 @@ class OrgaRegistrationTicketForm(MyForm):
         model = RegistrationTicket
         fields = "__all__"
         exclude = ("number", "order")
-        widgets = {
+        widgets: ClassVar[dict] = {
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
@@ -1011,7 +1028,7 @@ class OrgaRegistrationTicketForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Configure tier field based on available tiers for the event
-        tiers = self.get_tier_available(self.params["run"].event)
+        tiers = self.get_tier_available(self.params["run"].event, self.params)
         if len(tiers) > 1:
             self.fields["tier"].choices = tiers
         else:
@@ -1026,7 +1043,7 @@ class OrgaRegistrationTicketForm(MyForm):
             self.delete_field("giftable")
 
     @staticmethod
-    def get_tier_available(event) -> list[tuple[str, str]]:
+    def get_tier_available(event: Event, context: dict) -> list[tuple[str, str]]:
         """Get available ticket tiers based on event features and configuration.
 
         Filters ticket tiers by checking if required features are enabled for the event
@@ -1036,6 +1053,7 @@ class OrgaRegistrationTicketForm(MyForm):
         Args:
             event: Event instance to check tier availability for. Must have
                   get_config method and id attribute.
+            context: Dict with context information
 
         Returns:
             List of available ticket tier tuples in format (value, label).
@@ -1079,9 +1097,10 @@ class OrgaRegistrationTicketForm(MyForm):
                 continue
 
             # Skip ticket tiers that require configuration options not set
-            if tier_value in ticket_configs:
-                if not get_event_config(event.id, f"ticket_{ticket_configs[tier_value]}", default_value=False):
-                    continue
+            if tier_value in ticket_configs and not get_event_config(
+                event.id, f"ticket_{ticket_configs[tier_value]}", default_value=False, context=context
+            ):
+                continue
 
             # Add tier to available options if all checks pass
             available_tiers.append(tier_choice)
@@ -1090,32 +1109,36 @@ class OrgaRegistrationTicketForm(MyForm):
 
 
 class OrgaRegistrationSectionForm(MyForm):
+    """Form for OrgaRegistrationSection."""
+
     page_info = _("Manage signup form sections")
 
     page_title = _("Form section")
 
     class Meta:
         model = RegistrationSection
-        exclude = ["order"]
+        exclude: ClassVar[list] = ["order"]
 
 
 class OrgaRegistrationQuestionForm(MyForm):
+    """Form for OrgaRegistrationQuestion."""
+
     page_info = _("Manage signup form questions")
 
     page_title = _("Form element")
 
     class Meta:
         model = RegistrationQuestion
-        exclude = ["order"]
+        exclude: ClassVar[list] = ["order"]
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "factions": FactionS2WidgetMulti,
             "tickets": TicketS2WidgetMulti,
             "allowed": AllowedS2WidgetMulti,
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize RegistrationQuestionForm with event-specific question configuration.
 
         Args:
@@ -1201,14 +1224,16 @@ class OrgaRegistrationQuestionForm(MyForm):
 
 
 class OrgaRegistrationOptionForm(MyForm):
+    """Form for OrgaRegistrationOption."""
+
     page_info = _("Manage signup form question options")
 
     page_title = _("Form Options")
 
     class Meta:
         model = RegistrationOption
-        exclude = ["order"]
-        widgets = {"question": forms.HiddenInput()}
+        exclude: ClassVar[list] = ["order"]
+        widgets: ClassVar[dict] = {"question": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set question field from params if provided."""
@@ -1220,6 +1245,8 @@ class OrgaRegistrationOptionForm(MyForm):
 
 
 class OrgaRegistrationQuotaForm(MyForm):
+    """Form for OrgaRegistrationQuota."""
+
     page_info = _("Manage dynamic payment installments for participants")
 
     page_title = _("Dynamic rates")
@@ -1230,6 +1257,8 @@ class OrgaRegistrationQuotaForm(MyForm):
 
 
 class OrgaRegistrationInstallmentForm(MyForm):
+    """Form for OrgaRegistrationInstallment."""
+
     page_info = _("Manage fixed payment installments for participants")
 
     page_title = _("Fixed instalments")
@@ -1238,7 +1267,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
         model = RegistrationInstallment
         exclude = ("number",)
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "date_deadline": DatePickerInput,
             "tickets": TicketS2WidgetMulti,
         }
@@ -1265,6 +1294,8 @@ class OrgaRegistrationInstallmentForm(MyForm):
 
 
 class OrgaRegistrationSurchargeForm(MyForm):
+    """Form for OrgaRegistrationSurcharge."""
+
     page_info = _("Manage registration surcharges")
 
     page_title = _("Surcharge")
@@ -1273,11 +1304,13 @@ class OrgaRegistrationSurchargeForm(MyForm):
         model = RegistrationSurcharge
         exclude = ("number",)
 
-        widgets = {"date": DatePickerInput}
+        widgets: ClassVar[dict] = {"date": DatePickerInput}
 
 
 class PreRegistrationForm(forms.Form):
-    def __init__(self, *args, **kwargs) -> None:
+    """Form for PreRegistration."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize PreRegistrationForm with context-based field configuration.
 
         Args:

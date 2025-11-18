@@ -17,6 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -27,8 +30,12 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,
 )
-from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration, RegistrationTicket
+
+if TYPE_CHECKING:
+    from decimal import Decimal
+
+    from larpmanager.models.event import Run
 
 
 def round_to_nearest_cent(amount: float) -> float:
@@ -66,7 +73,7 @@ def round_to_nearest_cent(amount: float) -> float:
     return float(amount)
 
 
-def get_registration_accounting_cache_key(run_id) -> str:
+def get_registration_accounting_cache_key(run_id: int) -> str:
     """Generate cache key for registration accounting data.
 
     Args:
@@ -79,7 +86,7 @@ def get_registration_accounting_cache_key(run_id) -> str:
     return f"registration_accounting_{run_id}"
 
 
-def clear_registration_accounting_cache(run_id) -> None:
+def clear_registration_accounting_cache(run_id: int) -> None:
     """Reset registration accounting cache for a run.
 
     Args:
@@ -90,7 +97,7 @@ def clear_registration_accounting_cache(run_id) -> None:
     cache.delete(cache_key)
 
 
-def _get_accounting_context(run: Run, member_filter=None) -> tuple[dict, dict, dict]:
+def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple[dict, dict, dict]:
     """Get the context data needed for accounting calculations.
 
     This function retrieves and organizes data required for accounting operations
@@ -188,7 +195,7 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
                 # Remove cache entry if it belongs to this run and member
                 if registration.run_id == run.id:
                     cached_accounting_data.pop(registration_id, None)
-            except ObjectDoesNotExist:
+            except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip deleted registrations
                 # Skip if registration no longer exists
                 pass
     else:
@@ -275,7 +282,12 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
     return accounting_cache
 
 
-def _calculate_registration_accounting(reg, reg_tickets: dict, cache_aip: dict, features: dict) -> dict:
+def _calculate_registration_accounting(
+    reg: Registration,
+    reg_tickets: dict[int, RegistrationTicket],
+    cache_aip: dict[int, dict[str, Decimal]],
+    features: dict[str, Any],
+) -> dict[str, float]:
     """Calculate accounting data for a single registration.
 
     Computes financial totals, payment breakdowns, and remaining balances

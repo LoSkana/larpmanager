@@ -19,8 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from gettext import GNUTranslations
+from typing import Any
 
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.utils import translation as dj_translation
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import trans_real
@@ -72,9 +73,9 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
         assoc_trans = AssociationTranslations(base_translation, overrides)
 
         # Replace the thread-local active translation with our custom one
-        trans_real._active.value = assoc_trans
+        trans_real._active.value = assoc_trans  # noqa: SLF001  # Django translation internal
 
-    def process_response(self, request, response):
+    def process_response(self, request: HttpRequest, response: HttpResponse) -> HttpResponse:  # noqa: ARG002
         """Clean up translation overrides after processing the request.
 
         Args:
@@ -86,7 +87,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
 
         """
         # Restore default translation behavior for the next request
-        trans_real._active.value = None
+        trans_real._active.value = None  # noqa: SLF001  # Django translation internal
         dj_translation.deactivate_all()
         return response
 
@@ -107,7 +108,7 @@ class AssociationTranslations(GNUTranslations):
 
     """
 
-    def __init__(self, base_translation, overrides: dict[str, str]) -> None:
+    def __init__(self, base_translation: Any, overrides: dict[str, str]) -> None:
         """Initialize the translation wrapper with base translations and overrides.
 
         Args:

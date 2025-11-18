@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+from typing import Any
 
 from django.core.management.base import BaseCommand
 
@@ -39,7 +40,7 @@ class Command(BaseCommand):
 
     help = "Check status of pending payments across all payment gateways"
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle command execution with exception handling.
 
         Args:
@@ -52,7 +53,7 @@ class Command(BaseCommand):
             # Future payment gateway checks can be added here
         except Exception as e:
             notify_admins("Check Payments", "Error checking payments", e)
-            logger.exception("Error in check_payments command: %s", e)
+            logger.exception("Error in check_payments command")
 
     def check_satispay_payments(self) -> None:
         """Check all pending Satispay payments and verify their status.
@@ -87,7 +88,7 @@ class Command(BaseCommand):
                 satispay_verify({"association_id": payment_invoice.association_id}, payment_invoice.cod)
                 successfully_verified_count += 1
 
-            except Exception as verification_error:
+            except Exception as verification_error:  # noqa: PERF203, BLE001 - Batch operation must continue on any API error
                 # Log verification failures but continue processing other payments
                 logger.warning("Failed to verify Satispay payment %s: %s", payment_invoice.cod, verification_error)
 

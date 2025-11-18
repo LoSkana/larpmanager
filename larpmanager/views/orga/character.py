@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import contextlib
 from typing import Any
 
@@ -76,7 +78,7 @@ from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, w
 from larpmanager.utils.writing import writing_list, writing_versions, writing_view
 
 
-def get_character_optimized(context, num) -> None:
+def get_character_optimized(context: dict[str, Any], num: int) -> None:
     """Get character with optimized queries for editing.
 
     Args:
@@ -182,7 +184,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, num: int) -> Htt
     return writing_edit(request, context, OrgaCharacterForm, "character", TextVersionChoices.CHARACTER)
 
 
-def _characters_relationships(context) -> None:
+def _characters_relationships(context: dict[str, Any]) -> None:
     """Set up character relationships data and widgets for editing.
 
     Args:
@@ -437,7 +439,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
 
 
 @login_required
-def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse:
+def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type: str) -> JsonResponse | None:
     """Generate email data for writing form options by character choices.
 
     This function processes writing form questions and returns email data
@@ -515,7 +517,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
 
 @login_required
-def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:
+def orga_character_form(request: HttpRequest, event_slug: str) -> HttpResponseRedirect:  # noqa: ARG001
     """Redirect to writing form view with character type."""
     return redirect("orga_writing_form", event_slug=event_slug, writing_type="character")
 
@@ -660,13 +662,15 @@ def orga_writing_form_edit(request: HttpRequest, event_slug: str, writing_type: 
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
         # For choice questions, ensure at least one option exists
-        elif context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-            if not WritingOption.objects.filter(question_id=context["saved"].id).exists():
-                edit_option = True
-                messages.warning(
-                    request,
-                    _("You must define at least one option before saving a single-choice or multiple-choice question"),
-                )
+        elif (
+            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+            and not WritingOption.objects.filter(question_id=context["saved"].id).exists()
+        ):
+            edit_option = True
+            messages.warning(
+                request,
+                _("You must define at least one option before saving a single-choice or multiple-choice question"),
+            )
 
         # Redirect to option editing if needed, otherwise back to form list
         if edit_option:
@@ -895,7 +899,9 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/writing/check.html", context)
 
 
-def check_relations(character_cache, validation_checks, character_numbers, context, number_to_id_map) -> None:
+def check_relations(
+    character_cache: Any, validation_checks: Any, character_numbers: Any, context: dict[str, Any], number_to_id_map: Any
+) -> None:
     """Check character relationships for missing and extinct references.
 
     Args:
@@ -934,7 +940,9 @@ def check_relations(character_cache, validation_checks, character_numbers, conte
                 )
 
 
-def check_writings(cache, checks, character_numbers, context, character_id_to_number_map) -> None:
+def check_writings(
+    cache: Any, checks: Any, character_numbers: Any, context: dict[str, Any], character_id_to_number_map: Any
+) -> None:
     """Validate writing submissions and requirements for different element types.
 
     Args:
@@ -977,10 +985,9 @@ def check_writings(cache, checks, character_numbers, context, character_id_to_nu
                 checks[element_name + "_missing"].append((element, missing_character))
             for interloper_character in list(set(characters_from_relations) - set(characters_from_text)):
                 checks[element_name + "_interloper"].append((element, interloper_character))
-                # cache[nm][f.number] = (str(f), from_text)
 
 
-def check_speedlarp(checks, context, id_number_map) -> None:
+def check_speedlarp(checks: Any, context: dict[str, Any], id_number_map: Any) -> None:
     """Validate speedlarp character configurations.
 
     Args:
@@ -1015,7 +1022,7 @@ def check_speedlarp(checks, context, id_number_map) -> None:
 
 
 def check_speedlarp_prepare(
-    element,
+    element: Any,
     character_id_to_number_map: dict[int, int],
     character_speeds: dict[int, dict[str, list[str]]],
 ) -> None:
@@ -1037,7 +1044,7 @@ def check_speedlarp_prepare(
 
 
 @require_POST
-def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResponse:
+def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResponse | None:
     """Get the number attribute for a Trait or Character element.
 
     Args:
@@ -1101,14 +1108,14 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
     # Initialize character counter HTML for length validation
     counter = ""
-    if context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]:
-        if context["question"].max_length:
-            # Set appropriate label for multiple choice vs text fields
-            name = _("options") if context["question"].typ == "m" else "text length"
-            # Generate counter display with current/max length format
-            counter = (
-                f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
-            )
+    if (
+        context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]
+        and context["question"].max_length
+    ):
+        # Set appropriate label for multiple choice vs text fields
+        name = _("options") if context["question"].typ == "m" else "text length"
+        # Generate counter display with current/max length format
+        counter = f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
 
     # Prepare localized labels and form field references
     confirm = _("Confirm")
@@ -1141,7 +1148,7 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
 
 @require_POST
-def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_type):
+def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_type: Any) -> Any:
     """Handle Excel submission for writing data with validation.
 
     Args:
@@ -1265,7 +1272,7 @@ def _get_excel_form(
     return context
 
 
-def _get_question_update(context: dict, element) -> str:
+def _get_question_update(context: dict, element: Any) -> str:
     """Generate question update HTML for different question types.
 
     Creates appropriate HTML content for updating questions based on their type,

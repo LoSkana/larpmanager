@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 
 from larpmanager.tests.utils import (
@@ -30,7 +32,7 @@ from larpmanager.tests.utils import (
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_features_all(pw_page) -> None:
+def test_orga_features_all(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -44,7 +46,7 @@ def test_orga_features_all(pw_page) -> None:
     _checkboxes(page, False)
 
 
-def visit_all(page, live_server) -> None:
+def visit_all(page: Any, live_server: Any) -> None:
     # Visit every link
     visited_links = set()
     links_to_visit = {live_server + "/manage/"}

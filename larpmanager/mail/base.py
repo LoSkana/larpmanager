@@ -17,13 +17,17 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from datetime import datetime, timedelta
+from __future__ import annotations
+
+from datetime import timedelta
+from typing import TYPE_CHECKING, Any
 
 import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -35,9 +39,11 @@ from larpmanager.models.association import Association, get_association_maintain
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
-from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.tasks import my_send_mail
+
+if TYPE_CHECKING:
+    from larpmanager.models.registration import Registration
 
 
 def check_holiday() -> bool:
@@ -52,7 +58,7 @@ def check_holiday() -> bool:
 
     """
     # Get current date
-    today = datetime.now().date()
+    today = timezone.now().date()
 
     # Check holidays in major countries
     for country_code in ["US", "IT", "CN", "UK"]:
@@ -65,7 +71,7 @@ def check_holiday() -> bool:
     return False
 
 
-def join_email(association) -> None:
+def join_email(association: Any) -> None:
     """Send welcome emails to association executives when they join.
 
     Args:
@@ -94,7 +100,7 @@ def join_email(association) -> None:
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender, **kwargs) -> None:
+def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.
@@ -150,36 +156,57 @@ def on_association_roles_m2m_changed(sender, **kwargs) -> None:
 
         # Process each member being added to the role
         for mid in pk_set:
-            mb = Member.objects.get(pk=mid)
-            # Trigger member association join process
-            mb.join(instance.association)
-            # Invalidate cached permissions for this member
-            reset_event_links(mb.id, instance.association_id)
-
-            # Send role approval notification to the member
-            # Set language context for proper localization
-            activate(mb.language)
-            subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
-            url = get_url("manage", instance.association)
-            body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
-            my_send_mail(subj, body, mb, instance.association)
-
-            # Notify existing executives about the new role assignment
-            # Skip notification to the member who just received the role
-            for m in exes:
-                if m.pk == int(mid):
-                    continue
-                # Set language context for each executive
-                activate(m.language)
-                subj = hdr(instance.association) + _("Approval %(user)s as %(role)s") % {
-                    "user": mb,
-                    "role": instance.name,
-                }
-                body = _("The user has been assigned the specified role") + "."
-                my_send_mail(subj, body, m, instance.association)
+            _add_member_association_role(exes, instance, mid)
 
 
-def on_event_roles_m2m_changed(sender: type, **kwargs) -> None:
+def _add_member_association_role(exes: list[Member], instance: AssociationRole, mid: int | str) -> None:
+    """Add a member to an association role and send notifications.
+
+    Processes a new association role assignment by adding the member to the association,
+    invalidating cached permissions, and sending notification emails to both the new
+    member and existing executives.
+
+    Args:
+        exes: List of executive members who should be notified of the role assignment
+        instance: AssociationRole instance representing the role being assigned
+        mid: Member ID (int or str) of the member receiving the role
+
+    Side Effects:
+        - Adds member to association via join() method
+        - Invalidates cached permissions for the member
+        - Sends email notification to the new role holder
+        - Sends email notifications to all other executives about the assignment
+
+    """
+    mb = Member.objects.get(pk=mid)
+    # Trigger member association join process
+    mb.join(instance.association)
+    # Invalidate cached permissions for this member
+    reset_event_links(mb.id, instance.association_id)
+    # Send role approval notification to the member
+    # Set language context for proper localization
+    activate(mb.language)
+    subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
+    url = get_url("manage", instance.association)
+    body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
+    my_send_mail(subj, body, mb, instance.association)
+
+    # Notify existing executives about the new role assignment
+    # Skip notification to the member who just received the role
+    for m in exes:
+        if m.pk == int(mid):
+            continue
+        # Set language context for each executive
+        activate(m.language)
+        subj = hdr(instance.association) + _("Approval %(user)s as %(role)s") % {
+            "user": mb,
+            "role": instance.name,
+        }
+        body = _("The user has been assigned the specified role") + "."
+        my_send_mail(subj, body, m, instance.association)
+
+
+def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle event role changes and send notifications.
 
     Args:
@@ -388,8 +415,8 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
 
 
 def mail_confirm_casting(
-    member,
-    run,
+    member: Any,
+    run: Any,
     preference_category_name: str,
     selected_preferences: list,
     elements_to_avoid: str,
@@ -580,7 +607,7 @@ def get_exec_language(association: Association) -> str:
     return max(language_counts, key=language_counts.get) if language_counts else "en"
 
 
-def send_support_ticket_email(instance) -> None:
+def send_support_ticket_email(instance: Any) -> None:
     """Send ticket notification email to admins and association maintainers.
 
     Args:

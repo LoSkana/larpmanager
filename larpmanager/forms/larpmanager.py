@@ -17,12 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
-from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
@@ -31,8 +32,11 @@ from larpmanager.forms.base import MyForm
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.common import get_recaptcha_secrets
 
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
-def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
+
+def _get_captcha(form: forms.Form, request: HttpRequest | None) -> None:
     """Add reCAPTCHA field to form if secrets are configured."""
     # Get reCAPTCHA public and private keys from settings
     recaptcha_public_key, recaptcha_private_key = get_recaptcha_secrets(request)
@@ -49,6 +53,8 @@ def _get_captcha(form: forms.Form, request: HttpRequest) -> None:
 
 
 class LarpManagerCheck(forms.Form):
+    """Represents LarpManagerCheck model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure CAPTCHA if needed."""
         # Extract request from kwargs for CAPTCHA configuration
@@ -58,6 +64,8 @@ class LarpManagerCheck(forms.Form):
 
 
 class LarpManagerContact(LarpManagerCheck):
+    """Represents LarpManagerContact model."""
+
     email = forms.EmailField(required=True, label="", widget=forms.EmailInput(attrs={"placeholder": "Email"}))
 
     content = forms.CharField(
@@ -74,11 +82,11 @@ class LarpManagerContact(LarpManagerCheck):
         widget=forms.TextInput(attrs={"placeholder": _("The name of our hobby, four letters")}),
     )
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize delete association form."""
         super().__init__(*args, **kwargs)
 
-    def clean_verification(self):
+    def clean_verification(self) -> str:
         """Validate that the verification field contains 'larp'."""
         verification = self.cleaned_data.get("verification", "")
         if verification.strip().lower() != "larp":
@@ -87,10 +95,12 @@ class LarpManagerContact(LarpManagerCheck):
 
 
 class LarpManagerTicketForm(MyForm):
+    """Form for LarpManagerTicket."""
+
     class Meta:
         model = LarpManagerTicket
         fields = ("email", "content", "screenshot")
-        widgets = {"content": Textarea(attrs={"rows": 5})}
+        widgets: ClassVar[dict] = {"content": Textarea(attrs={"rows": 5})}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and setup captcha for unauthenticated users."""

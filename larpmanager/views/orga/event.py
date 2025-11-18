@@ -17,13 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import logging
-import traceback
 from collections import defaultdict
+from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Prefetch
+from django.db.models import F, Prefetch, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -46,7 +48,7 @@ from larpmanager.forms.event import (
     OrgaRunForm,
 )
 from larpmanager.forms.writing import UploadElementsForm
-from larpmanager.models.access import EventPermission, EventRole
+from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, EventButton, EventText, Run
@@ -68,6 +70,9 @@ from larpmanager.utils.download import (
 )
 from larpmanager.utils.edit import backend_edit, orga_edit
 from larpmanager.utils.upload import go_upload
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +159,12 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/orga/roles.html", context)
 
 
-def prepare_roles_list(context, permission_type, role_queryset, default_callback) -> None:
+def prepare_roles_list(
+    context: dict[str, Any],
+    permission_type: type[EventPermission | AssociationPermission],
+    role_queryset: QuerySet[EventRole] | QuerySet[AssociationRole],
+    default_callback: Callable[[dict], EventRole | AssociationRole],
+) -> None:
     """Prepare role list with permissions organized by module for display.
 
     Builds a formatted list of roles with their members and grouped permissions,
@@ -166,7 +176,10 @@ def prepare_roles_list(context, permission_type, role_queryset, default_callback
         "feature__name",
         "name",
     )
-    roles = role_queryset.order_by("number").prefetch_related(Prefetch("permissions", queryset=permissions_queryset))
+    roles = role_queryset.order_by("number").prefetch_related(
+        Prefetch("permissions", queryset=permissions_queryset),
+        "members",
+    )
     context["list"] = []
     if not roles:
         context["list"].append(default_callback(context))
@@ -223,13 +236,13 @@ def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render the event run edit form with cached run data."""
     # Retrieve cached run data and render edit form
-    run = get_cache_run(request.association["id"], event_slug)
+    run_id = get_cache_run(request.association["id"], event_slug)
     return orga_edit(
         request,
         event_slug,
         "orga_event",
         OrgaRunForm,
-        run,
+        run_id,
         "manage",
         additional_context={"add_another": False},
     )
@@ -279,7 +292,7 @@ def orga_config(
 
 
 @login_required
-def orga_features(request: HttpRequest, event_slug: str):
+def orga_features(request: HttpRequest, event_slug: str) -> Any:
     """Manage event features activation and configuration.
 
     Args:
@@ -567,7 +580,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
         if form.is_valid():
             try:
                 # Process the uploaded file and get processing logs
-                context["logs"] = go_upload(request, context, form)
+                context["logs"] = go_upload(context, form)
                 context["redr"] = redr
 
                 # Show success message and render results page
@@ -576,8 +589,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
 
             except Exception as exp:
                 # Log the full traceback and show error to user
-                logger.exception("Upload error: %s", exp)
-                logger.exception(traceback.format_exc())
+                logger.exception("Upload error")
                 messages.error(request, _("Unknow error on upload") + f": {exp}")
 
             # Redirect back to the main page on error or completion
@@ -661,7 +673,7 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
     return zip_exports(context, exports, "template")
 
 
-def _ability_template(context):
+def _ability_template(context: dict[str, Any]) -> Any:
     """Generate template for ability uploads with example data.
 
     Args:
@@ -796,8 +808,7 @@ def _reg_template(
     column_keys.extend(context["fields"])
 
     # Add values for dynamic fields based on field type mapping
-    for field_type in context["fields"].values():
-        row_values.append(value_mapping[field_type])
+    row_values.extend([value_mapping[field_type] for field_type in context["fields"].values()])
 
     # Create export tuple with template name, keys, and values
     return [(f"{template_type} - template", column_keys, [row_values])]

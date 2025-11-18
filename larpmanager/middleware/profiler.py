@@ -20,7 +20,6 @@
 
 import logging
 from collections.abc import Callable
-from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.utils.timezone import now
@@ -31,6 +30,8 @@ logger = logging.getLogger(__name__)
 
 
 class ProfilerMiddleware:
+    """Middleware for Profiler."""
+
     threshold = 0.5
 
     def __init__(self, get_response: Callable) -> None:
@@ -57,7 +58,7 @@ class ProfilerMiddleware:
 
         """
         # Record the start timestamp for duration calculation
-        request._profiler_start_ts = now()
+        request._profiler_start_ts = now()  # noqa: SLF001  # Internal profiling attribute
 
         # Process the request through the view function
         response = self.get_response(request)
@@ -65,7 +66,7 @@ class ProfilerMiddleware:
         # Check if profiling is enabled for this request
         if hasattr(request, "_profiler_func_name"):
             # Calculate the total execution duration
-            duration = (now() - request._profiler_start_ts).total_seconds()
+            duration = (now() - request._profiler_start_ts).total_seconds()  # noqa: SLF001  # Internal profiling attribute
 
             # Only emit signal if duration exceeds the threshold
             if duration >= self.threshold:
@@ -77,10 +78,10 @@ class ProfilerMiddleware:
                         domain=request.get_host(),
                         path=request.get_full_path(),
                         method=request.method,
-                        view_func_name=request._profiler_func_name,
+                        view_func_name=request._profiler_func_name,  # noqa: SLF001  # Internal profiling attribute
                         duration=duration,
                     )
-                except Exception as err:
+                except Exception as err:  # noqa: BLE001 - Profiler must never disrupt normal request handling
                     # Fail silently in production, but log for debugging
                     logger.warning("ProfilerMiddleware fail: %s", err)
 
@@ -90,14 +91,14 @@ class ProfilerMiddleware:
         self,
         request: HttpRequest,
         view_func: Callable,
-        view_args: tuple,
-        view_kwargs: dict,
+        view_args: tuple,  # noqa: ARG002
+        view_kwargs: dict,  # noqa: ARG002
     ) -> None:
         """Store the view function name in the request for profiling."""
-        request._profiler_func_name = self._extract_view_func_name(view_func)
+        request._profiler_func_name = self._extract_view_func_name(view_func)  # noqa: SLF001  # Internal profiling attribute
 
     @staticmethod
-    def _extract_view_func_name(view_function: Any) -> str:
+    def _extract_view_func_name(view_function: Callable[..., HttpResponse]) -> str:
         """Extract the name from a Django view function or class-based view.
 
         Args:

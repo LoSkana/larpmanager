@@ -170,9 +170,6 @@ def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
     is_maintainer = False
 
     # Disable for now access to maintainers
-    # if context["member"]:
-    #     maintainers = get_association_maintainers(ticket.association)
-    #     is_maintainer = context["member"] in maintainers
 
     # Deny access if neither superuser nor maintainer
     if not (is_superuser or is_maintainer):

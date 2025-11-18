@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 
@@ -25,12 +26,11 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.access import AssociationPermission, EventPermission
-from larpmanager.models.association import Association
 
 logger = logging.getLogger(__name__)
 
 
-def association_permission_feature_key(permission_slug) -> str:
+def association_permission_feature_key(permission_slug: str) -> str:
     """Generate cache key for association permission features.
 
     Args:
@@ -109,12 +109,12 @@ def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict
     return cached_feature_data
 
 
-def clear_association_permission_cache(association: Association) -> None:
+def clear_association_permission_cache(association: AssociationPermission) -> None:
     """Clear the association permission cache for the given association."""
     cache.delete(association_permission_feature_key(association.slug))
 
 
-def event_permission_feature_key(permission_slug) -> str:
+def event_permission_feature_key(permission_slug: str) -> str:
     """Generate cache key for event permission features.
 
     Args:

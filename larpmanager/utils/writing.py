@@ -137,10 +137,10 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
                 context["progress_assigned_map"][key] += 1
 
     # Store simplified model type name for template usage
-    context["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]
+    context["typ"] = str(typ._meta).replace("larpmanager.", "")  # type: ignore[attr-defined]  # noqa: SLF001  # Django model metadata
 
 
-def writing_popup_question(context, idx, question_idx):
+def writing_popup_question(context: dict[str, Any], idx: Any, question_idx: Any) -> Any:
     """Get writing question data for popup display.
 
     Args:
@@ -225,7 +225,7 @@ def writing_popup(request: HttpRequest, context: dict[str, Any], typ: type[Model
     return JsonResponse({"k": 1, "v": html_content})
 
 
-def writing_example(context, typ):
+def writing_example(context: dict[str, Any], typ: Any) -> Any:
     """Generate example writing content for a given type.
 
     Args:
@@ -249,7 +249,7 @@ def writing_example(context, typ):
     return response
 
 
-def writing_post(request: HttpRequest, context: dict, writing_element_type, template_name) -> None:
+def writing_post(request: HttpRequest, context: dict, writing_element_type: Any, template_name: Any) -> None:
     """Handle POST requests for writing operations.
 
     Args:
@@ -275,7 +275,7 @@ def writing_post(request: HttpRequest, context: dict, writing_element_type, temp
         raise ReturnNowError(writing_popup(request, context, writing_element_type))
 
 
-def writing_list(
+def writing_list(  # noqa: C901 - Complex writing list building with feature-dependent filtering
     request: HttpRequest,
     context: dict[str, Any],
     writing_type: type[Model],
@@ -344,7 +344,7 @@ def writing_list(
     # Setup writing-specific context if writing elements exist
     if writing:
         # noinspection PyProtectedMember, PyUnresolvedReferences
-        context["label_typ"] = writing_type._meta.model_name
+        context["label_typ"] = writing_type._meta.model_name  # noqa: SLF001  # Django model metadata
         context["writing_typ"] = QuestionApplicable.get_applicable(context["label_typ"])
 
         # Configure upload/download paths if writing type is applicable
@@ -357,7 +357,7 @@ def writing_list(
         writing_list_text_fields(context, text_fields, writing_type)
 
         # Prepare final context elements for rendering
-        _prepare_writing_list(context, request)
+        _prepare_writing_list(context)
         _setup_char_finder(context, writing_type)
         _get_custom_form(context)
 
@@ -365,7 +365,7 @@ def writing_list(
     return render(request, "larpmanager/orga/writing/" + template_name + "s.html", context)
 
 
-def writing_bulk(context, request, typ) -> None:
+def writing_bulk(context: dict[str, Any], request: HttpRequest, typ: Any) -> None:
     """Handle bulk operations for different writing element types.
 
     Args:
@@ -383,7 +383,7 @@ def writing_bulk(context, request, typ) -> None:
         type_to_bulk_handler[typ](request, context)
 
 
-def _get_custom_form(context) -> None:
+def _get_custom_form(context: dict[str, Any]) -> None:
     """Set up custom form questions and field names for writing elements.
 
     Args:
@@ -410,7 +410,7 @@ def _get_custom_form(context) -> None:
             context["form_questions"][question.id] = question
 
 
-def writing_list_query(context: dict, event, model_type) -> tuple[list[str], bool]:
+def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list[str], bool]:
     """Build optimized database query for writing element lists.
 
     Constructs an efficient Django ORM query for retrieving writing elements
@@ -453,7 +453,7 @@ def writing_list_query(context: dict, event, model_type) -> tuple[list[str], boo
     return deferred_text_fields, is_writing_model
 
 
-def writing_list_text_fields(context, text_fields, writing_element_type) -> None:
+def writing_list_text_fields(context: dict[str, Any], text_fields: Any, writing_element_type: Any) -> None:
     """Add editor-type question fields to text fields list and retrieve cached data.
 
     Args:
@@ -470,7 +470,7 @@ def writing_list_text_fields(context, text_fields, writing_element_type) -> None
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
 
-def retrieve_cache_text_field(context, text_fields, element_type) -> None:
+def retrieve_cache_text_field(context: dict[str, Any], text_fields: Any, element_type: Any) -> None:
     """Retrieve and attach cached text field data to writing elements.
 
     Args:
@@ -491,14 +491,8 @@ def retrieve_cache_text_field(context, text_fields, element_type) -> None:
             setattr(element, field_name + "_ln", line_count)
 
 
-def _prepare_writing_list(context, request: HttpRequest) -> None:
-    """Prepare context data for writing list display and configuration.
-
-    Args:
-        context: Template context dictionary to update
-        request: HTTP request object with user information
-
-    """
+def _prepare_writing_list(context: dict[str, Any]) -> None:
+    """Prepare context data for writing list display and configuration."""
     try:
         name_question = (
             context["event"]
@@ -506,7 +500,7 @@ def _prepare_writing_list(context, request: HttpRequest) -> None:
             .filter(applicable=context["writing_typ"], typ=WritingQuestionType.NAME)
         )
         context["name_que_id"] = name_question.values_list("id", flat=True)[0]
-    except Exception as e:
+    except IndexError as e:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()
@@ -528,7 +522,7 @@ def _prepare_writing_list(context, request: HttpRequest) -> None:
     )
 
 
-def writing_list_plot(context) -> None:
+def writing_list_plot(context: dict[str, Any]) -> None:
     """Build character associations for plot list display.
 
     Args:
@@ -594,7 +588,7 @@ def writing_list_questtype(context: dict) -> None:
         quest_type.quest_rels = quest_type_relationships.get(quest_type.id, {}).get("quest_rels", [])
 
 
-def writing_list_char(context: dict) -> None:
+def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character enhancement with multiple feature integrations
     """Enhance character list with feature-specific data and relationships.
 
     This function modifies the character list in the context by adding feature-specific
@@ -661,7 +655,7 @@ def writing_list_char(context: dict) -> None:
     char_add_addit(context)
 
 
-def char_add_addit(context) -> None:
+def char_add_addit(context: dict[str, Any]) -> None:
     """Add additional configuration data to all characters in the context list.
 
     Args:
@@ -737,7 +731,7 @@ def writing_view(request: HttpRequest, context: dict[str, Any], element_type_nam
     return render(request, "larpmanager/orga/writing/view.html", context)
 
 
-def writing_versions(request: HttpRequest, context: dict, element_name, version_type):
+def writing_versions(request: HttpRequest, context: dict, element_name: Any, version_type: Any) -> Any:
     """Display text versions with diff comparison for writing elements.
 
     Args:
@@ -767,16 +761,8 @@ def writing_versions(request: HttpRequest, context: dict, element_name, version_
     return render(request, "larpmanager/orga/writing/versions.html", context)
 
 
-def replace_character_names_before_save(instance) -> None:
-    """Django signal handler to replace character names before saving.
-
-    Args:
-        sender: Model class sending the signal
-        instance: Character instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-
-    """
+def replace_character_names_before_save(instance: object) -> None:
+    """Django signal handler to replace character names before saving."""
     if not instance.pk:
         return
 

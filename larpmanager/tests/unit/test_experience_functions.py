@@ -20,16 +20,15 @@
 
 """Tests for experience point calculation functions"""
 
-from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
+from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.experience import (
     _apply_modifier_cost,
     check_available_ability_px,
     get_free_abilities,
     set_free_abilities,
 )
-from larpmanager.tests.unit.base import BaseTestCase
 
 
 class TestExperienceUtilityFunctions(BaseTestCase):
@@ -55,7 +54,6 @@ class TestExperienceUtilityFunctions(BaseTestCase):
 
     def test_set_free_abilities_basic(self) -> None:
         """Test set_free_abilities stores list"""
-        from unittest.mock import call
 
         character = MagicMock()
 

@@ -17,7 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.db.models import Q
@@ -26,18 +28,29 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.base import MyForm
-from larpmanager.models.association import Association
 from larpmanager.models.base import Feature, FeatureModule
+
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
+    from larpmanager.models.event import Event
 
 
 class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
+    """Represents FeatureCheckboxWidget model."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with optional feature help text."""
         # Extract and store feature help text from kwargs
         self.feature_help = kwargs.pop("help_text", {})
         super().__init__(*args, **kwargs)
 
-    def render(self, name: str, value: list[str] | None, attrs: dict[str, str] | None = None, renderer=None) -> str:
+    def render(
+        self,
+        name: str,
+        value: list[str] | None,
+        attrs: dict[str, str] | None = None,
+        renderer: Any = None,  # noqa: ARG002
+    ) -> str:
         """Render feature checkboxes with tooltips and help links.
 
         Generates HTML for a set of feature checkboxes, each with an associated tooltip
@@ -97,12 +110,14 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class FeatureForm(MyForm):
+    """Form for Feature."""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set cancellation prevention flag."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, *, is_association) -> None:
+    def _init_features(self, *, is_association: bool) -> None:
         """Initialize feature selection fields organized by modules.
 
         Args:
@@ -145,7 +160,7 @@ class FeatureForm(MyForm):
             if selected_feature_ids:
                 self.initial[f"mod_{feature_module.id}"] = selected_feature_ids
 
-    def _save_features(self, instance) -> None:
+    def _save_features(self, instance: Association | Event) -> None:
         """Save selected features to the instance.
 
         Args:
@@ -174,14 +189,16 @@ class FeatureForm(MyForm):
 
 
 class QuickSetupForm(MyForm):
-    setup = {}
+    """Form for QuickSetup."""
+
+    setup: ClassVar[dict] = {}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form and prevent cancellation."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def init_fields(self, features) -> None:
+    def init_fields(self, features: dict[str, int]) -> None:
         """Initialize form fields for quick setup configuration.
 
         Args:
@@ -224,7 +241,7 @@ class QuickSetupForm(MyForm):
 
         """
         # Save the base instance first
-        instance = super().save(commit=commit)
+        instance: Association = super().save(commit=commit)
 
         # Process form fields to separate features from configurations
         features = {}

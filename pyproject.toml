@@ -13,7 +13,7 @@ extend_exclude="static/,larpmanager/static/"
 
 [tool.ruff]
 line-length = 120
-extend-exclude = ["main"]
+extend-exclude = ["main", "*/migrations/*", "*/tests/*", "scripts/*", "manage.py"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -25,9 +25,7 @@ ignore = [
 	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
 	"E501", # Line too long, ignored to use ruff formatter
 	"D100", # Missing docstring in public module
-	"D101", # Missing docstring in public class, to be removed later,
 	"D104", # Missing docstring in public package
-	"D105", # Missing docstring in magic method
 	"D106", # Missing docstring in public nested class, would be useless on Meta
     "ANN401",  # Dynamically typed expressions (Any) are disallowed
     "COM812",  # Trailing comma missing (conflicts with formatter)
@@ -35,31 +33,6 @@ ignore = [
     "TD003",   # Missing issue link in TODO
     "FIX002",  # Line contains TODO
     "DJ001",  # TODO remove django-nullable-model-string-field
-    "ANN001",  # TODO remove Missing type annotation for functions
-    "ANN002",  # TODO remove Missing type annotation for *args
-    "ANN003",  # TODO remove Missing type annotation for **kwargs
-    "ANN201",  # TODO remove Missing return type annotation for public function
-    "ANN202",  # TODO remove Missing return type annotation for private function
-    "ANN204",  # TODO remove Missing return type annotation for special method
-    "ANN205",  # TODO remove Missing return type annotation for staticmethod
-    "ANN206",  # TODO remove Missing return type annotation for classmethod
-    "RUF012",  # TODO remove 	mutable-class-default
-    "ERA001",  # TODO remove 	commented-out-code
-    "ARG001",  # TODO remove 	unused-function-argument
-    "SLF001",  # TODO remove	private-member-access
-    "ARG002",  # TODO remove 	unused-method-argument
-    "PTH118",  # TODO remove 	os-path-join
-    "DTZ005",  # TODO remove 	call-datetime-now-without-tzinfo
-    "BLE001",  # TODO remove 	blind-except
-    "C901",  # TODO remove   	complex-structure
-    "PERF401",  # TODO remove	manual-list-comprehension
-    "SIM102",  # TODO remove 	collapsible-if
-    "DTZ002",  # TODO remove 	call-datetime-today
-    "PTH110",  # TODO remove 	os-path-exists
-    "INP001",  # TODO remove 	implicit-namespace-package
-    "TRY401",  # TODO remove 	verbose-log-message
-    "PERF203",  # TODO remove	try-except-in-loop
-    "PTH123",  # TODO remove 	builtin-open
 ]
 
 [tool.ruff.lint.pydocstyle]

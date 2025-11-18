@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.conf import settings as conf_settings
@@ -47,7 +47,6 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.models.access import EventPermission, EventRole
-from larpmanager.models.association import AssociationSkin
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -136,7 +135,7 @@ class OrgaEventForm(MyForm):
 
     page_info = _("Manage event settings")
 
-    load_templates = ["event"]
+    load_templates: ClassVar[list] = ["event"]
 
     class Meta:
         model = Event
@@ -158,9 +157,9 @@ class OrgaEventForm(MyForm):
             "association",
         )
 
-        widgets = {"slug": SlugInput, "parent": CampaignS2Widget}
+        widgets: ClassVar[dict] = {"slug": SlugInput, "parent": CampaignS2Widget}
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event form with field configuration based on context.
 
         Configures form fields dynamically based on activated features and
@@ -193,12 +192,12 @@ class OrgaEventForm(MyForm):
             self.fields["slug"].required = True
 
         # Build list of fields to delete based on disabled features
-        dl = []
-
         # Check each display-related feature and mark fields for removal if disabled
-        for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]:
-            if s not in self.params["features"]:
-                dl.append(s)
+        dl = [
+            s
+            for s in ["visible", "website", "tagline", "where", "authors", "genre", "register_link"]
+            if s not in self.params["features"]
+        ]
 
         # Initialize campaign parent selection and add to deletion list if disabled
         self.init_campaign(dl)
@@ -268,18 +267,18 @@ class OrgaFeatureForm(FeatureForm):
         "Manage features activated for this event and all its runs (click on a feature to show its description)",
     )
 
-    load_js = ["feature-search"]
+    load_js: ClassVar[list] = ["feature-search"]
 
     class Meta:
         model = Event
-        fields = []
+        fields: ClassVar[list] = []
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and features."""
         super().__init__(*args, **kwargs)
         self._init_features(is_association=False)
 
-    def save(self, commit: bool = True) -> EventConfig:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update event features cache.
 
         Args:
@@ -290,7 +289,7 @@ class OrgaFeatureForm(FeatureForm):
 
         """
         # Save form without committing to database yet
-        instance = super().save(commit=False)
+        instance: Event = super().save(commit=False)
 
         # Update associated features for this event
         self._save_features(instance)
@@ -310,7 +309,7 @@ class OrgaConfigForm(ConfigForm):
 
     section_replace = True
 
-    load_js = ["config-search"]
+    load_js: ClassVar[list] = ["config-search"]
 
     class Meta:
         model = Event
@@ -1022,7 +1021,7 @@ class OrgaAppearanceForm(MyCssForm):
         help_text=_("These CSS commands will be carried over to all pages in your Association space"),
     )
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with conditional field handling based on carousel feature."""
         super().__init__(*args, **kwargs)
 
@@ -1043,7 +1042,7 @@ class OrgaAppearanceForm(MyCssForm):
         for m in dl:
             del self.fields[m]
 
-    def save(self, commit: bool = True) -> AssociationSkin:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form and generate a unique CSS code for the skin."""
         # Generate unique 32-character identifier for CSS code
         self.instance.css_code = generate_id(32)
@@ -1064,7 +1063,7 @@ class OrgaAppearanceForm(MyCssForm):
         return "event_css"
 
     @staticmethod
-    def get_css_path(event_instance) -> str:
+    def get_css_path(event_instance: Event) -> str:
         """Generate CSS file path for event styling.
 
         Args:
@@ -1089,7 +1088,7 @@ class OrgaEventTextForm(MyForm):
         model = EventText
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event text form with feature-based field filtering.
 
         Filters available text types based on activated features and
@@ -1107,7 +1106,9 @@ class OrgaEventTextForm(MyForm):
         if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
-        if not get_event_config(self.params["event"].id, "user_character_approval", default_value=False):
+        if not get_event_config(
+            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+        ):
             delete_choice.extend(
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW],
             )
@@ -1183,12 +1184,12 @@ class OrgaEventRoleForm(MyForm):
 
     page_info = _("Manage event access roles")
 
-    load_templates = ["share"]
+    load_templates: ClassVar[list] = ["share"]
 
     class Meta:
         model = EventRole
         fields = ("name", "members", "event")
-        widgets = {"members": AssociationMemberS2WidgetMulti}
+        widgets: ClassVar[dict] = {"members": AssociationMemberS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure members widget with association context."""
@@ -1198,9 +1199,9 @@ class OrgaEventRoleForm(MyForm):
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> EventRole:  # noqa: FBT001, FBT002, ARG002
         """Save form instance and update role permissions."""
-        instance = super().save()
+        instance: EventRole = super().save()
         save_permissions_role(instance, self)
         return instance
 
@@ -1226,13 +1227,13 @@ class OrgaRunForm(ConfigForm):
         model = Run
         exclude = ("balance", "number", "plan", "paid")
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "start": DatePickerInput,
             "end": DatePickerInput,
             "registration_open": DateTimePickerInput,
         }
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize RunForm with event-specific configuration and field setup.
 
         Args:
@@ -1284,28 +1285,32 @@ class OrgaRunForm(ConfigForm):
             for value, label in self.fields["development"].choices
         )
 
-        for s in ["registration_open", "registration_secret"]:
-            if not self.instance.pk or not self.instance.event or s not in self.params["features"]:
-                dl.append(s)
+        dl.extend(
+            [
+                s
+                for s in ["registration_open", "registration_secret"]
+                if not self.instance.pk or not self.instance.event or s not in self.params["features"]
+            ]
+        )
 
         for s in dl:
             del self.fields[s]
 
         self.show_sections = True
 
-    def set_configs(self):
+    def set_configs(self) -> None:  # noqa: C901 - Complex form configuration with feature-dependent field setup
         """Configure event-specific form fields and sections.
 
         Sets up various event features and their configuration options
         based on enabled features for character management.
         """
-        config_list = []
-
         if "character" not in self.params["features"]:
-            return config_list
+            return
 
-        if not get_event_config(self.params["event"].id, "writing_field_visibility", default_value=False):
-            return None
+        if not get_event_config(
+            self.params["event"].id, "writing_field_visibility", default_value=False, context=self.params
+        ):
+            return
 
         help_text = _(
             "Selected fields will be displayed as follows: public fields visible to all participants, "
@@ -1373,9 +1378,7 @@ class OrgaRunForm(ConfigForm):
                 writing_element_label,
             )
 
-        return config_list
-
-    def clean(self) -> dict[str, any]:
+    def clean(self) -> dict[str, Any]:
         """Validate that end date is defined and not before start date.
 
         Returns:
@@ -1415,7 +1418,7 @@ class OrgaProgressStepForm(MyForm):
 class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize ExeEventForm with template event selection.
 
         Args:
@@ -1442,7 +1445,7 @@ class ExeEventForm(OrgaEventForm):
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()
 
-    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save event with optional template copying.
 
         Args:
@@ -1452,21 +1455,20 @@ class ExeEventForm(OrgaEventForm):
             Saved event instance.
 
         """
-        instance = super().save(commit=False)
+        instance: Event = super().save(commit=False)
 
         # Copy template event data if template feature enabled and event is new
-        if "template" in self.params["features"] and not self.instance.pk:
-            if self.cleaned_data.get("template_event"):
-                event_id = self.cleaned_data["template_event"].id
-                event = Event.objects.get(pk=event_id)
+        if "template" in self.params["features"] and not self.instance.pk and self.cleaned_data.get("template_event"):
+            event_id = self.cleaned_data["template_event"].id
+            event = Event.objects.get(pk=event_id)
 
-                # Save instance first to get pk for M2M and FK relations
-                instance.save()
+            # Save instance first to get pk for M2M and FK relations
+            instance.save()
 
-                # Copy features and configurations from template
-                instance.features.add(*event.features.all())
-                copy_class(instance.id, event_id, EventConfig)
-                copy_class(instance.id, event_id, EventRole)
+            # Copy features and configurations from template
+            instance.features.add(*event.features.all())
+            copy_class(instance.id, event_id, EventConfig)
+            copy_class(instance.id, event_id, EventRole)
 
         instance.save()
 
@@ -1482,7 +1484,7 @@ class ExeTemplateForm(FeatureForm):
 
     class Meta:
         model = Event
-        fields = ["name"]
+        fields: ClassVar[list] = ["name"]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the instance and configure the feature system."""
@@ -1490,7 +1492,7 @@ class ExeTemplateForm(FeatureForm):
         super().__init__(*args, **kwargs)
         self._init_features(is_association=False)
 
-    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance, setting template and association defaults.
 
         Args:
@@ -1500,7 +1502,7 @@ class ExeTemplateForm(FeatureForm):
             The saved Event instance.
 
         """
-        instance = super().save(commit=False)
+        instance: Event = super().save(commit=False)
 
         # Ensure template flag is set
         if not instance.template:
@@ -1522,7 +1524,7 @@ class ExeTemplateForm(FeatureForm):
 class ExeTemplateRolesForm(OrgaEventRoleForm):
     """Form for managing template event roles with optional members."""
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize template roles form with optional member requirement.
 
         Args:
@@ -1543,9 +1545,9 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     class Meta:
         model = Event
-        fields = []
+        fields: ClassVar[list] = []
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize OrgaQuickSetupForm with event feature configuration.
 
         Args:
@@ -1718,7 +1720,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_fields,
         )
 
-    def add_writing_configs(self, basics: dict, event_id: int, help_text: str, writing_section: tuple) -> None:
+    def add_writing_configs(self, basics: set, event_id: int, help_text: str, writing_section: tuple) -> None:
         """Add writing-related configuration fields to the event form.
 
         This method adds configuration fields for writing elements (characters, factions,
@@ -1763,11 +1765,13 @@ class OrgaPreferencesForm(ExePreferencesForm):
         # Add character-specific configuration options
         if writing_section[0] == "character":
             # Add player field if character limit is set
-            if get_event_config(self.params["event"].id, "user_character_max", default_value=0):
+            if get_event_config(self.params["event"].id, "user_character_max", default_value=0, context=self.params):
                 extra_config_options.append(("player", _("Player")))
 
             # Add status field if character approval is enabled
-            if get_event_config(self.params["event"].id, "user_character_approval", default_value=False):
+            if get_event_config(
+                self.params["event"].id, "user_character_approval", default_value=False, context=self.params
+            ):
                 extra_config_options.append(("status", _("Status")))
 
             # Define character feature fields with their config keys and labels
@@ -1810,7 +1814,8 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_data=extra_config_options,
         )
 
-    def _compile_configs(self, basic_question_types, compiled_options, field_definitions) -> None:
+    @staticmethod
+    def _compile_configs(basic_question_types: set, compiled_options: list, field_definitions: dict) -> None:
         """Compile configuration options from field definitions.
 
         Args:
@@ -1827,7 +1832,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
             compiled_options.append((toggle_key, field["name"]))
 
-    def add_feature_extra(self, extra_fields, feature_field_definitions) -> None:
+    def add_feature_extra(self, extra_fields: list, feature_field_definitions: list) -> None:
         """Add feature-specific extra fields to configuration.
 
         Args:

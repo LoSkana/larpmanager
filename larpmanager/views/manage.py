@@ -1,4 +1,5 @@
-from datetime import datetime
+from __future__ import annotations
+
 from typing import Any
 
 from django.contrib import messages
@@ -8,6 +9,7 @@ from django.forms import ChoiceField, Form
 from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_select2.forms import Select2Widget
 from slugify import slugify
@@ -48,7 +50,7 @@ from larpmanager.utils.registration import registration_available
 
 
 @login_required
-def manage(request: HttpRequest, event_slug=None):
+def manage(request: HttpRequest, event_slug: str | None = None) -> HttpResponse | HttpResponseRedirect:
     """Route to the appropriate management dashboard.
 
     Routes to either executive management or organizer management
@@ -70,7 +72,7 @@ def manage(request: HttpRequest, event_slug=None):
     return _exe_manage(request)
 
 
-def _get_registration_status_code(run):
+def _get_registration_status_code(run: Run) -> tuple[str, Any]:
     """Get registration status code for a run with additional value.
 
     Args:
@@ -95,7 +97,7 @@ def _get_registration_status_code(run):
         return "preregister", None
 
     # Check registration opening time
-    current_datetime = datetime.today()
+    current_datetime = timezone.now()
     if "registration_open" in features:
         if not run.registration_open:
             return "not_set", None
@@ -116,7 +118,7 @@ def _get_registration_status_code(run):
     return "closed", None
 
 
-def _get_registration_status(run_instance) -> str:
+def _get_registration_status(run_instance: Run) -> str:
     """Get human-readable registration status for a run.
 
     This function retrieves the registration status code and returns a localized,
@@ -249,12 +251,12 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
 
     # Compile final context and check for intro driver
     _compile(request, context)
-    _check_intro_driver(request, context)
+    _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/exe.html", context)
 
 
-def _exe_suggestions(context) -> None:
+def _exe_suggestions(context: dict[str, Any]) -> None:
     """Add priority tasks and suggestions to the executive management context.
 
     Args:
@@ -305,7 +307,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     runs_to_conclude = Run.objects.filter(
         event__association_id=context["association_id"],
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
-        end__lt=datetime.today(),
+        end__lt=timezone.now().date(),
     ).values_list("search", flat=True)
 
     # Add action for past runs still open
@@ -368,13 +370,13 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         )
 
     # Process accounting-specific actions
-    _exe_accounting_actions(request, context, association_features)
+    _exe_accounting_actions(context, association_features)
 
     # Process user-specific actions
     _exe_users_actions(request, context, association_features)
 
 
-def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) -> None:
+def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: dict[str, Any]) -> None:
     """Process user management actions and setup tasks for executives.
 
     Args:
@@ -394,13 +396,14 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) ->
         ):
             _add_priority(context, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
-    if "vote" in enabled_features:
-        if not get_association_config(context["association_id"], "vote_candidates", default_value="", context=context):
-            _add_priority(
-                context,
-                _("Set up the voting configuration"),
-                "exe_config",
-            )
+    if "vote" in enabled_features and not get_association_config(
+        context["association_id"], "vote_candidates", default_value="", context=context
+    ):
+        _add_priority(
+            context,
+            _("Set up the voting configuration"),
+            "exe_config",
+        )
 
     if "help" in enabled_features:
         _closed_questions, open_questions = _get_help_questions(context, request)
@@ -412,11 +415,10 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features) ->
             )
 
 
-def _exe_accounting_actions(request: HttpRequest, context: dict, enabled_features) -> None:
+def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> None:
     """Process accounting-related setup actions for executives.
 
     Args:
-        request: request instance
         context: Context dictionary to populate with priority actions
         enabled_features: Set of enabled features for the association
 
@@ -428,16 +430,15 @@ def _exe_accounting_actions(request: HttpRequest, context: dict, enabled_feature
             "exe_methods",
         )
 
-    if "organization_tax" in enabled_features:
-        if not get_association_config(
-            context["association_id"], "organization_tax_perc", default_value="", context=context
-        ):
-            _add_priority(
-                context,
-                _("Set up the organization tax configuration"),
-                "exe_accounting",
-                "config/organization_tax",
-            )
+    if "organization_tax" in enabled_features and not get_association_config(
+        context["association_id"], "organization_tax_perc", default_value="", context=context
+    ):
+        _add_priority(
+            context,
+            _("Set up the organization tax configuration"),
+            "exe_accounting",
+            "config/organization_tax",
+        )
 
     if "vat" in enabled_features:
         vat_ticket = get_association_config(context["association_id"], "vat_ticket", default_value="", context=context)
@@ -453,7 +454,7 @@ def _exe_accounting_actions(request: HttpRequest, context: dict, enabled_feature
             )
 
 
-def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
+def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa: C901 - Complex dashboard view with feature checks
     """Event organizer management dashboard view.
 
     Args:
@@ -525,12 +526,12 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
             should_open_shortcuts = str(context["run"].id) != origin_id
         context["open_shortcuts"] = should_open_shortcuts
 
-    _check_intro_driver(request, context)
+    _check_intro_driver(context)
 
     return render(request, "larpmanager/manage/orga.html", context)
 
 
-def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
+def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex priority determination logic
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
@@ -674,7 +675,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:
 
 def _orga_user_actions(
     context: dict[str, Any],
-    features: list[str],
+    features: dict[str, int],
     request: HttpRequest,
 ) -> None:
     """Add action to context if there are unanswered help questions.
@@ -698,20 +699,21 @@ def _orga_user_actions(
             )
 
 
-def _orga_casting_actions(context, enabled_features) -> None:
+def _orga_casting_actions(context: dict[str, Any], enabled_features: dict[str, Any]) -> None:
     """Add priority actions related to casting and quest builder setup.
 
     Checks for missing casting configurations and quest/trait relationships,
     adding appropriate priority suggestions for event organizers.
     """
-    if "casting" in enabled_features:
-        if not get_event_config(context["event"].id, "casting_min", default_value=0, context=context):
-            _add_priority(
-                context,
-                _("Set the casting options in the configuration panel"),
-                "orga_casting",
-                "config/casting",
-            )
+    if "casting" in enabled_features and not get_event_config(
+        context["event"].id, "casting_min", default_value=0, context=context
+    ):
+        _add_priority(
+            context,
+            _("Set the casting options in the configuration panel"),
+            "orga_casting",
+            "config/casting",
+        )
 
     if "questbuilder" in enabled_features:
         if not context["event"].get_elements(QuestType).count():
@@ -799,7 +801,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
 
-def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
+def _orga_reg_acc_actions(context: dict, enabled_features: dict[str, int]) -> None:
     """Add priority actions related to registration and accounting setup.
 
     Checks for required configurations when certain features are enabled,
@@ -871,17 +873,18 @@ def _orga_reg_acc_actions(context: dict, enabled_features: list[str]) -> None:
                 )
 
     # Handle reduced tickets feature configuration
-    if "reduced" in enabled_features:
-        if not get_event_config(context["event"].id, "reduced_ratio", default_value=0, context=context):
-            _add_priority(
-                context,
-                _("Set up configuration for Patron and Reduced tickets"),
-                "orga_registration_tickets",
-                "config/reduced",
-            )
+    if "reduced" in enabled_features and not get_event_config(
+        context["event"].id, "reduced_ratio", default_value=0, context=context
+    ):
+        _add_priority(
+            context,
+            _("Set up configuration for Patron and Reduced tickets"),
+            "orga_registration_tickets",
+            "config/reduced",
+        )
 
 
-def _orga_reg_actions(context, enabled_features) -> None:
+def _orga_reg_actions(context: dict[str, Any], enabled_features: dict[str, Any]) -> None:
     """Add priority actions for registration management setup.
 
     Checks registration status, required tickets, and registration features
@@ -925,7 +928,7 @@ def _orga_reg_actions(context, enabled_features) -> None:
             )
 
 
-def _orga_suggestions(context) -> None:
+def _orga_suggestions(context: dict[str, Any]) -> None:
     """Add priority suggestions for event organization.
 
     Args:
@@ -958,7 +961,9 @@ def _orga_suggestions(context) -> None:
         _add_suggestion(context, suggestion_text, permission_slug)
 
 
-def _add_item(context, list_name, message_text, permission_key, custom_link) -> None:
+def _add_item(
+    context: dict[str, Any], list_name: str, message_text: str, permission_key: str, custom_link: str | None
+) -> None:
     """Add item to specific list in management context.
 
     Args:
@@ -975,7 +980,9 @@ def _add_item(context, list_name, message_text, permission_key, custom_link) -> 
     context[list_name].append((message_text, permission_key, custom_link))
 
 
-def _add_priority(context, priority_text, permission_key, custom_link=None) -> None:
+def _add_priority(
+    context: dict[str, Any], priority_text: str, permission_key: str, custom_link: str | None = None
+) -> None:
     """Add priority item to management dashboard.
 
     Args:
@@ -988,7 +995,7 @@ def _add_priority(context, priority_text, permission_key, custom_link=None) -> N
     _add_item(context, "priorities_list", priority_text, permission_key, custom_link)
 
 
-def _add_action(context, action_text, permission_key, custom_link=None) -> None:
+def _add_action(context: dict[str, Any], action_text: str, permission_key: str, custom_link: str | None = None) -> None:
     """Add action item to management dashboard.
 
     Args:
@@ -1001,7 +1008,9 @@ def _add_action(context, action_text, permission_key, custom_link=None) -> None:
     _add_item(context, "actions_list", action_text, permission_key, custom_link)
 
 
-def _add_suggestion(context, suggestion_text, permission_key, custom_link=None) -> None:
+def _add_suggestion(
+    context: dict[str, Any], suggestion_text: str, permission_key: str, custom_link: str | None = None
+) -> None:
     """Add suggestion item to management dashboard.
 
     Args:
@@ -1014,7 +1023,7 @@ def _add_suggestion(context, suggestion_text, permission_key, custom_link=None) 
     _add_item(context, "suggestions_list", suggestion_text, permission_key, custom_link)
 
 
-def _has_permission(request: HttpRequest, context: dict, permission):
+def _has_permission(request: HttpRequest, context: dict, permission: str) -> bool:
     """Check if user has required permission for action.
 
     Args:
@@ -1031,7 +1040,9 @@ def _has_permission(request: HttpRequest, context: dict, permission):
     return has_event_permission(request, context, context["event"].slug, permission)
 
 
-def _get_href(context, permission, display_name, custom_link_suffix):
+def _get_href(
+    context: dict[str, Any], permission: str, display_name: str, custom_link_suffix: str | None
+) -> tuple[str, str]:
     """Generate href and title for management dashboard links.
 
     Args:
@@ -1057,7 +1068,7 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
     return reverse(view_name, args=[context["run"].get_slug()])
 
 
-def _compile(request: HttpRequest, context: dict) -> None:
+def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901 - Complex dashboard compilation with feature-dependent sections
     """Compile management dashboard with suggestions, actions, and priorities.
 
     Processes and organizes management content sections, handling empty states
@@ -1110,7 +1121,7 @@ def exe_close_suggestion(request: HttpRequest, perm: str) -> HttpResponseRedirec
     return redirect("manage")
 
 
-def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: EventPermission) -> HttpResponseRedirect:
+def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> HttpResponseRedirect:
     """Close a suggestion by setting its status and redirect to manage page."""
     # Check user has permission to access this event
     context = check_event_context(request, event_slug, perm)
@@ -1121,7 +1132,7 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: EventPerm
     return redirect("manage", event_slug=event_slug)
 
 
-def _check_intro_driver(request: HttpRequest, context: dict) -> None:
+def _check_intro_driver(context: dict) -> None:
     """Check if intro driver should be shown and update context."""
     member = context["member"]
     config_key = "intro_driver"
@@ -1135,7 +1146,10 @@ def _check_intro_driver(request: HttpRequest, context: dict) -> None:
 
 
 def orga_redirect(
-    request: HttpRequest, event_slug: str, run_number: int, path: str | None = None
+    request: HttpRequest,  # noqa: ARG001
+    event_slug: str,
+    run_number: int,
+    path: str | None = None,
 ) -> HttpResponsePermanentRedirect:
     """Optimized redirect from /slug/number/path to /slug-number/path format.
 
@@ -1171,6 +1185,8 @@ def orga_redirect(
 
 
 class WhatWouldYouLikeForm(Form):
+    """Form for WhatWouldYouLike."""
+
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
         """Initialize the form with context and populate choice field options.
 
@@ -1205,15 +1221,19 @@ class WhatWouldYouLikeForm(Form):
         # Create the choice field with populated options and Select2 widget
         self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
 
-    def _add_guides_tutorials(self, content_choices: list[tuple[str, str]]) -> None:
+    @staticmethod
+    def _add_guides_tutorials(content_choices: list[tuple[str, str]]) -> None:
         """Add guide entries to content choices list."""
         # Add guides with formatted titles and preview snippets
-        for guide_data in get_guides_cache():
-            content_choices.append(
-                (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}"),
-            )
+        content_choices.extend(
+            [
+                (f"guide|{guide_data['slug']}", f"{guide_data['title']} [GUIDE] - {guide_data['content_preview']}")
+                for guide_data in get_guides_cache()
+            ]
+        )
 
-    def _add_tutorials_choices(self, choices: list[tuple[str, str]]) -> None:
+    @staticmethod
+    def _add_tutorials_choices(choices: list[tuple[str, str]]) -> None:
         """Add tutorial entries to choices list with formatted titles and previews."""
         # Add tutorials (including sections)
         for tutorial in get_tutorials_cache():
@@ -1230,7 +1250,8 @@ class WhatWouldYouLikeForm(Form):
                 (f"tutorial|{tutorial_choice_value}", f"{tutorial_title} [TUTORIAL] - {tutorial['content_preview']}"),
             )
 
-    def _add_features_choices(self, choices: list[tuple[str, str]]) -> None:
+    @staticmethod
+    def _add_features_choices(choices: list[tuple[str, str]]) -> None:
         """Add feature entries to tutorial choices list."""
         # Add features recap
         for feature in get_features_cache():
@@ -1252,8 +1273,12 @@ class WhatWouldYouLikeForm(Form):
         all_runs = {**self.context.get("open_runs", {}), **self.context.get("past_runs", {})}
 
         # Add run dashboard choices for each accessible run
-        for run_data in all_runs.values():
-            choices.append((f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard")))
+        choices.extend(
+            [
+                (f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard"))
+                for run_data in all_runs.values()
+            ]
+        )
 
         # Add association dashboard choice if user has association role
         if self.context.get("association_role", None):
@@ -1336,7 +1361,7 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
     context["form"] = form
 
 
-def _get_choice_redirect_url(choice, context):
+def _get_choice_redirect_url(choice: str, context: dict[str, Any]) -> str:
     """Get the appropriate redirect URL based on the user's choice.
 
     Args:
@@ -1380,14 +1405,14 @@ def _get_choice_redirect_url(choice, context):
     return redirect_handler()
 
 
-def _handle_event_pms_redirect(choice_value, context):
+def _handle_event_pms_redirect(choice_value: str, context: dict[str, Any]) -> str:
     """Handle event permissions redirect."""
     if "run" not in context:
         raise ValueError(_("Event context not available"))
     return reverse(choice_value, args=[context["run"].get_slug()])
 
 
-def _handle_tutorial_redirect(tutorial_choice_value):
+def _handle_tutorial_redirect(tutorial_choice_value: str) -> str:
     """Handle tutorial redirect with optional section anchor."""
     if "#" in tutorial_choice_value:
         tutorial_slug, section_slug = tutorial_choice_value.split("#", 1)

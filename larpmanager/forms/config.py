@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from abc import abstractmethod
 from enum import IntEnum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.forms import Textarea
@@ -11,8 +13,13 @@ from larpmanager.cache.config import reset_element_configs, save_all_element_con
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, get_members_queryset
 
+if TYPE_CHECKING:
+    from larpmanager.models.base import BaseModel
+
 
 class ConfigType(IntEnum):
+    """Represents ConfigType model."""
+
     CHAR = 1
     BOOL = 2
     HTML = 3
@@ -23,7 +30,9 @@ class ConfigType(IntEnum):
 
 
 class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
-    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer=None) -> str:
+    """Represents MultiCheckboxWidget model."""
+
+    def render(self, name: str, value: list | None, attrs: dict | None = None, renderer: Any = None) -> str:  # noqa: ARG002
         """Render the checkbox widget as HTML.
 
         Args:
@@ -68,7 +77,9 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
 
 
 class ConfigForm(MyForm):
-    def __init__(self, *args, **kwargs) -> None:
+    """Form for Config."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form with configuration fields and custom elements.
 
         Args:
@@ -95,7 +106,7 @@ class ConfigForm(MyForm):
     def set_configs(self) -> None:
         """No-op method placeholder."""
 
-    def set_section(self, section_slug, section_name) -> None:
+    def set_section(self, section_slug: str, section_name: str) -> None:
         """Set the current section for grouping configuration fields.
 
         Args:
@@ -110,7 +121,14 @@ class ConfigForm(MyForm):
         if self.params.get("jump_section", "") == section_slug:
             self.jump_section = section_name
 
-    def add_configs(self, configuration_key, config_type, field_label, field_help_text, extra_data=None) -> None:
+    def add_configs(
+        self,
+        configuration_key: str,
+        config_type: ConfigType,
+        field_label: str,
+        field_help_text: str,
+        extra_data: Any = None,
+    ) -> None:
         """Add a configuration field to be rendered in the form.
 
         Args:
@@ -135,7 +153,7 @@ class ConfigForm(MyForm):
             },
         )
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save the form instance with configuration values.
 
         Args:
@@ -165,7 +183,7 @@ class ConfigForm(MyForm):
 
         return instance
 
-    def _get_custom_field(self, field_definition, result_dict) -> None:
+    def _get_custom_field(self, field_definition: dict, result_dict: dict) -> None:
         """Extract and format configuration field value from form data.
 
         Args:
@@ -191,7 +209,7 @@ class ConfigForm(MyForm):
         result_dict[field_key] = field_value
 
     @staticmethod
-    def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra=None) -> forms.Field | None:
+    def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra: Any = None) -> forms.Field | None:
         """Create appropriate Django form field based on configuration type.
 
         Args:
@@ -307,7 +325,7 @@ class ConfigForm(MyForm):
                 initial_value = initial_value == "True"
             self.initial[field_key] = initial_value
 
-    def _get_all_element_configs(self):
+    def _get_all_element_configs(self) -> dict[str, str]:
         """Get all existing configuration values for the instance.
 
         Returns:

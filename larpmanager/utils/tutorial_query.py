@@ -1,4 +1,3 @@
-import os
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any
@@ -24,7 +23,7 @@ TUTORIAL_INDEX = "data/whoosh/tutorial_index"
 GUIDE_INDEX = "data/whoosh/GUIDE_INDEX"
 
 
-def _save_index(index_dir: str, schema) -> object:
+def _save_index(index_dir: str, schema: Any) -> object:
     """Create or open a Whoosh index directory.
 
     Args:
@@ -36,7 +35,7 @@ def _save_index(index_dir: str, schema) -> object:
 
     """
     # Create directory if it doesn't exist and return new index
-    if not os.path.exists(index_dir):
+    if not Path(index_dir).exists():
         Path(index_dir).mkdir(parents=True, exist_ok=True)
         return create_in(index_dir, schema, "MAIN")
 
@@ -157,7 +156,7 @@ def get_or_create_index_guide(index_directory_path: str) -> object:
 
 
 @background_auto(queue="whoosh")
-def add_guide_to_search_index(guide_id) -> None:
+def add_guide_to_search_index(guide_id: Any) -> None:
     """Index a guide document for search functionality.
 
     Args:

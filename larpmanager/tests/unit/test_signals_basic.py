@@ -24,9 +24,14 @@ from decimal import Decimal
 
 from django.core.cache import cache
 
-from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, AccountingItemPayment, OtherChoices, PaymentChoices
+from larpmanager.models.accounting import (
+    AccountingItemDiscount,
+    AccountingItemOther,
+    AccountingItemPayment,
+    OtherChoices,
+    PaymentChoices,
+)
 from larpmanager.models.writing import Character
-from larpmanager.models.member import Member
 from larpmanager.tests.unit.base import BaseTestCase
 
 

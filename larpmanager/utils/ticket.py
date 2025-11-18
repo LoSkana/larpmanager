@@ -25,6 +25,7 @@ import subprocess
 import sys
 import traceback
 from pathlib import Path
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -49,7 +50,7 @@ class ClaudeAnalysisError(RuntimeError):
 
 
 @background_auto(queue="analyze_ticket")
-def analyze_ticket_bgk(ticket_id) -> None:
+def analyze_ticket_bgk(ticket_id: int) -> None:
     """Analyze a ticket and send result email to admins and maintainers.
 
     Args:
@@ -80,7 +81,7 @@ def analyze_ticket_bgk(ticket_id) -> None:
         raise TicketNotFoundError(msg) from err
 
 
-def _analyze_ticket(ticket):
+def _analyze_ticket(ticket: LarpManagerTicket) -> tuple[str, float]:
     """Analyzes the ticket using Claude in a separate analysis directory."""
     # Get the analysis directory (sibling to the current project directory)
     current_dir = Path(__file__).resolve().parent.parent.parent
@@ -150,17 +151,17 @@ def _analyze_ticket(ticket):
             {analysis_data.get("confidence", 0.0)}
         """
         return response, priority
-    # Fallback: use entire response as text
-    return output, 0.5
+    # Fallsback: use entire response as text
+    return str(output), 0.5
 
 
-def _test_connection():
+def _test_connection() -> Any:
     """Verify that Claude is installed and configured."""
     result = subprocess.run(["claude", "--version"], check=False, capture_output=True, text=True, timeout=5)  # noqa: S607
     return result.returncode == 0
 
 
-def _send_analysis_result_email(ticket) -> None:
+def _send_analysis_result_email(ticket: Any) -> None:
     """Send analysis result email to admins and association maintainers.
 
     Args:
@@ -197,12 +198,9 @@ def _send_analysis_result_email(ticket) -> None:
         my_send_mail(subject, body, admin_email)
 
     # Disable for now
-    # Send to association maintainers
-    # for maintainer in get_association_maintainers(ticket.association):
-    #     my_send_mail(subject, body, maintainer.email)
 
 
-def create_error_ticket(request: HttpRequest):
+def create_error_ticket(request: HttpRequest) -> Any:
     """Create an error ticket automatically when an error occurs.
 
     Only creates one ticket per day for the same error to avoid spam.
@@ -250,8 +248,8 @@ def create_error_ticket(request: HttpRequest):
         content += f"Context: {context_info}\n\n"
     content += f"Traceback:\n{error_traceback}"
 
-    # Truncate if too long (max 1000 chars for content field)
-    max_length = 950
+    # Truncate if too long (max 5000 chars for content field)
+    max_length = 4000
     if len(content) > max_length:
         content = content[:max_length] + "\n...(truncated)"
 
@@ -277,5 +275,5 @@ def create_error_ticket(request: HttpRequest):
         reason="error",
         email="system@larpmanager.com",
         content=f"[{error_identifier}]\n\n{content}",
-        member=None,  # System-generated ticket
+        member=None,
     )

@@ -22,11 +22,10 @@ from __future__ import annotations
 import contextlib
 import io
 import logging
-import os
-import os.path
 import re
 import zipfile
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -38,6 +37,7 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Template
 from django.template.loader import get_template
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from xhtml2pdf import pisa
 
@@ -57,7 +57,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.base import get_event_context
 from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import get_element, get_handout
+from larpmanager.utils.common import get_element, get_handout, get_now
 from larpmanager.utils.exceptions import NotFoundError
 from larpmanager.utils.tasks import background_auto
 
@@ -68,7 +68,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def fix_filename(filename):
+def fix_filename(filename: Any) -> Any:
     """Remove special characters from filename for safe PDF generation.
 
     Args:
@@ -82,7 +82,7 @@ def fix_filename(filename):
 
 
 # reprint if file not exists, older than 1 day, or debug
-def reprint(file_path):
+def reprint(file_path: Any) -> Any:
     """Determine if PDF file should be regenerated.
 
     Args:
@@ -99,12 +99,13 @@ def reprint(file_path):
     if not path_obj.is_file():
         return True
 
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=1)
-    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, timezone.utc)
+    # Use timezone-aware datetimes for comparison to avoid naive/aware mismatch
+    cutoff_date = get_now() - timedelta(days=1)
+    modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, tz=dt_timezone.utc)
     return modification_time < cutoff_date
 
 
-def return_pdf(file_path, filename):
+def return_pdf(file_path: Any, filename: Any) -> Any:
     """Return PDF file as HTTP response.
 
     Args:
@@ -119,7 +120,7 @@ def return_pdf(file_path, filename):
 
     """
     try:
-        with open(file_path, "rb") as pdf_file:
+        with Path(file_path).open("rb") as pdf_file:
             response = HttpResponse(pdf_file.read(), content_type="application/pdf")
         response["Content-Disposition"] = f"inline;filename={fix_filename(filename)}.pdf"
     except FileNotFoundError as err:
@@ -129,7 +130,7 @@ def return_pdf(file_path, filename):
         return response
 
 
-def link_callback(uri: str, rel: str) -> str:
+def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
     """Convert HTML URIs to absolute system paths for xhtml2pdf.
 
     Resolves static and media URLs to absolute file paths so the PDF
@@ -155,10 +156,10 @@ def link_callback(uri: str, rel: str) -> str:
 
     # Check if URI is a media URL and build corresponding file path
     if uri.startswith(m_url):
-        path = os.path.join(m_root, uri.replace(m_url, ""))
+        path = str(Path(m_root) / uri.replace(m_url, ""))
     # Check if URI is a static URL and build corresponding file path
     elif uri.startswith(s_url):
-        path = os.path.join(s_root, uri.replace(s_url, ""))
+        path = str(Path(s_root) / uri.replace(s_url, ""))
     # Return empty string for unrecognized URI patterns
     else:
         return ""
@@ -269,7 +270,7 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         html_content = template.render(context)
 
     # Generate PDF file from rendered HTML
-    with open(output_filename, "wb") as pdf_file:
+    with Path(output_filename).open("wb") as pdf_file:
         # Convert HTML to PDF using xhtml2pdf library
         pdf_result = pisa.CreatePDF(html_content, dest=pdf_file, link_callback=link_callback)
 
@@ -498,7 +499,7 @@ def print_handout(context: dict, *, force: bool = True) -> Any:
 def print_volunteer_registry(context: dict) -> str:
     """Generate volunteer registry PDF and return file path."""
     # Build file path for volunteer registry PDF
-    file_path = os.path.join(conf_settings.MEDIA_ROOT, f"volunteer_registry/{context['association'].slug}.pdf")
+    file_path = str(Path(conf_settings.MEDIA_ROOT) / f"volunteer_registry/{context['association'].slug}.pdf")
 
     # Generate PDF from template
     xhtml_pdf(context, "pdf/volunteer_registry.html", file_path)
@@ -509,7 +510,7 @@ def print_volunteer_registry(context: dict) -> str:
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
-def cleanup_handout_pdfs_before_delete(handout) -> None:
+def cleanup_handout_pdfs_before_delete(handout: Any) -> None:
     """Handle handout pre-delete PDF cleanup.
 
     Args:
@@ -520,7 +521,7 @@ def cleanup_handout_pdfs_before_delete(handout) -> None:
         safe_remove(handout.get_filepath(event_run))
 
 
-def cleanup_handout_pdfs_after_save(instance) -> None:
+def cleanup_handout_pdfs_after_save(instance: object) -> None:
     """Handle handout post-save PDF cleanup.
 
     Args:
@@ -531,7 +532,7 @@ def cleanup_handout_pdfs_after_save(instance) -> None:
         safe_remove(instance.get_filepath(run))
 
 
-def cleanup_handout_template_pdfs_before_delete(handout_template) -> None:
+def cleanup_handout_template_pdfs_before_delete(handout_template: Any) -> None:
     """Handle handout template pre-delete PDF cleanup.
 
     Args:
@@ -542,7 +543,7 @@ def cleanup_handout_template_pdfs_before_delete(handout_template) -> None:
         safe_remove(handout_template.get_filepath(event_run))
 
 
-def cleanup_handout_template_pdfs_after_save(instance) -> None:
+def cleanup_handout_template_pdfs_after_save(instance: object) -> None:
     """Handle handout template post-save PDF cleanup.
 
     Args:
@@ -568,7 +569,7 @@ def remove_run_pdf(event: Event) -> None:
         safe_remove(event_run.get_gallery_filepath())
 
 
-def delete_character_pdf_files(instance, single=None, runs=None) -> None:
+def delete_character_pdf_files(instance: object, single: Any = None, runs: Any = None) -> None:
     """Delete PDF files for a character across specified runs.
 
     Args:
@@ -590,7 +591,7 @@ def delete_character_pdf_files(instance, single=None, runs=None) -> None:
         safe_remove(instance.get_relationships_filepath(run))
 
 
-def cleanup_character_pdfs_before_delete(character) -> None:
+def cleanup_character_pdfs_before_delete(character: Any) -> None:
     """Handle character pre-delete PDF cleanup.
 
     Args:
@@ -601,7 +602,7 @@ def cleanup_character_pdfs_before_delete(character) -> None:
     delete_character_pdf_files(character)
 
 
-def cleanup_character_pdfs_on_save(instance) -> None:
+def cleanup_character_pdfs_on_save(instance: object) -> None:
     """Handle character post-save PDF cleanup.
 
     Args:
@@ -612,7 +613,7 @@ def cleanup_character_pdfs_on_save(instance) -> None:
     delete_character_pdf_files(instance)
 
 
-def cleanup_relationship_pdfs_before_delete(instance) -> None:
+def cleanup_relationship_pdfs_before_delete(instance: object) -> None:
     """Handle player relationship pre-delete PDF cleanup.
 
     Args:
@@ -623,7 +624,7 @@ def cleanup_relationship_pdfs_before_delete(instance) -> None:
         delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
 
 
-def cleanup_relationship_pdfs_after_save(instance) -> None:
+def cleanup_relationship_pdfs_after_save(instance: object) -> None:
     """Handle player relationship post-save PDF cleanup.
 
     Args:
@@ -634,7 +635,7 @@ def cleanup_relationship_pdfs_after_save(instance) -> None:
         delete_character_pdf_files(el.character, instance.reg.run)
 
 
-def cleanup_faction_pdfs_before_delete(instance) -> None:
+def cleanup_faction_pdfs_before_delete(instance: object) -> None:
     """Handle faction pre-delete PDF cleanup.
 
     Args:
@@ -645,7 +646,7 @@ def cleanup_faction_pdfs_before_delete(instance) -> None:
         delete_character_pdf_files(character)
 
 
-def cleanup_faction_pdfs_on_save(instance) -> None:
+def cleanup_faction_pdfs_on_save(instance: object) -> None:
     """Handle faction post-save PDF cleanup.
 
     Args:
@@ -670,14 +671,8 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
         delete_character_pdf_files(character, trait_instance.run)
 
 
-def cleanup_pdfs_on_trait_assignment(assignment_trait_instance) -> None:
-    """Handle assignment trait post-save PDF cleanup.
-
-    Args:
-        assignment_trait_instance: AssignmentTrait instance that was saved
-        is_newly_created: Boolean indicating if instance was created
-
-    """
+def cleanup_pdfs_on_trait_assignment(assignment_trait_instance: Any) -> None:
+    """Handle assignment trait post-save PDF cleanup."""
     if not assignment_trait_instance.member:
         return
 
@@ -719,7 +714,7 @@ def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -
     print_handout_go(context, handout_id)
 
 
-def print_character_go(context: dict, character) -> None:
+def print_character_go(context: dict, character: Any) -> None:
     """Print character information, handling missing character gracefully."""
     try:
         # Validate character access and retrieve character data
@@ -772,7 +767,7 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
         print_handout_go(context, handout_number)
 
 
-def clean_tag(tag):
+def clean_tag(tag: Any) -> Any:
     """Clean XML tag by removing namespace prefix.
 
     Args:
@@ -788,7 +783,7 @@ def clean_tag(tag):
     return tag
 
 
-def replace_data(template_path, character_data) -> None:
+def replace_data(template_path: Any, character_data: Any) -> None:
     """Replace character data placeholders in template file.
 
     Args:
@@ -796,7 +791,7 @@ def replace_data(template_path, character_data) -> None:
         character_data: Character data dictionary with replacement values
 
     """
-    with open(template_path) as template_file:
+    with Path(template_path).open() as template_file:
         file_content = template_file.read()
 
     for placeholder_key in ["number", "name", "title"]:
@@ -805,7 +800,7 @@ def replace_data(template_path, character_data) -> None:
         file_content = file_content.replace(f"#{placeholder_key}#", str(character_data[placeholder_key]))
 
     # Write the file out again
-    with open(template_path, "w") as template_file:
+    with Path(template_path).open("w") as template_file:
         template_file.write(file_content)
 
 
@@ -884,7 +879,7 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
 
     # Generate timestamped filename for download
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
     response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_pdfs_{timestamp}.zip"'
 
     return response
@@ -917,13 +912,13 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
                 filepath = context["handout"].get_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated
-                if not os.path.exists(filepath) or reprint(filepath):
+                if not Path(filepath).exists() or reprint(filepath):
                     print_handout(context, force=True)
 
                 # Add to ZIP if generation succeeded
-                if os.path.exists(filepath):
+                if Path(filepath).exists():
                     zip_file.write(filepath, f"handout_{handout.number}_{handout.name}.pdf")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
                 # Notify user of failure but continue processing other handouts
                 messages.warning(request, _("Failed to add handout") + f" #{handout.number}: {e}")
 
@@ -974,13 +969,13 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
                 filepath = context["faction"].get_sheet_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated
-                if not os.path.exists(filepath) or reprint(filepath):
+                if not Path(filepath).exists() or reprint(filepath):
                     print_faction(context, force=True)
 
                 # Add to ZIP if generation succeeded
-                if os.path.exists(filepath):
+                if Path(filepath).exists():
                     zip_file.write(filepath, f"faction_{faction.number}_{faction.name}.pdf")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
                 # Notify user of failure but continue processing other factions
                 messages.warning(request, _("Failed to add faction") + f" #{faction.number}: {e}")
 
@@ -1013,13 +1008,13 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
                 filepath = context["character"].get_sheet_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated
-                if not os.path.exists(filepath) or reprint(filepath):
+                if not Path(filepath).exists() or reprint(filepath):
                     print_character(context, force=True)
 
                 # Add to ZIP if generation succeeded
-                if os.path.exists(filepath):
+                if Path(filepath).exists():
                     zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
                 # Notify user of failure but continue processing other characters
                 messages.warning(request, _("Failed to add character") + f" #{character.number}: {e}")
 
@@ -1047,13 +1042,13 @@ def _bulk_profiles(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
             filepath = context["run"].get_profiles_filepath()
 
             # Generate PDF if it doesn't exist or is outdated
-            if not os.path.exists(filepath) or reprint(filepath):
+            if not Path(filepath).exists() or reprint(filepath):
                 print_profiles(context, force=True)
 
             # Add to ZIP if generation succeeded
-            if os.path.exists(filepath):
+            if Path(filepath).exists():
                 zip_file.write(filepath, "profiles.pdf")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
             # Notify user of failure
             messages.warning(request, _("Failed to add profiles") + f": {e}")
 
@@ -1081,12 +1076,12 @@ def _bulk_gallery(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile
             filepath = context["run"].get_gallery_filepath()
 
             # Generate PDF if it doesn't exist or is outdated
-            if not os.path.exists(filepath) or reprint(filepath):
+            if not Path(filepath).exists() or reprint(filepath):
                 print_gallery(context, force=True)
 
             # Add to ZIP if generation succeeded
-            if os.path.exists(filepath):
+            if Path(filepath).exists():
                 zip_file.write(filepath, "gallery.pdf")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error (Http404, NotFoundError, OSError, etc.)
             # Notify user of failure
             messages.warning(request, _("Failed to add gallery") + f": {e}")

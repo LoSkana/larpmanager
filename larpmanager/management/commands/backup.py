@@ -31,13 +31,15 @@ from larpmanager.views.orga.event import _prepare_backup
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "Backup events"
 
     def add_arguments(self, parser: ArgumentParser) -> None:
         """Add command line arguments for the backup command."""
         parser.add_argument("--path", type=str, required=True, help="Backup path")
 
-    def handle(self, *args: tuple, **options: dict) -> None:
+    def handle(self, *args: tuple, **options: dict) -> None:  # noqa: ARG002
         """Database backup command with compression.
 
         Creates compressed backup files for all active runs (non-DONE, non-CANCELLED)

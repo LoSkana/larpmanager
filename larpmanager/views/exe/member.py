@@ -20,13 +20,16 @@
 
 import csv
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime
+from datetime import timezone as dt_timezone
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Case, Count, IntegerField, Value, When
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.payment import unique_invoice_cod
@@ -76,6 +79,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.utils.base import check_association_context
 from larpmanager.utils.common import (
     _get_help_questions,
+    ensure_timezone_aware,
     format_email_body,
     get_member,
     normalize_string,
@@ -114,13 +118,13 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     fees = set(
         AccountingItemMembership.objects.filter(
             association_id=context["association_id"],
-            year=datetime.now().year,
+            year=timezone.now().year,
         ).values_list("member_id", flat=True),
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
-        Run.objects.filter(event__association_id=context["association_id"], end__gt=datetime.today()).values_list(
+        Run.objects.filter(event__association_id=context["association_id"], end__gt=timezone.now().date()).values_list(
             "pk",
             "search",
         ),
@@ -440,7 +444,7 @@ def exe_member_registrations(request: HttpRequest, num: int) -> HttpResponse:
     return render(request, "larpmanager/exe/users/member_registrations.html", context)
 
 
-def member_add_accountingitempayment(context: dict, member: Member) -> dict:
+def member_add_accountingitempayment(context: dict, member: Member) -> None:
     """Add accounting item payment information to context for a member.
 
     Retrieves non-hidden payments for the member and sets display type based on payment method.
@@ -482,7 +486,7 @@ def member_add_accountingitemother(context: dict, member: Member) -> None:
 
 
 @login_required
-def exe_membership_status(request: HttpRequest, num):
+def exe_membership_status(request: HttpRequest, num: Any) -> Any:
     """Edit membership status and details for a specific member.
 
     Args:
@@ -601,7 +605,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
             association_id = context["association_id"]
 
             # Get membership fee amount from association configuration
-            fee = get_association_config(association_id, "membership_fee", default_value="0")
+            fee = get_association_config(association_id, "membership_fee", default_value="0", context=context)
 
             # Create payment invoice record with confirmed status
             payment = PaymentInvoice.objects.create(
@@ -632,7 +636,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_membership_document(request: HttpRequest):
+def exe_membership_document(request: HttpRequest) -> Any:
     """Handle membership document upload and approval process.
 
     Args:
@@ -689,8 +693,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
     split_two_names = 2
 
     # Set current year and calculate year start date
-    context["year"] = datetime.now(timezone.utc).year
-    start = datetime(context["year"], 1, 1, tzinfo=timezone.utc)
+    context["year"] = timezone.now().year
+    start = datetime(context["year"], 1, 1, tzinfo=dt_timezone.utc)
 
     # Build cache of member enrollment dates from accounting items
     cache = {}
@@ -716,7 +720,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
         member.last_enrolment = cache[member.id]
 
         # Calculate enrollment order based on days from year start
-        member.order = (member.last_enrolment - start).days
+        # Ensure both datetimes are timezone-aware for comparison
+        member.order = (ensure_timezone_aware(member.last_enrolment) - start).days
 
         # Parse and format member legal name if available
         if member.legal_name:
@@ -794,7 +799,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
     )
 
     # Generate current date string for filename
-    context["date"] = datetime.today().strftime("%Y-%m-%d")
+    context["date"] = timezone.now().date().strftime("%Y-%m-%d")
 
     # Generate the PDF file using the context data
     fp = print_volunteer_registry(context)
@@ -823,14 +828,17 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_vote")
-    context["year"] = datetime.today().year
+    context["year"] = timezone.now().year
     association_id = context["association_id"]
 
     # Parse candidate IDs from association configuration
-    idxs = []
-    for el in get_association_config(association_id, "vote_candidates", default_value="").split(","):
-        if el.strip():
-            idxs.append(el.strip())
+    idxs = [
+        el.strip()
+        for el in get_association_config(association_id, "vote_candidates", default_value="", context=context).split(
+            ","
+        )
+        if el.strip()
+    ]
 
     # Fetch candidate member objects and build candidates dictionary
     context["candidates"] = {}
@@ -956,14 +964,14 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_read_mail(request: HttpRequest, mail_id: str) -> HttpResponse:
+def exe_read_mail(request: HttpRequest, mail_id: int) -> HttpResponse:
     """Display archived email details for organization executives."""
     # Verify user has email archive access permissions
     context = check_association_context(request, "exe_archive_email")
     context["exe"] = True
 
     # Retrieve and add email data to context
-    context["email"] = get_mail(request, context, mail_id)
+    context["email"] = get_mail(context, mail_id)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 
@@ -1085,7 +1093,7 @@ def exe_questions_close(request: HttpRequest, member_id: int) -> HttpResponse:
 
 
 @login_required
-def exe_newsletter(request: HttpRequest):
+def exe_newsletter(request: HttpRequest) -> Any:
     """Display newsletter subscription management for association members.
 
     Args:

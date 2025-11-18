@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.db import models
 from django.db.models import Q, QuerySet, UniqueConstraint
 
@@ -28,6 +30,8 @@ from larpmanager.models.member import Member
 
 
 class PermissionModule(BaseModel):
+    """Represents PermissionModule model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
@@ -38,6 +42,8 @@ class PermissionModule(BaseModel):
 
 
 class AssociationPermission(BaseModel):
+    """Represents AssociationPermission model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True, unique=True)
@@ -59,12 +65,14 @@ class AssociationPermission(BaseModel):
         return self.name
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["slug"], condition=Q(deleted__isnull=True), name="aperm_slug_act"),
         ]
 
 
 class AssociationRole(BaseModel):
+    """Represents AssociationRole model."""
+
     name = models.CharField(max_length=100)
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="roles", null=True)
@@ -76,7 +84,7 @@ class AssociationRole(BaseModel):
     permissions = models.ManyToManyField(AssociationPermission, related_name="association_roles", blank=True)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["association", "number", "deleted"],
                 name="unique_association_role_with_optional",
@@ -148,6 +156,8 @@ def get_association_inners(association: Association) -> list[Member]:
 
 
 class EventPermission(BaseModel):
+    """Represents EventPermission model."""
+
     name = models.CharField(max_length=100)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], blank=True, unique=True)
@@ -173,21 +183,21 @@ class EventPermission(BaseModel):
         return self.name
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["slug"], condition=Q(deleted__isnull=True), name="eperm_slug_act"),
         ]
 
 
 class EventRole(BaseConceptModel):
+    """Represents EventRole model."""
+
     members = models.ManyToManyField(Member, related_name="event_roles")
 
     permissions = models.ManyToManyField(EventPermission, related_name="roles", blank=True)
 
-    _clone_m2m_fields = ["permissions"]
-
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_event_role_with_optional",

@@ -22,17 +22,21 @@
 
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+from typing import Any
 from unittest.mock import patch
 
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemPayment,
     AccountingItemTransaction,
     Discount,
-    PaymentChoices, DiscountType,
+    DiscountType,
+    PaymentChoices,
 )
 from larpmanager.models.event import DevelopStatus
-from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.registration import (
     Registration,
     RegistrationInstallment,
@@ -42,15 +46,12 @@ from larpmanager.models.registration import (
 )
 from larpmanager.tests.unit.base import BaseTestCase
 
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
-
 
 class TestRegistrationCreation(BaseTestCase):
     """Test cases for registration creation"""
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_create_basic_registration(self, mock_mail) -> None:
+    def test_create_basic_registration(self, mock_mail: Any) -> None:
         """Test creating a basic registration"""
         member = self.get_member()
         run = self.get_run()
@@ -66,7 +67,7 @@ class TestRegistrationCreation(BaseTestCase):
         self.assertEqual(registration.quotas, 1)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_create_registration_with_ticket(self, mock_mail) -> None:
+    def test_create_registration_with_ticket(self, mock_mail: Any) -> None:
         """Test creating a registration with a ticket"""
         member = self.get_member()
         run = self.get_run()
@@ -79,7 +80,7 @@ class TestRegistrationCreation(BaseTestCase):
         self.assertEqual(registration.ticket, ticket)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_create_registration_with_quotas(self, mock_mail) -> None:
+    def test_create_registration_with_quotas(self, mock_mail: Any) -> None:
         """Test creating a registration with multiple payment quotas"""
         member = self.get_member()
         run = self.get_run()
@@ -93,7 +94,7 @@ class TestRegistrationCreation(BaseTestCase):
         self.assertEqual(registration.quotas, 4)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_create_registration_generates_special_code(self, mock_mail) -> None:
+    def test_create_registration_generates_special_code(self, mock_mail: Any) -> None:
         """Test that registration creation generates a unique special code"""
         member = self.get_member()
         run = self.get_run()
@@ -105,7 +106,7 @@ class TestRegistrationCreation(BaseTestCase):
         self.assertGreater(len(registration.special_cod), 0)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_create_registration_with_additionals(self, mock_mail) -> None:
+    def test_create_registration_with_additionals(self, mock_mail: Any) -> None:
         """Test creating a registration with additional participants"""
         member = self.get_member()
         run = self.get_run()
@@ -124,7 +125,7 @@ class TestRegistrationModification(BaseTestCase):
     """Test cases for registration modification"""
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_modify_registration_quotas(self, mock_mail) -> None:
+    def test_modify_registration_quotas(self, mock_mail: Any) -> None:
         """Test modifying registration quotas"""
         registration = self.create_registration(quotas=1)
         original_id = registration.id
@@ -136,7 +137,7 @@ class TestRegistrationModification(BaseTestCase):
         self.assertEqual(updated.quotas, 3)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_modify_registration_ticket(self, mock_mail) -> None:
+    def test_modify_registration_ticket(self, mock_mail: Any) -> None:
         """Test modifying registration ticket"""
         run = self.get_run()
         ticket1 = self.ticket(event=run.event, name="Standard", price=Decimal("100.00"))
@@ -158,7 +159,7 @@ class TestRegistrationModification(BaseTestCase):
         self.assertEqual(updated.ticket, ticket2)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_cancel_registration(self, mock_mail) -> None:
+    def test_cancel_registration(self, mock_mail: Any) -> None:
         """Test cancelling a registration"""
         registration = self.create_registration()
         self.assertIsNone(registration.cancellation_date)
@@ -170,7 +171,7 @@ class TestRegistrationModification(BaseTestCase):
         self.assertIsNotNone(updated.cancellation_date)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_modify_registration_additionals(self, mock_mail) -> None:
+    def test_modify_registration_additionals(self, mock_mail: Any) -> None:
         """Test modifying additionals count"""
         registration = self.create_registration(additionals=1)
 
@@ -181,7 +182,7 @@ class TestRegistrationModification(BaseTestCase):
         self.assertEqual(updated.additionals, 3)
 
     @patch("larpmanager.mail.registration.my_send_mail")
-    def test_modify_registration_pay_what(self, mock_mail) -> None:
+    def test_modify_registration_pay_what(self, mock_mail: Any) -> None:
         """Test modifying pay-what-you-want amount"""
         registration = self.create_registration()
 
@@ -195,7 +196,7 @@ class TestRegistrationModification(BaseTestCase):
 class TestRegistrationAutomaticUpdates(BaseTestCase):
     """Test cases for automatic value updates in registrations"""
 
-    def ensure_run_active(self, run) -> None:
+    def ensure_run_active(self, run: Any) -> None:
         """Ensure run is in active status for accounting calculations"""
         if run.development in (DevelopStatus.CANC, DevelopStatus.DONE):
             run.development = DevelopStatus.SHOW
@@ -203,7 +204,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_iscr_update_with_ticket(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_iscr_update_with_ticket(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic tot_iscr calculation with ticket price"""
         mock_features.return_value = {}
 
@@ -224,7 +225,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_iscr_update_with_additionals(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_iscr_update_with_additionals(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic tot_iscr calculation with additionals"""
         mock_features.return_value = {}
 
@@ -244,7 +245,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_payed_update(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_payed_update(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic tot_payed calculation from payments"""
         mock_features.return_value = {}
 
@@ -271,7 +272,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_payed_update_multiple_payments(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_payed_update_multiple_payments(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic tot_payed with multiple payments"""
         mock_features.return_value = {}
 
@@ -306,7 +307,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_iscr_with_discount(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_iscr_with_discount(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic tot_iscr calculation with discount"""
         mock_features.return_value = {}
 
@@ -344,7 +345,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_iscr_with_options(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_iscr_with_options(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic tot_iscr calculation with registration options"""
         mock_features.return_value = {}
 
@@ -373,7 +374,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_quota_calculation(self, mock_features, mock_mail) -> None:
+    def test_automatic_quota_calculation(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic quota calculation for next payment"""
         mock_features.return_value = {}
 
@@ -394,7 +395,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_surcharge_calculation(self, mock_features, mock_mail) -> None:
+    def test_automatic_surcharge_calculation(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic surcharge calculation based on date"""
         mock_features.return_value = {}
 
@@ -423,7 +424,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_payment_date_set_when_fully_paid(self, mock_features, mock_mail) -> None:
+    def test_automatic_payment_date_set_when_fully_paid(self, mock_features: Any, mock_mail: Any) -> None:
         """Test that payment_date field is handled when payment is added"""
         mock_features.return_value = {}
 
@@ -451,7 +452,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_payed_with_transactions(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_payed_with_transactions(self, mock_features: Any, mock_mail: Any) -> None:
         """Test that transactions are accounted for in registration"""
         mock_features.return_value = {}
 
@@ -487,7 +488,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_tot_iscr_minimum_zero(self, mock_features, mock_mail) -> None:
+    def test_automatic_tot_iscr_minimum_zero(self, mock_features: Any, mock_mail: Any) -> None:
         """Test that tot_iscr never goes below zero with large discount"""
         mock_features.return_value = {}
 
@@ -520,7 +521,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_automatic_deadline_calculation_with_installments(self, mock_features, mock_mail) -> None:
+    def test_automatic_deadline_calculation_with_installments(self, mock_features: Any, mock_mail: Any) -> None:
         """Test automatic deadline calculation with installments"""
         mock_features.return_value = {"reg_installments": True}
 
@@ -546,7 +547,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
-    def test_discount_update_triggers_registration_recalculation(self, mock_features, mock_mail) -> None:
+    def test_discount_update_triggers_registration_recalculation(self, mock_features: Any, mock_mail: Any) -> None:
         """Test that adding a discount triggers registration update"""
         mock_features.return_value = {}
 

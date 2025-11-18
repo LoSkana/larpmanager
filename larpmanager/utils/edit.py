@@ -17,23 +17,21 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import time
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max
-from django.forms import Form, ModelForm, forms
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import _get_fkey_config, get_event_config
-from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
@@ -45,13 +43,18 @@ from larpmanager.utils.base import check_association_context, check_event_contex
 from larpmanager.utils.common import html_clean
 from larpmanager.utils.exceptions import NotFoundError
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from larpmanager.forms.base import MyForm
+
 
 def save_log(member: Member, cls: type, element: Any, *, to_delete: bool = False) -> None:
     """Create a log entry for model instance changes."""
     Log.objects.create(member=member, cls=cls.__name__, eid=element.id, dl=to_delete, dct=element.as_dict())
 
 
-def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:
+def save_version(element: Any, model_type: str, member: Member, *, to_delete: bool = False) -> None:  # noqa: C901 - Complex versioning logic with multiple model types
     """Manage versioning of text content.
 
     Creates and saves new versions of editable text elements with author tracking,
@@ -155,7 +158,7 @@ def _get_field_value(element: Any, question: Any) -> str | None:
     return None
 
 
-def _get_values_mapping(element) -> dict[str, callable]:
+def _get_values_mapping(element: Any) -> dict[str, callable]:
     """Return a mapping of field names to their value extraction functions.
 
     Args:
@@ -176,7 +179,7 @@ def _get_values_mapping(element) -> dict[str, callable]:
     }
 
 
-def check_run(element, context, accessor_field=None) -> None:
+def check_run(element: Any, context: Any, accessor_field: Any = None) -> None:
     """Validate that element belongs to the correct run and event.
 
     Args:
@@ -274,7 +277,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
             should_delete = "delete" in request.POST and request.POST["delete"] == "1"
 
             # Log the operation (save or delete)
-            save_log(context["member"], form_type, saved_instance, should_delete)
+            save_log(context["member"], form_type, saved_instance, to_delete=should_delete)
 
             # Delete the instance if deletion was requested
             if should_delete:
@@ -327,10 +330,10 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
     context["name"] = str(element)
 
 
-def backend_edit(
+def backend_edit(  # noqa: C901 - Complex editing logic with form validation and POST processing
     request: HttpRequest,
     context: dict[str, Any],
-    form_type: type[ModelForm],
+    form_type: type[MyForm],
     element_id: int | None,
     additional_field: str | None = None,
     *,
@@ -474,7 +477,7 @@ def orga_edit(
 def exe_edit(
     request: HttpRequest,
     form_type: type[MyForm],
-    entity_id: int,
+    entity_id: int | None,
     permission: str,
     redirect_view: str | None = None,
     additional_field: str | None = None,
@@ -570,9 +573,9 @@ def set_suggestion(context: dict, permission: str) -> None:
 def writing_edit(
     request: HttpRequest,
     context: dict[str, Any],
-    form_type: type[forms.Form],
+    form_type: type[MyForm],
     element_name: str,
-    element_type: str,
+    element_type: str | None,
     redirect_url: str | None = None,
 ) -> HttpResponse | None:
     """Handle editing of writing elements with form processing.
@@ -667,17 +670,17 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
     widget.set_event(context["event"])
 
     # Set up context variables for template rendering
-    context["finder_typ"] = model_type._meta.model_name
+    context["finder_typ"] = model_type._meta.model_name  # noqa: SLF001  # Django model metadata
     context["char_finder"] = widget.render(name="char_finder", value="")
     context["char_finder_media"] = widget.media
 
 
 def _writing_save(
     context: dict,
-    form: Any,
+    form: MyForm,
     form_type: type,
     nm: str,
-    redr: Callable | None,
+    redirect_func: Callable | None,
     request: HttpRequest,
     tp: str | None,
 ) -> HttpResponse:
@@ -692,7 +695,7 @@ def _writing_save(
         form: Validated form instance ready for saving
         form_type: Form class type used for logging operations
         nm: Name of the element in context (used for redirects)
-        redr: Optional redirect callable that takes context as parameter
+        redirect_func: Optional redirect callable that takes context as parameter
         request: HTTP request object containing POST data and user info
         tp: Type of writing element for version tracking (None disables versioning)
 
@@ -704,7 +707,7 @@ def _writing_save(
     if "ajax" in request.POST:
         # Check if element exists in context before processing
         if nm in context:
-            return writing_edit_save_ajax(form, request, context)
+            return writing_edit_save_ajax(form, request)
         return JsonResponse({"res": "ko"})
 
     # Process normal form submission
@@ -734,20 +737,20 @@ def _writing_save(
         return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
 
     # Handle custom redirect function if provided
-    if redr:
+    if redirect_func:
         context["element"] = p
-        return redr(context)
+        return redirect_func(context)
 
     # Default redirect to list view
     return redirect("orga_" + nm + "s", event_slug=context["run"].get_slug())
 
 
-def writing_edit_cache_key(event_id: int, writing_type: str) -> str:
+def writing_edit_cache_key(event_id: int | str, writing_type: str) -> str:
     """Generate cache key for writing edit operations."""
     return f"orga_edit_{event_id}_{writing_type}"
 
 
-def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "JsonResponse":
+def writing_edit_save_ajax(form: MyForm, request: HttpRequest) -> JsonResponse:
     """Handle AJAX save requests for writing elements with locking validation.
 
     This function processes AJAX requests to save writing elements while validating
@@ -757,7 +760,6 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
     Args:
         form: Django form instance containing the data to save
         request: HTTP request object containing POST data and user information
-        context: Context dictionary for additional data (currently unused)
 
     Returns:
         JsonResponse: JSON response containing either success status or warning message
@@ -775,7 +777,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
     # Extract and validate element ID from POST data
     eid = int(request.POST["eid"])
     if eid <= 0:
-        return res
+        return JsonResponse(res)
 
     # Get element type and editing token for conflict detection
     tp = request.POST["type"]
@@ -795,7 +797,7 @@ def writing_edit_save_ajax(form: Form, request: HttpRequest, context: dict) -> "
     return JsonResponse(res)
 
 
-def writing_edit_working_ticket(request: HttpRequest, element_type: str, element_id: int, user_token: str) -> str:
+def writing_edit_working_ticket(request: HttpRequest, element_type: str, element_id: int | str, user_token: str) -> str:
     """Manage working tickets to prevent concurrent editing conflicts.
 
     This function implements a locking mechanism to prevent multiple users from
@@ -863,7 +865,7 @@ def writing_edit_working_ticket(request: HttpRequest, element_type: str, element
 
 
 @require_POST
-def working_ticket(request: HttpRequest):
+def working_ticket(request: HttpRequest) -> Any:
     """Handle working ticket requests to prevent concurrent editing conflicts.
 
     Args:

@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
@@ -82,7 +84,7 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
     # Fetch registration tickets ordered by their sequence number
     context["list"] = RegistrationTicket.objects.filter(event=context["event"]).order_by("order")
     # Get available ticket tiers for the current event
-    context["tiers"] = OrgaRegistrationTicketForm.get_tier_available(context["event"])
+    context["tiers"] = OrgaRegistrationTicketForm.get_tier_available(context["event"], context)
 
     return render(request, "larpmanager/orga/registration/tickets.html", context)
 
@@ -228,13 +230,15 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, num: int)
         if str(request.POST.get("new_option", "")) == "1":
             edit_option = True
         # For choice questions, ensure at least one option exists
-        elif context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-            if not RegistrationOption.objects.filter(question_id=context["saved"].id).exists():
-                edit_option = True
-                messages.warning(
-                    request,
-                    _("You must define at least one option before saving a single-choice or multiple-choice question"),
-                )
+        elif (
+            context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+            and not RegistrationOption.objects.filter(question_id=context["saved"].id).exists()
+        ):
+            edit_option = True
+            messages.warning(
+                request,
+                _("You must define at least one option before saving a single-choice or multiple-choice question"),
+            )
 
         # Redirect to option creation if needed, otherwise back to form list
         if edit_option:
@@ -303,7 +307,7 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str, num: in
     return registration_option_edit(context, 0, request)
 
 
-def registration_option_edit(context, option_number, request):
+def registration_option_edit(context: Any, option_number: Any, request: Any) -> Any:
     """Handle editing of registration option with form processing and redirect logic.
 
     Args:

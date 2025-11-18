@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.contrib import admin
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, EventFilter, RunFilter
@@ -26,52 +28,66 @@ from larpmanager.models.event import Event, EventConfig, EventText, PreRegistrat
 
 @admin.register(ProgressStep)
 class ProgressStepAdmin(DefModelAdmin):
+    """Admin interface for ProgressStep model."""
+
     search_fields = ("name",)
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
 
 
 @admin.register(Event)
 class EventAdmin(DefModelAdmin):
+    """Admin interface for Event model."""
+
     list_display = ("name", "thumb", "slug", "association")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
     list_filter = (AssociationFilter,)
-    autocomplete_fields = ["association", "parent", "features"]
+    autocomplete_fields: ClassVar[list] = ["association", "parent", "features"]
 
 
 @admin.register(EventConfig)
 class EventConfigAdmin(DefModelAdmin):
+    """Admin interface for EventConfig model."""
+
     list_display = ("event", "name", "value")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
 
 
 @admin.register(Run)
 class RunAdmin(DefModelAdmin):
+    """Admin interface for Run model."""
+
     exclude = ("search",)
-    search_fields = ("search",)
+    search_fields: ClassVar[tuple] = ("search",)
     list_display = ("id", "event", "number", "start", "end")
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter, "development")
 
 
 @admin.register(RunConfig)
 class RunConfigAdmin(DefModelAdmin):
+    """Admin interface for RunConfig model."""
+
     list_display = ("run", "name", "value")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
     list_filter = (RunFilter,)
-    autocomplete_fields = ["run"]
+    autocomplete_fields: ClassVar[list] = ["run"]
 
 
 @admin.register(EventText)
 class EventTextAdmin(DefModelAdmin):
-    list_display = ("event", "typ", "language", "default")
+    """Admin interface for EventText model."""
+
+    list_display: ClassVar[tuple] = ("event", "typ", "language", "default")
     list_filter = (EventFilter, "typ", "language")
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
 
 
 @admin.register(PreRegistration)
 class PreRegistrationAdmin(DefModelAdmin):
-    list_display = ("event", "member", "pref")
+    """Admin interface for PreRegistration model."""
+
+    list_display: ClassVar[tuple] = ("event", "member", "pref")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "member"]
+    autocomplete_fields: ClassVar[list] = ["event", "member"]

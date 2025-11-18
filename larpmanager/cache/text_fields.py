@@ -17,16 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import re
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -38,13 +37,17 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing
 
+if TYPE_CHECKING:
+    from larpmanager.models.base import BaseModel
+    from larpmanager.models.event import Event, Run
 
-def cache_text_field_key(model_type: type, model_instance: object) -> str:
+
+def cache_text_field_key(model_type: type[BaseModel], model_instance: object) -> str:
     """Generate cache key for model text fields."""
     return f"cache_text_fields_{model_type.__name__}_{model_instance.id}"
 
 
-def remove_html_tags(text):
+def remove_html_tags(text: str) -> str:
     """Remove html tags from a string."""
     html_tag_pattern = re.compile("<.*?>")
     return re.sub(html_tag_pattern, "", text)
@@ -83,13 +86,13 @@ def get_single_cache_text_field(element_id: str, field_name: str, text_value: st
         )
 
     # Return the processed text and original length
-    return (cleaned_text, original_length)
+    return cleaned_text, original_length
 
 
 # Writing
 
 
-def init_cache_text_field(model_class: type, event: Event) -> dict:
+def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
     """Initialize cache for text fields of model instances related to an event.
 
     Args:
@@ -141,7 +144,7 @@ def _init_element_cache_text_field(
 
     # Get applicable writing questions for this element type
     # noinspection PyProtectedMember
-    applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)
+    applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)  # noqa: SLF001  # Django model metadata
     questions = element.event.get_elements(WritingQuestion).filter(applicable=applicable)
 
     # Process editor-type questions and cache their answers
@@ -154,7 +157,7 @@ def _init_element_cache_text_field(
             result_cache[element.id][field_key] = get_single_cache_text_field(element.id, field_key, answer_text)
 
 
-def get_cache_text_field(field_type: str, event: Event) -> str:
+def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:
     """Get cached text field value for event, initializing if not found."""
     # Generate cache key for the specific type and event
     cache_key = cache_text_field_key(field_type, event)
@@ -274,7 +277,7 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
                 field_key,
                 answer_text,
             )
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip missing answers
             pass
 
 

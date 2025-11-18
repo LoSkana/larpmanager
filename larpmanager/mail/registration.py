@@ -20,6 +20,7 @@
 
 import logging
 import time
+from typing import Any
 
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -33,7 +34,7 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import get_user_membership
-from larpmanager.models.registration import Registration
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.registration import get_registration_options
 from larpmanager.utils.tasks import background_auto, my_send_mail
 
@@ -41,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 
 @background_auto(queue="acc")
-def update_registration_status_bkg(registration_id) -> None:
+def update_registration_status_bkg(registration_id: Any) -> None:
     """Background task to update registration status with delay.
 
     Args:
@@ -53,7 +54,7 @@ def update_registration_status_bkg(registration_id) -> None:
     update_registration_status(registration)
 
 
-def update_registration_status(instance) -> None:
+def update_registration_status(instance: Any) -> None:
     """Send email notifications for registration status changes.
 
     Handles automated emails for registration confirmations and updates,
@@ -132,7 +133,7 @@ def update_registration_status(instance) -> None:
             my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
-def registration_options(registration_instance) -> str:
+def registration_options(registration_instance: Any) -> str:
     """Generate email content for registration options.
 
     Creates formatted text showing selected tickets and registration choices,
@@ -256,7 +257,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
     )
 
 
-def send_character_assignment_email(instance) -> None:
+def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     """Send character assignment email when registration-character relation is created.
 
     This function sends an email notification to a member when they are assigned
@@ -380,7 +381,7 @@ def send_registration_cancellation_email(instance: Registration) -> None:
     if instance.pk:
         try:
             previous_registration = Registration.objects.get(pk=instance.pk)
-        except Exception as e:
+        except Registration.DoesNotExist as e:
             logger.debug("Registration pk=%s not found in pre-save: %s", instance.pk, e)
 
     # Send cancellation email only when registration is newly cancelled
@@ -431,7 +432,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
             my_send_mail(email_subject, email_body, organizer, instance.run)
 
 
-def send_pre_registration_confirmation_email(pre_registration) -> None:
+def send_pre_registration_confirmation_email(pre_registration: Any) -> None:
     """Handle pre-registration pre-save notifications.
 
     Args:

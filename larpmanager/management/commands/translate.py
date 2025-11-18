@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import time
 from pathlib import Path
+from typing import Any
 
 import deepl
 import polib
@@ -33,7 +34,7 @@ class DeepLLimitExceededError(Exception):
 class Command(BaseCommand):
     """Translate elements in .po file untraslated, or with fuzzy translation, using deepl."""
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle the translation command by initializing translator and processing translations."""
         # Initialize DeepL translator and display initial usage
         self.translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
@@ -48,7 +49,7 @@ class Command(BaseCommand):
         # Display final usage statistics
         self.stdout.write(str(self.translator.get_usage()))
 
-    def translate_entry(self, entry, target_language: str) -> None:
+    def translate_entry(self, entry: polib.POEntry, target_language: str) -> None:
         """Translate a single entry using DeepL API.
 
         Args:
@@ -106,12 +107,12 @@ class Command(BaseCommand):
 
             po_file_path = locale_path / locale_code / "LC_MESSAGES" / "django.po"
 
-            with open(po_file_path) as file_input:
+            with po_file_path.open() as file_input:
                 file_lines = file_input.read().splitlines(keepends=True)
             first_empty_line_index = file_lines.index("\n")
             file_lines = file_lines[first_empty_line_index:]
             file_lines = ['msgid ""\n', 'msgstr ""\n', '"Content-Type: text/plain; charset=UTF-8"\n', *file_lines]
-            with open(po_file_path, "w") as file_output:
+            with po_file_path.open("w") as file_output:
                 file_output.writelines(file_lines)
 
             self.stdout.write(f"### LOCALE: {locale_code} ### ")
@@ -121,12 +122,15 @@ class Command(BaseCommand):
             punctuation_symbols = (".", "?", "!", ",")
             has_changed = False
             for entry in po_file:
-                if entry.msgstr and entry.msgstr.endswith(punctuation_symbols):
-                    if not entry.msgid.endswith(punctuation_symbols):
-                        if "fuzzy" in entry.flags:
-                            entry.flags.remove("fuzzy")
-                        entry.msgstr = entry.msgstr.rstrip(".?!,")
-                        has_changed = True
+                if (
+                    entry.msgstr
+                    and entry.msgstr.endswith(punctuation_symbols)
+                    and not entry.msgid.endswith(punctuation_symbols)
+                ):
+                    if "fuzzy" in entry.flags:
+                        entry.flags.remove("fuzzy")
+                    entry.msgstr = entry.msgstr.rstrip(".?!,")
+                    has_changed = True
 
             if has_changed:
                 self.save_po(po_file, po_file_path)
@@ -141,7 +145,8 @@ class Command(BaseCommand):
 
             self.save_po(po_file, po_file_path)
 
-    def save_po(self, po: polib.POFile, po_path: str) -> None:
+    @staticmethod
+    def save_po(po: polib.POFile, po_path: str) -> None:
         """Save a PO file with sorted and deduplicated entries.
 
         Args:

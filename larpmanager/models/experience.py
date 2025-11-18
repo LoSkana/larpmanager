@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
@@ -29,11 +31,13 @@ from larpmanager.models.writing import Character
 
 
 class AbilityTypePx(BaseConceptModel):
+    """Represents AbilityTypePx model."""
+
     name = models.CharField(max_length=150, blank=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_ability_type_with_optional",
@@ -47,6 +51,8 @@ class AbilityTypePx(BaseConceptModel):
 
 
 class AbilityPx(BaseConceptModel):
+    """Represents AbilityPx model."""
+
     typ = models.ForeignKey(
         AbilityTypePx,
         on_delete=models.CASCADE,
@@ -85,8 +91,8 @@ class AbilityPx(BaseConceptModel):
     characters = models.ManyToManyField(Character, related_name="px_ability_list", blank=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_ability_with_optional",
@@ -104,13 +110,15 @@ class AbilityPx(BaseConceptModel):
 
 
 class DeliveryPx(BaseConceptModel):
+    """Represents DeliveryPx model."""
+
     amount = models.IntegerField()
 
     characters = models.ManyToManyField(Character, related_name="px_delivery_list", blank=True)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_delivery_with_optional",
@@ -128,6 +136,8 @@ class DeliveryPx(BaseConceptModel):
 
 
 class Operation(models.TextChoices):
+    """Represents Operation model."""
+
     ADDITION = "ADD", _("Addition")
     SUBTRACTION = "SUB", _("Subtraction")
     MULTIPLICATION = "MUL", _("Multiplication")
@@ -135,6 +145,8 @@ class Operation(models.TextChoices):
 
 
 class RulePx(BaseConceptModel):
+    """Represents RulePx model."""
+
     abilities = models.ManyToManyField(
         AbilityPx,
         related_name="rules",
@@ -163,6 +175,8 @@ class RulePx(BaseConceptModel):
 
 
 class ModifierPx(BaseConceptModel):
+    """Represents ModifierPx model."""
+
     abilities = models.ManyToManyField(AbilityPx, related_name="modifiers_abilities", blank=True)
 
     cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
@@ -186,8 +200,8 @@ class ModifierPx(BaseConceptModel):
     order = models.IntegerField()
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_modifier_with_optional",

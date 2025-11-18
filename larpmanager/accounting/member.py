@@ -22,10 +22,11 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any
+from datetime import datetime
+from datetime import timezone as dt_timezone
 
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import (
@@ -45,19 +46,16 @@ from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
-
-if TYPE_CHECKING:
-    from django.http import HttpRequest
+from larpmanager.utils.common import get_now
 
 
-def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
+def info_accounting(context: dict) -> None:
     """Gather comprehensive accounting information for a member.
 
     Collects registration history, payment status, membership fees, donations,
     collections, refunds, and token/credit balances for display in member dashboard.
 
     Args:
-        request: Django HTTP request object containing user session and metadata
         context: Context dictionary containing member object and association ID (association_id).
              Modified in-place to include accounting data.
 
@@ -80,13 +78,13 @@ def info_accounting(request: HttpRequest, context: dict[str, Any]) -> None:
     context["registration_list"] = []
 
     # Gather membership fee information and status
-    _info_membership(context, member, request)
+    _info_membership(context, member)
 
     # Collect donation history and outstanding donations
-    _info_donations(context, member, request)
+    _info_donations(context, member)
 
     # Process collection records and payment collections
-    _info_collections(context, member, request)
+    _info_collections(context, member)
 
     # Initialize registration years tracking dictionary
     context["registration_years"] = {}
@@ -127,7 +125,7 @@ def _init_regs(
     registration_choices: dict[int, dict],
     context: dict,
     pending_invoices: dict,
-    registration,
+    registration: Registration,
 ) -> None:
     """Initialize registration options and payment status tracking.
 
@@ -154,7 +152,7 @@ def _init_regs(
     elif registration.quota > 0:
         context["payments_todo"].append(registration)
     if registration.run.start:
-        if registration.run.start < datetime.now().date():
+        if registration.run.start < timezone.now().date():
             return
         context["registration_years"][registration.run.start.year] = 1
 
@@ -242,13 +240,12 @@ def _info_token_credit(context: dict, member: Member) -> None:
     context["acc_credits"] = expense_queryset.count() + credit_queryset.count()
 
 
-def _info_collections(context: dict, member: Member, request: HttpRequest) -> None:
+def _info_collections(context: dict, member: Member) -> None:
     """Get collection information if collections feature is enabled.
 
     Args:
         context: Context dictionary with association ID to update
         member: Member instance to get collections for
-        request: Django request with association features
 
     Side effects:
         Updates context with collections and collection_gifts if feature enabled
@@ -264,13 +261,12 @@ def _info_collections(context: dict, member: Member, request: HttpRequest) -> No
     )
 
 
-def _info_donations(context: dict, member: Member, request: HttpRequest) -> None:
+def _info_donations(context: dict, member: Member) -> None:
     """Get donation history if donations feature is enabled.
 
     Args:
         context: Context dictionary with association ID to update
         member: Member instance to get donations for
-        request: Django request with association features
 
     Side effects:
         Updates context with donations list if feature enabled
@@ -283,7 +279,7 @@ def _info_donations(context: dict, member: Member, request: HttpRequest) -> None
     context["donations"] = donation_queryset.order_by("-created")
 
 
-def _info_membership(context: dict, member: Member, request: HttpRequest) -> None:
+def _info_membership(context: dict, member: Member) -> None:
     """Get membership fee information if membership feature is enabled.
 
     Retrieves and adds membership-related information to the context dictionary,
@@ -294,7 +290,6 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
         context: Context dictionary containing association ID, will be updated with
              membership information including fee history and status flags
         member: Member instance to retrieve membership information for
-        request: Django request object containing association features configuration
 
     Returns:
         None: Function modifies context dictionary in-place
@@ -313,7 +308,7 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
         return
 
     # Get current year for membership calculations
-    current_year = datetime.now().year
+    current_year = timezone.now().year
 
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
@@ -350,10 +345,12 @@ def _info_membership(context: dict, member: Member, request: HttpRequest) -> Non
 
         # Build full date string with current year
         membership_day += f"-{current_year}"
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=timezone.utc)
 
-        # Add grace period months to membership date
+        # Parse and make aware with explicit UTC
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=dt_timezone.utc)
+
+        # Add grace period months
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = datetime.now(timezone.utc) < membership_deadline_date
+        context["grazing"] = get_now() < membership_deadline_date

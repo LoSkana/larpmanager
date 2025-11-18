@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import ast
 import json
-import os
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -83,10 +82,10 @@ from larpmanager.views.user.casting import casting_details, get_casting_preferen
 from larpmanager.views.user.registration import init_form_submitted
 
 if TYPE_CHECKING:
-    from django.forms import Form
+    from larpmanager.forms.base import MyForm
 
 
-def character(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def character_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Return character sheet for specified character in event run.
 
     Args:
@@ -213,7 +212,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
     return _character_sheet(request, context)
 
 
-def character_your_link(context: dict, character, path: str | None = None) -> str:
+def character_your_link(context: dict, character: Any, path: str | None = None) -> str:
     """Generate a URL link for a character page.
 
     Args:
@@ -299,7 +298,7 @@ def character_form(
     context: dict[str, Any],
     event_slug: str,
     instance: Character | RegistrationCharacterRel | None,
-    form_class: type[Form],
+    form_class: type[MyForm],
 ) -> HttpResponse:
     """Handle character creation and editing form processing.
 
@@ -336,11 +335,11 @@ def character_form(
             with transaction.atomic():
                 character = form.save(commit=False)
                 # Update character with additional processing and context
-                success_message = _update_character(context, character, form, success_message, request)
+                success_message = _update_character(context, character, form, success_message)
                 character.save()
 
                 # Handle character assignment logic
-                check_assign_character(request, context)
+                check_assign_character(context)
 
             # Display success message to user
             if success_message:
@@ -373,7 +372,7 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
-def _update_character(context: dict, character: Character, form: Form, message: str, request: HttpRequest) -> str:
+def _update_character(context: dict, character: Any, form: MyForm, message: str) -> str:
     """Update character status based on form data and event configuration.
 
     Args:
@@ -381,7 +380,6 @@ def _update_character(context: dict, character: Character, form: Form, message: 
         character: Character instance to update
         form: Form instance with cleaned data
         message: Initial message string
-        request: HTTP request object containing user information
 
     Returns:
         Updated message string or original message if no changes
@@ -396,20 +394,23 @@ def _update_character(context: dict, character: Character, form: Form, message: 
         character.player = context["member"]
 
     # Check if character approval is enabled for this event
-    if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
-        # Update status to proposed if character is in creation/review and user clicked propose
-        if character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW] and form.cleaned_data["propose"]:
-            character.status = CharacterStatus.PROPOSED
-            message = _(
-                "The character has been proposed to the staff, who will examine it and approve it "
-                "or request changes if necessary.",
-            )
+    # Update status to proposed if character is in creation/review and user clicked propose
+    if (
+        get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context)
+        and character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]
+        and form.cleaned_data["propose"]
+    ):
+        character.status = CharacterStatus.PROPOSED
+        message = _(
+            "The character has been proposed to the staff, who will examine it and approve it "
+            "or request changes if necessary.",
+        )
 
     return message
 
 
 @login_required
-def character_customize(request: HttpRequest, event_slug: str, num):
+def character_customize(request: HttpRequest, event_slug: str, num: Any) -> Any:
     """Handle character customization form with profile and custom fields.
 
     Args:
@@ -541,7 +542,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
         return JsonResponse({"res": "ko"})
 
     # Open and rotate the image based on direction parameter
-    path = os.path.join(conf_settings.MEDIA_ROOT, path)
+    path = str(Path(conf_settings.MEDIA_ROOT) / path)
     im = Image.open(path)
     out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
@@ -559,7 +560,7 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
 
 
 @login_required
-def character_list(request: HttpRequest, event_slug: str):
+def character_list(request: HttpRequest, event_slug: str) -> Any:
     """Display list of player's characters for an event with customization fields.
 
     Args:
@@ -590,7 +591,7 @@ def character_list(request: HttpRequest, event_slug: str):
 
 
 @login_required
-def character_create(request: HttpRequest, event_slug: str):
+def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation.
 
     Args:
@@ -613,7 +614,7 @@ def character_create(request: HttpRequest, event_slug: str):
 
 
 @login_required
-def character_edit(request: HttpRequest, event_slug: str, num):
+def character_edit(request: HttpRequest, event_slug: str, num: Any) -> Any:
     """Handle character editing form for specific character.
 
     Args:
@@ -663,7 +664,7 @@ def get_options_dependencies(context: dict) -> None:
 
 
 @login_required
-def character_assign(request: HttpRequest, event_slug: str, num):
+def character_assign(request: HttpRequest, event_slug: str, num: Any) -> Any:
     """Assign character to user's registration if not already assigned.
 
     Args:
@@ -743,7 +744,7 @@ def character_abilities(request: HttpRequest, event_slug: str, num: int) -> Http
     }
 
     # Add undo functionality for recent ability changes
-    context["undo_abilities"] = get_undo_abilities(request, context, context["character"])
+    context["undo_abilities"] = get_undo_abilities(context, context["character"])
 
     # Render the abilities template with all context data
     return render(request, "larpmanager/event/character/abilities.html", context)
@@ -782,7 +783,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_num: i
 
 
 @login_required
-def character_abilities_del(request: HttpRequest, event_slug: str, num, id_del):
+def character_abilities_del(request: HttpRequest, event_slug: str, num: Any, id_del: Any) -> Any:
     """Remove character ability with validation and dependency handling.
 
     Args:
@@ -799,7 +800,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, num, id_del):
 
     """
     context = check_char_abilities(request, event_slug, num)
-    undo_abilities = get_undo_abilities(request, context, context["character"])
+    undo_abilities = get_undo_abilities(context, context["character"])
     if id_del not in undo_abilities:
         msg = "ability out of undo window"
         raise Http404(msg)
@@ -812,7 +813,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, num, id_del):
     return redirect("character_abilities", event_slug=context["run"].get_slug(), num=context["character"].number)
 
 
-def _save_character_abilities(context, request: HttpRequest) -> None:
+def _save_character_abilities(context: dict[str, Any], request: HttpRequest) -> None:
     """Process character ability selection and save to character.
 
     Args:
@@ -841,14 +842,13 @@ def _save_character_abilities(context, request: HttpRequest) -> None:
         context["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
-    get_undo_abilities(request, context, context["character"], selected_id)
+    get_undo_abilities(context, context["character"], selected_id)
 
 
-def get_undo_abilities(request: HttpRequest, context: dict, char, new_ability_id=None):
+def get_undo_abilities(context: dict, char: Any, new_ability_id: Any = None) -> Any:
     """Get list of recently acquired abilities that can be undone.
 
     Args:
-        request: HTTP request object
         context: Context dictionary containing event data
         char: Character object
         new_ability_id: ID of newly acquired ability to track (optional)
@@ -937,7 +937,7 @@ def character_relationships(request: HttpRequest, event_slug: str, num: int) -> 
 
 
 @login_required
-def character_relationships_edit(request: HttpRequest, event_slug: str, num, other_character_id):
+def character_relationships_edit(request: HttpRequest, event_slug: str, num: Any, other_character_id: Any) -> Any:
     """Handle editing of character relationship with another character.
 
     Args:

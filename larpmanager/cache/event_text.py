@@ -17,10 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import logging
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import get_language
 
 from larpmanager.models.event import EventText
@@ -28,7 +31,7 @@ from larpmanager.models.event import EventText
 logger = logging.getLogger(__name__)
 
 
-def event_text_key(event_id, text_type, language) -> str:
+def event_text_key(event_id: int, text_type: str, language: str) -> str:
     """Generate cache key for event text."""
     return f"event_text_{event_id}_{text_type}_{language}"
 
@@ -50,7 +53,7 @@ def update_event_text(event_id: int, text_type: str, language: str) -> str:
     # Try to get event text from database
     try:
         event_text = EventText.objects.get(event_id=event_id, typ=text_type, language=language).text
-    except Exception as e:
+    except (ObjectDoesNotExist, AttributeError) as e:
         logger.debug("Event text not found for event_id=%s, type=%s, language=%s: %s", event_id, text_type, language, e)
 
     # Cache the result for 1 day
@@ -81,7 +84,7 @@ def get_event_text_cache(event_id: int, typ: str, lang: str) -> str:
     return res
 
 
-def event_text_key_def(event_id, text_type) -> str:
+def event_text_key_def(event_id: int, text_type: str) -> str:
     """Generate cache key for default event text."""
     return f"event_text_def_{event_id}_{text_type}"
 
@@ -101,7 +104,7 @@ def update_event_text_def(event_id: int, typ: str) -> str:
     try:
         # Get default event text for the specified event and type
         default_text = EventText.objects.filter(event_id=event_id, typ=typ, default=True).first().text
-    except Exception as e:
+    except (ObjectDoesNotExist, AttributeError) as e:
         # Return empty string if no default text found or any error occurs
         logger.debug("Default event text not found for event_id=%s, type=%s: %s", event_id, typ, e)
 

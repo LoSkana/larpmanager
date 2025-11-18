@@ -18,10 +18,13 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
 from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
+from larpmanager.models.base import BaseModel
 from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
 from larpmanager.models.form import (
     WritingAnswer,
@@ -37,113 +40,141 @@ from larpmanager.models.writing import (
 
 
 class WritingQuestionFilter(AutocompleteFilter):
+    """Admin filter for WritingQuestion autocomplete."""
+
     title = "WritingQuestion"
     field_name = "question"
 
 
 @admin.register(Character)
 class CharacterAdmin(DefModelAdmin):
+    """Admin interface for Character model."""
+
     list_display = ("number", "name", "teaser", "event")
-    search_fields = ("name", "teaser")
+    search_fields: ClassVar[tuple] = ("name", "teaser")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "characters", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["event", "characters", "progress", "assigned"]
 
 
 @admin.register(CharacterConfig)
 class CharacterConfigAdmin(DefModelAdmin):
+    """Admin interface for CharacterConfig model."""
+
     list_display = ("character", "name", "value")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
     list_filter = (CharacterFilter,)
-    autocomplete_fields = ["character"]
+    autocomplete_fields: ClassVar[list] = ["character"]
 
 
 @admin.register(WritingQuestion)
 class WritingQuestionAdmin(DefModelAdmin):
+    """Admin interface for WritingQuestion model."""
+
     list_display = ("event", "typ", "name", "description_red", "order", "status", "visibility", "applicable")
-    exclude = ("search",)
+    exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search", "name")
-    autocomplete_fields = ["event"]
+    autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter, "applicable")
 
     @staticmethod
-    def description_red(instance):
+    def description_red(instance: BaseModel) -> str:
         """Return reduced description for admin display."""
         return reduced(instance.description)
 
 
 @admin.register(WritingOption)
 class WritingOptionAdmin(DefModelAdmin):
+    """Admin interface for WritingOption model."""
+
     list_display = ("question", "name", "event", "details_red", "max_available", "order")
-    exclude = ("search",)
+    exclude: ClassVar[tuple] = ("search",)
     search_fields = ("search", "name")
-    autocomplete_fields = ["question", "event"]
+    autocomplete_fields: ClassVar[list] = ["question", "event"]
     list_filter = (WritingQuestionFilter, EventFilter)
 
     @staticmethod
-    def details_red(instance):
+    def details_red(instance: BaseModel) -> str:
         """Return reduced details for admin display."""
         return reduced(instance.description)
 
 
 @admin.register(WritingChoice)
 class WritingChoiceAdmin(DefModelAdmin):
+    """Admin interface for WritingChoice model."""
+
     list_display = ("id", "question", "option", "element_id")
-    autocomplete_fields = ["question", "option"]
+    autocomplete_fields: ClassVar[list] = ["question", "option"]
     list_filter = (WritingQuestionFilter,)
 
 
 @admin.register(WritingAnswer)
 class WritingAnswerAdmin(DefModelAdmin):
+    """Admin interface for WritingAnswer model."""
+
     list_display = ("id", "question", "text_red", "element_id")
-    autocomplete_fields = ["question"]
+    autocomplete_fields: ClassVar[list] = ["question"]
     list_filter = (WritingQuestionFilter,)
 
     @staticmethod
-    def text_red(instance):
+    def text_red(instance: BaseModel) -> str:
         """Return reduced text for admin display."""
         return reduced(instance.text)
 
 
 class SourceFilter(AutocompleteFilter):
+    """Admin filter for source Character autocomplete."""
+
     title = "Member"
     field_name = "source"
 
 
 class TargetFilter(AutocompleteFilter):
+    """Admin filter for target Character autocomplete."""
+
     title = "Member"
     field_name = "target"
 
 
 @admin.register(Relationship)
 class RelationshipAdmin(DefModelAdmin):
-    list_display = ("source", "target", "text")
+    """Admin interface for Relationship model."""
+
+    list_display: ClassVar[tuple] = ("source", "target", "text")
     list_filter = (SourceFilter, TargetFilter)
-    autocomplete_fields = ["source", "target"]
+    autocomplete_fields: ClassVar[list] = ["source", "target"]
 
 
 @admin.register(AbilityTypePx)
 class AbilityTypePxAdmin(DefModelAdmin):
-    list_display = ("event", "name")
-    list_filter = (EventFilter,)
-    autocomplete_fields = ["event"]
-    search_fields = ["name"]
+    """Admin interface for AbilityTypePx model."""
+
+    list_display: ClassVar[tuple] = ("event", "name")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(AbilityPx)
 class AbilityPxAdmin(DefModelAdmin):
-    list_display = ("name", "typ", "cost", "event")
-    list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "characters", "typ", "prerequisites", "requirements"]
-    search_fields = ["name"]
+    """Admin interface for AbilityPx model."""
+
+    list_display: ClassVar[tuple] = ("name", "typ", "cost", "event")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event", "characters", "typ", "prerequisites", "requirements"]
+    search_fields: ClassVar[list] = ["name"]
 
 
 @admin.register(DeliveryPx)
 class DeliveryPxAdmin(DefModelAdmin):
-    list_display = ("event", "name", "amount")
+    """Admin interface for DeliveryPx model."""
+
+    list_display: ClassVar[tuple] = ("event", "name", "amount")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["characters"]
+    autocomplete_fields: ClassVar[list] = ["characters"]
 
 
 class PlotFilter(AutocompleteFilter):
+    """Admin filter for Plot autocomplete."""
+
     title = "Plot"
     field_name = "plot"

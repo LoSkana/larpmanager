@@ -17,14 +17,16 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import connection
+from django.utils import timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
@@ -49,7 +51,7 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.association import Association
-from larpmanager.models.event import DevelopStatus, Run
+from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.common import get_time_diff_today
@@ -70,7 +72,7 @@ class Command(BaseCommand):
 
     help = "Automate processes "
 
-    def handle(self, *args: Any, **options: Any) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Handle command execution with exception handling.
 
         Args:
@@ -80,7 +82,7 @@ class Command(BaseCommand):
         """
         try:
             self.go()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - Top-level handler must catch all errors to notify admins
             notify_admins("Automate", "", e)
 
     def go(self) -> None:
@@ -158,7 +160,7 @@ class Command(BaseCommand):
         Cleans up abandoned payment attempts to prevent database bloat.
         """
         # delete old payment invoice
-        reference_date = datetime.now() - timedelta(days=60)
+        reference_date = timezone.now() - timedelta(days=60)
         payment_invoices_query = PaymentInvoice.objects.filter(status=PaymentStatus.CREATED)
         for payment_invoice in payment_invoices_query.filter(created__lte=reference_date.date()):
             payment_invoice.delete()
@@ -174,9 +176,9 @@ class Command(BaseCommand):
         for payment_invoice in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
             try:
                 notify_invoice_check(payment_invoice)
-            except ObjectDoesNotExist:
+            except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling with different actions per exception type
                 payment_invoice.delete()
-            except Exception as exception:
+            except Exception as exception:  # noqa: BLE001 - Batch operation must continue and notify admins on any error
                 notify_admins("notify_invoice_check fail", payment_invoice.idx, exception)
 
     @staticmethod
@@ -200,7 +202,6 @@ class Command(BaseCommand):
         Runs SQL cleanup commands defined in CLEAN_DB setting to maintain
         database performance and remove stale data.
         """
-        # PaymentInvoice.objects.filter(txn_id__isnull=True).delete()
         with connection.cursor() as database_cursor:
             for cleanup_sql_query in conf_settings.CLEAN_DB:
                 database_cursor.execute(cleanup_sql_query)
@@ -225,7 +226,7 @@ class Command(BaseCommand):
         events_by_id = {}
 
         # Process past events for participation badges
-        for run in Run.objects.filter(end__lt=datetime.today(), event__association=association):
+        for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
             # Get all non-cancelled registrations
             registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
 
@@ -239,7 +240,7 @@ class Command(BaseCommand):
             events_by_id[run.event_id] = run.event
 
         # Process future events for friend referral tracking
-        for run in Run.objects.filter(end__gt=datetime.today()):
+        for run in Run.objects.filter(end__gt=timezone.now().date()):
             # Get confirmed registrations (excluding waiting list)
             for registration in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
                 ticket__tier=TicketTier.WAITING,
@@ -275,13 +276,13 @@ class Command(BaseCommand):
         # Award badge to member by adding to many-to-many relationship
         badge.members.add(member)
 
-    def check_event_badge(self, event, m, cache) -> None:
+    def check_event_badge(self, event: Event, m: Member, cache: dict[str, Any]) -> None:
         """Award event-specific badge to member.
 
         Args:
             event: Event instance to derive badge from
             m: Member instance to award badge to
-            cache (dict): Badge cache for performance
+            cache: Badge cache for performance
 
         """
         self.add_member_badge(event.slug, m, cache)
@@ -307,9 +308,7 @@ class Command(BaseCommand):
         # Check if member's badges are already cached
         if member.id not in cache["players"]:
             # Build list of badge codes from member's badges
-            badge_codes = []
-            for badge in member.badges.all():
-                badge_codes.append(badge.cod)
+            badge_codes = [badge.cod for badge in member.badges.all()]
 
             # Cache the badge codes for this member
             cache["players"][member.id] = badge_codes
@@ -344,15 +343,15 @@ class Command(BaseCommand):
 
             # Return cached badge instance
             return badge_cache["badges"][badge_code]
-        except Exception:
-            # Return None on any error (badge not found, cache issues, etc.)
+        except Badge.DoesNotExist:
+            # Return None if badge not found
             return None
 
     @staticmethod
     def get_count(
         counter_name: str,
         activity_cache: dict[str, dict[int, int]],
-        member,
+        member: Member,
         increment_value: int = 1,
     ) -> int:
         """Track and increment member activity counters.
@@ -610,7 +609,7 @@ class Command(BaseCommand):
         registrations_queryset = get_regs(association)
 
         # Calculate reference date (3 days from now) to filter out immediate events
-        minimum_start_date = datetime.now() + timedelta(days=3)
+        minimum_start_date = timezone.now() + timedelta(days=3)
 
         # Filter registrations to exclude events without start dates or starting too soon
         registrations_queryset = registrations_queryset.exclude(run__start__isnull=True).exclude(
@@ -690,7 +689,7 @@ class Command(BaseCommand):
 
         """
         # Get current year for membership fee validation
-        current_year = datetime.today().year
+        current_year = timezone.now().year
 
         # Skip if registration is not for current year
         if current_year != registration.run.end.year:
@@ -755,7 +754,8 @@ class Command(BaseCommand):
         # Send payment reminder if all conditions are met
         remember_pay(reg)
 
-    def check_deadline(self, run: Run) -> None:
+    @staticmethod
+    def check_deadline(run: Run) -> None:
         """Check and send deadline notifications for run.
 
         This function performs deadline checking for a specific run, considering holidays,
@@ -774,7 +774,7 @@ class Command(BaseCommand):
             return
 
         # Calculate reference date (7 days ago) and skip if run is too old or has no start date
-        reference_date = datetime.now() - timedelta(days=7)
+        reference_date = timezone.now() - timedelta(days=7)
         if not run.start or run.start < reference_date.date():
             return
 

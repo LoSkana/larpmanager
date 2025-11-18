@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+from typing import Any
+
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest
@@ -52,7 +54,7 @@ from larpmanager.utils.exceptions import (
 from larpmanager.utils.registration import check_signup, registration_status
 
 
-def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
+def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks
     """Build context with commonly used elements.
 
     Constructs a comprehensive context dictionary containing user information,
@@ -285,7 +287,7 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
     return context
 
 
-def get_event(request: HttpRequest, event_slug: str, run_number=None):
+def get_event(request: HttpRequest, event_slug: str, run_number: Any = None) -> Any:
     """Get event context from slug and number.
 
     Args:
@@ -331,7 +333,7 @@ def get_event(request: HttpRequest, event_slug: str, run_number=None):
 
 
 def get_event_context(
-    request,
+    request: Any,
     event_slug: str,
     feature_slug: str | None = None,
     *,
@@ -369,7 +371,7 @@ def get_event_context(
 
     # Validate user signup eligibility if requested
     if signup:
-        check_signup(request, context)
+        check_signup(context)
 
     # Verify feature access permissions for specific functionality
     if feature_slug:
@@ -401,7 +403,7 @@ def get_event_context(
     return context
 
 
-def prepare_run(context) -> None:
+def prepare_run(context: Any) -> None:
     """Prepare run context with visibility and field configurations.
 
     Args:
@@ -436,7 +438,7 @@ def prepare_run(context) -> None:
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
 
-def get_run(context, event_slug) -> None:
+def get_run(context: Any, event_slug: Any) -> None:
     """Load run and event data from cache and database.
 
     Args:
@@ -451,7 +453,7 @@ def get_run(context, event_slug) -> None:
 
     """
     try:
-        res = get_cache_run(context["association_id"], event_slug)
+        run_id = get_cache_run(context["association_id"], event_slug)
         que = Run.objects.select_related("event")
         fields = [
             "search",
@@ -472,7 +474,7 @@ def get_run(context, event_slug) -> None:
             "event__ter_rgb",
         ]
         que = que.defer(*fields)
-        context["run"] = que.get(pk=res)
+        context["run"] = que.get(pk=run_id)
         context["event"] = context["run"].event
     except Exception as err:
         raise UnknowRunError from err

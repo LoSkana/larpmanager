@@ -7,21 +7,22 @@ Outputs a CSV file with function name, file path, and line count, sorted by line
 import ast
 import csv
 from pathlib import Path
+from typing import Any
 
 
-def count_function_lines(node):
+def count_function_lines(node: Any) -> int:
     """Count the number of lines in a function definition."""
     if hasattr(node, "end_lineno") and hasattr(node, "lineno"):
         return node.end_lineno - node.lineno + 1
     return 0
 
 
-def analyze_file(file_path):
+def analyze_file(file_path: Any) -> list:
     """Extract all functions from a Python file with their line counts."""
     functions = []
 
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with Path(file_path).open(encoding="utf-8") as f:
             content = f.read()
 
         tree = ast.parse(content)
@@ -37,7 +38,7 @@ def analyze_file(file_path):
     return functions
 
 
-def analyze_codebase(root_dir="."):
+def analyze_codebase(root_dir: str = ".") -> list:
     """Analyze all Python files in the codebase."""
     all_functions = []
     root_path = Path(root_dir)
@@ -58,8 +59,6 @@ def analyze_codebase(root_dir="."):
 
 def main() -> None:
     """Run the main analysis."""
-    print("Analyzing codebase...")
-
     # Get the project root (parent of scripts directory)
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
@@ -72,18 +71,15 @@ def main() -> None:
 
     # Write to CSV
     output_file = project_root / "function_analysis.csv"
-    with open(output_file, "w", newline="", encoding="utf-8") as f:
+    with output_file.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=["name", "path", "lines"])
         writer.writeheader()
         writer.writerows(functions)
 
-    print(f"Analysis complete! Found {len(functions)} functions.")
-    print(f"Results saved to: {output_file}")
 
     # Print top 10
-    print("\nTop 10 largest functions:")
-    for i, func in enumerate(functions[:10], 1):
-        print(f"{i}. {func['name']} ({func['lines']} lines) - {func['path']}")
+    for _i, _func in enumerate(functions[:10], 1):
+        pass
 
 
 if __name__ == "__main__":

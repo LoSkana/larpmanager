@@ -22,6 +22,7 @@ from __future__ import annotations
 import csv
 import io
 import zipfile
+from typing import Any
 
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -56,7 +57,7 @@ from larpmanager.utils.common import check_field
 from larpmanager.utils.edit import _get_values_mapping
 
 
-def _temp_csv_file(column_headers, data_rows):
+def _temp_csv_file(column_headers: Any, data_rows: Any) -> Any:
     """Create CSV content from keys and values.
 
     Args:
@@ -74,7 +75,7 @@ def _temp_csv_file(column_headers, data_rows):
     return buffer.getvalue()
 
 
-def zip_exports(context, exports, filename):
+def zip_exports(context: Any, exports: Any, filename: Any) -> Any:
     """Create ZIP file containing multiple CSV exports.
 
     Args:
@@ -98,7 +99,7 @@ def zip_exports(context, exports, filename):
     return response
 
 
-def download(context, typ, nm):
+def download(context: Any, typ: Any, nm: Any) -> Any:
     """Generate downloadable ZIP export for model type.
 
     Args:
@@ -169,7 +170,7 @@ def export_data(context: dict, model_type: type, *, member_cover: bool = False) 
     return exports
 
 
-def export_plot_rels(context):
+def export_plot_rels(context: Any) -> Any:
     """Export plot-character relationships.
 
     Args:
@@ -180,25 +181,24 @@ def export_plot_rels(context):
 
     """
     column_keys = ["plot", "character", "text"]
-    relationship_values = []
 
     event_id = context["event"].get_class_parent(Plot)
 
-    for plot_character_relationship in (
-        PlotCharacterRel.objects.filter(plot__event_id=event_id).prefetch_related("plot", "character").order_by("order")
-    ):
-        relationship_values.append(
-            [
-                plot_character_relationship.plot.name,
-                plot_character_relationship.character.name,
-                plot_character_relationship.text,
-            ],
-        )
+    relationship_values = [
+        [
+            plot_character_relationship.plot.name,
+            plot_character_relationship.character.name,
+            plot_character_relationship.text,
+        ]
+        for plot_character_relationship in PlotCharacterRel.objects.filter(plot__event_id=event_id)
+        .prefetch_related("plot", "character")
+        .order_by("order")
+    ]
 
     return [("plot_rels", column_keys, relationship_values)]
 
 
-def export_relationships(context):
+def export_relationships(context: Any) -> Any:
     """Export character relationships.
 
     Args:
@@ -209,12 +209,13 @@ def export_relationships(context):
 
     """
     column_headers = ["source", "target", "text"]
-    relationship_rows = []
 
     event_id = context["event"].get_class_parent(Character)
 
-    for relationship in Relationship.objects.filter(source__event_id=event_id).prefetch_related("source", "target"):
-        relationship_rows.append([relationship.source.name, relationship.target.name, relationship.text])
+    relationship_rows = [
+        [relationship.source.name, relationship.target.name, relationship.text]
+        for relationship in Relationship.objects.filter(source__event_id=event_id).prefetch_related("source", "target")
+    ]
 
     return [("relationships", column_headers, relationship_rows)]
 
@@ -363,9 +364,12 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
             if question.id in question_answers and element.id in question_answers[question.id]:
                 cell_value = question_answers[question.id][element.id]
         # Handle choice-based question types (single, multiple)
-        elif question.typ in {"s", "m"}:
-            if question.id in question_choices and element.id in question_choices[question.id]:
-                cell_value = ", ".join(question_choices[question.id][element.id])
+        elif (
+            question.typ in {"s", "m"}
+            and question.id in question_choices
+            and element.id in question_choices[question.id]
+        ):
+            cell_value = ", ".join(question_choices[question.id][element.id])
 
         # Clean value for export format (remove tabs, convert newlines)
         cell_value = cell_value.replace("\t", "").replace("\n", "<br />")
@@ -404,10 +408,9 @@ def _row_header(
     member = None
     if model == "registration":
         member = el.member
-    elif model == "character":
-        # Check if character has assignment in context
-        if el.id in context["assignments"]:
-            member = context["assignments"][el.id]
+    # Check if character has assignment in context
+    elif model == "character" and el.id in context["assignments"]:
+        member = context["assignments"][el.id]
 
     # Add profile image column if requested
     if member_cover:
@@ -618,7 +621,7 @@ def _clean(html_content: str | None) -> str:
     return soup.get_text("\n").replace("\n", " ")
 
 
-def _download_prepare(context: dict, model_name: str, queryset, type_config: dict) -> object:
+def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], model_type: type) -> QuerySet[Any]:
     """Prepare and filter query for CSV download based on type and context.
 
     Processes a queryset by applying appropriate filters based on the model type
@@ -629,7 +632,7 @@ def _download_prepare(context: dict, model_name: str, queryset, type_config: dic
         context: Context dictionary containing event/run information and request data
         model_name: Name/type of the model being downloaded (e.g., 'character', 'registration')
         queryset: Initial Django queryset to filter and optimize
-        type_config: Type configuration dictionary containing filtering rules and field specifications
+        model_type: Type configuration dictionary containing filtering rules and field specifications
 
     Returns:
         Filtered and optimized Django queryset ready for CSV export with all
@@ -637,15 +640,15 @@ def _download_prepare(context: dict, model_name: str, queryset, type_config: dic
 
     """
     # Apply event-based filtering if specified in type configuration
-    if check_field(type_config, "event"):
+    if check_field(model_type, "event"):
         queryset = queryset.filter(event=context["event"])
 
     # Apply run-based filtering if specified in type configuration
-    elif check_field(type_config, "run"):
+    elif check_field(model_type, "run"):
         queryset = queryset.filter(run=context["run"])
 
     # Apply number-based ordering if specified in type configuration
-    if check_field(type_config, "number"):
+    if check_field(model_type, "number"):
         queryset = queryset.order_by("number")
 
     # Optimize character queries by prefetching factions and selecting player data
@@ -845,7 +848,7 @@ def export_character_form(context: dict) -> list[tuple[str, list, list]]:
     return exports
 
 
-def _orga_registrations_acc(context, registrations=None):
+def _orga_registrations_acc(context: Any, registrations: Any = None) -> Any:
     """Process registration accounting data for organizer reports.
 
     Args:
@@ -870,7 +873,7 @@ def _orga_registrations_acc(context, registrations=None):
     return cached_data
 
 
-def _orga_registrations_acc_reg(reg, context: dict, cache_aip: dict) -> dict:
+def _orga_registrations_acc_reg(reg: Any, context: dict, cache_aip: dict) -> dict:
     """Process registration accounting data for organizer downloads.
 
     Calculates payment breakdowns, remaining balances, and ticket pricing
@@ -1177,7 +1180,7 @@ def export_tickets(context: dict) -> list[tuple[str, list[str], list]]:
     return [("tickets", field_keys, extracted_values)]
 
 
-def export_event(context):
+def export_event(context: Any) -> Any:
     """Export event configuration and features data.
 
     Args:
@@ -1196,16 +1199,17 @@ def export_event(context):
     export_data = [("configuration", column_names, configuration_values)]
 
     column_names = ["name", "slug"]
-    feature_values = []
-    for element in [context["event"], association]:
-        for feature in element.features.all():
-            feature_values.append((feature.name, feature.slug))
+    feature_values = [
+        (feature.name, feature.slug)
+        for element in [context["event"], association]
+        for feature in element.features.all()
+    ]
     export_data.append(("features", column_names, feature_values))
 
     return export_data
 
 
-def export_abilities(context):
+def export_abilities(context: Any) -> Any:
     """Export abilities data for an event.
 
     Args:
@@ -1227,9 +1231,14 @@ def export_abilities(context):
     )
     ability_rows = []
     for ability in ability_queryset:
-        row_data = [ability.name, ability.cost, ability.typ.name if ability.typ else "", ability.descr]
-        row_data.append(", ".join([prereq.name for prereq in ability.prerequisites.all()]))
-        row_data.append(", ".join([req.name for req in ability.requirements.all()]))
+        row_data = [
+            ability.name,
+            ability.cost,
+            ability.typ.name if ability.typ else "",
+            ability.descr,
+            ", ".join([prereq.name for prereq in ability.prerequisites.all()]),
+            ", ".join([req.name for req in ability.requirements.all()]),
+        ]
         ability_rows.append(row_data)
 
     return [("abilities", column_headers, ability_rows)]

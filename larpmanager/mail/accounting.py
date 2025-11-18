@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
@@ -650,7 +652,7 @@ def get_credit_email(credit_name: str, instance: AccountingItemOther) -> tuple[s
     return subject, body
 
 
-def notify_token(instance, token_name: str) -> None:
+def notify_token(instance: Any, token_name: str) -> None:
     """Send token notification emails to user and event organizers."""
     # Send notification to the token recipient
     activate(instance.member.language)
@@ -757,7 +759,6 @@ def send_collection_activation_email(instance: AccountingItemCollection) -> None
 
     Args:
         instance: Collection instance that was saved
-        created: Boolean indicating if instance was created (True for new instances)
 
     Returns:
         None
@@ -887,7 +888,7 @@ def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:
     return subj, body
 
 
-def get_invoice_email(invoice) -> tuple[str, str]:
+def get_invoice_email(invoice: Any) -> tuple[str, str]:
     """Generate email subject and body for invoice payment verification.
 
     Args:

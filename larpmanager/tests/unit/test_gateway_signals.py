@@ -21,14 +21,13 @@
 """Tests for gateway and remaining signal receivers"""
 
 from decimal import Decimal
-from unittest.mock import patch
+
+# Import signals module to register signal handlers
+import larpmanager.models.signals  # noqa: F401
 
 # PaymentGateway and PaymentTransaction no longer exist - using available models
 from larpmanager.models.accounting import PaymentChoices
 from larpmanager.tests.unit.base import BaseTestCase
-
-# Import signals module to register signal handlers
-import larpmanager.models.signals  # noqa: F401
 
 
 class TestGatewaySignals(BaseTestCase):

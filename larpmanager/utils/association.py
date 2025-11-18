@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 from cryptography.fernet import Fernet
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -26,7 +28,7 @@ from larpmanager.models.access import AssociationPermission
 from larpmanager.models.association import Association
 
 
-def generate_association_encryption_key(association) -> None:
+def generate_association_encryption_key(association: Any) -> None:
     """Generate Fernet encryption key for new associations.
 
     Args:
@@ -37,7 +39,7 @@ def generate_association_encryption_key(association) -> None:
         association.key = Fernet.generate_key()
 
 
-def auto_assign_association_permission_number(association_permission) -> None:
+def auto_assign_association_permission_number(association_permission: Any) -> None:
     """Assign number to association permission if not set.
 
     Args:
@@ -89,7 +91,7 @@ def prepare_association_skin_features(instance: Association) -> None:
         return
 
     # Mark instance for skin feature updates
-    instance._update_skin_features = True
+    instance._update_skin_features = True  # noqa: SLF001  # Internal flag for skin feature updates
 
     # Apply skin defaults only to empty/unset fields
     # Set default nationality if not already specified

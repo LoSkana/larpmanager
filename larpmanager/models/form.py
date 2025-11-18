@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django.apps import apps
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -30,7 +30,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
 from larpmanager.models.base import BaseModel
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
     Registration,
@@ -52,7 +52,7 @@ class BaseQuestionType(models.TextChoices):
     EDITOR = "e", _("Advanced text editor")
 
     @staticmethod
-    def get_answer_types():
+    def get_answer_types() -> Any:
         """Get question types that use text answers.
 
         Returns:
@@ -62,7 +62,7 @@ class BaseQuestionType(models.TextChoices):
         return {BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR}
 
     @staticmethod
-    def get_choice_types():
+    def get_choice_types() -> Any:
         """Get question types that use choice options.
 
         Returns:
@@ -72,7 +72,7 @@ class BaseQuestionType(models.TextChoices):
         return {BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE}
 
     @staticmethod
-    def get_basic_types():
+    def get_basic_types() -> Any:
         """Get all basic question types.
 
         Returns:
@@ -82,7 +82,7 @@ class BaseQuestionType(models.TextChoices):
         return BaseQuestionType.get_answer_types() | BaseQuestionType.get_choice_types()
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of question types to string identifiers."""
         return {
             BaseQuestionType.SINGLE: "single-choice",
@@ -93,7 +93,7 @@ class BaseQuestionType(models.TextChoices):
         }
 
 
-def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]):
+def extend_textchoices(name: str, base: models.TextChoices, extra: list[tuple[str, str, str]]) -> Any:
     """Extend Django TextChoices with additional options.
 
     Args:
@@ -128,7 +128,7 @@ WritingQuestionType = extend_textchoices(
 )
 
 
-def get_def_writing_types():
+def get_def_writing_types() -> Any:
     """Get default writing question types.
 
     Returns:
@@ -138,7 +138,7 @@ def get_def_writing_types():
     return {WritingQuestionType.NAME, WritingQuestionType.TEASER, WritingQuestionType.SHEET, WritingQuestionType.TITLE}
 
 
-def get_writing_max_length():
+def get_writing_max_length() -> Any:
     """Get maximum length for writing content.
 
     Returns:
@@ -178,7 +178,7 @@ class QuestionStatus(models.TextChoices):
     HIDDEN = "h", _("Hidden")
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of question status values to string identifiers."""
         return {
             QuestionStatus.OPTIONAL: "optional",
@@ -197,7 +197,7 @@ class QuestionVisibility(models.TextChoices):
     HIDDEN = "h", _("Hidden")
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of visibility values to string identifiers."""
         return {
             QuestionVisibility.SEARCHABLE: "searchable",
@@ -227,7 +227,7 @@ class QuestionApplicable(models.TextChoices):
         return None
 
     @staticmethod
-    def get_applicable_inverse(question_applicable_type: int) -> type:
+    def get_applicable_inverse(question_applicable_type: str) -> type:
         """Get the Django model class for a QuestionApplicable type."""
         # noinspection PyUnresolvedReferences
         # Get the lowercase label from QuestionApplicable enum
@@ -236,7 +236,7 @@ class QuestionApplicable(models.TextChoices):
         return apps.get_model("larpmanager", model_name)
 
     @classmethod
-    def get_mapping(cls):
+    def get_mapping(cls) -> Any:
         """Return mapping of type values to labels."""
         return dict(cls.choices)
 
@@ -317,6 +317,7 @@ class WritingQuestion(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -333,29 +334,29 @@ class WritingQuestion(BaseModel):
         return js
 
     @staticmethod
-    def get_instance_questions(event_instance, enabled_features):  # noqa: ARG004
+    def get_instance_questions(event_instance: Any, enabled_features: Any) -> Any:  # noqa: ARG004
         """Get all writing questions for the event instance ordered by order field."""
         return event_instance.get_elements(WritingQuestion).order_by("order")
 
     @staticmethod
-    def skip(registration, features, params=None, *, is_organizer=False) -> bool:  # noqa: ARG004
+    def skip(registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: ARG004
         """Default behavior: never skip processing."""
         return False
 
-    def get_editable(self):
+    def get_editable(self) -> Any:
         """Return list of editable character statuses."""
         return self.editable.split(",") if self.editable else []
 
-    def set_editable(self, editable_list) -> None:
+    def set_editable(self, editable_list: Any) -> None:
         """Set editable character statuses from list."""
         self.editable = ",".join(editable_list)
 
-    def get_editable_display(self):
+    def get_editable_display(self) -> Any:
         """Return comma-separated display of editable character statuses."""
         return ", ".join([str(label) for value, label in CharacterStatus.choices if value in self.get_editable()])
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(
                 fields=["event", "applicable", "status"],
                 condition=Q(deleted__isnull=True),
@@ -366,6 +367,8 @@ class WritingQuestion(BaseModel):
 
 
 class WritingOption(BaseModel):
+    """Represents WritingOption model."""
+
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="char_options")
@@ -413,23 +416,16 @@ class WritingOption(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.question} {self.name}"
 
-    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
+    def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
         """Return the display name for this ticket tier."""
-        show_data = self.show(run)
+        show_data = self.show()
         return show_data["name"]
 
-    def show(self, run=None) -> dict[str, Any]:
-        """Return JSON representation with available fields and attributes.
-
-        Args:
-            run: Optional run instance for context (unused).
-
-        Returns:
-            Dictionary containing max_available and updated attributes.
-
-        """
+    def show(self) -> dict[str, Any]:
+        """Return JSON representation with available fields and attributes."""
         # Initialize response with max available count
         js = {"max_available": self.max_available}
 
@@ -441,6 +437,8 @@ class WritingOption(BaseModel):
 
 
 class WritingChoice(BaseModel):
+    """Choices for WritingChoice."""
+
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="choices")
 
     option = models.ForeignKey(WritingOption, on_delete=models.CASCADE, related_name="choices")
@@ -448,18 +446,21 @@ class WritingChoice(BaseModel):
     element_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
         # Return string representation showing element ID, question name, and option name
         # noinspection PyUnresolvedReferences
         return f"{self.element_id} ({self.question.name}) {self.option.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wch_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wch_elem_act"),
         ]
 
 
 class WritingAnswer(BaseModel):
+    """Represents WritingAnswer model."""
+
     question = models.ForeignKey(WritingQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=100000)
@@ -472,13 +473,15 @@ class WritingAnswer(BaseModel):
         return f"{self.element_id} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["element_id", "question"], condition=Q(deleted__isnull=True), name="wan_elem_q_act"),
             models.Index(fields=["element_id"], condition=Q(deleted__isnull=True), name="wan_elem_act"),
         ]
 
 
 class RegistrationQuestion(BaseModel):
+    """Represents RegistrationQuestion model."""
+
     typ = models.CharField(
         max_length=50,
         choices=RegistrationQuestionType.choices,
@@ -586,6 +589,7 @@ class RegistrationQuestion(BaseModel):
     )
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
 
     def show(self) -> dict[str, Any]:
@@ -623,7 +627,7 @@ class RegistrationQuestion(BaseModel):
 
         return questions
 
-    def skip(self, registration, features, params=None, *, is_organizer=False) -> bool:
+    def skip(self, registration: Any, features: Any, params: Any = None, *, is_organizer: Any = False) -> bool:  # noqa: C901 - Complex question skip logic with feature checks
         """Determine if a question should be skipped based on context and features.
 
         Evaluates question visibility rules including hidden status, ticket restrictions,
@@ -658,21 +662,21 @@ class RegistrationQuestion(BaseModel):
             run_id = params["run"].id
             is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
             # noinspection PyUnresolvedReferences
-            if not is_run_organizer and self.allowed_map[0]:
-                # noinspection PyUnresolvedReferences
-                if params["member"].id not in self.allowed_map:
-                    return True
+            if not is_run_organizer and self.allowed_map[0] and params["member"].id not in self.allowed_map:
+                return True
 
         return False
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="rq_evt_act"),
             models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="rq_evt_stat_act"),
         ]
 
 
 class RegistrationOption(BaseModel):
+    """Represents RegistrationOption model."""
+
     search = models.CharField(max_length=1000, editable=False)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="options")
@@ -710,16 +714,17 @@ class RegistrationOption(BaseModel):
     order = models.IntegerField(default=0)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.question} {self.name[:30]} ({self.price}€)"
 
-    def get_price(self):
+    def get_price(self) -> Any:
         """Return the option price."""
         return self.price
 
-    def get_form_text(self, run: Run | None = None, currency_symbol: str | None = None) -> str:
+    def get_form_text(self, currency_symbol: str | None = None) -> str:
         """Return formatted text with name and optional price."""
         # Get display data for the current instance
-        display_data = self.show(run)
+        display_data = self.show()
         formatted_text = display_data["name"]
 
         # Append formatted price with currency symbol if applicable
@@ -731,11 +736,8 @@ class RegistrationOption(BaseModel):
 
         return formatted_text
 
-    def show(self, run: Run | None = None) -> dict[str, Any]:
+    def show(self) -> dict[str, Any]:
         """Return ticket tier display data as dictionary.
-
-        Args:
-            run: Optional Run instance (currently unused).
 
         Returns:
             Dictionary with tier name, price, description, question, and max availability.
@@ -755,13 +757,15 @@ class RegistrationOption(BaseModel):
         return js
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="ro_evt_act"),
             models.Index(fields=["question"], condition=Q(deleted__isnull=True), name="ro_quest_act"),
         ]
 
 
 class RegistrationChoice(BaseModel):
+    """Choices for RegistrationChoice."""
+
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="choices")
 
     option = models.ForeignKey(RegistrationOption, on_delete=models.CASCADE, related_name="choices")
@@ -774,13 +778,15 @@ class RegistrationChoice(BaseModel):
         return f"{self.reg} ({self.question.name}) {self.option.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="rc_reg_q_act"),
             models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="rc_reg_act"),
         ]
 
 
 class RegistrationAnswer(BaseModel):
+    """Represents RegistrationAnswer model."""
+
     question = models.ForeignKey(RegistrationQuestion, on_delete=models.CASCADE, related_name="answers")
 
     text = models.TextField(max_length=5000)
@@ -793,7 +799,7 @@ class RegistrationAnswer(BaseModel):
         return f"{self.reg} ({self.question.name}) {self.text[:100]}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["reg", "question"], condition=Q(deleted__isnull=True), name="ra_reg_q_act"),
             models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="ra_reg_act"),
         ]

@@ -20,15 +20,16 @@
 
 """Registration accounting utilities for ticket pricing and payment calculation."""
 
+from __future__ import annotations
+
 import logging
 import math
-from collections.abc import Iterable
-from datetime import date, datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
+from django.utils import timezone
 
 from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
@@ -45,19 +46,26 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.casting import AssignmentTrait
-from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.models.form import RegistrationChoice
-from larpmanager.models.member import MembershipStatus, get_user_membership
+from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.form import RegistrationChoice, RegistrationOption
+from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
     RegistrationInstallment,
     RegistrationSurcharge,
+    RegistrationTicket,
     TicketTier,
 )
 from larpmanager.models.utils import get_sum
 from larpmanager.utils.common import get_time_diff, get_time_diff_today
 from larpmanager.utils.tasks import background_auto
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from datetime import date
+
+    from django.db.models import QuerySet
 
 logger = logging.getLogger(__name__)
 
@@ -214,6 +222,11 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
     if not start:
         return
 
+    # Validate quotas to prevent division by zero
+    if reg.quotas == 0:
+        logger.error("Registration %s has zero quotas, cannot calculate payment schedule", reg.pk)
+        return
+
     reg.days_event = get_time_diff_today(start)
     reg.tot_days = get_time_diff(start, reg.created.date())
 
@@ -259,7 +272,7 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
         return
 
 
-def installment_check(reg: "Registration", alert: int, association_id: int) -> None:
+def installment_check(reg: Registration, alert: int, association_id: int) -> None:
     """Check installment payment schedule for a registration.
 
     Processes configured installments for the event and determines
@@ -455,7 +468,7 @@ def cancel_reg(registration: Registration) -> None:
         bonus items, and resets event links
 
     """
-    registration.cancellation_date = datetime.now()
+    registration.cancellation_date = timezone.now()
     registration.save()
 
     # delete characters related
@@ -508,7 +521,7 @@ def round_to_nearest_cent(amount: float) -> float:
     return float(amount)
 
 
-def process_registration_pre_save(registration) -> None:
+def process_registration_pre_save(registration: Registration) -> None:
     """Process registration before saving.
 
     Args:
@@ -519,7 +532,7 @@ def process_registration_pre_save(registration) -> None:
     registration.member.join(registration.run.event.association)
 
 
-def get_date_surcharge(registration, event):
+def get_date_surcharge(registration: Registration | None, event: Event) -> int:
     """Calculate date-based surcharge for a registration.
 
     Args:
@@ -535,7 +548,7 @@ def get_date_surcharge(registration, event):
         if ticket_tier in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
             return 0
 
-    reference_date = datetime.now().date()
+    reference_date = timezone.now().date()
     if registration and registration.created:
         reference_date = registration.created
 
@@ -607,7 +620,7 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
         update_registration_status_bkg(registration.id)
 
 
-def process_accounting_discount_post_save(discount_item) -> None:
+def process_accounting_discount_post_save(discount_item: AccountingItemDiscount) -> None:
     """Process accounting discount item after save.
 
     Args:
@@ -619,29 +632,29 @@ def process_accounting_discount_post_save(discount_item) -> None:
             reg.save()
 
 
-def log_registration_ticket_saved(ticket) -> None:
+def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:
     """Process registration ticket after save.
 
     Args:
         ticket: RegistrationTicket instance that was saved
 
     """
-    logger.debug("RegistrationTicket saved: %s at %s", ticket, datetime.now())
+    logger.debug("RegistrationTicket saved: %s at %s", ticket, timezone.now())
     check_reg_events(ticket.event)
 
 
-def process_registration_option_post_save(option) -> None:
+def process_registration_option_post_save(option: RegistrationOption) -> None:
     """Process registration option after save.
 
     Args:
         option: RegistrationOption instance that was saved
 
     """
-    logger.debug("RegistrationOption saved: %s at %s", option, datetime.now())
+    logger.debug("RegistrationOption saved: %s at %s", option, timezone.now())
     check_reg_events(option.question.event)
 
 
-def check_reg_events(event) -> None:
+def check_reg_events(event: Event) -> None:
     """Trigger background accounting updates for all registrations in an event.
 
     Args:
@@ -651,10 +664,11 @@ def check_reg_events(event) -> None:
         Queues background task to update accounting for all registrations
 
     """
-    registration_ids = []
-    for run in event.runs.all():
-        for registration_id in run.registrations.values_list("id", flat=True):
-            registration_ids.append(str(registration_id))
+    registration_ids = [
+        str(registration_id)
+        for run in event.runs.all()
+        for registration_id in run.registrations.values_list("id", flat=True)
+    ]
     check_registration_background(",".join(registration_ids))
 
 
@@ -693,7 +707,7 @@ def check_registration_background(registration_ids: int | str | Iterable[int]) -
         trigger_registration_accounting(registration_id)
 
 
-def trigger_registration_accounting(registration_id) -> None:
+def trigger_registration_accounting(registration_id: int | None) -> None:
     """Update accounting for a single registration in background task.
 
     Args:
@@ -710,6 +724,55 @@ def trigger_registration_accounting(registration_id) -> None:
         registration.save()
     except ObjectDoesNotExist:
         return
+
+
+def _should_skip_accounting(reg: Registration) -> bool:
+    """Check if accounting should be skipped for this registration.
+
+    Args:
+        reg: Registration to check
+
+    Returns:
+        True if accounting should be skipped
+    """
+    return reg.run.development in [DevelopStatus.CANC, DevelopStatus.DONE]
+
+
+def _is_payment_complete(reg: Registration, remaining_balance: Decimal, tolerance: float = 0.05) -> bool:
+    """Check if payment is complete within rounding tolerance.
+
+    Args:
+        reg: Registration to check
+        remaining_balance: Remaining balance to pay
+        tolerance: Maximum rounding tolerance
+
+    Returns:
+        True if payment is complete
+    """
+    if -tolerance < remaining_balance <= tolerance:
+        if not reg.payment_date:
+            reg.payment_date = timezone.now()
+        return True
+    return False
+
+
+def _check_membership_requirements(reg: Registration, event_features: dict, association_id: int) -> bool:
+    """Check membership requirements for registration.
+
+    Args:
+        reg: Registration to check
+        event_features: Event features dictionary
+        association_id: Association ID
+
+    Returns:
+        True if membership requirements are met or not applicable
+    """
+    if "membership" in event_features and "laog" not in event_features:
+        if not hasattr(reg, "membership"):
+            reg.membership = get_user_membership(reg.member, association_id)
+        if reg.membership.status != MembershipStatus.ACCEPTED:
+            return False
+    return True
 
 
 def update_registration_accounting(reg: Registration) -> None:
@@ -735,9 +798,8 @@ def update_registration_accounting(reg: Registration) -> None:
 
     """
     # Skip processing for cancelled or completed runs
-    for cancelled_or_done_status in [DevelopStatus.CANC, DevelopStatus.DONE]:
-        if reg.run.development == cancelled_or_done_status:
-            return
+    if _should_skip_accounting(reg):
+        return
 
     max_rounding_tolerance = 0.05
 
@@ -762,9 +824,7 @@ def update_registration_accounting(reg: Registration) -> None:
 
     # Check if payment is complete (within rounding tolerance)
     remaining_balance = reg.tot_iscr - reg.tot_payed
-    if -max_rounding_tolerance < remaining_balance <= max_rounding_tolerance:
-        if not reg.payment_date:
-            reg.payment_date = datetime.now()
+    if _is_payment_complete(reg, remaining_balance, max_rounding_tolerance):
         return
 
     # Skip further processing if registration is cancelled
@@ -772,11 +832,8 @@ def update_registration_accounting(reg: Registration) -> None:
         return
 
     # Handle membership requirements for non-LAOG events
-    if "membership" in event_features and "laog" not in event_features:
-        if not hasattr(reg, "membership"):
-            reg.membership = get_user_membership(reg.member, association_id)
-        if reg.membership.status != MembershipStatus.ACCEPTED:
-            return
+    if not _check_membership_requirements(reg, event_features, association_id):
+        return
 
     # Process tokens and credits
     handle_tokes_credits(association_id, event_features, reg, remaining_balance)
@@ -798,7 +855,7 @@ def update_registration_accounting(reg: Registration) -> None:
     reg.alert = reg.deadline < alert_days_threshold
 
 
-def update_member_registrations(member) -> None:
+def update_member_registrations(member: Member) -> None:
     """Trigger accounting updates for all registrations of a member.
 
     Args:

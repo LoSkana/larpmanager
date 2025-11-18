@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -27,7 +28,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout
 pytestmark = pytest.mark.e2e
 
 
-def test_user_character_option_reg_ticket(pw_page) -> None:
+def test_user_character_option_reg_ticket(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -45,7 +46,7 @@ def test_user_character_option_reg_ticket(pw_page) -> None:
     go_to(page, live_server, "/test/character/1")
 
 
-def prepare(page) -> None:
+def prepare(page: Any) -> None:
     # configure event
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Player editor").check()
@@ -92,7 +93,7 @@ def prepare(page) -> None:
     page.get_by_role("button", name="Confirm").click()
 
 
-def create_character(page) -> None:
+def create_character(page: Any) -> None:
     # signup first ticket
     page.get_by_role("link", name="Register").click()
     page.get_by_label("Ticket").select_option("1")

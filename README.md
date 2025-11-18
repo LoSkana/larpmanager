@@ -15,6 +15,7 @@
 - **[Configuration System Guide](docs/03-configuration-system.md)** - How to add customizable settings without modifying models
 - **[Localization Guide](docs/04-localization.md)** - How to write translatable code and manage translations
 - **[Playwright Testing Guide](docs/05-playwright-testing.md)** - How to write and run end-to-end tests
+- **[Feature Descriptions](docs/06-feature-descriptions.md)** - Complete reference of all available features
 - **[Developer Instructions](CLAUDE.md)** - Project architecture, development commands, and best practices
 - **[Contributing](#contributing)** - How to contribute to the project
 - **[Deployment](#deploy)** - Production deployment instructions

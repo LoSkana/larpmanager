@@ -20,10 +20,10 @@
 
 import logging
 import math
-import os
 import random
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 from django.conf import settings as conf_settings
@@ -31,11 +31,13 @@ from django.contrib import messages
 from django.contrib.auth import login, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, update_last_login
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
@@ -138,7 +140,7 @@ def language(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def profile(request: HttpRequest):
+def profile(request: HttpRequest) -> Any:
     """Display and manage user profile information.
 
     Handles profile editing, privacy settings, and personal information updates,
@@ -213,7 +215,7 @@ def profile(request: HttpRequest):
     return render(request, "larpmanager/member/profile.html", context)
 
 
-def load_profile(request: HttpRequest, img, ext: str) -> JsonResponse:
+def load_profile(request: HttpRequest, img: Any, ext: str) -> JsonResponse:  # noqa: ARG001
     """Save uploaded profile image and return thumbnail URL."""
     # Generate unique filename and save to member profile
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.{ext}"
@@ -297,7 +299,7 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
         return JsonResponse({"res": "ko"})
 
     # Build full filesystem path and open image
-    path = os.path.join(conf_settings.MEDIA_ROOT, path)
+    path = str(Path(conf_settings.MEDIA_ROOT) / path)
     im = Image.open(path)
 
     # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
@@ -472,7 +474,7 @@ def membership(request: HttpRequest) -> HttpResponse:
     # Check if membership fee has been paid for current year
     context["fee_payed"] = AccountingItemMembership.objects.filter(
         association_id=context["association_id"],
-        year=datetime.now().year,
+        year=timezone.now().year,
         member_id=context["member"].id,
     ).exists()
 
@@ -501,7 +503,7 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def public(request: HttpRequest, member_id: int) -> HttpResponse:
+def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -537,7 +539,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
         for badge in (
             context["member_public"].badges.filter(association_id=context["association_id"]).order_by("number")
         ):
-            context["badges"].append(badge.show(request.LANGUAGE_CODE))
+            context["badges"].append(badge.show())
 
     # Add LARP history if enabled in association configuration
     association_id = context["association_id"]
@@ -573,7 +575,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:
         try:
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
-        except Exception as e:
+        except ValidationError as e:
             logger.debug("Social contact validation failed for member=%s: %s", member_id, e)
 
     return render(request, "larpmanager/member/public.html", context)
@@ -599,7 +601,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request: HttpRequest, member_id):
+def chat(request: HttpRequest, member_id: Any) -> Any:
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions
@@ -632,7 +634,7 @@ def chat(request: HttpRequest, member_id):
                     association_id=context["association_id"],
                 )
             your_contact.num_unread += 1
-            your_contact.last_message = datetime.now()
+            your_contact.last_message = timezone.now()
             your_contact.save()
             mine_contact = get_contact(my_member_id, member_id)
             if not mine_contact:
@@ -642,7 +644,7 @@ def chat(request: HttpRequest, member_id):
                     channel=get_channel(my_member_id, member_id),
                     association_id=context["association_id"],
                 )
-            mine_contact.last_message = datetime.now()
+            mine_contact.last_message = timezone.now()
             mine_contact.save()
             messages.success(request, _("Message sent!"))
             return redirect(request.path_info)
@@ -667,7 +669,7 @@ def badges(request: HttpRequest) -> HttpResponse:
 
     # Fetch and add badges to context, ordered by number
     for badge in Badge.objects.filter(association_id=context["association_id"]).order_by("number"):
-        context["badges"].append(badge.show(request.LANGUAGE_CODE))
+        context["badges"].append(badge.show())
 
     # Set page identifier and render template
     context["page"] = "badges"
@@ -682,14 +684,14 @@ def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
     badge = get_badge(badge_id, context)
 
     # Initialize context with badge data
-    context.update({"badge": badge.show(request.LANGUAGE_CODE), "list": []})
+    context.update({"badge": badge.show(), "list": []})
 
     # Collect all badge members
     for el in badge.members.all():
         context["list"].append(el)
 
     # Shuffle members using deterministic daily seed
-    v = datetime.today().date() - date(1970, 1, 1)
+    v = timezone.now().date() - date(1970, 1, 1)
     random.Random(v.days).shuffle(context["list"])  # noqa: S311
 
     return render(request, "larpmanager/general/badge.html", context)
@@ -792,7 +794,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     check_association_feature(request, context, "vote")
 
     # Set current year for membership and voting validation
-    context["year"] = datetime.now().year
+    context["year"] = timezone.now().year
 
     # Check if membership payment is required and completed
     if "membership" in context["features"]:
@@ -803,7 +805,7 @@ def vote(request: HttpRequest) -> HttpResponse:
 
     # Check if user has already voted this year
     que = Vote.objects.filter(member=context["member"], association_id=context["association_id"], year=context["year"])
-    if que.count() > 0:
+    if que.exists():
         context["done"] = True
         return render(request, "larpmanager/member/vote.html", context)
 
@@ -842,7 +844,7 @@ def vote(request: HttpRequest) -> HttpResponse:
         try:
             idx = int(mb)
             context["candidates"].append(Member.objects.get(pk=idx))
-        except Exception as e:
+        except (ValueError, Member.DoesNotExist) as e:  # noqa: PERF203 - Need per-item error handling to skip invalid candidates
             # Skip invalid candidate IDs
             logger.debug("Invalid candidate ID or member not found: %s: %s", mb, e)
 
@@ -950,7 +952,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
     # Add accounting information for each delegated account
     for el in context["list"]:
         del_ctx = {"member": el, "association_id": context["association_id"]}
-        info_accounting(request, del_ctx)
+        info_accounting(del_ctx)
         el.context = del_ctx
     return render(request, "larpmanager/member/delegated.html", context)
 

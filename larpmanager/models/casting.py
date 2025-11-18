@@ -17,9 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import re
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
@@ -34,7 +36,10 @@ logger = logging.getLogger(__name__)
 
 
 class QuestType(Writing):
+    """Represents QuestType model."""
+
     def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
     def show(self, run: Run | None = None) -> dict:
@@ -43,13 +48,15 @@ class QuestType(Writing):
         return super().show(run)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="qtype_evt_act"),
         ]
 
 
 class Quest(Writing):
+    """Represents Quest model."""
+
     typ = models.ForeignKey(
         QuestType,
         on_delete=models.CASCADE,
@@ -59,11 +66,11 @@ class Quest(Writing):
     )
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="quest_evt_act"),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_quest_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -73,7 +80,7 @@ class Quest(Writing):
         ]
 
     def __str__(self) -> str:
-        """Rappresentazione testuale con numero e nome della domanda."""
+        """Text version of quest."""
         return f"Q{self.number} {self.name}"
 
     def show(self, run: Run | None = None) -> dict:
@@ -102,16 +109,18 @@ class Quest(Writing):
 
 
 class Trait(Writing):
+    """Represents Trait model."""
+
     quest = models.ForeignKey(Quest, on_delete=models.CASCADE, null=True, related_name="traits")
 
     traits = models.ManyToManyField("self", symmetrical=False, blank=True)
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="trait_evt_act"),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_trait_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -141,6 +150,8 @@ class Trait(Writing):
 
 
 class AssignmentTrait(BaseModel):
+    """Represents AssignmentTrait model."""
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="assignments", blank=True, null=True)
 
     member = models.ForeignKey(
@@ -162,10 +173,13 @@ class AssignmentTrait(BaseModel):
     typ = models.IntegerField()
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.run} ({self.member}) {self.trait}"
 
 
 class Casting(BaseModel):
+    """Represents Casting model."""
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
@@ -186,6 +200,8 @@ class Casting(BaseModel):
 
 
 class CastingAvoid(BaseModel):
+    """Represents CastingAvoid model."""
+
     run = models.ForeignKey(
         Run,
         on_delete=models.CASCADE,
@@ -236,7 +252,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
             traits.append(trait)
-        except Exception as error:
+        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
             logger.warning("Error getting trait %s: %s", trait_number, error)
 
     # Extract all @number patterns for validation (not added to return list)
@@ -246,13 +262,13 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     for trait_number in set(trait_numbers_to_validate):
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
-        except Exception as error:
+        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
             logger.warning("Error getting trait %s in assignment: %s", trait_number, error)
 
     return traits
 
 
-def refresh_all_instance_traits(instance) -> None:
+def refresh_all_instance_traits(instance: Any) -> None:
     """Refresh traits for an instance by updating and synchronizing with calculated traits."""
     if instance.id is None:
         return

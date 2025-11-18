@@ -41,6 +41,20 @@ def clear_event_fields_cache(event_id: int) -> None:
     cache.delete(event_fields_key(event_id))
 
 
+def _ensure_cache_structure(cached_fields: dict, applicable_label: str, section: str) -> None:
+    """Ensure the nested cache structure exists for given applicability and section.
+
+    Args:
+        cached_fields: The cache dictionary to update
+        applicable_label: The applicability label key
+        section: The section name (e.g., 'questions', 'options', 'names', 'ids')
+    """
+    if applicable_label not in cached_fields:
+        cached_fields[applicable_label] = {}
+    if section not in cached_fields[applicable_label]:
+        cached_fields[applicable_label][section] = {}
+
+
 def update_event_fields(event_id: int) -> dict:
     """Update cached event fields including writing questions and registration data.
 
@@ -71,39 +85,26 @@ def update_event_fields(event_id: int) -> dict:
         event.get_elements(WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
     )
     for question_data in visible_questions.values("id", "name", "typ", "printable", "visibility", "applicable"):
-        applicability_label = QuestionApplicable(question_data["applicable"]).label
-        # Initialize nested dictionary structure for each applicability type
-        if applicability_label not in cached_fields:
-            cached_fields[applicability_label] = {}
-        if "questions" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["questions"] = {}
-        cached_fields[applicability_label]["questions"][question_data["id"]] = question_data
+        applicabile_label = QuestionApplicable(question_data["applicable"]).label
+        _ensure_cache_structure(cached_fields, applicabile_label, "questions")
+        cached_fields[applicabile_label]["questions"][question_data["id"]] = question_data
 
     # Fetch writing options and group by parent question's applicability
     writing_options = event.get_elements(WritingOption).order_by("order")
     for option_data in writing_options.values("id", "name", "question_id", "question__applicable"):
-        applicability_label = QuestionApplicable(option_data["question__applicable"]).label
-        # Ensure options section exists in the nested structure
-        if applicability_label not in cached_fields:
-            cached_fields[applicability_label] = {}
-        if "options" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["options"] = {}
-        cached_fields[applicability_label]["options"][option_data["id"]] = option_data
+        applicabile_label = QuestionApplicable(option_data["question__applicable"]).label
+        _ensure_cache_structure(cached_fields, applicabile_label, "options")
+        cached_fields[applicabile_label]["options"][option_data["id"]] = option_data
 
     # Create name and ID mappings for default writing question types
     default_type_questions = event.get_elements(WritingQuestion).filter(typ__in=get_def_writing_types())
     for question_data in default_type_questions.values("id", "typ", "name", "applicable"):
-        applicability_label = QuestionApplicable(question_data["applicable"]).label
+        applicabile_label = QuestionApplicable(question_data["applicable"]).label
         question_type = question_data["typ"]
-        # Initialize names and ids dictionaries for quick type-based lookups
-        if applicability_label not in cached_fields:
-            cached_fields[applicability_label] = {}
-        if "names" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["names"] = {}
-        cached_fields[applicability_label]["names"][question_type] = question_data["name"]
-        if "ids" not in cached_fields[applicability_label]:
-            cached_fields[applicability_label]["ids"] = {}
-        cached_fields[applicability_label]["ids"][question_type] = question_data["id"]
+        _ensure_cache_structure(cached_fields, applicabile_label, "names")
+        _ensure_cache_structure(cached_fields, applicabile_label, "ids")
+        cached_fields[applicabile_label]["names"][question_type] = question_data["name"]
+        cached_fields[applicabile_label]["ids"][question_type] = question_data["id"]
 
     # Cache the complete result structure with 1-day timeout
     cache.set(event_fields_key(event_id), cached_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -122,7 +123,40 @@ def get_event_fields_cache(event_id: int) -> dict:
     return cached_event_fields
 
 
-def visible_writing_fields(context: dict, applicable: QuestionApplicable, *, only_visible: bool = True) -> None:
+def _process_visible_questions(writing_fields_data: dict, *, only_visible: bool) -> tuple[dict, list[int], list[int]]:
+    """Process questions and return visible ones with tracking lists.
+
+    Args:
+        writing_fields_data: Writing fields data containing questions
+        only_visible: If True, filter to public and searchable only
+
+    Returns:
+        Tuple of (questions_dict, visible_question_ids, searchable_question_ids)
+    """
+    questions = {}
+    visible_question_ids = []
+    searchable_question_ids = []
+
+    if "questions" not in writing_fields_data:
+        return questions, visible_question_ids, searchable_question_ids
+
+    for question_id, question_data in writing_fields_data["questions"].items():
+        # Filter based on visibility settings
+        if not only_visible or question_data["visibility"] in [
+            QuestionVisibility.PUBLIC,
+            QuestionVisibility.SEARCHABLE,
+        ]:
+            questions[question_id] = question_data
+            visible_question_ids.append(question_data["id"])
+
+        # Track searchable questions separately
+        if question_data["visibility"] == QuestionVisibility.SEARCHABLE:
+            searchable_question_ids.append(question_data["id"])
+
+    return questions, visible_question_ids, searchable_question_ids
+
+
+def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool = True) -> None:
     """Filter and cache visible writing fields based on visibility settings.
 
     This function processes writing fields from the context and filters them based on
@@ -155,24 +189,11 @@ def visible_writing_fields(context: dict, applicable: QuestionApplicable, *, onl
     # Get the relevant writing fields data
     writing_fields_data = context["writing_fields"][applicable_type_key]
 
-    # Initialize tracking lists for question and searchable IDs
-    visible_question_ids = []
-    searchable_question_ids = []
-
-    # Process questions if they exist in the data
-    if "questions" in writing_fields_data:
-        for question_id, question_data in writing_fields_data["questions"].items():
-            # Filter based on visibility settings
-            if not only_visible or question_data["visibility"] in [
-                QuestionVisibility.PUBLIC,
-                QuestionVisibility.SEARCHABLE,
-            ]:
-                context["questions"][question_id] = question_data
-                visible_question_ids.append(question_data["id"])
-
-            # Track searchable questions separately
-            if question_data["visibility"] == QuestionVisibility.SEARCHABLE:
-                searchable_question_ids.append(question_data["id"])
+    # Process questions and get tracking lists
+    questions, visible_question_ids, searchable_question_ids = _process_visible_questions(
+        writing_fields_data, only_visible=only_visible
+    )
+    context["questions"] = questions
 
     # Process options if they exist, linking them to visible questions
     if "options" in writing_fields_data:
