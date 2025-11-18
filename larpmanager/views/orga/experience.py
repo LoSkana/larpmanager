@@ -47,8 +47,8 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Verify user has permission and retrieve event context
     context = check_event_context(request, event_slug, "orga_px_deliveries")
 
-    # Get all deliveries ordered by number
-    context["list"] = context["event"].get_elements(DeliveryPx).order_by("number")
+    # Get all deliveries ordered by number with optimized database access
+    context["list"] = context["event"].get_elements(DeliveryPx).order_by("number").prefetch_related("characters")
 
     return render(request, "larpmanager/orga/px/deliveries.html", context)
 
@@ -101,7 +101,7 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
         .get_elements(AbilityPx)
         .order_by("number")
         .select_related("typ")
-        .prefetch_related("requirements", "prerequisites")
+        .prefetch_related("requirements", "prerequisites", "characters")
     )
 
     # Render the abilities management template with populated context
@@ -157,7 +157,8 @@ def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display experience rules for an event."""
     # Check permission and get event context
     context = check_event_context(request, event_slug, "orga_px_rules")
-    context["list"] = context["event"].get_elements(RulePx).order_by("order")
+    # Get all rules ordered with optimized database access
+    context["list"] = context["event"].get_elements(RulePx).order_by("order").prefetch_related("abilities")
     return render(request, "larpmanager/orga/px/rules.html", context)
 
 
@@ -190,8 +191,13 @@ def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check permissions and get event context
     context = check_event_context(request, event_slug, "orga_px_modifiers")
 
-    # Retrieve ordered list of experience modifiers
-    context["list"] = context["event"].get_elements(ModifierPx).order_by("order")
+    # Retrieve ordered list of experience modifiers with optimized database access
+    context["list"] = (
+        context["event"]
+        .get_elements(ModifierPx)
+        .order_by("order")
+        .prefetch_related("abilities", "prerequisites", "requirements")
+    )
 
     return render(request, "larpmanager/orga/px/modifiers.html", context)
 
