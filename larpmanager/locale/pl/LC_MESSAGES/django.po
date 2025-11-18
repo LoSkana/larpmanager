@@ -203,6 +203,9 @@ msgstr "PWYW"
 msgid "Page"
 msgstr "Strona"
 
+msgid "Paid"
+msgstr "Płatne"
+
 msgid "Plot"
 msgstr "Działka"
 
@@ -459,9 +462,6 @@ msgstr "e-mail"
 msgid "money"
 msgstr "pieniądze"
 
-msgid "other"
-msgstr "inne"
-
 msgid "quick"
 msgstr "szybki"
 
@@ -656,6 +656,9 @@ msgstr "Żetony"
 
 msgid "Traits"
 msgstr "Cechy"
+
+msgid "Unpaid"
+msgstr "Nieopłacony"
 
 msgid "Unread"
 msgstr "Nieprzeczytane"
@@ -1233,17 +1236,11 @@ msgstr "Warsztat"
 msgid "XP avail"
 msgstr "XP dostępny"
 
-msgid "discount"
-msgstr "rabat"
-
 msgid "download"
 msgstr "pobieranie"
 
 msgid "factions"
 msgstr "frakcje"
-
-msgid "payments"
-msgstr "płatności"
 
 msgid "positive"
 msgstr "pozytywny"
@@ -2296,6 +2293,9 @@ msgstr "Wypełniacz biletów"
 msgid "Ticket chosen"
 msgstr "Wybrany bilet"
 
+msgid "Token balance"
+msgstr "Saldo tokenów"
+
 msgid "Token expired"
 msgstr "Token wygasł"
 
@@ -2330,9 +2330,6 @@ msgstr "usunięte elementy"
 msgid "items updated"
 msgstr "zaktualizowane elementy"
 
-msgid "personal data"
-msgstr "dane osobowe"
-
 msgid "registrations"
 msgstr "rejestracje"
 
@@ -2365,6 +2362,9 @@ msgstr "Kolekcja dla"
 
 msgid "Communications"
 msgstr "Komunikacja"
+
+msgid "Credit balance"
+msgstr "Saldo kredytowe"
 
 msgid "Customisations"
 msgstr "Personalizacja"
@@ -2579,6 +2579,9 @@ msgstr "Wyłączenie kredytów"
 msgid "Document number"
 msgstr "Numer dokumentu"
 
+msgid "Edit membership"
+msgstr "Edycja członkostwa"
+
 msgid "Event not found"
 msgstr "Nie znaleziono zdarzenia"
 
@@ -2656,6 +2659,9 @@ msgstr "Przetłumaczony tekst"
 
 msgid "Upload Expenses"
 msgstr "Prześlij wydatki"
+
+msgid "View accounting"
+msgstr "Zobacz księgowość"
 
 msgid "Volounteer data"
 msgstr "Dane wolontariusza"
@@ -2960,6 +2966,9 @@ msgstr "Podaj nową odpowiedź"
 msgid "ID document photo"
 msgstr "Zdjęcie dokumentu tożsamości"
 
+msgid "Identity document"
+msgstr "Dokument tożsamości"
+
 msgid "Invoice not found"
 msgstr "Nie znaleziono faktury"
 
@@ -2971,6 +2980,9 @@ msgstr "Maksymalna dostępna wartość"
 
 msgid "Membership fee of"
 msgstr "Składka członkowska w wysokości"
+
+msgid "Membership status"
+msgstr "Status członkostwa"
 
 msgid "Months free quota"
 msgstr "Miesiące wolnego limitu"
@@ -3001,6 +3013,9 @@ msgstr "Wstępna rejestracja"
 
 msgid "Pre-register here"
 msgstr "Wstępna rejestracja tutaj"
+
+msgid "Profile completed"
+msgstr "Profil ukończony"
 
 msgid "Quests and Traits"
 msgstr "Zadania i cechy"
@@ -3172,6 +3187,9 @@ msgstr "Całkowita wysłana płatność"
 
 msgid "Transaction totals"
 msgstr "Suma transakcji"
+
+msgid "View registrations"
+msgstr "Wyświetl rejestracje"
 
 msgid "Voluntary donation"
 msgstr "Dobrowolna darowizna"
@@ -3422,6 +3440,9 @@ msgstr "Otwarcie o godz: %(date)s"
 
 msgid "Organization inflows"
 msgstr "Wpływy organizacji"
+
+msgid "Password reset token"
+msgstr "Token resetowania hasła"
 
 msgid "Payment Verification"
 msgstr "Weryfikacja płatności"
@@ -3722,8 +3743,14 @@ msgstr "Zarządzanie pozycjami magazynowymi"
 msgid "Manages event revenues"
 msgstr "Zarządzanie przychodami z wydarzeń"
 
+msgid "Membership card number"
+msgstr "Numer karty członkowskiej"
+
 msgid "Modify shuttle request"
 msgstr "Modyfikacja żądania transferu"
+
+msgid "Newsletter preferences"
+msgstr "Preferencje dotyczące biuletynu"
 
 msgid "Number of partecipants"
 msgstr "Liczba uczestników"
@@ -3964,6 +3991,9 @@ msgstr "Zarządzanie zgłoszeniami wolontariuszy"
 
 msgid "Manages event's expenses"
 msgstr "Zarządzanie wydatkami związanymi z wydarzeniem"
+
+msgid "Membership approval date"
+msgstr "Data zatwierdzenia członkostwa"
 
 msgid "New delegate user added!"
 msgstr "Dodano nowego użytkownika delegata!"
@@ -5479,6 +5509,9 @@ msgstr "Zarezerwuj dodatkowe bilety poza własnymi"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Wybierz losowo kupony loterii do ulepszenia"
 
+msgid "The member associated with this membership"
+msgstr "Członek powiązany z tym członkostwem"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Suma została przypisana jako %(credits)s"
@@ -5550,6 +5583,9 @@ msgstr "Teraz możesz skonfigurować ustawienia edycji odtwarzacza"
 
 msgid "Set up a value for registration secret link"
 msgstr "Ustaw wartość dla tajnego łącza rejestracji"
+
+msgid "The organization this membership belongs to"
+msgstr "Organizacja, do której należy to członkostwo"
 
 msgid "This access link is invalid or has expired."
 msgstr "To łącze dostępu jest nieprawidłowe lub wygasło."
@@ -5850,6 +5886,9 @@ msgstr "Wybrane elementy zostaną pokazane uczestnikom"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Pokazuje obliczoną kwotę podatku dla każdej płatności"
+
+msgid "Temporary token used for password reset process"
+msgstr "Tymczasowy token używany w procesie resetowania hasła"
 
 msgid "The name of the question this option belongs to"
 msgstr "Nazwa pytania, do którego należy ta opcja"
@@ -6349,6 +6388,11 @@ msgstr "Użytkownik potwierdził rejestrację w tym wydarzeniu"
 msgid "The user has updated their registration for this event"
 msgstr "Użytkownik zaktualizował swoją rejestrację na to wydarzenie"
 
+msgid "This page shows all event registrations for the member"
+msgstr ""
+"Na tej stronie wyświetlane są wszystkie rejestracje wydarzeń dla danego "
+"użytkownika"
+
 msgid "This page shows the collections opened by participants"
 msgstr "Ta strona pokazuje kolekcje otwarte przez uczestników"
 
@@ -6464,6 +6508,9 @@ msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr ""
 "(Opcjonalnie) Inne umiejętności jako warunek wstępny, oddzielone przecinkami"
 
+msgid "Available credit balance for event payments and purchases"
+msgstr "Dostępne saldo kredytowe na płatności za wydarzenia i zakupy"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Treść strony prywatności połączona na dole wszystkich stron"
 
@@ -6481,6 +6528,11 @@ msgstr "Wybierz frakcję, według której chcesz filtrować postacie"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Pole znakowe obliczanego typu, które zostanie zaktualizowane"
+
+msgid "This page shows all accounting information for the member"
+msgstr ""
+"Na tej stronie wyświetlane są wszystkie informacje księgowe dotyczące "
+"członka"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
@@ -6556,6 +6608,9 @@ msgstr ""
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
 msgstr "Suma opłaty rejestracyjnej: <b>%(amount).2f %(currency)s</b>"
+
+msgid "Unique membership card number assigned by the organization"
+msgstr "Unikalny numer karty członkowskiej przypisany przez organizację"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Przekroczono maksymalną liczbę opcji do wyboru"
@@ -6660,6 +6715,9 @@ msgstr ""
 msgid "This page shows the factions (character groups) of the event"
 msgstr "Ta strona przedstawia frakcje (grupy postaci) wydarzenia"
 
+msgid "Upload the signed membership application form (PDF or image)"
+msgstr "Prześlij podpisany formularz wniosku o członkostwo (PDF lub obraz)"
+
 msgid "You have already granted data sharing with this organisation"
 msgstr "Użytkownik wyraził już zgodę na udostępnianie danych tej organizacji"
 
@@ -6745,6 +6803,9 @@ msgstr "bez związku, tylko w celu wyświetlenia nazwy innego znaku"
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr ""
 "Dodano do strony członkostwa jako paragraf dotyczący informacji o statucie"
+
+msgid "Available token balance for event registrations and activities"
+msgstr "Dostępne saldo tokenów na rejestracje wydarzeń i aktywności"
 
 msgid "Content of legal notice page linked at the bottom of all pages"
 msgstr ""
@@ -6858,6 +6919,9 @@ msgid "To be able to pay, your membership application must be approved"
 msgstr ""
 "Aby móc dokonać płatności, wniosek o członkostwo musi zostać zatwierdzony"
 
+msgid "Upload a photo or scan of your identity document (PDF or image)"
+msgstr "Prześlij zdjęcie lub skan dokumentu tożsamości (PDF lub obraz)"
+
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Ostrzeżenie: istnieje już zatwierdzony użytkownik o tej samej nazwie"
 
@@ -6944,6 +7008,10 @@ msgstr "Umożliwia uczestnikom anulowanie rejestracji w dowolnym momencie"
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Skopiuj i wklej dokładnie cały kolorowy tekst poniżej do notatek"
+
+msgid "Current status of the membership application and approval process"
+msgstr ""
+"Aktualny status procesu składania i zatwierdzania wniosków o członkostwo"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
@@ -7126,6 +7194,9 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Przypisywanie ról pracownikom i udzielanie dostępu do określonych funkcji"
 
+msgid "Date when the membership was officially approved by the organization"
+msgstr "Data oficjalnego zatwierdzenia członkostwa przez organizację"
+
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Czy chcesz zarządzać postaciami przypisanymi do zarejestrowanych uczestników"
@@ -7134,6 +7205,9 @@ msgid "Indicates whether the discount is visible and usable by participants"
 msgstr ""
 "Wskazuje, czy rabat jest widoczny i możliwy do wykorzystania przez "
 "uczestników"
+
+msgid "Indicates whether the member has completed their profile information"
+msgstr "Wskazuje, czy użytkownik uzupełnił informacje w swoim profilu"
 
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
@@ -7428,6 +7502,12 @@ msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
 "Umożliwia organizacji przyznawanie odznak i włącza publiczną tabelę wyników"
+
+msgid ""
+"Choose how often you want to receive updates about events and activities"
+msgstr ""
+"Wybierz, jak często chcesz otrzymywać informacje o wydarzeniach i "
+"aktywnościach"
 
 msgid ""
 "Content of the receipt created for each payment and sent to participants"

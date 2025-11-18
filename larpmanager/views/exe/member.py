@@ -355,25 +355,6 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
         form = ExeMemberForm(instance=context["member_edit"], context=context)
     context["form"] = form
 
-    # Get member registrations for current association events
-    context["regs"] = Registration.objects.filter(
-        member=context["member_edit"],
-        run__event__association=context["association_id"],
-    ).select_related("run")
-
-    # Add accounting payment items to context
-    member_add_accountingitempayment(context, context["member_edit"])
-
-    # Add other accounting items to context
-    member_add_accountingitemother(context, context["member_edit"])
-
-    # Get member discounts for current association
-    context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=context["member_edit"],
-        hide=False,
-        association_id=context["association_id"],
-    )
-
     # Process membership data and document paths
     get_user_membership(context["member_edit"], context["association_id"])
 
@@ -389,6 +370,78 @@ def exe_member(request: HttpRequest, num: int) -> HttpResponse:
         context.update(calculate_fiscal_code(context["member_edit"]))
 
     return render(request, "larpmanager/exe/users/member.html", context)
+
+
+@login_required
+def exe_member_accounting(request: HttpRequest, num: int) -> HttpResponse:
+    """Display member accounting information including payments, credits, and discounts.
+
+    This view shows detailed accounting data for a specific member including payment
+    history, other accounting items, token/credit balances, and available discounts.
+
+    Args:
+        request: The HTTP request object containing user session data
+        num: The unique identifier (ID) of the member
+
+    Returns:
+        HttpResponse: Rendered template with member accounting data
+
+    Raises:
+        Http404: If member with given ID doesn't exist or user lacks permissions
+
+    """
+    # Check user permissions and get association context
+    context = check_association_context(request, "exe_membership")
+    context["member_edit"] = get_member(num)
+
+    # Add accounting payment items to context
+    member_add_accountingitempayment(context, context["member_edit"])
+
+    # Add other accounting items to context
+    member_add_accountingitemother(context, context["member_edit"])
+
+    # Get member discounts for current association
+    context["discounts"] = AccountingItemDiscount.objects.filter(
+        member=context["member_edit"],
+        hide=False,
+        association_id=context["association_id"],
+    )
+
+    # Process membership data for credit/token balances
+    get_user_membership(context["member_edit"], context["association_id"])
+
+    return render(request, "larpmanager/exe/users/member_accounting.html", context)
+
+
+@login_required
+def exe_member_registrations(request: HttpRequest, num: int) -> HttpResponse:
+    """Display member event registrations and participation history.
+
+    This view shows all event registrations for a specific member within the
+    current association, including costs and payment status.
+
+    Args:
+        request: The HTTP request object containing user session data
+        num: The unique identifier (ID) of the member
+
+    Returns:
+        HttpResponse: Rendered template with member registration data
+
+    Raises:
+        Http404: If member with given ID doesn't exist or user lacks permissions
+
+    """
+    # Check user permissions and get association context
+    context = check_association_context(request, "exe_membership")
+    context["member_edit"] = get_member(num)
+
+    # Get member registrations for current association events
+    context["regs"] = Registration.objects.filter(
+        member=context["member_edit"],
+        run__event__association=context["association_id"],
+    ).select_related("run")
+
+    return render(request, "larpmanager/exe/users/member_registrations.html", context)
 
 
 def member_add_accountingitempayment(context: dict, member: Member) -> None:

@@ -203,6 +203,9 @@ msgstr "PWYW"
 msgid "Page"
 msgstr "Sida"
 
+msgid "Paid"
+msgstr "Betalade"
+
 msgid "Plot"
 msgstr "Tomt"
 
@@ -459,9 +462,6 @@ msgstr "e-post"
 msgid "money"
 msgstr "pengar"
 
-msgid "other"
-msgstr "mer"
-
 msgid "quick"
 msgstr "snabb"
 
@@ -656,6 +656,9 @@ msgstr "Tokens"
 
 msgid "Traits"
 msgstr "Egenskaper"
+
+msgid "Unpaid"
+msgstr "Obetald"
 
 msgid "Unread"
 msgstr "Oläst"
@@ -1233,17 +1236,11 @@ msgstr "Verkstad"
 msgid "XP avail"
 msgstr "Px Tillgänglig"
 
-msgid "discount"
-msgstr "rabatt"
-
 msgid "download"
 msgstr "nedladdning"
 
 msgid "factions"
 msgstr "Fraktioner"
-
-msgid "payments"
-msgstr "betalningar"
 
 msgid "positive"
 msgstr "positiv"
@@ -2296,6 +2293,9 @@ msgstr "Biljettfyllare"
 msgid "Ticket chosen"
 msgstr "Biljett vald"
 
+msgid "Token balance"
+msgstr "Token-saldo"
+
 msgid "Token expired"
 msgstr "Token har löpt ut"
 
@@ -2330,9 +2330,6 @@ msgstr "objekt raderade"
 msgid "items updated"
 msgstr "artiklar uppdaterade"
 
-msgid "personal data"
-msgstr "Personuppgifter"
-
 msgid "registrations"
 msgstr "inskrivningar"
 
@@ -2365,6 +2362,9 @@ msgstr "Samla för"
 
 msgid "Communications"
 msgstr "Kommunikation"
+
+msgid "Credit balance"
+msgstr "Kreditbalans"
 
 msgid "Customisations"
 msgstr "Anpassningar"
@@ -2579,6 +2579,9 @@ msgstr "Avaktivera krediter"
 msgid "Document number"
 msgstr "Dokumentnummer"
 
+msgid "Edit membership"
+msgstr "Redigera medlemskap"
+
 msgid "Event not found"
 msgstr "Händelsen hittades inte"
 
@@ -2656,6 +2659,9 @@ msgstr "Översatt text"
 
 msgid "Upload Expenses"
 msgstr "Ladda upp kostnader"
+
+msgid "View accounting"
+msgstr "Visa redovisning"
 
 msgid "Volounteer data"
 msgstr "Frivilliga uppgifter"
@@ -2960,6 +2966,9 @@ msgstr "Ge ett svar"
 msgid "ID document photo"
 msgstr "Foto av ID-handling"
 
+msgid "Identity document"
+msgstr "Identitetshandling"
+
 msgid "Invoice not found"
 msgstr "Fakturan hittades inte"
 
@@ -2971,6 +2980,9 @@ msgstr "Maximalt tillgänglig"
 
 msgid "Membership fee of"
 msgstr "Medlemsavgift på"
+
+msgid "Membership status"
+msgstr "Medlemskapets status"
 
 msgid "Months free quota"
 msgstr "Månader fri kvot"
@@ -3001,6 +3013,9 @@ msgstr "Förhandsanmälningar"
 
 msgid "Pre-register here"
 msgstr "Föranmäl dig här"
+
+msgid "Profile completed"
+msgstr "Profilen är klar"
 
 msgid "Quests and Traits"
 msgstr "Uppdrag och egenskaper"
@@ -3172,6 +3187,9 @@ msgstr "Totalt skickad betalning"
 
 msgid "Transaction totals"
 msgstr "Summa transaktioner"
+
+msgid "View registrations"
+msgstr "Visa registreringar"
 
 msgid "Voluntary donation"
 msgstr "Frivillig donation"
@@ -3422,6 +3440,9 @@ msgstr "Öppnas kl: %(date)s"
 
 msgid "Organization inflows"
 msgstr "Föreningens intäkter"
+
+msgid "Password reset token"
+msgstr "Token för återställning av lösenord"
 
 msgid "Payment Verification"
 msgstr "Verifiering av betalning"
@@ -3722,8 +3743,14 @@ msgstr "Hantera lagerartiklar"
 msgid "Manages event revenues"
 msgstr "Hanterar intäkter från evenemang"
 
+msgid "Membership card number"
+msgstr "Nummer på medlemskort"
+
 msgid "Modify shuttle request"
 msgstr "Ändra begäran om skyttel"
+
+msgid "Newsletter preferences"
+msgstr "Inställningar för nyhetsbrev"
 
 msgid "Number of partecipants"
 msgstr "Antal andelar"
@@ -3964,6 +3991,9 @@ msgstr "Hantera uppgifter om volontärer"
 
 msgid "Manages event's expenses"
 msgstr "Hanterar evenemangets kostnader"
+
+msgid "Membership approval date"
+msgstr "Datum för godkännande av medlemskap"
 
 msgid "New delegate user added!"
 msgstr "Ny delegerad användare tillagd!"
@@ -5481,6 +5511,9 @@ msgstr "Reservera ytterligare biljetter utöver din egen"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Välj slumpmässigt lotter för att uppgradera"
 
+msgid "The member associated with this membership"
+msgstr "Den medlem som är associerad med detta medlemskap"
+
 #, python-format
 msgid "The sum was assigned to you as %(credits)s"
 msgstr "Beloppet tilldelades dig som %(credits)s"
@@ -5552,6 +5585,9 @@ msgstr "Nu kan du ställa in spelarens redigeringsinställningar"
 
 msgid "Set up a value for registration secret link"
 msgstr "Ange ett värde för den hemliga länken för registrering"
+
+msgid "The organization this membership belongs to"
+msgstr "Den organisation som detta medlemskap tillhör"
 
 msgid "This access link is invalid or has expired."
 msgstr "Denna länk är ogiltig eller har löpt ut."
@@ -5851,6 +5887,9 @@ msgstr "Utvalda element kommer att visas för deltagarna"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Visar det beräknade skattebeloppet för varje betalning"
+
+msgid "Temporary token used for password reset process"
+msgstr "Temporär token som används för återställning av lösenord"
 
 msgid "The name of the question this option belongs to"
 msgstr "Namnet på den fråga som detta alternativ hör till"
@@ -6342,6 +6381,9 @@ msgstr "Användaren har bekräftat sin anmälan till detta evenemang"
 msgid "The user has updated their registration for this event"
 msgstr "Användaren har uppdaterat sin registrering för detta evenemang"
 
+msgid "This page shows all event registrations for the member"
+msgstr "Denna sida visar alla eventregistreringar för medlemmen"
+
 msgid "This page shows the collections opened by participants"
 msgstr "På denna sida visas de samlingar som öppnats av deltagarna"
 
@@ -6454,6 +6496,9 @@ msgstr "Denna sida visar alla utgiftsposter som registrerats i systemet"
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Valfritt) Annan förmåga som förkunskapskrav, kommaseparerad"
 
+msgid "Available credit balance for event payments and purchases"
+msgstr "Tillgängligt kreditutrymme för betalningar och köp av evenemang"
+
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Innehåll på integritetssidan länkad längst ner på alla sidor"
 
@@ -6471,6 +6516,9 @@ msgstr "Välj de grupper som du vill filtrera tecknen på"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Det teckenfält av beräknad typ som kommer att uppdateras"
+
+msgid "This page shows all accounting information for the member"
+msgstr "Denna sida visar all redovisningsinformation för medlemmen"
 
 #, python-format
 msgid "To confirm it, please pay %(amount)s within %(days)s days"
@@ -6540,6 +6588,9 @@ msgstr ""
 #, python-format
 msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>"
 msgstr "Summa för din post: <b>%(amount).2f %(currency)s</b>"
+
+msgid "Unique membership card number assigned by the organization"
+msgstr "Unikt nummer på medlemskortet som tilldelats av organisationen"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Du har överskridit det maximala antalet valbara alternativ"
@@ -6647,6 +6698,10 @@ msgid "This page shows the factions (character groups) of the event"
 msgstr ""
 "Denna sida sammanfattar fraktionerna (grupper av karaktärer) i evenemanget"
 
+msgid "Upload the signed membership application form (PDF or image)"
+msgstr ""
+"Ladda upp det undertecknade formuläret för medlemsansökan (PDF eller bild)"
+
 msgid "You have already granted data sharing with this organisation"
 msgstr "Du har redan beviljat datadelning med denna organisation"
 
@@ -6725,6 +6780,9 @@ msgstr "utan någon relation, bara för att visa det andra karaktärsnamnet"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr "Tillagd på medlemssidan som paragraf för stadgeinformation"
+
+msgid "Available token balance for event registrations and activities"
+msgstr "Tillgängligt token-saldo för eventregistreringar och aktiviteter"
 
 msgid "Content of legal notice page linked at the bottom of all pages"
 msgstr ""
@@ -6837,6 +6895,11 @@ msgstr "På den här sidan visas hur lagerartiklar tilldelas händelseområden"
 msgid "To be able to pay, your membership application must be approved"
 msgstr "För att du ska kunna betala måste din medlemsansökan vara godkänd"
 
+msgid "Upload a photo or scan of your identity document (PDF or image)"
+msgstr ""
+"Ladda upp ett foto eller en skanning av din identitetshandling (PDF eller "
+"bild)"
+
 msgid "Warning: there is already an approved member with the same name"
 msgstr "Varning: det finns redan en godkänd medlem med samma namn"
 
@@ -6916,6 +6979,10 @@ msgstr ""
 
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopiera och klistra in exakt all färgad text nedan i anteckningarna"
+
+msgid "Current status of the membership application and approval process"
+msgstr ""
+"Aktuell status för processen för ansökan och godkännande av medlemskap"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
@@ -7098,11 +7165,17 @@ msgid "Assign roles to staff members, and give access to specific functions"
 msgstr ""
 "Tilldela roller till medarbetare och ge tillgång till specifika funktioner"
 
+msgid "Date when the membership was officially approved by the organization"
+msgstr "Datum då medlemskapet officiellt godkändes av organisationen"
+
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Vill du hantera karaktärer som tilldelats registrerade deltagare"
 
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Anger om rabatten är synlig och användbar för deltagarna"
+
+msgid "Indicates whether the member has completed their profile information"
+msgstr "Anger om medlemmen har fyllt i sin profilinformation"
 
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
@@ -7386,6 +7459,10 @@ msgid ""
 msgstr ""
 "Gör det möjligt för organisationen att dela ut utmärkelser och aktivera en "
 "offentlig topplista"
+
+msgid ""
+"Choose how often you want to receive updates about events and activities"
+msgstr "Välj hur ofta du vill få uppdateringar om evenemang och aktiviteter"
 
 msgid ""
 "Content of the receipt created for each payment and sent to participants"

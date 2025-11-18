@@ -1,0 +1,87 @@
+{% extends "utils.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {{ member_edit }} - {% trans "Accounting" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page shows all accounting information for the member" %}
+{% endblock info %}
+{% block content %}
+    {% if member_edit.membership and 'token_credit' in features %}
+        <h3>{% trans "Balance" %}</h3>
+        <p>
+            <strong>{% trans "Credit balance" %}:</strong> {{ member_edit.membership.credit|format_decimal }}
+            <br>
+            <strong>{% trans "Token balance" %}:</strong> {{ member_edit.membership.tokens|format_decimal }}
+        </p>
+    {% endif %}
+    {% if pays %}
+        <h2>{% trans "Payments" %}</h2>
+        <table id="members_pay" class="writing go_datatable">
+            <thead>
+                <tr>
+                    <th>{% trans "Registration" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Value" %}</th>
+                    <th>{% trans "Type" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in pays %}
+                    <tr>
+                        <td>{{ el.reg.run }}</td>
+                        <td>{{ el.created | date:'Y-m-d' }}</td>
+                        <td>{{ el.value }}</td>
+                        <td>{{ el.typ }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if others %}
+        <h2>{% trans "Transactions" %}</h2>
+        <table id="members_other" class="writing go_datatable">
+            <thead>
+                <tr>
+                    <th>{% trans "Event" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Value" %}</th>
+                    <th>{% trans "Type" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in others %}
+                    <tr>
+                        <td>{{ el.run.search }}</td>
+                        <td>{{ el.created | date:'Y-m-d' }}</td>
+                        <td>{{ el.descr }}</td>
+                        <td>{{ el.value }}</td>
+                        <td>{{ el.typ }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if discounts %}
+        <h2>{% trans "Discount" %}</h2>
+        <table id="members_discount" class="writing go_datatable">
+            <thead>
+                <tr>
+                    <th>{% trans "Event" %}</th>
+                    <th>{% trans "Discount" %}</th>
+                    <th>{% trans "Detail" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in discounts %}
+                    <tr>
+                        <td>{{ el.run.search }}</td>
+                        <td>{{ el.disc }}</td>
+                        <td>{{ el.detail }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock content %}

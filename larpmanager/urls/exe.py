@@ -320,6 +320,16 @@ urlpatterns = [
         name="exe_member",
     ),
     path(
+        "manage/membership/<int:num>/accounting/",
+        views_em.exe_member_accounting,
+        name="exe_member_accounting",
+    ),
+    path(
+        "manage/membership/<int:num>/registrations/",
+        views_em.exe_member_registrations,
+        name="exe_member_registrations",
+    ),
+    path(
         "manage/membership/evaluation/<int:num>/",
         views_em.exe_membership_evaluation,
         name="exe_membership_evaluation",
