@@ -683,6 +683,9 @@ def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
     check_association_feature(request, context, "badge")
     badge = get_badge(badge_id, context)
 
+    # Reload badge with prefetched members to avoid N+1 queries
+    badge = Badge.objects.prefetch_related("members").get(pk=badge.id)
+
     # Initialize context with badge data
     context.update({"badge": badge.show(), "list": []})
 

@@ -303,8 +303,22 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
     if "fiscal_code_check" in context["features"]:
         context["cf"] = []
 
+        # Pre-fetch all memberships to avoid N+1 queries
+        members = list(Member.objects.filter(pk__in=member_ids))
+        memberships_dict = {
+            m.member_id: m for m in Membership.objects.filter(
+                member_id__in=member_ids,
+                association_id=context["association_id"]
+            ).select_related('member')
+        }
+
+        # Cache membership on each member object
+        for mb in members:
+            if mb.id in memberships_dict:
+                mb.membership = memberships_dict[mb.id]
+
         # Check each member's fiscal code for correctness
-        for mb in Member.objects.filter(pk__in=member_ids):
+        for mb in members:
             check = calculate_fiscal_code(mb)
             if not check:
                 continue
