@@ -77,7 +77,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     # Configure ticket price
     go_to(page, live_server, "test/manage")
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
-    page.get_by_role("link", name="").click()
+    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("50")
     page.locator("#id_description").click()
@@ -104,6 +104,7 @@ def test_registration_with_additionals(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # Verify registration confirmation shows correct total
+    go_to(page, live_server, "accounting/")
     expect(page.locator("#one")).to_contain_text("200€")
 
 
@@ -112,17 +113,15 @@ def verify_organizer_view(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage/registrations/")
 
     # Verify additional tickets column is visible
-    expect(page.locator("table")).to_contain_text("Additions")
-
-    # Verify the registration shows 3 additional tickets
-    expect(page.locator("table")).to_contain_text("3")
+    page.locator("#one").get_by_role("link", name="Additional").click()
+    expect(page.locator("#one")).to_contain_text("3")
 
 
 def test_edit_additionals(page: Any, live_server: Any) -> None:
     """Test editing additional tickets count after registration."""
     # Open the registration for editing
     go_to(page, live_server, "test/manage/registrations/")
-    page.get_by_role("link", name="").click()
+    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
 
     # Change additional tickets from 3 to 2
     page.get_by_label("Additional").select_option("2")
@@ -132,7 +131,8 @@ def test_edit_additionals(page: Any, live_server: Any) -> None:
 
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
-    expect(page.locator("table")).to_contain_text("2")
+    page.locator("#one").get_by_role("link", name="Additional").click()
+    expect(page.locator("#one")).to_contain_text("2")
 
 
 def test_additional_tickets_edge_cases(page: Any, live_server: Any) -> None:

@@ -197,9 +197,6 @@ msgstr "Otwarty"
 msgid "Over"
 msgstr "Odbiór"
 
-msgid "PWYW"
-msgstr "PWYW"
-
 msgid "Page"
 msgstr "Strona"
 
@@ -618,6 +615,9 @@ msgstr "Zwrot kosztów"
 msgid "Remove"
 msgstr "Usunąć"
 
+msgid "Review"
+msgstr "Recenzja"
+
 msgid "Safety"
 msgstr "Bezpieczeństwo"
 
@@ -635,9 +635,6 @@ msgstr "Wybierz"
 
 msgid "Seller"
 msgstr "Sprzedawca"
-
-msgid "Shared"
-msgstr "Współdzielony"
 
 msgid "Status"
 msgstr "Status"
@@ -1215,9 +1212,6 @@ msgstr "Szablon"
 msgid "Treasury"
 msgstr "Skarb Państwa"
 
-msgid "Uploaded"
-msgstr "Przesłano"
-
 msgid "Used on:"
 msgstr "Używany na:"
 
@@ -1253,9 +1247,6 @@ msgstr "--- Pusty"
 
 msgid "Abilities"
 msgstr "Umiejętności"
-
-msgid "Additions"
-msgstr "Dodatki"
 
 msgid "Approvals"
 msgstr "Zatwierdzenia"
@@ -1427,9 +1418,6 @@ msgstr "Warsztaty"
 
 msgid "negatives"
 msgstr "negatywy"
-
-msgid "surcharge"
-msgstr "dopłata"
 
 msgid "this link"
 msgstr "ten link"
@@ -1655,9 +1643,6 @@ msgstr "Witamy w"
 
 msgid "accounting"
 msgstr "księgowość"
-
-msgid "additional"
-msgstr "dodatkowy"
 
 msgid "are closed"
 msgstr "są zamknięte"
@@ -4208,9 +4193,6 @@ msgstr "Musisz użyć kodu znajomego"
 
 msgid "(click on image to enlarge)"
 msgstr "(kliknij na obrazek, aby powiększyć)"
-
-msgid "Additional free payment fee"
-msgstr "Dodatkowa bezpłatna opłata za płatność"
 
 #, python-format
 msgid "Bring a friend to %(event)s"

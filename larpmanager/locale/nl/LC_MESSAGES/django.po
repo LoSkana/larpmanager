@@ -197,9 +197,6 @@ msgstr "Open"
 msgid "Over"
 msgstr "Meer dan"
 
-msgid "PWYW"
-msgstr "PWYW"
-
 msgid "Page"
 msgstr "Pagina"
 
@@ -618,6 +615,9 @@ msgstr "Terugbetaling"
 msgid "Remove"
 msgstr "Verwijder"
 
+msgid "Review"
+msgstr "Beoordeling"
+
 msgid "Safety"
 msgstr "Veiligheid"
 
@@ -635,9 +635,6 @@ msgstr "Selecteer"
 
 msgid "Seller"
 msgstr "Verkoper"
-
-msgid "Shared"
-msgstr "Gedeelde"
 
 msgid "Status"
 msgstr "Status"
@@ -1215,9 +1212,6 @@ msgstr "Sjabloon"
 msgid "Treasury"
 msgstr "Schatkist"
 
-msgid "Uploaded"
-msgstr "Geüpload"
-
 msgid "Used on:"
 msgstr "Gebruikt op:"
 
@@ -1253,9 +1247,6 @@ msgstr "--- Leeg"
 
 msgid "Abilities"
 msgstr "Capaciteiten"
-
-msgid "Additions"
-msgstr "Toevoegingen"
 
 msgid "Approvals"
 msgstr "Goedkeuringen"
@@ -1427,9 +1418,6 @@ msgstr "Workshops"
 
 msgid "negatives"
 msgstr "negatieven"
-
-msgid "surcharge"
-msgstr "toeslag"
 
 msgid "this link"
 msgstr "deze link"
@@ -1655,9 +1643,6 @@ msgstr "Welkom bij"
 
 msgid "accounting"
 msgstr "boekhouding"
-
-msgid "additional"
-msgstr "extra"
 
 msgid "are closed"
 msgstr "gesloten zijn"
@@ -4208,9 +4193,6 @@ msgstr "Je hebt een vriendencode gebruikt"
 
 msgid "(click on image to enlarge)"
 msgstr "(klik op de afbeelding om te vergroten)"
-
-msgid "Additional free payment fee"
-msgstr "Extra gratis betaling"
 
 #, python-format
 msgid "Bring a friend to %(event)s"

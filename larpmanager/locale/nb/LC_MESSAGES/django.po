@@ -197,9 +197,6 @@ msgstr "Åpen"
 msgid "Over"
 msgstr "Over"
 
-msgid "PWYW"
-msgstr "PWYW"
-
 msgid "Page"
 msgstr "Side"
 
@@ -618,6 +615,9 @@ msgstr "Refusjon"
 msgid "Remove"
 msgstr "Fjern"
 
+msgid "Review"
+msgstr "Anmeldelse"
+
 msgid "Safety"
 msgstr "Sikkerhet"
 
@@ -635,9 +635,6 @@ msgstr "Velg"
 
 msgid "Seller"
 msgstr "Selger"
-
-msgid "Shared"
-msgstr "Delte"
 
 msgid "Status"
 msgstr "Status"
@@ -1215,9 +1212,6 @@ msgstr "Mal"
 msgid "Treasury"
 msgstr "Finansdepartementet"
 
-msgid "Uploaded"
-msgstr "Lastet opp"
-
 msgid "Used on:"
 msgstr "Brukes på:"
 
@@ -1253,9 +1247,6 @@ msgstr "--- Tom"
 
 msgid "Abilities"
 msgstr "Evner"
-
-msgid "Additions"
-msgstr "Tillegg"
 
 msgid "Approvals"
 msgstr "Godkjenninger"
@@ -1427,9 +1418,6 @@ msgstr "Verksteder"
 
 msgid "negatives"
 msgstr "negativer"
-
-msgid "surcharge"
-msgstr "tilleggsavgift"
 
 msgid "this link"
 msgstr "denne lenken"
@@ -1655,9 +1643,6 @@ msgstr "Velkommen til"
 
 msgid "accounting"
 msgstr "regnskap"
-
-msgid "additional"
-msgstr "ytterligere"
 
 msgid "are closed"
 msgstr "er stengt"
@@ -4208,9 +4193,6 @@ msgstr "Du brukte en vennekode"
 
 msgid "(click on image to enlarge)"
 msgstr "(klikk på bildet for å forstørre)"
-
-msgid "Additional free payment fee"
-msgstr "Ekstra gebyr for gratis betaling"
 
 #, python-format
 msgid "Bring a friend to %(event)s"

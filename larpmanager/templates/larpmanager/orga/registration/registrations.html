@@ -49,9 +49,6 @@
                 {% if registration_reg_que_age %}
                     <a href="#" class="table_toggle" tog='age'>{% trans "age" %}</a>
                 {% endif %}
-                {% if features.additional_tickets %}
-                    <a href="#" class="table_toggle" tog='additionals'>{% trans "additional" %}</a>
-                {% endif %}
                 {% if features.gift %}
                     <a href="#" class="table_toggle" tog='gift'>{% trans "gift" %}</a>
                 {% endif %}
@@ -63,9 +60,6 @@
                 {% endif %}
                 {% if features.custom_character %}
                     <a href="#" class="table_toggle" tog='custom'>{% trans "customisations" %}</a>
-                {% endif %}
-                {% if features.reg_surcharges %}
-                    <a href="#" class="table_toggle" tog='sur'>{% trans "surcharge" %}</a>
                 {% endif %}
                 {% if features.discount %}
                     <a href="#" class="table_toggle" tog='disc'>{% trans "Discounts" %}</a>
@@ -119,10 +113,6 @@
                                 <th class="membership">{% trans "Language" %}</th>
                                 <th class="membership">{% trans "Member" %}</th>
                             {% endif %}
-                            <th>{% trans "Ticket" %}</th>
-                            {% if features.additional_tickets %}
-                                <th class="additionals">{% trans "Additions" %}</th>
-                            {% endif %}
                             {% if features.character %}
                                 <th>{% trans "Character" %}</th>
                             {% endif %}
@@ -142,12 +132,6 @@
                             <th class="date">{% trans "Creation" %} (y/m/d)</th>
                             <th class="date">{% trans "Last change" %} (y/m/d)</th>
                             <th class="date">{% trans "Full payment" %} (y/m/d)</th>
-                            {% if features.pay_what_you_want %}
-                                <th class="acc pay_what">{% trans "PWYW" %}</th>
-                            {% endif %}
-                            {% if features.reg_surcharges %}
-                                <th class="sur">{% trans "Surcharge" %}</th>
-                            {% endif %}
                             {% if features.reg_quotas or features.reg_installments %}
                                 <th class="acc quota">{% trans "Next quota" %}</th>
                             {% endif %}
@@ -190,12 +174,6 @@
                                 {% if features.membership %}
                                     <td class="membership">{{ reg.member.language }}</td>
                                     <td class="membership">{{ reg.membership }}</td>
-                                {% endif %}
-                                <td>{{ reg.ticket_show }}</td>
-                                {% if features.additional_tickets %}
-                                    <td class="additionals">
-                                        {% if reg.additionals %}{{ reg.additionals }}{% endif %}
-                                    </td>
                                 {% endif %}
                                 {% if features.character %}
                                     <td>
@@ -252,6 +230,24 @@
                                                 {{ value | safe }}
                                             {% endwith %}
                                         </td>
+                                    {% elif que.typ == 'additional_tickets' %}
+                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">
+                                            {% if reg.additionals %}{{ reg.additionals }}{% endif %}
+                                        </td>
+                                    {% elif que.typ == 'pay_what_you_want' %}
+                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">
+                                            {% if reg.pay_what %}{{ reg.pay_what }}{% endif %}
+                                        </td>
+                                    {% elif que.typ == 'reg_quotas' %}
+                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">
+                                            {% if reg.quotas %}{{ reg.quotas }}{% endif %}
+                                        </td>
+                                    {% elif que.typ == 'reg_surcharges' %}
+                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">
+                                            {% if reg.surcharge %}{{ reg.surcharge }}{% endif %}
+                                        </td>
+                                    {% elif que.typ == 'ticket' %}
+                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">{{ reg.ticket_show }}</td>
                                     {% else %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             <!-- filled later -->
@@ -272,15 +268,6 @@
                                 <td class="date">
                                     {% if reg.payment_date %}{{ reg.payment_date | date:"y/m/d H:i" }}{% endif %}
                                 </td>
-                                {% if features.pay_what_you_want %}
-                                    <td class="acc pay_what"
-                                        tooltip="{% trans "Additional free payment fee" %}">
-                                        <!-- filled later -->
-                                    </td>
-                                {% endif %}
-                                {% if features.reg_surcharges %}
-                                    <td class="sur" tooltip="{% trans "Surcharge applied to the ticket" %}"></td>
-                                {% endif %}
                                 {% if features.reg_quotas or features.reg_installments %}
                                     <td class="acc quota"
                                         tooltip="{% trans "Amount of the next payment instalment required" %}">

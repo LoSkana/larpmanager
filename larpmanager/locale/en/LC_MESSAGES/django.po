@@ -3533,10 +3533,10 @@ msgid ""
 "If you are a candidate for the Board, please write an introduction here!"
 msgstr ""
 
-msgid "Shared"
+msgid "Inactive"
 msgstr ""
 
-msgid "Uploaded"
+msgid "Review"
 msgstr ""
 
 msgid "Kicked out"
@@ -6778,9 +6778,6 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-msgid "Inactive"
-msgstr ""
-
 msgid "used"
 msgstr ""
 
@@ -6982,9 +6979,6 @@ msgstr ""
 msgid "age"
 msgstr ""
 
-msgid "additional"
-msgstr ""
-
 msgid "gift"
 msgstr ""
 
@@ -6997,16 +6991,10 @@ msgstr ""
 msgid "customisations"
 msgstr ""
 
-msgid "surcharge"
-msgstr ""
-
 msgid "chronology"
 msgstr ""
 
 msgid "Age (during the event)"
-msgstr ""
-
-msgid "Additions"
 msgstr ""
 
 msgid "Last change"
@@ -7015,16 +7003,10 @@ msgstr ""
 msgid "Full payment"
 msgstr ""
 
-msgid "PWYW"
-msgstr ""
-
 msgid "Next quota"
 msgstr ""
 
 msgid "Owing"
-msgstr ""
-
-msgid "Additional free payment fee"
 msgstr ""
 
 msgid "Amount of the next payment instalment required"
