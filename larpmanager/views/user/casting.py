@@ -120,11 +120,11 @@ def casting_quest_traits(context: dict, typ: str) -> None:
 
     # Pre-fetch all assigned traits for this run to avoid N+1 queries
     assigned_trait_ids_set = set(
-        AssignmentTrait.objects.filter(run=context["run"]).values_list('trait_id', flat=True)
+        AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True)
     )
 
     # Iterate through quests filtered by event, type, and visibility
-    for quest in Quest.objects.filter(event=context["event"], typ=typ, hide=False).order_by("number").prefetch_related('traits'):
+    for quest in Quest.objects.filter(event=context["event"], typ=typ, hide=False).order_by("number").prefetch_related("traits"):
         faction_name = quest.show()["name"]
         available_traits = {}
 
@@ -437,7 +437,7 @@ def _casting_update(context: dict, prefs: dict, request: Any, typ: int) -> None:
         if typ == 0:
             # Character casting: batch fetch all characters
             characters_dict = {
-                char.id: char for char in Character.objects.filter(pk__in=element_ids).select_related('event')
+                char.id: char for char in Character.objects.filter(pk__in=element_ids).select_related("event")
             }
             for casting_preference in casting_preferences:
                 character = characters_dict.get(casting_preference.element)
@@ -446,7 +446,7 @@ def _casting_update(context: dict, prefs: dict, request: Any, typ: int) -> None:
         else:
             # Trait casting: batch fetch all traits with their quests
             traits_dict = {
-                trait.id: trait for trait in Trait.objects.filter(pk__in=element_ids).select_related('quest')
+                trait.id: trait for trait in Trait.objects.filter(pk__in=element_ids).select_related("quest")
             }
             for casting_preference in casting_preferences:
                 trait = traits_dict.get(casting_preference.element)
@@ -604,11 +604,11 @@ def casting_preferences_traits(context: dict, quest_type_number: int) -> None:
 
     # Pre-fetch all assigned traits for this run to avoid N+1 queries
     assigned_trait_ids_set = set(
-        AssignmentTrait.objects.filter(run=context["run"]).values_list('trait_id', flat=True)
+        AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True)
     )
 
     # Iterate through all visible quests of the specified type
-    for quest in Quest.objects.filter(event=context["event"], typ=quest_type, hide=False).order_by("number").prefetch_related('traits'):
+    for quest in Quest.objects.filter(event=context["event"], typ=quest_type, hide=False).order_by("number").prefetch_related("traits"):
         # Get the quest group name for display
         quest_group_name = quest.show()["name"]
 

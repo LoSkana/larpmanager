@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+from collections import defaultdict
 from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
@@ -550,9 +551,8 @@ def copy_character_config(e_id: Any, p_id: Any) -> None:
         character_id_by_number[character.number] = character.id
 
     # Pre-fetch all character configs to avoid N queries in nested loop
-    from collections import defaultdict
     configs_by_character = defaultdict(list)
-    for config in CharacterConfig.objects.filter(character__event_id=p_id).select_related('character'):
+    for config in CharacterConfig.objects.filter(character__event_id=p_id).select_related("character"):
         configs_by_character[config.character_id].append(config)
 
     for parent_character in Character.objects.filter(event_id=p_id):

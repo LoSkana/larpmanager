@@ -228,7 +228,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any) -> Any:
     available_runs = []
     run_display_names = []
 
-    for run in Run.objects.filter(event_id__in=event_ids, end__gte=timezone.now()).select_related('event__association'):
+    for run in Run.objects.filter(event_id__in=event_ids, end__gte=timezone.now()).select_related("event__association"):
         available_runs.append(run)
         run_display_names.append(f"{run.search} - {run.event.association.slug}")
 

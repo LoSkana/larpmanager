@@ -172,7 +172,7 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["pinocchio"] = []  # Members who haven't completed all workshops
     context["list"] = []  # All registered members with completion counts
 
-    # Pre-fetch all workshop completions to avoid N×M queries
+    # Pre-fetch all workshop completions to avoid NxM queries
     registrations = list(Registration.objects.filter(run=context["run"], cancellation_date__isnull=True))
     member_ids = [reg.member_id for reg in registrations]
     workshop_ids = [w.id for w in workshops]

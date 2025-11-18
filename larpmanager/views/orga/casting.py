@@ -35,7 +35,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.config import get_event_config
 from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
-from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
+from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
@@ -264,11 +264,11 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int]
 
     # Pre-fetch all assigned traits for this run to avoid N+1 queries
     assigned_trait_ids_set = set(
-        AssignmentTrait.objects.filter(run=context["run"]).values_list('trait_id', flat=True)
+        AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True)
     )
 
     # Get all quests for the event and quest type, ordered by number
-    for quest in Quest.objects.filter(event=context["event"], typ=context["quest_type"]).order_by("number").prefetch_related('traits'):
+    for quest in Quest.objects.filter(event=context["event"], typ=context["quest_type"]).order_by("number").prefetch_related("traits"):
         # Process traits for each quest
         for trait in quest.traits.all():
             # Check if trait is already assigned using pre-fetched set

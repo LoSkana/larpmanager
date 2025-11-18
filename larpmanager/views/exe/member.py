@@ -309,7 +309,7 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
             m.member_id: m for m in Membership.objects.filter(
                 member_id__in=member_ids,
                 association_id=context["association_id"]
-            ).select_related('member')
+            ).select_related("member")
         }
 
         # Cache membership on each member object
@@ -1167,7 +1167,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
 
     # Iterate through all memberships for the current association
     # Use select_related to avoid N+1 queries when accessing member data
-    for el in Membership.objects.filter(association_id=context["association_id"]).select_related('member'):
+    for el in Membership.objects.filter(association_id=context["association_id"]).select_related("member"):
         m = el.member
 
         # Skip members who don't match the requested language
