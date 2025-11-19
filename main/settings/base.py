@@ -193,6 +193,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'automatic_uploads': True,
     'file_picker_types': 'image media',
     'paste_data_images': False,
+    # CSRF token handler for upload security
+    'images_upload_credentials': True,
 }
 
 
@@ -211,6 +213,22 @@ ALLOWED_UPLOAD_EXTENSIONS = {
     '.pdf', '.doc', '.docx', '.odt', '.txt',
     # Audio/Video
     '.mp3', '.mp4', '.webm', '.ogg', '.wav',
+}
+
+# Upload rate limiting settings
+UPLOAD_RATE_LIMIT = 10  # Maximum uploads per time window
+UPLOAD_RATE_WINDOW = 60  # Time window in seconds (1 minute)
+UPLOAD_MAX_STORAGE_PER_USER = 100 * 1024 * 1024  # 100MB total per user
+
+# MIME type validation for uploads
+ALLOWED_MIME_TYPES = {
+    # Images
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp',
+    # Documents
+    'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.oasis.opendocument.text', 'text/plain',
+    # Audio/Video
+    'audio/mpeg', 'video/mp4', 'video/webm', 'audio/ogg', 'video/ogg', 'audio/wav', 'audio/wave',
 }
 
 

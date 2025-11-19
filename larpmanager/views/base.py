@@ -21,8 +21,10 @@ from __future__ import annotations
 
 import secrets
 import uuid
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+import magic
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -31,7 +33,6 @@ from django.core.files.storage import default_storage
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import save_single_config
@@ -203,47 +204,118 @@ def tutorial_query(request: HttpRequest) -> HttpResponse:
     return query_index(request)
 
 
+def _validate_upload_file(file: Any, file_ext: str, *, is_superuser: bool) -> str | None:
+    """Validate uploaded file size, extension, and MIME type.
+
+    Args:
+        file: Uploaded file object
+        file_ext: File extension (lowercase with dot)
+        is_superuser: Whether user is a superuser
+
+    Returns:
+        Error message if validation fails, None if successful
+
+    """
+    # Validate file size (skip for superusers)
+    if not is_superuser and file.size > settings.MAX_UPLOAD_SIZE:
+        max_size_mb = settings.MAX_UPLOAD_SIZE / (1024 * 1024)
+        return f"File size exceeds maximum allowed size of {max_size_mb}MB"
+
+    # Validate file extension
+    if not file_ext or file_ext not in settings.ALLOWED_UPLOAD_EXTENSIONS:
+        allowed = ", ".join(sorted(settings.ALLOWED_UPLOAD_EXTENSIONS))
+        return f"File type not allowed. Allowed types: {allowed}"
+
+    # Validate MIME type by reading file content
+    file.seek(0)
+    mime = magic.Magic(mime=True)
+    detected_mime = mime.from_buffer(file.read(2048))
+    file.seek(0)
+
+    if detected_mime not in settings.ALLOWED_MIME_TYPES:
+        return f"File content type '{detected_mime}' not allowed. File may be corrupted or disguised."
+
+    return None
+
+
 @login_required
-@csrf_exempt
+@require_POST
 def upload_media(request: HttpRequest) -> JsonResponse:
     """Handle media file uploads for TinyMCE editor.
 
     Security measures:
-    - Requires authentication
+    - Requires authentication and POST method
+    - CSRF protection enabled (credentials sent with requests)
+    - Rate limiting per user (configurable uploads per time window)
     - Validates file extension against whitelist
-    - Enforces file size limit
+    - Validates MIME type against whitelist (prevents file disguising)
+    - Enforces per-file size limit
+    - Enforces total storage limit per user
     - Generates unique filenames to prevent overwriting
+    - Stores files in user-specific subdirectories
+
+    Note: Superusers bypass rate limiting and size restrictions for administrative tasks.
 
     Args:
         request: HTTP request containing file upload data
 
     Returns:
         JSON response with file location or error message
+        - 200: Success with {"location": "file_url"}
+        - 400: Invalid request, file too large, or invalid file type
+        - 429: Rate limit exceeded
 
     """
-    if request.method != "POST" or not request.FILES.get("file"):
-        return JsonResponse({"error": "Invalid request"}, status=400)
+    if not request.FILES.get("file"):
+        return JsonResponse({"error": "No file provided"}, status=400)
+
+    user_id = request.user.id
+    is_superuser = request.user.is_superuser
+
+    # Check rate limiting (skip for superusers)
+    if not is_superuser:
+        cache_key = f"upload_rate:{user_id}"
+        upload_count = cache.get(cache_key, 0)
+
+        if upload_count >= settings.UPLOAD_RATE_LIMIT:
+            return JsonResponse(
+                {
+                    "error": f"Rate limit exceeded. Maximum {settings.UPLOAD_RATE_LIMIT} uploads per {settings.UPLOAD_RATE_WINDOW} seconds."
+                },
+                status=429,
+            )
+
+        # Increment rate limit counter
+        cache.set(cache_key, upload_count + 1, timeout=settings.UPLOAD_RATE_WINDOW)
 
     file = request.FILES["file"]
 
-    # Validate file size
-    if file.size > settings.MAX_UPLOAD_SIZE:
-        max_size_mb = settings.MAX_UPLOAD_SIZE / (1024 * 1024)
-        return JsonResponse({"error": f"File size exceeds maximum allowed size of {max_size_mb}MB"}, status=400)
+    # Check total storage limit for user (skip for superusers)
+    if not is_superuser:
+        user_dir = Path(settings.MEDIA_ROOT) / "tinymce_uploads" / str(request.association["id"]) / str(user_id)
+        if user_dir.exists():
+            total_size = sum(f.stat().st_size for f in user_dir.rglob("*") if f.is_file())
+            if total_size + file.size > settings.UPLOAD_MAX_STORAGE_PER_USER:
+                max_storage_mb = settings.UPLOAD_MAX_STORAGE_PER_USER / (1024 * 1024)
+                return JsonResponse(
+                    {"error": f"Storage limit exceeded. Maximum {max_storage_mb}MB total storage per user."},
+                    status=400,
+                )
 
-    # Extract and validate file extension
+    # Extract file extension
     file_ext = file.name[file.name.rfind(".") :].lower() if "." in file.name else ""
 
-    if not file_ext or file_ext not in settings.ALLOWED_UPLOAD_EXTENSIONS:
-        allowed = ", ".join(sorted(settings.ALLOWED_UPLOAD_EXTENSIONS))
-        return JsonResponse({"error": f"File type not allowed. Allowed types: {allowed}"}, status=400)
+    # Validate file (size, extension, MIME type)
+    error = _validate_upload_file(file, file_ext, is_superuser=is_superuser)
+    if error:
+        return JsonResponse({"error": error}, status=400)
 
     # Generate timestamp and unique filename
     timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
     filename = f"{timestamp}_{uuid.uuid4().hex}{file_ext}"
 
-    # Save file to association-specific directory
-    path = default_storage.save(f"tinymce_uploads/{request.association['id']}/{filename}", file)
+    # Save file to association and user-specific directory
+    path = default_storage.save(f"tinymce_uploads/{request.association['id']}/{user_id}/{filename}", file)
 
     return JsonResponse({"location": default_storage.url(path)})
 
