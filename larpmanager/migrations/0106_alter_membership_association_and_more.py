@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0105_alter_abilitypx_created_alter_abilitytypepx_created_and_more'),
+        ('larpmanager', '0106_alter_membership_association_and_more'),
     ]
 
     operations = [
