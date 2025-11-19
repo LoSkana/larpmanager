@@ -7,11 +7,10 @@ from typing import TYPE_CHECKING, Any
 from django import forms
 from django.forms import Textarea
 from django.utils.html import escape, format_html_join
-from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
 from larpmanager.forms.base import MyForm
-from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, get_members_queryset
+from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, CSRFTinyMCE, get_members_queryset
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -240,7 +239,7 @@ class ConfigForm(MyForm):
             # Rich text editor field for HTML content
             ConfigType.HTML: lambda: forms.CharField(
                 label=label,
-                widget=TinyMCE(),
+                widget=CSRFTinyMCE(),
                 help_text=help_text,
                 required=False,
             ),

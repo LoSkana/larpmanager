@@ -209,7 +209,7 @@ def clear_run_event_links_cache(event: Event) -> None:
         for member in association_role.members.all():
             reset_event_links(member.id, event.association_id)
     except ObjectDoesNotExist:
-        pass
+        logger.debug("Association role #1 not found for association %s", event.association_id)
 
     # Clear cache for all superusers since they have global access
     superusers = User.objects.filter(is_superuser=True)

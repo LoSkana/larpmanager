@@ -51,24 +51,37 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'larpmanager.middleware.profiler.ProfilerMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # First security middleware
     'django.middleware.security.SecurityMiddleware',
+    # CORS to set headers early
+    'corsheaders.middleware.CorsMiddleware',
+    # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # URL correction
     'larpmanager.middleware.url.CorrectUrlMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'larpmanager.middleware.token.TokenAuthMiddleware',
+    # Common middleware for URL handling
+    'django.middleware.common.CommonMiddleware',
+    # CSRF protection
+    'django.middleware.csrf.CsrfViewMiddleware',
+    # Authentication (must be before anything that depends on request.user)
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # Messages depends on sessions and authentication
+    'django.contrib.messages.middleware.MessageMiddleware',
+    # Token auth (login using social provider)
+    'larpmanager.middleware.token.TokenAuthMiddleware',
+    # Account middleware after authentication
+    'allauth.account.middleware.AccountMiddleware',
+    # Custom middleware
     'larpmanager.middleware.exception.ExceptionHandlingMiddleware',
     'larpmanager.middleware.broken.BrokenLinkEmailsMiddleware',
     'larpmanager.middleware.locale.LocaleAdvMiddleware',
     'larpmanager.middleware.association.AssociationIdentifyMiddleware',
     'larpmanager.middleware.translation.AssociationTranslationMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # Clickjacking protection
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    # Debug and profiling middleware (last)
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'larpmanager.middleware.profiler.ProfilerMiddleware',
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -174,8 +187,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 
-# Tinymce
 
+# Tinymce
 TINYMCE_JS_URL = 'node_modules/tinymce/tinymce.min.js'
 TINYMCE_DEFAULT_CONFIG = {
     'width': '100%',
@@ -189,7 +202,6 @@ TINYMCE_DEFAULT_CONFIG = {
     'license_key': 'gpl',
     'promotion': False,
 
-    'images_upload_url': '/upload_media/',
     'automatic_uploads': True,
     'file_picker_types': 'image media',
     'paste_data_images': False,
@@ -199,6 +211,39 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
+
+# Demo user password (used for creating demo accounts)
+DEMO_PASSWORD = 'pippo'
+
+# Maximum file upload size (10MB for TinyMCE uploads)
+MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB in bytes
+
+# Allowed file extensions for TinyMCE uploads
+ALLOWED_UPLOAD_EXTENSIONS = {
+    # Images
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp',
+    # Documents
+    '.pdf', '.doc', '.docx', '.odt', '.txt',
+    # Audio/Video
+    '.mp3', '.mp4', '.webm', '.ogg', '.wav',
+}
+
+# Upload rate limiting settings
+UPLOAD_RATE_LIMIT = 10  # Maximum uploads per time window
+UPLOAD_RATE_WINDOW = 60  # Time window in seconds (1 minute)
+UPLOAD_MAX_STORAGE_PER_USER = 100 * 1024 * 1024  # 100MB total per user
+
+# MIME type validation for uploads
+ALLOWED_MIME_TYPES = {
+    # Images
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp',
+    # Documents
+    'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.oasis.opendocument.text', 'text/plain',
+    # Audio/Video
+    'audio/mpeg', 'video/mp4', 'video/webm', 'audio/ogg', 'video/ogg', 'audio/wav', 'audio/wave',
+}
+
 
 # email
 

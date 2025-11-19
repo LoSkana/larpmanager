@@ -54,6 +54,10 @@ from larpmanager.utils.tasks import notify_admins
 
 logger = logging.getLogger(__name__)
 
+# Currency conversion constants
+# Payment gateways typically require amounts in smallest currency unit (cents for EUR/USD)
+CURRENCY_TO_CENTS_MULTIPLIER = 100
+
 
 def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
     """Create Satispay payment form and initialize payment.
@@ -98,7 +102,7 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
     satispay_response = satispaython.create_payment(
         satispay_key_id,
         satispay_rsa_key,
-        math.ceil(amount * 100),
+        math.ceil(amount * CURRENCY_TO_CENTS_MULTIPLIER),
         context["payment_currency"],
         body_params,
     )
@@ -205,7 +209,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
     # Parse response and extract payment details
     try:
         payment_data = json.loads(response.content)
-        payment_amount = int(payment_data["amount_unit"]) / 100.0
+        payment_amount = int(payment_data["amount_unit"]) / float(CURRENCY_TO_CENTS_MULTIPLIER)
         payment_status = payment_data["status"]
     except (json.JSONDecodeError, KeyError, ValueError) as e:
         error_msg = f"Failed to parse Satispay payment verification: {e}\nResponse: {response.content}"
@@ -326,7 +330,7 @@ def get_stripe_form(
     # Create price object with amount converted to cents
     # Stripe requires amounts in smallest currency unit (cents for EUR/USD)
     stripe_price = stripe.Price.create(
-        unit_amount=str(int(round(amount, 2) * 100)),
+        unit_amount=str(int(round(amount, 2) * CURRENCY_TO_CENTS_MULTIPLIER)),
         currency=context["payment_currency"],
         product=stripe_product.id,
     )
@@ -800,7 +804,7 @@ class RedSysClient:
         :return dict url, signature, parameters and type signature.
         """
         merchant_parameters = {
-            "DS_MERCHANT_AMOUNT": int(params["DS_MERCHANT_AMOUNT"] * 100),
+            "DS_MERCHANT_AMOUNT": int(params["DS_MERCHANT_AMOUNT"] * CURRENCY_TO_CENTS_MULTIPLIER),
             "DS_MERCHANT_ORDER": params["DS_MERCHANT_ORDER"].zfill(10),
             "DS_MERCHANT_MERCHANTCODE": params["DS_MERCHANT_MERCHANTCODE"][:9],
             "DS_MERCHANT_CURRENCY": params["DS_MERCHANT_CURRENCY"] or 978,  # EUR

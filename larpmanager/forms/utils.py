@@ -900,9 +900,86 @@ def get_members_queryset(association_id: int) -> QuerySet[Member]:
     return queryset.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
-class WritingTinyMCE(TinyMCE):
-    """Represents WritingTinyMCE model."""
+# CSRF-aware upload handler for TinyMCE
+# This JavaScript function is injected into TinyMCE configuration to handle file uploads
+# with proper CSRF token authentication
+_TINYMCE_CSRF_UPLOAD_HANDLER = """function(blobInfo, progress) {
+    return new Promise(function(resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload_media/');
+
+        // Get CSRF token from cookie or form
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+                         document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+
+        if (csrftoken) {
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        }
+
+        xhr.upload.onprogress = function(e) {
+            progress(e.loaded / e.total * 100);
+        };
+
+        xhr.onload = function() {
+            if (xhr.status === 403) {
+                reject('HTTP Error: ' + xhr.status + ' - CSRF verification failed');
+                return;
+            }
+            if (xhr.status < 200 || xhr.status >= 300) {
+                reject('HTTP Error: ' + xhr.status);
+                return;
+            }
+
+            const json = JSON.parse(xhr.responseText);
+            if (!json || typeof json.location !== 'string') {
+                reject('Invalid JSON: ' + xhr.responseText);
+                return;
+            }
+
+            resolve(json.location);
+        };
+
+        xhr.onerror = function() {
+            reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+        };
+
+        const formData = new FormData();
+        formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+        xhr.send(formData);
+    });
+}"""
+
+
+class CSRFTinyMCE(TinyMCE):
+    """TinyMCE widget with CSRF-aware image upload handler.
+
+    This widget extends the standard TinyMCE widget to include proper CSRF token
+    handling for file uploads, preventing 403 Forbidden errors.
+    """
+
+    def __init__(self, attrs=None, mce_attrs=None) -> None:  # noqa: ANN001
+        """Initialize TinyMCE widget with CSRF-aware upload handler.
+
+        Args:
+            attrs: HTML attributes for the widget
+            mce_attrs: TinyMCE-specific configuration attributes
+
+        """
+        # Merge custom upload handler with any existing mce_attrs
+        mce_attrs = mce_attrs or {}
+        mce_attrs["images_upload_handler"] = _TINYMCE_CSRF_UPLOAD_HANDLER
+
+        super().__init__(attrs=attrs, mce_attrs=mce_attrs)
+
+
+class WritingTinyMCE(CSRFTinyMCE):
+    """TinyMCE widget with custom styling for character markers and CSRF upload support."""
 
     def __init__(self) -> None:
-        """Initialize TinyMCE widget with custom styling for character markers."""
-        super().__init__(attrs={"rows": 20, "content_style": ".char-marker { background: yellow !important; }"})
+        """Initialize TinyMCE widget with custom styling and CSRF-aware upload handler."""
+        mce_attrs = {
+            "rows": 20,
+            "content_style": ".char-marker { background: yellow !important; }",
+        }
+        super().__init__(attrs=mce_attrs)

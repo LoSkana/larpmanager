@@ -86,7 +86,8 @@ class AssociationIdentifyMiddleware:
         base_domain = ".".join(request_host.split(".")[-2:])
 
         # Determine environment based on host characteristics
-        if os.getenv("ENV") == "prod":
+        env_var = os.getenv("ENV") or os.getenv("env")  # noqa: SIM112
+        if env_var == "prod":
             request.enviro = "prod"
         elif "xyz" in request_host:
             request.enviro = "staging"
