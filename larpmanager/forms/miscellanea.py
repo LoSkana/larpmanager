@@ -24,13 +24,13 @@ from django import forms
 from django.forms import Textarea
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
+    CSRFTinyMCE,
     DatePickerInput,
     EventS2Widget,
     TimePickerInput,
@@ -70,7 +70,7 @@ class SendMailForm(forms.Form):
 
     players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
     subject = forms.CharField()
-    body = forms.CharField(widget=TinyMCE(attrs={"rows": 30}))
+    body = forms.CharField(widget=CSRFTinyMCE(attrs={"rows": 30}))
     reply_to = forms.EmailField(help_text=_("Optional - email reply to"), required=False)
     raw = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 2}),

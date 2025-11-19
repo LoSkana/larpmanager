@@ -189,12 +189,9 @@ TINYMCE_DEFAULT_CONFIG = {
     'license_key': 'gpl',
     'promotion': False,
 
-    'images_upload_url': '/upload_media/',
     'automatic_uploads': True,
     'file_picker_types': 'image media',
     'paste_data_images': False,
-    # CSRF token handler for upload security
-    'images_upload_credentials': True,
 }
 
 
