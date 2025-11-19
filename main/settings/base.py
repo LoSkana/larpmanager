@@ -174,8 +174,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '../../media')
 
-# Tinymce
 
+# Tinymce
 TINYMCE_JS_URL = 'node_modules/tinymce/tinymce.min.js'
 TINYMCE_DEFAULT_CONFIG = {
     'width': '100%',
@@ -199,6 +199,20 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
+
+# Maximum file upload size (10MB for TinyMCE uploads)
+MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB in bytes
+
+# Allowed file extensions for TinyMCE uploads
+ALLOWED_UPLOAD_EXTENSIONS = {
+    # Images
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp',
+    # Documents
+    '.pdf', '.doc', '.docx', '.odt', '.txt',
+    # Audio/Video
+    '.mp3', '.mp4', '.webm', '.ogg', '.wav',
+}
+
 
 # email
 

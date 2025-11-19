@@ -23,6 +23,8 @@ import secrets
 import uuid
 from typing import TYPE_CHECKING, Any
 
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.core.files.storage import default_storage
@@ -201,9 +203,16 @@ def tutorial_query(request: HttpRequest) -> HttpResponse:
     return query_index(request)
 
 
+@login_required
 @csrf_exempt
 def upload_media(request: HttpRequest) -> JsonResponse:
     """Handle media file uploads for TinyMCE editor.
+
+    Security measures:
+    - Requires authentication
+    - Validates file extension against whitelist
+    - Enforces file size limit
+    - Generates unique filenames to prevent overwriting
 
     Args:
         request: HTTP request containing file upload data
@@ -212,18 +221,31 @@ def upload_media(request: HttpRequest) -> JsonResponse:
         JSON response with file location or error message
 
     """
-    if request.method == "POST" and request.FILES.get("file"):
-        file = request.FILES["file"]
+    if request.method != "POST" or not request.FILES.get("file"):
+        return JsonResponse({"error": "Invalid request"}, status=400)
 
-        # Generate timestamp and unique filename
-        timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
-        filename = f"{timestamp}_{uuid.uuid4().hex}{file.name[file.name.rfind('.') :]}"
+    file = request.FILES["file"]
 
-        # Save file to association-specific directory
-        path = default_storage.save(f"tinymce_uploads/{request.association['id']}/{filename}", file)
+    # Validate file size
+    if file.size > settings.MAX_UPLOAD_SIZE:
+        max_size_mb = settings.MAX_UPLOAD_SIZE / (1024 * 1024)
+        return JsonResponse({"error": f"File size exceeds maximum allowed size of {max_size_mb}MB"}, status=400)
 
-        return JsonResponse({"location": default_storage.url(path)})
-    return JsonResponse({"error": "Invalid request"}, status=400)
+    # Extract and validate file extension
+    file_ext = file.name[file.name.rfind(".") :].lower() if "." in file.name else ""
+
+    if not file_ext or file_ext not in settings.ALLOWED_UPLOAD_EXTENSIONS:
+        allowed = ", ".join(sorted(settings.ALLOWED_UPLOAD_EXTENSIONS))
+        return JsonResponse({"error": f"File type not allowed. Allowed types: {allowed}"}, status=400)
+
+    # Generate timestamp and unique filename
+    timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+    filename = f"{timestamp}_{uuid.uuid4().hex}{file_ext}"
+
+    # Save file to association-specific directory
+    path = default_storage.save(f"tinymce_uploads/{request.association['id']}/{filename}", file)
+
+    return JsonResponse({"location": default_storage.url(path)})
 
 
 @require_POST
