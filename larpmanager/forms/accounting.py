@@ -117,7 +117,9 @@ class OrgaExpenseForm(MyFormRun):
             self.delete_field("balance")
 
         # Remove approval field if organization has disabled expense approval
-        if get_association_config(self.params["event"].association_id, "expense_disable_orga", default_value=False, context=self.params):
+        if get_association_config(
+            self.params["event"].association_id, "expense_disable_orga", default_value=False, context=self.params
+        ):
             self.delete_field("is_approved")
 
 
@@ -309,7 +311,8 @@ class ExePaymentForm(MyForm):
 
         # Remove VAT field if feature is not enabled
         if "vat" not in self.params["features"]:
-            del self.fields["vat"]
+            self.delete_field("vat_ticket")
+            self.delete_field("vat_options")
 
 
 class ExeInvoiceForm(MyForm):
