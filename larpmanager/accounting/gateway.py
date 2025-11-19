@@ -895,8 +895,19 @@ class RedSysClient:
 
         # Verify signature matches to ensure payment authenticity
         if signature != computed_signature.decode():
+            # Debug information for signature mismatch
+            debug_info = f"""
+Signature Verification Failed:
+- Received signature: {signature}
+- Computed signature: {computed_signature.decode()}
+- Order number: {order_number}
+- Order length: {len(order_number)}
+- Encrypted order (hex): {encrypted_order.hex()}
+- Base64 params (first 100 chars): {b64_merchant_parameters[:100]}...
+- Merchant parameters: {pformat(merchant_parameters)}
+"""
             error_message = f"Different signature redsys: {signature} vs {computed_signature.decode()}"
-            error_message += pformat(merchant_parameters)
+            error_message += debug_info
             # TODO: For now we accept failed signatures and only log the error
             # TODO: return None to reject invalid payments
             notify_admins("Redsys signature verification failed", error_message)
