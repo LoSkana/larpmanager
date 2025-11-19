@@ -84,7 +84,8 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
 
             # Try to match causal code directly
             causal_match_found: bool = clean(pending_invoice.causal) in clean(payment_causal)
-            causal_code: str = pending_invoice.causal.split()[0]
+            causal_parts = pending_invoice.causal.split()
+            causal_code: str = causal_parts[0] if causal_parts else ""
 
             # Check for random causal codes (16 characters)
             random_causal_length: int = 16

@@ -281,7 +281,9 @@ def go_character(
 
     # Create either simple bold name or full link based on simple flag
     if simple:
-        formatted_link = f"<b>{escape(character_data['name'].split()[0])}</b>"
+        name_parts = character_data["name"].split()
+        first_name = name_parts[0] if name_parts else ""
+        formatted_link = f"<b>{escape(first_name)}</b>"
     else:
         formatted_link = (
             f"<a class='link_show_char' href='{escape(character_url)}'>{escape(character_data['name'])}</a>"
@@ -466,7 +468,9 @@ def go_trait(
     # Generate appropriate output based on simple flag
     if simple:
         # Simple mode: return bold first name only
-        link = f"<b>{escape(character_data['name'].split()[0])}</b>"
+        name_parts = character_data["name"].split()
+        first_name = name_parts[0] if name_parts else ""
+        link = f"<b>{escape(first_name)}</b>"
     else:
         # Full mode: generate clickable link with optional tooltip
         tooltip = ""
@@ -781,12 +785,23 @@ def hex_to_rgb(hex_color: Any) -> Any:
         hex_color (str): Hex color string (e.g., '#FF0000')
 
     Returns:
-        str: Comma-separated RGB values (e.g., '255,0,0')
+        str: Comma-separated RGB values (e.g., '255,0,0'), or original value if invalid format
 
     """
-    hex_without_hash = hex_color.lstrip("#")
-    rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
-    return ",".join(rgb_values)
+    if not hex_color:
+        return ""
+
+    hex_without_hash = str(hex_color).lstrip("#")
+
+    # Validate hex format: exactly 6 hexadecimal characters
+    if not re.match(r"^[0-9A-Fa-f]{6}$", hex_without_hash):
+        return hex_color  # Return original value if invalid format
+
+    try:
+        rgb_values = [str(int(hex_without_hash[i : i + 2], 16)) for i in (0, 2, 4)]
+        return ",".join(rgb_values)
+    except (ValueError, IndexError):
+        return hex_color  # Return original value if conversion fails
 
 
 @register.simple_tag
