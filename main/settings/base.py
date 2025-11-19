@@ -64,10 +64,11 @@ MIDDLEWARE = [
     # CSRF protection
     'django.middleware.csrf.CsrfViewMiddleware',
     # Authentication (must be before anything that depends on request.user)
-    'larpmanager.middleware.token.TokenAuthMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     # Messages depends on sessions and authentication
     'django.contrib.messages.middleware.MessageMiddleware',
+    # Token auth (login using social provider)
+    'larpmanager.middleware.token.TokenAuthMiddleware',
     # Account middleware after authentication
     'allauth.account.middleware.AccountMiddleware',
     # Custom middleware
