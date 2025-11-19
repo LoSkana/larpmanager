@@ -244,7 +244,7 @@ def get_payment_invoices_dict(registrations_by_id: dict, member: Any) -> dict:
         registration_ids = [registration.id for registration in registrations_by_id.values()]
 
         # Fetch all payment invoices for user's registrations in single optimized query
-        # Include method relation to avoid N+1 queries when accessing invoice.method
+        # Include method relation when accessing invoice.method
         payment_invoices = PaymentInvoice.objects.filter(
             reg_id__in=registration_ids,
             member=member,
@@ -942,7 +942,11 @@ def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = No
     context["list"] = []
 
     # Filter quests by event, visibility, and type, then add complete quest data
-    for el in Quest.objects.filter(event=context["event"], hide=False, typ=context["quest_type"]).order_by("number"):
+    for el in (
+        Quest.objects.filter(event=context["event"], hide=False, typ=context["quest_type"])
+        .prefetch_related("traits")
+        .order_by("number")
+    ):
         context["list"].append(el.show_complete())
 
     return render(request, "larpmanager/event/quests.html", context)
@@ -964,6 +968,10 @@ def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
     check_visibility(context, "quest", _("Quest"))
 
     get_element(context, quest_id, "quest", Quest, by_number=True)
+
+    # Reload quest with prefetched traits
+    context["quest"] = Quest.objects.prefetch_related("traits").get(pk=context["quest"].id)
+
     context["quest_fields"] = get_writing_element_fields(
         context,
         "quest",
@@ -1011,7 +1019,9 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build tickets list with availability and usage data
     context["tickets"] = []
-    for ticket in RegistrationTicket.objects.filter(event=context["event"], max_available__gt=0, visible=True):
+    for ticket in RegistrationTicket.objects.filter(
+        event=context["event"], max_available__gt=0, visible=True
+    ).select_related("event"):
         dt = ticket.show()
         key = f"tk_{ticket.id}"
         # Add usage count if available in registration counts
@@ -1021,7 +1031,9 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build registration options list with availability constraints
     context["opts"] = []
-    que = RegistrationOption.objects.filter(question__event=context["event"], max_available__gt=0)
+    que = RegistrationOption.objects.filter(question__event=context["event"], max_available__gt=0).select_related(
+        "question", "question__event"
+    )
     for option in que:
         dt = option.show()
         key = f"option_{option.id}"

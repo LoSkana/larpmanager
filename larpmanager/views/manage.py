@@ -554,7 +554,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
     # Check if character feature is properly configured
     if "character" in enabled_features:
         # Prompt to create first character if none exist
-        if not Character.objects.filter(event=context["event"]).count():
+        if not Character.objects.filter(event=context["event"]).exists():
             _add_priority(
                 context,
                 _("Create the first character of the event"),
@@ -630,14 +630,14 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         )
 
     # Check for incomplete registration form questions (missing options)
-    registration_questions_without_options = (
+    registration_questions_without_options = list(
         context["event"]
         .get_elements(RegistrationQuestion)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
-    if registration_questions_without_options.count():
+    if registration_questions_without_options:
         _add_priority(
             context,
             _("There are registration questions without options: %(list)s")
@@ -646,14 +646,14 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
         )
 
     # Check for incomplete writing form questions (missing options)
-    writing_questions_without_options = (
+    writing_questions_without_options = list(
         context["event"]
         .get_elements(WritingQuestion)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
     )
-    if writing_questions_without_options.count():
+    if writing_questions_without_options:
         _add_priority(
             context,
             _("There are writing fields without options: %(list)s")
@@ -716,17 +716,17 @@ def _orga_casting_actions(context: dict[str, Any], enabled_features: dict[str, A
         )
 
     if "questbuilder" in enabled_features:
-        if not context["event"].get_elements(QuestType).count():
+        if not context["event"].get_elements(QuestType).exists():
             _add_priority(
                 context,
                 _("Set up quest types"),
                 "orga_quest_types",
             )
 
-        unused_quest_types = (
+        unused_quest_types = list(
             context["event"].get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
         )
-        if unused_quest_types.count():
+        if unused_quest_types:
             _add_priority(
                 context,
                 _("There are quest types without quests: %(list)s")
@@ -734,8 +734,10 @@ def _orga_casting_actions(context: dict[str, Any], enabled_features: dict[str, A
                 "orga_quests",
             )
 
-        unused_quests = context["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
-        if unused_quests.count():
+        unused_quests = list(
+            context["event"].get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
+        )
+        if unused_quests:
             _add_priority(
                 context,
                 _("There are quests without traits: %(list)s")
@@ -772,7 +774,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
     # Verify that ability types have been set up
-    if not context["event"].get_elements(AbilityTypePx).count():
+    if not context["event"].get_elements(AbilityTypePx).exists():
         _add_priority(
             context,
             _("Set up ability types"),
@@ -780,11 +782,11 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
     # Find ability types that don't have any associated abilities
-    ability_types_without_abilities = (
+    ability_types_without_abilities = list(
         context["event"].get_elements(AbilityTypePx).annotate(ability_count=Count("abilities")).filter(ability_count=0)
     )
     # Add priority if there are unused ability types
-    if ability_types_without_abilities.count():
+    if ability_types_without_abilities:
         _add_priority(
             context,
             _("There are ability types without abilities: %(list)s")
@@ -793,7 +795,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
     # Check if delivery methods for experience points are configured
-    if not context["event"].get_elements(DeliveryPx).count():
+    if not context["event"].get_elements(DeliveryPx).exists():
         _add_priority(
             context,
             _("Set up delivery for experience points"),
@@ -827,7 +829,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: dict[str, int]) -> No
         )
 
     # Handle dynamic installments (quotas) setup
-    if "reg_quotas" in enabled_features and not context["event"].get_elements(RegistrationQuota).count():
+    if "reg_quotas" in enabled_features and not context["event"].get_elements(RegistrationQuota).exists():
         _add_priority(
             context,
             _("Set up dynamic installments"),
@@ -837,7 +839,7 @@ def _orga_reg_acc_actions(context: dict, enabled_features: dict[str, int]) -> No
     # Handle fixed installments feature
     if "reg_installments" in enabled_features:
         # Check if installments are configured
-        if not context["event"].get_elements(RegistrationInstallment).count():
+        if not context["event"].get_elements(RegistrationInstallment).exists():
             _add_priority(
                 context,
                 _("Set up fixed installments"),
