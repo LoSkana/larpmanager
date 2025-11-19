@@ -182,7 +182,7 @@ def registrations(page: Any) -> None:
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text("OK - Created User Test")
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text("User Test Standard #2 characcter")
+    expect(page.locator("#one")).to_contain_text("User Test #2 characcter")
     check_download(page, "Download")
 
 

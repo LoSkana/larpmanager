@@ -197,9 +197,6 @@ msgstr "Otevřít"
 msgid "Over"
 msgstr "Více než"
 
-msgid "PWYW"
-msgstr "PWYW"
-
 msgid "Page"
 msgstr "Stránka"
 
@@ -618,6 +615,9 @@ msgstr "Vrácení peněz"
 msgid "Remove"
 msgstr "Odstranění adresy"
 
+msgid "Review"
+msgstr "Recenze"
+
 msgid "Safety"
 msgstr "Bezpečnost"
 
@@ -635,9 +635,6 @@ msgstr "Vyberte"
 
 msgid "Seller"
 msgstr "Prodejce"
-
-msgid "Shared"
-msgstr "Sdílené stránky"
 
 msgid "Status"
 msgstr "Stav"
@@ -1218,9 +1215,6 @@ msgstr "Šablona"
 msgid "Treasury"
 msgstr "Pokladna"
 
-msgid "Uploaded"
-msgstr "Nahráno"
-
 msgid "Used on:"
 msgstr "Používá se na:"
 
@@ -1250,9 +1244,6 @@ msgstr "--- Prázdný"
 
 msgid "Abilities"
 msgstr "Schopnosti"
-
-msgid "Additions"
-msgstr "Dodatky"
 
 msgid "Approvals"
 msgstr "Schválení"
@@ -1424,9 +1415,6 @@ msgstr "Workshopy"
 
 msgid "negatives"
 msgstr "negativy"
-
-msgid "surcharge"
-msgstr "příplatek"
 
 msgid "this link"
 msgstr "tento odkaz"
@@ -1652,9 +1640,6 @@ msgstr "Vítejte v"
 
 msgid "accounting"
 msgstr "účetnictví"
-
-msgid "additional"
-msgstr "další"
 
 msgid "are closed"
 msgstr "jsou uzavřeny"
@@ -4238,9 +4223,6 @@ msgstr "Použili jste kód přítele"
 
 msgid "(click on image to enlarge)"
 msgstr "(kliknutím na obrázek jej zvětšíte)"
-
-msgid "Additional free payment fee"
-msgstr "Dodatečný poplatek za bezplatnou platbu"
 
 #, python-format
 msgid "Bring a friend to %(event)s"

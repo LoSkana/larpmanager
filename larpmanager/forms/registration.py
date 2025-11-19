@@ -23,7 +23,7 @@ import json
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -174,10 +174,21 @@ class RegistrationForm(BaseRegistrationForm):
         if "additional_tickets" not in self.params["features"]:
             return
 
-        # Create choice field with ticket quantity options (1-5)
+        # Get max_length from additional_tickets question, default to 5
+        max_tickets = 5
+        try:
+            additional_question = RegistrationQuestion.objects.filter(
+                event=self.params["run"].event, typ=RegistrationQuestionType.ADDITIONAL
+            ).first()
+            if additional_question and additional_question.max_length > 0:
+                max_tickets = additional_question.max_length
+        except ObjectDoesNotExist:
+            pass  # Use default value if query fails
+
+        # Create choice field with ticket quantity options (0 to max_tickets)
         self.fields["additionals"] = forms.ChoiceField(
             required=False,
-            choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")],
+            choices=[(i, str(i)) for i in range(max_tickets + 1)],
         )
 
         # Set initial value from instance if available
@@ -737,6 +748,21 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Check if additional tickets feature is available
         if "additional_tickets" not in self.params["features"]:
             return
+
+        # Get max_length from additional_tickets question, default to 5
+        max_tickets = 5
+        try:
+            additional_question = RegistrationQuestion.objects.filter(
+                event=self.params["run"].event, typ=RegistrationQuestionType.ADDITIONAL
+            ).first()
+            if additional_question and additional_question.max_length > 0:
+                max_tickets = additional_question.max_length
+        except ObjectDoesNotExist:
+            pass  # Use default value if query fails
+
+        # Update field choices if the field exists
+        if "additionals" in self.fields:
+            self.fields["additionals"].widget.choices = [(i, str(i)) for i in range(max_tickets + 1)]
 
         # Register the additional tickets section
         self.sections["id_additionals"] = registration_section
