@@ -199,6 +199,9 @@ TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
 
+# Demo user password (used for creating demo accounts)
+DEMO_PASSWORD = 'pippo'
+
 # Maximum file upload size (10MB for TinyMCE uploads)
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB in bytes
 

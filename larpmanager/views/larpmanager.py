@@ -1171,7 +1171,7 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
         email=f"test{new_primary_key}@demo.it",
         username=f"test{new_primary_key}",
     )
-    demo_user.password = "pippo"  # noqa: S105
+    demo_user.password = conf_settings.DEMO_PASSWORD
     demo_user.save()
 
     # Configure member profile with demo information
