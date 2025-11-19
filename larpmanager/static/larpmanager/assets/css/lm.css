@@ -2460,3 +2460,8 @@ input[type="number"] {
   max-width: 100%;
   object-fit: contain;
 }
+
+.gtagmanager {
+  display: none;
+  visibility: hidden;
+}

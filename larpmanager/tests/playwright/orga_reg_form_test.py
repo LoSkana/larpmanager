@@ -135,7 +135,7 @@ def signup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Event").click()
     page.get_by_role("link", name="Registration", exact=True).click()
     expect(page.locator("#register_form")).to_contain_text(
-        "(*) : These fields are mandatory Additional 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge"
+        "(*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge"
     )
 
 

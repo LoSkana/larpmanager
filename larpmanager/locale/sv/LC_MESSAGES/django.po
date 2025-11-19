@@ -197,9 +197,6 @@ msgstr "Öppna"
 msgid "Over"
 msgstr "Över"
 
-msgid "PWYW"
-msgstr "PWYW"
-
 msgid "Page"
 msgstr "Sida"
 
@@ -618,6 +615,9 @@ msgstr "Återbetalning"
 msgid "Remove"
 msgstr "Ta bort"
 
+msgid "Review"
+msgstr "Granskning"
+
 msgid "Safety"
 msgstr "Säkerhet"
 
@@ -635,9 +635,6 @@ msgstr "Välj"
 
 msgid "Seller"
 msgstr "Säljare"
-
-msgid "Shared"
-msgstr "Delad"
 
 msgid "Status"
 msgstr "Status"
@@ -1218,9 +1215,6 @@ msgstr "Mall"
 msgid "Treasury"
 msgstr "Finansdepartementet"
 
-msgid "Uploaded"
-msgstr "Uppladdad"
-
 msgid "Used on:"
 msgstr "Används på:"
 
@@ -1250,9 +1244,6 @@ msgstr "--- Tom"
 
 msgid "Abilities"
 msgstr "Förmågor"
-
-msgid "Additions"
-msgstr "Tillgångar"
 
 msgid "Approvals"
 msgstr "Godkännande"
@@ -1424,9 +1415,6 @@ msgstr "Verkstäder"
 
 msgid "negatives"
 msgstr "negativ"
-
-msgid "surcharge"
-msgstr "tilläggsavgift"
 
 msgid "this link"
 msgstr "denna länk"
@@ -1652,9 +1640,6 @@ msgstr "Välkommen till"
 
 msgid "accounting"
 msgstr "redovisning"
-
-msgid "additional"
-msgstr "ytterligare"
 
 msgid "are closed"
 msgstr "är stängda"
@@ -4238,9 +4223,6 @@ msgstr "Du använde en vänkod"
 
 msgid "(click on image to enlarge)"
 msgstr "(klicka på bilden för att förstora den)"
-
-msgid "Additional free payment fee"
-msgstr "Ytterligare avgift för fri betalning"
 
 #, python-format
 msgid "Bring a friend to %(event)s"

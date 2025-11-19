@@ -197,9 +197,6 @@ msgstr "Abrir"
 msgid "Over"
 msgstr "Terminado"
 
-msgid "PWYW"
-msgstr "Paga cuanto quieras"
-
 msgid "Page"
 msgstr "Página"
 
@@ -618,6 +615,9 @@ msgstr "Reembolso"
 msgid "Remove"
 msgstr "Eliminar"
 
+msgid "Review"
+msgstr "Consulte"
+
 msgid "Safety"
 msgstr "Seguridad"
 
@@ -635,9 +635,6 @@ msgstr "Seleccionar"
 
 msgid "Seller"
 msgstr "Vendedor"
-
-msgid "Shared"
-msgstr "Compartido"
 
 msgid "Status"
 msgstr "Estado"
@@ -1218,9 +1215,6 @@ msgstr "Plantilla"
 msgid "Treasury"
 msgstr "Tesorería"
 
-msgid "Uploaded"
-msgstr "Subido a"
-
 msgid "Used on:"
 msgstr "Utilizado en:"
 
@@ -1250,9 +1244,6 @@ msgstr "--- Vacío"
 
 msgid "Abilities"
 msgstr "Habilidades"
-
-msgid "Additions"
-msgstr "Adiciones"
 
 msgid "Approvals"
 msgstr "Homologaciones"
@@ -1424,9 +1415,6 @@ msgstr "Talleres"
 
 msgid "negatives"
 msgstr "negativos"
-
-msgid "surcharge"
-msgstr "recargo"
 
 msgid "this link"
 msgstr "este enlace"
@@ -1652,9 +1640,6 @@ msgstr "Bienvenido a"
 
 msgid "accounting"
 msgstr "contabilidad"
-
-msgid "additional"
-msgstr "adicional"
 
 msgid "are closed"
 msgstr "están cerrados"
@@ -4238,9 +4223,6 @@ msgstr "Has utilizado un código de amigo"
 
 msgid "(click on image to enlarge)"
 msgstr "(haz clic en la imagen para ampliarla)"
-
-msgid "Additional free payment fee"
-msgstr "Tasa adicional de pago gratuito"
 
 #, python-format
 msgid "Bring a friend to %(event)s"

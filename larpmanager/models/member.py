@@ -438,10 +438,10 @@ class MemberConfig(BaseModel):
 class MembershipStatus(models.TextChoices):
     """Represents MembershipStatus model."""
 
-    EMPTY = "e", _("Absent")
-    JOINED = "j", _("Shared")
-    UPLOADED = "u", _("Uploaded")
-    SUBMITTED = "s", _("Submitted")
+    EMPTY = "e", _("Inactive") + " (E)"
+    JOINED = "j", _("Inactive") + " (J)"
+    UPLOADED = "u", _("Inactive") + " (U)"
+    SUBMITTED = "s", _("Review")
     ACCEPTED = "a", _("Accepted")
     REWOKED = "r", _("Kicked out")
 
