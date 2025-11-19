@@ -593,7 +593,8 @@ def api_character(request, s, n, num):
     id = ctx["character"].pk
     name = ctx["character"].name
     abilities = ctx["character"].px_ability_list.all()
-    ci = get_object_or_404(CharacterInventory, pk=num, event=ctx["event"])
+    ci = ctx["character_inventory"]
+    #ci = get_object_or_404(CharacterInventory, pk=num, event=ctx["event"])
     pools = ci.get_pool_balances()
 
     parsed_abilities = {}
