@@ -67,6 +67,7 @@ from larpmanager.utils.common import (
     exchange_order,
     get_char,
     get_element,
+    get_character_inventory,
 )
 from larpmanager.utils.download import orga_character_form_download
 from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
@@ -698,7 +699,9 @@ def orga_api_characters(request, s, n):
         id = char.pk
         name = char.name
         abilities = char.px_ability_list.all()
-        ci = get_object_or_404(CharacterInventory, pk=char.pk, event=ctx["event"])
+        #ci = get_object_or_404(CharacterInventory, pk=char.pk, event=ctx["event"])
+        get_character_inventory(ctx, id)
+        ci = ctx["character_inventory"]
         pools = ci.get_pool_balances()
 
         parsed_abilities = {}
