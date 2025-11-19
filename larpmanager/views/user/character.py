@@ -587,12 +587,12 @@ def api_character_list(request, s, n):
 def api_character(request, s, n, num):
     ctx = get_event_run(request, s, n, status=True, signup=True)
     get_char_check(request, ctx, num, True)
-    get_character_inventory(ctx, num)
     get_event_cache_all(ctx)
 
     id = ctx["character"].pk
     name = ctx["character"].name
     abilities = ctx["character"].px_ability_list.all()
+    get_character_inventory(ctx, id)
     ci = ctx["character_inventory"]
     #ci = get_object_or_404(CharacterInventory, pk=num, event=ctx["event"])
     pools = ci.get_pool_balances()
