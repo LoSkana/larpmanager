@@ -953,7 +953,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         data = self.cleaned_data["characters_new"]
         character_ids = list(data.values_list("pk", flat=True))
 
-        # Batch fetch all assigned characters to avoid N queries
+        # Batch fetch all assigned characters
         assigned_qs = RegistrationCharacterRel.objects.filter(
             character_id__in=character_ids,
             reg__run=self.params["run"],

@@ -892,13 +892,13 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
     # Exclude factions already assigned to character if eid provided
     eid = int(request.POST.get("eid", "0"))
     if eid:
-        # Get character by ID and validate existence - use .first() directly
+        # Get character by ID and validate existence
         try:
             character = context["event"].get_elements(Character).prefetch_related("factions_list").get(pk=int(eid))
             # Get list of faction IDs already assigned to this character
             taken_factions = character.factions_list.values_list("id", flat=True)
             context["list"] = context["list"].exclude(pk__in=taken_factions)
-        except Character.DoesNotExist:
+        except ObjectDoesNotExist:
             return JsonResponse({"res": "ko"})
 
     # Convert queryset to list of tuples (id, name) for JSON response

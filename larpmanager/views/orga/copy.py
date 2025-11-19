@@ -166,12 +166,8 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
         source_character_map[character.id] = character.number
     for character in Character.objects.filter(event_id=e_id):
         target_character_map[character.number] = character.id
-    # ~ field = 'character_id'
-    # ~ for obj in Registration.objects.filter(run_id=context['run'].id):
-    # copy complicated
-    # Relationship
 
-    # Pre-fetch existing relationships to avoid N queries in loop
+    # Pre-fetch existing relationships
     existing_relationships = set(
         Relationship.objects.filter(source__event_id=e_id).values_list("source_id", "target_id")
     )
@@ -518,7 +514,7 @@ def correct_plot_character(e_id: Any, p_id: Any) -> None:
         new_plot_id = Plot.objects.values_list("id").get(event_id=e_id, number=old_plot[1])[0]
         plot_id_mapping[old_plot[0]] = new_plot_id
 
-    # Pre-fetch existing plot-character relationships to avoid N queries
+    # Pre-fetch existing plot-character relationships
     existing_plot_character_rels = set(
         PlotCharacterRel.objects.filter(character__event_id=e_id).values_list("character_id", "plot_id")
     )
@@ -550,7 +546,7 @@ def copy_character_config(e_id: Any, p_id: Any) -> None:
     for character in Character.objects.filter(event_id=e_id):
         character_id_by_number[character.number] = character.id
 
-    # Pre-fetch all character configs to avoid N queries in nested loop
+    # Pre-fetch all character configs
     configs_by_character = defaultdict(list)
     for config in CharacterConfig.objects.filter(character__event_id=p_id).select_related("character"):
         configs_by_character[config.character_id].append(config)

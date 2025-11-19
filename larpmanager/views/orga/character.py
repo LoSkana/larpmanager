@@ -341,14 +341,10 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
     # Check permissions and get base context
     context = check_event_context(request, event_slug, "orga_characters")
 
-    # Retrieve character data and add to context
-    get_char(context, num)
-
-    # Reload character with prefetched factions and plots to avoid N+1 queries
-    context["character"] = Character.objects.prefetch_related(
-        "factions_list__characters",
-        "plots__characters"
-    ).get(pk=context["character"].id)
+    # Load character with prefetched factions and plots
+    context["character"] = Character.objects.prefetch_related("factions_list__characters", "plots__characters").get(
+        pk=num
+    )
 
     # Initialize factions list in context
     context["factions"] = []
@@ -422,9 +418,11 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
             cho[opt.id] = opt.name
 
         # Process choices and group by element ID
-        for el in WritingChoice.objects.filter(
-            question=question, element_id__in=element_ids
-        ).select_related("option").order_by("option__order"):
+        for el in (
+            WritingChoice.objects.filter(question=question, element_id__in=element_ids)
+            .select_related("option")
+            .order_by("option__order")
+        ):
             if el.element_id not in res:
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])

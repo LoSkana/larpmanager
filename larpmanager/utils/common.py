@@ -447,7 +447,7 @@ def get_speedlarp(context: dict, speedlarp_id: int) -> None:
 def get_badge(badge_id: int, context: dict) -> Badge:
     """Get a badge by ID for a specific association."""
     try:
-        return Badge.objects.get(pk=badge_id, association_id=context["association_id"])
+        return Badge.objects.get(pk=badge_id, association_id=context["association_id"]).prefetch_related("members")
     except ObjectDoesNotExist as err:
         msg = "Badge does not exist"
         raise Http404(msg) from err

@@ -757,7 +757,7 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     def set_event(self, event: Event) -> None:
         """Set the event and compute allowed member IDs from event roles."""
         self.event = event
-        # Query event roles with prefetched members to avoid N+1 queries
+        # Query event roles with prefetched members
         que = EventRole.objects.filter(event_id=event.id).prefetch_related("members")
         # Extract flattened list of member IDs who have roles in this event
         self.allowed_member_ids = que.values_list("members__id", flat=True)

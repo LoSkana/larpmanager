@@ -274,14 +274,12 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     limit = timezone.now() - timedelta(days=365)
     logger.debug("Workshop completion limit date: %s", limit)
 
-    # Pre-fetch all workshop completions to avoid N+1 queries
+    # Pre-fetch all workshop completions
     workshops = list(context["event"].workshops.select_related().all().order_by("number"))
     workshop_ids = [w.id for w in workshops]
     workshop_completions = set(
         WorkshopMemberRel.objects.filter(
-            member=context["member"],
-            workshop_id__in=workshop_ids,
-            created__gte=limit
+            member=context["member"], workshop_id__in=workshop_ids, created__gte=limit
         ).values_list("workshop_id", flat=True)
     )
 

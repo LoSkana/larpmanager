@@ -443,7 +443,6 @@ def debug_mail(request: HttpRequest) -> Any:
         raise Http404
 
     # Use iterator() to avoid loading all registrations into memory at once
-    # This prevents memory issues with large datasets in debug environments
     for reg in Registration.objects.all().iterator(chunk_size=1000):
         remember_profile(reg)
         remember_membership(reg)

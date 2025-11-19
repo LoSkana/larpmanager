@@ -44,10 +44,7 @@ from larpmanager.forms.member import (
     ExeVolunteerRegistryForm,
     MembershipResponseForm,
 )
-from larpmanager.forms.miscellanea import (
-    OrgaHelpQuestionForm,
-    SendMailForm,
-)
+from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.mail.member import notify_membership_approved, notify_membership_reject
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -71,10 +68,7 @@ from larpmanager.models.member import (
     Vote,
     get_user_membership,
 )
-from larpmanager.models.miscellanea import (
-    Email,
-    HelpQuestion,
-)
+from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.utils.base import check_association_context
 from larpmanager.utils.common import (
@@ -303,32 +297,32 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
     if "fiscal_code_check" in context["features"]:
         context["cf"] = []
 
-        # Pre-fetch all memberships to avoid N+1 queries
+        # Pre-fetch all memberships
         members = list(Member.objects.filter(pk__in=member_ids))
         memberships_dict = {
-            m.member_id: m for m in Membership.objects.filter(
-                member_id__in=member_ids,
-                association_id=context["association_id"]
+            m.member_id: m
+            for m in Membership.objects.filter(
+                member_id__in=member_ids, association_id=context["association_id"]
             ).select_related("member")
         }
 
         # Cache membership on each member object
-        for mb in members:
-            if mb.id in memberships_dict:
-                mb.membership = memberships_dict[mb.id]
+        for member in members:
+            if member.id in memberships_dict:
+                member.membership = memberships_dict[member.id]
 
         # Check each member's fiscal code for correctness
-        for mb in members:
-            check = calculate_fiscal_code(mb)
+        for member in members:
+            check = calculate_fiscal_code(member)
             if not check:
                 continue
 
             # Add members with incorrect fiscal codes to report
             if not check["correct_cf"]:
-                check["member"] = str(mb)
-                check["member_id"] = mb.id
-                check["email"] = mb.email
-                check["membership"] = get_user_membership(mb, context["association_id"])
+                check["member"] = str(member)
+                check["member_id"] = member.id
+                check["email"] = member.email
+                check["membership"] = get_user_membership(member, context["association_id"])
                 context["cf"].append(check)
 
     return render(request, "larpmanager/exe/users/membership_check.html", context)
@@ -1166,7 +1160,6 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
     writer = csv.writer(response)
 
     # Iterate through all memberships for the current association
-    # Use select_related to avoid N+1 queries when accessing member data
     for el in Membership.objects.filter(association_id=context["association_id"]).select_related("member"):
         m = el.member
 

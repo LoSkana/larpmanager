@@ -262,13 +262,15 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int]
     trait_choices = {}
     assigned_trait_ids = []
 
-    # Pre-fetch all assigned traits for this run to avoid N+1 queries
-    assigned_trait_ids_set = set(
-        AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True)
-    )
+    # Pre-fetch all assigned traits for this run
+    assigned_trait_ids_set = set(AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True))
 
     # Get all quests for the event and quest type, ordered by number
-    for quest in Quest.objects.filter(event=context["event"], typ=context["quest_type"]).order_by("number").prefetch_related("traits"):
+    for quest in (
+        Quest.objects.filter(event=context["event"], typ=context["quest_type"])
+        .order_by("number")
+        .prefetch_related("traits")
+    ):
         # Process traits for each quest
         for trait in quest.traits.all():
             # Check if trait is already assigned using pre-fetched set
@@ -294,14 +296,11 @@ def check_player_skip_characters(registration_character_rel: RegistrationCharact
 
 def check_player_skip_quests(registration: Registration, trait_type: int) -> bool:
     """Check if player has traits allowing quest skipping."""
-    return (
-        AssignmentTrait.objects.filter(
-            run_id=registration.run_id,
-            member_id=registration.member_id,
-            typ=trait_type,
-        ).count()
-        > 0
-    )
+    return AssignmentTrait.objects.filter(
+        run_id=registration.run_id,
+        member_id=registration.member_id,
+        typ=trait_type,
+    ).exists()
 
 
 def check_casting_player(
