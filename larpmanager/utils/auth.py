@@ -120,7 +120,10 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
             self.update_member(user, sociallogin)
         except ObjectDoesNotExist:
             # No existing user found - let normal signup process continue
-            pass
+            logger.debug(
+                "No existing user found for email %s - proceeding with signup",
+                sociallogin.account.extra_data.get("email"),
+            )
 
     def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Form | None = None) -> User:
         """Save new user from social login.

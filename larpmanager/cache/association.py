@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -29,6 +30,11 @@ from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.registration import Registration
+
+logger = logging.getLogger(__name__)
+
+# Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
+MAX_DEMO_REGISTRATIONS = 10
 
 
 def clear_association_cache(association_slug: str) -> None:
@@ -104,7 +110,7 @@ def init_cache_association(a_slug: str) -> dict | None:
             association_dict["logo"] = association.profile_thumb.url
             association_dict["image"] = association.profile.url
         except FileNotFoundError:
-            pass
+            logger.warning("Profile image files not found for association %s", association.slug)
 
     # Remove sensitive and unnecessary fields from cache
     for m in [
@@ -124,9 +130,10 @@ def init_cache_association(a_slug: str) -> dict | None:
     _init_features(association, association_dict)
     _init_skin(association, association_dict)
 
-    # Determine if association qualifies for demo mode (< 10 registrations)
-    max_demo = 10
-    association_dict["demo"] = Registration.objects.filter(run__event__association_id=association.id).count() < max_demo
+    # Determine if association qualifies for demo mode (< MAX_DEMO_REGISTRATIONS)
+    association_dict["demo"] = (
+        Registration.objects.filter(run__event__association_id=association.id).count() < MAX_DEMO_REGISTRATIONS
+    )
 
     return association_dict
 

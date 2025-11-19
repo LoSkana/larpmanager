@@ -357,14 +357,14 @@ def save_registration_standard(
 
     # Process ticket selection and validation
     if "ticket" in form.cleaned_data:
-        try:
-            sel = RegistrationTicket.objects.filter(pk=form.cleaned_data["ticket"]).select_related("event").first()
-        except Exception as err:
-            msg = "RegistrationTicket does not exists"
-            raise Http404(msg) from err
+        sel = RegistrationTicket.objects.filter(pk=form.cleaned_data["ticket"]).select_related("event").first()
 
         # Validate ticket exists and belongs to correct event
-        if sel and sel.event != event:
+        if not sel:
+            msg = "RegistrationTicket does not exist"
+            raise Http404(msg)
+
+        if sel.event != event:
             msg = "RegistrationTicket wrong event"
             raise Http404(msg)
 
