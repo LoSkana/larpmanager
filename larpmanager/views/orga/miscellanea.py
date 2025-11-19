@@ -172,14 +172,22 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["pinocchio"] = []  # Members who haven't completed all workshops
     context["list"] = []  # All registered members with completion counts
 
+    # Pre-fetch all workshop completions
+    registrations = list(Registration.objects.filter(run=context["run"], cancellation_date__isnull=True))
+    member_ids = [reg.member_id for reg in registrations]
+    workshop_ids = [w.id for w in workshops]
+
+    # Create set of (member_id, workshop_id) pairs for completed workshops
+    workshop_completions = set(
+        WorkshopMemberRel.objects.filter(
+            member_id__in=member_ids, workshop_id__in=workshop_ids, created__gte=limit
+        ).values_list("member_id", "workshop_id")
+    )
+
     # Process each active registration for the event run
-    for reg in Registration.objects.filter(run=context["run"], cancellation_date__isnull=True):
-        # Count completed workshops for this member
-        reg.num = 0
-        for w in workshops:
-            # Check if member completed this workshop within time limit
-            if WorkshopMemberRel.objects.filter(member=reg.member, workshop=w, created__gte=limit).count() >= 1:
-                reg.num += 1
+    for reg in registrations:
+        # Count completed workshops for this member using pre-fetched set
+        reg.num = sum(1 for w in workshops if (reg.member_id, w.id) in workshop_completions)
 
         # Add member to pinocchio list if they haven't completed all workshops
         if reg.num != len(workshops):

@@ -73,7 +73,7 @@ def _build_px_context(character: Any) -> tuple[set[int], set[int], dict[int, lis
     )
 
     # Get all modifiers with optimized prefetch for related objects
-    # Use only() to limit fields and prefetch_related to avoid N+1 queries
+    # Use only() to limit fields and prefetch_related
     all_modifiers = (
         character.event.get_elements(ModifierPx)
         .only("id", "order", "cost")
@@ -454,11 +454,10 @@ def add_char_addit(character: Any) -> None:
 
     """
     character.addit = {}
-    character_configs = CharacterConfig.objects.filter(character__id=character.id)
-    if not character_configs.count():
+    if not CharacterConfig.objects.filter(character__id=character.id).exists():
         calculate_character_experience_points(character)
-        character_configs = CharacterConfig.objects.filter(character__id=character.id)
 
+    character_configs = CharacterConfig.objects.filter(character__id=character.id)
     for character_config in character_configs:
         character.addit[character_config.name] = character_config.value
 

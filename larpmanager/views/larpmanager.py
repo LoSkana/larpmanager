@@ -228,7 +228,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any) -> Any:
     available_runs = []
     run_display_names = []
 
-    for run in Run.objects.filter(event_id__in=event_ids, end__gte=timezone.now()):
+    for run in Run.objects.filter(event_id__in=event_ids, end__gte=timezone.now()).select_related("event__association"):
         available_runs.append(run)
         run_display_names.append(f"{run.search} - {run.event.association.slug}")
 
@@ -442,7 +442,8 @@ def debug_mail(request: HttpRequest) -> Any:
     if request.enviro not in ["dev", "test"]:
         raise Http404
 
-    for reg in Registration.objects.all():
+    # Use iterator() to avoid loading all registrations into memory at once
+    for reg in Registration.objects.all().iterator(chunk_size=1000):
         remember_profile(reg)
         remember_membership(reg)
         remember_membership_fee(reg)

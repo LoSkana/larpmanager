@@ -341,21 +341,23 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, num: str) -> 
     # Check permissions and get base context
     context = check_event_context(request, event_slug, "orga_characters")
 
-    # Retrieve character data and add to context
-    get_char(context, num)
+    # Load character with prefetched factions and plots
+    context["character"] = Character.objects.prefetch_related("factions_list__characters", "plots__characters").get(
+        pk=num
+    )
 
     # Initialize factions list in context
     context["factions"] = []
 
     # Process character factions with complete data
-    for p in context["character"].factions_list.all().prefetch_related("characters"):
+    for p in context["character"].factions_list.all():
         context["factions"].append(p.show_complete())
 
     # Initialize plots list in context
     context["plots"] = []
 
     # Process character plots with complete data
-    for p in context["character"].plots.all().prefetch_related("characters"):
+    for p in context["character"].plots.all():
         context["plots"].append(p.show_complete())
 
     # Render template with populated context
@@ -416,7 +418,11 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
             cho[opt.id] = opt.name
 
         # Process choices and group by element ID
-        for el in WritingChoice.objects.filter(question=question, element_id__in=element_ids).order_by("option__order"):
+        for el in (
+            WritingChoice.objects.filter(question=question, element_id__in=element_ids)
+            .select_related("option")
+            .order_by("option__order")
+        ):
             if el.element_id not in res:
                 res[el.element_id] = []
             res[el.element_id].append(cho[el.option_id])

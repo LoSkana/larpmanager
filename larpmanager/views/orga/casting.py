@@ -35,7 +35,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.config import get_event_config
 from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
-from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
+from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
@@ -262,12 +262,19 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int]
     trait_choices = {}
     assigned_trait_ids = []
 
+    # Pre-fetch all assigned traits for this run
+    assigned_trait_ids_set = set(AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True))
+
     # Get all quests for the event and quest type, ordered by number
-    for quest in Quest.objects.filter(event=context["event"], typ=context["quest_type"]).order_by("number"):
+    for quest in (
+        Quest.objects.filter(event=context["event"], typ=context["quest_type"])
+        .order_by("number")
+        .prefetch_related("traits")
+    ):
         # Process traits for each quest
-        for trait in Trait.objects.filter(quest=quest).order_by("number"):
-            # Check if trait is already assigned to someone in this run
-            if AssignmentTrait.objects.filter(trait=trait, run=context["run"]).exists():
+        for trait in quest.traits.all():
+            # Check if trait is already assigned using pre-fetched set
+            if trait.id in assigned_trait_ids_set:
                 assigned_trait_ids.append(trait.id)
 
             # Build choice label with quest and trait names
@@ -289,14 +296,11 @@ def check_player_skip_characters(registration_character_rel: RegistrationCharact
 
 def check_player_skip_quests(registration: Registration, trait_type: int) -> bool:
     """Check if player has traits allowing quest skipping."""
-    return (
-        AssignmentTrait.objects.filter(
-            run_id=registration.run_id,
-            member_id=registration.member_id,
-            typ=trait_type,
-        ).count()
-        > 0
-    )
+    return AssignmentTrait.objects.filter(
+        run_id=registration.run_id,
+        member_id=registration.member_id,
+        typ=trait_type,
+    ).exists()
 
 
 def check_casting_player(

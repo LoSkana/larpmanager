@@ -270,20 +270,26 @@ def workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Initialize workshop list for template context
     context["list"] = []
 
+    # Set completion check limit to 365 days ago
+    limit = timezone.now() - timedelta(days=365)
+    logger.debug("Workshop completion limit date: %s", limit)
+
+    # Pre-fetch all workshop completions
+    workshops = list(context["event"].workshops.select_related().all().order_by("number"))
+    workshop_ids = [w.id for w in workshops]
+    workshop_completions = set(
+        WorkshopMemberRel.objects.filter(
+            member=context["member"], workshop_id__in=workshop_ids, created__gte=limit
+        ).values_list("workshop_id", flat=True)
+    )
+
     # Process each workshop assigned to this event
-    for workshop in context["event"].workshops.select_related().all().order_by("number"):
+    for workshop in workshops:
         # Get workshop display data
         dt = workshop.show()
 
-        # Set completion check limit to 365 days ago
-        limit = timezone.now() - timedelta(days=365)
-        logger.debug("Workshop completion limit date: %s", limit)
-
-        # Check if user has completed this workshop within the time limit
-        dt["done"] = (
-            WorkshopMemberRel.objects.filter(member=context["member"], workshop=workshop, created__gte=limit).count()
-            >= 1
-        )
+        # Check if user has completed this workshop using pre-fetched set
+        dt["done"] = workshop.id in workshop_completions
 
         # Add workshop data to context list
         context["list"].append(dt)
