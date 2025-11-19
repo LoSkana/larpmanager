@@ -239,17 +239,6 @@
     {% if association.id == 0 %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
                 defer></script>
-        {% if association.skin_id == 1 and google_tag %}
-            <!-- Google tag (gtag.js) -->
-            <script async
-                    src="https://www.googletagmanager.com/gtag/js?id={{ google_tag }}"></script>
-            <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '{{ google_tag }}');
-            </script>
-        {% endif %}
     {% else %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
                 defer></script>
