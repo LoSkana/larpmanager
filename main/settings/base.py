@@ -51,24 +51,36 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'larpmanager.middleware.profiler.ProfilerMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # First security middleware
     'django.middleware.security.SecurityMiddleware',
+    # CORS to set headers early
+    'corsheaders.middleware.CorsMiddleware',
+    # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # URL correction
     'larpmanager.middleware.url.CorrectUrlMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    # Common middleware for URL handling
+    'django.middleware.common.CommonMiddleware',
+    # CSRF protection
+    'django.middleware.csrf.CsrfViewMiddleware',
+    # Authentication (must be before anything that depends on request.user)
     'larpmanager.middleware.token.TokenAuthMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # Messages depends on sessions and authentication
+    'django.contrib.messages.middleware.MessageMiddleware',
+    # Account middleware after authentication
+    'allauth.account.middleware.AccountMiddleware',
+    # Custom middleware
     'larpmanager.middleware.exception.ExceptionHandlingMiddleware',
     'larpmanager.middleware.broken.BrokenLinkEmailsMiddleware',
     'larpmanager.middleware.locale.LocaleAdvMiddleware',
     'larpmanager.middleware.association.AssociationIdentifyMiddleware',
     'larpmanager.middleware.translation.AssociationTranslationMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # Clickjacking protection
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    # Debug and profiling middleware (last)
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'larpmanager.middleware.profiler.ProfilerMiddleware',
 ]
 
 ROOT_URLCONF = 'main.urls'

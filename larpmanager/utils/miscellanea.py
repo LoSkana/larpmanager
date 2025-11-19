@@ -273,9 +273,10 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
         context["association_id"], "centauri_badge", default_value=None, context=template_context
     )
     if badge_code:
-        badge = Badge.objects.get(cod=badge_code)
-        badge.members.add(context["member"])
-        badge.save()
+        badge = Badge.objects.filter(cod=badge_code).first()
+        if badge:
+            badge.members.add(context["member"])
+            badge.save()
 
     # Render and return the Centauri easter egg page
     return render(request, "larpmanager/general/centauri.html", template_context)
