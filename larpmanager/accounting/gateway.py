@@ -886,18 +886,15 @@ class RedSysClient:
         # Encrypt order number using 3DES for signature verification
         encrypted_order = self.encrypt_order(order_number)
 
-        # Re-encode merchant parameters for signature comparison
-        reencoded_parameters = base64.b64encode(json.dumps(merchant_parameters).encode())
-
-        # Compute expected signature using HMAC-SHA256
-        computed_signature = self.sign_hmac256(encrypted_order, reencoded_parameters)
+        # Use original base64 parameters for signature verification
+        computed_signature = self.sign_hmac256(encrypted_order, b64_merchant_parameters.encode())
 
         # Verify signature matches to ensure payment authenticity
-        if signature != computed_signature:
-            error_message = f"Different signature redsys: {signature} vs {computed_signature}"
+        if signature != computed_signature.decode():
+            error_message = f"Different signature redsys: {signature} vs {computed_signature.decode()}"
             error_message += pformat(merchant_parameters)
-            # TODO: the signature is failing, for now we accept failed signatures
-            # TODO: put return in front
+            # TODO: For now we accept failed signatures and only log the error
+            # TODO: return None to reject invalid payments
             notify_admins("Redsys signature verification failed", error_message)
 
         # Return order number for successful payment processing
