@@ -78,8 +78,8 @@ class WritingForm(MyForm):
         for question in self.questions:
             question_types.add(question.typ)
 
-        if WritingQuestionType.COVER not in question_types and "cover" in self.fields:
-            del self.fields["cover"]
+        if WritingQuestionType.COVER not in question_types:
+            self.delete_field("cover")
 
         if WritingQuestionType.ASSIGNED in question_types:
             staffer_choices = [

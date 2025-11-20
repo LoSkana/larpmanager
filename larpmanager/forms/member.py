@@ -490,7 +490,7 @@ class BaseProfileForm(MyForm):
 
         # Batch delete fields
         for f in fields_to_delete:
-            del self.fields[f]
+            self.delete_field(f)
 
         # Handle residence address field if needed
         if "residence_address" in self.allowed:

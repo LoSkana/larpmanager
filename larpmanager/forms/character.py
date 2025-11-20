@@ -210,7 +210,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Remove unused fields from form
         all_fields = set(self.fields.keys()) - fields_default
         for field_label in all_fields - fields_custom:
-            del self.fields[field_label]
+            self.delete_field(field_label)
 
         # Add character completion proposal field for user approval workflow
         if (
@@ -863,7 +863,7 @@ class OrgaWritingQuestionForm(MyForm):
         """Initialize the applicable field based on instance state."""
         # Remove applicable field if instance already exists
         if self.instance.pk:
-            del self.fields["applicable"]
+            self.delete_field("applicable")
             return
 
         # Hide applicable field and set default value for new instances
