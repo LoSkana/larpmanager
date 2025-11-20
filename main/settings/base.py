@@ -57,10 +57,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # URL correction
-    'larpmanager.middleware.url.CorrectUrlMiddleware',
     # Common middleware for URL handling
     'django.middleware.common.CommonMiddleware',
+    # URL correction 2
+    'larpmanager.middleware.url.CorrectUrlMiddleware',
     # CSRF protection
     'django.middleware.csrf.CsrfViewMiddleware',
     # Authentication (must be before anything that depends on request.user)
