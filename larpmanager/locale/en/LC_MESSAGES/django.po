@@ -5246,6 +5246,9 @@ msgstr ""
 msgid "Refund given"
 msgstr ""
 
+msgid "Participant"
+msgstr ""
+
 msgid "Accounting - History"
 msgstr ""
 
@@ -7816,8 +7819,8 @@ msgid "Now participants can submit donation, and you can review them"
 msgstr ""
 
 msgid ""
-"Adds a page displaying member mailing lists, sorted by members' newsletter "
-"preferences"
+"Adds a page displaying participant mailing lists, sorted by participants' "
+"newsletter preferences"
 msgstr ""
 
 msgid "Now you can review users mailing list"
@@ -7940,8 +7943,8 @@ msgid "Now you can set the dynamic installments"
 msgstr ""
 
 msgid ""
-"Lets members cast votes for the election of the organisation's Executive "
-"Committee"
+"Lets participants cast votes for the election of the organisation's "
+"Executive Committee"
 msgstr ""
 
 msgid "Now you can set the vote options"
@@ -8075,7 +8078,7 @@ msgid ""
 "expenses, and the amount to refund the staff"
 msgstr ""
 
-msgid "Now staff members can upload expenses, and you can review them"
+msgid "Now crew can upload expenses, and you can review them"
 msgstr ""
 
 msgid ""
@@ -8122,7 +8125,8 @@ msgid "Now you can set the payment methods settings"
 msgstr ""
 
 msgid ""
-"Enables members to request a refund (a money transfer from the organization)"
+"Enables participants to request a refund (a money transfer from the "
+"organization)"
 msgstr ""
 
 msgid "Now participants can create refund requests, and you can review them"
@@ -8414,7 +8418,7 @@ msgstr ""
 msgid "Review all members"
 msgstr ""
 
-msgid "Manage members votes for the assignment of roles in the organization"
+msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
 
 msgid "Badges"
@@ -8453,7 +8457,7 @@ msgstr ""
 msgid "Check data"
 msgstr ""
 
-msgid "Check consistency of the members’ personal data"
+msgid "Check consistency of the participants’ personal data"
 msgstr ""
 
 msgid ""
@@ -8461,7 +8465,7 @@ msgid ""
 "events"
 msgstr ""
 
-msgid "Display all users data as members registry"
+msgid "Display all participants data as registry"
 msgstr ""
 
 msgid "Manage fields that track participants’ data"
@@ -8492,7 +8496,7 @@ msgstr ""
 msgid "Manage the event settings: name, description, dates, and other data"
 msgstr ""
 
-msgid "Assign roles to staff members, and give access to specific functions"
+msgid "Assign crew roles and grant specific access to event functions"
 msgstr ""
 
 msgid "Activate features for the event"
@@ -8510,7 +8514,7 @@ msgstr ""
 msgid "Manage payments performed by participants to cover the registration fee"
 msgstr ""
 
-msgid "Manage expenses uploaded by staff members and approve them"
+msgid "Manage expense submissions from crew and authorize them"
 msgstr ""
 
 msgid "Manages tokens used by participants to cover the registration fee"
@@ -8800,9 +8804,6 @@ msgid "Set ability type"
 msgstr ""
 
 msgid "Welcome"
-msgstr ""
-
-msgid "Participant"
 msgstr ""
 
 msgid "The participant's email"

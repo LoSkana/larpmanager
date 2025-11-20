@@ -5375,6 +5375,9 @@ msgstr "Zkopírujte tento kód a sdílejte ho s přáteli!"
 msgid "Describe exactly at which point it occurs"
 msgstr "Popište, kde přesně se vyskytuje"
 
+msgid "Display all participants data as registry"
+msgstr "Zobrazení všech údajů účastníků jako rejstřík"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Dělám to pravidelně, mám dobré zkušenosti"
 
@@ -5425,9 +5428,6 @@ msgstr "Potvrzení registrace pro %(event)s"
 #, python-format
 msgid "Details: %(details)s (<b>%(amount).2f</b>)"
 msgstr "Podrobnosti: %(details)s (<b>%(amount).2f</b>)"
-
-msgid "Display all users data as members registry"
-msgstr "Zobrazení údajů všech uživatelů jako registru členů"
 
 msgid "For which day you will need transportation"
 msgstr "Na který den budete potřebovat dopravu"
@@ -5822,9 +5822,6 @@ msgstr "Vaše předvolby byly uloženy do systému"
 msgid "Added to the registration page, before the form"
 msgstr "Přidáno na registrační stránku před formulář"
 
-msgid "Check consistency of the members’ personal data"
-msgstr "Kontrola konzistence osobních údajů členů"
-
 msgid "Customize specific texts on the event interface"
 msgstr "Přizpůsobení konkrétních textů v rozhraní události"
 
@@ -6168,6 +6165,9 @@ msgstr "zde jsou uvedeny podmínky pro odhlášení z této akce"
 msgid "As a final step, we ask you to complete your profile"
 msgstr "V posledním kroku vás požádáme o vyplnění vašeho profilu"
 
+msgid "Check consistency of the participants’ personal data"
+msgstr "Kontrola konzistence osobních údajů účastníků"
+
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Vybraný příspěvek %(user)s pro %(recipient)s"
@@ -6266,6 +6266,9 @@ msgstr "Správa dynamických splátek za registrace"
 
 msgid "Manage options in form questions for writing elements"
 msgstr "Správa možností v otázkách formuláře pro psaní prvků"
+
+msgid "Now crew can upload expenses, and you can review them"
+msgstr "Nyní může posádka nahrát výdaje a vy si je můžete zkontrolovat"
 
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Nyní můžete vytvořit tipy 'patron' a 'snížený'"
@@ -6413,6 +6416,9 @@ msgstr "Pokud je zaškrtnuto: zobrazí v kalendáři odkaz na minulé události"
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Uveďte barvu, která bude použita ke zvýraznění textů"
 
+msgid "Manage expense submissions from crew and authorize them"
+msgstr "Správa žádostí o výdaje od posádky a jejich schvalování"
+
 msgid "Manage loading and deployment status of warehouse items"
 msgstr "Správa stavu nakládky a nasazení skladových položek"
 
@@ -6555,9 +6561,6 @@ msgstr ""
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Ujistěte se, že máte čas sledovat/poslouchat obsah nyní"
 
-msgid "Manage expenses uploaded by staff members and approve them"
-msgstr "Správa výdajů nahraných zaměstnanci a jejich schvalování"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
 
@@ -6661,6 +6664,9 @@ msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
 "Správa jednorázových přístupových tokenů pro zabezpečený video/audio obsah"
 
+msgid "Manage votes for the assignment of roles in the organization"
+msgstr "Řídit hlasování o přidělování rolí v organizaci"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr "Nastavení tipů, které si uživatelé mohou vybrat při registraci"
 
@@ -6754,6 +6760,10 @@ msgstr "pro žádný vztah, pouze pro zobrazení jména druhého znaku"
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr "Přidáno na stránku členství jako odstavec pro informace o statutu"
 
+msgid "Assign crew roles and grant specific access to event functions"
+msgstr ""
+"Přiřazení rolí posádky a přidělení specifického přístupu k funkcím události"
+
 msgid "Available token balance for event registrations and activities"
 msgstr "Dostupný zůstatek žetonů pro registrace na akce a aktivity"
 
@@ -6780,9 +6790,6 @@ msgstr ""
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomůžeme"
-
-msgid "Now staff members can upload expenses, and you can review them"
-msgstr "Nyní mohou zaměstnanci nahrávat výdaje a vy je můžete kontrolovat"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Nepovinné - rozšířený popis (zobrazuje se malým šedým textem)"
@@ -7106,10 +7113,6 @@ msgid "Assign roles to collaborators and grant access to specific functions"
 msgstr ""
 "Přiřazení rolí spolupracovníkům a udělení přístupu ke konkrétním funkcím"
 
-msgid "Assign roles to staff members, and give access to specific functions"
-msgstr ""
-"Přiřazení rolí zaměstnancům a přidělení přístupu ke konkrétním funkcím"
-
 msgid "Date when the membership was officially approved by the organization"
 msgstr "Datum, kdy bylo členství oficiálně schváleno organizací"
 
@@ -7126,9 +7129,6 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Zviditelnění nadcházejících událostí pro externí weby prostřednictvím "
 "veřejného rozhraní API"
-
-msgid "Manage members votes for the assignment of roles in the organization"
-msgstr "Správa hlasů členů pro přidělování rolí v organizaci"
 
 msgid "Manage quick setup of the most important settings for your new event"
 msgstr ""
@@ -7724,10 +7724,6 @@ msgstr ""
 "statusu"
 
 msgid ""
-"Enables members to request a refund (a money transfer from the organization)"
-msgstr "Umožňuje členům požádat o vrácení peněz (převod peněz z organizace)"
-
-msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
 msgstr ""
 "Vytváří roční shrnutí fiskální činnosti pro zprávu o italském rozpočtu"
@@ -8125,6 +8121,12 @@ msgstr ""
 "obdélníkový, ideálně v poměru 4:3"
 
 msgid ""
+"Enables participants to request a refund (a money transfer from the "
+"organization)"
+msgstr ""
+"Umožňuje účastníkům požádat o vrácení peněz (převod peněz z organizace)"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8218,11 +8220,6 @@ msgid ""
 "available"
 msgstr ""
 "Uveďte možnosti postavy, které musí být vybrány, aby byla dovednost dostupná"
-
-msgid ""
-"Lets members cast votes for the election of the organisation's Executive "
-"Committee"
-msgstr "Umožňuje členům hlasovat při volbě výkonného výboru organizace"
 
 msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
@@ -8440,13 +8437,6 @@ msgstr ""
 "Nahrajte svou fotografii spojenou s vaší postavou speciálně pro tuto událost"
 
 msgid ""
-"Adds a page displaying member mailing lists, sorted by members' newsletter "
-"preferences"
-msgstr ""
-"Přidá stránku zobrazující seznamy adresářů členů, seřazené podle jejich "
-"preferencí pro zasílání novinek"
-
-msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
 msgstr ""
@@ -8514,6 +8504,11 @@ msgid ""
 msgstr ""
 "Dobrý den! Obracíme se na vás ohledně vaší předběžné registrace na "
 "<b>%(event)s</b>"
+
+msgid ""
+"Lets participants cast votes for the election of the organisation's "
+"Executive Committee"
+msgstr "Umožňuje účastníkům hlasovat pro volby výkonného výboru organizace"
 
 msgid ""
 "Manage organization-specific translation overrides for customizing "
@@ -9112,6 +9107,13 @@ msgid ""
 msgstr ""
 "Přidává odkaz na stránky osobních účtů, který uživatelům umožňuje volně "
 "darovat peníze sdružení"
+
+msgid ""
+"Adds a page displaying participant mailing lists, sorted by participants' "
+"newsletter preferences"
+msgstr ""
+"Přidá stránku zobrazující seznamy účastníků, seřazené podle jejich "
+"preferencí pro zasílání novinek"
 
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "

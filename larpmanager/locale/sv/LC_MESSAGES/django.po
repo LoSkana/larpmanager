@@ -5377,6 +5377,9 @@ msgstr "Kopiera denna kod och dela den med dina vänner!"
 msgid "Describe exactly at which point it occurs"
 msgstr "Beskriv exakt var det inträffar"
 
+msgid "Display all participants data as registry"
+msgstr "Visa alla deltagares data som register"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Jag gör det regelbundet, jag har god erfarenhet"
 
@@ -5427,9 +5430,6 @@ msgstr "Bekräftelse på anmälan till %(event)s"
 #, python-format
 msgid "Details: %(details)s (<b>%(amount).2f</b>)"
 msgstr "Detaljerad information: %(details)s (<b>%(amount).2f</b>)"
-
-msgid "Display all users data as members registry"
-msgstr "Visa alla användares data som medlemsregister"
 
 msgid "For which day you will need transportation"
 msgstr "För vilken dag behöver du transport"
@@ -5824,9 +5824,6 @@ msgstr "Dina preferenser har sparats i systemet"
 msgid "Added to the registration page, before the form"
 msgstr "Tillagd på registreringssidan, före formuläret"
 
-msgid "Check consistency of the members’ personal data"
-msgstr "Kontrollera att medlemmarnas personuppgifter är korrekta"
-
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassa specifika texter på eventgränssnittet"
 
@@ -6168,6 +6165,9 @@ msgstr "här är villkoren för att avregistrera sig från detta evenemang"
 msgid "As a final step, we ask you to complete your profile"
 msgstr "Som ett sista steg ber vi dig att fylla i din profil"
 
+msgid "Check consistency of the participants’ personal data"
+msgstr "Kontrollera att deltagarnas personuppgifter är korrekta"
+
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Insamlat bidrag från %(user)s för %(recipient)s"
@@ -6265,6 +6265,9 @@ msgstr "Hantera dynamiska delbetalningar för registreringar"
 
 msgid "Manage options in form questions for writing elements"
 msgstr "Hantera alternativ i formulärfrågor för skrivelement"
+
+msgid "Now crew can upload expenses, and you can review them"
+msgstr "Nu kan besättningen ladda upp utlägg och du kan granska dem"
 
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Nu kan du skapa biljetterna 'patron' och 'reduced"
@@ -6411,6 +6414,9 @@ msgstr "Om markerad: visar en länk i kalendern till tidigare evenemang"
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Ange den färg som ska användas för att markera texter"
 
+msgid "Manage expense submissions from crew and authorize them"
+msgstr "Hantera utläggsansökningar från besättningen och godkänna dem"
+
 msgid "Manage loading and deployment status of warehouse items"
 msgstr "Hantera lastnings- och utplaceringsstatus för lagerartiklar"
 
@@ -6550,9 +6556,6 @@ msgstr "Låt oss veta om du stöter på några problem eller behöver hjälp"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Se till att du har tid att titta/lyssna på innehållet nu"
 
-msgid "Manage expenses uploaded by staff members and approve them"
-msgstr "Hantera utlägg som laddats upp av medarbetare och godkänna dem"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets namn, visas i frågan (håll det kort)"
 
@@ -6664,6 +6667,9 @@ msgstr "I medlemsboken är ditt medlemsnummer"
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
 
+msgid "Manage votes for the assignment of roles in the organization"
+msgstr "Hantera röster för tilldelning av roller i organisationen"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Konfigurera de biljetter som användarna kan välja under registreringen"
@@ -6763,6 +6769,11 @@ msgstr "utan någon relation, bara för att visa det andra karaktärsnamnet"
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr "Tillagd på medlemssidan som paragraf för stadgeinformation"
 
+msgid "Assign crew roles and grant specific access to event functions"
+msgstr ""
+"Tilldela roller till personalen och ge specifik tillgång till "
+"evenemangsfunktioner"
+
 msgid "Available token balance for event registrations and activities"
 msgstr "Tillgängligt token-saldo för eventregistreringar och aktiviteter"
 
@@ -6788,9 +6799,6 @@ msgstr ""
 
 msgid "If you encounter any issues, contact us and we will assist you"
 msgstr "Om du stöter på några problem, kontakta oss så hjälper vi dig"
-
-msgid "Now staff members can upload expenses, and you can review them"
-msgstr "Nu kan medarbetarna ladda upp utlägg och du kan granska dem"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Valfritt - Utökad beskrivning (visas i liten grå text)"
@@ -7143,10 +7151,6 @@ msgid "Assign roles to collaborators and grant access to specific functions"
 msgstr ""
 "Tilldela roller till medarbetare och ge tillgång till specifika funktioner"
 
-msgid "Assign roles to staff members, and give access to specific functions"
-msgstr ""
-"Tilldela roller till medarbetare och ge tillgång till specifika funktioner"
-
 msgid "Date when the membership was officially approved by the organization"
 msgstr "Datum då medlemskapet officiellt godkändes av organisationen"
 
@@ -7162,10 +7166,6 @@ msgstr "Anger om medlemmen har fyllt i sin profilinformation"
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Gör kommande evenemang synliga för externa webbplatser via ett publikt API"
-
-msgid "Manage members votes for the assignment of roles in the organization"
-msgstr ""
-"Hantera medlemmarnas röster för tilldelning av roller i organisationen"
 
 msgid "Manage quick setup of the most important settings for your new event"
 msgstr ""
@@ -7784,12 +7784,6 @@ msgstr ""
 "status"
 
 msgid ""
-"Enables members to request a refund (a money transfer from the organization)"
-msgstr ""
-"Gör det möjligt för medlemmar att begära återbetalning (en penningöverföring"
-" från organisationen)"
-
-msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
 msgstr ""
 "Skapar en årlig sammanfattning av den finanspolitiska verksamheten för den "
@@ -8199,6 +8193,13 @@ msgstr ""
 "förhållandet 4:3"
 
 msgid ""
+"Enables participants to request a refund (a money transfer from the "
+"organization)"
+msgstr ""
+"Gör det möjligt för deltagare att begära återbetalning (en penningöverföring"
+" från organisationen)"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8300,12 +8301,6 @@ msgid ""
 msgstr ""
 "Ange de teckenalternativ som måste väljas för att göra färdigheten "
 "tillgänglig"
-
-msgid ""
-"Lets members cast votes for the election of the organisation's Executive "
-"Committee"
-msgstr ""
-"Lets medlemmar avger röster för val av organisationens verkställande utskott"
 
 msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
@@ -8538,13 +8533,6 @@ msgstr ""
 "detta evenemang"
 
 msgid ""
-"Adds a page displaying member mailing lists, sorted by members' newsletter "
-"preferences"
-msgstr ""
-"Lägger till en sida som visar medlemmarnas e-postlistor, sorterade efter "
-"medlemmarnas preferenser för nyhetsbrev"
-
-msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
 msgstr ""
@@ -8618,6 +8606,13 @@ msgid ""
 msgstr ""
 "Hallå där! Vi kontaktar dig angående din preliminära registrering för "
 "<b>%(event)s</b>"
+
+msgid ""
+"Lets participants cast votes for the election of the organisation's "
+"Executive Committee"
+msgstr ""
+"Låter deltagarna avge röster vid valet av organisationens verkställande "
+"utskott"
 
 msgid ""
 "Manage organization-specific translation overrides for customizing "
@@ -9228,6 +9223,13 @@ msgid ""
 msgstr ""
 "Lägger till en länk på sidor med personliga konton, så att användare fritt "
 "kan donera pengar till föreningen"
+
+msgid ""
+"Adds a page displaying participant mailing lists, sorted by participants' "
+"newsletter preferences"
+msgstr ""
+"Lägger till en sida som visar deltagarnas e-postlistor, sorterade efter "
+"deltagarnas preferenser för nyhetsbrev"
 
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "
