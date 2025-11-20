@@ -339,7 +339,7 @@
             {% endif %}
             {% if list_factions %}
                 {% for k, fc in list_factions.items %}
-                    , <a href="#" class="my_toggle" tog='email_fc_{{ k }}'>{{ fc.name }}</a>
+                    {% if fc.name %}, <a href="#" class="my_toggle" tog='email_fc_{{ k }}'>{{ fc.name }}</a>{% endif %}
                 {% endfor %}
             {% endif %}
             {% if reg_questions %}
