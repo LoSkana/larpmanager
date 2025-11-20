@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import json
 import logging
 import time
 from random import shuffle
@@ -574,16 +575,52 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Enable bulk upload functionality
     context["upload"] = "registrations"
     context["download"] = 1
+
     # Enable export view if configured
     if get_event_config(context["event"].id, "show_export", default_value=False, context=context):
         context["export"] = "registration"
 
-    # Load user's saved column visibility preferences
-    context["default_fields"] = context["member"].get_config(
-        f"open_registration_{context['event'].id}", default_value="[]"
-    )
+    _load_preferences_columns(context)
 
     return render(request, "larpmanager/orga/registration/registrations.html", context)
+
+
+def _load_preferences_columns(context: dict[str, Any]) -> None:
+    """Load and configure column visibility preferences for registration list.
+
+    Loads user's saved column visibility preferences from member configuration.
+    If no preferences are set, automatically enables the ticket column by default.
+
+    Args:
+        context: Context dictionary containing member, event, and reg_questions data
+
+    Side effects:
+        Updates context["default_fields"] with JSON string of visible column selectors
+
+    """
+    # Load user's saved column visibility preferences
+    default_fields_str = context["member"].get_config(f"open_registration_{context['event'].id}", default_value="[]")
+
+    # Parse default fields, handling empty or invalid JSON
+    # Replace single quotes with double quotes for valid JSON
+    try:
+        if default_fields_str and default_fields_str.strip():
+            default_fields_str = default_fields_str.replace("'", '"')
+            default_fields = json.loads(default_fields_str)
+        else:
+            default_fields = []
+    except (json.JSONDecodeError, ValueError):
+        default_fields = []
+
+    # If user hasn't set preferences, automatically open ticket column by default
+    if not default_fields:
+        # Find the ticket question ID to add to default fields
+        for question_id, question in context["reg_questions"].items():
+            if question.typ == "ticket":
+                default_fields.append(f".lq_{question_id}")
+                break
+
+    context["default_fields"] = json.dumps(default_fields)
 
 
 @login_required
