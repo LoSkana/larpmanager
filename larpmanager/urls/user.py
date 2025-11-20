@@ -407,11 +407,6 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path(
-        "after_login/<slug:subdomain>",
-        views_base.after_login,
-        name="after_login_no_path",
-    ),
-    path(
         "after_login/<slug:subdomain>/",
         views_base.after_login,
         name="after_login",
