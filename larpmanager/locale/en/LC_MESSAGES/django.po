@@ -7119,9 +7119,6 @@ msgstr ""
 msgid "Recalculate"
 msgstr ""
 
-msgid "Load list"
-msgstr ""
-
 msgid "No registrations have been received for this event yet"
 msgstr ""
 
@@ -7465,6 +7462,9 @@ msgid "Important"
 msgstr ""
 
 msgid "Versions"
+msgstr ""
+
+msgid "Load list"
 msgstr ""
 
 msgid "This page shows the factions and plots of the indicated character"
