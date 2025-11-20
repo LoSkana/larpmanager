@@ -536,8 +536,9 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         context=context,
     )
 
-    # Initialize registration grouping dictionary
+    # Initialize registration grouping and list dictionaries
     context["reg_all"] = {}
+    context["list_factions"] = {}
 
     # Query active (non-cancelled) registrations ordered by last update
     que = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).order_by("-updated")
