@@ -203,6 +203,57 @@ def get_accounting_refund(registration: Registration) -> None:
         registration.refunds[accounting_item_other.oth] += accounting_item_other.value
 
 
+def _calculate_quota_deadline(reg: Registration, quota_count: int, association_id: int) -> int:
+    """Calculate deadline for a specific quota installment.
+
+    Args:
+        reg: Registration instance
+        quota_count: Current quota number (1-indexed)
+        association_id: Association ID for payment deadline calculation
+
+    Returns:
+        Deadline in days from today
+
+    """
+    if quota_count == 1:
+        return get_payment_deadline(reg, 8, association_id)
+    days_left = reg.tot_days * 1.0 * (reg.quotas - (quota_count - 1)) / reg.quotas
+    return math.floor(reg.days_event - days_left)
+
+
+def _calculate_quota_amount(reg: Registration, quota_share_ratio: Decimal, *, is_last_quota: bool) -> float:
+    """Calculate the amount due for a quota installment.
+
+    Args:
+        reg: Registration instance
+        quota_share_ratio: Cumulative share of total payment for this quota
+        is_last_quota: Whether this is the final quota
+
+    Returns:
+        Amount due for this quota
+
+    """
+    if is_last_quota:
+        return reg.tot_iscr - reg.tot_payed
+    quota_amount = reg.tot_iscr * quota_share_ratio - reg.tot_payed
+    return math.floor(quota_amount)
+
+
+def _should_skip_quota(deadline: int, alert: int, quota_amount: float) -> bool:
+    """Determine if a quota should be skipped.
+
+    Args:
+        deadline: Deadline in days
+        alert: Alert threshold in days
+        quota_amount: Amount due for this quota
+
+    Returns:
+        True if quota should be skipped
+
+    """
+    return deadline >= alert or quota_amount <= 0 or not deadline or deadline < 0
+
+
 def quota_check(reg: Registration, start: date, alert: int, association_id: int) -> None:
     """Check payment quotas and deadlines for a registration.
 
@@ -219,57 +270,89 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
         Sets reg.quota, reg.deadline, and reg.qsr attributes
 
     """
-    if not start:
-        return
-
-    # Validate quotas to prevent division by zero
-    if reg.quotas == 0:
-        logger.error("Registration %s has zero quotas, cannot calculate payment schedule", reg.pk)
+    if not start or reg.quotas == 0:
+        if reg.quotas == 0:
+            logger.error("Registration %s has zero quotas, cannot calculate payment schedule", reg.pk)
         return
 
     reg.days_event = get_time_diff_today(start)
     reg.tot_days = get_time_diff(start, reg.created.date())
 
     quota_share = Decimal(1.0 / reg.quotas)
-    quota_count = 0
-    quota_share_ratio = 0
+    quota_share_ratio = Decimal(0)
     first_deadline = True
-    for _i in range(reg.quotas):
-        quota_share_ratio += quota_share
-        quota_count += 1
 
-        # if first, deadline is immediately
-        if quota_count == 1:
-            deadline = get_payment_deadline(reg, 8, association_id)
-        # else, deadline is computed in days to the event
-        else:
-            days_left = reg.tot_days * 1.0 * (reg.quotas - (quota_count - 1)) / reg.quotas
-            deadline = math.floor(reg.days_event - days_left)
+    for quota_count in range(1, reg.quotas + 1):
+        quota_share_ratio += quota_share
+        deadline = _calculate_quota_deadline(reg, quota_count, association_id)
 
         if deadline >= alert:
             continue
 
         reg.qsr = quota_share_ratio
+        is_last_quota = quota_count == reg.quotas
+        reg.quota = _calculate_quota_amount(reg, quota_share_ratio, is_last_quota=is_last_quota)
 
-        # if last quota
-        if quota_count == reg.quotas:
-            reg.quota = reg.tot_iscr - reg.tot_payed
-        else:
-            reg.quota = reg.tot_iscr * quota_share_ratio - reg.tot_payed
-            reg.quota = math.floor(reg.quota)
-
-        if reg.quota <= 0:
+        if reg.quota <= 0 or not deadline or deadline < 0:
             continue
 
-        if first_deadline and deadline:
+        if first_deadline:
             first_deadline = False
             reg.deadline = deadline
+            return
 
-        # go to next quota if deadline was missed
-        if not deadline or deadline < 0:
-            continue
+    # Fallback: ensure quota is set if payment is due
+    if reg.tot_iscr > reg.tot_payed:
+        reg.quota = reg.tot_iscr - reg.tot_payed
+        reg.deadline = 0
 
-        return
+
+def _is_installment_applicable(installment_tickets: list, reg_ticket_id: int) -> bool:
+    """Check if an installment applies to the registration's ticket type.
+
+    Args:
+        installment_tickets: List of ticket IDs the installment applies to
+        reg_ticket_id: Registration's ticket ID
+
+    Returns:
+        True if installment applies to this ticket type
+
+    """
+    applicable_ticket_ids = [ticket_id for ticket_id in installment_tickets if ticket_id is not None]
+    return not applicable_ticket_ids or reg_ticket_id in applicable_ticket_ids
+
+
+def _calculate_installment_cumulative(installment_amount: float, current_cumulative: float, total: float) -> float:
+    """Calculate cumulative amount due up to this installment.
+
+    Args:
+        installment_amount: Amount for this installment (0 means full amount)
+        current_cumulative: Current cumulative amount
+        total: Total registration amount
+
+    Returns:
+        Updated cumulative amount, capped at total
+
+    """
+    if installment_amount:
+        return min(current_cumulative + installment_amount, total)
+    return total
+
+
+def _set_installment_fallback(reg: Registration, cumulative_amount: float) -> None:
+    """Set fallback quota when no installments were processed.
+
+    Args:
+        reg: Registration instance
+        cumulative_amount: Cumulative amount from installments
+
+    """
+    if not cumulative_amount:
+        reg.deadline = get_time_diff_today(reg.created.date())
+        reg.quota = reg.tot_iscr - reg.tot_payed
+    elif reg.tot_iscr > reg.tot_payed and reg.quota == 0:
+        reg.quota = reg.tot_iscr - reg.tot_payed
+        reg.deadline = 0
 
 
 def installment_check(reg: Registration, alert: int, association_id: int) -> None:
@@ -277,80 +360,46 @@ def installment_check(reg: Registration, alert: int, association_id: int) -> Non
 
     Processes configured installments for the event and determines
     next payment amount and deadline based on the installment schedule.
-    Updates the registration's quota and deadline fields as side effects.
 
     Args:
         reg: Registration instance to check installments for
         alert: Alert threshold in days for deadline filtering
         association_id: Association ID used for payment deadline calculation
 
-    Returns:
-        None
-
     Side Effects:
-        - Sets reg.quota to the amount due for the next installment
-        - Sets reg.deadline to the deadline for the next payment
+        Sets reg.quota and reg.deadline
 
     """
-    # Early return if registration has no ticket
     if not reg.ticket:
         return
 
     cumulative_amount = 0
-
-    # Get all installments for this event, ordered by sequence
     installments_query = RegistrationInstallment.objects.filter(event_id=reg.run.event_id)
     installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
-
     is_first_deadline = True
 
-    # Process each installment in order
     for installment in installments_query:
-        # Filter installments that apply to this ticket type
-        applicable_ticket_ids = [ticket_id for ticket_id in installment.tickets_map if ticket_id is not None]
-        if applicable_ticket_ids and reg.ticket_id not in applicable_ticket_ids:
+        if not _is_installment_applicable(installment.tickets_map, reg.ticket_id):
             continue
 
-        # Calculate deadline for this installment
         deadline_days = _get_deadline_installment(association_id, installment, reg)
-
-        # Skip installments that are still within alert threshold
         if deadline_days and deadline_days >= alert:
             continue
 
-        # Calculate cumulative amount due up to this installment
-        if installment.amount:
-            cumulative_amount += installment.amount
-        else:
-            cumulative_amount = reg.tot_iscr
-
-        # Ensure total doesn't exceed registration total
-        cumulative_amount = min(cumulative_amount, reg.tot_iscr)
-
-        # Calculate outstanding amount for this installment
+        cumulative_amount = _calculate_installment_cumulative(installment.amount, cumulative_amount, reg.tot_iscr)
         reg.quota = max(cumulative_amount - reg.tot_payed, 0)
 
         logger.debug("Registration %s installment quota calculated: %s", reg.id, reg.quota)
 
-        # Skip if nothing is due for this installment
-        if reg.quota <= 0:
+        if reg.quota <= 0 or not deadline_days or deadline_days < 0:
             continue
 
-        # Set deadline for the first applicable installment
-        if is_first_deadline and deadline_days:
+        if is_first_deadline:
             is_first_deadline = False
             reg.deadline = deadline_days
+            return
 
-        # Skip to next installment if deadline has passed
-        if not deadline_days or deadline_days < 0:
-            continue
-
-        return
-
-    # Fallback: if no installments found, use registration date and full amount
-    if not cumulative_amount:
-        reg.deadline = get_time_diff_today(reg.created.date())
-        reg.quota = reg.tot_iscr - reg.tot_payed
+    _set_installment_fallback(reg, cumulative_amount)
 
 
 def _get_deadline_installment(
