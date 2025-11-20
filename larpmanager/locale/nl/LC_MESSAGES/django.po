@@ -5377,6 +5377,9 @@ msgstr "Kopieer deze code en deel hem met vrienden!"
 msgid "Describe exactly at which point it occurs"
 msgstr "Beschrijf precies waar het zich voordoet"
 
+msgid "Display all participants data as registry"
+msgstr "Alle deelnemersgegevens weergeven als register"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
 
@@ -5427,9 +5430,6 @@ msgstr "Bevestiging van inschrijving voor %(event)s"
 #, python-format
 msgid "Details: %(details)s (<b>%(amount).2f</b>)"
 msgstr "Details: %(details)s (<b>%(amount).2f</b>)"
-
-msgid "Display all users data as members registry"
-msgstr "Alle gebruikersgegevens weergeven als ledenregister"
 
 msgid "For which day you will need transportation"
 msgstr "Voor welke dag heb je vervoer nodig"
@@ -5827,9 +5827,6 @@ msgstr "Uw voorkeuren zijn opgeslagen in het systeem"
 msgid "Added to the registration page, before the form"
 msgstr "Toegevoegd aan de registratiepagina, vóór het formulier"
 
-msgid "Check consistency of the members’ personal data"
-msgstr "Controleer de consistentie van de persoonlijke gegevens van de leden"
-
 msgid "Customize specific texts on the event interface"
 msgstr "Specifieke teksten op de evenementinterface aanpassen"
 
@@ -6176,6 +6173,10 @@ msgstr "Dit zijn de voorwaarden om u af te melden voor dit evenement"
 msgid "As a final step, we ask you to complete your profile"
 msgstr "Als laatste stap vragen we je om je profiel in te vullen"
 
+msgid "Check consistency of the participants’ personal data"
+msgstr ""
+"Consistentie van de persoonlijke gegevens van de deelnemers controleren"
+
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Geïnde bijdrage van %(user)s voor %(recipient)s"
@@ -6273,6 +6274,9 @@ msgstr "Beheer dynamische termijnbetalingen voor registraties"
 
 msgid "Manage options in form questions for writing elements"
 msgstr "Opties beheren in formuliervragen voor schrijfelementen"
+
+msgid "Now crew can upload expenses, and you can review them"
+msgstr "Nu kunnen bemanningsleden uitgaven uploaden en jij kunt ze bekijken"
 
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Nu kun je de 'patron' en 'reduced' tickets maken"
@@ -6428,6 +6432,9 @@ msgstr ""
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Geef de kleur aan die wordt gebruikt om teksten te markeren"
 
+msgid "Manage expense submissions from crew and authorize them"
+msgstr "Onkostendeclaraties van het personeel beheren en autoriseren"
+
 msgid "Manage loading and deployment status of warehouse items"
 msgstr "De laad- en inzetstatus van magazijnitems beheren"
 
@@ -6576,9 +6583,6 @@ msgstr "Laat het ons weten als je problemen ondervindt of hulp nodig hebt"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Zorg dat je nu tijd hebt om de inhoud te bekijken/beluisteren"
 
-msgid "Manage expenses uploaded by staff members and approve them"
-msgstr "Beheer uitgaven die door medewerkers zijn geüpload en keur ze goed"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 
@@ -6692,6 +6696,9 @@ msgstr "In het ledenboek is je lidmaatschapsnummer"
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr "Beheer eenmalige toegangstokens voor beveiligde video/audio-inhoud"
 
+msgid "Manage votes for the assignment of roles in the organization"
+msgstr "Stemmen beheren voor de toewijzing van rollen in de organisatie"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Stel de tickets in die gebruikers kunnen selecteren tijdens de registratie"
@@ -6801,6 +6808,11 @@ msgstr "voor geen relatie, alleen om de andere karakternaam weer te geven"
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr "Toegevoegd aan de lidmaatschapspagina als paragraaf voor statuutinfo"
 
+msgid "Assign crew roles and grant specific access to event functions"
+msgstr ""
+"Bemanningsrollen toewijzen en specifieke toegang verlenen tot "
+"evenementfuncties"
+
 msgid "Available token balance for event registrations and activities"
 msgstr ""
 "Beschikbaar tokensaldo voor inschrijvingen voor evenementen en activiteiten"
@@ -6830,9 +6842,6 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Als u problemen ondervindt, neem dan contact met ons op en wij zullen u "
 "helpen"
-
-msgid "Now staff members can upload expenses, and you can review them"
-msgstr "Nu kunnen medewerkers uitgaven uploaden en jij kunt ze bekijken"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
@@ -7218,10 +7227,6 @@ msgid "Assign roles to collaborators and grant access to specific functions"
 msgstr ""
 "Rollen toewijzen aan medewerkers en toegang verlenen tot specifieke functies"
 
-msgid "Assign roles to staff members, and give access to specific functions"
-msgstr ""
-"Rollen toewijzen aan medewerkers en toegang geven tot specifieke functies"
-
 msgid "Date when the membership was officially approved by the organization"
 msgstr ""
 "Datum waarop het lidmaatschap officieel is goedgekeurd door de organisatie"
@@ -7240,10 +7245,6 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Maakt aankomende evenementen zichtbaar voor externe sites via een openbare "
 "API"
-
-msgid "Manage members votes for the assignment of roles in the organization"
-msgstr ""
-"Stemmen van leden beheren voor de toewijzing van rollen in de organisatie"
 
 msgid "Manage quick setup of the most important settings for your new event"
 msgstr ""
@@ -7914,12 +7915,6 @@ msgstr ""
 "hun status in het voorstel"
 
 msgid ""
-"Enables members to request a refund (a money transfer from the organization)"
-msgstr ""
-"Geeft leden de mogelijkheid om een terugbetaling aan te vragen (een "
-"geldoverschrijving van de organisatie)"
-
-msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
 msgstr ""
 "Genereert een jaarlijkse samenvatting van de fiscale activiteiten voor het "
@@ -8345,6 +8340,13 @@ msgstr ""
 "4:3 verhouding"
 
 msgid ""
+"Enables participants to request a refund (a money transfer from the "
+"organization)"
+msgstr ""
+"Deelnemers in staat stellen een terugbetaling aan te vragen (een "
+"geldoverschrijving van de organisatie)"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8447,13 +8449,6 @@ msgid ""
 msgstr ""
 "Geef de tekenopties aan die moeten worden geselecteerd om de vaardigheid "
 "beschikbaar te maken"
-
-msgid ""
-"Lets members cast votes for the election of the organisation's Executive "
-"Committee"
-msgstr ""
-"De leden brengen hun stem uit voor de verkiezing van het uitvoerend comité "
-"van de organisatie"
 
 msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
@@ -8690,13 +8685,6 @@ msgstr ""
 "evenement"
 
 msgid ""
-"Adds a page displaying member mailing lists, sorted by members' newsletter "
-"preferences"
-msgstr ""
-"Voegt een pagina toe met mailinglijsten van leden, gesorteerd op "
-"nieuwsbriefvoorkeuren van leden"
-
-msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
 msgstr ""
@@ -8771,6 +8759,13 @@ msgid ""
 msgstr ""
 "Hallo! We hebben contact met je opgenomen in verband met je voorlopige "
 "registratie voor <b>%(event)s</b>"
+
+msgid ""
+"Lets participants cast votes for the election of the organisation's "
+"Executive Committee"
+msgstr ""
+"Laat deelnemers stemmen voor de verkiezing van het uitvoerend comité van de "
+"organisatie"
 
 msgid ""
 "Manage organization-specific translation overrides for customizing "
@@ -9384,6 +9379,13 @@ msgid ""
 msgstr ""
 "Voegt een link toe op pagina's met persoonlijke accounts, zodat gebruikers "
 "vrijelijk geld kunnen doneren aan de vereniging"
+
+msgid ""
+"Adds a page displaying participant mailing lists, sorted by participants' "
+"newsletter preferences"
+msgstr ""
+"Voegt een pagina toe met mailinglijsten van deelnemers, gesorteerd op hun "
+"nieuwsbriefvoorkeuren"
 
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "

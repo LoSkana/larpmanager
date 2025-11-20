@@ -252,7 +252,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Vote
-    descr: Manage members votes for the assignment of roles in the organization
+    descr: Manage votes for the assignment of roles in the organization
     slug: exe_vote
     number: 21
     config: vote
@@ -332,7 +332,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Check data
-    descr: Check consistency of the members’ personal data
+    descr: Check consistency of the participants’ personal data
     slug: exe_membership_check
     number: 99
     config: null
@@ -353,7 +353,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Registry
-    descr: Display all users data as members registry
+    descr: Display all participants data as registry
     slug: exe_membership_registry
     number: 99
     config: null

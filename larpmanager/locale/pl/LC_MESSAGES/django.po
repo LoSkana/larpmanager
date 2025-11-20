@@ -5375,6 +5375,9 @@ msgstr "Skopiuj ten kod i udostępnij go znajomym!"
 msgid "Describe exactly at which point it occurs"
 msgstr "Opisz dokładnie, w którym momencie to następuje"
 
+msgid "Display all participants data as registry"
+msgstr "Wyświetl dane wszystkich uczestników jako rejestr"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Robię to rutynowo, mam dobre doświadczenie"
 
@@ -5425,9 +5428,6 @@ msgstr "Potwierdzenie rejestracji na %(event)s"
 #, python-format
 msgid "Details: %(details)s (<b>%(amount).2f</b>)"
 msgstr "Szczegóły: %(details)s (<b>%(amount).2f</b>)"
-
-msgid "Display all users data as members registry"
-msgstr "Wyświetla dane wszystkich użytkowników jako rejestr członków"
 
 msgid "For which day you will need transportation"
 msgstr "Którego dnia będziesz potrzebować transportu"
@@ -5823,9 +5823,6 @@ msgstr "Twoje preferencje zostały zapisane w systemie"
 msgid "Added to the registration page, before the form"
 msgstr "Dodano do strony rejestracji, przed formularzem"
 
-msgid "Check consistency of the members’ personal data"
-msgstr "Sprawdzanie spójności danych osobowych członków"
-
 msgid "Customize specific texts on the event interface"
 msgstr "Dostosowywanie określonych tekstów w interfejsie wydarzenia"
 
@@ -6172,6 +6169,9 @@ msgstr " tutaj warunki wyrejestrowania dla tego zdarzenia"
 msgid "As a final step, we ask you to complete your profile"
 msgstr "Ostatnim krokiem jest uzupełnienie profilu"
 
+msgid "Check consistency of the participants’ personal data"
+msgstr "Sprawdzenie spójności danych osobowych uczestników"
+
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Zebrany wkład %(user)s dla %(recipient)s"
@@ -6270,6 +6270,9 @@ msgstr "Zarządzanie dynamicznymi płatnościami ratalnymi za rejestracje"
 
 msgid "Manage options in form questions for writing elements"
 msgstr "Zarządzanie opcjami w pytaniach formularza dla elementów zapisu"
+
+msgid "Now crew can upload expenses, and you can review them"
+msgstr "Teraz załoga może przesyłać wydatki, a Ty możesz je przeglądać"
 
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Teraz można utworzyć bilety patronackie i ulgowe"
@@ -6418,6 +6421,9 @@ msgstr ""
 
 msgid "Indicate the color that will be used to highlight texts"
 msgstr "Wskaż kolor, który będzie używany do wyróżniania tekstów"
+
+msgid "Manage expense submissions from crew and authorize them"
+msgstr "Zarządzanie zgłoszeniami wydatków od załogi i ich autoryzacja"
 
 msgid "Manage loading and deployment status of warehouse items"
 msgstr ""
@@ -6568,10 +6574,6 @@ msgstr ""
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Upewnij się, że masz czas na obejrzenie/odsłuchanie treści już teraz"
 
-msgid "Manage expenses uploaded by staff members and approve them"
-msgstr ""
-"Zarządzanie wydatkami przesłanymi przez pracowników i ich zatwierdzanie"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nazwa opcji wyświetlana w pytaniu (powinna być krótka)"
 
@@ -6684,6 +6686,9 @@ msgstr ""
 "Zarządzanie jednorazowymi tokenami dostępu dla bezpiecznej zawartości "
 "wideo/audio"
 
+msgid "Manage votes for the assignment of roles in the organization"
+msgstr "Zarządzanie głosowaniami w celu przypisania ról w organizacji"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr "Skonfiguruj bilety, które użytkownicy mogą wybrać podczas rejestracji"
 
@@ -6786,6 +6791,11 @@ msgid "Added to the membership page as the paragraph for statute info"
 msgstr ""
 "Dodano do strony członkostwa jako paragraf dotyczący informacji o statucie"
 
+msgid "Assign crew roles and grant specific access to event functions"
+msgstr ""
+"Przypisywanie ról załogi i przyznawanie określonego dostępu do funkcji "
+"wydarzenia"
+
 msgid "Available token balance for event registrations and activities"
 msgstr "Dostępne saldo tokenów na rejestracje wydarzeń i aktywności"
 
@@ -6813,9 +6823,6 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Jeśli napotkasz jakiekolwiek problemy, skontaktuj się z nami, a my Ci "
 "pomożemy"
-
-msgid "Now staff members can upload expenses, and you can review them"
-msgstr "Teraz pracownicy mogą przesyłać wydatki, a Ty możesz je przeglądać"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Opcjonalnie - Rozszerzony opis (wyświetlany małym szarym tekstem)"
@@ -7172,10 +7179,6 @@ msgstr ""
 "Przypisywanie ról współpracownikom i udzielanie dostępu do określonych "
 "funkcji"
 
-msgid "Assign roles to staff members, and give access to specific functions"
-msgstr ""
-"Przypisywanie ról pracownikom i udzielanie dostępu do określonych funkcji"
-
 msgid "Date when the membership was officially approved by the organization"
 msgstr "Data oficjalnego zatwierdzenia członkostwa przez organizację"
 
@@ -7195,9 +7198,6 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Sprawia, że nadchodzące wydarzenia są widoczne dla zewnętrznych witryn za "
 "pośrednictwem publicznego interfejsu API"
-
-msgid "Manage members votes for the assignment of roles in the organization"
-msgstr "Zarządzanie głosami członków w celu przypisania ról w organizacji"
 
 msgid "Manage quick setup of the most important settings for your new event"
 msgstr ""
@@ -7841,12 +7841,6 @@ msgstr ""
 "proponowanym statusie"
 
 msgid ""
-"Enables members to request a refund (a money transfer from the organization)"
-msgstr ""
-"Umożliwia członkom zażądanie zwrotu pieniędzy (przelew pieniężny od "
-"organizacji)"
-
-msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
 msgstr ""
 "Generuje roczne podsumowanie działalności fiskalnej dla włoskiego raportu "
@@ -8268,6 +8262,13 @@ msgstr ""
 "najlepiej w proporcjach 4:3"
 
 msgid ""
+"Enables participants to request a refund (a money transfer from the "
+"organization)"
+msgstr ""
+"Umożliwia uczestnikom zażądanie zwrotu pieniędzy (przelew pieniężny od "
+"organizacji)"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8370,12 +8371,6 @@ msgid ""
 msgstr ""
 "Wskazuje opcje postaci, które należy wybrać, aby dana umiejętność była "
 "dostępna"
-
-msgid ""
-"Lets members cast votes for the election of the organisation's Executive "
-"Committee"
-msgstr ""
-"Członkowie Lets oddają głosy w wyborach do Komitetu Wykonawczego organizacji"
 
 msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
@@ -8603,13 +8598,6 @@ msgid ""
 msgstr "Prześlij swoje zdjęcie z postacią specjalnie na to wydarzenie"
 
 msgid ""
-"Adds a page displaying member mailing lists, sorted by members' newsletter "
-"preferences"
-msgstr ""
-"Dodaje stronę wyświetlającą listy mailingowe członków, posortowane według "
-"ich preferencji dotyczących biuletynów"
-
-msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
 msgstr ""
@@ -8682,6 +8670,13 @@ msgid ""
 msgstr ""
 "Witaj! Kontaktujemy się w sprawie tymczasowej rejestracji na "
 "<b>%(event)s</b>"
+
+msgid ""
+"Lets participants cast votes for the election of the organisation's "
+"Executive Committee"
+msgstr ""
+"Umożliwia uczestnikom oddawanie głosów w wyborach do Komitetu Wykonawczego "
+"organizacji"
 
 msgid ""
 "Manage organization-specific translation overrides for customizing "
@@ -9294,6 +9289,13 @@ msgid ""
 msgstr ""
 "Dodaje link na stronach kont osobistych, umożliwiając użytkownikom swobodne "
 "przekazywanie pieniędzy na rzecz stowarzyszenia"
+
+msgid ""
+"Adds a page displaying participant mailing lists, sorted by participants' "
+"newsletter preferences"
+msgstr ""
+"Dodaje stronę wyświetlającą listy mailingowe uczestników, posortowane według"
+" ich preferencji dotyczących newslettera"
 
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "
