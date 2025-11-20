@@ -11,7 +11,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Roles
-    descr: Assign roles to staff members, and give access to specific functions
+    descr: Assign crew roles and grant specific access to event functions
     slug: orga_roles
     number: 31
     config: null
@@ -91,7 +91,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Expenses
-    descr: Manage expenses uploaded by staff members and approve them
+    descr: Manage expense submissions from crew and authorize them
     slug: orga_expenses
     number: 31
     config: null

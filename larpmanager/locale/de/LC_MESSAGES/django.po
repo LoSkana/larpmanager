@@ -5379,6 +5379,9 @@ msgstr "Kopieren Sie diesen Code und teilen Sie ihn mit Ihren Freunden!"
 msgid "Describe exactly at which point it occurs"
 msgstr "Beschreiben Sie genau, wo sie auftritt"
 
+msgid "Display all participants data as registry"
+msgstr "Alle Teilnehmerdaten als Register anzeigen"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Ich mache das regelmäßig, ich habe gute Erfahrungen"
 
@@ -5429,9 +5432,6 @@ msgstr "Anmeldebestätigung für %(event)s"
 #, python-format
 msgid "Details: %(details)s (<b>%(amount).2f</b>)"
 msgstr "Details: %(details)s (<b>%(amount).2f</b>)"
-
-msgid "Display all users data as members registry"
-msgstr "Anzeige aller Benutzerdaten als Mitgliederverzeichnis"
 
 msgid "For which day you will need transportation"
 msgstr "Für welchen Tag benötigen Sie einen Transport"
@@ -5839,9 +5839,6 @@ msgstr "Ihre Präferenzen wurden im System gespeichert"
 msgid "Added to the registration page, before the form"
 msgstr "Zur Registrierungsseite hinzugefügt, vor dem Formular"
 
-msgid "Check consistency of the members’ personal data"
-msgstr "Überprüfung der Kohärenz der personenbezogenen Daten der Mitglieder"
-
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassen spezifischer Texte auf der Ereignisoberfläche"
 
@@ -6206,6 +6203,9 @@ msgstr "Hier sind die Bedingungen für die Abmeldung von dieser Veranstaltung"
 msgid "As a final step, we ask you to complete your profile"
 msgstr "Als letzten Schritt bitten wir Sie, Ihr Profil zu vervollständigen"
 
+msgid "Check consistency of the participants’ personal data"
+msgstr "Überprüfung der Konsistenz der persönlichen Daten der Teilnehmer"
+
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr "Gesammelter Beitrag von %(user)s für %(recipient)s"
@@ -6310,6 +6310,9 @@ msgstr "Verwalten Sie dynamische Ratenzahlungen für Registrierungen"
 
 msgid "Manage options in form questions for writing elements"
 msgstr "Verwalten von Optionen in Formularfragen für Schriftelemente"
+
+msgid "Now crew can upload expenses, and you can review them"
+msgstr "Jetzt kann die Crew Ausgaben hochladen, und Sie können sie überprüfen"
 
 msgid "Now you can create the 'patron' and 'reduced' tickets"
 msgstr "Jetzt können Sie die Tickets 'Gönner' und 'Ermäßigt' erstellen"
@@ -6477,6 +6480,9 @@ msgstr ""
 "Geben Sie die Farbe an, die zur Hervorhebung von Texten verwendet werden "
 "soll"
 
+msgid "Manage expense submissions from crew and authorize them"
+msgstr "Spesenabrechnungen des Personals verwalten und genehmigen"
+
 msgid "Manage loading and deployment status of warehouse items"
 msgstr "Verwaltung des Lade- und Bereitstellungsstatus von Lagerartikeln"
 
@@ -6642,9 +6648,6 @@ msgstr ""
 "Vergewissern Sie sich, dass Sie jetzt Zeit haben, sich die Inhalte "
 "anzusehen/anzuhören"
 
-msgid "Manage expenses uploaded by staff members and approve them"
-msgstr "Von Mitarbeitern hochgeladene Ausgaben verwalten und genehmigen"
-
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Name der Option, angezeigt in der Frage (kurz halten)"
 
@@ -6769,6 +6772,11 @@ msgstr "Im Mitgliedsbuch lautet Ihre Mitgliedsnummer"
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr "Verwalten Sie einmalige Zugriffstoken für sichere Video-/Audioinhalte"
 
+msgid "Manage votes for the assignment of roles in the organization"
+msgstr ""
+"Verwaltung von Abstimmungen über die Zuweisung von Rollen in der "
+"Organisation"
+
 msgid "Set up the tickets that users can select during registration"
 msgstr ""
 "Einrichten der Tickets, die Benutzer bei der Registrierung auswählen können"
@@ -6892,6 +6900,11 @@ msgstr ""
 "Auf der Mitgliedschaftsseite als Absatz für Statuteninformationen "
 "hinzugefügt"
 
+msgid "Assign crew roles and grant specific access to event functions"
+msgstr ""
+"Zuweisung von Personalrollen und Gewährung von spezifischem Zugriff auf "
+"Veranstaltungsfunktionen"
+
 msgid "Available token balance for event registrations and activities"
 msgstr ""
 "Verfügbares Token-Guthaben für Veranstaltungsanmeldungen und Aktivitäten"
@@ -6924,10 +6937,6 @@ msgid "If you encounter any issues, contact us and we will assist you"
 msgstr ""
 "Wenn Sie auf Probleme stoßen, kontaktieren Sie uns und wir werden Ihnen "
 "helfen"
-
-msgid "Now staff members can upload expenses, and you can review them"
-msgstr ""
-"Jetzt können Mitarbeiter Ausgaben hochladen, und Sie können sie überprüfen"
 
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
@@ -7349,11 +7358,6 @@ msgstr ""
 "Zuweisung von Rollen an Mitarbeiter und Gewährung von Zugriff auf bestimmte "
 "Funktionen"
 
-msgid "Assign roles to staff members, and give access to specific functions"
-msgstr ""
-"Zuweisung von Rollen an Mitarbeiter und Erteilung von Zugriff auf bestimmte "
-"Funktionen"
-
 msgid "Date when the membership was officially approved by the organization"
 msgstr ""
 "Datum, an dem die Mitgliedschaft offiziell von der Organisation genehmigt "
@@ -7374,11 +7378,6 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Macht anstehende Ereignisse für externe Websites über eine öffentliche API "
 "sichtbar"
-
-msgid "Manage members votes for the assignment of roles in the organization"
-msgstr ""
-"Verwalten von Mitgliederstimmen für die Zuweisung von Rollen in der "
-"Organisation"
 
 msgid "Manage quick setup of the most important settings for your new event"
 msgstr ""
@@ -8085,12 +8084,6 @@ msgstr ""
 "vorgeschlagenen Status informiert werden"
 
 msgid ""
-"Enables members to request a refund (a money transfer from the organization)"
-msgstr ""
-"Ermöglicht es den Mitgliedern, eine Rückerstattung zu beantragen (eine "
-"Geldüberweisung von der Organisation)"
-
-msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
 msgstr ""
 "Erstellt eine jährliche Zusammenfassung der steuerlichen Aktivitäten für den"
@@ -8525,6 +8518,13 @@ msgstr ""
 "Verhältnis 4:3"
 
 msgid ""
+"Enables participants to request a refund (a money transfer from the "
+"organization)"
+msgstr ""
+"Ermöglicht es den Teilnehmern, eine Rückerstattung zu beantragen (eine "
+"Geldüberweisung von der Organisation)"
+
+msgid ""
 "Go ahead and click on this button to perform the extraction. Warning: it is "
 "final"
 msgstr ""
@@ -8628,13 +8628,6 @@ msgid ""
 msgstr ""
 "Geben Sie die Zeichenoptionen an, die ausgewählt werden müssen, damit die "
 "Fertigkeit verfügbar ist"
-
-msgid ""
-"Lets members cast votes for the election of the organisation's Executive "
-"Committee"
-msgstr ""
-"Die Mitglieder geben ihre Stimme bei der Wahl des Exekutivausschusses der "
-"Organisation ab"
 
 msgid ""
 "Once the transfer is confirmed, submit the form below to notify us of your "
@@ -8871,13 +8864,6 @@ msgstr ""
 "dieses Ereignis verbindet"
 
 msgid ""
-"Adds a page displaying member mailing lists, sorted by members' newsletter "
-"preferences"
-msgstr ""
-"Fügt eine Seite hinzu, die die Mailinglisten der Mitglieder anzeigt, "
-"sortiert nach den Newsletter-Einstellungen der Mitglieder"
-
-msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
 msgstr ""
@@ -8953,6 +8939,13 @@ msgid ""
 msgstr ""
 "Hallo! Wir wenden uns an Sie bezüglich Ihrer vorläufigen Anmeldung für "
 "<b>%(event)s</b>"
+
+msgid ""
+"Lets participants cast votes for the election of the organisation's "
+"Executive Committee"
+msgstr ""
+"Ermöglicht den Teilnehmern die Stimmabgabe bei der Wahl des "
+"Exekutivausschusses der Organisation"
 
 msgid ""
 "Manage organization-specific translation overrides for customizing "
@@ -9567,6 +9560,13 @@ msgid ""
 msgstr ""
 "Fügt auf den Seiten der persönlichen Konten einen Link hinzu, der es den "
 "Nutzern ermöglicht, der Vereinigung kostenlos Geld zu spenden"
+
+msgid ""
+"Adds a page displaying participant mailing lists, sorted by participants' "
+"newsletter preferences"
+msgstr ""
+"Fügt eine Seite hinzu, die die Mailinglisten der Teilnehmer anzeigt, "
+"sortiert nach den Newsletter-Einstellungen der Teilnehmer"
 
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "

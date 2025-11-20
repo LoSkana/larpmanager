@@ -219,7 +219,7 @@
 - model: larpmanager.feature
   fields:
     name: Newsletter
-    descr: Adds a page displaying member mailing lists, sorted by members' newsletter
+    descr: Adds a page displaying participant mailing lists, sorted by participants' newsletter
       preferences
     slug: newsletter
     overall: true
@@ -401,7 +401,7 @@
 - model: larpmanager.feature
   fields:
     name: Vote
-    descr: Lets members cast votes for the election of the organisation's Executive
+    descr: Lets participants cast votes for the election of the organisation's Executive
       Committee
     slug: vote
     overall: true
@@ -611,7 +611,7 @@
     overall: true
     placeholder: false
     order: 30
-    after_text: Now staff members can upload expenses, and you can review them
+    after_text: Now crew can upload expenses, and you can review them
     after_link: exe_expenses
     hidden: false
     module: accounting
@@ -681,7 +681,7 @@
 - model: larpmanager.feature
   fields:
     name: Refunds
-    descr: Enables members to request a refund (a money transfer from the organization)
+    descr: Enables participants to request a refund (a money transfer from the organization)
     slug: refund
     overall: true
     placeholder: false
