@@ -893,13 +893,21 @@ class RedSysClient:
         # Use original base64 parameters for signature verification
         computed_signature = self.sign_hmac256(encrypted_order, b64_merchant_parameters.encode())
 
+        # Normalize both signatures to standard Base64 format for comparison
+        # Redsys sends URL-safe Base64 (using - and _ instead of + and /)
+        # Convert both to standard format to ensure comparison works
+        normalized_received_sig = signature.replace("-", "+").replace("_", "/")
+        normalized_computed_sig = computed_signature.decode().replace("-", "+").replace("_", "/")
+
         # Verify signature matches to ensure payment authenticity
-        if signature != computed_signature.decode():
+        if normalized_received_sig != normalized_computed_sig:
             # Debug information for signature mismatch
             debug_info = f"""
 Signature Verification Failed:
-- Received signature: {signature}
-- Computed signature: {computed_signature.decode()}
+- Received signature (original): {signature}
+- Computed signature (original): {computed_signature.decode()}
+- Received signature (normalized): {normalized_received_sig}
+- Computed signature (normalized): {normalized_computed_sig}
 - Order number: {order_number}
 - Order length: {len(order_number)}
 - Encrypted order (hex): {encrypted_order.hex()}
