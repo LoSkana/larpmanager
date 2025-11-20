@@ -419,7 +419,7 @@ urlpatterns = [
     path(
         "after_login/<slug:subdomain>/<path:path>",
         views_base.after_login,
-        name="after_login_with_path",
+        name="after_login",
     ),
     path(
         "tutorial_query/",
