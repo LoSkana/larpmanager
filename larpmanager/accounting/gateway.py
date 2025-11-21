@@ -871,14 +871,14 @@ class RedSysClient:
         # Check payment response code (0-99 indicates success)
         try:
             response_code = int(merchant_parameters["Ds_Response"])
-        except (ValueError, KeyError) as e:
-            error_msg = f"Invalid Ds_Response value: {e}\nParameters: {merchant_parameters}"
-            return notify_admins("Invalid Redsys response code", error_msg)
+        except (ValueError, KeyError):
+            response_code = -1
 
         # Response codes 0-99 indicate successful payment, anything else is failure
         max_successful_response_code = 99
         if response_code < 0 or response_code > max_successful_response_code:
-            return notify_admins("Failed redsys payment", merchant_parameters)
+            error_msg = f"Parameters: {merchant_parameters}"
+            return notify_admins("Invalid Redsys response code", error_msg)
 
         # Extract order number from merchant parameters
         try:
@@ -903,22 +903,21 @@ class RedSysClient:
         if normalized_received_sig != normalized_computed_sig:
             # Debug information for signature mismatch
             debug_info = f"""
-Signature Verification Failed:
-- Received signature (original): {signature}
-- Computed signature (original): {computed_signature.decode()}
-- Received signature (normalized): {normalized_received_sig}
-- Computed signature (normalized): {normalized_computed_sig}
-- Order number: {order_number}
-- Order length: {len(order_number)}
-- Encrypted order (hex): {encrypted_order.hex()}
-- Base64 params (first 100 chars): {b64_merchant_parameters[:100]}...
-- Merchant parameters: {pformat(merchant_parameters)}
-"""
+                Signature Verification Failed:
+                - Received signature (original): {signature}
+                - Computed signature (original): {computed_signature.decode()}
+                - Received signature (normalized): {normalized_received_sig}
+                - Computed signature (normalized): {normalized_computed_sig}
+                - Order number: {order_number}
+                - Order length: {len(order_number)}
+                - Encrypted order (hex): {encrypted_order.hex()}
+                - Base64 params (first 100 chars): {b64_merchant_parameters[:100]}...
+                - Merchant parameters: {pformat(merchant_parameters)}
+                """
             error_message = f"Different signature redsys: {signature} vs {computed_signature.decode()}"
             error_message += debug_info
-            # TODO: For now we accept failed signatures and only log the error
-            # TODO: return None to reject invalid payments
-            notify_admins("Redsys signature verification failed", error_message)
+
+            return notify_admins("Redsys signature verification failed", error_message)
 
         # Return order number for successful payment processing
         return order_number
