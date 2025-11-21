@@ -83,10 +83,32 @@ def send_daily_organizer_summaries() -> None:
         # Generate summary email content
         email_content = generate_summary_email(event, notifications)
 
-        # Send to all event organizers
-        organizers = get_event_organizers(event)
-        for organizer in organizers:
-            activate(organizer.language)
+        # Get recipients: event organizers + treasurers (if configured)
+        recipients = list(get_event_organizers(event))
+
+        # Add treasurers if the feature is enabled
+        from larpmanager.cache.feature import get_association_features
+        from larpmanager.models.member import Member
+
+        features = get_association_features(event.association_id)
+        if "treasurer" in features:
+            treasurer_list = get_event_config(
+                event.association_id, "treasurer_appointees", ""
+            ).split(", ")
+            for treasurer_member_id in treasurer_list:
+                if treasurer_member_id:  # Skip empty strings
+                    try:
+                        treasurer = Member.objects.get(pk=int(treasurer_member_id))
+                        if treasurer not in recipients:  # Avoid duplicates
+                            recipients.append(treasurer)
+                    except (Member.DoesNotExist, ValueError):
+                        logger.warning(
+                            f"Treasurer with ID {treasurer_member_id} not found for event {event.slug}"
+                        )
+
+        # Send to all recipients
+        for recipient in recipients:
+            activate(recipient.language)
             email_subject = hdr(event) + _("Daily Summary - %(event)s") % {
                 "event": event.title
             }
@@ -94,7 +116,7 @@ def send_daily_organizer_summaries() -> None:
             my_send_mail(
                 email_subject,
                 email_content,
-                organizer,
+                recipient,
                 event.current_run,
             )
 
