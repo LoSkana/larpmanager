@@ -362,3 +362,76 @@ class DigestNotificationTests(BaseTestCase):
         notifications = OrganizerNotificationQueue.objects.filter(event=event)
         email_content = generate_summary_email(event, notifications)
         assert "Deleted User" in email_content
+
+    @patch("larpmanager.mail.accounting.my_send_mail")
+    @patch("larpmanager.mail.accounting.get_association_features")
+    def test_payment_notifications_sent_to_treasurer_skip_digest(
+        self, mock_get_features: Any, mock_send_mail: Any
+    ) -> None:
+        """Test that payment notifications are sent immediately to treasurer (skip digest)"""
+        from larpmanager.cache.config import set_association_config, set_event_config
+        from larpmanager.mail.accounting import notify_pay_money
+        from larpmanager.models.accounting import AccountingItemPayment
+
+        event = self.get_event()
+        run = self.get_run()
+        member = self.get_member()
+        treasurer = self.create_member()  # Create a treasurer
+
+        # Enable treasurer feature
+        mock_get_features.return_value = ["treasurer"]
+        set_association_config(event.association_id, "treasurer_appointees", str(treasurer.pk))
+
+        # Enable digest mode for organizers
+        set_event_config(event.pk, "mail_orga_digest", True)
+
+        # Create a payment
+        payment = AccountingItemPayment()
+        payment.value = Decimal("100.00")
+
+        # Send payment notification
+        notify_pay_money("€", payment, member, run)
+
+        # Should send to treasurer immediately (not queued)
+        assert mock_send_mail.called
+        # Should send to user (1 call) + treasurer (1 call) = 2 calls
+        assert mock_send_mail.call_count == 2
+
+        # Should NOT create digest notification for organizers
+        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        assert notifications.count() == 0  # No digest queue entry
+
+    @patch("larpmanager.mail.accounting.my_send_mail")
+    @patch("larpmanager.mail.accounting.get_association_features")
+    def test_payment_notifications_queued_when_no_treasurer(
+        self, mock_get_features: Any, mock_send_mail: Any
+    ) -> None:
+        """Test that payment notifications are queued when there's no treasurer"""
+        from larpmanager.cache.config import set_event_config
+        from larpmanager.mail.accounting import notify_pay_money
+        from larpmanager.models.accounting import AccountingItemPayment
+
+        event = self.get_event()
+        run = self.get_run()
+        member = self.get_member()
+
+        # No treasurer feature
+        mock_get_features.return_value = []
+
+        # Enable digest mode for organizers
+        set_event_config(event.pk, "mail_orga_digest", True)
+
+        # Create a payment
+        payment = AccountingItemPayment()
+        payment.value = Decimal("100.00")
+
+        # Send payment notification
+        notify_pay_money("€", payment, member, run)
+
+        # Should only send to user (1 call), NOT to organizers
+        assert mock_send_mail.call_count == 1
+
+        # Should create digest notification for organizers
+        notifications = OrganizerNotificationQueue.objects.filter(event=event)
+        assert notifications.count() == 1
+        assert notifications.first().notification_type == "payment_money"
