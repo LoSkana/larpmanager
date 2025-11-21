@@ -50,6 +50,7 @@ from larpmanager.models.miscellanea import (
     WorkshopOption,
     WorkshopQuestion,
 )
+from larpmanager.models.notification import OrganizerNotificationQueue
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -410,3 +411,33 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
     def has_add_permission(self, request: HttpRequest) -> bool:  # noqa: ARG002
         """Prevent adding tokens through admin - they should be generated via the content."""
         return True
+
+
+class EventFilter(AutocompleteFilter):
+    """Admin filter for Event autocomplete."""
+
+    title = "Event"
+    field_name = "event"
+
+
+@admin.register(OrganizerNotificationQueue)
+class OrganizerNotificationQueueAdmin(DefModelAdmin):
+    """Admin interface for OrganizerNotificationQueue model."""
+
+    list_display: ClassVar[tuple] = (
+        "event",
+        "notification_type",
+        "registration",
+        "payment",
+        "created_at",
+        "sent",
+        "sent_at",
+    )
+    list_filter: ClassVar[tuple] = ("notification_type", "sent", "created_at", EventFilter)
+    search_fields: ClassVar[list] = ["event__title", "registration__member__username"]
+    readonly_fields: ClassVar[tuple] = ("created_at", "sent_at")
+    autocomplete_fields: ClassVar[list] = ["event", "registration", "payment", "invoice"]
+
+    def has_add_permission(self, request: HttpRequest) -> bool:  # noqa: ARG002
+        """Prevent manual creation - notifications are auto-generated."""
+        return False

@@ -136,6 +136,9 @@ class Command(BaseCommand):
         self.check_payment_not_approved()
         self.check_old_payments()
 
+        # Send daily organizer summaries for events with digest mode enabled
+        self.send_organizer_summaries()
+
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
@@ -790,3 +793,18 @@ class Command(BaseCommand):
 
         # Send deadline notifications for this run
         notify_deadlines(run)
+
+    @staticmethod
+    def send_organizer_summaries() -> None:
+        """Send daily summary emails to organizers for events with digest mode enabled.
+
+        Processes all queued notifications and sends consolidated daily summaries
+        to event organizers. Only sends emails for events that have digest mode
+        enabled via the mail_orga_digest configuration.
+
+        Returns:
+            None
+        """
+        from larpmanager.mail.digest import send_daily_organizer_summaries
+
+        send_daily_organizer_summaries()
