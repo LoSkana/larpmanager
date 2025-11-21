@@ -50,10 +50,10 @@ from larpmanager.models.miscellanea import (
     WorkshopModule,
 )
 from larpmanager.models.writing import Handout
-from larpmanager.utils.base import get_context, get_event_context, is_shuttle
-from larpmanager.utils.common import get_album, get_workshop
-from larpmanager.utils.exceptions import check_association_feature
-from larpmanager.utils.pdf import (
+from larpmanager.utils.core.base import get_context, get_event_context, is_shuttle
+from larpmanager.utils.core.common import get_album, get_workshop
+from larpmanager.utils.core.exceptions import check_association_feature
+from larpmanager.utils.io.pdf import (
     print_handout,
 )
 

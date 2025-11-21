@@ -23,7 +23,7 @@
 from unittest.mock import MagicMock, patch
 
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.experience import (
+from larpmanager.utils.services.experience import (
     _apply_modifier_cost,
     check_available_ability_px,
     get_free_abilities,

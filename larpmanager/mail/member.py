@@ -34,7 +34,7 @@ from larpmanager.mail.base import notify_organization_exe
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 if TYPE_CHECKING:
     from django.http import HttpRequest

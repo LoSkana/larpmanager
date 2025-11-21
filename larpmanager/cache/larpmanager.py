@@ -29,7 +29,7 @@ from larpmanager.models.larpmanager import LarpManagerReview, LarpManagerShowcas
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
-from larpmanager.utils.common import round_to_two_significant_digits
+from larpmanager.utils.core.common import round_to_two_significant_digits
 
 
 def clear_larpmanager_home_cache() -> None:

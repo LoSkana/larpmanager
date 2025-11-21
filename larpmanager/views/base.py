@@ -37,10 +37,10 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
-from larpmanager.utils.base import get_context
-from larpmanager.utils.common import welcome_user
-from larpmanager.utils.miscellanea import check_centauri
-from larpmanager.utils.tutorial_query import query_index
+from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.common import welcome_user
+from larpmanager.utils.larpmanager.query import query_index
+from larpmanager.utils.services.miscellanea import check_centauri
 from larpmanager.views.larpmanager import lm_home
 from larpmanager.views.user.event import calendar
 

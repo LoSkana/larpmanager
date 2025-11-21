@@ -73,13 +73,13 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import my_uuid
-from larpmanager.utils.base import get_context, get_event, get_event_context
-from larpmanager.utils.exceptions import (
+from larpmanager.utils.core.base import get_context, get_event, get_event_context
+from larpmanager.utils.core.exceptions import (
     RedirectError,
     RewokedMembershipError,
     check_event_feature,
 )
-from larpmanager.utils.registration import check_assign_character, get_reduced_available_count
+from larpmanager.utils.users.registration import check_assign_character, get_reduced_available_count
 
 logger = logging.getLogger(__name__)
 

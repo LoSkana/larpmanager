@@ -31,8 +31,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
-from larpmanager.utils.common import clean, detect_delimiter
-from larpmanager.utils.tasks import notify_admins
+from larpmanager.utils.core.common import clean, detect_delimiter
+from larpmanager.utils.larpmanager.tasks import notify_admins
 
 if TYPE_CHECKING:
     from django.core.files.uploadedfile import InMemoryUploadedFile

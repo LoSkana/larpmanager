@@ -69,9 +69,9 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import fetch_payment_details, update_payment_details
-from larpmanager.utils.einvoice import process_payment
-from larpmanager.utils.member import assign_badge
+from larpmanager.utils.core.base import fetch_payment_details, update_payment_details
+from larpmanager.utils.services.einvoice import process_payment
+from larpmanager.utils.users.member import assign_badge
 
 if TYPE_CHECKING:
     from decimal import Decimal

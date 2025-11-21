@@ -28,8 +28,8 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.registration import Registration
-from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.larpmanager.tasks import my_send_mail
+from larpmanager.utils.users.deadlines import check_run_deadlines
 
 
 def remember_membership(registration: Any) -> None:

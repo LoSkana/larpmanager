@@ -31,7 +31,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Run
 from larpmanager.models.member import Log, Member
-from larpmanager.utils.tasks import notify_admins
+from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.views.manage import _get_registration_status_code
 
 

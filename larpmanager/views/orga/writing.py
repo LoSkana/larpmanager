@@ -60,8 +60,8 @@ from larpmanager.models.writing import (
     TextVersion,
     TextVersionChoices,
 )
-from larpmanager.utils.base import check_event_context, get_event_context
-from larpmanager.utils.common import (
+from larpmanager.utils.core.base import check_event_context, get_event_context
+from larpmanager.utils.core.common import (
     exchange_order,
     get_element,
     get_handout,
@@ -74,10 +74,10 @@ from larpmanager.utils.common import (
     get_speedlarp,
     get_trait,
 )
-from larpmanager.utils.download import export_data
-from larpmanager.utils.edit import orga_edit, writing_edit
-from larpmanager.utils.pdf import print_handout
-from larpmanager.utils.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
+from larpmanager.utils.io.download import export_data
+from larpmanager.utils.io.pdf import print_handout
+from larpmanager.utils.services.edit import orga_edit, writing_edit
+from larpmanager.utils.services.writing import retrieve_cache_text_field, writing_list, writing_versions, writing_view
 
 
 @login_required

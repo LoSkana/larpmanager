@@ -59,12 +59,12 @@ from larpmanager.models.writing import (
     replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
-from larpmanager.utils.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
-from larpmanager.utils.character import get_character_relationships, get_character_sheet
-from larpmanager.utils.common import check_field, compute_diff
-from larpmanager.utils.download import download
-from larpmanager.utils.edit import _setup_char_finder
-from larpmanager.utils.exceptions import ReturnNowError
+from larpmanager.utils.core.common import check_field, compute_diff
+from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.io.download import download
+from larpmanager.utils.services.bulk import handle_bulk_characters, handle_bulk_quest, handle_bulk_trait
+from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
+from larpmanager.utils.services.edit import _setup_char_finder
 
 logger = logging.getLogger(__name__)
 

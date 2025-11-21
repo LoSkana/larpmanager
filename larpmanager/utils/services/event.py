@@ -28,7 +28,6 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.role import has_event_permission
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
@@ -43,7 +42,8 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
-from larpmanager.utils.common import copy_class
+from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.core.common import copy_class
 
 
 def get_character_filter(character: Any, character_registrations: Any, active_filters: Any) -> bool:

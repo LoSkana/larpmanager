@@ -58,8 +58,8 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import get_sum
-from larpmanager.utils.common import get_time_diff, get_time_diff_today
-from larpmanager.utils.tasks import background_auto
+from larpmanager.utils.core.common import get_time_diff, get_time_diff_today
+from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:
     from collections.abc import Iterable

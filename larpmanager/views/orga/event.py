@@ -33,7 +33,6 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import clear_run_cache_and_media
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.role import get_index_event_permissions
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
     OrgaAppearanceForm,
@@ -55,10 +54,10 @@ from larpmanager.models.event import Event, EventButton, EventText, Run
 from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType, WritingQuestionType
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, Faction, Plot
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import clear_messages, get_feature
-from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.download import (
+from larpmanager.utils.auth.permission import get_index_event_permissions
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,
     export_character_form,
@@ -68,8 +67,9 @@ from larpmanager.utils.download import (
     export_tickets,
     zip_exports,
 )
-from larpmanager.utils.edit import backend_edit, orga_edit
-from larpmanager.utils.upload import go_upload
+from larpmanager.utils.io.upload import go_upload
+from larpmanager.utils.services.edit import backend_edit, orga_edit
+from larpmanager.utils.users.deadlines import check_run_deadlines
 
 if TYPE_CHECKING:
     from collections.abc import Callable

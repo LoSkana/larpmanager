@@ -38,10 +38,10 @@ from larpmanager.models.casting import Trait
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestion
 from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
-from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import check_association_context, check_event_context
-from larpmanager.utils.common import html_clean
-from larpmanager.utils.exceptions import NotFoundError
+from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.core.base import check_association_context, check_event_context
+from larpmanager.utils.core.common import html_clean
+from larpmanager.utils.core.exceptions import NotFoundError
 
 if TYPE_CHECKING:
     from collections.abc import Callable

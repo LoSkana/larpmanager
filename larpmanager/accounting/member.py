@@ -46,7 +46,7 @@ from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.common import get_now
+from larpmanager.utils.core.common import get_now
 
 
 def info_accounting(context: dict) -> None:

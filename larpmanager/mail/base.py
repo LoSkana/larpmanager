@@ -40,7 +40,7 @@ from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 if TYPE_CHECKING:
     from larpmanager.models.registration import Registration

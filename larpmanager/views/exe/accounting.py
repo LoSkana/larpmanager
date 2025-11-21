@@ -74,9 +74,9 @@ from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.templatetags.show_tags import format_decimal
-from larpmanager.utils.base import check_association_context
-from larpmanager.utils.edit import backend_get, exe_edit
-from larpmanager.utils.paginate import exe_paginate
+from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.paginate import exe_paginate
+from larpmanager.utils.services.edit import backend_get, exe_edit
 
 
 @login_required

@@ -32,7 +32,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.feature import get_association_features
-from larpmanager.cache.role import get_index_association_permissions
 from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.forms.association import (
     ExeAppearanceForm,
@@ -50,9 +49,10 @@ from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText, AssociationTranslation
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
-from larpmanager.utils.base import check_association_context
-from larpmanager.utils.common import clear_messages, get_feature
-from larpmanager.utils.edit import backend_edit, exe_edit
+from larpmanager.utils.auth.permission import get_index_association_permissions
+from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.common import clear_messages, get_feature
+from larpmanager.utils.services.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
 

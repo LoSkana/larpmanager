@@ -34,7 +34,7 @@ from django.utils import timezone
 
 from larpmanager.models.association import Association
 from larpmanager.models.larpmanager import LarpManagerTicket
-from larpmanager.utils.tasks import background_auto, my_send_mail
+from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
 
 
 class ClaudeNotAvailableError(ConnectionError):

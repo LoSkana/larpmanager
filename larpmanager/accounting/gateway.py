@@ -48,9 +48,9 @@ from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import get_context, update_payment_details
-from larpmanager.utils.common import generate_number
-from larpmanager.utils.tasks import notify_admins
+from larpmanager.utils.core.base import get_context, update_payment_details
+from larpmanager.utils.core.common import generate_number
+from larpmanager.utils.larpmanager.tasks import notify_admins
 
 logger = logging.getLogger(__name__)
 

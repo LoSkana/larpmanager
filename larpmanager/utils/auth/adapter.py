@@ -20,19 +20,16 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
-from django.http import Http404, HttpRequest
-
-from larpmanager.models.access import EventPermission
 
 if TYPE_CHECKING:
     from allauth.socialaccount.models import SocialLogin
     from django.forms import Form
+    from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -156,119 +153,3 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         self.update_member(user, sociallogin)
 
         return user
-
-
-def is_lm_admin(request: HttpRequest) -> bool:
-    """Check if user is a LarpManager administrator.
-
-    This function determines if the authenticated user has administrator
-    privileges within the LarpManager system by checking superuser status
-    and admin group membership.
-
-    Args:
-        request: Django HTTP request object containing authenticated user data.
-                Must have a 'user' attribute with potential 'member' relationship.
-
-    Returns:
-        bool: True if user is a superuser or belongs to LM admin group,
-              False otherwise or if user lacks member relationship.
-
-    Note:
-        Admin group checking is currently not implemented (TODO).
-
-    """
-    # Check if user has associated member profile
-    if not hasattr(request.user, "member"):
-        return False
-
-    # Superusers always have admin privileges
-    # TODO: Implement admin group membership check
-    # This should verify if user belongs to LarpManager admin group
-    return request.user.is_superuser
-
-
-def check_lm_admin(request: HttpRequest) -> dict[str, Any]:
-    """Verify user is LM admin and return admin context.
-
-    This function validates that the current user has LM (LarpManager) administrator
-    privileges and returns a context dictionary containing association information
-    and admin status flag.
-
-    Args:
-        request: Django HTTP request object containing user and association data.
-
-    Returns:
-        A dictionary containing:
-            - association_id (int): The association ID from the request
-            - lm_admin (int): Admin flag set to 1 indicating LM admin status
-
-    Raises:
-        Http404: If the user does not have LM administrator privileges.
-
-    Example:
-        >>> context = check_lm_admin(request)
-        >>> print(context)
-        {'association_id': 123, 'lm_admin': 1}
-
-    """
-    # Check if the current user has LM administrator privileges
-    if not is_lm_admin(request):
-        msg = "Not lm admin"
-        raise Http404(msg)
-
-    # Return admin context with association ID and admin flag
-    return {"association_id": request.association["id"], "lm_admin": 1}
-
-
-def get_allowed_managed() -> list[str]:
-    """Get list of allowed management permission keys.
-
-    This function returns a predefined list of permission strings that are
-    allowed for management access within the LarpManager system. These
-    permissions control access to various administrative and organizational
-    features.
-
-    Returns:
-        list[str]: List of permission strings for management access. Includes
-            both executive-level (exe_*) and organizational-level (orga_*)
-            permissions.
-
-    Example:
-        >>> permissions = get_allowed_managed()
-        >>> 'exe_events' in permissions
-        True
-
-    """
-    return [
-        # Executive-level permissions for organization-wide features
-        "exe_events",
-        "exe_accounting",
-        "exe_preferences",
-        # Event-specific organizational permissions
-        "orga_event",
-        "orga_cancellations",
-        # Registration management permissions
-        "orga_registration_form",
-        "orga_registration_tickets",
-        "orga_registrations",
-        # Financial and sensitive data permissions
-        "orga_accounting",
-        "orga_sensitive",
-        "orga_preferences",
-    ]
-
-
-def auto_assign_event_permission_number(event_permission: Any) -> None:
-    """Assign number to event permission if not set.
-
-    Args:
-        event_permission: EventPermission instance to assign number to
-
-    """
-    if not event_permission.number:
-        max_number = EventPermission.objects.filter(feature__module=event_permission.feature.module).aggregate(
-            Max("number"),
-        )["number__max"]
-        if not max_number:
-            max_number = 1
-        event_permission.number = max_number + 10

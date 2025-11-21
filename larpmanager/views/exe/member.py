@@ -70,23 +70,23 @@ from larpmanager.models.member import (
 )
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration
-from larpmanager.utils.base import check_association_context
-from larpmanager.utils.common import (
+from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.common import (
     _get_help_questions,
     ensure_timezone_aware,
     format_email_body,
     get_member,
     normalize_string,
 )
-from larpmanager.utils.edit import exe_edit
-from larpmanager.utils.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.member import get_mail
-from larpmanager.utils.paginate import exe_paginate
-from larpmanager.utils.pdf import (
+from larpmanager.utils.core.paginate import exe_paginate
+from larpmanager.utils.io.pdf import (
     get_membership_request,
     print_volunteer_registry,
     return_pdf,
 )
+from larpmanager.utils.services.edit import exe_edit
+from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.users.member import get_mail
 from larpmanager.views.orga.member import send_mail_batch
 
 

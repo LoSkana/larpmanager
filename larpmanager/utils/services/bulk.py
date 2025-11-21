@@ -37,7 +37,7 @@ from larpmanager.models.miscellanea import (
     WarehouseTag,
 )
 from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot, Prologue
-from larpmanager.utils.exceptions import ReturnNowError
+from larpmanager.utils.core.exceptions import ReturnNowError
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet

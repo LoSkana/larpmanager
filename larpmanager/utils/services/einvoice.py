@@ -27,7 +27,7 @@ from django.utils import timezone
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.models.member import Member
-from larpmanager.utils.tasks import background_auto
+from larpmanager.utils.larpmanager.tasks import background_auto
 
 
 @background_auto(queue="e-invoice")

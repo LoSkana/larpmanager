@@ -34,7 +34,7 @@ from tinymce.models import HTMLField
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
 from larpmanager.models.utils import UploadToPathAndRename
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.validators import FileTypeValidator
 
 
 class MemberFieldType(models.TextChoices):

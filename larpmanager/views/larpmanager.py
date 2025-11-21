@@ -43,7 +43,6 @@ from django_ratelimit.decorators import ratelimit
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.larpmanager import get_cache_lm_home
-from larpmanager.cache.role import has_association_permission, has_event_permission
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
@@ -62,10 +61,11 @@ from larpmanager.models.larpmanager import (
 )
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.utils.auth import check_lm_admin
-from larpmanager.utils.base import get_context, get_event_context
-from larpmanager.utils.exceptions import UserPermissionError
-from larpmanager.utils.tasks import my_send_mail, send_mail_exec
+from larpmanager.utils.auth.admin import check_lm_admin
+from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
+from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.exceptions import UserPermissionError
+from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
 from larpmanager.views.user.member import get_user_backend
 
 

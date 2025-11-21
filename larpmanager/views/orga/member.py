@@ -37,11 +37,11 @@ from larpmanager.models.event import PreRegistration
 from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import _get_help_questions, format_email_body
-from larpmanager.utils.member import get_mail
-from larpmanager.utils.paginate import orga_paginate
-from larpmanager.utils.tasks import send_mail_exec
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import _get_help_questions, format_email_body
+from larpmanager.utils.core.paginate import orga_paginate
+from larpmanager.utils.larpmanager.tasks import send_mail_exec
+from larpmanager.utils.users.member import get_mail
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse

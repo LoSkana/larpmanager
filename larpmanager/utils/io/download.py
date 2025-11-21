@@ -53,8 +53,8 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
-from larpmanager.utils.common import check_field
-from larpmanager.utils.edit import _get_values_mapping
+from larpmanager.utils.core.common import check_field
+from larpmanager.utils.services.edit import _get_values_mapping
 
 
 def _temp_csv_file(column_headers: Any, data_rows: Any) -> Any:

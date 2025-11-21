@@ -39,7 +39,7 @@ from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
-from larpmanager.utils.codes import countries
+from larpmanager.utils.core.codes import countries
 
 logger = logging.getLogger(__name__)
 

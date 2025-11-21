@@ -36,11 +36,11 @@ from larpmanager.mail.base import mail_confirm_casting
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
-from larpmanager.utils.base import get_event_context
-from larpmanager.utils.common import get_element
-from larpmanager.utils.event import get_event_filter_characters
-from larpmanager.utils.exceptions import check_event_feature
-from larpmanager.utils.registration import registration_status
+from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.exceptions import check_event_feature
+from larpmanager.utils.services.event import get_event_filter_characters
+from larpmanager.utils.users.registration import registration_status
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet

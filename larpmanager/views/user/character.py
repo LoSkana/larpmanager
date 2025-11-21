@@ -61,23 +61,23 @@ from larpmanager.models.writing import (
     CharacterStatus,
 )
 from larpmanager.templatetags.show_tags import get_tooltip
-from larpmanager.utils.base import get_event_context
-from larpmanager.utils.character import (
+from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.core.common import get_player_relationship
+from larpmanager.utils.services.character import (
     check_missing_mandatory,
     get_char_check,
     get_character_relationships,
     get_character_sheet,
 )
-from larpmanager.utils.common import get_player_relationship
-from larpmanager.utils.edit import user_edit
-from larpmanager.utils.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
-from larpmanager.utils.registration import (
+from larpmanager.utils.services.edit import user_edit
+from larpmanager.utils.services.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
+from larpmanager.utils.services.writing import char_add_addit
+from larpmanager.utils.users.registration import (
     check_assign_character,
     check_character_maximum,
     get_player_characters,
     registration_find,
 )
-from larpmanager.utils.writing import char_add_addit
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
 

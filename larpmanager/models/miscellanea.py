@@ -39,7 +39,7 @@ from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
 from larpmanager.models.writing import Character
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.validators import FileTypeValidator
 
 
 class HelpQuestion(BaseModel):

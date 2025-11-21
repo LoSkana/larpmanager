@@ -19,12 +19,8 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.cache.role import (
-    get_index_association_permissions,
-    get_index_event_permissions,
-    has_association_permission,
-    has_event_permission,
-)
+from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
+    has_event_permission, get_index_event_permissions
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
 from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.accounting import (
@@ -42,11 +38,11 @@ from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, Writ
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import RegistrationInstallment, RegistrationQuota, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.base import check_association_context, check_event_context, get_context, get_event_context
-from larpmanager.utils.common import _get_help_questions, format_datetime
-from larpmanager.utils.edit import set_suggestion
-from larpmanager.utils.exceptions import RedirectError
-from larpmanager.utils.registration import registration_available
+from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
+from larpmanager.utils.core.common import _get_help_questions, format_datetime
+from larpmanager.utils.services.edit import set_suggestion
+from larpmanager.utils.core.exceptions import RedirectError
+from larpmanager.utils.users.registration import registration_available
 
 
 @login_required

@@ -54,9 +54,9 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.utils.common import get_time_diff_today
-from larpmanager.utils.pdf import print_run_bkg
-from larpmanager.utils.tasks import notify_admins
+from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.io.pdf import print_run_bkg
+from larpmanager.utils.larpmanager.tasks import notify_admins
 
 
 class Command(BaseCommand):

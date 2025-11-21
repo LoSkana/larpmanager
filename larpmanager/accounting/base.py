@@ -37,7 +37,7 @@ from larpmanager.models.accounting import (
     Collection,
 )
 from larpmanager.models.utils import get_payment_details_path
-from larpmanager.utils.tasks import notify_admins
+from larpmanager.utils.larpmanager.tasks import notify_admins
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
