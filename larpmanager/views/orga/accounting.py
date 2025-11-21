@@ -48,9 +48,9 @@ from larpmanager.models.accounting import (
     PaymentStatus,
 )
 from larpmanager.templatetags.show_tags import format_decimal
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.edit import backend_get, orga_edit
-from larpmanager.utils.paginate import orga_paginate
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.paginate import orga_paginate
+from larpmanager.utils.services.edit import backend_get, orga_edit
 
 
 @login_required

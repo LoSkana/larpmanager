@@ -40,8 +40,8 @@ from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType
-from larpmanager.utils.common import html_clean
-from larpmanager.utils.pdf import get_trait_character
+from larpmanager.utils.core.common import html_clean
+from larpmanager.utils.io.pdf import get_trait_character
 
 if TYPE_CHECKING:
     from django.forms import BoundField, Form

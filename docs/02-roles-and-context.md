@@ -97,8 +97,10 @@ def get_context(request: HttpRequest, check_main_site: bool = False) -> dict
 **Returns:** Dictionary with association data, user info, and basic settings
 
 **Example usage:**
+
 ```python
-from larpmanager.utils.base import get_context
+from larpmanager.utils.core.base import get_context
+
 
 def public_page(request):
     """Simple public page without permission requirements."""
@@ -148,9 +150,11 @@ def get_event_context(
 **Returns:** Dictionary with event context and optional validation
 
 **Example usage:**
+
 ```python
-from larpmanager.utils.base import get_event_context
+from larpmanager.utils.core.base import get_event_context
 from larpmanager.models.writing import Character
+
 
 def event_character_gallery(request, event_slug):
     """Public character gallery - requires "character_gallery" feature."""
@@ -218,9 +222,11 @@ def check_event_context(
 - `FeatureError` - If required feature is not enabled
 
 **Example usage:**
+
 ```python
 from django.contrib.auth.decorators import login_required
-from larpmanager.utils.base import check_event_context
+from larpmanager.utils.core.base import check_event_context
+
 
 @login_required
 def orga_characters(request, event_slug):
@@ -280,9 +286,11 @@ def check_association_context(
 - `FeatureError` - If required feature is not enabled
 
 **Example usage:**
+
 ```python
 from django.contrib.auth.decorators import login_required
-from larpmanager.utils.base import check_association_context
+from larpmanager.utils.core.base import check_association_context
+
 
 @login_required
 def exe_membership(request):
@@ -482,8 +490,9 @@ story_role.members.add(alice, bob)
 ```python
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from larpmanager.utils.base import check_event_context
+from larpmanager.utils.core.base import check_event_context
 from larpmanager.models.event import Character
+
 
 @login_required
 def orga_characters(request, event_slug):
@@ -508,8 +517,9 @@ def orga_characters(request, event_slug):
 ```python
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from larpmanager.utils.base import check_association_context
+from larpmanager.utils.core.base import check_association_context
 from larpmanager.models.member import Membership
+
 
 @login_required
 def exe_membership(request):
@@ -533,8 +543,9 @@ def exe_membership(request):
 
 ```python
 from django.shortcuts import render
-from larpmanager.utils.base import get_event_context
+from larpmanager.utils.core.base import get_event_context
 from larpmanager.models.writing import Character
+
 
 def event_character_gallery(request, event_slug):
     """Public character gallery for an event.
@@ -563,7 +574,8 @@ def event_character_gallery(request, event_slug):
 ```python
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from larpmanager.utils.base import check_event_context
+from larpmanager.utils.core.base import check_event_context
+
 
 @login_required
 def orga_character_detail(request, event_slug, character_id):
@@ -592,7 +604,8 @@ def orga_character_detail(request, event_slug, character_id):
 
 ```python
 from django.shortcuts import render
-from larpmanager.utils.base import get_context
+from larpmanager.utils.core.base import get_context
+
 
 def home(request):
     """Homepage - no specific permissions needed."""

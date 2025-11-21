@@ -18,11 +18,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest, HttpResponse
 
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
@@ -41,10 +47,10 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.utils.base import check_association_context, get_context
-from larpmanager.utils.common import get_event_template
-from larpmanager.utils.deadlines import check_run_deadlines
-from larpmanager.utils.edit import backend_edit, backend_get, exe_edit
+from larpmanager.utils.core.base import check_association_context, get_context
+from larpmanager.utils.core.common import get_event_template
+from larpmanager.utils.services.edit import backend_edit, backend_get, exe_edit
+from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
 from larpmanager.views.orga.registration import get_pre_registration

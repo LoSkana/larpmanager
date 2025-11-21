@@ -24,8 +24,8 @@ from datetime import date
 from unittest.mock import MagicMock, patch
 
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.common import cantor, check_already, get_channel
-from larpmanager.utils.fiscal_code import (
+from larpmanager.utils.core.common import cantor, check_already, get_channel
+from larpmanager.utils.users.fiscal_code import (
     _calculate_consonants,
     _calculate_vowels,
     _clean_birth_place,
@@ -274,7 +274,7 @@ class TestFiscalCodeFunctions(BaseTestCase):
         member.nationality = "it"
         member.legal_name = None
 
-        with patch("larpmanager.utils.fiscal_code._extract_municipality_code", return_value="F205"):
+        with patch("larpmanager.utils.users.fiscal_code._extract_municipality_code", return_value="F205"):
             result = calculate_fiscal_code(member)
 
             # calculate_fiscal_code returns a dict

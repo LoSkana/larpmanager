@@ -66,16 +66,16 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersionChoices,
 )
-from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.character import get_chars_relations
-from larpmanager.utils.common import (
+from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import (
     exchange_order,
     get_char,
 )
-from larpmanager.utils.download import orga_character_form_download
-from larpmanager.utils.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
-from larpmanager.utils.writing import writing_list, writing_versions, writing_view
+from larpmanager.utils.io.download import orga_character_form_download
+from larpmanager.utils.services.character import get_chars_relations
+from larpmanager.utils.services.edit import backend_edit, set_suggestion, writing_edit, writing_edit_working_ticket
+from larpmanager.utils.services.writing import writing_list, writing_versions, writing_view
 
 
 def get_character_optimized(context: dict[str, Any], num: int) -> None:

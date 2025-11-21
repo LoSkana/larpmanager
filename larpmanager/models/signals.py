@@ -202,34 +202,8 @@ from larpmanager.models.writing import (
     SpeedLarp,
     replace_character_names,
 )
-from larpmanager.utils.association import (
-    apply_skin_features_to_association,
-    auto_assign_association_permission_number,
-    generate_association_encryption_key,
-    prepare_association_skin_features,
-)
-from larpmanager.utils.auth import auto_assign_event_permission_number
-from larpmanager.utils.event import (
-    assign_previous_campaign_character,
-    copy_parent_event_to_campaign,
-    create_default_event_setup,
-    prepare_campaign_event_data,
-    update_run_plan_on_event_change,
-)
-from larpmanager.utils.experience import (
-    calculate_character_experience_points,
-    on_experience_characters_m2m_changed,
-    on_modifier_abilities_m2m_changed,
-    on_rule_abilities_m2m_changed,
-    refresh_delivery_characters,
-    update_characters_experience_on_ability_change,
-    update_characters_experience_on_modifier_change,
-    update_characters_experience_on_rule_change,
-)
-from larpmanager.utils.larpmanager import auto_assign_faq_sequential_number, generate_tutorial_url_slug
-from larpmanager.utils.member import create_member_profile_for_user, process_membership_status_updates
-from larpmanager.utils.miscellanea import auto_rotate_vertical_photos
-from larpmanager.utils.pdf import (
+from larpmanager.utils.auth.permission import auto_assign_event_permission_number
+from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_before_delete,
     cleanup_character_pdfs_on_save,
     cleanup_faction_pdfs_before_delete,
@@ -244,9 +218,35 @@ from larpmanager.utils.pdf import (
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
-from larpmanager.utils.registration import process_character_ticket_options, process_registration_event_change
-from larpmanager.utils.ticket import create_error_ticket
-from larpmanager.utils.writing import replace_character_names_before_save
+from larpmanager.utils.larpmanager.ticket import create_error_ticket
+from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
+from larpmanager.utils.services.association import (
+    apply_skin_features_to_association,
+    auto_assign_association_permission_number,
+    generate_association_encryption_key,
+    prepare_association_skin_features,
+)
+from larpmanager.utils.services.event import (
+    assign_previous_campaign_character,
+    copy_parent_event_to_campaign,
+    create_default_event_setup,
+    prepare_campaign_event_data,
+    update_run_plan_on_event_change,
+)
+from larpmanager.utils.services.experience import (
+    calculate_character_experience_points,
+    on_experience_characters_m2m_changed,
+    on_modifier_abilities_m2m_changed,
+    on_rule_abilities_m2m_changed,
+    refresh_delivery_characters,
+    update_characters_experience_on_ability_change,
+    update_characters_experience_on_modifier_change,
+    update_characters_experience_on_rule_change,
+)
+from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
+from larpmanager.utils.services.writing import replace_character_names_before_save
+from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
+from larpmanager.utils.users.registration import process_character_ticket_options, process_registration_event_change
 
 log = logging.getLogger(__name__)
 

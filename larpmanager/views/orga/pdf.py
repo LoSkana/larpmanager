@@ -31,10 +31,9 @@ from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Run
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Faction, Handout
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import get_element
-from larpmanager.utils.pdf import (
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_element
+from larpmanager.utils.io.pdf import (
     add_pdf_instructions,
     print_bulk,
     print_character,
@@ -45,6 +44,7 @@ from larpmanager.utils.pdf import (
     print_gallery,
     print_profiles,
 )
+from larpmanager.utils.services.character import get_char_check, get_character_relationships, get_character_sheet
 
 
 @login_required

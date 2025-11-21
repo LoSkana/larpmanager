@@ -21,15 +21,15 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpRequest, HttpResponse
 
-from larpmanager.utils.base import get_event_context
-from larpmanager.utils.character import get_char_check
-from larpmanager.utils.pdf import (
+from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.io.pdf import (
     print_character,
     print_character_friendly,
     print_character_rel,
     print_gallery,
     print_profiles,
 )
+from larpmanager.utils.services.character import get_char_check
 
 
 def check_print_pdf(context: dict) -> None:

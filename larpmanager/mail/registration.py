@@ -35,8 +35,8 @@ from larpmanager.models.association import AssociationTextType, get_url, hdr
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
-from larpmanager.utils.registration import get_registration_options
-from larpmanager.utils.tasks import background_auto, my_send_mail
+from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
+from larpmanager.utils.users.registration import get_registration_options
 
 logger = logging.getLogger(__name__)
 

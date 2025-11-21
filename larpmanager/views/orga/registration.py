@@ -50,7 +50,6 @@ from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
 from larpmanager.cache.registration import clear_registration_counts_cache
 from larpmanager.cache.rels import clear_event_relationships_cache
-from larpmanager.cache.role import has_event_permission
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import get_cache_reg_field
 from larpmanager.forms.registration import (
@@ -79,14 +78,15 @@ from larpmanager.models.registration import (
     RegistrationTicket,
     TicketTier,
 )
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import (
+from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import (
     get_char,
     get_discount,
     get_registration,
     get_time_diff,
 )
-from larpmanager.utils.download import _orga_registrations_acc, download
+from larpmanager.utils.io.download import _orga_registrations_acc, download
 from larpmanager.views.orga.member import member_field_correct
 
 if TYPE_CHECKING:

@@ -8752,58 +8752,25 @@ msgstr ""
 msgid "Show available characters"
 msgstr ""
 
-msgid "Move to container"
-msgstr ""
-
-msgid "Add tag"
-msgstr ""
-
-msgid "Remove tag"
-msgstr ""
-
-msgid "Add to faction"
-msgstr ""
-
-msgid "Remove from faction"
-msgstr ""
-
-msgid "Add to plot"
-msgstr ""
-
-msgid "Remove from plot"
-msgstr ""
-
-msgid "Add prologue"
-msgstr ""
-
-msgid "Remove prologue"
-msgstr ""
-
-msgid "Add to xp delivery"
-msgstr ""
-
-msgid "Remove from xp delivery"
-msgstr ""
-
-msgid "Set progress step"
-msgstr ""
-
-msgid "Set assigned staff member"
-msgstr ""
-
-msgid "Set character status"
-msgstr ""
-
-msgid "Set quest type"
-msgstr ""
-
-msgid "Set quest"
-msgstr ""
-
-msgid "Set ability type"
-msgstr ""
-
 msgid "Welcome"
+msgstr ""
+
+#, python-format
+msgid ""
+"File type '%(detected_type)s' is not allowed.Allowed types are: "
+"'%(allowed_types)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed. Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#, python-format
+msgid ""
+"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
+"assignments/media-types/media-types.xhtml"
 msgstr ""
 
 msgid "The participant's email"
@@ -8906,6 +8873,85 @@ msgstr ""
 msgid "Name of quest"
 msgstr ""
 
+#, python-format
+msgid "Membership registration of %(user)s"
+msgstr ""
+
+msgid "Lightweight"
+msgstr ""
+
+msgid "Portraits"
+msgstr ""
+
+msgid "Profiles"
+msgstr ""
+
+msgid "Failed to add handout"
+msgstr ""
+
+msgid "Failed to add faction"
+msgstr ""
+
+msgid "Failed to add character"
+msgstr ""
+
+msgid "Failed to add profiles"
+msgstr ""
+
+msgid "Failed to add gallery"
+msgstr ""
+
+msgid "Move to container"
+msgstr ""
+
+msgid "Add tag"
+msgstr ""
+
+msgid "Remove tag"
+msgstr ""
+
+msgid "Add to faction"
+msgstr ""
+
+msgid "Remove from faction"
+msgstr ""
+
+msgid "Add to plot"
+msgstr ""
+
+msgid "Remove from plot"
+msgstr ""
+
+msgid "Add prologue"
+msgstr ""
+
+msgid "Remove prologue"
+msgstr ""
+
+msgid "Add to xp delivery"
+msgstr ""
+
+msgid "Remove from xp delivery"
+msgstr ""
+
+msgid "Set progress step"
+msgstr ""
+
+msgid "Set assigned staff member"
+msgstr ""
+
+msgid "Set character status"
+msgstr ""
+
+msgid "Set quest type"
+msgstr ""
+
+msgid "Set quest"
+msgstr ""
+
+msgid "Set ability type"
+msgstr ""
+
 msgid "Operation completed"
 msgstr ""
 
@@ -8955,34 +9001,6 @@ msgid ""
 msgstr ""
 
 msgid "Date of birth characters do not match (check exact date)"
-msgstr ""
-
-#, python-format
-msgid "Membership registration of %(user)s"
-msgstr ""
-
-msgid "Lightweight"
-msgstr ""
-
-msgid "Portraits"
-msgstr ""
-
-msgid "Profiles"
-msgstr ""
-
-msgid "Failed to add handout"
-msgstr ""
-
-msgid "Failed to add faction"
-msgstr ""
-
-msgid "Failed to add character"
-msgstr ""
-
-msgid "Failed to add profiles"
-msgstr ""
-
-msgid "Failed to add gallery"
 msgstr ""
 
 #, python-format
@@ -9049,24 +9067,6 @@ msgid "Access character creation!"
 msgstr ""
 
 msgid "Select your character!"
-msgstr ""
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
-"assignments/media-types/media-types.xhtml"
 msgstr ""
 
 msgid "Registration completed successfully!"

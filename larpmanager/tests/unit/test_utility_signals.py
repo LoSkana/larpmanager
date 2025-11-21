@@ -53,7 +53,7 @@ class TestUtilitySignals(BaseTestCase):
         self.assertEqual(character.name, original_name)
         self.assertIsNotNone(character.id)
 
-    @patch("larpmanager.utils.experience.calculate_character_experience_points")
+    @patch("larpmanager.utils.services.experience.calculate_character_experience_points")
     def test_ability_px_post_save_updates_experience(self, mock_update: Any) -> None:
         """Test that AbilityPx m2m_changed signal updates character experience"""
         character = self.character()

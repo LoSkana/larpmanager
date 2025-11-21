@@ -70,13 +70,13 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.base import get_context
-from larpmanager.utils.common import get_badge, get_channel, get_contact, get_member
-from larpmanager.utils.exceptions import check_association_feature
-from larpmanager.utils.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.member import get_leaderboard
-from larpmanager.utils.pdf import get_membership_request
-from larpmanager.utils.registration import registration_status
+from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.common import get_badge, get_channel, get_contact, get_member
+from larpmanager.utils.core.exceptions import check_association_feature
+from larpmanager.utils.io.pdf import get_membership_request
+from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.users.member import get_leaderboard
+from larpmanager.utils.users.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
 
 logger = logging.getLogger(__name__)

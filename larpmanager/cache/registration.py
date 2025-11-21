@@ -29,7 +29,7 @@ from larpmanager.models.event import Run
 from larpmanager.models.form import RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character
-from larpmanager.utils.common import _search_char_reg
+from larpmanager.utils.core.common import _search_char_reg
 
 
 def clear_registration_counts_cache(run_id: int) -> None:

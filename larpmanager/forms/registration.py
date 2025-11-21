@@ -57,8 +57,8 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.writing import Character, Faction
-from larpmanager.utils.common import get_time_diff_today
-from larpmanager.utils.registration import get_reduced_available_count
+from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.users.registration import get_reduced_available_count
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event, Run

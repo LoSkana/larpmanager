@@ -62,7 +62,7 @@ from larpmanager.models.writing import (
     Relationship,
     TextVersionChoices,
 )
-from larpmanager.utils.edit import save_version
+from larpmanager.utils.services.edit import save_version
 
 
 class CharacterForm(WritingForm, BaseWritingForm):

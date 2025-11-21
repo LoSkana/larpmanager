@@ -62,9 +62,9 @@ from larpmanager.models.member import (
     VolunteerRegistry,
     get_user_membership,
 )
-from larpmanager.utils.common import get_recaptcha_secrets
-from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.common import get_recaptcha_secrets
+from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 if TYPE_CHECKING:
     from collections.abc import Generator

@@ -30,7 +30,7 @@ from django_recaptcha.widgets import ReCaptchaV3
 
 from larpmanager.forms.base import MyForm
 from larpmanager.models.larpmanager import LarpManagerTicket
-from larpmanager.utils.common import get_recaptcha_secrets
+from larpmanager.utils.core.common import get_recaptcha_secrets
 
 if TYPE_CHECKING:
     from django.http import HttpRequest

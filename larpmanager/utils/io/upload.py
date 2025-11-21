@@ -65,8 +65,8 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Relationship,
 )
-from larpmanager.utils.download import _get_column_names
-from larpmanager.utils.edit import save_log
+from larpmanager.utils.io.download import _get_column_names
+from larpmanager.utils.services.edit import save_log
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet

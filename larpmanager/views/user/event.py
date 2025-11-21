@@ -70,11 +70,11 @@ from larpmanager.models.writing import (
     Faction,
     FactionType,
 )
-from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import get_context, get_event, get_event_context
-from larpmanager.utils.common import get_element
-from larpmanager.utils.exceptions import HiddenError
-from larpmanager.utils.registration import registration_status
+from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.core.base import get_context, get_event, get_event_context
+from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.exceptions import HiddenError
+from larpmanager.utils.users.registration import registration_status
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:

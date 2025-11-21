@@ -278,10 +278,12 @@ Feature.objects.create(
 Create views following naming conventions. For detailed information on structuring views, see the [Roles and Context Guide](02-roles-and-context.md).
 
 **For event-specific features (overall=False):**
+
 ```python
 # In larpmanager/views/...
 from django.contrib.auth.decorators import login_required
-from larpmanager.utils.base import check_event_context
+from larpmanager.utils.core.base import check_event_context
+
 
 @login_required
 def orga_characters(request, event_slug):
@@ -296,10 +298,12 @@ def orga_characters(request, event_slug):
 ```
 
 **For organization-wide features (overall=True):**
+
 ```python
 # In larpmanager/views/...
 from django.contrib.auth.decorators import login_required
-from larpmanager.utils.base import check_association_context
+from larpmanager.utils.core.base import check_association_context
+
 
 @login_required
 def exe_members(request):

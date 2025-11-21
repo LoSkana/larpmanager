@@ -55,7 +55,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.validators import FileTypeValidator
 
 PAY_CHOICES = (
     ("t", _("Over")),

@@ -41,7 +41,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member
-from larpmanager.utils.tasks import my_send_mail
+from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 
 def send_expense_notification_email(instance: AccountingItemExpense) -> None:

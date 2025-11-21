@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.utils.member import almost_equal, count_differences
+from larpmanager.utils.users.member import almost_equal, count_differences
 
 if TYPE_CHECKING:
     from datetime import date

@@ -33,17 +33,17 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
-from larpmanager.cache.role import (
+from larpmanager.cache.run import get_cache_config_run, get_cache_run
+from larpmanager.models.association import Association
+from larpmanager.models.event import Run
+from larpmanager.models.member import get_user_membership
+from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
     get_index_event_permissions,
     has_association_permission,
     has_event_permission,
 )
-from larpmanager.cache.run import get_cache_config_run, get_cache_run
-from larpmanager.models.association import Association
-from larpmanager.models.event import Run
-from larpmanager.models.member import get_user_membership
-from larpmanager.utils.exceptions import (
+from larpmanager.utils.core.exceptions import (
     FeatureError,
     MainPageError,
     MembershipError,
@@ -51,7 +51,7 @@ from larpmanager.utils.exceptions import (
     UserPermissionError,
     check_event_feature,
 )
-from larpmanager.utils.registration import check_signup, registration_status
+from larpmanager.utils.users.registration import check_signup, registration_status
 
 
 def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks

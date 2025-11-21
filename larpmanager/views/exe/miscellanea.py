@@ -39,12 +39,12 @@ from larpmanager.models.miscellanea import (
     WarehouseMovement,
     WarehouseTag,
 )
-from larpmanager.utils.auth import is_lm_admin
-from larpmanager.utils.base import check_association_context
-from larpmanager.utils.bulk import handle_bulk_items
-from larpmanager.utils.edit import exe_edit
-from larpmanager.utils.miscellanea import get_warehouse_optionals
-from larpmanager.utils.ticket import analyze_ticket_bgk
+from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.larpmanager.ticket import analyze_ticket_bgk
+from larpmanager.utils.services.bulk import handle_bulk_items
+from larpmanager.utils.services.edit import exe_edit
+from larpmanager.utils.services.miscellanea import get_warehouse_optionals
 
 
 @login_required

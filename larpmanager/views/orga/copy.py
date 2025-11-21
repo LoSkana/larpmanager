@@ -65,8 +65,8 @@ from larpmanager.models.writing import (
     Relationship,
     SpeedLarp,
 )
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import copy_class
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import copy_class
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponseRedirect

@@ -55,11 +55,11 @@ from larpmanager.models.writing import (
     Faction,
     Handout,
 )
-from larpmanager.utils.base import get_event_context
-from larpmanager.utils.character import get_char_check, get_character_relationships, get_character_sheet
-from larpmanager.utils.common import get_element, get_handout, get_now
-from larpmanager.utils.exceptions import NotFoundError
-from larpmanager.utils.tasks import background_auto
+from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.core.common import get_element, get_handout, get_now
+from larpmanager.utils.core.exceptions import NotFoundError
+from larpmanager.utils.larpmanager.tasks import background_auto
+from larpmanager.utils.services.character import get_char_check, get_character_relationships, get_character_sheet
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event, Run

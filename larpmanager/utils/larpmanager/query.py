@@ -16,7 +16,7 @@ from whoosh.qparser import QueryParser
 from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
-from larpmanager.utils.tasks import background_auto, notify_admins
+from larpmanager.utils.larpmanager.tasks import background_auto, notify_admins
 
 TUTORIAL_INDEX = "data/whoosh/tutorial_index"
 

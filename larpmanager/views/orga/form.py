@@ -48,10 +48,10 @@ from larpmanager.models.registration import (
     RegistrationSurcharge,
     RegistrationTicket,
 )
-from larpmanager.utils.base import check_event_context
-from larpmanager.utils.common import exchange_order
-from larpmanager.utils.download import orga_registration_form_download, orga_tickets_download
-from larpmanager.utils.edit import backend_edit, orga_edit, set_suggestion
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import exchange_order
+from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
+from larpmanager.utils.services.edit import backend_edit, orga_edit, set_suggestion
 
 
 @login_required

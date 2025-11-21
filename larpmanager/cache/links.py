@@ -34,7 +34,7 @@ from django.utils import timezone
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
-from larpmanager.utils.auth import is_lm_admin
+from larpmanager.utils.auth.admin import is_lm_admin
 
 if TYPE_CHECKING:
     from django.http import HttpRequest

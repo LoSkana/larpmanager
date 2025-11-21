@@ -29,7 +29,6 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
-from larpmanager.cache.role import has_event_permission
 from larpmanager.forms.association import ExePreferencesForm
 from larpmanager.forms.base import MyCssForm, MyForm
 from larpmanager.forms.config import ConfigForm, ConfigType
@@ -66,7 +65,8 @@ from larpmanager.models.form import (
     _get_writing_mapping,
 )
 from larpmanager.models.utils import generate_id
-from larpmanager.utils.common import copy_class
+from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.core.common import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
 
 logger = logging.getLogger(__name__)

@@ -70,7 +70,7 @@ from larpmanager.models.writing import (
     Relationship,
     SpeedLarp,
 )
-from larpmanager.utils.exceptions import NotFoundError
+from larpmanager.utils.core.exceptions import NotFoundError
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import User

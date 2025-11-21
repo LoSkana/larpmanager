@@ -3,7 +3,7 @@
 from django.db import migrations, models
 
 import larpmanager.models.utils
-import larpmanager.utils.validators
+import larpmanager.utils.core.validators
 
 
 class Migration(migrations.Migration):
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 null=True,
                 upload_to=larpmanager.models.utils.UploadToPathAndRename("assoc_font/"),
                 validators=[
-                    larpmanager.utils.validators.FileTypeValidator(
+                    larpmanager.utils.core.validators.FileTypeValidator(
                         [
                             "font/ttf",
                             "font/otf",
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 null=True,
                 upload_to=larpmanager.models.utils.UploadToPathAndRename("contract/gdpr/"),
-                validators=[larpmanager.utils.validators.FileTypeValidator(["application/pdf"])],
+                validators=[larpmanager.utils.core.validators.FileTypeValidator(["application/pdf"])],
             ),
         ),
         migrations.AlterField(
@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 null=True,
                 upload_to=larpmanager.models.utils.UploadToPathAndRename("attachment/"),
                 validators=[
-                    larpmanager.utils.validators.FileTypeValidator(
+                    larpmanager.utils.core.validators.FileTypeValidator(
                         [
                             "application/pdf",
                             "application/msword",
