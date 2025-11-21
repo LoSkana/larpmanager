@@ -345,8 +345,8 @@ class TestModelSignals(BaseTestCase):
         # The event should be created successfully
         self.assertIsNotNone(event.id)
 
-    @patch("larpmanager.utils.event.clear_event_features_cache")
-    @patch("larpmanager.utils.event.clear_event_fields_cache")
+    @patch("larpmanager.utils.services.event.clear_event_features_cache")
+    @patch("larpmanager.utils.services.event.clear_event_fields_cache")
     def test_event_post_save_resets_caches(self, mock_reset_fields: Any, mock_reset_features: Any) -> None:
         """Test that Event post_save signal resets various caches"""
         association = self.get_association()
@@ -575,7 +575,7 @@ class TestModelSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(ticket.id)
 
-    @patch("larpmanager.utils.miscellanea._check_new")
+    @patch("larpmanager.utils.services.miscellanea._check_new")
     def test_warehouse_item_pre_save_rotates_vertical_photo(self, mock_check_new: Any) -> None:
         """Test that WarehouseItem pre_save signal rotates vertical photos"""
         from larpmanager.models.miscellanea import WarehouseContainer

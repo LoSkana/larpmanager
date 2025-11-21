@@ -274,7 +274,7 @@ class TestFiscalCodeFunctions(BaseTestCase):
         member.nationality = "it"
         member.legal_name = None
 
-        with patch("larpmanager.utils.fiscal_code._extract_municipality_code", return_value="F205"):
+        with patch("larpmanager.utils.users.fiscal_code._extract_municipality_code", return_value="F205"):
             result = calculate_fiscal_code(member)
 
             # calculate_fiscal_code returns a dict
