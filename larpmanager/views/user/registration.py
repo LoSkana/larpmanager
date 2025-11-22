@@ -636,8 +636,8 @@ def register(
     else:
         context["run_reg"] = None
 
-    # Apply ticket selection if provided
-    _apply_ticket(context, ticket_id)
+    # Apply ticket selection if provided, verifying it belongs to this event
+    _apply_ticket(context, ticket_id, current_event.pk)
 
     # Check if payment features are enabled for this association
     context["payment_feature"] = "payment" in get_association_features(context["association_id"])
@@ -684,20 +684,21 @@ def register(
     return render(request, "larpmanager/event/register.html", context)
 
 
-def _apply_ticket(context: dict, ticket_id: int | None) -> None:
-    """Apply ticket information to context if ticket exists.
+def _apply_ticket(context: dict, ticket_id: int | None, event_id: int) -> None:
+    """Apply ticket information to context if ticket exists and belongs to the event.
 
     Args:
         context: Context dictionary to update with ticket data
         ticket_id: Ticket ID to retrieve, or None
+        event_id: Event ID to verify ticket ownership
 
     """
     if not ticket_id:
         return
 
     try:
-        # Retrieve ticket and set tier in context
-        ticket = RegistrationTicket.objects.get(pk=ticket_id)
+        # Retrieve ticket and verify it belongs to the event
+        ticket = RegistrationTicket.objects.get(pk=ticket_id, event_id=event_id)
         context["tier"] = ticket.tier
 
         # Remove closed status for staff/NPC tickets
@@ -707,6 +708,7 @@ def _apply_ticket(context: dict, ticket_id: int | None) -> None:
         # Store ticket ID in context
         context["ticket"] = ticket_id
     except ObjectDoesNotExist:
+        # Ticket not found or doesn't belong to this event - ignore silently
         pass
 
 

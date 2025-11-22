@@ -26,6 +26,7 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Case, Count, IntegerField, Value, When
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -1058,7 +1059,7 @@ def exe_questions_answer(request: HttpRequest, member_id: int) -> HttpResponse:
             hp = form.save(commit=False)
 
             # Associate answer with the same run as the original question if applicable
-            if last.run:
+            if last and last.run:
                 hp.run = last.run
 
             # Set answer metadata and save to database
@@ -1086,16 +1087,20 @@ def exe_questions_close(request: HttpRequest, member_id: int) -> HttpResponse:
     context = check_association_context(request, "exe_questions")
 
     # Get the member and their most recent help question
-    member = Member.objects.get(pk=member_id)
-    h = (
-        HelpQuestion.objects.filter(member=member, association_id=context["association_id"])
-        .order_by("-created")
-        .first()
-    )
+    try:
+        member = Member.objects.get(pk=member_id)
+        h = (
+            HelpQuestion.objects.filter(member=member, association_id=context["association_id"])
+            .order_by("-created")
+            .first()
+        )
 
-    # Mark the question as closed and save
-    h.closed = True
-    h.save()
+        # Mark the question as closed and save if it exists
+        if h:
+            h.closed = True
+            h.save()
+    except ObjectDoesNotExist:
+        logger.error("Member not found with id %s", member_id)
 
     return redirect("exe_questions")
 

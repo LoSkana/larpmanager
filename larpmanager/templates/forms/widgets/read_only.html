@@ -1,8 +1,6 @@
 <div class="plot" style="text-align: left !important;">
     {% if widget.value %}
-        {% autoescape off %}
-            {{ widget.value }}
-        {% endautoescape %}
+        {{ widget.value }}
     {% endif %}
 </div>
 <input type="hidden" name="{{ widget.name }}" value="{{ widget.value }}" />

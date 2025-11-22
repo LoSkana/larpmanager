@@ -40,7 +40,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.cache.association_text import get_association_text
@@ -300,18 +300,22 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
 
     # Build full filesystem path and open image
     path = str(Path(conf_settings.MEDIA_ROOT) / path)
-    im = Image.open(path)
+    try:
+        im = Image.open(path)
 
-    # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
-    out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
+        # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
+        out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
-    # Extract file extension and generate new unique filename
-    ext = path.split(".")[-1]
-    n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
+        # Extract file extension and generate new unique filename
+        ext = path.split(".")[-1]
+        n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
-    # Save rotated image and update member profile
-    out.save(n_path)
-    request.user.member.profile = n_path
+        # Save rotated image and update member profile
+        out.save(n_path)
+        request.user.member.profile = n_path
+    except (OSError, IOError, UnidentifiedImageError) as e:
+        logger.error("Failed to rotate profile image: %s", e)
+        return JsonResponse({"res": "ko"})
     request.user.member.save()
 
     # Return success response with thumbnail URL

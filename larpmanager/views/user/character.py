@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import ast
 import json
+import logging
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -39,7 +40,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.cache.config import get_event_config, save_single_config
@@ -80,6 +81,8 @@ from larpmanager.utils.users.registration import (
 )
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from larpmanager.forms.base import MyForm
@@ -543,20 +546,24 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
 
     # Open and rotate the image based on direction parameter
     path = str(Path(conf_settings.MEDIA_ROOT) / path)
-    im = Image.open(path)
-    out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
+    try:
+        im = Image.open(path)
+        out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
-    # Generate unique filename and save rotated image
-    ext = path.split(".")[-1]
-    n_path = f"{Path(path).parent}/{rgr.pk}_{uuid4().hex}.{ext}"
-    out.save(n_path)
+        # Generate unique filename and save rotated image
+        ext = path.split(".")[-1]
+        n_path = f"{Path(path).parent}/{rgr.pk}_{uuid4().hex}.{ext}"
+        out.save(n_path)
 
-    # Update database with new image path atomically
-    with transaction.atomic():
-        rgr.custom_profile = n_path
-        rgr.save()
+        # Update database with new image path atomically
+        with transaction.atomic():
+            rgr.custom_profile = n_path
+            rgr.save()
 
-    return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+        return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+    except (OSError, IOError, UnidentifiedImageError) as e:
+        logger.error("Failed to rotate character profile image: %s", e)
+        return JsonResponse({"res": "ko"})
 
 
 @login_required

@@ -806,12 +806,16 @@ def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
         return
 
     # Read CSS content from source file
-    css_content = default_storage.open(source_css_path).read().decode("utf-8")
+    try:
+        css_content = default_storage.open(source_css_path).read().decode("utf-8")
 
-    # Generate new CSS ID and save to target event
-    event.css_code = generate_id(32)
-    target_css_path = appearance_form.get_css_path(event)
-    default_storage.save(target_css_path, ContentFile(css_content))
+        # Generate new CSS ID and save to target event
+        event.css_code = generate_id(32)
+        target_css_path = appearance_form.get_css_path(event)
+        default_storage.save(target_css_path, ContentFile(css_content))
+    except (OSError, IOError, UnicodeDecodeError, PermissionError) as e:
+        logger.error("Failed to copy CSS file from %s: %s", source_css_path, e)
+        # Continue without copying CSS - event will work without custom CSS
 
 
 @login_required

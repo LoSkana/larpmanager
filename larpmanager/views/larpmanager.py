@@ -1085,7 +1085,7 @@ def donate(request: HttpRequest) -> Any:
     return render(request, "larpmanager/larpmanager/donate.html", context)
 
 
-def debug_user(request: HttpRequest, member_id: Any) -> None:
+def debug_user(request: HttpRequest, member_id: Any) -> HttpResponse:
     """Login as a specific user for debugging purposes.
 
     Allows admin users to login as another user for debugging.
@@ -1095,13 +1095,14 @@ def debug_user(request: HttpRequest, member_id: Any) -> None:
         request: Django HTTP request object
         member_id: Member ID to login as
 
-    Side effects:
-        Logs in as the specified user
+    Returns:
+        HttpResponse: Redirect to user's profile page
 
     """
     check_lm_admin(request)
     member = Member.objects.get(pk=member_id)
     login(request, member.user, backend=get_user_backend())
+    return redirect("user_profile")
 
 
 @ratelimit(key="ip", rate="5/m", block=True)

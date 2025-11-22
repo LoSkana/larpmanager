@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 from django import forms
@@ -50,6 +51,8 @@ if TYPE_CHECKING:
     from django.db.models import QuerySet
 
     from larpmanager.models.base import BaseModel
+
+logger = logging.getLogger(__name__)
 
 
 class MyForm(forms.ModelForm):
@@ -1285,11 +1288,15 @@ class MyCssForm(MyForm):
         # Load and parse existing CSS file
         path = self.get_css_path(self.instance)
         if default_storage.exists(path):
-            css = default_storage.open(path).read().decode("utf-8")
-            # Extract CSS content before delimiter if present
-            if css_delimeter in css:
-                css = css.split(css_delimeter)[0]
-            self.initial[self.get_input_css()] = css
+            try:
+                css = default_storage.open(path).read().decode("utf-8")
+                # Extract CSS content before delimiter if present
+                if css_delimeter in css:
+                    css = css.split(css_delimeter)[0]
+                self.initial[self.get_input_css()] = css
+            except (OSError, IOError, UnicodeDecodeError, PermissionError) as e:
+                logger.error("Failed to load CSS file: %s", e)
+                # Continue without loading CSS - form will work with empty CSS
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save form instance with generated CSS code and custom CSS file.
