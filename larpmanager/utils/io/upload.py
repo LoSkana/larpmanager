@@ -19,11 +19,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import io
 import logging
 import os
 import shutil
-import zipfile
+import zipfile  # noqa: TC003 - Used at runtime in _safe_extract_zip and other functions
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -97,16 +96,19 @@ def _validate_zip_member_path(member_path: str, extraction_path: Path) -> None:
     """
     # Check for absolute paths
     if member_path.startswith("/"):
-        raise ValidationError("Malicious path in ZIP: absolute path detected")
+        msg = "Malicious path in ZIP: absolute path detected"
+        raise ValidationError(msg)
 
     # Check for directory traversal attempts
     if ".." in member_path:
-        raise ValidationError("Malicious path in ZIP: directory traversal detected")
+        msg = "Malicious path in ZIP: directory traversal detected"
+        raise ValidationError(msg)
 
     # Resolve the full path and ensure it's within extraction directory
     safe_path = (extraction_path / member_path).resolve()
     if not str(safe_path).startswith(str(extraction_path.resolve())):
-        raise ValidationError("Path traversal attempt detected in ZIP archive")
+        msg = "Path traversal attempt detected in ZIP archive"
+        raise ValidationError(msg)
 
 
 def _validate_zip_bomb(zip_obj: zipfile.ZipFile) -> None:
@@ -131,30 +133,32 @@ def _validate_zip_bomb(zip_obj: zipfile.ZipFile) -> None:
 
         # Check file count limit
         if file_count > MAX_FILE_COUNT:
-            raise ValidationError(f"ZIP archive contains too many files (max: {MAX_FILE_COUNT})")
+            msg = f"ZIP archive contains too many files (max: {MAX_FILE_COUNT})"
+            raise ValidationError(msg)
 
         # Check individual file size
         if info.file_size > MAX_ARCHIVE_SIZE:
-            raise ValidationError(
+            msg = (
                 f"File '{info.filename}' too large in archive "
                 f"({info.file_size} bytes, max: {MAX_ARCHIVE_SIZE} bytes)"
             )
+            raise ValidationError(msg)
 
         # Check compression ratio for suspicious files
         if info.compress_size > 0:
             ratio = info.file_size / info.compress_size
             if ratio > MAX_COMPRESSION_RATIO:
-                raise ValidationError(
+                msg = (
                     f"Suspicious compression ratio for '{info.filename}' "
                     f"({ratio:.0f}:1, max: {MAX_COMPRESSION_RATIO}:1)"
                 )
+                raise ValidationError(msg)
 
         # Track total uncompressed size
         total_size += info.file_size
         if total_size > MAX_ARCHIVE_SIZE:
-            raise ValidationError(
-                f"Total archive size too large ({total_size} bytes, max: {MAX_ARCHIVE_SIZE} bytes)"
-            )
+            msg = f"Total archive size too large ({total_size} bytes, max: {MAX_ARCHIVE_SIZE} bytes)"
+            raise ValidationError(msg)
 
 
 def _safe_extract_zip(zip_obj: zipfile.ZipFile, extraction_path: Path) -> None:
@@ -232,7 +236,8 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
     # Validate file size to prevent memory exhaustion
     max_csv_size = 10 * 1024 * 1024  # 10 MB
     if hasattr(uploaded_file, "size") and uploaded_file.size > max_csv_size:
-        raise ValidationError(f"CSV file too large (max: {max_csv_size / 1024 / 1024} MB)")
+        msg = f"CSV file too large (max: {max_csv_size / 1024 / 1024} MB)"
+        raise ValidationError(msg)
 
     # Define encoding priority list - most common first
     encodings = [

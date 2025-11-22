@@ -40,6 +40,7 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+from larpmanager.utils.io.upload import _safe_extract_zip
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -195,8 +196,6 @@ def upload_albums(main: Any, el: Any) -> None:
         Extracts zip file, creates album structure, uploads all images
 
     """
-    from larpmanager.utils.io.upload import _safe_extract_zip
-
     cache_subalbums = {}
 
     extraction_path = Path(conf_settings.MEDIA_ROOT) / "zip" / uuid4().hex
