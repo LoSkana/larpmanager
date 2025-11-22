@@ -321,6 +321,7 @@ def upload_media(request: HttpRequest) -> JsonResponse:
 
 
 @require_POST
+@login_required
 def set_member_config(request: HttpRequest) -> JsonResponse:
     """Update member configuration settings via AJAX.
 
@@ -343,10 +344,6 @@ def set_member_config(request: HttpRequest) -> JsonResponse:
         - All parameter values are converted to lowercase for consistency
 
     """
-    # Check user authentication status
-    if not request.user.is_authenticated:
-        return JsonResponse({"res": "ko", "msg": "not authenticated"})
-
     # Extract and validate configuration name parameter
     config_name = request.POST.get("name", "").lower()
     if not config_name:
@@ -363,6 +360,6 @@ def set_member_config(request: HttpRequest) -> JsonResponse:
     elif value == "false":
         value = False
 
-    # Save the configuration and return response
+    # Save the configuration and return success response
     save_single_config(request.user.member, config_name, value)
-    return JsonResponse({"res": "ko"})
+    return JsonResponse({"res": "ok"})
