@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import csv
+import logging
 from collections import defaultdict
 from datetime import datetime
 from datetime import timezone as dt_timezone
@@ -89,6 +90,8 @@ from larpmanager.utils.services.edit import exe_edit
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
 from larpmanager.views.orga.member import send_mail_batch
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -1100,7 +1103,7 @@ def exe_questions_close(request: HttpRequest, member_id: int) -> HttpResponse:
             h.closed = True
             h.save()
     except ObjectDoesNotExist:
-        logger.error("Member not found with id %s", member_id)
+        logger.exception("Member not found with id %s", member_id)
 
     return redirect("exe_questions")
 

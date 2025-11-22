@@ -313,8 +313,8 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
         # Save rotated image and update member profile
         out.save(n_path)
         request.user.member.profile = n_path
-    except (OSError, IOError, UnidentifiedImageError) as e:
-        logger.error("Failed to rotate profile image: %s", e)
+    except (OSError, UnidentifiedImageError):
+        logger.exception("Failed to rotate profile image")
         return JsonResponse({"res": "ko"})
     request.user.member.save()
 

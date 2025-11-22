@@ -1294,8 +1294,8 @@ class MyCssForm(MyForm):
                 if css_delimeter in css:
                     css = css.split(css_delimeter)[0]
                 self.initial[self.get_input_css()] = css
-            except (OSError, IOError, UnicodeDecodeError, PermissionError) as e:
-                logger.error("Failed to load CSS file: %s", e)
+            except (OSError, UnicodeDecodeError, PermissionError):
+                logger.exception("Failed to load CSS file")
                 # Continue without loading CSS - form will work with empty CSS
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002

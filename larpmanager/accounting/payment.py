@@ -591,7 +591,7 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
             accounting_transaction.reg = registration
             accounting_transaction.save()
         except ObjectDoesNotExist:
-            logger.error("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
 
 
 def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:

@@ -813,8 +813,8 @@ def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
         event.css_code = generate_id(32)
         target_css_path = appearance_form.get_css_path(event)
         default_storage.save(target_css_path, ContentFile(css_content))
-    except (OSError, IOError, UnicodeDecodeError, PermissionError) as e:
-        logger.error("Failed to copy CSS file from %s: %s", source_css_path, e)
+    except (OSError, UnicodeDecodeError, PermissionError):
+        logger.exception("Failed to copy CSS file from %s", source_css_path)
         # Continue without copying CSS - event will work without custom CSS
 
 

@@ -561,8 +561,8 @@ def character_profile_rotate(request: HttpRequest, event_slug: str, num: int, ro
             rgr.save()
 
         return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
-    except (OSError, IOError, UnidentifiedImageError) as e:
-        logger.error("Failed to rotate character profile image: %s", e)
+    except (OSError, UnidentifiedImageError):
+        logger.exception("Failed to rotate character profile image")
         return JsonResponse({"res": "ko"})
 
 
