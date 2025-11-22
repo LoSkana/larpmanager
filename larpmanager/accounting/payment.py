@@ -538,18 +538,21 @@ def _process_payment(invoice: PaymentInvoice) -> None:
         invoice: Invoice object to process payment for
 
     """
-    if not AccountingItemPayment.objects.filter(inv=invoice).exists():
-        registration = Registration.objects.get(pk=invoice.idx)
+    registration = Registration.objects.get(pk=invoice.idx)
 
-        accounting_item = AccountingItemPayment()
-        accounting_item.pay = PaymentChoices.MONEY
-        accounting_item.member_id = invoice.member_id
-        accounting_item.reg = registration
-        accounting_item.inv = invoice
-        accounting_item.value = invoice.mc_gross
-        accounting_item.association_id = invoice.association_id
-        accounting_item.save()
+    # Use get_or_create to prevent race condition from duplicate webhook deliveries
+    accounting_item, created = AccountingItemPayment.objects.get_or_create(
+        inv=invoice,
+        defaults={
+            'pay': PaymentChoices.MONEY,
+            'member_id': invoice.member_id,
+            'reg': registration,
+            'value': invoice.mc_gross,
+            'association_id': invoice.association_id,
+        }
+    )
 
+    if created:
         Registration.objects.filter(pk=registration.pk).update(num_payments=F("num_payments") + 1)
         registration.refresh_from_db()
 
@@ -642,13 +645,21 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
     if refund_request.status != RefundStatus.PAYED:
         return
 
-    accounting_item = AccountingItemOther()
-    accounting_item.member_id = refund_request.member_id
-    accounting_item.value = refund_request.value
-    accounting_item.oth = OtherChoices.REFUND
-    accounting_item.descr = f"Delivered refund of {refund_request.value:.2f}"
-    accounting_item.association_id = refund_request.association_id
-    accounting_item.save()
+    # Use get_or_create to prevent duplicate accounting items if signal fires multiple times
+    AccountingItemOther.objects.get_or_create(
+        oth=OtherChoices.REFUND,
+        member_id=refund_request.member_id,
+        association_id=refund_request.association_id,
+        value=refund_request.value,
+        descr=f"Delivered refund of {refund_request.value:.2f}",
+        defaults={
+            'member_id': refund_request.member_id,
+            'value': refund_request.value,
+            'oth': OtherChoices.REFUND,
+            'descr': f"Delivered refund of {refund_request.value:.2f}",
+            'association_id': refund_request.association_id,
+        }
+    )
 
 
 def process_collection_status_change(collection: Collection) -> None:

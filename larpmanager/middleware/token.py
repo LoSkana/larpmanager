@@ -69,6 +69,8 @@ class TokenAuthMiddleware:
                     user = get_user_model().objects.get(pk=user_id)
                     welcome_user(request, user)
                     login(request, user, backend=get_user_backend())
+                    # Delete token immediately after use to prevent replay attacks
+                    cache.delete(f"session_token:{token}")
                 except get_user_model().DoesNotExist:
                     # Invalid user_id, ignore silently for security
                     pass

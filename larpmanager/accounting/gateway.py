@@ -271,13 +271,24 @@ def handle_valid_paypal_ipn(ipn_obj: Any) -> bool | None:
 
     """
     if ipn_obj.payment_status == ST_PP_COMPLETED:
-        # WARNING !
-        # Check that the receiver email is the same we previously
-        # set on the `business` field. (The user could tamper with
-        # that fields on the payment form before it goes to PayPal)
-        # ~ if ipn_obj.receiver_email != context['paypal_id']:
-        # ~ # Not a valid payment
-        # ~ return
+        # Validate receiver email to prevent payment hijacking
+        # Get invoice to verify against expected PayPal business account
+        try:
+            invoice = PaymentInvoice.objects.get(cod=ipn_obj.invoice)
+            context = {"association_id": invoice.association_id}
+            update_payment_details(context)
+
+            # Check that the receiver email matches the configured PayPal account
+            if ipn_obj.receiver_email != context.get('paypal_id'):
+                # Not a valid payment - receiver email doesn't match
+                notify_admins(
+                    "PayPal receiver email mismatch",
+                    f"Expected: {context.get('paypal_id')}, Received: {ipn_obj.receiver_email}, Invoice: {ipn_obj.invoice}"
+                )
+                return None
+        except ObjectDoesNotExist:
+            notify_admins("PayPal IPN - invoice not found", f"Invoice code: {ipn_obj.invoice}")
+            return None
 
         return invoice_received_money(ipn_obj.invoice, ipn_obj.mc_gross, ipn_obj.mc_fee, ipn_obj.txn_id)
     return None
@@ -522,7 +533,7 @@ def sumup_webhook(request: HttpRequest) -> bool:
     """Handle SumUp webhook notifications for payment processing.
 
     Processes incoming webhook requests from SumUp payment gateway,
-    validates the payment status, and triggers invoice payment processing
+    validates the signature, and triggers invoice payment processing
     for successful transactions.
 
     Args:
@@ -533,15 +544,52 @@ def sumup_webhook(request: HttpRequest) -> bool:
               failed or was not successful
 
     """
-    # Parse the JSON payload from the webhook request body
+    # Validate webhook signature to prevent unauthorized requests
+    signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
+
+    # Get invoice to retrieve association for webhook secret
     try:
         webhook_payload = json.loads(request.body)
-        payment_status = webhook_payload["status"]
         payment_id = webhook_payload["id"]
+
+        # Get invoice to retrieve association context
+        invoice = PaymentInvoice.objects.get(cod=payment_id)
+        context = {"association_id": invoice.association_id}
+        update_payment_details(context)
+
+        # Verify webhook signature if secret is configured
+        sumup_webhook_secret = context.get("sumup_webhook_secret")
+        if sumup_webhook_secret:
+            if not signature_header:
+                error_msg = "SumUp webhook signature header missing"
+                logger.error(error_msg)
+                notify_admins("SumUp webhook security error", error_msg)
+                return False
+
+            # Compute expected HMAC-SHA256 signature
+            expected_signature = hmac.new(
+                sumup_webhook_secret.encode(),
+                request.body,
+                hashlib.sha256
+            ).hexdigest()
+
+            # Verify signature matches
+            if not hmac.compare_digest(signature_header, expected_signature):
+                error_msg = f"SumUp webhook signature mismatch. Payment ID: {payment_id}"
+                logger.error(error_msg)
+                notify_admins("SumUp webhook signature verification failed", error_msg)
+                return False
+
+        payment_status = webhook_payload["status"]
     except (json.JSONDecodeError, KeyError) as e:
         error_msg = f"Failed to parse SumUp webhook payload: {e}\nBody: {request.body}"
         logger.exception(error_msg)
         notify_admins("SumUp webhook JSON error", error_msg)
+        return False
+    except ObjectDoesNotExist:
+        error_msg = f"SumUp webhook - invoice not found: {payment_id}"
+        logger.error(error_msg)
+        notify_admins("SumUp webhook - invalid invoice", error_msg)
         return False
 
     # Check if the payment status indicates failure or non-success

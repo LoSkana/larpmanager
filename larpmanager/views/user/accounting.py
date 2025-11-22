@@ -829,7 +829,6 @@ def acc_webhook_redsys(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"res": "ok"})
 
 
-@csrf_exempt
 def acc_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
     """Handle failed Redsys payment callback."""
     # Notify user about payment failure
