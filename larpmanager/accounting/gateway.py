@@ -279,7 +279,7 @@ def handle_valid_paypal_ipn(ipn_obj: Any) -> bool | None:
             update_payment_details(context)
 
             # Check that the receiver email matches the configured PayPal account
-            if ipn_obj.receiver_email != context.get('paypal_id'):
+            if ipn_obj.receiver_email != context.get("paypal_id"):
                 # Not a valid payment - receiver email doesn't match
                 notify_admins(
                     "PayPal receiver email mismatch",
@@ -588,7 +588,7 @@ def sumup_webhook(request: HttpRequest) -> bool:
         return False
     except ObjectDoesNotExist:
         error_msg = f"SumUp webhook - invoice not found: {payment_id}"
-        logger.error(error_msg)
+        logger.error(error_msg)  # noqa: TRY400
         notify_admins("SumUp webhook - invalid invoice", error_msg)
         return False
 

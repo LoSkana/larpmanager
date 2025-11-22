@@ -541,14 +541,14 @@ def _process_payment(invoice: PaymentInvoice) -> None:
     registration = Registration.objects.get(pk=invoice.idx)
 
     # Use get_or_create to prevent race condition from duplicate webhook deliveries
-    accounting_item, created = AccountingItemPayment.objects.get_or_create(
+    _, created = AccountingItemPayment.objects.get_or_create(
         inv=invoice,
         defaults={
-            'pay': PaymentChoices.MONEY,
-            'member_id': invoice.member_id,
-            'reg': registration,
-            'value': invoice.mc_gross,
-            'association_id': invoice.association_id,
+            "pay": PaymentChoices.MONEY,
+            "member_id": invoice.member_id,
+            "reg": registration,
+            "value": invoice.mc_gross,
+            "association_id": invoice.association_id,
         }
     )
 
@@ -653,11 +653,11 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
         value=refund_request.value,
         descr=f"Delivered refund of {refund_request.value:.2f}",
         defaults={
-            'member_id': refund_request.member_id,
-            'value': refund_request.value,
-            'oth': OtherChoices.REFUND,
-            'descr': f"Delivered refund of {refund_request.value:.2f}",
-            'association_id': refund_request.association_id,
+            "member_id": refund_request.member_id,
+            "value": refund_request.value,
+            "oth": OtherChoices.REFUND,
+            "descr": f"Delivered refund of {refund_request.value:.2f}",
+            "association_id": refund_request.association_id,
         }
     )
 
