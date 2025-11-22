@@ -34,6 +34,7 @@ from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidde
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import override
 from django.views.decorators.cache import cache_page
@@ -160,8 +161,17 @@ def go_redirect(request: HttpRequest, slug: Any, path: Any, base_domain: Any = "
 
     new_path = f"https://{slug}.{base_domain}/" if slug else f"https://{base_domain}/"
 
+    # Validate path parameter to prevent open redirect vulnerabilities
+    # Only allow relative paths (starting with / but not //)
     if path:
-        new_path += path
+        # Ensure path doesn't start with // or contain protocol
+        if path.startswith("//") or ":" in path.split("/")[0]:
+            # Invalid path, redirect without it
+            return redirect(new_path)
+        # Ensure path starts with /
+        if not path.startswith("/"):
+            path = "/" + path
+        new_path += path.lstrip("/")
 
     return redirect(new_path)
 
@@ -209,6 +219,12 @@ def go_redirect_run(run: Any, path: Any) -> Any:
         HttpResponseRedirect: Redirect to the run's URL
 
     """
+    # Validate path parameter to prevent open redirect vulnerabilities
+    # Only allow relative paths (no protocol or //)
+    if path and (path.startswith("//") or ":" in path.split("/")[0]):
+        # Invalid path, redirect without it
+        path = ""
+
     full_url = f"https://{run.event.association.slug}.{run.event.association.skin.domain}/{run.get_slug()}/{path}"
     return redirect(full_url)
 
@@ -332,7 +348,8 @@ def activate_feature_association(
     messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # Redirect to specified path or feature's default view
-    if path:
+    # Validate path parameter to prevent open redirect vulnerabilities
+    if path and url_has_allowed_host_and_scheme("/" + path, allowed_hosts={request.get_host()}):
         return redirect("/" + path)
 
     # Use the first associated permission's slug as the default view
@@ -392,7 +409,8 @@ def activate_feature_event(
     messages.success(request, _("Feature activated") + ":" + feature.name)
 
     # Redirect to custom path if provided, otherwise use feature's default view
-    if path:
+    # Validate path parameter to prevent open redirect vulnerabilities
+    if path and url_has_allowed_host_and_scheme("/" + path, allowed_hosts={request.get_host()}):
         return redirect("/" + path)
 
     # Get the first event permission's slug as the default view name

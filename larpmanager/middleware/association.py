@@ -119,6 +119,8 @@ class AssociationIdentifyMiddleware:
             ):
                 association_slug = association_data["slug"]
                 association_domain = association_data["main_domain"]
+                # Note: get_full_path() preserves query parameters during domain redirect.
+                # This is intentional - the target domain's views will validate parameters.
                 return redirect(f"https://{association_slug}.{association_domain}{request.get_full_path()}")
             return cls.load_association(request, association_data)
 
@@ -163,6 +165,8 @@ class AssociationIdentifyMiddleware:
 
         # Handle larpmanager.com domain redirects to ensure HTTPS
         if request.get_host().endswith("larpmanager.com"):
+            # Note: get_full_path() preserves query parameters during HTTPS redirect.
+            # This is intentional - views will validate parameters.
             return redirect(f"https://larpmanager.com{request.get_full_path()}")
 
         # Allow admin panel access without association
