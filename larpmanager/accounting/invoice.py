@@ -23,6 +23,7 @@
 from __future__ import annotations
 
 import csv
+import logging
 import math
 from io import StringIO
 from typing import TYPE_CHECKING
@@ -33,6 +34,8 @@ from django.db import transaction
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.core.common import clean, detect_delimiter
 from larpmanager.utils.larpmanager.tasks import notify_admins
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -162,8 +165,23 @@ def invoice_received_money(
 
     # Process payment updates within atomic transaction
     with transaction.atomic():
-        # Update gross amount if provided
+        # Validate payment amount to prevent underpayment attacks
         if gross_amount:
+            # Check that received amount is at least the expected amount
+            expected_amount = float(invoice.mc_gross) if invoice.mc_gross else 0
+            received_amount = float(gross_amount)
+
+            # Allow small rounding differences (1 cent tolerance)
+            tolerance = 0.01
+            if received_amount < (expected_amount - tolerance):
+                error_msg = (
+                    f"Underpayment detected - Invoice: {invoice_code}, "
+                    f"Expected: {expected_amount:.2f}, Received: {received_amount:.2f}"
+                )
+                logger.error(error_msg)
+                notify_admins("Payment underpayment detected", error_msg)
+                return False
+
             invoice.mc_gross = gross_amount
 
         # Update processing fee if provided

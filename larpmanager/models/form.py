@@ -662,7 +662,7 @@ class RegistrationQuestion(BaseModel):
             run_id = params["run"].id
             is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
             # noinspection PyUnresolvedReferences
-            if not is_run_organizer and self.allowed_map[0] and params["member"].id not in self.allowed_map:
+            if not is_run_organizer and self.allowed_map and self.allowed_map[0] and params["member"].id not in self.allowed_map:
                 return True
 
         return False

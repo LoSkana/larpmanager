@@ -206,18 +206,19 @@ def replace_chars(context: dict[str, Any], text: str, limit: int = 200) -> str:
         limit (int): Maximum length of returned text
 
     Returns:
-        str: Text with character references replaced by names
+        str: Text with character references replaced by names (HTML-escaped)
 
     """
     text = html_clean(text)
     for character_number in range(context["max_ch_number"], 0, -1):
         if character_number not in context["chars"]:
             continue
-        character_name = context["chars"][character_number]["name"]
+        # Escape character name to prevent XSS
+        character_name = escape(context["chars"][character_number]["name"])
         text = text.replace(f"#{character_number}", character_name)
         text = text.replace(f"@{character_number}", character_name)
 
-        first_name_parts = character_name.split()
+        first_name_parts = str(character_name).split()
         if first_name_parts:
             first_name = first_name_parts[0]
             text = text.replace(f"^{character_number}", first_name)
