@@ -23,6 +23,7 @@ import io
 import logging
 import os
 import shutil
+import zipfile
 from decimal import Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -30,7 +31,7 @@ from typing import TYPE_CHECKING, Any
 import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils import timezone
 
 from larpmanager.models.casting import Quest, QuestType
@@ -77,6 +78,106 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# ZIP file security constants
+MAX_ARCHIVE_SIZE = 100 * 1024 * 1024  # 100 MB uncompressed
+MAX_FILE_COUNT = 1000  # Maximum number of files in archive
+MAX_COMPRESSION_RATIO = 100  # Maximum compression ratio to prevent ZIP bombs
+
+
+def _validate_zip_member_path(member_path: str, extraction_path: Path) -> None:
+    """Validate that a ZIP member path is safe for extraction.
+
+    Args:
+        member_path: Path of the member in the ZIP archive
+        extraction_path: Base path where files will be extracted
+
+    Raises:
+        ValidationError: If the path is unsafe (contains .., absolute path, etc.)
+
+    """
+    # Check for absolute paths
+    if member_path.startswith("/"):
+        raise ValidationError("Malicious path in ZIP: absolute path detected")
+
+    # Check for directory traversal attempts
+    if ".." in member_path:
+        raise ValidationError("Malicious path in ZIP: directory traversal detected")
+
+    # Resolve the full path and ensure it's within extraction directory
+    safe_path = (extraction_path / member_path).resolve()
+    if not str(safe_path).startswith(str(extraction_path.resolve())):
+        raise ValidationError("Path traversal attempt detected in ZIP archive")
+
+
+def _validate_zip_bomb(zip_obj: zipfile.ZipFile) -> None:
+    """Validate that a ZIP file is not a ZIP bomb.
+
+    Args:
+        zip_obj: ZipFile object to validate
+
+    Raises:
+        ValidationError: If the ZIP file appears to be a ZIP bomb
+
+    """
+    total_size = 0
+    file_count = 0
+
+    for info in zip_obj.infolist():
+        # Skip directories
+        if info.is_dir():
+            continue
+
+        file_count += 1
+
+        # Check file count limit
+        if file_count > MAX_FILE_COUNT:
+            raise ValidationError(f"ZIP archive contains too many files (max: {MAX_FILE_COUNT})")
+
+        # Check individual file size
+        if info.file_size > MAX_ARCHIVE_SIZE:
+            raise ValidationError(
+                f"File '{info.filename}' too large in archive "
+                f"({info.file_size} bytes, max: {MAX_ARCHIVE_SIZE} bytes)"
+            )
+
+        # Check compression ratio for suspicious files
+        if info.compress_size > 0:
+            ratio = info.file_size / info.compress_size
+            if ratio > MAX_COMPRESSION_RATIO:
+                raise ValidationError(
+                    f"Suspicious compression ratio for '{info.filename}' "
+                    f"({ratio:.0f}:1, max: {MAX_COMPRESSION_RATIO}:1)"
+                )
+
+        # Track total uncompressed size
+        total_size += info.file_size
+        if total_size > MAX_ARCHIVE_SIZE:
+            raise ValidationError(
+                f"Total archive size too large ({total_size} bytes, max: {MAX_ARCHIVE_SIZE} bytes)"
+            )
+
+
+def _safe_extract_zip(zip_obj: zipfile.ZipFile, extraction_path: Path) -> None:
+    """Safely extract a ZIP file with security validations.
+
+    Args:
+        zip_obj: ZipFile object to extract
+        extraction_path: Path where files should be extracted
+
+    Raises:
+        ValidationError: If security validation fails
+
+    """
+    # Validate ZIP bomb protection
+    _validate_zip_bomb(zip_obj)
+
+    # Validate each member path before extraction
+    for member in zip_obj.namelist():
+        _validate_zip_member_path(member, extraction_path)
+
+    # Extract all files (paths have been validated)
+    zip_obj.extractall(path=extraction_path)
+
 
 def go_upload(context: dict, upload_form_data: Any) -> Any:
     """Route uploaded files to appropriate processing functions.
@@ -121,12 +222,17 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
             or None if parsing failed with all attempted encodings.
 
     Raises:
-        None: All exceptions are caught and handled internally.
+        ValidationError: If file size exceeds maximum allowed size.
 
     """
     # Early return if no file provided
     if not uploaded_file:
         return None
+
+    # Validate file size to prevent memory exhaustion
+    max_csv_size = 10 * 1024 * 1024  # 10 MB
+    if hasattr(uploaded_file, "size") and uploaded_file.size > max_csv_size:
+        raise ValidationError(f"CSV file too large (max: {max_csv_size / 1024 / 1024} MB)")
 
     # Define encoding priority list - most common first
     encodings = [
@@ -148,12 +254,16 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
             # Reset file pointer to beginning
             uploaded_file.seek(0)
 
-            # Decode file content with current encoding
-            decoded_content = uploaded_file.read().decode(encoding)
-            string_buffer = io.StringIO(decoded_content)
-
-            # Parse CSV with automatic delimiter detection
-            return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+            # Use pandas' built-in CSV reading directly on the file object
+            # This is more memory-efficient than reading the entire file into memory
+            return pd.read_csv(
+                uploaded_file,
+                encoding=encoding,
+                sep=None,
+                engine="python",
+                dtype=str,
+                on_bad_lines="skip",  # Skip problematic lines instead of failing
+            )
         except Exception as parsing_error:  # noqa: PERF203, BLE001 - Must try all encodings on any parsing error
             # Log error and continue to next encoding
             logger.debug("Failed to parse CSV with encoding %s: %s", encoding, parsing_error)
@@ -1202,27 +1312,35 @@ def cover_load(context: dict[str, Any], z_obj: Any) -> None:
         context: Context dictionary containing run and event information
         z_obj: ZIP file object containing character cover images
 
+    Raises:
+        ValidationError: If ZIP file contains malicious paths or is a ZIP bomb
+
     Side effects:
         Extracts ZIP contents, processes images, updates character cover fields,
         and moves files to proper media directory structure
 
     """
-    # extract images
-    fpath = str(Path(conf_settings.MEDIA_ROOT) / "cover_load")
-    fpath = str(Path(fpath) / context["run"].event.slug)
-    fpath = str(Path(fpath) / str(context["run"].number))
-    if Path(fpath).exists():
+    # Build extraction path
+    fpath = Path(conf_settings.MEDIA_ROOT) / "cover_load" / context["run"].event.slug / str(context["run"].number)
+
+    # Clean up existing extraction directory
+    if fpath.exists():
         shutil.rmtree(fpath)
-    z_obj.extractall(path=fpath)
+
+    # Safely extract ZIP with security validations
+    _safe_extract_zip(z_obj, fpath)
+
     covers = {}
-    # get images
+    # Get images from extracted files
     for root, _dirnames, filenames in os.walk(fpath):
         for el in filenames:
             num = Path(el).stem
             covers[num] = str(Path(root) / el)
+
     logger.debug("Extracted covers: %s", covers)
     upload_to = UploadToPathAndRename("character/cover/")
-    # cicle characters
+
+    # Process characters and assign cover images
     for c in context["run"].event.get_elements(Character):
         num = str(c.number)
         if num not in covers:
