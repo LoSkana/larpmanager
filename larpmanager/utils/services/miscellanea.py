@@ -40,6 +40,7 @@ from PIL import ImageOps
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.member import Badge
 from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+from larpmanager.utils.io.upload import _safe_extract_zip
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -188,6 +189,9 @@ def upload_albums(main: Any, el: Any) -> None:
         main: Main album instance
         el: Zip file to extract
 
+    Raises:
+        ValidationError: If ZIP file contains malicious paths or is a ZIP bomb
+
     Side effects:
         Extracts zip file, creates album structure, uploads all images
 
@@ -197,7 +201,8 @@ def upload_albums(main: Any, el: Any) -> None:
     extraction_path = Path(conf_settings.MEDIA_ROOT) / "zip" / uuid4().hex
 
     with zipfile.ZipFile(el, "r") as zip_file:
-        zip_file.extractall(extraction_path)
+        # Safely extract ZIP with security validations
+        _safe_extract_zip(zip_file, extraction_path)
 
         for filename in zip_file.namelist():
             file_info = zip_file.getinfo(filename)
