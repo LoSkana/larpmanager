@@ -680,7 +680,7 @@ class TestInstallmentFallbackLogic(BaseTestCase):
 
         # Should NOT set alert - quota should be 0
         self.assertEqual(registration.quota, 0)
-        self.assertIsNone(registration.deadline)
+        self.assertEqual(registration.deadline, 0)
 
     def test_installment_check_with_close_installment(self) -> None:
         """Test installment check when an installment is within alert threshold"""
@@ -756,7 +756,7 @@ class TestInstallmentFallbackLogic(BaseTestCase):
 
         # First installment is covered, second is distant, should not set alert
         self.assertEqual(registration.quota, 0)
-        self.assertIsNone(registration.deadline)
+        self.assertEqual(registration.deadline, 0)
 
     def test_installment_check_partial_payment_close_deadline(self) -> None:
         """Test installment check with partial payment and close deadline"""
