@@ -1,6 +1,6 @@
 # LarpManager Python File Summaries
 
-Complete summaries of all Python files in the LarpManager repository (381 files total).
+Complete summaries of all Python files in the LarpManager repository (380 files total).
 
 ## Root Directory
 
@@ -252,7 +252,7 @@ Django ORM models defining the database schema and business logic. Core models i
 
 **member.py**: Member models including Member (custom user), MemberConfig, Membership, Badge, VolunteerRegistry, Vote, and Log for user account management and organization membership tracking.
 
-**miscellanea.py**: Miscellaneous models including Contact, ChatMessage, Album, AlbumImage, AlbumUpload, WorkshopModule, WorkshopQuestion, WorkshopOption, WorkshopMemberRel, HelpQuestion, WarehouseContainer, WarehouseTag, WarehouseItem, WarehouseArea, WarehouseItemAssignment, ShuttleService, Util, PlayerRelationship, Email, OneTimeContent, and OneTimeAccessToken.
+**miscellanea.py**: Miscellaneous models: Contact, ChatMessage, Album/Image/Upload, Workshop (Module/Question/Option/MemberRel), HelpQuestion, Warehouse (Container/Tag/Item/Area/Assignment), ShuttleService, Util, PlayerRelationship, Email, OneTimeContent/AccessToken.
 
 **registration.py**: Registration models including Registration, RegistrationTicket, RegistrationSection, RegistrationCharacterRel, RegistrationInstallment, and RegistrationSurcharge for event sign-up and payment tracking.
 
@@ -658,7 +658,7 @@ User-facing views for participants and public pages. Contains accounting.py for 
 
 ---
 
-**Total Files**: 381 Python files across 32 directories
+**Total Files**: 380 Python files across 32 directories
 
 **Lines of Code**: ~90,000+ lines total
 
