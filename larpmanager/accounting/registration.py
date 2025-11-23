@@ -351,7 +351,7 @@ def _set_installment_fallback(reg: Registration, cumulative_amount: float, *, ha
     if has_distant_installments:
         # All installments are beyond alert threshold: player is OK for now
         reg.quota = 0
-        reg.deadline = None
+        reg.deadline = 0
     elif not cumulative_amount:
         # No installments configured at all: use registration date as deadline
         reg.deadline = get_time_diff_today(reg.created.date())
