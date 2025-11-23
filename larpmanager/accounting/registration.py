@@ -396,11 +396,16 @@ def installment_check(reg: Registration, alert: int, association_id: int) -> Non
             continue
 
         cumulative_amount = _calculate_installment_cumulative(installment.amount, cumulative_amount, reg.tot_iscr)
+
+        # Skip installments with invalid deadline
+        if not deadline_days or deadline_days < 0:
+            continue
+
         reg.quota = max(cumulative_amount - reg.tot_payed, 0)
 
         logger.debug("Registration %s installment quota calculated: %s", reg.id, reg.quota)
 
-        if reg.quota <= 0 or not deadline_days or deadline_days < 0:
+        if reg.quota <= 0:
             continue
 
         if is_first_deadline:
