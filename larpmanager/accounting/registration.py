@@ -339,18 +339,25 @@ def _calculate_installment_cumulative(installment_amount: float, current_cumulat
     return total
 
 
-def _set_installment_fallback(reg: Registration, cumulative_amount: float) -> None:
+def _set_installment_fallback(reg: Registration, cumulative_amount: float, *, has_distant_installments: bool) -> None:
     """Set fallback quota when no installments were processed.
 
     Args:
         reg: Registration instance
         cumulative_amount: Cumulative amount from installments
+        has_distant_installments: Whether installments exist but are beyond alert threshold
 
     """
-    if not cumulative_amount:
+    if has_distant_installments:
+        # All installments are beyond alert threshold: player is OK for now
+        reg.quota = 0
+        reg.deadline = None
+    elif not cumulative_amount:
+        # No installments configured at all: use registration date as deadline
         reg.deadline = get_time_diff_today(reg.created.date())
         reg.quota = reg.tot_iscr - reg.tot_payed
     elif reg.tot_iscr > reg.tot_payed and reg.quota == 0:
+        # Outstanding debt but no valid installment deadline found: immediate payment
         reg.quota = reg.tot_iscr - reg.tot_payed
         reg.deadline = 0
 
@@ -374,6 +381,7 @@ def installment_check(reg: Registration, alert: int, association_id: int) -> Non
         return
 
     cumulative_amount = 0
+    has_distant_installments = False
     installments_query = RegistrationInstallment.objects.filter(event_id=reg.run.event_id)
     installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets")).order_by("order")
     is_first_deadline = True
@@ -384,22 +392,27 @@ def installment_check(reg: Registration, alert: int, association_id: int) -> Non
 
         deadline_days = _get_deadline_installment(association_id, installment, reg)
         if deadline_days and deadline_days >= alert:
+            has_distant_installments = True
             continue
 
         cumulative_amount = _calculate_installment_cumulative(installment.amount, cumulative_amount, reg.tot_iscr)
+
+        # Skip installments with invalid deadline
+        if not deadline_days or deadline_days < 0:
+            continue
+
         reg.quota = max(cumulative_amount - reg.tot_payed, 0)
 
         logger.debug("Registration %s installment quota calculated: %s", reg.id, reg.quota)
 
-        if reg.quota <= 0 or not deadline_days or deadline_days < 0:
+        if reg.quota <= 0:
             continue
 
         if is_first_deadline:
-            is_first_deadline = False
             reg.deadline = deadline_days
             return
 
-    _set_installment_fallback(reg, cumulative_amount)
+    _set_installment_fallback(reg, cumulative_amount, has_distant_installments=has_distant_installments)
 
 
 def _get_deadline_installment(

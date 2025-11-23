@@ -30,6 +30,7 @@ from larpmanager.accounting.registration import (
     get_reg_iscr,
     get_reg_payments,
     get_reg_transactions,
+    installment_check,
     registration_payments_status,
     round_to_nearest_cent,
 )
@@ -44,6 +45,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.registration import (
     RegistrationCharacterRel,
+    RegistrationInstallment,
     RegistrationSurcharge,
     TicketTier,
 )
@@ -629,3 +631,154 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         # Should delete character relationships
         self.assertEqual(RegistrationCharacterRel.objects.filter(reg=registration).count(), 0)
+
+
+class TestInstallmentFallbackLogic(BaseTestCase):
+    """Test cases for installment payment fallback logic"""
+
+    def test_installment_fallback_no_installments(self) -> None:
+        """Test fallback when no installments are configured"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Set registration amounts
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("0.00")
+
+        # Call installment check with no installments configured
+        installment_check(registration, alert=30, association_id=association.id)
+
+        # Should use registration creation date as deadline
+        self.assertIsNotNone(registration.deadline)
+        self.assertEqual(registration.quota, Decimal("300.00"))
+
+    def test_installment_fallback_all_distant(self) -> None:
+        """Test fallback when all installments are beyond alert threshold"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Create two installments both distant
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("100.00"), days_deadline=150, order=1, number=1
+        )
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("200.00"), days_deadline=300, order=2, number=2
+        )
+
+        # Set registration amounts - player paid first installment
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("200.00")
+
+        # Call installment check with alert threshold of 30 days
+        installment_check(registration, alert=30, association_id=association.id)
+
+        # Should NOT set alert - quota should be 0
+        self.assertEqual(registration.quota, 0)
+        self.assertIsNone(registration.deadline)
+
+    def test_installment_check_with_close_installment(self) -> None:
+        """Test installment check when an installment is within alert threshold"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Create installment that is close (within 30 days)
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("100.00"), days_deadline=10, order=1, number=1
+        )
+
+        # Set registration amounts
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("0.00")
+
+        # Call installment check
+        installment_check(registration, alert=30, association_id=association.id)
+
+        # Should set quota and deadline
+        self.assertEqual(registration.quota, Decimal("100.00"))
+        self.assertIsNotNone(registration.deadline)
+        self.assertGreaterEqual(registration.deadline, 0)
+
+    def test_installment_fallback_debt_no_valid_deadline(self) -> None:
+        """Test fallback when there's debt but no valid installment deadline"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Create installment with negative deadline (already passed)
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("100.00"), days_deadline=-50, order=1, number=1
+        )
+
+        # Set registration amounts
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("0.00")
+
+        # Call installment check
+        installment_check(registration, alert=30, association_id=association.id)
+
+        # Should set immediate payment (deadline=0)
+        self.assertEqual(registration.quota, Decimal("300.00"))
+        self.assertEqual(registration.deadline, 0)
+
+    def test_installment_check_player_paid_enough(self) -> None:
+        """Test installment check when player has paid enough for current installment"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Create two installments
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("100.00"), days_deadline=10, order=1, number=1
+        )
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("200.00"), days_deadline=150, order=2, number=2
+        )
+
+        # Player has paid more than first installment
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("150.00")
+
+        # Call installment check
+        installment_check(registration, alert=30, association_id=association.id)
+
+        # First installment is covered, second is distant, should not set alert
+        self.assertEqual(registration.quota, 0)
+        self.assertIsNone(registration.deadline)
+
+    def test_installment_check_partial_payment_close_deadline(self) -> None:
+        """Test installment check with partial payment and close deadline"""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Create installment close to deadline
+        RegistrationInstallment.objects.create(
+            event=run.event, amount=Decimal("150.00"), days_deadline=15, order=1, number=1
+        )
+
+        # Player has paid partially
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("50.00")
+
+        # Call installment check
+        installment_check(registration, alert=30, association_id=association.id)
+
+        # Should set remaining quota for this installment
+        self.assertEqual(registration.quota, Decimal("100.00"))  # 150 - 50
+        self.assertIsNotNone(registration.deadline)
+        self.assertGreaterEqual(registration.deadline, 0)
