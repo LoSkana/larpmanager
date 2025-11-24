@@ -25,11 +25,10 @@ from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-
-    from django.http import HttpRequest, HttpResponse
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +71,7 @@ class BrokenLinkEmailsMiddleware:
         """Return True if a 404 at the given URL *shouldn't* notify the site managers."""
         return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
-    def check(self, request: HttpRequest, response: HttpResponse) -> None:
+    def check(self, request: HttpRequest, response: HttpResponse) -> HttpResponseRedirect | None:
         """Middleware for detecting and logging broken links.
 
         Monitors for 404 errors and tracks problematic URLs for debugging,
@@ -83,6 +82,9 @@ class BrokenLinkEmailsMiddleware:
             request: The HTTP request object containing metadata and user info
             response: The HTTP response object with content and status code
 
+        Returns:
+            HttpResponseRedirect if a domain redirect is needed, None otherwise
+
         """
         # Extract basic request information
         domain = request.get_host()
@@ -91,24 +93,27 @@ class BrokenLinkEmailsMiddleware:
         # Skip processing if referer contains query parameters
         referer = request.META.get("HTTP_REFERER", "None")
         if "?" in referer:
-            return
+            return None
 
         # Filter out bot traffic to reduce noise
         user_agent = request.META.get("HTTP_USER_AGENT", "<none>")
         for bot_identifier in ["bot", "facebookexternalhit"]:
             if bot_identifier in str(user_agent):
-                return
+                return None
 
-        # SECURITY FIX: Removed $ separator redirect mechanism to prevent open redirect vulnerability
-        # The previous code allowed arbitrary subdomain redirection via path manipulation
+        # Handle domain redirection for larpmanager.com with $ separator
+        if domain == "larpmanager.com" and "$" in path:
+            path_parts = path.split("$")
+            url = "https://" + path_parts[1] + ".larpmanager.com/" + path_parts[0]
+            return HttpResponseRedirect(url)
 
         # Skip ignorable 404 paths (common crawlers, assets, etc.)
         if self.is_ignorable_404(path):
-            return
+            return None
 
         # Only process authenticated users or webhook paths
         if "webhook" not in path and not request.user.is_authenticated:
-            return
+            return None
 
         # Extract exception information from response HTML
         html_content = response.content.decode("utf-8")
@@ -129,4 +134,4 @@ class BrokenLinkEmailsMiddleware:
             f"{vars(request)}",
             fail_silently=True,
         )
-        return
+        return None
