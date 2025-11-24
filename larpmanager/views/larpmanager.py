@@ -892,7 +892,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     min_registrations = 5
 
     # Get all unpaid runs ordered by start date
-    que = Run.objects.filter(paid__isnull=True).order_by("start")
+    que = Run.objects.filter(paid__isnull=True).exclude(plan=AssociationPlan.FREE).order_by("start")
 
     # Initialize lists and totals for unpaid runs
     context["list"] = []
