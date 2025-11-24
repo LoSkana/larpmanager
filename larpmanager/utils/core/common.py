@@ -25,8 +25,7 @@ import random
 import re
 import string
 import unicodedata
-from datetime import date, datetime, timedelta
-from datetime import timezone as dt_timezone
+from datetime import UTC, date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -1156,10 +1155,10 @@ def format_email_body(email: object) -> str:
     return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned
 
 
-def get_now() -> object:
+def get_now() -> datetime:
     """Get current time - if executed in debug/test, without timezone, add it."""
     now = timezone.now()
     if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:
         # If timezone.now() returns naive, make it aware
-        now = now.replace(tzinfo=dt_timezone.utc)
+        now = now.replace(tzinfo=UTC)
     return now

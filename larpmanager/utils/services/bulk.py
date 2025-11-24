@@ -80,7 +80,7 @@ def _get_bulk_params(request: HttpRequest, context: dict) -> tuple[list[int], in
     for raw_id in request.POST.getlist("ids[]", []):
         try:
             entity_ids.append(int(raw_id))
-        except (ValueError, TypeError):  # noqa: PERF203 - Need per-item error handling to filter invalid IDs
+        except (ValueError, TypeError):
             # Skip invalid ID values and continue processing
             continue
 

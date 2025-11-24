@@ -22,8 +22,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from datetime import timezone as dt_timezone
+from datetime import UTC, datetime
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -347,7 +346,7 @@ def _info_membership(context: dict, member: Member) -> None:
         membership_day += f"-{current_year}"
 
         # Parse and make aware with explicit UTC
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=dt_timezone.utc)
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=UTC)
 
         # Add grace period months
         membership_deadline_date += relativedelta(months=membership_grace_period_months)

@@ -2,37 +2,34 @@
 set -euo pipefail
 
 # create branch
-git checkout -B deps/pip-upgrade
+git checkout -B deps/uv-upgrade
 
-# create venv
+# Install uv if not present
+if ! command -v uv &> /dev/null; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+# create venv with uv
 rm -rf .test_venv
-python -m venv .test_venv
+uv venv .test_venv
 . .test_venv/bin/activate
-python -m pip install -U pip setuptools wheel
 
 # baseline install
-python -m pip install -r requirements.txt
-python -m pip check || true
+uv pip install -r pyproject.toml
 
-# upgrade packages
-tmpfile=$(mktemp)
-while read line; do
-  pkg=$(echo "$line" | grep -Eo '^[A-Za-z0-9_.-]+')
-  if [ -n "$pkg" ]; then
-    ver=$(curl -s https://pypi.org/pypi/$pkg/json | jq -r .info.version 2>/dev/null)
-    if [ "$ver" != "null" ] && [ -n "$ver" ]; then
-      echo "$pkg==$ver"
-    else
-      echo "$line"
-    fi
-  else
-    echo "$line"
+# upgrade all packages to latest versions
+uv pip install --upgrade -r pyproject.toml
+
+# Generate updated pyproject.toml with new versions
+uv pip freeze | grep -v '^-e' | while read line; do
+  pkg=$(echo "$line" | cut -d'=' -f1)
+  ver=$(echo "$line" | cut -d'=' -f3)
+  if [ -n "$pkg" ] && [ -n "$ver" ]; then
+    # Update version in pyproject.toml
+    sed -i "s|\"$pkg==.*\"|\"$pkg==$ver\"|g" pyproject.toml
   fi
-done < requirements.txt > "$tmpfile" && mv "$tmpfile" requirements.txt
-
-# reinstall packages
-python -m pip install -r requirements.txt
-python -m pip check || true
+done
 
 # DB env
 export POSTGRES_HOST=localhost

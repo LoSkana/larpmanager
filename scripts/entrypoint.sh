@@ -10,8 +10,8 @@ done
 
 mkdir -p logs
 
-echo "Update pips"
-pip install -r requirements.txt -q
+echo "Update dependencies"
+uv pip install --system -r pyproject.toml
 
 echo "Migrations..."
 python manage.py compilemessages

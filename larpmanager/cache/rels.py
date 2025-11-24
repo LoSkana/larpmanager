@@ -198,7 +198,7 @@ def update_m2m_related_characters(
                 try:
                     character = Character.objects.get(id=character_id)
                     affected_characters.append(character)
-                except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+                except ObjectDoesNotExist:
                     logger.warning("Character %s not found during relationship update", character_id)
         elif action == "post_clear":
             # For post_clear, get all characters that were related

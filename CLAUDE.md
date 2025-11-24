@@ -16,6 +16,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **[Feature Descriptions](docs/06-feature-descriptions.md)** - Complete reference of all available features
 - **[README.md](README.md)** - Installation, deployment, and contribution guidelines
 
+## Package Management
+
+The project uses **uv** for fast and reliable Python package management. All dependencies are defined in `pyproject.toml`.
+
+### Installing uv
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Installing dependencies
+```bash
+# System-wide (for Docker and CI)
+uv pip install --system -r pyproject.toml
+
+# In a virtual environment
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -r pyproject.toml
+```
+
+### Upgrading dependencies
+Use the `./scripts/pip_upgrade.sh` script which has been updated for uv:
+```bash
+./scripts/pip_upgrade.sh
+```
+
 ## Development Commands
 
 ### Common Development Tasks

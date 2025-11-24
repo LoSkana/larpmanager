@@ -277,7 +277,7 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
                 field_key,
                 answer_text,
             )
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip missing answers
+        except ObjectDoesNotExist:
             pass
 
 
