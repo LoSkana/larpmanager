@@ -539,7 +539,11 @@ def _process_payment(invoice: PaymentInvoice) -> None:
 
     """
     if not AccountingItemPayment.objects.filter(inv=invoice).exists():
-        registration = Registration.objects.get(pk=invoice.idx)
+        try:
+            registration = Registration.objects.get(pk=invoice.idx)
+        except ObjectDoesNotExist:
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
+            return
 
         accounting_item = AccountingItemPayment()
         accounting_item.pay = PaymentChoices.MONEY

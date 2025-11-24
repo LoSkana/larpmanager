@@ -57,7 +57,9 @@
                 </div>
             {% endif %}
             {% if form.details and field.auto_id in form.details %}
-                <div class="plot">{% get_field_show_char form.details field.auto_id run 1 %}</div>
+                {% autoescape off %}
+                    <div class="plot">{% get_field_show_char form.details field.auto_id run 1 %}</div>
+                {% endautoescape %}
             {% endif %}
             {% if form.show_link and field.auto_id in form.show_link %}
                 <p>

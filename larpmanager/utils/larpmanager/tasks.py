@@ -507,7 +507,7 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subject: Any, message_text: Any, exception: Any = None) -> None:
+def notify_admins(subject: str, message_text: str = "", exception: Exception | None = None) -> None:
     """Send notification email to system administrators.
 
     Args:
