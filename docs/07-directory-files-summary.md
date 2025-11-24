@@ -1,24 +1,9 @@
-# LarpManager Python File Summaries
+#  Directory and File Summaries
 
-Complete summaries of all Python files in the LarpManager repository (380 files total).
-
-## Root Directory
-
-**conftest.py**: Pytest configuration with fixtures for database setup, browser automation via Playwright, test isolation, and e2e test initialization. Includes database loading from SQL dumps and fixture management.
-
-**manage.py**: Django's command-line utility entry point for administrative tasks. Sets default settings module and executes management commands.
-
-## larpmanager/
-
-**__init__.py**: Package initialization for the main LarpManager Django application.
-
-**apps.py**: Django app configuration that initializes signal handlers for database events and profiler receivers for performance monitoring on application startup.
 
 ### larpmanager/accounting/
 
-The accounting directory contains the financial core of LarpManager, handling all payment processing, invoice management, and financial transactions. Key modules include balance.py for comprehensive financial reporting and member balance calculations, gateway.py for multi-provider payment integration (PayPal, Stripe, Redsys, SumUp, Satispay), payment.py for payment processing workflows, registration.py for ticket pricing and payment schedules, invoice.py for invoice generation and CSV reconciliation, token_credit.py for credit balance management, and vat.py for VAT calculations. This subsystem integrates with the registration system for event payments, member management for membership fees, and provides comprehensive accounting reports with revenue/cost tracking, installment handling, refund processing, and automated payment verification.
-
-**__init__.py**: Package initialization for accounting module handling payments, invoices, and financial transactions.
+The accounting directory contains the financial core, handling all payment processing, invoice management, and financial transactions. Key modules include balance.py for comprehensive financial reporting and member balance calculations, gateway.py for multi-provider payment integration (PayPal, Stripe, Redsys, SumUp, Satispay), payment.py for payment processing workflows, registration.py for ticket pricing and payment schedules, invoice.py for invoice generation and CSV reconciliation, token_credit.py for credit balance management, and vat.py for VAT calculations. This subsystem integrates with the registration system for event payments, member management for membership fees, and provides comprehensive accounting reports with revenue/cost tracking, installment handling, refund processing, and automated payment verification.
 
 **balance.py**: Member balance calculation utilities. Calculates run accounting with revenue/costs/balance, processes expenses, inflows, outflows, payments, refunds, tokens, credits, and generates association-wide financial reports.
 
@@ -40,9 +25,7 @@ The accounting directory contains the financial core of LarpManager, handling al
 
 ### larpmanager/admin/
 
-Django admin interface configuration providing web-based administration for all LarpManager models. Contains admin.py files organized by domain: access.py for permissions and roles, accounting.py for financial records, associations.py for organization management, events.py for event/run configuration, members.py for user accounts, registrations.py for sign-ups, character.py and writing.py for story elements, miscellanea.py for auxiliary features, and base.py with shared admin utilities. Includes import/export functionality, autocomplete fields, custom filters, inline editing, and CSRF-aware TinyMCE integration for rich text fields. This layer provides staff users with comprehensive CRUD operations and bulk management tools for all system entities.
-
-**__init__.py**: Django admin interface configuration package. Automatically imports all admin modules for LarpManager models.
+Django admin interface configuration providing web-based administration for all models. Contains admin.py files organized by domain: access.py for permissions and roles, accounting.py for financial records, associations.py for organization management, events.py for event/run configuration, members.py for user accounts, registrations.py for sign-ups, character.py and writing.py for story elements, miscellanea.py for auxiliary features, and base.py with shared admin utilities. Includes import/export functionality, autocomplete fields, custom filters, inline editing, and CSRF-aware TinyMCE integration for rich text fields. This layer provides staff users with comprehensive CRUD operations and bulk management tools for all system entities.
 
 **access.py**: Django admin configuration for access control models including PermissionModule, AssociationRole, AssociationPermission, EventRole, and EventPermission with import/export functionality.
 
@@ -50,7 +33,7 @@ Django admin interface configuration providing web-based administration for all 
 
 **associations.py**: Django admin configuration for association and organization models including Association, AssociationConfig, AssociationText, AssociationTranslation, and AssociationSkin with search and filtering capabilities.
 
-**base.py**: Base admin classes for LarpManager models. Provides DefModelAdmin with import/export, CSRFTinyMCEModelAdmin for HTML fields, autocomplete filters, and admin interfaces for Feature, FeatureModule, PaymentMethod, and Log models.
+**base.py**: Base admin classes for models. Provides DefModelAdmin with import/export, CSRFTinyMCEModelAdmin for HTML fields, autocomplete filters, and admin interfaces for Feature, FeatureModule, PaymentMethod, and Log models.
 
 **casting.py**: Django admin configuration for casting-related models including Quest, QuestType, Casting, and CastingAvoid with autocomplete fields and filtering by event, run, and member.
 
@@ -58,7 +41,7 @@ Django admin interface configuration providing web-based administration for all 
 
 **events.py**: Django admin configuration for event management models including Event, EventConfig, Run, RunConfig, EventText, PreRegistration, and ProgressStep with association and event filtering capabilities.
 
-**larpmanager.py**: Django admin configuration for LarpManager platform models including FAQ, Tutorials, Guides, Showcase, Profiler, Discover, Reviews, Tickets, and PublisherApiKey with CSRF-aware TinyMCE editors.
+**larpmanager.py**: Django admin configuration for platform models including FAQ, Tutorials, Guides, Showcase, Profiler, Discover, Reviews, Tickets, and PublisherApiKey with CSRF-aware TinyMCE editors.
 
 **members.py**: Django admin configuration for member-related models including custom User admin, Member, MemberConfig, Membership, VolunteerRegistry, Vote, and Badge with search, filtering, and admin links between related models.
 
@@ -71,8 +54,6 @@ Django admin interface configuration providing web-based administration for all 
 ### larpmanager/cache/
 
 Caching layer utilities providing Redis-backed performance optimization throughout the application. Modules include config.py for configuration value caching, feature.py for feature flag lookups, permission.py for access control checks, role.py for role memberships, association.py and event_text.py for organization data, registration.py for payment calculations, character.py for character data, links.py for sidebar navigation, and various specialized caches. This directory implements a consistent caching strategy that reduces database queries for frequently accessed data, supports multi-tenant isolation, handles cache invalidation through Django signals, and significantly improves response times for permission checks, configuration lookups, and navigation generation across the platform.
-
-**__init__.py**: Package initialization for caching utilities module.
 
 **accounting.py**: Cache utilities for accounting-related data queries and aggregations.
 
@@ -94,7 +75,7 @@ Caching layer utilities providing Redis-backed performance optimization througho
 
 **fields.py**: Field metadata caching utilities.
 
-**larpmanager.py**: Platform-level caching for LarpManager global data.
+**larpmanager.py**: Platform-level caching for global data.
 
 **links.py**: Link generation and caching for sidebar navigation and event links.
 
@@ -118,13 +99,11 @@ Caching layer utilities providing Redis-backed performance optimization througho
 
 Django forms package containing all user input validation and form processing logic. Organized by domain with accounting.py for payment and invoice forms, association.py for organization settings, event.py for event creation and configuration, member.py for user profiles, registration.py for event sign-ups, character.py for character creation, writing.py for story elements, experience.py for progression systems, config.py for settings management, warehouse.py for inventory, and miscellanea.py for auxiliary features. Includes utils.py with shared form utilities and CSRF-aware TinyMCE widgets for rich text editing. Forms handle validation, cleaning, and saving of model data with custom widgets, dynamic field generation based on configuration, and integration with the permission system.
 
-**__init__.py**: Package initialization for Django forms module.
-
 **accounting.py**: Django forms for accounting including invoice submission, payment methods, refund requests, discounts, expenses, donations, collections, and VAT management.
 
 **association.py**: Forms for association management including settings, configurations, text customization, and organizational details.
 
-**base.py**: Base form classes and utilities for LarpManager forms.
+**base.py**: Base form classes and utilities for forms.
 
 **character.py**: Forms for character creation, editing, and management.
 
@@ -154,8 +133,6 @@ Django forms package containing all user input validation and form processing lo
 
 Email notification system handling all automated and manual email communications. Core modules include base.py with template rendering and email sending utilities, accounting.py for payment confirmations and invoice notifications, registration.py for signup status and payment reminders, member.py for member-related notifications, and remind.py for automated deadline and event reminders. Integrates with Django's email backend, uses template-based email generation with HTML and plain text versions, supports bulk email operations for association-wide communications, handles transactional emails for payment gateways, and provides comprehensive notification workflows for registration status changes, payment confirmations, and scheduled reminders through the automate management command.
 
-**__init__.py**: Package initialization for email notification module.
-
 **accounting.py**: Email templates and sending functions for accounting-related notifications.
 
 **base.py**: Base email utilities and template rendering functions.
@@ -169,8 +146,6 @@ Email notification system handling all automated and manual email communications
 ### larpmanager/management/commands/
 
 Django management commands for administrative operations and automation. Key commands include automate.py for daily scheduled tasks (payment verification, deadline reminders, background processing), reset.py and init_db.py for database initialization with test fixtures, dump_test.py for exporting test data to SQL, export_features.py and import_features.py for feature flag fixture management, translate.py for DeepL API translation updates, backup.py for database and media backups, check_payments.py for payment verification, assocs_mail.py for bulk member emails, and utils.py with shared utilities. These commands support development workflows, production maintenance, automated scheduling, deployment processes, and testing infrastructure, providing essential tools for platform administration and operational tasks.
-
-**__init__.py**: Package initialization for Django management commands.
 
 **assocs_mail.py**: Management command to send bulk emails to association members.
 
@@ -198,8 +173,6 @@ Django management commands for administrative operations and automation. Key com
 
 Django middleware components handling request/response processing and cross-cutting concerns. Includes association.py for multi-tenant context management that identifies the active organization, locale.py for language detection and i18n, translation.py for association-specific translation overrides, url.py for URL-based access control and permission enforcement, token.py for API authentication, profiler.py for performance monitoring and request timing, exception.py for global error handling, broken.py for 404/broken link handling, and base.py with shared utilities. This layer runs on every request, establishing tenant context, enforcing permissions, handling authentication, applying translations, and collecting performance metrics, serving as the foundation for multi-tenancy and security.
 
-**__init__.py**: Package initialization for Django middleware.
-
 **association.py**: Middleware for multi-tenant association context management.
 
 **base.py**: Base middleware classes and utilities.
@@ -222,15 +195,9 @@ Django middleware components handling request/response processing and cross-cutt
 
 Django ORM database migration files tracking schema evolution from initial creation through current version (0001_initial.py through 0108_alter_membership_status.py). Each migration represents a specific database change including table creation, field additions/modifications, foreign key relationships, index optimization, constraint updates, and data migrations. These files provide version control for the database schema, enable automated deployment of schema changes, support rollback capabilities, maintain referential integrity, and document the complete history of database structure evolution. Critical for maintaining database consistency across development, testing, and production environments.
 
-All migration files from **0001_initial.py** through **0108_alter_membership_status.py**: Database migration files for Django ORM schema changes. Each migration represents a specific database schema modification including table creation, field additions/modifications, index optimization, and data migrations.
-
-**__init__.py**: Package initialization for migrations directory.
-
 ### larpmanager/models/
 
 Django ORM models defining the database schema and business logic. Core models include association.py for multi-tenant organizations, event.py for LARP events and runs, member.py for user accounts and memberships, registration.py for event sign-ups and tickets, accounting.py for financial transactions and invoices, character.py and writing.py for story elements, access.py for role-based permissions, form.py for dynamic questionnaires, experience.py for progression systems, casting.py for character assignments, and miscellanea.py for auxiliary features. Models define database tables, relationships, validation rules, custom managers, and business logic methods. Includes signals.py for event-driven updates and cache invalidation, and utils.py for shared model utilities.
-
-**__init__.py**: Package initialization that imports all model classes for Django ORM.
 
 **access.py**: Access control models including Feature, PermissionModule, AssociationPermission, AssociationRole, EventPermission, and EventRole for role-based permissions.
 
@@ -264,149 +231,21 @@ Django ORM models defining the database schema and business logic. Core models i
 
 ### larpmanager/templatetags/
 
-Custom Django template tags and filters for template rendering logic. Contains show_tags.py with custom tags for permission checks, UI element rendering, conditional display logic, and template utilities. These tags extend Django's template language with LarpManager-specific functionality, enabling permission-based rendering, complex UI components, navigation generation, feature flag checks, and custom formatting directly in templates. Provides a clean separation between view logic and presentation while maintaining access to complex application logic within templates. Used extensively throughout HTML templates for dynamic content rendering based on user roles, features, and context.
-
-**__init__.py**: Package initialization for custom Django template tags.
+Custom Django template tags and filters for template rendering logic. Contains show_tags.py with custom tags for permission checks, UI element rendering, conditional display logic, and template utilities. These tags extend Django's template language with specific functionality, enabling permission-based rendering, complex UI components, navigation generation, feature flag checks, and custom formatting directly in templates. Provides a clean separation between view logic and presentation while maintaining access to complex application logic within templates. Used extensively throughout HTML templates for dynamic content rendering based on user roles, features, and context.
 
 **show_tags.py**: Custom template tags for rendering UI elements, permissions checks, and conditional display logic.
 
 ### larpmanager/tests/
 
-Comprehensive test suite for LarpManager with Playwright E2E tests and pytest unit tests. The tests directory is organized into two main subdirectories: playwright/ for end-to-end browser automation tests covering complete user workflows, and unit/ for isolated component testing of specific functions and business logic. Includes utils.py with shared test utilities and fixtures. Tests use pytest framework with Django integration, database fixtures loaded from SQL dumps, and markers for categorization (@pytest.mark.e2e, @pytest.mark.slow). The test suite validates all major features including registration, payments, accounting, character management, event organization, and administrative operations across different user roles and permissions.
-
-**__init__.py**: Package initialization for test suite.
-
-**utils.py**: Test utility functions and helpers.
+Comprehensive test suite with Playwright E2E tests and pytest unit tests. The tests directory is organized into two main subdirectories: playwright/ for end-to-end browser automation tests covering complete user workflows, and unit/ for isolated component testing of specific functions and business logic. Includes utils.py with shared test utilities and fixtures. Tests use pytest framework with Django integration, database fixtures loaded from SQL dumps, and markers for categorization (@pytest.mark.e2e, @pytest.mark.slow). The test suite validates all major features including registration, payments, accounting, character management, event organization, and administrative operations across different user roles and permissions.
 
 #### larpmanager/tests/playwright/ (E2E Tests)
 
 End-to-end test suite using Playwright for browser automation testing. Contains comprehensive functional tests covering user workflows, accounting processes, registration flows, payment handling, character management, event organization, executive features, and administrative tasks. Key test files include signup and payment tests, accounting verification, role management, feature availability, form creation and editing, bulk operations, PDF generation, and complex multi-step workflows. Tests verify complete user journeys from registration through payment, character creation, and event participation. Uses fixtures for database state, supports parallel execution, includes visual regression testing, and validates integration between frontend and backend across all user roles.
 
-**__init__.py**: Package initialization for Playwright end-to-end tests.
-
-**ability_px_test.py**: Tests for ability and experience point system.
-
-**additional_tickets_test.py**: Tests for additional ticket purchases.
-
-**character_your_acc_pay_ticket_link.py**: Tests for character account payment ticket workflow.
-
-**exe_accounting_test.py**: Tests for executive accounting features.
-
-**exe_assoc_role_test.py**: Tests for association role management.
-
-**exe_events_run_test.py**: Tests for event and run management.
-
-**exe_features_all_test.py**: Tests for all executive-level features.
-
-**exe_join_test.py**: Tests for joining associations.
-
-**exe_membership_test.py**: Tests for membership management.
-
-**exe_profile_test.py**: Tests for executive profile features.
-
-**exe_template_copy_campaign.py**: Tests for campaign template copying.
-
-**ghost_plots_secrets_factions_test.py**: Tests for plot, secret, and faction management.
-
-**inventory.py**: Tests for inventory/warehouse system.
-
-**mail_generation_test.py**: Tests for email generation and sending.
-
-**mirror_test.py**: Tests for data mirroring features.
-
-**orga_character_form_test.py**: Tests for organizer character form management.
-
-**orga_event_role_test.py**: Tests for event role management.
-
-**orga_features_all_test.py**: Tests for all organizer-level features.
-
-**orga_form_writing_config.py**: Tests for writing form configuration.
-
-**orga_manual_excel_save_external.py**: Tests for Excel export functionality.
-
-**orga_plot_relationships_reading_test.py**: Tests for plot and relationship reading.
-
-**orga_quest_trait.py**: Tests for quest and trait management.
-
-**orga_reg_form_test.py**: Tests for registration form creation.
-
-**orga_registration_form_test.py**: Tests for registration form handling.
-
-**overpay_upload_membership_prologue.py**: Tests for overpayment handling and membership.
-
-**permance_forms_test.py**: Performance tests for form rendering.
-
-**signup_accounting_test.py**: Tests for signup accounting workflow.
-
-**upload_download_test.py**: Tests for file upload and download.
-
-**user_accounting_test.py**: Tests for user accounting features.
-
-**user_character_form_editor_test.py**: Tests for character form editing.
-
-**user_character_option_reg_ticket.py**: Tests for character options and tickets.
-
-**user_new_ticket_orga_bulk.py**: Tests for bulk ticket creation.
-
-**user_pdf_test.py**: Tests for PDF generation.
-
-**user_registration_form_gift_test.py**: Tests for gift registration forms.
-
-**user_search.py**: Tests for user search functionality.
-
-**user_signup_membership_test.py**: Tests for membership signup.
-
-**user_signup_payment_test.py**: Tests for payment during signup.
-
-**user_signup_simple_test.py**: Tests for simple signup workflow.
-
-**user_ticket.py**: Tests for ticket management.
-
 #### larpmanager/tests/unit/ (Unit Tests)
 
 Unit test suite using pytest for isolated component testing. Contains focused tests for specific functions and modules including test_accounting_functions.py for financial calculations, test_balance_functions.py for balance computations, test_registration_functions.py for signup logic, test_payment_invoice_vat.py for VAT calculations, test_token_credit_functions.py for credit systems, test_experience_functions.py for progression, test_member_base_functions.py for user utilities, and various signal tests for event handlers. Tests use database fixtures, mock external dependencies, verify cache invalidation, validate business logic, and ensure correct behavior of utility functions in isolation. Provides fast feedback for development and maintains code quality.
-
-**__init__.py**: Package initialization for unit tests.
-
-**base.py**: Base test classes and utilities.
-
-**test_accounting_functions.py**: Unit tests for accounting calculation functions.
-
-**test_balance_functions.py**: Unit tests for balance calculation functions.
-
-**test_cache_signals.py**: Unit tests for cache invalidation signals.
-
-**test_common_fiscal_functions.py**: Unit tests for fiscal code and tax calculations.
-
-**test_experience_functions.py**: Unit tests for experience point functions.
-
-**test_gateway_signals.py**: Unit tests for payment gateway signals.
-
-**test_mail_signals.py**: Unit tests for email notification signals.
-
-**test_member_base_functions.py**: Unit tests for member base functions.
-
-**test_member_text_functions.py**: Unit tests for member text processing.
-
-**test_membership_accounting.py**: Unit tests for membership accounting.
-
-**test_model_signals.py**: Unit tests for model signal handlers.
-
-**test_payment_invoice_vat.py**: Unit tests for payment invoice VAT calculations.
-
-**test_registration_functions.py**: Unit tests for registration functions.
-
-**test_registration_signals.py**: Unit tests for registration signals.
-
-**test_signals_basic.py**: Unit tests for basic signal functionality.
-
-**test_text_field_signals.py**: Unit tests for text field signals.
-
-**test_token_credit_functions.py**: Unit tests for token/credit functions.
-
-**test_utility_signals.py**: Unit tests for utility signals.
-
-**test_utils_functions.py**: Unit tests for utility functions.
 
 ### larpmanager/urls/
 
@@ -418,7 +257,7 @@ URL routing configuration mapping URLs to views. Contains event.py for public ev
 
 **exe.py**: URL patterns for executive (organization-wide) views.
 
-**lm.py**: URL patterns for LarpManager platform pages.
+**lm.py**: URL patterns for platform pages.
 
 **orga.py**: URL patterns for organizer (event-specific) views.
 
@@ -430,13 +269,9 @@ URL routing configuration mapping URLs to views. Contains event.py for public ev
 
 Utility modules providing shared functionality across the application. Organized into specialized subdirectories: auth/ for authentication and authorization, core/ for essential utilities, io/ for file operations, larpmanager/ for platform-specific features, profiler/ for performance monitoring, services/ for business logic orchestration, and users/ for user-related utilities. These modules implement cross-cutting concerns, reusable business logic, and common operations used throughout views, models, and other components. Provides a clean separation of concerns with domain-specific utilities, supporting maintainability and code reuse across the application.
 
-**__init__.py**: Package initialization for utility modules.
-
 #### larpmanager/utils/auth/
 
-Authentication and authorization utilities. Contains adapter.py for django-allauth Google SSO integration, backend.py for custom authentication backends, permission.py for permission checking utilities and decorators, and admin.py for administrative authentication. Provides role-based access control helpers, permission decorators for views, custom authentication flows, SSO integration, and permission checking functions used throughout the application. Integrates with Django's auth system while extending it with LarpManager-specific role and feature-based permissions, supporting both traditional authentication and third-party OAuth providers.
-
-**__init__.py**: Package initialization for authentication utilities.
+Authentication and authorization utilities. Contains adapter.py for django-allauth Google SSO integration, backend.py for custom authentication backends, permission.py for permission checking utilities and decorators, and admin.py for administrative authentication. Provides role-based access control helpers, permission decorators for views, custom authentication flows, SSO integration, and permission checking functions used throughout the application. Integrates with Django's auth system while extending it with specific role and feature-based permissions, supporting both traditional authentication and third-party OAuth providers.
 
 **adapter.py**: Django-allauth adapter for Google SSO integration.
 
@@ -449,8 +284,6 @@ Authentication and authorization utilities. Contains adapter.py for django-allau
 #### larpmanager/utils/core/
 
 Core utility functions used throughout the application. Contains base.py for context management and payment details, codes.py for unique identifier generation, common.py for date processing and text manipulation, context_processors.py for Django template context, exceptions.py for custom exception classes, paginate.py for pagination utilities, and validators.py for custom form validators. Provides essential utilities for request context handling, code generation for registrations and payments, date calculations, text cleaning, data validation, and common operations. These utilities form the foundation for business logic throughout the application, ensuring consistent handling of common tasks.
-
-**__init__.py**: Package initialization for core utilities.
 
 **base.py**: Base utility functions for context, payment details, and common operations.
 
@@ -470,8 +303,6 @@ Core utility functions used throughout the application. Contains base.py for con
 
 Input/output utilities for file operations. Contains download.py for file download handling, pdf.py for PDF generation using ReportLab, and upload.py for file upload validation and processing. Handles document generation for invoices, character sheets, event materials, and reports. Manages file uploads for images, documents, and bulk data imports. Provides consistent file handling with validation, security checks, format conversion, and storage management. Integrates with Django's file storage backend and supports both local and cloud storage configurations for media files.
 
-**__init__.py**: Package initialization for I/O utilities.
-
 **download.py**: File download utilities.
 
 **pdf.py**: PDF generation utilities using ReportLab.
@@ -480,9 +311,7 @@ Input/output utilities for file operations. Contains download.py for file downlo
 
 #### larpmanager/utils/larpmanager/
 
-LarpManager-specific utilities for platform features. Contains query.py for database query optimization with select_related and prefetch_related helpers, tasks.py for background task management using django4-background-tasks, ticket.py for support ticket generation and management, and tutorial.py for onboarding and tutorial workflows. Provides platform-level utilities for performance optimization, asynchronous processing, user support, and guided workflows. These utilities support advanced features like automated background processing, query performance optimization, and integrated help systems.
-
-**__init__.py**: Package initialization for LarpManager-specific utilities.
+Specific utilities for platform features. Contains query.py for database query optimization with select_related and prefetch_related helpers, tasks.py for background task management using django4-background-tasks, ticket.py for support ticket generation and management, and tutorial.py for onboarding and tutorial workflows. Provides platform-level utilities for performance optimization, asynchronous processing, user support, and guided workflows. These utilities support advanced features like automated background processing, query performance optimization, and integrated help systems.
 
 **query.py**: Database query optimization utilities.
 
@@ -496,8 +325,6 @@ LarpManager-specific utilities for platform features. Contains query.py for data
 
 Performance profiling utilities for monitoring application performance. Contains signals.py for custom profiling signals and receivers.py for signal handlers that collect performance metrics. Integrates with middleware to track request timing, database query counts, cache hit rates, and response times. Stores profiling data in LarpManagerProfiler model for analysis. Enables performance monitoring in production, identifies bottlenecks, supports optimization efforts, and provides visibility into system performance across different features and user workflows.
 
-**__init__.py**: Package initialization for profiler utilities.
-
 **receivers.py**: Signal receivers for performance profiling.
 
 **signals.py**: Custom signals for profiling events.
@@ -505,8 +332,6 @@ Performance profiling utilities for monitoring application performance. Contains
 #### larpmanager/utils/services/
 
 Service layer providing business logic orchestration. Contains association.py for organization management, event.py for event operations, character.py for character management, writing.py for story services, experience.py for progression systems, einvoice.py for electronic invoice generation, edit.py for content editing workflows, bulk.py for bulk operations, and miscellanea.py for auxiliary services. Implements complex business workflows that span multiple models, coordinates transactions, handles external integrations, and provides reusable business logic. This layer sits between views and models, encapsulating domain logic and maintaining separation of concerns.
-
-**__init__.py**: Package initialization for service layer.
 
 **association.py**: Association management services.
 
@@ -530,8 +355,6 @@ Service layer providing business logic orchestration. Contains association.py fo
 
 User-related utility functions. Contains member.py for member utilities including badge assignment, registration.py for registration workflow helpers, fiscal_code.py for Italian fiscal code validation and generation, and deadlines.py for deadline calculation and checking. Provides specialized utilities for user management, registration processing, compliance with Italian regulations, and time-based access control. These utilities support member account operations, registration workflows, fiscal compliance, and deadline enforcement throughout the application.
 
-**__init__.py**: Package initialization for user utilities.
-
 **deadlines.py**: Deadline calculation and checking utilities.
 
 **fiscal_code.py**: Italian fiscal code validation and generation.
@@ -543,8 +366,6 @@ User-related utility functions. Contains member.py for member utilities includin
 ### larpmanager/views/
 
 Django views handling HTTP requests and responses. Organized into subdirectories by user role: exe/ for organization-wide executive views, orga/ for event-specific organizer views, and user/ for participant-facing views. Root level contains api.py for external integrations, auth.py for login/logout/signup, base.py with base view classes and mixins, larpmanager.py for platform pages (FAQ, tutorials, guides), and manage.py for admin operations. Views implement business logic, handle form processing, enforce permissions, render templates, and coordinate with models and services to fulfill user requests across all platform features.
-
-**__init__.py**: Package initialization for Django views.
 
 **api.py**: API views for external integrations.
 
@@ -560,8 +381,6 @@ Django views handling HTTP requests and responses. Organized into subdirectories
 
 Executive (organization-wide) views for association management. Contains accounting.py for organization-level financial reports and operations, association.py for organization settings and configuration, event.py for event creation and management across the organization, member.py for member management and roles, and miscellanea.py for auxiliary features like workshops and albums. These views require AssociationPermission and handle organization-wide operations including member management, event creation, financial oversight, organizational settings, and cross-event reporting. Provide executive dashboard functionality for association administrators with comprehensive oversight and management capabilities.
 
-**__init__.py**: Package initialization for executive views.
-
 **accounting.py**: Organization-wide accounting views.
 
 **association.py**: Association management views.
@@ -575,8 +394,6 @@ Executive (organization-wide) views for association management. Contains account
 #### larpmanager/views/orga/ (Organizer/Event Views)
 
 Organizer (event-specific) views for event management. Contains accounting.py for event financial management, casting.py for character assignment, character.py for participant character management, copy.py for event templating, event.py for event configuration, experience.py for progression systems, form.py for registration and writing forms, member.py for participant management, miscellanea.py for auxiliary features, pdf.py for document generation, registration.py for signup management, and writing.py for story elements. These views require EventPermission and handle event-specific operations including registration management, character casting, story development, financial tracking, and event configuration. Provide organizer dashboard for event coordinators.
-
-**__init__.py**: Package initialization for organizer views.
 
 **accounting.py**: Event-specific accounting views.
 
@@ -606,8 +423,6 @@ Organizer (event-specific) views for event management. Contains accounting.py fo
 
 User-facing views for participants and public pages. Contains accounting.py for payment and balance viewing, casting.py for casting preferences, character.py for character creation and editing, event.py for event browsing and information, member.py for profile management, miscellanea.py for auxiliary features, onetime.py for one-time content access, pdf.py for document downloads, and registration.py for event signup and ticket purchasing. These views provide the participant interface for event discovery, registration, character management, payment processing, and profile settings. Accessible to all members with appropriate permissions, forming the primary user experience for LARP participants.
 
-**__init__.py**: Package initialization for user views.
-
 **accounting.py**: User payment and balance views.
 
 **casting.py**: User casting preference views.
@@ -627,8 +442,6 @@ User-facing views for participants and public pages. Contains accounting.py for 
 **registration.py**: Event registration and signup views.
 
 ## main/
-
-**__init__.py**: Package initialization for Django project.
 
 **asgi.py**: ASGI configuration for async server deployment.
 
@@ -655,11 +468,3 @@ User-facing views for participants and public pages. Contains accounting.py for 
 **prepare_trans.py**: Prepare translation files for DeepL API processing.
 
 **update_trans.py**: Update translation files with DeepL API results.
-
----
-
-**Total Files**: 380 Python files across 32 directories
-
-**Lines of Code**: ~90,000+ lines total
-
-**Architecture**: Django-based multi-tenant LARP management platform with comprehensive features for events, registrations, accounting, character management, and story development.
