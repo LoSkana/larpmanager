@@ -30,13 +30,25 @@ RUN apt-get update && apt-get install -y \
     git \
     git-lfs \
     postgresql-client \
+    software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python 3.11
+RUN add-apt-repository ppa:deadsnakes/ppa -y && \
+    apt-get update && \
+    apt-get install -y python3.11 python3.11-venv python3.11-dev && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1 && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # install pip requirements
-COPY requirements.txt ./
+COPY pyproject.toml ./
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv pip install --system -r pyproject.toml
 
 RUN playwright install --with-deps
 
