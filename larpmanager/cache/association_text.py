@@ -165,11 +165,15 @@ def get_association_text(association_id: int, text_type: str, language_code: str
     # Use current language if none specified
     if not language_code:
         language_code = get_language()
+        import traceback
+
+        stack_trace = "".join(traceback.format_stack()[-6:-1])  # Get last 5 frames before this one
         logger.debug(
-            "get_association_text called without language_code. get_language() returned: %s (assoc=%s, type=%s)",
+            "get_association_text called without language_code. get_language() returned: %s (assoc=%s, type=%s)\nCall stack:\n%s",
             language_code,
             association_id,
             text_type,
+            stack_trace,
         )
 
     # Check if there is an association_text with the requested characteristics
