@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import logging
 from gettext import GNUTranslations
 from typing import Any
 
@@ -28,8 +27,6 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import trans_real
 
 from larpmanager.cache.association_translation import get_association_translation_cache
-
-logger = logging.getLogger(__name__)
 
 
 class AssociationTranslationMiddleware(MiddlewareMixin):
@@ -65,12 +62,6 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
 
         # Determine the active language for this request
         language = getattr(request, "LANGUAGE_CODE", dj_translation.get_language())
-        logger.debug(
-            "AssociationTranslationMiddleware: association_id=%s, language=%s (from request.LANGUAGE_CODE=%s)",
-            association_id,
-            language,
-            hasattr(request, "LANGUAGE_CODE"),
-        )
 
         # Get the base Django translation object for this language
         base_translation = trans_real.translation(language)
@@ -83,7 +74,6 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
 
         # Replace the thread-local active translation with our custom one
         trans_real._active.value = assoc_trans  # noqa: SLF001  # Django translation internal
-        logger.debug("AssociationTranslationMiddleware: set custom translation with language=%s", language)
 
     def process_response(self, request: HttpRequest, response: HttpResponse) -> HttpResponse:  # noqa: ARG002
         """Clean up translation overrides after processing the request.
@@ -141,7 +131,6 @@ class AssociationTranslations(GNUTranslations):
             The language code (e.g., 'en', 'it')
 
         """
-        logger.debug("AssociationTranslations.to_language() called, returning: %s", self._language)
         return self._language
 
     def gettext(self, message: str) -> str:

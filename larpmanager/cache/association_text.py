@@ -156,27 +156,7 @@ def get_association_text(association_id: int, text_type: str, language_code: str
     """
     # Use current language if none specified
     if not language_code:
-        import traceback
-        from django.utils.translation import trans_real
-
-        # Debug: check what translation object is active
-        active_trans = getattr(trans_real._active, "value", None)  # noqa: SLF001
-        trans_type = type(active_trans).__name__ if active_trans else "None"
-        has_language_method = hasattr(active_trans, "language") if active_trans else False
-
         language_code = get_language()
-        stack_trace = "".join(traceback.format_stack()[-4:-1])  # Get last 3 frames
-        logger.debug(
-            "get_association_text: using current language %s (assoc=%s, type=%s)\n"
-            "Active translation type: %s, has language(): %s\n"
-            "Call stack:\n%s",
-            language_code,
-            association_id,
-            text_type,
-            trans_type,
-            has_language_method,
-            stack_trace,
-        )
 
     # Check if there is an association_text with the requested characteristics
     cached_text = get_association_text_cache(association_id, text_type, language_code)
