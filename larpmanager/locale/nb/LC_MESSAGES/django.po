@@ -6485,6 +6485,9 @@ msgstr "Gå gjennom deltakernes kostholdsrestriksjoner og allergier."
 msgid "This page shows all expense items recorded in the system"
 msgstr "Denne siden viser alle utgiftsposter som er registrert i systemet"
 
+msgid "You must select at least one ticket for this installment"
+msgstr "Du må velge minst én billett til denne delbetalingen"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Valgfritt) Annen evne som forutsetning, kommaseparert"
 
@@ -6768,6 +6771,11 @@ msgstr "For å bekrefte påmeldingen må du betale det angitte beløpet"
 
 msgid "for no relationship, only to display the other character name"
 msgstr "for ingen relasjon, bare for å vise det andre tegnnavnet"
+
+#, python-format
+msgid "A quota with %(quotas)d payments already exists for this event"
+msgstr ""
+"Det finnes allerede en kvote med %(quotas)d betalinger for denne hendelsen"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr "Lagt til på medlemssiden som avsnitt for vedtektsinformasjon"
@@ -9384,6 +9392,14 @@ msgid ""
 msgstr ""
 "Gjør det mulig å konfigurere en egendefinert ekstern e-postserver som skal "
 "brukes i stedet for standardserveren"
+
+#, python-format
+msgid ""
+"An installment with order %(order)d already exists with the following common"
+" ticket(s): %(tickets)s"
+msgstr ""
+"En avbetaling med ordre %(order)d eksisterer allerede med følgende felles "
+"billett(er): %(tickets)s"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

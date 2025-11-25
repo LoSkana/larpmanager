@@ -1287,6 +1287,27 @@ class OrgaRegistrationQuotaForm(MyForm):
         model = RegistrationQuota
         exclude = ("number",)
 
+    def clean_quotas(self) -> int:
+        """Validate that the number is unique for quotas of this event."""
+        quotas = self.cleaned_data.get("quotas")
+        event = self.cleaned_data.get("event") or (self.instance.event if self.instance.pk else None)
+
+        if not event or not quotas:
+            return quotas
+
+        # Check if another quota with this number already exists for this event
+        existing_quota = RegistrationQuota.objects.filter(event=event, quotas=quotas)
+
+        # Exclude current instance if we're editing
+        if self.instance.pk:
+            existing_quota = existing_quota.exclude(pk=self.instance.pk)
+
+        if existing_quota.exists():
+            msg = _("A quota with %(quotas)d payments already exists for this event") % {"quotas": quotas}
+            raise ValidationError(msg)
+
+        return quotas
+
 
 class OrgaRegistrationInstallmentForm(MyForm):
     """Form for OrgaRegistrationInstallment."""
@@ -1309,8 +1330,21 @@ class OrgaRegistrationInstallmentForm(MyForm):
         super().__init__(*args, **kwargs)
         self.fields["tickets"].widget.set_event(self.params["event"])
 
+    def clean_order(self) -> int:
+        """Validate that the order is unique for installments of this event.
+
+        Note: This validation only checks the order field. The complete validation
+        that checks for common tickets is done in the clean() method after tickets
+        are available in cleaned_data.
+        """
+        order = self.cleaned_data.get("order")
+        if order is None:
+            return order
+
+        return order
+
     def clean(self) -> dict[str, any]:
-        """Validate that only one deadline type (date or days) is specified."""
+        """Validate that only one deadline type (date or days) is specified and tickets are selected."""
         cleaned_data = super().clean()
 
         # Check if both deadline types are specified
@@ -1321,6 +1355,52 @@ class OrgaRegistrationInstallmentForm(MyForm):
                 "days_deadline",
                 "Choose only one deadline for this installment, either by date or number of days!",
             )
+
+        # Check if tickets are selected (tickets is a QuerySet from the form)
+        tickets = cleaned_data.get("tickets")
+        if not tickets or (hasattr(tickets, "count") and tickets.count() == 0):
+            self.add_error(
+                "tickets",
+                _("You must select at least one ticket for this installment"),
+            )
+            # If no tickets, we can't check for conflicts, so return early
+            return cleaned_data
+
+        # Check for duplicate order with common tickets
+        order = cleaned_data.get("order")
+        event = cleaned_data.get("event") or (self.instance.event if self.instance.pk else None)
+
+        if event and order is not None and tickets:
+            # Get all installments with the same order for this event
+            existing_installments = RegistrationInstallment.objects.filter(event=event, order=order).prefetch_related(
+                "tickets"
+            )
+
+            # Exclude current instance if we're editing
+            if self.instance.pk:
+                existing_installments = existing_installments.exclude(pk=self.instance.pk)
+
+            # Get the IDs of tickets we're trying to assign
+            ticket_ids = set(tickets.values_list("id", flat=True))
+
+            # Check each existing installment for common tickets
+            for existing in existing_installments:
+                existing_ticket_ids = set(existing.tickets.values_list("id", flat=True))
+                common_tickets = ticket_ids & existing_ticket_ids
+
+                if common_tickets:
+                    # Get the names of common tickets for error message
+                    common_ticket_objs = RegistrationTicket.objects.filter(id__in=common_tickets)
+                    ticket_names = ", ".join([t.name for t in common_ticket_objs])
+
+                    self.add_error(
+                        "order",
+                        _(
+                            "An installment with order %(order)d already exists with the following common ticket(s): %(tickets)s"
+                        )
+                        % {"order": order, "tickets": ticket_names},
+                    )
+                    break  # Only report the first conflict found
 
         return cleaned_data
 
