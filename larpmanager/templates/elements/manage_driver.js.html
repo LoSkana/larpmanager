@@ -22,7 +22,7 @@ window.addEventListener('DOMContentLoaded', function() {
         let steps = [
           {
             popover: {
-              title: '{% trans "Welcome to" %} {{ association.platform }}!',
+              title: '{% filter escapejs %}{% trans "Welcome to" %} {{ association.platform }}{% endfilter %}!',
               description: '{{ intro | escapejs }}'
             }
           }
@@ -152,7 +152,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         steps.push({
           popover: {
-            title: '{% trans "And that is all" %}',
+            title: '{% filter escapejs %}{% trans "And that is all" %}{% endfilter %}',
             description: '{{ outro | escapejs }}'
           }
         });
@@ -163,7 +163,7 @@ window.addEventListener('DOMContentLoaded', function() {
             steps: steps,
             allowClose: false,
             popoverClass: 'my-driverjs',
-            doneBtnText: '{% trans "Done" %}',
+            doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
             onDestroyed: () => {
               $.ajax({
                 url: '{% url "set_member_config" %}',

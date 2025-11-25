@@ -2,11 +2,11 @@
 <script>
 
 window['texts'] = {
-    'upd': '{% trans "Your updated registration total is" %}',
-    'alr': '{% trans "You have already paid" %}',
-    'cre': '{% trans "The following will be used" %} {{ credit_name }}:',
-    'tok': '{% trans "The following will be used" %} {{ token_name }}:',
-    'pro': '{% trans "Your registration will now be saved in provisional status. It will be confirmed when your ticket payment is received" %}.',
+    'upd': '{% filter escapejs %}{% trans "Your updated registration total is" %}{% endfilter %}',
+    'alr': '{% filter escapejs %}{% trans "You have already paid" %}{% endfilter %}',
+    'cre': '{% filter escapejs %}{% trans "The following will be used" %} {{ credit_name }}{% endfilter %}:',
+    'tok': '{% filter escapejs %}{% trans "The following will be used" %} {{ token_name }}{% endfilter %}:',
+    'pro': '{% filter escapejs %}{% trans "Your registration will now be saved in provisional status. It will be confirmed when your ticket payment is received" %}{% endfilter %}.',
     'payment': {{ payment_feature | yesno:"true,false" }}
 }
 </script>

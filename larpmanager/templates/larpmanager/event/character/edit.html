@@ -148,7 +148,7 @@
                             // Hide spinner and enable confirm button on error
                             $('#upload_spinner').addClass('hide');
                             $('#confirm').prop('disabled', false);
-                            alert('{% trans "Error uploading image. Please try again." %}');
+                            alert('{% filter escapejs %}{% trans "Error uploading image. Please try again." %}{% endfilter %}');
                         }
                     });
                 });
