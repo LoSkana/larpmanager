@@ -18,12 +18,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
 import os
 from collections.abc import Callable
 
 from django.conf import settings as conf_settings
 from django.http import HttpRequest, HttpResponse
 from django.utils import translation
+
+logger = logging.getLogger(__name__)
 
 
 class LocaleAdvMiddleware:
@@ -91,5 +94,14 @@ class LocaleAdvMiddleware:
         else:
             # For anonymous users, rely on browser language detection
             selected_language = translation.get_language_from_request(request)
+
+        logger.debug(
+            "LocaleAdvMiddleware selected language: %s (user: %s, member_lang: %s)",
+            selected_language,
+            getattr(request, "user", "no-user"),
+            getattr(getattr(request.user, "member", None), "language", "no-member")
+            if hasattr(request, "user")
+            else "no-user-attr",
+        )
 
         return selected_language
