@@ -387,27 +387,27 @@ def get_index_permissions(
     permissions_by_module = {}
 
     # Get cached permissions for the specified type
-    for permission_record in get_cache_index_permission(permission_type):
+    for permission in get_cache_index_permission(permission_type):
         # Skip hidden permissions
-        if permission_record["hidden"]:
+        if permission["hidden"]:
             continue
 
         # Check if permission is allowed in current context
-        if not is_allowed_managed(permission_record, context):
+        if not is_allowed_managed(permission, context):
             continue
 
         # Check user has specific permission (unless has default access)
-        if not has_default and permission_record["slug"] not in permissions:
+        if not has_default and permission["slug"] not in permissions:
             continue
 
         # Check feature is available (skip placeholder features)
-        if not permission_record["feature__placeholder"] and permission_record["feature__slug"] not in features:
+        if not permission["feature__placeholder"] and permission["feature__slug"] not in features:
             continue
 
         # Group permissions by module
-        module_key = (_(permission_record["module__name"]), permission_record["module__icon"])
+        module_key = (_(permission["module__name"]), permission["module__icon"])
         if module_key not in permissions_by_module:
             permissions_by_module[module_key] = []
-        permissions_by_module[module_key].append(permission_record)
+        permissions_by_module[module_key].append(permission)
 
     return permissions_by_module

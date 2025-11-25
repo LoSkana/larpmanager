@@ -72,8 +72,8 @@ from larpmanager.cache.character import (
     reset_character_registration_cache,
     update_member_event_character_cache,
 )
-from larpmanager.cache.config import clear_config_cache
-from larpmanager.cache.event_text import clear_event_text_cache_on_delete, update_event_text_cache_on_save
+from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
 from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
@@ -581,13 +581,13 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
 @receiver(post_save, sender=AssociationConfig)
 def post_save_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association config cache after save."""
-    clear_config_cache(instance.association)
+    reset_element_configs(instance.association)
 
 
 @receiver(post_delete, sender=AssociationConfig)
 def post_delete_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association config cache after deletion."""
-    clear_config_cache(instance.association)
+    reset_element_configs(instance.association)
 
 
 # AssociationSkin signals
@@ -683,13 +683,13 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
 @receiver(post_save, sender=CharacterConfig)
 def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset character configuration cache after save."""
-    clear_config_cache(instance.character)
+    reset_element_configs(instance.character)
 
 
 @receiver(post_delete, sender=CharacterConfig)
 def post_delete_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset character configuration cache after model deletion."""
-    clear_config_cache(instance.character)
+    reset_element_configs(instance.character)
 
 
 # ChatMessage signals
@@ -804,13 +804,13 @@ def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
 @receiver(post_save, sender=EventConfig)
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset event configuration cache after model save."""
-    clear_config_cache(instance.event)
+    reset_element_configs(instance.event)
 
 
 @receiver(post_delete, sender=EventConfig)
 def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event configuration cache after deletion."""
-    clear_config_cache(instance.event)
+    reset_element_configs(instance.event)
 
 
 # EventPermission signals
@@ -861,7 +861,7 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
 @receiver(pre_delete, sender=EventText)
 def pre_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event text cache before deletion."""
-    clear_event_text_cache_on_delete(instance)
+    reset_event_text(instance)
 
 
 @receiver(post_save, sender=EventText)
@@ -1051,13 +1051,13 @@ def post_save_member_reset(sender: type, instance: Member, **kwargs: dict) -> No
 @receiver(post_save, sender=MemberConfig)
 def post_save_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset member configuration cache after save."""
-    clear_config_cache(instance.member)
+    reset_element_configs(instance.member)
 
 
 @receiver(post_delete, sender=MemberConfig)
 def post_delete_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear member config cache after deletion."""
-    clear_config_cache(instance.member)
+    reset_element_configs(instance.member)
 
 
 # Membership signals
@@ -1466,13 +1466,13 @@ def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
 @receiver(post_save, sender=RunConfig)
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
-    clear_config_cache(instance.run)
+    reset_element_configs(instance.run)
 
 
 @receiver(post_delete, sender=RunConfig)
 def post_delete_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear configuration cache after Run deletion."""
-    clear_config_cache(instance.run)
+    reset_element_configs(instance.run)
 
 
 # SpeedLarp signals
