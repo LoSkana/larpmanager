@@ -132,14 +132,16 @@ class AssociationTranslations(GNUTranslations):
         self._overrides = overrides or {}
         self._language = language
 
-    def language(self) -> str:
+    def to_language(self) -> str:
         """Return the language code for this translation.
+
+        This method is called by Django's get_language() function.
 
         Returns:
             The language code (e.g., 'en', 'it')
 
         """
-        logger.debug("AssociationTranslations.language() called, returning: %s", self._language)
+        logger.debug("AssociationTranslations.to_language() called, returning: %s", self._language)
         return self._language
 
     def gettext(self, message: str) -> str:
