@@ -74,7 +74,16 @@ def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
 
     """
     # Try to get cached text
-    cached_text = cache.get(association_text_key(association_id, typ, lang))
+    cache_key = association_text_key(association_id, typ, lang)
+    cached_text = cache.get(cache_key)
+
+    logger.debug(
+        "get_association_text_cache: assoc=%s, type=%s, lang=%s, cache_hit=%s",
+        association_id,
+        typ,
+        lang,
+        cached_text is not None,
+    )
 
     # Update cache if not found
     if cached_text is None:
@@ -156,6 +165,12 @@ def get_association_text(association_id: int, text_type: str, language_code: str
     # Use current language if none specified
     if not language_code:
         language_code = get_language()
+        logger.debug(
+            "get_association_text called without language_code. get_language() returned: %s (assoc=%s, type=%s)",
+            language_code,
+            association_id,
+            text_type,
+        )
 
     # Check if there is an association_text with the requested characteristics
     cached_text = get_association_text_cache(association_id, text_type, language_code)
