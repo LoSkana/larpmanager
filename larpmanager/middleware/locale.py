@@ -18,7 +18,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import os
 from collections.abc import Callable
 
 from django.conf import settings as conf_settings
@@ -69,11 +68,8 @@ class LocaleAdvMiddleware:
             str: Language code to be activated (e.g., 'en', 'it', 'es')
 
         """
-        # Force English in test environment to ensure consistent test results
-        if os.getenv("PYTEST_CURRENT_TEST"):
-            selected_language = "en"
         # Check if user is authenticated and has a language preference
-        elif hasattr(request, "user") and hasattr(request.user, "member"):
+        if hasattr(request, "user") and hasattr(request.user, "member"):
             if request.user.member.language:
                 # Use the user's explicitly set language preference
                 selected_language = request.user.member.language
