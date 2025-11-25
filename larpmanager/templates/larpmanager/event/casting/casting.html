@@ -69,7 +69,7 @@
                        name="subm"
                        id="submit"
                        value="{% trans "Submit" %}"
-                       onClick="return confirm('{% trans "Confirm your choices" %}?');">
+                       onClick="return confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
                 <p id="err"></p>
             </form>
         </div>
@@ -177,7 +177,7 @@
 
         for (var ix = 0; ix < casting_min; ix++) {
             var pref = $('#choice' + ix).children('option:selected').val();
-            if (pref === undefined || pref === '') { show_err('{% trans "You have not reached the minimum number of preferences" %}'); return; }
+            if (pref === undefined || pref === '') { show_err('{% filter escapejs %}{% trans "You have not reached the minimum number of preferences" %}{% endfilter %}'); return; }
         }
 
         for (var ix = 0; ix < casting_max; ix++) {
@@ -185,7 +185,7 @@
             if (pref1 === undefined) continue;
             for (var iy = ix + 1; iy < casting_max; iy++) {
                 var pref2 = $('#choice' + iy).children('option:selected').val();
-                if (pref1 === pref2) { show_err('{% trans "You have chosen the same option in more than one preference" %}'); return; }
+                if (pref1 === pref2) { show_err('{% filter escapejs %}{% trans "You have chosen the same option in more than one preference" %}{% endfilter %}'); return; }
             }
         }
 
