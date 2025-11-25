@@ -494,7 +494,7 @@ def get_sumup_form(
     )
 
     # Validate checkout response
-    expected_success_code = 200
+    expected_success_code = 201
     if checkout_response.status_code != expected_success_code:
         error_msg = f"SumUp checkout failed with status {checkout_response.status_code}: {checkout_response.text}"
         logger.error(error_msg)
