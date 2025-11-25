@@ -31,20 +31,20 @@ from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.larpmanager import LarpManagerGuide
 
-translation.activate("en")
-
 
 @cache_page(60 * 60)
 def manual_sitemap_view(request: HttpRequest) -> HttpResponse:
     """Generate XML sitemap for organization or global site."""
-    # Check if this is the global site (id=0) or organization-specific
-    association_id = request.association["id"]
-    urls = larpmanager_sitemap() if association_id == 0 else _organization_sitemap(association_id)
+    # Force English for sitemap generation using context manager
+    with translation.override("en"):
+        # Check if this is the global site (id=0) or organization-specific
+        association_id = request.association["id"]
+        urls = larpmanager_sitemap() if association_id == 0 else _organization_sitemap(association_id)
 
-    # Render URLs to XML format
-    stream = _render_sitemap(urls)
+        # Render URLs to XML format
+        stream = _render_sitemap(urls)
 
-    return HttpResponse(stream.getvalue(), content_type="application/xml")
+        return HttpResponse(stream.getvalue(), content_type="application/xml")
 
 
 def _render_sitemap(urls: list[str]) -> StringIO:
