@@ -5291,7 +5291,7 @@ msgid "Did you check the required data properly"
 msgstr "Hai controllato bene i dati richiesti"
 
 msgid "Error uploading image. Please try again."
-msgstr "Errore nel caricamento dell'immagine. Riprovare."
+msgstr "Errore nel caricamento. Riprovare."
 
 msgid "IP address from which the token was used"
 msgstr "Indirizzo IP da cui è stato utilizzato il token"
