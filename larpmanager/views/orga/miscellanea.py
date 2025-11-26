@@ -355,6 +355,11 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     if context["optionals"]["quantity"]:
         context["no_header_cols"] = [8, 9]
 
+    # Get cached warehouse data for the association
+    from larpmanager.cache.warehouse import get_association_warehouse_cache
+
+    warehouse_cache = get_association_warehouse_cache(context["association_id"])
+
     # Retrieve all warehouse items for the association with prefetched tags
     item_all: dict[int, Any] = {}
     for item in (
@@ -364,6 +369,11 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, num: 
     ):
         # Set initial availability to item's total quantity
         item.available = item.quantity or 0
+        # Attach cached tags from warehouse cache
+        if item.id in warehouse_cache:
+            item.tags_cached = warehouse_cache[item.id]["tags"]
+        else:
+            item.tags_cached = []
         item_all[item.id] = item
 
     # Process existing warehouse item assignments to calculate availability

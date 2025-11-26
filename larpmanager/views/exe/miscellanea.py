@@ -110,9 +110,24 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
     # Handle any bulk operations on items
     handle_bulk_items(request, context)
 
+    # Get cached warehouse data for the association
+    from larpmanager.cache.warehouse import get_association_warehouse_cache
+
+    warehouse_cache = get_association_warehouse_cache(context["association_id"])
+
     # Get warehouse items for current association with related data
-    context["list"] = WarehouseItem.objects.filter(association_id=context["association_id"])
-    context["list"] = context["list"].select_related("container").prefetch_related("tags")
+    items = WarehouseItem.objects.filter(association_id=context["association_id"])
+    items = items.select_related("container").prefetch_related("tags")
+
+    # Attach cached tags to each item
+    items_list = []
+    for item in items:
+        if item.id in warehouse_cache:
+            item.tags_cached = warehouse_cache[item.id]["tags"]
+        else:
+            item.tags_cached = []
+        items_list.append(item)
+    context["list"] = items_list
 
     # Add optional warehouse context data
     get_warehouse_optionals(context, [5])
