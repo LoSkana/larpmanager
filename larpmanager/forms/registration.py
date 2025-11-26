@@ -633,7 +633,7 @@ class RegistrationGiftForm(RegistrationForm):
         # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]
         for field in list_del:
-            del self.fields[field]
+            self.delete_field(field)
             key = f"id_{field}"
             if key in self.mandatory:
                 self.mandatory.remove(key)
@@ -1064,7 +1064,7 @@ class OrgaRegistrationTicketForm(MyForm):
         if len(tiers) > 1:
             self.fields["tier"].choices = tiers
         else:
-            del self.fields["tier"]
+            self.delete_field("tier")
 
         # Remove casting priority field if casting feature is disabled
         if "casting" not in self.params["features"]:
