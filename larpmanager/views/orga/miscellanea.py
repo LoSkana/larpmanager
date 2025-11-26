@@ -814,7 +814,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
 
     # Create comprehensive audit log entry with all changes
     Log.objects.create(
-        association=context["association"],
+        association_id=context["association_id"],
         member=context["member"],
         event=context["event"],
         category="warehouse",
