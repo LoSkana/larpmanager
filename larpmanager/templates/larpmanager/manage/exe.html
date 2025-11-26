@@ -85,6 +85,8 @@
         {% with list=suggestions typ="suggestions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
+        <hr />
+        <a href="{% url 'exe_reload_cache' %}">Reset cache</a>
     </div>
 {% endblock content %}
 {% block css %}

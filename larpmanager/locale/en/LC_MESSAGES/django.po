@@ -9134,6 +9134,9 @@ msgstr ""
 msgid "Feature %(name)s deactivated"
 msgstr ""
 
+msgid "Cache reset!"
+msgstr ""
+
 msgid "Your event has been created"
 msgstr ""
 
@@ -9511,9 +9514,6 @@ msgid "Registration cancelled"
 msgstr ""
 
 msgid "Player customisation updated"
-msgstr ""
-
-msgid "Cache reset!"
 msgstr ""
 
 msgid "You must create at least one quest type before you can create quests"

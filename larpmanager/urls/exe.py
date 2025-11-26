@@ -35,6 +35,11 @@ urlpatterns = [
         name="manage",
     ),
     path(
+        "manage/cache/",
+        views_eas.exe_reload_cache,
+        name="exe_reload_cache",
+    ),
+    path(
         "manage/quick/",
         views_eas.exe_quick,
         name="exe_quick",
