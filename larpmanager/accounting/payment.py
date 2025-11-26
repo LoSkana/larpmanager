@@ -539,7 +539,11 @@ def _process_payment(invoice: PaymentInvoice) -> None:
 
     """
     if not AccountingItemPayment.objects.filter(inv=invoice).exists():
-        registration = Registration.objects.get(pk=invoice.idx)
+        try:
+            registration = Registration.objects.get(pk=invoice.idx)
+        except ObjectDoesNotExist:
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
+            return
 
         accounting_item = AccountingItemPayment()
         accounting_item.pay = PaymentChoices.MONEY
@@ -586,9 +590,12 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
 
     # For registration payments, link the transaction to the registration
     if invoice.typ == PaymentType.REGISTRATION:
-        registration = Registration.objects.get(pk=invoice.idx)
-        accounting_transaction.reg = registration
-        accounting_transaction.save()
+        try:
+            registration = Registration.objects.get(pk=invoice.idx)
+            accounting_transaction.reg = registration
+            accounting_transaction.save()
+        except ObjectDoesNotExist:
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
 
 
 def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
