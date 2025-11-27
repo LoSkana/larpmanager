@@ -2,7 +2,6 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-27 04:37+0000\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "Expenses"
