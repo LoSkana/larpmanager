@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-27 01:28+0000\n"
+"POT-Creation-Date: 2025-11-27 04:37+0000\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "Expenses"
@@ -3146,18 +3146,10 @@ msgid ""
 "default or customize it"
 msgstr ""
 
-msgid "Component Templates"
-msgstr ""
-
-msgid ""
-"Other templates that are part of this template. Can include multiple "
-"instances."
+msgid "Optional template associated with this ability."
 msgstr ""
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
-msgstr ""
-
-msgid "Optional template associated with this ability."
 msgstr ""
 
 msgid ""

@@ -39,7 +39,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.models.experience import AbilityPx
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx
 from larpmanager.models.form import WritingOption
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
@@ -728,18 +728,23 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(AbilityPx)
 
 
-class AbilityTemplateS2Widget(s2forms.ModelSelect2Widget):
-    search_fields = [
+class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
+    """Represents AbilityTemplateS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
         "name__icontains",
     ]
 
-    def set_event(self, event):
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
         self.event = event
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[RegistrationTicket]:
+        """Return registration tickets for the event."""
         return self.event.get_elements(AbilityTemplatePx)
 
-    def label_from_instance(self, obj):
+    def label_from_instance(self, obj: Any) -> str:
+        """Return string representation of the given object."""
         return obj.get_full_name()
 
 

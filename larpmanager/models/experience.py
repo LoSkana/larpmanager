@@ -30,6 +30,21 @@ from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
+class AbilityTemplatePx(BaseConceptModel):
+    """Represents AbilityTemplatePx model."""
+
+    name = models.CharField(max_length=150)
+    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
+
+    def __str__(self) -> str:
+        """Return string representation of AbilityTemplatePx."""
+        return self.name
+
+    def get_full_name(self) -> str:
+        """Returns full name."""
+        return self.name
+
+
 class AbilityTypePx(BaseConceptModel):
     """Represents AbilityTypePx model."""
 
@@ -50,43 +65,6 @@ class AbilityTypePx(BaseConceptModel):
         ]
 
 
-class AbilityTemplatePx(BaseConceptModel):
-    name = models.CharField(max_length=150)
-    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
-
-    # Self-referential many-to-many: a template can include other templates, including multiple times
-    components = models.ManyToManyField(
-        "self",
-        through="AbilityTemplateComponent",
-        symmetrical=False,
-        blank=True,
-        related_name="used_in",
-        verbose_name=_("Component Templates"),
-        help_text=_("Other templates that are part of this template. Can include multiple instances."),
-    )
-
-    def __str__(self):
-        if self.rank > 1:
-            return f"{self.name} {self.rank}"
-        return self.name
-
-    def get_full_name(self):
-        return self.name
-
-
-class AbilityTemplateComponent(models.Model):
-    """Through model to allow multiple instances of the same component template
-    within a parent template.
-    """
-
-    parent = models.ForeignKey(AbilityTemplatePx, on_delete=models.CASCADE, related_name="component_links")
-    component = models.ForeignKey(AbilityTemplatePx, on_delete=models.CASCADE, related_name="component_instances")
-    quantity = models.PositiveIntegerField(default=1)
-
-    class Meta:
-        unique_together = ("parent", "component")
-
-
 class AbilityPx(BaseConceptModel):
     """Represents AbilityPx model."""
 
@@ -99,8 +77,6 @@ class AbilityPx(BaseConceptModel):
         verbose_name=_("Type"),
     )
 
-    cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
-
     template = models.ForeignKey(
         AbilityTemplatePx,
         on_delete=models.SET_NULL,
@@ -110,6 +86,8 @@ class AbilityPx(BaseConceptModel):
         verbose_name=_("Template"),
         help_text=_("Optional template associated with this ability."),
     )
+
+    cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
 
     descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
 
@@ -155,8 +133,10 @@ class AbilityPx(BaseConceptModel):
         """Return formatted display string with name and cost."""
         return f"{self.name} ({self.cost})"
 
-    def get_description(self):
-        return self.template.descr if self.template_id else self.descr
+    @property
+    def get_description(self) -> str:
+        """Returns description of ability."""
+        return self.template.descr if self.template else self.descr
 
 
 class DeliveryPx(BaseConceptModel):
@@ -183,48 +163,6 @@ class DeliveryPx(BaseConceptModel):
     def display(self) -> str:
         """Return formatted display string with name and amount."""
         return f"{self.name} ({self.amount})"
-
-
-def update_px(char):
-    start = char.event.get_config("px_start", 0)
-
-    addit = {
-        "px_tot": int(start) + sum(char.px_delivery_list.values_list("amount", flat=True)),
-        "px_used": sum(char.px_ability_list.values_list("cost", flat=True)),
-    }
-    addit["px_avail"] = addit["px_tot"] - addit["px_used"]
-
-    save_all_element_configs(char, addit)
-
-    # save computed field
-    event = char.event
-    computed_ques = event.get_elements(WritingQuestion).filter(typ=QuestionType.COMPUTED)
-    values = {question.id: Decimal(0) for question in computed_ques}
-
-    # apply rules
-    ability_ids = char.px_ability_list.values_list("pk", flat=True)
-    rules = (
-        event.get_elements(RulePx)
-        .filter(Q(abilities__isnull=True) | Q(abilities__in=ability_ids))
-        .distinct()
-        .order_by("order")
-    )
-
-    ops = {
-        Operation.ADDITION: lambda x, y: x + y,
-        Operation.SUBTRACTION: lambda x, y: x - y,
-        Operation.MULTIPLICATION: lambda x, y: x * y,
-        Operation.DIVISION: lambda x, y: x / y if y != 0 else x,
-    }
-
-    for rule in rules:
-        f_id = rule.field.id
-        values[f_id] = ops.get(rule.operation, lambda x, y: x)(values[f_id], rule.amount)
-
-    for question_id, value in values.items():
-        (qa, created) = WritingAnswer.objects.get_or_create(question_id=question_id, element_id=char.id)
-        qa.text = format(value, "f").rstrip("0").rstrip(".")
-        qa.save()
 
 
 class Operation(models.TextChoices):

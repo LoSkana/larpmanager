@@ -68,6 +68,8 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
 
 class OrgaAbilityTemplatePxForm(MyForm):
+    """Form for OrgaAbilityTemplatePx."""
+
     page_title = _("Ability Template")
 
     page_info = _("This page allows you to add or edit an ability template")
@@ -75,12 +77,18 @@ class OrgaAbilityTemplatePxForm(MyForm):
     class Meta:
         model = AbilityTemplatePx
         exclude = ("number",)
-        widgets = {
+        widgets: ClassVar[dict] = {
             "components": AbilityTemplateS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with event-specific ability configuration."""
         super().__init__(*args, **kwargs)
+
+        if "components" not in self.fields:
+            self.fields["components"] = forms.ModelMultipleChoiceField(
+                queryset=AbilityTemplatePx.objects.all(), required=False, widget=self.Meta.widgets.get("components")
+            )
 
         self.fields["components"].widget.set_event(self.params["event"])
 
@@ -102,7 +110,7 @@ class OrgaAbilityPxForm(PxBaseForm):
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
-            "template": AbilityTemplateS2Widget,
+            "template": AbilityTemplateS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -110,7 +118,6 @@ class OrgaAbilityPxForm(PxBaseForm):
         super().__init__(*args, **kwargs)
 
         # Configure prerequisite and requirement widgets with event context
-        # FIX
         for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
         for field_name in ["prerequisites", "dependents", "template"]:
