@@ -43,19 +43,24 @@ from larpmanager.accounting.registration import (
     get_accounting_refund,
     get_reg_payments,
 )
+from larpmanager.cache.accounting import clear_registration_accounting_cache
+from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_run_cache_and_media, get_event_cache_all
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config, reset_element_configs
+from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.cache.links import clear_run_event_links_cache
 from larpmanager.cache.registration import clear_registration_counts_cache
 from larpmanager.cache.rels import clear_event_relationships_cache
+from larpmanager.cache.role import remove_event_role_cache
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import get_cache_reg_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
 )
+from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -63,7 +68,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType
-from larpmanager.models.event import PreRegistration
+from larpmanager.models.event import EventText, PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -1192,10 +1197,28 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     clear_event_features_cache(context["event"].id)
     clear_run_event_links_cache(context["event"])
 
-    # Clear registration and relationship data caches
+    # Clear event button cache
+    clear_event_button_cache(context["event"].id)
+
+    # Clear event config cache
+    reset_element_configs(context["event"])
+
+    # Clear run config cache
+    reset_element_configs(context["run"])
+
+    # Clear registration-related caches
     clear_registration_counts_cache(context["run"].id)
+    clear_registration_accounting_cache(context["run"].id)
     clear_event_fields_cache(context["event"].id)
     clear_event_relationships_cache(context["event"].id)
+
+    # Clear event text caches for all EventText instances
+    for event_text in EventText.objects.filter(event_id=context["event"].id):
+        reset_event_text(event_text)
+
+    # Clear event role caches
+    for event_role_id in EventRole.objects.filter(event_id=context["event"].id).values_list("id", flat=True):
+        remove_event_role_cache(event_role_id)
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))

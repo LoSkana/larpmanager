@@ -112,4 +112,4 @@ class LarpManagerTicketForm(MyForm):
 
         # Remove screenshot field if reason is provided
         if self.params.get("reason"):
-            del self.fields["screenshot"]
+            self.delete_field("screenshot")

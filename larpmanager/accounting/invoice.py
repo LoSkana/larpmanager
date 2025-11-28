@@ -23,6 +23,7 @@
 from __future__ import annotations
 
 import csv
+import logging
 import math
 from io import StringIO
 from typing import TYPE_CHECKING
@@ -32,10 +33,11 @@ from django.db import transaction
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.core.common import clean, detect_delimiter
-from larpmanager.utils.larpmanager.tasks import notify_admins
 
 if TYPE_CHECKING:
     from django.core.files.uploadedfile import InMemoryUploadedFile
+
+logger = logging.getLogger(__name__)
 
 
 def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
@@ -127,6 +129,8 @@ def invoice_received_money(
     gross_amount: float | None = None,
     processing_fee: float | None = None,
     transaction_id: str | None = None,
+    expected_amount: float | None = None,
+    payment_method: str | None = None,
 ) -> bool | None:
     """Process received payment for a payment invoice.
 
@@ -138,9 +142,12 @@ def invoice_received_money(
         gross_amount: Optional gross amount received from payment processor
         processing_fee: Optional processing fee charged by payment processor
         transaction_id: Optional transaction ID from payment processor
+        expected_amount: Optional expected payment amount for verification
+        payment_method: Optional payment method name for logging
 
     Returns:
         True if payment was processed successfully, None if invalid invoice code
+        or verification fails
 
     Raises:
         No exceptions are raised - invalid invoices are handled gracefully
@@ -149,7 +156,7 @@ def invoice_received_money(
     Side Effects:
         - Updates invoice status to CHECKED
         - Saves financial details (gross amount, fees, transaction ID)
-        - Sends admin notification for invalid payment codes
+        - Sends admin notification for invalid payment codes or amount mismatches
 
     """
     # Attempt to retrieve the payment invoice by code
@@ -157,8 +164,41 @@ def invoice_received_money(
         invoice = PaymentInvoice.objects.get(cod=invoice_code)
     except ObjectDoesNotExist:
         # Notify administrators of invalid payment attempt
-        notify_admins("invalid payment", "wrong invoice: " + invoice_code)
+        logger.exception("Invalid payment: Invoice not found: %s", invoice_code)
         return None
+
+    # Verify payment amount if provided and expected amount is available
+    if gross_amount is not None and expected_amount is not None:
+        received_amount = float(gross_amount)
+        expected = float(expected_amount)
+
+        # Allow small rounding differences (1 cent tolerance)
+        amount_tolerance = 0.01
+
+        # Reject if received amount is less than expected (underpayment)
+        if received_amount < (expected - amount_tolerance):
+            method_name = payment_method or invoice.method.slug
+            logger.error(
+                "Payment alert: Insufficient Amount - Expected: %s, Received: %s, Invoice: %s, TxnID: %s, Method: %s, Association: %s",
+                expected,
+                received_amount,
+                invoice_code,
+                transaction_id,
+                method_name,
+                invoice.association.slug,
+            )
+            return None
+
+        # Log warning for overpayment (but still accept)
+        if received_amount > (expected + amount_tolerance):
+            method_name = payment_method or invoice.method.slug
+            logger.warning(
+                "Payment overpayment detected. Expected: %s, Received: %s, Invoice: %s, Method: %s",
+                expected,
+                received_amount,
+                invoice_code,
+                method_name,
+            )
 
     # Process payment updates within atomic transaction
     with transaction.atomic():

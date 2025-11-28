@@ -94,7 +94,7 @@ class ExeAssociationForm(MyForm):
 
         # Remove specified fields from the form's field collection
         for field_name in ["slug"]:
-            del self.fields[field_name]
+            self.delete_field(field_name)
 
 
 class ExeAssociationTextForm(MyForm):

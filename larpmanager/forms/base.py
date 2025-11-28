@@ -95,8 +95,7 @@ class MyForm(forms.ModelForm):
 
         # Remove system fields that shouldn't be user-editable
         for m in ["deleted", "temp"]:
-            if m in self.fields:
-                del self.fields[m]
+            self.delete_field(m)
 
         # Configure characters field widget with event context
         if "characters" in self.fields:
@@ -109,7 +108,7 @@ class MyForm(forms.ModelForm):
             if s in self.fields:
                 if self.instance.pk:
                     # Remove automatic fields for existing instances
-                    del self.fields[s]
+                    self.delete_field(s)
                 else:
                     # Hide automatic fields for new instances
                     self.fields[s].widget = forms.HiddenInput()
@@ -153,7 +152,9 @@ class MyForm(forms.ModelForm):
         available_runs = Run.objects.filter(event=self.params["event"])
 
         # If campaign switch is active, expand to include related events
-        if get_association_config(self.params["event"].association_id, "campaign_switch", default_value=False, context=self.params):
+        if get_association_config(
+            self.params["event"].association_id, "campaign_switch", default_value=False, context=self.params
+        ):
             # Start with current event ID
             related_event_ids = {self.params["event"].id}
 

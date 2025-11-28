@@ -1040,7 +1040,7 @@ class OrgaAppearanceForm(MyCssForm):
 
         # Delete unused fields from form
         for m in dl:
-            del self.fields[m]
+            self.delete_field(m)
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form and generate a unique CSS code for the skin."""
@@ -1294,7 +1294,7 @@ class OrgaRunForm(ConfigForm):
         )
 
         for s in dl:
-            del self.fields[s]
+            self.delete_field(s)
 
         self.show_sections = True
 
