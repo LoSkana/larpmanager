@@ -42,7 +42,7 @@ from larpmanager.models.association import (
 class AssociationAdmin(DefModelAdmin):
     """Admin interface for LARP organizations and associations."""
 
-    list_display = ("name", "slug", "created")
+    list_display = ("name", "slug")
     search_fields: ClassVar[tuple] = ("name",)
 
     autocomplete_fields: ClassVar[list] = ["payment_methods", "features", "maintainers"]

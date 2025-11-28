@@ -270,7 +270,7 @@ class OneTimeAccessTokenInline(admin.TabularInline):
 
     model = OneTimeAccessToken
     extra = 0
-    readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent", "created")
+    readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent")
     fields = ("note", "token", "used", "used_at", "used_by", "ip_address")
     can_delete = True
 
@@ -291,11 +291,10 @@ class OneTimeContentAdmin(DefModelAdmin):
         "file_size_display",
         "token_count",
         "active",
-        "created",
     )
-    list_filter = ("event", "active", "created")
+    list_filter = ("event", "active")
     search_fields: ClassVar[tuple] = ("name", "description", "event__name")
-    readonly_fields: ClassVar[tuple] = ("content_type", "file_size", "created", "updated")
+    readonly_fields: ClassVar[tuple] = ("content_type", "file_size")
     inlines: ClassVar[list] = [OneTimeAccessTokenInline]
     autocomplete_fields: ClassVar[list] = ["event"]
 
@@ -315,7 +314,7 @@ class OneTimeContentAdmin(DefModelAdmin):
         (
             "Metadata",
             {
-                "fields": ("content_type", "file_size", "duration", "created", "updated"),
+                "fields": ("content_type", "file_size", "duration"),
                 "classes": ("collapse",),
             },
         ),
@@ -359,19 +358,10 @@ class OneTimeContentAdmin(DefModelAdmin):
 class OneTimeAccessTokenAdmin(DefModelAdmin):
     """Admin interface for OneTimeAccessToken."""
 
-    list_display = (
-        "token_short",
-        "content",
-        "note",
-        "used",
-        "used_at",
-        "used_by",
-        "ip_address",
-        "created",
-    )
-    list_filter = ("used", "used_at", "created", "content__event")
+    list_display = ("token_short", "content", "note", "used", "used_at", "used_by", "ip_address")
+    list_filter = ("used", "used_at", "content__event")
     search_fields: ClassVar[tuple] = ("token", "note", "content__name", "used_by__name", "ip_address")
-    readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent", "created", "updated")
+    readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent")
     autocomplete_fields: ClassVar[list] = ["content", "used_by"]
 
     fieldsets = (
@@ -389,13 +379,6 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
             "Usage information",
             {
                 "fields": ("used", "used_at", "used_by", "ip_address", "user_agent"),
-                "classes": ("collapse",),
-            },
-        ),
-        (
-            "Metadata",
-            {
-                "fields": ("created", "updated"),
                 "classes": ("collapse",),
             },
         ),
