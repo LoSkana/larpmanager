@@ -63,7 +63,7 @@ class QuestTypeAdmin(DefModelAdmin):
 class CastingAdmin(DefModelAdmin):
     """Admin interface for Casting model."""
 
-    list_display = ("run", "member", "element", "pref", "typ", "created", "updated")
+    list_display = ("run", "member", "element", "pref", "typ")
     autocomplete_fields = (
         "run",
         "member",

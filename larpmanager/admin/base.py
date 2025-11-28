@@ -157,7 +157,7 @@ class RegistrationFilter(AutocompleteFilter):
 class LogAdmin(DefModelAdmin):
     """Admin interface for Log model."""
 
-    list_display: ClassVar[tuple] = ("member", "cls", "eid", "created", "dl")
+    list_display: ClassVar[tuple] = ("member", "cls", "eid", "dl")
     search_fields = ("member", "cls", "dl")
     autocomplete_fields: ClassVar[list] = ["member"]
 

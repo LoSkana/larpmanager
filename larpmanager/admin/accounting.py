@@ -77,7 +77,7 @@ class AccountingItemAdmin(DefModelAdmin):
 class AccountingItemTransactionAdmin(AccountingItemAdmin):
     """Admin interface for payment transaction accounting items."""
 
-    list_display = ("id", "inv", "member", "value", "created", "updated")
+    list_display = ("id", "inv", "member", "value")
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
     list_filter = (MemberFilter, AssociationFilter, RegistrationFilter)
 
@@ -86,7 +86,7 @@ class AccountingItemTransactionAdmin(AccountingItemAdmin):
 class AccountingItemDiscountAdmin(AccountingItemAdmin):
     """Admin interface for discount accounting items."""
 
-    list_display = ("id", "disc", "run", "member", "value", "created", "updated")
+    list_display = ("id", "disc", "run", "member", "value")
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "run", "disc"]
     list_filter = (MemberFilter, AssociationFilter, RunFilter)
 
@@ -95,7 +95,7 @@ class AccountingItemDiscountAdmin(AccountingItemAdmin):
 class AccountingItemDonationAdmin(AccountingItemAdmin):
     """Admin interface for donation accounting items."""
 
-    list_display = ("id", "member", "value", "descr", "created", "updated")
+    list_display = ("id", "member", "value", "descr")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
@@ -104,7 +104,7 @@ class AccountingItemDonationAdmin(AccountingItemAdmin):
 class AccountingItemCollectionAdmin(AccountingItemAdmin):
     """Admin interface for collection accounting items."""
 
-    list_display = ("id", "member", "value", "created", "updated")
+    list_display = ("id", "member", "value")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
@@ -113,16 +113,7 @@ class AccountingItemCollectionAdmin(AccountingItemAdmin):
 class AccountingItemExpenseAdmin(AccountingItemAdmin):
     """Admin interface for expense accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "short_descr",
-        "member",
-        "value",
-        "balance",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "short_descr", "member", "value", "balance")
     autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, MemberFilter, AssociationFilter)
     search_fields = ("search", "descr")
@@ -132,16 +123,7 @@ class AccountingItemExpenseAdmin(AccountingItemAdmin):
 class AccountingItemOutflowAdmin(AccountingItemAdmin):
     """Admin interface for outflow accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "short_descr",
-        "value",
-        "payment_date",
-        "balance",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "short_descr", "value", "payment_date", "balance")
     autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, AssociationFilter)
     search_fields = ("search", "descr")
@@ -151,15 +133,7 @@ class AccountingItemOutflowAdmin(AccountingItemAdmin):
 class AccountingItemInflowAdmin(AccountingItemAdmin):
     """Admin interface for inflow accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "short_descr",
-        "value",
-        "payment_date",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "short_descr", "value", "payment_date")
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "run"]
     list_filter = (RunFilter, AssociationFilter)
     search_fields = ("search", "descr")
@@ -169,34 +143,16 @@ class AccountingItemInflowAdmin(AccountingItemAdmin):
 class AccountingItemPaymentAdmin(AccountingItemAdmin):
     """Admin interface for payment accounting items linked to registrations."""
 
-    list_display = (
-        "id",
-        "reg",
-        "member",
-        "value",
-        "pay",
-        "created",
-        "updated",
-        "inv",
-    )
+    list_display = ("id", "reg", "member", "value")
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
-    list_filter = (MemberFilter, AssociationFilter, RegistrationFilter, "pay", "created")
+    list_filter = (MemberFilter, AssociationFilter, RegistrationFilter, "pay")
 
 
 @admin.register(AccountingItemMembership)
 class AccountingItemMembershipAdmin(AccountingItemAdmin):
     """Admin interface for membership fee accounting items."""
 
-    list_display = (
-        "id",
-        "year",
-        "member",
-        "value",
-        "created",
-        "updated",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "year", "member", "value")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
 
@@ -205,17 +161,7 @@ class AccountingItemMembershipAdmin(AccountingItemAdmin):
 class AccountingItemOtherAdmin(AccountingItemAdmin):
     """Admin interface for miscellaneous accounting items."""
 
-    list_display = (
-        "id",
-        "run",
-        "member",
-        "short_descr",
-        "created",
-        "value",
-        "oth",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "run", "member", "short_descr", "value", "oth")
     autocomplete_fields = ("run", "member", "inv", "association")
     list_filter = (RunFilter, MemberFilter, AssociationFilter)
 
@@ -226,18 +172,7 @@ class PaymentInvoiceAdmin(DefModelAdmin):
 
     exclude = ("search",)
     search_fields = ("search", "cod", "causal")
-    list_display = (
-        "id",
-        "key",
-        "causal",
-        "typ",
-        "method",
-        "status",
-        "mc_gross",
-        "mc_fee",
-        "created",
-        "updated",
-    )
+    list_display = ("id", "key", "causal", "typ", "method", "status", "mc_gross", "mc_fee")
     autocomplete_fields = ("member", "method", "association", "reg")
     list_filter = ("status", "method", "typ", AssociationFilter, MemberFilter)
 
