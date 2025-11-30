@@ -116,7 +116,7 @@ class MemberConfigAdmin(DefModelAdmin):
 class MembershipAdmin(DefModelAdmin):
     """Admin interface for Membership model."""
 
-    list_display: ClassVar[tuple] = ("member", "association", "status", "card_number", "date", "created")
+    list_display: ClassVar[tuple] = ("member", "association", "status", "card_number", "date")
     list_filter = (AssociationFilter, MemberFilter)
     autocomplete_fields: ClassVar[list] = ["member", "association"]
 

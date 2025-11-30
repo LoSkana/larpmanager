@@ -102,7 +102,7 @@
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <hr />
-        <a href="{% url 'orga_reload_cache' run.get_slug %}">Reload cache</a>
+        <a href="{% url 'orga_reload_cache' run.get_slug %}">Reset cache</a>
         -
         <a href="{% url 'orga_backup' run.get_slug %}">Full backup</a>
     </div>

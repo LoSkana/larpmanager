@@ -153,7 +153,7 @@ window.addEventListener('DOMContentLoaded', function() {
         select_p('7');
 
         $('form').on('submit', function() {
-            return confirm('{% trans "Are you really sure" %}?');
+            return confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
         });
     });
 });

@@ -6483,6 +6483,9 @@ msgid "This page shows all expense items recorded in the system"
 msgstr ""
 "Tato stránka zobrazuje všechny nákladové položky zaznamenané v systému"
 
+msgid "You must select at least one ticket for this installment"
+msgstr "Pro tuto část musíte vybrat alespoň jeden tip"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Nepovinné) Jiná schopnost jako předpoklad, oddělená čárkou"
 
@@ -6756,6 +6759,10 @@ msgstr "Pro potvrzení registrace prosím zaplaťte uvedenou částku"
 
 msgid "for no relationship, only to display the other character name"
 msgstr "pro žádný vztah, pouze pro zobrazení jména druhého znaku"
+
+#, python-format
+msgid "A quota with %(quotas)d payments already exists for this event"
+msgstr "Pro tuto událost již existuje kvóta s %(quotas)d plateb"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr "Přidáno na stránku členství jako odstavec pro informace o statutu"
@@ -9282,6 +9289,14 @@ msgid ""
 msgstr ""
 "Umožňuje nakonfigurovat vlastní externí poštovní server, který bude použit "
 "místo standardního"
+
+#, python-format
+msgid ""
+"An installment with order %(order)d already exists with the following common"
+" ticket(s): %(tickets)s"
+msgstr ""
+"Splátka s pořadovým číslem %(order)d již existuje s následujícím společným "
+"tipem (tipy): %(tickets)s"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

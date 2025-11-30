@@ -1919,10 +1919,23 @@ msgstr ""
 msgid "Dynamic rates"
 msgstr ""
 
+#, python-format
+msgid "A quota with %(quotas)d payments already exists for this event"
+msgstr ""
+
 msgid "Manage fixed payment installments for participants"
 msgstr ""
 
 msgid "Fixed instalments"
+msgstr ""
+
+msgid "You must select at least one ticket for this installment"
+msgstr ""
+
+#, python-format
+msgid ""
+"An installment with order %(order)d already exists with the following common "
+"ticket(s): %(tickets)s"
 msgstr ""
 
 msgid "Manage registration surcharges"
@@ -9121,6 +9134,9 @@ msgstr ""
 msgid "Feature %(name)s deactivated"
 msgstr ""
 
+msgid "Cache reset!"
+msgstr ""
+
 msgid "Your event has been created"
 msgstr ""
 
@@ -9498,9 +9514,6 @@ msgid "Registration cancelled"
 msgstr ""
 
 msgid "Player customisation updated"
-msgstr ""
-
-msgid "Cache reset!"
 msgstr ""
 
 msgid "You must create at least one quest type before you can create quests"

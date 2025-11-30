@@ -200,7 +200,7 @@ def _set_filtering(context: dict, queryset: QuerySet[Any], column_filters: dict)
 
         # Validate column index is within bounds
         if column_index >= len(context["fields"]):
-            logger.error("Column index out of bounds in _get_ordering: %s %s", column_filters, context["fields"])
+            logger.debug("Column index out of bounds in _get_ordering: %s %s", column_filters, context["fields"])
 
         # Extract field and name from context fields
         field_name, _display_name = context["fields"][column_index - 1]
@@ -259,7 +259,7 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
 
         # Validate column index is within bounds
         if column_index_int >= len(context["fields"]):
-            logger.error("Column index out of bounds in _get_ordering: %s %s", column_order, context["fields"])
+            logger.debug("Column index out of bounds in _get_ordering: %s %s", column_order, context["fields"])
         field_name, _display_name = context["fields"][column_index_int - 1]
 
         # Skip callback fields as they can't be used for database ordering

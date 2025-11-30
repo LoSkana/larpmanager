@@ -94,7 +94,7 @@ class LarpManagerShowcaseAdmin(CSRFTinyMCEModelAdmin):
 class LarpManagerProfilerAdmin(DefModelAdmin):
     """Admin interface for LarpManagerProfiler model."""
 
-    list_display = ("id", "view_func_name", "domain", "duration", "created")
+    list_display = ("id", "view_func_name", "domain", "duration")
 
 
 @admin.register(LarpManagerDiscover)

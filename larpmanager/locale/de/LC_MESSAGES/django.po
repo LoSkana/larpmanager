@@ -6558,6 +6558,9 @@ msgstr ""
 msgid "This page shows all expense items recorded in the system"
 msgstr "Diese Seite zeigt alle im System erfassten Ausgabenposten an"
 
+msgid "You must select at least one ticket for this installment"
+msgstr "Sie müssen mindestens ein Ticket für diese Tranche auswählen"
+
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(fakultativ) Andere Fähigkeit als Voraussetzung, durch Komma getrennt"
 
@@ -6894,6 +6897,12 @@ msgstr ""
 
 msgid "for no relationship, only to display the other character name"
 msgstr "für keine Beziehung, nur um den anderen Zeichennamen anzuzeigen"
+
+#, python-format
+msgid "A quota with %(quotas)d payments already exists for this event"
+msgstr ""
+"Für dieses Ereignis existiert bereits ein Kontingent mit "
+"%(quotas)d-Zahlungen"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr ""
@@ -9736,6 +9745,14 @@ msgid ""
 msgstr ""
 "Ermöglicht es Ihnen, einen benutzerdefinierten externen Mailserver zu "
 "konfigurieren, der anstelle des Standard-Servers verwendet wird"
+
+#, python-format
+msgid ""
+"An installment with order %(order)d already exists with the following common"
+" ticket(s): %(tickets)s"
+msgstr ""
+"Es existiert bereits eine Rate mit dem Auftrag %(order)d mit dem/den "
+"folgenden gemeinsamen Ticket(s): %(tickets)s"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

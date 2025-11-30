@@ -152,13 +152,13 @@ window['show_char'] = {% if show_character %} true {% else %} false {% endif %};
 window['show_teaser'] = {% if show_character.teaser %} true {% else %} false {% endif %};
 
 window['texts'] = {
-    'abs': '{% trans "Absent" %}',
-    'pl': '{% trans "Player" %}',
-    'cfields': '{% trans "Additional fields" %}',
-    'factions': '{% trans "Factions" %}',
-    'specs': '{% trans "Features" %}',
-    'none': '{% trans "None" %}',
-    'all': '{% trans "All" %}',
+    'abs': '{% filter escapejs %}{% trans "Absent" %}{% endfilter %}',
+    'pl': '{% filter escapejs %}{% trans "Player" %}{% endfilter %}',
+    'cfields': '{% filter escapejs %}{% trans "Additional fields" %}{% endfilter %}',
+    'factions': '{% filter escapejs %}{% trans "Factions" %}{% endfilter %}',
+    'specs': '{% filter escapejs %}{% trans "Features" %}{% endfilter %}',
+    'none': '{% filter escapejs %}{% trans "None" %}{% endfilter %}',
+    'all': '{% filter escapejs %}{% trans "All" %}{% endfilter %}',
 }
 
 window['fields'] = {}

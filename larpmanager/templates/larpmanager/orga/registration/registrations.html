@@ -550,7 +550,7 @@
 var url_load_questions = "{% url 'orga_registration_form_list' run.get_slug %}";
 var url_load_questions_email = "{% url 'orga_registration_form_email' run.get_slug %}";
 
-var download_text = '{% trans "Download" %}';
+var download_text = '{% filter escapejs %}{% trans "Download" %}{% endfilter %}';
 
 var accounting = true;
 
