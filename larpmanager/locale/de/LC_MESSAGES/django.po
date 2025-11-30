@@ -7139,9 +7139,6 @@ msgstr ""
 "Video- oder Audiodatei, die gestreamt werden soll (empfohlen: MP4, WebM, "
 "MP3)"
 
-msgid "You have indicated several preferences towards the same element!"
-msgstr "Sie haben mehrere Vorlieben für ein und dasselbe Element angegeben!"
-
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Ihr Antrag wird in der nächsten Sitzung des Verwaltungsrats behandelt"
 
@@ -7383,6 +7380,10 @@ msgid "Indicates whether the member has completed their profile information"
 msgstr ""
 "Zeigt an, ob das Mitglied seine Profilinformationen vervollständigt hat"
 
+msgid "Invalid selection detected, please select from the available options"
+msgstr ""
+"Ungültige Auswahl erkannt, bitte wählen Sie aus den verfügbaren Optionen"
+
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Macht anstehende Ereignisse für externe Websites über eine öffentliche API "
@@ -7544,6 +7545,9 @@ msgid "Users who can manage support tickets and receive ticket notifications"
 msgstr ""
 "Benutzer, die Support-Tickets verwalten und Ticket-Benachrichtigungen "
 "erhalten können"
+
+msgid "You have indicated more than one preferences towards the same element"
+msgstr "Sie haben mehrere Vorlieben für ein und dasselbe Element angegeben"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr ""

@@ -115,7 +115,8 @@ def get_event_filter_characters(context: dict[str, Any], character_filters: Any)
         default_faction.name = "all"
         default_faction.data = default_faction.show_red()
         default_faction.chars = []
-        for character in characters_by_id.values():
+        # Sort characters by number for consistent ordering
+        for character in sorted(characters_by_id.values(), key=lambda c: c.number):
             if not get_character_filter(character, character_registrations, character_filters):
                 continue
             character.data = character.show_red()

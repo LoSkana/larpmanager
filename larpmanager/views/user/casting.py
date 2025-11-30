@@ -79,6 +79,7 @@ def casting_characters(context: dict, reg: Registration) -> None:
     character_choices_by_faction = {}
     faction_names = []
     total_characters = 0
+    valid_character_ids = set()
 
     # Process each faction and organize characters within it
     for faction in context["factions"]:
@@ -86,14 +87,16 @@ def casting_characters(context: dict, reg: Registration) -> None:
         character_choices_by_faction[faction_name] = {}
         faction_names.append(faction_name)
 
-        # Add each character from the faction to choices with display info
-        for character in faction.chars:
+        # Add each character from the faction to choices with display info, sorted by number
+        for character in sorted(faction.chars, key=lambda c: c.number):
             character_choices_by_faction[faction_name][character.id] = character.show(context["run"])
+            valid_character_ids.add(character.id)
             total_characters += 1
 
     # Convert faction and character data to JSON for frontend consumption
     context["factions"] = json.dumps(faction_names)
     context["choices"] = json.dumps(character_choices_by_faction)
+    context["valid_element_ids"] = valid_character_ids
 
     # Add faction filter for transversal faction types
     context["faction_filter"] = context["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
@@ -117,6 +120,7 @@ def casting_quest_traits(context: dict, typ: str) -> None:
     trait_choices = {}
     faction_names = []
     total_traits = 0
+    valid_trait_ids = set()
 
     # Pre-fetch all assigned traits for this run
     assigned_trait_ids_set = set(AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True))
@@ -134,6 +138,7 @@ def casting_quest_traits(context: dict, typ: str) -> None:
             if trait.id in assigned_trait_ids_set:
                 continue
             available_traits[trait.id] = trait.show()
+            valid_trait_ids.add(trait.id)
             total_traits += 1
 
         # Only include quests that have available traits
@@ -147,6 +152,7 @@ def casting_quest_traits(context: dict, typ: str) -> None:
     # Serialize data as JSON for frontend consumption
     context["factions"] = json.dumps(list(faction_names))
     context["choices"] = json.dumps(trait_choices)
+    context["valid_element_ids"] = valid_trait_ids
 
 
 def casting_details(context: dict, casting_type: int) -> dict:
@@ -267,6 +273,9 @@ def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> Htt
     # Process POST request with new casting preferences
     if request.method == "POST":
         prefs = {}
+        valid_element_ids = context.get("valid_element_ids", set())
+        validation_error = None
+
         # Extract preference choices from form data
         for i in range(context["casting_max"]):
             k = f"choice{i}"
@@ -274,11 +283,22 @@ def casting(request: HttpRequest, event_slug: str, casting_type: int = 0) -> Htt
                 continue
             pref = int(request.POST[k])
 
+            # Validate element ID is in the allowed list (not hidden, etc.)
+            if pref not in valid_element_ids:
+                messages.error(request, _("Invalid selection detected, please select from the available options"))
+                validation_error = True
+                break
+
             # Validate no duplicate preferences selected
             if pref in prefs.values():
-                messages.warning(request, _("You have indicated several preferences towards the same element!"))
-                return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
+                messages.warning(request, _("You have indicated more than one preferences towards the same element"))
+                validation_error = True
+                break
             prefs[i] = pref
+
+        # Handle validation errors or save preferences
+        if validation_error:
+            return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
 
         # Save preferences and redirect to refresh page
         _casting_update(context, prefs, request, casting_type)

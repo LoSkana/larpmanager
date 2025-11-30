@@ -159,7 +159,15 @@
         // alert(faction);
         $('#choice' + ix).empty();
         $('#choice' + ix).append('<option value=\'\' selected disabled>Choose here</option>');
-        for (key in choices_dict[faction]) {
+
+        // Sort keys by character number for consistent ordering
+        var keys = Object.keys(choices_dict[faction]);
+        keys.sort(function(a, b) {
+            return choices_dict[faction][a]['number'] - choices_dict[faction][b]['number'];
+        });
+
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
             var el = choices_dict[faction][key];
             if (!in_faction(el)) continue;
             var text = "#{0} {1}".format(el['number'], el['name']);
