@@ -7027,9 +7027,6 @@ msgstr ""
 "Video- of audiobestand dat moet worden gestreamd (aanbevolen: MP4, WebM, "
 "MP3)"
 
-msgid "You have indicated several preferences towards the same element!"
-msgstr "Je hebt meerdere voorkeuren voor hetzelfde element aangegeven!"
-
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr ""
 "Uw verzoek zal worden behandeld tijdens de volgende vergadering van de Raad "
@@ -7249,6 +7246,10 @@ msgstr "Geeft aan of de korting zichtbaar en bruikbaar is voor deelnemers"
 msgid "Indicates whether the member has completed their profile information"
 msgstr "Geeft aan of het lid zijn profielinformatie heeft ingevuld"
 
+msgid "Invalid selection detected, please select from the available options"
+msgstr ""
+"Ongeldige selectie gedetecteerd, maak een keuze uit de beschikbare opties"
+
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Maakt aankomende evenementen zichtbaar voor externe sites via een openbare "
@@ -7390,6 +7391,9 @@ msgid "Users who can manage support tickets and receive ticket notifications"
 msgstr ""
 "Gebruikers die supporttickets kunnen beheren en ticketmeldingen kunnen "
 "ontvangen"
+
+msgid "You have indicated more than one preferences towards the same element"
+msgstr "Je hebt meerdere voorkeuren voor hetzelfde element aangegeven"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Je hebt het maximale aantal tekens bereikt dat kan worden aangemaakt"

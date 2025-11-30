@@ -7016,9 +7016,6 @@ msgstr ""
 "Archivo de vídeo o audio que se va a transmitir (recomendado: MP4, WebM, "
 "MP3)"
 
-msgid "You have indicated several preferences towards the same element!"
-msgstr "¡Ha indicado varias preferencias hacia el mismo elemento!"
-
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Su solicitud se examinará en la próxima reunión del Consejo"
 
@@ -7239,6 +7236,11 @@ msgstr "Indica si el descuento es visible y utilizable por los participantes"
 msgid "Indicates whether the member has completed their profile information"
 msgstr "Indica si el afiliado ha completado la información de su perfil"
 
+msgid "Invalid selection detected, please select from the available options"
+msgstr ""
+"Selección no válida detectada, por favor seleccione una de las opciones "
+"disponibles"
+
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Hace visibles los próximos eventos a sitios externos a través de una API "
@@ -7386,6 +7388,9 @@ msgid "Users who can manage support tickets and receive ticket notifications"
 msgstr ""
 "Usuarios que pueden gestionar tickets de soporte y recibir notificaciones de"
 " tickets"
+
+msgid "You have indicated more than one preferences towards the same element"
+msgstr "¡Ha indicado varias preferencias hacia el mismo elemento"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Ha alcanzado el número máximo de caracteres que se pueden crear"

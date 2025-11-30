@@ -9608,7 +9608,10 @@ msgid ""
 "be able to select your preferences!"
 msgstr ""
 
-msgid "You have indicated several preferences towards the same element!"
+msgid "Invalid selection detected, please select from the available options"
+msgstr ""
+
+msgid "You have indicated more than one preferences towards the same element"
 msgstr ""
 
 msgid "Preferences saved!"

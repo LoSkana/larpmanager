@@ -6946,9 +6946,6 @@ msgstr ""
 "Video nebo audio soubor, který má být streamován (doporučeno: MP4, WebM, "
 "MP3)"
 
-msgid "You have indicated several preferences towards the same element!"
-msgstr "Uvedli jste několik preferencí vůči stejnému prvku!"
-
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Vaše žádost bude projednána na příštím zasedání správní rady"
 
@@ -7132,6 +7129,9 @@ msgstr "Označuje, zda je sleva viditelná a účastníci ji mohou využít"
 msgid "Indicates whether the member has completed their profile information"
 msgstr "Označuje, zda člen vyplnil informace o svém profilu"
 
+msgid "Invalid selection detected, please select from the available options"
+msgstr "Zjištěn nesprávný výběr, vyberte prosím jednu z dostupných možností"
+
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Zviditelnění nadcházejících událostí pro externí weby prostřednictvím "
@@ -7261,6 +7261,9 @@ msgid "Users who can manage support tickets and receive ticket notifications"
 msgstr ""
 "Uživatelé, kteří mohou spravovat tikety podpory a přijímat oznámení o "
 "tiketech"
+
+msgid "You have indicated more than one preferences towards the same element"
+msgstr "Uvedli jste několik preferencí vůči stejnému prvku"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Dosáhli jste maximálního počtu znaků, které lze vytvořit"

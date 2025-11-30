@@ -6964,9 +6964,6 @@ msgstr "Använd informationen nedan för att begära överföringen från din ba
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller ljudfil som ska streamas (rekommenderas: MP4, WebM, MP3)"
 
-msgid "You have indicated several preferences towards the same element!"
-msgstr "Du har angett flera preferenser för samma element!"
-
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Din begäran kommer att behandlas vid nästa styrelsemöte"
 
@@ -7170,6 +7167,10 @@ msgstr "Anger om rabatten är synlig och användbar för deltagarna"
 msgid "Indicates whether the member has completed their profile information"
 msgstr "Anger om medlemmen har fyllt i sin profilinformation"
 
+msgid "Invalid selection detected, please select from the available options"
+msgstr ""
+"Ogiltigt val upptäckt, vänligen välj från de tillgängliga alternativen"
+
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Gör kommande evenemang synliga för externa webbplatser via ett publikt API"
@@ -7300,6 +7301,9 @@ msgstr ""
 msgid "Users who can manage support tickets and receive ticket notifications"
 msgstr ""
 "Användare som kan hantera supportärenden och ta emot meddelanden om ärenden"
+
+msgid "You have indicated more than one preferences towards the same element"
+msgstr "Du har angett flera preferenser för samma element"
 
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Du har nått det maximala antalet tecken som kan skapas"
