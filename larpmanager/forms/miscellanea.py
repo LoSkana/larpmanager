@@ -347,12 +347,12 @@ class OrganizerCastingOptionsForm(forms.Form):
             self.params = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
-        # Set default payment types (ticket, card, paypal)
-        self.fields["pays"].initial = ("t", "c", "p")
+        # Set default payment types
+        self.fields["pays"].initial = ("t", "c", "p", "n")
 
         # Configure membership field based on feature availability
         if "membership" in self.params["features"]:
-            self.fields["memberships"].initial = ("s", "a", "p")
+            self.fields["memberships"].initial = ("s", "a", "p", "j", "e")
         else:
             del self.fields["memberships"]
 
