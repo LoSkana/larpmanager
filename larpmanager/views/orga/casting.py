@@ -428,7 +428,7 @@ def get_casting_data(
     registrations_query = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
     # Exclude non-participant ticket types from casting
     registrations_query = registrations_query.exclude(
-        ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
+        ticket__tier__in=[TicketTier.WAITING],
     )
     registrations_query = registrations_query.order_by("created").select_related("ticket", "member")
     for registration in registrations_query:

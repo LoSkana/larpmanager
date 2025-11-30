@@ -87,8 +87,8 @@ def casting_characters(context: dict, reg: Registration) -> None:
         character_choices_by_faction[faction_name] = {}
         faction_names.append(faction_name)
 
-        # Add each character from the faction to choices with display info
-        for character in faction.chars:
+        # Add each character from the faction to choices with display info, sorted by number
+        for character in sorted(faction.chars, key=lambda c: c.number):
             character_choices_by_faction[faction_name][character.id] = character.show(context["run"])
             valid_character_ids.add(character.id)
             total_characters += 1

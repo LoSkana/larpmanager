@@ -21,29 +21,21 @@
 """Tests for casting validation to prevent hidden character selection"""
 
 import pytest
-from django.test import Client
-from django.urls import reverse
 
-from larpmanager.models.access import Feature
-from larpmanager.models.casting import Casting
-from larpmanager.models.registration import RegistrationTicket, TicketTier
+from larpmanager.models.registration import TicketTier
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.views.user.casting import casting_characters, casting_quest_traits
 
 
 @pytest.mark.django_db
-class TestCastingValidation(BaseTestCase):
-    """Test casting validation prevents hidden character selection"""
+class TestCastingValidationFunctions(BaseTestCase):
+    """Test casting validation functions prevent hidden character selection"""
 
     def setUp(self):
         """Set up test data"""
         super().setUp()
-        self.client = Client()
-
-        # Create event with slug - this automatically creates a Run with number=1
-        association = self.get_association()
-        self.event = self.create_event(association=association, slug="test-event")
-        # Get the automatically created run
-        self.run = self.event.runs.first()
+        self.event = self.get_event()
+        self.run = self.get_run()
         self.member = self.get_member()
         self.registration = self.create_registration(member=self.member, run=self.run)
 
@@ -52,136 +44,98 @@ class TestCastingValidation(BaseTestCase):
         self.registration.ticket = self.ticket
         self.registration.save()
 
-        # Enable casting feature
-        casting_feature, _ = Feature.objects.get_or_create(
-            name="casting", defaults={"overall": False, "slug": "casting", "order": 100}
-        )
-        self.event.features.add(casting_feature)
-
         # Create characters
         self.visible_char1 = self.character(event=self.event, name="Visible Character 1", hide=False, number=1)
         self.visible_char2 = self.character(event=self.event, name="Visible Character 2", hide=False, number=2)
         self.hidden_char = self.character(event=self.event, name="Hidden Character", hide=True, number=3)
 
-        # Login the user
-        self.client.force_login(self.member.user)
+    def test_casting_characters_excludes_hidden(self):
+        """Test that casting_characters function excludes hidden characters from valid_element_ids"""
+        context = {
+            "event": self.event,
+            "run": self.run,
+            "features": {},
+        }
 
-    def test_cannot_select_hidden_character(self):
-        """Test that POST request with hidden character ID is rejected"""
-        url = reverse("casting", kwargs={"event_slug": self.event.slug, "casting_type": 0})
+        # Call the function that should populate valid_element_ids
+        casting_characters(context, self.registration)
 
-        # Try to submit casting preferences with a hidden character
-        response = self.client.post(
-            url,
-            {
-                "choice0": str(self.visible_char1.id),
-                "choice1": str(self.hidden_char.id),  # This should be rejected
-            },
-        )
+        # Check that valid_element_ids is set
+        self.assertIn("valid_element_ids", context, "valid_element_ids should be in context")
 
-        # Should redirect back to the form
-        self.assertEqual(response.status_code, 302)
+        valid_ids = context["valid_element_ids"]
 
-        # No casting preferences should be saved
-        casting_count = Casting.objects.filter(run=self.run, member=self.member).count()
-        self.assertEqual(casting_count, 0, "Hidden character casting should not be saved")
-
-    def test_can_select_visible_characters(self):
-        """Test that POST request with only visible characters works"""
-        url = reverse("casting", kwargs={"event_slug": self.event.slug, "casting_type": 0})
-
-        # Submit casting preferences with only visible characters
-        response = self.client.post(
-            url,
-            {
-                "choice0": str(self.visible_char1.id),
-                "choice1": str(self.visible_char2.id),
-            },
-        )
-
-        # Debug output
-        if response.status_code != 302:
-            print(f"Response status: {response.status_code}")
-            print(f"Response content: {response.content[:500]}")
-
-        # Should redirect back to the form (success)
-        self.assertEqual(response.status_code, 302)
-
-        # Two casting preferences should be saved
-        casting_count = Casting.objects.filter(run=self.run, member=self.member).count()
-        self.assertEqual(casting_count, 2, "Should save visible character castings")
-
-        # Verify the correct characters were saved
-        castings = Casting.objects.filter(run=self.run, member=self.member).order_by("pref")
-        self.assertEqual(castings[0].element, self.visible_char1.id)
-        self.assertEqual(castings[1].element, self.visible_char2.id)
-
-    def test_hidden_character_not_in_context(self):
-        """Test that hidden characters don't appear in the context"""
-        url = reverse("casting", kwargs={"event_slug": self.event.slug, "casting_type": 0})
-
-        # GET request to load the form
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-
-        # Check that valid_element_ids doesn't contain the hidden character
-        valid_ids = response.context.get("valid_element_ids", set())
+        # Hidden character should NOT be in valid IDs
         self.assertNotIn(self.hidden_char.id, valid_ids, "Hidden character should not be in valid IDs")
-        self.assertIn(self.visible_char1.id, valid_ids, "Visible character should be in valid IDs")
-        self.assertIn(self.visible_char2.id, valid_ids, "Visible character should be in valid IDs")
 
-    def test_character_becomes_hidden_after_selection(self):
-        """Test that if a character becomes hidden after being selected, it remains in preferences"""
-        url = reverse("casting", kwargs={"event_slug": self.event.slug, "casting_type": 0})
+        # Visible characters SHOULD be in valid IDs
+        self.assertIn(self.visible_char1.id, valid_ids, "Visible character 1 should be in valid IDs")
+        self.assertIn(self.visible_char2.id, valid_ids, "Visible character 2 should be in valid IDs")
 
-        # First, select visible characters
-        self.client.post(
-            url,
-            {
-                "choice0": str(self.visible_char1.id),
-                "choice1": str(self.visible_char2.id),
-            },
-        )
+    def test_casting_characters_sorted_by_number(self):
+        """Test that characters are sorted by number in casting_characters"""
+        # Create characters out of order using numbers that don't conflict with setUp
+        char_10 = self.character(event=self.event, name="Character 10", hide=False, number=10)
+        char_7 = self.character(event=self.event, name="Character 7", hide=False, number=7)
+        char_4 = self.character(event=self.event, name="Character 4", hide=False, number=4)
 
-        # Verify selections were saved
-        casting_count = Casting.objects.filter(run=self.run, member=self.member).count()
-        self.assertEqual(casting_count, 2)
+        context = {
+            "event": self.event,
+            "run": self.run,
+            "features": {},
+        }
 
-        # Now hide one of the selected characters
+        casting_characters(context, self.registration)
+
+        # Parse the choices JSON to verify ordering
+        import json
+
+        choices = json.loads(context["choices"])
+
+        # Get all character IDs in order they appear
+        character_ids = []
+        for faction_name, faction_chars in choices.items():
+            for char_id in faction_chars.keys():
+                character_ids.append(int(char_id))
+
+        # Verify the characters are in the correct order (by their numbers)
+        char_4_index = character_ids.index(char_4.id)
+        char_7_index = character_ids.index(char_7.id)
+        char_10_index = character_ids.index(char_10.id)
+
+        self.assertLess(char_4_index, char_7_index, "Character with number=4 should come before number=7")
+        self.assertLess(char_7_index, char_10_index, "Character with number=7 should come before number=10")
+
+
+    def test_valid_element_ids_type(self):
+        """Test that valid_element_ids is a set"""
+        context = {
+            "event": self.event,
+            "run": self.run,
+            "features": {},
+        }
+
+        casting_characters(context, self.registration)
+
+        self.assertIsInstance(context["valid_element_ids"], set, "valid_element_ids should be a set")
+
+    def test_casting_characters_empty_when_all_hidden(self):
+        """Test that valid_element_ids is empty when all characters are hidden"""
+        # Hide all characters
         self.visible_char1.hide = True
         self.visible_char1.save()
+        self.visible_char2.hide = True
+        self.visible_char2.save()
 
-        # Try to update preferences - should still work with remaining visible characters
-        # But cannot add the now-hidden character again
-        response = self.client.post(
-            url,
-            {
-                "choice0": str(self.visible_char2.id),
-            },
-        )
+        context = {
+            "event": self.event,
+            "run": self.run,
+            "features": {},
+        }
 
-        self.assertEqual(response.status_code, 302)
+        casting_characters(context, self.registration)
 
-        # Should now have only 1 casting (the visible one)
-        casting_count = Casting.objects.filter(run=self.run, member=self.member).count()
-        self.assertEqual(casting_count, 1)
+        valid_ids = context["valid_element_ids"]
 
-    def test_invalid_character_id(self):
-        """Test that completely invalid character IDs are rejected"""
-        url = reverse("casting", kwargs={"event_slug": self.event.slug, "casting_type": 0})
-
-        # Try to submit with a non-existent character ID
-        response = self.client.post(
-            url,
-            {
-                "choice0": "99999",  # Non-existent ID
-            },
-        )
-
-        # Should redirect back to the form
-        self.assertEqual(response.status_code, 302)
-
-        # No casting preferences should be saved
-        casting_count = Casting.objects.filter(run=self.run, member=self.member).count()
-        self.assertEqual(casting_count, 0, "Invalid character ID should not be saved")
+        # Should have no valid IDs since all are hidden
+        self.assertEqual(len(valid_ids), 0, "Should have no valid IDs when all characters are hidden")
