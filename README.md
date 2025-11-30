@@ -177,63 +177,91 @@ sudo systemctl enable docker
 
 ---
 
-## Install
-
-If you're old school, a typical installation requires:
-- **Database**: PostgreSQL
-- **Frontend**: Npm
-- **Caching**: Redis
-- **Deployment**: Gunicorn + Nginx
-- **Email**: Postfix
-- **Utils**: Wkhtmltopdf, Imagemagick
-
-For a setup on a Debian-like system, install the following packages:
-```
-python3-pip redis-server postfix git postgresql postgresql-contrib
-nginx libpq-dev wkhtmltopdf nodejs build-essential
-libxmlsec1-dev libxmlsec1-openssl libavif16
-```
-
-Remember to init the database:
-```
-python manage.py migrate
-```
-
-Load npm modules:
-```
-cd larpmanager/static
-npm install
-```
-
-And install playwright for tests:
-```
-playwright install
-```
-
----
-
-## Deploy
-
-In order to deploy:
-1. Copy `main/settings/prod_sample.py` to `main/settings/prod.py`
-2. Set the settings (standard django installation)
-3. Follow the instructions of [django-allauth](https://docs.allauth.org/en/dev/socialaccount/providers/google.html) to setup login with google social provider
-4. Set `postgresql` and `redis` sockets (or with port mapping, your choice)
-4. Load the fixtures with `python manage.py reset`. It will create a test organization with three users, `admin` (superuser), `orga@test.it` (organizer with role access to organization and test event), `user@test.it` (simple user). The password for all of them is `banana`.
-5. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (by default `test`)
-
----
-
 ## Develop
 
 The codebase is based on Django; if you're not already familiar with it, we highly suggest you to follow the tutorials at https://docs.djangoproject.com/.
 
-In order to develop:
+The typical, recommended setup is to have:
+* On a server the *production* instance, managed with docker, with the real user data, CI pipeline, automated backup and all other devops best practices;
+* On your local machine, a *development* instance, managed with dedicated system installations, dummy test database and local development server.
 
-1. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`
-2. In `DATABASES`, put the settings for database connection
-3. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (by default `test`)
-4. Load the fixtures with `python manage.py reset`.
+### System Setup
+
+For a setup on a Debian-like system, install the following packages:
+```bash
+sudo apt install python3-pip python3-venv redis-server git postgresql postgresql-contrib \
+  libpq-dev wkhtmltopdf nodejs build-essential libxmlsec1-dev libxmlsec1-openssl libavif16
+```
+
+Create and activate a virtual environment:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Install Python dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### Database Setup
+
+Create the PostgreSQL database and user:
+```bash
+sudo -u postgres psql
+```
+
+Then run the following SQL commands:
+```sql
+CREATE DATABASE larpmanager;
+CREATE USER larpmanager WITH PASSWORD 'larpmanager';
+ALTER USER larpmanager CREATEDB;
+ALTER DATABASE larpmanager OWNER TO larpmanager;
+GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
+\q
+```
+
+### Django Configuration
+
+1. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`:
+   ```bash
+   cp main/settings/dev_sample.py main/settings/dev.py
+   ```
+
+2. The default database settings should work with the setup above. If you used different credentials, update the `DATABASES` section in `main/settings/dev.py`.
+
+3. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (default is `test`).
+
+4. Run migrations to initialize the database:
+   ```bash
+   python manage.py migrate
+   ```
+
+5. Load the initial test data:
+   ```bash
+   python manage.py reset
+   ```
+
+### Frontend Dependencies
+
+Install npm modules for frontend functionality:
+```bash
+cd larpmanager/static
+npm install
+cd ../..
+```
+
+### Testing Setup
+
+Install Playwright browsers for end-to-end tests:
+```bash
+playwright install
+```
+
+You're now ready to start developing! Run the development server with:
+```bash
+python manage.py runserver
+```
 
 ---
 
