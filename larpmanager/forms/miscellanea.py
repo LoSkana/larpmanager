@@ -359,7 +359,7 @@ class OrganizerCastingOptionsForm(forms.Form):
         # Fetch available tickets excluding waiting list, staff, and NPC tiers
         ticks = (
             RegistrationTicket.objects.filter(event=self.params["event"])
-            .exclude(tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
+            .exclude(tier__in=[TicketTier.WAITING])
             .values_list("id", "name")
         )
 
