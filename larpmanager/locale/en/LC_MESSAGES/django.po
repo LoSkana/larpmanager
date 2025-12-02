@@ -9782,6 +9782,12 @@ msgstr ""
 msgid "Your friend code has been used"
 msgstr ""
 
+msgid "This event has concluded"
+msgstr ""
+
+msgid "This event has been cancelled"
+msgstr ""
+
 msgid "Not available, kiddo"
 msgstr ""
 
