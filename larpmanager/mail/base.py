@@ -26,7 +26,6 @@ import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -631,14 +630,6 @@ def send_support_ticket_email(instance: Any) -> None:
     # Send to association maintainers
     for maintainer in get_association_maintainers(instance.association):
         my_send_mail(subject, body, maintainer.email)
-
-    # Add analyze button for superusers
-    analyze_path = reverse("exe_ticket_analyze", kwargs={"ticket_id": instance.id})
-    analyze_url = get_url(analyze_path.lstrip("/"), instance.association)
-    body += "<br /><br /><hr /><br />"
-    body += "<p><strong>Start automatic ticket analysis:</strong></p>"
-    body += f"<p><a href='{analyze_url}' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;'>Analyze Ticket</a></p>"
-    body += "<p><small>Note: Only superusers and association maintainers can start the analysis.</small></p>"
 
     # Send to admins
     for _admin_name, admin_email in conf_settings.ADMINS:
