@@ -10786,7 +10786,7 @@ msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event and will cancel your registration to make room for other participants"
 msgstr ""
-"Se sentiamo tue notizie, capiremo che non sei più interessato all'evento e "
+"Se NON avremo tue notizie, capiremo che non sei più interessato all'evento e "
 "cancelleremo la tua iscrizione per fare spazio ad altri partecipanti"
 
 msgid ""
