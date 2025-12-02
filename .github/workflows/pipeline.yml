@@ -14,10 +14,6 @@ jobs:
     container:
       image: ghcr.io/loskana/larpmanager-ci:latest
 
-      credentials:
-        username: loskana
-        password: ${{ secrets.REPO_TOKEN }}
-
     env:
       CI: true
       POSTGRES_HOST: postgres
