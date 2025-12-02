@@ -1165,7 +1165,7 @@ msgid "Refunded"
 msgstr "Rimborsati"
 
 msgid "Register"
-msgstr "Register"
+msgstr "Iscrizione"
 
 msgid "Registry"
 msgstr "Registro"
