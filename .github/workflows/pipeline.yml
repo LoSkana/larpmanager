@@ -13,10 +13,9 @@ jobs:
 
     container:
       image: ghcr.io/loskana/larpmanager-ci:latest
-
       credentials:
-        username: loskana
-        password: ${{ secrets.REPO_TOKEN }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     env:
       CI: true
