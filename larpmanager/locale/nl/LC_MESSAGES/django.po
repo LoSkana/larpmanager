@@ -4014,6 +4014,9 @@ msgstr "Geheime registratie link"
 msgid "The subdomain identifier"
 msgstr "De identificatiecode van het subdomein"
 
+msgid "This event has concluded"
+msgstr "Dit evenement is afgesloten"
+
 msgid "Try the sheet generation"
 msgstr "Probeer kaarten te genereren"
 
@@ -4434,6 +4437,9 @@ msgstr "De andere velden zijn optioneel"
 
 msgid "The total registration fee is"
 msgstr "Het totale inschrijfgeld is"
+
+msgid "This event has been cancelled"
+msgstr "Dit evenement is geannuleerd"
 
 msgid "Transportation - gas, highway"
 msgstr "Vervoer - benzine, snelweg"

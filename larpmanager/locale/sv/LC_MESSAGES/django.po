@@ -4014,6 +4014,9 @@ msgstr "Hemlig registreringslänk"
 msgid "The subdomain identifier"
 msgstr "Identifieraren för underdomänen"
 
+msgid "This event has concluded"
+msgstr "Denna händelse har avslutats"
+
 msgid "Try the sheet generation"
 msgstr "Försök med kortgenerering"
 
@@ -4434,6 +4437,9 @@ msgstr "De övriga fälten är valfria"
 
 msgid "The total registration fee is"
 msgstr "Den totala anmälningsavgiften är"
+
+msgid "This event has been cancelled"
+msgstr "Detta evenemang har ställts in"
 
 msgid "Transportation - gas, highway"
 msgstr "Transport - bensin, motorväg"

@@ -4014,6 +4014,9 @@ msgstr "Tajný registrační odkaz"
 msgid "The subdomain identifier"
 msgstr "Identifikátor subdomény"
 
+msgid "This event has concluded"
+msgstr "Tato akce byla ukončena"
+
 msgid "Try the sheet generation"
 msgstr "Vyzkoušejte generování karet"
 
@@ -4434,6 +4437,9 @@ msgstr "Ostatní pole jsou nepovinná"
 
 msgid "The total registration fee is"
 msgstr "Celková výše vstupního poplatku je"
+
+msgid "This event has been cancelled"
+msgstr "Tato akce byla zrušena"
 
 msgid "Transportation - gas, highway"
 msgstr "Doprava - benzín, dálnice"
