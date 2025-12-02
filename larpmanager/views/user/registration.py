@@ -61,6 +61,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import (
+    DevelopStatus,
     Event,
     EventTextType,
     PreRegistration,
@@ -629,6 +630,16 @@ def register(
     context = get_event_context(request, event_slug, include_status=True)
     current_run = context["run"]
     current_event = context["event"]
+
+    # Prevent registration on concluded or cancelled runs
+    if current_run.development in [DevelopStatus.DONE, DevelopStatus.CANC]:
+        msg = _("Registration closed") + " - "
+        if current_run == DevelopStatus.DONE:
+            msg += _("This event has concluded")
+        else:
+            msg += _("This event has been cancelled")
+        messages.warning(request, msg)
+        return redirect("gallery", event_slug=current_run.get_slug())
 
     # Set up registration context for the current run
     if hasattr(current_run, "reg"):
