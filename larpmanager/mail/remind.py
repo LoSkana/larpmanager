@@ -51,6 +51,7 @@ def remember_membership(registration: Any) -> None:
     body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_MEMBERSHIP,
+        registration.member.language,
     ) or get_remember_membership_body(registration)
 
     my_send_mail(subject, body, registration.member, registration.run)
@@ -132,6 +133,7 @@ def remember_pay(registration: Any) -> None:
     email_body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_PAY,
+        registration.member.language,
     ) or get_remember_pay_body(email_context, registration, is_provisional=is_provisional)
 
     my_send_mail(email_subject, email_body, registration.member, registration.run)
@@ -224,6 +226,7 @@ def remember_profile(registration: Any) -> None:
     body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_PROFILE,
+        registration.member.language,
     ) or get_remember_profile_body(context)
 
     my_send_mail(subject, body, registration.member, registration.run)
@@ -265,6 +268,7 @@ def remember_membership_fee(registration: Any) -> None:
     body = get_association_text(
         registration.run.event.association_id,
         AssociationTextType.REMINDER_MEMBERSHIP_FEE,
+        registration.member.language,
     ) or get_remember_membership_fee_body(context, registration)
 
     my_send_mail(subject, body, registration.member, registration.run)
