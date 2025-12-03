@@ -26,10 +26,11 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
+    AbilityTemplateS2WidgetMulti,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
@@ -66,6 +67,32 @@ class OrgaDeliveryPxForm(PxBaseForm):
         widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti}
 
 
+class OrgaAbilityTemplatePxForm(MyForm):
+    """Form for OrgaAbilityTemplatePx."""
+
+    page_title = _("Ability Template")
+
+    page_info = _("This page allows you to add or edit an ability template")
+
+    class Meta:
+        model = AbilityTemplatePx
+        exclude = ("number",)
+        widgets: ClassVar[dict] = {
+            "components": AbilityTemplateS2WidgetMulti,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with event-specific ability configuration."""
+        super().__init__(*args, **kwargs)
+
+        if "components" not in self.fields:
+            self.fields["components"] = forms.ModelMultipleChoiceField(
+                queryset=AbilityTemplatePx.objects.all(), required=False, widget=self.Meta.widgets.get("components")
+            )
+
+        self.fields["components"].widget.set_event(self.params["event"])
+
+
 class OrgaAbilityPxForm(PxBaseForm):
     """Form for OrgaAbilityPx."""
 
@@ -83,6 +110,7 @@ class OrgaAbilityPxForm(PxBaseForm):
             "characters": EventCharacterS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
+            "template": AbilityTemplateS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -92,6 +120,9 @@ class OrgaAbilityPxForm(PxBaseForm):
         # Configure prerequisite and requirement widgets with event context
         for s in ["prerequisites", "requirements"]:
             self.fields[s].widget.set_event(self.params["event"])
+        for field_name in ["prerequisites", "dependents", "template"]:
+            if field_name in self.fields:
+                self.fields[field_name].widget.set_event(self.params["event"])
 
         px_user = get_event_config(self.params["event"].id, "px_user", default_value=False, context=self.params)
 

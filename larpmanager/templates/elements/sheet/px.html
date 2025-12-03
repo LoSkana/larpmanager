@@ -32,7 +32,7 @@
                             </h4>
                         </th>
                         <td>
-                            {% if el.descr %}{{ el.descr | safe }}{% endif %}
+                            {% if el.get_description %}{{ el.get_description | safe }}{% endif %}
                         </td>
                     </tr>
                 {% endfor %}

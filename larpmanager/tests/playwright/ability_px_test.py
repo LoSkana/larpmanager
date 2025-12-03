@@ -130,6 +130,22 @@ def ability(live_server: Any, page: Any) -> None:
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
 
+    page.get_by_role("link", name="Ability Template").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("test_template")
+    page.locator("iframe[title=\"Rich Text Area\"]").content_frame.locator("html").click()
+    page.locator("iframe[title=\"Rich Text Area\"]").content_frame.get_by_label("Rich Text Area").fill("This text should show")
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="Ability", exact=True).click()
+    page.locator("[id=\"2\"]").get_by_role("link", name="").click()
+    page.get_by_text("---------").click()
+    page.get_by_role("searchbox").nth(3).fill("test_template")
+    page.get_by_role("option", name="test_template").click()
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="Ability", exact=True).click()
+    page.get_by_role("cell", name="This text should show").click()
+
 
 def delivery(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/px/deliveries/")
@@ -239,7 +255,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.locator("#ability_select").select_option("2")
     page.get_by_role("button", name="Submit", exact=True).click()
     expect(page.locator("#one")).to_contain_text(
-        "Experience points Total Used Available 12 3 9 Abilities base ability double shield (2) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
+        "Experience points Total Used Available 12 3 9 Abilities base ability double shield (2) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )
     expect(page.locator("#ability_select")).not_to_contain_text("double shield")
 
@@ -280,7 +296,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Ability").click()
     # ability is there (i got the correct class)
     expect(page.locator("#one")).to_contain_text(
-        "Experience points Total Used Available 12 1 11 Abilities base ability double shield (0) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
+        "Experience points Total Used Available 12 1 11 Abilities base ability double shield (0) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Change").click()
@@ -312,5 +328,5 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.locator("#ability_select").select_option("2")
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text(
-        "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
+        "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )

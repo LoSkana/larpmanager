@@ -748,3 +748,13 @@
     hidden: false
     feature: onetime_content
     module: onetime
+- model: larpmanager.eventpermission
+  fields:
+    name: Ability Template
+    descr: Manage ability templates
+    slug: orga_px_ability_templates
+    number: 41
+    config: px
+    hidden: false
+    feature: px
+    module: experience
