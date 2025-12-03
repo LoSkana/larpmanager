@@ -281,12 +281,14 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
     quota_share = Decimal(1.0 / reg.quotas)
     quota_share_ratio = Decimal(0)
     first_deadline = True
+    has_distant_quotas = False
 
     for quota_count in range(1, reg.quotas + 1):
         quota_share_ratio += quota_share
         deadline = _calculate_quota_deadline(reg, quota_count, association_id)
 
         if deadline >= alert:
+            has_distant_quotas = True
             continue
 
         reg.qsr = quota_share_ratio
@@ -302,7 +304,12 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
             return
 
     # Fallback: ensure quota is set if payment is due
-    if reg.tot_iscr > reg.tot_payed:
+    if has_distant_quotas:
+        # All quotas are beyond alert threshold: player is OK for now
+        reg.quota = 0
+        reg.deadline = 0
+    elif reg.tot_iscr > reg.tot_payed:
+        # Outstanding debt but no valid quota deadline found: immediate payment
         reg.quota = reg.tot_iscr - reg.tot_payed
         reg.deadline = 0
 
