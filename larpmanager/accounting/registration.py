@@ -280,7 +280,8 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
 
     quota_share = Decimal(1.0 / reg.quotas)
     quota_share_ratio = Decimal(0)
-    first_deadline = True
+    accumulated_overdue_ratio = Decimal(0)
+    first_valid_deadline = None
     has_distant_quotas = False
 
     for quota_count in range(1, reg.quotas + 1):
@@ -295,19 +296,48 @@ def quota_check(reg: Registration, start: date, alert: int, association_id: int)
         is_last_quota = quota_count == reg.quotas
         reg.quota = _calculate_quota_amount(reg, quota_share_ratio, is_last_quota=is_last_quota)
 
-        if reg.quota <= 0 or not deadline or deadline < 0:
+        if reg.quota <= 0:
             continue
 
-        if first_deadline:
-            first_deadline = False
+        # Handle overdue quotas (deadline in the past)
+        if not deadline or deadline < 0:
+            accumulated_overdue_ratio = quota_share_ratio
+            continue
+
+        # Found first valid future deadline
+        if first_valid_deadline is None:
+            first_valid_deadline = deadline
+            # quota_share_ratio already includes any overdue quotas
             reg.deadline = deadline
             return
 
+    _quota_fallback(accumulated_overdue_ratio, reg, has_distant_quotas=has_distant_quotas)
+
+
+def _quota_fallback(accumulated_overdue_ratio: Decimal, reg: Registration, *, has_distant_quotas: bool) -> None:
+    """Handle fallback logic when no valid quota deadline is found within alert threshold.
+
+    Args:
+        accumulated_overdue_ratio: Cumulative ratio of overdue quotas
+        reg: Registration instance to update
+        has_distant_quotas: Whether quotas exist beyond alert threshold
+
+    Side effects:
+        Sets reg.quota and reg.deadline based on payment status
+
+    """
     # Fallback: ensure quota is set if payment is due
     if has_distant_quotas:
-        # All quotas are beyond alert threshold: player is OK for now
-        reg.quota = 0
-        reg.deadline = 0
+        # Check if we have overdue quotas that need to be paid
+        if accumulated_overdue_ratio > 0:
+            reg.qsr = accumulated_overdue_ratio
+            is_last_quota = False
+            reg.quota = _calculate_quota_amount(reg, accumulated_overdue_ratio, is_last_quota=is_last_quota)
+            reg.deadline = 0  # Immediate payment for overdue
+        else:
+            # All quotas are beyond alert threshold: player is OK for now
+            reg.quota = 0
+            reg.deadline = 0
     elif reg.tot_iscr > reg.tot_payed:
         # Outstanding debt but no valid quota deadline found: immediate payment
         reg.quota = reg.tot_iscr - reg.tot_payed
