@@ -169,6 +169,7 @@ def update_event_features(ev_id: int) -> dict[str, int]:
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_requirements"],
             "casting": ["mirror"],
             "user_character": ["player_relationships"],
+            "px": ["rules", "modifiers", "templates"],
         }
         for config_type, config_feature_slugs in extra_features_mapping.items():
             for feature_slug in config_feature_slugs:

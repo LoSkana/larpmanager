@@ -43,7 +43,7 @@ function sidebar_mobile() {
     $('#sidebar-mobile-close').toggle();
 }
 
-const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
+const tinymceConfig = JSON.parse(document._getElementById('tinymce-config').textContent);
 
 window.addTinyMCETextarea = function(sel) {
     return new Promise((resolve) => {

@@ -1470,6 +1470,9 @@ msgstr "Cronología"
 msgid "Collection"
 msgstr "Colecta"
 
+msgid "Components"
+msgstr "Componentes"
+
 msgid "Contact us"
 msgstr "Contactar"
 
@@ -2269,6 +2272,9 @@ msgstr "Actualización del registro"
 msgid "Single choice"
 msgstr "Opción única"
 
+msgid "Template Name"
+msgstr "Nombre de la plantilla"
+
 msgid "Text language"
 msgstr "Idioma del texto"
 
@@ -2672,6 +2678,9 @@ msgstr "esperado dentro de"
 msgid "upcoming events"
 msgstr "Actos programados"
 
+msgid "Ability Template"
+msgstr "Plantilla de capacidades"
+
 msgid "Ability acquired"
 msgstr "Capacidad adquirida"
 
@@ -2872,6 +2881,12 @@ msgstr "descárguelo aquí"
 
 msgid "follow this link"
 msgstr "sigue este enlace"
+
+msgid "Ability Templates"
+msgstr "Plantillas de capacidades"
+
+msgid "Ability templates"
+msgstr "Plantillas de capacidades"
 
 msgid "Activation failed"
 msgstr "Error en la activación de la cuenta"
@@ -3958,6 +3973,9 @@ msgstr "Acceder al historial de tokens"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Chapa ligera (Prueba)"
+
+msgid "Manage ability templates"
+msgstr "Gestionar plantillas de habilidades"
 
 msgid "Manage area of the event"
 msgstr "Gestionar el área del evento"
@@ -5860,6 +5878,9 @@ msgstr "Ahora puede revisar los plazos de la organización"
 msgid "Number of characters to be assigned (default 1)"
 msgstr "Número de caracteres a asignar (por defecto 1)"
 
+msgid "Optional template associated with this ability."
+msgstr "Plantilla opcional asociada a esta habilidad."
+
 msgid "Selected elements will be shown to participants"
 msgstr "Los elementos seleccionados se mostrarán a los participantes"
 
@@ -6453,6 +6474,9 @@ msgstr "Seleccione las filas de la tabla y elija la operación a aplicar"
 
 msgid "The link will be valid for the following number of days"
 msgstr "El enlace será válido durante el siguiente número de días"
+
+msgid "This page allows you to add or edit an ability template"
+msgstr "Esta página le permite añadir o editar una plantilla de habilidad"
 
 msgid "This page shows the questions submitted by participants"
 msgstr "Esta página muestra las preguntas enviadas por los participantes"
@@ -7767,6 +7791,12 @@ msgstr ""
 "correctamente"
 
 msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+"Si está marcada, activa reglas para campos de caracteres calculados basados "
+"en habilidades"
+
+msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
 "Si está marcada, permite a los participantes personalizar los pronombres de "
@@ -8027,10 +8057,6 @@ msgid ""
 msgstr ""
 "Habilita el campo 'título', un texto breve (2-3 palabras) que se añade al "
 "nombre del personaje"
-
-#, fuzzy
-msgid "Optional template associated with this ability."
-msgstr "El miembro asociado a esta afiliación"
 
 msgid ""
 "If checked, it allows participants to customise the names of their "
@@ -8440,6 +8466,13 @@ msgstr ""
 "panel de la organización"
 
 msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+"Si está marcada, activa las plantillas de habilidades que se pueden "
+"reutilizar en varias habilidades"
+
+msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
 "system"
 msgstr ""
@@ -8672,6 +8705,13 @@ msgid ""
 msgstr ""
 "Esta página muestra la información sensible de los participantes inscritos "
 "en materia de seguridad"
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+"Esta página resume las plantillas de habilidades reutilizables que pueden "
+"asignarse a las habilidades"
 
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
@@ -9564,6 +9604,13 @@ msgid ""
 msgstr ""
 "Ya existe un plazo con el pedido %(order)d con el(los) siguiente(s) "
 "ticket(s) común(es): %(tickets)s"
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+"Si está marcada, activa los modificadores que pueden ajustar el coste de las"
+" habilidades en función de los prerrequisitos y requisitos"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

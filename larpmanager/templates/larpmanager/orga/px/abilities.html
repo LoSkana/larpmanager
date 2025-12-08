@@ -17,11 +17,13 @@
                 <th>{% trans "Cost" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Players" %}</th>
+                {% if px_templates %}
+                    <th>{% trans "Template" %}</th>
+                {% endif %}
                 {% if px_user %}
                     <th>{% trans "Visible" %}</th>
                     <th>{% trans "Prerequisites" %}</th>
                     <th>{% trans "Requirements" %}</th>
-                    <th>{% trans "Template" %}</th>
                 {% endif %}
             </tr>
         </thead>
@@ -50,6 +52,11 @@
                             <a href="{% url 'orga_characters_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
+                    {% if px_templates %}
+                        <td>
+                            {% if el.template %}{{ el.template.get_full_name }}{% endif %}
+                        </td>
+                    {% endif %}
                     {% if px_user %}
                         <td>{{ el.visible }}</td>
                         <td>
@@ -63,9 +70,6 @@
                                 {% include "elements/comma.html" %}
                                 {{ opt.name }}
                             {% endfor %}
-                        </td>
-                        <td>
-                            {% if el.template %}{{ el.template.get_full_name }}{% endif %}
                         </td>
                     {% endif %}
                 </tr>

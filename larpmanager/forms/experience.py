@@ -125,11 +125,18 @@ class OrgaAbilityPxForm(PxBaseForm):
                 self.fields[field_name].widget.set_event(self.params["event"])
 
         px_user = get_event_config(self.params["event"].id, "px_user", default_value=False, context=self.params)
+        px_templates = get_event_config(
+            self.params["event"].id, "px_templates", default_value=False, context=self.params
+        )
 
         # Set ability type choices from event-specific elements
         self.fields["typ"].choices = [
             (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("id", "name")
         ]
+
+        # Remove template field if px_templates is disabled
+        if not px_templates:
+            self.delete_field("template")
 
         # Remove user-experience fields if px_user is disabled
         if not px_user:

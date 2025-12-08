@@ -1135,6 +1135,29 @@ msgstr ""
 msgid "Initial value of experience points for all characters"
 msgstr ""
 
+msgid "Ability templates"
+msgstr ""
+
+msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+
+msgid "Rules"
+msgstr ""
+
+msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+
+msgid "Modifiers"
+msgstr ""
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+
 msgid "Player editor"
 msgstr ""
 
@@ -6951,18 +6974,12 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
-msgid "Modifiers"
-msgstr ""
-
 msgid ""
 "This page summarizes the modifiers that are applied to abilities based on "
 "other abilities, or character fields"
 msgstr ""
 
 msgid "New cost"
-msgstr ""
-
-msgid "Rules"
 msgstr ""
 
 msgid "This page summarizes the rules that are applied to the computed fields"

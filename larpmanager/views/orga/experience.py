@@ -27,12 +27,13 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.forms.experience import (
     OrgaAbilityPxForm,
+    OrgaAbilityTemplatePxForm,
     OrgaAbilityTypePxForm,
     OrgaDeliveryPxForm,
     OrgaModifierPxForm,
-    OrgaRulePxForm, OrgaAbilityTemplatePxForm,
+    OrgaRulePxForm,
 )
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx, AbilityTemplatePx
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import exchange_order
 from larpmanager.utils.core.exceptions import ReturnNowError
@@ -94,6 +95,9 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Retrieve event configuration for user PX management permissions
     context["px_user"] = get_event_config(context["event"].id, "px_user", default_value=False, context=context)
+    context["px_templates"] = get_event_config(
+        context["event"].id, "px_templates", default_value=False, context=context
+    )
 
     # Query and prepare abilities list with optimized database access
     context["list"] = (
@@ -155,7 +159,6 @@ def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, num: int) 
 @login_required
 def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display experience rules for an event."""
-    # Check permission and get event context
     context = check_event_context(request, event_slug, "orga_px_rules")
     context["list"] = context["event"].get_elements(RulePx).order_by("order")
     return render(request, "larpmanager/orga/px/rules.html", context)
@@ -163,7 +166,7 @@ def orga_px_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_px_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
-    # Check permission and get event context
+    """Display list of ability templates for an event."""
     context = check_event_context(request, event_slug, "orga_px_ability_templates")
     context["list"] = context["event"].get_elements(AbilityTemplatePx).order_by("number")
     return render(request, "larpmanager/orga/px/ability_templates.html", context)
