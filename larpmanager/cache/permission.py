@@ -232,6 +232,7 @@ def update_index_permission(permission_type: str) -> list[dict]:
         "descr",
         "slug",
         "hidden",
+        "config",
         "feature__placeholder",
         "feature__slug",
         "module__name",

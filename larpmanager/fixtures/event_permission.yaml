@@ -714,7 +714,7 @@
     descr: Manage XP rules
     slug: orga_px_rules
     number: 81
-    config: px
+    config: enable_px_rules
     hidden: false
     feature: rules
     module: experience
@@ -724,7 +724,7 @@
     descr: Manage XP modifiers
     slug: orga_px_modifiers
     number: 91
-    config: px
+    config: enable_px_modifiers
     hidden: false
     feature: modifiers
     module: experience
@@ -754,7 +754,7 @@
     descr: Manage ability templates
     slug: orga_px_ability_templates
     number: 41
-    config: px
+    config: enable_px_templates
     hidden: false
     feature: templates
     module: experience

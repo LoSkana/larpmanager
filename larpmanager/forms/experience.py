@@ -77,20 +77,6 @@ class OrgaAbilityTemplatePxForm(MyForm):
     class Meta:
         model = AbilityTemplatePx
         exclude = ("number",)
-        widgets: ClassVar[dict] = {
-            "components": AbilityTemplateS2WidgetMulti,
-        }
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with event-specific ability configuration."""
-        super().__init__(*args, **kwargs)
-
-        if "components" not in self.fields:
-            self.fields["components"] = forms.ModelMultipleChoiceField(
-                queryset=AbilityTemplatePx.objects.all(), required=False, widget=self.Meta.widgets.get("components")
-            )
-
-        self.fields["components"].widget.set_event(self.params["event"])
 
 
 class OrgaAbilityPxForm(PxBaseForm):

@@ -10,17 +10,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0108_alter_membership_status'),
+        ('larpmanager', '0109_alter_util_util'),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='AbilityTemplateComponent',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.PositiveIntegerField(default=1)),
-            ],
-        ),
         migrations.CreateModel(
             name='AbilityTemplatePx',
             fields=[
@@ -32,7 +25,6 @@ class Migration(migrations.Migration):
                 ('number', models.IntegerField()),
                 ('name', models.CharField(max_length=150)),
                 ('descr', tinymce.models.HTMLField(blank=True, max_length=5000, null=True, verbose_name='Description')),
-                ('components', models.ManyToManyField(blank=True, help_text='Other templates that are part of this template. Can include multiple instances.', related_name='used_in', through='larpmanager.AbilityTemplateComponent', to='larpmanager.abilitytemplatepx', verbose_name='Component Templates')),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='larpmanager.event')),
             ],
             options={
@@ -42,22 +34,8 @@ class Migration(migrations.Migration):
             bases=(model_clone.mixin.CloneMixin, models.Model),
         ),
         migrations.AddField(
-            model_name='abilitytemplatecomponent',
-            name='component',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='component_instances', to='larpmanager.abilitytemplatepx'),
-        ),
-        migrations.AddField(
-            model_name='abilitytemplatecomponent',
-            name='parent',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='component_links', to='larpmanager.abilitytemplatepx'),
-        ),
-        migrations.AddField(
             model_name='abilitypx',
             name='template',
             field=models.ForeignKey(blank=True, help_text='Optional template associated with this ability.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='abilities', to='larpmanager.abilitytemplatepx', verbose_name='Template'),
-        ),
-        migrations.AlterUniqueTogether(
-            name='abilitytemplatecomponent',
-            unique_together={('parent', 'component')},
         ),
     ]
