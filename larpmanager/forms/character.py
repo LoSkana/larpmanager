@@ -830,9 +830,10 @@ class OrgaWritingQuestionForm(MyForm):
                 if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
                     continue
 
-            # Handle character type 'c' - requires 'px' feature
-            elif choice[0] == "c" and "px" not in self.params["features"]:
-                continue
+            # Handle character type 'c' - requires 'px_rules' config
+            elif choice[0] == "c":
+                if not get_event_config(self.params["event"].id, "px_rules", default_value=False):
+                    continue
 
             # Add valid choice to final list
             filtered_choices.append(choice)
