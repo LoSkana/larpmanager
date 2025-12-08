@@ -405,16 +405,12 @@ def get_index_permissions(
         if not permission["feature__placeholder"] and permission["feature__slug"] not in features:
             continue
 
-        # Check config-dependent permissions (for enable_ prefixed configs)
-        if permission_type == "event" and permission.get("config") and context.get("event"):
-            config_key = permission["config"]
-            if config_key.startswith("enable_"):
-                actual_config_key = config_key.removeprefix("enable_")
-                config_value = get_event_config(
-                    context["event"].id, actual_config_key, default_value=False, context=context
-                )
-                if not config_value:
-                    continue
+        # Check config-dependent permissions
+        if permission_type == "event" and permission.get("active_if") and context.get("event"):
+            config_key = permission["active_if"]
+            config_value = get_event_config(context["event"].id, config_key, default_value=False, context=context)
+            if not config_value:
+                continue
 
         # Group permissions by module
         module_key = (_(permission["module__name"]), permission["module__icon"])

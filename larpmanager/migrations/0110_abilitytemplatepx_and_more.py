@@ -38,4 +38,14 @@ class Migration(migrations.Migration):
             name='template',
             field=models.ForeignKey(blank=True, help_text='Optional template associated with this ability.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='abilities', to='larpmanager.abilitytemplatepx', verbose_name='Template'),
         ),
+        migrations.AddField(
+            model_name='associationpermission',
+            name='active_if',
+            field=models.TextField(blank=True, max_length=100, null=True),
+        ),
+        migrations.AddField(
+            model_name='eventpermission',
+            name='active_if',
+            field=models.TextField(blank=True, max_length=100, null=True),
+        ),
     ]
