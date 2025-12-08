@@ -64,6 +64,9 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_px_undo").click()
     page.locator("#id_px_undo").fill("2")
     page.locator("#id_px_user").check()
+    page.locator("#id_px_templates").check()
+    page.locator("#id_px_rules").check()
+    page.locator("#id_px_modifiers").check()
 
     page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
     page.locator("#id_user_character_max").click()
