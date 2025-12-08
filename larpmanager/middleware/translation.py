@@ -70,7 +70,7 @@ class AssociationTranslationMiddleware(MiddlewareMixin):
         overrides = get_association_translation_cache(association_id, language) or {}
 
         # Create a custom translation wrapper that applies overrides
-        assoc_trans = AssociationTranslations(base_translation, overrides)
+        assoc_trans = AssociationTranslations(base_translation, overrides, language)
 
         # Replace the thread-local active translation with our custom one
         trans_real._active.value = assoc_trans  # noqa: SLF001  # Django translation internal
@@ -105,19 +105,33 @@ class AssociationTranslations(GNUTranslations):
     Attributes:
         _base: The underlying Django translation object
         _overrides: Dictionary mapping msgid strings to custom translations
+        _language: The language code for this translation (e.g., 'en', 'it')
 
     """
 
-    def __init__(self, base_translation: Any, overrides: dict[str, str]) -> None:
+    def __init__(self, base_translation: Any, overrides: dict[str, str], language: str) -> None:
         """Initialize the translation wrapper with base translations and overrides.
 
         Args:
             base_translation: Django's standard translation object for the language
             overrides: Dictionary mapping original strings to custom translations
+            language: The language code for this translation
 
         """
         self._base = base_translation
         self._overrides = overrides or {}
+        self._language = language
+
+    def to_language(self) -> str:
+        """Return the language code for this translation.
+
+        This method is called by Django's get_language() function.
+
+        Returns:
+            The language code (e.g., 'en', 'it')
+
+        """
+        return self._language
 
     def gettext(self, message: str) -> str:
         """Translate a message, using custom override if available.

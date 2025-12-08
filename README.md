@@ -1,10 +1,9 @@
-#  LarpManager
+# LarpManager
 
-**LarpManager** is the free LARP management platform.
+LarpManager is a free platform to manage live-action roleplaying (LARP) events.
 
-> Not interested in self-hosting? Start using it right away with the fully hosted and free to use instance on [https://larpmanager.com](https://larpmanager.com)!
-
-![License: AGPL or Commercial](https://img.shields.io/badge/license-AGPL%20%2F%20Commercial-blue.svg)
+If you don’t want to self-host, you can use the free hosted instance at:
+https://larpmanager.com
 
 ---
 
@@ -16,7 +15,7 @@
 - **[Localization Guide](docs/04-localization.md)** - How to write translatable code and manage translations
 - **[Playwright Testing Guide](docs/05-playwright-testing.md)** - How to write and run end-to-end tests
 - **[Feature Descriptions](docs/06-feature-descriptions.md)** - Complete reference of all available features
-- **[Developer Instructions](CLAUDE.md)** - Project architecture, development commands, and best practices
+- **[Developer Instructions](#develop)** - Architecture, commands and best practices
 - **[Contributing](#contributing)** - How to contribute to the project
 - **[Deployment](#deploy)** - Production deployment instructions
 
@@ -36,7 +35,7 @@ Refer to the `LICENSE` file for full terms.
 
 ---
 
-## Quick set up
+## Quick start (Docker)
 
 If you want an easy and fast deploy, set the environment variables see below for [instructions](#environment) on their values:
 
@@ -119,12 +118,12 @@ It will perform a graceful restart.
 
 ---
 
-## Cloud
+### Cloud recommendations
 
-For cloud deploy, we suggest the following configuration:
+Suggested baseline for cloud VMs:
 - OS: Ubuntu 22.04 LTS
-- A "burstable" instance (instead of memory or compute-optimized), as to allow to better handle bursts of user activity
-
+- Instance type: burstable instance to handle activity spikes
+-
 Some typical options could be:
 - EC2: t3.small / t3.medium
 - GCP: e2-small / e2-medium
@@ -132,7 +131,7 @@ Some typical options could be:
 
 ---
 
-## Environment
+### Environment variables
 
 Set those values:
 - GUNICORN_WORKERS: Rule of thumb is number of processors * 2 + 1
@@ -145,7 +144,7 @@ Set those values:
 
 ---
 
-## Docker
+### Docker installation
 
 To install everything needed for the quick setup, install some dependencies:
 
@@ -177,17 +176,16 @@ sudo systemctl enable docker
 
 ---
 
-## Develop
-
-The codebase is based on Django; if you're not already familiar with it, we highly suggest you to follow the tutorials at https://docs.djangoproject.com/.
+## Local Setup
 
 The typical, recommended setup is to have:
 * On a server the *production* instance, managed with docker, with the real user data, CI pipeline, automated backup and all other devops best practices;
 * On your local machine, a *development* instance, managed with dedicated system installations, dummy test database and local development server.
 
-### System Setup
+Here are the step for a local setup on your machine, required for both *Develop* and *Contributing*.
 
-For a setup on a Debian-like system, install the following packages:
+For a Debian-like system: install the following packages:
+
 ```bash
 sudo apt install python3-pip python3-venv redis-server git postgresql postgresql-contrib \
   libpq-dev wkhtmltopdf nodejs build-essential libxmlsec1-dev libxmlsec1-openssl libavif16
@@ -203,6 +201,13 @@ Install Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+Install and activate LFS to handle big files:
+   ```bash
+   sudo apt install git-lfs
+   git lfs install
+   git lfs pull
+   ```
 
 ### Database Setup
 
@@ -230,17 +235,8 @@ GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
 
 2. The default database settings should work with the setup above. If you used different credentials, update the `DATABASES` section in `main/settings/dev.py`.
 
-3. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (default is `test`).
+3. In `SLUG_ASSOC`, put the slug of the organization that will be loaded (default is `def`).
 
-4. Run migrations to initialize the database:
-   ```bash
-   python manage.py migrate
-   ```
-
-5. Load the initial test data:
-   ```bash
-   python manage.py reset
-   ```
 
 ### Frontend Dependencies
 
@@ -258,7 +254,24 @@ Install Playwright browsers for end-to-end tests:
 playwright install
 ```
 
-You're now ready to start developing! Run the development server with:
+
+## Develop
+
+The codebase is based on Django; if you're not already familiar with it, we highly suggest you to follow the tutorials at https://docs.djangoproject.com/.
+
+1. Follow the steps outlined in [System setup](#system-setup) for setting up your local *development* instance
+
+2. Run migrations to initialize the database:
+   ```bash
+   python manage.py migrate
+   ```
+
+3. Load the initial test data:
+   ```bash
+   python manage.py reset
+   ```
+
+4. Now you can run the local server for manual testing and debugging:
 ```bash
 python manage.py runserver
 ```
@@ -269,17 +282,12 @@ python manage.py runserver
 
 Thanks in advance for contributing! Here's the steps:
 
-1. Install and activate `pre-commit`:
+1. Follow the steps outlined in [System setup](#system-setup) for setting up your local *development* instance
+
+2. Install and activate `pre-commit`:
    ```bash
    pip install pre-commit
    pre-commit install
-   ```
-
-2. Install and activate LFS to handle big files (like the test dump):
-   ```bash
-   sudo apt install git-lfs
-   git lfs install
-   git lfs pull
    ```
 
 3. In the `main/settings/dev.py` settings file, add a `DEEPL_API_KEY` value. You can obtain a API key for the *DeepL API Free* (up to 500k characters monthly) [here](https://www.deepl.com/en/pro).
@@ -300,7 +308,7 @@ Thanks in advance for contributing! Here's the steps:
    ./scripts/translate.sh
    ```
    This will updated all your translations, have correct the untranslated / fuzzy ones with Deepl API. In the terminal, take some time to review them before proceeding.
-6. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. Run
+6. If you're creating a new feature, write a playwright test suite that covers it. Look in the `larpmanager/tests` folder to see how it's done. (Standard users are "orga@test.it" and "user@test.it", both with password "banana"). Run
    ```bash
    ./scripts/record-test.sh
    ```

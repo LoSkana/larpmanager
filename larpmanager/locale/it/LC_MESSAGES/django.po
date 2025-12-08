@@ -1165,7 +1165,7 @@ msgid "Refunded"
 msgstr "Rimborsati"
 
 msgid "Register"
-msgstr "Register"
+msgstr "Iscrizione"
 
 msgid "Registry"
 msgstr "Registro"
@@ -4032,6 +4032,9 @@ msgstr "Link iscrizione segreto"
 msgid "The subdomain identifier"
 msgstr "L'identificatore del sottodominio"
 
+msgid "This event has concluded"
+msgstr "Questo evento si è concluso"
+
 msgid "Try the sheet generation"
 msgstr "Prova la generazione schede"
 
@@ -4452,6 +4455,9 @@ msgstr "Gli altri campi sono facoltativi"
 
 msgid "The total registration fee is"
 msgstr "Il totale dell'iscrizione corrisponde a"
+
+msgid "This event has been cancelled"
+msgstr "Questo evento è stato cancellato"
 
 msgid "Transportation - gas, highway"
 msgstr "Trasporti - benzina, autostrada"
@@ -10838,8 +10844,9 @@ msgid ""
 "If we don't hear from you, we'll assume you're no longer interested in the "
 "event and will cancel your registration to make room for other participants"
 msgstr ""
-"Se sentiamo tue notizie, capiremo che non sei più interessato all'evento e "
-"cancelleremo la tua iscrizione per fare spazio ad altri partecipanti"
+"Se non sentiremo tue notizie, capiremo che non sei più interessato "
+"all'evento e cancelleremo la tua iscrizione per fare spazio ad altri "
+"partecipanti"
 
 msgid ""
 "The rule will be applied, only one time, if the character has any of the "

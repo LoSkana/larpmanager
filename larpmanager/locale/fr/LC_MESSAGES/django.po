@@ -4032,6 +4032,9 @@ msgstr "Lien d'enregistrement secret"
 msgid "The subdomain identifier"
 msgstr "L'identifiant du sous-domaine"
 
+msgid "This event has concluded"
+msgstr "Cet événement est terminé"
+
 msgid "Try the sheet generation"
 msgstr "Essayer la génération de cartes"
 
@@ -4452,6 +4455,9 @@ msgstr "Les autres champs sont facultatifs"
 
 msgid "The total registration fee is"
 msgstr "Le montant total des droits d'inscription est de"
+
+msgid "This event has been cancelled"
+msgstr "Cet événement a été annulé"
 
 msgid "Transportation - gas, highway"
 msgstr "Transport - essence, autoroute"

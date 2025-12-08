@@ -158,7 +158,7 @@ class Util(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-    util = models.FileField(upload_to=UploadToPathAndRename("../utils/"))
+    util = models.FileField(upload_to=UploadToPathAndRename("utils/"))
 
     def __str__(self) -> str:
         """Return string representation with member number and name."""

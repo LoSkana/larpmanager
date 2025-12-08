@@ -31,6 +31,7 @@ from larpmanager.accounting.registration import (
     get_reg_payments,
     get_reg_transactions,
     installment_check,
+    quota_check,
     registration_payments_status,
     round_to_nearest_cent,
 )
@@ -782,3 +783,280 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         self.assertEqual(registration.quota, Decimal("100.00"))  # 150 - 50
         self.assertIsNotNone(registration.deadline)
         self.assertGreaterEqual(registration.deadline, 0)
+
+
+class TestQuotaCheckFallbackLogic(BaseTestCase):
+    """Test cases for quota_check payment fallback logic"""
+
+    def test_quota_check_all_distant(self) -> None:
+        """Test quota_check when all quotas are beyond alert threshold"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("400.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Set event start date far in future (120 days)
+        run.start = timezone.now().date() + timedelta(days=120)
+        run.save()
+
+        # Set registration to have 4 quotas
+        registration.quotas = 4
+        registration.tot_iscr = Decimal("400.00")
+        registration.tot_payed = Decimal("300.00")  # Paid 3 quotas already
+
+        # Call quota_check with alert threshold of 30 days
+        # All 4 quota deadlines will be beyond 30 days (at ~90, 60, 30, 0 days from event)
+        # Since event is 120 days away, even the last quota is beyond alert
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Should NOT require immediate payment - quota should be 0
+        self.assertEqual(registration.quota, 0)
+        self.assertEqual(registration.deadline, 0)
+
+    def test_quota_check_partial_payment_close_deadline(self) -> None:
+        """Test quota_check with partial payment and close deadline"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("400.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Set event start date relatively soon (40 days)
+        run.start = timezone.now().date() + timedelta(days=40)
+        run.save()
+
+        # Set registration to have 4 quotas
+        registration.quotas = 4
+        registration.tot_iscr = Decimal("400.00")
+        registration.tot_payed = Decimal("200.00")  # Paid 2 quotas
+
+        # Call quota_check with alert threshold of 30 days
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Should set quota for next payment
+        self.assertGreater(registration.quota, 0)
+        self.assertIsNotNone(registration.deadline)
+        self.assertGreaterEqual(registration.deadline, 0)
+
+    def test_quota_check_no_payment_immediate_event(self) -> None:
+        """Test quota_check when event is imminent and no payment made"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("400.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Set event start date very soon (5 days)
+        run.start = timezone.now().date() + timedelta(days=5)
+        run.save()
+
+        # Set registration to have 4 quotas
+        registration.quotas = 4
+        registration.tot_iscr = Decimal("400.00")
+        registration.tot_payed = Decimal("0.00")  # No payment
+
+        # Call quota_check with alert threshold of 30 days
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Should require payment for first quota that's within alert
+        # The function returns at the FIRST valid quota found
+        self.assertGreater(registration.quota, 0)
+        self.assertIsNotNone(registration.deadline)
+
+    def test_quota_check_paid_ahead_next_distant(self) -> None:
+        """Test quota_check when player paid ahead and next quota is distant"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("400.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Set event start date in future (90 days)
+        run.start = timezone.now().date() + timedelta(days=90)
+        run.save()
+
+        # Set registration to have 4 quotas (100€ each)
+        # Quotas due at: ~67, 45, 22, 0 days from now
+        registration.quotas = 4
+        registration.tot_iscr = Decimal("400.00")
+        registration.tot_payed = Decimal("100.00")  # Paid first quota
+
+        # Call quota_check with alert threshold of 30 days
+        # Quota 1 (67 days): beyond alert, skip
+        # Quota 2 (45 days): beyond alert, skip
+        # Quota 3 (22 days): within alert, but already paid enough (cumulative 300 > 100 paid)
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Next payment due is quota 3 at ~22 days, should set that
+        # OR if all remaining quotas have been evaluated and next is distant, quota=0
+        # Since quota 3 is at 22 days (< 30 alert), it should be set
+        if registration.deadline > 0:
+            self.assertGreater(registration.quota, 0)
+        else:
+            # If all quotas evaluated were already paid or distant
+            self.assertEqual(registration.quota, 0)
+
+    def test_quota_check_overdue_with_future_quota(self) -> None:
+        """Test quota_check with overdue quota and valid future quota - should accumulate"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Set event 90 days in future, registration created 10 days ago
+        run.start = timezone.now().date() + timedelta(days=90)
+        run.save()
+        registration.created = timezone.now() - timedelta(days=10)
+
+        # 3 quotas: quota 1 deadline ~18 days, quota 2 ~23 days (both within alert), quota 3 ~56 days
+        registration.quotas = 3
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("0.00")
+
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Should show quota 1 + quota 2 accumulated (199€ due to floor), with quota 2's deadline
+        # floor(300 * 2/3) = floor(200.0) but with Decimal can be 199
+        self.assertIn(registration.quota, [199, Decimal("200.00")])
+        self.assertGreater(registration.deadline, 0)  # Should be around 23 days
+        self.assertLess(registration.deadline, 30)
+
+    def test_quota_check_only_overdue_quotas(self) -> None:
+        """Test quota_check with overdue quota followed by distant quota"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Event 100 days in future, registration created 80 days ago
+        # This creates: quota 1 @ 88 days (beyond alert), quota 2 @ -20 days (overdue), quota 3 @ 40 days (beyond alert)
+        run.start = timezone.now().date() + timedelta(days=100)
+        run.save()
+        registration.created = timezone.now() - timedelta(days=80)
+
+        # 3 quotas
+        registration.quotas = 3
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("0.00")
+
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Quota 1 is beyond alert (88), quota 2 is overdue (-20), quota 3 is beyond alert (40)
+        # Quota 2 represents CUMULATIVE 2/3 of total (200€), not just the second installment
+        # So should show 199-200€ (cumulative up to quota 2) with immediate deadline
+        self.assertIn(registration.quota, [199, Decimal("200.00")])
+        self.assertEqual(registration.deadline, 0)  # Immediate payment
+
+    def test_quota_check_first_quota_always_shown(self) -> None:
+        """Test quota_check shows first quota when within alert threshold"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Event 90 days in future, registration just created (10 days ago)
+        # This creates: quota 1 @ 18 days, quota 2 @ 23 days (both within alert)
+        run.start = timezone.now().date() + timedelta(days=90)
+        run.save()
+        registration.created = timezone.now() - timedelta(days=10)
+
+        # 3 quotas: first two within alert (18, 23 days), third beyond (56 days)
+        registration.quotas = 3
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("0.00")
+
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # First two quotas are within alert, so should show ~199-200€ (due to floor)
+        self.assertIn(registration.quota, [199, Decimal("200.00")])
+        self.assertGreater(registration.deadline, 0)
+        self.assertLess(registration.deadline, 30)
+
+    def test_quota_check_multiple_overdue_accumulation(self) -> None:
+        """Test quota_check accumulates multiple overdue quotas correctly"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("400.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Event 50 days in future, registration created 60 days ago
+        run.start = timezone.now().date() + timedelta(days=50)
+        run.save()
+        registration.created = timezone.now() - timedelta(days=60)
+
+        # 4 quotas: first 3 overdue, last one within alert
+        registration.quotas = 4
+        registration.tot_iscr = Decimal("400.00")
+        registration.tot_payed = Decimal("0.00")
+
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Should show all 4 quotas accumulated (400€) with last quota's deadline
+        self.assertEqual(registration.quota, Decimal("400.00"))
+        self.assertGreaterEqual(registration.deadline, 0)
+
+    def test_quota_check_overdue_with_partial_payment(self) -> None:
+        """Test quota_check with overdue quotas and partial payment"""
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Event 90 days in future, registration created 20 days ago
+        run.start = timezone.now().date() + timedelta(days=90)
+        run.save()
+        registration.created = timezone.now() - timedelta(days=20)
+
+        # 3 quotas, first one overdue
+        registration.quotas = 3
+        registration.tot_iscr = Decimal("300.00")
+        registration.tot_payed = Decimal("50.00")  # Partial payment of first quota
+
+        quota_check(registration, run.start, alert=30, association_id=association.id)
+
+        # Should show remaining from overdue + next quota
+        self.assertGreater(registration.quota, Decimal("50.00"))
+        self.assertLessEqual(registration.quota, Decimal("200.00"))
+        self.assertGreater(registration.deadline, 0)

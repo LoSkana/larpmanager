@@ -4032,6 +4032,9 @@ msgstr "Hemmelig registreringslenke"
 msgid "The subdomain identifier"
 msgstr "Identifikatoren for underdomenet"
 
+msgid "This event has concluded"
+msgstr "Dette arrangementet er avsluttet"
+
 msgid "Try the sheet generation"
 msgstr "Prøv kortgenerering"
 
@@ -4452,6 +4455,9 @@ msgstr "De andre feltene er valgfrie"
 
 msgid "The total registration fee is"
 msgstr "Den totale deltakeravgiften er"
+
+msgid "This event has been cancelled"
+msgstr "Dette arrangementet er avlyst"
 
 msgid "Transportation - gas, highway"
 msgstr "Transport - bensin, motorvei"
