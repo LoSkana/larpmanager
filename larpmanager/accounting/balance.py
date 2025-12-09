@@ -243,6 +243,57 @@ def get_token_details(nm: str, run: Run) -> dict[str, int | dict | str]:
     return dc
 
 
+def _process_tokens_credits(
+    run: Run,
+    features: dict[str, int],
+    context: dict,
+    details_by_category: dict,
+) -> tuple[int, int]:
+    """Process tokens and credits accounting details.
+
+    Args:
+        run: Run instance to process
+        features: Dictionary of enabled features
+        context: Context dictionary with token/credit names
+        details_by_category: Dictionary to populate with accounting details
+
+    Returns:
+        Tuple of (sum_tokens, sum_credits)
+
+    """
+    sum_tokens = 0
+    sum_credits = 0
+
+    if "tokens" in features:
+        details_by_category["tok"] = get_acc_detail(
+            context.get("tokens_name", _("Tokens")),
+            run,
+            _("Total issued"),
+            AccountingItemOther,
+            OtherChoices.choices,
+            "oth",
+            filters={"cancellation__exact": False, "oth__exact": OtherChoices.TOKEN},
+        )
+        sum_tokens = details_by_category["tok"]["tot"]
+
+    if "credits" in features:
+        details_by_category["cre"] = get_acc_detail(
+            context.get("credits_name", _("Credits")),
+            run,
+            _("Total issued"),
+            AccountingItemOther,
+            OtherChoices.choices,
+            "oth",
+            filters={
+                "cancellation__exact": False,
+                "oth__exact": OtherChoices.CREDIT,
+            },
+        )
+        sum_credits = details_by_category["cre"]["tot"]
+
+    return sum_tokens, sum_credits
+
+
 def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) -> dict:
     """Generate comprehensive accounting report for a run.
 
@@ -252,7 +303,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
 
     Args:
         run: Run instance to generate accounting for
-        context: Context dictionary with optional token/credit names (e.g., 'token_name', 'credit_name')
+        context: Context dictionary with optional token/credit names (e.g., 'tokens_name', 'credits_name')
         perform_update: Whether to update the run with new financial data
 
     Returns:
@@ -356,35 +407,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
         sum_refund = details_by_category["ref"]["tot"]
 
     # Process tokens and credits: accumulate all issued tokens and credits
-    sum_credits = 0
-    sum_tokens = 0
-    if "token_credit" in features:
-        # Tokens are virtual currency issued to members
-        details_by_category["tok"] = get_acc_detail(
-            context.get("token_name", _("Tokens")),
-            run,
-            _("Total issued"),
-            AccountingItemOther,
-            OtherChoices.choices,
-            "oth",
-            filters={"cancellation__exact": False, "oth__exact": OtherChoices.TOKEN},
-        )
-        sum_tokens = details_by_category["tok"]["tot"]
-
-        # Credits are similar to tokens but distinct in accounting
-        details_by_category["cre"] = get_acc_detail(
-            context.get("credit_name", _("Credits")),
-            run,
-            _("Total issued"),
-            AccountingItemOther,
-            OtherChoices.choices,
-            "oth",
-            filters={
-                "cancellation__exact": False,
-                "oth__exact": OtherChoices.CREDIT,
-            },
-        )
-        sum_credits = details_by_category["cre"]["tot"]
+    sum_tokens, sum_credits = _process_tokens_credits(run, features, context, details_by_category)
 
     # Process discounts: accumulate all participation fee reductions
     if "discount" in features:

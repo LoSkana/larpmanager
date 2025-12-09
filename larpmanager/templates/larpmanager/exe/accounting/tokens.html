@@ -1,10 +1,10 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {{ token_name }} - {% trans "Organization" %}
+    {{ tokens_name }} - {% trans "Organization" %}
 {% endblock title %}
 {% block info %}
-    {% trans "This page summarises the system entries of" %} {{ token_name }}
+    {% trans "This page summarises the system entries of" %} {{ tokens_name }}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}

@@ -120,11 +120,10 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         context["is_staff"] = request.user.is_staff
 
     # Set default names for token/credit system if feature enabled
-    if "token_credit" in context["features"]:
-        if not context["token_name"]:
-            context["token_name"] = _("Tokens")
-        if not context["credit_name"]:
-            context["credit_name"] = _("Credits")
+    for feature, default_name in [("tokens", _("Tokens")), ("credits", _("Credits"))]:
+        name_key = f"{feature}_name"
+        if feature in context["features"] and not context.get(name_key):
+            context[name_key] = default_name
 
     # Add TinyMCE editor configuration
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG

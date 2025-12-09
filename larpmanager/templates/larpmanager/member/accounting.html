@@ -60,7 +60,7 @@
         <hr />
     {% endif %}
     {% if member.membership.credit %}
-        <h2>{{ credit_name }}</h2>
+        <h2>{{ credits_name }}</h2>
         <p>
             {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
             {% if member.membership.credit > 0 %}
@@ -81,7 +81,7 @@
         <hr />
     {% endif %}
     {% if member.membership.tokens %}
-        <h2>{{ token_name }}</h2>
+        <h2>{{ tokens_name }}</h2>
         <p>
             {% trans "Total" %}: <b>{{ member.membership.tokens }}</b>.
             {% if member.membership.tokens > 0 %}
@@ -304,16 +304,16 @@
         <hr />
     {% endif %}
     {% if acc_tokens > 0 %}
-        <h2>{% trans "History" %} {{ token_name }}</h2>
+        <h2>{% trans "History" %} {{ tokens_name }}</h2>
         <p>
-            {% trans "To access the history" %} {{ token_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
+            {% trans "To access the history" %} {{ tokens_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
         </p>
         <hr />
     {% endif %}
     {% if acc_credits > 0 %}
-        <h2>{% trans "History" %} {{ credit_name }}</h2>
+        <h2>{% trans "History" %} {{ credits_name }}</h2>
         <p>
-            {% trans "To access the history" %} {{ credit_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
+            {% trans "To access the history" %} {{ credits_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
         </p>
         <hr />
     {% endif %}

@@ -456,9 +456,6 @@ msgstr "Kde"
 msgid "email"
 msgstr "e-mail"
 
-msgid "money"
-msgstr "peníze"
-
 msgid "quick"
 msgstr "rychlý"
 
@@ -1914,6 +1911,9 @@ msgstr "Název obsahu"
 msgid "Content type"
 msgstr "Typ obsahu"
 
+msgid "Credits name"
+msgstr "Název úvěru"
+
 msgid "Event hidden"
 msgstr "Skrytá událost"
 
@@ -1973,9 +1973,6 @@ msgstr "Více informací"
 
 msgid "Municipality"
 msgstr "Obec"
-
-msgid "Name credits"
-msgstr "Jmenné kredity"
 
 msgid "Next payment"
 msgstr "Další platba"
@@ -4926,6 +4923,9 @@ msgstr "Název slevy - pro interní použití"
 msgid "No elements are currently available"
 msgstr "V současné době nejsou k dispozici žádné prvky"
 
+msgid "Now set up the tokens configuration"
+msgstr "Nyní nastavte konfiguraci tokenů"
+
 msgid "Now you can create the receipt text"
 msgstr "Nyní můžete vytvořit text účtenky"
 
@@ -4996,6 +4996,9 @@ msgstr "Správa odesílání faktur za členské poplatky"
 
 msgid "Manage the models for event handouts"
 msgstr "Správa modelů pro materiály k událostem"
+
+msgid "Now set up the credits configuration"
+msgstr "Nyní nastavte konfiguraci kreditů"
 
 msgid "Now you can create the filler ticket"
 msgstr "Nyní můžete vytvořit výplňový lístek"
@@ -7277,6 +7280,10 @@ msgstr "Dosáhli jste maximálního počtu znaků, které lze vytvořit"
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "zda si postava NENÍ vědoma identity druhého rysu"
 
+msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgstr ""
+"Nelze zpracovat vrácení peněz: Funkce žetonů ani kreditů nejsou povoleny"
+
 msgid "Click the tutorial to open it and follow the step-by-step instructions"
 msgstr ""
 "Kliknutím na výukový program jej otevřete a postupujte podle pokynů krok za "
@@ -7388,6 +7395,11 @@ msgstr ""
 "zaregistrovat"
 
 msgid ""
+"Some activated features need the 'Credits' feature, but it isn't active"
+msgstr ""
+"Některé aktivované funkce potřebují funkci \"Kredity\", ale ta není aktivní"
+
+msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr "Vaše žádost o odhlášení z odběru zpráv byla úspěšná."
 
@@ -7449,6 +7461,12 @@ msgid ""
 msgstr ""
 "Pokud jste kandidátem na člena představenstva, napište sem prosím své "
 "představení!"
+
+msgid ""
+"Manages tokens used by participants to cover the event registration fees"
+msgstr ""
+"spravuje žetony, které účastníci používají k úhradě registračních poplatků "
+"za událost"
 
 msgid ""
 "On this page you can mark your specialties to collaborate on our  events"
@@ -7517,6 +7535,12 @@ msgid ""
 msgstr ""
 "Pokud potřebujete pomoc, napište sem svůj požadavek v angličtině a použijte "
 "jednotlivá klíčová slova"
+
+msgid ""
+"Manages credits used by participants to cover the event registration fees"
+msgstr ""
+"spravuje kredity, které účastníci využívají k úhradě registračních poplatků "
+"za událost"
 
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"
@@ -7940,13 +7964,6 @@ msgstr ""
 " vybrat"
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, but it isn't "
-"active"
-msgstr ""
-"Některé aktivované funkce potřebují funkci 'Token / Kredit', ale není "
-"aktivní"
-
-msgid ""
 "Sorry, this facilitation code has already been used the maximum number "
 "allowed"
 msgstr ""
@@ -8083,20 +8100,6 @@ msgid ""
 msgstr ""
 "Obrázek loga (můžete nahrát soubor libovolné velikosti, jeho velikost se "
 "automaticky změní)"
-
-msgid ""
-"Manages credits used by participants to cover the registration fee on all "
-"events"
-msgstr ""
-"spravuje kredity, které účastníci využívají k úhradě registračních poplatků "
-"na všech akcích"
-
-msgid ""
-"Manages tokens used by participants to cover the registration fee for all "
-"events"
-msgstr ""
-"spravuje žetony, které účastníci používají k úhradě registračního poplatku "
-"za všechny akce"
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -8620,6 +8623,13 @@ msgid ""
 msgstr ""
 "Aktivuje vstupenky ve stylu 'čekací listiny', které jsou k dispozici pouze v"
 " případě, že jsou všechny hlavní vstupenky vyprodány"
+
+msgid ""
+"Allows managing Tokens, which participants can use instead of money for "
+"registration fees"
+msgstr ""
+"Umožňuje správu žetonů, které mohou účastníci použít místo peněz na "
+"registrační poplatky"
 
 msgid ""
 "Customize the appearance of all organizational pages, including colors, "
@@ -9637,6 +9647,13 @@ msgstr ""
 "dovednost a získat zpět použité XP (výchozí hodnota je 0)"
 
 msgid ""
+"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
+"processed as virtual currency."
+msgstr ""
+"Varování: Funkce žetonů ani kreditů nejsou povoleny. Náhrady nelze zpracovat"
+" jako virtuální měnu."
+
+msgid ""
 "If you select another event, it will be considered in the same campaign, and"
 " they will share the characters"
 msgstr ""
@@ -10193,6 +10210,13 @@ msgid ""
 msgstr ""
 "Umožňuje uživateli vytvářet 'delegované' účty, které plně spravuje (např. "
 "děti), čímž se vyhne nutnosti používat samostatné přihlašovací údaje"
+
+msgid ""
+"Allows managing Credits, which participants can use instead of money for "
+"registration fees. Credits can also be redeemed for cash"
+msgstr ""
+"Umožňuje spravovat kredity, které mohou účastníci použít místo peněz za "
+"registrační poplatky. Kredity lze také vyměnit za hotovost"
 
 msgid ""
 "Allows participants to purchase tickets as gifts. A special code is "

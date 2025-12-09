@@ -128,8 +128,7 @@
             </tr>
         {% endfor %}
     </table>
-    <h4>{% trans "Transactions" %} - {{ trans }}</h4>
-    <h4>{{ credit_name }} {% trans "positive" %} (soci con cui l'associazione ha un debito)</h4>
+    <h4>{{ credits_name }} {% trans "positive" %}</h4>
     <table class="tablesorter">
         {% for el in pos %}
             <tr>
@@ -138,7 +137,7 @@
             </tr>
         {% endfor %}
     </table>
-    <h4>{{ credit_name }} {% trans "negatives" %} (soci che sono in debito con l'associazione )</h4>
+    <h4>{{ credits_name }} {% trans "negatives" %}</h4>
     <table class="tablesorter">
         {% for el in neg %}
             <tr>

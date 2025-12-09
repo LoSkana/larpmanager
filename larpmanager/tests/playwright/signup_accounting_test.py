@@ -165,7 +165,8 @@ def pay(live_server: Any, page: Any) -> None:
 
 def token_credits(live_server: Any, page: Any) -> None:
     # activate tokens credits
-    go_to(page, live_server, "/manage/features/token_credit/on")
+    go_to(page, live_server, "/manage/features/tokens/on")
+    go_to(page, live_server, "/manage/features/credits/on")
     go_to(page, live_server, "/manage/tokens")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()

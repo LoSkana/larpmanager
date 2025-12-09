@@ -715,24 +715,27 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("vat_options", ConfigType.INT, label_vat_on_options, help_text_vat_on_options)
 
         # Configure token/credit system naming and display
-        if "token_credit" in self.params["features"]:
-            self.set_section("token_credit", _("Tokens / Credits"))
+        if "tokens" in self.params["features"]:
+            self.set_section("tokens", _("Tokens"))
 
             # Customizable token display name
             label_token_display_name = _("Token name")
             help_text_token_display_name = _("Name to be displayed for tokens")
             self.add_configs(
-                "token_credit_token_name",
+                "tokens_name",
                 ConfigType.CHAR,
                 label_token_display_name,
                 help_text_token_display_name,
             )
 
+        if "credits" in self.params["features"]:
+            self.set_section("credits", _("Credits"))
+
             # Customizable credit display name
-            label_credit_display_name = _("Name credits")
+            label_credit_display_name = _("Credits name")
             help_text_credit_display_name = _("Name to be displayed for credits")
             self.add_configs(
-                "token_credit_credit_name",
+                "credits_name",
                 ConfigType.CHAR,
                 label_credit_display_name,
                 help_text_credit_display_name,

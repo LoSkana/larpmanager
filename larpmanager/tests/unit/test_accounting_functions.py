@@ -54,7 +54,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_with_tokens(self, mock_features: Any) -> None:
         """Test using tokens to pay for registration"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -88,7 +88,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         Note: This test verifies the basic credit payment logic.
         We cannot fully test signal behavior without creating signal loops.
         """
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -119,7 +119,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_tokens_then_credits(self, mock_features: Any) -> None:
         """Test using tokens first, then credits"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -149,7 +149,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_overpay_removes_credit_first(self, mock_features: Any) -> None:
         """Test overpayment reversal removes credits before tokens"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -184,7 +184,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         Note: This test verifies the function doesn't crash with zero remaining.
         The function doesn't early-return on zero, so it processes normally.
         """
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -202,7 +202,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_registration_tokens_credits_use_with_negative_remaining(self, mock_features: Any) -> None:
         """Test that function handles negative remaining correctly"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()
@@ -489,7 +489,7 @@ class TestAccountingEdgeCases(BaseTestCase):
     @patch("larpmanager.accounting.token_credit.get_association_features")
     def test_tokens_credits_with_insufficient_balance(self, mock_features: Any) -> None:
         """Test using more tokens/credits than available"""
-        mock_features.return_value = {"token_credit": True}
+        mock_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
         association = self.get_association()

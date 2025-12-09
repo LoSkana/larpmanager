@@ -101,13 +101,12 @@
 - model: larpmanager.associationpermission
   fields:
     name: Credits
-    descr: Manages credits used by participants to cover the registration fee on all
-      events
+    descr: Manages credits used by participants to cover the event registration fees
     slug: exe_credits
     number: 8
-    config: token_credit
+    config: credits
     hidden: false
-    feature: token_credit
+    feature: credits
     module: accounting
 - model: larpmanager.associationpermission
   fields:
@@ -342,13 +341,12 @@
 - model: larpmanager.associationpermission
   fields:
     name: Tokens
-    descr: Manages tokens used by participants to cover the registration fee for all
-      events
+    descr: Manages tokens used by participants to cover the event registration fees
     slug: exe_tokens
     number: 8
-    config: token_credit
+    config: tokens
     hidden: false
-    feature: token_credit
+    feature: tokens
     module: accounting
 - model: larpmanager.associationpermission
   fields:
