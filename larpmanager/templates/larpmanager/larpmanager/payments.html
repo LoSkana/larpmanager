@@ -23,9 +23,9 @@
             <tr>
                 <th>{{ el }}</th>
                 <td>{{ el.event.association }}</td>
-                <td>{{ el.start | date:"d/m/Y" }}</td>
+                <td>{{ el.start | date:"Y/m/d" }}</td>
                 <td>
-                    {% if el.end %}{{ el.end | date:"d/m/Y" }}{% endif %}
+                    {% if el.end %}{{ el.end | date:"Y/m/d" }}{% endif %}
                 </td>
                 <td>{{ el.features }}</td>
                 <td>{{ el.get_plan_display }}</td>
