@@ -363,7 +363,7 @@ def update_credit_on_expense_save(expense_item: AccountingItemExpense) -> None:
     if not expense_item.member or not expense_item.is_approved:
         return
 
-    update_credits(expense_item)
+    update_token_credit(expense_item, token=False)
 
 
 def update_token_credit(

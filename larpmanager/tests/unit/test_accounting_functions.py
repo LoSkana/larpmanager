@@ -70,7 +70,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         membership.save()
 
         # Use tokens to pay
-        registration_tokens_credits_use(registration, Decimal("30.00"), association.id)
+        registration_tokens_credits_use(registration, Decimal("30.00"), association.id, mock_features.return_value)
 
         # Check membership tokens decreased
         membership.refresh_from_db()
@@ -139,7 +139,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         membership.save()
 
         # Use tokens and credits to pay 60 total
-        registration_tokens_credits_use(registration, Decimal("60.00"), association.id)
+        registration_tokens_credits_use(registration, Decimal("60.00"), association.id, mock_features.return_value)
 
         # Check both decreased correctly
         membership.refresh_from_db()
@@ -164,7 +164,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         )
 
         # Reverse 50 overpayment (should remove credit first)
-        registration_tokens_credits_overpay(registration, Decimal("50.00"), association.id)
+        registration_tokens_credits_overpay(registration, Decimal("50.00"), association.id, mock_features.return_value)
 
         # Check credit payment reduced/removed, token payment untouched
         credit_payments = AccountingItemPayment.objects.filter(
@@ -209,7 +209,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         # Should not create any payments
-        registration_tokens_credits_use(registration, Decimal("-10.00"), association.id)
+        registration_tokens_credits_use(registration, Decimal("-10.00"), association.id, mock_features.return_value)
 
         payments = AccountingItemPayment.objects.filter(member=member, reg=registration)
         self.assertEqual(payments.count(), 0)
@@ -505,7 +505,7 @@ class TestAccountingEdgeCases(BaseTestCase):
         membership.save()
 
         # Try to use 50 (more than available)
-        registration_tokens_credits_use(registration, Decimal("50.00"), association.id)
+        registration_tokens_credits_use(registration, Decimal("50.00"), association.id, mock_features.return_value)
 
         # Should only use what's available
         membership.refresh_from_db()
