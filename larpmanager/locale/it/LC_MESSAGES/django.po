@@ -9659,7 +9659,7 @@ msgid ""
 " default or customize it"
 msgstr ""
 "Questo codice viene utilizzato per generare il link segreto di registrazione"
-"; si può tenere quello predefinito o personalizzarlo (max 30 caratteri)"
+"; si può tenere quello predefinito o personalizzarlo (max 50 caratteri)"
 
 msgid ""
 "To confirm your event registration, please complete your payment within one "
