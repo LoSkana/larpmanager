@@ -584,7 +584,7 @@ class Run(BaseModel):
 
     registration_secret = models.CharField(
         default=my_uuid_short,
-        max_length=30,
+        max_length=50,
         unique=True,
         verbose_name=_("Secret code"),
         help_text=_(
