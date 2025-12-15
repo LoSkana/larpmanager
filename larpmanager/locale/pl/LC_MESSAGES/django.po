@@ -1470,6 +1470,9 @@ msgstr "Chronologia"
 msgid "Collection"
 msgstr "Kolekcja"
 
+msgid "Components"
+msgstr "Komponenty"
+
 msgid "Contact us"
 msgstr "Skontaktuj się z nami"
 
@@ -2269,6 +2272,9 @@ msgstr "Aktualizacja rejestracji"
 msgid "Single choice"
 msgstr "Pojedynczy wybór"
 
+msgid "Template Name"
+msgstr "Nazwa szablonu"
+
 msgid "Text language"
 msgstr "Język tekstu"
 
@@ -2672,6 +2678,9 @@ msgstr "oczekiwany w ciągu"
 msgid "upcoming events"
 msgstr "nadchodzące wydarzenia"
 
+msgid "Ability Template"
+msgstr "Szablon zdolności"
+
 msgid "Ability acquired"
 msgstr "Zdolność nabyta"
 
@@ -2872,6 +2881,12 @@ msgstr "Pobierz tutaj"
 
 msgid "follow this link"
 msgstr "kliknij ten link"
+
+msgid "Ability Templates"
+msgstr "Szablony zdolności"
+
+msgid "Ability templates"
+msgstr "Szablony umiejętności"
 
 msgid "Activation failed"
 msgstr "Aktywacja nie powiodła się"
@@ -3958,6 +3973,9 @@ msgstr "Przejdź do historii tokenów"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lekki arkusz (test)"
+
+msgid "Manage ability templates"
+msgstr "Zarządzanie szablonami umiejętności"
 
 msgid "Manage area of the event"
 msgstr "Zarządzanie obszarem wydarzenia"
@@ -5866,6 +5884,9 @@ msgstr "Teraz możesz sprawdzić terminy organizacji"
 msgid "Number of characters to be assigned (default 1)"
 msgstr "Liczba znaków do przypisania (domyślnie 1)"
 
+msgid "Optional template associated with this ability."
+msgstr "Opcjonalny szablon powiązany z tą umiejętnością."
+
 msgid "Selected elements will be shown to participants"
 msgstr "Wybrane elementy zostaną pokazane uczestnikom"
 
@@ -6450,6 +6471,9 @@ msgstr "Zaznacz wiersze tabeli i wybierz operację do zastosowania"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Link będzie ważny przez następującą liczbę dni"
+
+msgid "This page allows you to add or edit an ability template"
+msgstr "Ta strona umożliwia dodanie lub edycję szablonu umiejętności"
 
 msgid "This page shows the questions submitted by participants"
 msgstr "Na tej stronie znajdują się pytania przesłane przez uczestników"
@@ -7714,6 +7738,12 @@ msgstr ""
 "wypełnione prawidłowo"
 
 msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+"Jeśli zaznaczone, włącza reguły dla obliczanych pól znaków na podstawie "
+"umiejętności"
+
+msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
 "Jeśli opcja ta jest zaznaczona, umożliwia uczestnikom dostosowanie zaimków "
@@ -8375,6 +8405,13 @@ msgstr ""
 "wyłącznie z poziomu panelu organizacji"
 
 msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+"Jeśli zaznaczone, włącza szablony umiejętności, które mogą być ponownie "
+"użyte w wielu umiejętnościach"
+
+msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
 "system"
 msgstr ""
@@ -8600,6 +8637,13 @@ msgid ""
 msgstr ""
 "Na tej stronie wyświetlane są poufne informacje dotyczące bezpieczeństwa "
 "zarejestrowanych uczestników"
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+"Ta strona podsumowuje szablony zdolności wielokrotnego użytku, które można "
+"przypisać do zdolności"
 
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
@@ -9489,6 +9533,13 @@ msgid ""
 msgstr ""
 "Rata z zamówieniem %(order)d już istnieje z następującymi wspólnymi "
 "biletami: %(tickets)s"
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+"Jeśli zaznaczone, włącza modyfikatory, które mogą dostosowywać koszty "
+"umiejętności w oparciu o warunki wstępne i wymagania"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

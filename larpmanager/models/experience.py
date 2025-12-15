@@ -30,6 +30,21 @@ from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
+class AbilityTemplatePx(BaseConceptModel):
+    """Represents AbilityTemplatePx model."""
+
+    name = models.CharField(max_length=150)
+    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
+
+    def __str__(self) -> str:
+        """Return string representation of AbilityTemplatePx."""
+        return self.name
+
+    def get_full_name(self) -> str:
+        """Returns full name."""
+        return self.name
+
+
 class AbilityTypePx(BaseConceptModel):
     """Represents AbilityTypePx model."""
 
@@ -60,6 +75,16 @@ class AbilityPx(BaseConceptModel):
         null=True,
         related_name="abilities",
         verbose_name=_("Type"),
+    )
+
+    template = models.ForeignKey(
+        AbilityTemplatePx,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="abilities",
+        verbose_name=_("Template"),
+        help_text=_("Optional template associated with this ability."),
     )
 
     cost = models.IntegerField(default=0, help_text=_("Note that if the cost is 0, it will be automatically assigned"))
@@ -107,6 +132,11 @@ class AbilityPx(BaseConceptModel):
     def display(self) -> str:
         """Return formatted display string with name and cost."""
         return f"{self.name} ({self.cost})"
+
+    @property
+    def get_description(self) -> str:
+        """Returns description of ability."""
+        return self.template.descr if self.template else self.descr
 
 
 class DeliveryPx(BaseConceptModel):

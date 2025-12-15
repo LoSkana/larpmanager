@@ -666,6 +666,27 @@ class OrgaConfigForm(ConfigForm):
                 initial_experience_points_help_text,
             )
 
+            # Ability templates configuration
+            ability_templates_label = _("Ability templates")
+            ability_templates_help_text = _(
+                "If checked, enables ability templates that can be reused across multiple abilities",
+            )
+            self.add_configs("px_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
+
+            # Rules configuration
+            rules_label = _("Rules")
+            rules_help_text = _(
+                "If checked, enables rules for computed character fields based on abilities",
+            )
+            self.add_configs("px_rules", ConfigType.BOOL, rules_label, rules_help_text)
+
+            # Modifiers configuration
+            modifiers_label = _("Modifiers")
+            modifiers_help_text = _(
+                "If checked, enables modifiers that can adjust ability costs based on prerequisites and requirements",
+            )
+            self.add_configs("px_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
+
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
             self.set_section("user_character", _("Player editor"))

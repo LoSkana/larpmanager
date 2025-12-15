@@ -715,8 +715,9 @@
     slug: orga_px_rules
     number: 81
     config: px
+    active_if: px_rules
     hidden: false
-    feature: px
+    feature: rules
     module: experience
 - model: larpmanager.eventpermission
   fields:
@@ -725,8 +726,9 @@
     slug: orga_px_modifiers
     number: 91
     config: px
+    active_if: px_modifiers
     hidden: false
-    feature: px
+    feature: modifiers
     module: experience
 - model: larpmanager.eventpermission
   fields:
@@ -748,3 +750,14 @@
     hidden: false
     feature: onetime_content
     module: onetime
+- model: larpmanager.eventpermission
+  fields:
+    name: Ability Templates
+    descr: Manage ability templates
+    slug: orga_px_ability_templates
+    number: 41
+    config: px
+    active_if: px_templates
+    hidden: false
+    feature: templates
+    module: experience
