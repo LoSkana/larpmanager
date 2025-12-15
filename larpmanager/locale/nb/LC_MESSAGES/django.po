@@ -6047,6 +6047,9 @@ msgstr "Påminnelse om betaling av medlemskontingent for %(event)s"
 msgid "Select your preferences on the characters to play"
 msgstr "Velg hvilke figurer du vil spille"
 
+msgid "The registration code is not active at the moment"
+msgstr "Registreringskoden er ikke aktiv for øyeblikket"
+
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
 msgstr "Summen er %(amount).2f, med årsak '%(reason)s'"
@@ -6674,8 +6677,8 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "Du har angitt det samme alternativet i mer enn én innstilling"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
-msgstr "%(amount)d %(tokens)s ble brukt for å delta i dette arrangementet"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
+msgstr "%(amount)s %(tokens)s ble brukt for å delta i dette arrangementet"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
@@ -6730,8 +6733,8 @@ msgstr ""
 "Du har allerede gitt tillatelse til datadeling med denne organisasjonen"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
-msgstr "%(amount)d %(credits)s ble brukt til å delta i dette arrangementet"
+msgid "%(amount)s %(credits)s were used to participate in this event"
+msgstr "%(amount)s %(credits)s ble brukt til å delta i dette arrangementet"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valgfritt) Tegnalternativer som krav, kommaseparert"

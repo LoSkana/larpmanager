@@ -6046,6 +6046,9 @@ msgstr "Reminder versamento quota sociale per %(event)s"
 msgid "Select your preferences on the characters to play"
 msgstr "Seleziona le tue preferenze sui personaggi da interpretare"
 
+msgid "The registration code is not active at the moment"
+msgstr "Il codice di registrazione non è attivo al momento"
+
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
 msgstr "La somma è di %(amount).2f, con motivazione '%(reason)s'"
@@ -6577,7 +6580,7 @@ msgstr ""
 "Permette di copiare qualsiasi elemento direttamente da un altro evento"
 
 msgid "As soon as it is approved, your accounting will be updated"
-msgstr "Non appena approvata, la tua contabilità sarà aggiornata"
+msgstr "Non appena approvato, la tua contabilità sarà aggiornata"
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr ""
@@ -6687,9 +6690,9 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "Hai indicato la stessa opzione in più di una preferenza"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(tokens)s sono stati usati per partecipare a questo evento"
+"%(amount)s %(tokens)s sono stati usati per partecipare a questo evento"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
@@ -6752,9 +6755,9 @@ msgid "You have already granted data sharing with this organisation"
 msgstr "Hai già concesso la condivisione dei dati con questa organizzazione"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(credits)s sono stati usati per partecipare a questo evento"
+"%(amount)s %(credits)s sono stati usati per partecipare a questo evento"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Facoltativo) Opzioni personaggio come requisiti, separati da virgola"

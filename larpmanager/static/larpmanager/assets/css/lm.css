@@ -1731,6 +1731,21 @@ a label:hover {
 .popup_tutorial {
   width: 80vw;
   height: 80vh;
+  z-index: 10000 !important;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Force all TinyMCE elements to stay below popups */
+[class*="tox"] {
+  z-index: 1 !important;
+}
+
+/* Force uglipop elements to be on top */
+[id*="uglipop"] {
+  z-index: 99999 !important;
 }
 
 .popup_query {
@@ -1793,6 +1808,10 @@ input[type="checkbox"].checkbox_single {
 
   #tutorial_query_go {
     width: auto !important;
+  }
+
+  .popup_tutorial {
+    width: 95% !important;
   }
 }
 

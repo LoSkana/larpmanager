@@ -6052,6 +6052,9 @@ msgstr "Herinnering betaling lidmaatschapsgeld voor %(event)s"
 msgid "Select your preferences on the characters to play"
 msgstr "Kies je favoriete personages om te spelen"
 
+msgid "The registration code is not active at the moment"
+msgstr "De registratiecode is momenteel niet actief"
+
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
 msgstr "De som is %(amount).2f, met reden '%(reason)s'"
@@ -6697,9 +6700,9 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "U hebt dezelfde optie in meer dan één voorkeur aangegeven"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(tokens)s werden gebruikt om deel te nemen aan dit evenement"
+"%(amount)s %(tokens)s werden gebruikt om deel te nemen aan dit evenement"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "WAARSCHUWING: deze actie overschrijft wijzigingen in deze gebeurtenis"
@@ -6759,9 +6762,9 @@ msgstr ""
 "organisatie"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(credits)s werden gebruikt om deel te nemen aan dit evenement"
+"%(amount)s %(credits)s werden gebruikt om deel te nemen aan dit evenement"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Optioneel) Tekenopties als vereisten, door komma's gescheiden"

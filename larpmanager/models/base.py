@@ -22,8 +22,7 @@ from itertools import chain
 from typing import Any, ClassVar
 
 from django.core.validators import RegexValidator
-from django.db import models
-from django.db.models import Max
+from django.db import models, transaction
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -311,11 +310,14 @@ def auto_assign_sequential_numbers(instance: Any) -> None:
             if hasattr(instance, "character") and instance.character:
                 queryset = instance.__class__.objects.filter(character=instance.character)
             if queryset is not None:
-                max_value = queryset.aggregate(Max(field_name))[f"{field_name}__max"]
-                if not max_value:
-                    setattr(instance, field_name, 1)
-                else:
-                    setattr(instance, field_name, max_value + 1)
+                # Use select_for_update() to lock rows and prevent race conditions
+                with transaction.atomic():
+                    max_instance = queryset.select_for_update().order_by(f"-{field_name}").first()
+                    if not max_instance:
+                        setattr(instance, field_name, 1)
+                    else:
+                        max_value = getattr(max_instance, field_name)
+                        setattr(instance, field_name, max_value + 1)
 
 
 def update_model_search_field(model_instance: Any) -> None:

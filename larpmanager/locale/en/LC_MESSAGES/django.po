@@ -2137,7 +2137,7 @@ msgid "Utilisation %(tokens)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -2145,7 +2145,7 @@ msgid "Utilisation %(credits)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -9829,6 +9829,9 @@ msgid "This event has concluded"
 msgstr ""
 
 msgid "This event has been cancelled"
+msgstr ""
+
+msgid "The registration code is not active at the moment"
 msgstr ""
 
 msgid "Not available, kiddo"

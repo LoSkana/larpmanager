@@ -44,6 +44,32 @@ from larpmanager.models.member import Member
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 
 
+def format_decimal_amount(value: float) -> str:
+    """Format decimal value for display: integers without decimals, decimals with max 2 places.
+
+    Args:
+        value: The decimal/float value to format
+
+    Returns:
+        Formatted string with integers shown without decimals (e.g., "5"),
+        and decimals shown with minimum necessary decimals, max 2 (e.g., "5.5", "5.25")
+
+    Examples:
+        >>> format_decimal_amount(5.0)
+        '5'
+        >>> format_decimal_amount(5.5)
+        '5.5'
+        >>> format_decimal_amount(5.25)
+        '5.25'
+        >>> format_decimal_amount(5.123)
+        '5.12'
+
+    """
+    if value % 1 == 0:
+        return str(int(value))
+    return f"{value:.2f}".rstrip("0").rstrip(".")
+
+
 def send_expense_notification_email(instance: AccountingItemExpense) -> None:
     """Send email notification to event organizers when an expense is created.
 
@@ -334,9 +360,9 @@ def get_pay_token_email(instance: AccountingItemPayment, run: Run, token_name: s
 
     # Create localized body message with token amount and currency
     body = (
-        _("%(amount)d %(tokens)s were used to participate in this event")
+        _("%(amount)s %(tokens)s were used to participate in this event")
         % {
-            "amount": int(instance.value),
+            "amount": format_decimal_amount(instance.value),
             "tokens": token_name,
         }
         + "!"
@@ -403,9 +429,9 @@ def get_pay_credit_email(credit_name: str, instance: AccountingItemPayment, run:
 
     # Create email body describing the credit transaction amount
     email_body = (
-        _("%(amount)d %(credits)s were used to participate in this event")
+        _("%(amount)s %(credits)s were used to participate in this event")
         % {
-            "amount": int(instance.value),
+            "amount": format_decimal_amount(instance.value),
             "credits": credit_name,
         }
         + "!"
