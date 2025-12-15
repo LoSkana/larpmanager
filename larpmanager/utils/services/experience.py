@@ -60,11 +60,9 @@ def _build_px_context(character: Any) -> tuple[set[int], set[int], dict[int, lis
 
     """
     # Get all abilities already learned by the character
-    # This creates a set of primary keys for efficient lookup operations
     current_character_abilities = set(character.px_ability_list.values_list("pk", flat=True))
 
     # Get the options selected for the character from writing choices
-    # Filter by character ID and applicable question type for accuracy
     current_character_choices = set(
         WritingChoice.objects.filter(
             element_id=character.id,
@@ -72,8 +70,11 @@ def _build_px_context(character: Any) -> tuple[set[int], set[int], dict[int, lis
         ).values_list("option_id", flat=True),
     )
 
-    # Get all modifiers with optimized prefetch for related objects
-    # Use only() to limit fields and prefetch_related
+    # Check if modifiers are enabled for this event; return empty if disabled
+    if not get_event_config(character.event_id, "px_modifiers", default_value=False):
+        return current_character_abilities, current_character_choices, {}
+
+    # Get all modifiers
     all_modifiers = (
         character.event.get_elements(ModifierPx)
         .only("id", "order", "cost")
@@ -86,19 +87,14 @@ def _build_px_context(character: Any) -> tuple[set[int], set[int], dict[int, lis
     )
 
     # Build mapping for cost, prerequisites, and requirements by ability
-    # This creates an efficient lookup structure for modifier calculations
     modifiers_by_ability = defaultdict(list)
     for modifier in all_modifiers:
-        # Extract IDs from prefetched objects to avoid additional queries
-        # Use list comprehension and set comprehension for performance
         ability_ids = [ability.id for ability in modifier.abilities.all()]
         prerequisite_ids = {ability.id for ability in modifier.prerequisites.all()}
         requirement_ids = {option.id for option in modifier.requirements.all()}
 
-        # Create payload tuple with modifier data for easy access
-        payload = (modifier.cost, prerequisite_ids, requirement_ids)
-
         # Map each ability to its applicable modifiers
+        payload = (modifier.cost, prerequisite_ids, requirement_ids)
         for ability_id in ability_ids:
             modifiers_by_ability[ability_id].append(payload)
 

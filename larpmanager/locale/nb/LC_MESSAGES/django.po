@@ -1470,6 +1470,9 @@ msgstr "Kronologi"
 msgid "Collection"
 msgstr "Samle"
 
+msgid "Components"
+msgstr "Komponenter"
+
 msgid "Contact us"
 msgstr "Kontakt oss"
 
@@ -2269,6 +2272,9 @@ msgstr "Oppdatering av registrering"
 msgid "Single choice"
 msgstr "Enkelt valg"
 
+msgid "Template Name"
+msgstr "Navn på mal"
+
 msgid "Text language"
 msgstr "Tekstens språk"
 
@@ -2672,6 +2678,9 @@ msgstr "forventet innen"
 msgid "upcoming events"
 msgstr "Planlagte arrangementer"
 
+msgid "Ability Template"
+msgstr "Mal for evner"
+
 msgid "Ability acquired"
 msgstr "Ervervet evne"
 
@@ -2872,6 +2881,12 @@ msgstr "last den ned her"
 
 msgid "follow this link"
 msgstr "Følg denne lenken"
+
+msgid "Ability Templates"
+msgstr "Evne-maler"
+
+msgid "Ability templates"
+msgstr "Evne-maler"
 
 msgid "Activation failed"
 msgstr "Aktivering mislyktes"
@@ -3958,6 +3973,9 @@ msgstr "Få tilgang til PT-historikk"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lettvektsplate (Test)"
+
+msgid "Manage ability templates"
+msgstr "Administrere evne-maler"
 
 msgid "Manage area of the event"
 msgstr "Administrer området for arrangementet"
@@ -5868,6 +5886,9 @@ msgstr "Nå kan du gå gjennom organisasjonens tidsfrister"
 msgid "Number of characters to be assigned (default 1)"
 msgstr "Antall tegn som skal tilordnes (standard 1)"
 
+msgid "Optional template associated with this ability."
+msgstr "Valgfri mal knyttet til denne evnen."
+
 msgid "Selected elements will be shown to participants"
 msgstr "Utvalgte elementer vil bli vist til deltakerne"
 
@@ -6448,6 +6469,9 @@ msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Koblingen vil være gyldig i følgende antall dager"
+
+msgid "This page allows you to add or edit an ability template"
+msgstr "På denne siden kan du legge til eller redigere en evnemal"
 
 msgid "This page shows the questions submitted by participants"
 msgstr "Denne siden viser spørsmålene som deltakerne har sendt inn"
@@ -7665,6 +7689,11 @@ msgid ""
 msgstr "Jeg bekrefter at alle nødvendige personopplysninger er korrekt utfylt"
 
 msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+"Hvis avkrysset, aktiveres regler for beregnede tegnfelt basert på evner"
+
+msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr "Hvis det er krysset av, kan deltakerne tilpasse karakterenes pronomen"
 
@@ -8305,6 +8334,13 @@ msgstr ""
 "organisasjonspanelet"
 
 msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+"Hvis avkrysset, aktiverer du evnemaler som kan gjenbrukes på tvers av flere "
+"evner"
+
+msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
 "system"
 msgstr ""
@@ -8526,6 +8562,12 @@ msgid ""
 msgstr ""
 "Denne siden viser sensitiv informasjon om registrerte deltakere med hensyn "
 "til sikkerhet"
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+"Denne siden oppsummerer de gjenbrukbare evnemalene som kan tilordnes evner"
 
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
@@ -9413,6 +9455,13 @@ msgid ""
 msgstr ""
 "En avbetaling med ordre %(order)d eksisterer allerede med følgende felles "
 "billett(er): %(tickets)s"
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+"Hvis avkrysset, aktiveres modifikatorer som kan justere evnekostnader basert"
+" på forutsetninger og krav"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

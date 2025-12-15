@@ -219,8 +219,8 @@
 - model: larpmanager.feature
   fields:
     name: Newsletter
-    descr: Adds a page displaying participant mailing lists, sorted by participants' newsletter
-      preferences
+    descr: Adds a page displaying participant mailing lists, sorted by participants'
+      newsletter preferences
     slug: newsletter
     overall: true
     placeholder: false
@@ -1320,7 +1320,9 @@
 - model: larpmanager.feature
   fields:
     name: One-Time Content
-    descr: Enables secure streaming of video/audio content via one-time access tokens. Each token can only be used once and tracks who accessed the content, when, and from where
+    descr: Enables secure streaming of video/audio content via one-time access tokens.
+      Each token can only be used once and tracks who accessed the content, when,
+      and from where
     slug: onetime_content
     overall: false
     placeholder: false
@@ -1332,7 +1334,8 @@
 - model: larpmanager.feature
   fields:
     name: Translations
-    descr: Allows to fine-tune how words and phrases are translated in the organization's space
+    descr: Allows to fine-tune how words and phrases are translated in the organization's
+      space
     slug: translation
     overall: true
     placeholder: false
@@ -1341,3 +1344,75 @@
     after_link: exe_translations
     hidden: false
     module: appearance
+- model: larpmanager.feature
+  fields:
+    name: PX Rules
+    descr: Pseudo-feature activated by px_rules configuration
+    slug: px_rules
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: PX Modifiers
+    descr: Pseudo-feature activated by px_modifiers configuration
+    slug: px_modifiers
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: PX Templates
+    descr: Pseudo-feature activated by px_templates configuration
+    slug: px_templates
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Rules
+    descr: Pseudo-feature activated by px_rules configuration
+    slug: rules
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Modifiers
+    descr: Pseudo-feature activated by px_modifiers configuration
+    slug: modifiers
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Templates
+    descr: Pseudo-feature activated by px_templates configuration
+    slug: templates
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany

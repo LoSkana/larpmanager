@@ -1470,6 +1470,9 @@ msgstr "Cronologia"
 msgid "Collection"
 msgstr "Colletta"
 
+msgid "Components"
+msgstr "Componenti"
+
 msgid "Contact us"
 msgstr "Contattaci"
 
@@ -2269,6 +2272,9 @@ msgstr "Aggiornamento iscrizioni"
 msgid "Single choice"
 msgstr "Scelta singola"
 
+msgid "Template Name"
+msgstr "Nome del modello"
+
 msgid "Text language"
 msgstr "Lingua del testo"
 
@@ -2672,6 +2678,9 @@ msgstr "previsto entro"
 msgid "upcoming events"
 msgstr "Eventi in programma"
 
+msgid "Ability Template"
+msgstr "Modello di abilità"
+
 msgid "Ability acquired"
 msgstr "Abilità acquisita"
 
@@ -2872,6 +2881,12 @@ msgstr "scaricala qui"
 
 msgid "follow this link"
 msgstr "segui questo link"
+
+msgid "Ability Templates"
+msgstr "Modelli di abilità"
+
+msgid "Ability templates"
+msgstr "Modelli di abilità"
 
 msgid "Activation failed"
 msgstr "Attivazione fallita"
@@ -3958,6 +3973,9 @@ msgstr "Accedi allo storico dei PT"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Scheda leggera (Test)"
+
+msgid "Manage ability templates"
+msgstr "Gestisci i modelli di abilità"
 
 msgid "Manage area of the event"
 msgstr "Gestione dell'area dell'evento"
@@ -5867,6 +5885,9 @@ msgstr "Ora puoi rivedere le scadenze dell'organizzazione"
 msgid "Number of characters to be assigned (default 1)"
 msgstr "Numero di personaggi da assegnare (default 1)"
 
+msgid "Optional template associated with this ability."
+msgstr "Modello opzionale associato a questa abilità."
+
 msgid "Selected elements will be shown to participants"
 msgstr "Gli elementi selezionati saranno mostrati ai partecipanti"
 
@@ -6455,6 +6476,10 @@ msgstr "Seleziona le righe della tabella e scegli l'operazione da applicare"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Il link sarà valido per il seguente numero di giorni"
+
+msgid "This page allows you to add or edit an ability template"
+msgstr ""
+"Questa pagina consente di aggiungere o modificare un modello di abilità"
 
 msgid "This page shows the questions submitted by participants"
 msgstr "Questa pagina mostra le domande presentate dai partecipanti"
@@ -7797,6 +7822,12 @@ msgstr ""
 "correttamente"
 
 msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+"Se selezionata, abilita le regole per i campi personaggio computati in base "
+"alle abilità"
+
+msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
 "Se selezionata, abilita ai partecipanti di personalizzare i pronomi dei loro"
@@ -8475,6 +8506,13 @@ msgstr ""
 "pannello dell'organizzazione"
 
 msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+"Questa pagina riassume i modelli di abilità riutilizzabili che possono "
+"essere assegnati alle abilità"
+
+msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
 "system"
 msgstr ""
@@ -8707,6 +8745,13 @@ msgid ""
 msgstr ""
 "Questa pagina mostra le informazioni sensibili dei partecipanti registrati "
 "in materia di sicurezza"
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+"Questa pagina riassume i modelli di abilità riutilizzabili che possono "
+"essere assegnati alle abilità"
 
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
@@ -9600,6 +9645,13 @@ msgid ""
 msgstr ""
 "Esiste già una rata con ordine %(order)d con i seguenti ticket comuni: "
 "%(tickets)s"
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+"Se selezionata, abilita i modificatori che possono aggiustare i costi delle "
+"abilità in base a prerequisiti e requisiti"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "
