@@ -6746,7 +6746,7 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "Sie haben die gleiche Option in mehr als einer Präferenz angegeben"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(tokens)s wurden zur Teilnahme an dieser Veranstaltung verwendet"
 
@@ -6813,7 +6813,7 @@ msgstr ""
 "zugestimmt"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(credits)s wurden für die Teilnahme an dieser Veranstaltung "
 "verwendet"

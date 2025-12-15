@@ -6661,7 +6661,7 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "Wybrałeś tę samą opcję w więcej niż jednej preferencji"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(tokens)s wykorzystano do wzięcia udziału w tym wydarzeniu"
 
@@ -6718,7 +6718,7 @@ msgid "You have already granted data sharing with this organisation"
 msgstr "Użytkownik wyraził już zgodę na udostępnianie danych tej organizacji"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
 "%(amount)d %(credits)s zostały wykorzystane do wzięcia udziału w tym "
 "wydarzeniu"

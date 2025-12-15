@@ -2108,7 +2108,7 @@ msgid "Utilisation %(tokens)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -2116,7 +2116,7 @@ msgid "Utilisation %(credits)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
 
 #, python-format

@@ -6671,7 +6671,7 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "Has indicado la misma opción en más de una preferencia"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr "¡%(amount)d %(tokens)s se utilizaron para participar en este evento"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
@@ -6733,7 +6733,7 @@ msgid "You have already granted data sharing with this organisation"
 msgstr "Ya has autorizado el intercambio de datos con esta organización"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr "¡%(amount)d %(credits)s se utilizaron para participar en este evento"
 
 msgid "(Optional) Character options as requirements, comma-separated"
