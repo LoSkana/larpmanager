@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+import time
 import traceback
 from datetime import timedelta
 from typing import Any
@@ -721,7 +722,7 @@ def _apply_ticket(context: dict, ticket_id: int | None) -> None:
         pass
 
 
-def _check_redirect_registration(
+def _check_redirect_registration(  # noqa: PLR0911
     request: HttpRequest, context: dict, event: Any, secret_code: str | None
 ) -> HttpResponse | None:
     """Check if registration should be redirected based on event status and settings.
@@ -752,8 +753,12 @@ def _check_redirect_registration(
     # Validate secret code if secret registration is enabled
     if "registration_secret" in context["features"] and secret_code:
         if context["run"].registration_secret != secret_code:
-            msg = "wrong registration code"
-            raise Http404(msg)
+            msg = _("The registration code is not active at the moment")
+            messages.warning(request, msg)
+            # Delay to discourage brute force attacks
+            time.sleep(2)
+            return redirect("register", event_slug=context["event"].slug)
+        # Secret code is correct, allow registration bypassing other checks
         return None
 
     # Redirect to external registration link if configured

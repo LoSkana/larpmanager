@@ -6024,6 +6024,9 @@ msgstr "Připomenutí platby členských příspěvků za %(event)s"
 msgid "Select your preferences on the characters to play"
 msgstr "Vyberte si postavy, které chcete hrát"
 
+msgid "The registration code is not active at the moment"
+msgstr "Registrační kód není v současné době aktivní"
+
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
 msgstr "Součet je %(amount).2f s důvodem '%(reason)s'"
@@ -6645,7 +6648,7 @@ msgstr "Stejnou možnost jste uvedli ve více než jedné preferenci"
 
 #, python-format
 msgid "%(amount)s %(tokens)s were used to participate in this event"
-msgstr "K účasti na této akci bylo použito %(amount)d %(tokens)s"
+msgstr "K účasti na této akci bylo použito %(amount)s %(tokens)s"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "UPOZORNĚNÍ: tato akce přepíše změny provedené v této události"
@@ -6697,7 +6700,7 @@ msgstr "Sdílení dat s touto organizací jste již povolili"
 
 #, python-format
 msgid "%(amount)s %(credits)s were used to participate in this event"
-msgstr "K účasti na této akci bylo použito %(amount)d %(credits)s"
+msgstr "K účasti na této akci bylo použito %(amount)s %(credits)s"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Nepovinné) Možnosti znaků jako požadavky, oddělené čárkou"

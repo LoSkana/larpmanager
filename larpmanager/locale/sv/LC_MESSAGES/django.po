@@ -6025,6 +6025,9 @@ msgstr "Påminnelse om betalning av medlemsavgift för %(event)s"
 msgid "Select your preferences on the characters to play"
 msgstr "Välj vilka karaktärer du vill spela"
 
+msgid "The registration code is not active at the moment"
+msgstr "Registreringskoden är inte aktiv för närvarande"
+
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
 msgstr "Summan är %(amount).2f, med anledning '%(reason)s'"
@@ -6645,7 +6648,7 @@ msgstr "Du har angett samma alternativ i mer än en preferens"
 
 #, python-format
 msgid "%(amount)s %(tokens)s were used to participate in this event"
-msgstr "%(amount)d %(tokens)s användes för att delta i detta evenemang"
+msgstr "%(amount)s %(tokens)s användes för att delta i detta evenemang"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
@@ -6704,7 +6707,7 @@ msgstr "Du har redan beviljat datadelning med denna organisation"
 
 #, python-format
 msgid "%(amount)s %(credits)s were used to participate in this event"
-msgstr "%(amount)d %(credits)s användes för att delta i detta evenemang"
+msgstr "%(amount)s %(credits)s användes för att delta i detta evenemang"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valfritt) Teckenalternativ som krav, kommaseparerade"

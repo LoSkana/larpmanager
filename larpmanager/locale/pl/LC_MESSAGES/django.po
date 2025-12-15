@@ -6026,6 +6026,9 @@ msgstr "Przypomnienie o płatności składek członkowskich za %(event)s"
 msgid "Select your preferences on the characters to play"
 msgstr "Wybierz swoje preferencje dotyczące postaci, którymi chcesz grać"
 
+msgid "The registration code is not active at the moment"
+msgstr "Kod rejestracyjny nie jest obecnie aktywny"
+
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
 msgstr "Suma wynosi %(amount).2f, z powodem '%(reason)s'"
@@ -6663,7 +6666,7 @@ msgstr "Wybrałeś tę samą opcję w więcej niż jednej preferencji"
 #, python-format
 msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(tokens)s wykorzystano do wzięcia udziału w tym wydarzeniu"
+"%(amount)s %(tokens)s wykorzystano do wzięcia udziału w tym wydarzeniu"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "UWAGA: Ta czynność zastępuje zmiany wprowadzone w tym zdarzeniu"
@@ -6720,7 +6723,7 @@ msgstr "Użytkownik wyraził już zgodę na udostępnianie danych tej organizacj
 #, python-format
 msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(credits)s zostały wykorzystane do wzięcia udziału w tym "
+"%(amount)s %(credits)s zostały wykorzystane do wzięcia udziału w tym "
 "wydarzeniu"
 
 msgid "(Optional) Character options as requirements, comma-separated"

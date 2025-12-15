@@ -9788,6 +9788,9 @@ msgstr ""
 msgid "This event has been cancelled"
 msgstr ""
 
+msgid "The registration code is not active at the moment"
+msgstr ""
+
 msgid "Not available, kiddo"
 msgstr ""
 
