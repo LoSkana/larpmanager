@@ -199,7 +199,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
         raise UserPermissionError
 
     # Retrieve feature configuration for this permission
-    (required_feature, tutorial_identifier, config_slug) = get_association_permission_feature(permission_slug)
+    (required_feature, tutorial_slug, config_slug) = get_association_permission_feature(permission_slug)
 
     # Check if required feature is enabled for this association
     if required_feature != "def" and required_feature not in context["features"]:
@@ -215,7 +215,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
 
     # Add tutorial information if not already present
     if "tutorial" not in context:
-        context["tutorial"] = tutorial_identifier
+        context["tutorial"] = tutorial_slug
 
     # Add configuration URL if user has config permissions
     if config_slug and has_association_permission(request, context, "exe_config"):
@@ -263,11 +263,11 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
             permission_slug = permission_slug[0]
 
         # Get feature configuration for this permission
-        (feature_name, tutorial_key, config_section) = get_event_permission_feature(permission_slug)
+        (feature_name, tutorial_slug, config_section) = get_event_permission_feature(permission_slug)
 
         # Add tutorial information if not already present
         if "tutorial" not in context:
-            context["tutorial"] = tutorial_key
+            context["tutorial"] = tutorial_slug
 
         # Add configuration link if user has config permissions
         if config_section and has_event_permission(request, context, event_slug, "orga_config"):
