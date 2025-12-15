@@ -6552,7 +6552,7 @@ msgstr ""
 "Permette di copiare qualsiasi elemento direttamente da un altro evento"
 
 msgid "As soon as it is approved, your accounting will be updated"
-msgstr "Non appena approvata, la tua contabilità sarà aggiornata"
+msgstr "Non appena approvato, la tua contabilità sarà aggiornata"
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr ""
