@@ -25,6 +25,7 @@ from __future__ import annotations
 import csv
 import logging
 import math
+from decimal import Decimal
 from io import StringIO
 from typing import TYPE_CHECKING
 
@@ -126,10 +127,10 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
 
 def invoice_received_money(
     invoice_code: str,
-    gross_amount: float | None = None,
-    processing_fee: float | None = None,
+    gross_amount: float | Decimal | None = None,
+    processing_fee: float | Decimal | None = None,
     transaction_id: str | None = None,
-    expected_amount: float | None = None,
+    expected_amount: float | Decimal | None = None,
     payment_method: str | None = None,
 ) -> bool | None:
     """Process received payment for a payment invoice.
@@ -169,11 +170,11 @@ def invoice_received_money(
 
     # Verify payment amount if provided and expected amount is available
     if gross_amount is not None and expected_amount is not None:
-        received_amount = float(gross_amount)
-        expected = float(expected_amount)
+        received_amount = Decimal(str(gross_amount)) if not isinstance(gross_amount, Decimal) else gross_amount
+        expected = Decimal(str(expected_amount)) if not isinstance(expected_amount, Decimal) else expected_amount
 
         # Allow small rounding differences (1 cent tolerance)
-        amount_tolerance = 0.01
+        amount_tolerance = Decimal("0.01")
 
         # Reject if received amount is less than expected (underpayment)
         if received_amount < (expected - amount_tolerance):
@@ -203,12 +204,12 @@ def invoice_received_money(
     # Process payment updates within atomic transaction
     with transaction.atomic():
         # Update gross amount if provided
-        if gross_amount:
-            invoice.mc_gross = gross_amount
+        if gross_amount is not None:
+            invoice.mc_gross = Decimal(str(gross_amount)) if not isinstance(gross_amount, Decimal) else gross_amount
 
         # Update processing fee if provided
-        if processing_fee:
-            invoice.mc_fee = processing_fee
+        if processing_fee is not None:
+            invoice.mc_fee = Decimal(str(processing_fee)) if not isinstance(processing_fee, Decimal) else processing_fee
 
         # Update transaction ID if provided
         if transaction_id:
