@@ -456,9 +456,6 @@ msgstr "Dove"
 msgid "email"
 msgstr "email"
 
-msgid "money"
-msgstr "soldi"
-
 msgid "quick"
 msgstr "veloce"
 
@@ -1917,6 +1914,9 @@ msgstr "Nome del contenuto"
 msgid "Content type"
 msgstr "Tipo di contenuto"
 
+msgid "Credits name"
+msgstr "Nome dei crediti"
+
 msgid "Event hidden"
 msgstr "Evento nascosto"
 
@@ -1976,9 +1976,6 @@ msgstr "Ulteriori dettagli"
 
 msgid "Municipality"
 msgstr "Comune"
-
-msgid "Name credits"
-msgstr "Nome crediti"
 
 msgid "Next payment"
 msgstr "Prossimo pagamento"
@@ -4944,6 +4941,9 @@ msgstr "Nome dello sconto - ad uso interno"
 msgid "No elements are currently available"
 msgstr "Non ci sono elementi attualmente disponibili"
 
+msgid "Now set up the tokens configuration"
+msgstr "Ora imposta la configurazione dei token"
+
 msgid "Now you can create the receipt text"
 msgstr "Ora puoi creare il testo della ricevuta"
 
@@ -5014,6 +5014,9 @@ msgstr "Gestisci il caricamento delle fatture delle quote associative"
 
 msgid "Manage the models for event handouts"
 msgstr "Gestisci i modelli per gli handout dell'evento"
+
+msgid "Now set up the credits configuration"
+msgstr "Ora imposta la configurazione dei crediti"
 
 msgid "Now you can create the filler ticket"
 msgstr "Ora puoi creare il biglietto di riempimento"
@@ -7449,6 +7452,11 @@ msgstr ""
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "se il personaggio NON è a conoscenza dell'identità dell'altro tratto"
 
+msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgstr ""
+"Impossibile elaborare il rimborso: Non sono abilitati né i gettoni né i "
+"crediti"
+
 msgid "Click the tutorial to open it and follow the step-by-step instructions"
 msgstr "Fai clic sul tutorial per aprirlo e seguire le istruzioni passo-passo"
 
@@ -7572,6 +7580,12 @@ msgstr ""
 "iscriverti"
 
 msgid ""
+"Some activated features need the 'Credits' feature, but it isn't active"
+msgstr ""
+"Alcune funzioni attivate necessitano della funzione \"Crediti\", ma questa "
+"non è attiva"
+
+msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr ""
 "Le tua richiesta di disiscrizione dalle comunicazioni è avvenuta con "
@@ -7641,6 +7655,12 @@ msgstr ""
 msgid ""
 "If you are a candidate for the Board, please write an introduction here!"
 msgstr "Se ti candidi per il direttivo, scrivi qui una tua presentazione!"
+
+msgid ""
+"Manages tokens used by participants to cover the event registration fees"
+msgstr ""
+"Gestisci i gettoni utilizzati dai partecipanti per coprire le spese di "
+"registrazione evento"
 
 msgid ""
 "On this page you can mark your specialties to collaborate on our  events"
@@ -7719,6 +7739,12 @@ msgid ""
 msgstr ""
 "Se hai bisogno di aiuto, scrivi qui la tua richiesta in inglese utilizzando "
 "singole parole chiave"
+
+msgid ""
+"Manages credits used by participants to cover the event registration fees"
+msgstr ""
+"Gestisci i crediti utilizzati dai partecipanti per coprire le spese di "
+"iscrizione evento"
 
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"
@@ -8199,13 +8225,6 @@ msgstr ""
 " opzione sia selezionabile"
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, but it isn't "
-"active"
-msgstr ""
-"Alcune funzionalità attivate necessitano della funzionalità 'Token / "
-"Credito', ma non è attiva"
-
-msgid ""
 "Sorry, this facilitation code has already been used the maximum number "
 "allowed"
 msgstr ""
@@ -8352,20 +8371,6 @@ msgid ""
 msgstr ""
 "Immagine logo (puoi caricare un file di qualunque dimensione, verrà "
 "ridimensionato automaticamente"
-
-msgid ""
-"Manages credits used by participants to cover the registration fee on all "
-"events"
-msgstr ""
-"Gestisci i crediti utilizzati dai partecipanti per coprire la quota di "
-"iscrizione a tutti gli eventi"
-
-msgid ""
-"Manages tokens used by participants to cover the registration fee for all "
-"events"
-msgstr ""
-"Gestisci i gettoni utilizzati dai partecipanti per coprire la quota di "
-"iscrizione a tutti gli eventi"
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -8946,6 +8951,13 @@ msgid ""
 msgstr ""
 "Attiva i biglietti in stile 'lista d'attesa', disponibili solo quando tutti "
 "i biglietti principali sono esauriti"
+
+msgid ""
+"Allows managing Tokens, which participants can use instead of money for "
+"registration fees"
+msgstr ""
+"Consente la gestione di gettoni, che i partecipanti possono utilizzare al "
+"posto del denaro per le spese di registrazione"
 
 msgid ""
 "Customize the appearance of all organizational pages, including colors, "
@@ -9984,6 +9996,13 @@ msgstr ""
 " scelta e recuperare i punti XP spesi (l'impostazione predefinita è 0)"
 
 msgid ""
+"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
+"processed as virtual currency."
+msgstr ""
+"Attenzione: Non sono abilitate le funzioni di gettoni e crediti. I rimborsi "
+"non possono essere elaborati come moneta virtuale."
+
+msgid ""
 "If you select another event, it will be considered in the same campaign, and"
 " they will share the characters"
 msgstr ""
@@ -10546,6 +10565,14 @@ msgstr ""
 "Consente a un utente di creare account 'delegati' che gestisce completamente"
 " (ad esempio, i figli), evitando la necessità di credenziali di accesso "
 "separate"
+
+msgid ""
+"Allows managing Credits, which participants can use instead of money for "
+"registration fees. Credits can also be redeemed for cash"
+msgstr ""
+"Consente di gestire i crediti, che i partecipanti possono utilizzare al "
+"posto del denaro per le quote di iscrizione. I crediti possono anche essere "
+"riscattati in denaro"
 
 msgid ""
 "Allows participants to purchase tickets as gifts. A special code is "

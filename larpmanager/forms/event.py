@@ -883,20 +883,22 @@ class OrgaConfigForm(ConfigForm):
                 disable_provisional_help_text,
             )
 
-        # Configure token and credit system controls
-        if "token_credit" in self.params["features"]:
-            self.set_section("token_credit", _("Tokens / Credits"))
+        if "tokens" in self.params["features"]:
+            self.set_section("tokens", _("Tokens"))
 
             # Token disabling option for this specific event
             disable_tokens_label = _("Disable Tokens")
             disable_tokens_help_text = _("If checked, no tokens will be used in the entries of this event")
-            self.add_configs("token_credit_disable_t", ConfigType.BOOL, disable_tokens_label, disable_tokens_help_text)
+            self.add_configs("tokens_disable", ConfigType.BOOL, disable_tokens_label, disable_tokens_help_text)
+
+        if "credits" in self.params["features"]:
+            self.set_section("credits", _("Credits"))
 
             # Credit disabling option for this specific event
             disable_credits_label = _("Disable credits")
             disable_credits_help_text = _("If checked, no credits will be used in the entries for this event")
             self.add_configs(
-                "token_credit_disable_c",
+                "credits_disable",
                 ConfigType.BOOL,
                 disable_credits_label,
                 disable_credits_help_text,

@@ -584,11 +584,11 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
             "config/user_character",
         )
 
-    # Check for features that depend on token_credit
-    if "token_credit" not in enabled_features and set(enabled_features) & {"expense", "refund", "collection"}:
+    # Check for features that depend on credits
+    if "credits" not in enabled_features and set(enabled_features) & {"expense", "refund", "collection"}:
         _add_priority(
             context,
-            _("Some activated features need the 'Token / Credit' feature, but it isn't active"),
+            _("Some activated features need the 'Credits' feature, but it isn't active"),
             "orga_features",
         )
 

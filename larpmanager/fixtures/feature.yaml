@@ -626,6 +626,32 @@
     order: 50
     after_text: Now set up the token and credits configuration
     after_link: config/token_credit
+    hidden: true
+    module: accounting
+- model: larpmanager.feature
+  fields:
+    name: Tokens
+    descr: Allows managing Tokens, which participants can use instead of money for
+      registration fees
+    slug: tokens
+    overall: true
+    placeholder: false
+    order: 50
+    after_text: Now set up the tokens configuration
+    after_link: config/tokens
+    hidden: false
+    module: accounting
+- model: larpmanager.feature
+  fields:
+    name: Credits
+    descr: Allows managing Credits, which participants can use instead of money for
+      registration fees. Credits can also be redeemed for cash
+    slug: credits
+    overall: true
+    placeholder: false
+    order: 55
+    after_text: Now set up the credits configuration
+    after_link: config/credits
     hidden: false
     module: accounting
 - model: larpmanager.feature

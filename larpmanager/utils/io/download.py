@@ -31,7 +31,7 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import round_to_nearest_cent
-from larpmanager.cache.accounting import get_registration_accounting_cache
+from larpmanager.cache.accounting import calculate_payment_breakdown, get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs
 from larpmanager.models.association import Association
@@ -518,16 +518,17 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
         column_values.append(registration.options_price)
         column_headers.append(_("Options"))
 
-    # Token and credit payment methods if token credit feature is enabled
-    if "token_credit" in context["features"]:
-        _expand_val(column_values, registration, "pay_a")
-        column_headers.append(_("Money"))
+    # Token and credit payment methods if tokens or credits feature is enabled
+    _expand_val(column_values, registration, "pay_a")
+    column_headers.append(_("Money"))
 
+    if "tokens" in context["features"]:
         _expand_val(column_values, registration, "pay_b")
-        column_headers.append(context.get("credit_name", _("Credits")))
+        column_headers.append(context.get("credits_name", _("Credits")))
 
+    if "tokens" in context["features"]:
         _expand_val(column_values, registration, "pay_c")
-        column_headers.append(context.get("token_name", _("Credits")))
+        column_headers.append(context.get("tokens_name", _("Tokens")))
 
 
 def _get_standard_row(context: dict, element: object) -> tuple[list, list]:
@@ -890,7 +891,7 @@ def _orga_registrations_acc_reg(reg: Any, context: dict, cache_aip: dict) -> dic
     Returns:
         dict: Processed accounting data containing:
             - Payment amounts (tot_payed, tot_iscr, quota, etc.)
-            - Payment type breakdown (pay_a, pay_b, pay_c) if token_credit enabled
+            - Payment type breakdown (pay_a, pay_b, pay_c) if tokens / credits enabled
             - Remaining balance calculation
             - Ticket and options pricing breakdown
 
@@ -904,20 +905,14 @@ def _orga_registrations_acc_reg(reg: Any, context: dict, cache_aip: dict) -> dic
     for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
         dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
 
-    # Process payment breakdown if token credit feature is enabled
-    if "token_credit" in context["features"]:
-        if reg.member_id in cache_aip:
-            # Extract payment types 'b' and 'c' from cache
-            for pay in ["b", "c"]:
-                v = 0
-                if pay in cache_aip[reg.member_id]:
-                    v = cache_aip[reg.member_id][pay]
-                dt["pay_" + pay] = float(v)
-            # Calculate remaining payment type 'a' as difference
-            dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
-        else:
-            # If no cached data, all payment is type 'a'
-            dt["pay_a"] = dt["tot_payed"]
+    # Calculate payment breakdown by type (cash, tokens, credits)
+    payment_breakdown = calculate_payment_breakdown(
+        context["features"],
+        reg.member_id,
+        dt["tot_payed"],
+        cache_aip,
+    )
+    dt.update(payment_breakdown)
 
     # Calculate remaining balance with rounding tolerance
     dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
