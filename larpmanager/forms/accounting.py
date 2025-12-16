@@ -140,8 +140,8 @@ class OrgaTokenForm(MyFormRun):
         super().__init__(*args, **kwargs)
 
         # Set page metadata with token name
-        self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
-        self.page_title = self.params["token_name"]
+        self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
+        self.page_title = self.params["tokens_name"]
 
         # Configure initial form values and widget
         self.initial["oth"] = OtherChoices.TOKEN
@@ -162,7 +162,7 @@ class OrgaCreditForm(MyFormRun):
         """Initialize credit form with page title and run-specific member field."""
         super().__init__(*args, **kwargs)
         # Set page title from credit name parameter
-        self.page_title = self.params["credit_name"]
+        self.page_title = self.params["credits_name"]
         # Configure form for credit transaction type
         self.initial["oth"] = OtherChoices.CREDIT
         self.fields["member"].widget.set_run(self.params["run"])
@@ -348,7 +348,7 @@ class ExeCreditForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Set page title with credit name
-        self.page_title = _("Assignment") + f" {self.params['credit_name']}"
+        self.page_title = _("Assignment") + f" {self.params['credits_name']}"
 
         # Configure run choices and association widgets
         get_run_choices(self)
@@ -373,8 +373,8 @@ class ExeTokenForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Set page title and info with token name
-        self.page_title = _("Assignment") + f" {self.params['token_name']}"
-        self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
+        self.page_title = _("Assignment") + f" {self.params['tokens_name']}"
+        self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
 
         # Configure run choices and association filtering
         get_run_choices(self)

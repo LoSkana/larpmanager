@@ -143,11 +143,9 @@
                                 <th class="acc ticket_price">{% trans "Ticket" %}</th>
                                 <th class="acc options_price">{% trans "Options" %}</th>
                             {% endif %}
-                            {% if 'token_credit' in association.features %}
-                                <th class="acc pay_a">{% trans "Money" %}</th>
-                                <th class="acc pay_b">{{ credit_name }}</th>
-                                <th class="acc pay_c">{{ token_name }}</th>
-                            {% endif %}
+                            <th class="acc pay_a">{% trans "Money" %}</th>
+                            {% if 'credits' in association.features %}<th class="acc pay_b">{{ credits_name }}</th>{% endif %}
+                            {% if 'tokens' in association.features %}<th class="acc pay_c">{{ tokens_name }}</th>{% endif %}
                             {% if features.unique_code %}
                                 <th class="special_cod">{% trans "Code" %}</th>
                             {% endif %}
@@ -300,17 +298,19 @@
                                         <!-- filled later -->
                                     </td>
                                 {% endif %}
-                                {% if 'token_credit' in association.features %}
-                                    <td class="acc pay_a"
-                                        tooltip="{% trans "Sum of payments received with means of payment" %}">
-                                        <!-- filled later -->
-                                    </td>
+                                <td class="acc pay_a"
+                                    tooltip="{% trans "Sum of payments received with means of payment" %}">
+                                    <!-- filled later -->
+                                </td>
+                                {% if 'credits' in association.features %}
                                     <td class="acc pay_b"
-                                        tooltip="{% trans "Sum of payments received through" %} {{ credit_name }}">
+                                        tooltip="{% trans "Sum of payments received through" %} {{ credits_name }}">
                                         <!-- filled later -->
                                     </td>
+                                {% endif %}
+                                {% if 'tokens' in association.features %}
                                     <td class="acc pay_c"
-                                        tooltip="{% trans "Sum of payments received through" %} {{ token_name }}">
+                                        tooltip="{% trans "Sum of payments received through" %} {{ tokens_name }}">
                                         <!-- filled later -->
                                     </td>
                                 {% endif %}

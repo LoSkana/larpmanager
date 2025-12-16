@@ -43,7 +43,7 @@ After calling a context helper function, the dictionary typically contains:
 - `association_id` - Current association ID
 - `association_slug` - Association URL slug
 - `features` - Set of enabled feature slugs
-- `token_name`, `credit_name` - Configured names for tokens/credits system
+- `tokens_name`, `credits_name` - Configured names for tokens/credits system
 
 **User Data:**
 - `member` - Current Member object (or None if not logged in)

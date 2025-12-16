@@ -456,9 +456,6 @@ msgstr "Waar"
 msgid "email"
 msgstr "e-mail"
 
-msgid "money"
-msgstr "geld"
-
 msgid "quick"
 msgstr "snel"
 
@@ -1917,6 +1914,9 @@ msgstr "Naam inhoud"
 msgid "Content type"
 msgstr "Type inhoud"
 
+msgid "Credits name"
+msgstr "Naam Credits"
+
 msgid "Event hidden"
 msgstr "Gebeurtenis verborgen"
 
@@ -1976,9 +1976,6 @@ msgstr "Meer informatie"
 
 msgid "Municipality"
 msgstr "Gemeente"
-
-msgid "Name credits"
-msgstr "Naam kredieten"
 
 msgid "Next payment"
 msgstr "Volgende betaling"
@@ -4944,6 +4941,9 @@ msgstr "Naam van korting - voor intern gebruik"
 msgid "No elements are currently available"
 msgstr "Er zijn momenteel geen elementen beschikbaar"
 
+msgid "Now set up the tokens configuration"
+msgstr "Stel nu de tokens-configuratie in"
+
 msgid "Now you can create the receipt text"
 msgstr "Nu kun je de ontvangstbevestiging maken"
 
@@ -5014,6 +5014,9 @@ msgstr "Beheer het uploaden van lidmaatschapsfacturen"
 
 msgid "Manage the models for event handouts"
 msgstr "De modellen voor hand-outs voor evenementen beheren"
+
+msgid "Now set up the credits configuration"
+msgstr "Stel nu de credits configuratie in"
 
 msgid "Now you can create the filler ticket"
 msgstr "Nu kun je het vulkaartje maken"
@@ -7436,6 +7439,11 @@ msgstr ""
 "of het personage zich NIET bewust is van de identiteit van de andere "
 "eigenschap"
 
+msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgstr ""
+"Kan restitutie niet verwerken: De functies tokens noch credits zijn "
+"ingeschakeld"
+
 msgid "Click the tutorial to open it and follow the step-by-step instructions"
 msgstr ""
 "Klik op de zelfstudie om deze te openen en volg de stapsgewijze instructies"
@@ -7556,6 +7564,12 @@ msgstr ""
 "wel alvast registreren"
 
 msgid ""
+"Some activated features need the 'Credits' feature, but it isn't active"
+msgstr ""
+"Sommige geactiveerde functies hebben de functie 'Credits' nodig, maar deze "
+"is niet actief"
+
+msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr "Uw verzoek om u af te melden voor communicatie was succesvol."
 
@@ -7626,6 +7640,12 @@ msgid ""
 "If you are a candidate for the Board, please write an introduction here!"
 msgstr ""
 "Als je kandidaat bent voor het bestuur, schrijf dan hier een introductie!"
+
+msgid ""
+"Manages tokens used by participants to cover the event registration fees"
+msgstr ""
+"Beheert tokens die door deelnemers worden gebruikt om de registratiekosten "
+"voor het evenement te dekken"
 
 msgid ""
 "On this page you can mark your specialties to collaborate on our  events"
@@ -7704,6 +7724,12 @@ msgid ""
 msgstr ""
 "Als je hulp nodig hebt, typ dan hier je verzoek in het Engels met enkele "
 "trefwoorden"
+
+msgid ""
+"Manages credits used by participants to cover the event registration fees"
+msgstr ""
+"Beheert de tegoeden die deelnemers gebruiken om de registratiekosten voor "
+"het evenement te dekken"
 
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"
@@ -8185,13 +8211,6 @@ msgstr ""
 " kiezen"
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, but it isn't "
-"active"
-msgstr ""
-"Sommige geactiveerde functies hebben de functie 'Token / Credit' nodig, maar"
-" deze is niet actief"
-
-msgid ""
 "Sorry, this facilitation code has already been used the maximum number "
 "allowed"
 msgstr ""
@@ -8336,20 +8355,6 @@ msgid ""
 msgstr ""
 "Logoafbeelding (je kunt een bestand van elke grootte uploaden, het formaat "
 "wordt automatisch aangepast"
-
-msgid ""
-"Manages credits used by participants to cover the registration fee on all "
-"events"
-msgstr ""
-"Beheert de tegoeden die deelnemers gebruiken om het inschrijfgeld voor alle "
-"evenementen te dekken"
-
-msgid ""
-"Manages tokens used by participants to cover the registration fee for all "
-"events"
-msgstr ""
-"Beheert tokens die door deelnemers worden gebruikt om het inschrijfgeld voor"
-" alle evenementen te dekken"
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -8929,6 +8934,13 @@ msgid ""
 msgstr ""
 "Activeert 'wachtlijst'-achtige tickets, alleen beschikbaar als alle "
 "hoofdtickets zijn uitverkocht"
+
+msgid ""
+"Allows managing Tokens, which participants can use instead of money for "
+"registration fees"
+msgstr ""
+"Maakt het beheer van tokens mogelijk, die deelnemers kunnen gebruiken in "
+"plaats van geld voor registratiekosten"
 
 msgid ""
 "Customize the appearance of all organizational pages, including colors, "
@@ -9968,6 +9980,13 @@ msgstr ""
 "herroepen en uitgegeven XP kan terugkrijgen (standaardwaarde is 0)"
 
 msgid ""
+"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
+"processed as virtual currency."
+msgstr ""
+"Waarschuwing: De functies tokens en credits zijn niet ingeschakeld. "
+"Restituties kunnen niet worden verwerkt als virtuele valuta."
+
+msgid ""
 "If you select another event, it will be considered in the same campaign, and"
 " they will share the characters"
 msgstr ""
@@ -10537,6 +10556,14 @@ msgstr ""
 "Hiermee kan een gebruiker 'gedelegeerde' accounts aanmaken die hij volledig "
 "beheert (bijv. kinderen), zodat er geen aparte aanmeldingsgegevens nodig "
 "zijn"
+
+msgid ""
+"Allows managing Credits, which participants can use instead of money for "
+"registration fees. Credits can also be redeemed for cash"
+msgstr ""
+"Hiermee kunnen Credits worden beheerd, die deelnemers kunnen gebruiken in "
+"plaats van geld voor inschrijfgeld. Credits kunnen ook worden ingewisseld "
+"voor geld"
 
 msgid ""
 "Allows participants to purchase tickets as gifts. A special code is "

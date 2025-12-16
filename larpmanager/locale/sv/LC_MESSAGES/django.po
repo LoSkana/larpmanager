@@ -456,9 +456,6 @@ msgstr "Var"
 msgid "email"
 msgstr "e-post"
 
-msgid "money"
-msgstr "pengar"
-
 msgid "quick"
 msgstr "snabb"
 
@@ -1917,6 +1914,9 @@ msgstr "Innehållets namn"
 msgid "Content type"
 msgstr "Typ av innehåll"
 
+msgid "Credits name"
+msgstr "Credits namn"
+
 msgid "Event hidden"
 msgstr "Dold händelse"
 
@@ -1976,9 +1976,6 @@ msgstr "Mer information"
 
 msgid "Municipality"
 msgstr "kommun"
-
-msgid "Name credits"
-msgstr "Namn krediter"
 
 msgid "Next payment"
 msgstr "Nästa betalning"
@@ -4944,6 +4941,9 @@ msgstr "Namn på rabatt - för internt bruk"
 msgid "No elements are currently available"
 msgstr "Inga element är för närvarande tillgängliga"
 
+msgid "Now set up the tokens configuration"
+msgstr "Ställ nu in konfigurationen för tokens"
+
 msgid "Now you can create the receipt text"
 msgstr "Nu kan du skapa kvittotexten"
 
@@ -5014,6 +5014,9 @@ msgstr "Hantera uppladdning av fakturor för medlemsavgifter"
 
 msgid "Manage the models for event handouts"
 msgstr "Hantera modellerna för evenemangshandouts"
+
+msgid "Now set up the credits configuration"
+msgstr "Ställ nu in konfigurationen för krediter"
 
 msgid "Now you can create the filler ticket"
 msgstr "Nu kan du skapa fyllnadsbiljetten"
@@ -7344,6 +7347,11 @@ msgstr "Du har nått det maximala antalet tecken som kan skapas"
 msgid "whether the character is NOT aware of the identity of the other trait"
 msgstr "om karaktären INTE är medveten om den andra egenskapens identitet"
 
+msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgstr ""
+"Kan inte behandla återbetalning: Varken tokens eller credits-funktioner är "
+"aktiverade"
+
 msgid "Click the tutorial to open it and follow the step-by-step instructions"
 msgstr ""
 "Klicka på handledningen för att öppna den och följ steg-för-steg-"
@@ -7460,6 +7468,12 @@ msgstr ""
 "Anmälan till detta evenemang är inte öppen ännu, men du kan föranmäla dig"
 
 msgid ""
+"Some activated features need the 'Credits' feature, but it isn't active"
+msgstr ""
+"Vissa aktiverade funktioner behöver funktionen \"Credits\", men den är inte "
+"aktiv"
+
+msgid ""
 "The request of removal from further communication has been successfull!"
 msgstr "Din begäran om att avregistrera dig från kommunikation lyckades."
 
@@ -7529,6 +7543,12 @@ msgid ""
 msgstr "Om du är kandidat till styrelsen, vänligen skriv en presentation här!"
 
 msgid ""
+"Manages tokens used by participants to cover the event registration fees"
+msgstr ""
+"Hanterar polletter som används av deltagarna för att täcka "
+"registreringsavgifterna för evenemanget"
+
+msgid ""
 "On this page you can mark your specialties to collaborate on our  events"
 msgstr ""
 "På den här sidan kan du markera dina specialiteter för att samarbeta i våra "
@@ -7595,6 +7615,12 @@ msgid ""
 msgstr ""
 "Om du behöver hjälp kan du skriva din förfrågan här på engelska med hjälp av"
 " enstaka nyckelord"
+
+msgid ""
+"Manages credits used by participants to cover the event registration fees"
+msgstr ""
+"Hanterar krediter som används av deltagarna för att täcka "
+"registreringsavgifterna för evenemanget"
 
 msgid ""
 "Net profit of the event, difference between total revenue and total costs"
@@ -8036,13 +8062,6 @@ msgstr ""
 "valbart"
 
 msgid ""
-"Some activated features need the 'Token / Credit' feature, but it isn't "
-"active"
-msgstr ""
-"Vissa aktiverade funktioner behöver funktionen 'Token / Credit', men den är "
-"inte aktiv"
-
-msgid ""
 "Sorry, this facilitation code has already been used the maximum number "
 "allowed"
 msgstr ""
@@ -8186,20 +8205,6 @@ msgid ""
 msgstr ""
 "Logotypbild (du kan ladda upp en fil av valfri storlek, den kommer att "
 "ändras automatiskt"
-
-msgid ""
-"Manages credits used by participants to cover the registration fee on all "
-"events"
-msgstr ""
-"Hanterar krediter som används av deltagarna för att täcka "
-"registreringsavgiften för alla evenemang"
-
-msgid ""
-"Manages tokens used by participants to cover the registration fee for all "
-"events"
-msgstr ""
-"Hanterar polletter som används av deltagarna för att täcka "
-"registreringsavgiften för alla evenemang"
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -8771,6 +8776,13 @@ msgid ""
 msgstr ""
 "Aktiverar biljetter av typen 'väntelista', som endast är tillgängliga när "
 "alla huvudbiljetter är slutsålda"
+
+msgid ""
+"Allows managing Tokens, which participants can use instead of money for "
+"registration fees"
+msgstr ""
+"Tillåter hantering av Tokens, som deltagare kan använda istället för pengar "
+"för registreringsavgifter"
 
 msgid ""
 "Customize the appearance of all organizational pages, including colors, "
@@ -9808,6 +9820,13 @@ msgstr ""
 "färdighet och återfå förbrukade XP (standard är 0)"
 
 msgid ""
+"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
+"processed as virtual currency."
+msgstr ""
+"Varning för att Varken tokens eller credits-funktioner är aktiverade. "
+"Återbetalningar kan inte behandlas som virtuell valuta."
+
+msgid ""
 "If you select another event, it will be considered in the same campaign, and"
 " they will share the characters"
 msgstr ""
@@ -10370,6 +10389,13 @@ msgstr ""
 "Gör det möjligt för en användare att skapa 'delegerade' konton som de "
 "hanterar fullt ut (t.ex. barn), vilket gör att det inte behövs några "
 "separata inloggningsuppgifter"
+
+msgid ""
+"Allows managing Credits, which participants can use instead of money for "
+"registration fees. Credits can also be redeemed for cash"
+msgstr ""
+"Tillåter hantering av Credits, som deltagarna kan använda i stället för "
+"pengar för registreringsavgifter. Krediter kan också lösas in mot kontanter"
 
 msgid ""
 "Allows participants to purchase tickets as gifts. A special code is "

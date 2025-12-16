@@ -104,9 +104,9 @@
     descr: Manages tokens used by participants to cover the registration fee
     slug: orga_tokens
     number: 41
-    config: token_credit
+    config: tokens
     hidden: false
-    feature: token_credit
+    feature: tokens
     module: accounting
 - model: larpmanager.eventpermission
   fields:
@@ -114,9 +114,9 @@
     descr: Manages credits used by participants to cover the registration fee
     slug: orga_credits
     number: 51
-    config: token_credit
+    config: credits
     hidden: false
-    feature: token_credit
+    feature: credits
     module: accounting
 - model: larpmanager.eventpermission
   fields:

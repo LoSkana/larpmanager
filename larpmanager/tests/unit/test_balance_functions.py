@@ -291,7 +291,7 @@ class TestRunAccountingFunctions(BaseTestCase):
     @patch("larpmanager.accounting.balance.get_event_features")
     def test_get_run_accounting_with_tokens_credits(self, mock_features: Any) -> None:
         """Test run accounting with tokens and credits"""
-        mock_features.return_value = {"payment": True, "token_credit": True}
+        mock_features.return_value = {"payment": True, "tokens": True, "credits": True}
 
         run = self.get_run()
         run.development = DevelopStatus.SHOW
@@ -318,7 +318,7 @@ class TestRunAccountingFunctions(BaseTestCase):
             cancellation=False,
         )
 
-        result = get_run_accounting(run, {"token_name": "Tokens", "credit_name": "Credits"})
+        result = get_run_accounting(run, {"tokens_name": "Tokens", "credits_name": "Credits"})
 
         self.assertIn("tok", result)
         self.assertIn("cre", result)

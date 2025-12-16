@@ -172,7 +172,7 @@ class TestModelSignals(BaseTestCase):
     ) -> None:
         """Test that AccountingItemPayment post_save signal calls update_token_credit when updating"""
         # Enable token_credit feature
-        mock_get_features.return_value = {"token_credit": True}
+        mock_get_features.return_value = {"tokens": True, "credits": True}
 
         member = self.get_member()
 

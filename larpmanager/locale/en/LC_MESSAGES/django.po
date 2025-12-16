@@ -4,6 +4,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "Tokens"
+msgstr ""
+
+msgid "Total issued"
+msgstr ""
+
+msgid "Credits"
+msgstr ""
+
 msgid "Expenses"
 msgstr ""
 
@@ -38,15 +47,6 @@ msgid "Refunds"
 msgstr ""
 
 msgid "Total amount refunded to participants"
-msgstr ""
-
-msgid "Tokens"
-msgstr ""
-
-msgid "Total issued"
-msgstr ""
-
-msgid "Credits"
 msgstr ""
 
 msgid "Discount"
@@ -574,16 +574,13 @@ msgid ""
 "registration options"
 msgstr ""
 
-msgid "Tokens / Credits"
-msgstr ""
-
 msgid "Token name"
 msgstr ""
 
 msgid "Name to be displayed for tokens"
 msgstr ""
 
-msgid "Name credits"
+msgid "Credits name"
 msgstr ""
 
 msgid "Name to be displayed for credits"
@@ -6635,6 +6632,11 @@ msgstr ""
 msgid "Returning type"
 msgstr ""
 
+msgid ""
+"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
+"processed as virtual currency."
+msgstr ""
+
 msgid "Only"
 msgstr ""
 
@@ -6647,6 +6649,9 @@ msgstr ""
 msgid "Approve reimbursement"
 msgstr ""
 
+msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgstr ""
+
 msgid "Cancellations"
 msgstr ""
 
@@ -6657,9 +6662,6 @@ msgid "Show cancellations"
 msgstr ""
 
 msgid "no payment"
-msgstr ""
-
-msgid "money"
 msgstr ""
 
 msgid "Days"
@@ -8134,12 +8136,31 @@ msgstr ""
 msgid "Now crew can upload expenses, and you can review them"
 msgstr ""
 
+msgid "Tokens / Credits"
+msgstr ""
+
 msgid ""
 "Allows managing Tokens and Credits, which participants can use instead of "
 "money for registration fees. Credits can also be redeemed for cash"
 msgstr ""
 
 msgid "Now set up the token and credits configuration"
+msgstr ""
+
+msgid ""
+"Allows managing Tokens, which participants can use instead of money for "
+"registration fees"
+msgstr ""
+
+msgid "Now set up the tokens configuration"
+msgstr ""
+
+msgid ""
+"Allows managing Credits, which participants can use instead of money for "
+"registration fees. Credits can also be redeemed for cash"
+msgstr ""
+
+msgid "Now set up the credits configuration"
 msgstr ""
 
 msgid ""
@@ -8419,8 +8440,7 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 
 msgid ""
-"Manages credits used by participants to cover the registration fee on all "
-"events"
+"Manages credits used by participants to cover the event registration fees"
 msgstr ""
 
 msgid "Manage refund requests"
@@ -8514,8 +8534,7 @@ msgid "Check consistency of the participants’ personal data"
 msgstr ""
 
 msgid ""
-"Manages tokens used by participants to cover the registration fee for all "
-"events"
+"Manages tokens used by participants to cover the event registration fees"
 msgstr ""
 
 msgid "Display all participants data as registry"
@@ -9363,9 +9382,7 @@ msgid ""
 "participants"
 msgstr ""
 
-msgid ""
-"Some activated features need the 'Token / Credit' feature, but it isn't "
-"active"
+msgid "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 
 #, python-format
