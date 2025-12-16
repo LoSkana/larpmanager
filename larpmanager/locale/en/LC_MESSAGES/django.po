@@ -1132,6 +1132,29 @@ msgstr ""
 msgid "Initial value of experience points for all characters"
 msgstr ""
 
+msgid "Ability templates"
+msgstr ""
+
+msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+
+msgid "Rules"
+msgstr ""
+
+msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+
+msgid "Modifiers"
+msgstr ""
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+
 msgid "Player editor"
 msgstr ""
 
@@ -1622,6 +1645,12 @@ msgstr ""
 msgid "Manage experience point deliveries"
 msgstr ""
 
+msgid "Ability Template"
+msgstr ""
+
+msgid "This page allows you to add or edit an ability template"
+msgstr ""
+
 msgid "Ability"
 msgstr ""
 
@@ -2105,7 +2134,7 @@ msgid "Utilisation %(tokens)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -2113,7 +2142,7 @@ msgid "Utilisation %(credits)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -3134,6 +3163,9 @@ msgstr ""
 msgid ""
 "This code is used to generate the secret registration link, you may keep the "
 "default or customize it"
+msgstr ""
+
+msgid "Optional template associated with this ability."
 msgstr ""
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
@@ -6920,6 +6952,20 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
+msgid "Ability Templates"
+msgstr ""
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+
+msgid "Template Name"
+msgstr ""
+
+msgid "Components"
+msgstr ""
+
 msgid "Ability types"
 msgstr ""
 
@@ -6930,18 +6976,12 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
-msgid "Modifiers"
-msgstr ""
-
 msgid ""
 "This page summarizes the modifiers that are applied to abilities based on "
 "other abilities, or character fields"
 msgstr ""
 
 msgid "New cost"
-msgstr ""
-
-msgid "Rules"
 msgstr ""
 
 msgid "This page summarizes the rules that are applied to the computed fields"
@@ -8769,6 +8809,9 @@ msgstr ""
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
 
+msgid "Manage ability templates"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -9803,6 +9846,9 @@ msgid "This event has concluded"
 msgstr ""
 
 msgid "This event has been cancelled"
+msgstr ""
+
+msgid "The registration code is not active at the moment"
 msgstr ""
 
 msgid "Not available, kiddo"

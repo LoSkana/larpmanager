@@ -27,6 +27,7 @@ from django.utils.translation import gettext_lazy as _
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.permission import (
     get_association_permission_feature,
@@ -403,6 +404,13 @@ def get_index_permissions(
         # Check feature is available (skip placeholder features)
         if not permission["feature__placeholder"] and permission["feature__slug"] not in features:
             continue
+
+        # Check config-dependent permissions
+        if permission_type == "event" and permission.get("active_if") and context.get("event"):
+            config_key = permission["active_if"]
+            config_value = get_event_config(context["event"].id, config_key, default_value=False, context=context)
+            if not config_value:
+                continue
 
         # Group permissions by module
         module_key = (_(permission["module__name"]), permission["module__icon"])

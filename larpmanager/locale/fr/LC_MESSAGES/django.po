@@ -1467,6 +1467,9 @@ msgstr "Chronologie"
 msgid "Collection"
 msgstr "Collecter"
 
+msgid "Components"
+msgstr "Composants"
+
 msgid "Contact us"
 msgstr "Contactez nous"
 
@@ -2266,6 +2269,9 @@ msgstr "Mise à jour de l'inscription"
 msgid "Single choice"
 msgstr "Choix unique"
 
+msgid "Template Name"
+msgstr "Nom du modèle"
+
 msgid "Text language"
 msgstr "Langue du texte"
 
@@ -2669,6 +2675,9 @@ msgstr "attendue dans les"
 msgid "upcoming events"
 msgstr "Événements programmés"
 
+msgid "Ability Template"
+msgstr "Modèle de capacité"
+
 msgid "Ability acquired"
 msgstr "Capacité acquise"
 
@@ -2869,6 +2878,12 @@ msgstr "télécharger ici"
 
 msgid "follow this link"
 msgstr "suivre ce lien"
+
+msgid "Ability Templates"
+msgstr "Modèles de capacité"
+
+msgid "Ability templates"
+msgstr "Modèles de capacité"
 
 msgid "Activation failed"
 msgstr "Échec de l'activation"
@@ -3955,6 +3970,9 @@ msgstr "Accéder à l'historique des PT"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Feuille légère (Test)"
+
+msgid "Manage ability templates"
+msgstr "Gérer les modèles de capacité"
 
 msgid "Manage area of the event"
 msgstr "Gérer la zone de l'événement"
@@ -5881,6 +5899,9 @@ msgstr "Vous pouvez maintenant consulter les échéances de l'organisation"
 msgid "Number of characters to be assigned (default 1)"
 msgstr "Nombre de caractères à attribuer (par défaut 1)"
 
+msgid "Optional template associated with this ability."
+msgstr "Modèle facultatif associé à cette capacité."
+
 msgid "Selected elements will be shown to participants"
 msgstr "Les éléments sélectionnés seront montrés aux participants"
 
@@ -6043,6 +6064,9 @@ msgstr "Rappel du paiement des cotisations pour les %(event)s"
 
 msgid "Select your preferences on the characters to play"
 msgstr "Sélectionnez votre préférence de personnages à jouer"
+
+msgid "The registration code is not active at the moment"
+msgstr "Le code d'enregistrement n'est pas actif pour le moment"
 
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
@@ -6491,6 +6515,9 @@ msgstr ""
 msgid "The link will be valid for the following number of days"
 msgstr "Le lien sera valable pendant le nombre de jours suivant "
 
+msgid "This page allows you to add or edit an ability template"
+msgstr "Cette page vous permet d'ajouter ou de modifier un modèle de capacité"
+
 msgid "This page shows the questions submitted by participants"
 msgstr "Cette page présente les questions soumises par les participants"
 
@@ -6717,9 +6744,9 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "Vous avez indiqué la même option dans plus d'une préférence"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(tokens)s ont été utilisés pour participer à cet événement"
+"%(amount)s %(tokens)s ont été utilisés pour participer à cet événement"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
@@ -6779,9 +6806,9 @@ msgid "You have already granted data sharing with this organisation"
 msgstr "Vous avez déjà autorisé le partage de données avec cette organisation"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(credits)s ont été utilisés pour participer à cet événement"
+"%(amount)s %(credits)s ont été utilisés pour participer à cet événement"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
@@ -7909,6 +7936,12 @@ msgstr ""
 "correctement remplies"
 
 msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+"Si cette case est cochée, elle active les règles pour les champs de "
+"caractères calculés en fonction des capacités"
+
+msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
 "Si cette case est cochée, elle permet aux participants de personnaliser les "
@@ -8573,6 +8606,13 @@ msgstr ""
 "qu'à partir du panel de l'organisation"
 
 msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+"Si cette case est cochée, les modèles d'aptitudes peuvent être réutilisés "
+"pour plusieurs aptitudes"
+
+msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
 "system"
 msgstr ""
@@ -8803,6 +8843,13 @@ msgid ""
 msgstr ""
 "Cette page présente les informations sensibles des participants enregistrés "
 "en matière de sécurité"
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+"Cette page résume les modèles de capacités réutilisables qui peuvent être "
+"attribués aux capacités"
 
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
@@ -9705,6 +9752,13 @@ msgid ""
 msgstr ""
 "Un versement avec l'ordre %(order)d existe déjà avec le(s) ticket(s) "
 "commun(s) suivant(s) : %(tickets)s"
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+"Si cette case est cochée, elle active les modificateurs qui peuvent ajuster "
+"les coûts des capacités en fonction des prérequis et des exigences"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

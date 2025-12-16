@@ -1001,7 +1001,7 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
     notify_invoice_check(inv)
 
     # Display success message and redirect to profile check
-    mes = _("Payment received") + "!" + _("As soon as it is approved, your accounting will be updated") + "."
+    mes = _("Payment received") + "! " + _("As soon as it is approved, your accounting will be updated") + "."
     return acc_profile_check(request, mes, inv)
 
 

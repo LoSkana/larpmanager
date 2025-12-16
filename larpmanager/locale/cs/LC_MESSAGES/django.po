@@ -1467,6 +1467,9 @@ msgstr "Chronologie"
 msgid "Collection"
 msgstr "Sbírejte"
 
+msgid "Components"
+msgstr "Komponenty"
+
 msgid "Contact us"
 msgstr "Kontaktujte nás"
 
@@ -2266,6 +2269,9 @@ msgstr "Aktualizace registrace"
 msgid "Single choice"
 msgstr "Jediná volba"
 
+msgid "Template Name"
+msgstr "Název šablony"
+
 msgid "Text language"
 msgstr "Jazyk textu"
 
@@ -2669,6 +2675,9 @@ msgstr "očekává se v rámci"
 msgid "upcoming events"
 msgstr "Naplánované události"
 
+msgid "Ability Template"
+msgstr "Šablona schopností"
+
 msgid "Ability acquired"
 msgstr "Získané schopnosti"
 
@@ -2869,6 +2878,12 @@ msgstr "stáhněte si ji zde"
 
 msgid "follow this link"
 msgstr "následujte tento odkaz"
+
+msgid "Ability Templates"
+msgstr "Šablony schopností"
+
+msgid "Ability templates"
+msgstr "Šablony schopností"
 
 msgid "Activation failed"
 msgstr "Aktivace se nezdařila"
@@ -3955,6 +3970,9 @@ msgstr "Přístup k historii PT"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lehký plech (test)"
+
+msgid "Manage ability templates"
+msgstr "Správa šablon schopností"
 
 msgid "Manage area of the event"
 msgstr "Správa oblasti události"
@@ -5868,6 +5886,9 @@ msgstr "Nyní můžete zkontrolovat termíny organizace"
 msgid "Number of characters to be assigned (default 1)"
 msgstr "Počet znaků, které mají být přiřazeny (výchozí 1)"
 
+msgid "Optional template associated with this ability."
+msgstr "Volitelná šablona spojená s touto schopností."
+
 msgid "Selected elements will be shown to participants"
 msgstr "Vybrané prvky budou účastníkům předvedeny"
 
@@ -6026,6 +6047,9 @@ msgstr "Připomenutí platby členských příspěvků za %(event)s"
 
 msgid "Select your preferences on the characters to play"
 msgstr "Vyberte si postavy, které chcete hrát"
+
+msgid "The registration code is not active at the moment"
+msgstr "Registrační kód není v současné době aktivní"
 
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
@@ -6446,6 +6470,9 @@ msgstr "Vyberte řádky tabulky a zvolte operaci, která se má použít"
 msgid "The link will be valid for the following number of days"
 msgstr "Odkaz bude platný po dobu následujících dnů"
 
+msgid "This page allows you to add or edit an ability template"
+msgstr "Na této stránce můžete přidat nebo upravit šablonu schopností"
+
 msgid "This page shows the questions submitted by participants"
 msgstr "Na této stránce jsou uvedeny otázky, které účastníci zaslali"
 
@@ -6647,8 +6674,8 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "Stejnou možnost jste uvedli ve více než jedné preferenci"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
-msgstr "K účasti na této akci bylo použito %(amount)d %(tokens)s"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
+msgstr "K účasti na této akci bylo použito %(amount)s %(tokens)s"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "UPOZORNĚNÍ: tato akce přepíše změny provedené v této události"
@@ -6699,8 +6726,8 @@ msgid "You have already granted data sharing with this organisation"
 msgstr "Sdílení dat s touto organizací jste již povolili"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
-msgstr "K účasti na této akci bylo použito %(amount)d %(credits)s"
+msgid "%(amount)s %(credits)s were used to participate in this event"
+msgstr "K účasti na této akci bylo použito %(amount)s %(credits)s"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Nepovinné) Možnosti znaků jako požadavky, oddělené čárkou"
@@ -7627,6 +7654,12 @@ msgid ""
 msgstr "Potvrzuji, že všechny požadované osobní údaje byly vyplněny správně"
 
 msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+"Pokud je zaškrtnuto, povolí pravidla pro vypočtená pole znaků na základě "
+"schopností"
+
+msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje účastníkům přizpůsobit zájmena svých postav"
@@ -8228,6 +8261,13 @@ msgstr ""
 "organizace"
 
 msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+"Tato stránka shrnuje opakovaně použitelné šablony schopností, které lze "
+"přiřadit schopnostem"
+
+msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
 "system"
 msgstr ""
@@ -8441,6 +8481,13 @@ msgid ""
 msgstr ""
 "Na této stránce jsou uvedeny citlivé informace o registrovaných účastnících "
 "týkající se bezpečnosti"
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+"Tato stránka shrnuje opakovaně použitelné šablony schopností, které lze "
+"přiřadit schopnostem"
 
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
@@ -9316,6 +9363,13 @@ msgid ""
 msgstr ""
 "Splátka s pořadovým číslem %(order)d již existuje s následujícím společným "
 "tipem (tipy): %(tickets)s"
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+"Pokud je zaškrtnuto, povoluje modifikátory, které mohou upravit náklady na "
+"schopnosti na základě předpokladů a požadavků"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "

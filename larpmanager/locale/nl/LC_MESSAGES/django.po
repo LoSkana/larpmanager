@@ -1467,6 +1467,9 @@ msgstr "Chronologie"
 msgid "Collection"
 msgstr "Verzamel"
 
+msgid "Components"
+msgstr "Onderdelen"
+
 msgid "Contact us"
 msgstr "Neem contact met ons op"
 
@@ -2266,6 +2269,9 @@ msgstr "Registratie bijwerken"
 msgid "Single choice"
 msgstr "Enkele keuze"
 
+msgid "Template Name"
+msgstr "Naam sjabloon"
+
 msgid "Text language"
 msgstr "Taal van de tekst"
 
@@ -2669,6 +2675,9 @@ msgstr "verwacht binnen"
 msgid "upcoming events"
 msgstr "Geplande evenementen"
 
+msgid "Ability Template"
+msgstr "Vermogen Sjabloon"
+
 msgid "Ability acquired"
 msgstr "Verworven vermogen"
 
@@ -2869,6 +2878,12 @@ msgstr "hier downloaden"
 
 msgid "follow this link"
 msgstr "volg deze link"
+
+msgid "Ability Templates"
+msgstr "Vermogen Sjablonen"
+
+msgid "Ability templates"
+msgstr "Vermogen sjablonen"
 
 msgid "Activation failed"
 msgstr "Activering mislukt"
@@ -3955,6 +3970,9 @@ msgstr "Toegang tot PT-geschiedenis"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lichtgewicht plaat (Test)"
+
+msgid "Manage ability templates"
+msgstr "Mogelijkheidssjablonen beheren"
 
 msgid "Manage area of the event"
 msgstr "Gebied van het evenement beheren"
@@ -5876,6 +5894,9 @@ msgstr "Nu kun je de deadlines van de organisatie bekijken"
 msgid "Number of characters to be assigned (default 1)"
 msgstr "Aantal tekens dat moet worden toegewezen (standaard 1)"
 
+msgid "Optional template associated with this ability."
+msgstr "Optioneel sjabloon voor deze vaardigheid."
+
 msgid "Selected elements will be shown to participants"
 msgstr "Geselecteerde elementen worden aan de deelnemers getoond"
 
@@ -6033,6 +6054,9 @@ msgstr "Herinnering betaling lidmaatschapsgeld voor %(event)s"
 
 msgid "Select your preferences on the characters to play"
 msgstr "Kies je favoriete personages om te spelen"
+
+msgid "The registration code is not active at the moment"
+msgstr "De registratiecode is momenteel niet actief"
 
 #, python-format
 msgid "The sum is %(amount).2f, with reason '%(reason)s'"
@@ -6462,6 +6486,9 @@ msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
 msgid "The link will be valid for the following number of days"
 msgstr "De link blijft het volgende aantal dagen geldig"
 
+msgid "This page allows you to add or edit an ability template"
+msgstr "Op deze pagina kunt u een vaardigheidssjabloon toevoegen of bewerken"
+
 msgid "This page shows the questions submitted by participants"
 msgstr "Deze pagina toont de vragen die zijn ingediend door deelnemers"
 
@@ -6676,9 +6703,9 @@ msgid "You have chosen the same option in more than one preference"
 msgstr "U hebt dezelfde optie in meer dan één voorkeur aangegeven"
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(tokens)s werden gebruikt om deel te nemen aan dit evenement"
+"%(amount)s %(tokens)s werden gebruikt om deel te nemen aan dit evenement"
 
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr "WAARSCHUWING: deze actie overschrijft wijzigingen in deze gebeurtenis"
@@ -6738,9 +6765,9 @@ msgstr ""
 "organisatie"
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
-"%(amount)d %(credits)s werden gebruikt om deel te nemen aan dit evenement"
+"%(amount)s %(credits)s werden gebruikt om deel te nemen aan dit evenement"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Optioneel) Tekenopties als vereisten, door komma's gescheiden"
@@ -7807,6 +7834,12 @@ msgstr ""
 "Ik bevestig dat al mijn vereiste persoonlijke gegevens correct zijn ingevuld"
 
 msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+"Als deze optie is aangevinkt, worden regels ingeschakeld voor berekende "
+"tekenvelden op basis van vaardigheden"
+
+msgid ""
 "If checked, it allows participants to customise their characters' pronouns"
 msgstr ""
 "Als deze optie is aangevinkt, kunnen deelnemers de voornaamwoorden van hun "
@@ -8460,6 +8493,13 @@ msgstr ""
 "vanuit het organisatiepaneel"
 
 msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+"Als deze optie is aangevinkt, worden vaardigheidssjablonen ingeschakeld die "
+"kunnen worden hergebruikt voor meerdere vaardigheden"
+
+msgid ""
 "If checked, the gallery will not be displayed to those not logged in to the "
 "system"
 msgstr ""
@@ -8692,6 +8732,13 @@ msgid ""
 msgstr ""
 "Deze pagina toont de gevoelige informatie van geregistreerde deelnemers met "
 "betrekking tot veiligheid"
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+"Deze pagina geeft een overzicht van de herbruikbare vaardigheidssjablonen "
+"die kunnen worden toegewezen aan vaardigheden"
 
 msgid ""
 "Upload a photo of the identity document that you listed in the request "
@@ -9593,6 +9640,13 @@ msgid ""
 msgstr ""
 "Er bestaat al een aflevering met order %(order)d met de volgende "
 "gemeenschappelijke ticket(s): %(tickets)s"
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+"Als deze optie is aangevinkt, kunnen modifiers de kosten van vaardigheden "
+"aanpassen op basis van vereisten en vereisten"
 
 msgid ""
 "If checked, options no longer available in the form are hidden, instead of "
