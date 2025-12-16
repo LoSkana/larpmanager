@@ -29,6 +29,7 @@ import json
 import logging
 import math
 import re
+from decimal import Decimal
 from pprint import pformat
 from typing import Any, ClassVar
 
@@ -210,7 +211,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
     # Parse response and extract payment details
     try:
         payment_data = json.loads(response.content)
-        payment_amount = int(payment_data["amount_unit"]) / float(CURRENCY_TO_CENTS_MULTIPLIER)
+        payment_amount = Decimal(str(int(payment_data["amount_unit"]))) / Decimal(str(CURRENCY_TO_CENTS_MULTIPLIER))
         payment_status = payment_data["status"]
         payment_currency = payment_data.get("currency")
     except (json.JSONDecodeError, KeyError, ValueError) as e:
@@ -460,8 +461,10 @@ def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
             )
             return False
 
-        # Get amount in base currency (Stripe uses cents)
-        stripe_amount = first_line_item["price"]["unit_amount"] / float(CURRENCY_TO_CENTS_MULTIPLIER)
+        # Get amount in base currency
+        stripe_amount = Decimal(str(first_line_item["price"]["unit_amount"])) / Decimal(
+            str(CURRENCY_TO_CENTS_MULTIPLIER)
+        )
 
         return invoice_received_money(
             price_id, expected_amount=invoice.mc_gross, gross_amount=stripe_amount, payment_method="stripe"
@@ -667,8 +670,9 @@ def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple sec
         return False
 
     # Process the successful payment using the transaction ID
+    sumup_amount_decimal = Decimal(str(sumup_amount)) if sumup_amount is not None else None
     return invoice_received_money(
-        payment_id, expected_amount=invoice.mc_gross, gross_amount=sumup_amount, payment_method="sumup"
+        payment_id, expected_amount=invoice.mc_gross, gross_amount=sumup_amount_decimal, payment_method="sumup"
     )
 
 
@@ -813,7 +817,9 @@ def redsys_webhook(request: HttpRequest) -> bool:
         try:
             payment_data = json.loads(base64.b64decode(merchant_parameters).decode())
             # Redsys amount is in cents
-            redsys_amount = int(payment_data.get("Ds_Amount", 0)) / float(CURRENCY_TO_CENTS_MULTIPLIER)
+            redsys_amount = Decimal(str(int(payment_data.get("Ds_Amount", 0)))) / Decimal(
+                str(CURRENCY_TO_CENTS_MULTIPLIER)
+            )
         except (json.JSONDecodeError, ValueError, KeyError):
             logger.exception("Redsys webhook: Failed to parse payment amount from merchant parameters")
             redsys_amount = None
