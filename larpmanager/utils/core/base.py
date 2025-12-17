@@ -436,6 +436,15 @@ def prepare_run(context: Any) -> None:
 
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
+    # Check if there are visible factions with characters for nav display
+    context["has_visible_factions"] = False
+    if "faction" in context.get("features", {}) and "factions" in context:
+        for faction_data in context["factions"].values():
+            # Check if faction has a name and has characters
+            if faction_data.get("name") and faction_data.get("characters"):
+                context["has_visible_factions"] = True
+                break
+
 
 def get_run(context: Any, event_slug: Any) -> None:
     """Load run and event data from cache and database.
