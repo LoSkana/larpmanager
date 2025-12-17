@@ -2855,9 +2855,6 @@ msgstr "Nome dell'abilità"
 msgid "Ticket selection"
 msgstr "Selezione del biglietto"
 
-msgid "Tokens / Credits"
-msgstr "Gettoni / Crediti"
-
 msgid "Total collection"
 msgstr "Totale raccolta"
 
@@ -5789,9 +5786,6 @@ msgstr "Gestisci le tue spese dell'evento e carica le ricevute"
 
 msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr "Numero massimo di posti filler (0 = illimitato)"
-
-msgid "Now set up the token and credits configuration"
-msgstr "Ora impostate la configurazione dei token e dei crediti"
 
 msgid "Now you can add warehouse containers and items"
 msgstr "Ora puoi aggiungere contenitori e articoli di magazzino"
@@ -10750,14 +10744,6 @@ msgstr ""
 "Normalmente vengono mostrati tutti i campi dei personaggi (pubblici o "
 "privati); con questa configurazione è possibile selezionare quali "
 "visualizzare in qualsiasi momento"
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-"Consente di gestire gettoni e crediti, che i partecipanti possono utilizzare"
-" al posto del denaro per le spese di registrazione. I crediti possono anche "
-"essere riscattati in denaro"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

@@ -2855,9 +2855,6 @@ msgstr "Nazwa zdolności"
 msgid "Ticket selection"
 msgstr "Wybór biletów"
 
-msgid "Tokens / Credits"
-msgstr "Tokeny / Kredyty"
-
 msgid "Total collection"
 msgstr "Całkowita kolekcja"
 
@@ -5789,9 +5786,6 @@ msgstr "Zarządzanie wydatkami na wydarzenia i przesyłanie paragonów"
 
 msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr "Maksymalna liczba miejsc wypełnienia (0 = nieograniczona)"
-
-msgid "Now set up the token and credits configuration"
-msgstr "Teraz należy skonfigurować token i kredyty"
 
 msgid "Now you can add warehouse containers and items"
 msgstr "Teraz możesz dodawać kontenery magazynowe i przedmioty"
@@ -10638,14 +10632,6 @@ msgstr ""
 "Normalnie wyświetlane są wszystkie pola znaków (publiczne lub prywatne); "
 "dzięki tej konfiguracji można wybrać, które z nich mają być wyświetlane w "
 "danym momencie"
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-"Umożliwia zarządzanie tokenami i kredytami, które uczestnicy mogą "
-"wykorzystać zamiast pieniędzy na opłaty rejestracyjne. Kredyty mogą być "
-"również wymieniane na gotówkę"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

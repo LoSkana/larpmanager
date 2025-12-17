@@ -8136,17 +8136,6 @@ msgstr ""
 msgid "Now crew can upload expenses, and you can review them"
 msgstr ""
 
-msgid "Tokens / Credits"
-msgstr ""
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-
-msgid "Now set up the token and credits configuration"
-msgstr ""
-
 msgid ""
 "Allows managing Tokens, which participants can use instead of money for "
 "registration fees"
