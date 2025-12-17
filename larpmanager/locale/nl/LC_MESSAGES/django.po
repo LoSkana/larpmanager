@@ -2855,9 +2855,6 @@ msgstr "De naam vermogen"
 msgid "Ticket selection"
 msgstr "Selectie van tickets"
 
-msgid "Tokens / Credits"
-msgstr "Tokens / Credits"
-
 msgid "Total collection"
 msgstr "Totale collectie"
 
@@ -5793,9 +5790,6 @@ msgstr "Beheer je evenementuitgaven en upload ontvangstbewijzen"
 
 msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr "Maximum aantal vulplekken (0 = onbeperkt)"
-
-msgid "Now set up the token and credits configuration"
-msgstr "Stel nu de token en credits configuratie in"
 
 msgid "Now you can add warehouse containers and items"
 msgstr "Nu kun je magazijncontainers en items toevoegen"
@@ -10743,14 +10737,6 @@ msgstr ""
 "Normaal gesproken worden alle tekenvelden (openbaar of privé) weergegeven; "
 "met deze configuratie kun je kiezen welke velden op een bepaald moment "
 "worden weergegeven"
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-"Hiermee kunnen tokens en credits worden beheerd, die deelnemers kunnen "
-"gebruiken in plaats van geld voor registratiekosten. Credits kunnen ook "
-"worden ingewisseld voor geld"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

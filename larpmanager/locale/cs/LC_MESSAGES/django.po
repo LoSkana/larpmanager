@@ -2855,9 +2855,6 @@ msgstr "Schopnost pojmenování"
 msgid "Ticket selection"
 msgstr "Výběr vstupenek"
 
-msgid "Tokens / Credits"
-msgstr "Žetony / kredity"
-
 msgid "Total collection"
 msgstr "Celková sbírka"
 
@@ -5788,9 +5785,6 @@ msgstr "Správa výdajů na události a nahrávání účtenek"
 
 msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr "Maximální počet výplňových míst (0 = neomezeně)"
-
-msgid "Now set up the token and credits configuration"
-msgstr "Nyní nastavte konfiguraci tokenu a kreditů"
 
 msgid "Now you can add warehouse containers and items"
 msgstr "Nyní můžete přidávat skladové kontejnery a položky"
@@ -10440,13 +10434,6 @@ msgid ""
 msgstr ""
 "Obvykle se zobrazují všechna pole znaků (veřejná nebo soukromá); v této "
 "konfiguraci můžete vybrat, která se mají v daném okamžiku zobrazit"
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-"Umožňuje správu žetonů a kreditů, které mohou účastníci použít místo peněz "
-"za registrační poplatky. Kredity lze také vyměnit za hotovost"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
