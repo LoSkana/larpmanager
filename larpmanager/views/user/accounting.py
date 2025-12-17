@@ -30,6 +30,7 @@ from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
@@ -934,6 +935,67 @@ def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
     return acc_profile_check(request, mes, inv)
 
 
+def _get_payment_form(payment_method: str, request: HttpRequest, *, require_receipt: bool) -> Any:
+    """Get the appropriate payment form based on payment method.
+
+    Args:
+        payment_method: Payment submission type ('wire', 'paypal_nf', or 'any')
+        request: HTTP request object containing POST data and files
+        require_receipt: Whether receipt upload is required
+
+    Returns:
+        Form instance for the payment method
+
+    Raises:
+        Http404: If payment submission type is unknown
+
+    """
+    if payment_method in {"wire", "paypal_nf"}:
+        return WireInvoiceSubmitForm(request.POST, request.FILES, require_receipt=require_receipt)
+    if payment_method == "any":
+        return AnyInvoiceSubmitForm(request.POST, request.FILES)
+    raise Http404("unknown value: " + payment_method)
+
+
+def _safe_error_redirect(request: HttpRequest, redirect_path: str) -> HttpResponse:
+    """Safely redirect on error with validation to prevent open redirects.
+
+    Args:
+        request: HTTP request object
+        redirect_path: Path to redirect to
+
+    Returns:
+        HttpResponse redirect to validated path or accounting page
+
+    """
+    # Validate redirect_path to prevent open redirect vulnerabilities
+    if redirect_path and url_has_allowed_host_and_scheme("/" + redirect_path, allowed_hosts={request.get_host()}):
+        return redirect("/" + redirect_path)
+    return redirect("accounting")
+
+
+def _update_invoice_from_form(inv: Any, payment_method: str, form_data: dict) -> None:
+    """Update invoice with form data.
+
+    Args:
+        inv: PaymentInvoice object to update
+        payment_method: Payment method type
+        form_data: Cleaned form data
+
+    """
+    if payment_method in {"wire", "paypal_nf"}:
+        # Only set invoice if one was provided
+        if form_data.get("invoice"):
+            inv.invoice = form_data["invoice"]
+    elif payment_method == "any":
+        inv.text = form_data["text"]
+
+    # Mark as submitted and generate transaction ID
+    inv.status = PaymentStatus.SUBMITTED
+    inv.txn_id = timezone.now().timestamp()
+    inv.save()
+
+
 @login_required
 def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) -> HttpResponse:
     """Handle payment submission and invoice upload for user accounts.
@@ -962,40 +1024,23 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
     # Check if receipt is required for manual payments
     require_receipt = get_association_config(context["association_id"], "payment_require_receipt", default_value=False)
 
-    # Select appropriate form based on payment type
-    if payment_method in {"wire", "paypal_nf"}:
-        form = WireInvoiceSubmitForm(request.POST, request.FILES, require_receipt=require_receipt)
-    elif payment_method == "any":
-        form = AnyInvoiceSubmitForm(request.POST, request.FILES)
-    else:
-        raise Http404("unknown value: " + payment_method)
-
-    # Validate form data and uploaded files
+    # Get and validate the appropriate form
+    form = _get_payment_form(payment_method, request, require_receipt=require_receipt)
     if not form.is_valid():
         mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
         messages.error(request, mes)
-        return redirect("/" + redirect_path)
+        return _safe_error_redirect(request, redirect_path)
 
     # Retrieve the payment invoice using form data
     try:
         inv = PaymentInvoice.objects.get(cod=form.cleaned_data["cod"], association_id=context["association_id"])
     except ObjectDoesNotExist:
         messages.error(request, _("Error processing payment, contact us"))
-        return redirect("/" + redirect_path)
+        return _safe_error_redirect(request, redirect_path)
 
     # Update invoice with submitted data atomically
     with transaction.atomic():
-        if payment_method in {"wire", "paypal_nf"}:
-            # Only set invoice if one was provided
-            if form.cleaned_data.get("invoice"):
-                inv.invoice = form.cleaned_data["invoice"]
-        elif payment_method == "any":
-            inv.text = form.cleaned_data["text"]
-
-        # Mark as submitted and generate transaction ID
-        inv.status = PaymentStatus.SUBMITTED
-        inv.txn_id = timezone.now().timestamp()
-        inv.save()
+        _update_invoice_from_form(inv, payment_method, form.cleaned_data)
 
     # Send notification for invoice review
     notify_invoice_check(inv)

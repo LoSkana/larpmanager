@@ -156,6 +156,35 @@ window.addEventListener('DOMContentLoaded', function() {
     $('.trigger_save').on('click', function(e) {
         e.preventDefault();
         var href = $(this).attr('href');
+
+        // Validate href to prevent XSS and open redirect
+        if (href && typeof href === 'string') {
+            // Reject javascript:, data:, and other dangerous protocols
+            var lowerHref = href.toLowerCase().trim();
+            if (lowerHref.startsWith('javascript:') ||
+                lowerHref.startsWith('data:') ||
+                lowerHref.startsWith('vbscript:')) {
+                console.error('Invalid href protocol detected');
+                return;
+            }
+
+            // Only allow relative URLs or same-origin URLs
+            if (!href.startsWith('/') && !href.startsWith('#')) {
+                try {
+                    var url = new URL(href, window.location.origin);
+                    if (url.origin !== window.location.origin) {
+                        console.error('Cross-origin redirect blocked');
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Invalid URL');
+                    return;
+                }
+            }
+        } else {
+            return;
+        }
+
         submitForm(false)
             .then(function() {
                 window.location.href = href;
