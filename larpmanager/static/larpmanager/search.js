@@ -219,6 +219,12 @@ function uniform(s) {
     return s.toString().toLowerCase().trim();
 }
 
+function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 function search(key) {
     key = uniform(key);
     var top = '';
@@ -238,8 +244,8 @@ function search(key) {
 
         for (var ix = 0; ix < res.length; ix++) {
             var el = res[ix];
-            var name = el['name'];
-            if (el['title'].length > 0) name += " - {0}".format(el['title']);
+            var name = escapeHtml(el['name']);
+            if (el['title'].length > 0) name += " - {0}".format(escapeHtml(el['title']));
             if (first) first = false; else { top += ", "; characters += '<hr class="clear" />'; }
             top += "<small style='display: inline-block'><a href='#num{0}'>{1}</a></small>".format(el['number'], name);
 
@@ -252,7 +258,7 @@ function search(key) {
             }
             var player = window['texts']['abs'];
             if (el['player_id'] > 0) {
-                player = '<a href="{0}">{1}</a>'.format(prof_url.replace("/0", "/"+el['player_id']),el['player'])
+                player = '<a href="{0}">{1}</a>'.format(prof_url.replace("/0", "/"+el['player_id']), escapeHtml(el['player']))
                 if (el['player_prof'])
                     pf = el['player_prof'];
             };
@@ -266,10 +272,12 @@ function search(key) {
                 if (el['fields'][k]) {
                     var field = el['fields'][k];
                     if (Array.isArray(field)) {
-                        field = field.map(id => options[id]['name']);
+                        field = field.map(id => escapeHtml(options[id]['name']));
                         field = field.join(', ');
+                    } else {
+                        field = escapeHtml(field);
                     }
-                    characters += '<div class="go-inline"><b>{0}:</b> {1}</div>'.format(value['name'], field);
+                    characters += '<div class="go-inline"><b>{0}:</b> {1}</div>'.format(escapeHtml(value['name']), field);
                 }
             }
 
@@ -281,15 +289,16 @@ function search(key) {
                     if (fac.number == 0) continue;
                     if (fac.typ == 'g') continue;
                     if (j != 0) gr += ", ";
-                    gr += '<a href="{0}">{1}</a></h3>'.format(faction_url.replace("/0", "/" + fac.number), fac.name);
+                    gr += '<a href="{0}">{1}</a></h3>'.format(faction_url.replace("/0", "/" + fac.number), escapeHtml(fac.name));
                 }
 
                 if (gr) characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(gr, window['texts']['factions']);
             }
 
             if (show_teaser && el['teaser'].length > 0) {
-                teaser = $('#teasers .' + el['id']).html();
-                characters += '<div class="go-inline">{0}</div>'.format(teaser);
+                // Use .text() instead of .html() to prevent XSS
+                teaser = $('#teasers .' + el['id']).text();
+                characters += '<div class="go-inline">{0}</div>'.format(escapeHtml(teaser));
             }
 
             characters += '</div></div>';
@@ -312,19 +321,19 @@ function get_included_labels() {
 
     var txt = [];
     var el = filters['faction']['sel_l'];
-    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).join(', '));
+    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).map(escapeHtml).join(', '));
 
     el = filters['spec']['sel_l'];
-    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).join(', '));
+    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).map(escapeHtml).join(', '));
 
     for (const [cf, value] of Object.entries(fields)) {
         el = filters[cf]['sel_l'];
-        if (el.size > 0) txt.push(value + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(value) + ': ' + Array.from(el).map(escapeHtml).join(', '));
     }
 
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['sel_l'];
-        if (el.size > 0) txt.push(questions[cf]['name'] + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(questions[cf]['name']) + ': ' + Array.from(el).map(escapeHtml).join(', '));
     }
 
     if (txt.length == 0)
@@ -337,19 +346,19 @@ function get_escluded_labels() {
 
     var txt = [];
     var el = filters['faction']['nsel_l'];
-    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).join(', '));
+    if (el.size > 0) txt.push(window['texts']['factions'] + ": " + Array.from(el).map(escapeHtml).join(', '));
 
     el = filters['spec']['nsel_l'];
-    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).join(', '));
+    if (el.size > 0) txt.push(window['texts']['specs'] + ": " + Array.from(el).map(escapeHtml).join(', '));
 
     for (const [cf, value] of Object.entries(fields)) {
         el = filters[cf]['nsel_l'];
-        if (el.size > 0) txt.push(value + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(value) + ': ' + Array.from(el).map(escapeHtml).join(', '));
     }
 
     for (const [cf, value] of Object.entries(searchable)) {
         el = filters['field_' + cf]['nsel_l'];
-        if (el.size > 0) txt.push(questions[cf]['name'] + ': ' + Array.from(el).join(', '));
+        if (el.size > 0) txt.push(escapeHtml(questions[cf]['name']) + ': ' + Array.from(el).map(escapeHtml).join(', '));
     }
 
     if (txt.length == 0)
