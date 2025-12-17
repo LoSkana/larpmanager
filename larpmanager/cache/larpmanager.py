@@ -19,13 +19,15 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import random
+
 from django.core.cache import cache
 from django.db.models import Count
 
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.larpmanager import LarpManagerReview, LarpManagerShowcase
+from larpmanager.models.larpmanager import LarpManagerHighlight, LarpManagerReview, LarpManagerShowcase
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
@@ -109,9 +111,35 @@ def _get_reviews() -> list[dict]:
 
 
 def _get_showcases() -> list[dict]:
-    """Return all showcases as a list of dictionaries ordered by number."""
-    # Iterate through showcases ordered by number and convert to dict
-    return [showcase.as_dict() for showcase in LarpManagerShowcase.objects.order_by("number")]
+    """Return all showcases with unique highlight assignments.
+
+    Each showcase is assigned one unique highlight from the randomized pool.
+    If there are more showcases than highlights, highlights are reused in a cycle.
+
+    Returns:
+        List of showcase dictionaries with assigned highlight data.
+
+    """
+    # Get showcases ordered by number
+    showcases = list(LarpManagerShowcase.objects.order_by("number"))
+
+    # Get randomized highlights
+    highlights = list(LarpManagerHighlight.objects.all())
+    random.shuffle(highlights)
+
+    # Assign one unique highlight to each showcase
+    result = []
+    for idx, showcase in enumerate(showcases):
+        showcase_dict = showcase.as_dict()
+
+        # Assign a highlight (cycle through if more showcases than highlights)
+        if highlights:
+            assigned_highlight = highlights[idx % len(highlights)]
+            showcase_dict["highlight"] = assigned_highlight.as_dict()
+
+        result.append(showcase_dict)
+
+    return result
 
 
 def _get_promoters() -> list[dict]:
