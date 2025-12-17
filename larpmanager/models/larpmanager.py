@@ -94,24 +94,14 @@ class LarpManagerFaq(BaseModel):
     )
 
 
-class LarpManagerShowcase(BaseModel):
-    """Model for displaying showcase items with photos.
-
-    Represents featured content with images, text,
-    and metadata for promotional displays.
-    """
-
-    number = models.IntegerField(blank=True, null=True)
-
-    title = models.CharField(max_length=1000)
-
-    text = HTMLField(blank=True, null=True)
+class LarpManagerHighlight(BaseModel):
+    """Model for storing highlight photos used in showcases."""
 
     info = models.CharField(max_length=1000)
 
     photo = models.ImageField(
         max_length=500,
-        upload_to=UploadToPathAndRename("showcase/"),
+        upload_to=UploadToPathAndRename("highlight/"),
         verbose_name=_("Photo"),
     )
 
@@ -122,17 +112,37 @@ class LarpManagerShowcase(BaseModel):
         options={"quality": 80},
     )
 
+    def __str__(self) -> str:
+        """Return string representation of the highlight."""
+        return self.info[:50] if self.info else f"Highlight #{self.id}"
+
     def show_reduced(self) -> Any:
-        """Generate HTML for displaying reduced-size image.
-
-        Returns:
-            str: HTML string for reduced image display or empty string if no image
-
-        """
+        """Generate HTML for displaying reduced-size image."""
         if self.reduced:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.reduced.url)
         return ""
+
+    def as_dict(self, *, many_to_many: bool = True) -> dict:
+        """Convert model instance to dictionary with image URL."""
+        result_dict = super().as_dict(many_to_many=many_to_many)
+
+        # Add reduced image URL if available
+        if self.reduced:
+            # noinspection PyUnresolvedReferences
+            result_dict["reduced_url"] = self.reduced.url
+
+        return result_dict
+
+
+class LarpManagerShowcase(BaseModel):
+    """Model for displaying showcase items with photos."""
+
+    number = models.IntegerField(blank=True, null=True)
+
+    title = models.CharField(max_length=1000)
+
+    text = HTMLField(blank=True, null=True)
 
     def text_red(self) -> Any:
         """Get truncated version of showcase text.
@@ -142,32 +152,6 @@ class LarpManagerShowcase(BaseModel):
 
         """
         return self.text[:100]
-
-    def as_dict(self, *, many_to_many: bool = True) -> dict:
-        """Convert model instance to dictionary with image URL.
-
-        Converts the model instance to a dictionary representation, including
-        many-to-many relationships if specified. Additionally includes a reduced
-        image URL if the instance has a reduced image available.
-
-        Args:
-            many_to_many: Whether to include many-to-many relationships in the
-                         resulting dictionary. Defaults to True.
-
-        Returns:
-            Dictionary representation of the model instance with image URLs
-            included if available.
-
-        """
-        # Get base dictionary representation from parent class
-        result_dict = super().as_dict(many_to_many=many_to_many)
-
-        # Add reduced image URL if available
-        if self.reduced:
-            # noinspection PyUnresolvedReferences
-            result_dict["reduced_url"] = self.reduced.url
-
-        return result_dict
 
 
 class LarpManagerGuide(BaseModel):

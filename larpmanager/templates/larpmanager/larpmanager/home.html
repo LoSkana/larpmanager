@@ -83,13 +83,15 @@
                         <h4>{{ el.title }}</h4>
                         <p>{{ el.text | safe }}</p>
                     </div>
-                    <div class="image-container">
-                        <div class="image-wrapper">
-                            <img src="{% if el.reduced_url %}{{ el.reduced_url }}{% endif %}"
-                                 alt="Image for {{ el.title }}">
+                    {% if el.highlight %}
+                        <div class="image-container">
+                            <div class="image-wrapper">
+                                <img src="{% if el.highlight.reduced_url %}{{ el.highlight.reduced_url }}{% endif %}"
+                                     alt="Image for {{ el.title }}">
+                            </div>
+                            <div class="image-caption">{{ el.highlight.info }}</div>
                         </div>
-                        <div class="image-caption">{{ el.info }}</div>
-                    </div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </section>
