@@ -2855,9 +2855,6 @@ msgstr "Le nom de la capacité"
 msgid "Ticket selection"
 msgstr "Sélection des billets"
 
-msgid "Tokens / Credits"
-msgstr "Jetons / Crédits"
-
 msgid "Total collection"
 msgstr "Collecte totale"
 
@@ -5796,9 +5793,6 @@ msgstr "Gérez les dépenses liées à votre événement et téléchargez les re
 
 msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr "Nombre maximal de points de remplissage (0 = illimité)"
-
-msgid "Now set up the token and credits configuration"
-msgstr "Il faut maintenant configurer les jetons et les crédits"
 
 msgid "Now you can add warehouse containers and items"
 msgstr ""
@@ -10865,14 +10859,6 @@ msgstr ""
 "Normalement, tous les champs de caractères (publics ou privés) sont affichés"
 " ; avec cette configuration, vous pouvez sélectionner ceux qui doivent être "
 "affichés à un moment donné"
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-"Permet de gérer des jetons et des crédits, que les participants peuvent "
-"utiliser à la place de l'argent pour les frais d'inscription. Les crédits "
-"peuvent également être échangés contre de l'argent"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

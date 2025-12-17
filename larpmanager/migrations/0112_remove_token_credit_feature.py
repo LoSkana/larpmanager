@@ -23,8 +23,9 @@ def remove_token_credit_feature(apps: Any, schema_editor: Any) -> None:
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
-        ("larpmanager", "0111_split_token_credit_feature"),
+        ('larpmanager', '0111_split_token_credit_feature'),
     ]
 
     operations = [

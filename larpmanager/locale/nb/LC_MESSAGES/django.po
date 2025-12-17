@@ -2855,9 +2855,6 @@ msgstr "Navnet evne"
 msgid "Ticket selection"
 msgstr "Valg av billett"
 
-msgid "Tokens / Credits"
-msgstr "Tokens / Kreditter"
-
 msgid "Total collection"
 msgstr "Total innsamling"
 
@@ -5791,9 +5788,6 @@ msgstr "Administrer utgiftene til arrangementet og last opp kvitteringer"
 
 msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr "Maksimalt antall utfyllingspunkter (0 = ubegrenset)"
-
-msgid "Now set up the token and credits configuration"
-msgstr "Konfigurer nå token- og kredittkonfigurasjonen"
 
 msgid "Now you can add warehouse containers and items"
 msgstr "Nå kan du legge til lagercontainere og varer"
@@ -10554,14 +10548,6 @@ msgid ""
 msgstr ""
 "Normalt vises alle tegnfelt (offentlige eller private); med denne "
 "konfigurasjonen kan du velge hvilke som skal vises til enhver tid"
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-"Gjør det mulig å administrere Tokens og Credits, som deltakerne kan bruke i "
-"stedet for penger til registreringsavgifter. Kreditter kan også innløses mot"
-" kontanter"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
