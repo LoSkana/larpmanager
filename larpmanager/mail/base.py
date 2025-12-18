@@ -517,8 +517,8 @@ def send_character_status_update_email(instance: Character) -> None:
             # Determine context for email
             email_context = instance.event
             if instance.event.runs.exists():
-                # Use the first run if the event has any runs
-                email_context = instance.event.runs.first()
+                # Use the last run if the event has any runs
+                email_context = instance.event.runs.last()
 
             # Send the notification email to the player
             my_send_mail(email_subject, email_body, instance.player, email_context)
