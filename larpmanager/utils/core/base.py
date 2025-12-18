@@ -22,6 +22,7 @@ from __future__ import annotations
 from typing import Any
 
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest
 from django.urls import reverse
@@ -37,6 +38,7 @@ from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
+from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
     get_index_event_permissions,
@@ -47,6 +49,7 @@ from larpmanager.utils.core.exceptions import (
     FeatureError,
     MainPageError,
     MembershipError,
+    RedirectError,
     UnknowRunError,
     UserPermissionError,
     check_event_feature,
@@ -338,6 +341,7 @@ def get_event_context(
     *,
     signup: bool = False,
     include_status: bool = False,
+    check_visibility: bool = True,
 ) -> dict:
     """Get comprehensive event run context with permissions and features.
 
@@ -350,6 +354,7 @@ def get_event_context(
         signup: Whether to check and validate signup eligibility for the user
         feature_slug: Optional feature slug to verify user access permissions
         include_status: Whether to include detailed registration status information
+        check_visibility: Whether to enforce visibility restrictions
 
     Returns:
         Complete event context dictionary containing:
@@ -399,6 +404,25 @@ def get_event_context(
     # Finalize run context preparation and return complete context
     prepare_run(context)
 
+    # Check character visibility restrictions if requested (skip for admin and manage users)
+    if check_visibility and not is_lm_admin(request) and "manage" not in context:
+        event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
+        # Check if gallery is hidden for non-authenticated users
+        hide_gallery_for_non_login = get_event_config(
+            context["event"].id, "gallery_hide_login", default_value=False, context=context
+        )
+        if hide_gallery_for_non_login and not request.user.is_authenticated:
+            messages.warning(request, _("You must be logged in to view this page"))
+            raise RedirectError(event_url)
+
+        # Check if gallery is hidden for non-registered users
+        hide_gallery_for_non_signup = get_event_config(
+            context["event"].id, "gallery_hide_signup", default_value=False, context=context
+        )
+        if hide_gallery_for_non_signup and not getattr(context["run"], "reg", None):
+            messages.warning(request, _("You must be registered to view this page"))
+            raise RedirectError(event_url)
+
     return context
 
 
@@ -435,6 +459,15 @@ def prepare_run(context: Any) -> None:
     context.update(run_configuration)
 
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
+
+    # Check if there are visible factions with characters for nav display
+    context["has_visible_factions"] = False
+    if "faction" in context.get("features", {}) and "factions" in context:
+        for faction_data in context["factions"].values():
+            # Check if faction has a name and has characters
+            if faction_data.get("name") and faction_data.get("characters"):
+                context["has_visible_factions"] = True
+                break
 
 
 def get_run(context: Any, event_slug: Any) -> None:

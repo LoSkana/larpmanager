@@ -50,7 +50,7 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{% url 'public' el.member_id %}">{{ el.member }}</a>
+                        <a href="{% url 'public' el.member.uuid %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.member.email }}</td>
                     {% if features.info %}<td>{{ el.info }}</td>{% endif %}

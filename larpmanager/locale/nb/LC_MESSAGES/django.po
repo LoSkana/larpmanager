@@ -456,6 +456,9 @@ msgstr "Hvor"
 msgid "email"
 msgstr "e-post"
 
+msgid "moved"
+msgstr "flyttet"
+
 msgid "quick"
 msgstr "raskt"
 
@@ -675,6 +678,9 @@ msgstr "Stemmegivning"
 msgid "XP tot"
 msgstr "Px Tot"
 
+msgid "copied"
+msgstr "kopiert"
+
 msgid "issued"
 msgstr "utstedt"
 
@@ -764,6 +770,9 @@ msgstr "Gruppe"
 
 msgid "Gallery"
 msgstr "Galleri"
+
+msgid "Go Back"
+msgstr "Gå tilbake"
 
 msgid "Handout"
 msgstr "Utdeling"
@@ -1209,6 +1218,9 @@ msgstr "Leveres"
 msgid "Template"
 msgstr "Mal"
 
+msgid "Transfer"
+msgstr "Overføring"
+
 msgid "Treasury"
 msgstr "Finansdepartementet"
 
@@ -1220,6 +1232,9 @@ msgstr "MVA-sats"
 
 msgid "Versions"
 msgstr "Versjoner"
+
+msgid "Warnings"
+msgstr "Advarsler"
 
 msgid "Workshop"
 msgstr "Verksted"
@@ -1355,6 +1370,9 @@ msgstr "Les post"
 
 msgid "Recipient"
 msgstr "Mottaker"
+
+msgid "Recompute"
+msgstr "Beregne på nytt"
 
 msgid "Reminders"
 msgstr "Påminnelser"
@@ -1734,6 +1752,9 @@ msgstr "Fire kvoter"
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
 
+msgid "Information"
+msgstr "Informasjon"
+
 msgid "Installment"
 msgstr "Avbetaling"
 
@@ -1785,14 +1806,14 @@ msgstr "Progresjon"
 msgid "Provisional"
 msgstr "Foreløpig"
 
+msgid "Public UUID"
+msgstr "Offentlig UUID"
+
 msgid "Publication"
 msgstr "Utgivelse"
 
 msgid "Quick Setup"
 msgstr "Hurtigoppsett"
-
-msgid "Recalculate"
-msgstr "Beregning på nytt"
 
 msgid "Register to"
 msgstr "Registrer deg for"
@@ -2354,6 +2375,9 @@ msgstr "Kommunikasjon"
 msgid "Credit balance"
 msgstr "Kredittsaldo"
 
+msgid "Current Ticket"
+msgstr "Gjeldende billett"
+
 msgid "Customisations"
 msgstr "Tilpasninger"
 
@@ -2579,6 +2603,9 @@ msgstr "Ekstern tilgang"
 msgid "Filter factions"
 msgstr "Filtergrupper"
 
+msgid "Invalid request"
+msgstr "Ugyldig forespørsel"
+
 msgid "Mail assignment"
 msgstr "Tildeling av post"
 
@@ -2708,6 +2735,9 @@ msgstr "Total innsamling"
 msgid "Color background"
 msgstr "Tekstbakgrunn"
 
+msgid "Confirm Transfer"
+msgstr "Bekreft overføring"
+
 msgid "Current quantity"
 msgstr "Nåværende mengde"
 
@@ -2822,6 +2852,9 @@ msgstr "Valg av spiller"
 msgid "Pre-registration"
 msgstr "Forhåndsregistrering"
 
+msgid "Preview transfer"
+msgstr "Forhåndsvisning av overføring"
+
 msgid "Registration fee"
 msgstr "Deltakeravgift"
 
@@ -2855,14 +2888,17 @@ msgstr "Navnet evne"
 msgid "Ticket selection"
 msgstr "Valg av billett"
 
-msgid "Tokens / Credits"
-msgstr "Tokens / Kreditter"
-
 msgid "Total collection"
 msgstr "Total innsamling"
 
 msgid "Transaction fees"
 msgstr "Transaksjonsgebyrer"
+
+msgid "Transfer details"
+msgstr "Overføringsdetaljer"
+
+msgid "Transfer preview"
+msgstr "Forhåndsvisning av overganger"
 
 msgid "Where it is held"
 msgstr "Hvor den avholdes"
@@ -3650,6 +3686,9 @@ msgstr "Slik får du tilgang til historikken"
 msgid "Token not initialized"
 msgstr "Token ikke initialisert"
 
+msgid "Transfer registration"
+msgstr "Registrering av overføring"
+
 msgid "Upload membership fee"
 msgstr "Last opp medlemsavgift"
 
@@ -3766,6 +3805,9 @@ msgstr "Avbestilling av registrering"
 
 msgid "Registration confirmed"
 msgstr "Inngang bekreftet"
+
+msgid "Registration not found"
+msgstr "Registrering ikke funnet"
 
 msgid "Registration questions"
 msgstr "Bruksområder"
@@ -4020,11 +4062,17 @@ msgstr "Foreløpig registrering"
 msgid "Regeneration pdf started"
 msgstr "pdf regenerering startet"
 
+msgid "Registration to transfer"
+msgstr "Registrering for overføring"
+
 msgid "Relationships max length"
 msgstr "Relasjoner maks lengde"
 
 msgid "Secret registration link"
 msgstr "Hemmelig registreringslenke"
+
+msgid "Target session not found"
+msgstr "Måløkten ble ikke funnet"
 
 msgid "The subdomain identifier"
 msgstr "Identifikatoren for underdomenet"
@@ -4117,6 +4165,9 @@ msgstr "Les skriveelementene"
 msgid "Receipt already confirmed"
 msgstr "Kvitteringen er allerede bekreftet"
 
+msgid "Registration form answers"
+msgstr "Svar på registreringsskjemaet"
+
 msgid "Registration opening date"
 msgstr "Åpningsdato for registrering"
 
@@ -4153,6 +4204,9 @@ msgstr "Bruk av tredjeparts eiendeler"
 
 msgid "We're sorry to see you go"
 msgstr "Vi er lei oss for at du må gå"
+
+msgid "What will be transferred?"
+msgstr "Hva vil bli overført?"
 
 msgid "cancel your registrations"
 msgstr "avbestille registreringen"
@@ -4196,6 +4250,9 @@ msgstr "Administrer varemerker på lageret"
 
 msgid "Manage warehouse movements"
 msgstr "Administrere lagerbevegelser"
+
+msgid "Multiple choice selections"
+msgstr "Flere valgmuligheter"
 
 msgid "Now you can create inflows"
 msgstr "Nå kan du opprette innstrømninger"
@@ -4300,6 +4357,9 @@ msgstr "Navn på merket som skal deles ut"
 msgid "Now you can create outflows"
 msgstr "Nå kan du opprette utstrømninger"
 
+msgid "Or select a different event"
+msgstr "Eller velg et annet arrangement"
+
 msgid "Pre-registration cancelled!"
 msgstr "Forhåndsregistrering avlyst!"
 
@@ -4308,6 +4368,9 @@ msgstr "Påminnelse om medlemskap"
 
 msgid "Set up dynamic installments"
 msgstr "Sett opp dynamiske avdrag"
+
+msgid "Target session (same event)"
+msgstr "Måløkt (samme hendelse)"
 
 msgid "Thank you for participating"
 msgstr "Takk for at du deltok"
@@ -4366,6 +4429,9 @@ msgstr "Forespørsel om underdanig medlem"
 
 msgid "Player customisation updated"
 msgstr "Spillertilpasning oppdatert"
+
+msgid "Target event has no sessions"
+msgstr "Målhendelsen har ingen økter"
 
 msgid "The only mandatory column is"
 msgstr "Den eneste obligatoriske kolonnen er"
@@ -4512,6 +4578,12 @@ msgstr "Administrer visning av skriveelement"
 msgid "Registrations on external link"
 msgstr "Registreringer på ekstern lenke"
 
+msgid "Select registration and target"
+msgstr "Velg registrering og mål"
+
+msgid "Select target session or event"
+msgstr "Velg måløkt eller hendelse"
+
 msgid "Select the new photo to upload"
 msgstr "Velg det nye bildet som skal lastes opp"
 
@@ -4520,6 +4592,9 @@ msgstr "Sett opp skattekonfigurasjonen"
 
 msgid "Set your interface preferences"
 msgstr "Angi grensesnittinnstillingene dine"
+
+msgid "Target event (different event)"
+msgstr "Målhendelse (annen hendelse)"
 
 msgid "The registrations to the event"
 msgstr "Påmelding til arrangementet"
@@ -4650,6 +4725,9 @@ msgstr "Viser en liste over e-postadressen til brukerne"
 msgid "Do you want to tell us something"
 msgstr "Er det noe du vil fortelle oss"
 
+msgid "Errors - Transfer Cannot Proceed"
+msgstr "Feil - overføringen kan ikke fortsette"
+
 msgid "Is it selectable by participants"
 msgstr "Kan den velges av deltakerne"
 
@@ -4739,6 +4817,9 @@ msgstr "Fullstendig navn på organisasjonen"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Bekreft oppføring til %(event)s"
+
+msgid "Confirm to move this registration"
+msgstr "Bekreft for å flytte denne registreringen"
 
 msgid "Descriptive name for this API key"
 msgstr "Beskrivende navn for denne API-nøkkelen"
@@ -5048,6 +5129,9 @@ msgstr "Påmelding bekreftet på %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollegodkjenning %(role)s per %(event)s"
 
+msgid "Select a session from the same event"
+msgstr "Velg en økt fra samme arrangement"
+
 msgid "Select the event of this new session"
 msgstr "Velg hendelsen for denne nye økten"
 
@@ -5078,6 +5162,9 @@ msgstr "Du har blitt tildelt en prestasjon"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Lagt til nederst i alle e-poster som sendes"
+
+msgid "Character assignments (if compatible)"
+msgstr "Tegntildelinger (hvis kompatible)"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontroller gyldigheten av skattekoden"
@@ -5139,6 +5226,9 @@ msgstr "Nå kan du angi den juridiske merknadsteksten"
 #, python-format
 msgid "Registration to %(event)s by %(user)s"
 msgstr "Oppføring i %(event)s av %(user)s"
+
+msgid "Review the transfer before confirming"
+msgstr "Gå gjennom overføringen før du bekrefter"
 
 msgid "Select the organisation to proceed to"
 msgstr "Velg organisasjonen du vil gå videre til"
@@ -5304,6 +5394,9 @@ msgstr "Denne teksten vil bli lagt til på arket med"
 msgid "You are logged in with an email address"
 msgstr "Du er logget inn med en e-postadresse"
 
+msgid "You must be logged in to view this page"
+msgstr "Du må være innlogget for å se denne siden"
+
 msgid "if it doesn't exist, it will be created"
 msgstr "hvis den ikke finnes, vil den bli opprettet"
 
@@ -5379,6 +5472,9 @@ msgstr "Hvem tar ansvar for å løse det"
 msgid "Would you like to pay a different amount"
 msgstr "Ønsker du å betale et annet beløp"
 
+msgid "You must be registered to view this page"
+msgstr "Du må være registrert for å se denne siden"
+
 msgid "You think you should have an achievement"
 msgstr "Synes du at du har krav på en prestasjon"
 
@@ -5428,6 +5524,9 @@ msgstr "Det finnes oppdrag uten egenskaper: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Denne siden oppsummerer de opplastede fotoalbumene"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Unik identifikator for offentlige profil-URL-er"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Du ekskluderer (ingen av disse filtrene)"
@@ -5689,6 +5788,9 @@ msgstr "Husk å sette prefikset i begynnelsen!"
 msgid "Select a character to add a new relationship"
 msgstr "Velg et tegn for å legge til en ny relasjon"
 
+msgid "Select the registration you want to transfer"
+msgstr "Velg registreringen du ønsker å overføre"
+
 msgid "Set up a value for registration opening date"
 msgstr "Sett opp en verdi for åpningsdato for registrering"
 
@@ -5792,9 +5894,6 @@ msgstr "Administrer utgiftene til arrangementet og last opp kvitteringer"
 msgid "Maximum number of filler spots (0 = unlimited)"
 msgstr "Maksimalt antall utfyllingspunkter (0 = ubegrenset)"
 
-msgid "Now set up the token and credits configuration"
-msgstr "Konfigurer nå token- og kredittkonfigurasjonen"
-
 msgid "Now you can add warehouse containers and items"
 msgstr "Nå kan du legge til lagercontainere og varer"
 
@@ -5892,6 +5991,9 @@ msgstr "Antall tegn som skal tilordnes (standard 1)"
 msgid "Optional template associated with this ability."
 msgstr "Valgfri mal knyttet til denne evnen."
 
+msgid "Registration data (ticket, quotas, additionals)"
+msgstr "Registreringsdata (billett, kvoter, tillegg)"
+
 msgid "Selected elements will be shown to participants"
 msgstr "Utvalgte elementer vil bli vist til deltakerne"
 
@@ -5937,6 +6039,9 @@ msgstr "En beskrivelse av kompetanseferdighetene"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Få tilgang til karakteren din <a href='%(url)s'>her</a>"
+
+msgid "Accounting items (payment history will be reset)"
+msgstr "Regnskapsposter (betalingshistorikk vil bli tilbakestilt)"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beskriv nøyaktig hvilke deltakere som er involvert"
@@ -6106,6 +6211,9 @@ msgstr "Administrer fremdriftstrinnene for skriveelementene"
 msgid "Maximum number of characters the player can create"
 msgstr "Maksimalt antall karakterer spilleren kan skape"
 
+msgid "Please select both a registration and a target run"
+msgstr "Vennligst velg både en registrering og en målkjøring"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"
 
@@ -6133,6 +6241,9 @@ msgstr "Denne siden oppsummerer organisasjonens frivillige"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deltakeravgifter redusert gjennom rabatter"
+
+msgid "Transfer a registration from this event to another"
+msgstr "Overfør en registrering fra dette arrangementet til et annet"
 
 msgid "Write to us if you need help in setting things up!"
 msgstr "Skriv til oss hvis du trenger hjelp til å sette opp ting!"
@@ -6460,6 +6571,9 @@ msgstr "Administrerer status for lasting og distribusjon av varer på lageret"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Administrere betalinger utført av deltakere på alle arrangementer"
+
+msgid "Please select either a target session or a target event"
+msgstr "Velg enten en måløkt eller en målhendelse"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Konfigurer raskt de viktigste innstillingene for arrangementene dine"
@@ -6854,6 +6968,10 @@ msgstr "Valgfritt - Utvidet beskrivelse (vises med liten grå tekst)"
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr "Valgfri merknad om dette tokenet (f.eks. mottakerens navn, formål)"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(run)s"
+msgstr "Registrering for %(member)s vellykket %(action)s til %(run)s"
+
 msgid "Set specific values for configuration of features of the event"
 msgstr "Angi spesifikke verdier for konfigurasjon av funksjoner i hendelsen"
 
@@ -7058,6 +7176,10 @@ msgstr ""
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vennligst oppgi anledningen du ønsker å donere til"
+
+msgid "Please select only one target (either session or event, not both)"
+msgstr ""
+"Vennligst velg kun ett mål (enten økt eller arrangement, ikke begge deler)"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""
@@ -10046,6 +10168,13 @@ msgstr ""
 "likt fordelt fra registreringsdatoen"
 
 msgid ""
+"This will move the registration from the current run to the target run. The "
+"original registration will be deleted."
+msgstr ""
+"Dette vil flytte registreringen fra den aktuelle kjøringen til målkjøringen."
+" Den opprinnelige registreringen vil bli slettet."
+
+msgid ""
 "Activates a page summarizing overdue participants and their deadlines "
 "(payments, memberships, forms, casting, etc.)"
 msgstr ""
@@ -10554,14 +10683,6 @@ msgid ""
 msgstr ""
 "Normalt vises alle tegnfelt (offentlige eller private); med denne "
 "konfigurasjonen kan du velge hvilke som skal vises til enhver tid"
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-"Gjør det mulig å administrere Tokens og Credits, som deltakerne kan bruke i "
-"stedet for penger til registreringsavgifter. Kreditter kan også innløses mot"
-" kontanter"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

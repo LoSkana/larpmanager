@@ -1983,6 +1983,30 @@ msgstr ""
 msgid "Is there anything else you would like to tell us"
 msgstr ""
 
+msgid "Registration to transfer"
+msgstr ""
+
+msgid "Select the registration you want to transfer"
+msgstr ""
+
+msgid "Target session (same event)"
+msgstr ""
+
+msgid "Select a session from the same event"
+msgstr ""
+
+msgid "Target event (different event)"
+msgstr ""
+
+msgid "Or select a different event"
+msgstr ""
+
+msgid "Please select either a target session or a target event"
+msgstr ""
+
+msgid "Please select only one target (either session or event, not both)"
+msgstr ""
+
 msgid "Manage warehouse items"
 msgstr ""
 
@@ -3423,6 +3447,12 @@ msgstr ""
 msgid "Passport"
 msgstr ""
 
+msgid "Public UUID"
+msgstr ""
+
+msgid "Unique identifier for public profile URLs"
+msgstr ""
+
 msgid "Navigation language"
 msgstr ""
 
@@ -4550,6 +4580,12 @@ msgstr ""
 msgid "you can still pay the remaining amount if you wish"
 msgstr ""
 
+msgid "List"
+msgstr ""
+
+msgid "Players"
+msgstr ""
+
 msgid "Organization"
 msgstr ""
 
@@ -4637,9 +4673,6 @@ msgid "Messages"
 msgstr ""
 
 msgid "Achievements"
-msgstr ""
-
-msgid "List"
 msgstr ""
 
 msgid "Mail"
@@ -4895,12 +4928,6 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-msgid "Characters are only visible to logged in users"
-msgstr ""
-
-msgid "Characters are only visible to participants"
-msgstr ""
-
 msgid "Registered"
 msgstr ""
 
@@ -5128,6 +5155,12 @@ msgid "Registration conditions"
 msgstr ""
 
 msgid "Conditions of"
+msgstr ""
+
+msgid "Characters are only visible to logged in users"
+msgstr ""
+
+msgid "Characters are only visible to participants"
 msgstr ""
 
 msgid "Character are not visible at the moment"
@@ -6949,9 +6982,6 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-msgid "Players"
-msgstr ""
-
 msgid "Ability Templates"
 msgstr ""
 
@@ -7171,7 +7201,10 @@ msgstr ""
 msgid "Unique registration code, used for payment checks"
 msgstr ""
 
-msgid "Recalculate"
+msgid "Transfer"
+msgstr ""
+
+msgid "Recompute"
 msgstr ""
 
 msgid "No registrations have been received for this event yet"
@@ -7198,6 +7231,83 @@ msgid "Casting priority"
 msgstr ""
 
 msgid "Direct link"
+msgstr ""
+
+msgid "Transfer registration"
+msgstr ""
+
+msgid "Transfer a registration from this event to another"
+msgstr ""
+
+msgid "Select registration and target"
+msgstr ""
+
+msgid "Select target session or event"
+msgstr ""
+
+msgid "Preview transfer"
+msgstr ""
+
+msgid "What will be transferred?"
+msgstr ""
+
+msgid "Registration data (ticket, quotas, additionals)"
+msgstr ""
+
+msgid "Registration form answers"
+msgstr ""
+
+msgid "Multiple choice selections"
+msgstr ""
+
+msgid "Character assignments (if compatible)"
+msgstr ""
+
+msgid "Accounting items (payment history will be reset)"
+msgstr ""
+
+msgid "Transfer preview"
+msgstr ""
+
+msgid "Review the transfer before confirming"
+msgstr ""
+
+msgid "Transfer details"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Current Ticket"
+msgstr ""
+
+msgid "Errors - Transfer Cannot Proceed"
+msgstr ""
+
+msgid "Warnings"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+msgid "Confirm to move this registration"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"This will move the registration from the current run to the target run. The "
+"original registration will be deleted."
+msgstr ""
+
+msgid "Confirm Transfer"
+msgstr ""
+
+msgid "Go Back"
 msgstr ""
 
 msgid ""
@@ -7396,9 +7506,6 @@ msgstr ""
 msgid ""
 "This page shows what will happen when you commit the warehouse quantities "
 "based on the current assignments"
-msgstr ""
-
-msgid "Warning"
 msgstr ""
 
 msgid ""
@@ -7671,12 +7778,6 @@ msgid "This page shows the quests for the event"
 msgstr ""
 
 msgid "This page shows the relationships between characters"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "To"
 msgstr ""
 
 msgid "This page shows the roles of the characters"
@@ -8134,17 +8235,6 @@ msgid ""
 msgstr ""
 
 msgid "Now crew can upload expenses, and you can review them"
-msgstr ""
-
-msgid "Tokens / Credits"
-msgstr ""
-
-msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
-msgstr ""
-
-msgid "Now set up the token and credits configuration"
 msgstr ""
 
 msgid ""
@@ -8825,6 +8915,12 @@ msgid "No elements are currently available"
 msgstr ""
 
 msgid "Show available characters"
+msgstr ""
+
+msgid "You must be logged in to view this page"
+msgstr ""
+
+msgid "You must be registered to view this page"
 msgstr ""
 
 msgid "Welcome"
@@ -9574,6 +9670,31 @@ msgid "Registration cancelled"
 msgstr ""
 
 msgid "Player customisation updated"
+msgstr ""
+
+msgid "Invalid request"
+msgstr ""
+
+msgid "Please select both a registration and a target run"
+msgstr ""
+
+msgid "Registration not found"
+msgstr ""
+
+msgid "Target event has no sessions"
+msgstr ""
+
+msgid "Target session not found"
+msgstr ""
+
+msgid "moved"
+msgstr ""
+
+msgid "copied"
+msgstr ""
+
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(run)s"
 msgstr ""
 
 msgid "You must create at least one quest type before you can create quests"

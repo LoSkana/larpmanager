@@ -3,7 +3,7 @@
     {% for mb in list %}
         <div class="el">
             <div class="icon">
-                <a href="{% url 'public' mb.id %}">
+                <a href="{% url 'public' mb.uuid %}">
                     <div class="img_cover"
                          style="background-image:url('{% if mb.profile %}{{ mb.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
                     </div>

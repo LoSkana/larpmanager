@@ -186,7 +186,14 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
+from larpmanager.models.larpmanager import (
+    LarpManagerFaq,
+    LarpManagerGuide,
+    LarpManagerHighlight,
+    LarpManagerShowcase,
+    LarpManagerTicket,
+    LarpManagerTutorial,
+)
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
 from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, PlayerRelationship, WarehouseItem
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
@@ -1038,6 +1045,30 @@ def post_save_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) 
 def post_delete_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset tutorials cache after instance deletion."""
     reset_tutorials_cache()
+
+
+@receiver(post_save, sender=LarpManagerShowcase)
+def post_save_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when showcase content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerShowcase)
+def post_delete_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after showcase deletion."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_save, sender=LarpManagerHighlight)
+def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when highlight content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerHighlight)
+def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after highlight deletion."""
+    clear_larpmanager_home_cache()
 
 
 # Member signals

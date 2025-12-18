@@ -630,49 +630,46 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get event features for permission checking
     features = get_event_features(context["event"].id)
 
-    # Check if user has permission to view gallery content
-    if check_gallery_visibility(request, context):
-        # Load character cache if writing fields are visible or character display is forced
-        if not get_event_config(
-            context["event"].id, "writing_field_visibility", default_value=False, context=context
-        ) or context.get(
-            "show_character",
-        ):
-            get_event_cache_all(context)
+    # Load character cache if writing fields are visible or character display is forced
+    field_visibility = get_event_config(
+        context["event"].id, "writing_field_visibility", default_value=False, context=context
+    )
+    if not field_visibility or context.get("show_character"):
+        get_event_cache_all(context)
 
-        # Check configuration for hiding uncasted players
-        hide_uncasted_players = get_event_config(
-            context["event"].id, "gallery_hide_uncasted_players", default_value=False, context=context
-        )
-        if not hide_uncasted_players:
-            # Get registrations that have assigned characters
-            que = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id)
+    # Check configuration for hiding uncasted players
+    hide_uncasted_players = get_event_config(
+        context["event"].id, "gallery_hide_uncasted_players", default_value=False, context=context
+    )
+    if not hide_uncasted_players:
+        # Get registrations that have assigned characters
+        que = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id)
 
-            # Filter by character approval status if required
-            if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
-                que = que.filter(character__status__in=[CharacterStatus.APPROVED])
-            assigned = que.values_list("reg_id", flat=True)
+        # Filter by character approval status if required
+        if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
+            que = que.filter(character__status__in=[CharacterStatus.APPROVED])
+        assigned = que.values_list("reg_id", flat=True)
 
-            # Pre-filter ticket IDs to exclude from registration without character assigned
-            excluded_ticket_ids = RegistrationTicket.objects.filter(
-                event_id=context["event"].id,
-                tier__in=[
-                    TicketTier.WAITING,
-                    TicketTier.STAFF,
-                    TicketTier.NPC,
-                    TicketTier.COLLABORATOR,
-                    TicketTier.SELLER,
-                ],
-            ).values_list("id", flat=True)
+        # Pre-filter ticket IDs to exclude from registration without character assigned
+        excluded_ticket_ids = RegistrationTicket.objects.filter(
+            event_id=context["event"].id,
+            tier__in=[
+                TicketTier.WAITING,
+                TicketTier.STAFF,
+                TicketTier.NPC,
+                TicketTier.COLLABORATOR,
+                TicketTier.SELLER,
+            ],
+        ).values_list("id", flat=True)
 
-            # Get registrations without assigned characters
-            que_reg = Registration.objects.filter(run_id=context["run"].id, cancellation_date__isnull=True)
-            que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
+        # Get registrations without assigned characters
+        que_reg = Registration.objects.filter(run_id=context["run"].id, cancellation_date__isnull=True)
+        que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
 
-            # Add non-provisional registered members to the display list
-            for reg in que_reg.select_related("member"):
-                if not is_reg_provisional(reg, event=context["event"], features=features, context=context):
-                    context["registration_list"].append(reg.member)
+        # Add non-provisional registered members to the display list
+        for reg in que_reg.select_related("member"):
+            if not is_reg_provisional(reg, event=context["event"], features=features, context=context):
+                context["registration_list"].append(reg.member)
 
     return render(request, "larpmanager/event/gallery.html", context)
 
@@ -694,8 +691,8 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
         - Sets no_robots flag based on development status and timing
 
     """
-    # Get base context with event and run information
-    context = get_event_context(request, event_slug, include_status=True)
+    # Get base context with event and run information (don't need visibility check)
+    context = get_event_context(request, event_slug, include_status=True, check_visibility=False)
     context["coming"] = []
     context["past"] = []
 

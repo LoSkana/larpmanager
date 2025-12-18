@@ -627,8 +627,8 @@ def register(
         RewokedMembershipError: When user membership has been revoked
 
     """
-    # Get event and run context with status validation
-    context = get_event_context(request, event_slug, include_status=True)
+    # Get event and run context with status validation (no visibility check)
+    context = get_event_context(request, event_slug, include_status=True, check_visibility=False)
     current_run = context["run"]
     current_event = context["event"]
 
@@ -648,8 +648,8 @@ def register(
     else:
         context["run_reg"] = None
 
-    # Apply ticket selection if provided
-    _apply_ticket(context, ticket_id)
+    # Apply ticket selection if provided, verifying it belongs to this event
+    _apply_ticket(context, ticket_id, current_event.pk)
 
     # Check if payment features are enabled for this association
     context["payment_feature"] = "payment" in get_association_features(context["association_id"])
@@ -696,20 +696,21 @@ def register(
     return render(request, "larpmanager/event/register.html", context)
 
 
-def _apply_ticket(context: dict, ticket_id: int | None) -> None:
-    """Apply ticket information to context if ticket exists.
+def _apply_ticket(context: dict, ticket_id: int | None, event_id: int) -> None:
+    """Apply ticket information to context if ticket exists and belongs to the event.
 
     Args:
         context: Context dictionary to update with ticket data
         ticket_id: Ticket ID to retrieve, or None
+        event_id: Event ID to verify ticket ownership
 
     """
     if not ticket_id:
         return
 
     try:
-        # Retrieve ticket and set tier in context
-        ticket = RegistrationTicket.objects.get(pk=ticket_id)
+        # Retrieve ticket and verify it belongs to the event
+        ticket = RegistrationTicket.objects.get(pk=ticket_id, event_id=event_id)
         context["tier"] = ticket.tier
 
         # Remove closed status for staff/NPC tickets
@@ -719,6 +720,7 @@ def _apply_ticket(context: dict, ticket_id: int | None) -> None:
         # Store ticket ID in context
         context["ticket"] = ticket_id
     except ObjectDoesNotExist:
+        # Ticket not found or doesn't belong to this event - ignore silently
         pass
 
 
@@ -830,7 +832,7 @@ def _register_prepare(context: dict[str, Any], registration: Any) -> Any:
 
 def register_reduced(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return count of available reduced-price tickets for an event run."""
-    context = get_event_context(request, event_slug)
+    context = get_event_context(request, event_slug, check_visibility=False)
     # Count reduced tickets still available for this run
     ct = get_reduced_available_count(context["run"])
     return JsonResponse({"res": ct})
@@ -924,7 +926,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         return JsonResponse({"res": "ko", "msg": msg})
 
     # Get event context and validate discount feature availability
-    context = get_event_context(request, event_slug)
+    context = get_event_context(request, event_slug, check_visibility=False)
 
     if "discount" not in context["features"]:
         return error(_("Not available, kiddo"))
@@ -1086,7 +1088,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
 
     """
     # Get the event run context from the request and identifier
-    context = get_event_context(request, event_slug)
+    context = get_event_context(request, event_slug, check_visibility=False)
     now = timezone.now()
 
     # Bulk delete expired discount items for this user and run
@@ -1170,7 +1172,9 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     """
     # Get event context and verify registration access
-    context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_context(
+        request, event_slug, signup=False, feature_slug="gift", include_status=True, check_visibility=False
+    )
     check_registration_open(context, request)
 
     # Filter registrations for current user with redeem codes (gift registrations)
@@ -1235,7 +1239,9 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
 
     """
     # Get event context and verify user has gift management permissions
-    context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_context(
+        request, event_slug, signup=False, feature_slug="gift", include_status=True, check_visibility=False
+    )
     check_registration_open(context, request)
 
     # Retrieve the specific gift registration and prepare form context
@@ -1332,7 +1338,9 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     """
     # Get event context and validate user permissions for gift redemption
-    context = get_event_context(request, event_slug, signup=False, feature_slug="gift", include_status=True)
+    context = get_event_context(
+        request, event_slug, signup=False, feature_slug="gift", include_status=True, check_visibility=False
+    )
 
     # Check if user is already registered for this event
     if context["run"].reg:

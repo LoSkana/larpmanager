@@ -32,7 +32,7 @@
         {% for mb in pages %}
             <div class="el">
                 <div class="icon">
-                    <a href="{% url 'public' mb.id %}">
+                    <a href="{% url 'public' mb.uuid %}">
                         {% if mb.profile %}
                             <img src="{{ mb.profile }}" alt="character profile" />
                         {% else %}

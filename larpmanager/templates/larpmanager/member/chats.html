@@ -17,7 +17,7 @@
             {% for el in list %}
                 <tr>
                     <td>
-                        <a href="{% url 'public' el.you.id %}">{{ el.you.display_member }}</a>
+                        <a href="{% url 'public' el.you.uuid %}">{{ el.you.display_member }}</a>
                     </td>
                     <td>{{ el.last_message }}</td>
                     <td>

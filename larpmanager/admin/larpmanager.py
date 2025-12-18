@@ -29,6 +29,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerFaq,
     LarpManagerFaqType,
     LarpManagerGuide,
+    LarpManagerHighlight,
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
@@ -83,11 +84,19 @@ class LarpManagerBlogAdmin(CSRFTinyMCEModelAdmin):
     list_display = ("title", "slug", "number", "published", "text_red", "show_thumb")
 
 
+@admin.register(LarpManagerHighlight)
+class LarpManagerHighlightAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerHighlight model."""
+
+    list_display = ("info", "show_reduced")
+    search_fields: ClassVar[list] = ["info"]
+
+
 @admin.register(LarpManagerShowcase)
 class LarpManagerShowcaseAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerShowcase model."""
 
-    list_display = ("title", "number", "text_red", "show_reduced")
+    list_display = ("title", "number", "text_red")
 
 
 @admin.register(LarpManagerProfiler)

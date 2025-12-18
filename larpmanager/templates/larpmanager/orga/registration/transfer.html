@@ -1,0 +1,58 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Transfer registration" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "Transfer a registration from this event to another" %}
+{% endblock info %}
+{% block content %}
+    <h2>{% trans "Select registration and target" %}</h2>
+    <form method="post"
+          action="{% url 'orga_registration_transfer_preview' event_slug=run.get_slug %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.registration_id.id_for_label }}">{{ form.registration_id.label }}:</label>
+            {{ form.registration_id }}
+            {% if form.registration_id.help_text %}
+                <small class="form-text text-muted">{{ form.registration_id.help_text }}</small>
+            {% endif %}
+            {% if form.registration_id.errors %}<div class="text-danger">{{ form.registration_id.errors }}</div>{% endif %}
+        </div>
+        <div class="form-group">
+            <h3>{% trans "Select target session or event" %}</h3>
+            <div class="form-group">
+                <label for="{{ form.target_run_id.id_for_label }}">{{ form.target_run_id.label }}:</label>
+                {{ form.target_run_id }}
+                {% if form.target_run_id.help_text %}
+                    <small class="form-text text-muted">{{ form.target_run_id.help_text }}</small>
+                {% endif %}
+                {% if form.target_run_id.errors %}<div class="text-danger">{{ form.target_run_id.errors }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.target_event_id.id_for_label }}">{{ form.target_event_id.label }}:</label>
+                {{ form.target_event_id }}
+                {% if form.target_event_id.help_text %}
+                    <small class="form-text text-muted">{{ form.target_event_id.help_text }}</small>
+                {% endif %}
+                {% if form.target_event_id.errors %}<div class="text-danger">{{ form.target_event_id.errors }}</div>{% endif %}
+            </div>
+        </div>
+        {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">{% trans "Preview transfer" %}</button>
+            <a href="{% url 'orga_registrations' event_slug=run.get_slug %}"
+               class="btn btn-secondary">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+    <div class="alert alert-info">
+        <h4>{% trans "What will be transferred?" %}</h4>
+        <ul>
+            <li>{% trans "Registration data (ticket, quotas, additionals)" %}</li>
+            <li>{% trans "Registration form answers" %}</li>
+            <li>{% trans "Multiple choice selections" %}</li>
+            <li>{% trans "Character assignments (if compatible)" %}</li>
+            <li>{% trans "Accounting items (payment history will be reset)" %}</li>
+        </ul>
+    </div>
+{% endblock content %}

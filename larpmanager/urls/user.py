@@ -154,7 +154,7 @@ urlpatterns = [
         name="membership_request_test",
     ),
     path(
-        "public/<int:member_id>/",
+        "public/<slug:slug>/",
         views_um.public,
         name="public",
     ),
@@ -184,7 +184,7 @@ urlpatterns = [
         name="chats",
     ),
     path(
-        "chat/<int:member_id>/",
+        "chat/<slug:slug>/",
         views_um.chat,
         name="chat",
     ),

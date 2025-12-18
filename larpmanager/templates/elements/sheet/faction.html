@@ -20,7 +20,7 @@
                     {% if el.player_id > 0 %}
                         <div class="go-inline">
                             <p>
-                                <b>{% trans "Player" %}: </b> <a href="{% url 'public' el.player_id %}">
+                                <b>{% trans "Player" %}: </b> <a href="{% url 'public' el.player_uuid %}">
                                     {% if run.id in all_runs %}
                                         {{ el.player_full }}
                                     {% else %}

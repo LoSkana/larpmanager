@@ -40,7 +40,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import activate, get_language
 from django.utils.translation import gettext_lazy as _
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.cache.association_text import get_association_text
@@ -71,11 +71,11 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.core.base import get_context
-from larpmanager.utils.core.common import get_badge, get_channel, get_contact, get_member
+from larpmanager.utils.core.common import get_badge, get_channel, get_contact
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.users.member import get_leaderboard
+from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
 from larpmanager.utils.users.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
 
@@ -300,18 +300,22 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
 
     # Build full filesystem path and open image
     path = str(Path(conf_settings.MEDIA_ROOT) / path)
-    im = Image.open(path)
+    try:
+        im = Image.open(path)
 
-    # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
-    out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
+        # Rotate image based on direction parameter (90 degrees clockwise if 1, otherwise counterclockwise)
+        out = im.rotate(90) if rotation_angle == 1 else im.rotate(-90)
 
-    # Extract file extension and generate new unique filename
-    ext = path.split(".")[-1]
-    n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
+        # Extract file extension and generate new unique filename
+        ext = path.split(".")[-1]
+        n_path = f"{Path(path).parent}/{request.user.member.pk}_{uuid4().hex}.{ext}"
 
-    # Save rotated image and update member profile
-    out.save(n_path)
-    request.user.member.profile = n_path
+        # Save rotated image and update member profile
+        out.save(n_path)
+        request.user.member.profile = n_path
+    except (OSError, UnidentifiedImageError):
+        logger.exception("Failed to rotate profile image")
+        return JsonResponse({"res": "ko"})
     request.user.member.save()
 
     # Return success response with thumbnail URL
@@ -503,7 +507,7 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
+def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -512,18 +516,18 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
 
     Args:
         request: HTTP request object containing user and association context
-        member_id: Member ID to display profile for
+        slug: Member UUID slug to display profile for
 
     Returns:
         HttpResponse: Rendered public member profile page
 
     Raises:
-        Http404: If member has no membership in the current association
+        Http404: If member not found or has no membership in the current association
 
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
-    context["member_public"] = get_member(member_id)
+    context["member_public"] = get_member_uuid(slug)
 
     # Verify member has membership in current association
     if not Membership.objects.filter(
@@ -576,7 +580,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
         except ValidationError as e:
-            logger.debug("Social contact validation failed for member=%s: %s", member_id, e)
+            logger.debug("Social contact validation failed for member=%s: %s", slug, e)
 
     return render(request, "larpmanager/member/public.html", context)
 
@@ -601,7 +605,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request: HttpRequest, member_id: Any) -> Any:
+def chat(request: HttpRequest, slug: str) -> Any:
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions
@@ -609,6 +613,11 @@ def chat(request: HttpRequest, member_id: Any) -> Any:
     """
     context = get_context(request)
     check_association_feature(request, context, "chat")
+
+    # Get other user
+    context["member_public"] = get_member_uuid(slug)
+    member_id = context["member_public"].id
+
     my_member_id = context["member"].id
     if member_id == my_member_id:
         messages.success(request, _("You can't send messages to yourself") + "!")
