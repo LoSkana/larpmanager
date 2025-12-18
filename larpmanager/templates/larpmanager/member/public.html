@@ -23,7 +23,7 @@
             {% endif %}
             {% if 'chat' in association.features %}
                 <p>
-                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.id %}">Chat</a>
+                    <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.uuid %}">Chat</a>
                 </p>
             {% endif %}
             {% if member_public.pronoun %}

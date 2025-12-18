@@ -224,6 +224,6 @@ class Command(BaseCommand):
 
                 try:
                     cursor.execute(sql)
-                    self.stdout.write(self.style.SUCCESS(f"Reset sequence for {table_name}"))
+                    self.stdout.write(self.style.DEBUG(f"Reset sequence for {table_name}"))
                 except Exception as e:  # noqa: BLE001
                     self.stdout.write(self.style.WARNING(f"Could not reset sequence for {table_name}: {e}"))
