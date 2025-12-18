@@ -184,7 +184,7 @@ urlpatterns = [
         name="chats",
     ),
     path(
-        "chat/<int:member_id>/",
+        "chat/<slug:slug>/",
         views_um.chat,
         name="chat",
     ),

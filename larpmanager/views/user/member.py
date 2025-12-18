@@ -75,7 +75,7 @@ from larpmanager.utils.core.common import get_badge, get_channel, get_contact
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.users.member import get_leaderboard
+from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
 from larpmanager.utils.users.registration import registration_status
 from larpmanager.views.user.event import get_character_rels_dict, get_payment_invoices_dict, get_pre_registrations_dict
 
@@ -527,11 +527,7 @@ def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Com
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
-    try:
-        context["member_public"] = Member.objects.get(uuid=slug)
-    except Member.DoesNotExist as err:
-        msg = "member not found"
-        raise Http404(msg) from err
+    context["member_public"] = get_member_uuid(slug)
 
     # Verify member has membership in current association
     if not Membership.objects.filter(
@@ -609,7 +605,7 @@ def chats(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def chat(request: HttpRequest, member_id: Any) -> Any:
+def chat(request: HttpRequest, slug: str) -> Any:
     """Handle chat functionality between members.
 
     Manages message exchange, conversation history, and chat permissions
@@ -617,6 +613,11 @@ def chat(request: HttpRequest, member_id: Any) -> Any:
     """
     context = get_context(request)
     check_association_feature(request, context, "chat")
+
+    # Get other user
+    context["member_public"] = get_member_uuid(slug)
+    member_id = context["member_public"].id
+
     my_member_id = context["member"].id
     if member_id == my_member_id:
         messages.success(request, _("You can't send messages to yourself") + "!")
