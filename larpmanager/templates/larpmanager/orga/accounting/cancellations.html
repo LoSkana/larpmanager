@@ -14,13 +14,9 @@
         <thead>
             <tr>
                 <th>{% trans "Registration fee" %}</th>
-                {% if features.token_credit %}
-                    <th>{% trans "Payment" %} ({% trans "money" %})</th>
-                    <th>{% trans "Payment" %} ({{ token_name }})</th>
-                    <th>{% trans "Payment" %} ({{ credit_name }})</th>
-                {% else %}
-                    <th>{% trans "Payment" %}</th>
-                {% endif %}
+                <th>{% trans "Payment" %}</th>
+                {% if features.tokens %}<th>{{ tokens_name }}</th>{% endif %}
+                {% if features.credits %}<th>{{ credits_name }}</th>{% endif %}
                 <th>{% trans "Player" %}</th>
                 <th></th>
                 {% if features.info %}
@@ -28,11 +24,9 @@
                 {% endif %}
                 <th>{% trans "Days" %}</th>
                 <th>{% trans "Cancellation date" %}</th>
-                {% if features.token_credit %}
-                    <th>{% trans "Refund" %} ({{ token_name }})</th>
-                    <th>{% trans "Refund" %} ({{ credit_name }})</th>
-                    <th>{% trans "Refunded" %}</th>
-                {% endif %}
+                <th>{% trans "Refunded" %}</th>
+                {% if features.tokens %}<th>{{ tokens_name }}</th>{% endif %}
+                {% if features.credits %}<th>{{ credits_name }}</th>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -43,54 +37,40 @@
                         {% if el.tot_iscr %}{{ el.tot_iscr | floatformat:"0" }}{% endif %}
                     </td>
                     <td>
-                        {% if el.payments.a %}
-                            {{ el.payments.a | floatformat:"0" }}
-                        {% else %}
-                            0
-                        {% endif %}
+                        {% if el.payments.a %}{{ el.payments.a | floatformat:"0" }}{% endif %}
                     </td>
-                    {% if features.token_credit %}
+                    {% if features.tokens %}
                         <td>
-                            {% if el.payments.c %}
-                                {{ el.payments.c | floatformat:"0" }}
-                            {% else %}
-                                0
-                            {% endif %}
+                            {% if el.payments.c %}{{ el.payments.c | floatformat:"0" }}{% endif %}
                         </td>
+                    {% endif %}
+                    {% if features.credits %}
                         <td>
-                            {% if el.payments.b %}
-                                {{ el.payments.b | floatformat:"0" }}
-                            {% else %}
-                                0
-                            {% endif %}
+                            {% if el.payments.b %}{{ el.payments.b | floatformat:"0" }}{% endif %}
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{% url 'public' el.member.id %}">{{ el.member }}</a>
+                        <a href="{% url 'public' el.member_id %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.member.email }}</td>
                     {% if features.info %}<td>{{ el.info }}</td>{% endif %}
                     <td>{{ el.days }}</td>
                     <td>{{ el.cancellation_date }}</td>
-                    {% if features.token_credit %}
+                    <td>
+                        {% if el.refunded %}
+                            {% trans "Refunded" %}
+                        {% else %}
+                            <a href="{% url 'orga_cancellation_refund' run.get_slug el.id %}">{% trans "Approve reimbursement" %}</a>
+                        {% endif %}
+                    </td>
+                    {% if features.tokens %}
                         <td>
-                            {% if el.refunds.t %}
-                                {{ el.refunds.t | floatformat:"0" }}
-                            {% else %}
-                            {% endif %}
+                            {% if el.refunds.t %}{{ el.refunds.t | floatformat:"0" }}{% endif %}
                         </td>
+                    {% endif %}
+                    {% if features.credits %}
                         <td>
-                            {% if el.refunds.c %}
-                                {{ el.refunds.c | floatformat:"0" }}
-                            {% else %}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if el.refunded %}
-                                {% trans "Refunded" %}
-                            {% else %}
-                                <a href="{% url 'orga_cancellation_refund' run.get_slug el.id %}">{% trans "Approve reimbursement" %}</a>
-                            {% endif %}
+                            {% if el.refunds.c %}{{ el.refunds.c | floatformat:"0" }}{% endif %}
                         </td>
                     {% endif %}
                 </tr>

@@ -224,11 +224,9 @@
     gdpr_contract: ''
     review_done: false
     images_shared: false
-    key: bldCZ3JCa0lCOEZIQkc3SnRGX3owMFpqYTZyWko1ZzRZbXMxalRNNWE0Yz0=
     payment_methods: []
-    features: [191]
     skin: 1
-- model: larpmanager.assocrole
+- model: larpmanager.associationrole
   pk: 1
   fields:
     deleted: null
@@ -236,7 +234,7 @@
     created: 2025-03-19 09:06:22.925963
     updated: 2025-03-19 09:06:22.963000
     name: Admin
-    assoc: 1
+    association: 1
     number: 1
     members:
     - 2
@@ -249,7 +247,7 @@
     created: 2025-03-19 09:06:22.978214
     updated: 2025-03-19 09:06:22.986056
     member: 4
-    assoc: 1
+    association: 1
     compiled: false
     credit: '0.00'
     tokens: '0.00'
@@ -268,7 +266,7 @@
     created: 2025-03-19 10:31:08.853446
     updated: 2025-03-19 10:31:08.854170
     member: 2
-    assoc: 1
+    association: 1
     compiled: false
     credit: '0.00'
     tokens: '0.00'
@@ -287,7 +285,7 @@
     created: 2025-03-19 09:06:22.978214
     updated: 2025-03-19 09:06:22.986056
     member: 3
-    assoc: 1
+    association: 1
     compiled: false
     credit: '0.00'
     tokens: '0.00'
@@ -306,7 +304,7 @@
     created: 2025-03-19 10:31:27.508716
     updated: 2025-03-19 10:31:27.523681
     slug: test
-    assoc: 1
+    association: 1
     name: Test Larp
     tagline: null
     where: null

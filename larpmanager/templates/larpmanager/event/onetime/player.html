@@ -1,0 +1,121 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{{ content.name }}">
+        <meta name="keywords" content="">
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        <meta http-equiv="Cache-Control"
+              content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <title>{{ content.name }}</title>
+        <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}">
+    </head>
+    <body class="onetime-body">
+        <div class="onetime-container">
+            <div class="onetime-header">
+                <h1>{{ content.name }}</h1>
+                {% if content.description %}<p>{{ content.description }}</p>{% endif %}
+            </div>
+            <div class="onetime-player-wrapper">
+                {% if content.content_type|slice:":5" == "video" %}
+                    <video controls
+                           preload="auto"
+                           controlsList="nodownload"
+                           playsinline
+                           crossorigin="anonymous"
+                           class="onetime_video">
+                        <source src="{% url 'onetime_stream' token=token %}"
+                                type="{{ content.content_type }}">
+                        Your browser does not support the video tag.
+                    </video>
+                {% elif content.content_type|slice:":5" == "audio" %}
+                    <audio controls preload="metadata" controlsList="nodownload">
+                        <source src="{% url 'onetime_stream' token=token %}"
+                                type="{{ content.content_type }}">
+                        Your browser does not support the audio tag.
+                    </audio>
+                {% else %}
+                    <p class="onetime-unsupported">Media type not supported for streaming.</p>
+                {% endif %}
+            </div>
+            <div class="onetime-warning">
+                <h3>⚠️ One-Time Access Notice</h3>
+                <p>
+                    This is a one-time access link. The access token has been consumed and cannot be used again.
+                    If you close this page, you will not be able to access this content again with the same link.
+                    Please watch/listen to the content now or contact the organizers for a new access link.
+                </p>
+            </div>
+            <div class="onetime-info">
+                <p>This content is protected and cannot be downloaded or recorded.</p>
+            </div>
+        </div>
+        <script>
+        // Disable right-click context menu on media elements
+        document.querySelectorAll('video, audio').forEach(function(media) {
+            media.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            // Prevent download attribute bypass
+            media.addEventListener('loadedmetadata', function() {
+                media.removeAttribute('download');
+                console.log('Video metadata loaded:', {
+                    duration: media.duration,
+                    videoWidth: media.videoWidth,
+                    videoHeight: media.videoHeight,
+                    readyState: media.readyState
+                });
+            });
+
+            // Add error handling
+            media.addEventListener('error', function(e) {
+                console.error('Video error:', e.target.error);
+                const errorDiv = document.createElement('div');
+                errorDiv.innerHTML = '<p style="color: red;">Video loading error: ' +
+                                    (e.target.error ? e.target.error.message : 'Unknown error') + '</p>';
+                media.parentNode.appendChild(errorDiv);
+            });
+
+            // Add load progress tracking
+            media.addEventListener('loadstart', function() {
+                console.log('Video loading started');
+            });
+
+            media.addEventListener('canplay', function() {
+                console.log('Video can start playing');
+            });
+
+            media.addEventListener('canplaythrough', function() {
+                console.log('Video can play through without buffering');
+            });
+        });
+
+        // Warn before leaving page
+        let hasPlayed = false;
+        document.querySelectorAll('video, audio').forEach(function(media) {
+            media.addEventListener('play', function() {
+                hasPlayed = true;
+            });
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (hasPlayed) {
+                const message = 'Are you sure you want to leave? This is a one-time access link.';
+                e.returnValue = message;
+                return message;
+            }
+        });
+
+        // Disable caching
+        if (window.performance && window.performance.navigation.type === 2) {
+            window.location.reload();
+        }
+        </script>
+    </body>
+</html>

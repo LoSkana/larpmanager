@@ -1,0 +1,37 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Translations" %} - {% trans "Organization" %}
+{% endblock title %}
+{% block info %}
+    {% trans "This page summarizes the organization's custom translations" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/header/edit.html" %}
+    <table id="text" class="go_datatable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Language" %}</th>
+                <th>{% trans "Original" %}</th>
+                <th>{% trans "Translation" %}</th>
+                <th>{% trans "Active" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.id }}">
+                    <td>
+                        <a href="{% url 'exe_texts_edit' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.language }}</td>
+                    <td>{{ el.msgid }}</td>
+                    <td>{{ el.msgstr }}</td>
+                    <td>
+                        {% if el.active %}<i class="fa-solid fa-check"></i>{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

@@ -18,39 +18,47 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Pytest configuration and fixtures for LarpManager test suite."""
+
 import logging
 import os
 import subprocess
+from collections.abc import Generator, Mapping
+from pathlib import Path
+from typing import Any
 
 import pytest
 from django.conf import settings
 from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection
+from django.test.utils import ContextList
+from playwright.sync_api import BrowserContext, BrowserType, Page, Response
+from pytest_django.fixtures import SettingsWrapper
+
+from larpmanager.models.access import AssociationRole
+from larpmanager.models.association import Association, AssociationSkin
 
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
 logging.getLogger("faker.providers").setLevel(logging.ERROR)
 
+# Track database initialization state per worker
+_DB_INITIALIZED = {}
+
 
 @pytest.fixture(autouse=True, scope="session")
-def _env_for_tests():
+def _env_for_tests() -> None:
     os.environ.setdefault("PYTHONHASHSEED", "0")
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 
 @pytest.fixture(autouse=True)
-def _fast_password_hashers(settings):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
-
-
-@pytest.fixture(autouse=True)
-def _email_backend(settings):
+def _email_backend(settings: SettingsWrapper) -> None:
     settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 
 @pytest.fixture(autouse=True)
-def _cache_isolation(settings):
+def _cache_isolation(settings: SettingsWrapper) -> None:
     settings.CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -61,14 +69,12 @@ def _cache_isolation(settings):
 
 
 @pytest.fixture
-def reset_sequences(request):
-    marker = request.node.get_closest_marker("django_db_reset_sequences")
-    if marker:
-        pass
-
-
-@pytest.fixture
-def pw_page(pytestconfig, browser_type, live_server):
+def pw_page(
+    pytestconfig: pytest.Config,
+    browser_type: BrowserType,
+    live_server: ContextList,
+) -> Generator[tuple[Page, str, BrowserContext], None, None]:
+    """Prepares browser, context and finally page, for playwright tests."""
     headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
 
     browser = browser_type.launch(headless=not headed, slow_mo=50)
@@ -82,10 +88,11 @@ def pw_page(pytestconfig, browser_type, live_server):
 
     page.on("dialog", lambda dialog: dialog.accept())
 
-    def on_response(response):
+    def on_response(response: Response) -> None:
         error_status = 500
         if response.status == error_status:
-            raise AssertionError(f"HTTP 500 su {response.url}")
+            msg = f"HTTP 500 su {response.url}"
+            raise AssertionError(msg)
 
     page.on("response", on_response)
 
@@ -95,7 +102,7 @@ def pw_page(pytestconfig, browser_type, live_server):
     browser.close()
 
 
-def _truncate_app_tables():
+def _truncate_app_tables() -> None:
     with connection.cursor() as cur:
         cur.execute(r"""
         DO $$
@@ -117,41 +124,13 @@ def _truncate_app_tables():
         END$$;""")
 
 
-@pytest.fixture(autouse=True, scope="function")
-def _db_teardown_between_tests(django_db_blocker):
-    yield
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        with django_db_blocker.unblock():
-            _truncate_app_tables()
+def psql(params: list[str], env: Mapping[str, str]) -> None:
+    """Performs a query on the db."""
+    subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)  # noqa: S603
 
 
-@pytest.fixture(autouse=True)
-def load_fixtures(django_db_blocker):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        with django_db_blocker.unblock():
-            call_command("init_db", verbosity=0)
-
-
-def psql(params, env):
-    subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)
-
-
-def pytest_sessionstart(session):
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        return
-
-    env = os.environ.copy()
-    env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
-    name = settings.DATABASES["default"]["NAME"]
-    host = settings.DATABASES["default"].get("HOST") or "localhost"
-    user = settings.DATABASES["default"]["USER"]
-
-    clean_db(host, env, name, user)
-    sql_path = os.path.join(os.path.dirname(__file__), "larpmanager", "tests", "test_db.sql")
-    psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", sql_path], env)
-
-
-def clean_db(host, env, name, user):
+def clean_db(host: str, env: Mapping[str, str], name: str, user: str) -> None:
+    """Drop the schema and recreate it."""
     psql(
         [
             "psql",
@@ -171,10 +150,66 @@ def clean_db(host, env, name, user):
     )
 
 
-@pytest.fixture(scope="session")
-def django_db_setup():
-    # normal behaviour in CI
-    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
-        return
-    # don't touch the db in local
-    pass
+def _database_has_tables() -> bool:
+    """Check if database has any application tables."""
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname = 'public'
+              AND c.relkind = 'r'
+              AND c.relname NOT LIKE 'django_%'
+        """)
+        count = cursor.fetchone()[0]
+        return count > 0
+
+
+def _load_test_db_sql() -> None:
+    """Load test database from SQL file."""
+    env = os.environ.copy()
+    env["PGPASSWORD"] = settings.DATABASES["default"]["PASSWORD"]
+    name = settings.DATABASES["default"]["NAME"]
+    host = settings.DATABASES["default"].get("HOST") or "localhost"
+    user = settings.DATABASES["default"]["USER"]
+
+    sql_path = Path(__file__).parent / "larpmanager" / "tests" / "test_db.sql"
+
+    if not sql_path.exists():
+        msg = f"Test database SQL file not found: {sql_path}"
+        raise FileNotFoundError(msg)
+
+    # Clean the database first
+    clean_db(host, env, name, user)
+
+    # Load the SQL dump
+    psql(["psql", "-v", "ON_ERROR_STOP=1", "-U", user, "-h", host, "-d", name, "-f", str(sql_path)], env)
+
+
+def _reload_fixtures() -> None:
+    _truncate_app_tables()
+    call_command("init_db")
+
+
+@pytest.fixture(autouse=True)
+def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: Any) -> None:
+    """Set up database for e2e tests with single database per worker."""
+    with django_db_blocker.unblock():
+        if not _database_has_tables():
+            # No tables - load from SQL dump
+            _load_test_db_sql()
+        elif "playwright" in str(request.node.fspath):
+            # Tables exist - truncate and init
+            _reload_fixtures()
+
+
+@pytest.fixture(autouse=True)
+def _ensure_association_skin(db: Any) -> None:  # noqa: ARG001
+    """Ensure default AssociationSkin and AssociationRole exist for tests."""
+    if not AssociationSkin.objects.filter(pk=1).exists():
+        AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
+
+    # Ensure AssociationRole with number=1 exists for all associations
+    for association in Association.objects.all():
+        if not AssociationRole.objects.filter(association=association, number=1).exists():
+            AssociationRole.objects.create(association=association, number=1, name="Executive")

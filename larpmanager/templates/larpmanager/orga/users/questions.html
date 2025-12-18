@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th>{% trans "Date" %}</th>
-                <th>{% trans "Member" %}</th>
+                <th>{% trans "Participant" %}</th>
                 <th>{% trans "Question" %}</th>
                 <th></th>
                 <th></th>
@@ -48,7 +48,7 @@
             <thead>
                 <tr>
                     <th>{% trans "Date" %}</th>
-                    <th>{% trans "Member" %}</th>
+                    <th>{% trans "Participant" %}</th>
                     <th>{% trans "Question" %}</th>
                     <th></th>
                 </tr>
@@ -60,7 +60,7 @@
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
                         <td>
-                            <a href="{% url 'orga_questions_answer' run.get_slug el.member.id %}">{% trans "Answer" %}</a>
+                            <a href="{% url 'orga_questions_answer' run.get_slug el.member_id %}">{% trans "Answer" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

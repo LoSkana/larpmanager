@@ -20,10 +20,10 @@
 
 from django.urls import path
 
-from larpmanager.utils import edit as views_ed
+from larpmanager.utils.services import edit as views_ed
 from larpmanager.views import manage as views_mg
 from larpmanager.views.exe import accounting as views_ea
-from larpmanager.views.exe import assoc as views_eas
+from larpmanager.views.exe import association as views_eas
 from larpmanager.views.exe import event as views_ee
 from larpmanager.views.exe import member as views_em
 from larpmanager.views.exe import miscellanea as views_ems
@@ -33,6 +33,11 @@ urlpatterns = [
         "manage/",
         views_mg.manage,
         name="manage",
+    ),
+    path(
+        "manage/cache/",
+        views_eas.exe_reload_cache,
+        name="exe_reload_cache",
     ),
     path(
         "manage/quick/",
@@ -115,7 +120,7 @@ urlpatterns = [
         name="exe_archive_email",
     ),
     path(
-        "manage/mail/read/<int:nm>",
+        "manage/mail/read/<int:mail_id>",
         views_em.exe_read_mail,
         name="exe_read_mail",
     ),
@@ -125,12 +130,12 @@ urlpatterns = [
         name="exe_questions",
     ),
     path(
-        "manage/questions/<int:r>/answer/",
+        "manage/questions/<int:member_id>/answer/",
         views_em.exe_questions_answer,
         name="exe_questions_answer",
     ),
     path(
-        "manage/questions/<int:r>/close/",
+        "manage/questions/<int:member_id>/close/",
         views_em.exe_questions_close,
         name="exe_questions_close",
     ),
@@ -185,6 +190,16 @@ urlpatterns = [
         name="exe_texts_edit",
     ),
     path(
+        "manage/translations/",
+        views_eas.exe_translations,
+        name="exe_translations",
+    ),
+    path(
+        "manage/translations/edit/<int:num>/",
+        views_eas.exe_translations_edit,
+        name="exe_translations_edit",
+    ),
+    path(
         "manage/roles/",
         views_eas.exe_roles,
         name="exe_roles",
@@ -215,12 +230,12 @@ urlpatterns = [
         name="exe_features",
     ),
     path(
-        "manage/features/<int:num>/on/",
+        "manage/features/<slug:slug>/on/",
         views_eas.exe_features_on,
         name="exe_features_on",
     ),
     path(
-        "manage/features/<int:num>/off/",
+        "manage/features/<slug:slug>/off/",
         views_eas.exe_features_off,
         name="exe_features_off",
     ),
@@ -310,6 +325,16 @@ urlpatterns = [
         name="exe_member",
     ),
     path(
+        "manage/membership/<int:num>/accounting/",
+        views_em.exe_member_accounting,
+        name="exe_member_accounting",
+    ),
+    path(
+        "manage/membership/<int:num>/registrations/",
+        views_em.exe_member_registrations,
+        name="exe_member_registrations",
+    ),
+    path(
         "manage/membership/evaluation/<int:num>/",
         views_em.exe_membership_evaluation,
         name="exe_membership_evaluation",
@@ -360,7 +385,7 @@ urlpatterns = [
         name="exe_templates_config",
     ),
     path(
-        "manage/template/roles/<int:eid>/<int:num>/",
+        "manage/template/roles/<int:event_id>/<int:num>/",
         views_ee.exe_templates_roles,
         name="exe_templates_roles",
     ),
@@ -493,5 +518,10 @@ urlpatterns = [
         "manage/working_ticket/",
         views_ed.working_ticket,
         name="working_ticket",
+    ),
+    path(
+        "manage/ticket/analyze/<int:ticket_id>/",
+        views_ems.exe_ticket_analyze,
+        name="exe_ticket_analyze",
     ),
 ]

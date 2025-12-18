@@ -17,78 +17,110 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.role import has_assoc_permission, has_event_permission
 from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.utils.exceptions import (
+from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
+from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.exceptions import (
     FeatureError,
     HiddenError,
     MainPageError,
     MembershipError,
     NotFoundError,
-    PermissionError,
     RedirectError,
     ReturnNowError,
+    RewokedMembershipError,
     SignupError,
     UnknowRunError,
+    UserPermissionError,
     WaitingError,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class ExceptionHandlingMiddleware:
     """Handle permission / missing feature instead of raising a 404."""
 
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with Django's get_response callable."""
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        """Process request through middleware chain."""
         return self.get_response(request)
 
-    def process_exception(self, request, exception):
-        """Django middleware exception handler.
+    def process_exception(self, request: HttpRequest, exception: Exception) -> HttpResponse | None:
+        """Process Django middleware exceptions and route to appropriate handlers.
 
-        Routes different exception types to appropriate error pages and handles
-        permission, not found, and other application-specific errors.
+        Args:
+            request: The HTTP request object that triggered the exception
+            exception: The exception instance that was raised
+
+        Returns:
+            HttpResponse object for handled exceptions, None for unhandled exceptions
+
+        Note:
+            This method handles application-specific exceptions by routing them to
+            appropriate error pages or redirect responses. Unhandled exceptions
+            return None to allow Django's default exception handling.
+
         """
+        # Define exception type to handler mappings for clean separation of concerns
         handlers = [
-            (PermissionError, lambda ex: render(request, "exception/permission.html")),
-            (NotFoundError, lambda ex: render(request, "exception/notfound.html")),
+            # Permission-related errors - show appropriate error pages
+            (UserPermissionError, lambda _ex: render(request, "exception/permission.html")),
+            (NotFoundError, lambda _ex: render(request, "exception/notfound.html")),
             (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
+            # Run-related errors - show available runs for the current association
             (
                 UnknowRunError,
-                lambda ex: render(
+                lambda _ex: render(
                     request,
                     "exception/runs.html",
                     {
                         "runs": Run.objects.filter(development=DevelopStatus.SHOW)
                         .exclude(event__visible=False)
                         .select_related("event")
-                        .filter(event__assoc_id=request.assoc["id"])
-                        .order_by("-end")
+                        .filter(event__association_id=request.association["id"])
+                        .order_by("-end"),
                     },
                 ),
             ),
+            # Feature and access control errors - delegate to specialized handlers
             (FeatureError, lambda ex: self._handle_feature_error(request, ex)),
+            # Registration and signup flow errors - redirect with informative messages
             (
                 SignupError,
                 lambda ex: self._redirect_with_message(
-                    request, _("To access this feature, you must first register!"), "register", [ex.slug]
+                    request,
+                    _("To access this feature, you must first register") + "!",
+                    "register",
+                    [ex.slug],
                 ),
             ),
             (
                 WaitingError,
                 lambda ex: self._redirect_with_message(
-                    request, _("This feature is available for non-waiting tickets!"), "register", [ex.slug]
+                    request,
+                    _("This feature is available for non-waiting tickets") + "!",
+                    "register",
+                    [ex.slug],
                 ),
             ),
+            # Content visibility and access errors
             (
                 HiddenError,
                 lambda ex: self._redirect_with_message(
@@ -96,47 +128,91 @@ class ExceptionHandlingMiddleware:
                     ex.name + " " + _("not visible at this time"),
                     "gallery",
                     [ex.slug],
-                    level="warning",
                 ),
             ),
+            # Flow control exceptions - handle redirects and early returns
             (RedirectError, lambda ex: redirect(ex.view)),
-            (MainPageError, lambda ex: redirect("/")),
             (ReturnNowError, lambda ex: ex.value),
+            # Domain and membership management errors
+            (
+                MainPageError,
+                lambda ex: redirect(f"https://{ex.base_domain}/{ex.path or request.path}"),
+            ),
+            (
+                RewokedMembershipError,
+                lambda _ex: self._redirect_with_message(request, _("You're not allowed to sign up") + "!", "home", []),
+            ),
         ]
 
+        # Iterate through handlers and process the first matching exception type
         for exc_type, handler in handlers:
             if isinstance(exception, exc_type):
                 return handler(exception)
 
+        # Return None for unhandled exceptions to use Django's default handling
         return None
 
     @staticmethod
-    def _redirect_with_message(request, message, viewname, args, level="success"):
-        getattr(messages, level)(request, message)
-        return redirect(reverse(viewname, args=args))
+    def _redirect_with_message(
+        request: HttpRequest,
+        message_text: str,
+        view_name: str,
+        view_args: list,
+        message_level: str = "success",
+    ) -> HttpResponseRedirect:
+        """Add a message to the request and redirect to a named view."""
+        getattr(messages, message_level)(request, message_text)
+        return redirect(reverse(view_name, args=view_args))
 
     @staticmethod
-    def _handle_feature_error(request, ex):
-        # error is association skin is managed
-        if request.assoc["skin_managed"]:
-            raise Http404("not allowed")
+    def _handle_feature_error(request: HttpRequest, exception: FeatureError) -> HttpResponse:
+        """Handle feature access errors by rendering appropriate error page.
 
+        This function processes FeatureError exceptions by determining the appropriate
+        error response based on association settings and feature permissions.
+
+        Args:
+            request: The HTTP request object containing user and association context
+            exception: FeatureError exception containing feature slug and run ID information
+
+        Returns:
+            HttpResponse: Rendered feature error template with context data
+
+        Raises:
+            Http404: If association skin is managed, or if feature/run objects are not found
+
+        """
+        # Check if association skin is managed - if so, deny access completely
+        context = get_context(request)
+        if context["skin_managed"]:
+            msg = "not allowed"
+            raise Http404(msg)
+
+        # Retrieve the feature object or raise 404 if not found
         try:
-            feature = Feature.objects.get(slug=ex.feature)
-        except ObjectDoesNotExist as err:
-            raise Http404("Feature not found") from err
+            feature = Feature.objects.get(slug=exception.feature)
+        except ObjectDoesNotExist as error:
+            msg = "Feature not found"
+            raise Http404(msg) from error
 
-        ctx = {"exe": ex, "feature": feature}
+        # Build base context with exception and feature data
+        context.update({"exe": exception, "feature": feature})
 
+        # Handle permission checking based on feature scope
         if feature.overall:
-            ctx["permission"] = has_assoc_permission(request, {}, "exe_features")
+            # For organization-wide features, check association permissions
+            context["permission"] = has_association_permission(request, context, "exe_features")
         else:
+            # For event-specific features, retrieve run and check event permissions
             try:
-                run = Run.objects.get(pk=ex.run)
-            except ObjectDoesNotExist as err:
-                raise Http404("Run not found") from err
+                run = Run.objects.get(pk=exception.run)
+            except ObjectDoesNotExist as error:
+                msg = "Run not found"
+                raise Http404(msg) from error
 
-            ctx["run"] = run
-            ctx["permission"] = has_event_permission(request, {}, run.event.slug, "orga_features")
+            # Add run context and check event-level permissions
+            context["run"] = run
+            context["permission"] = has_event_permission(request, context, run.event.slug, "orga_features")
 
-        return render(request, "exception/feature.html", ctx)
+        # Render the feature error template with assembled context
+        return render(request, "exception/feature.html", context)

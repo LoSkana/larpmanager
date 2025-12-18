@@ -4,7 +4,7 @@
     {% trans "New refund request" %} - {{ run }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page allows you to upload a new personal expense item" %}
+    {% trans "Manage personal expense submission" %}
 {% endblock info %}
 {% block content %}
     <form action="{{ request.path }}"
@@ -28,7 +28,7 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('form').on('submit', function() {
-        return confirm('{% trans "Are you really sure" %}?');
+        return confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
     });
 });
 });

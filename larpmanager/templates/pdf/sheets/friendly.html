@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Profiles</title>
+        <title>{{ sheet_char.name }}</title>
         <meta charset="utf-8">
         <meta name="keywords" content="none">
         <meta name="description" content="none">
@@ -12,20 +12,22 @@
                 src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
             }
 
+            @page {
+                size: A4;
+                margin-top: 0.5cm;
+                margin-right: 0.5cm;
+                margin-bottom: 0.5cm;
+                margin-left: 0.5cm;
+            }
+
             html {
                 font-family: easyreading;
-                height: 100%;
                 line-height: 1.3;
             }
 
-            p {
+           p {
                 margin: 0.3em;
                 padding: 0;
-            }
-
-            body {
-                background: white;
-                height: 100%;
             }
 
             h1 {
@@ -39,7 +41,7 @@
                 margin-bottom: 1em;
             }
 
-            a {
+    a {
                 color: inherit;
                 font-weight: bold;
                 text-decoration: none;
@@ -63,7 +65,7 @@
             }
 
             table {
-                width: 100%;
+                width: 540pt;
             }
 
             td,
@@ -84,13 +86,15 @@
             .show_char {
                 display: none;
             }
+
+
         </style>
         <style>{{ event.sheet_css | safe }}</style>
     </head>
     <body>
         <div>
             <div class="intro"></div>
-            <div class="head">{{ event.assoc }} - {{ event }}</div>
+            <div class="head">{{ event.association }} - {{ event }}</div>
             <br />
             {% include "elements/sheet/main.html" %}
             {% include "elements/sheet/plots.html" %}

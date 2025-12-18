@@ -17,6 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+from typing import Any, ClassVar
 
 from babel.numbers import get_currency_symbol
 from colorfield.fields import ColorField
@@ -31,16 +34,20 @@ from tinymce.models import HTMLField
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
 from larpmanager.models.utils import UploadToPathAndRename
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.validators import FileTypeValidator
 
 
 class MemberFieldType(models.TextChoices):
+    """Represents MemberFieldType model."""
+
     ABSENT = "a", _("Absent")
     OPTIONAL = "o", _("Optional")
     MANDATORY = "m", _("Mandatory")
 
 
 class Currency(models.TextChoices):
+    """Represents Currency model."""
+
     EUR = "e", "EUR"
     USD = "u", "USD"
     GBP = "g", "GBP"
@@ -49,11 +56,15 @@ class Currency(models.TextChoices):
 
 
 class AssociationPlan(models.TextChoices):
+    """Represents AssociationPlan model."""
+
     FREE = "f", _("Free")
     SUPPORT = "p", _("Support")
 
 
 class AssociationSkin(BaseModel):
+    """Represents AssociationSkin model."""
+
     name = models.CharField(max_length=100)
 
     domain = models.CharField(max_length=100)
@@ -77,6 +88,8 @@ class AssociationSkin(BaseModel):
 
 
 class Association(BaseModel):
+    """Represents Association model."""
+
     skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, default=1)
 
     name = models.CharField(max_length=100, help_text=_("Complete name of the Organization"))
@@ -163,7 +176,7 @@ class Association(BaseModel):
 
     background = models.ImageField(
         max_length=500,
-        upload_to="assoc_background/",
+        upload_to="association_background/",
         verbose_name=_("Background image"),
         blank=True,
         help_text=_("Background of web pages"),
@@ -177,15 +190,23 @@ class Association(BaseModel):
     )
 
     font = models.FileField(
-        upload_to=UploadToPathAndRename("assoc_font/"),
+        upload_to=UploadToPathAndRename("association_font/"),
         verbose_name=_("Title font"),
         help_text=_("Font to be used in page titles"),
         blank=True,
         null=True,
         validators=[
             FileTypeValidator(
-                ["font/ttf", "font/otf", "application/font-woff", "application/font-woff2", "font/woff", "font/woff2"]
-            )
+                [
+                    "font/ttf",
+                    "font/otf",
+                    "application/font-woff",
+                    "application/font-woff2",
+                    "font/woff",
+                    "font/woff2",
+                    "font/sfnt",
+                ],
+            ),
         ],
     )
 
@@ -243,8 +264,16 @@ class Association(BaseModel):
 
     demo = models.BooleanField(default=False)
 
+    maintainers = models.ManyToManyField(
+        "larpmanager.Member",
+        related_name="maintained_associations",
+        blank=True,
+        verbose_name=_("Maintainers"),
+        help_text=_("Users who can manage support tickets and receive ticket notifications"),
+    )
+
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_association_with_optional"),
             UniqueConstraint(
                 fields=["slug"],
@@ -253,49 +282,59 @@ class Association(BaseModel):
             ),
         ]
 
-    def get_currency_symbol(self):
+    def get_currency_symbol(self) -> str:
+        """Return the currency symbol for the payment currency."""
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this association."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
-    def promoter_dict(self):
-        res = {"slug": self.slug, "name": self.name}
+    def promoter_dict(self) -> dict[str, str]:
+        """Return a dictionary with promoter information including slug, name, and optional thumbnail URL."""
+        promoter_data = {"slug": self.slug, "name": self.name}
+
+        # Add thumbnail URL if available
         if self.promoter_thumb:
             # noinspection PyUnresolvedReferences
-            res["promoter_url"] = self.promoter_thumb.url
-        return res
+            promoter_data["promoter_url"] = self.promoter_thumb.url
+        return promoter_data
 
 
 class AssociationConfig(BaseModel):
+    """Django app configuration for Association."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
-        return f"{self.assoc} {self.name}"
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.association} {self.name}"
 
     class Meta:
-        indexes = [
-            models.Index(fields=["assoc", "name"]),
+        indexes: ClassVar[list] = [
+            models.Index(fields=["association", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["assoc", "name", "deleted"],
-                name="unique_assoc_config_with_optional",
+                fields=["association", "name", "deleted"],
+                name="unique_association_config_with_optional",
             ),
             UniqueConstraint(
-                fields=["assoc", "name"],
+                fields=["association", "name"],
                 condition=Q(deleted=None),
-                name="unique_assoc_config_without_optional",
+                name="unique_association_config_without_optional",
             ),
         ]
 
 
-class AssocTextType(models.TextChoices):
+class AssociationTextType(models.TextChoices):
+    """Represents AssociationTextType model."""
+
     PROFILE = "p", _("Profile")
     HOME = "h", _("Home")
     SIGNUP = "u", _("Registration mail")
@@ -314,13 +353,18 @@ class AssocTextType(models.TextChoices):
     REMINDER_PROFILE = "rr", _("Reminder profile")
 
 
-class AssocText(BaseModel):
+class AssociationText(BaseModel):
+    """Represents AssociationText model."""
+
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
 
     typ = models.CharField(
-        max_length=2, choices=AssocTextType.choices, verbose_name=_("Type"), help_text=_("Type of text")
+        max_length=2,
+        choices=AssociationTextType.choices,
+        verbose_name=_("Type"),
+        help_text=_("Type of text"),
     )
 
     language = models.CharField(
@@ -334,44 +378,184 @@ class AssocText(BaseModel):
 
     default = models.BooleanField(default=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="texts")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="texts")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining type and language displays."""
         # noinspection PyUnresolvedReferences
         return f"{self.get_typ_display()} {self.get_language_display()}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["assoc", "typ", "language", "deleted"],
-                name="unique_assoc_text_with_optional",
+                fields=["association", "typ", "language", "deleted"],
+                name="unique_association_text_with_optional",
             ),
             UniqueConstraint(
-                fields=["assoc", "typ", "language"],
+                fields=["association", "typ", "language"],
                 condition=Q(deleted=None),
-                name="nique_assoc_text_without_optional",
+                name="nique_association_text_without_optional",
             ),
         ]
 
 
-def hdr(obj):
-    if isinstance(obj, Association):
-        return f"[{obj.name}] "
-    if obj.assoc:
-        return f"[{obj.assoc.name}] "
-    else:
-        return "[LarpManager] "
+class AssociationTranslation(BaseModel):
+    """Per-organization custom translation overrides for Django i18n strings.
+
+    This model enables multi-tenant translation customization, allowing each
+    association/organization to override specific Django translation strings
+    without modifying the global .po files. These custom translations are
+    injected at request time via the AssociationTranslationMiddleware.
+
+    The model follows the gettext convention:
+    - msgid: The original English text that appears in the code
+    - msgstr: The custom translation for this organization
+    - context: Optional msgctxt for disambiguating identical strings
+
+    Use cases:
+    - Organizations wanting different terminology (e.g., "Character" vs "Hero")
+    - Regional variations within the same language
+    - Brand-specific vocabulary customization
+
+    The active flag allows temporarily disabling translations without deletion,
+    and the unique constraints ensure no duplicate translations exist for the
+    same msgid/context/language combination within an association.
+    """
+
+    number = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name=_("Number"),
+        help_text=_("Optional ordering number"),
+    )
+
+    association = models.ForeignKey(
+        Association,
+        on_delete=models.CASCADE,
+        related_name="custom_translations",
+        verbose_name=_("Association"),
+        help_text=_("The organization this translation belongs to"),
+    )
+
+    language = models.CharField(
+        max_length=3,
+        choices=conf_settings.LANGUAGES,
+        verbose_name=_("Language"),
+        help_text=_("ISO language code (e.g., 'en', 'it', 'de')"),
+    )
+
+    msgid = models.TextField(
+        verbose_name=_("Original text"),
+        help_text=_("The original English text as it appears in the code (msgid in gettext)"),
+        db_index=True,
+    )
+
+    msgstr = models.TextField(
+        verbose_name=_("Translated text"),
+        help_text=_("The custom translation that will replace the default for this organization"),
+    )
+
+    context = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name=_("Context"),
+        help_text=_("Optional context for disambiguation when the same text has different meanings (msgctxt)"),
+    )
+
+    active = models.BooleanField(
+        default=True,
+        verbose_name=_("Active"),
+        help_text=_("Whether this translation override is currently active. Inactive translations are ignored."),
+    )
+
+    def __str__(self) -> str:
+        """Return a human-readable string representation of the translation.
+
+        Returns:
+            A formatted string showing association, language, and truncated original text
+
+        """
+        return f"{self.association.name} - {self.get_language_display()}: {self.msgid[:50]}"
+
+    class Meta:
+        constraints: ClassVar[list] = [
+            # Ensure unique translations including soft-deleted records
+            UniqueConstraint(
+                fields=["association", "language", "msgid", "context", "deleted"],
+                name="unique_assoc_translation_with_deleted",
+            ),
+            # Ensure unique translations for active records only
+            UniqueConstraint(
+                fields=["association", "language", "msgid", "context"],
+                condition=Q(deleted=None),
+                name="unique_assoc_translation_without_deleted",
+            ),
+        ]
+        indexes: ClassVar[list] = [
+            # Composite index for fast translation lookups
+            models.Index(fields=["association", "language", "msgid"]),
+            # Index for filtering active/inactive translations
+            models.Index(fields=["active"]),
+        ]
+        verbose_name = _("Association Translation")
+        verbose_name_plural = _("Association Translations")
 
 
-def get_url(s, obj=None):
+def hdr(association_or_related_object: Association | Any) -> str:
+    """Return a formatted header string with the association name in brackets."""
+    # Check if object is an Association instance directly
+    if isinstance(association_or_related_object, Association):
+        return f"[{association_or_related_object.name}] "
+    # Check if object has an associated Association via association attribute
+    if association_or_related_object.association:
+        return f"[{association_or_related_object.association.name}] "
+    return "[LarpManager] "
+
+
+def get_association_maintainers(association: Association) -> Any:
+    """Get all maintainers for an association.
+
+    Args:
+        association: Association instance
+
+    Returns:
+        QuerySet of Member instances who are maintainers for this association
+
+    """
+    return association.maintainers.all()
+
+
+def get_url(path: str, obj: object = None) -> str:
+    """Generate a URL for the given path and object.
+
+    Constructs URLs based on the type of object provided. For Association objects,
+    uses the association's slug and domain. For objects with an 'association' attribute,
+    uses the associated organization's slug and domain. Falls back to default
+    larpmanager.com domain when no object is provided.
+
+    Args:
+        path: The path/route to append to the base URL
+        obj: Optional object to determine the base URL. Can be Association,
+             an object with 'association' attribute, or a string slug
+
+    Returns:
+        Complete URL string with proper protocol formatting
+
+    """
     if obj:
+        # Handle Association objects directly
         if isinstance(obj, Association):
-            url = f"https://{obj.slug}.{obj.skin.domain}/{s}"
-        elif hasattr(obj, "assoc"):
-            url = f"https://{obj.assoc.slug}.{obj.assoc.skin.domain}/{s}"
+            url = f"https://{obj.slug}.{obj.skin.domain}/{path}"
+        # Handle objects that belong to an association
+        elif hasattr(obj, "association"):
+            url = f"https://{obj.association.slug}.{obj.association.skin.domain}/{path}"
+        # Handle string slugs or other objects
         else:
-            url = f"https://{obj}.larpmanager.com/{s}"
+            url = f"https://{obj}.larpmanager.com/{path}"
     else:
-        url = "https://larpmanager.com/" + s
+        # Default to main larpmanager.com domain
+        url = "https://larpmanager.com/" + path
 
+    # Clean up double slashes while preserving protocol
     return url.replace("//", "/").replace(":/", "://")

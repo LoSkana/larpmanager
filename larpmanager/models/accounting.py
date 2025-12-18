@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any, ClassVar
+
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
@@ -32,6 +34,8 @@ from larpmanager.models.utils import UploadToPathAndRename, download, generate_i
 
 
 class PaymentType(models.TextChoices):
+    """Represents PaymentType model."""
+
     REGISTRATION = "r", "registration"
     MEMBERSHIP = "m", "membership"
     DONATE = "d", "donation"
@@ -39,6 +43,8 @@ class PaymentType(models.TextChoices):
 
 
 class PaymentStatus(models.TextChoices):
+    """Represents PaymentStatus model."""
+
     CREATED = "r", "Created"
     SUBMITTED = "s", "Submitted"
     CONFIRMED = "c", "Confirmed"
@@ -46,6 +52,8 @@ class PaymentStatus(models.TextChoices):
 
 
 class PaymentInvoice(BaseModel):
+    """Represents PaymentInvoice model."""
+
     search = models.CharField(max_length=500, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
@@ -91,7 +99,7 @@ class PaymentInvoice(BaseModel):
 
     cod = models.CharField(max_length=50, unique=True, db_index=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     reg = models.ForeignKey(
         Registration,
@@ -108,38 +116,76 @@ class PaymentInvoice(BaseModel):
     key = models.CharField(max_length=500, null=True)
 
     class Meta:
-        indexes = [models.Index(fields=["key", "status"]), models.Index(fields=["assoc", "cod"])]
+        indexes: ClassVar[list] = [
+            models.Index(fields=["key", "status"]),
+            models.Index(fields=["association", "cod"]),
+            models.Index(fields=["reg", "status", "-created"]),
+            models.Index(fields=["status", "-created"]),
+        ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return invoice summary with payment status and transaction details."""
         return (
             f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
         )
 
-    def download(self):
+    def download(self) -> str:
+        """Download the invoice file if available.
+
+        Returns:
+            Download URL or empty string if no invoice/name available.
+
+        """
+        # Check if invoice exists
         if not self.invoice:
             return ""
+
+        # Check if invoice has a name
         if not self.invoice.name:
             return ""
+
+        # Return download URL for the invoice
         # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
-    def get_details(self):
-        s = ""
+    def get_details(self) -> str:
+        """Generate HTML details string for payment method information.
+
+        Returns:
+            str: HTML formatted string containing download link, text description,
+                 and payment code if available. Returns empty string if no method.
+
+        """
+        details_html = ""
+
+        # Return empty string if no payment method is set
         if not self.method:
-            return s
-        # slug = self.method.slug
+            return details_html
+
+        # Add download link if invoice is available
         if self.invoice:
-            s += f" <a href='{self.download()}'>Download</a>"
+            details_html += f" <a href='{self.download()}'>Download</a>"
+
+        # Append payment method text description
         if self.text:
-            s += f" {self.text}"
+            details_html += f" {self.text}"
+
+        # Append payment code if available
         if self.cod:
-            s += f" {self.cod}"
-        return s
+            details_html += f" {self.cod}"
+
+        return details_html
 
 
 class ElectronicInvoice(BaseModel):
+    """Represents ElectronicInvoice model."""
+
     inv = models.OneToOneField(
-        PaymentInvoice, on_delete=models.SET_NULL, null=True, blank=True, related_name="electronicinvoice"
+        PaymentInvoice,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="electronicinvoice",
     )
 
     progressive = models.IntegerField()
@@ -148,20 +194,20 @@ class ElectronicInvoice(BaseModel):
 
     year = models.IntegerField()
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     xml = models.TextField(blank=True, null=True)
 
     response = models.TextField(blank=True, null=True)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["number", "year", "assoc", "deleted"],
+                fields=["number", "year", "association", "deleted"],
                 name="unique_number_with_optional",
             ),
             UniqueConstraint(
-                fields=["number", "year", "assoc"],
+                fields=["number", "year", "association"],
                 condition=Q(deleted=None),
                 name="unique_number_without_optional",
             ),
@@ -176,20 +222,36 @@ class ElectronicInvoice(BaseModel):
             ),
         ]
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Save the ElectronicInvoice instance with auto-generated progressive and number.
+
+        Automatically assigns progressive and number values if not already set:
+        - progressive: Global sequential counter across all invoices
+        - number: Sequential counter per year and association
+
+        Args:
+            *args: Variable length argument list passed to parent save method.
+            **kwargs: Arbitrary keyword arguments passed to parent save method.
+
+        """
+        # Auto-generate progressive number if not set (global counter)
         if not self.progressive:
             highest_progressive = ElectronicInvoice.objects.aggregate(models.Max("progressive"))["progressive__max"]
             self.progressive = highest_progressive + 1 if highest_progressive else 1
 
+        # Auto-generate invoice number if not set (per year/association counter)
         if not self.number:
-            que = ElectronicInvoice.objects.filter(year=self.year, assoc=self.assoc)
+            que = ElectronicInvoice.objects.filter(year=self.year, association=self.association)
             highest_number = que.aggregate(models.Max("number"))["number__max"]
             self.number = highest_number + 1 if highest_number else 1
 
+        # Call parent save method to persist the instance
         super().save(*args, **kwargs)
 
 
 class ExpenseChoices(models.TextChoices):
+    """Choices for ExpenseChoices."""
+
     SCENOGR = "a", _("Set design - staging, materials")
     COST = "b", _("Costumes - make up, cloth, armor")
     PROP = "c", _("Prop - weapons, props")
@@ -203,6 +265,8 @@ class ExpenseChoices(models.TextChoices):
 
 
 class BalanceChoices(models.TextChoices):
+    """Choices for BalanceChoices."""
+
     MATER = "1", _("Raw materials, auxiliaries, consumables and goods")
     SERV = "2", _("Services")
     GODIM = "3", _("Use of third party assets")
@@ -211,6 +275,8 @@ class BalanceChoices(models.TextChoices):
 
 
 class AccountingItem(BaseModel):
+    """Represents AccountingItem model."""
+
     search = models.CharField(max_length=150, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, null=True, blank=True)
@@ -219,17 +285,26 @@ class AccountingItem(BaseModel):
 
     inv = models.OneToOneField(PaymentInvoice, on_delete=models.SET_NULL, null=True, blank=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     hide = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation of the accounting entry.
+
+        Returns:
+            String with ID, class name, and member info if available.
+
+        """
+        # Build base string with class name
         s = "Voce contabile"
         # noinspection PyUnresolvedReferences
         if self.id:
             # noinspection PyUnresolvedReferences
             s += f" &{self.id}"
         s += f" - {self.__class__.__name__}"
+
+        # Append member info if present
         if self.member:
             s += f" - {self.member}"
         return s
@@ -237,7 +312,8 @@ class AccountingItem(BaseModel):
     class Meta:
         abstract = True
 
-    def short_descr(self):
+    def short_descr(self) -> str:
+        """Return first 100 characters of description if available, empty string otherwise."""
         if not hasattr(self, "descr"):
             return ""
         # noinspection PyUnresolvedReferences
@@ -245,31 +321,51 @@ class AccountingItem(BaseModel):
 
 
 class AccountingItemTransaction(AccountingItem):
+    """Represents AccountingItemTransaction model."""
+
     reg = models.ForeignKey(
-        Registration, on_delete=models.CASCADE, related_name="accounting_items_t", null=True, blank=True
+        Registration,
+        on_delete=models.CASCADE,
+        related_name="accounting_items_t",
+        null=True,
+        blank=True,
     )
 
     user_burden = models.BooleanField(default=False)
 
 
 class AccountingItemMembership(AccountingItem):
+    """Represents AccountingItemMembership model."""
+
     year = models.IntegerField()
 
     class Meta:
-        indexes = [models.Index(fields=["assoc", "year"])]
+        indexes: ClassVar[list] = [
+            models.Index(
+                fields=["association", "year"],
+                condition=Q(deleted__isnull=True),
+                name="acctmem_association_year_act",
+            ),
+        ]
 
 
 class AccountingItemDonation(AccountingItem):
+    """Represents AccountingItemDonation model."""
+
     descr = models.CharField(max_length=1000)
 
 
 class OtherChoices(models.TextChoices):
+    """Choices for OtherChoices."""
+
     CREDIT = "c", _("Credits")
     TOKEN = "t", _("Tokens")
     REFUND = "r", _("Refund")
 
 
 class AccountingItemOther(AccountingItem):
+    """Represents AccountingItemOther model."""
+
     oth = models.CharField(max_length=1, choices=OtherChoices.choices)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
@@ -281,41 +377,57 @@ class AccountingItemOther(AccountingItem):
     ref_addit = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        indexes = [models.Index(fields=["run", "oth"])]
+        indexes: ClassVar[list] = [models.Index(fields=["run", "oth"])]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation based on other type and member."""
+        # Determine base string based on other type
         s = _("Credit assignment")
         if self.oth == OtherChoices.TOKEN:
             s = _("Tokens assignment")
         elif self.oth == OtherChoices.REFUND:
             s = _("Refund")
+
+        # Append member information if present
         if self.member:
             s += f" - {self.member}"
         return s
 
 
 class PaymentChoices(models.TextChoices):
+    """Choices for PaymentChoices."""
+
     MONEY = "a", "Money"
     CREDIT = "b", "Credit"
     TOKEN = "c", "Token"
 
 
 class AccountingItemPayment(AccountingItem):
+    """Represents AccountingItemPayment model."""
+
     pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
     reg = models.ForeignKey(
-        Registration, on_delete=models.CASCADE, related_name="accounting_items_p", null=True, blank=True
+        Registration,
+        on_delete=models.CASCADE,
+        related_name="accounting_items_p",
+        null=True,
+        blank=True,
     )
 
     info = models.CharField(max_length=150, null=True, blank=True)
 
-    vat = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    vat_ticket = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    vat_options = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["pay", "reg"])]
+        indexes: ClassVar[list] = [models.Index(fields=["pay", "reg"])]
 
 
 class AccountingItemExpense(AccountingItem):
+    """Represents AccountingItemExpense model."""
+
     invoice = models.FileField(upload_to=UploadToPathAndRename("invoice/"))
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
@@ -340,12 +452,15 @@ class AccountingItemExpense(AccountingItem):
 
     is_approved = models.BooleanField(default=False)
 
-    def download(self):
+    def download(self) -> str:
+        """Download the invoice file."""
         # noinspection PyUnresolvedReferences
         return download(self.invoice.url)
 
 
 class AccountingItemFlow(AccountingItem):
+    """Represents AccountingItemFlow model."""
+
     class Meta:
         abstract = True
 
@@ -361,7 +476,8 @@ class AccountingItemFlow(AccountingItem):
         help_text=_("Indicate the exact date in which the payment has been performed"),
     )
 
-    def download(self):
+    def download(self) -> str:
+        """Return download helper for invoice URL or empty string if no invoice exists."""
         if not self.invoice:
             return ""
         # noinspection PyUnresolvedReferences
@@ -369,6 +485,8 @@ class AccountingItemFlow(AccountingItem):
 
 
 class AccountingItemOutflow(AccountingItemFlow):
+    """Represents AccountingItemOutflow model."""
+
     exp = models.CharField(
         max_length=1,
         choices=ExpenseChoices.choices,
@@ -387,19 +505,21 @@ class AccountingItemOutflow(AccountingItemFlow):
 
 
 class AccountingItemInflow(AccountingItemFlow):
-    pass
+    """Represents AccountingItemInflow model."""
+
+
+class DiscountType(models.TextChoices):
+    """Represents DiscountType model."""
+
+    STANDARD = "a", _("Standard")
+    PLAYAGAIN = "p", _("Play Again")
+    FRIEND = "f", _("Friend")
+    INFLUENCER = "I", _("Influencer")
+    GIFT = "g", _("Gift")
 
 
 class Discount(BaseModel):
-    STANDARD = "a"
-    FRIEND = "f"
-    INFLUENCER = "I"
-    PLAYAGAIN = "p"
-    GIFT = "g"
-    TYPE_CHOICES = [
-        (STANDARD, _("Standard")),
-        (PLAYAGAIN, _("Play Again")),
-    ]
+    """Represents Discount model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
 
@@ -407,7 +527,8 @@ class Discount(BaseModel):
         Run,
         related_name="discounts",
         blank=True,
-        help_text=_("Indicate the runs for which the discount is active"),
+        help_text=_("Indicate the sessions for which the discount is active"),
+        verbose_name=_("Sessions"),
     )
 
     value = models.DecimalField(
@@ -418,7 +539,7 @@ class Discount(BaseModel):
     )
 
     max_redeem = models.IntegerField(
-        help_text=_("Indicate the maximum number of such discounts that can be requested (0 for infinite uses)")
+        help_text=_("Indicate the maximum number of such discounts that can be requested (0 for infinite uses)"),
     )
 
     cod = models.CharField(
@@ -427,17 +548,17 @@ class Discount(BaseModel):
         verbose_name=_("Code"),
         help_text=_(
             "Indicate the special discount code, to be communicated to the participants, which "
-            "will need to be entered during registration."
+            "will need to be entered during registration.",
         ),
     )
 
     typ = models.CharField(
         max_length=1,
-        choices=TYPE_CHOICES,
+        choices=DiscountType.choices,
         verbose_name=_("Type"),
         help_text=_(
             "Indicate the type of discount: standard, play again (only available to those who "
-            "have already played this event)"
+            "have already played this event)",
         ),
     )
 
@@ -450,7 +571,7 @@ class Discount(BaseModel):
         default=True,
         help_text=_(
             "Indicate whether the discount can be used only on new enrollment, or whether it "
-            "can be used by already registered participants."
+            "can be used by already registered participants.",
         ),
     )
 
@@ -459,7 +580,7 @@ class Discount(BaseModel):
     number = models.IntegerField()
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_discount_with_optional",
@@ -471,26 +592,32 @@ class Discount(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with name, type, value and optional currency symbol."""
         # noinspection PyUnresolvedReferences
         s = f"{self.name} ({self.get_typ_display()}) {self.value}"
+
+        # Append currency symbol if associated with an event
         if self.event:
             # noinspection PyUnresolvedReferences
-            s += self.event.assoc.get_currency_symbol()
+            s += self.event.association.get_currency_symbol()
         return s
 
-    def show(self, run=None):
+    def show(self) -> dict:
+        """Return dictionary representation with value, max_redeem, and name attributes."""
         js = {"value": self.value, "max_redeem": self.max_redeem}
         for s in ["name"]:
             self.upd_js_attr(js, s)
         return js
 
-    def show_event(self):
-        # noinspection PyUnresolvedReferences
+    def show_event(self) -> str:
+        """Return comma-separated list of all associated runs."""
         return ", ".join([str(c) for c in self.runs.all()])
 
 
 class AccountingItemDiscount(AccountingItem):
+    """Represents AccountingItemDiscount model."""
+
     run = models.ForeignKey(
         Run,
         on_delete=models.CASCADE,
@@ -503,8 +630,12 @@ class AccountingItemDiscount(AccountingItem):
 
     detail = models.IntegerField(null=True, blank=True)
 
-    def show(self):
+    def show(self) -> dict[str, str]:
+        """Return dictionary representation of the discount with name, value, and expiration time."""
+        # Build base discount information
         j = {"name": self.disc.name, "value": self.value}
+
+        # Add formatted expiration time if available
         if self.expires:
             # noinspection PyUnresolvedReferences
             j["expires"] = self.expires.strftime("%H:%M")
@@ -514,12 +645,16 @@ class AccountingItemDiscount(AccountingItem):
 
 
 class CollectionStatus(models.TextChoices):
+    """Represents CollectionStatus model."""
+
     OPEN = "o", _("Open")
     DONE = "d", _("Close")
     PAYED = "p", _("Delivered")
 
 
 class Collection(BaseModel):
+    """Represents Collection model."""
+
     name = models.CharField(max_length=100, null=True)
 
     status = models.CharField(max_length=1, choices=CollectionStatus.choices, default=CollectionStatus.OPEN)
@@ -548,47 +683,69 @@ class Collection(BaseModel):
 
     total = models.IntegerField(default=0)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation based on member or name."""
+        # Return member-based or name-based description
         if self.member:
             return f"Colletta per {self.member}"
-        else:
-            return f"Colletta per {self.name}"
+        return f"Colletta per {self.name}"
 
-    def display_member(self):
+    def display_member(self) -> str:
+        """Return member's display name if exists, otherwise return name."""
+        # Return member's display name if member exists
         if self.member:
             # noinspection PyUnresolvedReferences
             return self.member.display_member()
         return self.name
 
-    def unique_contribute_code(self):
-        for _idx in range(5):
-            cod = generate_id(16)
-            if not Collection.objects.filter(contribute_code=cod).exists():
-                self.contribute_code = cod
-                return
-        raise ValueError("Too many attempts to generate the code")
+    def unique_contribute_code(self) -> None:
+        """Generate a unique contribute code for the collection."""
+        # Try up to 5 times to generate a unique code
+        for _attempt in range(5):
+            generated_code = generate_id(16)
 
-    def unique_redeem_code(self):
-        for _idx in range(5):
-            cod = generate_id(16)
-            if not Collection.objects.filter(redeem_code=cod).exists():
-                self.redeem_code = cod
+            # Check if the generated code is already in use
+            if not Collection.objects.filter(contribute_code=generated_code).exists():
+                self.contribute_code = generated_code
                 return
-        raise ValueError("Too many attempts to generate the code")
+
+        # If all attempts failed, raise an error
+        msg = "Too many attempts to generate the code"
+        raise ValueError(msg)
+
+    def unique_redeem_code(self) -> None:
+        """Generate a unique redeem code for the collection."""
+        # Try up to 5 attempts to generate a unique code
+        max_attempts = 5
+        for _attempt_number in range(max_attempts):
+            generated_code = generate_id(16)
+            # Check if the generated code is already in use
+            if not Collection.objects.filter(redeem_code=generated_code).exists():
+                self.redeem_code = generated_code
+                return
+        # Raise error if unable to generate unique code after max attempts
+        msg = "Too many attempts to generate the code"
+        raise ValueError(msg)
 
 
 class AccountingItemCollection(AccountingItem):
+    """Represents AccountingItemCollection model."""
+
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name="collection_gifts")
 
 
 class RefundStatus(models.TextChoices):
+    """Represents RefundStatus model."""
+
     REQUEST = "r", _("Request")
     PAYED = "p", _("Delivered")
 
 
 class RefundRequest(BaseModel):
+    """Represents RefundRequest model."""
+
     search = models.CharField(max_length=200, editable=False)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="refund_requests")
@@ -600,7 +757,7 @@ class RefundRequest(BaseModel):
         verbose_name=_("Details"),
         help_text=_(
             "Indicate all references of how you want your refund to be paid  (ex: IBAN and "
-            "full bank details, paypal link, etc)"
+            "full bank details, paypal link, etc)",
         ),
     )
 
@@ -614,18 +771,21 @@ class RefundRequest(BaseModel):
 
     hide = models.BooleanField(default=False)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with member name."""
         return f"Refund request of {self.member}"
 
     # ## Workshops
 
 
 class RecordAccounting(BaseModel):
+    """Represents RecordAccounting model."""
+
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="rec_accs", null=True, blank=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="rec_accs")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="rec_accs")
 
     global_sum = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name=_("Global balance"))
 

@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             name="details",
             field=models.CharField(
                 blank=True,
-                help_text="Optional – Additional information about the option, displayed below the question",
+                help_text="Optional - Additional information about the option, displayed below the question",
                 max_length=500,
                 null=True,
                 verbose_name="Description",
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
             name="max_available",
             field=models.IntegerField(
                 default=0,
-                help_text="Optional – Maximum number of times it can be selected across all registrations (0 = unlimited)",
+                help_text="Optional - Maximum number of times it can be selected across all registrations (0 = unlimited)",
                 verbose_name="Maximum number",
             ),
         ),
@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
             field=models.DecimalField(
                 decimal_places=2,
                 default=0,
-                help_text="Optional – Amount added to the registration fee if selected (0 = no extra cost)",
+                help_text="Optional - Amount added to the registration fee if selected (0 = no extra cost)",
                 max_digits=10,
                 verbose_name="Price",
             ),
@@ -123,7 +123,7 @@ class Migration(migrations.Migration):
             name="casting_priority",
             field=models.IntegerField(
                 default=1,
-                help_text="Optional – Casting priority granted by this option (e.g., 1 = low, 5 = medium, 25 = high)",
+                help_text="Optional - Casting priority granted by this option (e.g., 1 = low, 5 = medium, 25 = high)",
             ),
         ),
         migrations.AlterField(
@@ -149,7 +149,7 @@ class Migration(migrations.Migration):
             name="max_available",
             field=models.IntegerField(
                 default=0,
-                help_text="Optional – Maximum number of times it can be requested across all signups (0 = unlimited)",
+                help_text="Optional - Maximum number of times it can be requested across all signups (0 = unlimited)",
             ),
         ),
         migrations.AlterField(
@@ -167,7 +167,7 @@ class Migration(migrations.Migration):
             name="details",
             field=models.CharField(
                 blank=True,
-                help_text="Optional – Additional information about the option, displayed below the question",
+                help_text="Optional - Additional information about the option, displayed below the question",
                 max_length=500,
                 null=True,
                 verbose_name="Description",
@@ -187,7 +187,7 @@ class Migration(migrations.Migration):
             name="max_available",
             field=models.IntegerField(
                 default=0,
-                help_text="Optional – Maximum number of times it can be selected across all characters (0 = unlimited)",
+                help_text="Optional - Maximum number of times it can be selected across all characters (0 = unlimited)",
             ),
         ),
         migrations.AlterField(

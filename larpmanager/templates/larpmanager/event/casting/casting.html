@@ -69,7 +69,7 @@
                        name="subm"
                        id="submit"
                        value="{% trans "Submit" %}"
-                       onClick="return confirm('{% trans "Confirm your choices" %}?');">
+                       onClick="return confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
                 <p id="err"></p>
             </form>
         </div>
@@ -159,7 +159,15 @@
         // alert(faction);
         $('#choice' + ix).empty();
         $('#choice' + ix).append('<option value=\'\' selected disabled>Choose here</option>');
-        for (key in choices_dict[faction]) {
+
+        // Sort keys by character number for consistent ordering
+        var keys = Object.keys(choices_dict[faction]);
+        keys.sort(function(a, b) {
+            return choices_dict[faction][a]['number'] - choices_dict[faction][b]['number'];
+        });
+
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
             var el = choices_dict[faction][key];
             if (!in_faction(el)) continue;
             var text = "#{0} {1}".format(el['number'], el['name']);
@@ -177,7 +185,7 @@
 
         for (var ix = 0; ix < casting_min; ix++) {
             var pref = $('#choice' + ix).children('option:selected').val();
-            if (pref === undefined || pref === '') { show_err('{% trans "You have not reached the minimum number of preferences" %}'); return; }
+            if (pref === undefined || pref === '') { show_err('{% filter escapejs %}{% trans "You have not reached the minimum number of preferences" %}{% endfilter %}'); return; }
         }
 
         for (var ix = 0; ix < casting_max; ix++) {
@@ -185,7 +193,7 @@
             if (pref1 === undefined) continue;
             for (var iy = ix + 1; iy < casting_max; iy++) {
                 var pref2 = $('#choice' + iy).children('option:selected').val();
-                if (pref1 === pref2) { show_err('{% trans "You have chosen the same option in more than one preference" %}'); return; }
+                if (pref1 === pref2) { show_err('{% filter escapejs %}{% trans "You have chosen the same option in more than one preference" %}{% endfilter %}'); return; }
             }
         }
 

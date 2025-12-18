@@ -4,7 +4,7 @@
     {% trans "Accounting" %}
 {% endblock title %}
 {% block content %}
-    {% if assoc_terms_conditions %}
+    {% if association_terms_conditions %}
         <p>
             {% trans "You can consult" %} <a href="{% url 'register_conditions' %}">{% trans "here the conditions of registration" %}.</a>
         </p>
@@ -50,7 +50,7 @@
         <p>{% trans "These are delegated account registrations for which you have to make a payment" %}.</p>
         <p>
             {% for del in delegated %}
-                {% for reg in del.ctx.payments_todo %}
+                {% for reg in del.context.payments_todo %}
                     {% include "elements/comma.html" %}
                     <b>{{ reg.run }}</b> ({{ del }}) - {{ reg.quota|format_decimal }}{{ currency_symbol }}
                     {% trans "by" %} {{ reg.deadline }} {% trans "days" %}
@@ -60,12 +60,12 @@
         <hr />
     {% endif %}
     {% if member.membership.credit %}
-        <h2>{{ credit_name }}</h2>
+        <h2>{{ credits_name }}</h2>
         <p>
             {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
             {% if member.membership.credit > 0 %}
                 <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
-                {% if 'refund' in assoc.features %}
+                {% if 'refund' in association.features %}
                     <br />
                     {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'acc_refund' %}">{% trans "refund request" %}</a>.
                     {% if refunds %}
@@ -81,7 +81,7 @@
         <hr />
     {% endif %}
     {% if member.membership.tokens %}
-        <h2>{{ token_name }}</h2>
+        <h2>{{ tokens_name }}</h2>
         <p>
             {% trans "Total" %}: <b>{{ member.membership.tokens }}</b>.
             {% if member.membership.tokens > 0 %}
@@ -90,10 +90,10 @@
         </p>
         <hr />
     {% endif %}
-    {% if 'membership' in assoc.features %}
+    {% if 'membership' in association.features %}
         {% if member.membership.status == 'a' %}
             {% if year_membership_fee %}
-                {% if 'vote' in assoc.features and assoc.voting_open %}
+                {% if 'vote' in association.features and association.voting_open %}
                     <h2>{% trans "Executive Vote" %} {{ year }}</h2>
                     <p>
                         <a href="{% url 'vote' %}">{% trans "Cast your vote for the new Executive" %}!</a>
@@ -107,13 +107,13 @@
                         {% trans "You have submitted your dues payment, and it is now being approved by the staff. You don't have to do anything for the time being" %}!
                     </p>
                     <hr />
-                {% elif year in reg_years %}
+                {% elif year in registration_years %}
                     <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
                     <p>
                         {% trans "You are registered for an event to be held in this calendar year, but we are not aware of your dues payment. Be careful: if you don't complete it, <b>you won't be able to attend events</b>, nor vote at the Membership Meeting" %}! <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                     </p>
                     <hr />
-                {% elif 'vote' in assoc.features and assoc.voting_open %}
+                {% elif 'vote' in association.features and association.voting_open %}
                     <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
                     <p>
                         {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'acc_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
@@ -145,7 +145,7 @@
             <hr />
         {% endif %}
     {% endif %}
-    {% if 'membership_fee' in assoc.features %}
+    {% if 'membership_fee' in association.features %}
         {% if membership_fee %}
             <h2>{% trans "Membership fee" %}</h2>
             <p>
@@ -158,7 +158,7 @@
         {% endif %}
         <hr />
     {% endif %}
-    {% if 'collection' in assoc.features %}
+    {% if 'collection' in association.features %}
         <h2>{% trans "Collection" %}</h2>
         <p>
             {% trans "Want to help one of your friends play with us? Organize a collection: you and anyone who wants to contribute will be able to donate part of their registration fees" %}! <a href="{% url 'acc_collection' %}">{% trans "Create a new collection" %}</a>.
@@ -195,7 +195,7 @@
             <hr />
         {% endif %}
     {% endif %}
-    {% if 'donate' in assoc.features %}
+    {% if 'donate' in association.features %}
         <h2>{% trans "Donation" %}</h2>
         <p>
             {% trans "If you would like to make a donation to the Organization" %}, <a href="{% url 'acc_donate' %}">{% trans "follow this link" %}</a>. {% trans "You will have our eternal thanks for believing in us" %}!
@@ -211,10 +211,10 @@
             <hr />
         {% endif %}
     {% endif %}
-    {% if reg_list %}
+    {% if registration_list %}
         <h2>{% trans "Registration history" %}</h2>
         <p>
-            {% for reg in reg_list %}
+            {% for reg in registration_list %}
                 {% include "elements/comma.html" %}
                 <a href="#" class="my_toggle" tog='reg_{{ reg.id }}'>{{ reg.run.search }}
                     {% if reg.cancellation_date %}
@@ -223,7 +223,7 @@
                 </a>
             {% endfor %}
         </p>
-        {% for reg in reg_list %}
+        {% for reg in registration_list %}
             <div id="reg_{{ reg.id }}" class="hide reg_{{ reg.id }}">
                 <h3>{{ reg.run.search }}</h3>
                 {% if reg.pending %}
@@ -304,16 +304,16 @@
         <hr />
     {% endif %}
     {% if acc_tokens > 0 %}
-        <h2>{% trans "History" %} {{ token_name }}</h2>
+        <h2>{% trans "History" %} {{ tokens_name }}</h2>
         <p>
-            {% trans "To access the history" %} {{ token_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
+            {% trans "To access the history" %} {{ tokens_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
         </p>
         <hr />
     {% endif %}
     {% if acc_credits > 0 %}
-        <h2>{% trans "History" %} {{ credit_name }}</h2>
+        <h2>{% trans "History" %} {{ credits_name }}</h2>
         <p>
-            {% trans "To access the history" %} {{ credit_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
+            {% trans "To access the history" %} {{ credits_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
         </p>
         <hr />
     {% endif %}

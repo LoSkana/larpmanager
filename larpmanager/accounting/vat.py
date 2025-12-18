@@ -17,66 +17,117 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+"""VAT calculation utilities for payment accounting."""
+
+from decimal import Decimal
 
 from django.db.models import Sum
 
-from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction
+from larpmanager.cache.config import get_association_config
+from larpmanager.cache.feature import get_association_features
+from larpmanager.models.accounting import AccountingItemPayment, AccountingItemTransaction, PaymentChoices
 
 
-def compute_vat(instance):
+def calculate_payment_vat(instance: AccountingItemPayment) -> None:
     """Compute VAT for a payment based on ticket and options VAT rates.
 
     Calculates VAT for an accounting item payment by splitting the payment
     between ticket amount and options, applying different VAT rates to each.
 
-    Args:
-        instance: AccountingItemPayment instance to compute VAT for
+    The function performs the following steps:
+    1. Validates that VAT feature is enabled and payment is in money
+    2. Calculates previous payments to determine remaining amounts
+    3. Retrieves VAT configuration for tickets and options
+    4. Splits current payment between ticket and options portions
+    5. Updates the payment record with calculated VAT amounts
 
-    Side effects:
-        Updates the instance's VAT field in the database
+    Args:
+        instance: AccountingItemPayment instance to compute VAT for.
+                 Must have valid association_id, pay type, reg, and inv attributes.
+
+    Returns:
+        None: Function modifies the instance's VAT fields in the database as a side effect.
+
+    Side Effects:
+        Updates the instance's vat_ticket and vat_options fields in the database.
+
     """
-    # Get total previous payments and transactions for the same member and run
-    previous_pays = get_previous_sum(instance, AccountingItemPayment)
-    previous_trans = get_previous_sum(instance, AccountingItemTransaction)
-    previous_paid = previous_pays - previous_trans
-    # Get VAT configuration (e.g. 22 becomes 0.22)
-    vat_ticket = int(instance.assoc.get_config("vat_ticket", 0)) / 100.0
-    vat_options = int(instance.assoc.get_config("vat_options", 0)) / 100.0
-    # Determine the full ticket amount (either from pay_what or ticket price)
-    ticket_total = 0
+    # Early return if VAT feature is not enabled for this association
+    if "vat" not in get_association_features(instance.association_id):
+        return
+
+    # Early return if payment is not in money (no VAT calculation needed)
+    if instance.pay != PaymentChoices.MONEY:
+        return
+
+    # Calculate total amount already paid by this member for this run
+    # This includes previous payments minus any refund transactions
+    previous_payments_sum = get_previous_sum(instance, AccountingItemPayment)
+    previous_transactions_sum = get_previous_sum(instance, AccountingItemTransaction)
+    total_previously_paid = previous_payments_sum - previous_transactions_sum
+
+    # Retrieve VAT rates from association configuration
+    # Convert percentage values (e.g., 22) to decimal rates (e.g., 0.22)
+    config_context = {}
+    _vat_rate_ticket = (
+        int(get_association_config(instance.association_id, "vat_ticket", default_value=0, context=config_context))
+        / 100.0
+    )
+    _vat_rate_options = (
+        int(get_association_config(instance.association_id, "vat_options", default_value=0, context=config_context))
+        / 100.0
+    )
+
+    # Calculate total ticket cost including both base price and custom amounts
+    ticket_total_cost = Decimal(0)
     if instance.reg.pay_what is not None:
-        ticket_total += instance.reg.pay_what
+        ticket_total_cost += Decimal(str(instance.reg.pay_what))
     if instance.reg.ticket:
-        ticket_total += instance.reg.ticket.price
-    # Check transaction for this payment
-    paid = instance.value
-    que = AccountingItemTransaction.objects.filter(inv=instance.inv)
-    for trans in que:
-        paid -= trans.value
-    # Compute how much of the ticket is still unpaid
-    remaining_ticket = max(0, ticket_total - previous_paid)
-    # Split the current payment value between ticket and options
-    quota_ticket = float(min(paid, remaining_ticket))
-    quota_options = float(paid) - float(quota_ticket)
-    # Compute VAT based on the split and respective rates
-    vat = max(0.0, quota_ticket * vat_ticket + quota_options * vat_options)
-    updates = {"vat": vat}
+        ticket_total_cost += Decimal(str(instance.reg.ticket.price))
+
+    # Determine net payment amount after accounting for refund transactions
+    # Ensure we're working with Decimal for monetary calculations
+    current_payment_amount = Decimal(str(instance.value))
+    transactions_query = AccountingItemTransaction.objects.filter(inv=instance.inv)
+    for transaction in transactions_query:
+        current_payment_amount -= Decimal(str(transaction.value))
+
+    # Calculate how much of the ticket portion remains unpaid
+    # This determines how to split the current payment
+    remaining_ticket_amount = max(Decimal(0), ticket_total_cost - Decimal(str(total_previously_paid)))
+
+    # Split current payment between ticket portion and options portion
+    # Ticket portion is paid first, remainder goes to options
+    payment_allocated_to_ticket = min(current_payment_amount, remaining_ticket_amount)
+    payment_allocated_to_options = current_payment_amount - payment_allocated_to_ticket
+
+    # Update database with calculated VAT amounts for each portion
+    updates = {"vat_ticket": payment_allocated_to_ticket, "vat_options": payment_allocated_to_options}
     AccountingItemPayment.objects.filter(pk=instance.pk).update(**updates)
 
 
-def get_previous_sum(aip, typ):
+def get_previous_sum(aip: AccountingItemPayment, typ: type) -> Decimal:
     """Calculate sum of previous accounting items for the same member and run.
 
+    Computes the total value of all accounting items of the specified type
+    that were created before the given reference item, for the same member
+    and run combination.
+
     Args:
-        aip: AccountingItemPayment instance for reference
-        typ: Model class (AccountingItemPayment or AccountingItemTransaction)
+        aip: AccountingItemPayment instance used as reference point for
+            filtering by member, run, and creation timestamp
+        typ: Model class to query (AccountingItemPayment or AccountingItemTransaction)
 
     Returns:
-        int: Sum of values from previous items, or 0 if none found
+        Sum of values from previous items matching the criteria, or Decimal(0) if none found
+
+    Example:
+        >>> previous_total = get_previous_sum(payment_item, AccountingItemPayment)
+        >>> print(f"Previous payments total: {previous_total}")
+
     """
-    return (
-        typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created).aggregate(
-            total=Sum("value")
-        )["total"]
-        or 0
-    )
+    # Filter items by same member and run, created before reference item
+    previous_items = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)
+
+    # Aggregate the sum of values and return Decimal(0) if no items found
+    return previous_items.aggregate(total=Sum("value"))["total"] or Decimal(0)

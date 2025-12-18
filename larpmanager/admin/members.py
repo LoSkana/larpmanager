@@ -18,17 +18,21 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
-from larpmanager.admin.base import AssocFilter, DefModelAdmin, MemberFilter, reduced
+from larpmanager.admin.base import AssociationFilter, DefModelAdmin, MemberFilter, reduced
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership, VolunteerRegistry, Vote
 
 
 class MyUserAdmin(UserAdmin):
+    """Custom admin interface for Django User model."""
+
     list_display = ("username", "is_staff", "email", "is_superuser", "character_link")
     list_filter = ("is_staff", "is_superuser")
     fieldsets = (
@@ -52,9 +56,10 @@ class MyUserAdmin(UserAdmin):
     ordering = ("id",)
 
     @staticmethod
-    def character_link(instance):
+    def character_link(instance: User) -> str:
+        """Generate admin link for member."""
         url = reverse("admin:larpmanager_member_change", args=[instance.member.id])
-        return mark_safe(f"<a href='{url}'>{instance.member}</a>")
+        return format_html('<a href="{}">{}</a>', url, instance.member)
 
 
 admin.site.unregister(User)
@@ -63,6 +68,8 @@ admin.site.register(User, MyUserAdmin)
 
 @admin.register(Member)
 class MemberAdmin(DefModelAdmin):
+    """Admin interface for Member model."""
+
     search_fields = ("search", "name", "surname", "nickname", "language")
     list_display = (
         "display_member",
@@ -76,53 +83,66 @@ class MemberAdmin(DefModelAdmin):
     )
 
     list_filter = ("newsletter", "first_aid", "language")
-    autocomplete_fields = ["user", "badges", "parent"]
+    autocomplete_fields: ClassVar[list] = ["user", "badges", "parent"]
 
     @staticmethod
-    def user_link(instance):
+    def user_link(instance: Member) -> str:
+        """Generate HTML link to admin page for the user."""
         url = reverse("admin:auth_user_change", args=[instance.user.id])
-        return mark_safe(f"<a href='{url}'>{instance.user}</a>")
+        return format_html('<a href="{}">{}</a>', url, instance.user)
 
     @staticmethod
-    def diet_red(instance):
+    def diet_red(instance: Member) -> str:
+        """Return reduced diet info for admin display."""
         return reduced(instance.diet)
 
     @staticmethod
-    def safety_red(instance):
+    def safety_red(instance: Member) -> str:
+        """Return reduced safety info for admin display."""
         return reduced(instance.safety)
 
 
 @admin.register(MemberConfig)
 class MemberConfigAdmin(DefModelAdmin):
+    """Admin interface for MemberConfig model."""
+
     list_display = ("member", "name", "value")
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("name",)
     list_filter = (MemberFilter,)
-    autocomplete_fields = ["member"]
+    autocomplete_fields: ClassVar[list] = ["member"]
 
 
 @admin.register(Membership)
 class MembershipAdmin(DefModelAdmin):
-    list_display = ("member", "assoc", "status", "card_number", "date", "created")
-    list_filter = (AssocFilter, MemberFilter)
-    autocomplete_fields = ["member", "assoc"]
+    """Admin interface for Membership model."""
+
+    list_display: ClassVar[tuple] = ("member", "association", "status", "card_number", "date")
+    list_filter = (AssociationFilter, MemberFilter)
+    autocomplete_fields: ClassVar[list] = ["member", "association"]
 
 
 @admin.register(VolunteerRegistry)
 class VolunteerRegistryAdmin(DefModelAdmin):
-    list_display = ("member", "assoc", "start", "end")
-    list_filter = (MemberFilter, AssocFilter)
-    autocomplete_fields = ["member", "assoc"]
+    """Admin interface for VolunteerRegistry model."""
+
+    list_display: ClassVar[tuple] = ("member", "association", "start", "end")
+    list_filter = (MemberFilter, AssociationFilter)
+    autocomplete_fields: ClassVar[list] = ["member", "association"]
 
 
 @admin.register(Vote)
 class VoteAdmin(DefModelAdmin):
-    list_display = ("member", "assoc", "year", "number", "candidate")
-    list_filter = (MemberFilter, AssocFilter, "year")
-    autocomplete_fields = ["member", "assoc", "candidate"]
+    """Admin interface for Vote model."""
+
+    list_display: ClassVar[tuple] = ("member", "association", "year", "number", "candidate")
+    list_filter = (MemberFilter, AssociationFilter, "year")
+    autocomplete_fields: ClassVar[list] = ["member", "association", "candidate"]
 
 
 @admin.register(Badge)
 class BadgeAdmin(DefModelAdmin):
-    list_display = ("name", "cod", "descr", "number", "thumb")
-    autocomplete_fields = ["members"]
-    search_fields = ["name"]
+    """Admin interface for Badge model."""
+
+    list_display: ClassVar[tuple] = ("name", "cod", "descr", "number", "thumb")
+    autocomplete_fields: ClassVar[list] = ["members"]
+    search_fields: ClassVar[list] = ["name"]

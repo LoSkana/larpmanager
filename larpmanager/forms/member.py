@@ -17,12 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 import os
 import re
 from collections import OrderedDict
-from datetime import datetime
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import pycountry
 from dateutil.relativedelta import relativedelta
@@ -35,18 +36,23 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.forms import Textarea
 from django.template import loader
-from django.utils import translation
+from django.utils import timezone, translation
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
-from larpmanager.cache.feature import get_assoc_features
+from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import BaseAccForm, MyForm
-from larpmanager.forms.utils import AssocMemberS2Widget, AssocMemberS2WidgetMulti, DatePickerInput, get_members_queryset
+from larpmanager.forms.utils import (
+    AssociationMemberS2Widget,
+    AssociationMemberS2WidgetMulti,
+    DatePickerInput,
+    get_members_queryset,
+)
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.association import Association, MemberFieldType
-from larpmanager.models.base import FeatureNationality
+from larpmanager.models.base import BaseModel, FeatureNationality
 from larpmanager.models.member import (
     Badge,
     Member,
@@ -56,9 +62,13 @@ from larpmanager.models.member import (
     VolunteerRegistry,
     get_user_membership,
 )
-from larpmanager.utils.common import get_recaptcha_secrets
-from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.common import get_recaptcha_secrets
+from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.larpmanager.tasks import my_send_mail
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+    from datetime import date
 
 logger = logging.getLogger(__name__)
 
@@ -68,17 +78,34 @@ class MyAuthForm(AuthenticationForm):
 
     class Meta:
         model = User
-        fields = ["username", "password"]
+        fields: ClassVar[list] = ["username", "password"]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form with custom widget configurations.
+
+        Configures username and password fields with Bootstrap styling,
+        removes labels, and sets appropriate input attributes for a clean
+        inline form appearance.
+
+        Args:
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments passed to parent class.
+
+        """
         super().__init__(*args, **kwargs)
+
+        # Configure username field with Bootstrap styling and email placeholder
         self.fields["username"].widget = forms.TextInput(
             attrs={"class": "form-control", "placeholder": "email", "maxlength": 70},
         )
+        # Remove label to create clean inline form appearance
         self.fields["username"].label = False
+
+        # Configure password field with Bootstrap styling and secure input
         self.fields["password"].widget = forms.PasswordInput(
             attrs={"class": "form-control", "placeholder": "password", "maxlength": 70},
         )
+        # Remove label for consistent styling with username field
         self.fields["password"].label = False
 
 
@@ -86,88 +113,115 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
     """Custom registration form with unique email validation and GDPR compliance."""
 
     # noinspection PyUnresolvedReferences, PyProtectedMember
-    def __init__(self, *args, **kwargs):
-        """Initialize RegistrationFormUniqueEmail with custom field configuration.
+    def __init__(
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        """Initialize registration form with custom field configuration.
+
+        Configures form fields for user registration including language selection,
+        email validation, password fields, user details, newsletter preferences,
+        GDPR consent, and reCAPTCHA when not in debug mode.
 
         Args:
-            *args: Variable length argument list passed to parent
-            **kwargs: Arbitrary keyword arguments, including 'request'
+            *args: Variable length argument list passed to parent class.
+            **kwargs: Arbitrary keyword arguments. 'request' is extracted and stored
+                if present, remaining kwargs passed to parent.
+
         """
+        # Extract request object and initialize parent form
         self.request = kwargs.pop("request", None)
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         self.fields["username"].widget = forms.HiddenInput()
 
+        # Configure language selection field
         self.fields["lang"] = forms.ChoiceField(
             required=True,
             choices=conf_settings.LANGUAGES,
-            label=Member._meta.get_field("language").verbose_name,
-            help_text=Member._meta.get_field("language").help_text,
+            label=Member._meta.get_field("language").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("language").help_text,  # noqa: SLF001  # Django model metadata
             initial=translation.get_language(),
         )
 
+        # Set maximum length for email and password fields
         self.fields["email"].widget.attrs["maxlength"] = 70
 
         self.fields["password1"].widget.attrs["maxlength"] = 70
 
+        # Add name and surname fields from Member model metadata
         self.fields["name"] = forms.CharField(
             required=True,
-            label=Member._meta.get_field("name").verbose_name,
-            help_text=Member._meta.get_field("name").help_text,
+            label=Member._meta.get_field("name").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("name").help_text,  # noqa: SLF001  # Django model metadata
         )
 
         self.fields["surname"] = forms.CharField(
             required=True,
-            label=Member._meta.get_field("surname").verbose_name,
-            help_text=Member._meta.get_field("surname").help_text,
+            label=Member._meta.get_field("surname").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("surname").help_text,  # noqa: SLF001  # Django model metadata
         )
 
+        # Configure newsletter subscription preferences
         self.fields["newsletter"] = forms.ChoiceField(
             required=True,
             choices=NewsletterChoices.choices,
-            label=Member._meta.get_field("newsletter").verbose_name,
-            help_text=Member._meta.get_field("newsletter").help_text,
+            label=Member._meta.get_field("newsletter").verbose_name,  # noqa: SLF001  # Django model metadata
+            help_text=Member._meta.get_field("newsletter").help_text,  # noqa: SLF001  # Django model metadata
             initial=NewsletterChoices.ALL,
         )
 
+        # Add GDPR consent checkbox
         self.fields["share"] = forms.BooleanField(
             required=True,
             label=_("Authorisation"),
             help_text=_(
-                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy",
             )
             + "?",
         )
 
+        # Add reCAPTCHA field in production environments
         if not conf_settings.DEBUG and not os.getenv("PYTEST_CURRENT_TEST"):
             public, private = get_recaptcha_secrets(self.request)
             if public and private:
                 self.fields["captcha"] = ReCaptchaField(
-                    widget=ReCaptchaV3, label="Captcha", public_key=public, private_key=private
+                    widget=ReCaptchaV3,
+                    label="Captcha",
+                    public_key=public,
+                    private_key=private,
                 )
 
-        # place language as first
+        # Reorder fields to place language selection first
         new_order = ["lang"] + [key for key in self.fields if key != "lang"]
         self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
 
-    def clean_username(self):
+    def clean_username(self) -> str:
+        """Validate username field and check for duplicate email addresses."""
+        # Extract and normalize username input
         data = self.cleaned_data["username"].strip()
-        logger.debug(f"Validating username/email: {data}")
-        # check if already used in user or email
-        if User.objects.filter(email__iexact=data).count() > 0:
-            raise ValidationError("Email already used! It seems you already have an account!")
+        logger.debug("Validating username/email: %s", data)
+
+        # Prevent duplicate email registrations
+        if User.objects.filter(email__iexact=data).exists():
+            msg = "Email already used! It seems you already have an account!"
+            raise ValidationError(msg)
         return data
 
-    def save(self, commit=True):
-        """Save user and associated member profile.
+    def save(self, commit: bool = True) -> User:  # noqa: FBT001, FBT002, ARG002
+        """Save user and update associated member profile with form data.
 
         Args:
-            commit: Whether to save to database
+            commit: Whether to save to database. Defaults to True.
 
         Returns:
-            User: Created user instance
+            Created user instance with updated member profile.
+
         """
+        # Create user instance from parent form
         user = super(RegistrationFormUniqueEmail, self).save()
 
+        # Update member profile with form data
         user.member.newsletter = self.cleaned_data["newsletter"]
         user.member.language = self.cleaned_data["lang"]
         user.member.name = self.cleaned_data["name"]
@@ -180,75 +234,87 @@ class MyRegistrationFormUniqueEmail(RegistrationFormUniqueEmail):
 class MyPasswordResetConfirmForm(SetPasswordForm):
     """Custom password reset confirmation form with field limits."""
 
-    def __init__(self, *args, **kwargs):
-        """Initialize form with password field constraints.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-        """
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with password field constraints."""
         super().__init__(*args, **kwargs)
+        # Limit password field to 70 characters
         self.fields["new_password1"].widget.attrs["maxlength"] = 70
 
 
 class MyPasswordResetForm(PasswordResetForm):
     """Custom password reset form with association-specific handling."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with email field constraints.
 
         Args:
             *args: Variable length argument list
             **kwargs: Arbitrary keyword arguments
+
         """
         super().__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["maxlength"] = 70
 
-    def get_users(self, email):
+    def get_users(self, email: str) -> Generator:
+        """Return active users matching the given email (case-insensitive)."""
         # noinspection PyProtectedMember
-        active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)
+        active_users = get_user_model()._default_manager.filter(email__iexact=email, is_active=True)  # noqa: SLF001  # Django model manager
         return (u for u in active_users)
 
     def send_mail(
         self,
-        subject_template_name,
-        email_template_name,
-        context,
-        from_email,
-        to_email,
-        html_email_template_name=None,
-    ):
+        subject_template_name: str,
+        email_template_name: str,
+        context: dict,
+        from_email: str,  # noqa: ARG002
+        to_email: str,
+        html_email_template_name: str | None = None,  # noqa: ARG002
+    ) -> None:
+        """Send a django.core.mail.EmailMultiAlternatives to `to_email`.
+
+        Args:
+            subject_template_name: Template name for email subject
+            email_template_name: Template name for email body
+            context: Context dictionary for template rendering
+            from_email: Sender email address
+            to_email: Recipient email address
+            html_email_template_name: Optional HTML template name
+
+        Returns:
+            None
+
         """
-        Sends a django.core.mail.EmailMultiAlternatives to `to_email`.
-        """
+        # Render email subject from template and remove newlines
         subject = loader.render_to_string(subject_template_name, context)
         # Email subject *must not* contain newlines
         subject = "".join(subject.splitlines())
+
+        # Render email body from template
         body = loader.render_to_string(email_template_name, context)
 
-        assoc_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
-        assoc = None
-        if assoc_slug:
+        # Extract association slug from domain and find association
+        association_slug = context["domain"].replace("larpmanager.com", "").strip(".").strip()
+        association = None
+
+        # If association slug exists, try to find association and update membership
+        if association_slug:
             try:
-                assoc = Association.objects.get(slug=assoc_slug)
+                association = Association.objects.get(slug=association_slug)
                 user = context["user"]
-                mb = get_user_membership(user.member, assoc.id)
+
+                # Store password reset token in user membership
+                mb = get_user_membership(user.member, association.id)
                 mb.password_reset = f"{context['uid']}#{context['token']}"
                 mb.save()
             except ObjectDoesNotExist:
-                # Invalid association slug - continue with None assoc
+                # Invalid association slug - continue with None association
                 pass
 
-        logger.debug(f"Password reset context: domain={context.get('domain')}, uid={context.get('uid')}")
+        # Log password reset attempt for debugging
+        logger.debug("Password reset context: domain=%s, uid=%s", context.get("domain"), context.get("uid"))
 
-        my_send_mail(subject, body, to_email, assoc)
-
-    # ~ email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
-    # ~ if html_email_template_name is not None:
-    # ~ html_email = loader.render_to_string(html_email_template_name, context)
-    # ~ email_message.attach_alternative(html_email, 'text/html')
-
-    # ~ email_message.send()
+        # Send the email using custom mail function
+        my_send_mail(subject, body, to_email, association)
 
 
 class AvatarForm(forms.Form):
@@ -266,7 +332,8 @@ class LanguageForm(forms.Form):
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with current language pre-selected."""
         current_lang = kwargs.pop("current_language")
         super().__init__(*args, **kwargs)
         self.fields["language"].initial = current_lang
@@ -277,16 +344,16 @@ COUNTRY_CHOICES = sorted([(country.alpha_2, country.name) for country in pycount
 
 # noinspection PyUnresolvedReferences
 FULL_PROVINCE_CHOICES = sorted(
-    [(province.code, province.name, province.country_code) for province in pycountry.subdivisions], key=lambda x: x[1]
+    [(province.code, province.name, province.country_code) for province in pycountry.subdivisions],
+    key=lambda x: x[1],
 )
 
 PROVINCE_CHOICES = [("", "----")] + [(province[0], province[1]) for province in FULL_PROVINCE_CHOICES]
 
 country_subdivisions_map = {}
 for province in FULL_PROVINCE_CHOICES:
-    if province[2] == "IT":
-        if re.match(r"^IT-\d{2}", province[0]):
-            continue
+    if province[2] == "IT" and re.match(r"^IT-\d{2}", province[0]):
+        continue
     if province[2] not in country_subdivisions_map:
         country_subdivisions_map[province[2]] = []
     country_subdivisions_map[province[2]].append([province[0], province[1]])
@@ -302,10 +369,16 @@ MEMBERSHIP_CHOICES = (
 
 
 class ResidenceWidget(forms.MultiWidget):
+    """Represents ResidenceWidget model."""
+
     template_name = "forms/widgets/residence_widget.html"
 
-    def __init__(self, attrs=None):
+    def __init__(self, attrs: dict[str, Any] | None = None) -> None:
+        """Initialize the multi-widget with country, province, city, postal code, street, and house number fields."""
+        # Common attributes for all text input widgets
         attr_common = {"class": "form-control"}
+
+        # Define all address component widgets
         widgets = [
             forms.Select(choices=COUNTRY_CHOICES),
             forms.Select(choices=PROVINCE_CHOICES),
@@ -314,21 +387,28 @@ class ResidenceWidget(forms.MultiWidget):
             forms.TextInput(attrs={**attr_common, "placeholder": _("Street")}),
             forms.TextInput(attrs={**attr_common, "placeholder": _("House number")}),
         ]
+
         super().__init__(widgets, attrs)
 
-    def decompress(self, value):
+    def decompress(self, value: str | None) -> list[str | None]:
+        """Split value by '|' or return list of 6 None values."""
         if value:
             return value.split("|")
         return [None] * 6
 
 
-def validate_no_pipe(value):
+def validate_no_pipe(value: str) -> None:
+    """Validate that the value does not contain pipe characters."""
     if "|" in value:
         raise forms.ValidationError(_("Character not allowed") + ": |")
 
 
 class ResidenceField(forms.MultiValueField):
-    def __init__(self, *args, **kwargs):
+    """Represents ResidenceField model."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the field with residence-specific subfields and widget."""
+        # Define subfields for country, province, city, postal code, address, and civic number
         fields = [
             forms.ChoiceField(choices=COUNTRY_CHOICES),
             forms.ChoiceField(choices=PROVINCE_CHOICES, required=False),
@@ -337,62 +417,106 @@ class ResidenceField(forms.MultiValueField):
             forms.CharField(max_length=30, validators=[validate_no_pipe]),
             forms.CharField(max_length=10, validators=[validate_no_pipe]),
         ]
+
+        # Initialize custom widget for residence input
         widget = ResidenceWidget(attrs=None)
         super().__init__(*args, fields=fields, widget=widget, **kwargs)
 
-    def compress(self, values):
-        if not values:
+    def compress(self, values_list: list[str | None]) -> str:
+        """Join list values into pipe-separated string, replacing None with empty string."""
+        if not values_list:
             return ""
-        values = [v if v is not None else "" for v in values]
-        return "|".join(values)
+        # Replace None values with empty strings
+        sanitized_values = [value if value is not None else "" for value in values_list]
+        return "|".join(sanitized_values)
 
-    def clean(self, value):
+    def clean(self, value: list | None) -> str:
+        """Clean and validate field values, handling empty values appropriately.
+
+        Args:
+            value: List of field values to clean, or None if empty.
+
+        Returns:
+            Compressed list of cleaned field values.
+
+        Raises:
+            forms.ValidationError: If any field validation fails.
+
+        """
+        # Handle empty/None input by creating default values for all fields
         if not value:
-            value = self.compress([None] * len(self.fields))
-            return value
+            return self.compress([None] * len(self.fields))
 
-        try:
-            cleaned_data = []
-            for i, field in enumerate(self.fields):
-                if i == 1 and (value[i] in (None, "")):
-                    cleaned_data.append("")
-                else:
-                    cleaned_data.append(field.clean(value[i]))
-            return self.compress(cleaned_data)
-        except forms.ValidationError as err:
-            raise err
+        cleaned_data = []
+        # Process each field value individually
+        for i, field in enumerate(self.fields):
+            # Special handling for second field (index 1) - allow empty strings
+            if i == 1 and (value[i] in (None, "")):
+                cleaned_data.append("")
+            else:
+                # Apply field-specific validation and cleaning
+                cleaned_data.append(field.clean(value[i]))
+
+        # Compress cleaned data into final format
+        return self.compress(cleaned_data)
 
 
 class BaseProfileForm(MyForm):
-    def __init__(self, *args, **kwargs):
+    """Form for BaseProfile."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize base profile form with field filtering based on association settings.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+
+        """
         super().__init__(*args, **kwargs)
 
-        self.allowed = self.params["request"].assoc["members_fields"]
-        assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
-        self.mandatory = set(assoc.mandatory_fields.split(","))
-        self.optional = set(assoc.optional_fields.split(","))
+        # Cache frequently accessed request data
+        self.allowed = self.params["members_fields"]
 
-        dl = []
-        for f in self.fields:
-            if f not in self.allowed and f not in ["name", "surname", "language"]:
-                dl.append(f)
+        # Use cached association data
+        association = Association.objects.get(pk=self.params["association_id"])
 
-        for f in dl:
-            del self.fields[f]
+        # Pre-split and cache field sets
+        self.mandatory = set(association.mandatory_fields.split(","))
+        self.optional = set(association.optional_fields.split(","))
 
+        # Field filtering
+        always_allowed = {"name", "surname", "language"}
+        fields_to_delete = [f for f in self.fields if f not in self.allowed and f not in always_allowed]
+
+        # Batch delete fields
+        for f in fields_to_delete:
+            self.delete_field(f)
+
+        # Handle residence address field if needed
         if "residence_address" in self.allowed:
             self.fields["residence_address"] = ResidenceField(label=_("Residence address"))
             self.fields["residence_address"].required = "residence_address" in self.mandatory
-            if self.instance.pk and self.instance.residence_address:
-                self.initial["residence_address"] = self.instance.residence_address
-                aux = self.instance.residence_address.split("|")
-                self.initial_nation = aux[0]
-                self.initial_province = aux[1]
 
+            if self.instance.pk and self.instance.residence_address:
+                residence_data = self.instance.residence_address
+                self.initial["residence_address"] = residence_data
+
+                # Safe split with error handling
+                try:
+                    aux = residence_data.split("|")
+                    self.initial_nation = aux[0] if len(aux) > 0 else ""
+                    self.initial_province = aux[1] if len(aux) > 1 else ""
+                except (IndexError, AttributeError):
+                    self.initial_nation = ""
+                    self.initial_province = ""
+
+            # Only assign if needed (avoid unnecessary memory allocation)
             self.country_subdivisions_map = country_subdivisions_map
 
 
 class ProfileForm(BaseProfileForm):
+    """Form for Profile."""
+
     class Meta:
         model = Member
         fields = (
@@ -419,7 +543,7 @@ class ProfileForm(BaseProfileForm):
             "phone_contact",
         )
 
-        widgets = {
+        widgets: ClassVar[dict] = {
             "diet": Textarea(attrs={"rows": 5}),
             "safety": Textarea(attrs={"rows": 5}),
             "presentation": Textarea(attrs={"rows": 5}),
@@ -428,7 +552,7 @@ class ProfileForm(BaseProfileForm):
             "document_expiration": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: C901 - Complex form initialization with dynamic field setup
         """Initialize member form with dynamic field validation and configuration.
 
         Sets mandatory fields, handles voting candidates, and adds required
@@ -437,83 +561,117 @@ class ProfileForm(BaseProfileForm):
         Args:
             *args: Variable positional arguments
             **kwargs: Variable keyword arguments including request context
+
         """
         super().__init__(*args, **kwargs)
 
-        for f in self.fields:
-            if f in self.mandatory:
-                self.fields[f].required = True
-                self.fields[f].label = _(self.fields[f].label) + " (*)"
+        # Batch process mandatory field updates
+        mandatory_asterisk = " (*)"
+        fields_to_update = {}
 
-        for s in ["name", "surname"]:
-            if s in self.fields:
-                self.fields[s].label = _(self.fields[s].label) + " (*)"
+        # Process mandatory fields
+        for field_name in self.fields:
+            if field_name in self.mandatory:
+                field = self.fields[field_name]
+                field.required = True
+                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
 
+        # Process always-required fields
+        for field_name in ["name", "surname"]:
+            if field_name in self.fields:
+                field = self.fields[field_name]
+                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
+
+        # Apply all label updates at once
+        for field_name, new_label in fields_to_update.items():
+            self.fields[field_name].label = new_label
+
+        # Handle presentation field for voting candidates
         if "presentation" in self.fields:
-            assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
-            vote_cands = assoc.get_config("vote_candidates", "").split(",")
+            vote_cands = get_association_config(
+                self.params["association_id"], "vote_candidates", default_value="", context=self.params
+            ).split(",")
             if not self.instance.pk or str(self.instance.pk) not in vote_cands:
                 self.delete_field("presentation")
 
+        # Set default values
+        initial_defaults = {}
         if "phone_contact" not in self.initial:
-            self.initial["phone_contact"] = "+XX"
-
+            initial_defaults["phone_contact"] = "+XX"
         if "birth_date" not in self.initial:
-            self.initial["birth_date"] = "00/00/0000"
-        # ~ else:
-        # ~ self.initial['birth_date'] = self.instance.birth_date.isoformat()
+            initial_defaults["birth_date"] = "00/00/0000"
 
+        # Apply initial values in batch
+        self.initial.update(initial_defaults)
+
+        # Membership checking
         share = False
         if self.instance.pk:
-            get_user_membership(self.instance, self.params["request"].assoc["id"])
-            share = self.instance.membership.compiled
+            membership = self.params["membership"]
+            share = membership.compiled
 
+        # Add consent field only if needed
         if not share:
             self.fields["share"] = forms.BooleanField(
                 required=True,
                 label=_("Authorisation"),
                 help_text=_(
-                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy"
+                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our Privacy Policy",
                 )
                 + "?",
             )
 
-    def clean_birth_date(self):
+    def clean_birth_date(self) -> date:
+        """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]
-        logger.debug(f"Validating birth date: {data}")
+        logger.debug("Validating birth date: %s", data)
 
-        assoc = Association.objects.get(pk=self.params["request"].assoc["id"])
-        if "membership" in get_assoc_features(assoc.id):
-            min_age = assoc.get_config("membership_age", "")
+        # Use cached association
+        association_id = self.params["association_id"]
+
+        # Use cached features
+        features = self.params["features"]
+
+        if "membership" in features:
+            min_age = get_association_config(association_id, "membership_age", default_value="", context=self.params)
             if min_age:
-                min_age = int(min_age)
-                # ~ d = date.fromisoformat(data)
-                logger.debug(f"Checking minimum age {min_age} against birth date {data}")
-                dif = relativedelta(datetime.now(), data).years
-                if dif < min_age:
-                    raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
+                try:
+                    min_age = int(min_age)
+                    logger.debug("Checking minimum age %s against birth date %s", min_age, data)
+                    age_diff = relativedelta(timezone.now(), data).years
+                    if age_diff < min_age:
+                        raise ValidationError(_("Minimum age: %(number)d") % {"number": min_age})
+                except (ValueError, TypeError) as e:
+                    logger.warning("Invalid membership_age config: %s, error: %s", min_age, e)
 
         return data
 
-    def clean(self):
+    def clean(self) -> dict[str, Any]:
+        """Validate profile photo requirements based on form configuration."""
         cleaned_data = super().clean()
 
-        if "profile" in self.allowed and "profile" in self.mandatory:
-            if not self.instance.profile:
-                self.add_error(None, _("Please upload your profile photo") + "!")
+        # Check if profile photo is both allowed and mandatory, then validate presence
+        if "profile" in self.allowed and "profile" in self.mandatory and not self.instance.profile:
+            self.add_error(None, _("Please upload your profile photo") + "!")
 
         return cleaned_data
 
-    def save(self, commit=True):
+    def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
+        """Save form instance with residence address if provided."""
         instance = super().save(commit=False)
+
+        # Update residence address if present in cleaned data
         if "residence_address" in self.cleaned_data:
             instance.residence_address = self.cleaned_data["residence_address"]
+
         if commit:
             instance.save()
         return instance
 
 
 class MembershipRequestForm(forms.ModelForm):
+    """Form for MembershipRequest."""
+
     class Meta:
         model = Membership
         fields = ("request", "document")
@@ -532,6 +690,8 @@ class MembershipRequestForm(forms.ModelForm):
 
 
 class MembershipConfirmForm(forms.Form):
+    """Form for MembershipConfirm."""
+
     confirm_1 = forms.BooleanField(required=True, initial=False)
     confirm_2 = forms.BooleanField(required=True, initial=False)
     confirm_3 = forms.BooleanField(required=True, initial=False)
@@ -539,77 +699,88 @@ class MembershipConfirmForm(forms.Form):
 
 
 class MembershipResponseForm(forms.Form):
+    """Form for MembershipResponse."""
+
     is_approved = forms.BooleanField(required=False, initial=True)
     response = forms.CharField(
         required=False,
         max_length=1000,
         help_text=_(
-            "Optional text to be included in the email sent to the participant to notify them of the approval decision"
+            "Optional text to be included in the email sent to the participant to notify them of the approval decision",
         ),
     )
 
 
 class ExeVolunteerRegistryForm(MyForm):
+    """Form for ExeVolunteerRegistry."""
+
     page_title = _("Volounteer data")
 
-    page_info = _("This page allows you to add or edit a volunteer entry")
+    page_info = _("Manage volunteer entries")
 
     class Meta:
         model = VolunteerRegistry
-        exclude = []
+        exclude: ClassVar[list] = []
 
-        widgets = {
-            "member": AssocMemberS2Widget,
+        widgets: ClassVar[dict] = {
+            "member": AssociationMemberS2Widget,
             "start": DatePickerInput,
             "end": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member widget with association ID."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
+        self.fields["member"].widget.set_association_id(self.params["association_id"])
 
-    def clean_member(self):
+    def clean_member(self) -> Member:
+        """Validate member is not already registered as volunteer for this association."""
         member = self.cleaned_data["member"]
 
-        # check if already used
-        lst = VolunteerRegistry.objects.filter(member=member, assoc_id=self.params["a_id"])
+        # Check for existing volunteer entries for this member and association
+        lst = VolunteerRegistry.objects.filter(member=member, association_id=self.params["association_id"])
         if lst.count() > 1:
-            raise ValidationError("Volunteer entry already existing!")
+            msg = "Volunteer entry already existing!"
+            raise ValidationError(msg)
 
         return member
 
 
 class MembershipForm(BaseAccForm):
+    """Form for Membership."""
+
     amount = forms.DecimalField(min_value=0.01, max_value=1000, decimal_places=2)
 
 
 class ExeMemberForm(BaseProfileForm):
-    page_info = _("This page allows you to edit a member's profile")
+    """Form for ExeMember."""
+
+    page_info = _("Manage member profiles")
 
     class Meta:
         model = Member
         fields = "__all__"
-        widgets = {
+        widgets: ClassVar[dict] = {
             "birth_date": DatePickerInput,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and make profile field optional if present."""
         super().__init__(*args, **kwargs)
         if "profile" in self.fields:
             self.fields["profile"].required = False
 
 
 class ExeMembershipForm(MyForm):
-    page_info = _("This page allows you to change a member's membership status")
+    """Form for ExeMembership."""
 
-    load_templates = ["membership"]
+    page_info = _("Manage member membership status")
+
+    load_templates: ClassVar[list] = ["membership"]
 
     class Meta:
         model = Membership
         fields = (
-            "compiled",
-            "credit",
-            "tokens",
             "status",
             "request",
             "document",
@@ -620,7 +791,9 @@ class ExeMembershipForm(MyForm):
 
 
 class ExeMembershipFeeForm(forms.Form):
-    page_info = _("This page allows you to upload the invoce of payment of a membership fee")
+    """Form for ExeMembershipFee."""
+
+    page_info = _("Manage membership fee invoice upload")
 
     page_title = _("Upload membership fee")
 
@@ -628,7 +801,7 @@ class ExeMembershipFeeForm(forms.Form):
         label=_("Member"),
         queryset=Member.objects.none(),
         required=False,
-        widget=AssocMemberS2Widget,
+        widget=AssociationMemberS2Widget,
     )
 
     invoice = forms.FileField(
@@ -636,24 +809,38 @@ class ExeMembershipFeeForm(forms.Form):
         label=_("Invoice"),
     )
 
-    def __init__(self, *args, **kwargs):
-        self.params = kwargs.pop("ctx", None)
-        super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
-        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with association context and configure member/payment fields.
 
-        assoc = Association.objects.get(pk=self.params["a_id"])
-        choices = [(method.id, method.name) for method in assoc.payment_methods.all()]
+        Args:
+            *args: Positional arguments passed to parent form class.
+            **kwargs: Keyword arguments including 'context' dict with association context.
+
+        """
+        # Extract association context and initialize parent form
+        self.params = kwargs.pop("context", {})
+        super().__init__(*args, **kwargs)
+        association_id = self.params.get("association_id", None)
+
+        # Configure member field widget and queryset for the association
+        self.fields["member"].widget.set_association_id(association_id)
+        self.fields["member"].queryset = get_members_queryset(association_id)
+
+        # Build payment method choices from association's available methods
+        association = Association.objects.get(pk=association_id)
+        choices = [(method.id, method.name) for method in association.payment_methods.all()]
         self.fields["method"] = forms.ChoiceField(
             required=True,
             choices=choices,
             label=_("Method"),
         )
 
-    def clean_member(self):
+    def clean_member(self) -> Member:
+        """Validate that the member doesn't already have a membership fee for the current year."""
         member = self.cleaned_data["member"]
-        year = datetime.today().year
+        year = timezone.now().year
 
+        # Check if membership fee already exists for this year
         if AccountingItemMembership.objects.filter(member=member, year=year).exists():
             self.add_error("member", _("Membership fee already existing for this user and for this year"))
 
@@ -661,10 +848,12 @@ class ExeMembershipFeeForm(forms.Form):
 
 
 class ExeMembershipDocumentForm(forms.Form):
+    """Form for ExeMembershipDocument."""
+
     page_info = (
-        _("This page allows you to upload a new membership documents")
+        _("Manage membership document upload")
         + " - "
-        + _("Please note that the user must have confirmed it's consent to share their data with your organization")
+        + _("Please note that the user must have confirmed their consent to share their data with your organization")
     )
 
     page_title = _("Upload membership document")
@@ -673,7 +862,7 @@ class ExeMembershipDocumentForm(forms.Form):
         label=_("Member"),
         queryset=Member.objects.none(),
         required=False,
-        widget=AssocMemberS2Widget,
+        widget=AssociationMemberS2Widget,
     )
 
     request = forms.FileField(
@@ -691,13 +880,23 @@ class ExeMembershipDocumentForm(forms.Form):
 
     date = forms.DateField(widget=DatePickerInput(), label=_("Date of membership approval"))
 
-    def __init__(self, *args, **kwargs):
-        self.params = kwargs.pop("ctx", None)
-        super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_assoc(self.params["a_id"])
-        self.fields["member"].queryset = get_members_queryset(self.params["a_id"])
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with association context and set member field constraints.
 
-        number = Membership.objects.filter(assoc_id=self.params["a_id"]).aggregate(Max("card_number"))[
+        Configures member widget and queryset for the specified association,
+        and auto-increments card number based on existing memberships.
+        """
+        # Extract association context and initialize parent form
+        self.params = kwargs.pop("context", {})
+        super().__init__(*args, **kwargs)
+        self.association_id = self.params.get("association_id", None)
+
+        # Configure member field with association-specific queryset and widget
+        self.fields["member"].widget.set_association_id(self.association_id)
+        self.fields["member"].queryset = get_members_queryset(self.association_id)
+
+        # Calculate next available card number for the association
+        number = Membership.objects.filter(association_id=self.association_id).aggregate(Max("card_number"))[
             "card_number__max"
         ]
         if not number:
@@ -706,25 +905,37 @@ class ExeMembershipDocumentForm(forms.Form):
             number += 1
         self.initial["card_number"] = number
 
-    def clean_member(self):
+    def clean_member(self) -> Member:
+        """Validate that the member can join the organization.
+
+        Raises:
+            ValidationError: If member already has an active membership.
+
+        """
         member = self.cleaned_data["member"]
-        membership = Membership.objects.get(member=member, assoc_id=self.params["a_id"])
+        membership = Membership.objects.get(member=member, association_id=self.association_id)
+
+        # Check if membership status allows joining
         if membership.status not in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
             self.add_error("member", _("User is already a member"))
 
         return member
 
-    def clean_card_number(self):
+    def clean_card_number(self) -> str:
+        """Validate that card number is unique within the association."""
         card_number = self.cleaned_data["card_number"]
 
-        if Membership.objects.filter(assoc_id=self.params["a_id"], card_number=card_number).exists():
+        # Check if another member already has this card number in the same association
+        if Membership.objects.filter(association_id=self.params["association_id"], card_number=card_number).exists():
             self.add_error("card_number", _("There is already a member with this number"))
 
         return card_number
 
 
 class ExeBadgeForm(MyForm):
-    page_info = _("This page allows you to add or edit a badge, or assign it  to users")
+    """Form for ExeBadge."""
+
+    page_info = _("Manage badges and user assignments")
 
     page_title = _("Badge")
 
@@ -732,25 +943,35 @@ class ExeBadgeForm(MyForm):
         model = Badge
         exclude = ("number",)
 
-        widgets = {
-            "members": AssocMemberS2WidgetMulti,
+        widgets: ClassVar[dict] = {
+            "members": AssociationMemberS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
-        self.fields["members"].widget.set_assoc(self.params["a_id"])
+        self.fields["members"].widget.set_association_id(self.params["association_id"])
 
 
 class ExeProfileForm(MyForm):
+    """Form for ExeProfile."""
+
     page_title = _("Profile")
 
-    page_info = _("This page allows you to set up the fields that participants can fill in in their user profile")
+    page_info = _("Manage profile fields that participants can fill in")
 
     class Meta:
         model = Association
         fields = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize member field configuration form.
+
+        Args:
+            *args: Positional arguments passed to parent
+            **kwargs: Keyword arguments passed to parent
+
+        """
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
@@ -780,14 +1001,20 @@ class ExeProfileForm(MyForm):
             self.delete_field("fiscal_code")
 
     @staticmethod
-    def get_members_fields():
-        """
-        Get available member fields for form configuration.
+    def get_members_fields() -> list[tuple[str, str, str]]:
+        """Get available member fields for form configuration.
+
+        Retrieves all fields from the Member model, excluding system fields and
+        sensitive data fields that should not be configurable in forms.
 
         Returns:
-            list: List of tuples containing field information (name, verbose_name, help_text)
+            list[tuple[str, str, str]]: List of tuples containing field information
+                in the format (field_name, verbose_name, help_text)
+
         """
-        skip = [
+        # Define fields to exclude from configuration options
+        # These are system fields or sensitive data that shouldn't be user-configurable
+        excluded_field_names = [
             "id",
             "deleted",
             "created",
@@ -803,18 +1030,26 @@ class ExeProfileForm(MyForm):
             "parent",
             "legal_gender",
         ]
-        choices = []
+
+        available_fields: list[tuple[str, str, str]] = []
+
+        # Iterate through all fields in the Member model
         # noinspection PyUnresolvedReferences,PyProtectedMember
-        for f in Member._meta.get_fields():
-            if not str(f).startswith("larpmanager.Member."):
-                continue
-            if f.name in skip:
+        for field in Member._meta.get_fields():  # noqa: SLF001  # Django model metadata
+            # Filter only fields that belong to the Member model
+            if not str(field).startswith("larpmanager.Member."):
                 continue
 
-            choices.append((f.name, f.verbose_name, f.help_text))
-        return choices
+            # Skip fields that are in the exclusion list
+            if field.name in excluded_field_names:
+                continue
 
-    def save(self, commit=True):
+            # Add field information as tuple (name, verbose_name, help_text)
+            available_fields.append((field.name, field.verbose_name, field.help_text))
+
+        return available_fields
+
+    def save(self, commit: bool = True) -> Member:  # noqa: FBT001, FBT002
         """Save form data and update member field configurations.
 
         Args:
@@ -822,8 +1057,9 @@ class ExeProfileForm(MyForm):
 
         Returns:
             The saved form instance
+
         """
-        instance = super().save(commit=commit)
+        instance: Member = super().save(commit=commit)
 
         mandatory = []
         optional = []

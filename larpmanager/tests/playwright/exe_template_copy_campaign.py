@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_con
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_template_copy(pw_page):
+def test_exe_template_copy(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,14 +43,14 @@ def test_exe_template_copy(pw_page):
     campaign(live_server, page)
 
 
-def template(live_server, page):
+def template(live_server: Any, page: Any) -> None:
     # Activate template
-    go_to(page, live_server, "/manage/features/179/on")
+    go_to(page, live_server, "/manage/features/template/on")
     go_to(page, live_server, "/manage/template")
     page.get_by_role("link", name="New").click()
     page.get_by_role("row", name="Name").locator("td").click()
     page.locator("#id_name").fill("template")
-    page.locator("input[type='checkbox'][value='178']").check()  # mark character
+    page.get_by_role("checkbox", name="Characters").check()
     page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
     submit_confirm(page)
     page.get_by_role("link", name="Add").click()
@@ -88,13 +89,13 @@ def template(live_server, page):
     go_to(page, live_server, "/fromtemplate/1/manage/copy")
 
 
-def setup(live_server, page):
+def setup(live_server: Any, page: Any) -> None:
     # activate factions
-    go_to(page, live_server, "/test/manage/features/104/on")
+    go_to(page, live_server, "/test/1/manage/features/faction/on")
     # activate xp
-    go_to(page, live_server, "/test/manage/features/118/on")
+    go_to(page, live_server, "/test/1/manage/features/px/on")
     # activate characters
-    go_to(page, live_server, "/test/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/character/on")
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
@@ -113,7 +114,7 @@ def setup(live_server, page):
     submit_confirm(page)
 
 
-def copy(live_server, page):
+def copy(live_server: Any, page: Any) -> None:
     # copy event
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
@@ -123,7 +124,7 @@ def copy(live_server, page):
     page.locator("#slug").fill("copy")
     submit_confirm(page)
 
-    go_to(page, live_server, "/copy/1/manage/features/10/on")
+    go_to(page, live_server, "/copy/1/manage/features/copy/on")
     go_to(page, live_server, "/copy/1/manage/copy/")
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
@@ -148,9 +149,9 @@ def copy(live_server, page):
     expect(page.locator('[id="\\32 "]')).to_contain_text("11")
 
 
-def campaign(live_server, page):
+def campaign(live_server: Any, page: Any) -> None:
     # create campaign
-    go_to(page, live_server, "/manage/features/79/on")
+    go_to(page, live_server, "/manage/features/campaign/on")
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
     page.locator("#id_name").click()

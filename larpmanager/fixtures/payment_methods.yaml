@@ -1,5 +1,4 @@
 - model: larpmanager.paymentmethod
-  pk: 1
   fields:
     name: Wire
     slug: wire
@@ -10,15 +9,13 @@
     fields: payee, iban, bic
     profile: payment_methods/ac81a0b8942e41a8bbcefa197ccfb3d8.png
 - model: larpmanager.paymentmethod
-  pk: 2
   fields:
     name: Freeform
     slug: any
-    instructions: <p>No need for data; the member will upload a text of any kind.&nbsp;</p>
+    instructions: <p>No need for data; the participant will upload a text of any kind.&nbsp;</p>
     fields: ''
     profile: payment_methods/873326d033b74568bb9e79d1e96762cf.png
 - model: larpmanager.paymentmethod
-  pk: 3
   fields:
     name: Paypal
     slug: paypal
@@ -35,7 +32,6 @@
     fields: id, business
     profile: payment_methods/aba0f22f1f3b4cc8bfb7ca092ad0ba6e.png
 - model: larpmanager.paymentmethod
-  pk: 4
   fields:
     name: Stripe
     slug: stripe
@@ -55,7 +51,6 @@
     fields: pk_api, sk_api, webhook_secret
     profile: payment_methods/86a08e7ab3bd41f9be8dff0bd5302d78.png
 - model: larpmanager.paymentmethod
-  pk: 5
   fields:
     name: SumUp
     slug: sumup
@@ -73,7 +68,6 @@
     fields: merchant_id, client_id, client_secret
     profile: payment_methods/6e4c4daef26f43c0a8bac55274cca6f0.png
 - model: larpmanager.paymentmethod
-  pk: 6
   fields:
     name: Redsys
     slug: redsys
@@ -82,7 +76,6 @@
       merchant_paymethods
     profile: payment_methods/d313edf6dff84bd0834b3ed32dbc1475.png
 - model: larpmanager.paymentmethod
-  pk: 7
   fields:
     name: Paypal (manual)
     slug: paypal_nf
@@ -95,7 +88,6 @@
     fields: handle
     profile: payment_methods/7_3b97971f5d8747b1bd225266243b5179.png
 - model: larpmanager.paymentmethod
-  pk: 8
   fields:
     name: Satispay
     slug: satispay

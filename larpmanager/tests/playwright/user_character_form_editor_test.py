@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -25,7 +27,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_conf
 pytestmark = pytest.mark.e2e
 
 
-def test_user_character_form_editor(pw_page):
+def test_user_character_form_editor(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -41,12 +43,12 @@ def test_user_character_form_editor(pw_page):
     character(page, live_server)
 
 
-def prepare(page, live_server):
+def prepare(page: Any, live_server: Any) -> None:
     # Activate characters
-    go_to(page, live_server, "/test/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/character/on")
 
     # Activate player editor
-    go_to(page, live_server, "/test/manage/features/120/on")
+    go_to(page, live_server, "/test/1/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name="Player editor ").click()
@@ -64,7 +66,7 @@ def prepare(page, live_server):
     expect(page.locator('[id="\\33 "]')).to_contain_text("Sheet")
 
 
-def field_single(page, live_server):
+def field_single(page: Any, live_server: Any) -> None:
     # add single
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -92,7 +94,7 @@ def field_single(page, live_server):
     submit_confirm(page)
 
 
-def field_multiple(page, live_server):
+def field_multiple(page: Any, live_server: Any) -> None:
     # Add multiple
     page.get_by_role("link", name="New").click()
     page.get_by_text("Question type").click()
@@ -129,7 +131,7 @@ def field_multiple(page, live_server):
     submit_confirm(page)
 
 
-def field_text(page, live_server):
+def field_text(page: Any, live_server: Any) -> None:
     # Add text
     page.get_by_role("link", name="New").click()
     page.locator("#id_typ").select_option("t")
@@ -169,7 +171,7 @@ def field_text(page, live_server):
     submit_confirm(page)
 
 
-def character(page, live_server):
+def character(page: Any, live_server: Any) -> None:
     # signup, create char
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()

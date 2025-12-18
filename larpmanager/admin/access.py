@@ -17,62 +17,93 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+"""Django admin configuration for access control models."""
+
+from typing import ClassVar
 
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from larpmanager.admin.base import DefModelAdmin
-from larpmanager.models.access import AssocPermission, AssocRole, EventPermission, EventRole, PermissionModule
+from larpmanager.models.access import (
+    AssociationPermission,
+    AssociationRole,
+    EventPermission,
+    EventRole,
+    PermissionModule,
+)
 
 
 class PermissionModuleResource(resources.ModelResource):
+    """Import/export resource for PermissionModule model."""
+
     class Meta:
+        """Meta configuration for PermissionModule resource."""
+
         model = PermissionModule
 
 
 @admin.register(PermissionModule)
 class PermissionModuleAdmin(ImportExportModelAdmin):
-    resource_classes = [PermissionModuleResource]
+    """Django admin for PermissionModule model."""
+
+    resource_classes: ClassVar[list] = [PermissionModuleResource]
     list_display = ("name", "icon")
     search_fields = ("name",)
 
 
-@admin.register(AssocRole)
-class AssocRoleAdmin(DefModelAdmin):
-    list_display = ("name", "assoc", "number")
-    autocomplete_fields = ["members", "assoc", "permissions"]
+@admin.register(AssociationRole)
+class AssociationRoleAdmin(DefModelAdmin):
+    """Django admin for AssociationRole model."""
+
+    list_display = ("name", "association", "number")
+    autocomplete_fields: ClassVar[list] = ["members", "association", "permissions"]
     search_fields = ("name",)
 
 
-class AssocPermissionResource(resources.ModelResource):
+class AssociationPermissionResource(resources.ModelResource):
+    """Import/export resource for AssociationPermission model."""
+
     class Meta:
-        model = AssocPermission
+        """Meta configuration for AssociationPermission resource."""
+
+        model = AssociationPermission
 
 
-@admin.register(AssocPermission)
-class AssocPermissionAdmin(ImportExportModelAdmin):
-    resource_classes = [AssocPermissionResource]
+@admin.register(AssociationPermission)
+class AssociationPermissionAdmin(ImportExportModelAdmin):
+    """Django admin for AssociationPermission model."""
+
+    resource_classes: ClassVar[list] = [AssociationPermissionResource]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)
-    autocomplete_fields = ["feature", "module"]
+    autocomplete_fields: ClassVar[list] = ["feature", "module"]
 
 
 @admin.register(EventRole)
 class EventRoleAdmin(DefModelAdmin):
+    """Django admin for EventRole model."""
+
     list_display = ("name", "event", "number")
-    autocomplete_fields = ["members", "event", "permissions"]
+    autocomplete_fields: ClassVar[list] = ["members", "event", "permissions"]
     search_fields = ("name",)
 
 
 class EventPermissionResource(resources.ModelResource):
+    """Import/export resource for EventPermission model."""
+
     class Meta:
+        """Meta configuration for EventPermission resource."""
+
         model = EventPermission
 
 
 @admin.register(EventPermission)
 class EventPermissionAdmin(ImportExportModelAdmin):
-    resource_classes = [EventPermissionResource]
-    autocomplete_fields = ["feature", "module"]
+    """Django admin for EventPermission model."""
+
+    resource_classes: ClassVar[list] = [EventPermissionResource]
+    autocomplete_fields: ClassVar[list] = ["feature", "module"]
     list_display = ("name", "slug", "number", "descr", "module", "feature")
     search_fields = ("name",)

@@ -17,78 +17,141 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+import random
 
 from django.core.cache import cache
 from django.db.models import Count
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
-from larpmanager.models.larpmanager import LarpManagerReview, LarpManagerShowcase
+from larpmanager.models.larpmanager import LarpManagerHighlight, LarpManagerReview, LarpManagerShowcase
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
-from larpmanager.utils.common import round_to_two_significant_digits
+from larpmanager.utils.core.common import round_to_two_significant_digits
 
 
-def reset_cache_lm_home():
-    cache.delete(cache_cache_lm_home_key())
+def clear_larpmanager_home_cache() -> None:
+    """Clear the cached larpmanager home page."""
+    cache.delete(cache_larpmanager_home_key())
 
 
-def cache_cache_lm_home_key():
+def cache_larpmanager_home_key() -> str:
+    """Generate cache key for larpmanager home data."""
     return "cache_lm_home"
 
 
-def get_cache_lm_home():
-    key = cache_cache_lm_home_key()
-    res = cache.get(key)
-    if not res:
-        res = update_cache_lm_home()
-        cache.set(key, res, timeout=60 * 15)
-    return res
+def get_cache_lm_home() -> dict:
+    """Get cached LM home data, computing if not cached.
+
+    Returns:
+        Cached or freshly computed home data.
+
+    """
+    # Get cache key and attempt to retrieve cached data
+    cache_key = cache_larpmanager_home_key()
+    cached_data = cache.get(cache_key)
+
+    # If cache miss, compute fresh data and cache it
+    if cached_data is None:
+        cached_data = update_cache_lm_home()
+        cache.set(cache_key, cached_data, timeout=300)
+
+    return cached_data
 
 
-def update_cache_lm_home():
-    ctx = {}
-    for el in [Event, Character, Registration, Member, PaymentInvoice]:
-        nm = str(el.__name__).lower()
-        cnt = el.objects.count()
-        ctx[f"cnt_{nm}"] = int(round_to_two_significant_digits(cnt))
+def update_cache_lm_home() -> dict[str, int | list]:
+    """Update and return cached data for the LarpManager home page.
 
-    que_run = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
-    ctx["cnt_run"] = int(round_to_two_significant_digits(que_run.count()))
+    Collects statistics for various models including events, characters,
+    registrations, members, and payment invoices. Also gathers data about
+    active runs, promoters, showcases, and reviews.
 
-    ctx["promoters"] = _get_promoters()
-    ctx["showcase"] = _get_showcases()
-    ctx["reviews"] = _get_reviews()
-    return ctx
+    Returns:
+        dict[str, int | list]: Dictionary containing:
+            - cnt_<model>: Rounded count for each model type
+            - cnt_run: Count of runs with more than 5 registrations
+            - promoters: List of promoter data
+            - showcase: List of showcase items
+            - reviews: List of review data
 
+    """
+    context = {}
 
-def _get_reviews():
-    res = []
-    for element in LarpManagerReview.objects.all():
-        res.append(element.as_dict())
-    return res
+    # Count objects for main models and round to two significant digits
+    for model_class in [Event, Character, Registration, Member, PaymentInvoice]:
+        model_name = str(model_class.__name__).lower()
+        model_count = model_class.objects.count()
+        context[f"cnt_{model_name}"] = int(round_to_two_significant_digits(model_count))
 
+    # Count runs that have more than 5 registrations
+    runs_query = Run.objects.annotate(num_reg=Count("registrations")).filter(num_reg__gt=5)
+    context["cnt_run"] = int(round_to_two_significant_digits(runs_query.count()))
 
-def _get_showcases():
-    res = []
-    for element in LarpManagerShowcase.objects.order_by("number"):
-        res.append(element.as_dict())
-    return res
+    # Gather additional display data
+    context["promoters"] = _get_promoters()
+    context["showcase"] = _get_showcases()
+    context["reviews"] = _get_reviews()
 
-
-def _get_promoters():
-    que = Association.objects.exclude(promoter__isnull=True)
-    que = que.exclude(promoter__exact="")
-    res = []
-    for element in que:
-        res.append(element.promoter_dict())
-    return res
+    return context
 
 
-@receiver(post_save, sender=Association)
-def update_association_reset_lm_home(sender, instance, **kwargs):
-    reset_cache_lm_home()
+def _get_reviews() -> list[dict]:
+    """Get all LARP manager reviews as dictionaries.
+
+    Returns:
+        List of review dictionaries.
+
+    """
+    # Convert each review object to dictionary representation
+    return [review.as_dict() for review in LarpManagerReview.objects.all()]
+
+
+def _get_showcases() -> list[dict]:
+    """Return all showcases with unique highlight assignments.
+
+    Each showcase is assigned one unique highlight from the randomized pool.
+    If there are more showcases than highlights, highlights are reused in a cycle.
+
+    Returns:
+        List of showcase dictionaries with assigned highlight data.
+
+    """
+    # Get showcases ordered by number
+    showcases = list(LarpManagerShowcase.objects.order_by("number"))
+
+    # Get randomized highlights
+    highlights = list(LarpManagerHighlight.objects.all())
+    random.shuffle(highlights)
+
+    # Assign one unique highlight to each showcase
+    result = []
+    for idx, showcase in enumerate(showcases):
+        showcase_dict = showcase.as_dict()
+
+        # Assign a highlight (cycle through if more showcases than highlights)
+        if highlights:
+            assigned_highlight = highlights[idx % len(highlights)]
+            showcase_dict["highlight"] = assigned_highlight.as_dict()
+
+        result.append(showcase_dict)
+
+    return result
+
+
+def _get_promoters() -> list[dict]:
+    """Get all promoters from associations that have promoter data.
+
+    Returns:
+        List of promoter dictionaries from associations with valid promoter data.
+
+    """
+    # Filter associations that have promoter data
+    associations_queryset = Association.objects.exclude(promoter__isnull=True)
+    associations_queryset = associations_queryset.exclude(promoter__exact="")
+
+    # Convert each association's promoter to dictionary format
+    return [association.promoter_dict() for association in associations_queryset]

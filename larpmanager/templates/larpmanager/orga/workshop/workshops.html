@@ -19,7 +19,7 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'public' el.member.id %}">{{ el.member }}</a>
+                        <a href="{% url 'public' el.member_id %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.num }}</td>
                 </tr>

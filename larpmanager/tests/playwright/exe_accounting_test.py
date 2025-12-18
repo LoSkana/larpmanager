@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -27,7 +29,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confir
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_accounting(pw_page):
+def test_exe_accounting(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -43,7 +45,7 @@ def test_exe_accounting(pw_page):
     verify(page, live_server)
 
 
-def verify(page, live_server):
+def verify(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/accounting/")
     expect(page.locator("#one")).to_contain_text("Total revenue: 133.00")
     expect(page.locator("#one")).to_contain_text("Net profit: 71.00")
@@ -67,7 +69,7 @@ def verify(page, live_server):
     expect(page.locator("#one")).to_contain_text("30.00")
 
 
-def sign_up_pay(page, live_server):
+def sign_up_pay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/tickets/")
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
@@ -106,7 +108,7 @@ def sign_up_pay(page, live_server):
     submit_confirm(page)
 
 
-def add_exe(page, live_server):
+def add_exe(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/outflows")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
@@ -152,7 +154,7 @@ def add_exe(page, live_server):
     submit_confirm(page)
 
 
-def add_orga(page, live_server):
+def add_orga(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/inflows")
     page.get_by_role("link", name="New").click()
     page.locator("#id_value").click()
@@ -177,17 +179,17 @@ def add_orga(page, live_server):
     submit_confirm(page)
 
 
-def config(page, live_server):
+def config(page: Any, live_server: Any) -> None:
     # activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
     # activate taxes
-    go_to(page, live_server, "/manage/features/173/on")
+    go_to(page, live_server, "/manage/features/vat/on")
     # activate inflows
-    go_to(page, live_server, "/manage/features/144/on")
+    go_to(page, live_server, "/manage/features/inflow/on")
     # activate organization tax
-    go_to(page, live_server, "/manage/features/121/on")
+    go_to(page, live_server, "/manage/features/organization_tax/on")
     # activate outflows
-    go_to(page, live_server, "/manage/features/108/on")
+    go_to(page, live_server, "/manage/features/outflow/on")
 
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name="Payments ").click()

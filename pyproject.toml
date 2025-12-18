@@ -13,12 +13,30 @@ extend_exclude="static/,larpmanager/static/"
 
 [tool.ruff]
 line-length = 120
-lint.select = ["F", "E", "B", "UP", "I", "N", "PL"] # F, E, B, UP, I, N, PL, D
-lint.ignore = ["ISC001", "E501"]
-extend-exclude = ["main"]
+extend-exclude = ["main", "*/migrations/*", "*/tests/*", "scripts/*", "manage.py"]
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.ruff.lint]
+select = ["ALL"]
+
+ignore = [
+	"ISC001", # Implicit string concatenation, ignored to use ruff formatter
+	"E501", # Line too long, ignored to use ruff formatter
+	"D100", # Missing docstring in public module
+	"D104", # Missing docstring in public package
+	"D106", # Missing docstring in public nested class, would be useless on Meta
+    "ANN401",  # Dynamically typed expressions (Any) are disallowed
+    "COM812",  # Trailing comma missing (conflicts with formatter)
+    "TD002",   # Missing author in TODO
+    "TD003",   # Missing issue link in TODO
+    "FIX002",  # Line contains TODO
+    "DJ001",  # TODO remove django-nullable-model-string-field
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.lint.pylint]
 max-args = 8

@@ -17,18 +17,25 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import os
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
 from django.shortcuts import redirect, render
 from django.utils.translation import get_language
 
-from larpmanager.cache.association import get_cache_assoc
+from larpmanager.cache.association import get_cache_association
+from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.skin import get_cache_skin
-from larpmanager.models.association import AssocTextType
-from larpmanager.utils.text import get_assoc_text
+from larpmanager.models.association import AssociationTextType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from django.http import HttpRequest, HttpResponse
 
 
 class AssociationIdentifyMiddleware:
@@ -38,10 +45,11 @@ class AssociationIdentifyMiddleware:
     context loading for multi-tenant functionality.
     """
 
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with Django response handler."""
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """Process request through association middleware.
 
         Args:
@@ -49,100 +57,149 @@ class AssociationIdentifyMiddleware:
 
         Returns:
             HttpResponse: Either a redirect or the normal response
+
         """
-        return self.get_assoc_info(request) or self.get_response(request)
+        return self.get_association_info(request) or self.get_response(request)
 
     @classmethod
-    def get_assoc_info(cls, request):
+    def get_association_info(cls, request: HttpRequest) -> HttpResponse | None:
         """Extract association information from request domain.
 
-        Determines environment, extracts subdomain, loads association data,
-        and handles domain redirects for multi-tenant setup.
+        Determines the environment based on host domain, extracts subdomain to identify
+        the target association, loads association data from cache, and handles domain
+        redirects for proper multi-tenant routing.
 
         Args:
-            request: Django HTTP request object
+            request: Django HTTP request object containing host and session data
 
         Returns:
-            HttpResponse or None: Redirect response if needed, None to continue
-        """
-        # get assoc slug from host
-        host = request.get_host().split(":")[0]
-        domain = host.split(".")[0]
-        base_domain = ".".join(host.split(".")[-2:])
+            HttpResponse: Redirect response if domain mismatch requires redirect
+            None: Continue processing if association found and domain is correct
 
-        if os.getenv("env") == "prod":
+        Raises:
+            No exceptions are raised directly by this method
+
+        """
+        # Extract host components for domain analysis
+        request_host = request.get_host().split(":")[0]
+        subdomain = request_host.split(".")[0]
+        base_domain = ".".join(request_host.split(".")[-2:])
+
+        # Determine environment based on host characteristics
+        env_var = os.getenv("ENV") or os.getenv("env")  # noqa: SIM112
+        if env_var == "prod":
             request.enviro = "prod"
-        elif "xyz" in host:
+        elif "xyz" in request_host:
             request.enviro = "staging"
         else:
-            # dev environment
+            # Handle dev/test environment detection
             if not os.getenv("PYTEST_CURRENT_TEST"):
                 request.enviro = "dev"
             else:
                 request.enviro = "test"
 
-            # base_domain = "ludomanager.it"
+            # Override base domain for development environments
             base_domain = "larpmanager.com"
 
-        conf_slug = getattr(conf_settings, "SLUG_ASSOC", None)
+        # Resolve association slug from multiple sources
+        configured_slug = getattr(conf_settings, "SLUG_ASSOC", None)
+        association_slug = (
+            request.session.get("debug_slug") if "debug_slug" in request.session else configured_slug or subdomain
+        )
 
-        assoc_slug = request.session.get("debug_slug") if "debug_slug" in request.session else conf_slug or domain
+        # Attempt to load association data from cache
+        association_data = get_cache_association(association_slug)
+        if association_data:
+            # Check for domain mismatch requiring redirect
+            if (
+                "main_domain" in association_data
+                and association_data["main_domain"] != base_domain
+                and request.enviro == "prod"
+                and not configured_slug
+            ):
+                association_slug = association_data["slug"]
+                association_domain = association_data["main_domain"]
+                return redirect(f"https://{association_slug}.{association_domain}{request.get_full_path()}")
+            return cls.load_association(request, association_data)
 
-        assoc = get_cache_assoc(assoc_slug)
-        if assoc:
-            if "main_domain" in assoc and assoc["main_domain"] != base_domain:
-                if request.enviro == "prod" and not conf_slug:
-                    slug = assoc["slug"]
-                    domain = assoc["main_domain"]
-                    return redirect(f"https://{slug}.{domain}{request.get_full_path()}")
-            return cls.load_assoc(request, assoc)
-
+        # Fallback to main domain handling
         return cls.get_main_info(request, base_domain)
 
     @classmethod
-    def get_main_info(cls, request, base_domain):
+    def get_main_info(cls, request: HttpRequest, base_domain: str) -> HttpResponse | None:
         """Handle requests to main domain without specific association.
 
         Handles demo user logout, skin loading, and default redirects
         for the main application domain.
 
         Args:
-            request: Django HTTP request object
-            base_domain (str): Base domain name
+            request: Django HTTP request object containing user session and path info
+            base_domain: Base domain name used for skin lookup and routing decisions
 
         Returns:
-            HttpResponse or None: Redirect/render response or None to continue
+            HttpResponse for redirects/renders, or None to continue normal processing
+
+        Note:
+            Demo users (ending with 'demo.it') are automatically logged out when
+            visiting the main page, except for post-login flows.
+
         """
-        # if logged in with demo user visiting main page, logout
-        user = request.user
-        if not request.path.startswith("/after_login/"):
-            if user.is_authenticated and user.email.lower().endswith("demo.it"):
-                logout(request)
-                return redirect(request.path)
+        # Check for demo user logout requirement - skip if already in post-login flow
+        # Demo users should be logged out when visiting main domain
+        current_user = request.user
+        if (
+            not request.path.startswith("/after_login/")
+            and current_user.is_authenticated
+            and current_user.email.lower().endswith("demo.it")
+        ):
+            logout(request)
+            return redirect(request.path)
 
-        skin = get_cache_skin(base_domain)
-        if skin:
-            return cls.load_assoc(request, skin)
+        # Attempt to load association skin for the base domain
+        association_skin = get_cache_skin(base_domain)
+        if association_skin:
+            # Skin found - load the associated organization
+            return cls.load_association(request, association_skin)
 
+        # Handle larpmanager.com domain redirects to ensure HTTPS
         if request.get_host().endswith("larpmanager.com"):
             return redirect(f"https://larpmanager.com{request.get_full_path()}")
 
+        # Allow admin panel access without association
         if request.path.startswith("/admin"):
-            return
+            return None
 
-        return render(request, "exception/assoc.html", {})
+        # No valid association found - render error page
+        return render(request, "exception/association.html", {})
 
     @staticmethod
-    def load_assoc(request, assoc):
+    def load_association(request: HttpRequest, association_data: dict) -> None:
         """Load association data into request context.
 
-        Args:
-            request: Django HTTP request object
-            assoc (dict): Association data dictionary
+        This function enriches the request object with association data and
+        localized footer text for the current language.
 
-        Side effects:
-            Sets request.assoc with association data and footer text
+        Args:
+            request: Django HTTP request object to be modified
+            association_data: Association data dictionary containing at minimum an 'id' key
+
+        Returns:
+            None
+
+        Side Effects:
+            - Sets request.association with the provided association data
+            - Adds localized footer text to request.association["footer"]
+
         """
-        request.assoc = assoc
-        lang = get_language()
-        request.assoc["footer"] = get_assoc_text(request.assoc["id"], AssocTextType.FOOTER, lang)
+        # Attach association data to request for template access
+        request.association = association_data
+
+        # Get current language for localization
+        current_language = get_language()
+
+        # Load and attach localized footer text for the association
+        request.association["footer"] = get_association_text(
+            request.association["id"],
+            AssociationTextType.FOOTER,
+            current_language,
+        )

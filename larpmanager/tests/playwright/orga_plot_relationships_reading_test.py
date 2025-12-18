@@ -18,6 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -33,7 +34,7 @@ from larpmanager.tests.utils import (
 pytestmark = pytest.mark.e2e
 
 
-def test_plot_relationship_reading(pw_page):
+def test_plot_relationship_reading(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -56,7 +57,7 @@ def test_plot_relationship_reading(pw_page):
     reading(live_server, page)
 
 
-def reading(live_server, page):
+def reading(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
 
     # set prova presentation and text
@@ -112,7 +113,7 @@ def reading(live_server, page):
     expect(page.locator("#one")).to_contain_text("testona Text wwwww prova bruuuu")
 
 
-def relationships(live_server, page):
+def relationships(live_server: Any, page: Any) -> None:
     # create second character
     page.get_by_role("link", name="Characters", exact=True).click()
     page.get_by_role("link", name="New").click()
@@ -126,7 +127,7 @@ def relationships(live_server, page):
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
-    fill_tinymce(page, "rel_1_direct", "ciaaoooooo")
+    fill_tinymce(page, "rel_1", "ciaaoooooo")
     submit_confirm(page)
 
     # check in main list
@@ -150,7 +151,7 @@ def relationships(live_server, page):
     expect(page.locator("#one")).to_contain_text("Relationships Test Character ciaaoooooo")
 
 
-def plots(live_server, page):
+def plots(live_server: Any, page: Any) -> None:
     # create plot
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
@@ -232,7 +233,7 @@ def plots(live_server, page):
     expect(page.locator("#one")).to_contain_text("testona wwwwwbruuuu")
 
 
-def plots_character(live_server, page):
+def plots_character(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/1/manage/")
     # create other plots
     page.get_by_role("link", name="Plots", exact=True).click()
@@ -259,6 +260,8 @@ def plots_character(live_server, page):
     page.locator(".select2-results__option").first.wait_for(state="visible")
     page.locator(".select2-results__option").first.click()
     page.get_by_role("button", name="Confirm").click()
+
+    page.wait_for_timeout(2000)
 
     # check there are all three
     page.locator("#one").get_by_role("link", name="Plots").click()

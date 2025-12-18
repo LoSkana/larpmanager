@@ -15,17 +15,20 @@
             <h3>
                 <a href="{% url 'orga_characters_edit' run.get_slug item.char.id %}">{{ item.char }}</a>
             </h3>
-            <table>
+            <table id="rel_{{ key }}_tr">
                 <tr>
                     <th>{% trans "Direct" %}</th>
                     <td>
                         <p>
-                            <a href="#" class="my_toggle" tog="f_{{ key }}_direct">{% trans "Show" %}</a>
+                            <a href="#" class="my_toggle" tog="f_{{ key }}">{% trans "Show" %}</a>
                         </p>
-                        <div class="hide hide_later f_{{ key }}_direct">
-                            <textarea name="rel_{{ key }}">
+                        <div class="hide hide_later f_{{ key }}">
+                            <textarea name="rel_{{ key }}" id="rel_{{key}}">
                                 {{ item.direct | safe }}
                             </textarea>
+                            <div class="helptext">
+                                {% trans "text length" %}: <span class="count"></span> / {{ form.relationship_max_length }}
+                            </div>
                         </div>
                         <div class="helptext">{% trans "How the relationship is described from this character's perspective" %}</div>
                     </td>

@@ -34,6 +34,7 @@ from larpmanager.views.user import accounting as views_ua
 from larpmanager.views.user import event as views_ue
 from larpmanager.views.user import member as views_um
 from larpmanager.views.user import miscellanea as views_ums
+from larpmanager.views.user import onetime as views_onetime
 from larpmanager.views.user import registration as views_ur
 
 urlpatterns = [
@@ -69,16 +70,16 @@ urlpatterns = [
     ),
     path(
         "help/",
-        views_ums.help,
+        views_ums.user_help,
         name="help",
     ),
     path(
-        "help/<int:n>/",
+        "help/<int:run_id>/",
         views_ums.help_red,
         name="help_red",
     ),
     path(
-        "help/attachment/<int:p>/",
+        "help/attachment/<int:attachment_id>/",
         views_ums.help_attachment,
         name="help_attachment",
     ),
@@ -108,7 +109,7 @@ urlpatterns = [
         name="profile_upload",
     ),
     path(
-        "profile/rotate/<int:n>/",
+        "profile/rotate/<int:rotation_angle>/",
         views_um.profile_rotate,
         name="profile_rotate",
     ),
@@ -128,7 +129,7 @@ urlpatterns = [
         name="pre_register",
     ),
     path(
-        "pre_register/<slug:s>/remove",
+        "pre_register/<slug:event_slug>/remove",
         views_ur.pre_register_remove,
         name="pre_register_remove",
     ),
@@ -153,7 +154,7 @@ urlpatterns = [
         name="membership_request_test",
     ),
     path(
-        "public/<int:n>/",
+        "public/<int:member_id>/",
         views_um.public,
         name="public",
     ),
@@ -168,17 +169,12 @@ urlpatterns = [
         name="leaderboard",
     ),
     path(
-        "leaderboard/<int:p>/",
+        "leaderboard/<int:page>/",
         views_um.leaderboard,
         name="leaderboard",
     ),
     path(
-        "badge/<int:n>/",
-        views_um.badge,
-        name="badge",
-    ),
-    path(
-        "badge/<int:n>/<int:p>/",
+        "badge/<int:badge_id>/",
         views_um.badge,
         name="badge",
     ),
@@ -188,7 +184,7 @@ urlpatterns = [
         name="chats",
     ),
     path(
-        "chat/<int:n>/",
+        "chat/<int:member_id>/",
         views_um.chat,
         name="chat",
     ),
@@ -213,12 +209,12 @@ urlpatterns = [
         name="accounting",
     ),
     path(
-        "accounting/pay/<slug:s>/",
+        "accounting/pay/<slug:event_slug>/",
         views_ua.acc_pay,
         name="acc_pay",
     ),
     path(
-        "accounting/pay/<slug:s>/<slug:method>/",
+        "accounting/pay/<slug:event_slug>/<slug:method>/",
         views_ua.acc_pay,
         name="acc_pay",
     ),
@@ -258,7 +254,7 @@ urlpatterns = [
         name="acc_cancelled",
     ),
     path(
-        "accounting/payed/<int:p>/",
+        "accounting/payed/<int:payment_id>/",
         views_ua.acc_payed,
         name="acc_payed",
     ),
@@ -273,7 +269,7 @@ urlpatterns = [
         name="acc_webhook_paypal",
     ),
     path(
-        "accounting/webhook/paypal/<slug:s>/",
+        "accounting/webhook/paypal/<slug:event_slug>/",
         views_ua.acc_webhook_paypal,
         name="acc_webhook_paypal",
     ),
@@ -323,32 +319,32 @@ urlpatterns = [
         name="acc_collection",
     ),
     path(
-        "accounting/collection/<slug:s>/",
+        "accounting/collection/<slug:collection_code>/",
         views_ua.acc_collection_manage,
         name="acc_collection_manage",
     ),
     path(
-        "accounting/collection/<slug:s>/participate/",
+        "accounting/collection/<slug:collection_code>/participate/",
         views_ua.acc_collection_participate,
         name="acc_collection_participate",
     ),
     path(
-        "accounting/collection/<slug:s>/close/",
+        "accounting/collection/<slug:collection_code>/close/",
         views_ua.acc_collection_close,
         name="acc_collection_close",
     ),
     path(
-        "accounting/collection/<slug:s>/redeem/",
+        "accounting/collection/<slug:collection_code>/redeem/",
         views_ua.acc_collection_redeem,
         name="acc_collection_redeem",
     ),
     path(
-        "accounting/submit/<slug:s>/<path:p>/",
+        "accounting/submit/<slug:payment_method>/<path:redirect_path>/",
         views_ua.acc_submit,
         name="acc_submit",
     ),
     path(
-        "accounting/confirm/<slug:c>/",
+        "accounting/confirm/<slug:invoice_cod>/",
         views_ua.acc_confirm,
         name="acc_confirm",
     ),
@@ -363,7 +359,7 @@ urlpatterns = [
         name="shuttle_new",
     ),
     path(
-        "shuttle/edit/<int:n>/",
+        "shuttle/edit/<int:shuttle_id>/",
         views_ums.shuttle_edit,
         name="shuttle_edit",
     ),
@@ -377,12 +373,12 @@ urlpatterns = [
         name="register_conditions",
     ),
     path(
-        "at/<slug:s>/",
+        "at/<slug:url_cod>/",
         views_ums.url_short,
         name="url_short",
     ),
     path(
-        "util/<slug:cod>/",
+        "util/<slug:util_cod>/",
         views_ums.util,
         name="util",
     ),
@@ -431,4 +427,14 @@ urlpatterns = [
         name="set_member_config",
     ),
     path("upload_media/", views_base.upload_media, name="upload_media"),
+    path(
+        "watch/<str:token>/",
+        views_onetime.onetime_access,
+        name="onetime_access",
+    ),
+    path(
+        "stream/<str:token>/",
+        views_onetime.onetime_stream,
+        name="onetime_stream",
+    ),
 ]

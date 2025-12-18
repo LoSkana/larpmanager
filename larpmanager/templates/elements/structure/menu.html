@@ -13,22 +13,22 @@
                 <li>
                     <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> Accounting</a>
                 </li>
-                {% if 'membership' in assoc.features %}
+                {% if 'membership' in association.features %}
                     <li>
                         <a href="{% url 'membership' %}"><i class="fa-solid fa-id-card"></i> {% trans "Membership" %}</a>
                     </li>
                 {% endif %}
-                {% if 'delegated_members' in assoc.features %}
+                {% if 'delegated_members' in association.features %}
                     <li>
                         <a href="{% url 'delegated' %}"><i class="fa-solid fa-user-shield"></i> {% trans "Delegated users" %}</a>
                     </li>
                 {% endif %}
-                {% if 'chat' in assoc.features %}
+                {% if 'chat' in association.features %}
                     <li>
                         <a href="{% url 'chats' %}"><i class="fa-solid fa-message"></i> {% trans "Messages" %}</a>
                     </li>
                 {% endif %}
-                {% if 'badge' in assoc.features %}
+                {% if 'badge' in association.features %}
                     <li>
                         <a href="{% url 'public' user.member.id %}"><i class="fa-solid fa-trophy"></i> {% trans "Achievements" %}</a>
                     </li>

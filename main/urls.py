@@ -45,5 +45,7 @@ urlpatterns = [
     path('', include('larpmanager.urls')),
 ]
 
-urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
-urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
+# Serve static and media files only in development
+if settings.DEBUG:
+    urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+    urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))

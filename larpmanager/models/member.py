@@ -17,8 +17,11 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-import os
+import logging
+from pathlib import Path
+from typing import Any, ClassVar
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
@@ -36,33 +39,45 @@ from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
-from larpmanager.utils.codes import countries
+from larpmanager.utils.core.codes import countries
+
+logger = logging.getLogger(__name__)
 
 
 class GenderChoices(models.TextChoices):
+    """Choices for GenderChoices."""
+
     MALE = "m", _("Male")
     FEMALE = "f", _("Female")
     OTHER = "o", _("Other")
 
 
 class FirstAidChoices(models.TextChoices):
+    """Choices for FirstAidChoices."""
+
     YES = "y", "Yes"
     NO = "n", "No"
 
 
 class NewsletterChoices(models.TextChoices):
+    """Choices for NewsletterChoices."""
+
     ALL = "a", _("Yes, keep me posted!")
     ONLY = "o", _("Only really important communications")
     NO = "n", _("No, I don't want updates")
 
 
 class DocumentChoices(models.TextChoices):
+    """Choices for DocumentChoices."""
+
     IDENT = "i", _("ID Card")
     PATEN = "p", _("Driver's License")
     PASS = "s", _("Passport")
 
 
 class Member(BaseModel):
+    """Represents Member model."""
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
 
     email = models.CharField(max_length=200, editable=False)
@@ -89,7 +104,7 @@ class Member(BaseModel):
             "If you prefer that your real name and surname not be publicly visible, please "
             "indicate an alias that will be displayed instead. Note: If you register for an "
             "event, your real first and last name will be shown to other participants, and to the "
-            "organisers."
+            "organisers.",
         ),
         blank=True,
     )
@@ -103,7 +118,7 @@ class Member(BaseModel):
             "If for whatever reason the first and last name shown on your documents is "
             "different from the one you prefer to use, then write it here. It will only be "
             "used for internal bureaucratic purposes, and will NEVER be displayed to other "
-            "participants."
+            "participants.",
         ),
     )
 
@@ -146,7 +161,7 @@ class Member(BaseModel):
         verbose_name=_("Contact"),
         help_text=_(
             "Indicates a way for other participants to contact you. It can be an email, a social "
-            "profile, whatever you want. It will be made public to others participants"
+            "profile, whatever you want. It will be made public to others participants",
         ),
         blank=True,
         null=True,
@@ -159,7 +174,7 @@ class Member(BaseModel):
         verbose_name=_("First aid"),
         help_text=_(
             "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to intervene in "
-            "case accidents occur during the event?"
+            "case accidents occur during the event?",
         ),
         null=True,
     )
@@ -200,7 +215,7 @@ class Member(BaseModel):
         null=True,
         verbose_name=_("Date of expiration of the document"),
         help_text=_(
-            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for."
+            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for.",
         ),
     )
 
@@ -227,7 +242,7 @@ class Member(BaseModel):
         help_text=_(
             "Fill in this field if you follow a personal diet for reasons of choice(e.g. "
             "vegetarian, vegan) or health (celiac disease, allergies). Leave empty if you do "
-            "not have things to report!"
+            "not have things to report!",
         ),
     )
 
@@ -245,7 +260,7 @@ class Member(BaseModel):
             "mental health problems (e.g. neurosis, bipolar disorder, anxiety disorder, "
             "various phobias), trigger topics ('lines and veils', we can't promise that you "
             "won't run into them in the event, but we'll make sure they're not part of your "
-            "main quests). Leave empty if you do not have things to report!"
+            "main quests). Leave empty if you do not have things to report!",
         ),
     )
 
@@ -265,7 +280,7 @@ class Member(BaseModel):
         help_text=_(
             "Upload your portrait photo. It will be shown to other participants to help recognize "
             "you in the event. Choose a photo that you would put in an official document (in which "
-            "you are alone, centered on your face)"
+            "you are alone, centered on your face)",
         ),
         blank=True,
         null=True,
@@ -290,90 +305,124 @@ class Member(BaseModel):
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="delegated")
 
     class Meta:
-        ordering = ["surname", "name"]
+        ordering: ClassVar[list] = ["surname", "name"]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         if self.nickname:
             name = self.display_real()
             nick = self.nickname
             if slugify(nick) != slugify(name):
                 name += f" - {nick}"
             return name
-        elif self.name or self.surname:
+        if self.name or self.surname:
             return self.display_real()
-        else:
-            return str(self.user)
+        return str(self.user)
 
-    def display_member(self):
+    def display_member(self) -> str:
+        """Return a user-friendly display name for the member.
+
+        Returns the member's display name in order of preference:
+        nickname > real name > email > primary key.
+
+        Returns:
+            str: The display name for the member.
+
+        """
+        # Use nickname if available
         if self.nickname:
             return str(self.nickname)
 
+        # Fall back to real name (first/last name combination)
         if self.name or self.surname:
             return self.display_real()
 
+        # Use email as last resort before ID
         if self.email:
             return self.email
 
-        return self.pk
+        # Final fallback to primary key
+        return str(self.pk)
 
-    def display_real(self):
+    def display_real(self) -> str:
+        """Return full real name as 'name surname'."""
         return f"{self.name} {self.surname}"
 
-    def display_profile(self):
+    def display_profile(self) -> str:
+        """Return the URL of the profile thumbnail image."""
         # noinspection PyUnresolvedReferences
         return self.profile_thumb.url
 
-    def get_card_number(self):
+    def get_card_number(self) -> int:
+        """Return the member's card number."""
         # noinspection PyUnresolvedReferences
         return self.id
 
-    def show_nick(self):
+    def show_nick(self) -> str:
+        """Return nickname if present, otherwise the string representation."""
         if self.nickname:
             return self.nickname
         return str(self)
 
-    def get_member_filepath(self):
-        fp = os.path.join(conf_settings.MEDIA_ROOT, "pdf/members")
-        # noinspection PyUnresolvedReferences
-        fp = os.path.join(fp, str(self.id))
-        os.makedirs(fp, exist_ok=True)
-        return fp
+    def get_member_filepath(self) -> str:
+        """Get the file path for member PDF storage.
 
-    def get_request_filepath(self):
-        return os.path.join(self.get_member_filepath(), "request.pdf")
+        Returns:
+            The absolute path to the member's PDF directory.
 
-    def join(self, assoc):
-        mmb = get_user_membership(self, assoc.id)  # type: ignore
-        if mmb.status == MembershipStatus.EMPTY:
-            mmb.status = MembershipStatus.JOINED
-            mmb.save()
+        """
+        # Build base PDF members directory path
+        member_pdf_directory = str(Path(conf_settings.MEDIA_ROOT) / "pdf/members" / str(self.id))
+        # Ensure directory exists
+        Path(member_pdf_directory).mkdir(parents=True, exist_ok=True)
+        return member_pdf_directory
 
-    def get_residence(self):
+    def get_request_filepath(self) -> Any:
+        """Return the full file path for member request PDF."""
+        return str(Path(self.get_member_filepath()) / "request.pdf")
+
+    def join(self, association: Association) -> None:
+        """Join an association if not already a member."""
+        membership = get_user_membership(self, association.id)  # type: ignore[arg-type]
+        if membership.status == MembershipStatus.EMPTY:
+            membership.status = MembershipStatus.JOINED
+            membership.save()
+
+    def get_residence(self) -> str:
+        """Return formatted residence address string or empty string if no address."""
         if not self.residence_address:
             return ""
-        # noinspection PyUnresolvedReferences
-        aux = self.residence_address.split("|")
-        return f"{aux[4]} {aux[5]}, {aux[2]} ({aux[3]}), {aux[1].replace('IT-', '')} ({aux[0]})"
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+        # Split address components by pipe delimiter
+        # noinspection PyUnresolvedReferences
+        address_components = self.residence_address.split("|")
+
+        # Format: street number, city (province), country_code (country)
+        return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
+
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this member."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class MemberConfig(BaseModel):
+    """Django app configuration for Member."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.member} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["member", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["member", "name", "deleted"],
                 name="unique_member_config_with_optional",
@@ -387,97 +436,179 @@ class MemberConfig(BaseModel):
 
 
 class MembershipStatus(models.TextChoices):
-    EMPTY = "e", _("Absent")
-    JOINED = "j", _("Shared")
-    UPLOADED = "u", _("Uploaded")
-    SUBMITTED = "s", _("Submitted")
+    """Represents MembershipStatus model."""
+
+    EMPTY = "e", _("Inactive") + " (E)"
+    JOINED = "j", _("Inactive") + " (J)"
+    UPLOADED = "u", _("Inactive") + " (U)"
+    SUBMITTED = "s", _("Review")
     ACCEPTED = "a", _("Accepted")
     REWOKED = "r", _("Kicked out")
 
 
 class Membership(BaseModel):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="memberships")
+    """Represents Membership model."""
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="memberships")
-
-    compiled = models.BooleanField(default=False)
-
-    credit = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-    tokens = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-    status = models.CharField(
-        max_length=1, choices=MembershipStatus.choices, default=MembershipStatus.EMPTY, db_index=True
+    member = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        related_name="memberships",
+        verbose_name=_("Member"),
+        help_text=_("The member associated with this membership"),
     )
 
-    request = models.FileField(upload_to=UploadToPathAndRename("request/"), null=True, blank=True)
+    association = models.ForeignKey(
+        Association,
+        on_delete=models.CASCADE,
+        related_name="memberships",
+        verbose_name=_("Association"),
+        help_text=_("The organization this membership belongs to"),
+    )
 
-    document = models.FileField(upload_to=UploadToPathAndRename("document/"), null=True, blank=True)
+    compiled = models.BooleanField(
+        default=False,
+        verbose_name=_("Profile completed"),
+        help_text=_("Indicates whether the member has completed their profile information"),
+    )
 
-    card_number = models.IntegerField(null=True, blank=True)
+    credit = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name=_("Credit balance"),
+        help_text=_("Available credit balance for event payments and purchases"),
+    )
 
-    date = models.DateField(blank=True, null=True)
+    tokens = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        verbose_name=_("Token balance"),
+        help_text=_("Available token balance for event registrations and activities"),
+    )
 
-    password_reset = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(
+        max_length=1,
+        choices=MembershipStatus.choices,
+        default=MembershipStatus.EMPTY,
+        db_index=True,
+        verbose_name=_("Membership status"),
+        help_text=_("Current status of the membership application and approval process"),
+    )
+
+    request = models.FileField(
+        upload_to=UploadToPathAndRename("request/"),
+        null=True,
+        blank=True,
+        verbose_name=_("Membership request"),
+        help_text=_("Upload the signed membership application form (PDF or image)"),
+    )
+
+    document = models.FileField(
+        upload_to=UploadToPathAndRename("document/"),
+        null=True,
+        blank=True,
+        verbose_name=_("Identity document"),
+        help_text=_("Upload a photo or scan of your identity document (PDF or image)"),
+    )
+
+    card_number = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name=_("Membership card number"),
+        help_text=_("Unique membership card number assigned by the organization"),
+    )
+
+    date = models.DateField(
+        blank=True,
+        null=True,
+        verbose_name=_("Membership approval date"),
+        help_text=_("Date when the membership was officially approved by the organization"),
+    )
+
+    password_reset = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name=_("Password reset token"),
+        help_text=_("Temporary token used for password reset process"),
+    )
 
     newsletter = models.CharField(
         max_length=1,
         choices=NewsletterChoices.choices,
         default=NewsletterChoices.ALL,
-        verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events") + "?",
+        verbose_name=_("Newsletter preferences"),
+        help_text=_("Choose how often you want to receive updates about events and activities"),
     )
 
     class Meta:
-        constraints = [
+        indexes: ClassVar[list] = [
+            models.Index(
+                fields=["association", "member"],
+                condition=Q(deleted__isnull=True),
+                name="memb_association_mem_act",
+            ),
+            models.Index(
+                fields=["association", "status"],
+                condition=Q(deleted__isnull=True),
+                name="memb_association_stat_act",
+            ),
+        ]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["member", "assoc", "deleted"],
+                fields=["member", "association", "deleted"],
                 name="unique_membership_number_with_optional",
             ),
             UniqueConstraint(
-                fields=["member", "assoc"],
+                fields=["member", "association"],
                 condition=Q(deleted=None),
                 name="unique_membership_number_without_optional",
             ),
         ]
 
-    def __str__(self):
-        return f"{self.member} - {self.assoc}"
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.member} - {self.association}"
 
-    def get_request_filepath(self):
+    def get_request_filepath(self) -> Any:
+        """Get request file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.request.url)
-        except Exception as e:
-            print(e)
+        except (ValueError, AttributeError) as exception:
+            logger.debug("Request file not available for membership %s: %s", self.id, exception)
             return ""
 
-    def get_document_filepath(self):
+    def get_document_filepath(self) -> Any:
+        """Get document file path from download URL."""
         try:
             # noinspection PyUnresolvedReferences
             return download_d(self.document.url)
-        except Exception as e:
-            print(e)
+        except (ValueError, AttributeError) as error:
+            logger.debug("Document file not available for membership %s: %s", self.id, error)
             return ""
 
 
 class VolunteerRegistry(BaseModel):
+    """Represents VolunteerRegistry model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="volunteer")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="volunteers")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="volunteers")
 
     start = models.DateField(null=True)
 
     end = models.DateField(blank=True, null=True)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["member", "assoc", "deleted"],
+                fields=["member", "association", "deleted"],
                 name="unique_volunteer_registry_with_optional",
             ),
             UniqueConstraint(
-                fields=["member", "assoc"],
+                fields=["member", "association"],
                 condition=Q(deleted=None),
                 name="unique_volunteer_registry_without_optional",
             ),
@@ -485,6 +616,8 @@ class VolunteerRegistry(BaseModel):
 
 
 class Badge(BaseModel):
+    """Represents Badge model."""
+
     name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Short name"))
 
     name_eng = models.CharField(
@@ -520,19 +653,25 @@ class Badge(BaseModel):
 
     members = models.ManyToManyField(Member, related_name="badges", blank=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def thumb(self):
+    def thumb(self) -> str:
+        """Return HTML for thumbnail image if available, otherwise empty string."""
         if self.img_thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.img_thumb.url)
         return ""
 
-    def show(self, lang):
+    def show(self) -> dict:
+        """Return a dictionary representation for display purposes."""
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
+
+        # Add localized name and description attributes
         for s in ["name", "descr"]:
             self.upd_js_attr(js, s)
+
+        # Add thumbnail image URL if available
         if self.img:
             # noinspection PyUnresolvedReferences
             js["img_url"] = self.img_thumb.url
@@ -540,6 +679,8 @@ class Badge(BaseModel):
 
 
 class Log(BaseModel):
+    """Represents Log model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
     eid = models.IntegerField()
@@ -550,14 +691,17 @@ class Log(BaseModel):
 
     dl = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.cls} {self.eid}"
 
 
 class Vote(BaseModel):
+    """Represents Vote model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="votes_given")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="votes")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="votes")
 
     year = models.IntegerField()
 
@@ -566,29 +710,57 @@ class Vote(BaseModel):
     candidate = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="votes_received")
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["member", "assoc", "year", "number", "deleted"],
+                fields=["member", "association", "year", "number", "deleted"],
                 name="unique_vote_number_with_optional",
             ),
             UniqueConstraint(
-                fields=["member", "assoc", "year", "number"],
+                fields=["member", "association", "year", "number"],
                 condition=Q(deleted=None),
                 name="unique_vote_number_without_optional",
             ),
         ]
 
-    def __str__(self):
-        return f"V{self.number} {self.member} ({self.assoc} - {self.year})"
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"V{self.number} {self.member} ({self.association} - {self.year})"
 
 
-def get_user_membership(user, assoc):
+def get_user_membership(user: Member, association: Association | int) -> Membership:
+    """Get or create a membership for a user in an association.
+
+    This function first checks if the user already has a cached membership
+    attribute. If not, it retrieves or creates a membership record for the
+    user in the specified association.
+
+    Args:
+        user: The member object for whom to get the membership
+        association: Either an Association instance or an association ID (int)
+
+    Returns:
+        The membership object for the user in the association
+
+    Raises:
+        Http404: If the association ID is invalid or not found
+
+    """
+    # Check if user already has a cached membership attribute
+    if hasattr(user, "membership"):
+        return user.membership
+
+    # Extract association ID from either Association object or integer
     # noinspection PyUnresolvedReferences
-    assoc_id = assoc.id if isinstance(assoc, Association) else assoc
+    association_id = association.id if isinstance(association, Association) else association
 
-    if not assoc_id:
-        raise Http404("Association not found")
+    # Validate that we have a valid association ID
+    if not association_id:
+        msg = "Association not found"
+        raise Http404(msg)
 
-    membership, _ = Membership.objects.get_or_create(member=user, assoc_id=assoc_id)
+    # Get existing membership or create a new one for this user/association pair
+    membership, _ = Membership.objects.get_or_create(member=user, association_id=association_id)
+
+    # Cache the membership on the user object for future access
     user.membership = membership
     return membership

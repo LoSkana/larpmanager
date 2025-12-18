@@ -1,23 +1,18 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    Dashboard - {{ assoc.name }}
+    Dashboard - {{ association.name }}
 {% endblock title %}
 {% block content %}
     <div id="manage">
         <p>
             <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
         </p>
-        <input type="text"
-               name="tutorial_query"
-               id="tutorial_query"
-               placeholder="{% trans "What would you like to do" %}?" />
-        <input type="button" id="tutorial_query_go" value="{% trans "Search" %}" />
-        <div class="helptext">
-            <i>
-                ({% trans "Type a keyword in the search bar to find a reference - please write in English" %})
-            </i>
-        </div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.wwyltd }}
+            <button type="submit">{% trans "Go" %}</button>
+        </form>
         <hr />
         {% with list=priorities typ="priorities" %}
             {% include "larpmanager/manage/helpers.html" %}
@@ -29,52 +24,69 @@
             <h2>
                 <i class="fa-solid fa-calendar-days"></i> {% trans "Events" %}
             </h2>
-            <table class="mob">
-                {% for run in ongoing_runs %}
+            <table class="go_datatable" no_header_cols="all">
+                <thead>
                     <tr>
-                        <td>
-                            <a href="{% url 'manage' run.get_slug %}">{{ run }}</a>
-                        </td>
-                        <td>
-                            <i>{{ run.pretty_dates }}</i>
-                        </td>
-                        <td>{{ run.get_development_display }}</td>
-                        <td>
-                            <a href="{% url 'register' run.get_slug %}">{{ run.registration_status }}</a>
-                        </td>
-                        <td>
-                            {% if run.counts.count_reg %}
-                                ({% trans "registrations" %}: {{ run.counts.count_reg }})
-                            {% endif %}
-                        </td>
+                        <th>{% trans "Event" %}</th>
+                        <th>{% trans "Dates" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Registrations" %}</th>
+                        <th>{% trans "Counts" %}</th>
                     </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for run in ongoing_runs %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'manage' run.get_slug %}">{{ run }}</a>
+                            </td>
+                            <td>
+                                <i>{{ run.pretty_dates }}</i>
+                            </td>
+                            <td>{{ run.get_development_display }}</td>
+                            <td>
+                                <a href="{% url 'register' run.get_slug %}">{{ run.registration_status }}</a>
+                            </td>
+                            <td>
+                                {% if run.counts.count_reg %}
+                                    ({% trans "registrations" %}: {{ run.counts.count_reg }})
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         {% endif %}
         {% if global_sum or bank_sum %}
             <h2>
                 <a href="{% url 'exe_accounting' %}"><i class="fa-solid fa-calculator"></i> {% trans "Accounting" %}</a>
             </h2>
-            <table>
-                <tr>
-                    <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %}">
-                        <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
-                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                    </th>
-                    <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
-                        <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
-                        <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
-                    </th>
-                </tr>
-                <tr>
-                    <td>{{ global_sum }}</td>
-                    <td>{{ bank_sum }}</td>
-                </tr>
+            <table class="go_datatable" no_header_cols="all">
+                <thead>
+                    <tr>
+                        <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %}">
+                            <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
+                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                        </th>
+                        <th descr="{% trans "This is the overall amount that should be held in the organization’s bank and financial accounts" %}">
+                            <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
+                            <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ global_sum }}</td>
+                        <td>{{ bank_sum }}</td>
+                    </tr>
+                </tbody>
             </table>
         {% endif %}
         {% with list=suggestions typ="suggestions" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
+        <hr />
+        <a href="{% url 'exe_reload_cache' %}">Reset cache</a>
     </div>
 {% endblock content %}
 {% block css %}

@@ -17,200 +17,255 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import logging
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_delete, post_save
-from django.dispatch import receiver
 
-from larpmanager.models.access import AssocPermission, EventPermission
-from larpmanager.models.base import Feature, FeatureModule
+from larpmanager.models.access import AssociationPermission, EventPermission
 
 logger = logging.getLogger(__name__)
 
 
-def assoc_permission_feature_key(slug):
+def association_permission_feature_key(permission_slug: str) -> str:
     """Generate cache key for association permission features.
 
     Args:
-        slug (str): Permission slug
+        permission_slug (str): Permission slug
 
     Returns:
         str: Cache key for association permission feature
+
     """
-    return f"assoc_permission_feature_{slug}"
+    return f"association_permission_feature_{permission_slug}"
 
 
-def update_assoc_permission_feature(slug):
+def update_association_permission_feature(slug: str) -> tuple[str, str, str]:
     """Update cached association permission feature data.
 
+    Retrieves association permission data by slug, processes the feature information,
+    and updates the cache with the processed data.
+
     Args:
-        slug (str): Permission slug
+        slug: Permission slug to look up
 
     Returns:
-        tuple: (feature_slug, tutorial, config) data
+        A tuple containing (feature_slug, tutorial, config) where:
+            - feature_slug: The feature slug or 'def' if placeholder
+            - tutorial: Feature tutorial text or empty string
+            - config: Permission config text or empty string
+
     """
-    perm = AssocPermission.objects.select_related("feature").get(slug=slug)
+    # Fetch permission with related feature data to minimize queries
+    perm = AssociationPermission.objects.select_related("feature").get(slug=slug)
     feature = perm.feature
-    if feature.placeholder:
-        slug = "def"
-    else:
-        slug = feature.slug
+
+    # Use default slug for placeholder features, otherwise use actual feature slug
+    slug = "def" if feature.placeholder else feature.slug
+
+    # Extract tutorial and config data with fallback to empty strings
     tutorial = feature.tutorial or ""
     config = perm.config or ""
-    cache.set(assoc_permission_feature_key(slug), (slug, tutorial, config))
+
+    # Cache the processed data for future requests
+    cache.set(
+        association_permission_feature_key(slug),
+        (slug, tutorial, config),
+        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
+    )
     return slug, tutorial, config
 
 
-def get_assoc_permission_feature(slug):
+def get_association_permission_feature(slug: str) -> tuple[str, str | None, dict | None]:
     """Get cached association permission feature data.
 
+    Retrieves feature data for an association permission from cache first,
+    falling back to database if not cached.
+
     Args:
-        slug (str): Permission slug
+        slug: Permission slug identifier
 
     Returns:
-        tuple: (feature_slug, tutorial, config) from cache or database
+        A tuple containing:
+            - feature_slug (str): The feature slug, defaults to "def" if slug is empty
+            - tutorial (str | None): Tutorial content if available
+            - config (dict | None): Configuration data if available
+
     """
+    # Return default values if no slug provided
     if not slug:
         return "def", None, None
-    res = cache.get(assoc_permission_feature_key(slug))
-    if not res:
-        res = update_assoc_permission_feature(slug)
-    return res
+
+    # Attempt to retrieve from cache first
+    cached_feature_data = cache.get(association_permission_feature_key(slug))
+
+    # If cache miss, update cache and return fresh data
+    if cached_feature_data is None:
+        cached_feature_data = update_association_permission_feature(slug)
+
+    return cached_feature_data
 
 
-@receiver(post_save, sender=AssocPermission)
-def post_save_assoc_permission_reset(sender, instance, **kwargs):
-    cache.delete(assoc_permission_feature_key(instance.slug))
+def clear_association_permission_cache(association: AssociationPermission) -> None:
+    """Clear the association permission cache for the given association."""
+    cache.delete(association_permission_feature_key(association.slug))
 
 
-@receiver(post_delete, sender=AssocPermission)
-def post_delete_assoc_permission_reset(sender, instance, **kwargs):
-    cache.delete(assoc_permission_feature_key(instance.slug))
-
-
-def event_permission_feature_key(slug):
+def event_permission_feature_key(permission_slug: str) -> str:
     """Generate cache key for event permission features.
 
     Args:
-        slug (str): Permission slug
+        permission_slug (str): Permission slug
 
     Returns:
         str: Cache key for event permission feature
+
     """
-    return f"event_permission_feature_{slug}"
+    return f"event_permission_feature_{permission_slug}"
 
 
-def update_event_permission_feature(slug):
+def update_event_permission_feature(permission_slug: str) -> tuple[str, str, str]:
+    """Update event permission feature cache with slug, tutorial, and config data.
+
+    Args:
+        permission_slug: The permission slug to look up
+
+    Returns:
+        A tuple containing (feature_slug, tutorial, config):
+            - feature_slug: The feature slug or "def" if placeholder
+            - tutorial: The feature tutorial text or empty string
+            - config: The permission config or empty string
+
+    """
     try:
-        perm = EventPermission.objects.select_related("feature").get(slug=slug)
+        # Fetch permission with related feature to avoid additional queries
+        event_permission = EventPermission.objects.select_related("feature").get(slug=permission_slug)
     except ObjectDoesNotExist:
-        logger.warning(f"Permission slug does not exist: {slug}")
+        logger.warning("Permission slug does not exist: %s", permission_slug)
         return "", "", ""
-    feature = perm.feature
-    if feature.placeholder:
-        slug = "def"
-    else:
-        slug = feature.slug
-    tutorial = feature.tutorial or ""
-    config = perm.config or ""
-    cache.set(event_permission_feature_key(slug), (slug, tutorial, config))
-    return slug, tutorial, config
+
+    # Extract feature from permission
+    permission_feature = event_permission.feature
+
+    # Determine the appropriate slug based on feature type
+    feature_slug = "def" if permission_feature.placeholder else permission_feature.slug
+
+    # Extract tutorial and config with fallback to empty strings
+    feature_tutorial = permission_feature.tutorial or ""
+    permission_config = event_permission.config or ""
+
+    # Cache the result for 1 day to improve performance
+    cache.set(
+        event_permission_feature_key(permission_slug),
+        (feature_slug, feature_tutorial, permission_config),
+        timeout=conf_settings.CACHE_TIMEOUT_1_DAY,
+    )
+
+    return feature_slug, feature_tutorial, permission_config
 
 
-def get_event_permission_feature(slug):
+def get_event_permission_feature(slug: str | None) -> tuple[str, None, None]:
+    """Get event permission feature from cache or update if not cached.
+
+    Args:
+        slug: Event slug identifier
+
+    Returns:
+        Tuple containing permission feature data
+
+    """
+    # Return default values if no slug provided
     if not slug:
         return "def", None, None
-    res = cache.get(event_permission_feature_key(slug))
-    if not res:
-        res = update_event_permission_feature(slug)
-    return res
+
+    # Attempt to retrieve from cache first
+    cached_feature = cache.get(event_permission_feature_key(slug))
+
+    # Update cache if no cached result found
+    if cached_feature is None:
+        cached_feature = update_event_permission_feature(slug)
+
+    return cached_feature
 
 
-@receiver(post_save, sender=EventPermission)
-def post_save_event_permission_reset(sender, instance, **kwargs):
-    cache.delete(event_permission_feature_key(instance.slug))
+def clear_event_permission_cache(event_permission: EventPermission) -> None:
+    """Clear cache for an event permission."""
+    cache.delete(event_permission_feature_key(event_permission.slug))
 
 
-@receiver(post_delete, sender=EventPermission)
-def post_delete_event_permission_reset(sender, instance, **kwargs):
-    cache.delete(event_permission_feature_key(instance.slug))
+def index_permission_key(permission_type: str) -> str:
+    """Build cache key for index permission lookup."""
+    return f"index_permission_key_{permission_type}"
 
 
-def index_permission_key(typ):
-    return f"index_permission_key_{typ}"
+def update_index_permission(permission_type: str) -> list[dict]:
+    """Update and cache permission index for given type.
 
+    Retrieves permissions from database, orders them by module and number,
+    then caches the result for efficient access.
 
-def update_index_permission(typ):
-    mapping = {"event": EventPermission, "assoc": AssocPermission}
-    que = mapping[typ].objects.select_related("feature", "module")
-    que = que.order_by("module__order", "number")
-    res = que.values(
+    Args:
+        permission_type: Permission type, either 'event' or 'association'
+
+    Returns:
+        List of permission dictionaries with feature and module information
+
+    Raises:
+        KeyError: If permission_type is not 'event' or 'association'
+
+    """
+    # Map permission type to corresponding model class
+    type_to_model_mapping = {"event": EventPermission, "association": AssociationPermission}
+
+    # Get queryset with related feature and module data
+    permission_queryset = type_to_model_mapping[permission_type].objects.select_related("feature", "module")
+
+    # Order by module priority and permission number
+    permission_queryset = permission_queryset.order_by("module__order", "number")
+
+    # Extract required fields for caching
+    permission_data = permission_queryset.values(
         "name",
         "descr",
         "slug",
         "hidden",
+        "config",
+        "active_if",
         "feature__placeholder",
         "feature__slug",
         "module__name",
         "module__icon",
     )
-    cache.set(index_permission_key(typ), res)
-    return res
+
+    # Cache result with 1-day timeout
+    cache.set(index_permission_key(permission_type), permission_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    return permission_data
 
 
-def get_cache_index_permission(typ):
-    res = cache.get(index_permission_key(typ))
-    if not res:
-        res = update_index_permission(typ)
-    return res
+def get_cache_index_permission(permission_type: str) -> list:
+    """Get or update cached permission index for a given type.
+
+    Args:
+        permission_type: The permission type to retrieve from cache.
+
+    Returns:
+        The cached or freshly updated permission index.
+
+    """
+    # Attempt to retrieve from cache
+    cached_result = cache.get(index_permission_key(permission_type))
+
+    # Update cache if not found
+    if cached_result is None:
+        cached_result = update_index_permission(permission_type)
+
+    return cached_result
 
 
-def reset_index_permission(typ):
-    cache.delete(index_permission_key(typ))
-
-
-@receiver(post_save, sender=AssocPermission)
-def post_save_assoc_permission_index_permission(sender, instance, **kwargs):
-    reset_index_permission("assoc")
-
-
-@receiver(post_delete, sender=AssocPermission)
-def post_delete_assoc_permission_index_permission(sender, instance, **kwargs):
-    reset_index_permission("assoc")
-
-
-@receiver(post_save, sender=EventPermission)
-def post_save_event_permission_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
-
-
-@receiver(post_delete, sender=EventPermission)
-def post_delete_event_permission_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
-
-
-@receiver(post_save, sender=Feature)
-def post_save_feature_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
-    reset_index_permission("assoc")
-
-
-@receiver(post_delete, sender=Feature)
-def post_delete_feature_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
-    reset_index_permission("assoc")
-
-
-@receiver(post_save, sender=FeatureModule)
-def post_save_feature_module_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
-    reset_index_permission("assoc")
-
-
-@receiver(post_delete, sender=FeatureModule)
-def post_delete_feature_module_index_permission(sender, instance, **kwargs):
-    reset_index_permission("event")
-    reset_index_permission("assoc")
+def clear_index_permission_cache(permission_type: str) -> None:
+    """Clear the cached permission index for the specified permission type."""
+    cache.delete(index_permission_key(permission_type))

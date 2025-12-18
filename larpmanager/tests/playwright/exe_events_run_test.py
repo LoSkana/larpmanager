@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -25,7 +27,7 @@ from larpmanager.tests.utils import go_to, login_orga, submit_confirm
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_events_run(pw_page):
+def test_exe_events_run(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -47,10 +49,10 @@ def test_exe_events_run(pw_page):
     submit_confirm(page)
 
     page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2025-06-11")
+    page.locator("#id_start").fill("2055-06-11")
     page.wait_for_timeout(2000)
     page.locator("#id_start").click()
-    page.locator("#id_end").fill("2025-06-13")
+    page.locator("#id_end").fill("2055-06-13")
     page.wait_for_timeout(2000)
     page.locator("#id_end").click()
     submit_confirm(page)

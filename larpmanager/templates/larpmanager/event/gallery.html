@@ -53,9 +53,9 @@
                 {% endwith %}
             {% endfor %}
         {% endif %}
-        {% if reg_list %}
+        {% if registration_list %}
             <h1 class="title">{% trans "Registered" %}</h1>
-            {% include "elements/gallery.html" with list=reg_list %}
+            {% include "elements/gallery.html" with list=registration_list %}
         {% endif %}
     {% endif %}
 {% endblock content %}

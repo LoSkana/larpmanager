@@ -1,0 +1,100 @@
+{% load show_tags static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ faction.name }}</title>
+        <meta charset="utf-8">
+        <meta name="keywords" content="none">
+        <meta name="description" content="none">
+        <style>
+            @font-face {
+                font-family: 'easyreading';
+                src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
+            }
+
+            @page {
+                size: A4;
+                margin-top: 0.5cm;
+                margin-right: 0.5cm;
+                margin-bottom: 0.5cm;
+                margin-left: 0.5cm;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            html {
+                font-family: easyreading;
+                height: 100%;
+                line-height: 1.3;
+            }
+
+            p {
+                margin: 0.3em;
+                padding: 0;
+            }
+
+            body {
+                background: white;
+                height: 100%;
+            }
+
+            h1 {
+                text-align: center;
+                font-size: 150%;
+                margin-bottom: 0.5em;
+            }
+
+            h2 {
+                margin-left: 40px;
+                margin-top: 1em;
+                margin-bottom: 1em;
+            }
+
+            a {
+                color: inherit;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            .head {
+                text-align: center;
+                font-size: 120%;
+                font-weight: bold;
+            }
+
+            br {
+                display: block;
+                margin: 1px 0;
+            }
+
+            .faction-type {
+                text-align: center;
+                margin: 0.5em;
+                font-style: italic;
+            }
+
+            .faction-content {
+                margin: 2em;
+            }
+
+            .faction-cover {
+                text-align: center;
+                margin: 1em;
+            }
+
+            .faction-cover img {
+                max-width: 300px;
+                max-height: 300px;
+            }
+        </style>
+        <style>{{ event.sheet_css | safe }}</style>
+    </head>
+    <body>
+        <div>
+            <div class="head">{{ event.association }} - {{ event }}</div>
+            {% include "elements/sheet/faction.html" with faction=sheet_faction %}
+        </div>
+    </body>
+</html>

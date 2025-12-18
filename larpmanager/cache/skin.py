@@ -18,55 +18,88 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from larpmanager.models.association import AssociationSkin
 
 
-def reset_cache_skin(s):
-    key = cache_skin_key(s)
+def clear_skin_cache(skin: AssociationSkin) -> None:
+    """Clear cached skin data."""
+    key = cache_skin_key(skin)
     cache.delete(key)
 
 
-def cache_skin_key(s):
-    return f"skin_{s}"
+def cache_skin_key(skin_id: int) -> str:
+    """Return cache key for skin."""
+    return f"skin_{skin_id}"
 
 
-def get_cache_skin(s):
-    key = cache_skin_key(s)
-    res = cache.get(key)
-    if not res:
-        res = init_cache_skin(s)
-        if not res:
+def get_cache_skin(skin_identifier: str) -> dict | None:
+    """Get cached skin data or initialize if not found.
+
+    Args:
+        skin_identifier: Skin identifier string.
+
+    Returns:
+        Cached skin data dictionary or None if initialization fails.
+
+    """
+    # Generate cache key for the skin
+    cache_key = cache_skin_key(skin_identifier)
+    cached_skin_data = cache.get(cache_key)
+
+    # Initialize cache if not found
+    if cached_skin_data is None:
+        cached_skin_data = init_cache_skin(skin_identifier)
+        if not cached_skin_data:
             return None
-        cache.set(key, res)
-    return res
+        # Cache the result for one day
+        cache.set(cache_key, cached_skin_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return cached_skin_data
 
 
-def init_cache_skin(domain):
+def init_cache_skin(domain: str) -> dict | None:
+    """Initialize skin cache data for a given domain.
+
+    Retrieves the AssociationSkin object for the specified domain and builds
+    a standardized skin configuration dictionary with default values and
+    skin-specific data.
+
+    Args:
+        domain (str): Domain name to lookup skin configuration for.
+
+    Returns:
+        dict | None: Skin configuration dictionary containing skin metadata
+            and styling information, or None if no skin found for domain.
+
+    Raises:
+        ObjectDoesNotExist: When no AssociationSkin exists for the domain.
+
+    """
     try:
-        skin = AssociationSkin.objects.get(domain=domain)
+        # Lookup skin configuration by domain
+        association_skin = AssociationSkin.objects.get(domain=domain)
     except ObjectDoesNotExist:
+        # Return None if no skin configuration exists for this domain
         return None
 
+    # Build standardized skin configuration dictionary
+    # with default LarpManager branding and skin-specific data
     return {
         "id": 0,
-        "name": skin.name,
+        "name": association_skin.name,
         "shuttle": [],
-        "features": ["assoc_css"],
+        "features": [],
+        # Default CSS configuration
         "css_code": "main",
         "slug": "lm",
+        # Default LarpManager branding assets
         "logo": "https://larpmanager.com/static/lm_logo.png",
         "main_mail": "info@larpmanager.com",
         "favicon": "https://larpmanager.com/static/lm_fav.png",
+        # Domain and skin identification
         "base_domain": domain,
-        "skin_id": skin.id,
+        "skin_id": association_skin.id,
     }
-
-
-@receiver(post_save, sender=AssociationSkin)
-def update_association_skin_reset_cache(sender, instance, **kwargs):
-    reset_cache_skin(instance.domain)

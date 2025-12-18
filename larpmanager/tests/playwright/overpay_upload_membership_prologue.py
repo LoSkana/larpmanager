@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -27,7 +29,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, load_image, login_orga
 pytestmark = pytest.mark.e2e
 
 
-def test_overpay_upload_membership_prologue(pw_page):
+def test_overpay_upload_membership_prologue(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,7 +44,7 @@ def test_overpay_upload_membership_prologue(pw_page):
     upload_membership_fee(page, live_server)
 
 
-def check_overpay(page, live_server):
+def check_overpay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage")
     # Activate tokens / credits
     page.locator("#exe_features").get_by_role("link", name="Features").click()
@@ -81,7 +83,7 @@ def check_overpay(page, live_server):
     expect(page.locator("#one")).to_contain_text("Admin Test Standard 84060100 60")
 
 
-def check_overpay_2(page, live_server):
+def check_overpay_2(page: Any, live_server: Any) -> None:
     # Add tokens
     page.get_by_role("link", name="Tokens").click()
     page.get_by_role("link", name="New").click()
@@ -128,7 +130,7 @@ def check_overpay_2(page, live_server):
     )
 
 
-def check_special_cod(page, live_server):
+def check_special_cod(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Registrations ").click()
@@ -146,7 +148,7 @@ def check_special_cod(page, live_server):
     expect(page.locator("#one")).to_contain_text("Admin Test Standard")
 
 
-def prologues(page):
+def prologues(page: Any) -> None:
     # activate prologues
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Prologues").check()
@@ -176,7 +178,7 @@ def prologues(page):
     expect(page.locator("#one")).to_contain_text("P1 ffff (test) #1 Test Character")
 
 
-def upload_membership(page, live_server):
+def upload_membership(page: Any, live_server: Any) -> None:
     # Activate membership
     go_to(page, live_server, "/manage")
     page.locator("#exe_features").click()
@@ -202,8 +204,11 @@ def upload_membership(page, live_server):
     page.locator("#id_date").click()
     page.get_by_role("button", name="Confirm").click()
 
-    # Check result
+    # Try accessing member form
     expect(page.locator("#one")).to_contain_text("Test Admin orga@test.it Accepted 1")
+    page.get_by_role("link", name="").click()
+
+    # Check result
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
     page.get_by_role("button", name="Submit").click()
@@ -216,7 +221,7 @@ def upload_membership(page, live_server):
     )
 
 
-def upload_membership_fee(page, live_server):
+def upload_membership_fee(page: Any, live_server: Any) -> None:
     # upload fee
     go_to(page, live_server, "/manage")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
@@ -245,4 +250,4 @@ def upload_membership_fee(page, live_server):
     # check
     expect(page.locator("#one")).to_contain_text("Test Admin orga@test.it Payed 1")
     page.get_by_role("link", name="Invoices").click()
-    expect(page.locator("#one")).to_contain_text("Admin Test Wire membership Confirmed 10 Membership fee of Admin Test")
+    expect(page.locator("#one")).to_contain_text("Admin TestWiremembershipConfirmed10Membership fee of Admin Test")

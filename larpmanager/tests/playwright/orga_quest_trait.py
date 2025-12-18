@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -25,7 +27,7 @@ from larpmanager.tests.utils import check_feature, fill_tinymce, go_to, login_or
 pytestmark = pytest.mark.e2e
 
 
-def test_quest_trait(pw_page):
+def test_quest_trait(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -52,7 +54,7 @@ def test_quest_trait(pw_page):
     page.get_by_role("heading", name="Torta - Strudel").first.click()
 
 
-def quests(page, live_server):
+def quests(page: Any, live_server: Any) -> None:
     # Activate features
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
@@ -88,7 +90,7 @@ def quests(page, live_server):
     expect(page.locator("#one")).to_contain_text("Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
 
 
-def traits(page, live_server):
+def traits(page: Any, live_server: Any) -> None:
     # create traits
     page.locator("#orga_traits").get_by_role("link", name="Traits").click()
     page.get_by_role("link", name="New").click()
@@ -142,7 +144,7 @@ def traits(page, live_server):
     expect(page.locator("#one")).to_contain_text("Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
-def signups(page, live_server):
+def signups(page: Any, live_server: Any) -> None:
     # create signup for my char
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Registrations", exact=True).click()
@@ -174,7 +176,7 @@ def signups(page, live_server):
     submit_confirm(page)
 
 
-def casting(page, live_server):
+def casting(page: Any, live_server: Any) -> None:
     # config casting
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Casting ").click()

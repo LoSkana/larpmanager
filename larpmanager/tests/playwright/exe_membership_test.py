@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -27,13 +29,13 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_membership(pw_page):
+def test_exe_membership(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
 
     # activate members
-    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/features/membership/on")
 
     # register
     go_to(page, live_server, "/test/register")

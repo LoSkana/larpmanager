@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_conf
 pytestmark = pytest.mark.e2e
 
 
-def test_px(pw_page):
+def test_px(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -46,7 +47,7 @@ def test_px(pw_page):
     modifiers(page, live_server)
 
 
-def setup(live_server, page):
+def setup(live_server: Any, page: Any) -> None:
     # activate features
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
@@ -63,6 +64,9 @@ def setup(live_server, page):
     page.locator("#id_px_undo").click()
     page.locator("#id_px_undo").fill("2")
     page.locator("#id_px_user").check()
+    page.locator("#id_px_templates").check()
+    page.locator("#id_px_rules").check()
+    page.locator("#id_px_modifiers").check()
 
     page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
     page.locator("#id_user_character_max").click()
@@ -99,7 +103,7 @@ def setup(live_server, page):
     page.get_by_role("button", name="Confirm").click()
 
 
-def ability(live_server, page):
+def ability(live_server: Any, page: Any) -> None:
     # set up xp
     go_to(page, live_server, "/test/manage/px/ability_types/")
     page.get_by_role("link", name="New").click()
@@ -129,8 +133,24 @@ def ability(live_server, page):
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
 
+    page.get_by_role("link", name="Ability Template").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("test_template")
+    page.locator("iframe[title=\"Rich Text Area\"]").content_frame.locator("html").click()
+    page.locator("iframe[title=\"Rich Text Area\"]").content_frame.get_by_label("Rich Text Area").fill("This text should show")
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="Ability", exact=True).click()
+    page.locator("[id=\"2\"]").get_by_role("link", name="").click()
+    page.get_by_text("---------").click()
+    page.get_by_role("searchbox").nth(3).fill("test_template")
+    page.get_by_role("option", name="test_template").click()
+    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="Ability", exact=True).click()
+    page.get_by_role("cell", name="This text should show").click()
 
-def delivery(live_server, page):
+
+def delivery(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/px/deliveries/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
@@ -163,7 +183,7 @@ def delivery(live_server, page):
     expect(page.locator('[id="\\31 "]')).to_contain_text("1")
 
 
-def rules(page):
+def rules(page: Any) -> None:
     # create first rule - for everyone
     page.get_by_role("link", name="Rules").click()
     page.get_by_role("link", name="New").click()
@@ -210,7 +230,7 @@ def rules(page):
     submit_confirm(page)
 
 
-def player_choice_undo(page, live_server):
+def player_choice_undo(page: Any, live_server: Any) -> None:
     # signup
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Registration is open!").click()
@@ -238,7 +258,7 @@ def player_choice_undo(page, live_server):
     page.locator("#ability_select").select_option("2")
     page.get_by_role("button", name="Submit", exact=True).click()
     expect(page.locator("#one")).to_contain_text(
-        "Experience points Total Used Available 12 3 9 Abilities base ability double shield (2) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
+        "Experience points Total Used Available 12 3 9 Abilities base ability double shield (2) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )
     expect(page.locator("#ability_select")).not_to_contain_text("double shield")
 
@@ -250,7 +270,7 @@ def player_choice_undo(page, live_server):
     expect(page.locator("#ability_select")).to_contain_text("--- Select abilitydouble shield - 2")
 
 
-def modifiers(page, live_server):
+def modifiers(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     # add modifier on ability
     page.get_by_role("link", name="Modifiers").click()
@@ -279,7 +299,7 @@ def modifiers(page, live_server):
     page.get_by_role("link", name="Ability").click()
     # ability is there (i got the correct class)
     expect(page.locator("#one")).to_contain_text(
-        "Experience points Total Used Available 12 1 11 Abilities base ability double shield (0) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
+        "Experience points Total Used Available 12 1 11 Abilities base ability double shield (0) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Change").click()
@@ -311,5 +331,5 @@ def modifiers(page, live_server):
     page.locator("#ability_select").select_option("2")
     page.get_by_role("button", name="Submit").click()
     expect(page.locator("#one")).to_contain_text(
-        "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
+        "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit"
     )

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confir
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_simple(pw_page):
+def test_user_signup_simple(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,9 +41,9 @@ def test_user_signup_simple(pw_page):
     help_questions(live_server, page)
 
 
-def signup(live_server, page):
+def signup(live_server: Any, page: Any) -> None:
     # deactivate registration open
-    go_to(page, live_server, "/test/manage/features/114/off")
+    go_to(page, live_server, "/test/manage/features/registration_open/off")
 
     # sign up
     go_to(page, live_server, "/")
@@ -79,9 +80,9 @@ def signup(live_server, page):
     expect(page.locator("#banner")).not_to_contain_text("Register")
 
 
-def help_questions(live_server, page):
+def help_questions(live_server: Any, page: Any) -> None:
     # test help
-    go_to(page, live_server, "/manage/features/28/on")
+    go_to(page, live_server, "/manage/features/help/on")
     page.get_by_role("link", name="Need help?").click()
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("please help me")
@@ -109,7 +110,7 @@ def help_questions(live_server, page):
     submit_confirm(page)
 
 
-def pre_register(live_server, page):
+def pre_register(live_server: Any, page: Any) -> None:
     # Set email send
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
@@ -120,9 +121,9 @@ def pre_register(live_server, page):
     page.locator("#id_mail_payment").check()
 
     # Activate pre-register
-    go_to(page, live_server, "/manage/features/32/on")
+    go_to(page, live_server, "/manage/features/pre_register/on")
     # Activate registration open
-    go_to(page, live_server, "/test/manage/features/114/on")
+    go_to(page, live_server, "/test/manage/features/registration_open/on")
 
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name=re.compile(r"^Pre-registration\s.+")).click()

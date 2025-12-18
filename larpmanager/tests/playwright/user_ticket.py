@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 
+from typing import Any
+
 import pytest
 
 from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm
@@ -26,7 +28,7 @@ from larpmanager.tests.utils import go_to, load_image, login_user, submit_confir
 pytestmark = pytest.mark.e2e
 
 
-def test_user_ticket(pw_page):
+def test_user_ticket(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     go_to(page, live_server, "/")

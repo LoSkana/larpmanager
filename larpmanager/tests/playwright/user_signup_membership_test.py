@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import check_download, go_to, load_image, login_org
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_membership(pw_page):
+def test_user_signup_membership(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,11 +41,11 @@ def test_user_signup_membership(pw_page):
     pay(live_server, page)
 
 
-def signup(live_server, page):
+def signup(live_server: Any, page: Any) -> None:
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
     # Activate membership
-    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_cc").check()
@@ -52,6 +53,10 @@ def signup(live_server, page):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
+
+    page.get_by_role("link", name="Payments ").click()
+    page.locator("#id_payment_require_receipt").check()
+
     submit_confirm(page)
     go_to(page, live_server, "/manage/methods")
     page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
@@ -76,7 +81,7 @@ def signup(live_server, page):
     submit_confirm(page)
 
 
-def membership(live_server, page):
+def membership(live_server: Any, page: Any) -> None:
     # send membership
     go_to(page, live_server, "/test/register")
     expect(page.locator("#one")).to_contain_text("Provisional registration")
@@ -107,12 +112,14 @@ def membership(live_server, page):
     page.get_by_role("link", name="to confirm it proceed with").click()
 
 
-def pay(live_server, page):
+def pay(live_server: Any, page: Any) -> None:
     # pay
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect(page.locator("b")).to_contain_text("100")
     submit(page)
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     submit(page)
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")

@@ -11,7 +11,7 @@
         <p>
             {% trans "You can consult" %}<a href="{% url 'register_conditions' event.slug %}">{% trans " here the conditions of disenrollment for this event" %}.</a>
         </p>
-    {% elif assoc_terms_conditions %}
+    {% elif association_terms_conditions %}
         <hr />
         <p>
             {% trans "You can consult" %}<a href="{% url 'register_conditions' %}">{% trans " here the conditions of disenrollment for this event" %}.</a>

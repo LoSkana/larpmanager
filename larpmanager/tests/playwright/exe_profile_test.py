@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
@@ -24,7 +26,7 @@ from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
 pytestmark = pytest.mark.e2e
 
 
-def test_exe_profile(pw_page):
+def test_exe_profile(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)

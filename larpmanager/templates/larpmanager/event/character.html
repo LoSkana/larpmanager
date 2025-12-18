@@ -61,11 +61,11 @@
         <script>
 function go_chart() {
 
-    var ctx = document.getElementById('myChart');
-    if (ctx === null) return;
-    ctx = ctx.getContext('2d');
+    var context = document.getElementById('myChart');
+    if (context === null) return;
+    context = context.getContext('2d');
 
-    var myChart = new Chart(ctx, {
+    var myChart = new Chart(context, {
         type: 'bar',
         data: {
             labels: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %} "{{ forloop.counter }}"{% endfor %}{% endwith %}],

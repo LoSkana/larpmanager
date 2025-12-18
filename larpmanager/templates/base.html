@@ -3,7 +3,9 @@
 {% block banner %}
     <div class="inner">
         <h1>
-            {% if assoc.logo and request.path == '/' %}<img src="{{ assoc.logo }}" class="main_logo" alt="logo" />{% endif %}
+            {% if association.logo and request.path == '/' %}
+                <img src="{{ association.logo }}" class="main_logo" alt="logo" />
+            {% endif %}
             <span>
                 {% block title %}
                 {% endblock title %}
@@ -12,5 +14,5 @@
     </div>
 {% endblock banner %}
 {% block robots %}
-    {% if assoc.id > 0 or staging or not index %}<meta name="robots" content="noindex, nofollow" />{% endif %}
+    {% if association.id > 0 or staging or not index %}<meta name="robots" content="noindex, nofollow" />{% endif %}
 {% endblock robots %}

@@ -19,7 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import logging
+from collections.abc import Callable
 
+from django.http import HttpRequest, HttpResponse
 from django.utils.timezone import now
 
 from larpmanager.utils.profiler.signals import profiler_response_signal
@@ -28,37 +30,87 @@ logger = logging.getLogger(__name__)
 
 
 class ProfilerMiddleware:
-    def __init__(self, get_response):
+    """Middleware for Profiler."""
+
+    threshold = 0.5
+
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with Django response handler."""
         self.get_response = get_response
 
-    def __call__(self, request):
-        request._profiler_start_ts = now()
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        """Process request and measure view function execution time.
+
+        This middleware measures the execution time of Django view functions
+        and sends a signal when the duration exceeds the configured threshold.
+        It silently handles any errors to avoid disrupting the request flow.
+
+        Args:
+            request: The incoming HTTP request object containing request data
+                    and metadata.
+
+        Returns:
+            The HTTP response object returned by the view function.
+
+        Note:
+            The profiling data is only collected if the request has a
+            _profiler_func_name attribute set by the view decorator.
+
+        """
+        # Record the start timestamp for duration calculation
+        request._profiler_start_ts = now()  # noqa: SLF001  # Internal profiling attribute
+
+        # Process the request through the view function
         response = self.get_response(request)
 
+        # Check if profiling is enabled for this request
         if hasattr(request, "_profiler_func_name"):
-            duration = (now() - request._profiler_start_ts).total_seconds()
-            if duration >= 1:
+            # Calculate the total execution duration
+            duration = (now() - request._profiler_start_ts).total_seconds()  # noqa: SLF001  # Internal profiling attribute
+
+            # Only emit signal if duration exceeds the threshold
+            if duration >= self.threshold:
                 try:
+                    # Send profiling data via Django signal
                     # noinspection PyProtectedMember
                     profiler_response_signal.send(
                         sender=None,
                         domain=request.get_host(),
                         path=request.get_full_path(),
                         method=request.method,
-                        view_func_name=request._profiler_func_name,
+                        view_func_name=request._profiler_func_name,  # noqa: SLF001  # Internal profiling attribute
                         duration=duration,
                     )
-                except Exception as err:
-                    # fail silently in production, but log for debugging
-                    logger.warning(f"ProfilerMiddleware fail: {err}")
+                except Exception as err:  # noqa: BLE001 - Profiler must never disrupt normal request handling
+                    # Fail silently in production, but log for debugging
+                    logger.warning("ProfilerMiddleware fail: %s", err)
 
         return response
 
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        request._profiler_func_name = self._extract_view_func_name(view_func)
+    def process_view(
+        self,
+        request: HttpRequest,
+        view_func: Callable,
+        view_args: tuple,  # noqa: ARG002
+        view_kwargs: dict,  # noqa: ARG002
+    ) -> None:
+        """Store the view function name in the request for profiling."""
+        request._profiler_func_name = self._extract_view_func_name(view_func)  # noqa: SLF001  # Internal profiling attribute
 
     @staticmethod
-    def _extract_view_func_name(view_func):
-        if hasattr(view_func, "view_class"):
-            return view_func.view_class.__name__
-        return getattr(view_func, "__name__", view_func.__class__.__name__)
+    def _extract_view_func_name(view_function: Callable[..., HttpResponse]) -> str:
+        """Extract the name from a Django view function or class-based view.
+
+        Args:
+            view_function: Django view function or class-based view
+
+        Returns:
+            Name of the view class or function
+
+        """
+        # Check if it's a class-based view with view_class attribute
+        if hasattr(view_function, "view_class"):
+            return view_function.view_class.__name__
+
+        # Fallback to __name__ attribute or class name
+        return getattr(view_function, "__name__", view_function.__class__.__name__)

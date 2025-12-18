@@ -18,11 +18,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import os
 import random
+import secrets
+from pathlib import Path
+from typing import Any, ClassVar
 
 from django.db import models
 from django.db.models import Q, UniqueConstraint
+from django.http import HttpResponse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
@@ -35,7 +39,7 @@ from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
 from larpmanager.models.writing import Character
-from larpmanager.utils.validators import FileTypeValidator
+from larpmanager.utils.core.validators import FileTypeValidator
 
 
 class HelpQuestion(BaseModel):
@@ -51,7 +55,7 @@ class HelpQuestion(BaseModel):
         verbose_name=_("Event"),
         help_text=_(
             "If your question is about a specific event, please select it! If  is a general "
-            "question instead, please leave it blank."
+            "question instead, please leave it blank.",
         ),
     )
 
@@ -81,14 +85,15 @@ class HelpQuestion(BaseModel):
                     "image/jpeg",
                     "image/png",
                     "image/gif",
-                ]
-            )
+                ],
+            ),
         ],
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, null=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining member and text."""
         return f"{self.member} {self.text}"
 
 
@@ -105,11 +110,11 @@ class Contact(BaseModel):
 
     num_unread = models.IntegerField(default=0)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ["me", "you"]
-        constraints = [
+        ordering: ClassVar[list] = ["me", "you"]
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["me", "you", "deleted"], name="unique_contact_with_optional"),
             UniqueConstraint(
                 fields=["me", "you"],
@@ -118,11 +123,14 @@ class Contact(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation showing connection between me and you."""
         return f"C - {self.me} {self.you}"
 
 
 class ChatMessage(BaseModel):
+    """Represents ChatMessage model."""
+
     message = models.TextField(max_length=1000)
 
     channel = models.IntegerField(db_index=True)
@@ -131,13 +139,17 @@ class ChatMessage(BaseModel):
 
     receiver = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="RECEIVER_MSG")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with sender and message preview."""
+        # Format message preview with sender and truncated content
         return f"CM - {self.sender} {self.message[:20]}"
 
 
 class Util(BaseModel):
+    """Represents Util model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150)
@@ -146,25 +158,28 @@ class Util(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-    util = models.FileField(upload_to=UploadToPathAndRename("../utils/"))
+    util = models.FileField(upload_to=UploadToPathAndRename("utils/"))
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with member number and name."""
         return f"U{self.number} {self.name}"
 
-    def download(self):
+    def download(self) -> HttpResponse:
+        """Download the utility file."""
         # noinspection PyUnresolvedReferences
         s = self.util.url
-        # s = s.replace("media/", "", 1)
         return download(s)
 
-    def file_name(self):
+    def file_name(self) -> str:
+        """Return the base filename from the util URL or empty string if no util."""
         if not self.util:
             return ""
-        # noinspection PyUnresolvedReferences
-        return os.path.basename(self.util.url)
+        return Path(self.util.url).name
 
 
 class UrlShortner(BaseModel):
+    """Represents UrlShortner model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150)
@@ -173,13 +188,16 @@ class UrlShortner(BaseModel):
 
     url = models.URLField(max_length=300)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"U{self.number} {self.name}"
 
 
 class Album(BaseModel):
+    """Represents Album model."""
+
     name = models.CharField(max_length=70)
 
     cover = models.ImageField(max_length=500, upload_to=UploadToPathAndRename("albums/cover/"), blank=True)
@@ -205,16 +223,19 @@ class Album(BaseModel):
 
     run = models.ForeignKey(Run, on_delete=models.PROTECT, blank=True, null=True, related_name="albums")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __unicode__(self) -> str:
+        """Return the title of the object."""
         # noinspection PyUnresolvedReferences
         return self.title
 
-    def show_thumb(self):
+    def show_thumb(self) -> Any:
+        """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
+        return None
 
 
 class AlbumUpload(BaseModel):
@@ -225,7 +246,7 @@ class AlbumUpload(BaseModel):
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="uploads")
 
     PHOTO = "p"
-    TYPE_CHOICES = [
+    TYPE_CHOICES: ClassVar[list] = [
         (PHOTO, _("Photo")),
     ]
     typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
@@ -256,17 +277,22 @@ class AlbumImage(BaseModel):
 
     height = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return self.upload.name
 
-    def show_thumb(self):
+    def show_thumb(self) -> Any:
+        """Return HTML for displaying thumbnail image if available."""
         if self.thumb:
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.thumb.url)
+        return None
 
-    def original_url(self):
+    def original_url(self) -> str:
+        """Extract the original media URL path from the full URL."""
         # noinspection PyUnresolvedReferences
         s = self.original.url
+        # Split by /media/ and take the third part (after two splits)
         return "/media/" + s.split("/media/")[2]
 
 
@@ -277,7 +303,7 @@ class Competence(BaseModel):
 
     descr = models.CharField(max_length=5000, help_text=_("A description of the skills / abilities involved"))
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE)
+    association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     members = models.ManyToManyField(Member, related_name="competences", through="CompetenceMemberRel")
 
@@ -293,11 +319,12 @@ class CompetenceMemberRel(BaseModel):
 
     info = models.TextField(max_length=5000)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.member} - {self.competence} ({self.exp})"
 
     class Meta:
-        unique_together = ["competence", "member", "deleted"]
+        unique_together: ClassVar[list] = ["competence", "member", "deleted"]
 
 
 class WorkshopModule(BaseModel):
@@ -315,10 +342,12 @@ class WorkshopModule(BaseModel):
 
     members = models.ManyToManyField(Member, related_name="workshops", through="WorkshopMemberRel")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
-    def show(self):
+    def show(self) -> dict[str, Any]:
+        """Return dictionary representation of instance for display."""
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "number": self.number}
         self.upd_js_attr(js, "name")
@@ -326,15 +355,20 @@ class WorkshopModule(BaseModel):
 
 
 class WorkshopMemberRel(BaseModel):
+    """Represents WorkshopMemberRel model."""
+
     workshop = models.ForeignKey(WorkshopModule, on_delete=models.CASCADE)
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.workshop} - {self.member}"
 
 
 class WorkshopQuestion(BaseModel):
+    """Represents WorkshopQuestion model."""
+
     search = models.CharField(max_length=200, editable=False)
 
     name = models.CharField(max_length=200)
@@ -345,10 +379,17 @@ class WorkshopQuestion(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="workshop_questions")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return self.name
 
-    def show(self):
+    def show(self) -> dict[str, any]:
+        """Return dictionary representation for display purposes.
+
+        Returns:
+            Dictionary containing id, number and name attributes.
+
+        """
         # noinspection PyUnresolvedReferences
         js = {"id": self.id, "opt": [], "number": self.number}
         self.upd_js_attr(js, "name")
@@ -359,10 +400,14 @@ class WorkshopQuestion(BaseModel):
         return js
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=["module", "number", "deleted"], name="unique workshop question")]
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(fields=["module", "number", "deleted"], name="unique workshop question")
+        ]
 
 
 class WorkshopOption(BaseModel):
+    """Represents WorkshopOption model."""
+
     search = models.CharField(max_length=500, editable=False)
 
     question = models.ForeignKey(WorkshopQuestion, on_delete=models.CASCADE, related_name="options")
@@ -375,35 +420,52 @@ class WorkshopOption(BaseModel):
 
     number = models.IntegerField(blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.question} {self.name} ({self.is_correct})"
 
-    def show(self):
+    def show(self) -> dict[str, Any]:
+        """Return JSON-serializable dict with answer option data.
+
+        Returns:
+            Dictionary with id, correctness flag, and name if present.
+
+        """
         # noinspection PyUnresolvedReferences
+        # Build base dict with id and correctness status
         js = {"id": self.id, "is_correct": self.is_correct}
+
+        # Add name attribute if available
         self.upd_js_attr(js, "name")
+
         return js
 
 
 class WarehouseContainer(BaseModel):
+    """Represents WarehouseContainer model."""
+
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
 
     position = models.CharField(max_length=100, help_text=_("Where it is located"), blank=True, default="")
 
     description = models.CharField(max_length=1000, blank=True, default="")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
 
 class WarehouseTag(BaseModel):
+    """Represents WarehouseTag model."""
+
     name = models.CharField(max_length=100)
 
     description = models.CharField(max_length=1000, blank=True, default="")
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
 
 
 class WarehouseItem(BaseModel):
+    """Represents WarehouseItem model."""
+
     name = models.CharField(max_length=100)
 
     quantity = models.IntegerField(blank=True, null=True)
@@ -430,14 +492,17 @@ class WarehouseItem(BaseModel):
         options={"quality": 80},
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
 
     @classmethod
-    def get_optional_fields(cls):
+    def get_optional_fields(cls) -> Any:
+        """Return list of optional field names."""
         return ["quantity"]
 
 
 class WarehouseMovement(BaseModel):
+    """Represents WarehouseMovement model."""
+
     quantity = models.IntegerField(blank=True, null=True)
 
     item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="movements")
@@ -449,12 +514,14 @@ class WarehouseMovement(BaseModel):
         help_text=_("Where it has been placed? When it is expected to come back?"),
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="movements")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="movements")
 
     completed = models.BooleanField(default=False)
 
 
 class WarehouseArea(BaseModel):
+    """Represents WarehouseArea model."""
+
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
 
     position = models.CharField(max_length=100, help_text=_("Where it is"), blank=True, default="")
@@ -465,6 +532,8 @@ class WarehouseArea(BaseModel):
 
 
 class WarehouseItemAssignment(BaseModel):
+    """Represents WarehouseItemAssignment model."""
+
     quantity = models.IntegerField(blank=True, null=True)
 
     item = models.ForeignKey(WarehouseItem, on_delete=models.CASCADE, related_name="assignments")
@@ -480,7 +549,7 @@ class WarehouseItemAssignment(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["area", "item", "deleted"],
                 name="unique_warehouse_item_assignment_with_optional",
@@ -494,12 +563,16 @@ class WarehouseItemAssignment(BaseModel):
 
 
 class ShuttleStatus(models.TextChoices):
+    """Represents ShuttleStatus model."""
+
     OPEN = "0", _("Waiting list")
     COMING = "1", _("We're coming")
     DONE = "2", _("Arrived safe and sound")
 
 
 class ShuttleService(BaseModel):
+    """Represents ShuttleService model."""
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="shuttle_services_requests")
 
     passengers = models.IntegerField(
@@ -517,7 +590,7 @@ class ShuttleService(BaseModel):
         help_text=_(
             "Indicates how you can be recognized, if you will be found near some point "
             "specific, if you have a lot of luggage: any information that might help us help "
-            "you"
+            "you",
         ),
     )
 
@@ -542,26 +615,31 @@ class ShuttleService(BaseModel):
     notes = models.TextField(
         verbose_name=_("Note"),
         help_text=_(
-            "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival"
+            "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival",
         ),
         null=True,
     )
 
     status = models.CharField(max_length=1, choices=ShuttleStatus.choices, default=ShuttleStatus.OPEN, db_index=True)
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="shuttles")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.member} ({self.date} {self.time}) {self.status}"
 
 
 class ProblemStatus(models.TextChoices):
+    """Represents ProblemStatus model."""
+
     OPEN = "o", "1 - OPEN"
     WORKING = "w", "2 - WORKING"
     CLOSED = "c", "3 - CLOSED"
 
 
 class ProblemSeverity(models.TextChoices):
+    """Represents ProblemSeverity model."""
+
     RED = "r", "1 - RED"
     ORANGE = "o", "2 - ORANGE"
     YELLOW = "y", "3 - YELLOW"
@@ -569,6 +647,8 @@ class ProblemSeverity(models.TextChoices):
 
 
 class Problem(BaseModel):
+    """Represents Problem model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     number = models.IntegerField()
@@ -582,7 +662,7 @@ class Problem(BaseModel):
             "Indicate severity: RED (risks ruining the event for more than half of the "
             "participants), ORANGE (risks ruining the event for more than ten participants),  YELLOW "
             "(risks ruining the event for a few participants), GREEN (more than  problems, finesses "
-            "to be fixed)"
+            "to be fixed)",
         ),
     )
 
@@ -593,7 +673,7 @@ class Problem(BaseModel):
         verbose_name=_("Status"),
         help_text=_(
             "When putting in WORKING, indicate in the comments the specific actions that  are "
-            "being performed; when putting in CLOSED, indicate showd in the  comments."
+            "being performed; when putting in CLOSED, indicate showd in the  comments.",
         ),
         db_index=True,
     )
@@ -622,40 +702,65 @@ class Problem(BaseModel):
 
     comments = models.TextField(blank=True)
 
-    def get_small_text(self, s):
-        if not hasattr(self, s):
-            return s
-        v = getattr(self, s)
-        if not v:
-            return s
-        return v[:100]
+    def get_small_text(self, attribute_name: str) -> str:
+        """Get truncated text value from object attribute.
 
-    def where_l(self):
+        Args:
+            attribute_name: Attribute name to retrieve and truncate.
+
+        Returns:
+            Truncated string (max 100 chars) or original string if attribute doesn't exist.
+
+        """
+        # Check if attribute exists on object
+        if not hasattr(self, attribute_name):
+            return attribute_name
+
+        # Get attribute value
+        attribute_value = getattr(self, attribute_name)
+        if not attribute_value:
+            return attribute_name
+
+        # Return truncated value (max 100 characters)
+        return attribute_value[:100]
+
+    def where_l(self) -> Any:
+        """Return truncated 'where' attribute text."""
         return self.get_small_text("where")
 
-    def when_l(self):
+    def when_l(self) -> Any:
+        """Return truncated 'when' attribute text."""
         return self.get_small_text("when")
 
-    def who_l(self):
+    def who_l(self) -> Any:
+        """Return truncated 'who' attribute text."""
         return self.get_small_text("who")
 
-    def what_l(self):
+    def what_l(self) -> Any:
+        """Return truncated 'what' attribute text."""
         return self.get_small_text("what")
 
 
 class PlayerRelationship(BaseModel):
+    """Represents PlayerRelationship model."""
+
     reg = models.ForeignKey(Registration, on_delete=models.CASCADE)
 
     target = models.ForeignKey(Character, related_name="target_players", on_delete=models.CASCADE)
 
     text = HTMLField(max_length=5000)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation with registration, target, and run number."""
         # noinspection PyUnresolvedReferences
         return f"{self.reg} - {self.target} ({self.reg.run.number})"
 
     class Meta:
-        constraints = [
+        indexes: ClassVar[list] = [
+            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
+            models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="prel_target_act"),
+        ]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["reg", "target", "deleted"],
                 name="unique_player_relationship_with_optional",
@@ -669,7 +774,9 @@ class PlayerRelationship(BaseModel):
 
 
 class Email(BaseModel):
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
+    """Represents Email model."""
+
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, blank=True, null=True)
 
@@ -685,5 +792,226 @@ class Email(BaseModel):
 
     search = models.CharField(max_length=500, blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.recipient} - {self.subj}"
+
+
+class OneTimeContent(BaseModel):
+    """Model to store multimedia content for one-time access via tokens.
+
+    Organizers can upload video/audio files and generate access tokens.
+    """
+
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="onetime_contents",
+        verbose_name=_("Event"),
+        help_text=_("The event this content belongs to"),
+    )
+
+    name = models.CharField(
+        max_length=200,
+        verbose_name=_("Content name"),
+        help_text=_("Descriptive name for this content"),
+    )
+
+    description = models.TextField(
+        blank=True,
+        verbose_name=_("Description"),
+        help_text=_("Optional description of the content"),
+    )
+
+    file = models.FileField(
+        upload_to=UploadToPathAndRename("onetime_content/"),
+        verbose_name=_("Media file"),
+        help_text=_("Video or audio file to be streamed (recommended: MP4, WebM, MP3)"),
+    )
+
+    content_type = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name=_("Content type"),
+        help_text=_("MIME type of the file (e.g., video/mp4)"),
+    )
+
+    file_size = models.BigIntegerField(
+        default=0,
+        verbose_name=_("File size"),
+        help_text=_("Size of the file in bytes"),
+    )
+
+    duration = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_("Duration"),
+        help_text=_("Duration in seconds (optional)"),
+    )
+
+    active = models.BooleanField(
+        default=True,
+        verbose_name=_("Active"),
+        help_text=_("Whether this content is currently available for access"),
+    )
+
+    class Meta:
+        ordering: ClassVar[list] = ["-created"]
+        verbose_name = _("One-Time Content")
+        verbose_name_plural = _("One-Time Contents")
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.name} ({self.event.name})"
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Override save to capture file metadata."""
+        if self.file:
+            self.file_size = self.file.size
+            # Try to determine content type
+            if not self.content_type:
+                file_name = self.file.name.lower()
+                if file_name.endswith(".mp4"):
+                    self.content_type = "video/mp4"
+                elif file_name.endswith(".webm"):
+                    self.content_type = "video/webm"
+                elif file_name.endswith(".mp3"):
+                    self.content_type = "audio/mpeg"
+                elif file_name.endswith(".ogg"):
+                    self.content_type = "audio/ogg"
+                else:
+                    self.content_type = "application/octet-stream"
+        super().save(*args, **kwargs)
+
+    def generate_token(self, note: Any = "") -> Any:
+        """Generate a new access token for this content.
+
+        Args:
+            note (str): Optional note describing the purpose of this token
+
+        Returns:
+            OneTimeAccessToken: The newly created token
+
+        """
+        return OneTimeAccessToken.objects.create(content=self, note=note)
+
+    def get_token_stats(self) -> Any:
+        """Get statistics about tokens for this content.
+
+        Returns:
+            dict: Dictionary with token statistics
+
+        """
+        access_tokens = self.access_tokens.all()
+        return {
+            "total": access_tokens.count(),
+            "used": access_tokens.filter(used=True).count(),
+            "unused": access_tokens.filter(used=False).count(),
+        }
+
+
+class OneTimeAccessToken(BaseModel):
+    """Access token for one-time viewing of content.
+
+    Each token can only be used once.
+    """
+
+    content = models.ForeignKey(
+        OneTimeContent,
+        on_delete=models.CASCADE,
+        related_name="access_tokens",
+        verbose_name=_("Content"),
+    )
+
+    token = models.CharField(
+        max_length=64,
+        unique=True,
+        db_index=True,
+        editable=False,
+        verbose_name=_("Token"),
+    )
+
+    note = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name=_("Note"),
+        help_text=_("Optional note about this token (e.g., recipient name, purpose)"),
+    )
+
+    used = models.BooleanField(
+        default=False,
+        verbose_name=_("Used"),
+        help_text=_("Whether this token has been used"),
+    )
+
+    used_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name=_("Used at"),
+        help_text=_("When this token was used"),
+    )
+
+    used_by = models.ForeignKey(
+        Member,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="used_onetime_tokens",
+        verbose_name=_("Used by"),
+        help_text=_("Member who used this token (if authenticated)"),
+    )
+
+    ip_address = models.GenericIPAddressField(
+        blank=True,
+        null=True,
+        verbose_name=_("IP address"),
+        help_text=_("IP address from which the token was used"),
+    )
+
+    user_agent = models.TextField(
+        blank=True,
+        verbose_name=_("User agent"),
+        help_text=_("Browser user agent string from the access"),
+    )
+
+    class Meta:
+        ordering: ClassVar[list] = ["-created"]
+        verbose_name = _("One-Time Access Token")
+        verbose_name_plural = _("One-Time Access Tokens")
+
+    def __str__(self) -> str:
+        """Return string representation showing token preview and usage status."""
+        status = _("Used") if self.used else _("Unused")
+        return f"{self.token[:8]}... - {status}"
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Generate token on creation."""
+        if not self.token:
+            # Generate a cryptographically secure token
+            self.token = secrets.token_urlsafe(48)
+        super().save(*args, **kwargs)
+
+    def mark_as_used(self, http_request: Any = None, authenticated_member: Any = None) -> None:
+        """Mark this token as used and record access information.
+
+        Args:
+            http_request: Django HttpRequest object to extract metadata
+            authenticated_member: Member object if user is authenticated
+
+        """
+        self.used = True
+        self.used_at = timezone.now()
+        self.used_by = authenticated_member
+
+        if http_request:
+            # Extract IP address
+            forwarded_for_header = http_request.META.get("HTTP_X_FORWARDED_FOR")
+            if forwarded_for_header:
+                self.ip_address = forwarded_for_header.split(",")[0].strip()
+            else:
+                self.ip_address = http_request.META.get("REMOTE_ADDR")
+
+            # Extract user agent
+            self.user_agent = http_request.META.get("HTTP_USER_AGENT", "")[:500]
+
+        self.save()

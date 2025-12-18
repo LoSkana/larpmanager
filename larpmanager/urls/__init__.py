@@ -18,12 +18,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.conf import (
     settings as conf_settings,
 )
 from django.conf.urls.static import static
 from django.urls import path
 
+from larpmanager.views.api import published_events
 from larpmanager.views.user import event as views_ue
 
 from .event import urlpatterns as event_urls
@@ -48,10 +51,15 @@ urlpatterns = (
     + static_urls
     + [
         path(
-            "<slug:s>/",
+            "api/v1/published-events/",
+            published_events,
+            name="api_published_events",
+        ),
+        path(
+            "<slug:event_slug>/",
             views_ue.event_redirect,
             name="event_redirect",
-        )
+        ),
     ]
 )
 
@@ -59,10 +67,22 @@ handler404 = "larpmanager.views.error_404"
 handler500 = "larpmanager.views.error_500"
 
 
-def walk_patterns(patterns):
+def walk_patterns(patterns: Any) -> set[str]:
+    """Extract URL prefixes from Django URL patterns.
+
+    Args:
+        patterns: Collection of URL pattern objects.
+
+    Returns:
+        Set of URL prefixes without angle brackets or regex anchors.
+
+    """
     prefixes = set()
     for element in patterns:
+        # Extract first path segment from pattern string
         part = str(element.pattern).strip("/").split("/")[0]
+
+        # Remove regex anchor and filter valid prefixes
         part = part.replace("^", "")
         if part and not part.startswith("<"):
             prefixes.add(part)

@@ -1,391 +1,390 @@
 - model: larpmanager.feature
-  pk: 6
   fields:
     name: Prologues
     descr: Enables "Prologues", short introductory paragraphs for each act of the
       event, which participants receive to guide them
     slug: prologue
     overall: false
-    module: 1
     placeholder: false
     order: 240
     after_text: Now you can create prologues for the event
     after_link: orga_prologues
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 7
   fields:
     name: Quests and Traits
     descr: Introduces 'Quests' as building blocks of the character sheet, each with
       multiple 'traits'
     slug: questbuilder
     overall: false
-    module: 1
     placeholder: false
     order: 120
     after_text: Now you can create quests for the event
     after_link: orga_quest_types
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 10
   fields:
     name: Copy
     descr: Allows you to copy any element directly from another event
     slug: copy
     overall: false
-    module: 3
     placeholder: false
     order: 10
     after_text: Now you can copy elements from an other event
     after_link: orga_copy
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 11
   fields:
     name: Pay what you want
-    descr: Allows participants to add an optional extra amount to their registration fee
+    descr: Allows participants to add an optional extra amount to their registration
+      fee
     slug: pay_what_you_want
     overall: false
-    module: 2
     placeholder: false
     order: 50
     after_text: Now you can configure the registration question
     after_link: orga_registration_form
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 12
   fields:
     name: Discount
-    descr: Allows you to generate discount codes that participants can use to reduce their
-      ticket price
+    descr: Allows you to generate discount codes that participants can use to reduce
+      their ticket price
     slug: discount
     overall: false
-    module: 2
     placeholder: false
     order: 30
     after_text: Now you can create discounts for the event
     after_link: orga_discounts
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 15
   fields:
     name: LAOG
     descr: Treats this event as a digital/online occurrence that does not require
       in-person registration
     slug: laog
     overall: false
-    module: 3
     placeholder: false
     order: 70
     after_text: ''
     after_link: ''
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 18
   fields:
     name: Reminder
     descr: Performs daily checks for upcoming payments deadlines and sends reminder
       emails automatically
     slug: remind
     overall: true
-    module: 4
     placeholder: false
     order: 20
     after_text: Now you can set the reminder options
     after_link: config/remind
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 20
   fields:
     name: Bring a friend
     descr: Enables 'bring a friend' discount. A participant can provides their unique
       code to a new registrant, granting both a discounted price
     slug: bring_friend
     overall: false
-    module: 2
     placeholder: false
     order: 9999
     after_text: Now you can set the discount options
     after_link: config/bring_friend
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 21
   fields:
     name: PDF generation
     descr: Automatically generates and updates PDFs of character sheets, gallery and
       participant profiles
     slug: print_pdf
     overall: false
-    module: 1
     placeholder: false
     order: 25
     after_text: Now you can set the PDF generation options
     after_link: orga_characters_pdf
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 24
   fields:
     name: Workshop
     descr: Adds a quiz-style system for workshop questions. Organizers can define
       forms, questions, and correct answers for participants to complete
     slug: workshop
     overall: false
-    module: 3
     placeholder: false
     order: 20
     after_text: Now you can start creating workshops, starting from modules
     after_link: orga_workshop_modules
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 25
   fields:
     name: Speed Larp
     descr: Manages pre-larp 'mini-scenes.' You can create any number of scenes and
       assign participants to them, with checks to avoid scheduling conflicts
     slug: speedlarp
     overall: false
-    module: 3
     placeholder: false
     order: 60
     after_text: Now you can start creating speed-larps
     after_link: orga_speedlarps
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 26
   fields:
     name: Safety
     descr: Lets staff access the safety information submitted by participants
     slug: safety
     overall: false
-    module: 8
     placeholder: false
     order: 20
     after_text: Now you can review the safety information submitted by participants
     after_link: orga_safety
     hidden: true
+    module: users
 - model: larpmanager.feature
-  pk: 27
   fields:
     name: Casting algorithm
-    descr: Lets participants submit character preferences, then finds the optimal overall
-      match
+    descr: Lets participants submit character preferences, then finds the optimal
+      overall match
     slug: casting
     overall: false
-    module: 7
     placeholder: false
     order: 10
     after_text: Now you can set the casting options
     after_link: config/casting
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 28
   fields:
     name: Help
     descr: Allows participants to submit questions, and organizers to review and organize
       them
     slug: help
     overall: true
-    module: 8
     placeholder: false
     order: 10
     after_text: Now you can review participants' questions
     after_link: exe_questions
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 31
   fields:
     name: Collections
     descr: Allows participants to create and contribute to collections aimed at assisting
       another participant with event fees
     slug: collection
     overall: true
-    module: 2
     placeholder: false
     order: 40
     after_text: Now participants can submit collections, and you can review them
     after_link: exe_collections
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 32
   fields:
     name: Pre-registration
     descr: Enables free pre-registration to events
     slug: pre_register
     overall: true
-    module: 4
     placeholder: false
     order: 30
     after_text: Now participants can submit preregistrations, and you can review them
     after_link: exe_pre_registrations
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 36
   fields:
     name: Donation
     descr: Adds a link on personal accounts pages, allowing users to donate money
       to the association freely
     slug: donate
     overall: true
-    module: 2
     placeholder: false
     order: 20
     after_text: Now participants can submit donation, and you can review them
     after_link: exe_donations
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 40
   fields:
     name: Newsletter
-    descr: Adds a page displaying member mailing lists, sorted by members' newsletter
-      preferences
+    descr: Adds a page displaying participant mailing lists, sorted by participants'
+      newsletter preferences
     slug: newsletter
     overall: true
-    module: 8
     placeholder: false
     order: 60
     after_text: Now you can review users mailing list
     after_link: exe_newsletter
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 43
   fields:
     name: Utility
     descr: Lets you upload and host files directly on the platform, making them available
       either to staff or to participants via secret external links
     slug: utils
     overall: false
-    module: 3
     placeholder: false
     order: 30
     after_text: Now you can host files in the platform
     after_link: orga_utils
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 44
   fields:
     name: Character customization
     descr: Enables participants to customize specific attributes (name, pronoun, public
       info, etc.) of the characters they're assigned
     slug: custom_character
     overall: false
-    module: 7
     placeholder: false
     order: 40
     after_text: Now you can set customization options
     after_link: config/custom_character
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 45
   fields:
     name: Membership
     descr: Requires Executive Committee approval of membership before participating
       in an event
     slug: membership
     overall: true
-    module: 8
     placeholder: false
     order: 40
     after_text: Now you can set membership options
     after_link: config/membership
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 46
   fields:
     name: Shuttle
-    descr: Allows participants to submit shuttle requests (e.g., pickup logistics), and
-      staff can manage the status of those requests
+    descr: Allows participants to submit shuttle requests (e.g., pickup logistics),
+      and staff can manage the status of those requests
     slug: shuttle
     overall: true
-    module: 3
     placeholder: false
     order: 30
     after_text: ''
     after_link: ''
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 47
   fields:
     name: External mail server
     descr: Allows you to configure a custom external mail server that will be used
       instead of the standard one
     slug: custom_mail
     overall: true
-    module: 3
     placeholder: false
     order: 40
     after_text: Now you can set the external mail server settings
     after_link: config/custom_mail_server
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 50
   fields:
     name: Lottery
     descr: Enables 'lottery' tickets with unlimited availability and no cost, from
       which a random subset is converted into normal tickets
     slug: lottery
     overall: false
-    module: 4
     placeholder: false
     order: 90
     after_text: Now you can create the lottery ticket
     after_link: orga_registration_tickets
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 51
   fields:
     name: Filler
     descr: 'Enables ''Filler'' characters: simpler character sheets, assigned to participants
       who are ready to replacing last-minute dropout of main characters.'
     slug: filler
     overall: false
-    module: 4
     placeholder: false
     order: 70
     after_text: Now you can create the filler ticket
     after_link: orga_registration_tickets
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 52
   fields:
     name: Chat
     descr: Enables participants to send private messages to each other, without revealing
       personal email addresses
     slug: chat
     overall: true
-    module: 8
     placeholder: false
     order: 50
     after_text: ''
     after_link: ''
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 53
   fields:
     name: Waiting list
     descr: Activates 'waiting list' style tickets, available only when all main tickets
       are sold out
     slug: waiting
     overall: false
-    module: 4
     placeholder: false
     order: 60
     after_text: Now you can create the waiting ticket
     after_link: orga_registration_tickets
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 57
   fields:
     name: Participant cancellation
     descr: Allows participants to cancel their own registrations at any time
     slug: player_cancellation
     overall: false
-    module: 7
     placeholder: false
     order: 20
     after_text: ''
     after_link: ''
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 58
   fields:
     name: External registration
-    descr: Instead of using an internal registration form, redirects the participant to
-      an external registration link
+    descr: Instead of using an internal registration form, redirects the participant
+      to an external registration link
     slug: register_link
     overall: false
-    module: 4
     placeholder: false
     order: 30
     after_text: Now you can set the external registration link
     after_link: orga_event
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 60
   fields:
     name: Problems
-    descr: Enables a ticket-like system for issues during the event, where staff can log
-      issues, assign severity/urgency, and track them
+    descr: Enables a ticket-like system for issues during the event, where staff can
+      log issues, assign severity/urgency, and track them
     slug: problems
     overall: false
-    module: 3
     placeholder: false
     order: 40
     after_text: Now you can review the event's problems
     after_link: orga_problems
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 62
   fields:
     name: Dynamic rates
     descr: 'Enables dynamic installment management: the total fee is evenly split
@@ -393,915 +392,1040 @@
       days until the event.'
     slug: reg_quotas
     overall: false
-    module: 2
     placeholder: false
     order: 20
     after_text: Now you can set the dynamic installments
     after_link: orga_registration_quotas
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 63
   fields:
     name: Vote
-    descr: Lets members cast votes for the election of the organisation's Executive
+    descr: Lets participants cast votes for the election of the organisation's Executive
       Committee
     slug: vote
     overall: true
-    module: 8
     placeholder: false
     order: 90
     after_text: Now you can set the vote options
     after_link: config/vote
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 65
   fields:
     name: Badge
     descr: Allows the organisation to award badges and enables a public leaderboard
     slug: badge
     overall: true
-    module: 8
     placeholder: false
     order: 80
     after_text: Now you can create badges
     after_link: exe_badges
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 66
   fields:
     name: Warehouse
     descr: Enables warehouse management for organization warehouse management
     slug: warehouse
     overall: true
-    module: 3
     placeholder: false
     order: 5
     after_text: Now you can add warehouse containers and items
     after_link: exe_warehouse_containers
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 69
   fields:
     name: Secret link
-    descr: Generates a special, hidden link that lets certain participants register even
-      if general registration is closed (e.g., early access for a specific group)
+    descr: Generates a special, hidden link that lets certain participants register
+      even if general registration is closed (e.g., early access for a specific group)
     slug: registration_secret
     overall: false
-    module: 4
     placeholder: false
     order: 20
     after_text: Now you can set the registration secret link
     after_link: orga_run
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 74
   fields:
     name: Fixed instalments
     descr: Enables fixed installment deadlines for registration fees, allowing you
       to define multiple due dates and amounts
     slug: reg_installments
     overall: false
-    module: 2
     placeholder: false
     order: 10
     after_text: Now you can create fixed installments
     after_link: orga_registration_installments
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 75
   fields:
     name: Relationships
     descr: Allows authors to add relationships to characters
     slug: relationships
     overall: false
-    module: 1
     placeholder: false
     order: 200
     after_text: Now you can add relationships when editing a character
     after_link: orga_characters
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 77
   fields:
     name: Sections
     descr: Lets you define sections in the registration form, grouping questions to
       make lengthy forms clearer
     slug: reg_que_sections
     overall: false
-    module: 4
     placeholder: false
     order: 40
     after_text: Now you can define registration form sections
     after_link: orga_registration_sections
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 79
   fields:
     name: Campaign
     descr: Enables a 'campaign' style setup where multiple events share the same set
       of characters and factions
     slug: campaign
     overall: true
-    module: 12
     placeholder: false
     order: 30
     after_text: ''
     after_link: ''
+    hidden: false
+    module: events
 - model: larpmanager.feature
-  pk: 81
   fields:
     name: Patron and Reduced
     descr: Adds 'Patron' and 'Reduced' ticket types. Each Patron ticket purchased
       makes one Reduced ticket available
     slug: reduced
     overall: false
-    module: 4
     placeholder: false
     order: 80
     after_text: Now you can create the 'patron' and 'reduced' tickets
     after_link: orga_registration_tickets
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 86
   fields:
     name: Accounting tracking
     descr: Keeps a daily record of the organisation's and events' financial status,
       displaying trend graphs over time
     slug: record_acc
     overall: true
-    module: 2
     placeholder: false
     order: 140
     after_text: Now you can review the historical accounting informations
     after_link: exe_accounting_rec
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 91
   fields:
     name: Progress
     descr: Adds a 'progress' status field (e.g. draft, ready, approved) to key writing
       elements
     slug: progress
     overall: false
-    module: 1
     placeholder: false
     order: 110
     after_text: Now you can create the progress steps
     after_link: orga_progress_steps
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 93
   fields:
     name: Diet
     descr: Lets staff access the diet information submitted by participants
     slug: diet
     overall: false
-    module: 8
     placeholder: false
     order: 30
     after_text: Now you can review the diet information submitted by participants
     after_link: orga_diet
     hidden: true
+    module: users
 - model: larpmanager.feature
-  pk: 94
   fields:
     name: Deadlines
     descr: Activates a page summarizing overdue participants and their deadlines (payments,
       memberships, forms, casting, etc.)
     slug: deadlines
     overall: true
-    module: 4
     placeholder: false
     order: 10
     after_text: Now you can review the organization's deadlines
     after_link: exe_deadlines
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 103
   fields:
     name: Plots
     descr: Enables Plots, story arcs involving selected characters, adding extra content
       to their character sheets
     slug: plot
     overall: false
-    module: 1
     placeholder: false
     order: 130
     after_text: Now you can create the plots of the event
     after_link: orga_plots
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 104
   fields:
     name: Factions
     descr: Enables 'Factions' to organize characters into groups, either visible,
       transversal or secret
     slug: faction
     overall: false
-    module: 1
     placeholder: false
     order: 120
     after_text: Now you can create the factions of the event
     after_link: orga_factions
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 105
   fields:
     name: Handout
     descr: Enables 'Handouts,' pre-written texts that provide information about a
       plot or lore
     slug: handout
     overall: false
-    module: 1
     placeholder: false
     order: 140
     after_text: Now you can create the handouts of the event
     after_link: orga_handouts
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 106
   fields:
     name: Expenses
     descr: Lets staff upload receipts for event expenses, tracking both the event
       expenses, and the amount to refund the staff
     slug: expense
     overall: true
-    module: 2
     placeholder: false
     order: 30
-    after_text: Now staff members can upload expenses, and you can review them
+    after_text: Now crew can upload expenses, and you can review them
     after_link: exe_expenses
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 107
   fields:
-    name: Tokens / Credits
-    descr: Allows managing Tokens and Credits, which participants can use instead of money
-      for registration fees. Credits can also be redeemed for cash
-    slug: token_credit
+    name: Tokens
+    descr: Allows managing Tokens, which participants can use instead of money for
+      registration fees
+    slug: tokens
     overall: true
-    module: 2
     placeholder: false
     order: 50
-    after_text: Now set up the token and credits configuration
-    after_link: config/token_credit
+    after_text: Now set up the tokens configuration
+    after_link: config/tokens
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 108
+  fields:
+    name: Credits
+    descr: Allows managing Credits, which participants can use instead of money for
+      registration fees. Credits can also be redeemed for cash
+    slug: credits
+    overall: true
+    placeholder: false
+    order: 55
+    after_text: Now set up the credits configuration
+    after_link: config/credits
+    hidden: false
+    module: accounting
+- model: larpmanager.feature
   fields:
     name: Outflows
     descr: Enables management of expenses paid using the organization's financial
       instruments
     slug: outflow
     overall: true
-    module: 2
     placeholder: false
     order: 90
     after_text: Now you can create outflows
     after_link: exe_outflows
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 109
   fields:
     name: Verification payments
     descr: Allows you to upload financial system statements (e.g., bank statements)
       to match and approve corresponding wire payments
     slug: verification
     overall: true
-    module: 2
     placeholder: false
     order: 130
     after_text: Now you can verify wire payments
     after_link: exe_verification
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 110
   fields:
     name: Fiscal Budget
     descr: Generates an annual summary of fiscal activity for the Italian budget report
     slug: ita_balance
     overall: true
-    module: 10
     placeholder: false
     order: 10
     after_text: Now you can review the annual balance
     after_link: exe_balance
+    hidden: false
+    module: italy
 - model: larpmanager.feature
-  pk: 111
   fields:
     name: Payments
     descr: Enables payment processing, specifying which payment methods to accept
     slug: payment
     overall: true
-    module: 2
     placeholder: false
     order: 10
     after_text: Now you can set the payment methods settings
     after_link: exe_methods
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 112
   fields:
     name: Refunds
-    descr: Enables members to request a refund (a money transfer from the organization)
+    descr: Enables participants to request a refund (a money transfer from the organization)
     slug: refund
     overall: true
-    module: 2
     placeholder: false
     order: 60
     after_text: Now participants can create refund requests, and you can review them
     after_link: exe_refunds
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 114
   fields:
     name: Opening date
     descr: Lets you specify a date (and time) on which registration will open, keeping
       it closed until then
     slug: registration_open
     overall: false
-    module: 4
     placeholder: false
     order: 10
     after_text: Now you can set the registration opening date
     after_link: orga_run
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 115
   fields:
     name: Legal Notice
     descr: Adds a link to legal notices on every page, and provides a management panel
       link to edit the content of that notice
     slug: legal_notice
     overall: true
-    module: 6
     placeholder: false
     order: 10
     after_text: Now you can set the legal notice text
     after_link: exe_texts
+    hidden: false
+    module: appearance
 - model: larpmanager.feature
-  pk: 118
   fields:
     name: Experience points
     descr: Adds support for assigning XP (experience points) to characters, which
       can then be used to purchase skills
     slug: px
     overall: false
-    module: 7
     placeholder: false
     order: 50
     after_text: Now you can set the experience points settings
     after_link: config/px
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 120
   fields:
     name: Player editor
     descr: Allows participants to create and modify their own characters freely
     slug: user_character
     overall: false
-    module: 7
     placeholder: false
     order: 30
     after_text: Now you can set the player editing settings
     after_link: config/user_character
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 121
   fields:
     name: Organisation tax
     descr: Allows you to set a 'tax' percentage on event income that must be set aside
       for the organisation
     slug: organization_tax
     overall: true
-    module: 2
     placeholder: false
     order: 110
     after_text: Now you can set the organization tax options
     after_link: config/organization_tax
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 124
   fields:
     name: Easter egg
     descr: Occasionally shows a special page to users, based on a defined probability,
       and optionally assigns a result
     slug: centauri
     overall: true
-    module: 10
     placeholder: false
     order: 9999
     after_text: Now you can se the special page options
     after_link: config/centauri
+    hidden: false
+    module: italy
 - model: larpmanager.feature
-  pk: 138
   fields:
     name: URL shortener
     descr: Adds a page where you can define shorter URLs for long links
     slug: urlshortner
     overall: true
-    module: 3
     placeholder: false
     order: 10
     after_text: Now you can create url shortners
     after_link: exe_urlshortner
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 139
   fields:
     name: Surcharge
     descr: Enables the definition of surcharges that are added to every registration
       made after a specified date
     slug: reg_surcharges
     overall: false
-    module: 2
     placeholder: false
     order: 40
     after_text: Now you can create registration surcharges
     after_link: orga_registration_surcharges
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 144
   fields:
     name: Inflows
     descr: Enables managing of entry of revenue for an event that do not originate
       from participant registrations
     slug: inflow
     overall: true
-    module: 2
     placeholder: false
     order: 80
     after_text: Now you can create inflows
     after_link: exe_inflows
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 146
   fields:
     name: Carousel
     descr: Introduces a new way to display past and upcoming events, inspired by popular
       streaming-service layouts
     slug: carousel
     overall: true
-    module: 6
     placeholder: false
     order: 20
     after_text: ''
     after_link: ''
+    hidden: false
+    module: appearance
 - model: larpmanager.feature
-  pk: 152
   fields:
     name: Treasurer
     descr: Lets you specify a set of users who receive payment confirmation emails
       for all events, instead of each event's organizers
     slug: treasurer
     overall: true
-    module: 2
     placeholder: false
     order: 120
     after_text: ''
     after_link: ''
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 156
   fields:
     name: Receipt
     descr: Automatically generates a customizable PDF receipt for each payment and
       emails it to the user
     slug: receipts
     overall: true
-    module: 2
     placeholder: false
     order: 9999
     after_text: Now you can create the receipt text
     after_link: exe_texts
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 158
   fields:
     name: Register of volunteers
     descr: Enables a volunteer register, as required by Italian RUNTS regulations
     slug: volunteer_registry
     overall: true
-    module: 10
     placeholder: false
     order: 20
     after_text: Now you can review the volunteers registry
     after_link: exe_volunteer_registry
+    hidden: false
+    module: italy
 - model: larpmanager.feature
-  pk: 173
   fields:
     name: Taxes
     descr: Shows the calculated tax amount on each payment
     slug: vat
     overall: true
-    module: 2
     placeholder: false
     order: 100
     after_text: Now you can set the taxes options
     after_link: config/vat
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 174
   fields:
     name: Delegated accounts
     descr: Allows a user to create 'delegated' accounts they fully manage (e.g., children),
       avoiding the need for separate login credentials
     slug: delegated_members
     overall: true
-    module: 8
     placeholder: false
     order: 70
     after_text: ''
     after_link: ''
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 175
   fields:
     name: Gift
     descr: Allows participants to purchase tickets as gifts. A special code is generated
       and provided to the gift recipient for registration
     slug: gift
     overall: false
-    module: 2
     placeholder: false
     order: 60
     after_text: Now you can select which tickets can be gifted
     after_link: orga_registration_tickets
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 177
   fields:
     name: Additional tickets
     descr: Allows a user to reserve extra tickets in addition to their own
     slug: additional_tickets
     overall: false
-    module: 4
     placeholder: false
     order: 50
     after_text: Now you can configure the registration question
     after_link: orga_registration_form
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 178
   fields:
     name: Characters
     descr: Enables the creation, editing, and assignment of characters to registered
       participants
     slug: character
     overall: false
-    module: 1
     placeholder: false
     order: 1
     after_text: Now you can create characters
     after_link: orga_characters
+    hidden: false
+    module: writing
 - model: larpmanager.feature
-  pk: 179
   fields:
     name: Template
     descr: Lets you create 'template' events whose configurations and settings can
       be used as a starting point for other events
     slug: template
     overall: true
-    module: 12
     placeholder: false
     order: 11
     after_text: Now you can create event templates
     after_link: exe_templates
+    hidden: false
+    module: events
 - model: larpmanager.feature
-  pk: 185
   fields:
     name: Fiscal code check
     descr: Check the validity of the fiscal code
     slug: fiscal_code_check
     overall: true
-    module: 10
     placeholder: false
     order: 30
     after_text: Now you can peform the fiscal code validity check
     after_link: exe_membership_check
+    hidden: false
+    module: italy
 - model: larpmanager.feature
-  pk: 187
   fields:
     name: Exe Archive
     descr: ''
     slug: exe_archive_email
     overall: true
-    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 188
   fields:
     name: Exe Profile
     descr: ''
     slug: exe_profile
     overall: true
-    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 189
   fields:
     name: Exe Send e-mail
     descr: ''
     slug: exe_send_mail
     overall: true
-    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 191
   fields:
     name: Event
     descr: Manage events
     slug: exe_events
     overall: true
-    module: 12
     placeholder: false
     order: 1
     after_text: Now you can manage events
     after_link: exe_events
+    hidden: false
+    module: events
 - model: larpmanager.feature
-  pk: 192
   fields:
     name: Exe Texts
     descr: ''
     slug: exe_texts
     overall: true
-    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: appearance
 - model: larpmanager.feature
-  pk: 193
   fields:
     name: Exe Appearance
     descr: ''
     slug: exe_appearance
     overall: true
-    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: appearance
 - model: larpmanager.feature
-  pk: 194
   fields:
     name: Exe Accounting
     descr: ''
     slug: exe_accounting
     overall: true
-    module: 2
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 195
   fields:
     name: Exe Features
     descr: ''
     slug: exe_features
     overall: true
-    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: organization
 - model: larpmanager.feature
-  pk: 196
   fields:
     name: Exe Configuration
     descr: ''
     slug: exe_config
     overall: true
-    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: organization
 - model: larpmanager.feature
-  pk: 197
   fields:
     name: Exe Roles
     descr: ''
     slug: exe_roles
     overall: true
-    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: organization
 - model: larpmanager.feature
-  pk: 198
   fields:
     name: Exe Organization
     descr: ''
     slug: exe_association
     overall: true
-    module: 9
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: organization
 - model: larpmanager.feature
-  pk: 199
   fields:
     name: Orga Archive
     descr: ''
     slug: orga_archive_email
     overall: false
-    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 200
   fields:
     name: Orga Send e-mail
     descr: ''
     slug: orga_send_mail
     overall: false
-    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 201
   fields:
     name: Orga Cache Reloading
     descr: ''
     slug: orga_reload_cache
     overall: false
-    module: 3
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: miscellany
 - model: larpmanager.feature
-  pk: 202
   fields:
     name: Orga Navigation
     descr: ''
     slug: orga_buttons
     overall: false
-    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: appearance
 - model: larpmanager.feature
-  pk: 203
   fields:
     name: Orga Texts
     descr: ''
     slug: orga_texts
     overall: false
-    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: appearance
 - model: larpmanager.feature
-  pk: 204
   fields:
     name: Orga Cancellations
     descr: ''
     slug: orga_cancellations
     overall: false
-    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 205
   fields:
     name: Orga Form
     descr: ''
     slug: orga_registration_form
     overall: false
-    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 206
   fields:
     name: Orga Tickets
     descr: ''
     slug: orga_registration_tickets
     overall: false
-    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 207
   fields:
     name: Orga Registrations
     descr: ''
     slug: orga_registrations
     overall: false
-    module: 4
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: registration
 - model: larpmanager.feature
-  pk: 208
   fields:
     name: Orga Sensitive data
     descr: ''
     slug: orga_sensitive
     overall: false
-    module: 8
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: users
 - model: larpmanager.feature
-  pk: 209
   fields:
     name: Orga Accounting
     descr: ''
     slug: orga_accounting
     overall: false
-    module: 2
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: accounting
 - model: larpmanager.feature
-  pk: 210
   fields:
     name: Orga Appearance
     descr: ''
     slug: orga_appearance
     overall: false
-    module: 6
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: appearance
 - model: larpmanager.feature
-  pk: 211
   fields:
     name: Orga Features
     descr: ''
     slug: orga_features
     overall: false
-    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 212
   fields:
     name: Orga Configuration
     descr: ''
     slug: orga_config
     overall: false
-    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 213
   fields:
     name: Orga Roles
     descr: ''
     slug: orga_roles
     overall: false
-    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 214
   fields:
     name: Orga Run
     descr: ''
     slug: orga_run
     overall: false
-    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 215
   fields:
     name: Orga Event
     descr: ''
     slug: orga_event
     overall: false
-    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 216
   fields:
     name: Quick Setup
     descr: ''
     slug: quick_setup
     overall: false
-    module: 7
     placeholder: true
     order: 9999
     after_text: null
     after_link: null
+    hidden: false
+    module: event
 - model: larpmanager.feature
-  pk: 217
   fields:
     name: New player
-    descr: Enables 'New player' tickets, reserved for users that never participated in an event of the organization
+    descr: Enables 'New player' tickets, reserved for users that never participated
+      in an event of the organization
     slug: new_player
     overall: false
-    module: 4
     placeholder: false
     order: 75
     after_text: Now you can create the "new player" ticket
     after_link: orga_registration_tickets
+    hidden: false
+    module: registration
+- model: larpmanager.feature
+  fields:
+    name: Publication
+    descr: Makes upcoming events visible to external sites through a public API
+    slug: publisher
+    overall: true
+    placeholder: false
+    order: 80
+    after_text: ''
+    after_link: ''
+    hidden: false
+    module: events
+- model: larpmanager.feature
+  fields:
+    name: One-Time Content
+    descr: Enables secure streaming of video/audio content via one-time access tokens.
+      Each token can only be used once and tracks who accessed the content, when,
+      and from where
+    slug: onetime_content
+    overall: false
+    placeholder: false
+    order: 50
+    after_text: Now you can upload content and generate access tokens
+    after_link: orga_onetimes
+    hidden: false
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Translations
+    descr: Allows to fine-tune how words and phrases are translated in the organization's
+      space
+    slug: translation
+    overall: true
+    placeholder: false
+    order: 30
+    after_text: Now you can define custom organization translations
+    after_link: exe_translations
+    hidden: false
+    module: appearance
+- model: larpmanager.feature
+  fields:
+    name: PX Rules
+    descr: Pseudo-feature activated by px_rules configuration
+    slug: px_rules
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: PX Modifiers
+    descr: Pseudo-feature activated by px_modifiers configuration
+    slug: px_modifiers
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: PX Templates
+    descr: Pseudo-feature activated by px_templates configuration
+    slug: px_templates
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Rules
+    descr: Pseudo-feature activated by px_rules configuration
+    slug: rules
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Modifiers
+    descr: Pseudo-feature activated by px_modifiers configuration
+    slug: modifiers
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+- model: larpmanager.feature
+  fields:
+    name: Templates
+    descr: Pseudo-feature activated by px_templates configuration
+    slug: templates
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany

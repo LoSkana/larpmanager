@@ -18,19 +18,24 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
 import json
+import logging
 import random
+from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import registration_payments_status
+from larpmanager.cache.config import get_event_config
 from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
-from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
+from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
@@ -38,9 +43,9 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.writing import Character, Faction, FactionType
-from larpmanager.utils.common import get_element, get_time_diff_today
-from larpmanager.utils.deadlines import get_membership_fee_year
-from larpmanager.utils.event import check_event_permission
+from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_element, get_time_diff_today
+from larpmanager.utils.users.deadlines import get_membership_fee_year
 from larpmanager.views.user.casting import (
     casting_details,
     casting_history_characters,
@@ -49,349 +54,669 @@ from larpmanager.views.user.casting import (
     casting_preferences_traits,
 )
 
-
-@login_required
-def orga_casting_preferences(request, s, typ=0):
-    ctx = check_event_permission(request, s, "orga_casting_preferences")
-    casting_details(ctx, typ)
-    if typ == 0:
-        casting_preferences_characters(ctx)
-    else:
-        casting_preferences_traits(ctx, typ)
-
-    return render(request, "larpmanager/event/casting/preferences.html", ctx)
+logger = logging.getLogger(__name__)
 
 
 @login_required
-def orga_casting_history(request, s, typ=0):
-    ctx = check_event_permission(request, s, "orga_casting_history")
-    casting_details(ctx, typ)
-    if typ == 0:
-        casting_history_characters(ctx)
+def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type: int = 0) -> HttpResponse:
+    """Handle casting preferences for characters or traits based on type."""
+    # Check user permissions for casting preferences
+    context = check_event_context(request, event_slug, "orga_casting_preferences")
+
+    # Get base casting details
+    casting_details(context, casting_type)
+
+    # Load preferences based on type
+    if casting_type == 0:
+        casting_preferences_characters(context)
     else:
-        casting_history_traits(ctx)
+        casting_preferences_traits(context, casting_type)
 
-    return render(request, "larpmanager/event/casting/history.html", ctx)
-
-
-def assign_casting(request, ctx, typ):
-    """
-    Handle character casting assignment for organizers.
-
-    Args:
-        request: HTTP request object with assignment data
-        ctx: Context dictionary with casting information
-        typ: Type of casting assignment (0 for characters, other for traits)
-    """
-    # TODO Assign member to mirror_inv
-    mirror = "mirror" in ctx["features"]
-    res = request.POST.get("res")
-    if not res:
-        messages.error(request, _("Results not present"))
-        return
-    err = ""
-    for sp in res.split():
-        aux = sp.split("_")
-        try:
-            mb = Member.objects.get(pk=aux[0].replace("p", ""))
-            reg = Registration.objects.get(member=mb, run=ctx["run"], cancellation_date__isnull=True)
-            eid = aux[1].replace("c", "")
-            if typ == 0:
-                if mirror:
-                    char = Character.objects.get(pk=eid)
-                    if char.mirror:
-                        eid = char.mirror_id
-
-                RegistrationCharacterRel.objects.create(character_id=eid, reg=reg)
-            else:
-                AssignmentTrait.objects.create(trait_id=eid, run=reg.run, member=mb, typ=typ)
-        except Exception as e:
-            print(e)
-            err += str(e)
-    if err:
-        messages.error(request, err)
-
-
-def get_casting_choices_characters(ctx, options):
-    """Get character choices for casting with filtering and availability status.
-
-    Args:
-        ctx: Context dictionary containing event, run, and features data
-        options: Dictionary containing faction filtering options
-
-    Returns:
-        Tuple of (choices dict, taken list, mirrors dict, allowed list)
-    """
-    choices = {}
-    mirrors = {}
-    taken = []
-
-    allowed = []
-    if "faction" in ctx["features"]:
-        que = ctx["event"].get_elements(Faction).filter(typ=FactionType.PRIM)
-        for el in que.order_by("number"):
-            if str(el.id) not in options["factions"]:
-                continue
-            allowed.extend(el.characters.values_list("id", flat=True))
-
-    chars = RegistrationCharacterRel.objects.filter(reg__run=ctx["run"]).values_list("character_id", flat=True)
-
-    # remove characters that are mirrors
-    que = ctx["event"].get_elements(Character)
-    for c in que.exclude(hide=True):
-        if allowed and c.id not in allowed:
-            continue
-
-        if c.id in chars:
-            taken.append(c.id)
-        if c.mirror_id:
-            if c.mirror_id in chars:
-                taken.append(c.id)
-            mirrors[c.id] = str(c.mirror_id)
-        choices[c.id] = str(c)
-
-    return choices, taken, mirrors, allowed
-
-
-def get_casting_choices_quests(ctx):
-    choices = {}
-    taken = []
-    for q in Quest.objects.filter(event=ctx["event"], typ=ctx["quest_type"]).order_by("number"):
-        # gr = q.show()["name"]
-        for t in Trait.objects.filter(quest=q).order_by("number"):
-            if AssignmentTrait.objects.filter(trait=t, run=ctx["run"]).count() > 0:
-                taken.append(t.id)
-            choices[t.id] = f"{q.name} - {t.name}"
-    return choices, taken, {}
-
-
-def check_player_skip_characters(reg, ctx):
-    # check it has a number of characters assigned less the allowed amount
-    casting_chars = int(ctx["event"].get_config("casting_characters", 1))
-    return RegistrationCharacterRel.objects.filter(reg=reg).count() >= casting_chars
-
-
-def check_player_skip_quests(reg, typ):
-    return AssignmentTrait.objects.filter(run=reg.run, member=reg.member, typ=typ).count() > 0
-
-
-def check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
-    """Check if player should be skipped in casting based on various criteria.
-
-    Args:
-        ctx: Context dictionary with features data
-        reg: Registration instance
-        options: Dictionary with casting filter options
-        typ: Casting type (0 for characters, other for quests)
-        cache_membs: Cached membership statuses
-        cache_aim: Cached aim membership data
-
-    Returns:
-        Boolean indicating if player should be skipped
-    """
-    # check if select the player given the ticket
-    if "tickets" in options and str(reg.ticket_id) not in options["tickets"]:
-        return True
-
-    # check if select the player given the membership status
-    if "membership" in ctx["features"]:
-        if reg.member.id not in cache_membs:
-            return True
-
-        status = cache_membs[reg.member.id]
-        if status == "a" and reg.member.id in cache_aim:
-            status = "p"
-
-        if "memberships" in options and status not in options["memberships"]:
-            return True
-
-    # check if select the player given the payment status
-    registration_payments_status(reg)
-    if "pays" in options and reg.payment_status:
-        if reg.payment_status not in options["pays"]:
-            return True
-
-    # check if we have to skip the player (already assigned)
-    if typ == 0:
-        check = check_player_skip_characters(reg, ctx)
-    else:
-        check = check_player_skip_quests(reg, typ)
-
-    if check:
-        return True
-
-    return False
-
-
-def get_casting_data(request, ctx, typ, form):
-    """Retrieve and process casting-related data for character assignment.
-
-    Handles casting form data and prepares context for casting operations
-    including character assignments and trait management.
-    """
-    options = form.get_data()
-    # print(options)
-
-    casting_details(ctx, typ)
-
-    players = {}
-    didnt_choose = []
-    preferences = {}
-    nopes = {}
-    chosen = {}
-
-    # get casting choices
-    if typ == 0:
-        (choices, taken, mirrors, allowed) = get_casting_choices_characters(ctx, options)
-    else:
-        get_element(ctx, typ, "quest_type", QuestType, by_number=True)
-        allowed = None
-        (choices, taken, mirrors) = get_casting_choices_quests(ctx)
-
-    cache_aim, cache_membs, castings = _casting_prepare(ctx, request, typ)
-
-    # loop over registered players
-    que = Registration.objects.filter(run=ctx["run"], cancellation_date__isnull=True)
-    que = que.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
-    que = que.order_by("created").select_related("ticket", "member")
-    for reg in que:
-        if check_casting_player(ctx, reg, options, typ, cache_membs, cache_aim):
-            continue
-
-        _get_player_info(players, reg)
-
-        pref = _get_player_preferences(allowed, castings, chosen, nopes, reg)
-
-        if len(pref) == 0:
-            didnt_choose.append(reg.member.id)
-        else:
-            preferences[reg.member.id] = pref
-
-    not_chosen, not_chosen_add = _fill_not_chosen(choices, chosen, ctx, preferences, taken)
-
-    avoids = {}
-    for el in CastingAvoid.objects.filter(run=ctx["run"], typ=typ):
-        avoids[el.member_id] = el.text
-
-    ctx["num_choices"] = min(ctx["casting_max"] + not_chosen_add, len(choices))
-    ctx["choices"] = json.dumps(choices)
-    ctx["mirrors"] = json.dumps(mirrors)
-    ctx["players"] = json.dumps(players)
-    ctx["preferences"] = json.dumps(preferences)
-    ctx["taken"] = json.dumps(taken)
-    ctx["not_chosen"] = json.dumps(not_chosen)
-    ctx["chosen"] = json.dumps(list(chosen.keys()))
-    ctx["didnt_choose"] = json.dumps(didnt_choose)
-    ctx["nopes"] = json.dumps(nopes)
-    ctx["avoids"] = json.dumps(avoids)
-
-    ctx["reg_priority"] = int(ctx["event"].get_config("casting_reg_priority", 0))
-    ctx["pay_priority"] = int(ctx["event"].get_config("casting_pay_priority", 0))
-
-
-def _casting_prepare(ctx, request, typ):
-    cache_aim = get_membership_fee_year(request.assoc["id"])
-    cache_membs = {}
-    memb_que = Membership.objects.filter(assoc_id=request.assoc["id"])
-    for el in memb_que.values("member_id", "status"):
-        cache_membs[el["member_id"]] = el["status"]
-    castings = {}
-    for el in Casting.objects.filter(run=ctx["run"], typ=typ).order_by("pref"):
-        if el.member_id not in castings:
-            castings[el.member_id] = []
-        castings[el.member_id].append(el)
-    return cache_aim, cache_membs, castings
-
-
-def _get_player_info(players, reg):
-    # player info
-    players[reg.member.id] = {
-        "name": str(reg.member),
-        "prior": 1,
-        "email": reg.member.email,
-    }
-    if reg.ticket:
-        players[reg.member.id]["prior"] = reg.ticket.casting_priority
-    # set registration days (number of days from registration created)
-    players[reg.member.id]["reg_days"] = -get_time_diff_today(reg.created.date()) + 1
-    # set payment days (number of days from full payment date, or default value 1)
-    players[reg.member.id]["pay_days"] = -get_time_diff_today(reg.payment_date) + 1 if reg.payment_date else 1
-
-
-def _get_player_preferences(allowed, castings, chosen, nopes, reg):
-    # get player preferences
-    pref = []
-    if reg.member_id in castings:
-        for c in castings[reg.member_id]:
-            if allowed and c.element not in allowed:
-                continue
-            p = c.element
-            pref.append(p)
-            chosen[p] = 1
-            if c.nope:
-                if reg.member.id not in nopes:
-                    nopes[reg.member.id] = []
-                nopes[reg.member.id].append(p)
-    return pref
-
-
-def _fill_not_chosen(choices, chosen, ctx, preferences, taken):
-    # adds 3 non taken characters to each player preferences to resolve unlucky ties
-    not_chosen = []
-    for cid in choices.keys():
-        if cid not in chosen and cid not in taken:
-            not_chosen.append(cid)
-    not_chosen.sort()
-    not_chosen_add = min(ctx["casting_add"], len(not_chosen))
-    for _mid, pref in preferences.items():
-        random.shuffle(not_chosen)
-        for i in range(0, not_chosen_add):
-            pref.append(not_chosen[i])
-    return not_chosen, not_chosen_add
+    return render(request, "larpmanager/event/casting/preferences.html", context)
 
 
 @login_required
-def orga_casting(request, s, typ=None, tick=""):
-    """Handle organizational casting assignments.
+def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: int = 0) -> HttpResponse:
+    """Render casting history page with characters or traits based on type.
 
     Args:
         request: HTTP request object
-        s: Event slug
-        typ: Casting type identifier (defaults to 0 if None)
-        tick: Ticket identifier string
+        event_slug: Event slug identifier
+        casting_type: History type (0 for characters, 1 for traits)
 
     Returns:
-        HttpResponse: Casting template with form and data or redirect after assignment
+        Rendered casting history template
+
     """
-    ctx = check_event_permission(request, s, "orga_casting")
-    if typ is None:
-        return redirect("orga_casting", s=ctx["run"].get_slug(), typ=0)
-    ctx["typ"] = typ
-    ctx["tick"] = tick
-    if request.method == "POST":
-        form = OrganizerCastingOptionsForm(request.POST, ctx=ctx)
-        if not form.is_valid():
-            raise Http404("form not valid")
-        if request.POST.get("submit"):
-            assign_casting(request, ctx, typ)
-            return redirect(request.path_info)
+    # Check user permissions for casting history access
+    context = check_event_context(request, event_slug, "orga_casting_history")
+
+    # Add casting details to context
+    casting_details(context, casting_type)
+
+    # Add type-specific history data to context
+    if casting_type == 0:
+        casting_history_characters(context)
     else:
-        form = OrganizerCastingOptionsForm(ctx=ctx)
-    casting_details(ctx, typ)
-    get_casting_data(request, ctx, typ, form)
-    ctx["form"] = form
-    return render(request, "larpmanager/orga/casting.html", ctx)
+        casting_history_traits(context)
+
+    return render(request, "larpmanager/event/casting/history.html", context)
+
+
+def assign_casting(request: HttpRequest, context: dict, assignment_type: int) -> None:
+    """Handle character casting assignment for organizers.
+
+    Processes POST data to assign members to characters or traits in a LARP event.
+    Supports mirror character functionality where assignments can be redirected
+    to mirror characters if enabled.
+
+    Args:
+        request: HTTP request object containing assignment data in POST
+        context: Context dictionary containing casting information and feature flags
+        assignment_type: Type of casting assignment (0 for characters, other for traits)
+
+    Returns:
+        None: Function modifies database state and adds messages to request
+
+    Raises:
+        No exceptions are raised, but errors are collected and displayed as messages
+
+    """
+    # TODO: Assign member to mirror_inv
+    # Check if mirror character feature is enabled
+    mirror_enabled = "mirror" in context["features"]
+
+    # Extract assignment results from POST data
+    assignment_results = request.POST.get("res")
+    if not assignment_results:
+        messages.error(request, _("Results not present"))
+        return
+
+    # Initialize error collection string
+    error_messages = ""
+
+    # Process each assignment in the results string
+    for assignment_string in assignment_results.split():
+        parts = assignment_string.split("_")
+        try:
+            # Extract member ID and get member object
+            member = Member.objects.get(pk=parts[0].replace("p", ""))
+
+            # Get active registration for this member and run
+            registration = Registration.objects.get(member=member, run=context["run"], cancellation_date__isnull=True)
+
+            # Extract entity ID (character or trait)
+            entity_id = parts[1].replace("c", "")
+
+            # Handle character assignment (assignment_type == 0)
+            if assignment_type == 0:
+                # Check for mirror character redirection
+                if mirror_enabled:
+                    character = Character.objects.get(pk=entity_id)
+                    if character.mirror:
+                        entity_id = character.mirror_id
+
+                # Create character assignment relationship
+                RegistrationCharacterRel.objects.create(character_id=entity_id, reg=registration)
+            else:
+                # Create trait assignment for non-character types
+                AssignmentTrait.objects.create(
+                    trait_id=entity_id,
+                    run_id=registration.run_id,
+                    member=member,
+                    typ=assignment_type,
+                )
+
+        except Exception as exception:
+            # Collect any errors that occur during processing
+            logger.exception("Error processing casting assignment")
+            error_messages += str(exception)
+
+    # Display collected errors to user if any occurred
+    if error_messages:
+        messages.error(request, error_messages)
+
+
+def get_casting_choices_characters(
+    context: dict,
+    filtering_options: dict,
+) -> tuple[dict[int, str], list[int], dict[int, str], list[int]]:
+    """Get character choices for casting with filtering and availability status.
+
+    Retrieves all available characters for casting based on faction filtering,
+    tracking which characters are already taken and handling mirror relationships.
+
+    Args:
+        context: Context dictionary containing:
+            - event: Event instance for character filtering
+            - run: Run instance for registration filtering
+            - features: dict of enabled features
+        filtering_options: Dictionary containing:
+            - factions: List of allowed faction IDs for filtering
+
+    Returns:
+        Tuple containing:
+            - character_choices: dict mapping character IDs to display names
+            - taken_character_ids: List of character IDs that are already assigned
+            - mirror_character_mapping: dict mapping character IDs to their mirror character IDs
+            - allowed_character_ids: List of character IDs allowed by faction filtering
+
+    """
+    character_choices = {}
+    mirror_character_mapping = {}
+    taken_character_ids = []
+
+    # Build list of allowed characters based on faction filtering
+    allowed_character_ids = []
+    if "faction" in context["features"]:
+        # Get primary factions for the event
+        primary_factions_query = context["event"].get_elements(Faction).filter(typ=FactionType.PRIM)
+        for faction_element in primary_factions_query.order_by("number"):
+            # Skip factions not in the allowed filtering_options
+            if str(faction_element.id) not in filtering_options["factions"]:
+                continue
+            # Add all characters from this faction to allowed list
+            allowed_character_ids.extend(faction_element.characters.values_list("id", flat=True))
+
+    # Get characters that are already registered for this run
+    registered_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
+        "character_id",
+        flat=True,
+    )
+
+    # Process all characters for the event (excluding hidden ones)
+    characters_query = context["event"].get_elements(Character)
+    for character in characters_query.exclude(hide=True):
+        # Skip characters not allowed by faction filtering
+        if allowed_character_ids and character.id not in allowed_character_ids:
+            continue
+
+        # Mark character as taken if already registered
+        if character.id in registered_character_ids:
+            taken_character_ids.append(character.id)
+
+        # Handle mirror character relationships
+        if character.mirror_id:
+            # Mark character as taken if its mirror is registered
+            if character.mirror_id in registered_character_ids:
+                taken_character_ids.append(character.id)
+            # Store mirror relationship mapping
+            mirror_character_mapping[character.id] = str(character.mirror_id)
+
+        # Add character to character_choices with display name
+        character_choices[character.id] = str(character)
+
+    return character_choices, taken_character_ids, mirror_character_mapping, allowed_character_ids
+
+
+def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int], dict]:
+    """Get quest-based casting choices and track assigned traits.
+
+    Args:
+        context: Context dict containing 'event', 'quest_type', and 'run'
+
+    Returns:
+        Tuple of (choices dict, taken trait IDs, empty dict)
+
+    """
+    trait_choices = {}
+    assigned_trait_ids = []
+
+    # Pre-fetch all assigned traits for this run
+    assigned_trait_ids_set = set(AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True))
+
+    # Get all quests for the event and quest type, ordered by number
+    for quest in (
+        Quest.objects.filter(event=context["event"], typ=context["quest_type"])
+        .order_by("number")
+        .prefetch_related("traits")
+    ):
+        # Process traits for each quest
+        for trait in quest.traits.all():
+            # Check if trait is already assigned using pre-fetched set
+            if trait.id in assigned_trait_ids_set:
+                assigned_trait_ids.append(trait.id)
+
+            # Build choice label with quest and trait names
+            trait_choices[trait.id] = f"{quest.name} - {trait.name}"
+
+    return trait_choices, assigned_trait_ids, {}
+
+
+def check_player_skip_characters(registration_character_rel: RegistrationCharacterRel, context: dict) -> bool:
+    """Check if registration has reached maximum allowed characters."""
+    # Get max characters allowed from event config
+    max_characters_allowed = int(
+        get_event_config(context["event"].id, "casting_characters", default_value=1, context=context)
+    )
+
+    # Check if current character count meets or exceeds limit
+    return RegistrationCharacterRel.objects.filter(reg=registration_character_rel).count() >= max_characters_allowed
+
+
+def check_player_skip_quests(registration: Registration, trait_type: int) -> bool:
+    """Check if player has traits allowing quest skipping."""
+    return AssignmentTrait.objects.filter(
+        run_id=registration.run_id,
+        member_id=registration.member_id,
+        typ=trait_type,
+    ).exists()
+
+
+def check_casting_player(
+    context: dict,
+    registration: Any,
+    casting_filter_options: dict,
+    casting_type: int,
+    cached_membership_statuses: dict,
+    cached_aim_memberships: dict,
+) -> bool:
+    """Check if player should be skipped in casting based on various criteria.
+
+    This function evaluates multiple filtering criteria to determine whether
+    a registered player should be excluded from casting assignments.
+
+    Args:
+        context: Context dictionary containing features data and configuration
+        registration: Registration instance representing the player's registration
+        casting_filter_options: Dictionary with casting filter options (tickets, memberships, pays)
+        casting_type: Casting type identifier (0 for characters, other values for quests)
+        cached_membership_statuses: Cached membership statuses keyed by member ID
+        cached_aim_memberships: Cached aim membership data for additional status checks
+
+    Returns:
+        True if player should be skipped in casting, False otherwise
+
+    Example:
+        >>> should_skip = check_casting_player(context, registration, filters, 0, memb_cache, aim_cache)
+
+    """
+    # Filter by ticket type - skip if player's ticket not in allowed list
+    if "tickets" in casting_filter_options and str(registration.ticket_id) not in casting_filter_options["tickets"]:
+        return True
+
+    # Filter by membership status when membership feature is enabled
+    if "membership" in context["features"]:
+        # Skip if member not found in membership cache
+        if registration.member_id not in cached_membership_statuses:
+            return True
+
+        # Determine actual membership status, accounting for AIM membership
+        membership_status = cached_membership_statuses[registration.member_id]
+        if membership_status == "a" and registration.member_id in cached_aim_memberships:
+            membership_status = "p"  # Override status for AIM members
+
+        # Skip if membership status not in allowed list
+        if "memberships" in casting_filter_options and membership_status not in casting_filter_options["memberships"]:
+            return True
+
+    # Filter by payment status - check current payment state
+    registration_payments_status(registration)
+    # Skip if payment status not in allowed list
+    if (
+        "pays" in casting_filter_options
+        and registration.payment_status
+        and registration.payment_status not in casting_filter_options["pays"]
+    ):
+        return True
+
+    # Check for existing assignments based on casting type
+    if casting_type == 0:
+        # Character casting - check if already assigned to character
+        has_existing_assignment = check_player_skip_characters(registration, context)
+    else:
+        # Quest casting - check if already assigned to quest
+        has_existing_assignment = check_player_skip_quests(registration, casting_type)
+
+    # Skip if player already has assignments
+    return bool(has_existing_assignment)
+
+
+def get_casting_data(
+    context: dict,
+    casting_type: int,
+    form: OrganizerCastingOptionsForm,
+) -> None:
+    """Retrieve and process casting data for automated character assignment algorithm.
+
+    Collects player preferences, character choices, ticket types, membership status,
+    payment status, and avoidance lists. Processes data into JSON-serialized format
+    for client-side casting algorithm execution with priority weighting.
+
+    Args:
+        context: Context dictionary to populate with casting data
+        casting_type: Casting type (0 for characters, other for quest traits)
+        form: Form with filtering options (tickets, membership, payment status)
+
+    Side effects:
+        - Adds JSON-serialized casting data to context (choices, players, preferences, etc.)
+        - Loads membership and payment status caches
+        - Calculates registration and payment priorities
+        - Filters players based on form options
+
+    """
+    # Extract filtering options from form (tickets, membership status, payment status)
+    filter_options = form.get_data()
+
+    # Load casting configuration (max choices, additional padding)
+    casting_details(context, casting_type)
+
+    # Initialize data structures for casting algorithm
+    players_info = {}  # Player info with priorities
+    players_without_choices = []  # Players who didn't submit preferences
+    player_preferences = {}  # Player->Character preference mappings
+    character_avoidances = {}  # Characters players want to avoid
+    chosen_characters = {}  # Characters that have been selected by at least one player
+
+    # Get available choices based on casting type
+    if casting_type == 0:
+        # Character casting - includes faction filtering and mirror handling
+        (available_choices, taken_characters, mirror_characters, allowed_factions) = get_casting_choices_characters(
+            context,
+            filter_options,
+        )
+    else:
+        # Quest trait casting
+        get_element(context, casting_type, "quest_type", QuestType, by_number=True)
+        allowed_factions = None
+        (available_choices, taken_characters, mirror_characters) = get_casting_choices_quests(context)
+
+    # Load cached membership and casting preference data
+    cache_aim, cache_memberships, casting_submissions = _casting_prepare(context, casting_type)
+
+    # Process each registration to build player preferences
+    registrations_query = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
+    # Exclude non-participant ticket types from casting
+    registrations_query = registrations_query.exclude(
+        ticket__tier__in=[TicketTier.WAITING],
+    )
+    registrations_query = registrations_query.order_by("created").select_related("ticket", "member")
+    for registration in registrations_query:
+        # Skip players that don't match filter criteria (ticket, membership, payment)
+        if check_casting_player(context, registration, filter_options, casting_type, cache_memberships, cache_aim):
+            continue
+
+        # Add player info with ticket priority and registration/payment dates
+        _get_player_info(players_info, registration)
+
+        # Extract player's character preferences from casting submissions
+        player_choice_list = _get_player_preferences(
+            allowed_factions,
+            casting_submissions,
+            chosen_characters,
+            character_avoidances,
+            registration,
+        )
+
+        # Track players who didn't submit preferences
+        if len(player_choice_list) == 0:
+            players_without_choices.append(registration.member_id)
+        else:
+            player_preferences[registration.member_id] = player_choice_list
+
+    # Add random unchosen characters to resolve ties fairly
+    unchosen_characters, unchosen_padding = _fill_not_chosen(
+        available_choices,
+        chosen_characters,
+        context,
+        player_preferences,
+        taken_characters,
+    )
+
+    # Load character avoidance texts (reasons players can't play certain characters)
+    avoidance_texts = {}
+    for avoidance_entry in CastingAvoid.objects.filter(run=context["run"], typ=casting_type):
+        avoidance_texts[avoidance_entry.member_id] = avoidance_entry.text
+
+    # Serialize all data to JSON for client-side casting algorithm
+    context["num_choices"] = min(context["casting_max"] + unchosen_padding, len(available_choices))
+    context["choices"] = json.dumps(available_choices)
+    context["mirrors"] = json.dumps(mirror_characters)
+    context["players"] = json.dumps(players_info)
+    context["preferences"] = json.dumps(player_preferences)
+    context["taken"] = json.dumps(taken_characters)
+    context["not_chosen"] = json.dumps(unchosen_characters)
+    context["chosen"] = json.dumps(list(chosen_characters.keys()))
+    context["didnt_choose"] = json.dumps(players_without_choices)
+    context["nopes"] = json.dumps(character_avoidances)
+    context["avoids"] = json.dumps(avoidance_texts)
+
+    # Load priority configuration for algorithm weighting
+    for priority_key in ("reg_priority", "pay_priority"):
+        context[priority_key] = int(
+            get_event_config(context["event"].id, f"casting_{priority_key}", default_value=0, context=context)
+        )
+
+
+def _casting_prepare(context: dict, typ: str) -> tuple[int, dict[int, str], dict[int, list]]:
+    """Prepare casting data for a specific run and type.
+
+    Args:
+        context: Context dictionary containing run information
+        typ: Type of casting to filter
+
+    Returns:
+        tuple: A tuple containing:
+            - membership_fee_year: Membership fee year for the association
+            - member_id_to_status: Dictionary mapping member IDs to their membership status
+            - member_id_to_castings: Dictionary mapping member IDs to their list of casting objects
+
+    """
+    # Get the membership fee year for the current association
+    membership_fee_year = get_membership_fee_year(context["association_id"])
+
+    # Build cache of member statuses for the association
+    member_id_to_status = {}
+    membership_query = Membership.objects.filter(association_id=context["association_id"])
+    for membership in membership_query.values("member_id", "status"):
+        member_id_to_status[membership["member_id"]] = membership["status"]
+
+    # Group casting objects by member ID for the specified run and type
+    member_id_to_castings = {}
+    for casting in Casting.objects.filter(run=context["run"], typ=typ).order_by("pref"):
+        # Initialize member's casting list if not exists
+        if casting.member_id not in member_id_to_castings:
+            member_id_to_castings[casting.member_id] = []
+        member_id_to_castings[casting.member_id].append(casting)
+
+    return membership_fee_year, member_id_to_status, member_id_to_castings
+
+
+def _get_player_info(players: dict, registration: Registration) -> None:
+    """Update the players dictionary with registration information for a single player.
+
+    Args:
+        players (dict): Dictionary to store player information, keyed by member ID
+        registration: Registration object containing member and ticket information
+
+    Returns:
+        None: Function modifies the players dictionary in-place
+
+    """
+    # Initialize basic player information with default priority
+    players[registration.member_id] = {
+        "name": str(registration.member),
+        "prior": 1,
+        "email": registration.member.email,
+    }
+
+    # Override priority if ticket has casting priority defined
+    if registration.ticket:
+        players[registration.member_id]["prior"] = registration.ticket.casting_priority
+
+    # Calculate registration days (number of days from registration creation)
+    players[registration.member_id]["reg_days"] = -get_time_diff_today(registration.created.date()) + 1
+
+    # Calculate payment days (number of days from full payment, default to 1 if unpaid)
+    players[registration.member_id]["pay_days"] = (
+        -get_time_diff_today(registration.payment_date) + 1 if registration.payment_date else 1
+    )
+
+
+def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, nopes: dict, reg: Registration) -> list:
+    """Get player preferences from casting data.
+
+    Processes casting choices for a registration, filtering by allowed elements
+    and tracking both chosen preferences and rejected options.
+
+    Args:
+        allowed: Set of allowed elements to filter by, or None for no filtering
+        castings: Dictionary mapping member IDs to their casting choices
+        chosen: Dictionary to track chosen elements (modified in-place)
+        nopes: Dictionary to track rejected elements by member (modified in-place)
+        reg: Registration object containing member information
+
+    Returns:
+        List of preference elements for the player
+
+    """
+    # Initialize preferences list
+    preferences = []
+
+    # Check if this member has any casting choices
+    if reg.member_id in castings:
+        # Process each casting choice for this member
+        for casting_choice in castings[reg.member_id]:
+            # Skip elements not in allowed set (if filtering is enabled)
+            if allowed and casting_choice.element not in allowed:
+                continue
+
+            # Add element to preferences and mark as chosen
+            element = casting_choice.element
+            preferences.append(element)
+            chosen[element] = 1
+
+            # Track rejected preferences ("nopes") for this member
+            if casting_choice.nope:
+                if reg.member_id not in nopes:
+                    nopes[reg.member_id] = []
+                nopes[reg.member_id].append(element)
+
+    return preferences
+
+
+def _fill_not_chosen(choices: dict, chosen: set, context: dict, preferences: dict, taken: set) -> tuple[list, int]:
+    """Fill player preferences with non-chosen characters to resolve unlucky ties.
+
+    This function adds up to `context["casting_add"]` non-taken characters to each
+    player's preference list. Characters are shuffled randomly for each player
+    to ensure fair distribution when resolving casting conflicts.
+
+    Args:
+        choices: Dictionary mapping character IDs to character data
+        chosen: Set of character IDs that have already been chosen
+        context: Context dictionary containing casting configuration (must have "casting_add" key)
+        preferences: Dictionary mapping member IDs to their character preference lists
+        taken: Set of character IDs that are unavailable/taken
+
+    Returns:
+        tuple: A tuple containing:
+            - list: Sorted list of available character IDs that weren't chosen or taken
+            - int: Number of characters actually added to each preference list
+
+    """
+    # Collect all character IDs that are available (not chosen and not taken)
+    available_character_ids = [
+        character_id for character_id in choices if character_id not in chosen and character_id not in taken
+    ]
+
+    # Sort the available characters for consistent ordering
+    available_character_ids.sort()
+
+    # Determine how many characters to add (limited by available characters)
+    characters_to_add_count = min(context["casting_add"], len(available_character_ids))
+
+    # Add randomly shuffled available characters to each player's preferences
+    for preference_list in preferences.values():
+        # Shuffle for each player to ensure fair random distribution
+        random.shuffle(available_character_ids)
+        # Add the specified number of characters to this player's preferences
+        for index in range(characters_to_add_count):
+            preference_list.append(available_character_ids[index])
+
+    return available_character_ids, characters_to_add_count
 
 
 @login_required
-def orga_casting_toggle(request, s, typ):
-    ctx = check_event_permission(request, s, "orga_casting")
+def orga_casting(
+    request: HttpRequest,
+    event_slug: str,
+    casting_type: int | None = None,
+    ticket: str = "",
+) -> HttpResponse:
+    """Handle organizational casting assignments for LARP events.
+
+    Manages the casting assignment process for event organizers, allowing them to
+    assign participants to specific casting types and roles within an event.
+
+    Args:
+        request: The HTTP request object containing user data and POST parameters
+        event_slug: Event slug identifier used to identify the specific event
+        casting_type: Casting type identifier. If None, redirects to default type 0
+        ticket: Ticket identifier string for specific participant casting
+
+    Returns:
+        HttpResponse: Rendered casting template with form and casting data,
+                     or redirect response after successful assignment
+
+    Raises:
+        Http404: When the submitted form is not valid
+
+    """
+    # Check user permissions for accessing casting functionality
+    context = check_event_context(request, event_slug, "orga_casting")
+
+    # Redirect to default casting type if none specified
+    if casting_type is None:
+        return redirect("orga_casting", event_slug=context["run"].get_slug(), casting_type=0)
+
+    # Set context variables for template rendering
+    context["typ"] = casting_type
+    context["tick"] = ticket
+
+    # Handle POST request for casting assignment
+    if request.method == "POST":
+        form = OrganizerCastingOptionsForm(request.POST, context=context)
+
+        # Validate form data before processing
+        if not form.is_valid():
+            msg = "form not valid"
+            raise Http404(msg)
+
+        # Process casting assignment if submit button was clicked
+        if request.POST.get("submit"):
+            assign_casting(request, context, casting_type)
+            return redirect(request.path_info)
+    else:
+        # Initialize empty form for GET requests
+        form = OrganizerCastingOptionsForm(context=context)
+
+    # Retrieve and populate casting details for the specified type
+    casting_details(context, casting_type)
+
+    # Get casting data and populate form with current selections
+    get_casting_data(context, casting_type, form)
+
+    # Add form to context and render template
+    context["form"] = form
+    return render(request, "larpmanager/orga/casting.html", context)
+
+
+@login_required
+def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str) -> JsonResponse:
+    """Toggle the 'nope' status of a casting entry."""
+    context = check_event_context(request, event_slug, "orga_casting")
+
     try:
+        # Extract member and element IDs from POST data
         pid = request.POST["pid"]
         oid = request.POST["oid"]
-        c = Casting.objects.get(run=ctx["run"], typ=typ, member_id=pid, element=oid)
+
+        # Retrieve and toggle the casting entry's nope status
+        c = Casting.objects.get(run=context["run"], typ=casting_type, member_id=pid, element=oid)
         c.nope = not c.nope
         c.save()
+
         return JsonResponse({"res": "ok"})
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})

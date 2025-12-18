@@ -4,7 +4,7 @@
     Join
 {% endblock title %}
 {% block content %}
-    <p>Compile the info below to get started immediately!</p>
+    <p>Compile the info below to get started immediately with LarpManager!</p>
     <form action="{{ request.path }}"
           enctype="multipart/form-data"
           method="post">
@@ -14,8 +14,9 @@
         </table>
         <input type="submit" value="{% trans "Submit" %}">
     </form>
+    <p>(We strongly recommend using a desktop computer rather than a mobile device)</p>
 {% endblock content %}
 {% block js %}
-    <script> const base_domain = ".{{ assoc.base_domain }}"; </script>
-    {% include "elements/assoc_preview.js" %}
+    <script> const base_domain = ".{{ association.base_domain }}"; </script>
+    {% include "elements/association_preview.js" %}
 {% endblock js %}

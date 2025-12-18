@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_user_accounting(pw_page):
+def test_user_accounting(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -42,9 +43,9 @@ def test_user_accounting(pw_page):
     collections(page, live_server)
 
 
-def prepare(page, live_server):
+def prepare(page: Any, live_server: Any) -> None:
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
 
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
@@ -56,6 +57,7 @@ def prepare(page, live_server):
 
     page.get_by_role("link", name=re.compile(r"^Payments\s.+")).click()
     page.locator("#id_payment_special_code").check()
+    page.locator("#id_payment_require_receipt").check()
 
     submit_confirm(page)
 
@@ -71,9 +73,9 @@ def prepare(page, live_server):
     submit_confirm(page)
 
 
-def donation(page, live_server):
+def donation(page: Any, live_server: Any) -> None:
     # test donation
-    go_to(page, live_server, "/manage/features/36/on")
+    go_to(page, live_server, "/manage/features/donate/on")
 
     go_to(page, live_server, "/accounting")
     page.get_by_role("link", name="follow this link").click()
@@ -85,6 +87,8 @@ def donation(page, live_server):
     submit(page)
 
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)
@@ -99,9 +103,9 @@ def donation(page, live_server):
     expect(page.locator("#one")).to_contain_text("(10.00€)")
 
 
-def membership_fees(page, live_server):
+def membership_fees(page: Any, live_server: Any) -> None:
     # test membership fees
-    go_to(page, live_server, "/manage/features/45/on")
+    go_to(page, live_server, "/manage/features/membership/on")
 
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
@@ -141,6 +145,8 @@ def membership_fees(page, live_server):
 
     expect(page.locator("#one")).to_contain_text("15")
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)
@@ -154,9 +160,9 @@ def membership_fees(page, live_server):
     expect(page.locator("#one")).not_to_contain_text("Payment membership fee")
 
 
-def collections(page, live_server):
+def collections(page: Any, live_server: Any) -> None:
     # test collections
-    go_to(page, live_server, "/manage/features/31/on")
+    go_to(page, live_server, "/manage/features/collection/on")
 
     go_to(page, live_server, "/accounting")
     page.get_by_role("link", name="Create a new collection").click()
@@ -171,6 +177,8 @@ def collections(page, live_server):
 
     expect(page.locator("#one")).to_contain_text("20")
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("test beneficiary")
     expect(page.locator("#one")).to_contain_text("test iban")
     submit(page)

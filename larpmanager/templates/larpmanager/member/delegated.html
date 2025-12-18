@@ -30,7 +30,7 @@
                 <tr>
                     <td>{{ el }}</td>
                     <td>
-                        {% for reg in el.ctx.reg_list %}
+                        {% for reg in el.context.registration_list %}
                             {{ reg.run }}
                             {% if reg.ticket %}
                                 (
@@ -51,7 +51,7 @@
                         {% endfor %}
                     </td>
                     <td>
-                        {% for reg in el.ctx.payments_todo %}
+                        {% for reg in el.context.payments_todo %}
                             {% include "elements/comma.html" %}
                             <b>{{ reg.run }} </b> -
                             {{ reg.quota|format_decimal }}{{ currency_symbol }} {% trans "by" %} {{ reg.deadline }} {% trans "days" %}

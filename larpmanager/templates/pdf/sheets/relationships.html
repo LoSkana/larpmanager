@@ -13,6 +13,14 @@
                 }
             }
 
+            @page {
+                size: A4;
+                margin-top: 0.5cm;
+                margin-right: 0.5cm;
+                margin-bottom: 0.5cm;
+                margin-left: 0.5cm;
+            }
+
             body {
                 background: white;
                 text-align: center;
@@ -83,50 +91,49 @@
         </style>
     </head>
     <body>
-        <table>
-            <tr>
-                {% for el in rel %}
-                    {% if forloop.counter|divisibleby:2 %}
-                    {% else %}
-                    </tr>
-                </table>
-                <table>
-                    <tr>
-                    {% endif %}
-                    <td class="{% if not forloop.counter|divisibleby:2 %}left{% endif %}">
-                        {% if el.player_id > 0 %}
-                            <img src="https://{{ assoc.main_domain }}/{{ el.player_prof }}"
-                                 alt="player profile" />
-                        {% else %}
-                            <img src="https://{{ assoc.main_domain }}/{% static 'larpmanager/assets/blank-avatar.png' %}"
-                                 alt="player profile" />
-                        {% endif %}
-                        <p>
-                            <span class="name"><a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a> </span>
-                            {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
-                            {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                        </p>
-                        {% if el.player_id > 0 %}
+        {% if rel %}
+            <table>
+                <tr>
+                    {% for el in rel %}
+                        <td class="{% if not forloop.counter|divisibleby:2 %}left{% endif %}">
+                            {% if el.player_id > 0 %}
+                                <img src="https://{{ association.main_domain }}/{{ el.player_prof }}"
+                                     alt="player profile" />
+                            {% else %}
+                                <img src="https://{{ association.main_domain }}/{% static 'larpmanager/assets/blank-avatar.png' %}"
+                                     alt="player profile" />
+                            {% endif %}
                             <p>
-                                <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                <span class="name"><a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a></span>
+                                {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                                {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                             </p>
+                            {% if el.player_id > 0 %}
+                                <p>
+                                    <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                </p>
+                            {% endif %}
+                            {% if el.factions_list %}
+                                <b>{% trans "Factions" %}:</b>
+                                {% for fac in el.factions_list %}
+                                    {% include "elements/comma.html" %}
+                                    {{ fac }}
+                                {% endfor %}
+                            {% endif %}
+                            <p class="relationship">
+                                <b>Relationship:</b> {% show_char el.text run 1 %}
+                            </p>
+                        </td>
+                        {% if forloop.counter|divisibleby:2 and not forloop.last %}
+                        </tr>
+                        <tr>
                         {% endif %}
-                        {% if el.factions_list %}
-                            <b>{% trans "Factions" %}:</b>
-                            {% for fac in el.factions_list %}
-                                {% include "elements/comma.html" %}
-                                {{ fac }}
-                            {% endfor %}
-                        {% endif %}
-                        <p class="relationship">
-                            <b>Relationship:</b>  {% show_char el.text run 1 %}
-                        </p>
-                    </td>
-                {% endfor %}
-            </tr>
-        </table>
+                    {% endfor %}
+                </tr>
+            </table>
+        {% endif %}
     </body>
-    <script src="https://{{ assoc.slug }}.{{ assoc.main_domain }}/{% static "larpmanager/assets/js/jquery.min.js" %}"></script>
+    <script src="https://{{ association.slug }}.{{ association.main_domain }}/{% static "larpmanager/assets/js/jquery.min.js" %}"></script>
     <script>
 $(function() {
   resize_texts();

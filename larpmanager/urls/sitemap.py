@@ -17,82 +17,133 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-from datetime import datetime
 from io import StringIO
+from typing import Any
 
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.urls import path
-from django.utils import translation
+from django.utils import timezone, translation
 from django.utils.xmlutils import SimplerXMLGenerator
 from django.views.decorators.cache import cache_page
 
+from larpmanager.cache.association import get_cache_association
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.larpmanager import LarpManagerGuide
 
-translation.activate("en")
-
 
 @cache_page(60 * 60)
-def manual_sitemap_view(request):
-    if request.assoc["id"] == 0:
-        urls = larpmanager_sitemap()
-    else:
-        urls = _organization_sitemap(request)
+def manual_sitemap_view(request: HttpRequest) -> HttpResponse:
+    """Generate XML sitemap for organization or global site."""
+    # Force English for sitemap generation using context manager
+    with translation.override("en"):
+        # Check if this is the global site (id=0) or organization-specific
+        association_id = request.association["id"]
+        urls = larpmanager_sitemap() if association_id == 0 else _organization_sitemap(association_id)
 
-    stream = _render_sitemap(urls)
+        # Render URLs to XML format
+        stream = _render_sitemap(urls)
 
-    return HttpResponse(stream.getvalue(), content_type="application/xml")
-
-
-def _render_sitemap(urls):
-    # XML rendering
-    stream = StringIO()
-    xml = SimplerXMLGenerator(stream, "utf-8")
-    xml.startDocument()
-    xml.startElement("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
-    for loc in urls:
-        xml.startElement("url", {})
-        xml.startElement("loc", {})
-        xml.characters(loc)
-        xml.endElement("loc")
-        xml.endElement("url")
-    xml.endElement("urlset")
-    xml.endDocument()
-    return stream
+        return HttpResponse(stream.getvalue(), content_type="application/xml")
 
 
-def _organization_sitemap(request):
-    assoc = Association.objects.get(pk=request.assoc["id"])
-    domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
-    urls = [f"https://{assoc.slug}.{domain}/"]
-    # Event runs
-    cache_ev = {}
+def _render_sitemap(urls: list[str]) -> StringIO:
+    """Generate XML sitemap from a list of URLs.
+
+    Args:
+        urls: List of URL strings to include in the sitemap
+
+    Returns:
+        StringIO object containing the generated XML sitemap
+
+    """
+    # Initialize XML stream and generator
+    xml_stream = StringIO()
+    xml_generator = SimplerXMLGenerator(xml_stream, "utf-8")
+
+    # Start XML document and root urlset element
+    xml_generator.startDocument()
+    xml_generator.startElement("urlset", {"xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9"})
+
+    # Generate URL entries for each location
+    for location_url in urls:
+        xml_generator.startElement("url", {})
+        xml_generator.startElement("loc", {})
+        xml_generator.characters(location_url)
+        xml_generator.endElement("loc")
+        xml_generator.endElement("url")
+
+    # Close root element and document
+    xml_generator.endElement("urlset")
+    xml_generator.endDocument()
+    return xml_stream
+
+
+def _organization_sitemap(association_id: Any) -> list[str]:
+    """Generate sitemap URLs for an organization's events and runs.
+
+    Args:
+        association_id: ID of the organization/association to generate sitemap for
+
+    Returns:
+        List of fully qualified URLs for the organization's public pages.
+        Returns empty list if organization is marked as demo.
+
+    Note:
+        Only includes events that are not in START or CANCELLED status
+        and have end dates in the future.
+
+    """
+    # Get organization and check if it's a demo instance
+    organization = Association.objects.get(pk=association_id)
+    organization_cache = get_cache_association(organization.slug)
+    if organization_cache.get("demo", False):
+        return []
+
+    # Build base organization URL
+    domain = organization.skin.domain if organization.skin else "larpmanager.com"
+    urls = [f"https://{organization.slug}.{domain}/"]
+
+    # Track processed events to avoid duplicates
+    processed_event_ids = {}
+
+    # Query active runs for future events
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
-        .filter(event__assoc_id=request.assoc["id"])
-        .filter(end__gte=datetime.now())
-        .select_related("event", "event__assoc")
+        .filter(event__association_id=association_id)
+        .filter(end__gte=timezone.now())
+        .select_related("event", "event__association")
         .order_by("-end")
     )
-    for el in runs:
-        if el.event_id in cache_ev:
+
+    # Generate URLs for each unique event
+    for run in runs:
+        # Skip if event already processed
+        if run.event_id in processed_event_ids:
             continue
-        cache_ev[el.event_id] = 1
-        assoc = el.event.assoc
-        domain = assoc.skin.domain if assoc.skin else "larpmanager.com"
-        urls.append(f"https://{assoc.slug}.{domain}/{el.get_slug()}/event/")
+        processed_event_ids[run.event_id] = 1
+
+        # Build event-specific URL
+        event_organization = run.event.association
+        domain = event_organization.skin.domain if event_organization.skin else "larpmanager.com"
+        urls.append(f"https://{event_organization.slug}.{domain}/{run.get_slug()}/event/")
+
     return urls
 
 
-def larpmanager_sitemap():
-    urls = []
+def larpmanager_sitemap() -> list[str]:
+    """Generate sitemap URLs for LarpManager website.
+
+    Returns:
+        List of complete URLs for static pages and blog posts.
+
+    """
     # Static pages
-    for el in ["", "usage", "about-us"]:
-        urls.append(f"https://larpmanager.com/{el}/")
-    # Blog posts
-    for el in LarpManagerGuide.objects.all():
-        urls.append(f"https://larpmanager.com/guide/{el.slug}/")
+    urls = [f"https://larpmanager.com/{page_path}/" for page_path in ["", "usage", "about-us"]]
+
+    # Blog posts from guides
+    urls.extend([f"https://larpmanager.com/guide/{guide.slug}/" for guide in LarpManagerGuide.objects.all()])
+
     return urls
 
 

@@ -17,131 +17,222 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import ast
+from __future__ import annotations
 
+import ast
+from typing import TYPE_CHECKING
+
+from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
 
 from larpmanager.cache.button import get_event_button_cache
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
 
+if TYPE_CHECKING:
+    from larpmanager.models.association import Association
 
-def reset_cache_run(a, s):
-    key = cache_run_key(a, s)
+
+def reset_cache_run(association: Association, slug: str) -> None:
+    """Invalidate the cached run data for a specific event."""
+    key = cache_run_key(association, slug)
     cache.delete(key)
 
 
-def cache_run_key(a, s):
-    return f"run_{a}_{s}"
+def cache_run_key(association_id: int, slug: str) -> str:
+    """Generate cache key for run data."""
+    return f"run_{association_id}_{slug}"
 
 
-def get_cache_run(a, s):
-    key = cache_run_key(a, s)
-    res = cache.get(key)
-    if not res:
-        res = init_cache_run(a, s)
-        cache.set(key, res)
-    return res
+def get_cache_run(association_id: int, slug: str) -> int:
+    """Get cached run data for association and slug."""
+    # Generate cache key for the association and slug
+    cache_key = cache_run_key(association_id, slug)
+
+    # Try to retrieve cached result
+    cached_result = cache.get(cache_key)
+
+    # If not cached, initialize and cache the result
+    if cached_result is None:
+        cached_result = init_cache_run(association_id, slug)
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    return cached_result
 
 
-def init_cache_run(a, s):
-    try:
-        try:
-            s, n = s.split("-")
-            n = int(n)
-        except ValueError:
-            n = 1
-
-        run = Run.objects.select_related("event").get(event__assoc_id=a, event__slug=s, number=n)
-        return run.id
-    except ObjectDoesNotExist:
-        return None
-
-
-@receiver(pre_save, sender=Run)
-def pre_save_run(sender, instance, **kwargs):
-    if instance.pk:
-        reset_cache_run(instance.event.assoc_id, instance.get_slug())
-
-
-@receiver(pre_save, sender=Event)
-def pre_save_event(sender, instance, **kwargs):
-    if instance.pk:
-        for run in instance.runs.all():
-            reset_cache_run(instance.assoc_id, run.get_slug())
-
-
-def reset_cache_config_run(run):
-    key = cache_config_run_key(run)
-    cache.delete(key)
-
-
-def cache_config_run_key(run):
-    return f"run_config_{run.id}"
-
-
-def get_cache_config_run(run):
-    key = cache_config_run_key(run)
-    res = cache.get(key)
-    if not res:
-        res = init_cache_config_run(run)
-        cache.set(key, res)
-    return res
-
-
-def init_cache_config_run(run):
-    """
-    Initialize and build cache configuration data for a run.
+def init_cache_run(association_id: int, event_slug: str) -> int | None:
+    """Get the run ID from association ID and event slug.
 
     Args:
-        run: Run instance to initialize cache for
+        association_id: The association ID
+        event_slug: Event slug, optionally with run number (e.g., "event-2")
 
     Returns:
-        dict: Cache configuration context with buttons, limitations, and display settings
+        Run ID if found, None otherwise
+
     """
-    ev_features = get_event_features(run.event_id)
-    ctx = {
+    try:
+        # Extract run number from event slug if present (e.g., "event-2" -> "event", 2)
+        try:
+            event_slug, run_number = event_slug.split("-")
+            run_number = int(run_number)
+        except ValueError:
+            run_number = 1
+
+        # Fetch the run with related event data
+        run = Run.objects.select_related("event").get(
+            event__association_id=association_id,
+            event__slug=event_slug,
+            number=run_number,
+        )
+    except ObjectDoesNotExist:
+        return None
+    else:
+        return run.id
+
+
+def on_run_pre_save_invalidate_cache(instance: Run) -> None:
+    """Handle run pre-save cache invalidation.
+
+    Args:
+        instance: Run instance being saved
+
+    """
+    if instance.pk:
+        reset_cache_run(instance.event.association_id, instance.get_slug())
+
+
+def on_event_pre_save_invalidate_cache(instance: Event) -> None:
+    """Handle event pre-save cache invalidation.
+
+    Args:
+        instance: Event instance being saved
+
+    """
+    if instance.pk:
+        for run in instance.runs.all():
+            reset_cache_run(instance.association_id, run.get_slug())
+
+
+def reset_cache_config_run(run: Run) -> None:
+    """Delete cached configuration for a run."""
+    cache_key = cache_config_run_key(run)
+    cache.delete(cache_key)
+
+
+def cache_config_run_key(run_instance: Run) -> str:
+    """Return cache key for a run's config."""
+    return f"run_config_{run_instance.id}"
+
+
+def get_cache_config_run(run: Run) -> dict:
+    """Retrieve cached run configuration, initializing if not found.
+
+    Args:
+        run: The run object to get configuration for.
+
+    Returns:
+        Dictionary containing the run configuration data.
+
+    """
+    # Generate cache key for this specific run
+    cache_key = cache_config_run_key(run)
+
+    # Attempt to retrieve from cache
+    cached_config = cache.get(cache_key)
+
+    # Initialize and cache if not found
+    if cached_config is None:
+        cached_config = init_cache_config_run(run)
+        cache.set(cache_key, cached_config, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    return cached_config
+
+
+def init_cache_config_run(run: Run) -> dict:
+    """Initialize and build cache configuration data for a run.
+
+    This function creates a cache configuration context containing UI elements,
+    limitations, and display settings for a specific run. It handles event features,
+    parent event inheritance, and writing system configurations.
+
+    Args:
+        run: Run instance to initialize cache for. Must have an associated event.
+
+    Returns:
+        dict: Cache configuration context containing:
+            - buttons: Event-specific button cache
+            - limitations: Whether to show limitations
+            - user_character_max: Maximum characters per user
+            - cover_orig: Original cover setting
+            - px_user: User experience points setting
+            - show_* keys: Display configuration for character, faction, quest, trait
+            - show_addit: Additional display configuration
+
+    """
+    # Get event features to determine what functionality is available
+    event_features = get_event_features(run.event_id)
+
+    # Initialize base context with buttons and core display settings
+    context = {
         "buttons": get_event_button_cache(run.event_id),
-        "limitations": run.event.get_config("show_limitations", False),
-        "user_character_max": run.event.get_config("user_character_max", 0),
-        "cover_orig": run.event.get_config("cover_orig", False),
-        "px_user": run.event.get_config("px_user", False),
     }
+    context["limitations"] = get_event_config(run.event_id, "show_limitations", default_value=False, context=context)
+    context["user_character_max"] = get_event_config(
+        run.event_id, "user_character_max", default_value=0, context=context
+    )
+    context["cover_orig"] = get_event_config(run.event_id, "cover_orig", default_value=False, context=context)
+    context["px_user"] = get_event_config(run.event_id, "px_user", default_value=False, context=context)
 
+    # Handle parent event inheritance for px_user setting
     if run.event.parent:
-        ctx["px_user"] = run.event.parent.get_config("px_user", False)
+        context["px_user"] = get_event_config(run.event.parent.id, "px_user", default_value=False, context=context)
 
+    # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
     for config_name in ["character", "faction", "quest", "trait"]:
-        if mapping[config_name] not in ev_features:
+        # Skip if this writing feature is not enabled for the event
+        if mapping[config_name] not in event_features:
             continue
-        res = {}
-        val = run.get_config("show_" + config_name, "[]")
-        for el in ast.literal_eval(val):
-            res[el] = 1
-        ctx["show_" + config_name] = res
 
-    res = {}
-    val = run.get_config("show_addit", "[]")
-    for el in ast.literal_eval(val):
-        res[el] = 1
-    ctx["show_addit"] = res
+        # Parse and convert list configuration to dictionary lookup
+        config_display_dict = {}
+        config_value = run.get_config("show_" + config_name, default_value="[]")
+        for element in ast.literal_eval(config_value):
+            config_display_dict[element] = 1
+        context["show_" + config_name] = config_display_dict
 
-    return ctx
+    # Process additional display configurations
+    additional_display_dict = {}
+    additional_config_value = run.get_config("show_addit", default_value="[]")
+    for element in ast.literal_eval(additional_config_value):
+        additional_display_dict[element] = 1
+    context["show_addit"] = additional_display_dict
+
+    return context
 
 
-@receiver(post_save, sender=Run)
-def post_run_reset_cache_config_run(sender, instance, **kwargs):
+def on_run_post_save_reset_config_cache(instance: Run) -> None:
+    """Handle run post-save cache reset.
+
+    Args:
+        instance: Run instance that was saved
+
+    """
     if instance.pk:
         reset_cache_config_run(instance)
 
 
-@receiver(post_save, sender=Event)
-def post_event_reset_cache_config_run(sender, instance, **kwargs):
+def on_event_post_save_reset_config_cache(instance: Event) -> None:
+    """Handle event post-save cache reset.
+
+    Args:
+        instance: Event instance that was saved
+
+    """
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_config_run(run)

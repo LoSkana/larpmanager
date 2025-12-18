@@ -18,131 +18,209 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""Invoice generation and CSV import/export utilities."""
+
+from __future__ import annotations
+
 import csv
+import logging
 import math
+from decimal import Decimal
 from io import StringIO
+from typing import TYPE_CHECKING
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
-from larpmanager.utils.common import clean, detect_delimiter
-from larpmanager.utils.tasks import notify_admins
+from larpmanager.utils.core.common import clean, detect_delimiter
+
+if TYPE_CHECKING:
+    from django.core.files.uploadedfile import InMemoryUploadedFile
+
+logger = logging.getLogger(__name__)
 
 
-def invoice_verify(request, ctx, csv_upload):
+def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
     """Verify and match payments from CSV upload against pending invoices.
 
     Processes a CSV file containing payment data and matches entries against
     pending payment invoices using causal codes, registration codes, or transaction IDs.
+    Marks matching invoices as verified when payment amounts are sufficient.
 
     Args:
-        request: Django HTTP request object
-        ctx: Context dictionary containing todo list of pending invoices
-        csv_upload: Uploaded CSV file containing payment data
+        context (dict): Context dictionary containing 'todo' key with list of pending invoices
+        csv_upload (InMemoryUploadedFile): Uploaded CSV file containing payment data with
+            format [amount, causal, ...] where amount uses dot for thousands
+            and comma for decimal separator
 
     Returns:
         int: Number of successfully verified payments
 
     Note:
         CSV format expected: [amount, causal, ...] where amount uses dot for thousands
-        and comma for decimal separator
+        and comma for decimal separator. Only processes unverified invoices where
+        payment amount meets or exceeds invoice amount.
+
     """
-    content = csv_upload.read().decode("utf-8")
-    delim = detect_delimiter(content)
-    csv_data = csv.reader(StringIO(content), delimiter=delim)
+    # Decode CSV content and detect delimiter
+    csv_content: str = csv_upload.read().decode("utf-8")
+    delimiter: str = detect_delimiter(csv_content)
+    csv_data = csv.reader(StringIO(csv_content), delimiter=delimiter)
 
-    counter = 0
+    verified_payments_count: int = 0
 
+    # Process each row in the CSV file
     for row in csv_data:
-        causal = row[1]
-        amount = row[0].replace(".", "").replace(",", ".")
+        payment_causal: str = row[1]
+        payment_amount_string: str = row[0].replace(".", "").replace(",", ".")
 
-        if not causal:
+        # Skip rows with missing causal or amount data
+        if not payment_causal or not payment_amount_string:
             continue
 
-        if not amount:
-            continue
-
-        # check in all todos
-        for el in ctx["todo"]:
-            if el.verified:
+        # Check payment against all pending invoices
+        for pending_invoice in context["todo"]:
+            # Skip already verified invoices
+            if pending_invoice.verified:
                 continue
 
-            found = clean(el.causal) in clean(causal)
-            code = el.causal.split()[0]
+            # Try to match causal code directly
+            causal_match_found: bool = clean(pending_invoice.causal) in clean(payment_causal)
+            causal_parts = pending_invoice.causal.split()
+            causal_code: str = causal_parts[0] if causal_parts else ""
 
-            random_causal_length = 16
+            # Check for random causal codes (16 characters)
+            random_causal_length: int = 16
+            if not causal_match_found and len(causal_code) == random_causal_length:
+                causal_match_found = causal_code in clean(payment_causal)
 
-            if not found and len(code) == random_causal_length:
-                found = code in clean(causal)
+            # Try matching registration code if available
+            if not causal_match_found and pending_invoice.reg_cod:
+                causal_match_found = clean(pending_invoice.reg_cod) in clean(payment_causal)
 
-            if not found and el.reg_cod:
-                found = clean(el.reg_cod) in clean(causal)
+            # Try matching transaction ID if available
+            if not causal_match_found and pending_invoice.txn_id:
+                causal_match_found = clean(pending_invoice.txn_id) in clean(payment_causal)
 
-            if not found and el.txn_id:
-                found = clean(el.txn_id) in clean(causal)
-
-            if not found:
+            # Skip if no match found
+            if not causal_match_found:
                 continue
 
-            a_dist = math.ceil(float(amount)) - math.ceil(float(el.mc_gross))
-            if a_dist > 0:
+            # Verify payment amount is sufficient (rounded up)
+            # amount_difference > 0 means overpayment (ok), < 0 means underpayment (skip)
+            amount_difference: float = math.ceil(float(payment_amount_string)) - math.ceil(
+                float(pending_invoice.mc_gross),
+            )
+            if amount_difference < 0:
+                # Payment is less than invoice amount - skip this invoice
                 continue
 
-            counter += 1
-
+            # Mark invoice as verified and increment counter
+            verified_payments_count += 1
             with transaction.atomic():
-                el.verified = True
-                el.save()
+                pending_invoice.verified = True
+                pending_invoice.save()
 
-    return counter
+    return verified_payments_count
 
 
-def invoice_received_money(cod, gross=None, fee=None, txn_id=None):
+def invoice_received_money(
+    invoice_code: str,
+    gross_amount: float | Decimal | None = None,
+    processing_fee: float | Decimal | None = None,
+    transaction_id: str | None = None,
+    expected_amount: float | Decimal | None = None,
+    payment_method: str | None = None,
+) -> bool | None:
     """Process received payment for a payment invoice.
 
     Updates payment invoice status and financial details when money is received
     from payment processors like PayPal or bank transfers.
 
     Args:
-        cod: Invoice code to identify the payment
-        gross: Optional gross amount received
-        fee: Optional processing fee charged
-        txn_id: Optional transaction ID from payment processor
+        invoice_code: Invoice code to identify the payment
+        gross_amount: Optional gross amount received from payment processor
+        processing_fee: Optional processing fee charged by payment processor
+        transaction_id: Optional transaction ID from payment processor
+        expected_amount: Optional expected payment amount for verification
+        payment_method: Optional payment method name for logging
 
     Returns:
-        bool: True if payment was processed successfully, None if invalid invoice
+        True if payment was processed successfully, None if invalid invoice code
+        or verification fails
 
-    Side effects:
-        Updates invoice status to CHECKED and saves financial details
-        Sends admin notification for invalid payment codes
+    Raises:
+        No exceptions are raised - invalid invoices are handled gracefully
+        with admin notifications.
+
+    Side Effects:
+        - Updates invoice status to CHECKED
+        - Saves financial details (gross amount, fees, transaction ID)
+        - Sends admin notification for invalid payment codes or amount mismatches
+
     """
+    # Attempt to retrieve the payment invoice by code
     try:
-        invoice = PaymentInvoice.objects.get(cod=cod)
+        invoice = PaymentInvoice.objects.get(cod=invoice_code)
     except ObjectDoesNotExist:
-        notify_admins("invalid payment", "wrong invoice: " + cod)
-        return
+        # Notify administrators of invalid payment attempt
+        logger.exception("Invalid payment: Invoice not found: %s", invoice_code)
+        return None
 
+    # Verify payment amount if provided and expected amount is available
+    if gross_amount is not None and expected_amount is not None:
+        received_amount = Decimal(str(gross_amount)) if not isinstance(gross_amount, Decimal) else gross_amount
+        expected = Decimal(str(expected_amount)) if not isinstance(expected_amount, Decimal) else expected_amount
+
+        # Allow small rounding differences (1 cent tolerance)
+        amount_tolerance = Decimal("0.01")
+
+        # Reject if received amount is less than expected (underpayment)
+        if received_amount < (expected - amount_tolerance):
+            method_name = payment_method or invoice.method.slug
+            logger.error(
+                "Payment alert: Insufficient Amount - Expected: %s, Received: %s, Invoice: %s, TxnID: %s, Method: %s, Association: %s",
+                expected,
+                received_amount,
+                invoice_code,
+                transaction_id,
+                method_name,
+                invoice.association.slug,
+            )
+            return None
+
+        # Log warning for overpayment (but still accept)
+        if received_amount > (expected + amount_tolerance):
+            method_name = payment_method or invoice.method.slug
+            logger.warning(
+                "Payment overpayment detected. Expected: %s, Received: %s, Invoice: %s, Method: %s",
+                expected,
+                received_amount,
+                invoice_code,
+                method_name,
+            )
+
+    # Process payment updates within atomic transaction
     with transaction.atomic():
-        if gross:
-            invoice.mc_gross = gross
+        # Update gross amount if provided
+        if gross_amount is not None:
+            invoice.mc_gross = Decimal(str(gross_amount)) if not isinstance(gross_amount, Decimal) else gross_amount
 
-        if fee:
-            invoice.mc_fee = fee
+        # Update processing fee if provided
+        if processing_fee is not None:
+            invoice.mc_fee = Decimal(str(processing_fee)) if not isinstance(processing_fee, Decimal) else processing_fee
 
-        if txn_id:
-            invoice.txn_id = txn_id
+        # Update transaction ID if provided
+        if transaction_id:
+            invoice.txn_id = transaction_id
 
+        # Skip processing if already checked or confirmed
         if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
             return True
 
-        # ~ invoice.mc_gross = ipn_obj.mc_gross
-        # ~ invoice.mc_fee = ipn_obj.mc_fee
-        # ~ invoice.txn_id = ipn_obj.txn_id
+        # Mark invoice as checked and save changes
         invoice.status = PaymentStatus.CHECKED
         invoice.save()
-
-    # print(invoice)
 
     return True

@@ -14,7 +14,7 @@
                 }
             }
 
-            max_lengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title"]
+            max_lengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title", "additional_tickets"]
             if (max_lengtheable.includes(selectedValue)) {
                 $('#id_max_length_tr').fadeIn(speed);
             } else {

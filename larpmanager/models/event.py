@@ -17,14 +17,17 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 import inspect
-import os
+import logging
+from pathlib import Path
+from typing import Any, ClassVar
 
 from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
 from django.utils import formats
 from django.utils.translation import gettext_lazy as _
@@ -45,8 +48,12 @@ from larpmanager.models.utils import (
     show_thumb,
 )
 
+logger = logging.getLogger(__name__)
+
 
 class Event(BaseModel):
+    """Represents Event model."""
+
     slug = models.CharField(
         max_length=30,
         validators=[AlphanumericValidator],
@@ -57,7 +64,7 @@ class Event(BaseModel):
         help_text=_("Only lowercase characters and numbers are allowed, no spaces or symbols"),
     )
 
-    assoc = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="events")
 
     name = models.CharField(max_length=100)
 
@@ -162,7 +169,7 @@ class Event(BaseModel):
         blank=True,
         verbose_name=_("Campaign"),
         help_text=_(
-            "If you select another event, it will be considered in the same campaign, and they will share the characters"
+            "If you select another event, it will be considered in the same campaign, and they will share the characters",
         )
         + " - "
         + _("if you leave this empty, this can be the starting event of a new campaign"),
@@ -217,7 +224,7 @@ class Event(BaseModel):
     template = models.BooleanField(default=False)
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["slug", "deleted"], name="unique_event_with_optional"),
             UniqueConstraint(
                 fields=["slug"],
@@ -226,20 +233,55 @@ class Event(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the name of the object as a string."""
         return self.name
 
-    def get_elements(self, typ):
-        queryset = typ.objects.filter(event=self.get_class_parent(typ))
-        if hasattr(typ, "number"):
+    def get_elements(self, element_model_class: type[BaseModel]) -> QuerySet:
+        """Get ordered elements of specified type for the parent event.
+
+        Args:
+            element_model_class: Model class to query elements from
+
+        Returns:
+            Ordered queryset of elements
+
+        """
+        # Get all elements for the parent event
+        queryset = element_model_class.objects.filter(event=self.get_class_parent(element_model_class))
+
+        # Order by number if the model has that field
+        if hasattr(element_model_class, "number"):
             queryset = queryset.order_by("number")
         return queryset
 
-    def get_class_parent(self, nm):
-        if inspect.isclass(nm) and issubclass(nm, BaseModel):
-            nm = nm.__name__.lower()
+    def get_class_parent(self, model_class: type[BaseModel] | str) -> Any:
+        """Get the parent event for inheriting elements of a specific model class.
 
-        elements = [
+        This method determines whether to use the parent event's elements or the current
+        event's elements based on inheritance settings and model class type.
+
+        Args:
+            model_class: Model class (subclass of BaseModel) or class name string to check
+                inheritance for. If a class is provided, it will be converted to
+                lowercase string format.
+
+        Returns:
+            Event: Parent event if inheritance is enabled for the given model class
+                   and a parent exists, otherwise returns self.
+
+        Note:
+            Only specific model classes support inheritance. The method checks against
+            a predefined list of inheritable elements and respects campaign independence
+            configuration settings.
+
+        """
+        # Convert class objects to lowercase string representation
+        if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
+            model_class = model_class.__name__.lower()
+
+        # Define which model elements can be inherited from parent events
+        inheritable_elements = [
             "character",
             "faction",
             "abilitypx",
@@ -249,32 +291,49 @@ class Event(BaseModel):
             "writingoption",
         ]
 
-        if self.parent and nm in elements:
-            # check if we don't want to actually use that event's elements
-            if not self.get_config(f"campaign_{nm}_indep", False):
-                return self.parent
+        # Check if inheritance conditions are met
+        # Verify that campaign independence is not enabled for this element type
+        # If independence is disabled (False), use parent's elements
+        if (
+            self.parent
+            and model_class in inheritable_elements
+            and not self.get_config(f"campaign_{model_class}_indep", default_value=False)
+        ):
+            return self.parent
 
+        # Return self if no parent exists, element not inheritable, or independence enabled
         return self
 
-    def get_cover_thumb_url(self):
+    def get_cover_thumb_url(self) -> str | None:
+        """Get the URL of the cover thumbnail image, or None if unavailable."""
         try:
             # noinspection PyUnresolvedReferences
             return self.cover_thumb.url
-        except Exception as e:
-            print(e)
+        except (ValueError, AttributeError) as e:
+            # Log error and return None if cover_thumb is not available
+            logger.debug("Cover thumbnail not available for event %s: %s", self.id, e)
             return None
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Return the name attribute."""
         return self.name
 
-    def show(self):
+    def show(self) -> dict[str, str]:
         """Generate display dictionary with event information and media URLs.
 
         Creates a comprehensive dictionary containing event details, cover images,
         carousel images, fonts, and backgrounds with their respective URLs.
+
+        Returns:
+            dict[str, str]: Dictionary containing event attributes and media URLs.
+                Keys include: slug, name, tagline, description, website, genre,
+                where, authors, cover, cover_thumb, carousel_img, carousel_thumb,
+                font, background, background_red (when available).
+
         """
         dc = {}
 
+        # Extract basic event attributes
         for s in [
             "slug",
             "name",
@@ -286,22 +345,27 @@ class Event(BaseModel):
             "authors",
         ]:
             dc[s] = get_attr(self, s)
+
+        # Add cover image URLs if available
         if self.cover:
             # noinspection PyUnresolvedReferences
             dc["cover"] = self.cover.url
             # noinspection PyUnresolvedReferences
             dc["cover_thumb"] = self.cover_thumb.url
 
+        # Add carousel image URLs if available
         if self.carousel_img:
             # noinspection PyUnresolvedReferences
             dc["carousel_img"] = self.carousel_img.url
             # noinspection PyUnresolvedReferences
             dc["carousel_thumb"] = self.carousel_thumb.url
 
+        # Add font URL if available
         if self.font:
             # noinspection PyUnresolvedReferences
             dc["font"] = self.font.url
 
+        # Add background image URLs if available
         if self.background:
             # noinspection PyUnresolvedReferences
             dc["background"] = self.background.url
@@ -310,38 +374,47 @@ class Event(BaseModel):
 
         return dc
 
-    def thumb(self):
+    def thumb(self) -> str:
+        """Return HTML markup for thumbnail image at 100px width."""
         # noinspection PyUnresolvedReferences
         return show_thumb(100, self.cover_thumb.url)
 
-    def download_sheet_template(self):
+    def download_sheet_template(self) -> str:
+        """Download the sheet template file."""
         # noinspection PyUnresolvedReferences
         return download(self.sheet_template.path)
 
-    def get_media_filepath(self):
-        fp = os.path.join(conf_settings.MEDIA_ROOT, f"pdf/{self.slug}/")
-        os.makedirs(fp, exist_ok=True)
-        return fp
+    def get_media_filepath(self) -> str:
+        """Get the media directory path for this object's PDFs, creating it if needed."""
+        # Build path to PDF directory using object slug
+        pdf_directory_path = str(Path(conf_settings.MEDIA_ROOT) / f"pdf/{self.slug}/")
+        # Ensure directory exists
+        Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
+        return pdf_directory_path
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this event."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class EventConfig(BaseModel):
+    """Django app configuration for Event."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining event and name."""
         return f"{self.event} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["event", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "name", "deleted"],
                 name="unique_event_config_with_optional",
@@ -355,6 +428,8 @@ class EventConfig(BaseModel):
 
 
 class BaseConceptModel(BaseModel):
+    """Represents BaseConceptModel model."""
+
     number = models.IntegerField()
 
     name = models.CharField(max_length=150, blank=False)
@@ -363,23 +438,27 @@ class BaseConceptModel(BaseModel):
 
     class Meta:
         abstract = True
-        ordering = ["event", "number"]
+        ordering: ClassVar[list] = ["event", "number"]
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Get the name attribute."""
         return get_attr(self, "name")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return the string representation of this instance."""
         return self.name
 
 
 class EventButton(BaseConceptModel):
+    """Represents EventButton model."""
+
     tooltip = models.CharField(max_length=200)
 
     link = models.URLField(max_length=150)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_event_button_with_optional",
@@ -393,6 +472,8 @@ class EventButton(BaseConceptModel):
 
 
 class EventTextType(models.TextChoices):
+    """Represents EventTextType model."""
+
     INTRO = "i", _("Character sheet intro")
     TOC = "t", _("Terms and conditions")
     REGISTER = "r", _("Registration form")
@@ -406,6 +487,8 @@ class EventTextType(models.TextChoices):
 
 
 class EventText(BaseModel):
+    """Represents EventText model."""
+
     number = models.IntegerField(null=True, blank=True)
 
     text = HTMLField(blank=True, null=True)
@@ -426,7 +509,7 @@ class EventText(BaseModel):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="texts")
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "typ", "language", "deleted"],
                 name="unique_event_text_with_optional",
@@ -440,11 +523,13 @@ class EventText(BaseModel):
 
 
 class ProgressStep(BaseConceptModel):
+    """Represents ProgressStep model."""
+
     order = models.IntegerField(default=0)
 
     class Meta:
-        indexes = [models.Index(fields=["number", "event"])]
-        constraints = [
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "number", "deleted"],
                 name="unique_ProgressStep_with_optional",
@@ -456,11 +541,14 @@ class ProgressStep(BaseConceptModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return formatted string with order number and name."""
         return f"{self.order} - {self.name}"
 
 
 class DevelopStatus(models.TextChoices):
+    """Represents DevelopStatus model."""
+
     START = "0", _("Hidden")
     SHOW = "1", _("Visible")
     CANC = "8", _("Cancelled")
@@ -468,6 +556,8 @@ class DevelopStatus(models.TextChoices):
 
 
 class Run(BaseModel):
+    """Represents Run model."""
+
     search = models.CharField(max_length=150, editable=False)
 
     development = models.CharField(
@@ -483,7 +573,7 @@ class Run(BaseModel):
 
     start = models.DateField(blank=True, null=True, verbose_name=_("Start date"))
 
-    end = models.DateField(blank=True, null=True, verbose_name=_("End date"))
+    end = models.DateField(blank=True, null=True, verbose_name=_("End date"), db_index=True)
 
     registration_open = models.DateTimeField(
         blank=True,
@@ -498,7 +588,7 @@ class Run(BaseModel):
         unique=True,
         verbose_name=_("Secret code"),
         help_text=_(
-            "This code is used to generate the secret registration link, you may keep the default or customize it"
+            "This code is used to generate the secret registration link, you may keep the default or customize it",
         ),
         db_index=True,
     )
@@ -510,7 +600,11 @@ class Run(BaseModel):
     plan = models.CharField(max_length=1, choices=AssociationPlan.choices, blank=True, null=True)
 
     class Meta:
-        constraints = [
+        indexes: ClassVar[list] = [
+            models.Index(fields=["id", "deleted"]),
+            models.Index(fields=["event", "deleted"]),
+        ]
+        constraints: ClassVar[list] = [
             UniqueConstraint(fields=["event", "number", "deleted"], name="unique_run_with_optional"),
             UniqueConstraint(
                 fields=["event", "number"],
@@ -519,71 +613,111 @@ class Run(BaseModel):
             ),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation of the run with event name and optional number."""
         s = self.event.name
         if self.number and self.number != 1:
             s = f"{s} #{self.number}"
         return s
 
-    def get_slug(self):
-        slug = self.event.slug
+    def get_slug(self) -> str:
+        """Return the slug for this run, appending the run number if greater than 1."""
+        run_slug = self.event.slug
         if self.number > 1:
-            slug += f"-{self.number}"
-        return slug
+            run_slug += f"-{self.number}"
+        return run_slug
 
-    def get_where(self):
+    def get_where(self) -> str:
+        """Return the location of the associated event."""
         # noinspection PyUnresolvedReferences
         return self.event.where
 
-    def get_cover_url(self):
+    def get_cover_url(self) -> str:
+        """Return the thumbnail URL of the associated event's cover image."""
         # noinspection PyUnresolvedReferences
         return self.event.cover_thumb.url
 
-    def pretty_dates(self):
+    def pretty_dates(self) -> str:
+        """Format start and end dates into a human-readable string.
+
+        Returns a formatted date string that intelligently handles different
+        scenarios: missing dates, same dates, different years/months, etc.
+
+        Returns:
+            str: Formatted date string or "TBA" if dates are missing.
+                Examples: "15 January 2024", "15 - 20 January 2024",
+                "15 January - 20 February 2024", "15 January 2024 - 20 January 2025"
+
+        """
+        # Handle missing dates - return "TBA" if either date is None
         if not self.start or not self.end:
             return "TBA"
+
+        # Same date - show single date format
         if self.start == self.end:
             return formats.date_format(self.start, "j E Y")
+
+        # Different years - show full date format for both dates
         # noinspection PyUnresolvedReferences
         if self.start.year != self.end.year:
             return f"{formats.date_format(self.start, 'j E Y')} - {formats.date_format(self.end, 'j E Y')}"
+
+        # Different months (same year) - show month for start, full date for end
         # noinspection PyUnresolvedReferences
         if self.start.month != self.end.month:
             return f"{formats.date_format(self.start, 'j E')} - {formats.date_format(self.end, 'j E Y')}"
+
+        # Same month and year - show day range with single month/year
         # noinspection PyUnresolvedReferences
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
 
-    def get_media_filepath(self):
-        # noinspection PyUnresolvedReferences
-        fp = os.path.join(self.event.get_media_filepath(), f"{self.number}/")
-        os.makedirs(fp, exist_ok=True)
-        return fp
+    def get_media_filepath(self) -> str:
+        """Return the media file path for this run, creating the directory if needed.
 
-    def get_gallery_filepath(self):
+        Returns:
+            The absolute path to the run's media directory.
+
+        """
+        # Build path by combining event media path with run number
+        # noinspection PyUnresolvedReferences
+        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}/")
+
+        # Ensure directory exists
+        Path(run_media_path).mkdir(parents=True, exist_ok=True)
+
+        return run_media_path
+
+    def get_gallery_filepath(self) -> str:
+        """Return the file path for the gallery PDF."""
         return self.get_media_filepath() + "gallery.pdf"
 
-    def get_profiles_filepath(self):
+    def get_profiles_filepath(self) -> str:
+        """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, name, def_v=None):
-        return get_element_config(self, name, def_v)
+    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
+        """Get configuration value for this run."""
+        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
 
 class RunConfig(BaseModel):
+    """Django app configuration for Run."""
+
     name = models.CharField(max_length=150)
 
     value = models.CharField(max_length=1000)
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="configs")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining run and name."""
         return f"{self.run} {self.name}"
 
     class Meta:
-        indexes = [
+        indexes: ClassVar[list] = [
             models.Index(fields=["run", "name"]),
         ]
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["run", "name", "deleted"],
                 name="unique_run_config_with_optional",
@@ -597,6 +731,8 @@ class RunConfig(BaseModel):
 
 
 class PreRegistration(BaseModel):
+    """Represents PreRegistration model."""
+
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="pre_registrations")
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="pre_registrations")
@@ -605,11 +741,12 @@ class PreRegistration(BaseModel):
 
     info = models.CharField(max_length=255)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation combining event and member."""
         return f"{self.event} {self.member}"
 
     class Meta:
-        constraints = [
+        constraints: ClassVar[list] = [
             UniqueConstraint(
                 fields=["event", "member", "deleted"],
                 name="unique_prereg_with_optional",

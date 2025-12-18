@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 
 from larpmanager.tests.utils import check_download, go_to, login_orga, submit_confirm
@@ -24,19 +26,19 @@ from larpmanager.tests.utils import check_download, go_to, login_orga, submit_co
 pytestmark = pytest.mark.e2e
 
 
-def test_user_pdf(pw_page):
+def test_user_pdf(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/character/on")
 
     # activate relationships
-    go_to(page, live_server, "/test/manage/features/75/on")
+    go_to(page, live_server, "/test/1/manage/features/relationships/on")
 
     # activate pdf
-    go_to(page, live_server, "/test/manage/features/21/on")
+    go_to(page, live_server, "/test/1/manage/features/print_pdf/on")
 
     # signup
     go_to(page, live_server, "/test/register")

@@ -128,6 +128,26 @@ h1 {
   font-size: 1.7em;
 }
 
+#banner h1 {
+  font-size: 1.8em;
+}
+
+#banner h2 {
+  font-size: 4em;
+  margin-bottom: 0.2em;
+}
+
+@media (max-width: 736px) {
+  #banner h2 {
+    font-size: 5em;
+    margin-bottom: 0.2em;
+  }
+
+  #banner h1 {
+    font-size: 2.2em;
+  }
+}
+
 #main h1.home a {
   text-decoration: none;
   border: 0;
@@ -188,6 +208,10 @@ h1.home {
 @media screen and (max-width: 736px) {
   h1.home {
     font-size: 1.25em;
+  }
+
+  #main h5 {
+    font-size: 1.5em;
   }
 }
 

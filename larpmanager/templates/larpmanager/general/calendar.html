@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block maintitle %}
-    {{ assoc.name }}
-    {% if assoc.id > 0 %}- {{ assoc.platform }}{% endif %}
+    {{ association.name }}
+    {% if association.id > 0 %}- {{ association.platform }}{% endif %}
 {% endblock maintitle %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
 {% endblock robots %}
 {% block meta %}
-    <meta property="og:title" content="{{ assoc.name }} - {{ assoc.platform }}" />
+    <meta property="og:title"
+          content="{{ association.name }} - {{ association.platform }}" />
     <meta name="description"
-          content="Manage your registration for {{ assoc.name }} events with LarpManager!">
+          content="Manage your registration for {{ association.name }} events with LarpManager!">
 {% endblock meta %}
 {% block title %}
-    {{ assoc.name }}
+    {{ association.name }}
 {% endblock title %}
 {% block content %}
     <div class="clearer"></div>
@@ -31,7 +32,7 @@
         <h2>{% trans "Next events" %}</h2>
         {% include "elements/run_list.html" with list=future %}
     {% endif %}
-    {% if 'past_events' in assoc.features %}
+    {% if 'past_events' in association.features %}
         <div class="nav">
             <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>
         </div>

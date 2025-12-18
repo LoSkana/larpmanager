@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_signup_accounting(pw_page):
+def test_signup_accounting(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -46,7 +47,7 @@ def test_signup_accounting(pw_page):
     check_delete(live_server, page)
 
 
-def check_delete(live_server, page):
+def check_delete(live_server: Any, page: Any) -> None:
     # update signup - orga
     go_to(page, live_server, "/test/manage/registrations")
     page.wait_for_selector("table")
@@ -79,7 +80,7 @@ def check_delete(live_server, page):
     page.get_by_role("button", name="Confirmation delete").click()
 
 
-def discount(live_server, page):
+def discount(live_server: Any, page: Any) -> None:
     # check signup
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
@@ -96,8 +97,8 @@ def discount(live_server, page):
     submit_confirm(page)
 
     # use discount
-    go_to(page, live_server, "/test/manage/features/12/on")
-    go_to(page, live_server, "/test/manage/discounts/")
+    go_to(page, live_server, "/test/1/manage/features/discount/on")
+    go_to(page, live_server, "/test/1/manage/discounts/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("discount")
@@ -130,7 +131,7 @@ def discount(live_server, page):
     page.locator("#register_go").click()
 
 
-def pay(live_server, page):
+def pay(live_server: Any, page: Any) -> None:
     # check accounting
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
@@ -151,6 +152,8 @@ def pay(live_server, page):
     expect(page.locator("#one")).to_contain_text("52")
     submit(page)
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     expect(page.locator("#one")).to_contain_text("52")
     submit(page)
 
@@ -160,9 +163,10 @@ def pay(live_server, page):
     page.get_by_role("link", name="Confirm", exact=True).click()
 
 
-def token_credits(live_server, page):
+def token_credits(live_server: Any, page: Any) -> None:
     # activate tokens credits
-    go_to(page, live_server, "/manage/features/107/on")
+    go_to(page, live_server, "/manage/features/tokens/on")
+    go_to(page, live_server, "/manage/features/credits/on")
     go_to(page, live_server, "/manage/tokens")
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_member-container").click()
@@ -208,7 +212,7 @@ def token_credits(live_server, page):
     submit_confirm(page)
 
 
-def signup_pay(live_server, page):
+def signup_pay(live_server: Any, page: Any) -> None:
     # Signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
@@ -233,9 +237,10 @@ def signup_pay(live_server, page):
     expect(page.locator("#one")).to_contain_text("test iban")
 
 
-def setup_payment(live_server, page):
+def setup_payment(live_server: Any, page: Any) -> None:
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
+
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_cc").check()
@@ -243,6 +248,10 @@ def setup_payment(live_server, page):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
+
+    page.get_by_role("link", name="Payments ").click()
+    page.locator("#id_payment_require_receipt").check()
+
     submit_confirm(page)
     go_to(page, live_server, "/manage/methods")
     page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()

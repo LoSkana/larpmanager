@@ -89,7 +89,7 @@ urlpatterns = [
         name="lm_payments",
     ),
     path(
-        "lm/payments/<int:r>",
+        "lm/payments/<int:run_id>",
         views_lm.lm_payments_confirm,
         name="lm_payments_confirm",
     ),
@@ -104,32 +104,27 @@ urlpatterns = [
         name="lm_profile",
     ),
     path(
-        "lm/profile/<slug:func>",
-        views_lm.lm_profile_rm,
-        name="lm_profile_rm",
-    ),
-    path(
-        "redirect/<path:p>",
+        "redirect/<path:path>",
         views_lm.redr,
         name="redr",
     ),
     path(
-        "activate/<slug:cod>/next/<path:p>",
-        views_lm.activate_feature_assoc,
+        "activate/<slug:feature_slug>/next/<path:path>",
+        views_lm.activate_feature_association,
         name="activate_feature_assoc",
     ),
     path(
-        "activate/<slug:cod>/",
-        views_lm.activate_feature_assoc,
+        "activate/<slug:feature_slug>/",
+        views_lm.activate_feature_association,
         name="activate_feature_assoc",
     ),
     path(
-        "<slug:s>/activate/<slug:cod>/next/<path:p>",
+        "<slug:event_slug>/activate/<slug:feature_slug>/next/<path:path>",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),
     path(
-        "<slug:s>/activate/<slug:cod>/",
+        "<slug:event_slug>/activate/<slug:feature_slug>/",
         views_lm.activate_feature_event,
         name="activate_feature_event",
     ),
@@ -154,7 +149,7 @@ urlpatterns = [
         name="ticket",
     ),
     path(
-        "ticket/<slug:s>/",
+        "ticket/<slug:reason>/",
         views_lm.ticket,
         name="ticket",
     ),
@@ -169,12 +164,12 @@ urlpatterns = [
         name="debug_slug",
     ),
     path(
-        "debug/<slug:s>/",
+        "debug/<slug:association_slug>/",
         views_lm.debug_slug,
         name="debug_slug",
     ),
     path(
-        "debug/user/<int:s>/",
+        "debug/user/<int:member_id>/",
         views_lm.debug_user,
         name="debug_user",
     ),

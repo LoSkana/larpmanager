@@ -28,7 +28,7 @@
                 margin-top: 0;
             }
         </style>
-    {% elif assoc.id != 0 %}
+    {% elif association.id != 0 %}
         <style>
             #tutorials {
                 margin-top: 1em;
@@ -124,7 +124,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
             var target = $($(this).attr('href'));
 
-            window.jump_to(target);
+            jump_to(target);
 
         });
 
@@ -139,6 +139,19 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
     });
+
+    function jump_to(target) {
+
+        console.log(target);
+
+        var headerHeight = $('header').length
+          ? $('header').outerHeight()
+          : $('#nav').outerHeight();
+
+        $('html').animate({
+            scrollTop: $('html').scrollTop() + $(target).offset().top - headerHeight * 1
+        }, 0);
+    }
 });
 
     </script>

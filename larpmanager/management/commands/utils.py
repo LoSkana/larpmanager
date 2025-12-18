@@ -23,15 +23,26 @@ import subprocess
 from django.core.management.base import CommandError
 
 
-def check_branch():
+def check_branch() -> None:
     """Prevent dangerous operations from running on main branch.
 
+    This function checks if the current git branch is 'main' and raises an error
+    if so, unless running in a CI environment (GitHub Actions or other CI systems).
+    This helps prevent accidental destructive operations on the main branch during
+    local development.
+
     Raises:
-        CommandError: If current git branch is 'main' (except in CI environments)
+        CommandError: If current git branch is 'main' and not in CI environment.
+
     """
+    # Skip check if running in CI environment
     if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true":
         return
 
-    branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()
-    if branch == "main":
-        raise CommandError("This command cannot be executed while on 'main'")
+    # Get current git branch name
+    current_branch_name = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], text=True).strip()  # noqa: S607
+
+    # Raise error if on main branch
+    if current_branch_name == "main":
+        msg = "This command cannot be executed while on 'main'"
+        raise CommandError(msg)

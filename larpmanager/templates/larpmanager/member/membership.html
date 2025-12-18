@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Member" %}
+    {% trans "Participant" %}
 {% endblock title %}
 {% block content %}
     {% if membership_cf and error_cf %}
@@ -132,7 +132,7 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('form').on('submit', function() {
-        return confirm('{% trans "Did you check the required data properly" %}?');
+        return confirm('{% filter escapejs %}{% trans "Did you check the required data properly" %}{% endfilter %}?');
     });
 });
 });

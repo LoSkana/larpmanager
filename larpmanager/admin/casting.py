@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import ClassVar
+
 from django.contrib import admin
 
 from larpmanager.admin.base import DefModelAdmin, EventFilter, MemberFilter, RunFilter
@@ -25,6 +27,8 @@ from larpmanager.models.casting import Casting, CastingAvoid, Quest, QuestType, 
 
 
 class TraitInline(admin.TabularInline):
+    """Inline admin for Trait model within Quest admin."""
+
     model = Trait
     fields = (
         "number",
@@ -34,26 +38,32 @@ class TraitInline(admin.TabularInline):
 
 @admin.register(Quest)
 class QuestAdmin(DefModelAdmin):
+    """Admin interface for Quest model."""
+
     list_display = ("number", "name", "event")
-    inlines = [
+    inlines: ClassVar[list] = [
         TraitInline,
     ]
     list_filter = (EventFilter,)
-    autocomplete_fields = ["typ", "event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["typ", "event", "progress", "assigned"]
     search_fields = ("name",)
 
 
 @admin.register(QuestType)
 class QuestTypeAdmin(DefModelAdmin):
-    list_display = ("name", "event")
+    """Admin interface for QuestType model."""
+
+    list_display: ClassVar[tuple] = ("name", "event")
     list_filter = (EventFilter,)
-    autocomplete_fields = ["event", "progress", "assigned"]
+    autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
     search_fields = ("name",)
 
 
 @admin.register(Casting)
 class CastingAdmin(DefModelAdmin):
-    list_display = ("run", "member", "element", "pref", "typ", "created", "updated")
+    """Admin interface for Casting model."""
+
+    list_display = ("run", "member", "element", "pref", "typ")
     autocomplete_fields = (
         "run",
         "member",
@@ -63,6 +73,8 @@ class CastingAdmin(DefModelAdmin):
 
 @admin.register(CastingAvoid)
 class CastingAvoidAdmin(DefModelAdmin):
+    """Admin interface for CastingAvoid model."""
+
     list_display = ("run", "member", "typ", "text")
     autocomplete_fields = (
         "run",

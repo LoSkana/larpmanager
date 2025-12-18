@@ -18,6 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from typing import Any
+
 from django.conf import settings as conf_settings
 from django.core.management.base import BaseCommand
 
@@ -25,13 +27,20 @@ from larpmanager.models.association import Association
 
 
 class Command(BaseCommand):
+    """Django management command."""
+
     help = "List of all assocs mails"
 
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
+        """Print email mappings for associations and admin."""
+        # Get associations with valid email addresses, excluding demo accounts
         lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(demo=True)
+
+        # Output association slug and email mappings
         for el in lst.order_by("slug").values_list("slug", "main_mail"):
             if el[1]:
                 self.stdout.write(f"{el[0]}@larpmanager.com {el[1]}")
 
-        name, email = conf_settings.ADMINS[0]
+        # Output admin email mapping
+        _name, email = conf_settings.ADMINS[0]
         self.stdout.write(f"@larpmanager.com {email}")

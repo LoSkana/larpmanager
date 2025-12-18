@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import re
+from typing import Any
 
 import pytest
 from playwright.sync_api import expect
@@ -28,7 +29,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submi
 pytestmark = pytest.mark.e2e
 
 
-def test_user_signup_payment(pw_page):
+def test_user_signup_payment(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -40,9 +41,9 @@ def test_user_signup_payment(pw_page):
     characters(page, live_server)
 
 
-def prepare(page, live_server):
+def prepare(page: Any, live_server: Any) -> None:
     # Activate payments
-    go_to(page, live_server, "/manage/features/111/on")
+    go_to(page, live_server, "/manage/features/payment/on")
 
     go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
@@ -51,6 +52,10 @@ def prepare(page, live_server):
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
+
+    page.get_by_role("link", name="Payments ").click()
+    page.locator("#id_payment_require_receipt").check()
+
     submit_confirm(page)
 
     go_to(page, live_server, "/manage/methods")
@@ -72,7 +77,7 @@ def prepare(page, live_server):
     submit_confirm(page)
 
 
-def signup(page, live_server):
+def signup(page: Any, live_server: Any) -> None:
     # Signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
@@ -96,6 +101,8 @@ def signup(page, live_server):
     submit(page)
 
     load_image(page, "#id_invoice")
+    page.get_by_role("checkbox", name="Payment confirmation:").check()
+
     submit(page)
 
     # approve payment
@@ -114,9 +121,9 @@ def signup(page, live_server):
     expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
 
 
-def characters(page, live_server):
+def characters(page: Any, live_server: Any) -> None:
     # Activate characters
-    go_to(page, live_server, "/test/manage/features/178/on")
+    go_to(page, live_server, "/test/1/manage/features/character/on")
 
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")

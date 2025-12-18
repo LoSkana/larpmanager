@@ -17,84 +17,121 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
+import logging
 import re
+from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.mail import mail_managers
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+logger = logging.getLogger(__name__)
 
 
 class BrokenLinkEmailsMiddleware:
-    def __init__(self, get_response):
+    """Middleware for BrokenLinkEmails."""
+
+    def __init__(self, get_response: Callable) -> None:
+        """Initialize middleware with the response handler."""
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        """Send broken link emails for relevant 404 NOT FOUND responses.
+
+        Args:
+            request: The HTTP request object being processed.
+
+        Returns:
+            The HTTP response object, potentially modified if a broken link
+            was detected and processed.
+
         """
-        Send broken link emails for relevant 404 NOT FOUND responses.
-        """
+        # Get the initial response from the next middleware or view
         response = self.get_response(request)
+
+        # Define the status code we're interested in monitoring
         broken_link_status = 404
+
+        # Only process 404 errors when not in debug mode
         if response.status_code == broken_link_status and not conf_settings.DEBUG:
+            # Check if this broken link should trigger an email notification
             res = self.check(request, response)
             if res:
                 return res
+
         return response
 
     @staticmethod
-    def is_ignorable_404(uri):
-        """
-        Returns True if a 404 at the given URL *shouldn't* notify the site managers.
-        """
-        return any(pattern.search(uri) for pattern in conf_settings.IGNORABLE_404_URLS)
+    def is_ignorable_404(request_uri: str) -> bool:
+        """Return True if a 404 at the given URL *shouldn't* notify the site managers."""
+        return any(url_pattern.search(request_uri) for url_pattern in conf_settings.IGNORABLE_404_URLS)
 
-    def check(self, request, response):
+    def check(self, request: HttpRequest, response: HttpResponse) -> HttpResponseRedirect | None:
         """Middleware for detecting and logging broken links.
 
         Monitors for 404 errors and tracks problematic URLs for debugging,
         filtering out bot traffic and ignorable URLs, and sending detailed
         error reports to administrators.
+
+        Args:
+            request: The HTTP request object containing metadata and user info
+            response: The HTTP response object with content and status code
+
+        Returns:
+            HttpResponseRedirect if a domain redirect is needed, None otherwise
+
         """
+        # Extract basic request information
         domain = request.get_host()
         path = request.get_full_path()
 
+        # Skip processing if referer contains query parameters
         referer = request.META.get("HTTP_REFERER", "None")
         if "?" in referer:
-            return
+            return None
 
-        ua = request.META.get("HTTP_USER_AGENT", "<none>")
-        for s in ["bot", "facebookexternalhit"]:
-            if s in str(ua):
-                return
+        # Filter out bot traffic to reduce noise
+        user_agent = request.META.get("HTTP_USER_AGENT", "<none>")
+        for bot_identifier in ["bot", "facebookexternalhit"]:
+            if bot_identifier in str(user_agent):
+                return None
 
-        # print(domain)
-        # print(path)
+        # Handle domain redirection for larpmanager.com with $ separator
         if domain == "larpmanager.com" and "$" in path:
-            aux = path.split("$")
-            # print (at)
-            url = "https://" + aux[1] + ".larpmanager.com/" + aux[0]
+            path_parts = path.split("$")
+            url = "https://" + path_parts[1] + ".larpmanager.com/" + path_parts[0]
             return HttpResponseRedirect(url)
 
+        # Skip ignorable 404 paths (common crawlers, assets, etc.)
         if self.is_ignorable_404(path):
-            return
+            return None
 
+        # Only process authenticated users or webhook paths
         if "webhook" not in path and not request.user.is_authenticated:
-            return
+            return None
 
-        html = response.content.decode("utf-8")
-        exception = re.search('<span class="exception-404">(.*)</span>', html, re.IGNORECASE)
+        # Extract exception information from response HTML
+        html_content = response.content.decode("utf-8")
+        exception = re.search('<span class="exception-404">(.*)</span>', html_content, re.IGNORECASE)
         if exception:
             exception = exception.group(1)
 
-        ip = request.META.get("REMOTE_ADDR", "<none>")
+        # Send detailed error report to administrators
+        ip_address = request.META.get("REMOTE_ADDR", "<none>")
         mail_managers(
             f"Broken link on {domain}",
             f"Requested URL: {path}\n"
             f"Exception: {exception}\n"
-            f"User: {str(request.user)}\n"
+            f"User: {request.user!s}\n"
             f"Referrer: {referer}\n"
-            f"User agent: {ua}\n"
-            f"IP address: {ip}\n\n"
+            f"User agent: {user_agent}\n"
+            f"IP address: {ip_address}\n\n"
             f"{vars(request)}",
             fail_silently=True,
         )
+        return None

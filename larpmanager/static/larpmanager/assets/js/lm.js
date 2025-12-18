@@ -28,9 +28,9 @@ $.ajaxSetup({
 
 window.jump_to = function(target) {
 
-    var headerHeight = $('header').outerHeight();
-
-    if (!target.length) return;
+    var headerHeight = $('header').length
+      ? $('header').outerHeight()
+      : $('#nav').outerHeight();
 
     $('#page-wrapper').animate({
         scrollTop: $('#page-wrapper').scrollTop() + $(target).offset().top - headerHeight * 4
@@ -427,9 +427,15 @@ function data_tables() {
         }
         let table_no_header_cols = $table.attr('no_header_cols');
         if (table_no_header_cols) {
-            disable_sort_columns = disable_sort_columns.concat(
-                JSON.parse(table_no_header_cols)
-            );
+            if (table_no_header_cols === "all") {
+                var thList = $table.find('thead th');
+                var totalColumns = thList.length;
+                disable_sort_columns = Array.from({length: totalColumns}, (_, i) => i);
+            } else {
+                disable_sort_columns = disable_sort_columns.concat(
+                    JSON.parse(table_no_header_cols)
+                );
+            }
         }
 
         let hide_columns = [];
@@ -443,7 +449,6 @@ function data_tables() {
         var full_layout = rowCount >= 10;
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
             scrollX: true,
             stateSave: true,
             paging: full_layout,
@@ -469,6 +474,21 @@ function data_tables() {
                 }
               })
             }
+        });
+
+        table.on('draw.dt', function() {
+            $('a[qtip]').each(function() {
+                if (!$(this).data('qtip-initialized')) {
+                    $(this).qtip({
+                        content: { text: $(this).attr('qtip') },
+                        style: { classes: 'qtip-dark qtip-rounded qtip-shadow' },
+                        hide: { effect: function(offset) { $(this).fadeOut(500); } },
+                        show: { effect: function(offset) { $(this).fadeIn(500); } },
+                        position: { my: 'top center', at: 'bottom center' }
+                    });
+                    $(this).data('qtip-initialized', true);
+                }
+            });
         });
 
         for (const index of hide_columns) {
@@ -510,7 +530,7 @@ function data_tables() {
         const url = $table.attr('url');
 
         const table = new DataTable('#' + tableId, {
-            lengthMenu: [ [10, 25, 50, 100, 200], [10, 25, 50, 100, 200] ],
+            lengthMenu: [[10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,
                 type: 'POST'
@@ -532,7 +552,7 @@ function data_tables() {
                 { searcheable: false, targets: [0] },
                 { columnControl: [], targets: [0] }
             ],
-            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' },
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
             /*
             initComplete: function () {
                 this.api()

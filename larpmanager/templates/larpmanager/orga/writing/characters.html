@@ -13,6 +13,9 @@
     {% if features.campaign and event.parent %}
         <a href="#" class="table_toggle" tog='attended'>{% trans "Attended" %}</a>
     {% endif %}
+    {% if features.campaign %}
+        <a href="#" class="table_toggle" tog='active'>{% trans "Active" %}</a>
+    {% endif %}
     {% if user_character_approval %}
         <a href="#" class="table_toggle" tog='status'>{% trans "Status" %}</a>
     {% endif %}
@@ -27,7 +30,7 @@
         <a href="#" class="table_toggle" tog='prologues'>{% trans "Prologues" %}</a>
     {% endif %}
     {% if features.relationships %}
-        <a href="#" class="table_toggle" tog='relationships'>{% trans "Relationships" %}</a>
+        <a href="#" class="table_toggle" tog='relationship_list'>{% trans "Relationships" %}</a>
     {% endif %}
     {% if features.speedlarp %}
         <a href="#" class="table_toggle" tog='speedlarp'>{% trans "Speedlarp" %}</a>
@@ -43,6 +46,9 @@
     {% if features.campaign and event.parent %}
         <th class="attended">{% trans "Attended" %}</th>
     {% endif %}
+    {% if features.campaign %}
+        <th class="active">{% trans "Active" %}</th>
+    {% endif %}
     {% if user_character_approval %}
         <th class="status">{% trans "Status" %}</th>
     {% endif %}
@@ -57,6 +63,11 @@
         <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Plots" %}
         </th>
+        {% if writing_unimportant %}
+            <th class="stats">
+                <i class="fa fa-hashtag"></i> {% trans "Important" %}
+            </th>
+        {% endif %}
     {% endif %}
     {% if features.prologue %}
         <th class="prologues">{% trans "Prologues" %}</th>
@@ -65,10 +76,15 @@
         </th>
     {% endif %}
     {% if features.relationships %}
-        <th class="relationships">{% trans "Relationships" %}</th>
+        <th class="relationship_list">{% trans "Relationships" %}</th>
         <th class="stats">
             <i class="fa fa-hashtag"></i> {% trans "Relationships" %}
         </th>
+        {% if writing_unimportant %}
+            <th class="stats">
+                <i class="fa fa-hashtag"></i> {% trans "Important" %}
+            </th>
+        {% endif %}
     {% endif %}
     {% if features.speedlarp %}
         <th class="speedlarp">{% trans "Speedlarp" %}</th>
@@ -96,11 +112,21 @@
                     <a href="{% url 'character_external' run.get_slug el.access_token %}"
                        qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                 {% endif %}
+                {% if features.print_pdf %}
+                    <a href="{% url 'orga_characters_friendly_pdf' run.get_slug el.id %}"
+                       download
+                       qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
+                {% endif %}
             </td>
             {% if user_character_max %}<td class="player">{{ el.player.show_nick }}</td>{% endif %}
             {% if features.campaign and event.parent %}
                 <td class="attended">
                     {% if el.has_registration %}<i class="fa fa-check"></i>{% endif %}
+                </td>
+            {% endif %}
+            {% if features.campaign %}
+                <td class="active">
+                    {% if el.addit.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
                 </td>
             {% endif %}
             {% if user_character_approval %}<td class="status">{{ el.get_status_display }}</td>{% endif %}
@@ -117,6 +143,7 @@
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.plot_rels.count }}</td>
+                {% if writing_unimportant %}<td class="stats">{{ el.plot_rels.important }}</td>{% endif %}
             {% endif %}
             {% if features.prologue %}
                 <td class="prologues dot_links">
@@ -127,12 +154,13 @@
                 <td class="stats">{{ el.prologue_rels.count }}</td>
             {% endif %}
             {% if features.relationships %}
-                <td class="relationships dot_links">
+                <td class="relationship_list dot_links">
                     {% for rel in el.relationships_rels.list %}
                         <a href="{% url 'orga_characters_edit' run.get_slug rel.0 %}">{{ rel.1 }}</a>
                     {% endfor %}
                 </td>
                 <td class="stats">{{ el.relationships_rels.count }}</td>
+                {% if writing_unimportant %}<td class="stats">{{ el.relationships_rels.important }}</td>{% endif %}
             {% endif %}
             {% if features.speedlarp %}
                 <td class="speedlarp dot_links">

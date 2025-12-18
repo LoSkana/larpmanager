@@ -17,934 +17,1659 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-import os
-from datetime import date
-from io import BytesIO
+from __future__ import annotations
 
-import PIL.Image as PILImage
-from cryptography.fernet import Fernet
-from django.conf import settings as conf_settings
+import logging
+from typing import Any
+
 from django.contrib.auth.models import User
-from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.base import ContentFile
-from django.db import models, transaction
-from django.db.models import Max, Q
-from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
+from django.core.signals import got_request_exception
+from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
-from django.utils.translation import activate
-from django.utils.translation import gettext_lazy as _
-from PIL import ImageOps
-from slugify import slugify
+from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 
-from larpmanager.accounting.vat import compute_vat
-from larpmanager.cache.button import event_button_key
-from larpmanager.cache.config import reset_configs
-from larpmanager.cache.feature import get_assoc_features, get_event_features, reset_event_features
-from larpmanager.cache.fields import reset_event_fields_cache
-from larpmanager.models.access import AssocPermission, EventPermission, EventRole, get_event_organizers
+from larpmanager.accounting.base import (
+    handle_accounting_item_collection_post_save,
+    handle_accounting_item_payment_pre_save,
+    handle_collection_pre_save,
+)
+from larpmanager.accounting.gateway import handle_invalid_paypal_ipn, handle_valid_paypal_ipn
+from larpmanager.accounting.payment import (
+    process_collection_status_change,
+    process_payment_invoice_status_change,
+    process_refund_request_status_change,
+)
+from larpmanager.accounting.registration import (
+    handle_registration_accounting_updates,
+    log_registration_ticket_saved,
+    process_accounting_discount_post_save,
+    process_registration_option_post_save,
+    process_registration_pre_save,
+)
+from larpmanager.accounting.token_credit import (
+    update_credit_on_expense_save,
+    update_token_credit_on_other_save,
+    update_token_credit_on_payment_delete,
+    update_token_credit_on_payment_save,
+)
+from larpmanager.accounting.vat import calculate_payment_vat
+from larpmanager.cache.accounting import clear_registration_accounting_cache, refresh_member_accounting_cache
+from larpmanager.cache.association import clear_association_cache
+from larpmanager.cache.association_text import (
+    clear_association_text_cache_on_delete,
+    update_association_text_cache_on_save,
+)
+from larpmanager.cache.association_translation import clear_association_translation_cache
+from larpmanager.cache.button import clear_event_button_cache
+from larpmanager.cache.character import (
+    clear_event_cache_all_runs,
+    clear_run_cache_and_media,
+    on_character_pre_save_update_cache,
+    on_faction_pre_save_update_cache,
+    on_quest_pre_save_update_cache,
+    on_quest_type_pre_save_update_cache,
+    on_trait_pre_save_update_cache,
+    reset_character_registration_cache,
+    update_member_event_character_cache,
+)
+from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
+from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
+from larpmanager.cache.fields import clear_event_fields_cache
+from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
+from larpmanager.cache.links import (
+    clear_run_event_links_cache,
+    on_registration_post_save_reset_event_links,
+    reset_event_links,
+)
+from larpmanager.cache.permission import (
+    clear_association_permission_cache,
+    clear_event_permission_cache,
+    clear_index_permission_cache,
+)
+from larpmanager.cache.registration import clear_registration_counts_cache, on_character_update_registration_cache
+from larpmanager.cache.rels import (
+    clear_event_relationships_cache,
+    on_faction_characters_m2m_changed,
+    on_plot_characters_m2m_changed,
+    on_prologue_characters_m2m_changed,
+    on_speedlarp_characters_m2m_changed,
+    refresh_character_related_caches,
+    refresh_character_relationships,
+    refresh_event_faction_relationships,
+    refresh_event_plot_relationships,
+    refresh_event_prologue_relationships,
+    refresh_event_quest_relationships,
+    refresh_event_questtype_relationships,
+    refresh_event_speedlarp_relationships,
+    remove_item_from_cache_section,
+)
+from larpmanager.cache.role import remove_association_role_cache, remove_event_role_cache
+from larpmanager.cache.run import (
+    on_event_post_save_reset_config_cache,
+    on_event_pre_save_invalidate_cache,
+    on_run_post_save_reset_config_cache,
+    on_run_pre_save_invalidate_cache,
+)
+from larpmanager.cache.skin import clear_skin_cache
+from larpmanager.cache.text_fields import update_text_fields_cache
+from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
+from larpmanager.mail.accounting import (
+    send_collection_activation_email,
+    send_donation_confirmation_email,
+    send_expense_approval_email,
+    send_expense_notification_email,
+    send_gift_collection_notification_email,
+    send_payment_confirmation_email,
+    send_token_credit_notification_email,
+)
+from larpmanager.mail.base import (
+    on_association_roles_m2m_changed,
+    on_event_roles_m2m_changed,
+    send_character_status_update_email,
+    send_support_ticket_email,
+    send_trait_assignment_email,
+)
+from larpmanager.mail.member import (
+    on_member_badges_m2m_changed,
+    send_chat_message_notification_email,
+    send_help_question_notification_email,
+    send_membership_payment_notification_email,
+)
+from larpmanager.mail.registration import (
+    send_character_assignment_email,
+    send_pre_registration_confirmation_email,
+    send_registration_cancellation_email,
+    send_registration_deletion_email,
+)
+from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
 from larpmanager.models.accounting import (
+    AccountingItem,
     AccountingItemCollection,
+    AccountingItemDiscount,
+    AccountingItemDonation,
+    AccountingItemExpense,
+    AccountingItemMembership,
+    AccountingItemOther,
     AccountingItemPayment,
-    AccountingItemTransaction,
     Collection,
+    PaymentInvoice,
+    RefundRequest,
 )
-from larpmanager.models.association import Association, AssociationConfig
-from larpmanager.models.casting import Trait, update_traits_all
-from larpmanager.models.event import Event, EventButton, EventConfig, EventText, Run, RunConfig
+from larpmanager.models.association import (
+    Association,
+    AssociationConfig,
+    AssociationSkin,
+    AssociationText,
+    AssociationTranslation,
+)
+from larpmanager.models.base import (
+    BaseModel,
+    Feature,
+    FeatureModule,
+    auto_assign_sequential_numbers,
+    update_model_search_field,
+)
+from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
+from larpmanager.models.event import (
+    Event,
+    EventButton,
+    EventConfig,
+    EventText,
+    PreRegistration,
+    Run,
+    RunConfig,
+)
+from larpmanager.models.experience import AbilityPx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import (
-    BaseQuestionType,
-    QuestionApplicable,
-    QuestionStatus,
-    QuestionVisibility,
-    RegistrationQuestion,
-    RegistrationQuestionType,
-    WritingChoice,
+    RegistrationOption,
+    WritingOption,
     WritingQuestion,
-    WritingQuestionType,
 )
-from larpmanager.models.larpmanager import LarpManagerFaq, LarpManagerGuide, LarpManagerTicket, LarpManagerTutorial
-from larpmanager.models.member import Member, MemberConfig, Membership, MembershipStatus
-from larpmanager.models.miscellanea import WarehouseItem
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, Prologue, SpeedLarp, replace_chars_all
-from larpmanager.utils.common import copy_class
-from larpmanager.utils.tasks import my_send_mail
-from larpmanager.utils.tutorial_query import delete_index_guide, delete_index_tutorial, index_guide, index_tutorial
+from larpmanager.models.larpmanager import (
+    LarpManagerFaq,
+    LarpManagerGuide,
+    LarpManagerHighlight,
+    LarpManagerShowcase,
+    LarpManagerTicket,
+    LarpManagerTutorial,
+)
+from larpmanager.models.member import Badge, Member, MemberConfig, Membership
+from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, PlayerRelationship, WarehouseItem
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
+from larpmanager.models.writing import (
+    Character,
+    CharacterConfig,
+    Faction,
+    Handout,
+    HandoutTemplate,
+    Plot,
+    Prologue,
+    Relationship,
+    SpeedLarp,
+    replace_character_names,
+)
+from larpmanager.utils.auth.permission import auto_assign_event_permission_number
+from larpmanager.utils.io.pdf import (
+    cleanup_character_pdfs_before_delete,
+    cleanup_character_pdfs_on_save,
+    cleanup_faction_pdfs_before_delete,
+    cleanup_faction_pdfs_on_save,
+    cleanup_handout_pdfs_after_save,
+    cleanup_handout_pdfs_before_delete,
+    cleanup_handout_template_pdfs_after_save,
+    cleanup_handout_template_pdfs_before_delete,
+    cleanup_pdfs_on_trait_assignment,
+    cleanup_relationship_pdfs_after_save,
+    cleanup_relationship_pdfs_before_delete,
+    deactivate_castings_and_remove_pdfs,
+    delete_character_pdf_files,
+)
+from larpmanager.utils.larpmanager.ticket import create_error_ticket
+from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
+from larpmanager.utils.services.association import (
+    apply_skin_features_to_association,
+    auto_assign_association_permission_number,
+    generate_association_encryption_key,
+    prepare_association_skin_features,
+)
+from larpmanager.utils.services.event import (
+    assign_previous_campaign_character,
+    copy_parent_event_to_campaign,
+    create_default_event_setup,
+    prepare_campaign_event_data,
+    update_run_plan_on_event_change,
+)
+from larpmanager.utils.services.experience import (
+    calculate_character_experience_points,
+    on_experience_characters_m2m_changed,
+    on_modifier_abilities_m2m_changed,
+    on_rule_abilities_m2m_changed,
+    refresh_delivery_characters,
+    update_characters_experience_on_ability_change,
+    update_characters_experience_on_modifier_change,
+    update_characters_experience_on_rule_change,
+)
+from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
+from larpmanager.utils.services.writing import replace_character_names_before_save
+from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
+from larpmanager.utils.users.registration import process_character_ticket_options, process_registration_event_change
+
+log = logging.getLogger(__name__)
+
+# ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
+# ruff: noqa: ARG001 Unused function argument
 
 
+# Generic signal handlers (no specific sender)
 @receiver(pre_save)
-def pre_save_callback(sender, instance, *args, **kwargs):
-    """Generic pre-save handler for automatic field population.
+def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Handle pre-save operations for automatic field population.
 
     Automatically sets number/order fields and updates search fields
-    for models that have them.
+    for models that have them. This function is designed to be used
+    as a Django model signal handler.
 
-    Args:
-        sender: Model class sending the signal
-        instance: Model instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
     """
-    for field in ["number", "order"]:
-        if hasattr(instance, field) and not getattr(instance, field):
-            que = None
-            if hasattr(instance, "event") and instance.event:
-                que = instance.__class__.objects.filter(event=instance.event)
-            if hasattr(instance, "assoc") and instance.assoc:
-                que = instance.__class__.objects.filter(assoc=instance.assoc)
-            if hasattr(instance, "character") and instance.character:
-                que = instance.__class__.objects.filter(character=instance.character)
-            if que is not None:
-                n = que.aggregate(Max(field))[f"{field}__max"]
-                if not n:
-                    setattr(instance, field, 1)
-                else:
-                    setattr(instance, field, n + 1)
+    # Auto-assign sequential numbers for models with number/order fields
+    auto_assign_sequential_numbers(instance)
 
-    if hasattr(instance, "search"):
-        instance.search = None
-        instance.search = str(instance)
+    # Update search fields for models that implement search functionality
+    update_model_search_field(instance)
 
 
-@receiver(pre_save, sender=Association)
-def pre_save_association_generate_fernet(sender, instance, **kwargs):
-    """Generate Fernet encryption key for new associations.
-
-    Args:
-        sender: Association model class
-        instance: Association instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.key:
-        instance.key = Fernet.generate_key()
+@receiver(post_save)
+def post_save_text_fields_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update text fields cache after model instance is saved."""
+    update_text_fields_cache(instance)
 
 
-@receiver(pre_save, sender=AssocPermission)
-def pre_save_assoc_permission(sender, instance, **kwargs):
-    """Handle association permission changes and cache updates.
-
-    Args:
-        sender: AssocPermission model class
-        instance: AssocPermission instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.number:
-        n = AssocPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
-            "number__max"
-        ]
-        if not n:
-            n = 1
-        instance.number = n + 10
+@receiver(post_delete)
+def post_delete_text_fields_callback(sender: type, instance: object, **kwargs: Any) -> None:
+    """Update text fields cache after model instance deletion."""
+    update_text_fields_cache(instance)
 
 
-@receiver(pre_save, sender=EventPermission)
-def pre_save_event_permission(sender, instance, **kwargs):
-    """Handle event permission changes and numbering.
-
-    Args:
-        sender: EventPermission model class
-        instance: EventPermission instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.number:
-        n = EventPermission.objects.filter(feature__module=instance.feature.module).aggregate(Max("number"))[
-            "number__max"
-        ]
-        if not n:
-            n = 1
-        instance.number = n + 10
+# AbilityPx signals
+@receiver(post_save, sender=AbilityPx)
+def post_save_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when ability changes."""
+    update_characters_experience_on_ability_change(instance)
 
 
-@receiver(pre_save, sender=Plot)
-def pre_save_plot(sender, instance, *args, **kwargs):
-    """Replace character references in plot text before saving.
-
-    Args:
-        sender: Plot model class
-        instance: Plot instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
-    replace_chars_all(instance)
+@receiver(post_delete, sender=AbilityPx)
+def post_delete_ability_px(sender: type, instance: AbilityPx, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when ability is deleted."""
+    update_characters_experience_on_ability_change(instance)
 
 
-@receiver(pre_save, sender=Faction)
-def pre_save_faction(sender, instance, *args, **kwargs):
-    """Replace character references in faction text before saving.
-
-    Args:
-        sender: Faction model class
-        instance: Faction instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
-    replace_chars_all(instance)
-
-
-@receiver(pre_save, sender=Prologue)
-def pre_save_prologue(sender, instance, *args, **kwargs):
-    """Replace character references in prologue text before saving.
-
-    Args:
-        sender: Prologue model class
-        instance: Prologue instance being saved
-        *args: Additional positional arguments
-        **kwargs: Additional keyword arguments
-    """
-    replace_chars_all(instance)
-
-
-@receiver(post_save, sender=Run)
-def save_run_plan(sender, instance, **kwargs):
-    """Set run plan from association default if not already set.
-
-    Args:
-        sender: Run model class
-        instance: Run instance that was saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.plan and instance.event:
-        updates = {"plan": instance.event.assoc.plan}
-        Run.objects.filter(pk=instance.pk).update(**updates)
-
-
-@receiver(post_save, sender=Trait)
-def update_trait(sender, instance, **kwargs):
-    """Update trait relationships after trait is saved.
-
-    Args:
-        sender: Trait model class
-        instance: Trait instance that was saved
-        **kwargs: Additional keyword arguments
-    """
-    update_traits_all(instance)
-
-
-@receiver(post_save, sender=AccountingItemPayment)
-def post_save_accounting_item_payment_updatereg(sender, instance, created, **kwargs):
-    """Update registration totals when payment items are saved.
-
-    Args:
-        sender: AccountingItemPayment model class
-        instance: AccountingItemPayment instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
-    """
-    instance.reg.save()
-
-
-@receiver(pre_save, sender=AccountingItemPayment)
-def update_accounting_item_payment_member(sender, instance, **kwargs):
-    """Update payment member and handle registration changes.
-
-    Args:
-        sender: AccountingItemPayment model class
-        instance: AccountingItemPayment instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.member:
-        instance.member = instance.reg.member
-
-    if not instance.pk:
-        return
-
-    prev = AccountingItemPayment.objects.get(pk=instance.pk)
-    instance._update_reg = prev.value != instance.value
-
-    if prev.reg != instance.reg:
-        for trans in AccountingItemTransaction.objects.filter(inv_id=instance.inv_id):
-            trans.reg = instance.reg
-            trans.save()
-
-
-@receiver(pre_save, sender=Collection)
-def pre_save_collection(sender, instance, **kwargs):
-    """Generate unique codes and calculate collection totals.
-
-    Args:
-        sender: Collection model class
-        instance: Collection instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.pk:
-        instance.unique_contribute_code()
-        instance.unique_redeem_code()
-        return
-    instance.total = 0
-    for el in instance.collection_gifts.all():
-        instance.total += el.value
+# AccountingItemCollection signals
+@receiver(pre_save, sender=AccountingItemCollection)
+def pre_save_collection_gift(sender: type, instance: AccountingItemCollection, **kwargs: Any) -> None:
+    """Send gift collection notification email before saving."""
+    send_gift_collection_notification_email(instance)
 
 
 @receiver(post_save, sender=AccountingItemCollection)
-def post_save_accounting_item_collection(sender, instance, created, **kwargs):
-    """Update collection total when items are added.
-
-    Args:
-        sender: AccountingItemCollection model class
-        instance: AccountingItemCollection instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
-    """
-    if instance.collection:
-        instance.collection.save()
+def post_save_accounting_item_collection(
+    sender: type,
+    instance: AccountingItemCollection,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Handle post-save signal for accounting item collection."""
+    handle_accounting_item_collection_post_save(instance)
 
 
-@receiver(pre_save, sender=SpeedLarp)
-def pre_save_speed_larp(sender, instance, *args, **kwargs):
-    replace_chars_all(instance)
+# AccountingItemDiscount signals
+@receiver(post_save, sender=AccountingItemDiscount)
+def post_save_discount_accounting_cache(
+    sender: type, instance: AccountingItemDiscount, created: bool, **kwargs: Any
+) -> None:
+    """Update accounting caches when a discount is saved."""
+    # Process discount changes in accounting system
+    process_accounting_discount_post_save(instance)
+
+    # Refresh member's accounting cache if discount is associated with a run and member
+    if instance.run and instance.member_id:
+        refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
-@receiver(pre_save, sender=LarpManagerTutorial)
-def pre_save_larp_manager_tutorial(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = slugify(instance.name)
+@receiver(post_delete, sender=AccountingItemDiscount)
+def post_delete_discount_accounting_cache(sender: type, instance: AccountingItemDiscount, **kwargs: Any) -> None:
+    """Refresh member accounting cache after discount deletion."""
+    if instance.run and instance.member_id:
+        refresh_member_accounting_cache(instance.run, instance.member_id)
 
 
-@receiver(pre_save, sender=LarpManagerFaq)
-def pre_save_larp_manager_faq(sender, instance, *args, **kwargs):
-    if instance.number:
-        return
-    n = LarpManagerFaq.objects.filter(typ=instance.typ).aggregate(Max("number"))["number__max"]
-    if not n:
-        n = 1
-    else:
-        n = ((n / 10) + 1) * 10
-    instance.number = n
+# AccountingItemDonation signals
+@receiver(pre_save, sender=AccountingItemDonation)
+def pre_save_accounting_item_donation(
+    sender: type, instance: AccountingItemDonation, *args: Any, **kwargs: Any
+) -> None:
+    """Send confirmation email to donor."""
+    send_donation_confirmation_email(instance)
 
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    """Create member profile and sync email when user is saved.
+# AccountingItemExpense signals
+@receiver(pre_save, sender=AccountingItemExpense)
+def pre_save_accounting_item_expense(sender: type, instance: AccountingItemExpense, **kwargs: Any) -> None:
+    """Send approval email when expense is saved."""
+    send_expense_approval_email(instance)
 
-    Args:
-        sender: User model class
-        instance: User instance that was saved
-        created (bool): Whether this is a new user
-        **kwargs: Additional keyword arguments
-    """
+
+@receiver(post_save, sender=AccountingItemExpense)
+def post_save_accounting_item_expense(
+    sender: type,
+    instance: AccountingItemExpense,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Send expense notification and update credit balance."""
     if created:
-        Member.objects.create(user=instance)
-    instance.member.email = instance.email
-    instance.member.save()
-
-
-@receiver(pre_save, sender=Membership)
-def pre_save_membership(sender, instance, **kwargs):
-    """Handle membership status changes and card numbering.
-
-    Args:
-        sender: Membership model class
-        instance: Membership instance being saved
-        **kwargs: Additional keyword arguments
-    """
-    if instance.status == MembershipStatus.ACCEPTED:
-        if not instance.card_number:
-            n = Membership.objects.filter(assoc=instance.assoc).aggregate(Max("card_number"))["card_number__max"]
-            if not n:
-                n = 0
-            instance.card_number = n + 1
-        if not instance.date:
-            instance.date = date.today()
-
-    if instance.status == MembershipStatus.EMPTY:
-        if instance.card_number:
-            instance.card_number = None
-        if instance.date:
-            instance.date = None
-
-
-@receiver(post_save, sender=EventButton)
-def save_event_button(sender, instance, created, **kwargs):
-    cache.delete(event_button_key(instance.event_id))
-
-
-@receiver(pre_delete, sender=EventButton)
-def delete_event_button(sender, instance, **kwargs):
-    cache.delete(event_button_key(instance.event_id))
-
-
-@receiver(pre_save, sender=Event)
-def pre_save_event_prepare_campaign(sender, instance, **kwargs):
-    if instance.pk:
-        try:
-            old_instance = Event.objects.get(pk=instance.pk)
-            instance._old_parent_id = old_instance.parent_id
-        except ObjectDoesNotExist:
-            instance._old_parent_id = None
-    else:
-        instance._old_parent_id = None
-
-
-@receiver(post_save, sender=Event)
-def post_save_event_campaign(sender, instance, **kwargs):
-    if instance.parent_id:
-        # noinspection PyProtectedMember
-        if instance._old_parent_id != instance.parent_id:
-            # copy config, texts, roles, features
-            copy_class(instance.pk, instance.parent_id, EventConfig)
-            copy_class(instance.pk, instance.parent_id, EventText)
-            copy_class(instance.pk, instance.parent_id, EventRole)
-            for fn in instance.parent.features.all():
-                instance.features.add(fn)
-
-            # Temporarily disconnect signal
-            post_save.disconnect(post_save_event_campaign, sender=Event)
-            instance.save()
-            post_save.connect(post_save_event_campaign, sender=Event)
-
-
-@receiver(post_save, sender=Event)
-def save_event_update(sender, instance, **kwargs):
-    if instance.template:
-        return
-
-    if instance.runs.count() == 0:
-        Run.objects.create(event=instance, number=1)
-
-    features = get_event_features(instance.id)
-
-    save_event_tickets(features, instance)
-
-    save_event_registration_form(features, instance)
-
-    save_event_character_form(features, instance)
-
-    reset_event_features(instance.id)
-
-    reset_event_fields_cache(instance.id)
-
-
-def save_event_tickets(features, instance):
-    """Create default registration tickets for event.
-
-    Args:
-        features (dict): Enabled features for the event
-        instance: Event instance to create tickets for
-    """
-    # create tickets if not exists
-    tickets = [
-        ("", TicketTier.STANDARD, "Standard"),
-        ("waiting", TicketTier.WAITING, "Waiting"),
-        ("filler", TicketTier.FILLER, "Filler"),
-    ]
-    for ticket in tickets:
-        if ticket[0] and ticket[0] not in features:
-            continue
-        if RegistrationTicket.objects.filter(event=instance, tier=ticket[1]).count() == 0:
-            RegistrationTicket.objects.create(event=instance, tier=ticket[1], name=ticket[2])
-
-
-def save_event_character_form(features, instance):
-    """Create character form questions based on enabled features.
-
-    Args:
-        features (dict): Enabled features for the event
-        instance: Event instance to create form for
-    """
-    # create fields if not exists / delete if feature not active
-    if "character" not in features:
-        return
-
-    # if has parent, use those
-    if instance.parent:
-        return
-
-    _activate_orga_lang(instance)
-
-    def_tps = {
-        WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 100),
-        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000),
-        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 5000),
-    }
-
-    custom_tps = BaseQuestionType.get_basic_types()
-
-    _init_character_form_questions(custom_tps, def_tps, features, instance)
-
-    if "questbuilder" in features:
-        _init_writing_element(instance, def_tps, [QuestionApplicable.QUEST, QuestionApplicable.TRAIT])
-
-    if "prologue" in features:
-        _init_writing_element(instance, def_tps, [QuestionApplicable.PROLOGUE])
-
-    if "faction" in features:
-        _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION])
-
-    if "plot" in features:
-        plot_tps = dict(def_tps)
-        plot_tps[WritingQuestionType.TEASER] = (
-            "Concept",
-            QuestionStatus.MANDATORY,
-            QuestionVisibility.PUBLIC,
-            3000,
-        )
-        _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
-
-
-def _init_writing_element(instance, def_tps, applicables):
-    for applicable in applicables:
-        # if there are already questions for this applicable, skip
-        if instance.get_elements(WritingQuestion).filter(applicable=applicable).exists():
-            continue
-
-        objs = [
-            WritingQuestion(
-                event=instance,
-                typ=typ,
-                name=_(cfg[0]),
-                status=cfg[1],
-                visibility=cfg[2],
-                max_length=cfg[3],
-                applicable=applicable,
-            )
-            for typ, cfg in def_tps.items()
-        ]
-        WritingQuestion.objects.bulk_create(objs)
-
-
-def _init_character_form_questions(custom_tps, def_tps, features, instance):
-    """Initialize character form questions during model setup.
-
-    Sets up default and custom question types for character creation forms,
-    managing question creation and deletion based on enabled features and
-    existing question configurations.
-    """
-    que = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
-    types = set(que.values_list("typ", flat=True).distinct())
-
-    # evaluate each question type field
-    choices = dict(WritingQuestionType.choices)
-    all_types = choices.keys()
-    all_types -= custom_tps
-
-    # add default types if none are present
-    if not types:
-        for el, add in def_tps.items():
-            WritingQuestion.objects.create(
-                event=instance,
-                typ=el,
-                name=_(add[0]),
-                status=add[1],
-                visibility=add[2],
-                max_length=add[3],
-                applicable=QuestionApplicable.CHARACTER,
-            )
-
-    # add types from feature if the feature is active but the field is missing
-    not_to_remove = set(def_tps.keys())
-    if "px" in features:
-        not_to_remove.add(WritingQuestionType.COMPUTED)
-    all_types -= not_to_remove
-    for el in sorted(list(all_types)):
-        if el in features and el not in types:
-            WritingQuestion.objects.create(
-                event=instance,
-                typ=el,
-                name=_(el.capitalize()),
-                status=QuestionStatus.HIDDEN,
-                visibility=QuestionVisibility.HIDDEN,
-                max_length=1000,
-                applicable=QuestionApplicable.CHARACTER,
-            )
-        if el not in features and el in types:
-            WritingQuestion.objects.filter(event=instance, typ=el).delete()
-
-
-def save_event_registration_form(features, instance):
-    """Create registration form questions based on enabled features.
-
-    Args:
-        features (dict): Enabled features for the event
-        instance: Event instance to create form for
-    """
-    _activate_orga_lang(instance)
-
-    def_tps = {RegistrationQuestionType.TICKET}
-
-    help_texts = {
-        RegistrationQuestionType.TICKET: _("Your registration ticket"),
-    }
-
-    basic_tps = BaseQuestionType.get_basic_types()
-
-    que = instance.get_elements(RegistrationQuestion)
-    types = set(que.values_list("typ", flat=True).distinct())
-
-    # evaluate each question type field
-    choices = dict(RegistrationQuestionType.choices)
-    all_types = choices.keys()
-    all_types -= basic_tps
-
-    # add default types if none are present
-    for el in def_tps:
-        if el not in types:
-            RegistrationQuestion.objects.create(
-                event=instance,
-                typ=el,
-                name=choices[el],
-                description=help_texts.get(el, ""),
-                status=QuestionStatus.MANDATORY,
-            )
-
-    # add types from feature if the feature is active but the field is missing
-    not_to_remove = set(def_tps)
-    all_types -= not_to_remove
-
-    help_texts = {
-        "additional_tickets": _("Reserve additional tickets beyond your own"),
-        "pay_what_you_want": _("Freely indicate the amount of your donation"),
-        "reg_surcharges": _("Registration surcharge"),
-        "reg_quotas": _(
-            "Number of installments to split the fee: payments and deadlines will be equally divided from the registration date"
-        ),
-    }
-
-    for el in sorted(list(all_types)):
-        if el in features and el not in types:
-            RegistrationQuestion.objects.create(
-                event=instance,
-                typ=el,
-                name=_(choices[el].capitalize()),
-                description=help_texts.get(el, ""),
-                status=QuestionStatus.OPTIONAL,
-            )
-        if el not in features and el in types:
-            RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
-
-
-def _activate_orga_lang(instance):
-    # get most common language between organizers
-    langs = {}
-    for orga in get_event_organizers(instance):
-        lang = orga.language
-        if lang not in langs:
-            langs[lang] = 1
-        else:
-            langs[lang] += 1
-    if langs:
-        max_lang = max(langs, key=langs.get)
-    else:
-        max_lang = "en"
-    activate(max_lang)
-
-
-@receiver(post_save, sender=Registration)
-def post_save_registration_campaign(sender, instance, **kwargs):
-    """Auto-assign last character for campaign registrations.
-
-    Args:
-        sender: Registration model class
-        instance: Registration instance that was saved
-        **kwargs: Additional keyword arguments
-    """
-    if not instance.member:
-        return
-
-    if instance.cancellation_date:
-        return
-
-    # auto assign last character if campaign
-    if "campaign" not in get_event_features(instance.run.event_id):
-        return
-    if not instance.run.event.parent:
-        return
-
-    # if already has a character, do not proceed
-    if RegistrationCharacterRel.objects.filter(reg__member=instance.member, reg__run=instance.run).count() > 0:
-        return
-
-    # get last run of campaign
-    last = (
-        Run.objects.filter(Q(event__parent=instance.run.event.parent) | Q(event_id=instance.run.event.parent_id))
-        .exclude(event_id=instance.run.event_id)
-        .order_by("-end")
-        .first()
-    )
-    if not last:
-        return
-
-    try:
-        old_rcr = RegistrationCharacterRel.objects.get(reg__member=instance.member, reg__run=last)
-        rcr = RegistrationCharacterRel.objects.create(reg=instance, character=old_rcr.character)
-        for s in ["name", "pronoun", "song", "public", "private"]:
-            if hasattr(old_rcr, "custom_" + s):
-                value = getattr(old_rcr, "custom_" + s)
-                setattr(rcr, "custom_" + s, value)
-        rcr.save()
-    except ObjectDoesNotExist:
-        pass
+        send_expense_notification_email(instance)
+    update_credit_on_expense_save(instance)
+
+
+# AccountingItemMembership signals
+@receiver(pre_save, sender=AccountingItemMembership)
+def pre_save_accounting_item_membership(sender: type, instance: AccountingItem, *args: Any, **kwargs: Any) -> None:
+    """Send payment notification email when membership accounting item is saved."""
+    send_membership_payment_notification_email(instance)
+
+
+# AccountingItemOther signals
+@receiver(pre_save, sender=AccountingItemOther)
+def pre_save_accounting_item_other(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
+    """Send token credit notification email when accounting item is saved."""
+    send_token_credit_notification_email(instance)
+
+
+@receiver(post_save, sender=AccountingItemOther)
+def post_save_other_accounting_cache(
+    sender: type,
+    instance: AccountingItemOther,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Update token credit and member accounting cache after OtherAccounting save."""
+    # Update token credit based on the OtherAccounting instance
+    update_token_credit_on_other_save(instance)
+
+    # Refresh member accounting cache if run and member are present
+    if instance.run and instance.member_id:
+        refresh_member_accounting_cache(instance.run, instance.member_id)
+
+
+@receiver(post_delete, sender=AccountingItemOther)
+def post_delete_other_accounting_cache(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
+    """Refresh accounting cache for a member when their accounting entry is deleted."""
+    # Refresh member cache if run and member are present
+    if instance.run and instance.member_id:
+        refresh_member_accounting_cache(instance.run, instance.member_id)
+
+
+# AccountingItemPayment signals
+@receiver(pre_save, sender=AccountingItemPayment)
+def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayment, **kwargs: Any) -> None:
+    """Send payment confirmation and handle pre-save operations."""
+    send_payment_confirmation_email(instance)
+    handle_accounting_item_payment_pre_save(instance)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
-def post_save_accounting_item_payment_vat(sender, instance, created, **kwargs):
-    """Calculate VAT for payment items when VAT feature is enabled.
+def post_save_payment_accounting_cache(
+    sender: type, instance: AccountingItemPayment, created: bool, **kwargs: Any
+) -> None:
+    """Update accounting caches and process payment-related calculations after payment save."""
+    # Update registration and member accounting cache if payment has associated registration
+    if instance.reg and instance.reg.run:
+        instance.reg.save()
+        refresh_member_accounting_cache(instance.reg.run, instance.member_id)
 
-    Args:
-        sender: AccountingItemPayment model class
-        instance: AccountingItemPayment instance that was saved
-        created (bool): Whether this is a new instance
-        **kwargs: Additional keyword arguments
+    # Update token credits based on payment changes
+    update_token_credit_on_payment_save(instance, created=created)
+
+    # Calculate and update VAT information for the payment
+    calculate_payment_vat(instance)
+
+
+@receiver(post_delete, sender=AccountingItemPayment)
+def post_delete_payment_accounting_cache(
+    sender: type,
+    instance: AccountingItemPayment,
+    **kwargs: Any,
+) -> None:
+    """Update accounting caches after payment deletion."""
+    update_token_credit_on_payment_delete(instance)
+
+    # Refresh member accounting cache if payment is linked to a registration
+    if instance.reg and instance.reg.run:
+        refresh_member_accounting_cache(instance.reg.run, instance.member_id)
+
+
+# AssignmentTrait signals
+@receiver(pre_delete, sender=AssignmentTrait)
+def pre_delete_assignment_trait(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
+    """Signal handler to deactivate castings and remove PDFs when an assignment trait is deleted."""
+    deactivate_castings_and_remove_pdfs(instance)
+
+
+@receiver(post_save, sender=AssignmentTrait)
+def post_save_assignment_trait(
+    sender: type,
+    instance: AssignmentTrait,
+    created: bool,
+    **kwargs: dict,
+) -> None:
+    """Handle post-save actions for AssignmentTrait instances.
+
+    Clears caches, sends notification emails, and manages PDF cleanup.
     """
-    if "vat" not in get_assoc_features(instance.assoc_id):
-        return
+    # Clear cached data and generated media for the run
+    clear_run_cache_and_media(instance.run)
 
-    compute_vat(instance)
-
-
-@receiver(post_save, sender=EventConfig)
-def post_save_reset_event_config(sender, instance, **kwargs):
-    reset_configs(instance.event)
-
-
-@receiver(post_delete, sender=EventConfig)
-def post_delete_reset_event_config(sender, instance, **kwargs):
-    reset_configs(instance.event)
+    # Notify relevant users about trait assignment
+    if created and instance.member:
+        send_trait_assignment_email(instance)
+        # Remove outdated PDF files if necessary
+        cleanup_pdfs_on_trait_assignment(instance)
 
 
-@receiver(post_save, sender=AssociationConfig)
-def post_save_reset_assoc_config(sender, instance, **kwargs):
-    reset_configs(instance.assoc)
+@receiver(post_delete, sender=AssignmentTrait)
+def post_delete_assignment_trait_reset(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
+    """Clear cache and media after assignment deletion."""
+    clear_run_cache_and_media(instance.run)
 
 
-@receiver(post_delete, sender=AssociationConfig)
-def post_delete_reset_assoc_config(sender, instance, **kwargs):
-    reset_configs(instance.assoc)
+# AssociationPermission signals
+@receiver(pre_save, sender=AssociationPermission)
+def pre_save_association_permission(sender: type, instance: object, **kwargs: Any) -> None:
+    """Auto-assign number to association permission before save."""
+    auto_assign_association_permission_number(instance)
 
 
-@receiver(post_save, sender=RunConfig)
-def post_save_reset_run_config(sender, instance, **kwargs):
-    reset_configs(instance.run)
+@receiver(post_save, sender=AssociationPermission)
+def post_save_association_permission_index_permission(
+    sender: type,
+    instance: AssociationPermission,
+    **kwargs: Any,
+) -> None:
+    """Clear caches when association permission is saved."""
+    clear_index_permission_cache("association")
+    clear_association_permission_cache(instance)
 
 
-@receiver(post_delete, sender=RunConfig)
-def post_delete_reset_run_config(sender, instance, **kwargs):
-    reset_configs(instance.run)
+@receiver(post_delete, sender=AssociationPermission)
+def post_delete_association_permission_index_permission(
+    sender: type,
+    instance: AssociationPermission,
+    **kwargs: Any,
+) -> None:
+    """Clear association permission caches after deletion."""
+    clear_index_permission_cache("association")
+    clear_association_permission_cache(instance)
 
 
-@receiver(post_save, sender=MemberConfig)
-def post_save_reset_member_config(sender, instance, **kwargs):
-    reset_configs(instance.member)
+# AssociationRole signals
+@receiver(pre_delete, sender=AssociationRole)
+def pre_delete_association_role_reset(sender: type, instance: AssociationRole, **kwargs: dict) -> None:
+    """Clean up cache and event links when an association role is deleted."""
+    # Clear cached role data
+    remove_association_role_cache(instance.pk)
+
+    # Reset event links for all members with this role
+    for member in instance.members.all():
+        reset_event_links(member.id, instance.association_id)
 
 
-@receiver(post_delete, sender=MemberConfig)
-def post_delete_reset_member_config(sender, instance, **kwargs):
-    reset_configs(instance.member)
+@receiver(post_save, sender=AssociationRole)
+def post_save_association_role_reset(sender: type, instance: AssociationRole, **kwargs: Any) -> None:
+    """Reset caches when an association role is saved."""
+    # Clear association role cache
+    remove_association_role_cache(instance.pk)
+
+    # Reset event links for all members with this role
+    for member in instance.members.all():
+        reset_event_links(member.id, instance.association_id)
 
 
-@receiver(post_save, sender=CharacterConfig)
-def post_save_reset_character_config(sender, instance, **kwargs):
-    reset_configs(instance.character)
+# AssocText signals
+@receiver(pre_delete, sender=AssociationText)
+def pre_delete_association_text(sender: type, instance: object, **kwargs: Any) -> None:
+    """Clear association text cache before deletion."""
+    clear_association_text_cache_on_delete(instance)
 
 
-@receiver(post_delete, sender=CharacterConfig)
-def post_delete_reset_character_config(sender, instance, **kwargs):
-    reset_configs(instance.character)
+@receiver(post_save, sender=AssociationText)
+def post_save_association_text(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
+    """Update association text cache after save."""
+    update_association_text_cache_on_save(instance)
 
 
+# AssociationTranslation signals
+@receiver(post_save, sender=AssociationTranslation)
+def post_save_association_translation(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
+    """Clear cache when association translation is saved."""
+    clear_association_translation_cache(instance.association_id, instance.language)
+
+
+@receiver(pre_delete, sender=AssociationTranslation)
+def pre_delete_association_translation(sender: type, instance: object, **kwargs: Any) -> None:
+    """Clear cache when association translation is deleted."""
+    clear_association_translation_cache(instance.association_id, instance.language)
+
+
+# Association signals
 @receiver(pre_save, sender=Association)
-def pre_save_association_set_skin_features(sender, instance, **kwargs):
-    if not instance.skin:
-        return
-
-    # execute if new association, or if changed skin
-    if instance.pk:
-        try:
-            prev = Association.objects.get(pk=instance.pk)
-        except ObjectDoesNotExist:
-            return
-        if instance.skin == prev.skin:
-            return
-
-    instance._update_skin_features = True
-    if not instance.nationality:
-        instance.nationality = instance.skin.default_nation
-
-    if not instance.optional_fields:
-        instance.optional_fields = instance.skin.default_optional_fields
-
-    if not instance.mandatory_fields:
-        instance.mandatory_fields = instance.skin.default_mandatory_fields
+def pre_save_association_set_skin_features(sender: type, instance: Association, **kwargs: Any) -> None:
+    """Prepare association skin features and encryption key before saving."""
+    prepare_association_skin_features(instance)
+    generate_association_encryption_key(instance)
 
 
 @receiver(post_save, sender=Association)
-def post_save_association_set_skin_features(sender, instance, created, **kwargs):
-    if not hasattr(instance, "_update_skin_features"):
-        return
+def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs: Any) -> None:
+    """Reset caches and apply features when an association is saved."""
+    # Clear global home cache
+    clear_larpmanager_home_cache()
 
-    def update_features():
-        instance.features.set(instance.skin.default_features.all())
+    # Apply skin features to the association
+    apply_skin_features_to_association(instance)
 
-    transaction.on_commit(update_features)
+    # Clear association-specific cache
+    clear_association_cache(instance.slug)
 
-
-@receiver(post_save, sender=LarpManagerTutorial)
-def post_save_index_tutorial(sender, instance, **kwargs):
-    index_tutorial(instance.id)
-
-
-@receiver(post_delete, sender=LarpManagerTutorial)
-def delete_tutorial_from_index(sender, instance, **kwargs):
-    delete_index_tutorial(instance.id)
+    # Reset features cache for this association
+    on_association_post_save_reset_features_cache(instance)
 
 
-@receiver(post_save, sender=LarpManagerGuide)
-def post_save_index_guide(sender, instance, **kwargs):
-    index_guide(instance.id)
+# AssociationConfig signals
+@receiver(post_save, sender=AssociationConfig)
+def post_save_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
+    """Clear association config cache after save."""
+    reset_element_configs(instance.association)
 
 
-@receiver(post_delete, sender=LarpManagerGuide)
-def delete_guide_from_index(sender, instance, **kwargs):
-    delete_index_guide(instance.id)
+@receiver(post_delete, sender=AssociationConfig)
+def post_delete_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
+    """Clear association config cache after deletion."""
+    reset_element_configs(instance.association)
 
 
-@receiver(post_save, sender=WritingQuestion)
-def save_event_field(sender, instance, created, **kwargs):
-    reset_event_fields_cache(instance.event_id)
+# AssociationSkin signals
+@receiver(post_save, sender=AssociationSkin)
+def post_save_association_skin_reset_cache(sender: type, instance: Association, **kwargs: Any) -> None:
+    """Clear skin cache when association is saved."""
+    clear_skin_cache(instance.domain)
 
 
-@receiver(pre_delete, sender=WritingQuestion)
-def delete_event_field(sender, instance, **kwargs):
-    reset_event_fields_cache(instance.event_id)
+# Character signals
+@receiver(pre_save, sender=Character)
+def pre_save_character_update_status(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Update character status and cache before saving.
+
+    Args:
+        sender: Model class sending the signal.
+        instance: Character instance being saved.
+        **kwargs: Additional signal arguments.
+
+    """
+    # Send email notification for character status changes
+    send_character_status_update_email(instance)
+
+    # Replace character name placeholders in related fields
+    replace_character_names_before_save(instance)
+
+    # Update cached character data
+    on_character_pre_save_update_cache(instance)
 
 
-@receiver(post_save, sender=LarpManagerTicket)
-def save_larpmanager_ticket(sender, instance, created, **kwargs):
-    for _name, email in conf_settings.ADMINS:
-        subj = f"LarpManager ticket - {instance.assoc.name}"
-        if instance.reason:
-            subj += f" [{instance.reason}]"
-        body = f"Email: {instance.email} <br /><br />"
-        if instance.member:
-            body += f"User: {instance.member} ({instance.member.email}) <br /><br />"
-        body += instance.content
-        if instance.screenshot:
-            body += f"<br /><br /><img src='http://larpmanager.com/{instance.screenshot_reduced.url}' />"
-        my_send_mail(subj, body, email)
+@receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
+def post_character_update_px(sender: type, instance: Character, *args: Any, **kwargs: Any) -> None:
+    """Calculate experience points for character after update."""
+    calculate_character_experience_points(instance)
 
 
-@receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
-def rotate_vertical_photo(sender, instance: WarehouseItem, **kwargs):
-    """Automatically rotate vertical photos in warehouse items before saving.
+@receiver(post_save, sender=Character)
+def post_save_character(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Handle post-save operations for Character model instances.
+
+    This signal handler performs several maintenance tasks after a Character
+    instance is saved, including PDF cleanup, cache updates, and relationship
+    refreshes to maintain data consistency across the application.
+
+    Args:
+        sender: The model class that sent the signal (Character).
+        instance: The Character instance that was saved.
+        **kwargs: Additional keyword arguments from the signal.
+
+    Returns:
+        None
+
+    """
+    # Clean up any outdated PDF files associated with this character
+    cleanup_character_pdfs_on_save(instance)
+
+    # Update registration-related cache entries for this character
+    on_character_update_registration_cache(instance)
+
+    # Refresh the character's own relationship cache
+    refresh_character_relationships(instance)
+
+    # Update relationship caches for all characters that have this character as a target
+    for rel in Relationship.objects.filter(target=instance):
+        refresh_character_relationships(rel.source)
+
+    # Update all other character-related caches (experience, skills, etc.)
+    refresh_character_related_caches(instance)
+
+
+@receiver(pre_delete, sender=Character)
+def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Clear event cache and cleanup PDFs before character deletion."""
+    clear_event_cache_all_runs(instance.event)
+    cleanup_character_pdfs_before_delete(instance)
+
+
+@receiver(post_delete, sender=Character)
+def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Clear caches for deleted character and update related relationships."""
+    # Update all related caches
+    refresh_character_related_caches(instance)
+
+    # Clear event-level relationship cache
+    clear_event_relationships_cache(instance.event_id)
+
+    # Refresh cache for characters that had this character as target
+    for rel in Relationship.objects.filter(target=instance):
+        refresh_character_relationships(rel.source)
+
+
+# CharacterConfig signals
+@receiver(post_save, sender=CharacterConfig)
+def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset character configuration cache after save."""
+    reset_element_configs(instance.character)
+
+
+@receiver(post_delete, sender=CharacterConfig)
+def post_delete_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset character configuration cache after model deletion."""
+    reset_element_configs(instance.character)
+
+
+# ChatMessage signals
+@receiver(pre_save, sender=ChatMessage)
+def pre_save_notify_chat_message(sender: type[ChatMessage], instance: ChatMessage, **kwargs: Any) -> None:
+    """Notify users via email when a new chat message is created."""
+    send_chat_message_notification_email(instance)
+
+
+# Collection signals
+@receiver(pre_save, sender=Collection)
+def pre_save_collection(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Pre-save signal handler for collection instances."""
+    handle_collection_pre_save(instance)
+    process_collection_status_change(instance)
+
+
+@receiver(post_save, sender=Collection)
+def post_save_collection_activation_email(
+    sender: type,
+    instance: Collection,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Send collection activation email after save signal."""
+    if created:
+        send_collection_activation_email(instance)
+
+
+# DeliveryPx signals
+@receiver(post_save, sender=DeliveryPx)
+def post_save_delivery_px(
+    sender: type,
+    instance: DeliveryPx,
+    *args: Any,
+    **kwargs: Any,
+) -> None:
+    """Refresh delivery characters after save signal."""
+    refresh_delivery_characters(instance)
+
+
+@receiver(post_delete, sender=DeliveryPx)
+def post_delete_delivery_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Signal handler that refreshes delivery characters after a delivery is deleted."""
+    refresh_delivery_characters(instance)
+
+
+# Event signals
+@receiver(pre_save, sender=Event)
+def pre_save_event(sender: type, instance: Event, **kwargs: Any) -> None:
+    """Invalidate cache and prepare campaign data before saving an Event."""
+    on_event_pre_save_invalidate_cache(instance)
+    prepare_campaign_event_data(instance)
+
+
+@receiver(post_save, sender=Event)
+def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None:
+    """Handle post-save operations for Event model instances.
+
+    This function is triggered after an Event instance is saved and performs
+    various cache invalidation and setup operations to maintain data consistency.
 
     Args:
         sender: The model class that sent the signal
-        instance: The WarehouseItem instance being saved
-        **kwargs: Additional keyword arguments
+        instance: The Event instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+
+    Returns:
+        None
+
     """
-    try:
-        # noinspection PyProtectedMember, PyUnresolvedReferences
-        field = instance._meta.get_field("photo")
-        if not isinstance(field, models.ImageField):
-            return
-    except Exception:
-        return
+    # Clear event-related caches to ensure fresh data
+    clear_event_cache_all_runs(instance)
+    clear_event_features_cache(instance.id)
 
-    f = getattr(instance, "photo", None)
-    if not f:
-        return
+    # Setup campaign inheritance if not explicitly skipped
+    if not getattr(instance, "_skip_campaign_setup", False):  # Internal flag to prevent recursion
+        copy_parent_event_to_campaign(instance)
 
-    if _check_new(f, instance, sender):
-        return
+    # Clear run and registration related caches
+    clear_run_event_links_cache(instance)
 
-    fileobj = getattr(f, "file", None) or f
-    try:
-        fileobj.seek(0)
-        img = PILImage.open(fileobj)
-    except Exception:
-        return
+    # Clear registration counts for all associated runs
+    for run_id in instance.runs.values_list("id", flat=True):
+        clear_registration_counts_cache(run_id)
 
-    img = ImageOps.exif_transpose(img)
-    w, h = img.size
-    if h <= w:
-        return
-
-    img = img.rotate(90, expand=True)
-
-    fmt = _get_extension(f, img)
-
-    if fmt == "JPEG" and img.mode in ("RGBA", "LA", "P"):
-        img = img.convert("RGB")
-
-    out = BytesIO()
-    save_kwargs = {"optimize": True}
-    if fmt == "JPEG":
-        save_kwargs["quality"] = 88
-    img.save(out, format=fmt, **save_kwargs)
-    out.seek(0)
-
-    basename = os.path.basename(f.name) or f.name
-    instance.photo = ContentFile(out.read(), name=basename)
+    # Reset configuration cache and create default setup
+    on_event_post_save_reset_config_cache(instance)
+    create_default_event_setup(instance)
 
 
-def _get_extension(f, img):
-    ext = os.path.splitext(f.name)[1].lower()
-    fmt = (img.format or "").upper()
-    if not fmt:
-        if ext in (".jpg", ".jpeg"):
-            fmt = "JPEG"
-        elif ext == ".png":
-            fmt = "PNG"
-        elif ext == ".webp":
-            fmt = "WEBP"
-        else:
-            fmt = "JPEG"
-    return fmt
+@receiver(post_delete, sender=Event)
+def post_delete_event_links(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear cache for event links after deletion."""
+    clear_run_event_links_cache(instance)
 
 
-def _check_new(f, instance, sender):
-    if instance.pk:
-        try:
-            old = sender.objects.filter(pk=instance.pk).only("photo").first()
-            if old:
-                old_name = old.photo.name if old.photo else ""
-                if f.name == old_name and not getattr(f, "file", None):
-                    return True
-        except Exception:
-            pass
-
-    return False
+# EventButton signals
+@receiver(post_save, sender=EventButton)
+def post_save_event_button(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
+    """Clear event button cache after save."""
+    clear_event_button_cache(instance.event_id)
 
 
-def check_character_ticket_options(reg, char):
-    """Remove character options not available for registration ticket.
+@receiver(pre_delete, sender=EventButton)
+def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear cache when event button is deleted."""
+    clear_event_button_cache(instance.event_id)
+
+
+# EventConfig signals
+@receiver(post_save, sender=EventConfig)
+def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset event configuration cache after model save."""
+    reset_element_configs(instance.event)
+
+
+@receiver(post_delete, sender=EventConfig)
+def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear event configuration cache after deletion."""
+    reset_element_configs(instance.event)
+
+
+# EventPermission signals
+@receiver(pre_save, sender=EventPermission)
+def pre_save_event_permission(sender: type, instance: EventPermission, **kwargs: Any) -> None:
+    """Auto-assign permission number before saving EventPermission."""
+    auto_assign_event_permission_number(instance)
+
+
+@receiver(post_save, sender=EventPermission)
+def post_save_event_permission_reset(sender: type, instance: EventPermission, **kwargs: Any) -> None:
+    """Reset caches when EventPermission is saved."""
+    clear_event_permission_cache(instance)
+    clear_index_permission_cache("event")
+
+
+@receiver(post_delete, sender=EventPermission)
+def post_delete_event_permission_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset event permission caches after EventPermission deletion."""
+    clear_event_permission_cache(instance)
+    clear_index_permission_cache("event")
+
+
+# EventRole signals
+@receiver(pre_delete, sender=EventRole)
+def pre_delete_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
+    """Reset caches and event links when an EventRole is deleted."""
+    # Clear the event role cache for this instance
+    remove_event_role_cache(instance.pk)
+
+    # Reset event links for all members associated with this role
+    for member in instance.members.all():
+        reset_event_links(member.id, instance.event.association_id)
+
+
+@receiver(post_save, sender=EventRole)
+def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
+    """Reset caches when an EventRole is saved."""
+    # Clear the event role cache for this specific instance
+    remove_event_role_cache(instance.pk)
+
+    # Reset event links cache for all members assigned to this role
+    for member in instance.members.all():
+        reset_event_links(member.id, instance.event.association_id)
+
+
+# EventText signals
+@receiver(pre_delete, sender=EventText)
+def pre_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear event text cache before deletion."""
+    reset_event_text(instance)
+
+
+@receiver(post_save, sender=EventText)
+def post_save_event_text(sender: type, instance: EventText, created: bool, **kwargs: Any) -> None:
+    """Update cache when EventText is saved."""
+    update_event_text_cache_on_save(instance)
+
+
+# Faction signals
+@receiver(pre_save, sender=Faction)
+def pre_save_faction(sender: type, instance: Faction, *args: Any, **kwargs: Any) -> None:
+    """Signal handler that updates faction before saving."""
+    replace_character_names(instance)
+    on_faction_pre_save_update_cache(instance)
+
+
+@receiver(post_save, sender=Faction)
+def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any) -> None:
+    """Reset faction relationships and update character caches after faction save.
 
     Args:
-        reg: Registration instance
-        char: Character instance to check options for
+        sender: The model class that sent the signal
+        instance: The faction instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+
     """
-    ticket_id = reg.ticket.id
+    # Update faction cache for event relationships
+    refresh_event_faction_relationships(instance)
 
-    to_delete = []
+    # Update cache for all characters belonging to this faction
+    for char in instance.characters.all():
+        refresh_character_relationships(char)
 
-    # get options
-    for choice in WritingChoice.objects.filter(element_id=char.id):
-        tickets_map = choice.option.tickets.values_list("pk", flat=True)
-        if tickets_map and ticket_id not in tickets_map:
-            to_delete.append(choice.id)
+    # Clean up faction PDFs after save operation
+    cleanup_faction_pdfs_on_save(instance)
 
-    WritingChoice.objects.filter(pk__in=to_delete).delete()
+
+@receiver(pre_delete, sender=Faction)
+def pre_delete_faction(sender: type, instance: Faction, **kwargs: dict) -> None:
+    """Clean up faction PDFs and clear event cache before faction deletion."""
+    cleanup_faction_pdfs_before_delete(instance)
+    clear_event_cache_all_runs(instance.event)
+
+
+@receiver(post_delete, sender=Faction)
+def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
+    """Reset character relationships when a faction is deleted."""
+    # Update cache for all characters that were in this faction
+    for char in instance.characters.all():
+        refresh_character_relationships(char)
+
+    # Remove faction from cache
+    remove_item_from_cache_section(instance.event_id, "factions", instance.id)
+
+
+# Feature signals
+@receiver(post_save, sender=Feature)
+def post_save_feature_index_permission(sender: type, instance: object, **kwargs: dict) -> None:
+    """Clear permission and feature caches after feature/permission save."""
+    clear_index_permission_cache("event")
+    clear_index_permission_cache("association")
+    reset_features_cache()
+
+
+@receiver(post_delete, sender=Feature)
+def post_delete_feature_index_permission(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear permission and feature caches after deleting feature index permission."""
+    # Clear both event and association permission caches
+    clear_index_permission_cache("event")
+    clear_index_permission_cache("association")
+
+    # Reset global features cache
+    reset_features_cache()
+
+
+# FeatureModule signals
+@receiver(post_save, sender=FeatureModule)
+def post_save_feature_module_index_permission(sender: type, instance: object, **kwargs: object) -> None:
+    """Clear cached permissions and features after feature/module/permission changes."""
+    # Clear cached index permissions for event and organization contexts
+    clear_index_permission_cache("event")
+    clear_index_permission_cache("association")
+
+    # Invalidate the global features cache
+    reset_features_cache()
+
+
+@receiver(post_delete, sender=FeatureModule)
+def post_delete_feature_module_index_permission(
+    sender: type,
+    instance: object,
+    **kwargs: object,
+) -> None:
+    """Clear permission and feature caches after deletion."""
+    clear_index_permission_cache("event")
+    clear_index_permission_cache("association")
+    reset_features_cache()
+
+
+# Handout signals
+@receiver(pre_delete, sender=Handout)
+def pre_delete_handout(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clean up handout PDFs before deletion."""
+    cleanup_handout_pdfs_before_delete(instance)
+
+
+@receiver(post_save, sender=Handout)
+def post_save_handout(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clean up handout PDFs after save."""
+    cleanup_handout_pdfs_after_save(instance)
+
+
+# HandoutTemplate signals
+@receiver(pre_delete, sender=HandoutTemplate)
+def pre_delete_handout_template(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Delete associated PDF files before deleting handout template."""
+    cleanup_handout_template_pdfs_before_delete(instance)
+
+
+@receiver(post_save, sender=HandoutTemplate)
+def post_save_handout_template(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clean up handout template PDFs after save."""
+    cleanup_handout_template_pdfs_after_save(instance)
+
+
+# HelpQuestion signals
+@receiver(pre_save, sender=HelpQuestion)
+def pre_save_notify_help_question(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Notify about help question before saving."""
+    send_help_question_notification_email(instance)
+
+
+# LarpManagerFaq signals
+@receiver(pre_save, sender=LarpManagerFaq)
+def pre_save_larp_manager_faq(sender: type, instance: LarpManagerFaq, *args: Any, **kwargs: Any) -> None:
+    """Signal handler that auto-assigns sequential FAQ numbers before saving."""
+    auto_assign_faq_sequential_number(instance)
+
+
+# LarpManagerGuide signals
+@receiver(post_save, sender=LarpManagerGuide)
+def post_save_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset guides cache when guide content changes."""
+    reset_guides_cache()
+
+
+@receiver(post_delete, sender=LarpManagerGuide)
+def post_delete_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset guides cache after model deletion."""
+    reset_guides_cache()
+
+
+# LarpManagerTicket signals
+@receiver(post_save, sender=LarpManagerTicket)
+def save_larpmanager_ticket(sender: type, instance: LarpManagerTicket, created: bool, **kwargs: Any) -> None:
+    """Send email notification when a support ticket is saved."""
+    send_support_ticket_email(instance)
+
+
+# LarpManagerTutorial signals
+@receiver(pre_save, sender=LarpManagerTutorial)
+def pre_save_larp_manager_tutorial(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Generate URL slug for tutorial instance before saving."""
+    generate_tutorial_url_slug(instance)
+
+
+@receiver(post_save, sender=LarpManagerTutorial)
+def post_save_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Django signal handler that clears the tutorials cache when a related model is saved."""
+    reset_tutorials_cache()
+
+
+@receiver(post_delete, sender=LarpManagerTutorial)
+def post_delete_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset tutorials cache after instance deletion."""
+    reset_tutorials_cache()
+
+
+@receiver(post_save, sender=LarpManagerShowcase)
+def post_save_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when showcase content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerShowcase)
+def post_delete_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after showcase deletion."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_save, sender=LarpManagerHighlight)
+def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when highlight content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerHighlight)
+def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after highlight deletion."""
+    clear_larpmanager_home_cache()
+
+
+# Member signals
+@receiver(post_save, sender=Member)
+def post_save_member_reset(sender: type, instance: Member, **kwargs: dict) -> None:
+    """Update cached event character data when member changes."""
+    update_member_event_character_cache(instance)
+
+
+# MemberConfig signals
+@receiver(post_save, sender=MemberConfig)
+def post_save_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset member configuration cache after save."""
+    reset_element_configs(instance.member)
+
+
+@receiver(post_delete, sender=MemberConfig)
+def post_delete_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear member config cache after deletion."""
+    reset_element_configs(instance.member)
+
+
+# Membership signals
+@receiver(pre_save, sender=Membership)
+def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> None:
+    """Process membership status updates before save."""
+    process_membership_status_updates(instance)
+
+
+# ModifierPx signals
+@receiver(post_save, sender=ModifierPx)
+def post_save_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when a modifier is saved."""
+    update_characters_experience_on_modifier_change(instance)
+
+
+@receiver(post_delete, sender=ModifierPx)
+def post_delete_modifier_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update character experience after modifier deletion."""
+    update_characters_experience_on_modifier_change(instance)
+
+
+# PaymentInvoice signals
+@receiver(pre_save, sender=PaymentInvoice)
+def pre_save_payment_invoice(sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any) -> None:
+    """Process payment invoice status changes before saving."""
+    process_payment_invoice_status_change(instance)
+
+
+# PlayerRelationship signals
+@receiver(pre_delete, sender=PlayerRelationship)
+def pre_delete_player_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clean up relationship PDFs before deleting instance."""
+    cleanup_relationship_pdfs_before_delete(instance)
+
+
+@receiver(post_save, sender=PlayerRelationship)
+def post_save_player_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clean up relationship PDFs after save."""
+    cleanup_relationship_pdfs_after_save(instance)
+
+
+# Plot signals
+@receiver(pre_save, sender=Plot)
+def pre_save_plot(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Replace character names in plot instance before saving."""
+    replace_character_names(instance)
+
+
+@receiver(post_save, sender=Plot)
+def post_save_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
+    """Update plot and character relationship caches after plot save."""
+    # Update plot cache
+    refresh_event_plot_relationships(instance)
+
+    # Update cache for all characters in this plot
+    for char_rel in instance.get_plot_characters():
+        refresh_character_relationships(char_rel.character)
+
+
+@receiver(post_delete, sender=Plot)
+def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
+    """Reset character relationships and cache when a plot is deleted."""
+    # Update cache for all characters that were in this plot
+    for char_rel in instance.get_plot_characters():
+        refresh_character_relationships(char_rel.character)
+
+    # Remove plot from cache
+    remove_item_from_cache_section(instance.event_id, "plots", instance.id)
+
+
+# PreRegistration signals
+@receiver(pre_save, sender=PreRegistration)
+def pre_save_pre_registration(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Send confirmation email for the pre-registration."""
+    send_pre_registration_confirmation_email(instance)
+
+
+# Prologue signals
+@receiver(pre_save, sender=Prologue)
+def pre_save_prologue(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Replace character names in prologue before saving."""
+    replace_character_names(instance)
+
+
+@receiver(post_save, sender=Prologue)
+def post_save_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: Any) -> None:
+    """Reset relationship cache for prologue and associated characters."""
+    # Update prologue cache
+    refresh_event_prologue_relationships(instance)
+
+    # Update cache for all characters in this prologue
+    for char in instance.characters.all():
+        refresh_character_relationships(char)
+
+
+@receiver(post_delete, sender=Prologue)
+def post_delete_prologue_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
+    """Reset character relationships and cache when prologue is deleted."""
+    # Update cache for all characters that were in this prologue
+    for char in instance.characters.all():
+        refresh_character_relationships(char)
+
+    # Remove prologue from cache
+    remove_item_from_cache_section(instance.event_id, "prologues", instance.id)
+
+
+# Quest signals
+@receiver(pre_save, sender=Quest)
+def pre_save_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Update cache before saving quest instance."""
+    on_quest_pre_save_update_cache(instance)
+
+
+@receiver(post_save, sender=Quest)
+def post_save_quest_reset_rels(sender: type, instance: Quest, **kwargs: Any) -> None:
+    """Update quest and questtype cache relationships after quest save."""
+    # Update quest cache
+    refresh_event_quest_relationships(instance)
+
+    # Update questtype cache if quest has a type
+    if instance.typ:
+        refresh_event_questtype_relationships(instance.typ)
+
+
+@receiver(pre_delete, sender=Quest)
+def pre_delete_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear event cache when quest is deleted."""
+    clear_event_cache_all_runs(instance.event)
+
+
+@receiver(post_delete, sender=Quest)
+def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
+    """Reset quest relationships after quest deletion.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The quest instance being deleted
+        **kwargs: Additional keyword arguments from the signal
+
+    """
+    # Update questtype cache if quest had a type
+    if instance.typ:
+        refresh_event_questtype_relationships(instance.typ)
+
+    # Remove quest from cache
+    remove_item_from_cache_section(instance.event_id, "quests", instance.id)
+
+
+# QuestType signals
+@receiver(pre_save, sender=QuestType)
+def pre_save_questtype_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
+    """Signal handler that updates cache when a quest type is modified."""
+    on_quest_type_pre_save_update_cache(instance)
+
+
+@receiver(post_save, sender=QuestType)
+def post_save_questtype_reset_rels(
+    sender: type,
+    instance: QuestType,
+    **kwargs: Any,
+) -> None:
+    """Reset quest type and related quest caches after save.
+
+    Args:
+        sender: The model class that sent the signal.
+        instance: The QuestType instance being saved.
+        **kwargs: Additional keyword arguments from the signal.
+
+    """
+    # Update questtype cache
+    refresh_event_questtype_relationships(instance)
+
+    # Update cache for all quests of this type
+    for quest in instance.quests.all():
+        refresh_event_quest_relationships(quest)
+
+
+@receiver(pre_delete, sender=QuestType)
+def pre_delete_quest_type_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
+    """Clear cache when a quest type is deleted."""
+    clear_event_cache_all_runs(instance.event)
+
+
+@receiver(post_delete, sender=QuestType)
+def post_delete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs: Any) -> None:
+    """Reset quest relationships when a quest type is deleted."""
+    # Update cache for all quests that were of this type
+    for quest in instance.quests.all():
+        refresh_event_quest_relationships(quest)
+
+    # Remove questtype from cache
+    remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
+
+
+# RefundRequest signals
+@receiver(pre_save, sender=RefundRequest)
+def pre_save_refund_request(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Process refund request status changes before saving."""
+    process_refund_request_status_change(instance)
+
+
+# Registration signals
+@receiver(pre_save, sender=Registration)
+def pre_save_registration_switch_event(sender: type, instance: Registration, **kwargs: Any) -> None:
+    """Handle registration updates when switching events."""
+    # Process event change logic
+    process_registration_event_change(instance)
+
+    # Send cancellation notification if needed
+    send_registration_cancellation_email(instance)
+
+    # Execute pre-save registration processing
+    process_registration_pre_save(instance)
 
 
 @receiver(post_save, sender=Registration)
-def post_save_registration_character_form(sender, instance, **kwargs):
-    """Clean up character form options based on ticket restrictions.
+def post_save_registration_cache(sender: type, instance: Registration, created: bool, **kwargs: Any) -> None:
+    """Handle post-save operations for Registration instances.
+
+    This signal handler performs various cache updates and business logic
+    operations after a Registration instance is saved to the database.
 
     Args:
-        sender: Registration model class
-        instance: Registration instance that was saved
-        **kwargs: Additional keyword arguments
+        sender: The model class that sent the signal
+        instance: The Registration instance that was saved
+        created: True if this is a new instance, False if updated
+        **kwargs: Additional keyword arguments from the signal
+
+    Returns:
+        None
+
     """
-    if not instance.member:
-        return
+    # Assign character from previous campaign if applicable
+    assign_previous_campaign_character(instance)
 
-    if not instance.ticket:
-        return
+    # Process ticket options and character-related data
+    process_character_ticket_options(instance)
 
-    event = instance.run.event
+    # Update accounting records and balances
+    handle_registration_accounting_updates(instance)
 
+    # Clear cached accounting data for this run
+    clear_registration_accounting_cache(instance.run_id)
+
+    # Reset event navigation links cache
+    on_registration_post_save_reset_event_links(instance)
+
+    # Update registration count caches for this run
+    clear_registration_counts_cache(instance.run_id)
+
+
+@receiver(pre_delete, sender=Registration)
+def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
+    """Send email notification before registration is deleted."""
+    send_registration_deletion_email(instance)
+
+
+@receiver(post_delete, sender=Registration)
+def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear accounting cache for the associated run after registration deletion."""
+    clear_registration_accounting_cache(instance.run_id)
+
+
+# RegistrationCharacterRel signals
+@receiver(post_save, sender=RegistrationCharacterRel)
+def post_save_registration_character_rel_savereg(
+    sender: type,
+    instance: RegistrationCharacterRel,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Reset character cache and send assignment email notification."""
+    reset_character_registration_cache(instance)
+
+    if created:
+        send_character_assignment_email(instance)
+
+
+@receiver(post_delete, sender=RegistrationCharacterRel)
+def post_delete_registration_character_rel_savereg(
+    sender: type, instance: RegistrationCharacterRel, **kwargs: Any
+) -> None:
+    """Reset character registration cache after relationship deletion."""
+    reset_character_registration_cache(instance)
+
+
+# RegistrationOption signals
+@receiver(post_save, sender=RegistrationOption)
+def post_save_registration_option(
+    sender: type[BaseModel],
+    instance: RegistrationOption,
+    created: bool,
+    **kwargs: dict,
+) -> None:
+    """Process registration option post-save signal."""
+    process_registration_option_post_save(instance)
+
+
+# RegistrationTicket signals
+@receiver(post_save, sender=RegistrationTicket)
+def post_save_ticket_accounting_cache(
+    sender: type,
+    instance: RegistrationTicket,
+    created: bool,
+    **kwargs: Any,
+) -> None:
+    """Clear accounting cache for all runs when a ticket is saved."""
+    log_registration_ticket_saved(instance)
+
+    # Clear accounting cache for all runs in the ticket's event
+    for run in instance.event.runs.all():
+        clear_registration_accounting_cache(run.id)
+
+
+@receiver(post_delete, sender=RegistrationTicket)
+def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
+    """Clear accounting cache for all runs when a ticket is deleted."""
+    # Clear accounting cache for all runs in the ticket's event
+    for run in instance.event.runs.all():
+        clear_registration_accounting_cache(run.id)
+
+
+# Relationship signals
+@receiver(pre_delete, sender=Relationship)
+def pre_delete_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Delete character PDF files before relationship deletion."""
+    delete_character_pdf_files(instance.source)
+
+
+@receiver(post_save, sender=Relationship)
+def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Update cached relationships and delete PDF files after saving a relationship."""
+    refresh_character_relationships(instance.source)
+    delete_character_pdf_files(instance.source)
+
+
+@receiver(post_delete, sender=Relationship)
+def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Update cache for source character after relationship deletion."""
+    refresh_character_relationships(instance.source)
+
+
+# RulePx signals
+@receiver(post_save, sender=RulePx)
+def post_save_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update characters experience when rule changes."""
+    update_characters_experience_on_rule_change(instance)
+
+
+@receiver(post_delete, sender=RulePx)
+def post_delete_rule_px(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when a rule is deleted."""
+    update_characters_experience_on_rule_change(instance)
+
+
+# Run signals
+@receiver(pre_save, sender=Run)
+def pre_save_run(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Invalidate cache on run pre-save signal."""
+    on_run_pre_save_invalidate_cache(instance)
+
+
+@receiver(post_save, sender=Run)
+def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
+    """Handle post-save actions for Run model instances.
+
+    This signal handler performs cache clearing and configuration updates
+    when a Run instance is saved. It handles both new runs and updates
+    to existing runs, with special handling for development status changes.
+
+    Args:
+        sender: The model class that sent the signal
+        instance: The Run instance that was saved
+        **kwargs: Additional keyword arguments from the signal
+
+    """
+    # Clear registration-related caches for this run
+    clear_registration_counts_cache(instance.id)
+
+    # Reset configuration cache when run changes
+    on_run_post_save_reset_config_cache(instance)
+
+    # Update run plan based on event changes
+    update_run_plan_on_event_change(instance)
+
+    # Clear run-specific cache and media files
+    clear_run_cache_and_media(instance)
+
+    clear_run_event_links_cache(instance.event)
+
+
+@receiver(pre_delete, sender=Run)
+def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
+    """Reset run cache and media files before deletion."""
+    clear_run_cache_and_media(instance)
+
+
+@receiver(post_delete, sender=Run)
+def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear event links cache when a run link is deleted."""
+    clear_run_event_links_cache(instance.event)
+
+
+# RunConfig signals
+@receiver(post_save, sender=RunConfig)
+def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset run config cache when related instance is saved."""
+    reset_element_configs(instance.run)
+
+
+@receiver(post_delete, sender=RunConfig)
+def post_delete_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear configuration cache after Run deletion."""
+    reset_element_configs(instance.run)
+
+
+# SpeedLarp signals
+@receiver(pre_save, sender=SpeedLarp)
+def pre_save_speed_larp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Pre-save signal handler that replaces character names in the instance."""
+    replace_character_names(instance)
+
+
+@receiver(post_save, sender=SpeedLarp)
+def post_save_speedlarp_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset speedlarp and character relationship caches after speedlarp save."""
+    # Update speedlarp cache
+    refresh_event_speedlarp_relationships(instance)
+
+    # Update cache for all characters in this speedlarp
     for char in instance.characters.all():
-        check_character_ticket_options(instance, char)
+        refresh_character_relationships(char)
 
-    for char in event.get_elements(Character).filter(player=instance.member):
-        check_character_ticket_options(instance, char)
+
+@receiver(post_delete, sender=SpeedLarp)
+def post_delete_speedlarp_reset_rels(sender: type, instance: SpeedLarp, **kwargs: Any) -> None:
+    """Reset character relationships and cache when speedlarp is deleted."""
+    # Update cache for all characters that were in this speedlarp
+    for char in instance.characters.all():
+        refresh_character_relationships(char)
+
+    # Remove speedlarp from cache
+    remove_item_from_cache_section(instance.event_id, "speedlarps", instance.id)
+
+
+# Trait signals
+@receiver(pre_save, sender=Trait)
+def pre_save_trait_reset(sender: type, instance: Trait, **kwargs: dict) -> None:
+    """Update cache before saving trait."""
+    on_trait_pre_save_update_cache(instance)
+
+
+@receiver(post_save, sender=Trait)
+def post_save_trait_reset_rels(sender: type, instance: Trait, **kwargs: Any) -> None:
+    """Update quest relationships and trait cache when a trait is saved."""
+    # Update quest cache if trait has a quest
+    if instance.quest:
+        refresh_event_quest_relationships(instance.quest)
+
+    # Refresh all trait relationships for this instance
+    refresh_all_instance_traits(instance)
+
+
+@receiver(pre_delete, sender=Trait)
+def pre_delete_trait_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear event cache when trait is deleted."""
+    clear_event_cache_all_runs(instance.event)
+
+
+@receiver(post_delete, sender=Trait)
+def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Reset quest relationships after trait deletion."""
+    # Update quest cache if trait had a quest
+    if instance.quest:
+        refresh_event_quest_relationships(instance.quest)
+
+
+# User signals
+@receiver(post_save, sender=User)
+def post_save_user_profile(sender: type, instance: User, created: bool, **kwargs: Any) -> None:
+    """Create member profile when user is created."""
+    create_member_profile_for_user(instance, is_newly_created=created)
+
+
+# WarehouseItem signals
+@receiver(pre_save, sender=WarehouseItem, dispatch_uid="warehouseitem_rotate_vertical_photo")
+def pre_save_warehouse_item(sender: type[WarehouseItem], instance: WarehouseItem, **kwargs: Any) -> None:
+    """Rotate vertical photos before saving warehouse item."""
+    auto_rotate_vertical_photos(instance, sender)
+
+
+# WritingOption signals
+@receiver(post_save, sender=WritingOption)
+def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear caches when WritingOption is saved."""
+    clear_event_fields_cache(instance.question.event_id)
+    clear_event_cache_all_runs(instance.question.event)
+
+
+@receiver(pre_delete, sender=WritingOption)
+def pre_delete_character_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear character-related caches when a character option is deleted."""
+    clear_event_cache_all_runs(instance.question.event)
+    clear_event_fields_cache(instance.question.event_id)
+
+
+# WritingQuestion signals
+@receiver(pre_delete, sender=WritingQuestion)
+def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, **kwargs: Any) -> None:
+    """Clear caches when a writing question is deleted."""
+    clear_event_fields_cache(instance.event_id)
+    clear_event_cache_all_runs(instance.event)
+
+
+@receiver(post_save, sender=WritingQuestion)
+def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear cache for event fields and all runs when writing question changes."""
+    clear_event_fields_cache(instance.event_id)
+    clear_event_cache_all_runs(instance.event)
+
+
+# m2m_changed signals
+m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryPx.characters.through)
+m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityPx.characters.through)
+m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierPx.abilities.through)
+m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RulePx.abilities.through)
+
+m2m_changed.connect(on_faction_characters_m2m_changed, sender=Faction.characters.through)
+m2m_changed.connect(on_plot_characters_m2m_changed, sender=Plot.characters.through)
+m2m_changed.connect(on_speedlarp_characters_m2m_changed, sender=SpeedLarp.characters.through)
+m2m_changed.connect(on_prologue_characters_m2m_changed, sender=Prologue.characters.through)
+
+m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.members.through)
+m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
+
+m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
+
+
+@receiver(valid_ipn_received)
+def paypal_webhook(sender: type, **kwargs: Any) -> Any:
+    """Handle valid PayPal IPN notifications.
+
+    Args:
+        sender: IPN object from PayPal
+        **kwargs: Additional keyword arguments
+
+    Returns:
+        Result from invoice_received_money or None
+
+    """
+    return handle_valid_paypal_ipn(sender)
+
+
+@receiver(invalid_ipn_received)
+def paypal_ko_webhook(sender: type, **kwargs: Any) -> None:
+    """Handle invalid PayPal IPN notifications.
+
+    Args:
+        sender: Invalid IPN object from PayPal
+        **kwargs: Additional keyword arguments
+
+    """
+    handle_invalid_paypal_ipn(sender)
+
+
+@receiver(got_request_exception)
+def handle_request_exception(sender: type, request: object, **kwargs: Any) -> None:
+    """Handle request exceptions and create error tickets automatically.
+
+    This signal handler is triggered when an exception occurs during request processing.
+    It creates an error ticket with the exception details.
+
+    Args:
+        sender: The sender of the signal
+        request: The HttpRequest object
+        **kwargs: Additional keyword arguments (may contain 'exception')
+
+    """
+    try:
+        create_error_ticket(request)
+    except Exception as e:  # noqa: BLE001 - Error handler must never fail and disrupt error reporting
+        # Don't let ticket creation failure break the error handling
+        log.debug("Failed to create error ticket: %s", e)

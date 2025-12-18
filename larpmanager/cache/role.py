@@ -18,182 +18,160 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from django.conf import settings as conf_settings
 from django.core.cache import cache
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
 
-from larpmanager.cache.feature import get_assoc_features, get_event_features
-from larpmanager.cache.links import cache_event_links
-from larpmanager.cache.permission import get_assoc_permission_feature, get_event_permission_feature
-from larpmanager.models.access import AssocRole, EventRole
-from larpmanager.utils.auth import get_allowed_managed
-from larpmanager.utils.exceptions import PermissionError
+from larpmanager.cache.feature import get_association_features, get_event_features
+from larpmanager.models.access import AssociationRole, EventRole
+from larpmanager.utils.core.exceptions import UserPermissionError
 
 
-def cache_assoc_role_key(ar_id):
-    return f"assoc_role_{ar_id}"
+def cache_association_role_key(association_role_id: int) -> str:
+    """Generate cache key for association role."""
+    return f"association_role_{association_role_id}"
 
 
-def get_assoc_role(ar):
-    ls = []
-    features = get_assoc_features(ar.assoc_id)
-    for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
-        if not el[2] and el[1] not in features:
+def get_association_role(ar: AssociationRole) -> tuple[str, list[str]]:
+    """Get association role name and available permission slugs.
+
+    Args:
+        ar: AssociationRole instance to extract permissions from
+
+    Returns:
+        Tuple containing role name and list of permission slugs
+
+    """
+    permission_slugs = []
+    features = get_association_features(ar.association_id)
+
+    # Filter permissions based on feature availability and placeholders
+    for permission_slug, feature_slug, is_placeholder in ar.permissions.values_list(
+        "slug",
+        "feature__slug",
+        "feature__placeholder",
+    ):
+        if not is_placeholder and feature_slug not in features:
             continue
-        ls.append(el[0])
-    return ar.name, ls
+        permission_slugs.append(permission_slug)
+
+    return ar.name, permission_slugs
 
 
-def get_cache_assoc_role(ar_id):
-    key = cache_assoc_role_key(ar_id)
-    res = cache.get(key)
-    if not res:
+def get_cache_association_role(ar_id: int) -> dict:
+    """Get cached association role data by ID.
+
+    Retrieves association role data from cache if available, otherwise
+    fetches from database and caches the result.
+
+    Args:
+        ar_id: The association role ID to retrieve.
+
+    Returns:
+        Dictionary containing association role data.
+
+    Raises:
+        PermissionError: If the association role cannot be found or accessed.
+
+    """
+    # Generate cache key for this association role
+    cache_key = cache_association_role_key(ar_id)
+
+    # Try to get cached result first
+    cached_result = cache.get(cache_key)
+
+    if cached_result is None:
+        # Cache miss - fetch from database
         try:
-            ar = AssocRole.objects.get(pk=ar_id)
+            association_role = AssociationRole.objects.get(pk=ar_id)
         except Exception as err:
-            raise PermissionError() from err
-        res = get_assoc_role(ar)
-        cache.set(key, res)
-    return res
+            # Convert any database error to permission error
+            raise UserPermissionError from err
+
+        # Process the association role data
+        cached_result = get_association_role(association_role)
+
+        # Cache the result for future requests
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    return cached_result
 
 
-def delete_cache_assoc_role(ar_id):
-    key = cache_assoc_role_key(ar_id)
+def remove_association_role_cache(association_role_id: int) -> None:
+    """Delete the cached association role."""
+    key = cache_association_role_key(association_role_id)
     cache.delete(key)
 
 
-@receiver(post_save, sender=AssocRole)
-def post_save_assoc_role_reset(sender, instance, **kwargs):
-    delete_cache_assoc_role(instance.pk)
+def cache_event_role_key(assignment_role_id: int) -> str:
+    """Return cache key for event role assignment."""
+    return f"event_role_{assignment_role_id}"
 
 
-@receiver(pre_delete, sender=AssocRole)
-def del_assoc_role_reset(sender, instance, **kwargs):
-    delete_cache_assoc_role(instance.pk)
+def get_event_role(assignment_role: EventRole) -> tuple[str, list[str]]:
+    """Get event role name and available permission slugs.
 
+    Args:
+        assignment_role: Assignment role object with permissions and event access.
 
-def get_assoc_roles(request):
-    pms = {}
-    if request.user.is_superuser:
-        return True, [], ["superuser"]
-    ctx = cache_event_links(request)
-    is_admin = False
-    names = []
-    for num, el in ctx["assoc_role"].items():
-        if num == 1:
-            is_admin = True
-        (name, slugs) = get_cache_assoc_role(el)
-        names.append(name)
-        for slug in slugs:
-            pms[slug] = 1
-    return is_admin, pms, names
+    Returns:
+        Tuple of role name and list of available permission slugs.
 
+    """
+    available_permission_slugs = []
+    event_features = get_event_features(assignment_role.event_id)
 
-def has_assoc_permission(request, ctx, perm):
-    if not hasattr(request.user, "member"):
-        return False
-    if check_managed(ctx, perm):
-        return False
-    (admin, permissions, names) = get_assoc_roles(request)
-    if admin:
-        return True
-    if not perm:
-        return True
-    return perm in permissions
-
-
-def cache_event_role_key(ar_id):
-    return f"event_role_{ar_id}"
-
-
-def get_event_role(ar):
-    ls = []
-    features = get_event_features(ar.event_id)
-    for el in ar.permissions.values_list("slug", "feature__slug", "feature__placeholder"):
-        if not el[2] and el[1] not in features:
+    # Filter permissions based on feature availability and placeholder status
+    for permission_slug, feature_slug, is_placeholder in assignment_role.permissions.values_list(
+        "slug",
+        "feature__slug",
+        "feature__placeholder",
+    ):
+        if not is_placeholder and feature_slug not in event_features:
             continue
-        ls.append(el[0])
-    return ar.name, ls
+        available_permission_slugs.append(permission_slug)
+
+    return assignment_role.name, available_permission_slugs
 
 
-def get_cache_event_role(ev_id):
-    key = cache_event_role_key(ev_id)
-    res = cache.get(key)
-    if not res:
+def get_cache_event_role(ev_id: int) -> dict:
+    """Retrieve event role data from cache or database.
+
+    Attempts to fetch event role information from cache first. If not found,
+    retrieves from database, caches the result, and returns it.
+
+    Args:
+        ev_id: The event ID to retrieve role data for.
+
+    Returns:
+        Dictionary containing event role information.
+
+    Raises:
+        PermissionError: If the event role cannot be found or accessed.
+
+    """
+    # Generate cache key for this specific event role
+    cache_key = cache_event_role_key(ev_id)
+    cached_result = cache.get(cache_key)
+
+    # If not in cache, fetch from database
+    if cached_result is None:
         try:
-            ar = EventRole.objects.get(pk=ev_id)
-        except Exception as err:
-            raise PermissionError() from err
-        res = get_event_role(ar)
-        cache.set(key, res)
-    return res
+            # Retrieve EventRole object from database
+            event_role = EventRole.objects.get(pk=ev_id)
+        except Exception as error:
+            # Convert any database error to PermissionError
+            raise UserPermissionError from error
+
+        # Process the event role data
+        cached_result = get_event_role(event_role)
+
+        # Cache the result for future requests
+        cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    return cached_result
 
 
-def delete_cache_event_role(ar_id):
-    key = cache_event_role_key(ar_id)
+def remove_event_role_cache(assignment_role_id: int) -> None:
+    """Remove cached event role data for the given assignment role ID."""
+    key = cache_event_role_key(assignment_role_id)
     cache.delete(key)
-
-
-@receiver(post_save, sender=EventRole)
-def post_save_event_role_reset(sender, instance, **kwargs):
-    delete_cache_event_role(instance.pk)
-
-
-@receiver(pre_delete, sender=EventRole)
-def del_event_role_reset(sender, instance, **kwargs):
-    delete_cache_event_role(instance.pk)
-
-
-def get_event_roles(request, slug):
-    pms = {}
-    # split if provided slug from session
-    slug = slug.split("-", 1)[0]
-    if request.user.is_superuser:
-        return True, [], ["superuser"]
-    ctx = cache_event_links(request)
-    if slug not in ctx["event_role"]:
-        return False, [], []
-    is_organizer = False
-    names = []
-    for num, el in ctx["event_role"][slug].items():
-        if num == 1:
-            is_organizer = True
-        (name, slugs) = get_cache_event_role(el)
-        names.append(name)
-        for pm_slug in slugs:
-            pms[pm_slug] = 1
-    return is_organizer, pms, names
-
-
-def has_event_permission(request, ctx, slug, perm=None):
-    if not request or not hasattr(request.user, "member") or check_managed(ctx, perm, assoc=False):
-        return False
-    if "assoc_role" in ctx and 1 in ctx["assoc_role"]:
-        return True
-    (organizer, permissions, names) = get_event_roles(request, slug)
-    if organizer:
-        return True
-    if not perm:
-        return len(names) > 0
-    if isinstance(perm, list):
-        return any(p in permissions for p in perm)
-    return perm in permissions
-
-
-def check_managed(ctx, perm, assoc=True):
-    # check if the association skin is managed and the user is not staff
-    if not ctx.get("skin_managed", False) or ctx.get("is_staff", False):
-        return False
-
-    if perm in get_allowed_managed():
-        return False
-
-    if assoc:
-        placeholder, _, _ = get_assoc_permission_feature(perm)
-    else:
-        placeholder, _, _ = get_event_permission_feature(perm)
-
-    if placeholder != "def":
-        return False
-
-    return True

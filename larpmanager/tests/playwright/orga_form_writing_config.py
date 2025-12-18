@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any
+
 import pytest
 from playwright.sync_api import expect
 
@@ -25,7 +27,7 @@ from larpmanager.tests.utils import go_to, login_orga
 pytestmark = pytest.mark.e2e
 
 
-def test_orga_form_writing_config(pw_page):
+def test_orga_form_writing_config(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -39,7 +41,7 @@ def test_orga_form_writing_config(pw_page):
     form_other_writing(page)
 
 
-def feature_fields(page):
+def feature_fields(page: Any) -> None:
     # set feature
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Characters").check()
@@ -76,7 +78,7 @@ def feature_fields(page):
     )
 
 
-def feature_fields2(page):
+def feature_fields2(page: Any) -> None:
     # add config hide, assigned
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Writing ").click()
@@ -127,7 +129,7 @@ def feature_fields2(page):
     )
 
 
-def form_other_writing(page):
+def form_other_writing(page: Any) -> None:
     # add other writing elements
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Plots").check()
