@@ -14,7 +14,7 @@
 {% endif %}
 {% if char.player %}
     <div class="go-inline" id="char_player">
-        <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' char.player_id %}">
+        <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' char.player_uuid %}">
             {% if run.id in all_runs %}
                 {{ char.player_full }}
             {% else %}

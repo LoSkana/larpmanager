@@ -3423,6 +3423,12 @@ msgstr ""
 msgid "Passport"
 msgstr ""
 
+msgid "Public UUID"
+msgstr ""
+
+msgid "Unique identifier for public profile URLs"
+msgstr ""
+
 msgid "Navigation language"
 msgstr ""
 

@@ -154,7 +154,7 @@ urlpatterns = [
         name="membership_request_test",
     ),
     path(
-        "public/<int:member_id>/",
+        "public/<slug:slug>/",
         views_um.public,
         name="public",
     ),

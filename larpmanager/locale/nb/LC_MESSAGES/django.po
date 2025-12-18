@@ -1785,6 +1785,9 @@ msgstr "Progresjon"
 msgid "Provisional"
 msgstr "Foreløpig"
 
+msgid "Public UUID"
+msgstr "Offentlig UUID"
+
 msgid "Publication"
 msgstr "Utgivelse"
 
@@ -5425,6 +5428,9 @@ msgstr "Det finnes oppdrag uten egenskaper: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Denne siden oppsummerer de opplastede fotoalbumene"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Unik identifikator for offentlige profil-URL-er"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Du ekskluderer (ingen av disse filtrene)"

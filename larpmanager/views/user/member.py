@@ -71,7 +71,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.core.base import get_context
-from larpmanager.utils.core.common import get_badge, get_channel, get_contact, get_member
+from larpmanager.utils.core.common import get_badge, get_channel, get_contact
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
@@ -507,7 +507,7 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
+def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -516,18 +516,22 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
 
     Args:
         request: HTTP request object containing user and association context
-        member_id: Member ID to display profile for
+        slug: Member UUID slug to display profile for
 
     Returns:
         HttpResponse: Rendered public member profile page
 
     Raises:
-        Http404: If member has no membership in the current association
+        Http404: If member not found or has no membership in the current association
 
     """
     # Initialize context with user data and fetch member information
     context = get_context(request)
-    context["member_public"] = get_member(member_id)
+    try:
+        context["member_public"] = Member.objects.get(uuid=slug)
+    except Member.DoesNotExist as err:
+        msg = "member not found"
+        raise Http404(msg) from err
 
     # Verify member has membership in current association
     if not Membership.objects.filter(
@@ -580,7 +584,7 @@ def public(request: HttpRequest, member_id: int) -> HttpResponse:  # noqa: C901 
             validate(context["member_public"].social_contact)
             context["member_public"].contact_url = True
         except ValidationError as e:
-            logger.debug("Social contact validation failed for member=%s: %s", member_id, e)
+            logger.debug("Social contact validation failed for member=%s: %s", slug, e)
 
     return render(request, "larpmanager/member/public.html", context)
 

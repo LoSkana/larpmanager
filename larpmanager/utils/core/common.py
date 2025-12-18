@@ -1014,6 +1014,7 @@ def _search_char_reg(context: dict, character: object, search_result: dict) -> N
     search_result["player"] = character.reg.display_member()
     search_result["player_full"] = str(character.reg.member)
     search_result["player_id"] = character.reg.member_id
+    search_result["player_uuid"] = character.reg.member.uuid
     search_result["first_aid"] = character.reg.member.first_aid
 
     # Set profile image with fallback hierarchy: character custom -> member -> None

@@ -1785,6 +1785,9 @@ msgstr "Progressie"
 msgid "Provisional"
 msgstr "Voorlopig"
 
+msgid "Public UUID"
+msgstr "Openbare UUID"
+
 msgid "Publication"
 msgstr "Publicatie"
 
@@ -5425,6 +5428,9 @@ msgstr "Er zijn quests zonder eigenschappen: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Unieke identifier voor openbare profiel-URL's"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Je sluit (geen van deze filters) uit"

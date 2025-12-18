@@ -110,7 +110,7 @@
                             </p>
                             {% if el.player_id > 0 %}
                                 <p>
-                                    <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                    <b>Player:</b> <a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                                 </p>
                             {% endif %}
                             {% if el.factions_list %}

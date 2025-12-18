@@ -20,7 +20,7 @@
                         </div>
                         {% if el.player_id > 0 %}
                             <div class="go-inline">
-                                <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                             </div>
                         {% endif %}
                         <div class="go-inline">

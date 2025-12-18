@@ -38,7 +38,7 @@ from pilkit.processors import ResizeToFill
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel
-from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
+from larpmanager.models.utils import UploadToPathAndRename, download_d, my_uuid_short, show_thumb
 from larpmanager.utils.core.codes import countries
 
 logger = logging.getLogger(__name__)
@@ -79,6 +79,15 @@ class Member(BaseModel):
     """Represents Member model."""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
+
+    uuid = models.CharField(
+        max_length=12,
+        unique=True,
+        default=my_uuid_short,
+        editable=False,
+        verbose_name=_("Public UUID"),
+        help_text=_("Unique identifier for public profile URLs"),
+    )
 
     email = models.CharField(max_length=200, editable=False)
 
