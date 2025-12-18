@@ -32,6 +32,7 @@ from larpmanager.views.orga import member as views_om
 from larpmanager.views.orga import miscellanea as views_oms
 from larpmanager.views.orga import pdf as views_op
 from larpmanager.views.orga import registration as views_or
+from larpmanager.views.orga import transfer as views_ot
 from larpmanager.views.orga import writing as views_ow
 
 urlpatterns = [
@@ -249,6 +250,21 @@ urlpatterns = [
         "<slug:event_slug>/manage/registrations/member",
         views_or.orga_registration_member,
         name="orga_registration_member",
+    ),
+    path(
+        "<slug:event_slug>/manage/registrations/transfer/",
+        views_ot.orga_registration_transfer,
+        name="orga_registration_transfer",
+    ),
+    path(
+        "<slug:event_slug>/manage/registrations/transfer/preview/",
+        views_ot.orga_registration_transfer_preview,
+        name="orga_registration_transfer_preview",
+    ),
+    path(
+        "<slug:event_slug>/manage/registrations/transfer/confirm/",
+        views_ot.orga_registration_transfer_confirm,
+        name="orga_registration_transfer_confirm",
     ),
     path(
         "<slug:event_slug>/manage/albums/",

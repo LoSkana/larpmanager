@@ -86,7 +86,14 @@
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <hr />
-        <a href="{% url 'exe_reload_cache' %}">Reset cache</a>
+        <div class="staff-list">
+            <div class="orga-buttons">
+                <a class="new button" href="{% url 'exe_reload_cache' %}">
+                    <i class="fas fa-sync"></i>
+                    Reset cache
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock content %}
 {% block css %}

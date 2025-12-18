@@ -456,6 +456,9 @@ msgstr "Var"
 msgid "email"
 msgstr "e-post"
 
+msgid "moved"
+msgstr "flyttade"
+
 msgid "quick"
 msgstr "snabb"
 
@@ -675,6 +678,9 @@ msgstr "Omröstning"
 msgid "XP tot"
 msgstr "Px Tot"
 
+msgid "copied"
+msgstr "kopierad"
+
 msgid "issued"
 msgstr "utfärdade"
 
@@ -764,6 +770,9 @@ msgstr "Grupp"
 
 msgid "Gallery"
 msgstr "Galleri"
+
+msgid "Go Back"
+msgstr "Gå tillbaka"
 
 msgid "Handout"
 msgstr "Handout"
@@ -1209,6 +1218,9 @@ msgstr "Medföljer"
 msgid "Template"
 msgstr "Mall"
 
+msgid "Transfer"
+msgstr "Överföring"
+
 msgid "Treasury"
 msgstr "Finansdepartementet"
 
@@ -1220,6 +1232,9 @@ msgstr "Momssats"
 
 msgid "Versions"
 msgstr "Versioner"
+
+msgid "Warnings"
+msgstr "Varningar"
 
 msgid "Workshop"
 msgstr "Verkstad"
@@ -1355,6 +1370,9 @@ msgstr "Läs mail"
 
 msgid "Recipient"
 msgstr "Mottagare"
+
+msgid "Recompute"
+msgstr "Återberäkna"
 
 msgid "Reminders"
 msgstr "Påminnelser"
@@ -1734,6 +1752,9 @@ msgstr "Fyra kvoter"
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
 
+msgid "Information"
+msgstr "Information om"
+
 msgid "Installment"
 msgstr "Avbetalning"
 
@@ -1790,9 +1811,6 @@ msgstr "Publikation"
 
 msgid "Quick Setup"
 msgstr "Snabbinställning"
-
-msgid "Recalculate"
-msgstr "Omräkning"
 
 msgid "Register to"
 msgstr "Anmäl dig till"
@@ -2354,6 +2372,9 @@ msgstr "Kommunikation"
 msgid "Credit balance"
 msgstr "Kreditbalans"
 
+msgid "Current Ticket"
+msgstr "Aktuell biljett"
+
 msgid "Customisations"
 msgstr "Anpassningar"
 
@@ -2579,6 +2600,9 @@ msgstr "Extern åtkomst"
 msgid "Filter factions"
 msgstr "Filtrera grupper"
 
+msgid "Invalid request"
+msgstr "Ogiltig begäran"
+
 msgid "Mail assignment"
 msgstr "Tilldelning av post"
 
@@ -2708,6 +2732,9 @@ msgstr "Total samling"
 msgid "Color background"
 msgstr "Text bakgrund"
 
+msgid "Confirm Transfer"
+msgstr "Bekräfta överföring"
+
 msgid "Current quantity"
 msgstr "Aktuell kvantitet"
 
@@ -2822,6 +2849,9 @@ msgstr "Val av spelare"
 msgid "Pre-registration"
 msgstr "Förhandsanmälan"
 
+msgid "Preview transfer"
+msgstr "Förhandstitt transfer"
+
 msgid "Registration fee"
 msgstr "Anmälningsavgift"
 
@@ -2860,6 +2890,12 @@ msgstr "Total samling"
 
 msgid "Transaction fees"
 msgstr "Transaktionsavgifter"
+
+msgid "Transfer details"
+msgstr "Detaljer om överföringen"
+
+msgid "Transfer preview"
+msgstr "Förhandstitt på övergångar"
 
 msgid "Where it is held"
 msgstr "Var den hålls"
@@ -3647,6 +3683,9 @@ msgstr "För att komma åt historiken"
 msgid "Token not initialized"
 msgstr "Token inte initialiserad"
 
+msgid "Transfer registration"
+msgstr "Registrering av överföring"
+
 msgid "Upload membership fee"
 msgstr "Ladda upp medlemsavgift"
 
@@ -3763,6 +3802,9 @@ msgstr "Annullering av registrering"
 
 msgid "Registration confirmed"
 msgstr "Anmälan bekräftad"
+
+msgid "Registration not found"
+msgstr "Registreringen hittades inte"
 
 msgid "Registration questions"
 msgstr "Tillämpningar"
@@ -4017,11 +4059,17 @@ msgstr "Provisorisk registrering"
 msgid "Regeneration pdf started"
 msgstr "pdf förnyelse påbörjad"
 
+msgid "Registration to transfer"
+msgstr "Registrering för överföring"
+
 msgid "Relationships max length"
 msgstr "Relationer max längd"
 
 msgid "Secret registration link"
 msgstr "Hemlig registreringslänk"
+
+msgid "Target session not found"
+msgstr "Målsessionen hittades inte"
 
 msgid "The subdomain identifier"
 msgstr "Identifieraren för underdomänen"
@@ -4114,6 +4162,9 @@ msgstr "Läs de skrivande elementen"
 msgid "Receipt already confirmed"
 msgstr "Kvittot är redan bekräftat"
 
+msgid "Registration form answers"
+msgstr "Svar på registreringsformulär"
+
 msgid "Registration opening date"
 msgstr "Öppningsdatum för registrering"
 
@@ -4150,6 +4201,9 @@ msgstr "Användning av tredje parts tillgångar"
 
 msgid "We're sorry to see you go"
 msgstr "Vi är ledsna att se dig gå"
+
+msgid "What will be transferred?"
+msgstr "Vad kommer att överföras?"
 
 msgid "cancel your registrations"
 msgstr "avboka din registrering"
@@ -4193,6 +4247,9 @@ msgstr "Hantera taggar för lagerartiklar"
 
 msgid "Manage warehouse movements"
 msgstr "Hantera lagerrörelser"
+
+msgid "Multiple choice selections"
+msgstr "Flervalsalternativ"
 
 msgid "Now you can create inflows"
 msgstr "Nu kan du skapa inflöden"
@@ -4297,6 +4354,9 @@ msgstr "Namn på märket som ska delas ut"
 msgid "Now you can create outflows"
 msgstr "Nu kan du skapa utflöden"
 
+msgid "Or select a different event"
+msgstr "Eller välj ett annat evenemang"
+
 msgid "Pre-registration cancelled!"
 msgstr "Förhandsregistreringen är inställd!"
 
@@ -4305,6 +4365,9 @@ msgstr "Påminnelse om medlemsansökan"
 
 msgid "Set up dynamic installments"
 msgstr "Ställ in dynamiska delbetalningar"
+
+msgid "Target session (same event)"
+msgstr "Målsession (samma händelse)"
 
 msgid "Thank you for participating"
 msgstr "Tack för din medverkan"
@@ -4363,6 +4426,9 @@ msgstr "Begäran om undergiven medlem"
 
 msgid "Player customisation updated"
 msgstr "Spelaranpassning uppdaterad"
+
+msgid "Target event has no sessions"
+msgstr "Målhändelsen har inga sessioner"
 
 msgid "The only mandatory column is"
 msgstr "Den enda obligatoriska kolumnen är"
@@ -4509,6 +4575,12 @@ msgstr "Hantera visning av skrivelement"
 msgid "Registrations on external link"
 msgstr "Registreringar på extern länk"
 
+msgid "Select registration and target"
+msgstr "Välj registrering och mål"
+
+msgid "Select target session or event"
+msgstr "Välj målsession eller evenemang"
+
 msgid "Select the new photo to upload"
 msgstr "Välj det nya foto som ska laddas upp"
 
@@ -4517,6 +4589,9 @@ msgstr "Ställ in skattekonfigurationen"
 
 msgid "Set your interface preferences"
 msgstr "Ställ in dina gränssnittsinställningar"
+
+msgid "Target event (different event)"
+msgstr "Målhändelse (annan händelse)"
 
 msgid "The registrations to the event"
 msgstr "Anmälan till evenemanget"
@@ -4647,6 +4722,9 @@ msgstr "Visar en lista över användarnas e-postmeddelanden"
 msgid "Do you want to tell us something"
 msgstr "Är det något du vill berätta för oss"
 
+msgid "Errors - Transfer Cannot Proceed"
+msgstr "Fel - Överföringen kan inte fortsätta"
+
 msgid "Is it selectable by participants"
 msgstr "Är den valbar för deltagare"
 
@@ -4736,6 +4814,9 @@ msgstr "Organisationens fullständiga namn"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Bekräfta inmatning till %(event)s"
+
+msgid "Confirm to move this registration"
+msgstr "Bekräfta för att flytta denna registrering"
 
 msgid "Descriptive name for this API key"
 msgstr "Beskrivande namn för denna API-nyckel"
@@ -5045,6 +5126,9 @@ msgstr "Registrering bekräftad vid %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rollgodkännande %(role)s per %(event)s"
 
+msgid "Select a session from the same event"
+msgstr "Välj en session från samma evenemang"
+
 msgid "Select the event of this new session"
 msgstr "Välj evenemang för denna nya session"
 
@@ -5075,6 +5159,9 @@ msgstr "Du har tilldelats en prestation"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Läggs till längst ner i alla utskickade mail"
+
+msgid "Character assignments (if compatible)"
+msgstr "Teckentilldelning (om kompatibel)"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontrollera att skattekoden är giltig"
@@ -5136,6 +5223,9 @@ msgstr "Nu kan du ställa in den juridiska meddelandetexten"
 #, python-format
 msgid "Registration to %(event)s by %(user)s"
 msgstr "Inmatning i %(event)s av %(user)s"
+
+msgid "Review the transfer before confirming"
+msgstr "Granska överföringen innan du bekräftar"
 
 msgid "Select the organisation to proceed to"
 msgstr "Välj den organisation som du vill gå vidare till"
@@ -5301,6 +5391,9 @@ msgstr "Denna text kommer att läggas till på arket för"
 msgid "You are logged in with an email address"
 msgstr "Du är inloggad med en e-postadress"
 
+msgid "You must be logged in to view this page"
+msgstr "Du måste vara inloggad för att se denna sida"
+
 msgid "if it doesn't exist, it will be created"
 msgstr "om den inte finns, kommer den att skapas"
 
@@ -5375,6 +5468,9 @@ msgstr "Vem tar ansvar för att lösa problemet"
 
 msgid "Would you like to pay a different amount"
 msgstr "Skulle du vilja betala ett annat belopp"
+
+msgid "You must be registered to view this page"
+msgstr "Du måste vara registrerad för att se denna sida"
 
 msgid "You think you should have an achievement"
 msgstr "Tycker du att du har rätt till en prestation"
@@ -5685,6 +5781,9 @@ msgstr "Kom ihåg att sätta prefixet i början!"
 msgid "Select a character to add a new relationship"
 msgstr "Välj en karaktär för att lägga till en ny relation"
 
+msgid "Select the registration you want to transfer"
+msgstr "Välj den registrering som du vill överföra"
+
 msgid "Set up a value for registration opening date"
 msgstr "Ange ett värde för öppningsdatum för registrering"
 
@@ -5885,6 +5984,9 @@ msgstr "Antal tecken som ska tilldelas (standard 1)"
 msgid "Optional template associated with this ability."
 msgstr "Valfri mall som associeras med denna förmåga."
 
+msgid "Registration data (ticket, quotas, additionals)"
+msgstr "Registreringsdata (biljett, kvoter, tillägg)"
+
 msgid "Selected elements will be shown to participants"
 msgstr "Utvalda element kommer att visas för deltagarna"
 
@@ -5930,6 +6032,9 @@ msgstr "En beskrivning av kompetensens färdigheter"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Få tillgång till din karaktär <a href='%(url)s'>här</a>"
+
+msgid "Accounting items (payment history will be reset)"
+msgstr "Bokföringsposter (betalningshistoriken kommer att återställas)"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beskriv exakt vilka deltagare som är involverade"
@@ -6099,6 +6204,9 @@ msgstr "Hantera framstegsstegen för skrivelementen"
 msgid "Maximum number of characters the player can create"
 msgstr "Maximalt antal karaktärer som spelaren kan skapa"
 
+msgid "Please select both a registration and a target run"
+msgstr "Vänligen välj både en registrering och en målkörning"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i förhållandet (destination)"
 
@@ -6126,6 +6234,9 @@ msgstr "Denna sida sammanfattar organisationens volontärer"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
+
+msgid "Transfer a registration from this event to another"
+msgstr "Överföra en registrering från detta evenemang till ett annat"
 
 msgid "Write to us if you need help in setting things up!"
 msgstr "Hör av dig till oss om du behöver hjälp med att sätta upp saker!"
@@ -6449,6 +6560,9 @@ msgstr "Hantera lastnings- och utplaceringsstatus för lagerartiklar"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Hantera betalningar som utförs av deltagare på alla evenemang"
+
+msgid "Please select either a target session or a target event"
+msgstr "Välj antingen en målsession eller ett målegenemang"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Snabbt konfigurera de viktigaste inställningarna för dina evenemang"
@@ -6843,6 +6957,10 @@ msgstr "Valfritt - Utökad beskrivning (visas i liten grå text)"
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr "Valfri notering om denna token (t.ex. mottagarens namn, syfte)"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(run)s"
+msgstr "Registrering för %(member)s framgångsrikt %(action)s till %(run)s"
+
 msgid "Set specific values for configuration of features of the event"
 msgstr "Ange specifika värden för konfiguration av evenemangets funktioner"
 
@@ -7042,6 +7160,10 @@ msgstr "Nu kan du granska den kostinformation som deltagarna har lämnat in"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Ange för vilket tillfälle du vill göra en donation"
+
+msgid "Please select only one target (either session or event, not both)"
+msgstr ""
+"Vänligen välj endast ett mål (antingen session eller evenemang, inte båda)"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""
@@ -10054,6 +10176,13 @@ msgid ""
 msgstr ""
 "Antal delbetalningar för att dela upp avgiften: betalningar och tidsfrister "
 "kommer att delas upp lika från registreringsdatumet"
+
+msgid ""
+"This will move the registration from the current run to the target run. The "
+"original registration will be deleted."
+msgstr ""
+"Detta kommer att flytta registreringen från den aktuella körningen till "
+"målkörningen. Den ursprungliga registreringen kommer att raderas."
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "
