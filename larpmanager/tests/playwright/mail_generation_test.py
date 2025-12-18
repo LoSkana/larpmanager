@@ -165,7 +165,7 @@ def badge(live_server: Any, page: Any) -> None:
 def chat(live_server: Any, page: Any) -> None:
     # Test chat
     go_to(page, live_server, "/manage/features/chat/on")
-    go_to(page, live_server, "/public/3/")
+    go_to(page, live_server, "/public/uIT2O97q9XKA/")
     page.get_by_role("link", name="Chat").click()
     page.get_by_role("textbox").fill("ciao!")
     submit(page)
