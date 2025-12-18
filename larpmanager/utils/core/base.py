@@ -406,14 +406,14 @@ def get_event_context(
 
     # Check character visibility restrictions if requested (skip for admin and manage users)
     if check_visibility and not is_lm_admin(request) and "manage" not in context:
+        event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
         # Check if gallery is hidden for non-authenticated users
         hide_gallery_for_non_login = get_event_config(
             context["event"].id, "gallery_hide_login", default_value=False, context=context
         )
         if hide_gallery_for_non_login and not request.user.is_authenticated:
             messages.warning(request, _("You must be logged in to view this page"))
-            gallery_url = reverse("gallery", kwargs={"event_slug": context["run"].get_slug()})
-            raise RedirectError(gallery_url)
+            raise RedirectError(event_url)
 
         # Check if gallery is hidden for non-registered users
         hide_gallery_for_non_signup = get_event_config(
@@ -421,8 +421,7 @@ def get_event_context(
         )
         if hide_gallery_for_non_signup and not getattr(context["run"], "reg", None):
             messages.warning(request, _("You must be registered to view this page"))
-            gallery_url = reverse("gallery", kwargs={"event_slug": context["run"].get_slug()})
-            raise RedirectError(gallery_url)
+            raise RedirectError(event_url)
 
     return context
 
