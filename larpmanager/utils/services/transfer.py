@@ -17,8 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -29,7 +30,6 @@ from larpmanager.models.accounting import (
     OtherChoices,
     PaymentInvoice,
 )
-from larpmanager.models.event import Run
 from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
@@ -43,18 +43,21 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 
+if TYPE_CHECKING:
+    from larpmanager.models.event import Event, Run
+
 
 def transfer_registration_between_runs(
     registration: Registration,
     target_run: Run,
-    ticket_mapping: Optional[dict[int, int]] = None,
+    ticket_mapping: dict[int, int] | None = None,
+    *,
     preserve_choices: bool = True,
     preserve_answers: bool = True,
     preserve_accounting: bool = True,
     move_registration: bool = True,
 ) -> Registration:
-    """
-    Transfer a registration from one run to another, attempting to match tickets, questions and options.
+    """Transfer a registration from one run to another, attempting to match tickets, questions and options.
 
     Args:
         registration: The registration to transfer
@@ -72,10 +75,10 @@ def transfer_registration_between_runs(
     Raises:
         ValidationError: If the transfer is not possible
     """
-
     # Check that the registration is not already in the target run
     if registration.run == target_run:
-        raise ValidationError("Registration is already in the target run")
+        msg = "Registration is already in the target run"
+        raise ValidationError(msg)
 
     # Check that the member doesn't already have a registration in the target run
     existing_reg = Registration.objects.filter(
@@ -83,7 +86,8 @@ def transfer_registration_between_runs(
     ).first()
 
     if existing_reg:
-        raise ValidationError(f"Member {registration.member} already has a registration in run {target_run}")
+        msg = f"Member {registration.member} already has a registration in run {target_run}"
+        raise ValidationError(msg)
 
     with transaction.atomic():
         # 1. Find matching ticket in the new run
@@ -130,10 +134,9 @@ def transfer_registration_between_runs(
 
 
 def _find_matching_ticket(
-    source_ticket: RegistrationTicket, target_run: Run, ticket_mapping: Optional[dict[int, int]] = None
-) -> Optional[RegistrationTicket]:
-    """
-    Find the corresponding ticket in the destination run.
+    source_ticket: RegistrationTicket, target_run: Run, ticket_mapping: dict[int, int] | None = None
+) -> RegistrationTicket | None:
+    """Find the corresponding ticket in the destination run.
 
     Matching logic:
     1. If manual mapping exists, use it
@@ -160,15 +163,11 @@ def _find_matching_ticket(
         return exact_match
 
     # Match by tier only
-    tier_match = RegistrationTicket.objects.filter(event=target_event, tier=source_ticket.tier).first()
-
-    return tier_match
+    return RegistrationTicket.objects.filter(event=target_event, tier=source_ticket.tier).first()
 
 
 def _transfer_choices(source_reg: Registration, target_reg: Registration) -> list[RegistrationChoice]:
-    """
-    Transfer multiple choice selections from source registration to destination.
-    """
+    """Transfer multiple choice selections from source registration to destination."""
     source_choices = RegistrationChoice.objects.filter(reg=source_reg)
     transferred_choices = []
 
@@ -191,9 +190,7 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
 
 
 def _transfer_answers(source_reg: Registration, target_reg: Registration) -> list[RegistrationAnswer]:
-    """
-    Transfer text answers from source registration to destination.
-    """
+    """Transfer text answers from source registration to destination."""
     source_answers = RegistrationAnswer.objects.filter(reg=source_reg)
     transferred_answers = []
 
@@ -210,9 +207,8 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
     return transferred_answers
 
 
-def _find_matching_question(source_question: RegistrationQuestion, target_event) -> Optional[RegistrationQuestion]:
-    """
-    Find the corresponding question in the destination event.
+def _find_matching_question(source_question: RegistrationQuestion, target_event: Event) -> RegistrationQuestion | None:
+    """Find the corresponding question in the destination event.
 
     Matching logic:
     1. Match by type and exact name
@@ -243,17 +239,13 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event)
             return type_match
 
     # Match by name
-    name_match = RegistrationQuestion.objects.filter(event=target_event, name=source_question.name).first()
-
-    return name_match
+    return RegistrationQuestion.objects.filter(event=target_event, name=source_question.name).first()
 
 
 def _find_matching_option(
     source_option: RegistrationOption, target_question: RegistrationQuestion
-) -> Optional[RegistrationOption]:
-    """
-    Find the corresponding option in the destination question.
-    """
+) -> RegistrationOption | None:
+    """Find the corresponding option in the destination question."""
     # Match by exact name
     exact_match = RegistrationOption.objects.filter(question=target_question, name=source_option.name).first()
 
@@ -261,17 +253,11 @@ def _find_matching_option(
         return exact_match
 
     # Match by description if name doesn't match
-    desc_match = RegistrationOption.objects.filter(
-        question=target_question, description=source_option.description
-    ).first()
-
-    return desc_match
+    return RegistrationOption.objects.filter(question=target_question, description=source_option.description).first()
 
 
-def _transfer_character_relations(source_reg: Registration, target_reg: Registration):
-    """
-    Transfer character relationships from source registration to destination.
-    """
+def _transfer_character_relations(source_reg: Registration, target_reg: Registration) -> None:
+    """Transfer character relationships from source registration to destination."""
     source_relations = RegistrationCharacterRel.objects.filter(reg=source_reg)
 
     for relation in source_relations:
@@ -292,9 +278,8 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
             )
 
 
-def _transfer_accounting_items(source_reg: Registration, target_reg: Registration):
-    """
-    Transfer accounting items (payments, invoices and other items) from source registration to destination.
+def _transfer_accounting_items(source_reg: Registration, target_reg: Registration) -> None:
+    """Transfer accounting items (payments, invoices and other items) from source registration to destination.
 
     Note: This function transfers the accounting structure but resets payment amounts to 0
     to avoid double-counting payments. The actual financial reconciliation should be handled separately.
@@ -357,9 +342,8 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             )
 
 
-def _delete_original_registration_data(registration: Registration):
-    """
-    Delete the original registration and all its related data.
+def _delete_original_registration_data(registration: Registration) -> None:
+    """Delete the original registration and all its related data.
 
     This function removes:
     - Payment invoices linked to the registration (PaymentInvoice)
@@ -395,8 +379,7 @@ def _delete_original_registration_data(registration: Registration):
 
 
 def get_suggested_ticket_mapping(source_run: Run, target_run: Run) -> dict[int, int]:
-    """
-    Generate a suggested mapping between tickets of two runs.
+    """Generate a suggested mapping between tickets of two runs.
 
     Args:
         source_run: The source run
@@ -427,8 +410,7 @@ def get_suggested_ticket_mapping(source_run: Run, target_run: Run) -> dict[int, 
 
 
 def validate_transfer_feasibility(registration: Registration, target_run: Run) -> dict[str, list[str]]:
-    """
-    Validate if a registration transfer is feasible and return potential issues.
+    """Validate if a registration transfer is feasible and return potential issues.
 
     Args:
         registration: The registration to transfer
@@ -502,22 +484,18 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     return result
 
 
-def _validate_character(registration, result, target_run):
+def _validate_character(registration: Registration, result: dict[str, list[str]], target_run: Run) -> None:
     # Check character compatibility
     source_characters = registration.characters.all()
     if source_characters:
         character_event = target_run.event.get_class_parent("character")
-        incompatible_chars = []
-
-        for char in source_characters:
-            if char.event != character_event:
-                incompatible_chars.append(char.name)
+        incompatible_chars = [char.name for char in source_characters if char.event != character_event]
 
         if incompatible_chars:
             result["warnings"].append(f"Characters not available in target event: {', '.join(incompatible_chars)}")
 
 
-def _validate_ticket(registration, result, target_run):
+def _validate_ticket(registration: Registration, result: dict[str, list[str]], target_run: Run) -> None:
     # Check ticket matching
     target_ticket = _find_matching_ticket(registration.ticket, target_run)
     if not target_ticket and registration.ticket:
@@ -533,54 +511,16 @@ def _validate_ticket(registration, result, target_run):
             result["info"].append(f"Ticket price will change from {registration.ticket.price} to {target_ticket.price}")
 
 
-def copy_registration_between_runs(
-    registration: Registration,
-    target_run: Run,
-    ticket_mapping: Optional[dict[int, int]] = None,
-    preserve_choices: bool = True,
-    preserve_answers: bool = True,
-    preserve_accounting: bool = True,
-) -> Registration:
-    """
-    Copy a registration from one run to another without deleting the original.
-
-    This is a convenience wrapper around transfer_registration_between_runs with move_registration=False.
-
-    Args:
-        registration: The registration to copy
-        target_run: The destination run
-        ticket_mapping: Manual mapping between ticket IDs (source_ticket_id -> target_ticket_id)
-        preserve_choices: Whether to preserve multiple choice selections
-        preserve_answers: Whether to preserve text answers
-        preserve_accounting: Whether to preserve accounting items (payments and other items)
-
-    Returns:
-        The new registration created in the target run
-
-    Raises:
-        ValidationError: If the copy is not possible
-    """
-    return transfer_registration_between_runs(
-        registration=registration,
-        target_run=target_run,
-        ticket_mapping=ticket_mapping,
-        preserve_choices=preserve_choices,
-        preserve_answers=preserve_answers,
-        preserve_accounting=preserve_accounting,
-        move_registration=False,
-    )
-
-
 def move_registration_between_runs(
     registration: Registration,
     target_run: Run,
-    ticket_mapping: Optional[dict[int, int]] = None,
+    ticket_mapping: dict[int, int] | None = None,
+    *,
     preserve_choices: bool = True,
     preserve_answers: bool = True,
     preserve_accounting: bool = True,
 ) -> Registration:
-    """
-    Move a registration from one run to another, deleting the original.
+    """Move a registration from one run to another, deleting the original.
 
     This is a convenience wrapper around transfer_registration_between_runs with move_registration=True.
 

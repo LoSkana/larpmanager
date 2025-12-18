@@ -456,6 +456,9 @@ msgstr "Waar"
 msgid "email"
 msgstr "e-mail"
 
+msgid "moved"
+msgstr "Verplaatst"
+
 msgid "quick"
 msgstr "snel"
 
@@ -675,6 +678,9 @@ msgstr "Stemmen"
 msgid "XP tot"
 msgstr "Px Tot"
 
+msgid "copied"
+msgstr "gekopieerd"
+
 msgid "issued"
 msgstr "uitgegeven"
 
@@ -764,6 +770,9 @@ msgstr "Groep"
 
 msgid "Gallery"
 msgstr "Galerij"
+
+msgid "Go Back"
+msgstr "Ga terug"
 
 msgid "Handout"
 msgstr "Handout"
@@ -1209,6 +1218,9 @@ msgstr "Geleverd"
 msgid "Template"
 msgstr "Sjabloon"
 
+msgid "Transfer"
+msgstr "Overdracht"
+
 msgid "Treasury"
 msgstr "Schatkist"
 
@@ -1220,6 +1232,9 @@ msgstr "BTW-tarief"
 
 msgid "Versions"
 msgstr "Versies"
+
+msgid "Warnings"
+msgstr "Waarschuwingen"
 
 msgid "Workshop"
 msgstr "Workshop"
@@ -1355,6 +1370,9 @@ msgstr "Post lezen"
 
 msgid "Recipient"
 msgstr "Ontvanger"
+
+msgid "Recompute"
+msgstr "Herbereken"
 
 msgid "Reminders"
 msgstr "Herinneringen"
@@ -1734,6 +1752,9 @@ msgstr "Vier quota"
 msgid "Gallery Pdf"
 msgstr "Pdf Galerij"
 
+msgid "Information"
+msgstr "Informatie"
+
 msgid "Installment"
 msgstr "Termijn"
 
@@ -1790,9 +1811,6 @@ msgstr "Publicatie"
 
 msgid "Quick Setup"
 msgstr "Snelle installatie"
-
-msgid "Recalculate"
-msgstr "Herberekenen"
 
 msgid "Register to"
 msgstr "Aanmelden voor"
@@ -2354,6 +2372,9 @@ msgstr "Communicatie"
 msgid "Credit balance"
 msgstr "Kredietsaldo"
 
+msgid "Current Ticket"
+msgstr "Huidig ticket"
+
 msgid "Customisations"
 msgstr "Aanpassingen"
 
@@ -2579,6 +2600,9 @@ msgstr "Externe toegang"
 msgid "Filter factions"
 msgstr "Filtergroepen"
 
+msgid "Invalid request"
+msgstr "Ongeldig verzoek"
+
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
@@ -2708,6 +2732,9 @@ msgstr "Totale collectie"
 msgid "Color background"
 msgstr "Tekst achtergrond"
 
+msgid "Confirm Transfer"
+msgstr "Bevestig overdracht"
+
 msgid "Current quantity"
 msgstr "Huidige hoeveelheid"
 
@@ -2822,6 +2849,9 @@ msgstr "Speler selectie"
 msgid "Pre-registration"
 msgstr "Voorinschrijving"
 
+msgid "Preview transfer"
+msgstr "Voorbeeld overdracht"
+
 msgid "Registration fee"
 msgstr "Inschrijfgeld"
 
@@ -2860,6 +2890,12 @@ msgstr "Totale collectie"
 
 msgid "Transaction fees"
 msgstr "Transactiekosten"
+
+msgid "Transfer details"
+msgstr "Details overbrengen"
+
+msgid "Transfer preview"
+msgstr "Transfervoorbeschouwing"
 
 msgid "Where it is held"
 msgstr "Waar het wordt gehouden"
@@ -3647,6 +3683,9 @@ msgstr "De geschiedenis openen"
 msgid "Token not initialized"
 msgstr "Token niet geïnitialiseerd"
 
+msgid "Transfer registration"
+msgstr "Registratie overdragen"
+
 msgid "Upload membership fee"
 msgstr "Lidmaatschap uploaden"
 
@@ -3763,6 +3802,9 @@ msgstr "Annulering registratie"
 
 msgid "Registration confirmed"
 msgstr "Toegang bevestigd"
+
+msgid "Registration not found"
+msgstr "Registratie niet gevonden"
 
 msgid "Registration questions"
 msgstr "Toepassingen"
@@ -4017,11 +4059,17 @@ msgstr "Voorlopige registratie"
 msgid "Regeneration pdf started"
 msgstr "pdf regeneratie gestart"
 
+msgid "Registration to transfer"
+msgstr "Registratie voor overdracht"
+
 msgid "Relationships max length"
 msgstr "Relaties maximale lengte"
 
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
+
+msgid "Target session not found"
+msgstr "Doelsessie niet gevonden"
 
 msgid "The subdomain identifier"
 msgstr "De identificatiecode van het subdomein"
@@ -4114,6 +4162,9 @@ msgstr "Lees de schrijfelementen"
 msgid "Receipt already confirmed"
 msgstr "Ontvangst al bevestigd"
 
+msgid "Registration form answers"
+msgstr "Antwoorden registratieformulier"
+
 msgid "Registration opening date"
 msgstr "Datum opening registratie"
 
@@ -4150,6 +4201,9 @@ msgstr "Gebruik van activa van derden"
 
 msgid "We're sorry to see you go"
 msgstr "We vinden het jammer dat je weggaat"
+
+msgid "What will be transferred?"
+msgstr "Wat wordt er overgedragen?"
 
 msgid "cancel your registrations"
 msgstr "annuleer je registratie"
@@ -4193,6 +4247,9 @@ msgstr "Magazijnartikelmarkeringen beheren"
 
 msgid "Manage warehouse movements"
 msgstr "Magazijnbewegingen beheren"
+
+msgid "Multiple choice selections"
+msgstr "Meerkeuze selecties"
 
 msgid "Now you can create inflows"
 msgstr "Nu kun je instromen maken"
@@ -4297,6 +4354,9 @@ msgstr "Naam van de badge die wordt uitgereikt"
 msgid "Now you can create outflows"
 msgstr "Nu kun je uitstromen maken"
 
+msgid "Or select a different event"
+msgstr "Of selecteer een ander evenement"
+
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
 
@@ -4305,6 +4365,9 @@ msgstr "Herinnering lidmaatschapsverzoek"
 
 msgid "Set up dynamic installments"
 msgstr "Dynamische afbetalingen instellen"
+
+msgid "Target session (same event)"
+msgstr "Doelsessie (hetzelfde evenement)"
 
 msgid "Thank you for participating"
 msgstr "Bedankt voor uw deelname"
@@ -4363,6 +4426,9 @@ msgstr "Verzoek onderdanig lid"
 
 msgid "Player customisation updated"
 msgstr "Spelersaanpassing bijgewerkt"
+
+msgid "Target event has no sessions"
+msgstr "Doelgebeurtenis heeft geen sessies"
 
 msgid "The only mandatory column is"
 msgstr "De enige verplichte kolom is"
@@ -4509,6 +4575,12 @@ msgstr "Weergave schrijfelement beheren"
 msgid "Registrations on external link"
 msgstr "Registraties op externe link"
 
+msgid "Select registration and target"
+msgstr "Selecteer registratie en doel"
+
+msgid "Select target session or event"
+msgstr "Selecteer doelsessie of gebeurtenis"
+
 msgid "Select the new photo to upload"
 msgstr "Selecteer de nieuwe foto die u wilt uploaden"
 
@@ -4517,6 +4589,9 @@ msgstr "De belastingconfiguratie instellen"
 
 msgid "Set your interface preferences"
 msgstr "Stel je interfacevoorkeuren in"
+
+msgid "Target event (different event)"
+msgstr "Doelgebeurtenis (andere gebeurtenis)"
 
 msgid "The registrations to the event"
 msgstr "Registratie voor het evenement"
@@ -4647,6 +4722,9 @@ msgstr "Lijst met e-mails van gebruikers weergeven"
 msgid "Do you want to tell us something"
 msgstr "Wil je ons iets vertellen"
 
+msgid "Errors - Transfer Cannot Proceed"
+msgstr "Fouten - Overdracht kan niet doorgaan"
+
 msgid "Is it selectable by participants"
 msgstr "Is het selecteerbaar door deelnemers"
 
@@ -4736,6 +4814,9 @@ msgstr "Volledige naam van de organisatie"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Toegang tot %(event)s bevestigen"
+
+msgid "Confirm to move this registration"
+msgstr "Bevestigen om deze registratie te verplaatsen"
 
 msgid "Descriptive name for this API key"
 msgstr "Beschrijvende naam voor deze API-sleutel"
@@ -5045,6 +5126,9 @@ msgstr "Registratie bevestigd bij %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Rolgoedkeuring %(role)s per %(event)s"
 
+msgid "Select a session from the same event"
+msgstr "Selecteer een sessie van hetzelfde evenement"
+
 msgid "Select the event of this new session"
 msgstr "Selecteer de gebeurtenis van deze nieuwe sessie"
 
@@ -5075,6 +5159,9 @@ msgstr "Je hebt een prestatie geleverd"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
+
+msgid "Character assignments (if compatible)"
+msgstr "Karaktertoewijzingen (indien compatibel)"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Controleer de geldigheid van de fiscale code"
@@ -5136,6 +5223,9 @@ msgstr "Nu kunt u de tekst van de juridische kennisgeving instellen"
 #, python-format
 msgid "Registration to %(event)s by %(user)s"
 msgstr "Invoer in %(event)s van %(user)s"
+
+msgid "Review the transfer before confirming"
+msgstr "Controleer de overdracht voordat u bevestigt"
 
 msgid "Select the organisation to proceed to"
 msgstr "Selecteer de organisatie om verder te gaan"
@@ -5686,6 +5776,9 @@ msgstr "Vergeet niet het voorvoegsel aan het begin te zetten!"
 msgid "Select a character to add a new relationship"
 msgstr "Selecteer een personage om een nieuwe relatie toe te voegen"
 
+msgid "Select the registration you want to transfer"
+msgstr "Selecteer de registratie die je wilt overdragen"
+
 msgid "Set up a value for registration opening date"
 msgstr "Stel een waarde in voor de openingsdatum van de registratie"
 
@@ -5891,6 +5984,9 @@ msgstr "Aantal tekens dat moet worden toegewezen (standaard 1)"
 msgid "Optional template associated with this ability."
 msgstr "Optioneel sjabloon voor deze vaardigheid."
 
+msgid "Registration data (ticket, quotas, additionals)"
+msgstr "Registratiegegevens (ticket, quota, aanvullingen)"
+
 msgid "Selected elements will be shown to participants"
 msgstr "Geselecteerde elementen worden aan de deelnemers getoond"
 
@@ -5936,6 +6032,9 @@ msgstr "Een beschrijving van de competentievaardigheden"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>"
+
+msgid "Accounting items (payment history will be reset)"
+msgstr "Boekingsitems (betalingsgeschiedenis wordt gereset)"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beschrijf precies welke deelnemers betrokken zijn"
@@ -6106,6 +6205,9 @@ msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 msgid "Maximum number of characters the player can create"
 msgstr "Maximum aantal personages dat de speler kan maken"
 
+msgid "Please select both a registration and a target run"
+msgstr "Selecteer zowel een registratie als een doelrun"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede teken in de relatie (bestemming)"
 
@@ -6134,6 +6236,9 @@ msgstr ""
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deelnamekosten verlaagd door kortingen"
+
+msgid "Transfer a registration from this event to another"
+msgstr "Een registratie overdragen van dit evenement naar een ander"
 
 msgid "Write to us if you need help in setting things up!"
 msgstr "Schrijf ons als je hulp nodig hebt bij het opzetten!"
@@ -6467,6 +6572,9 @@ msgstr "De laad- en inzetstatus van magazijnitems beheren"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Beheer betalingen door deelnemers aan alle evenementen"
+
+msgid "Please select either a target session or a target event"
+msgstr "Selecteer een doelsessie of een doelevenement"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Configureer snel de belangrijkste instellingen van je evenementen"
@@ -6888,6 +6996,10 @@ msgstr ""
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr "Optionele opmerking over dit token (bijv. naam ontvanger, doel)"
 
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(run)s"
+msgstr "Registratie voor %(member)s met succes %(action)s naar %(run)s"
+
 msgid "Set specific values for configuration of features of the event"
 msgstr ""
 "Specifieke waarden instellen voor de configuratie van kenmerken van de "
@@ -7108,6 +7220,9 @@ msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vul de gelegenheid in waarvoor je de donatie wilt doen"
+
+msgid "Please select only one target (either session or event, not both)"
+msgstr "Selecteer slechts één doel (sessie of evenement, niet beide)"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""
@@ -10215,6 +10330,13 @@ msgid ""
 msgstr ""
 "Aantal termijnen om de kosten te verdelen: betalingen en termijnen worden "
 "gelijk verdeeld vanaf de registratiedatum"
+
+msgid ""
+"This will move the registration from the current run to the target run. The "
+"original registration will be deleted."
+msgstr ""
+"Hierdoor wordt de registratie verplaatst van de huidige run naar de "
+"doelsrun. De oorspronkelijke registratie wordt verwijderd."
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "
