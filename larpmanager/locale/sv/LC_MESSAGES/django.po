@@ -5391,6 +5391,9 @@ msgstr "Denna text kommer att läggas till på arket för"
 msgid "You are logged in with an email address"
 msgstr "Du är inloggad med en e-postadress"
 
+msgid "You must be logged in to view this page"
+msgstr "Du måste vara inloggad för att se denna sida"
+
 msgid "if it doesn't exist, it will be created"
 msgstr "om den inte finns, kommer den att skapas"
 
@@ -5465,6 +5468,9 @@ msgstr "Vem tar ansvar för att lösa problemet"
 
 msgid "Would you like to pay a different amount"
 msgstr "Skulle du vilja betala ett annat belopp"
+
+msgid "You must be registered to view this page"
+msgstr "Du måste vara registrerad för att se denna sida"
 
 msgid "You think you should have an achievement"
 msgstr "Tycker du att du har rätt till en prestation"

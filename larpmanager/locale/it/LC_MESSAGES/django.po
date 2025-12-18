@@ -5389,6 +5389,9 @@ msgstr "Questo testo verrà aggiunto alla scheda di"
 msgid "You are logged in with an email address"
 msgstr "Sei loggato con indirizzo email"
 
+msgid "You must be logged in to view this page"
+msgstr "Per visualizzare questa pagina è necessario aver effettuato il login"
+
 msgid "if it doesn't exist, it will be created"
 msgstr "se non esiste, verrà creato"
 
@@ -5463,6 +5466,9 @@ msgstr "Chi si prende in carico di risolverlo"
 
 msgid "Would you like to pay a different amount"
 msgstr "Desideri versare un diverso ammontare"
+
+msgid "You must be registered to view this page"
+msgstr "Per visualizzare questa pagina è necessario essere registrati"
 
 msgid "You think you should have an achievement"
 msgstr "Pensi di aver diritto ad un achievement"

@@ -5392,6 +5392,9 @@ msgstr "Ce texte sera ajouté à la feuille de"
 msgid "You are logged in with an email address"
 msgstr "Vous êtes connecté avec une adresse e-mail"
 
+msgid "You must be logged in to view this page"
+msgstr "Vous devez être connecté pour voir cette page"
+
 msgid "if it doesn't exist, it will be created"
 msgstr "s'il n'existe pas, il sera créé"
 
@@ -5466,6 +5469,9 @@ msgstr "Qui se charge de le résoudre"
 
 msgid "Would you like to pay a different amount"
 msgstr "Souhaitez-vous payer un montant différent"
+
+msgid "You must be registered to view this page"
+msgstr "Vous devez être inscrit pour voir cette page"
 
 msgid "You think you should have an achievement"
 msgstr "Pensez-vous avoir droit à une récompense"
@@ -7051,7 +7057,7 @@ msgstr ""
 
 #, python-format
 msgid "Registration for %(member)s successfully %(action)s to %(run)s"
-msgstr "Inscription pour les %(member) avec succès %(action) à %(run)s"
+msgstr "Inscription pour les %(member)s avec succès %(action)s à %(run)s"
 
 msgid "Set specific values for configuration of features of the event"
 msgstr ""

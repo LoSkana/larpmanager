@@ -5389,6 +5389,9 @@ msgstr "Tento text bude přidán na list"
 msgid "You are logged in with an email address"
 msgstr "Jste přihlášeni pomocí e-mailové adresy"
 
+msgid "You must be logged in to view this page"
+msgstr "Pro zobrazení této stránky musíte být přihlášeni"
+
 msgid "if it doesn't exist, it will be created"
 msgstr "pokud neexistuje, bude vytvořen"
 
@@ -5463,6 +5466,9 @@ msgstr "Kdo je zodpovědný za jeho řešení"
 
 msgid "Would you like to pay a different amount"
 msgstr "Chcete zaplatit jinou částku"
+
+msgid "You must be registered to view this page"
+msgstr "Pro zobrazení této stránky musíte být zaregistrováni"
 
 msgid "You think you should have an achievement"
 msgstr "Myslíte si, že máte nárok na úspěch"

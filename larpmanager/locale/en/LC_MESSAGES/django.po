@@ -4922,12 +4922,6 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-msgid "Characters are only visible to logged in users"
-msgstr ""
-
-msgid "Characters are only visible to participants"
-msgstr ""
-
 msgid "Registered"
 msgstr ""
 
@@ -5155,6 +5149,12 @@ msgid "Registration conditions"
 msgstr ""
 
 msgid "Conditions of"
+msgstr ""
+
+msgid "Characters are only visible to logged in users"
+msgstr ""
+
+msgid "Characters are only visible to participants"
 msgstr ""
 
 msgid "Character are not visible at the moment"
@@ -8909,6 +8909,12 @@ msgid "No elements are currently available"
 msgstr ""
 
 msgid "Show available characters"
+msgstr ""
+
+msgid "You must be logged in to view this page"
+msgstr ""
+
+msgid "You must be registered to view this page"
 msgstr ""
 
 msgid "Welcome"

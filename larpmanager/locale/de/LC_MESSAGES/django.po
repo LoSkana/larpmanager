@@ -5393,6 +5393,9 @@ msgstr "Dieser Text wird auf dem Blatt der"
 msgid "You are logged in with an email address"
 msgstr "Sie sind mit einer E-Mail-Adresse eingeloggt"
 
+msgid "You must be logged in to view this page"
+msgstr "Sie müssen eingeloggt sein, um diese Seite zu sehen"
+
 msgid "if it doesn't exist, it will be created"
 msgstr "wenn sie nicht existiert, wird sie erstellt"
 
@@ -5467,6 +5470,9 @@ msgstr "Wer ist für die Lösung des Problems zuständig"
 
 msgid "Would you like to pay a different amount"
 msgstr "Möchten Sie einen anderen Betrag zahlen"
+
+msgid "You must be registered to view this page"
+msgstr "Sie müssen registriert sein, um diese Seite zu sehen"
 
 msgid "You think you should have an achievement"
 msgstr "Glauben Sie, dass Sie ein Recht auf eine Leistung haben"
