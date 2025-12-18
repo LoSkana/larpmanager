@@ -39,7 +39,7 @@
                     {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                     -
                     {% if el.player_id > 0 %}
-                        <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_id %}">
+                        <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_uuid %}">
                             {% if run.id in all_runs %}
                                 {{ el.player_full }}
                             {% else %}

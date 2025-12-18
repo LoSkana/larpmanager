@@ -1806,6 +1806,9 @@ msgstr "Postup"
 msgid "Provisional"
 msgstr "Provizorní"
 
+msgid "Public UUID"
+msgstr "Veřejné UUID"
+
 msgid "Publication"
 msgstr "Publikace"
 
@@ -5519,6 +5522,9 @@ msgstr "Existují úkoly bez vlastností: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Tato stránka shrnuje nahraná fotoalba"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Jedinečný identifikátor pro veřejné adresy URL profilu"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Vylučujete (žádný z těchto filtrů)"

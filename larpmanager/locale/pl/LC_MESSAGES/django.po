@@ -1806,6 +1806,9 @@ msgstr "Progresja"
 msgid "Provisional"
 msgstr "Tymczasowe"
 
+msgid "Public UUID"
+msgstr "Publiczny identyfikator UUID"
+
 msgid "Publication"
 msgstr "Publikacja"
 
@@ -5519,6 +5522,9 @@ msgstr "Istnieją zadania bez cech: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Na tej stronie wyświetlane są przesłane albumy ze zdjęciami"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Unikalny identyfikator dla adresów URL profili publicznych"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Wykluczasz (żaden z tych filtrów)"

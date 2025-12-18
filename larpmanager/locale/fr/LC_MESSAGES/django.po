@@ -1806,6 +1806,9 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Provisoire"
 
+msgid "Public UUID"
+msgstr "UUID public"
+
 msgid "Publication"
 msgstr "Publication"
 
@@ -5522,6 +5525,9 @@ msgstr "Il y a des quêtes sans traits : %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Cette page résume les albums photos téléchargés"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Identifiant unique pour les URL des profils publics"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Vous excluez (aucun de ces filtres)"

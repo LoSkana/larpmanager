@@ -76,7 +76,7 @@
                                 {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                                 {% if el.player_id > 0 %}
                                     <p>
-                                        <a href="{% url 'public' el.player_id %}"><b>{{ el.player }}</b></a>
+                                        <a href="{% url 'public' el.player_uuid %}"><b>{{ el.player }}</b></a>
                                     </p>
                                 {% endif %}
                             </p>

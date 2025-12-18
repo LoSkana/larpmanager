@@ -93,6 +93,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: hwCXNm815c9a
 - model: larpmanager.member
   pk: 2
   fields:
@@ -128,6 +129,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: GpFgBKP0p482
 - model: larpmanager.member
   pk: 3
   fields:
@@ -163,6 +165,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: uIT2O97q9XKA
 - model: larpmanager.member
   pk: 4
   fields:
@@ -198,6 +201,7 @@
     profile: ''
     presentation: null
     parent: null
+    uuid: YngKtqLrb639
 - model: larpmanager.association
   pk: 1
   fields:

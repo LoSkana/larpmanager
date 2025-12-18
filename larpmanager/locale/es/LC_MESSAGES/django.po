@@ -1806,6 +1806,9 @@ msgstr "Progresión"
 msgid "Provisional"
 msgstr "Provisional"
 
+msgid "Public UUID"
+msgstr "UUID público"
+
 msgid "Publication"
 msgstr "Publicación"
 
@@ -5519,6 +5522,9 @@ msgstr "Hay misiones sin rasgos: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Esta página muestra los álbumes de fotos cargados"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Identificador único para las URL de los perfiles públicos"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Estás excluyendo (ninguno de estos filtros)"

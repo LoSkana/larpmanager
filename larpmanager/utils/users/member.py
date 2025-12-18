@@ -288,3 +288,12 @@ def process_membership_status_updates(membership: Membership) -> None:
         # Remove date for empty memberships
         if membership.date:
             membership.date = None
+
+
+def get_member_uuid(slug: str) -> Member:
+    """Retrieves a member by their uuid."""
+    try:
+        return Member.objects.get(uuid=slug)
+    except Member.DoesNotExist as err:
+        msg = "member not found"
+        raise Http404(msg) from err

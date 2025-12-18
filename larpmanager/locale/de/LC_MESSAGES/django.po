@@ -1806,6 +1806,9 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Vorläufig"
 
+msgid "Public UUID"
+msgstr "Öffentliche UUID"
+
 msgid "Publication"
 msgstr "Veröffentlichung"
 
@@ -5523,6 +5526,9 @@ msgstr "Es gibt Quests ohne Eigenschaften: %(list)s"
 
 msgid "This page shows the uploaded photo albums"
 msgstr "Diese Seite fasst die hochgeladenen Fotoalben zusammen"
+
+msgid "Unique identifier for public profile URLs"
+msgstr "Eindeutiger Bezeichner für öffentliche Profil-URLs"
 
 msgid "You are excluding (none of these filters)"
 msgstr "Sie schließen (keinen dieser Filter)"
