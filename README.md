@@ -188,7 +188,7 @@ For a Debian-like system: install the following packages:
 
 ```bash
 sudo apt install python3-pip python3-venv redis-server git postgresql postgresql-contrib \
-  libpq-dev wkhtmltopdf nodejs build-essential libxmlsec1-dev libxmlsec1-openssl libavif16
+  libpq-dev nodejs build-essential libxmlsec1-dev libxmlsec1-openssl libavif16 libcairo2-dev pkg-config python3-dev
 ```
 
 Create and activate a virtual environment:
@@ -259,7 +259,7 @@ playwright install
 
 The codebase is based on Django; if you're not already familiar with it, we highly suggest you to follow the tutorials at https://docs.djangoproject.com/.
 
-1. Follow the steps outlined in [System setup](#system-setup) for setting up your local *development* instance
+1. Follow the steps outlined in [Local setup](#local-setup) for setting up your local *development* instance
 
 2. Run migrations to initialize the database:
    ```bash
@@ -282,7 +282,7 @@ python manage.py runserver
 
 Thanks in advance for contributing! Here's the steps:
 
-1. Follow the steps outlined in [System setup](#system-setup) for setting up your local *development* instance
+1. Follow the steps outlined in [Local setup](#local-setup) for setting up your local *development* instance
 
 2. Install and activate `pre-commit`:
    ```bash
