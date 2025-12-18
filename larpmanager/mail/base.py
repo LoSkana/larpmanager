@@ -514,8 +514,14 @@ def send_character_status_update_email(instance: Character) -> None:
             # Construct email subject with event, character, and status info
             email_subject = f"{hdr(instance.event)} - {instance!s} - {instance.get_status_display()}"
 
+            # Determine context for email
+            email_context = instance.event
+            if instance.event.runs.exists():
+                # Use the first run if the event has any runs
+                email_context = instance.event.runs.first()
+
             # Send the notification email to the player
-            my_send_mail(email_subject, email_body, instance.player, instance.event)
+            my_send_mail(email_subject, email_body, instance.player, email_context)
 
 
 def notify_organization_exe(
