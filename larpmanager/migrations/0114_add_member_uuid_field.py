@@ -4,8 +4,10 @@ import secrets
 
 from django.db import migrations, models
 
+from larpmanager.models.utils import my_uuid_short
 
-def generate_uuid():
+
+def my_uuid_short():
     """Generate a unique 12-character UUID for member public URLs."""
     return secrets.token_urlsafe(9)[:12]
 
@@ -16,7 +18,7 @@ def populate_member_uuids(apps, schema_editor):
     for member in Member.objects.filter(uuid__isnull=True):
         # Generate unique UUIDs, checking for collisions
         while True:
-            new_uuid = generate_uuid()
+            new_uuid = my_uuid_short()
             if not Member.objects.filter(uuid=new_uuid).exists():
                 member.uuid = new_uuid
                 member.save(update_fields=["uuid"])
@@ -50,7 +52,7 @@ class Migration(migrations.Migration):
             model_name="member",
             name="uuid",
             field=models.CharField(
-                default=generate_uuid,
+                default=my_uuid_short,
                 editable=False,
                 help_text="Unique identifier for public profile URLs",
                 max_length=12,
@@ -62,12 +64,12 @@ class Migration(migrations.Migration):
             model_name="member",
             name="uuid",
             field=models.CharField(
-                default=generate_uuid,
+                default=my_uuid_short,
                 editable=False,
                 help_text="Unique identifier for public profile URLs",
                 max_length=12,
                 unique=True,
                 verbose_name="Public UUID",
             ),
-        ),
+        )
     ]
