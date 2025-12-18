@@ -1189,40 +1189,56 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Verify user permissions and get event context
     context = check_event_context(request, event_slug)
 
-    # Clear run-specific cache and associated media files
-    clear_run_cache_and_media(context["run"])
-    reset_cache_run(context["event"].association_id, context["run"].get_slug())
-
-    # Clear event-level feature and configuration caches
-    clear_event_features_cache(context["event"].id)
-    clear_run_event_links_cache(context["event"])
-
-    # Clear event button cache
-    clear_event_button_cache(context["event"].id)
-
-    # Clear event config cache
-    reset_element_configs(context["event"])
-
-    # Clear run config cache
-    reset_element_configs(context["run"])
-
-    # Clear registration-related caches
-    clear_registration_counts_cache(context["run"].id)
-    clear_registration_accounting_cache(context["run"].id)
-    clear_event_fields_cache(context["event"].id)
-    clear_event_relationships_cache(context["event"].id)
-
-    # Clear event text caches for all EventText instances
-    for event_text in EventText.objects.filter(event_id=context["event"].id):
-        reset_event_text(event_text)
-
-    # Clear event role caches
-    for event_role_id in EventRole.objects.filter(event_id=context["event"].id).values_list("id", flat=True):
-        remove_event_role_cache(event_role_id)
+    # Reset everything
+    reset_all_run(context["event"], context["run"])
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))
     return redirect("manage", event_slug=context["run"].get_slug())
+
+
+def reset_all_run(event: Any, run: Any) -> None:
+    """Clear all caches for a given event and run.
+
+    This function comprehensively clears all cached data related to an event
+    and its run, including character data, features, configurations, registrations,
+    accounting, and role information.
+
+    Args:
+        event: Event instance
+        run: Run instance
+
+    """
+    # Clear run-specific cache and associated media files
+    clear_run_cache_and_media(run)
+    reset_cache_run(event.association_id, run.get_slug())
+
+    # Clear event-level feature and configuration caches
+    clear_event_features_cache(event.id)
+    clear_run_event_links_cache(event)
+
+    # Clear event button cache
+    clear_event_button_cache(event.id)
+
+    # Clear event config cache
+    reset_element_configs(event)
+
+    # Clear run config cache
+    reset_element_configs(run)
+
+    # Clear registration-related caches
+    clear_registration_counts_cache(run.id)
+    clear_registration_accounting_cache(run.id)
+    clear_event_fields_cache(event.id)
+    clear_event_relationships_cache(event.id)
+
+    # Clear event text caches for all EventText instances
+    for event_text in EventText.objects.filter(event_id=event.id):
+        reset_event_text(event_text)
+
+    # Clear event role caches
+    for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
+        remove_event_role_cache(event_role_id)
 
 
 def lottery_info(request: HttpRequest, context: dict) -> None:  # noqa: ARG001
