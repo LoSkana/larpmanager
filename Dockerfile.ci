@@ -45,8 +45,9 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
 
 # Install Playwright and its browsers
-RUN pip install playwright --break-system-packages && \
-    playwright install --with-deps
+RUN pip install playwright --break-system-packages
+
+RUN playwright install chromium --with-deps
 
 COPY . .
 

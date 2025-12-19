@@ -58,6 +58,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt -q --break-system-packages
+        playwright install chromium --with-deps
         cd larpmanager/static
         npm install
         cd ../../
