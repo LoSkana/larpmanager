@@ -46,6 +46,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Build and run**: `docker compose up --build`
 - **Create superuser in container**: `docker exec -it larpmanager python manage.py createsuperuser`
 - **Deploy updates**: `docker exec -it larpmanager scripts/deploy.sh` (graceful restart with migrations)
+- **Build CI image**: `./scripts/build_ci_image.sh` (for updating CI Docker image)
+- **Build and push CI image**: `./scripts/build_ci_image.sh --push` (requires GHCR authentication)
 
 ## Architecture Overview
 
@@ -167,13 +169,14 @@ For adding new features with views and permissions, follow the [Features and Per
 ## Environment Setup
 
 ### Development Setup
-1. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`
-2. Configure database settings in `DATABASES`
-3. Set `SLUG_ASSOC` to organization slug (default: `test`)
-4. Add `DEEPL_API_KEY` for translation features (get free API key from DeepL)
-5. Run `python manage.py reset` to load test fixtures
-6. Install pre-commit hooks: `pre-commit install`
-7. Install Git LFS: `git lfs install && git lfs pull`
+1. **Install Python 3.12** or higher (Ubuntu 24.04 LTS recommended)
+2. Copy `main/settings/dev_sample.py` to `main/settings/dev.py`
+3. Configure database settings in `DATABASES`
+4. Set `SLUG_ASSOC` to organization slug (default: `test`)
+5. Add `DEEPL_API_KEY` for translation features (get free API key from DeepL)
+6. Run `python manage.py reset` to load test fixtures
+7. Install pre-commit hooks: `pre-commit install`
+8. Install Git LFS: `git lfs install && git lfs pull`
 
 ### Production Setup
 1. Copy `main/settings/prod_sample.py` to `main/settings/prod.py`
