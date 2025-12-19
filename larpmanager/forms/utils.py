@@ -588,6 +588,52 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         return Run.objects.filter(event__association_id=self.association_id)
 
 
+class RunRegS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for registrations filtered by run."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_run(self, run: Run) -> None:
+        """Set the run for this instance."""
+        self.run = run
+
+    def get_queryset(self) -> QuerySet[Registration]:
+        """Return non-cancelled registrations for the current run."""
+        return (
+            Registration.objects.filter(run=self.run, cancellation_date__isnull=True)
+            .select_related("member", "ticket")
+            .order_by("member__name", "member__surname")
+        )
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return formatted label for registration instance."""
+        return str(obj)
+
+
+class TransferTargetRunS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for target runs in registration transfers."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the current event to exclude runs from the same event."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[Run]:
+        """Return runs from different events that are not concluded or cancelled."""
+        return (
+            Run.objects.filter(event__association_id=self.event.association_id)
+            .exclude(event_id=self.event.id)
+            .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
+            .select_related("event")
+            .order_by("-start")
+        )
+
+
 class EventCharacterS2:
     """Represents EventCharacterS2 model."""
 

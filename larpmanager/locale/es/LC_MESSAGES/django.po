@@ -510,6 +510,9 @@ msgstr "Directo"
 msgid "Emails"
 msgstr "Correos electrónicos"
 
+msgid "Errors"
+msgstr "Errores"
+
 msgid "Events"
 msgstr "Eventos"
 
@@ -771,9 +774,6 @@ msgstr "Facción"
 msgid "Gallery"
 msgstr "Galería"
 
-msgid "Go Back"
-msgstr "Volver atrás"
-
 msgid "Handout"
 msgstr "Documento"
 
@@ -821,6 +821,9 @@ msgstr "Pago"
 
 msgid "Players"
 msgstr "Jugadores"
+
+msgid "Preview"
+msgstr "Vista previa"
 
 msgid "Primary"
 msgstr "Principal"
@@ -2375,9 +2378,6 @@ msgstr "Comunicaciones"
 msgid "Credit balance"
 msgstr "Saldo acreedor"
 
-msgid "Current Ticket"
-msgstr "Billete actual"
-
 msgid "Customisations"
 msgstr "Personalizaciones"
 
@@ -2735,9 +2735,6 @@ msgstr "Total recolectadol"
 msgid "Color background"
 msgstr "Color de fondo"
 
-msgid "Confirm Transfer"
-msgstr "Confirmar transferencia"
-
 msgid "Current quantity"
 msgstr "Cantidad actual"
 
@@ -2852,9 +2849,6 @@ msgstr "Selección de jugadores"
 msgid "Pre-registration"
 msgstr "Preinscripción"
 
-msgid "Preview transfer"
-msgstr "Transferencia previa"
-
 msgid "Registration fee"
 msgstr "Cuota de inscripción"
 
@@ -2893,9 +2887,6 @@ msgstr "Total de la colecta"
 
 msgid "Transaction fees"
 msgstr "Comisiones de transacción"
-
-msgid "Transfer details"
-msgstr "Detalles de la transferencia"
 
 msgid "Transfer preview"
 msgstr "Previsión de fichajes"
@@ -3510,6 +3501,9 @@ msgstr "Solicitar inscripción"
 msgid "Returning percentage"
 msgstr "Porcentaje de devolución"
 
+msgid "Select the new event"
+msgstr "Seleccione el nuevo evento"
+
 msgid "Selezione non valida"
 msgstr "Selección no validada"
 
@@ -3831,6 +3825,9 @@ msgstr "Selecciona tu personaje"
 msgid "Set up payment methods"
 msgstr "Establecer métodos de pago"
 
+msgid "Target event not found"
+msgstr "Evento objetivo no encontrado"
+
 msgid "The name of the option"
 msgstr "El nombre de la opción"
 
@@ -4062,9 +4059,6 @@ msgstr "Registro provisional"
 msgid "Regeneration pdf started"
 msgstr "¡Regeneración de pdf iniciada"
 
-msgid "Registration to transfer"
-msgstr "Registro para transferir"
-
 msgid "Relationships max length"
 msgstr "Relaciones longitud máxima"
 
@@ -4165,9 +4159,6 @@ msgstr "Leer los elementos de escritura"
 msgid "Receipt already confirmed"
 msgstr "Recibo ya confirmado"
 
-msgid "Registration form answers"
-msgstr "Respuestas al formulario de inscripción"
-
 msgid "Registration opening date"
 msgstr "Fecha de apertura de las inscripciones"
 
@@ -4204,9 +4195,6 @@ msgstr "Uso de recursos de terceros"
 
 msgid "We're sorry to see you go"
 msgstr "Sentimos que te vayas"
-
-msgid "What will be transferred?"
-msgstr "¿Qué se transferirá?"
 
 msgid "cancel your registrations"
 msgstr "cancela tus inscripciones"
@@ -4250,9 +4238,6 @@ msgstr "Gestión de etiquetas de artículos de almacén"
 
 msgid "Manage warehouse movements"
 msgstr "Gestionar los movimientos del almacén"
-
-msgid "Multiple choice selections"
-msgstr "Selección múltiple"
 
 msgid "Now you can create inflows"
 msgstr "Ahora puede crear flujos de entrada"
@@ -4357,9 +4342,6 @@ msgstr "Nombre de la insignia que se concederá"
 msgid "Now you can create outflows"
 msgstr "Ahora puede crear salidas"
 
-msgid "Or select a different event"
-msgstr "O seleccione otro acontecimiento"
-
 msgid "Pre-registration cancelled!"
 msgstr "Preinscripción anulada"
 
@@ -4368,9 +4350,6 @@ msgstr "Recordatorio solicitud de adhesión"
 
 msgid "Set up dynamic installments"
 msgstr "Establecer plazos dinámicos"
-
-msgid "Target session (same event)"
-msgstr "Sesión objetivo (mismo evento)"
 
 msgid "Thank you for participating"
 msgstr "Gracias por participar"
@@ -4429,9 +4408,6 @@ msgstr "Solicitud de afiliación enviada"
 
 msgid "Player customisation updated"
 msgstr "Personalización de los jugadores actualizada"
-
-msgid "Target event has no sessions"
-msgstr "El evento objetivo no tiene sesiones"
 
 msgid "The only mandatory column is"
 msgstr "La única columna obligatoria es"
@@ -4578,12 +4554,6 @@ msgstr "Gestionar la visualización del elemento de escritura"
 msgid "Registrations on external link"
 msgstr "Inscripciones en enlace externo"
 
-msgid "Select registration and target"
-msgstr "Seleccione el registro y el objetivo"
-
-msgid "Select target session or event"
-msgstr "Seleccione la sesión o el evento de destino"
-
 msgid "Select the new photo to upload"
 msgstr "Selecciona la nueva foto a subir"
 
@@ -4592,9 +4562,6 @@ msgstr "Establecer la configuración de impuestos"
 
 msgid "Set your interface preferences"
 msgstr "Configura tus preferencias de interfaz"
-
-msgid "Target event (different event)"
-msgstr "Evento objetivo (evento diferente)"
 
 msgid "The registrations to the event"
 msgstr "Las inscripciones al evento"
@@ -4725,9 +4692,6 @@ msgstr "Muestra la lista de correos electrónicos de los usuarios"
 msgid "Do you want to tell us something"
 msgstr "¿Hay algo que quieras decirnos"
 
-msgid "Errors - Transfer Cannot Proceed"
-msgstr "Errores - La transferencia no puede continuar"
-
 msgid "Is it selectable by participants"
 msgstr "¿Es seleccionable por los participantes"
 
@@ -4817,9 +4781,6 @@ msgstr "Nombre completo de la Organización"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Confirmar entrada a %(event)s"
-
-msgid "Confirm to move this registration"
-msgstr "Confirmar para mover este registro"
 
 msgid "Descriptive name for this API key"
 msgstr "Nombre descriptivo de esta clave API"
@@ -5129,9 +5090,6 @@ msgstr "¡Inscripción confirmada en %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Aprobación de roles %(role)s por %(event)s"
 
-msgid "Select a session from the same event"
-msgstr "Seleccione una sesión del mismo evento"
-
 msgid "Select the event of this new session"
 msgstr "Seleccione el evento de esta nueva sesión"
 
@@ -5162,9 +5120,6 @@ msgstr "Has conseguido un logro"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Añadido al final de todos los correos enviados"
-
-msgid "Character assignments (if compatible)"
-msgstr "Asignación de caracteres (si es compatible)"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Compruebe la validez del código fiscal"
@@ -5906,6 +5861,9 @@ msgstr "Ahora puede establecer el enlace de registro externo"
 msgid "Optional - Image displayed within the question"
 msgstr "Opcional - Imagen mostrada en la pregunta"
 
+msgid "Please select both a registration and an event"
+msgstr "Seleccione una inscripción y un acto"
+
 msgid "Registered users will be granted normal access"
 msgstr "Los usuarios registrados tendrán acceso normal"
 
@@ -5989,9 +5947,6 @@ msgstr "Número de caracteres a asignar (por defecto 1)"
 msgid "Optional template associated with this ability."
 msgstr "Plantilla opcional asociada a esta habilidad."
 
-msgid "Registration data (ticket, quotas, additionals)"
-msgstr "Datos de registro (billete, cuotas, adicionales)"
-
 msgid "Selected elements will be shown to participants"
 msgstr "Los elementos seleccionados se mostrarán a los participantes"
 
@@ -6038,9 +5993,6 @@ msgstr "Descripción de las habilidades involucradas"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "¡Accede a tu personaje <a href='%(url)s'>aquí</a>"
-
-msgid "Accounting items (payment history will be reset)"
-msgstr "Partidas contables (se restablecerá el historial de pagos)"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Describa exactamente qué participantes intervienen"
@@ -6211,9 +6163,6 @@ msgstr "Gestionar las etapas de progreso de los elementos de escritura"
 
 msgid "Maximum number of characters the player can create"
 msgstr "Número máximo de personajes que puede crear el jugador"
-
-msgid "Please select both a registration and a target run"
-msgstr "Seleccione una inscripción y un recorrido objetivo"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Segundo carácter de la relación (destino)"
@@ -6585,9 +6534,6 @@ msgstr ""
 msgid "Manage payments performed by participants on all events"
 msgstr ""
 "Gestionar los pagos realizados por los participantes en todos los eventos"
-
-msgid "Please select either a target session or a target event"
-msgstr "Seleccione una sesión o un acontecimiento como objetivo"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Configura rápidamente los ajustes más importantes de tus eventos"
@@ -7224,9 +7170,6 @@ msgstr ""
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Por favor, indica el motivo por el que quieres realizar la donación"
-
-msgid "Please select only one target (either session or event, not both)"
-msgstr "Seleccione sólo un objetivo (sesión o evento, no ambos)"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr "Esta página muestra todos los eventos; puede editarlos o crear nuevos"
@@ -10326,13 +10269,6 @@ msgid ""
 msgstr ""
 "Número de plazos para fraccionar la tasa: los pagos y los plazos se "
 "dividirán a partes iguales a partir de la fecha de inscripción"
-
-msgid ""
-"This will move the registration from the current run to the target run. The "
-"original registration will be deleted."
-msgstr ""
-"Esto moverá el registro de la ejecución actual a la ejecución de destino. Se"
-" borrará el registro original."
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "

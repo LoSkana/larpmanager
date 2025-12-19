@@ -1983,28 +1983,10 @@ msgstr ""
 msgid "Is there anything else you would like to tell us"
 msgstr ""
 
-msgid "Registration to transfer"
-msgstr ""
-
 msgid "Select the registration you want to transfer"
 msgstr ""
 
-msgid "Target session (same event)"
-msgstr ""
-
-msgid "Select a session from the same event"
-msgstr ""
-
-msgid "Target event (different event)"
-msgstr ""
-
-msgid "Or select a different event"
-msgstr ""
-
-msgid "Please select either a target session or a target event"
-msgstr ""
-
-msgid "Please select only one target (either session or event, not both)"
+msgid "Select the new event"
 msgstr ""
 
 msgid "Manage warehouse items"
@@ -7239,31 +7221,7 @@ msgstr ""
 msgid "Transfer a registration from this event to another"
 msgstr ""
 
-msgid "Select registration and target"
-msgstr ""
-
-msgid "Select target session or event"
-msgstr ""
-
-msgid "Preview transfer"
-msgstr ""
-
-msgid "What will be transferred?"
-msgstr ""
-
-msgid "Registration data (ticket, quotas, additionals)"
-msgstr ""
-
-msgid "Registration form answers"
-msgstr ""
-
-msgid "Multiple choice selections"
-msgstr ""
-
-msgid "Character assignments (if compatible)"
-msgstr ""
-
-msgid "Accounting items (payment history will be reset)"
+msgid "Preview"
 msgstr ""
 
 msgid "Transfer preview"
@@ -7272,42 +7230,19 @@ msgstr ""
 msgid "Review the transfer before confirming"
 msgstr ""
 
-msgid "Transfer details"
-msgstr ""
-
 msgid "From"
 msgstr ""
 
 msgid "To"
 msgstr ""
 
-msgid "Current Ticket"
-msgstr ""
-
-msgid "Errors - Transfer Cannot Proceed"
+msgid "Errors"
 msgstr ""
 
 msgid "Warnings"
 msgstr ""
 
 msgid "Information"
-msgstr ""
-
-msgid "Confirm to move this registration"
-msgstr ""
-
-msgid "Warning"
-msgstr ""
-
-msgid ""
-"This will move the registration from the current run to the target run. The "
-"original registration will be deleted."
-msgstr ""
-
-msgid "Confirm Transfer"
-msgstr ""
-
-msgid "Go Back"
 msgstr ""
 
 msgid ""
@@ -7506,6 +7441,9 @@ msgstr ""
 msgid ""
 "This page shows what will happen when you commit the warehouse quantities "
 "based on the current assignments"
+msgstr ""
+
+msgid "Warning"
 msgstr ""
 
 msgid ""
@@ -9675,13 +9613,13 @@ msgstr ""
 msgid "Invalid request"
 msgstr ""
 
-msgid "Please select both a registration and a target run"
+msgid "Please select both a registration and an event"
 msgstr ""
 
 msgid "Registration not found"
 msgstr ""
 
-msgid "Target event has no sessions"
+msgid "Target event not found"
 msgstr ""
 
 msgid "Target session not found"
