@@ -38,7 +38,6 @@ from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
-from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
     get_index_event_permissions,
@@ -404,8 +403,8 @@ def get_event_context(
     # Finalize run context preparation and return complete context
     prepare_run(context)
 
-    # Check character visibility restrictions if requested (skip for admin and manage users)
-    if check_visibility and not is_lm_admin(request) and "manage" not in context:
+    # Check character visibility restrictions if requested (skip for users with event permissions)
+    if check_visibility and not has_event_permission(request, context, event_slug):
         event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
         # Check if gallery is hidden for non-authenticated users
         hide_gallery_for_non_login = get_event_config(
