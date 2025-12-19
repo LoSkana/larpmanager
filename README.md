@@ -337,7 +337,7 @@ Thanks in advance for contributing! Here's the steps:
    to update the dump used by tests and ci.
 8. Before pushing make sure that all the tests passes using:
    ```bash
-   pytest
+   ./scripts/test.sh [workers] (default: 6 workers)
    ```
    *Note that the tests will take some time to complete*.
 9. When you're ready to push your new branch, run

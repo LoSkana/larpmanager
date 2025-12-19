@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Common Development Tasks
-- **Run tests**: `pytest`
+- **Run all tests**: `./scripts/test.sh [workers]` (default: 6 workers)
 - **Run specific test**: `pytest larpmanager/tests/specific_test.py`
 - **Run unit tests only**: `./scripts/test_unit.sh`
 - **Run playwright tests only**: `./scripts/test_playwright.sh`
