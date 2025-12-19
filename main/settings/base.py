@@ -336,6 +336,7 @@ IGNORABLE_PROFILER_URLS = [
     re.compile(r'logout'),
     re.compile(r'xyz'),
     re.compile(r'accounts/google/login/callback'),
+    re.compile(r'apple-touch-icon'),
 ]
 
 # PAYMENT SETTINGS
