@@ -68,7 +68,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType
-from larpmanager.models.event import EventText, PreRegistration
+from larpmanager.models.event import Event, EventText, PreRegistration, Run
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -1197,7 +1197,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     return redirect("manage", event_slug=context["run"].get_slug())
 
 
-def reset_all_run(event: Any, run: Any) -> None:
+def reset_all_run(event: Event, run: Run) -> None:
     """Clear all caches for a given event and run.
 
     This function comprehensively clears all cached data related to an event

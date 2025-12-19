@@ -7,37 +7,29 @@
     {% trans "Review the transfer before confirming" %}
 {% endblock info %}
 {% block content %}
-    <h2>{% trans "Transfer preview" %}</h2>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3>{% trans "Transfer details" %}</h3>
-        </div>
-        <div class="panel-body">
-            <table class="table">
-                <tr>
-                    <th>{% trans "Member" %}:</th>
-                    <td>{{ registration.member.display_member }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "From" %}:</th>
-                    <td>{{ registration.run }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "To" %}:</th>
-                    <td>{{ target_run }} ({{ target_run.event.name }})</td>
-                </tr>
-                {% if registration.ticket %}
-                    <tr>
-                        <th>{% trans "Current Ticket" %}:</th>
-                        <td>{{ registration.ticket.name }} ({{ registration.ticket.get_tier_display }})</td>
-                    </tr>
-                {% endif %}
-            </table>
-        </div>
-    </div>
+    <table class="table">
+        <tr>
+            <th>{% trans "Participant" %}</th>
+            <td>{{ registration.member.display_member }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "From" %}</th>
+            <td>{{ registration.run }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "To" %}</th>
+            <td>{{ target_run }} ({{ target_run.event.name }})</td>
+        </tr>
+        {% if registration.ticket %}
+            <tr>
+                <th>{% trans "Ticket" %}:</th>
+                <td>{{ registration.ticket.name }} ({{ registration.ticket.get_tier_display }})</td>
+            </tr>
+        {% endif %}
+    </table>
     {% if validation.errors %}
         <div class="alert alert-danger">
-            <h4>{% trans "Errors - Transfer Cannot Proceed" %}</h4>
+            <h4>{% trans "Errors" %}</h4>
             <ul>
                 {% for error in validation.errors %}<li>{{ error }}</li>{% endfor %}
             </ul>
@@ -67,31 +59,8 @@
             <input type="hidden" name="target_run_id" value="{{ target_run.id }}">
             <input type="hidden" name="move_registration" value="true">
             <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="confirm" required>
-                        {% trans "Confirm to move this registration" %}
-                    </label>
-                </div>
-            </div>
-            <div class="alert alert-warning">
-                <strong>{% trans "Warning" %}:</strong>
-                {% trans "This will move the registration from the current run to the target run. The original registration will be deleted." %}
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-danger">{% trans "Confirm Transfer" %}</button>
-                <a href="{% url 'orga_registration_transfer' event_slug=run.get_slug %}"
-                   class="btn btn-secondary">{% trans "Go Back" %}</a>
-                <a href="{% url 'orga_registrations' event_slug=run.get_slug %}"
-                   class="btn btn-secondary">{% trans "Cancel" %}</a>
+                <button type="submit" class="btn btn-danger">{% trans "Transfer" %}</button>
             </div>
         </form>
-    {% else %}
-        <div class="form-group">
-            <a href="{% url 'orga_registration_transfer' event_slug=run.get_slug %}"
-               class="btn btn-secondary">{% trans "Go Back" %}</a>
-            <a href="{% url 'orga_registrations' event_slug=run.get_slug %}"
-               class="btn btn-secondary">{% trans "Cancel" %}</a>
-        </div>
     {% endif %}
 {% endblock content %}

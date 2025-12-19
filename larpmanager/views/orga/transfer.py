@@ -26,7 +26,7 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.forms.transfer import RegistrationTransferForm
+from larpmanager.forms.registration import RegistrationTransferForm
 from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
@@ -53,14 +53,8 @@ def orga_registration_transfer(request: HttpRequest, event_slug: str) -> HttpRes
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Initialize the form with context data
-    form = RegistrationTransferForm(
-        run=context["run"],
-        event=context["event"],
-        association_id=context["association_id"],
-    )
-
+    form = RegistrationTransferForm(context=context)
     context["form"] = form
-
     return render(request, "larpmanager/orga/registration/transfer.html", context)
 
 
@@ -85,10 +79,9 @@ def orga_registration_transfer_preview(request: HttpRequest, event_slug: str) ->
     # Get registration and target run from POST data
     registration_id = request.POST.get("registration_id")
     target_run_id = request.POST.get("target_run_id")
-    target_event_id = request.POST.get("target_event_id")
 
-    if not registration_id or (not target_run_id and not target_event_id):
-        messages.error(request, _("Please select both a registration and a target run"))
+    if not registration_id or not target_run_id:
+        messages.error(request, _("Please select both a registration and an event"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Get the registration
@@ -102,16 +95,9 @@ def orga_registration_transfer_preview(request: HttpRequest, event_slug: str) ->
 
     # Get the target run
     try:
-        if target_run_id:
-            target_run = Run.objects.select_related("event").get(id=target_run_id, event=context["event"])
-        else:
-            # Get first run from target event
-            target_run = Run.objects.filter(event_id=target_event_id).order_by("number").first()
-            if not target_run:
-                messages.error(request, _("Target event has no sessions"))
-                return redirect("orga_registration_transfer", event_slug=event_slug)
+        target_run = Run.objects.select_related("event").get(id=target_run_id)
     except Run.DoesNotExist:
-        messages.error(request, _("Target session not found"))
+        messages.error(request, _("Target event not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Validate transfer feasibility

@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -37,9 +37,12 @@ from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     DatePickerInput,
     FactionS2WidgetMulti,
+    RunRegS2Widget,
     TicketS2WidgetMulti,
+    TransferTargetRunS2Widget,
 )
 from larpmanager.models.casting import Trait
+from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
     RegistrationOption,
@@ -59,9 +62,6 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.users.registration import get_reduced_available_count
-
-if TYPE_CHECKING:
-    from larpmanager.models.event import Event, Run
 
 
 class RegistrationForm(BaseRegistrationForm):
@@ -1430,7 +1430,6 @@ class PreRegistrationForm(forms.Form):
             **kwargs: Arbitrary keyword arguments including 'context' context data
 
         """
-        super().__init__()
         self.context = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
@@ -1472,3 +1471,31 @@ class PreRegistrationForm(forms.Form):
             label=_("Informations"),
             help_text=_("Is there anything else you would like to tell us") + "?",
         )
+
+
+class RegistrationTransferForm(forms.Form):
+    """Form for selecting registration and target for transfer."""
+
+    registration_id = forms.ModelChoiceField(
+        queryset=Registration.objects.none(),
+        label=_("Registration"),
+        required=True,
+        help_text=_("Select the registration you want to transfer"),
+        widget=RunRegS2Widget(),
+    )
+
+    target_run_id = forms.ModelChoiceField(
+        queryset=Run.objects.none(),
+        label=_("Event"),
+        required=False,
+        help_text=_("Select the new event"),
+        widget=TransferTargetRunS2Widget(),
+    )
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with context data."""
+        self.context = kwargs.pop("context")
+        super().__init__(*args, **kwargs)
+
+        self.fields["registration_id"].widget.set_run(self.context["run"])
+        self.fields["target_run_id"].widget.set_event(self.context["event"])

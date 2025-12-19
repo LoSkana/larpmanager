@@ -510,6 +510,9 @@ msgstr "Přímý"
 msgid "Emails"
 msgstr "E-maily"
 
+msgid "Errors"
+msgstr "Chyby"
+
 msgid "Events"
 msgstr "Události"
 
@@ -771,9 +774,6 @@ msgstr "Skupina"
 msgid "Gallery"
 msgstr "Galerie"
 
-msgid "Go Back"
-msgstr "Zpět"
-
 msgid "Handout"
 msgstr "Materiál pro rozdávání"
 
@@ -821,6 +821,9 @@ msgstr "Platba"
 
 msgid "Players"
 msgstr "Hráči"
+
+msgid "Preview"
+msgstr "Náhled"
 
 msgid "Primary"
 msgstr "Primární"
@@ -2375,9 +2378,6 @@ msgstr "Komunikace"
 msgid "Credit balance"
 msgstr "Kreditní zůstatek"
 
-msgid "Current Ticket"
-msgstr "Aktuální letenka"
-
 msgid "Customisations"
 msgstr "Přizpůsobení"
 
@@ -2735,9 +2735,6 @@ msgstr "Celková sbírka"
 msgid "Color background"
 msgstr "Textové pozadí"
 
-msgid "Confirm Transfer"
-msgstr "Potvrzení přenosu"
-
 msgid "Current quantity"
 msgstr "Aktuální množství"
 
@@ -2852,9 +2849,6 @@ msgstr "Výběr hráčů"
 msgid "Pre-registration"
 msgstr "Předběžná registrace"
 
-msgid "Preview transfer"
-msgstr "Náhled přenosu"
-
 msgid "Registration fee"
 msgstr "Vstupní poplatek"
 
@@ -2893,9 +2887,6 @@ msgstr "Celková sbírka"
 
 msgid "Transaction fees"
 msgstr "Transakční poplatky"
-
-msgid "Transfer details"
-msgstr "Podrobnosti o přenosu"
 
 msgid "Transfer preview"
 msgstr "Náhled transferu"
@@ -3510,6 +3501,9 @@ msgstr "Žádost o registraci"
 msgid "Returning percentage"
 msgstr "Procento návratnosti"
 
+msgid "Select the new event"
+msgstr "Vyberte novou událost"
+
 msgid "Selezione non valida"
 msgstr "Selezione non valida"
 
@@ -3831,6 +3825,9 @@ msgstr "Vyberte si svou postavu!"
 msgid "Set up payment methods"
 msgstr "Nastavení platebních metod"
 
+msgid "Target event not found"
+msgstr "Cílová událost nebyla nalezena"
+
 msgid "The name of the option"
 msgstr "Název možnosti"
 
@@ -4062,9 +4059,6 @@ msgstr "Prozatímní registrace"
 msgid "Regeneration pdf started"
 msgstr "pdf regenerace zahájena"
 
-msgid "Registration to transfer"
-msgstr "Registrace k převodu"
-
 msgid "Relationships max length"
 msgstr "Maximální délka vztahů"
 
@@ -4165,9 +4159,6 @@ msgstr "Přečtěte si prvky psaní"
 msgid "Receipt already confirmed"
 msgstr "Příjem již potvrzen"
 
-msgid "Registration form answers"
-msgstr "Odpovědi na registrační formulář"
-
 msgid "Registration opening date"
 msgstr "Datum zahájení registrace"
 
@@ -4204,9 +4195,6 @@ msgstr "Použití majetku třetích stran"
 
 msgid "We're sorry to see you go"
 msgstr "Je nám líto, že odcházíte"
-
-msgid "What will be transferred?"
-msgstr "Co bude převedeno?"
 
 msgid "cancel your registrations"
 msgstr "zrušit svou registraci"
@@ -4250,9 +4238,6 @@ msgstr "Správa značek skladových položek"
 
 msgid "Manage warehouse movements"
 msgstr "Řízení skladových pohybů"
-
-msgid "Multiple choice selections"
-msgstr "Výběr z více možností"
 
 msgid "Now you can create inflows"
 msgstr "Nyní můžete vytvářet přítoky"
@@ -4357,9 +4342,6 @@ msgstr "Název odznaku, který má být udělen"
 msgid "Now you can create outflows"
 msgstr "Nyní můžete vytvářet odtoky"
 
-msgid "Or select a different event"
-msgstr "Nebo vyberte jinou událost"
-
 msgid "Pre-registration cancelled!"
 msgstr "Předběžná registrace zrušena!"
 
@@ -4368,9 +4350,6 @@ msgstr "Připomínka žádosti o členství"
 
 msgid "Set up dynamic installments"
 msgstr "Nastavení dynamických splátek"
-
-msgid "Target session (same event)"
-msgstr "Cílová relace (stejná událost)"
 
 msgid "Thank you for participating"
 msgstr "Děkujeme za účast"
@@ -4429,9 +4408,6 @@ msgstr "Žádost o submisivní členství"
 
 msgid "Player customisation updated"
 msgstr "Přizpůsobení hráče aktualizováno"
-
-msgid "Target event has no sessions"
-msgstr "Cílová událost nemá žádné relace"
 
 msgid "The only mandatory column is"
 msgstr "Jediný povinný sloupec je"
@@ -4578,12 +4554,6 @@ msgstr "Správa zobrazení prvku psaní"
 msgid "Registrations on external link"
 msgstr "Registrace na externím odkazu"
 
-msgid "Select registration and target"
-msgstr "Vyberte registraci a cíl"
-
-msgid "Select target session or event"
-msgstr "Výběr cílové relace nebo události"
-
 msgid "Select the new photo to upload"
 msgstr "Vyberte novou fotografii, kterou chcete nahrát"
 
@@ -4592,9 +4562,6 @@ msgstr "Nastavení konfigurace daní"
 
 msgid "Set your interface preferences"
 msgstr "Nastavení předvoleb rozhraní"
-
-msgid "Target event (different event)"
-msgstr "Cílová událost (jiná událost)"
 
 msgid "The registrations to the event"
 msgstr "Registrace na akci"
@@ -4725,9 +4692,6 @@ msgstr "Zobrazí seznam e-mailů uživatelů"
 msgid "Do you want to tell us something"
 msgstr "Chcete nám něco říct"
 
-msgid "Errors - Transfer Cannot Proceed"
-msgstr "Chyby - přenos nelze provést"
-
 msgid "Is it selectable by participants"
 msgstr "Je volitelný účastníky"
 
@@ -4817,9 +4781,6 @@ msgstr "Úplný název organizace"
 #, python-format
 msgid "Confirm registration to %(event)s"
 msgstr "Potvrzení vstupu do %(event)s"
-
-msgid "Confirm to move this registration"
-msgstr "Potvrzení přesunu této registrace"
 
 msgid "Descriptive name for this API key"
 msgstr "Popisný název tohoto klíče API"
@@ -5129,9 +5090,6 @@ msgstr "Registrace potvrzena na %(event)s!"
 msgid "Role approval %(role)s per %(event)s"
 msgstr "Schválení role %(role)s na %(event)s"
 
-msgid "Select a session from the same event"
-msgstr "Výběr relace ze stejné události"
-
 msgid "Select the event of this new session"
 msgstr "Vyberte událost této nové relace"
 
@@ -5162,9 +5120,6 @@ msgstr "Byl vám udělen úspěch"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Přidáno na konec všech odeslaných e-mailů"
-
-msgid "Character assignments (if compatible)"
-msgstr "Přiřazení znaků (je-li kompatibilní)"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Zkontrolujte platnost fiskálního kódu"
@@ -5906,6 +5861,9 @@ msgstr "Nyní můžete nastavit externí registrační odkaz"
 msgid "Optional - Image displayed within the question"
 msgstr "Nepovinné - Obrázek zobrazený v rámci otázky"
 
+msgid "Please select both a registration and an event"
+msgstr "Vyberte prosím registraci i událost"
+
 msgid "Registered users will be granted normal access"
 msgstr "Registrovaní uživatelé budou mít běžný přístup"
 
@@ -5988,9 +5946,6 @@ msgstr "Počet znaků, které mají být přiřazeny (výchozí 1)"
 msgid "Optional template associated with this ability."
 msgstr "Volitelná šablona spojená s touto schopností."
 
-msgid "Registration data (ticket, quotas, additionals)"
-msgstr "Registrační údaje (jízdenka, kvóty, přírůstky)"
-
 msgid "Selected elements will be shown to participants"
 msgstr "Vybrané prvky budou účastníkům předvedeny"
 
@@ -6036,9 +5991,6 @@ msgstr "Popis kompetenčních dovedností"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
-
-msgid "Accounting items (payment history will be reset)"
-msgstr "Účetní položky (historie plateb se vynuluje)"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Přesně popište, kteří účastníci jsou zapojeni"
@@ -6208,9 +6160,6 @@ msgstr "Správa kroků postupu pro prvky psaní"
 
 msgid "Maximum number of characters the player can create"
 msgstr "Maximální počet postav, které může hráč vytvořit"
-
-msgid "Please select both a registration and a target run"
-msgstr "Vyberte prosím registraci i cílový běh"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Druhý znak ve vztahu (cílová destinace)"
@@ -6568,9 +6517,6 @@ msgstr "Správa stavu nakládky a nasazení skladových položek"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Správa plateb provedených účastníky všech událostí"
-
-msgid "Please select either a target session or a target event"
-msgstr "Vyberte prosím buď cílovou relaci, nebo cílovou událost"
 
 msgid "Quickly configure your events's most important settings"
 msgstr "Rychlá konfigurace nejdůležitějších nastavení událostí"
@@ -7145,9 +7091,6 @@ msgstr "Nyní si můžete prohlédnout informace o stravě poskytnuté účastn�
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Uveďte prosím, při jaké příležitosti si přejete dar poskytnout"
-
-msgid "Please select only one target (either session or event, not both)"
-msgstr "Vyberte prosím pouze jeden cíl (buď relaci, nebo událost, ne obojí)"
 
 msgid "This page shows all events; you can edit them, or create new ones"
 msgstr ""
@@ -10062,13 +10005,6 @@ msgid ""
 msgstr ""
 "Počet splátek pro rozdělení poplatku: platby a termíny budou rovnoměrně "
 "rozděleny od data registrace"
-
-msgid ""
-"This will move the registration from the current run to the target run. The "
-"original registration will be deleted."
-msgstr ""
-"Tím se registrace přesune z aktuálního běhu do cílového běhu. Původní "
-"registrace bude smazána."
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "
