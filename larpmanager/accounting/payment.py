@@ -258,7 +258,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
                     reg_id=context["reg"].id,
                 ).text
             placeholder_values[question_name] = answer_value
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip missing questions
+        except ObjectDoesNotExist:
             # Skip missing questions/answers
             pass
 

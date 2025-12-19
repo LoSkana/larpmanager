@@ -20,8 +20,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta
-from datetime import timezone as dt_timezone
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
@@ -158,7 +157,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "e": run.event.slug,
             "r": run.number,
             "s": str(run),
-            "k": (run.start if run.start else datetime.max.replace(tzinfo=dt_timezone.utc).date()),
+            "k": (run.start if run.start else datetime.max.replace(tzinfo=UTC).date()),
         }
 
         # Categorize as open or past run

@@ -96,7 +96,7 @@ class Command(BaseCommand):
                         self.stdout.write(
                             self.style.SUCCESS(f"✓ Reset sequence for {table_name}"),
                         )
-                    except Exception as e:  # noqa: BLE001, PERF203
+                    except Exception as e:  # noqa: BLE001
                         self.stdout.write(
                             self.style.ERROR(f"✗ Failed to reset sequence for {table_name}: {e}"),
                         )
