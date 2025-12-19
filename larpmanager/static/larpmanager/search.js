@@ -258,7 +258,7 @@ function search(key) {
             }
             var player = window['texts']['abs'];
             if (el['player_id'] > 0) {
-                player = '<a href="{0}">{1}</a>'.format(prof_url.replace("/0", "/"+el['player_id']), escapeHtml(el['player']))
+                player = '<a href="{0}">{1}</a>'.format(prof_url.replace("/0", "/"+el['player_uuid']), escapeHtml(el['player']))
                 if (el['player_prof'])
                     pf = el['player_prof'];
             };
