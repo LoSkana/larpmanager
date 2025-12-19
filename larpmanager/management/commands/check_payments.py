@@ -88,7 +88,7 @@ class Command(BaseCommand):
                 satispay_verify({"association_id": payment_invoice.association_id}, payment_invoice.cod)
                 successfully_verified_count += 1
 
-            except Exception as verification_error:  # noqa: PERF203, BLE001 - Batch operation must continue on any API error
+            except Exception as verification_error:  # noqa: BLE001 - Batch operation must continue on any API error
                 # Log verification failures but continue processing other payments
                 logger.warning("Failed to verify Satispay payment %s: %s", payment_invoice.cod, verification_error)
 

@@ -121,7 +121,7 @@ It will perform a graceful restart.
 ### Cloud recommendations
 
 Suggested baseline for cloud VMs:
-- OS: Ubuntu 22.04 LTS
+- OS: Ubuntu 24.04 LTS (required for Python 3.12)
 - Instance type: burstable instance to handle activity spikes
 -
 Some typical options could be:
@@ -184,16 +184,29 @@ The typical, recommended setup is to have:
 
 Here are the step for a local setup on your machine, required for both *Develop* and *Contributing*.
 
+**Requirements:**
+- Python 3.12 or higher
+- Ubuntu 24.04 LTS recommended
+
 For a Debian-like system: install the following packages:
 
 ```bash
-sudo apt install python3-pip python3-venv redis-server git postgresql postgresql-contrib \
-  libpq-dev nodejs build-essential libxmlsec1-dev libxmlsec1-openssl libavif16 libcairo2-dev pkg-config python3-dev
+# On Ubuntu 24.04 LTS
+sudo apt install python3.12 python3.12-venv python3.12-dev python3-pip redis-server git \
+  postgresql postgresql-contrib libpq-dev nodejs build-essential libxmlsec1-dev \
+  libxmlsec1-openssl libavif16 libcairo2-dev pkg-config
+
+# On Ubuntu 22.04 or older (requires deadsnakes PPA for Python 3.12)
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.12 python3.12-venv python3.12-dev python3-pip redis-server git \
+  postgresql postgresql-contrib libpq-dev nodejs build-essential libxmlsec1-dev \
+  libxmlsec1-openssl libavif16 libcairo2-dev pkg-config
 ```
 
 Create and activate a virtual environment:
 ```bash
-python3 -m venv venv
+python3.12 -m venv venv
 source venv/bin/activate
 ```
 

@@ -252,7 +252,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
             traits.append(trait)
-        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
+        except Trait.DoesNotExist as error:
             logger.warning("Error getting trait %s: %s", trait_number, error)
 
     # Extract all @number patterns for validation (not added to return list)
@@ -262,7 +262,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     for trait_number in set(trait_numbers_to_validate):
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
-        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
+        except Trait.DoesNotExist as error:
             logger.warning("Error getting trait %s in assignment: %s", trait_number, error)
 
     return traits

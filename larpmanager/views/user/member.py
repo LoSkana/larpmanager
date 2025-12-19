@@ -853,7 +853,7 @@ def vote(request: HttpRequest) -> HttpResponse:
         try:
             idx = int(mb)
             context["candidates"].append(Member.objects.get(pk=idx))
-        except (ValueError, Member.DoesNotExist) as e:  # noqa: PERF203 - Need per-item error handling to skip invalid candidates
+        except (ValueError, Member.DoesNotExist) as e:
             # Skip invalid candidate IDs
             logger.debug("Invalid candidate ID or member not found: %s: %s", mb, e)
 

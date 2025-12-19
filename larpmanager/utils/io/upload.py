@@ -154,7 +154,7 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
 
             # Parse CSV with automatic delimiter detection
             return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
-        except Exception as parsing_error:  # noqa: PERF203, BLE001 - Must try all encodings on any parsing error
+        except Exception as parsing_error:  # noqa: BLE001 - Must try all encodings on any parsing error
             # Log error and continue to next encoding
             logger.debug("Failed to parse CSV with encoding %s: %s", encoding, parsing_error)
             continue
@@ -878,7 +878,7 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
             element.save()  # to be sure
             faction.characters.add(element)
             faction.save()
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+        except ObjectDoesNotExist:
             # Log faction not found errors
             logs.append(f"Faction not found: {faction_name}")
 
@@ -1458,7 +1458,7 @@ def _assign_prereq(
             # Ensure element is saved before adding M2M relationship
             element.save()
             element.prerequisites.add(prerequisite_element)
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+        except ObjectDoesNotExist:
             logs.append(f"Prerequisite not found: {prerequisite_name}")
 
 
@@ -1486,5 +1486,5 @@ def _assign_requirements(
 
             # Add the requirement to the writing element
             writing_element.requirements.add(writing_option)
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+        except ObjectDoesNotExist:
             error_logs.append(f"requirements not found: {requirement_name}")
