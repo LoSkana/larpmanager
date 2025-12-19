@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/test.sh
+
 # Unified test script for LarpManager
 set -euo pipefail
 
@@ -25,6 +25,8 @@ check_branch() {
 WORKERS="${1:-6}"
 export WORKERS
 
+playwright install
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 SQL_FILE="${PROJECT_ROOT}/larpmanager/tests/test_db.sql"
@@ -45,7 +47,6 @@ echo ""
 
 # Setup environment for tests
 export PYTEST_CURRENT_TEST="true"
-export HOME=$(mktemp -d)
 
 # Run unit tests
 echo "==> Running unit tests..."
