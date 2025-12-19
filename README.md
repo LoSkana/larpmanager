@@ -284,10 +284,14 @@ The codebase is based on Django; if you're not already familiar with it, we high
    python manage.py reset
    ```
 
+(Since this command is dangerous, we added a check to prevent it to be executed on `main` branch; to execute, just create a new branch before)
+
 4. Now you can run the local server for manual testing and debugging:
 ```bash
 python manage.py runserver
 ```
+
+5. You can use default users "orga@test.it" and "user@test.it", both with password "banana"
 
 ---
 
