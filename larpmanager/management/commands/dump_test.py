@@ -18,7 +18,9 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import os
+import re
 import subprocess
+from pathlib import Path
 
 from django.core.management import BaseCommand, call_command
 
@@ -29,6 +31,39 @@ class Command(BaseCommand):
     """Django management command."""
 
     help = "Dump test db"
+
+    def normalize_dates(self, file_path: str) -> None:
+        """Normalize dynamic dates in SQL dump to fixed reference dates.
+
+        This function replaces all occurrences of dynamic timestamps (current date,
+        migration dates, etc.) with fixed reference dates to ensure the dump file
+        remains stable across multiple generations.
+
+        Args:
+            file_path: Path to the SQL dump file to normalize
+
+        """
+        self.stdout.write("Normalizing dates in SQL dump...")
+
+        # Read the SQL file
+        with Path(file_path).open(encoding="utf-8") as f:
+            content = f.read()
+
+        # Replace all timestamps with a fixed reference timestamp
+        # Pattern: YYYY-MM-DD HH:MM:SS.microseconds+timezone
+        # Microseconds can be 1-6 digits
+        # Replace with: 2025-01-01 00:00:00.000000+01
+        content = re.sub(
+            r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+\+\d{2}",
+            "2025-01-01 00:00:00.000000+01",
+            content,
+        )
+
+        # Write the normalized content back
+        with Path(file_path).open("w", encoding="utf-8") as f:
+            f.write(content)
+
+        self.stdout.write(self.style.SUCCESS("Dates normalized successfully"))
 
     def handle(self, *args: tuple, **kwargs: dict) -> None:  # noqa: ARG002
         """Django management command handler to dump test database.
@@ -79,6 +114,9 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Database dump completed: test_db.sql"))
         except subprocess.CalledProcessError as e:
             self.stderr.write(self.style.ERROR(f"Dump failed: {e}"))
+
+        # Normalize dates to fixed reference dates for stable dumps
+        self.normalize_dates("larpmanager/tests/test_db.sql")
 
         # Clean up PostgreSQL-specific commands that may cause test issues
         clean_cmd = [
