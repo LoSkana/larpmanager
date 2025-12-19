@@ -78,6 +78,45 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _normalize_numeric(value: str) -> str:
+    """Normalize numeric string by replacing comma decimal separator with dot.
+
+    Args:
+        value: Numeric string that may use comma or dot as decimal separator
+
+    Returns:
+        Normalized string with dot as decimal separator
+
+    """
+    return str(value).replace(",", ".")
+
+
+def _to_int(value: str) -> int:
+    """Convert numeric string to integer, handling both comma and dot decimal separators.
+
+    Args:
+        value: Numeric string that may use comma or dot as decimal separator
+
+    Returns:
+        Integer value (decimals are truncated)
+
+    """
+    return int(float(_normalize_numeric(value)))
+
+
+def _to_decimal(value: str) -> Decimal:
+    """Convert numeric string to Decimal, handling both comma and dot decimal separators.
+
+    Args:
+        value: Numeric string that may use comma or dot as decimal separator
+
+    Returns:
+        Decimal value
+
+    """
+    return Decimal(_normalize_numeric(value))
+
+
 def go_upload(context: dict, upload_form_data: Any) -> Any:
     """Route uploaded files to appropriate processing functions.
 
@@ -332,7 +371,7 @@ def _reg_field_load(
     elif field_name == "characters":
         _reg_assign_characters(context, registration, field_value, error_logs)
     elif field_name == "pwyw":
-        registration.pay_what = Decimal(field_value)
+        registration.pay_what = _to_decimal(field_value)
     else:
         _assign_choice_answer(
             registration,
@@ -1013,7 +1052,7 @@ def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> 
 
         # Handle special case for max_length field conversion
         if field_name == "max_length":
-            validated_value = int(field_value)
+            validated_value = _to_int(field_value)
 
         # Set the validated value on the instance
         setattr(question_instance, field_name, validated_value)
@@ -1109,8 +1148,10 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
             continue
 
         # Convert numeric fields to appropriate types
-        if field_name in ["max_available", "price"]:
-            processed_value = int(processed_value)
+        if field_name == "max_available":
+            processed_value = _to_int(processed_value)
+        elif field_name == "price":
+            processed_value = _to_decimal(processed_value)
 
         # Handle requirements field with special processing
         if field_name == "requirements":
@@ -1301,9 +1342,9 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
 
         # Convert numeric fields to appropriate types
         if field_name == "max_available":
-            processed_value = int(field_value)
+            processed_value = _to_int(field_value)
         if field_name == "price":
-            processed_value = float(field_value)
+            processed_value = _to_decimal(field_value)
 
         # Set the field value on the ticket object
         setattr(ticket, field_name, processed_value)
@@ -1382,7 +1423,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
         # Convert cost field to integer
         if field_name == "cost":
-            processed_value = int(field_value)
+            processed_value = _to_int(field_value)
 
         # Handle prerequisites field parsing
         if field_name == "prerequisites":
