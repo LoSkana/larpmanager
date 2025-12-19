@@ -57,8 +57,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt -q
+        pip install -r requirements.txt -q --break-system-packages
         cd larpmanager/static
         npm install
         cd ../../
