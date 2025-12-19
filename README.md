@@ -289,6 +289,8 @@ The codebase is based on Django; if you're not already familiar with it, we high
 python manage.py runserver
 ```
 
+5. You can use default users "orga@test.it" and "user@test.it", both with password "banana"
+
 ---
 
 ## Contributing
