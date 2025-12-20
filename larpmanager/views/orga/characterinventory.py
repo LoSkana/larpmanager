@@ -25,8 +25,6 @@ from django.views.decorators.http import require_POST
 from larpmanager.forms.characterinventory import OrgaPoolTypePxForm, OrgaCharacterInventoryForm
 from larpmanager.models.characterinventory import PoolTypeCI, CharacterInventory, InventoryTransfer
 from larpmanager.services.ci_transfer import perform_transfer
-from larpmanager.utils.edit import orga_edit
-from larpmanager.utils.event import check_event_permission
 
 
 @login_required
