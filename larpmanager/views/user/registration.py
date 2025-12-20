@@ -490,7 +490,7 @@ def save_registration_bring_friend(context: dict, form: object, reg: Registratio
 
     # Look up the registration associated with the friend code
     try:
-        friend = Registration.objects.get(special_cod=cod)
+        friend = Registration.objects.get(uuid=cod)
     except Exception as err:
         msg = "I'm sorry, this friend code was not found"
         raise Http404(msg) from err
@@ -867,7 +867,7 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
 # ~ def discount_bring_friend(request: HttpRequest, context: dict, cod):
 # ~ # check if there is a registration with that cod
 # ~ try:
-# ~ friend = Registration.objects.get(special_cod=cod)
+# ~ friend = Registration.objects.get(uuid=cod)
 # ~ except Exception as e:
 # ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount code not valid")})
 # ~ if friend.member == context["member"]:

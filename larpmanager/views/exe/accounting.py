@@ -1080,7 +1080,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     # Cache registration special codes using run-member composite key
     # This avoids N+1 queries when displaying registration codes
     cache = {
-        f"{reg.run_id}-{reg.member_id}": reg.special_cod
+        f"{reg.run_id}-{reg.member_id}": reg.uuid
         for reg in Registration.objects.filter(run_id__in=run_ids, member_id__in=member_ids)
     }
 

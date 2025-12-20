@@ -24,6 +24,7 @@ import hashlib
 import json
 import logging
 import random
+import secrets
 import string
 from html.parser import HTMLParser
 from io import StringIO
@@ -145,11 +146,9 @@ def my_uuid_short() -> Any:
 
 
 def my_uuid(length: int | None = None) -> str:
-    """Generate a UUID hex string, optionally truncated to specified length."""
-    uuid_hex_string = uuid4().hex
-    if length is None:
-        return uuid_hex_string
-    return uuid_hex_string[:length]
+    """Generate a UUID of specified length."""
+    alphabet = string.ascii_lowercase + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def download_d(session: Any) -> Any:

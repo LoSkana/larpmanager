@@ -347,7 +347,7 @@ class Registration(BaseModel):
 
     modified = models.IntegerField(default=0)
 
-    special_cod = models.CharField(
+    uuid = models.CharField(
         max_length=12,
         verbose_name=_("Unique code"),
         unique=True,

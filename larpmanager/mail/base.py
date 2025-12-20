@@ -315,7 +315,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     email_subject = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
 
     # Start email body with the user's personal discount code
-    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
+    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.uuid}
 
     # Add instructions for sharing the code and friend's discount amount
     email_body += (

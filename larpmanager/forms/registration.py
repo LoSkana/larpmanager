@@ -609,7 +609,7 @@ class RegistrationForm(BaseRegistrationForm):
             if cod:
                 try:
                     # Look for registration with matching special code in same event
-                    Registration.objects.get(special_cod=cod, run__event=run.event)
+                    Registration.objects.get(uuid=cod, run__event=run.event)
                 except Registration.DoesNotExist:
                     # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
@@ -728,10 +728,10 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Handle unique code field based on feature flag
         if "unique_code" in self.params["features"]:
-            self.sections["id_special_cod"] = add_section
-            self.reorder_field("special_cod")
+            self.sections["id_uuid"] = add_section
+            self.reorder_field("uuid")
         else:
-            self.delete_field("special_cod")
+            self.delete_field("uuid")
 
         # Initialize organization-specific fields and clean up unused ones
         keys = self.init_orga_fields(main_section)

@@ -1703,7 +1703,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ("", "#load_accounting", _("Accounting")),
             ("", "email", _("Email")),
             ("", "date", _("Chronology")),
-            ("unique_code", "special_cod", _("Unique code")),
+            ("unique_code", "uuid", _("Unique code")),
             ("additional_tickets", "additionals", _("Additional")),
             ("gift", "gift", _("Gift")),
             ("membership", "membership", _("Member")),
