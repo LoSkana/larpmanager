@@ -74,11 +74,6 @@ urlpatterns = [
         name="help",
     ),
     path(
-        "help/<int:run_id>/",
-        views_ums.help_red,
-        name="help_red",
-    ),
-    path(
         "help/attachment/<int:attachment_id>/",
         views_ums.help_attachment,
         name="help_attachment",

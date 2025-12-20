@@ -37,7 +37,6 @@ from larpmanager.forms.miscellanea import (
     ShuttleServiceEditForm,
     ShuttleServiceForm,
 )
-from larpmanager.models.event import Run
 from larpmanager.models.miscellanea import (
     Album,
     AlbumUpload,
@@ -76,22 +75,6 @@ def util(request: HttpRequest, util_cod: str) -> HttpResponseRedirect:  # noqa: 
     except Exception as err:
         msg = "not found"
         raise Http404(msg) from err
-
-
-def help_red(request: HttpRequest, run_id: int) -> HttpResponseRedirect:
-    """Redirect to help page for a specific run."""
-    # Set up context with user data and association ID
-    context = get_context(request)
-
-    # Get the run object or raise 404 if not found
-    try:
-        context["run"] = Run.objects.get(pk=run_id, event__association_id=context["association_id"])
-    except ObjectDoesNotExist as err:
-        msg = "Run does not exist"
-        raise Http404(msg) from err
-
-    # Redirect to help page with run slug
-    return redirect("help", event_slug=context["run"].get_slug())
 
 
 @login_required
