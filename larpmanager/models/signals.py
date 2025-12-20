@@ -788,17 +788,9 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
 
 @receiver(post_save, sender=Character)
 def create_personal_inventory(sender, instance, created, **kwargs):
-    if created:
-        inventory = CharacterInventory.objects.create(
-            name=f"{instance.name}'s Personal Storage",
-            event=instance.event
-        )
-        inventory.owners.add(instance)
-        inventory.save()
-
-    # Reset configuration cache and create default setup
-    on_event_post_save_reset_config_cache(instance)
-    create_default_event_setup(instance)
+    if not created:
+        return
+    CharacterInventory.objects.create(character=instance)
 
 
 @receiver(post_delete, sender=Event)
