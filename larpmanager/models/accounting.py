@@ -115,6 +115,13 @@ class PaymentInvoice(BaseModel):
 
     key = models.CharField(max_length=500, null=True)
 
+    uuid = models.CharField(
+        max_length=12,
+        unique=True,
+        default=my_uuid_short,
+        editable=False,
+    )
+
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(fields=["key", "status"]),

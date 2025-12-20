@@ -43,9 +43,6 @@
                 <a href="#" id="load_accounting">{% trans "accounting" %}</a>
                 <a href="#" class="table_toggle hide" tog='acc'>hidden</a>
                 <a href="#" class="table_toggle" tog='email'>{% trans "email" %}</a>
-                {% if features.unique_code %}
-                    <a href="#" class="table_toggle" tog='uuid'>{% trans "unique code" %}</a>
-                {% endif %}
                 {% if registration_reg_que_age %}
                     <a href="#" class="table_toggle" tog='age'>{% trans "age" %}</a>
                 {% endif %}
@@ -146,9 +143,6 @@
                             <th class="acc pay_a">{% trans "Money" %}</th>
                             {% if 'credits' in association.features %}<th class="acc pay_b">{{ credits_name }}</th>{% endif %}
                             {% if 'tokens' in association.features %}<th class="acc pay_c">{{ tokens_name }}</th>{% endif %}
-                            {% if features.unique_code %}
-                                <th class="uuid">{% trans "Code" %}</th>
-                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -312,12 +306,6 @@
                                     <td class="acc pay_c"
                                         tooltip="{% trans "Sum of payments received through" %} {{ tokens_name }}">
                                         <!-- filled later -->
-                                    </td>
-                                {% endif %}
-                                {% if features.unique_code %}
-                                    <td class="uuid"
-                                        tooltip="{% trans "Unique registration code, used for payment checks" %}">
-                                        {% if reg.uuid %}{{ reg.uuid }}{% endif %}
                                     </td>
                                 {% endif %}
                             </tr>

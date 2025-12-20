@@ -1809,9 +1809,6 @@ msgstr "Progressie"
 msgid "Provisional"
 msgstr "Voorlopig"
 
-msgid "Public UUID"
-msgstr "Openbare UUID"
-
 msgid "Publication"
 msgstr "Publicatie"
 
@@ -1895,9 +1892,6 @@ msgstr "ranking"
 
 msgid "text length"
 msgstr "tekstlengte"
-
-msgid "unique code"
-msgstr "unieke code"
 
 msgid "Ability type"
 msgstr "Type vaardigheid"
@@ -5480,9 +5474,6 @@ msgstr "Er zijn quests zonder eigenschappen: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Unieke identifier voor openbare profiel-URL's"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Je sluit (geen van deze filters) uit"
 
@@ -6128,9 +6119,6 @@ msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
-
-msgid "Unique registration code, used for payment checks"
-msgstr "Unieke registratiecode, gebruikt voor betalingscontroles"
 
 msgid "You are including (at least one of these filters)"
 msgstr "U bevat (ten minste een van) deze filters"
@@ -7536,11 +7524,6 @@ msgstr ""
 msgid "Here you can switch between administration pages and user-facing pages"
 msgstr ""
 "Hier kun je schakelen tussen beheerpagina's en pagina's voor gebruikers"
-
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Als deze optie is ingeschakeld, wordt aan alle registraties een unieke code "
-"toegevoegd om ernaar te verwijzen"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

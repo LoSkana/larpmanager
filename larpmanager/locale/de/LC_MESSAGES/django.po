@@ -1809,9 +1809,6 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Vorläufig"
 
-msgid "Public UUID"
-msgstr "Öffentliche UUID"
-
 msgid "Publication"
 msgstr "Veröffentlichung"
 
@@ -1895,9 +1892,6 @@ msgstr "Rangliste"
 
 msgid "text length"
 msgstr "Textlänge"
-
-msgid "unique code"
-msgstr "einzigartiger Code"
 
 msgid "Ability type"
 msgstr "Art der Fertigkeit"
@@ -5482,9 +5476,6 @@ msgstr "Es gibt Quests ohne Eigenschaften: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Diese Seite fasst die hochgeladenen Fotoalben zusammen"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Eindeutiger Bezeichner für öffentliche Profil-URLs"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Sie schließen (keinen dieser Filter)"
 
@@ -6148,10 +6139,6 @@ msgstr "Diese Funktion ist für nicht wartende Tickets verfügbar"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranz überschritten, mit der Stornierung fortfahren"
-
-msgid "Unique registration code, used for payment checks"
-msgstr ""
-"Eindeutiger Registrierungscode, der für Zahlungskontrollen verwendet wird"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Sie enthalten (mindestens einen) der folgenden Filter"
@@ -7698,11 +7685,6 @@ msgid "Here you can switch between administration pages and user-facing pages"
 msgstr ""
 "Hier können Sie zwischen Verwaltungsseiten und benutzerorientierten Seiten "
 "wechseln"
-
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Wenn diese Option aktiviert ist, wird allen Registrierungen ein eindeutiger "
-"Code hinzugefügt, um sie zu referenzieren"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

@@ -706,7 +706,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Define form sections for field organization
         reg_section = _("Registration")
         char_section = _("Character")
-        add_section = _("Details")
         main_section = _("Main")
 
         # Assign registration fields to registration section
@@ -725,13 +724,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Initialize character fields if feature is enabled
         if "character" in self.params["features"]:
             self.init_character(char_section)
-
-        # Handle unique code field based on feature flag
-        if "unique_code" in self.params["features"]:
-            self.sections["id_uuid"] = add_section
-            self.reorder_field("uuid")
-        else:
-            self.delete_field("uuid")
 
         # Initialize organization-specific fields and clean up unused ones
         keys = self.init_orga_fields(main_section)

@@ -419,11 +419,6 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("registration_no_grouping", ConfigType.BOOL, grouping_label, grouping_help_text)
 
-        # Add unique code generation for registrations
-        unique_code_label = _("Unique code")
-        unique_code_help_text = _("If checked, adds to all registrations an unique code to reference them")
-        self.add_configs("registration_unique_code", ConfigType.BOOL, unique_code_label, unique_code_help_text)
-
         # Configure staff visibility permissions for registration questions
         allowed_label = _("Allowed")
         allowed_help_text = _(
@@ -1703,7 +1698,6 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ("", "#load_accounting", _("Accounting")),
             ("", "email", _("Email")),
             ("", "date", _("Chronology")),
-            ("unique_code", "uuid", _("Unique code")),
             ("additional_tickets", "additionals", _("Additional")),
             ("gift", "gift", _("Gift")),
             ("membership", "membership", _("Member")),

@@ -349,10 +349,9 @@ class Registration(BaseModel):
 
     uuid = models.CharField(
         max_length=12,
-        verbose_name=_("Unique code"),
         unique=True,
         default=my_uuid_short,
-        db_index=True,
+        editable=False,
     )
 
     redeem_code = models.CharField(max_length=16, null=True, blank=True)

@@ -896,12 +896,12 @@ def acc_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
 
 
 @login_required
-def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
+def acc_payed(request: HttpRequest, uuid: int = 0) -> HttpResponse:
     """Handle payment completion and redirect to profile check.
 
     Args:
         request: The HTTP request object containing user and association data
-        payment_id: Payment invoice primary key. If 0, no specific invoice is processed
+        uuid: Payment uuid. If 0, no specific invoice is processed
 
     Returns:
         HttpResponse from acc_profile_check with success message and invoice
@@ -912,11 +912,11 @@ def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
     """
     # Check if a specific payment invoice ID was provided
     context = get_context(request)
-    if payment_id:
+    if uuid:
         try:
             # Retrieve the payment invoice for the current user and association
             inv = PaymentInvoice.objects.get(
-                pk=payment_id,
+                uuid=uuid,
                 member=context["member"],
                 association_id=context["association_id"],
             )

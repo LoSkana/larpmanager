@@ -254,7 +254,7 @@ urlpatterns = [
         name="acc_cancelled",
     ),
     path(
-        "accounting/payed/<int:payment_id>/",
+        "accounting/payed/<int:uuid>/",
         views_ua.acc_payed,
         name="acc_payed",
     ),

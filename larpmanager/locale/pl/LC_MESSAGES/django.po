@@ -1809,9 +1809,6 @@ msgstr "Progresja"
 msgid "Provisional"
 msgstr "Tymczasowe"
 
-msgid "Public UUID"
-msgstr "Publiczny identyfikator UUID"
-
 msgid "Publication"
 msgstr "Publikacja"
 
@@ -1895,9 +1892,6 @@ msgstr "tabela liderów"
 
 msgid "text length"
 msgstr "długość tekstu"
-
-msgid "unique code"
-msgstr "unikalny kod"
 
 msgid "Ability type"
 msgstr "Typ umiejętności"
@@ -5478,9 +5472,6 @@ msgstr "Istnieją zadania bez cech: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Na tej stronie wyświetlane są przesłane albumy ze zdjęciami"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Unikalny identyfikator dla adresów URL profili publicznych"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Wykluczasz (żaden z tych filtrów)"
 
@@ -6123,9 +6114,6 @@ msgstr "Ta funkcja jest dostępna dla biletów, które nie oczekują"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Przekroczona tolerancja, kontynuuj anulowanie"
-
-msgid "Unique registration code, used for payment checks"
-msgstr "Unikalny kod rejestracyjny, używany do kontroli płatności"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Uwzględniasz (co najmniej jeden z tych filtrów)"
@@ -7487,11 +7475,6 @@ msgid "Here you can switch between administration pages and user-facing pages"
 msgstr ""
 "Tutaj można przełączać się między stronami administracyjnymi i stronami dla "
 "użytkowników"
-
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Jeśli zaznaczone, dodaje do wszystkich rejestracji unikalny kod, aby się do "
-"nich odwoływać"
 
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""

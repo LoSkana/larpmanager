@@ -85,8 +85,6 @@ class Member(BaseModel):
         unique=True,
         default=my_uuid_short,
         editable=False,
-        verbose_name=_("Public UUID"),
-        help_text=_("Unique identifier for public profile URLs"),
     )
 
     email = models.CharField(max_length=200, editable=False)
