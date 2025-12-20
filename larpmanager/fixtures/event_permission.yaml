@@ -762,7 +762,6 @@
     feature: templates
     module: experience
 - model: larpmanager.eventpermission
-  pk: 83
   fields:
     name: Character Inventory
     descr: Manage character inventories and their items
@@ -773,7 +772,6 @@
     feature: character
     module: writing
 - model: larpmanager.eventpermission
-  pk: 84
   fields:
     name: Pool Types
     descr: Manage character inventory pool types
