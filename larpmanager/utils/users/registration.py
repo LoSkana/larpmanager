@@ -377,7 +377,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
     if run.reg.alert:
         # Handle wire transfer specific messaging
         if wire_created_invoices:
-            payment_url = reverse("acc_reg", args=[run.reg.id])
+            payment_url = reverse("acc_reg", args=[run.reg.uuid])
             message = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{payment_url}'>{message}</a>"
             note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
@@ -385,7 +385,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
             return True
 
         # Handle general payment alert with deadline warning
-        payment_url = reverse("acc_reg", args=[run.reg.id])
+        payment_url = reverse("acc_reg", args=[run.reg.uuid])
         message = _("to confirm it proceed with payment") + "."
         text_url = f", <a href='{payment_url}'>{message}</a>"
 

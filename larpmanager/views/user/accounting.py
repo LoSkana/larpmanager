@@ -62,6 +62,7 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     AccountingItemPayment,
+    Collection,
     CollectionStatus,
     OtherChoices,
     PaymentChoices,
@@ -279,7 +280,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Save refund request with transaction safety
             with transaction.atomic():
-                p = form.save(commit=False)
+                p: PaymentInvoice = form.save(commit=False)
                 p.member = context["member"]
                 p.association_id = context["association_id"]
                 p.save()
@@ -352,12 +353,12 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
 
     # Redirect to payment processing with or without specific method
     if method:
-        return redirect("acc_reg", reg_id=reg.id, method=method)
-    return redirect("acc_reg", reg_id=reg.id)
+        return redirect("acc_reg", uuid=reg.uuid, method=method)
+    return redirect("acc_reg", uuid=reg.uuid)
 
 
 @login_required
-def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> HttpResponse:
+def acc_reg(request: HttpRequest, uuid: int, method: str | None = None) -> HttpResponse:
     """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording
@@ -366,7 +367,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
     Args:
         request: HTTP request object with authenticated user
-        reg_id: Registration ID to process payment for
+        uuid: Registration UUID
         method: Optional payment method slug to pre-select
 
     Returns:
@@ -383,7 +384,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     # Retrieve registration with related run and event data
     try:
         reg = Registration.objects.select_related("run", "run__event").get(
-            id=reg_id,
+            uuid=uuid,
             member=context["member"],
             cancellation_date__isnull=True,
             run__event__association_id=context["association_id"],
@@ -594,7 +595,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Create collection within atomic transaction to ensure data consistency
             with transaction.atomic():
-                p = form.save(commit=False)
+                p: Collection = form.save(commit=False)
                 p.organizer = context["member"]
                 p.association_id = context["association_id"]
                 p.save()

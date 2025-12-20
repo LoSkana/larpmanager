@@ -219,12 +219,12 @@ urlpatterns = [
         name="acc_pay",
     ),
     path(
-        "accounting/registration/<int:reg_id>/",
+        "accounting/registration/<slug:uuid>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
     path(
-        "accounting/registration/<int:reg_id>/<slug:method>/",
+        "accounting/registration/<slug:uuid>/<slug:method>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
