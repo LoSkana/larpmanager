@@ -265,7 +265,7 @@ urlpatterns = [
         name="register",
     ),
     path(
-        "<slug:event_slug>/register/ticket/<int:ticket_id>/",
+        "<slug:event_slug>/register/ticket/<slug:ticket_uuid>/",
         views_ur.register,
         name="register",
     ),

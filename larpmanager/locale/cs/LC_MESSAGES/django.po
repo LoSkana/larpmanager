@@ -1845,6 +1845,9 @@ msgstr "Zkrácení adresy URL"
 msgid "Show closed"
 msgstr "Zobrazit uzavřeno"
 
+msgid "Signup link"
+msgstr "Odkaz na registraci"
+
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
 

@@ -56,7 +56,7 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{% url 'register' run.get_slug el.id %}">{% trans "Link" %}</a>
+                        <a href="{% url 'register' run.get_slug el.uuid %}">{% trans "Signup link" %}</a>
                     </td>
                     <td>
                         {% if not forloop.first %}

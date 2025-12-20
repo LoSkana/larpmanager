@@ -606,7 +606,7 @@ def register(
     event_slug: str,
     secret_code: str = "",
     discount_code: str = "",
-    ticket_id: int = 0,
+    ticket_uuid: int = 0,
 ) -> HttpResponse:
     """Handle event registration form display and submission.
 
@@ -618,7 +618,7 @@ def register(
         event_slug: Event slug identifier
         secret_code: Optional scenario code for registration context
         discount_code: Optional discount code to apply
-        ticket_id: Ticket ID to pre-select (default: 0)
+        ticket_uuid: if provided, ticket UUID to select (default: 0)
 
     Returns:
         HttpResponse: Rendered registration page or redirect response
@@ -649,7 +649,7 @@ def register(
         context["run_reg"] = None
 
     # Apply ticket selection if provided, verifying it belongs to this event
-    _apply_ticket(context, ticket_id, current_event.pk)
+    _apply_ticket(context, ticket_uuid, current_event.pk)
 
     # Check if payment features are enabled for this association
     context["payment_feature"] = "payment" in get_association_features(context["association_id"])
@@ -696,21 +696,21 @@ def register(
     return render(request, "larpmanager/event/register.html", context)
 
 
-def _apply_ticket(context: dict, ticket_id: int | None, event_id: int) -> None:
+def _apply_ticket(context: dict, ticket_uuid: int | None, event_id: int) -> None:
     """Apply ticket information to context if ticket exists and belongs to the event.
 
     Args:
         context: Context dictionary to update with ticket data
-        ticket_id: Ticket ID to retrieve, or None
+        ticket_uuid: Ticket UUID to retrieve, or None
         event_id: Event ID to verify ticket ownership
 
     """
-    if not ticket_id:
+    if not ticket_uuid:
         return
 
     try:
         # Retrieve ticket and verify it belongs to the event
-        ticket = RegistrationTicket.objects.get(pk=ticket_id, event_id=event_id)
+        ticket = RegistrationTicket.objects.get(uuid=ticket_uuid, event_id=event_id)
         context["tier"] = ticket.tier
 
         # Remove closed status for staff/NPC tickets
@@ -718,7 +718,7 @@ def _apply_ticket(context: dict, ticket_id: int | None, event_id: int) -> None:
             del context["run"].status["closed"]
 
         # Store ticket ID in context
-        context["ticket"] = ticket_id
+        context["ticket"] = ticket.id
     except ObjectDoesNotExist:
         # Ticket not found or doesn't belong to this event - ignore silently
         pass

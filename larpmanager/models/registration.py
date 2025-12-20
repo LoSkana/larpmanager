@@ -120,6 +120,13 @@ class RegistrationTicket(BaseModel):
 
     order = models.IntegerField(default=0)
 
+    uuid = models.CharField(
+        max_length=12,
+        unique=True,
+        default=my_uuid_short,
+        editable=False,
+    )
+
     def __str__(self) -> str:
         """Return ticket tier string representation with event, tier, name and price."""
         # noinspection PyUnresolvedReferences

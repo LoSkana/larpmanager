@@ -1845,6 +1845,9 @@ msgstr "Förkorta URL"
 msgid "Show closed"
 msgstr "Visa stängd"
 
+msgid "Signup link"
+msgstr "Länk för registrering"
+
 msgid "Simple list"
 msgstr "Enkel lista"
 

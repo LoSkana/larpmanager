@@ -1845,6 +1845,9 @@ msgstr "Acortar URL"
 msgid "Show closed"
 msgstr "Ver cerrados"
 
+msgid "Signup link"
+msgstr "Enlace de inscripción"
+
 msgid "Simple list"
 msgstr "Lista simple"
 

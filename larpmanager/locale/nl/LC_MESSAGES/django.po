@@ -1845,6 +1845,9 @@ msgstr "URL verkorten"
 msgid "Show closed"
 msgstr "Toon gesloten"
 
+msgid "Signup link"
+msgstr "Link aanmelden"
+
 msgid "Simple list"
 msgstr "Eenvoudige lijst"
 

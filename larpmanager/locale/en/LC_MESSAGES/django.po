@@ -7200,6 +7200,9 @@ msgstr ""
 msgid "Direct link"
 msgstr ""
 
+msgid "Signup link"
+msgstr ""
+
 msgid "Transfer registration"
 msgstr ""
 

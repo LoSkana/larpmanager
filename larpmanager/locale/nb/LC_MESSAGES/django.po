@@ -1845,6 +1845,9 @@ msgstr "Forkort URL-adressen"
 msgid "Show closed"
 msgstr "Vis stengt"
 
+msgid "Signup link"
+msgstr "Påmeldingslenke"
+
 msgid "Simple list"
 msgstr "Enkel liste"
 
