@@ -17,7 +17,7 @@
             <td>{{ entry.type.name }}</td>
             <td>{{ entry.balance.amount }}</td>
             <td style="padding: 0.2em;">
-                <form method="post" action="{% url 'orga_ci_transfer' run.event.slug run.number %}" style="display: flex; flex-direction: column; gap: 0.2em;">
+                <form method="post" action="{% url 'orga_ci_transfer' run.get_slug %}" style="display: flex; flex-direction: column; gap: 0.2em;">
                     {% csrf_token %}
                     <input type="hidden" name="source_inventory" value="{{ character_inventory.id }}">
                     <input type="hidden" name="pool_type" value="{{ entry.type.id }}">
@@ -42,7 +42,7 @@
             </td>
             <td>
                 {% if request.user.is_staff %}
-                    <form method="post" action="{% url 'orga_ci_transfer' run.event.slug run.number %}" style="display: flex; flex-direction: column; gap: 0.2em;">
+                    <form method="post" action="{% url 'orga_ci_transfer' run.get_slug %}" style="display: flex; flex-direction: column; gap: 0.2em;">
                         {% csrf_token %}
                         <input type="hidden" name="source_inventory" value="">  {# NPC = None #}
                         <input type="hidden" name="target_inventory" value="{{ character_inventory.id }}">

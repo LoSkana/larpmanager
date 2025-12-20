@@ -13,7 +13,7 @@
                 </li>
                 {% endfor %}
             </ul>
-            <a href="{% url 'orga_ci_character_inventory_view' run.event.slug run.number inventory.id %}" class="btn">
+            <a href="{% url 'orga_ci_character_inventory_view' event.slug inventory.id %}" class="btn">
                 {% trans "View Details" %}
             </a>
         </div>
@@ -21,4 +21,3 @@
     </div>
 </div>
 {% endif %}
-

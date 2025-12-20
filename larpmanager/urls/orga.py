@@ -828,32 +828,32 @@ urlpatterns = [
         name="orga_px_rules_order",
     ),
     path(
-        "<slug:s>/<int:n>/manage/ci/character_inventory/",
+        "<slug:event_slug>/manage/ci/character_inventory/",
         views_ci.orga_ci_character_inventory,
         name="orga_ci_character_inventory",
     ),
     path(
-        "<slug:s>/<int:n>/manage/ci/character_inventory/edit/<int:num>/",
+        "<slug:event_slug>/manage/ci/character_inventory/edit/<int:num>/",
         views_ci.orga_ci_character_inventory_edit,
         name="orga_ci_character_inventory_edit",
     ),
     path(
-        "<slug:s>/<int:n>/manage/ci/character_inventory/<int:num>/view/",
+        "<slug:event_slug>/manage/ci/character_inventory/<int:num>/view/",
         views_ci.orga_ci_character_inventory_view,
         name="orga_ci_character_inventory_view",
     ),
     path(
-        "<slug:s>/<int:n>/manage/ci/character_inventory/transfer/",
+        "<slug:event_slug>/manage/ci/character_inventory/transfer/",
         views_ci.orga_ci_transfer,
         name="orga_ci_transfer",
     ),
     path(
-        "<slug:s>/<int:n>/manage/ci/pool_types/",
+        "<slug:event_slug>/manage/ci/pool_types/",
         views_ci.orga_ci_pool_types,
         name="orga_ci_pool_types",
     ),
     path(
-        "<slug:s>/<int:n>/manage/ci/pool_types/edit/<int:num>/",
+        "<slug:event_slug>/manage/ci/pool_types/edit/<int:num>/",
         views_ci.orga_ci_pool_types_edit,
         name="orga_ci_pool_types_edit",
     ),

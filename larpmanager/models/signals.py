@@ -258,7 +258,6 @@ from larpmanager.utils.users.registration import process_character_ticket_option
 
 log = logging.getLogger(__name__)
 
-
 # ruff: noqa: FBT001 (Do not check "Boolean-typed positional argument in function definition", as with created there are too many)
 # ruff: noqa: ARG001 Unused function argument
 
@@ -314,10 +313,10 @@ def pre_save_collection_gift(sender: type, instance: AccountingItemCollection, *
 
 @receiver(post_save, sender=AccountingItemCollection)
 def post_save_accounting_item_collection(
-        sender: type,
-        instance: AccountingItemCollection,
-        created: bool,
-        **kwargs: Any,
+    sender: type,
+    instance: AccountingItemCollection,
+    created: bool,
+    **kwargs: Any,
 ) -> None:
     """Handle post-save signal for accounting item collection."""
     handle_accounting_item_collection_post_save(instance)
@@ -326,7 +325,7 @@ def post_save_accounting_item_collection(
 # AccountingItemDiscount signals
 @receiver(post_save, sender=AccountingItemDiscount)
 def post_save_discount_accounting_cache(
-        sender: type, instance: AccountingItemDiscount, created: bool, **kwargs: Any
+    sender: type, instance: AccountingItemDiscount, created: bool, **kwargs: Any
 ) -> None:
     """Update accounting caches when a discount is saved."""
     # Process discount changes in accounting system
@@ -347,7 +346,7 @@ def post_delete_discount_accounting_cache(sender: type, instance: AccountingItem
 # AccountingItemDonation signals
 @receiver(pre_save, sender=AccountingItemDonation)
 def pre_save_accounting_item_donation(
-        sender: type, instance: AccountingItemDonation, *args: Any, **kwargs: Any
+    sender: type, instance: AccountingItemDonation, *args: Any, **kwargs: Any
 ) -> None:
     """Send confirmation email to donor."""
     send_donation_confirmation_email(instance)
@@ -362,10 +361,10 @@ def pre_save_accounting_item_expense(sender: type, instance: AccountingItemExpen
 
 @receiver(post_save, sender=AccountingItemExpense)
 def post_save_accounting_item_expense(
-        sender: type,
-        instance: AccountingItemExpense,
-        created: bool,
-        **kwargs: Any,
+    sender: type,
+    instance: AccountingItemExpense,
+    created: bool,
+    **kwargs: Any,
 ) -> None:
     """Send expense notification and update credit balance."""
     if created:
@@ -389,10 +388,10 @@ def pre_save_accounting_item_other(sender: type, instance: AccountingItemOther, 
 
 @receiver(post_save, sender=AccountingItemOther)
 def post_save_other_accounting_cache(
-        sender: type,
-        instance: AccountingItemOther,
-        created: bool,
-        **kwargs: Any,
+    sender: type,
+    instance: AccountingItemOther,
+    created: bool,
+    **kwargs: Any,
 ) -> None:
     """Update token credit and member accounting cache after OtherAccounting save."""
     # Update token credit based on the OtherAccounting instance
@@ -421,7 +420,7 @@ def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayme
 
 @receiver(post_save, sender=AccountingItemPayment)
 def post_save_payment_accounting_cache(
-        sender: type, instance: AccountingItemPayment, created: bool, **kwargs: Any
+    sender: type, instance: AccountingItemPayment, created: bool, **kwargs: Any
 ) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
     # Update registration and member accounting cache if payment has associated registration
@@ -438,9 +437,9 @@ def post_save_payment_accounting_cache(
 
 @receiver(post_delete, sender=AccountingItemPayment)
 def post_delete_payment_accounting_cache(
-        sender: type,
-        instance: AccountingItemPayment,
-        **kwargs: Any,
+    sender: type,
+    instance: AccountingItemPayment,
+    **kwargs: Any,
 ) -> None:
     """Update accounting caches after payment deletion."""
     update_token_credit_on_payment_delete(instance)
@@ -459,10 +458,10 @@ def pre_delete_assignment_trait(sender: type, instance: AssignmentTrait, **kwarg
 
 @receiver(post_save, sender=AssignmentTrait)
 def post_save_assignment_trait(
-        sender: type,
-        instance: AssignmentTrait,
-        created: bool,
-        **kwargs: dict,
+    sender: type,
+    instance: AssignmentTrait,
+    created: bool,
+    **kwargs: dict,
 ) -> None:
     """Handle post-save actions for AssignmentTrait instances.
 
@@ -493,9 +492,9 @@ def pre_save_association_permission(sender: type, instance: object, **kwargs: An
 
 @receiver(post_save, sender=AssociationPermission)
 def post_save_association_permission_index_permission(
-        sender: type,
-        instance: AssociationPermission,
-        **kwargs: Any,
+    sender: type,
+    instance: AssociationPermission,
+    **kwargs: Any,
 ) -> None:
     """Clear caches when association permission is saved."""
     clear_index_permission_cache("association")
@@ -504,9 +503,9 @@ def post_save_association_permission_index_permission(
 
 @receiver(post_delete, sender=AssociationPermission)
 def post_delete_association_permission_index_permission(
-        sender: type,
-        instance: AssociationPermission,
-        **kwargs: Any,
+    sender: type,
+    instance: AssociationPermission,
+    **kwargs: Any,
 ) -> None:
     """Clear association permission caches after deletion."""
     clear_index_permission_cache("association")
@@ -718,10 +717,10 @@ def pre_save_collection(sender: type, instance: Any, **kwargs: Any) -> None:
 
 @receiver(post_save, sender=Collection)
 def post_save_collection_activation_email(
-        sender: type,
-        instance: Collection,
-        created: bool,
-        **kwargs: Any,
+    sender: type,
+    instance: Collection,
+    created: bool,
+    **kwargs: Any,
 ) -> None:
     """Send collection activation email after save signal."""
     if created:
@@ -731,13 +730,38 @@ def post_save_collection_activation_email(
 # DeliveryPx signals
 @receiver(post_save, sender=DeliveryPx)
 def post_save_delivery_px(
-        sender: type,
-        instance: DeliveryPx,
-        *args: Any,
-        **kwargs: Any,
+    sender: type,
+    instance: DeliveryPx,
+    *args: Any,
+    **kwargs: Any,
 ) -> None:
     """Refresh delivery characters after save signal."""
     refresh_delivery_characters(instance)
+
+
+@receiver(post_save, sender=Character)
+def create_personal_inventory(sender, instance, created, **kwargs):
+    if created:
+        inventory = CharacterInventory.objects.create(
+            name=f"{instance.name}'s Personal Storage",
+            event=instance.event
+        )
+        inventory.owners.add(instance)
+        inventory.save()
+
+
+@receiver(post_save, sender=CharacterInventory)
+def create_pools_for_inventory(sender, instance, created, **kwargs):
+    if created:
+        for pool_type in PoolTypeCI.objects.filter(event=instance.event):
+            PoolBalanceCI.objects.create(
+                inventory=instance,
+                event=instance.event,
+                number=1,
+                name=pool_type.name,
+                pool_type=pool_type,
+                amount=0
+            )
 
 
 @receiver(post_delete, sender=DeliveryPx)
@@ -785,12 +809,9 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     for run_id in instance.runs.values_list("id", flat=True):
         clear_registration_counts_cache(run_id)
 
-
-@receiver(post_save, sender=Character)
-def create_personal_inventory(sender, instance, created, **kwargs):
-    if not created:
-        return
-    CharacterInventory.objects.create(character=instance)
+    # Reset configuration cache and create default setup
+    on_event_post_save_reset_config_cache(instance)
+    create_default_event_setup(instance)
 
 
 @receiver(post_delete, sender=Event)
@@ -963,9 +984,9 @@ def post_save_feature_module_index_permission(sender: type, instance: object, **
 
 @receiver(post_delete, sender=FeatureModule)
 def post_delete_feature_module_index_permission(
-        sender: type,
-        instance: object,
-        **kwargs: object,
+    sender: type,
+    instance: object,
+    **kwargs: object,
 ) -> None:
     """Clear permission and feature caches after deletion."""
     clear_index_permission_cache("event")
@@ -1190,17 +1211,6 @@ def post_save_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: An
         refresh_character_relationships(char)
 
 
-@receiver(post_save, sender=CharacterInventory)
-def create_pools_for_inventory(sender, instance, created, **kwargs):
-    if created:
-        for pool_type in PoolTypeCI.objects.filter(event=instance.event):
-            PoolBalanceCI.objects.create(
-                inventory=instance,
-                pool_type=pool_type,
-                amount=0
-            )
-
-
 @receiver(post_delete, sender=Prologue)
 def post_delete_prologue_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
     """Reset character relationships and cache when prologue is deleted."""
@@ -1263,9 +1273,9 @@ def pre_save_questtype_reset(sender: type, instance: QuestType, **kwargs: dict) 
 
 @receiver(post_save, sender=QuestType)
 def post_save_questtype_reset_rels(
-        sender: type,
-        instance: QuestType,
-        **kwargs: Any,
+    sender: type,
+    instance: QuestType,
+    **kwargs: Any,
 ) -> None:
     """Reset quest type and related quest caches after save.
 
@@ -1372,10 +1382,10 @@ def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwa
 # RegistrationCharacterRel signals
 @receiver(post_save, sender=RegistrationCharacterRel)
 def post_save_registration_character_rel_savereg(
-        sender: type,
-        instance: RegistrationCharacterRel,
-        created: bool,
-        **kwargs: Any,
+    sender: type,
+    instance: RegistrationCharacterRel,
+    created: bool,
+    **kwargs: Any,
 ) -> None:
     """Reset character cache and send assignment email notification."""
     reset_character_registration_cache(instance)
@@ -1386,7 +1396,7 @@ def post_save_registration_character_rel_savereg(
 
 @receiver(post_delete, sender=RegistrationCharacterRel)
 def post_delete_registration_character_rel_savereg(
-        sender: type, instance: RegistrationCharacterRel, **kwargs: Any
+    sender: type, instance: RegistrationCharacterRel, **kwargs: Any
 ) -> None:
     """Reset character registration cache after relationship deletion."""
     reset_character_registration_cache(instance)
@@ -1395,10 +1405,10 @@ def post_delete_registration_character_rel_savereg(
 # RegistrationOption signals
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(
-        sender: type[BaseModel],
-        instance: RegistrationOption,
-        created: bool,
-        **kwargs: dict,
+    sender: type[BaseModel],
+    instance: RegistrationOption,
+    created: bool,
+    **kwargs: dict,
 ) -> None:
     """Process registration option post-save signal."""
     process_registration_option_post_save(instance)
@@ -1407,10 +1417,10 @@ def post_save_registration_option(
 # RegistrationTicket signals
 @receiver(post_save, sender=RegistrationTicket)
 def post_save_ticket_accounting_cache(
-        sender: type,
-        instance: RegistrationTicket,
-        created: bool,
-        **kwargs: Any,
+    sender: type,
+    instance: RegistrationTicket,
+    created: bool,
+    **kwargs: Any,
 ) -> None:
     """Clear accounting cache for all runs when a ticket is saved."""
     log_registration_ticket_saved(instance)

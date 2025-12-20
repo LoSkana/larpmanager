@@ -7,7 +7,7 @@
     {% trans "This page summarizes the character inventories" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/orga.html" %}
+    {% include "elements/header/edit.html" %}
     <table id="pool_types" class="go_datatable writing">
         <thead>
             <tr>
@@ -20,12 +20,12 @@
             {% for el in list %}
                 <tr id="{{ el.id }}">
                     <td>
-                        <a href="{% url 'orga_ci_character_inventory_edit' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_ci_character_inventory_edit' run.get_slug el.id %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>
-                        <a href="{% url 'orga_ci_character_inventory_view' run.event.slug run.number el.id %}"
+                        <a href="{% url 'orga_ci_character_inventory_view' run.get_slug el.id %}"
                             qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
                     </td>
                 </tr>
