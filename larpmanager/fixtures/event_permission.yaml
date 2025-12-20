@@ -770,8 +770,8 @@
     number: 51
     config: null
     hidden: false
-    feature: 120
-    module: 16
+    feature: character
+    module: writing
 - model: larpmanager.eventpermission
   pk: 84
   fields:
@@ -781,5 +781,5 @@
     number: 53
     config: null
     hidden: false
-    feature: 120
-    module: 16
+    feature: character
+    module: writing
