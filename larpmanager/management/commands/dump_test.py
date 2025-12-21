@@ -122,7 +122,10 @@ class Command(BaseCommand):
         clean_cmd = [
             "sed",
             "-i",
-            r"/^\\restrict/d;/^\\unrestrict/d;/COMMENT ON SCHEMA public/d",
+            r"/^\\restrict/d;"
+            r"/^\\unrestrict/d;"
+            r"/COMMENT ON SCHEMA public/d;"
+            r"/SET transaction_timeout/d",
             "larpmanager/tests/test_db.sql",
         ]
         subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603
