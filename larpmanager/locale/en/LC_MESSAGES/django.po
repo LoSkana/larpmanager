@@ -816,6 +816,18 @@ msgstr ""
 msgid "Writing option"
 msgstr ""
 
+msgid "Inventories"
+msgstr ""
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+
+msgid "Pool type"
+msgstr ""
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr ""
+
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -4601,6 +4613,9 @@ msgstr ""
 msgid "Write here questions about your character directly to the authors"
 msgstr ""
 
+msgid "View Details"
+msgstr ""
+
 msgid "Download complete sheet"
 msgstr ""
 
@@ -6887,6 +6902,60 @@ msgstr ""
 msgid "This page allows you to select items to bulk download"
 msgstr ""
 
+msgid "Character Inventories"
+msgstr ""
+
+msgid "This page summarizes the character inventories"
+msgstr ""
+
+msgid "Inventory"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Character Inventory"
+msgstr ""
+
+msgid "Currencies & Materials"
+msgstr ""
+
+msgid "Transfer"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Add from NPC"
+msgstr ""
+
+msgid "Transfer Log"
+msgstr ""
+
+msgid "Actor"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Resource"
+msgstr ""
+
+msgid "No transfers yet."
+msgstr ""
+
+msgid "Character Inventory Pool Types"
+msgstr ""
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+
+msgid "Pool"
+msgstr ""
+
 msgid "Copy"
 msgstr ""
 
@@ -7183,9 +7252,6 @@ msgstr ""
 msgid "Unique registration code, used for payment checks"
 msgstr ""
 
-msgid "Transfer"
-msgstr ""
-
 msgid "Recompute"
 msgstr ""
 
@@ -7228,12 +7294,6 @@ msgid "Transfer preview"
 msgstr ""
 
 msgid "Review the transfer before confirming"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "To"
 msgstr ""
 
 msgid "Errors"
@@ -7666,9 +7726,6 @@ msgid "Tipo"
 msgstr ""
 
 msgid "Selectable"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
 msgid "Handout template"
@@ -8267,6 +8324,15 @@ msgstr ""
 msgid "Now you can set the player editing settings"
 msgstr ""
 
+msgid "Character inventory"
+msgstr ""
+
+msgid "Allows characters to have inventories"
+msgstr ""
+
+msgid "Now characters can have inventories"
+msgstr ""
+
 msgid "Organisation tax"
 msgstr ""
 
@@ -8840,10 +8906,22 @@ msgstr ""
 msgid "Manage ability templates"
 msgstr ""
 
+msgid "Manage character inventories and their items"
+msgstr ""
+
+msgid "Pool Types"
+msgstr ""
+
+msgid "Manage character inventory pool types"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
 msgid "One-Time"
+msgstr ""
+
+msgid "CharacterInventory"
 msgstr ""
 
 msgid "Fields"
