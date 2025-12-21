@@ -884,20 +884,20 @@ msgstr ""
 msgid "Gallery"
 msgstr ""
 
-msgid "Request login"
+msgid "Require login"
 msgstr ""
 
 msgid ""
-"If checked, the gallery will not be displayed to those not logged in to the "
-"system"
+"If checked, the characters will not be displayed to those not logged in to "
+"the system"
 msgstr ""
 
-msgid "Request registration"
+msgid "Require registration"
 msgstr ""
 
 msgid ""
-"If checked, the subscribers' gallery will not be displayed to those who are "
-"not registered to the event"
+"If checked, the characters will not be displayed to those who are not "
+"registered to the event"
 msgstr ""
 
 msgid "Hide unassigned characters"
