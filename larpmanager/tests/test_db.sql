@@ -4311,10 +4311,10 @@ INSERT INTO public.auth_permission VALUES (534, 'Can change social application t
 INSERT INTO public.auth_permission VALUES (535, 'Can delete social application token', 134, 'delete_socialtoken');
 INSERT INTO public.auth_permission VALUES (536, 'Can view social application token', 134, 'view_socialtoken');
 
-INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$9BDQTtuQb0ywqJ97VGWNBU$aXbvOhQ/oVe7/pLYRJqAnGECnXRfyZq5OOZ7SHplvVc=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$hxMoTUYfgTTNsLVxzz52mV$ajFICtWPPIOpZYq6fC78XBpbgNJjLXh7cM32wiwxYIk=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$XZfyMdlHcluHc4ZOHf7HXg$JuEpgH2t4a2XM6Qnu/uzGCTrU/Fp6vi2PBWpC0GmWgo=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$6tvYswF78EU11fqciHi4pH$ELd5fP2wsuGZH3T+ediwkGR2oLWsGe3lML/2pg/k67s=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$L4fxudGVH7kbrHJ9D1GW6o$k1YihPgUvCAG/+dXAbDsAzG2tv369PJ40SOxEgcHTnI=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$SedsxX4ca3VNJOu9OivBYH$MEixiGmHiLgg0ghv7czyUVNsnnJdEQsWHibO8ls4XFM=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$THAwEI1ehJplOTvkgRdqtV$Ss5Zw6mDIKtoU4d8RMo+5Z04cLbMjmtegig5+MnwW80=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$moj1r0JFCO6BBSGd3cuC8z$ffKvRKD8pkyHWEMziajOXs2S/inLz+5T+arux34yEJ0=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.background_task VALUES (1, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[1], {}]', '3ef1b43da432e47bfa6cf411b9ca320f22179ba0', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
 INSERT INTO public.background_task VALUES (2, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
@@ -4619,7 +4619,7 @@ INSERT INTO public.django_migrations VALUES (160, 'socialaccount', '0004_app_pro
 INSERT INTO public.django_migrations VALUES (161, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (162, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
 
-INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x3c874d7d90872330a8238ac563d8ef40bb4ead3acbd55076ab0145090e8b567e', '', 1, false);
+INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false);
 
 INSERT INTO public.larpmanager_association_features VALUES (1, 1, 79);
 
