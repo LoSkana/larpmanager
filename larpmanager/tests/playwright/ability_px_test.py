@@ -141,7 +141,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.locator("iframe[title=\"Rich Text Area\"]").content_frame.get_by_label("Rich Text Area").fill("This text should show")
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Ability", exact=True).click()
-    page.locator("[id=\"2\"]").get_by_role("link", name="").click()
+    page.locator("[id=\"u2\"]").get_by_role("link", name="").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").nth(3).fill("test_template")
     page.get_by_role("option", name="test_template").click()
