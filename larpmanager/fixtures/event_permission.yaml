@@ -769,8 +769,8 @@
     number: 51
     config: null
     hidden: false
-    feature: character
-    module: writing
+    feature: character_inventory
+    module: characterinventory
 - model: larpmanager.eventpermission
   fields:
     name: Pool Types
@@ -779,5 +779,5 @@
     number: 53
     config: null
     hidden: false
-    feature: character
-    module: writing
+    feature: character_inventory
+    module: characterinventory

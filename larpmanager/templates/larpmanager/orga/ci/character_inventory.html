@@ -41,7 +41,7 @@
                 </form>
             </td>
             <td>
-                {% if request.user.is_staff %}
+                {% if can_edit_from_npc %}
                     <form method="post" action="{% url 'orga_ci_transfer' run.get_slug %}" style="display: flex; flex-direction: column; gap: 0.2em;">
                         {% csrf_token %}
                         <input type="hidden" name="source_inventory" value="">  {# NPC = None #}
