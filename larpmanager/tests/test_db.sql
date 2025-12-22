@@ -4311,10 +4311,10 @@ INSERT INTO public.auth_permission VALUES (534, 'Can change social application t
 INSERT INTO public.auth_permission VALUES (535, 'Can delete social application token', 134, 'delete_socialtoken');
 INSERT INTO public.auth_permission VALUES (536, 'Can view social application token', 134, 'view_socialtoken');
 
-INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$SfTFmWbbnrexiMEMkpHFb9$eUop7inKMSPiFN1JbToRnGqS7ohQzk90uXMEIhThU30=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$jHaifm1xy300UWpZ3JRl9e$aSt36MdpvPgANKEwTFUAfUguEndCg0bc/2/jO32gUhw=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$QuI86QC2GoVmxewsN1fbP5$KQ9EfILKNTLWTBTiCoyBnrowPBnEXJ5ojQ+v3I76cwk=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$g4M4GpE85awBsA5Fx3zmYf$bRxjYLmfmQW4YkQCUCwF4QaV8Ccf83u19AcNADe7P5M=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$9BDQTtuQb0ywqJ97VGWNBU$aXbvOhQ/oVe7/pLYRJqAnGECnXRfyZq5OOZ7SHplvVc=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$hxMoTUYfgTTNsLVxzz52mV$ajFICtWPPIOpZYq6fC78XBpbgNJjLXh7cM32wiwxYIk=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$XZfyMdlHcluHc4ZOHf7HXg$JuEpgH2t4a2XM6Qnu/uzGCTrU/Fp6vi2PBWpC0GmWgo=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$6tvYswF78EU11fqciHi4pH$ELd5fP2wsuGZH3T+ediwkGR2oLWsGe3lML/2pg/k67s=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.background_task VALUES (1, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[1], {}]', '3ef1b43da432e47bfa6cf411b9ca320f22179ba0', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
 INSERT INTO public.background_task VALUES (2, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
@@ -4619,7 +4619,7 @@ INSERT INTO public.django_migrations VALUES (160, 'socialaccount', '0004_app_pro
 INSERT INTO public.django_migrations VALUES (161, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (162, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
 
-INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x746573745f7061796d656e745f6b65795f666f725f74657374696e675f707572706f7365735f6f6e6c795f646f5f6e6f745f7573655f696e5f70726f64756374696f6e', '', 1, false);
+INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x3c874d7d90872330a8238ac563d8ef40bb4ead3acbd55076ab0145090e8b567e', '', 1, false);
 
 INSERT INTO public.larpmanager_association_features VALUES (1, 1, 79);
 
