@@ -12,9 +12,9 @@
         {% csrf_token %}
         {% for el in list %}
             <h2>
-                <a id="{{ el.id }}_go">{{ el.name }}</a>
+                <a id="{{ el.uuid }}_go">{{ el.name }}</a>
             </h2>
-            <div id="{{ el.id }}_sec" {% if not el.cmr %}class="hide"{% endif %}>
+            <div id="{{ el.uuid }}_sec" {% if not el.cmr %}class="hide"{% endif %}>
                 <table class="mob">
                     <tr>
                         <th>{% trans "Description" %}</th>
@@ -23,7 +23,7 @@
                     <tr>
                         <th>{% trans "Experience" %}</th>
                         <td>
-                            <select name="{{ el.id }}_exp">
+                            <select name="{{ el.uuid }}_exp">
                                 <option value="0">{% trans "I am not interested" %}</option>
                                 <option value="1">{% trans "I'm interested, but I don't have much experience" %}</option>
                                 <option value="2">{% trans "I've done it a few times, I have a basic experience" %}</option>
@@ -35,7 +35,7 @@
                     <tr>
                         <th>{% trans "Details" %}</th>
                         <td>
-                            <textarea rows="2" cols="60"  name="{{ el.id }}_info"></textarea>
+                            <textarea rows="2" cols="60"  name="{{ el.uuid }}_info"></textarea>
                             <span class="helptext">{% trans "Indicate precisely your field of experience" %}</span>
                         </td>
                     </tr>
@@ -51,7 +51,7 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     {% for el in list %}
-    $('#{{ el.id }}_go').on('click', function() { $('#{{ el.id }}_sec').toggle(500); });
+    $('#{{ el.uuid }}_go').on('click', function() { $('#{{ el.id }}_sec').toggle(500); });
 
     {% if el.cmr %}
     $('select[name="{{ el.id }}_exp"]').val("{{ el.cmr.exp }}");

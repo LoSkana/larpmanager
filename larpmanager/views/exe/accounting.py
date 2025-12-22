@@ -136,13 +136,13 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_outflows_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_outflows_edit(request: HttpRequest, outflow_uuid: str) -> HttpResponse:
     """Edit accounting outflow record.
 
     Args:
         request: Django HTTP request object containing user authentication
                 and form data for editing the outflow record
-        num: Primary key identifier of the outflow record to edit
+        outflow_uuid: UUID of the outflow record to edit
 
     Returns:
         HttpResponse: Rendered edit form on GET request or redirect
@@ -154,7 +154,7 @@ def exe_outflows_edit(request: HttpRequest, num: int) -> HttpResponse:
 
     """
     # Delegate to generic edit handler with outflow-specific form and redirect
-    return exe_edit(request, ExeOutflowForm, num, "exe_outflows")
+    return exe_edit(request, ExeOutflowForm, outflow_uuid, "exe_outflows")
 
 
 @login_required
@@ -208,9 +208,9 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_inflows_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_inflows_edit(request: HttpRequest, inflow_uuid: str) -> HttpResponse:
     """Edit an inflow entry for the association."""
-    return exe_edit(request, ExeInflowForm, num, "exe_inflows")
+    return exe_edit(request, ExeInflowForm, inflow_uuid, "exe_inflows")
 
 
 @login_required
@@ -260,9 +260,9 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_donations_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_donations_edit(request: HttpRequest, donation_uuid: str) -> HttpResponse:
     """Edit an organization-wide donation entry."""
-    return exe_edit(request, ExeDonationForm, num, "exe_donations")
+    return exe_edit(request, ExeDonationForm, donation_uuid, "exe_donations")
 
 
 @login_required
@@ -310,9 +310,9 @@ def exe_credits(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_credits_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_credits_edit(request: HttpRequest, credit_uuid: str) -> HttpResponse:
     """Simple edit view wrapper for credit management."""
-    return exe_edit(request, ExeCreditForm, num, "exe_credits")
+    return exe_edit(request, ExeCreditForm, credit_uuid, "exe_credits")
 
 
 @login_required
@@ -363,9 +363,9 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_tokens_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_tokens_edit(request: HttpRequest, token_uuid: str) -> HttpResponse:
     """Edit an existing registration token."""
-    return exe_edit(request, ExeTokenForm, num, "exe_tokens")
+    return exe_edit(request, ExeTokenForm, token_uuid, "exe_tokens")
 
 
 @login_required
@@ -427,32 +427,20 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_expenses_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_expenses_edit(request: HttpRequest, expense_uuid: str) -> HttpResponse:
     """Edit an expense for an association."""
-    return exe_edit(request, ExeExpenseForm, num, "exe_expenses")
+    return exe_edit(request, ExeExpenseForm, expense_uuid, "exe_expenses")
 
 
 @login_required
-def exe_expenses_approve(request: HttpRequest, num: str) -> HttpResponse:
-    """Approve an expense request for the current organization.
-
-    Args:
-        request: The HTTP request object containing user and organization context
-        num: The primary key identifier of the expense to approve
-
-    Returns:
-        HttpResponse: Redirect to the expenses list page
-
-    Raises:
-        Http404: If expense doesn't exist or doesn't belong to current organization
-
-    """
+def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpResponse:
+    """Approve an expense request for the current organization."""
     # Check user has permission to manage expenses
     context = check_association_context(request, "exe_expenses")
 
     # Retrieve the expense object, raise 404 if not found
     try:
-        exp = AccountingItemExpense.objects.get(pk=num)
+        exp = AccountingItemExpense.objects.get(uuid=expense_uuid)
     except Exception as err:
         msg = "no id expense"
         raise Http404(msg) from err
@@ -535,9 +523,9 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_payments_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_payments_edit(request: HttpRequest, payment_uuid: str) -> HttpResponse:
     """Edit organization-wide payment method."""
-    return exe_edit(request, ExePaymentForm, num, "exe_payments")
+    return exe_edit(request, ExePaymentForm, payment_uuid, "exe_payments")
 
 
 @login_required
@@ -608,13 +596,13 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_invoices_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_invoices_edit(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Edit an existing invoice."""
-    return exe_edit(request, ExeInvoiceForm, num, "exe_invoices")
+    return exe_edit(request, ExeInvoiceForm, invoice_uuid, "exe_invoices")
 
 
 @login_required
-def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
+def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Confirm a payment invoice by updating its status.
 
     Changes invoice status from CREATED or SUBMITTED to CONFIRMED.
@@ -622,7 +610,7 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user and session data
-        num: The invoice number/ID to confirm
+        invoice_uuid: The invoice uuid
 
     Returns:
         HttpResponse: Redirect to the invoices list page
@@ -635,7 +623,7 @@ def exe_invoices_confirm(request: HttpRequest, num: int) -> HttpResponse:
     context = check_association_context(request, "exe_invoices")
 
     # Retrieve the specific invoice by number
-    backend_get(context, PaymentInvoice, num)
+    backend_get(context, PaymentInvoice, invoice_uuid)
 
     # Validate current status allows confirmation
     if context["el"].status == PaymentStatus.CREATED or context["el"].status == PaymentStatus.SUBMITTED:
@@ -671,9 +659,9 @@ def exe_collections(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_collections_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_collections_edit(request: HttpRequest, collection_uuid: str) -> HttpResponse:
     """Edit an existing collection."""
-    return exe_edit(request, ExeCollectionForm, num, "exe_collections")
+    return exe_edit(request, ExeCollectionForm, collection_uuid, "exe_collections")
 
 
 @login_required
@@ -725,13 +713,13 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_refunds_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_refunds_edit(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     """Single-line wrapper - delegates to exe_edit with refund form."""
-    return exe_edit(request, ExeRefundRequestForm, num, "exe_refunds")
+    return exe_edit(request, ExeRefundRequestForm, refund_uuid, "exe_refunds")
 
 
 @login_required
-def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
+def exe_refunds_confirm(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     """Confirm a refund request by changing its status to PAYED.
 
     This view handles the confirmation of refund requests by updating their status
@@ -739,7 +727,7 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user authentication and permissions
-        num: The unique identifier number of the refund request to confirm
+        refund_uuid: The uuid of the refund request to confirm
 
     Returns:
         HttpResponse: Redirect to the refunds list page after successful confirmation
@@ -752,7 +740,7 @@ def exe_refunds_confirm(request: HttpRequest, num: int) -> HttpResponse:
     context = check_association_context(request, "exe_refunds")
 
     # Retrieve the specific refund request by number
-    backend_get(context, RefundRequest, num)
+    backend_get(context, RefundRequest, refund_uuid)
 
     # Verify the refund request is in the correct status for confirmation
     if context["el"].status == RefundStatus.REQUEST:
@@ -802,12 +790,12 @@ def exe_year_accounting(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
-def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
+def exe_run_accounting(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Display accounting information for a specific run.
 
     Args:
         request: The HTTP request object
-        num: Primary key of the run to display accounting for
+        run_uuid: UUID of the run to display accounting for
 
     Returns:
         Rendered accounting template with run and accounting data
@@ -820,7 +808,7 @@ def exe_run_accounting(request: HttpRequest, num: int) -> HttpResponse:
     context = check_association_context(request, "exe_accounting")
 
     # Get the run and verify ownership
-    context["run"] = Run.objects.get(pk=num)
+    context["run"] = Run.objects.get(uuid=run_uuid)
     if context["run"].event.association_id != context["association_id"]:
         msg = "not your run"
         raise Http404(msg)
@@ -1107,7 +1095,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
+def exe_verification_manual(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Manually verify a payment invoice for an organization.
 
     This view allows organization executives to manually confirm payment invoices
@@ -1116,7 +1104,7 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: The HTTP request object containing user and session data
-        num: The primary key of the PaymentInvoice to verify
+        invoice_uuid: The primary key of the PaymentInvoice to verify
 
     Returns:
         HttpResponse: Redirect to the verification list page
@@ -1129,7 +1117,7 @@ def exe_verification_manual(request: HttpRequest, num: int) -> HttpResponse:
     context = check_association_context(request, "exe_verification")
 
     # Retrieve the invoice to verify
-    invoice = PaymentInvoice.objects.get(pk=num)
+    invoice = PaymentInvoice.objects.get(uuid=invoice_uuid)
 
     # Ensure invoice belongs to user's organization
     if invoice.association_id != context["association_id"]:

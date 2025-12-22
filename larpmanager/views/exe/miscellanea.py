@@ -60,9 +60,9 @@ def exe_urlshortner(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_urlshortner_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_urlshortner_edit(request: HttpRequest, url_uuid: str) -> HttpResponse:
     """Edit an existing URL shortener entry."""
-    return exe_edit(request, ExeUrlShortnerForm, num, "exe_urlshortner")
+    return exe_edit(request, ExeUrlShortnerForm, url_uuid, "exe_urlshortner")
 
 
 @login_required
@@ -78,9 +78,9 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_containers_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_containers_edit(request: HttpRequest, container_uuid: str) -> HttpResponse:
     """Edit warehouse container using generic edit handler."""
-    return exe_edit(request, ExeWarehouseContainerForm, num, "exe_warehouse_containers")
+    return exe_edit(request, ExeWarehouseContainerForm, container_uuid, "exe_warehouse_containers")
 
 
 @login_required
@@ -96,9 +96,9 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_tags_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_tags_edit(request: HttpRequest, tag_uuid: str) -> HttpResponse:
     """Edit warehouse tag via generic edit view."""
-    return exe_edit(request, ExeWarehouseTagForm, num, "exe_warehouse_tags")
+    return exe_edit(request, ExeWarehouseTagForm, tag_uuid, "exe_warehouse_tags")
 
 
 @login_required
@@ -121,9 +121,9 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_items_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_items_edit(request: HttpRequest, item_uuid: str) -> HttpResponse:
     """Delegate to exe_edit for warehouse item form handling."""
-    return exe_edit(request, ExeWarehouseItemForm, num, "exe_warehouse_items")
+    return exe_edit(request, ExeWarehouseItemForm, item_uuid, "exe_warehouse_items")
 
 
 @login_required
@@ -142,20 +142,20 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_movements_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_movements_edit(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Edit a specific warehouse movement by delegating to the generic exe_edit view."""
-    return exe_edit(request, ExeWarehouseMovementForm, num, "exe_warehouse_movements")
+    return exe_edit(request, ExeWarehouseMovementForm, movement_uuid, "exe_warehouse_movements")
 
 
 @login_required
-def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
+def exe_ticket_analyze(request: HttpRequest, ticket_uuid: str) -> HttpResponse:
     """Trigger automatic analysis for a support ticket.
 
     Only superusers and association (maintainers) can trigger analysis.
 
     Args:
         request: Django HTTP request object (must be authenticated)
-        ticket_id: ID of the ticket to analyze
+        ticket_uuid: UUID of the ticket to analyze
 
     Returns:
         HttpResponse: Redirect to home with success/error message
@@ -163,7 +163,7 @@ def exe_ticket_analyze(request: HttpRequest, ticket_id: int) -> HttpResponse:
 
     """
     # Get the ticket
-    ticket = get_object_or_404(LarpManagerTicket, pk=ticket_id)
+    ticket = get_object_or_404(LarpManagerTicket, uuid=ticket_uuid)
 
     # Check if user is superuser or maintainer of the ticket's association
     is_superuser = is_lm_admin(request)

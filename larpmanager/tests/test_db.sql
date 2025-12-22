@@ -437,7 +437,8 @@ CREATE TABLE public.larpmanager_abilitypx (
     visible boolean NOT NULL,
     typ_id integer,
     event_id integer NOT NULL,
-    template_id integer
+    template_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -543,7 +544,8 @@ CREATE TABLE public.larpmanager_abilitytemplatepx (
     number integer NOT NULL,
     name character varying(150) NOT NULL,
     descr text,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -573,7 +575,8 @@ CREATE TABLE public.larpmanager_abilitytypepx (
     updated timestamp with time zone NOT NULL,
     number integer NOT NULL,
     name character varying(150) NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -607,7 +610,8 @@ CREATE TABLE public.larpmanager_accountingitemcollection (
     association_id integer NOT NULL,
     collection_id integer NOT NULL,
     member_id integer,
-    inv_id integer
+    inv_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -644,7 +648,8 @@ CREATE TABLE public.larpmanager_accountingitemdiscount (
     disc_id integer NOT NULL,
     member_id integer,
     inv_id integer,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -678,7 +683,8 @@ CREATE TABLE public.larpmanager_accountingitemdonation (
     descr character varying(1000) NOT NULL,
     association_id integer NOT NULL,
     member_id integer,
-    inv_id integer
+    inv_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -717,7 +723,8 @@ CREATE TABLE public.larpmanager_accountingitemexpense (
     association_id integer NOT NULL,
     member_id integer,
     inv_id integer,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -754,7 +761,8 @@ CREATE TABLE public.larpmanager_accountingiteminflow (
     association_id integer NOT NULL,
     member_id integer,
     inv_id integer,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -788,7 +796,8 @@ CREATE TABLE public.larpmanager_accountingitemmembership (
     year integer NOT NULL,
     association_id integer NOT NULL,
     member_id integer,
-    inv_id integer
+    inv_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -826,7 +835,8 @@ CREATE TABLE public.larpmanager_accountingitemother (
     association_id integer NOT NULL,
     member_id integer,
     inv_id integer,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -865,7 +875,8 @@ CREATE TABLE public.larpmanager_accountingitemoutflow (
     association_id integer NOT NULL,
     member_id integer,
     inv_id integer,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -903,7 +914,8 @@ CREATE TABLE public.larpmanager_accountingitempayment (
     member_id integer,
     inv_id integer,
     reg_id integer,
-    vat_ticket numeric(10,2) NOT NULL
+    vat_ticket numeric(10,2) NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -938,7 +950,8 @@ CREATE TABLE public.larpmanager_accountingitemtransaction (
     association_id integer NOT NULL,
     member_id integer,
     inv_id integer,
-    reg_id integer
+    reg_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -972,7 +985,8 @@ CREATE TABLE public.larpmanager_album (
     cod character varying(32) NOT NULL,
     parent_id integer,
     association_id integer NOT NULL,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1114,7 +1128,8 @@ CREATE TABLE public.larpmanager_association (
     key bytea,
     nationality character varying(2),
     skin_id integer NOT NULL,
-    demo boolean NOT NULL
+    demo boolean NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1271,7 +1286,8 @@ CREATE TABLE public.larpmanager_associationrole (
     updated timestamp with time zone NOT NULL,
     name character varying(100) NOT NULL,
     number integer NOT NULL,
-    association_id integer
+    association_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1371,7 +1387,8 @@ CREATE TABLE public.larpmanager_associationtext (
     typ character varying(2) NOT NULL,
     language character varying(3),
     "default" boolean NOT NULL,
-    association_id integer NOT NULL
+    association_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1391,7 +1408,8 @@ CREATE TABLE public.larpmanager_associationtranslation (
     msgstr text NOT NULL,
     context character varying(200),
     active boolean NOT NULL,
-    association_id integer NOT NULL
+    association_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1496,7 +1514,8 @@ CREATE TABLE public.larpmanager_badge (
     number integer NOT NULL,
     cod character varying(30) NOT NULL,
     img character varying(100) NOT NULL,
-    association_id integer NOT NULL
+    association_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1628,7 +1647,8 @@ CREATE TABLE public.larpmanager_character (
     assigned_id integer,
     player_id integer,
     progress_id integer,
-    access_token character varying(12) NOT NULL
+    access_token character varying(12) NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1777,7 +1797,8 @@ CREATE TABLE public.larpmanager_writingoption (
     max_available integer NOT NULL,
     "order" integer NOT NULL,
     question_id integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1841,7 +1862,8 @@ CREATE TABLE public.larpmanager_writingquestion (
     max_length integer NOT NULL,
     printable boolean NOT NULL,
     event_id integer NOT NULL,
-    applicable character varying(1) NOT NULL
+    applicable character varying(1) NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -1909,7 +1931,8 @@ CREATE TABLE public.larpmanager_collection (
     association_id integer NOT NULL,
     member_id integer,
     organizer_id integer NOT NULL,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2034,7 +2057,8 @@ CREATE TABLE public.larpmanager_deliverypx (
     number integer NOT NULL,
     name character varying(150) NOT NULL,
     amount integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2095,7 +2119,8 @@ CREATE TABLE public.larpmanager_discount (
     visible boolean NOT NULL,
     only_reg boolean NOT NULL,
     number integer NOT NULL,
-    event_id integer
+    event_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2154,7 +2179,8 @@ CREATE TABLE public.larpmanager_electronicinvoice (
     xml text,
     response text,
     association_id integer NOT NULL,
-    inv_id integer
+    inv_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2189,7 +2215,8 @@ CREATE TABLE public.larpmanager_email (
     sent timestamp with time zone,
     search character varying(500) NOT NULL,
     association_id integer,
-    run_id integer
+    run_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2241,7 +2268,8 @@ CREATE TABLE public.larpmanager_event (
     ter_rgb character varying(25),
     template boolean NOT NULL,
     association_id integer NOT NULL,
-    parent_id integer
+    parent_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2298,7 +2326,8 @@ CREATE TABLE public.larpmanager_eventbutton (
     name character varying(150) NOT NULL,
     tooltip character varying(200) NOT NULL,
     link character varying(150) NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2394,7 +2423,8 @@ CREATE TABLE public.larpmanager_eventrole (
     updated timestamp with time zone NOT NULL,
     number integer NOT NULL,
     name character varying(150) NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2477,7 +2507,8 @@ CREATE TABLE public.larpmanager_eventtext (
     typ character varying(2) NOT NULL,
     language character varying(3),
     "default" boolean NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2517,7 +2548,8 @@ CREATE TABLE public.larpmanager_faction (
     selectable boolean NOT NULL,
     event_id integer NOT NULL,
     assigned_id integer,
-    progress_id integer
+    progress_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2650,7 +2682,8 @@ CREATE TABLE public.larpmanager_handout (
     event_id integer NOT NULL,
     template_id integer,
     assigned_id integer,
-    progress_id integer
+    progress_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2746,7 +2779,8 @@ CREATE TABLE public.larpmanager_warehousearea (
     name character varying(100) NOT NULL,
     "position" character varying(100) NOT NULL,
     description character varying(1000) NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2811,7 +2845,8 @@ CREATE TABLE public.larpmanager_warehousecontainer (
     name character varying(100) NOT NULL,
     "position" character varying(100) NOT NULL,
     description character varying(1000) NOT NULL,
-    association_id integer NOT NULL
+    association_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2844,7 +2879,8 @@ CREATE TABLE public.larpmanager_warehouseitem (
     description character varying(1000) NOT NULL,
     photo character varying(500),
     association_id integer NOT NULL,
-    container_id integer NOT NULL
+    container_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2901,7 +2937,8 @@ CREATE TABLE public.larpmanager_warehousemovement (
     notes character varying(1000),
     completed boolean NOT NULL,
     association_id integer NOT NULL,
-    item_id integer NOT NULL
+    item_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -2931,7 +2968,8 @@ CREATE TABLE public.larpmanager_warehousetag (
     updated timestamp with time zone NOT NULL,
     name character varying(100) NOT NULL,
     description character varying(1000) NOT NULL,
-    association_id integer NOT NULL
+    association_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3179,8 +3217,7 @@ CREATE TABLE public.larpmanager_larpmanagershowcase (
     updated timestamp with time zone NOT NULL,
     number integer,
     title character varying(1000) NOT NULL,
-    text text,
-    photo_id integer
+    text text
 );
 
 
@@ -3210,13 +3247,14 @@ CREATE TABLE public.larpmanager_larpmanagerticket (
     updated timestamp with time zone NOT NULL,
     reason character varying(100),
     email character varying(254),
-    content character varying(5000) NOT NULL,
+    content text NOT NULL,
     screenshot character varying(500),
     association_id integer NOT NULL,
     member_id integer,
     analysis character varying(10000) NOT NULL,
     priority character varying(100) NOT NULL,
-    status boolean NOT NULL
+    status boolean NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3437,7 +3475,8 @@ CREATE TABLE public.larpmanager_modifierpx (
     name character varying(150) NOT NULL,
     cost integer NOT NULL,
     "order" integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3547,7 +3586,8 @@ CREATE TABLE public.larpmanager_onetimeaccesstoken (
     ip_address inet,
     user_agent text NOT NULL,
     used_by_id integer,
-    content_id integer NOT NULL
+    content_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3582,7 +3622,8 @@ CREATE TABLE public.larpmanager_onetimecontent (
     file_size bigint NOT NULL,
     duration integer,
     active boolean NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3627,7 +3668,8 @@ CREATE TABLE public.larpmanager_paymentinvoice (
     association_id integer NOT NULL,
     member_id integer NOT NULL,
     method_id integer NOT NULL,
-    reg_id integer
+    reg_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3757,7 +3799,8 @@ CREATE TABLE public.larpmanager_plot (
     assigned_id integer,
     event_id integer NOT NULL,
     progress_id integer,
-    "order" integer NOT NULL
+    "order" integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3788,7 +3831,8 @@ CREATE TABLE public.larpmanager_plotcharacterrel (
     text text,
     character_id integer NOT NULL,
     plot_id integer NOT NULL,
-    "order" integer NOT NULL
+    "order" integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3856,7 +3900,8 @@ CREATE TABLE public.larpmanager_problem (
     who text NOT NULL,
     assigned character varying(100) NOT NULL,
     comments text NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3887,7 +3932,8 @@ CREATE TABLE public.larpmanager_progressstep (
     number integer NOT NULL,
     name character varying(150) NOT NULL,
     "order" integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3924,7 +3970,8 @@ CREATE TABLE public.larpmanager_prologue (
     assigned_id integer,
     event_id integer NOT NULL,
     progress_id integer,
-    typ_id integer
+    typ_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -3985,7 +4032,8 @@ CREATE TABLE public.larpmanager_prologuetype (
     hide boolean NOT NULL,
     assigned_id integer,
     event_id integer NOT NULL,
-    progress_id integer
+    progress_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4055,7 +4103,8 @@ CREATE TABLE public.larpmanager_quest (
     assigned_id integer,
     event_id integer NOT NULL,
     progress_id integer,
-    typ_id integer
+    typ_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4091,7 +4140,8 @@ CREATE TABLE public.larpmanager_questtype (
     hide boolean NOT NULL,
     assigned_id integer,
     event_id integer NOT NULL,
-    progress_id integer
+    progress_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4156,7 +4206,8 @@ CREATE TABLE public.larpmanager_refundrequest (
     value numeric(10,2) NOT NULL,
     hide boolean NOT NULL,
     association_id integer NOT NULL,
-    member_id integer NOT NULL
+    member_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4198,7 +4249,7 @@ CREATE TABLE public.larpmanager_registration (
     surcharge integer NOT NULL,
     refunded boolean NOT NULL,
     modified integer NOT NULL,
-    special_cod character varying(12) NOT NULL,
+    uuid character varying(12) NOT NULL,
     redeem_code character varying(16),
     member_id integer NOT NULL,
     ticket_id integer,
@@ -4331,7 +4382,8 @@ CREATE TABLE public.larpmanager_registrationinstallment (
     amount integer NOT NULL,
     days_deadline integer,
     date_deadline date,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4536,7 +4588,8 @@ CREATE TABLE public.larpmanager_registrationquota (
     quotas integer NOT NULL,
     days_available integer NOT NULL,
     surcharge integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4568,7 +4621,8 @@ CREATE TABLE public.larpmanager_registrationsection (
     name character varying(100) NOT NULL,
     description text,
     "order" integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4599,7 +4653,8 @@ CREATE TABLE public.larpmanager_registrationsurcharge (
     number integer NOT NULL,
     amount integer NOT NULL,
     date date NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4638,7 +4693,8 @@ CREATE TABLE public.larpmanager_registrationticket (
     casting_priority integer NOT NULL,
     giftable boolean NOT NULL,
     "order" integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4702,7 +4758,8 @@ CREATE TABLE public.larpmanager_rulepx (
     amount numeric(10,2) NOT NULL,
     "order" integer NOT NULL,
     event_id integer NOT NULL,
-    field_id integer NOT NULL
+    field_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4765,7 +4822,8 @@ CREATE TABLE public.larpmanager_run (
     balance numeric(10,2) NOT NULL,
     paid numeric(10,2),
     plan character varying(1),
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4832,7 +4890,8 @@ CREATE TABLE public.larpmanager_shuttleservice (
     status character varying(1) NOT NULL,
     association_id integer NOT NULL,
     member_id integer NOT NULL,
-    working_id integer
+    working_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4870,7 +4929,8 @@ CREATE TABLE public.larpmanager_speedlarp (
     station integer NOT NULL,
     assigned_id integer,
     event_id integer NOT NULL,
-    progress_id integer
+    progress_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4928,7 +4988,8 @@ CREATE TABLE public.larpmanager_textversion (
     version integer NOT NULL,
     text text NOT NULL,
     dl boolean NOT NULL,
-    member_id integer
+    member_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -4965,7 +5026,8 @@ CREATE TABLE public.larpmanager_trait (
     assigned_id integer,
     event_id integer NOT NULL,
     progress_id integer,
-    quest_id integer
+    quest_id integer,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -5022,7 +5084,8 @@ CREATE TABLE public.larpmanager_urlshortner (
     name character varying(150) NOT NULL,
     cod character varying(5) NOT NULL,
     url character varying(300) NOT NULL,
-    association_id integer NOT NULL
+    association_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -5054,7 +5117,8 @@ CREATE TABLE public.larpmanager_util (
     name character varying(150) NOT NULL,
     cod character varying(16),
     util character varying(100) NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -5178,7 +5242,8 @@ CREATE TABLE public.larpmanager_workshopmodule (
     is_generic boolean NOT NULL,
     name character varying(50) NOT NULL,
     number integer NOT NULL,
-    event_id integer NOT NULL
+    event_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -5211,7 +5276,8 @@ CREATE TABLE public.larpmanager_workshopoption (
     is_correct boolean NOT NULL,
     number integer NOT NULL,
     event_id integer NOT NULL,
-    question_id integer NOT NULL
+    question_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -5243,7 +5309,8 @@ CREATE TABLE public.larpmanager_workshopquestion (
     name character varying(200) NOT NULL,
     number integer NOT NULL,
     event_id integer NOT NULL,
-    module_id integer NOT NULL
+    module_id integer NOT NULL,
+    uuid character varying(12) NOT NULL
 );
 
 
@@ -6054,10 +6121,10 @@ INSERT INTO public.auth_permission VALUES (536, 'Can view social application tok
 -- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$xbmI5Ggo5thh0HDIjsYEJu$lXr3WcjL64k+tzCaqyAkY1VQOD+nHYO1AZFPAlWI/K8=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$QlUCu0YRSTWwAomb1uFA8t$oBhSbjdtWHni+ZvdYf2pzFCrHouuSVU3pvT8+I0OyeY=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$wngXsnJ9RjpB08XFY4o1dR$os/oZ9zgEcTQJWX1O7neeQXDNTOxRtq4hUqRs66LQ/4=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$UoAcK2DYrXUZ6QOMPRqQap$b2gx3MyBb6cVmsM/xnjA+SMoQA78rnjP50w/f2hLdYM=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$neC9HOKRjNj1dJYeuEcq0l$Rxrq7M+D378LxnDvg3SoJN+3+mo8Y/lgCV8q9ZSAzM8=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$7lRxMV60qnFnse1q2lA7b3$ItnB9ecSEhJ1rPB/ZjzLne6xj51GspWS1m1/PH0UpX0=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$TBGHfPj2sDUXC1o2Z3aMJg$D1Z2ZGMIytKU0mVTmdD+q1KqLWy3CvXW+nwSTKOPRlM=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$O6ht3CJ2TVj3izoGMhXujh$TjG2YkP0J+ztFB3kkN1gUbxtCu5I14Tio7FuXwZ9ypk=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
 
 
 --
@@ -6381,26 +6448,27 @@ INSERT INTO public.django_migrations VALUES (140, 'larpmanager', '0100_alter_ass
 INSERT INTO public.django_migrations VALUES (141, 'larpmanager', '0101_association_maintainers_larpmanagerticket_analysis_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (142, 'larpmanager', '0102_alter_association_font', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (143, 'larpmanager', '0103_alter_discount_typ', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (144, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (145, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (146, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (147, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (148, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (149, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (150, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (151, 'larpmanager', '0104_alter_larpmanagerticket_content', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (152, 'larpmanager', '0105_alter_abilitypx_created_alter_abilitytypepx_created_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (153, 'larpmanager', '0106_alter_membership_association_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (154, 'larpmanager', '0107_alter_membership_status', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (155, 'larpmanager', '0108_alter_membership_status', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (156, 'larpmanager', '0109_alter_util_util', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (157, 'larpmanager', '0110_abilitytemplatepx_and_more', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (158, 'larpmanager', '0111_add_visible_if_config_to_permissions', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (159, 'larpmanager', '0112_rename_visible_if_config_to_active_if', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (160, 'larpmanager', '0111_split_token_credit_feature', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (161, 'larpmanager', '0112_remove_token_credit_feature', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (164, 'larpmanager', '0113_create_highlights_and_migrate_showcase_photos', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (165, 'larpmanager', '0114_add_member_uuid_field', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (144, 'larpmanager', '0104_alter_larpmanagerticket_content', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (145, 'larpmanager', '0105_alter_abilitypx_created_alter_abilitytypepx_created_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (146, 'larpmanager', '0106_alter_membership_association_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (147, 'larpmanager', '0107_alter_membership_status', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (148, 'larpmanager', '0108_alter_membership_status', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (149, 'larpmanager', '0109_alter_util_util', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (150, 'larpmanager', '0110_abilitytemplatepx_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (151, 'larpmanager', '0111_split_token_credit_feature', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (152, 'larpmanager', '0112_remove_token_credit_feature', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (153, 'larpmanager', '0113_create_highlights_and_migrate_showcase_photos', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (154, 'larpmanager', '0114_add_member_uuid_field', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (155, 'larpmanager', '0115_alter_member_uuid', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (156, 'sessions', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (157, 'socialaccount', '0001_initial', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (158, 'socialaccount', '0002_token_max_lengths', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (159, 'socialaccount', '0003_extra_data_default_dict', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (160, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (161, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (162, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (163, 'larpmanager', '0116_everyone_uuid', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (164, 'larpmanager', '0117_finish_uuid', '2025-01-01 00:00:00.000000+01');
 
 
 --
@@ -6533,7 +6601,7 @@ INSERT INTO public.django_migrations VALUES (165, 'larpmanager', '0114_add_membe
 -- Data for Name: larpmanager_association; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x443674634672687934616b6738596f796c42694b3563624577614435353451365f37332d70554a366244553d', '', 1, false);
+INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x4f7a794f4442664a5f746d69706459545537525f31795176525575754a4a667269393238334135624b50513d', '', 1, false, 'u1');
 
 
 --
@@ -6615,7 +6683,7 @@ INSERT INTO public.larpmanager_associationpermission VALUES (44, NULL, false, '2
 -- Data for Name: larpmanager_associationrole; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_associationrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Admin', 1, 1);
+INSERT INTO public.larpmanager_associationrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Admin', 1, 1, 'u1');
 
 
 --
@@ -6686,7 +6754,7 @@ INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 79
 -- Data for Name: larpmanager_character; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'ae45d06c7a5d');
+INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'bqplwgp2u821', 'u1');
 
 
 --
@@ -6759,15 +6827,15 @@ INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:
 -- Data for Name: larpmanager_email; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_email VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Admin', 'Access the management panel <a href= https://def.larpmanager.com/manage''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Admin', 1, NULL);
-INSERT INTO public.larpmanager_email VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Organizer per Test Larp', 'Access the management panel <a href= https://def.larpmanager.com/test/1/manage/''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Organizer per Test Larp', 1, NULL);
+INSERT INTO public.larpmanager_email VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Admin', 'Access the management panel <a href= https://def.larpmanager.com/manage''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Admin', 1, NULL, 'sj1qej9ioqav');
+INSERT INTO public.larpmanager_email VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Organizer per Test Larp', 'Access the management panel <a href= https://def.larpmanager.com/test/1/manage/''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Organizer per Test Larp', 1, NULL, '3hzjogk7m0xp');
 
 
 --
 -- Data for Name: larpmanager_event; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_event VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'test', 'Test Larp', NULL, NULL, NULL, '<p>testone</p>', '', true, '', '', '', '', '', 10, 0, 0, '', '', '', NULL, NULL, NULL, false, 1, NULL);
+INSERT INTO public.larpmanager_event VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'test', 'Test Larp', NULL, NULL, NULL, '<p>testone</p>', '', true, '', '', '', '', '', 10, 0, 0, '', '', '', NULL, NULL, NULL, false, 1, NULL, 'u1');
 
 
 --
@@ -6874,7 +6942,7 @@ INSERT INTO public.larpmanager_eventpermission VALUES (76, NULL, false, '2025-01
 -- Data for Name: larpmanager_eventrole; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_eventrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Organizer', 1);
+INSERT INTO public.larpmanager_eventrole VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Organizer', 1, 'u1');
 
 
 --
@@ -7132,10 +7200,10 @@ INSERT INTO public.larpmanager_featuremodule VALUES (10, NULL, false, '2025-01-0
 -- Data for Name: larpmanager_member; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'cPN96i5bC5IY');
-INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'jzyEB1sZuUXx');
-INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'DJ7ky9scO_H8');
-INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'SH7sta2RwU59');
+INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a');
+INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482');
+INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA');
+INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639');
 
 
 --
@@ -7444,7 +7512,7 @@ INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '202
 -- Data for Name: larpmanager_registrationticket; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard (0.00€)', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1);
+INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard (0.00€)', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1, 'u1');
 
 
 --
@@ -7469,7 +7537,7 @@ INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-
 -- Data for Name: larpmanager_run; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1);
+INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1');
 
 
 --
@@ -7752,7 +7820,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 134, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 165, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 164, true);
 
 
 --
@@ -9074,6 +9142,14 @@ ALTER TABLE ONLY public.larpmanager_abilitypx_prerequisites
 
 
 --
+-- Name: larpmanager_abilitypx larpmanager_abilitypx_uuid_799b135f_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_abilitypx
+    ADD CONSTRAINT larpmanager_abilitypx_uuid_799b135f_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_abilitytemplatepx larpmanager_abilitytemplatepx_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9082,11 +9158,27 @@ ALTER TABLE ONLY public.larpmanager_abilitytemplatepx
 
 
 --
+-- Name: larpmanager_abilitytemplatepx larpmanager_abilitytemplatepx_uuid_c8f4bded_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_abilitytemplatepx
+    ADD CONSTRAINT larpmanager_abilitytemplatepx_uuid_c8f4bded_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_abilitytypepx larpmanager_abilitytypepx_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_abilitytypepx
     ADD CONSTRAINT larpmanager_abilitytypepx_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_abilitytypepx larpmanager_abilitytypepx_uuid_474ad498_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_abilitytypepx
+    ADD CONSTRAINT larpmanager_abilitytypepx_uuid_474ad498_uniq UNIQUE (uuid);
 
 
 --
@@ -9106,6 +9198,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemcollection
 
 
 --
+-- Name: larpmanager_accountingitemcollection larpmanager_accountingitemcollection_uuid_d86254a9_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemcollection
+    ADD CONSTRAINT larpmanager_accountingitemcollection_uuid_d86254a9_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_accountingitemdiscount larpmanager_accountingitemdiscount_inv_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9119,6 +9219,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemdiscount
 
 ALTER TABLE ONLY public.larpmanager_accountingitemdiscount
     ADD CONSTRAINT larpmanager_accountingitemdiscount_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_accountingitemdiscount larpmanager_accountingitemdiscount_uuid_b6b47f11_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemdiscount
+    ADD CONSTRAINT larpmanager_accountingitemdiscount_uuid_b6b47f11_uniq UNIQUE (uuid);
 
 
 --
@@ -9138,6 +9246,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemdonation
 
 
 --
+-- Name: larpmanager_accountingitemdonation larpmanager_accountingitemdonation_uuid_e0755a2f_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemdonation
+    ADD CONSTRAINT larpmanager_accountingitemdonation_uuid_e0755a2f_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_accountingitemexpense larpmanager_accountingitemexpense_inv_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9151,6 +9267,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemexpense
 
 ALTER TABLE ONLY public.larpmanager_accountingitemexpense
     ADD CONSTRAINT larpmanager_accountingitemexpense_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_accountingitemexpense larpmanager_accountingitemexpense_uuid_cbbc7c34_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemexpense
+    ADD CONSTRAINT larpmanager_accountingitemexpense_uuid_cbbc7c34_uniq UNIQUE (uuid);
 
 
 --
@@ -9170,6 +9294,14 @@ ALTER TABLE ONLY public.larpmanager_accountingiteminflow
 
 
 --
+-- Name: larpmanager_accountingiteminflow larpmanager_accountingiteminflow_uuid_8d1f58be_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingiteminflow
+    ADD CONSTRAINT larpmanager_accountingiteminflow_uuid_8d1f58be_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_accountingitemmembership larpmanager_accountingitemmembership_inv_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9183,6 +9315,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemmembership
 
 ALTER TABLE ONLY public.larpmanager_accountingitemmembership
     ADD CONSTRAINT larpmanager_accountingitemmembership_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_accountingitemmembership larpmanager_accountingitemmembership_uuid_afaa5124_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemmembership
+    ADD CONSTRAINT larpmanager_accountingitemmembership_uuid_afaa5124_uniq UNIQUE (uuid);
 
 
 --
@@ -9202,6 +9342,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemother
 
 
 --
+-- Name: larpmanager_accountingitemother larpmanager_accountingitemother_uuid_29754a74_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemother
+    ADD CONSTRAINT larpmanager_accountingitemother_uuid_29754a74_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_accountingitemoutflow larpmanager_accountingitemoutflow_inv_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9215,6 +9363,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemoutflow
 
 ALTER TABLE ONLY public.larpmanager_accountingitemoutflow
     ADD CONSTRAINT larpmanager_accountingitemoutflow_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_accountingitemoutflow larpmanager_accountingitemoutflow_uuid_75a376dc_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemoutflow
+    ADD CONSTRAINT larpmanager_accountingitemoutflow_uuid_75a376dc_uniq UNIQUE (uuid);
 
 
 --
@@ -9234,6 +9390,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitempayment
 
 
 --
+-- Name: larpmanager_accountingitempayment larpmanager_accountingitempayment_uuid_e8a95b24_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitempayment
+    ADD CONSTRAINT larpmanager_accountingitempayment_uuid_e8a95b24_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_accountingitemtransaction larpmanager_accountingitemtransaction_inv_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9250,6 +9414,14 @@ ALTER TABLE ONLY public.larpmanager_accountingitemtransaction
 
 
 --
+-- Name: larpmanager_accountingitemtransaction larpmanager_accountingitemtransaction_uuid_ac678061_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_accountingitemtransaction
+    ADD CONSTRAINT larpmanager_accountingitemtransaction_uuid_ac678061_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_album larpmanager_album_cod_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9263,6 +9435,14 @@ ALTER TABLE ONLY public.larpmanager_album
 
 ALTER TABLE ONLY public.larpmanager_album
     ADD CONSTRAINT larpmanager_album_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_album larpmanager_album_uuid_9ec520ae_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_album
+    ADD CONSTRAINT larpmanager_album_uuid_9ec520ae_uniq UNIQUE (uuid);
 
 
 --
@@ -9354,11 +9534,27 @@ ALTER TABLE ONLY public.larpmanager_association
 
 
 --
+-- Name: larpmanager_association larpmanager_association_uuid_6f55c8f1_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_association
+    ADD CONSTRAINT larpmanager_association_uuid_6f55c8f1_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_associationconfig larpmanager_associationconfig_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_associationconfig
     ADD CONSTRAINT larpmanager_associationconfig_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_associationrole larpmanager_associationrole_uuid_b5d5053f_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_associationrole
+    ADD CONSTRAINT larpmanager_associationrole_uuid_b5d5053f_uniq UNIQUE (uuid);
 
 
 --
@@ -9386,11 +9582,27 @@ ALTER TABLE ONLY public.larpmanager_associationskin
 
 
 --
+-- Name: larpmanager_associationtext larpmanager_associationtext_uuid_696c6196_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_associationtext
+    ADD CONSTRAINT larpmanager_associationtext_uuid_696c6196_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_associationtranslation larpmanager_associationtranslation_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_associationtranslation
     ADD CONSTRAINT larpmanager_associationtranslation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_associationtranslation larpmanager_associationtranslation_uuid_8ccad617_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_associationtranslation
+    ADD CONSTRAINT larpmanager_associationtranslation_uuid_8ccad617_uniq UNIQUE (uuid);
 
 
 --
@@ -9482,6 +9694,14 @@ ALTER TABLE ONLY public.larpmanager_badge
 
 
 --
+-- Name: larpmanager_badge larpmanager_badge_uuid_cfad8eea_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_badge
+    ADD CONSTRAINT larpmanager_badge_uuid_cfad8eea_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_casting larpmanager_casting_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9519,6 +9739,14 @@ ALTER TABLE ONLY public.larpmanager_character
 
 ALTER TABLE ONLY public.larpmanager_character
     ADD CONSTRAINT larpmanager_character_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_character larpmanager_character_uuid_80446154_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_character
+    ADD CONSTRAINT larpmanager_character_uuid_80446154_uniq UNIQUE (uuid);
 
 
 --
@@ -9610,6 +9838,14 @@ ALTER TABLE ONLY public.larpmanager_collection
 
 
 --
+-- Name: larpmanager_collection larpmanager_collection_uuid_e43fbbcf_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_collection
+    ADD CONSTRAINT larpmanager_collection_uuid_e43fbbcf_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_competence larpmanager_competence_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9666,6 +9902,14 @@ ALTER TABLE ONLY public.larpmanager_deliverypx
 
 
 --
+-- Name: larpmanager_deliverypx larpmanager_deliverypx_uuid_1051f2e5_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_deliverypx
+    ADD CONSTRAINT larpmanager_deliverypx_uuid_1051f2e5_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_discount larpmanager_discount_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9690,6 +9934,14 @@ ALTER TABLE ONLY public.larpmanager_discount_runs
 
 
 --
+-- Name: larpmanager_discount larpmanager_discount_uuid_1814e068_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_discount
+    ADD CONSTRAINT larpmanager_discount_uuid_1814e068_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_electronicinvoice larpmanager_electronicinvoice_inv_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9706,11 +9958,27 @@ ALTER TABLE ONLY public.larpmanager_electronicinvoice
 
 
 --
+-- Name: larpmanager_electronicinvoice larpmanager_electronicinvoice_uuid_726ce7ec_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_electronicinvoice
+    ADD CONSTRAINT larpmanager_electronicinvoice_uuid_726ce7ec_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_email larpmanager_email_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_email
     ADD CONSTRAINT larpmanager_email_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_email larpmanager_email_uuid_35bdf547_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_email
+    ADD CONSTRAINT larpmanager_email_uuid_35bdf547_uniq UNIQUE (uuid);
 
 
 --
@@ -9738,11 +10006,27 @@ ALTER TABLE ONLY public.larpmanager_event
 
 
 --
+-- Name: larpmanager_event larpmanager_event_uuid_5bdb0145_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_event
+    ADD CONSTRAINT larpmanager_event_uuid_5bdb0145_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_eventbutton larpmanager_eventbutton_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_eventbutton
     ADD CONSTRAINT larpmanager_eventbutton_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_eventbutton larpmanager_eventbutton_uuid_8bbcdc22_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_eventbutton
+    ADD CONSTRAINT larpmanager_eventbutton_uuid_8bbcdc22_uniq UNIQUE (uuid);
 
 
 --
@@ -9810,11 +10094,27 @@ ALTER TABLE ONLY public.larpmanager_eventrole
 
 
 --
+-- Name: larpmanager_eventrole larpmanager_eventrole_uuid_e4b4ef60_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_eventrole
+    ADD CONSTRAINT larpmanager_eventrole_uuid_e4b4ef60_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_eventtext larpmanager_eventtext_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_eventtext
     ADD CONSTRAINT larpmanager_eventtext_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_eventtext larpmanager_eventtext_uuid_8fd3a587_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_eventtext
+    ADD CONSTRAINT larpmanager_eventtext_uuid_8fd3a587_uniq UNIQUE (uuid);
 
 
 --
@@ -9839,6 +10139,14 @@ ALTER TABLE ONLY public.larpmanager_faction_characters
 
 ALTER TABLE ONLY public.larpmanager_faction
     ADD CONSTRAINT larpmanager_faction_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_faction larpmanager_faction_uuid_e330e2fc_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_faction
+    ADD CONSTRAINT larpmanager_faction_uuid_e330e2fc_uniq UNIQUE (uuid);
 
 
 --
@@ -9887,6 +10195,14 @@ ALTER TABLE ONLY public.larpmanager_handout
 
 ALTER TABLE ONLY public.larpmanager_handout
     ADD CONSTRAINT larpmanager_handout_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_handout larpmanager_handout_uuid_7271f699_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_handout
+    ADD CONSTRAINT larpmanager_handout_uuid_7271f699_uniq UNIQUE (uuid);
 
 
 --
@@ -10042,6 +10358,14 @@ ALTER TABLE ONLY public.larpmanager_larpmanagerticket
 
 
 --
+-- Name: larpmanager_larpmanagerticket larpmanager_larpmanagerticket_uuid_05573696_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_larpmanagerticket
+    ADD CONSTRAINT larpmanager_larpmanagerticket_uuid_05573696_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_larpmanagertutorial larpmanager_larpmanagertutorial_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10162,6 +10486,14 @@ ALTER TABLE ONLY public.larpmanager_modifierpx_requirements
 
 
 --
+-- Name: larpmanager_modifierpx larpmanager_modifierpx_uuid_2d6f325c_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_modifierpx
+    ADD CONSTRAINT larpmanager_modifierpx_uuid_2d6f325c_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_onetimeaccesstoken larpmanager_onetimeaccesstoken_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10178,11 +10510,27 @@ ALTER TABLE ONLY public.larpmanager_onetimeaccesstoken
 
 
 --
+-- Name: larpmanager_onetimeaccesstoken larpmanager_onetimeaccesstoken_uuid_f215d60a_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_onetimeaccesstoken
+    ADD CONSTRAINT larpmanager_onetimeaccesstoken_uuid_f215d60a_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_onetimecontent larpmanager_onetimecontent_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_onetimecontent
     ADD CONSTRAINT larpmanager_onetimecontent_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_onetimecontent larpmanager_onetimecontent_uuid_2b4e6b4c_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_onetimecontent
+    ADD CONSTRAINT larpmanager_onetimecontent_uuid_2b4e6b4c_uniq UNIQUE (uuid);
 
 
 --
@@ -10199,6 +10547,14 @@ ALTER TABLE ONLY public.larpmanager_paymentinvoice
 
 ALTER TABLE ONLY public.larpmanager_paymentinvoice
     ADD CONSTRAINT larpmanager_paymentinvoice_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_paymentinvoice larpmanager_paymentinvoice_uuid_0f1fce0c_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_paymentinvoice
+    ADD CONSTRAINT larpmanager_paymentinvoice_uuid_0f1fce0c_uniq UNIQUE (uuid);
 
 
 --
@@ -10250,11 +10606,27 @@ ALTER TABLE ONLY public.larpmanager_plot
 
 
 --
+-- Name: larpmanager_plot larpmanager_plot_uuid_bd1eca2b_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_plot
+    ADD CONSTRAINT larpmanager_plot_uuid_bd1eca2b_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_plotcharacterrel larpmanager_plotcharacterrel_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_plotcharacterrel
     ADD CONSTRAINT larpmanager_plotcharacterrel_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_plotcharacterrel larpmanager_plotcharacterrel_uuid_a95b91b2_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_plotcharacterrel
+    ADD CONSTRAINT larpmanager_plotcharacterrel_uuid_a95b91b2_uniq UNIQUE (uuid);
 
 
 --
@@ -10274,11 +10646,27 @@ ALTER TABLE ONLY public.larpmanager_problem
 
 
 --
+-- Name: larpmanager_problem larpmanager_problem_uuid_0a4cbc79_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_problem
+    ADD CONSTRAINT larpmanager_problem_uuid_0a4cbc79_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_progressstep larpmanager_progressstep_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_progressstep
     ADD CONSTRAINT larpmanager_progressstep_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_progressstep larpmanager_progressstep_uuid_9704072b_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_progressstep
+    ADD CONSTRAINT larpmanager_progressstep_uuid_9704072b_uniq UNIQUE (uuid);
 
 
 --
@@ -10306,11 +10694,27 @@ ALTER TABLE ONLY public.larpmanager_prologue
 
 
 --
+-- Name: larpmanager_prologue larpmanager_prologue_uuid_414c34ee_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_prologue
+    ADD CONSTRAINT larpmanager_prologue_uuid_414c34ee_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_prologuetype larpmanager_prologuetype_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_prologuetype
     ADD CONSTRAINT larpmanager_prologuetype_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_prologuetype larpmanager_prologuetype_uuid_436c3d20_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_prologuetype
+    ADD CONSTRAINT larpmanager_prologuetype_uuid_436c3d20_uniq UNIQUE (uuid);
 
 
 --
@@ -10338,11 +10742,27 @@ ALTER TABLE ONLY public.larpmanager_quest
 
 
 --
+-- Name: larpmanager_quest larpmanager_quest_uuid_19960bdb_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_quest
+    ADD CONSTRAINT larpmanager_quest_uuid_19960bdb_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_questtype larpmanager_questtype_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_questtype
     ADD CONSTRAINT larpmanager_questtype_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_questtype larpmanager_questtype_uuid_45872468_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_questtype
+    ADD CONSTRAINT larpmanager_questtype_uuid_45872468_uniq UNIQUE (uuid);
 
 
 --
@@ -10359,6 +10779,14 @@ ALTER TABLE ONLY public.larpmanager_recordaccounting
 
 ALTER TABLE ONLY public.larpmanager_refundrequest
     ADD CONSTRAINT larpmanager_refundrequest_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_refundrequest larpmanager_refundrequest_uuid_cfd0dab5_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_refundrequest
+    ADD CONSTRAINT larpmanager_refundrequest_uuid_cfd0dab5_uniq UNIQUE (uuid);
 
 
 --
@@ -10406,7 +10834,7 @@ ALTER TABLE ONLY public.larpmanager_registrationquestion_tickets
 --
 
 ALTER TABLE ONLY public.larpmanager_registration
-    ADD CONSTRAINT larpmanager_registration_special_cod_key UNIQUE (special_cod);
+    ADD CONSTRAINT larpmanager_registration_special_cod_key UNIQUE (uuid);
 
 
 --
@@ -10447,6 +10875,14 @@ ALTER TABLE ONLY public.larpmanager_registrationinstallment
 
 ALTER TABLE ONLY public.larpmanager_registrationinstallment_tickets
     ADD CONSTRAINT larpmanager_registrationinstallment_tickets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_registrationinstallment larpmanager_registrationinstallment_uuid_f3344033_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_registrationinstallment
+    ADD CONSTRAINT larpmanager_registrationinstallment_uuid_f3344033_uniq UNIQUE (uuid);
 
 
 --
@@ -10498,11 +10934,27 @@ ALTER TABLE ONLY public.larpmanager_registrationquota
 
 
 --
+-- Name: larpmanager_registrationquota larpmanager_registrationquota_uuid_8c88ff01_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_registrationquota
+    ADD CONSTRAINT larpmanager_registrationquota_uuid_8c88ff01_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_registrationsection larpmanager_registrationsection_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_registrationsection
     ADD CONSTRAINT larpmanager_registrationsection_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_registrationsection larpmanager_registrationsection_uuid_fefacdb9_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_registrationsection
+    ADD CONSTRAINT larpmanager_registrationsection_uuid_fefacdb9_uniq UNIQUE (uuid);
 
 
 --
@@ -10514,11 +10966,27 @@ ALTER TABLE ONLY public.larpmanager_registrationsurcharge
 
 
 --
+-- Name: larpmanager_registrationsurcharge larpmanager_registrationsurcharge_uuid_36224a2e_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_registrationsurcharge
+    ADD CONSTRAINT larpmanager_registrationsurcharge_uuid_36224a2e_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_registrationticket larpmanager_registrationticket_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_registrationticket
     ADD CONSTRAINT larpmanager_registrationticket_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_registrationticket larpmanager_registrationticket_uuid_57dc7e1d_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_registrationticket
+    ADD CONSTRAINT larpmanager_registrationticket_uuid_57dc7e1d_uniq UNIQUE (uuid);
 
 
 --
@@ -10554,6 +11022,14 @@ ALTER TABLE ONLY public.larpmanager_rulepx
 
 
 --
+-- Name: larpmanager_rulepx larpmanager_rulepx_uuid_20dd13bf_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_rulepx
+    ADD CONSTRAINT larpmanager_rulepx_uuid_20dd13bf_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_run larpmanager_run_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10570,6 +11046,14 @@ ALTER TABLE ONLY public.larpmanager_run
 
 
 --
+-- Name: larpmanager_run larpmanager_run_uuid_c8ddba9d_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_run
+    ADD CONSTRAINT larpmanager_run_uuid_c8ddba9d_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_runconfig larpmanager_runconfig_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10583,6 +11067,14 @@ ALTER TABLE ONLY public.larpmanager_runconfig
 
 ALTER TABLE ONLY public.larpmanager_shuttleservice
     ADD CONSTRAINT larpmanager_shuttleservice_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_shuttleservice larpmanager_shuttleservice_uuid_7e5a065d_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_shuttleservice
+    ADD CONSTRAINT larpmanager_shuttleservice_uuid_7e5a065d_uniq UNIQUE (uuid);
 
 
 --
@@ -10610,11 +11102,27 @@ ALTER TABLE ONLY public.larpmanager_speedlarp
 
 
 --
+-- Name: larpmanager_speedlarp larpmanager_speedlarp_uuid_7d865869_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_speedlarp
+    ADD CONSTRAINT larpmanager_speedlarp_uuid_7d865869_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_textversion larpmanager_textversion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_textversion
     ADD CONSTRAINT larpmanager_textversion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_textversion larpmanager_textversion_uuid_a7fdb1b1_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_textversion
+    ADD CONSTRAINT larpmanager_textversion_uuid_a7fdb1b1_uniq UNIQUE (uuid);
 
 
 --
@@ -10642,6 +11150,14 @@ ALTER TABLE ONLY public.larpmanager_trait_traits
 
 
 --
+-- Name: larpmanager_trait larpmanager_trait_uuid_404230a1_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_trait
+    ADD CONSTRAINT larpmanager_trait_uuid_404230a1_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_urlshortner larpmanager_urlshortner_cod_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10658,11 +11174,27 @@ ALTER TABLE ONLY public.larpmanager_urlshortner
 
 
 --
+-- Name: larpmanager_urlshortner larpmanager_urlshortner_uuid_a5e4eb88_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_urlshortner
+    ADD CONSTRAINT larpmanager_urlshortner_uuid_a5e4eb88_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_util larpmanager_util_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_util
     ADD CONSTRAINT larpmanager_util_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_util larpmanager_util_uuid_ca22dc95_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_util
+    ADD CONSTRAINT larpmanager_util_uuid_ca22dc95_uniq UNIQUE (uuid);
 
 
 --
@@ -10682,6 +11214,46 @@ ALTER TABLE ONLY public.larpmanager_vote
 
 
 --
+-- Name: larpmanager_warehousearea larpmanager_warehousearea_uuid_faa27a0d_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_warehousearea
+    ADD CONSTRAINT larpmanager_warehousearea_uuid_faa27a0d_uniq UNIQUE (uuid);
+
+
+--
+-- Name: larpmanager_warehousecontainer larpmanager_warehousecontainer_uuid_4ce0ba22_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_warehousecontainer
+    ADD CONSTRAINT larpmanager_warehousecontainer_uuid_4ce0ba22_uniq UNIQUE (uuid);
+
+
+--
+-- Name: larpmanager_warehouseitem larpmanager_warehouseitem_uuid_aa098580_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_warehouseitem
+    ADD CONSTRAINT larpmanager_warehouseitem_uuid_aa098580_uniq UNIQUE (uuid);
+
+
+--
+-- Name: larpmanager_warehousemovement larpmanager_warehousemovement_uuid_960f5b13_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_warehousemovement
+    ADD CONSTRAINT larpmanager_warehousemovement_uuid_960f5b13_uniq UNIQUE (uuid);
+
+
+--
+-- Name: larpmanager_warehousetag larpmanager_warehousetag_uuid_7c4b8a3f_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_warehousetag
+    ADD CONSTRAINT larpmanager_warehousetag_uuid_7c4b8a3f_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_workshopmemberrel larpmanager_workshopmemberrel_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10698,6 +11270,14 @@ ALTER TABLE ONLY public.larpmanager_workshopmodule
 
 
 --
+-- Name: larpmanager_workshopmodule larpmanager_workshopmodule_uuid_d55cc894_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_workshopmodule
+    ADD CONSTRAINT larpmanager_workshopmodule_uuid_d55cc894_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_workshopoption larpmanager_workshopoption_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10706,11 +11286,43 @@ ALTER TABLE ONLY public.larpmanager_workshopoption
 
 
 --
+-- Name: larpmanager_workshopoption larpmanager_workshopoption_uuid_81990c66_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_workshopoption
+    ADD CONSTRAINT larpmanager_workshopoption_uuid_81990c66_uniq UNIQUE (uuid);
+
+
+--
 -- Name: larpmanager_workshopquestion larpmanager_workshopquestion_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.larpmanager_workshopquestion
     ADD CONSTRAINT larpmanager_workshopquestion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: larpmanager_workshopquestion larpmanager_workshopquestion_uuid_d7b052cc_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_workshopquestion
+    ADD CONSTRAINT larpmanager_workshopquestion_uuid_d7b052cc_uniq UNIQUE (uuid);
+
+
+--
+-- Name: larpmanager_writingoption larpmanager_writingoption_uuid_2f6599f6_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_writingoption
+    ADD CONSTRAINT larpmanager_writingoption_uuid_2f6599f6_uniq UNIQUE (uuid);
+
+
+--
+-- Name: larpmanager_writingquestion larpmanager_writingquestion_uuid_a483cd93_uniq; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.larpmanager_writingquestion
+    ADD CONSTRAINT larpmanager_writingquestion_uuid_a483cd93_uniq UNIQUE (uuid);
 
 
 --
@@ -11561,6 +12173,13 @@ CREATE INDEX larpmanager_abilitypx_typ_id_277deb0f ON public.larpmanager_ability
 
 
 --
+-- Name: larpmanager_abilitypx_uuid_799b135f_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_abilitypx_uuid_799b135f_like ON public.larpmanager_abilitypx USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_abilitytemplatepx_deleted_f3f8ed79; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11575,6 +12194,13 @@ CREATE INDEX larpmanager_abilitytemplatepx_event_id_025d1985 ON public.larpmanag
 
 
 --
+-- Name: larpmanager_abilitytemplatepx_uuid_c8f4bded_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_abilitytemplatepx_uuid_c8f4bded_like ON public.larpmanager_abilitytemplatepx USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_abilitytypepx_deleted_acfcc170; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11586,6 +12212,13 @@ CREATE INDEX larpmanager_abilitytypepx_deleted_acfcc170 ON public.larpmanager_ab
 --
 
 CREATE INDEX larpmanager_abilitytypepx_event_id_d6683902 ON public.larpmanager_abilitytypepx USING btree (event_id);
+
+
+--
+-- Name: larpmanager_abilitytypepx_uuid_474ad498_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_abilitytypepx_uuid_474ad498_like ON public.larpmanager_abilitytypepx USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -11614,6 +12247,13 @@ CREATE INDEX larpmanager_accountingitemcollection_deleted_6323248d ON public.lar
 --
 
 CREATE INDEX larpmanager_accountingitemcollection_member_id_5ee4bf44 ON public.larpmanager_accountingitemcollection USING btree (member_id);
+
+
+--
+-- Name: larpmanager_accountingitemcollection_uuid_d86254a9_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemcollection_uuid_d86254a9_like ON public.larpmanager_accountingitemcollection USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -11652,6 +12292,13 @@ CREATE INDEX larpmanager_accountingitemdiscount_run_id_95e6d716 ON public.larpma
 
 
 --
+-- Name: larpmanager_accountingitemdiscount_uuid_b6b47f11_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemdiscount_uuid_b6b47f11_like ON public.larpmanager_accountingitemdiscount USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_accountingitemdonation_assoc_id_2591c588; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11670,6 +12317,13 @@ CREATE INDEX larpmanager_accountingitemdonation_deleted_77739487 ON public.larpm
 --
 
 CREATE INDEX larpmanager_accountingitemdonation_member_id_76275c3e ON public.larpmanager_accountingitemdonation USING btree (member_id);
+
+
+--
+-- Name: larpmanager_accountingitemdonation_uuid_e0755a2f_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemdonation_uuid_e0755a2f_like ON public.larpmanager_accountingitemdonation USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -11701,6 +12355,13 @@ CREATE INDEX larpmanager_accountingitemexpense_run_id_6e5661f7 ON public.larpman
 
 
 --
+-- Name: larpmanager_accountingitemexpense_uuid_cbbc7c34_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemexpense_uuid_cbbc7c34_like ON public.larpmanager_accountingitemexpense USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_accountingiteminflow_assoc_id_1090ed69; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11729,6 +12390,13 @@ CREATE INDEX larpmanager_accountingiteminflow_run_id_aff6fbcc ON public.larpmana
 
 
 --
+-- Name: larpmanager_accountingiteminflow_uuid_8d1f58be_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingiteminflow_uuid_8d1f58be_like ON public.larpmanager_accountingiteminflow USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_accountingitemmembership_assoc_id_aba7b5f1; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11747,6 +12415,13 @@ CREATE INDEX larpmanager_accountingitemmembership_deleted_644d1db2 ON public.lar
 --
 
 CREATE INDEX larpmanager_accountingitemmembership_member_id_c640f4ca ON public.larpmanager_accountingitemmembership USING btree (member_id);
+
+
+--
+-- Name: larpmanager_accountingitemmembership_uuid_afaa5124_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemmembership_uuid_afaa5124_like ON public.larpmanager_accountingitemmembership USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -11778,6 +12453,13 @@ CREATE INDEX larpmanager_accountingitemother_run_id_30cad840 ON public.larpmanag
 
 
 --
+-- Name: larpmanager_accountingitemother_uuid_29754a74_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemother_uuid_29754a74_like ON public.larpmanager_accountingitemother USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_accountingitemoutflow_assoc_id_1b6e9d0a; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11803,6 +12485,13 @@ CREATE INDEX larpmanager_accountingitemoutflow_member_id_1d361f03 ON public.larp
 --
 
 CREATE INDEX larpmanager_accountingitemoutflow_run_id_323a6198 ON public.larpmanager_accountingitemoutflow USING btree (run_id);
+
+
+--
+-- Name: larpmanager_accountingitemoutflow_uuid_75a376dc_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemoutflow_uuid_75a376dc_like ON public.larpmanager_accountingitemoutflow USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -11834,6 +12523,13 @@ CREATE INDEX larpmanager_accountingitempayment_reg_id_0a192716 ON public.larpman
 
 
 --
+-- Name: larpmanager_accountingitempayment_uuid_e8a95b24_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitempayment_uuid_e8a95b24_like ON public.larpmanager_accountingitempayment USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_accountingitemtransaction_assoc_id_de560604; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11859,6 +12555,13 @@ CREATE INDEX larpmanager_accountingitemtransaction_member_id_22a4c990 ON public.
 --
 
 CREATE INDEX larpmanager_accountingitemtransaction_reg_id_368dc7e0 ON public.larpmanager_accountingitemtransaction USING btree (reg_id);
+
+
+--
+-- Name: larpmanager_accountingitemtransaction_uuid_ac678061_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_accountingitemtransaction_uuid_ac678061_like ON public.larpmanager_accountingitemtransaction USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -11901,6 +12604,13 @@ CREATE INDEX larpmanager_album_parent_id_03a291d7 ON public.larpmanager_album US
 --
 
 CREATE INDEX larpmanager_album_run_id_02ec9614 ON public.larpmanager_album USING btree (run_id);
+
+
+--
+-- Name: larpmanager_album_uuid_9ec520ae_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_album_uuid_9ec520ae_like ON public.larpmanager_album USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12044,6 +12754,13 @@ CREATE INDEX larpmanager_association_slug_8ac0e5b8_like ON public.larpmanager_as
 
 
 --
+-- Name: larpmanager_association_uuid_6f55c8f1_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_association_uuid_6f55c8f1_like ON public.larpmanager_association USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_associationconfig_assoc_id_eec4d07a; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12055,6 +12772,13 @@ CREATE INDEX larpmanager_associationconfig_assoc_id_eec4d07a ON public.larpmanag
 --
 
 CREATE INDEX larpmanager_associationconfig_deleted_c8774679 ON public.larpmanager_associationconfig USING btree (deleted);
+
+
+--
+-- Name: larpmanager_associationrole_uuid_b5d5053f_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_associationrole_uuid_b5d5053f_like ON public.larpmanager_associationrole USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12076,6 +12800,13 @@ CREATE INDEX larpmanager_associationski_feature_id_9ce293c2 ON public.larpmanage
 --
 
 CREATE INDEX larpmanager_associationskin_deleted_ae3141b5 ON public.larpmanager_associationskin USING btree (deleted);
+
+
+--
+-- Name: larpmanager_associationtext_uuid_696c6196_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_associationtext_uuid_696c6196_like ON public.larpmanager_associationtext USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12104,6 +12835,13 @@ CREATE INDEX larpmanager_associationtranslation_msgid_5344e26d ON public.larpman
 --
 
 CREATE INDEX larpmanager_associationtranslation_msgid_5344e26d_like ON public.larpmanager_associationtranslation USING btree (msgid text_pattern_ops);
+
+
+--
+-- Name: larpmanager_associationtranslation_uuid_8ccad617_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_associationtranslation_uuid_8ccad617_like ON public.larpmanager_associationtranslation USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12219,6 +12957,13 @@ CREATE INDEX larpmanager_badge_members_member_id_f9c62cac ON public.larpmanager_
 
 
 --
+-- Name: larpmanager_badge_uuid_cfad8eea_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_badge_uuid_cfad8eea_like ON public.larpmanager_badge USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_casting_deleted_4ea5f747; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12307,6 +13052,13 @@ CREATE INDEX larpmanager_character_player_id_a98bc322 ON public.larpmanager_char
 --
 
 CREATE INDEX larpmanager_character_progress_id_c3c887df ON public.larpmanager_character USING btree (progress_id);
+
+
+--
+-- Name: larpmanager_character_uuid_80446154_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_character_uuid_80446154_like ON public.larpmanager_character USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12520,6 +13272,13 @@ CREATE INDEX larpmanager_collection_run_id_01457313 ON public.larpmanager_collec
 
 
 --
+-- Name: larpmanager_collection_uuid_e43fbbcf_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_collection_uuid_e43fbbcf_like ON public.larpmanager_collection USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_competence_assoc_id_a02e760e; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12611,6 +13370,13 @@ CREATE INDEX larpmanager_deliverypx_event_id_f0de0eca ON public.larpmanager_deli
 
 
 --
+-- Name: larpmanager_deliverypx_uuid_1051f2e5_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_deliverypx_uuid_1051f2e5_like ON public.larpmanager_deliverypx USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_discount_deleted_276b7835; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12639,6 +13405,13 @@ CREATE INDEX larpmanager_discount_runs_run_id_7289a2ef ON public.larpmanager_dis
 
 
 --
+-- Name: larpmanager_discount_uuid_1814e068_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_discount_uuid_1814e068_like ON public.larpmanager_discount USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_domain_6b16a3_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12660,6 +13433,13 @@ CREATE INDEX larpmanager_electronicinvoice_deleted_f1fa13df ON public.larpmanage
 
 
 --
+-- Name: larpmanager_electronicinvoice_uuid_726ce7ec_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_electronicinvoice_uuid_726ce7ec_like ON public.larpmanager_electronicinvoice USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_email_assoc_id_7e333186; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12678,6 +13458,13 @@ CREATE INDEX larpmanager_email_deleted_290de702 ON public.larpmanager_email USIN
 --
 
 CREATE INDEX larpmanager_email_run_id_bee1a3c8 ON public.larpmanager_email USING btree (run_id);
+
+
+--
+-- Name: larpmanager_email_uuid_35bdf547_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_email_uuid_35bdf547_like ON public.larpmanager_email USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12744,6 +13531,13 @@ CREATE INDEX larpmanager_event_slug_467befa0_like ON public.larpmanager_event US
 
 
 --
+-- Name: larpmanager_event_uuid_5bdb0145_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_event_uuid_5bdb0145_like ON public.larpmanager_event USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_eventbutton_deleted_8c66c097; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12755,6 +13549,13 @@ CREATE INDEX larpmanager_eventbutton_deleted_8c66c097 ON public.larpmanager_even
 --
 
 CREATE INDEX larpmanager_eventbutton_event_id_a4c9fa2c ON public.larpmanager_eventbutton USING btree (event_id);
+
+
+--
+-- Name: larpmanager_eventbutton_uuid_8bbcdc22_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_eventbutton_uuid_8bbcdc22_like ON public.larpmanager_eventbutton USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12842,6 +13643,13 @@ CREATE INDEX larpmanager_eventrole_permissions_eventrole_id_406cd812 ON public.l
 
 
 --
+-- Name: larpmanager_eventrole_uuid_e4b4ef60_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_eventrole_uuid_e4b4ef60_like ON public.larpmanager_eventrole USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_eventtext_deleted_99dfa820; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12853,6 +13661,13 @@ CREATE INDEX larpmanager_eventtext_deleted_99dfa820 ON public.larpmanager_eventt
 --
 
 CREATE INDEX larpmanager_eventtext_event_id_b024f8d0 ON public.larpmanager_eventtext USING btree (event_id);
+
+
+--
+-- Name: larpmanager_eventtext_uuid_8fd3a587_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_eventtext_uuid_8fd3a587_like ON public.larpmanager_eventtext USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12895,6 +13710,13 @@ CREATE INDEX larpmanager_faction_event_id_273b7b1c ON public.larpmanager_faction
 --
 
 CREATE INDEX larpmanager_faction_progress_id_b2ae8f09 ON public.larpmanager_faction USING btree (progress_id);
+
+
+--
+-- Name: larpmanager_faction_uuid_e330e2fc_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_faction_uuid_e330e2fc_like ON public.larpmanager_faction USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -12972,6 +13794,13 @@ CREATE INDEX larpmanager_handout_progress_id_9633620f ON public.larpmanager_hand
 --
 
 CREATE INDEX larpmanager_handout_template_id_2c83c9cc ON public.larpmanager_handout USING btree (template_id);
+
+
+--
+-- Name: larpmanager_handout_uuid_7271f699_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_handout_uuid_7271f699_like ON public.larpmanager_handout USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -13234,13 +14063,6 @@ CREATE INDEX larpmanager_larpmanagershowcase_deleted_e6753259 ON public.larpmana
 
 
 --
--- Name: larpmanager_larpmanagershowcase_photo_id_50d420bb; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX larpmanager_larpmanagershowcase_photo_id_50d420bb ON public.larpmanager_larpmanagershowcase USING btree (photo_id);
-
-
---
 -- Name: larpmanager_larpmanagerticket_assoc_id_baa4f5f5; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -13259,6 +14081,13 @@ CREATE INDEX larpmanager_larpmanagerticket_deleted_b59b20d7 ON public.larpmanage
 --
 
 CREATE INDEX larpmanager_larpmanagerticket_member_id_d10603a0 ON public.larpmanager_larpmanagerticket USING btree (member_id);
+
+
+--
+-- Name: larpmanager_larpmanagerticket_uuid_05573696_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_larpmanagerticket_uuid_05573696_like ON public.larpmanager_larpmanagerticket USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -13444,6 +14273,13 @@ CREATE INDEX larpmanager_modifierpx_requirements_writingoption_id_eeed9ff1 ON pu
 
 
 --
+-- Name: larpmanager_modifierpx_uuid_2d6f325c_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_modifierpx_uuid_2d6f325c_like ON public.larpmanager_modifierpx USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_number_0084bb_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -13591,6 +14427,13 @@ CREATE INDEX larpmanager_onetimeaccesstoken_used_by_id_8a7f0bcd ON public.larpma
 
 
 --
+-- Name: larpmanager_onetimeaccesstoken_uuid_f215d60a_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_onetimeaccesstoken_uuid_f215d60a_like ON public.larpmanager_onetimeaccesstoken USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_onetimecontent_deleted_6c779c95; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -13602,6 +14445,13 @@ CREATE INDEX larpmanager_onetimecontent_deleted_6c779c95 ON public.larpmanager_o
 --
 
 CREATE INDEX larpmanager_onetimecontent_event_id_1b6775de ON public.larpmanager_onetimecontent USING btree (event_id);
+
+
+--
+-- Name: larpmanager_onetimecontent_uuid_2b4e6b4c_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_onetimecontent_uuid_2b4e6b4c_like ON public.larpmanager_onetimecontent USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -13665,6 +14515,13 @@ CREATE INDEX larpmanager_paymentinvoice_status_fc0a18f4 ON public.larpmanager_pa
 --
 
 CREATE INDEX larpmanager_paymentinvoice_status_fc0a18f4_like ON public.larpmanager_paymentinvoice USING btree (status varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_paymentinvoice_uuid_0f1fce0c_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_paymentinvoice_uuid_0f1fce0c_like ON public.larpmanager_paymentinvoice USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -13745,6 +14602,13 @@ CREATE INDEX larpmanager_plot_progress_id_562f7322 ON public.larpmanager_plot US
 
 
 --
+-- Name: larpmanager_plot_uuid_bd1eca2b_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_plot_uuid_bd1eca2b_like ON public.larpmanager_plot USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_plotcharacterrel_character_id_8a844fb2; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -13763,6 +14627,13 @@ CREATE INDEX larpmanager_plotcharacterrel_deleted_46896298 ON public.larpmanager
 --
 
 CREATE INDEX larpmanager_plotcharacterrel_plot_id_0912c690 ON public.larpmanager_plotcharacterrel USING btree (plot_id);
+
+
+--
+-- Name: larpmanager_plotcharacterrel_uuid_a95b91b2_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_plotcharacterrel_uuid_a95b91b2_like ON public.larpmanager_plotcharacterrel USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -13815,6 +14686,13 @@ CREATE INDEX larpmanager_problem_status_b3b43852_like ON public.larpmanager_prob
 
 
 --
+-- Name: larpmanager_problem_uuid_0a4cbc79_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_problem_uuid_0a4cbc79_like ON public.larpmanager_problem USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_progressstep_deleted_afd643a1; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -13826,6 +14704,13 @@ CREATE INDEX larpmanager_progressstep_deleted_afd643a1 ON public.larpmanager_pro
 --
 
 CREATE INDEX larpmanager_progressstep_event_id_078f4fa6 ON public.larpmanager_progressstep USING btree (event_id);
+
+
+--
+-- Name: larpmanager_progressstep_uuid_9704072b_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_progressstep_uuid_9704072b_like ON public.larpmanager_progressstep USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -13878,6 +14763,13 @@ CREATE INDEX larpmanager_prologue_typ_id_23b53360 ON public.larpmanager_prologue
 
 
 --
+-- Name: larpmanager_prologue_uuid_414c34ee_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_prologue_uuid_414c34ee_like ON public.larpmanager_prologue USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_prologuetype_assigned_id_630ea26a; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -13903,6 +14795,13 @@ CREATE INDEX larpmanager_prologuetype_event_id_f388f607 ON public.larpmanager_pr
 --
 
 CREATE INDEX larpmanager_prologuetype_progress_id_25332c25 ON public.larpmanager_prologuetype USING btree (progress_id);
+
+
+--
+-- Name: larpmanager_prologuetype_uuid_436c3d20_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_prologuetype_uuid_436c3d20_like ON public.larpmanager_prologuetype USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -13955,6 +14854,13 @@ CREATE INDEX larpmanager_quest_typ_id_fa0bfa0d ON public.larpmanager_quest USING
 
 
 --
+-- Name: larpmanager_quest_uuid_19960bdb_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_quest_uuid_19960bdb_like ON public.larpmanager_quest USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_questtype_assigned_id_7b98cd92; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -13980,6 +14886,13 @@ CREATE INDEX larpmanager_questtype_event_id_6c929e67 ON public.larpmanager_quest
 --
 
 CREATE INDEX larpmanager_questtype_progress_id_43cc1a54 ON public.larpmanager_questtype USING btree (progress_id);
+
+
+--
+-- Name: larpmanager_questtype_uuid_45872468_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_questtype_uuid_45872468_like ON public.larpmanager_questtype USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -14039,6 +14952,13 @@ CREATE INDEX larpmanager_refundrequest_status_d3b8fb4d_like ON public.larpmanage
 
 
 --
+-- Name: larpmanager_refundrequest_uuid_cfd0dab5_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_refundrequest_uuid_cfd0dab5_like ON public.larpmanager_refundrequest USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_reg_id_173630_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14070,7 +14990,7 @@ CREATE INDEX larpmanager_registration_run_id_cb5c59d0 ON public.larpmanager_regi
 -- Name: larpmanager_registration_special_cod_9f7f04b0_like; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX larpmanager_registration_special_cod_9f7f04b0_like ON public.larpmanager_registration USING btree (special_cod varchar_pattern_ops);
+CREATE INDEX larpmanager_registration_special_cod_9f7f04b0_like ON public.larpmanager_registration USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -14179,6 +15099,13 @@ CREATE INDEX larpmanager_registrationinstallment_event_id_0cf7e097 ON public.lar
 
 
 --
+-- Name: larpmanager_registrationinstallment_uuid_f3344033_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_registrationinstallment_uuid_f3344033_like ON public.larpmanager_registrationinstallment USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_registrationoption_deleted_e81d0f54; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14277,6 +15204,13 @@ CREATE INDEX larpmanager_registrationquota_event_id_390608b4 ON public.larpmanag
 
 
 --
+-- Name: larpmanager_registrationquota_uuid_8c88ff01_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_registrationquota_uuid_8c88ff01_like ON public.larpmanager_registrationquota USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_registrationsection_deleted_9663b9c2; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14288,6 +15222,13 @@ CREATE INDEX larpmanager_registrationsection_deleted_9663b9c2 ON public.larpmana
 --
 
 CREATE INDEX larpmanager_registrationsection_event_id_d5558ddd ON public.larpmanager_registrationsection USING btree (event_id);
+
+
+--
+-- Name: larpmanager_registrationsection_uuid_fefacdb9_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_registrationsection_uuid_fefacdb9_like ON public.larpmanager_registrationsection USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -14305,6 +15246,13 @@ CREATE INDEX larpmanager_registrationsurcharge_event_id_6585ce05 ON public.larpm
 
 
 --
+-- Name: larpmanager_registrationsurcharge_uuid_36224a2e_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_registrationsurcharge_uuid_36224a2e_like ON public.larpmanager_registrationsurcharge USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_registrationticket_deleted_3f742056; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14316,6 +15264,13 @@ CREATE INDEX larpmanager_registrationticket_deleted_3f742056 ON public.larpmanag
 --
 
 CREATE INDEX larpmanager_registrationticket_event_id_bde84c5d ON public.larpmanager_registrationticket USING btree (event_id);
+
+
+--
+-- Name: larpmanager_registrationticket_uuid_57dc7e1d_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_registrationticket_uuid_57dc7e1d_like ON public.larpmanager_registrationticket USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -14375,6 +15330,13 @@ CREATE INDEX larpmanager_rulepx_field_id_87e7d90a ON public.larpmanager_rulepx U
 
 
 --
+-- Name: larpmanager_rulepx_uuid_20dd13bf_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_rulepx_uuid_20dd13bf_like ON public.larpmanager_rulepx USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_run_deleted_5dc444ab; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14421,6 +15383,13 @@ CREATE INDEX larpmanager_run_id_9346af_idx ON public.larpmanager_accountingitemo
 --
 
 CREATE INDEX larpmanager_run_registration_secret_733f6de3_like ON public.larpmanager_run USING btree (registration_secret varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_run_uuid_c8ddba9d_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_run_uuid_c8ddba9d_like ON public.larpmanager_run USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -14473,6 +15442,13 @@ CREATE INDEX larpmanager_shuttleservice_status_3ce6ffe3_like ON public.larpmanag
 
 
 --
+-- Name: larpmanager_shuttleservice_uuid_7e5a065d_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_shuttleservice_uuid_7e5a065d_like ON public.larpmanager_shuttleservice USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_shuttleservice_working_id_9ee4228d; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14522,6 +15498,13 @@ CREATE INDEX larpmanager_speedlarp_progress_id_85514844 ON public.larpmanager_sp
 
 
 --
+-- Name: larpmanager_speedlarp_uuid_7d865869_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_speedlarp_uuid_7d865869_like ON public.larpmanager_speedlarp USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_status_453566_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14540,6 +15523,13 @@ CREATE INDEX larpmanager_textversion_deleted_b676e862 ON public.larpmanager_text
 --
 
 CREATE INDEX larpmanager_textversion_member_id_462b2f0f ON public.larpmanager_textversion USING btree (member_id);
+
+
+--
+-- Name: larpmanager_textversion_uuid_a7fdb1b1_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_textversion_uuid_a7fdb1b1_like ON public.larpmanager_textversion USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -14592,6 +15582,13 @@ CREATE INDEX larpmanager_trait_traits_to_trait_id_2d83095e ON public.larpmanager
 
 
 --
+-- Name: larpmanager_trait_uuid_404230a1_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_trait_uuid_404230a1_like ON public.larpmanager_trait USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_urlshortner_assoc_id_697779ff; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14613,6 +15610,13 @@ CREATE INDEX larpmanager_urlshortner_deleted_dab59f05 ON public.larpmanager_urls
 
 
 --
+-- Name: larpmanager_urlshortner_uuid_a5e4eb88_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_urlshortner_uuid_a5e4eb88_like ON public.larpmanager_urlshortner USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_util_deleted_a8caabdb; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14624,6 +15628,13 @@ CREATE INDEX larpmanager_util_deleted_a8caabdb ON public.larpmanager_util USING 
 --
 
 CREATE INDEX larpmanager_util_event_id_3e0ebc15 ON public.larpmanager_util USING btree (event_id);
+
+
+--
+-- Name: larpmanager_util_uuid_ca22dc95_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_util_uuid_ca22dc95_like ON public.larpmanager_util USING btree (uuid varchar_pattern_ops);
 
 
 --
@@ -14676,6 +15687,41 @@ CREATE INDEX larpmanager_vote_member_id_8dba5f9d ON public.larpmanager_vote USIN
 
 
 --
+-- Name: larpmanager_warehousearea_uuid_faa27a0d_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_warehousearea_uuid_faa27a0d_like ON public.larpmanager_warehousearea USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_warehousecontainer_uuid_4ce0ba22_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_warehousecontainer_uuid_4ce0ba22_like ON public.larpmanager_warehousecontainer USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_warehouseitem_uuid_aa098580_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_warehouseitem_uuid_aa098580_like ON public.larpmanager_warehouseitem USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_warehousemovement_uuid_960f5b13_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_warehousemovement_uuid_960f5b13_like ON public.larpmanager_warehousemovement USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_warehousetag_uuid_7c4b8a3f_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_warehousetag_uuid_7c4b8a3f_like ON public.larpmanager_warehousetag USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_workshopmemberrel_deleted_25cfe91b; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14711,6 +15757,13 @@ CREATE INDEX larpmanager_workshopmodule_event_id_1486f44e ON public.larpmanager_
 
 
 --
+-- Name: larpmanager_workshopmodule_uuid_d55cc894_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_workshopmodule_uuid_d55cc894_like ON public.larpmanager_workshopmodule USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_workshopoption_deleted_5b3ebbf6; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14732,6 +15785,13 @@ CREATE INDEX larpmanager_workshopoption_question_id_fba6e893 ON public.larpmanag
 
 
 --
+-- Name: larpmanager_workshopoption_uuid_81990c66_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_workshopoption_uuid_81990c66_like ON public.larpmanager_workshopoption USING btree (uuid varchar_pattern_ops);
+
+
+--
 -- Name: larpmanager_workshopquestion_deleted_9245971f; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -14750,6 +15810,27 @@ CREATE INDEX larpmanager_workshopquestion_event_id_5fe516b8 ON public.larpmanage
 --
 
 CREATE INDEX larpmanager_workshopquestion_module_id_5fe3467d ON public.larpmanager_workshopquestion USING btree (module_id);
+
+
+--
+-- Name: larpmanager_workshopquestion_uuid_d7b052cc_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_workshopquestion_uuid_d7b052cc_like ON public.larpmanager_workshopquestion USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_writingoption_uuid_2f6599f6_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_writingoption_uuid_2f6599f6_like ON public.larpmanager_writingoption USING btree (uuid varchar_pattern_ops);
+
+
+--
+-- Name: larpmanager_writingquestion_uuid_a483cd93_like; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX larpmanager_writingquestion_uuid_a483cd93_like ON public.larpmanager_writingquestion USING btree (uuid varchar_pattern_ops);
 
 
 --

@@ -63,7 +63,7 @@ def get_character_filter(character: Any, character_registrations: Any, active_fi
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
+def get_event_filter_characters(context: dict, character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
     """Get filtered characters organized by factions for event display.
 
     Args:

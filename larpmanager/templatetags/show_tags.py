@@ -115,7 +115,7 @@ def get(value: dict[str, Any], arg: str) -> Any:
     return ""
 
 
-def get_tooltip(context: dict[str, Any], character: dict[str, Any]) -> str:
+def get_tooltip(context: dict, character: dict[str, Any]) -> str:
     """Generate HTML tooltip for character display.
 
     Args:
@@ -168,7 +168,7 @@ def tooltip_fields(character: dict[str, Any], tooltip: str) -> str:
     return tooltip
 
 
-def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip: str) -> str:
+def tooltip_factions(character: dict[str, Any], context: dict, tooltip: str) -> str:
     """Add faction information to character tooltip.
 
     Args:
@@ -195,7 +195,7 @@ def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context: dict[str, Any], text: str, limit: int = 200) -> str:
+def replace_chars(context: dict, text: str, limit: int = 200) -> str:
     """Template tag to replace character number references with names.
 
     Replaces #XX, @XX, and ^XX patterns with character names in text.
@@ -494,7 +494,7 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
+def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert trait references to character links.
 
     Args:

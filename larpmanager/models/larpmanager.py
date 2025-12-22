@@ -27,7 +27,7 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import AlphanumericValidator, BaseModel
+from larpmanager.models.base import AlphanumericValidator, BaseModel, UuidMixin
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, show_thumb
 
@@ -266,7 +266,7 @@ class LarpManagerDiscover(BaseModel):
     )
 
 
-class LarpManagerTicket(BaseModel):
+class LarpManagerTicket(UuidMixin, BaseModel):
     """Model for managing support tickets and requests.
 
     Handles user support requests with contact information,

@@ -111,9 +111,9 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_roles_edit(request: HttpRequest, num: Any) -> Any:
+def exe_roles_edit(request: HttpRequest, role_uuid: str) -> Any:
     """Edit specific association role."""
-    return exe_edit(request, ExeAssociationRoleForm, num, "exe_roles")
+    return exe_edit(request, ExeAssociationRoleForm, role_uuid, "exe_roles")
 
 
 @login_required
@@ -148,9 +148,9 @@ def exe_texts(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_texts_edit(request: HttpRequest, num: Any) -> Any:
+def exe_texts_edit(request: HttpRequest, text_uuid: str) -> HttpResponse:
     """Edit specific association text."""
-    return exe_edit(request, ExeAssociationTextForm, num, "exe_texts")
+    return exe_edit(request, ExeAssociationTextForm, text_uuid, "exe_texts")
 
 
 @login_required
@@ -184,26 +184,9 @@ def exe_translations(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_translations_edit(request: HttpRequest, num: int) -> HttpResponse:
-    """Handle creation and editing of association translation overrides.
-
-    This view provides the form interface for creating new translation overrides
-    or editing existing ones. It delegates to the standard exe_edit utility which
-    handles both GET (display form) and POST (process submission) requests.
-
-    Args:
-        request: HTTP request object
-        num: Translation ID for editing, or 0 for creating new translation
-
-    Returns:
-        HttpResponse: Rendered form for editing or redirect after successful save
-
-    Raises:
-        PermissionDenied: If user lacks exe_translations permission
-        Http404: If translation with given ID doesn't exist
-
-    """
-    return exe_edit(request, ExeAssociationTranslationForm, num, "exe_translations")
+def exe_translations_edit(request: HttpRequest, translation_uuid: str) -> HttpResponse:
+    """Handle creation and editing of association translation overrides."""
+    return exe_edit(request, ExeAssociationTranslationForm, translation_uuid, "exe_translations")
 
 
 @login_required

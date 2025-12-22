@@ -23,7 +23,7 @@
                                 {% if not ch.hide %}
                                     <div class="el">
                                         <div class="icon">
-                                            <a href="{% url 'character' run.get_slug ch.number %}">
+                                            <a href="{% url 'character' run.get_slug ch.uuid %}">
                                                 <div class="img_cover"
                                                      style="background-image:url('{% get_char_profile ch %}')"></div>
                                                 <div class="icon-name">

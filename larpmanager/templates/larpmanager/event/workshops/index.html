@@ -21,7 +21,7 @@
                             {% if el.done %}
                                 <span class="correct">{% trans "Done" %}!</span>
                             {% else %}
-                                <a href="{% url "workshop_answer" slug run.number el.number %}">{% trans "To be done" %}</a>
+                                <a href="{% url "workshop_answer" slug run.number el.uuid %}">{% trans "To be done" %}</a>
                             {% endif %}
                         </td>
                         <td></td>

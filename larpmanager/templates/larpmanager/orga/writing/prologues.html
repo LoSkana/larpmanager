@@ -22,16 +22,16 @@
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
-        <tr id="{{ el.id }}">
+        <tr id="{{ el.uuid }}">
             <td>
-                <a href="{% url 'orga_prologues_edit' run.get_slug el.id %}"
+                <a href="{% url 'orga_prologues_edit' run.get_slug el.uuid %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
             <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_prologues_view' run.get_slug el.id %}"
+                <a href="{% url 'orga_prologues_view' run.get_slug el.uuid %}"
                    qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_prologues_versions' run.get_slug el.id %}"
+                <a href="{% url 'orga_prologues_versions' run.get_slug el.uuid %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
             </td>
             {% include "elements/writing/questions_body.html" %}

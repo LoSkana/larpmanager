@@ -6,7 +6,7 @@
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
     <div class="lm_tooltip">
-        <a href="{% url 'workshops' slug run.number %}">Workshop</a>
+        <a href="{% url 'workshops' slug run.uuid %}">Workshop</a>
         <div class="lm_tooltiptext">{% trans "Fill out the event prep questions" %}!</div>
     </div>
 {% endblock nav %}
@@ -16,7 +16,7 @@
         <p>
             {% trans "Oops! You gave one or more incorrect answers" %}.
             {% trans "Please check them below" %}.
-            <a href="{% url "workshop_answer" slug run.number workshop.id %}">{% trans "Retry" %}!</a>
+            <a href="{% url "workshop_answer" slug run.number workshop.uuid %}">{% trans "Retry" %}!</a>
         </p>
         <hr class="c" />
         {% for el in list %}

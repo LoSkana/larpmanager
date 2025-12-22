@@ -185,12 +185,12 @@ def assign_badge(member: Member, badge_code: str) -> None:
         logger.exception("Failed to assign badge %s to member %s", badge_code, member)
 
 
-def get_mail(context: dict, email_id: int) -> Email:
+def get_mail(context: dict, email_uuid: str) -> Email:
     """Retrieve an email object with proper authorization checks.
 
     Args:
         context: Context dictionary that may contain run information
-        email_id: Primary key of the email to retrieve
+        email_uuid: UUID of the email to retrieve
 
     Returns:
         Email: The requested email object if authorized
@@ -202,7 +202,7 @@ def get_mail(context: dict, email_id: int) -> Email:
     """
     # Attempt to retrieve the email by primary key
     try:
-        email = Email.objects.get(pk=email_id)
+        email = Email.objects.get(uuid=email_uuid)
     except ObjectDoesNotExist as err:
         msg = "not found"
         raise Http404(msg) from err

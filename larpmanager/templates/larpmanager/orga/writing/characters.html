@@ -95,25 +95,25 @@
 {% endblock thead %}
 {% block tbody %}
     {% for el in list %}
-        <tr id="{{ el.id }}">
+        <tr id="{{ el.uuid }}">
             <td>
-                <a href="{% url 'orga_characters_edit' run.get_slug el.id %}"
+                <a href="{% url 'orga_characters_edit' run.get_slug el.uuid %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
             <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
             <td>
-                <a href="{% url 'orga_characters_view' run.get_slug el.id %}"
+                <a href="{% url 'orga_characters_view' run.get_slug el.uuid %}"
                    qtip="{% trans "Read" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_characters_versions' run.get_slug el.id %}"
+                <a href="{% url 'orga_characters_versions' run.get_slug el.uuid %}"
                    qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
-                <a href="{% url 'character' run.get_slug el.number %}"
+                <a href="{% url 'character' run.get_slug el.uuid %}"
                    qtip="{% trans "Gallery" %}"><i class="fa-solid fa-eye"></i></a>
                 {% if writing_external_access %}
                     <a href="{% url 'character_external' run.get_slug el.access_token %}"
                        qtip="{% trans "External access" %}"><i class="fa-solid fa-key"></i></a>
                 {% endif %}
                 {% if features.print_pdf %}
-                    <a href="{% url 'orga_characters_friendly_pdf' run.get_slug el.id %}"
+                    <a href="{% url 'orga_characters_friendly_pdf' run.get_slug el.uuid %}"
                        download
                        qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
                 {% endif %}

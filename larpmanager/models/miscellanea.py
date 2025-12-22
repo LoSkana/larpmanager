@@ -33,7 +33,7 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -147,7 +147,7 @@ class ChatMessage(BaseModel):
         return f"CM - {self.sender} {self.message[:20]}"
 
 
-class Util(BaseModel):
+class Util(UuidMixin, BaseModel):
     """Represents Util model."""
 
     number = models.IntegerField()
@@ -177,7 +177,7 @@ class Util(BaseModel):
         return Path(self.util.url).name
 
 
-class UrlShortner(BaseModel):
+class UrlShortner(UuidMixin, BaseModel):
     """Represents UrlShortner model."""
 
     number = models.IntegerField()
@@ -195,7 +195,7 @@ class UrlShortner(BaseModel):
         return f"U{self.number} {self.name}"
 
 
-class Album(BaseModel):
+class Album(UuidMixin, BaseModel):
     """Represents Album model."""
 
     name = models.CharField(max_length=70)
@@ -327,7 +327,7 @@ class CompetenceMemberRel(BaseModel):
         unique_together: ClassVar[list] = ["competence", "member", "deleted"]
 
 
-class WorkshopModule(BaseModel):
+class WorkshopModule(UuidMixin, BaseModel):
     """Model for managing workshop modules and member participation."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -366,7 +366,7 @@ class WorkshopMemberRel(BaseModel):
         return f"{self.workshop} - {self.member}"
 
 
-class WorkshopQuestion(BaseModel):
+class WorkshopQuestion(UuidMixin, BaseModel):
     """Represents WorkshopQuestion model."""
 
     search = models.CharField(max_length=200, editable=False)
@@ -405,7 +405,7 @@ class WorkshopQuestion(BaseModel):
         ]
 
 
-class WorkshopOption(BaseModel):
+class WorkshopOption(UuidMixin, BaseModel):
     """Represents WorkshopOption model."""
 
     search = models.CharField(max_length=500, editable=False)
@@ -441,7 +441,7 @@ class WorkshopOption(BaseModel):
         return js
 
 
-class WarehouseContainer(BaseModel):
+class WarehouseContainer(UuidMixin, BaseModel):
     """Represents WarehouseContainer model."""
 
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
@@ -453,7 +453,7 @@ class WarehouseContainer(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
 
-class WarehouseTag(BaseModel):
+class WarehouseTag(UuidMixin, BaseModel):
     """Represents WarehouseTag model."""
 
     name = models.CharField(max_length=100)
@@ -463,7 +463,7 @@ class WarehouseTag(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
 
 
-class WarehouseItem(BaseModel):
+class WarehouseItem(UuidMixin, BaseModel):
     """Represents WarehouseItem model."""
 
     name = models.CharField(max_length=100)
@@ -500,7 +500,7 @@ class WarehouseItem(BaseModel):
         return ["quantity"]
 
 
-class WarehouseMovement(BaseModel):
+class WarehouseMovement(UuidMixin, BaseModel):
     """Represents WarehouseMovement model."""
 
     quantity = models.IntegerField(blank=True, null=True)
@@ -519,7 +519,7 @@ class WarehouseMovement(BaseModel):
     completed = models.BooleanField(default=False)
 
 
-class WarehouseArea(BaseModel):
+class WarehouseArea(UuidMixin, BaseModel):
     """Represents WarehouseArea model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
@@ -570,7 +570,7 @@ class ShuttleStatus(models.TextChoices):
     DONE = "2", _("Arrived safe and sound")
 
 
-class ShuttleService(BaseModel):
+class ShuttleService(UuidMixin, BaseModel):
     """Represents ShuttleService model."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="shuttle_services_requests")
@@ -646,7 +646,7 @@ class ProblemSeverity(models.TextChoices):
     GREEN = "g", "4 - GREEN"
 
 
-class Problem(BaseModel):
+class Problem(UuidMixin, BaseModel):
     """Represents Problem model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -773,7 +773,7 @@ class PlayerRelationship(BaseModel):
         ]
 
 
-class Email(BaseModel):
+class Email(UuidMixin, BaseModel):
     """Represents Email model."""
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
@@ -797,7 +797,7 @@ class Email(BaseModel):
         return f"{self.recipient} - {self.subj}"
 
 
-class OneTimeContent(BaseModel):
+class OneTimeContent(UuidMixin, BaseModel):
     """Model to store multimedia content for one-time access via tokens.
 
     Organizers can upload video/audio files and generate access tokens.
@@ -910,7 +910,7 @@ class OneTimeContent(BaseModel):
         }
 
 
-class OneTimeAccessToken(BaseModel):
+class OneTimeAccessToken(UuidMixin, BaseModel):
     """Access token for one-time viewing of content.
 
     Each token can only be used once.

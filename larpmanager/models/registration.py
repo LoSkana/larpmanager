@@ -29,10 +29,10 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
-from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str, my_uuid_short
+from larpmanager.models.utils import UploadToPathAndRename, decimal_to_str
 from larpmanager.models.writing import Character
 
 
@@ -69,7 +69,7 @@ class TicketTier(models.TextChoices):
         }
 
 
-class RegistrationTicket(BaseModel):
+class RegistrationTicket(UuidMixin, BaseModel):
     """Represents RegistrationTicket model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -119,13 +119,6 @@ class RegistrationTicket(BaseModel):
     )
 
     order = models.IntegerField(default=0)
-
-    uuid = models.CharField(
-        max_length=12,
-        unique=True,
-        default=my_uuid_short,
-        editable=False,
-    )
 
     def __str__(self) -> str:
         """Return ticket tier string representation with event, tier, name and price."""
@@ -179,7 +172,7 @@ class RegistrationTicket(BaseModel):
         return formatted_text
 
 
-class RegistrationSection(BaseModel):
+class RegistrationSection(UuidMixin, BaseModel):
     """Represents RegistrationSection model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -198,7 +191,7 @@ class RegistrationSection(BaseModel):
     order = models.IntegerField(default=0)
 
 
-class RegistrationQuota(BaseModel):
+class RegistrationQuota(UuidMixin, BaseModel):
     """Represents RegistrationQuota model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="quotas")
@@ -232,7 +225,7 @@ class RegistrationQuota(BaseModel):
         return f"{self.quotas} {self.days_available} ({self.surcharge}€)"
 
 
-class RegistrationInstallment(BaseModel):
+class RegistrationInstallment(UuidMixin, BaseModel):
     """Represents RegistrationInstallment model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="installments")
@@ -282,7 +275,7 @@ class RegistrationInstallment(BaseModel):
         return f"{self.order} {self.amount} ({self.days_deadline} - {self.date_deadline})"
 
 
-class RegistrationSurcharge(BaseModel):
+class RegistrationSurcharge(UuidMixin, BaseModel):
     """Represents RegistrationSurcharge model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="surcharges")
@@ -312,7 +305,7 @@ class RegistrationSurcharge(BaseModel):
         return f"{self.amount} ({self.date})"
 
 
-class Registration(BaseModel):
+class Registration(UuidMixin, BaseModel):
     """Represents Registration model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -353,13 +346,6 @@ class Registration(BaseModel):
     refunded = models.BooleanField(default=False)
 
     modified = models.IntegerField(default=0)
-
-    uuid = models.CharField(
-        max_length=12,
-        unique=True,
-        default=my_uuid_short,
-        editable=False,
-    )
 
     redeem_code = models.CharField(max_length=16, null=True, blank=True)
 

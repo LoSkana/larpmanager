@@ -38,7 +38,7 @@ from larpmanager.models.member import FirstAidChoices, Member, Membership, Membe
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import _get_help_questions, format_email_body
+from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.larpmanager.tasks import send_mail_exec
 from larpmanager.utils.users.member import get_mail
@@ -313,7 +313,7 @@ def orga_questions(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int) -> HttpResponse:
+def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: str) -> HttpResponse:
     """Handle organizer responses to member help questions.
 
     This view allows organizers to respond to help questions submitted by members
@@ -323,7 +323,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
     Args:
         request: HTTP request object containing POST data for form submission
         event_slug: Event/run identifier (slug or ID)
-        member_id: Member ID who submitted the question
+        member_uuid: Member UUID who submitted the question
 
     Returns:
         HttpResponse: Rendered template for answering help questions or redirect
@@ -338,7 +338,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
     context = check_event_context(request, event_slug, "orga_questions")
 
     # Get the member who submitted the question
-    member = Member.objects.get(pk=member_id)
+    member = Member.objects.get(uuid=member_uuid)
 
     # Handle form submission for organizer's answer
     if request.method == "POST":
@@ -383,7 +383,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
 
     # Get all help questions for this member in this event, newest first
     context["list"] = HelpQuestion.objects.filter(
-        member_id=member_id,
+        member_id=member.id,
         association_id=context["association_id"],
         run_id=context["run"],
     ).order_by("-created")
@@ -392,14 +392,15 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_id: int)
 
 
 @login_required
-def orga_questions_close(request: HttpRequest, event_slug: str, member_id: str) -> HttpResponse:
+def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str) -> HttpResponse:
     """Close a help question for an organization event."""
     context = check_event_context(request, event_slug, "orga_questions")
 
+    member = get_member(member_uuid)
     # Get the most recent help question for this member and run
     h = (
         HelpQuestion.objects.filter(
-            member_id=member_id,
+            member_id=member.id,
             association_id=context["association_id"],
             run_id=context["run"],
         )
@@ -519,13 +520,13 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpResponse:
+def orga_read_mail(request: HttpRequest, event_slug: str, mail_uuid: str) -> HttpResponse:
     """Display a specific email from the archive for organization staff.
 
     Args:
         request: The HTTP request object.
         event_slug: Event identifier string.
-        mail_id: The id of the email.
+        mail_uuid: The uuid of the email.
 
     Returns:
         Rendered template with email content.
@@ -535,7 +536,7 @@ def orga_read_mail(request: HttpRequest, event_slug: str, mail_id: str) -> HttpR
     context = check_event_context(request, event_slug, "orga_archive_email")
 
     # Retrieve the specific email for display
-    context["email"] = get_mail(context, mail_id)
+    context["email"] = get_mail(context, mail_uuid)
 
     return render(request, "larpmanager/exe/users/read_mail.html", context)
 

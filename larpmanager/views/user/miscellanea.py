@@ -228,10 +228,10 @@ def album(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def album_sub(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def album_sub(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
     """View handler for displaying a specific photo album within an event run."""
     context = get_event_context(request, event_slug)
-    get_album(context, num)
+    get_album(context, album_uuid)
     return album_aux(request, context, context["album"])
 
 
@@ -310,7 +310,7 @@ def valid_workshop_answer(request: HttpRequest, context: dict) -> Any:
 
 
 @login_required
-def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: int) -> HttpResponse:
+def workshop_answer(request: HttpRequest, event_slug: str, module_uuid: str) -> HttpResponse:
     """Handle workshop answer submission and validation.
 
     This function processes workshop submissions for LARP events, validates answers,
@@ -319,7 +319,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: i
     Args:
         request (HttpRequest): The HTTP request object containing user data and POST parameters
         event_slug (str): Event slug identifier for the current event/run
-        workshop_module_id (int): Workshop module number to process
+        module_uuid (str): Workshop module UUID to process
 
     Returns:
         HttpResponse: Either a rendered template (answer form or failure page) or
@@ -332,7 +332,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, workshop_module_id: i
     """
     # Get event context and validate user access to workshop signup
     context = get_event_context(request, event_slug, signup=True, include_status=True)
-    get_workshop(context, workshop_module_id)
+    get_workshop(context, module_uuid)
 
     # Check if user has already completed this workshop module
     completed = [el.pk for el in context["member"].workshops.select_related().all()]
@@ -440,12 +440,12 @@ def shuttle_new(request: HttpRequest) -> Any:
 
 
 @login_required
-def shuttle_edit(request: HttpRequest, shuttle_id: Any) -> Any:
+def shuttle_edit(request: HttpRequest, shuttle_uuid: Any) -> Any:
     """Edit existing shuttle service request.
 
     Args:
         request: HTTP request object
-        shuttle_id: Shuttle service ID to edit
+        shuttle_uuid: Shuttle service UUID to edit
 
     Returns:
         HttpResponse: Rendered edit form or redirect after successful update
@@ -454,7 +454,7 @@ def shuttle_edit(request: HttpRequest, shuttle_id: Any) -> Any:
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
 
-    shuttle = ShuttleService.objects.get(pk=shuttle_id)
+    shuttle = ShuttleService.objects.get(uuid=shuttle_uuid)
     if request.method == "POST":
         form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, context=context)
         if form.is_valid():

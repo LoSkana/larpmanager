@@ -10,7 +10,7 @@
                 {% trans "Go to the history preferences for" %}:
                 <a href="{% url 'orga_casting_history' run.get_slug 0 %}">{% trans "characters" %}</a>,
                 {% for num, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting_history' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'orga_casting_history' run.get_slug qt.uuid %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% else %}
@@ -18,7 +18,7 @@
                 {% trans "Go to the history preferences for" %}:
                 <a href="{% url 'casting_history' run.get_slug 0 %}">{% trans "characters" %}</a>,
                 {% for num, qt in quest_types.items %}
-                    , <a href="{% url 'casting_history' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'casting_history' run.get_slug qt.uuid %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}

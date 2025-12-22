@@ -145,7 +145,7 @@ def my_uuid_short() -> Any:
     return my_uuid(12)
 
 
-def my_uuid(length: int | None = None) -> str:
+def my_uuid(length: int | None = 32) -> str:
     """Generate a UUID of specified length."""
     alphabet = string.ascii_lowercase + string.digits
     return "".join(secrets.choice(alphabet) for _ in range(length))

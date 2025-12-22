@@ -22,7 +22,7 @@ from itertools import chain
 from typing import Any, ClassVar
 
 from django.core.validators import RegexValidator
-from django.db import models, transaction
+from django.db import IntegrityError, models, transaction
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -32,7 +32,7 @@ from pilkit.processors import ResizeToFill
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from tinymce.models import HTMLField
 
-from larpmanager.models.utils import UploadToPathAndRename, get_attr
+from larpmanager.models.utils import UploadToPathAndRename, get_attr, my_uuid_short
 
 AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -.")
 
@@ -50,27 +50,21 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         abstract = True
         ordering: ClassVar[list] = ["-updated"]
 
-    def upd_js_attr(self, javascript_object: dict, attribute_name: str) -> dict:
-        """Update JavaScript object with model attribute value.
+    def upd_js_attr(self, dict_object: dict, attribute_name: str) -> dict:
+        """Update dict object with model attribute value.
 
         Retrieves the value of the specified attribute from the model instance
-        and adds it to the provided JavaScript object dictionary.
+        and adds it to the provided object dictionary.
 
         Args:
-            javascript_object: JavaScript object dictionary to update
+            dict_object: object dictionary to update
             attribute_name: Name of the model attribute to retrieve and add
 
         Returns:
-            Updated JavaScript object dictionary with the new attribute
-
-        Example:
-            >>> obj.upd_js_attr({'existing': 'value'}, 'name')
-            {'existing': 'value', 'name': 'John'}
-
+            Updated dict object dictionary with the new attribute
         """
-        # Get attribute value from model instance and add to JS object
-        javascript_object[attribute_name] = get_attr(self, attribute_name)
-        return javascript_object
+        dict_object[attribute_name] = get_attr(self, attribute_name)
+        return dict_object
 
     def __str__(self) -> str:
         """Return string representation of the model.
@@ -128,14 +122,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
         Returns:
             A dictionary with field names as keys and field values as data.
-            Many-to-many fields are represented as lists of related object IDs.
-
-        Example:
-            >>> instance = MyModel.objects.get(id=1)
-            >>> data = instance.as_dict()
-            >>> print(data)
-            {'id': 1, 'name': 'example', 'tags': [1, 2, 3]}
-
+            Many-to-many fields are represented as lists of related object IDs
         """
         # Get model metadata for field introspection
         # noinspection PyUnresolvedReferences
@@ -330,3 +317,33 @@ def update_model_search_field(model_instance: Any) -> None:
     if hasattr(model_instance, "search"):
         model_instance.search = None
         model_instance.search = str(model_instance)
+
+
+class UuidMixin(models.Model):
+    """Adds an uuid field to the model."""
+
+    uuid = models.CharField(
+        max_length=12,
+        unique=True,
+        db_index=True,
+        editable=False,
+    )
+
+    UUID_RETRY_LIMIT = 5
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Assign an unique uuid if missing."""
+        if not self.uuid:
+            for _ in range(self.UUID_RETRY_LIMIT):
+                self.uuid = my_uuid_short()
+                try:
+                    with transaction.atomic():
+                        return super().save(*args, **kwargs)
+                except IntegrityError:
+                    self.uuid = None
+            msg = "UUID collision after retries"
+            raise RuntimeError(msg)
+        return super().save(*args, **kwargs)

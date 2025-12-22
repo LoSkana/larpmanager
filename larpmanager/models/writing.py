@@ -32,13 +32,13 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
 
-class Writing(BaseConceptModel):
+class Writing(UuidMixin, BaseConceptModel):
     """Represents Writing model."""
 
     progress = models.ForeignKey(
@@ -84,12 +84,8 @@ class Writing(BaseConceptModel):
             Dictionary containing id, number, and name attributes.
 
         """
-        # noinspection PyUnresolvedReferences
-        # Create base dictionary with id and number
-        js = {"id": self.id, "number": self.number}
-
-        # Update dictionary with name attribute
-        for s in ["name"]:
+        js = {}
+        for s in ["id", "number", "name", "uuid"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -508,7 +504,7 @@ class Plot(Writing):
         )
 
 
-class PlotCharacterRel(BaseModel):
+class PlotCharacterRel(UuidMixin, BaseModel):
     """Represents PlotCharacterRel model."""
 
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
@@ -792,7 +788,7 @@ class TextVersionChoices(models.TextChoices):
     RELATIONSHIP = "l", "Relationship"
 
 
-class TextVersion(BaseModel):
+class TextVersion(UuidMixin, BaseModel):
     """Represents TextVersion model."""
 
     tp = models.CharField(max_length=1, choices=TextVersionChoices.choices)

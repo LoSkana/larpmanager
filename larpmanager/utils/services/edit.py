@@ -239,7 +239,7 @@ def check_association(element: object, context: dict, attribute_field: str | Non
         raise Http404(msg)
 
 
-def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: str, entity_id: int) -> bool:
+def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: str, entity_uuid: str) -> bool:
     """Edit user data with validation.
 
     Handle both GET and POST requests for editing user data. On POST, validate
@@ -251,7 +251,7 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
         context: Context dictionary containing model data and form instance
         form_type: Django form class to use for data validation and editing
         model_name: Name key for accessing the model instance in context dictionary
-        entity_id: Entity ID for editing, used for form numbering (0 for new instances)
+        entity_uuid: Entity ID for editing, used for form numbering (0 for new instances)
 
     Returns:
         True if form was successfully processed and saved, False if form
@@ -293,22 +293,22 @@ def user_edit(request: HttpRequest, context: dict, form_type: type, model_name: 
 
     # Add form and entity ID to context for template rendering
     context["form"] = form
-    context["num"] = entity_id
+    context["num"] = "0"
 
-    # Add string representation of instance name for existing entities
-    if entity_id != 0:
+    if entity_uuid != "0":
         context["name"] = str(context[model_name])
+        context["num"] = context[model_name].number
 
     return False
 
 
-def backend_get(context: dict, model_type: type, entity_id: int, association_field: str | None = None) -> None:
+def backend_get(context: dict, model_type: type, entity_uuid: str, association_field: str | None = None) -> None:
     """Retrieve an object by ID and perform security checks.
 
     Args:
         context: Context dictionary to store the retrieved object
         model_type: Model class to query
-        entity_id: Primary key of the object to retrieve
+        entity_uuid: UUID of the object to retrieve
         association_field: Optional field name for additional checks
 
     Raises:
@@ -317,7 +317,7 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
     """
     # Retrieve object by primary key, handle any database exceptions
     try:
-        element = model_type.objects.get(pk=entity_id)
+        element = model_type.objects.get(uuid=entity_uuid)
     except Exception as err:
         raise NotFoundError from err
 
@@ -332,9 +332,9 @@ def backend_get(context: dict, model_type: type, entity_id: int, association_fie
 
 def backend_edit(  # noqa: C901 - Complex editing logic with form validation and POST processing
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     form_type: type[MyForm],
-    element_id: int | None,
+    element_uuid: str | None,
     additional_field: str | None = None,
     *,
     is_association: bool = False,
@@ -350,7 +350,7 @@ def backend_edit(  # noqa: C901 - Complex editing logic with form validation and
         request: Django HTTP request object containing user and POST data
         context: Context dictionary for template rendering and data sharing
         form_type: Django ModelForm class for handling the specific model
-        element_id: Element ID for editing existing objects, None for new objects
+        element_uuid: Element UUID for editing existing objects, None for new objects
         additional_field: Optional additional field parameter for specialized handling
         is_association: Flag indicating association-based vs event-based operation
         quiet: Flag to suppress success messages when True
@@ -367,21 +367,21 @@ def backend_edit(  # noqa: C901 - Complex editing logic with form validation and
     # Handle association-based operations vs event-based operations
     if is_association:
         context["exe"] = True
-        if element_id is None:
-            element_id = context["association_id"]
+        if element_uuid is None:
+            element_uuid = context["uuid"]
             context["nonum"] = True
-    elif element_id is None:
-        element_id = context["event"].id
+    elif element_uuid is None:
+        element_uuid = context["event"].uuid
         context["nonum"] = True
 
     # Load existing element or set as None for new objects
-    if element_id != 0:
-        backend_get(context, model_type, element_id, additional_field)
+    if element_uuid != "0":
+        backend_get(context, model_type, element_uuid, additional_field)
     else:
         context["el"] = None
 
     # Set up context for template rendering
-    context["num"] = element_id
+    context["num"] = element_uuid
     context["type"] = context["elementTyp"].__name__.lower()
 
     # Process POST request - form submission and validation
@@ -408,7 +408,7 @@ def backend_edit(  # noqa: C901 - Complex editing logic with form validation and
         context["form"] = form_type(instance=context["el"], context=context)
 
     # Set display name for existing objects
-    if element_id != 0:
+    if element_uuid != 0:
         context["name"] = str(context["el"])
 
     # Handle "add another" functionality for continuous adding
@@ -424,7 +424,7 @@ def orga_edit(
     event_slug: str,
     permission: str | None,
     form_type: type[MyForm],
-    entity_id: int | None = None,
+    entity_uuid: str | None = None,
     redirect_view: str | None = None,
     additional_context: dict | None = None,
 ) -> HttpResponse:
@@ -438,7 +438,7 @@ def orga_edit(
         event_slug: Event slug identifier
         permission: Permission string to check for access control
         form_type: Type of form/object to edit
-        entity_id: Entity ID to edit
+        entity_uuid: Entity UUID to edit
         redirect_view: Optional redirect view name after successful edit
         additional_context: Optional additional context to merge into template context
 
@@ -455,7 +455,7 @@ def orga_edit(
 
     # Process the edit operation using backend edit handler
     # Returns True if edit was successful and should redirect
-    if backend_edit(request, context, form_type, entity_id, additional_field=None, is_association=False):
+    if backend_edit(request, context, form_type, entity_uuid, additional_field=None, is_association=False):
         # Set suggestion context for successful edit
         set_suggestion(context, permission)
 
@@ -477,7 +477,7 @@ def orga_edit(
 def exe_edit(
     request: HttpRequest,
     form_type: type[MyForm],
-    entity_id: int | None,
+    entity_uuid: str | None,
     permission: str,
     redirect_view: str | None = None,
     additional_field: str | None = None,
@@ -491,7 +491,7 @@ def exe_edit(
     Args:
         request: HTTP request object containing form data and user information
         form_type: Type of form/entity being edited (e.g., 'member', 'event')
-        entity_id: Entity ID for the object being edited
+        entity_uuid: Entity UUID for the object being edited
         permission: Permission string required to access this edit functionality
         redirect_view: Optional redirect target after successful edit (defaults to permission)
         additional_field: Optional additional field parameter for the backend edit
@@ -513,7 +513,7 @@ def exe_edit(
         request,
         context,
         form_type,
-        entity_id,
+        entity_uuid,
         additional_field=additional_field,
         is_association=True,
     ):
@@ -572,7 +572,7 @@ def set_suggestion(context: dict, permission: str) -> None:
 
 def writing_edit(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     form_type: type[MyForm],
     element_name: str,
     element_type: str | None,

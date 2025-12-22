@@ -31,7 +31,7 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}"
+                <tr id="{{ el.uuid }}"
                     {% if not el.tot_payed %}class="hide not_payed"{% endif %}>
                     <td>
                         {% if el.tot_iscr %}{{ el.tot_iscr | floatformat:"0" }}{% endif %}
@@ -60,7 +60,7 @@
                         {% if el.refunded %}
                             {% trans "Refunded" %}
                         {% else %}
-                            <a href="{% url 'orga_cancellation_refund' run.get_slug el.id %}">{% trans "Approve reimbursement" %}</a>
+                            <a href="{% url 'orga_cancellation_refund' run.get_slug el.uuid %}">{% trans "Approve reimbursement" %}</a>
                         {% endif %}
                     </td>
                     {% if features.tokens %}

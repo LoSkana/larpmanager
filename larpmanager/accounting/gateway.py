@@ -61,7 +61,7 @@ logger = logging.getLogger(__name__)
 CURRENCY_TO_CENTS_MULTIPLIER = 100
 
 
-def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
+def get_satispay_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create Satispay payment form and initialize payment.
 
     Creates a new Satispay payment request using the provided invoice and amount,
@@ -349,7 +349,7 @@ def handle_invalid_paypal_ipn(invalid_ipn_object: Any) -> None:
 
 def get_stripe_form(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     invoice: PaymentInvoice,
     amount: float,
 ) -> None:
@@ -474,7 +474,7 @@ def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
 
 def get_sumup_form(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     invoice: PaymentInvoice,
     amount: float,
 ) -> None:
@@ -701,7 +701,7 @@ def redsys_invoice_cod() -> str:
     raise ValueError(msg)
 
 
-def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
+def get_redsys_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: float) -> None:
     """Create Redsys payment form with encrypted parameters.
 
     Generates a secure payment form for Redsys payment gateway by creating

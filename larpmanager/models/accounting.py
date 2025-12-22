@@ -26,7 +26,7 @@ from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, PaymentMethod
+from larpmanager.models.base import BaseModel, PaymentMethod, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -51,7 +51,7 @@ class PaymentStatus(models.TextChoices):
     CHECKED = "k", "Checked"
 
 
-class PaymentInvoice(BaseModel):
+class PaymentInvoice(UuidMixin, BaseModel):
     """Represents PaymentInvoice model."""
 
     search = models.CharField(max_length=500, editable=False)
@@ -115,13 +115,6 @@ class PaymentInvoice(BaseModel):
 
     key = models.CharField(max_length=500, null=True)
 
-    uuid = models.CharField(
-        max_length=12,
-        unique=True,
-        default=my_uuid_short,
-        editable=False,
-    )
-
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(fields=["key", "status"]),
@@ -184,7 +177,7 @@ class PaymentInvoice(BaseModel):
         return details_html
 
 
-class ElectronicInvoice(BaseModel):
+class ElectronicInvoice(UuidMixin, BaseModel):
     """Represents ElectronicInvoice model."""
 
     inv = models.OneToOneField(
@@ -281,7 +274,7 @@ class BalanceChoices(models.TextChoices):
     DIVER = "5", _("Miscellaneous operating expenses")
 
 
-class AccountingItem(BaseModel):
+class AccountingItem(UuidMixin, BaseModel):
     """Represents AccountingItem model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -525,7 +518,7 @@ class DiscountType(models.TextChoices):
     GIFT = "g", _("Gift")
 
 
-class Discount(BaseModel):
+class Discount(UuidMixin, BaseModel):
     """Represents Discount model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
@@ -659,7 +652,7 @@ class CollectionStatus(models.TextChoices):
     PAYED = "p", _("Delivered")
 
 
-class Collection(BaseModel):
+class Collection(UuidMixin, BaseModel):
     """Represents Collection model."""
 
     name = models.CharField(max_length=100, null=True)
@@ -750,7 +743,7 @@ class RefundStatus(models.TextChoices):
     PAYED = "p", _("Delivered")
 
 
-class RefundRequest(BaseModel):
+class RefundRequest(UuidMixin, BaseModel):
     """Represents RefundRequest model."""
 
     search = models.CharField(max_length=200, editable=False)

@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
                         <a href="{% url 'public' el.member.uuid %}">{{ el.member }}</a>
                     </td>

@@ -40,7 +40,7 @@
         {% for el in todo %}
             <tr>
                 <td>
-                    <a href="{% url 'exe_verification_manual' el.id %}">{% trans "Verification" %}</a>
+                    <a href="{% url 'exe_verification_manual' el.uuid %}">{% trans "Verification" %}</a>
                 </td>
                 <td>{{ el.causal }}</td>
                 <td>{{ el.cod }}</td>

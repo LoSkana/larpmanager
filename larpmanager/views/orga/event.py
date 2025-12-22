@@ -160,7 +160,7 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 def prepare_roles_list(
-    context: dict[str, Any],
+    context: dict,
     permission_type: type[EventPermission | AssociationPermission],
     role_queryset: QuerySet[EventRole] | QuerySet[AssociationRole],
     default_callback: Callable[[dict], EventRole | AssociationRole],
@@ -213,9 +213,9 @@ def prepare_roles_list(
 
 
 @login_required
-def orga_roles_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_roles_edit(request: HttpRequest, event_slug: str, role_uuid: str) -> HttpResponse:
     """Edit organization event role."""
-    return orga_edit(request, event_slug, "orga_roles", OrgaEventRoleForm, num)
+    return orga_edit(request, event_slug, "orga_roles", OrgaEventRoleForm, role_uuid)
 
 
 @login_required
@@ -257,9 +257,9 @@ def orga_texts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_texts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_texts_edit(request: HttpRequest, event_slug: str, text_uuid: str) -> HttpResponse:
     """Edit organization event text entry."""
-    return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, num)
+    return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, text_uuid)
 
 
 @login_required
@@ -271,9 +271,9 @@ def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_buttons_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_buttons_edit(request: HttpRequest, event_slug: str, button_uuid: str) -> HttpResponse:
     """Edit a specific button configuration for an event."""
-    return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, num)
+    return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, button_uuid)
 
 
 @login_required
@@ -673,7 +673,7 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
     return zip_exports(context, exports, "template")
 
 
-def _ability_template(context: dict[str, Any]) -> Any:
+def _ability_template(context: dict) -> Any:
     """Generate template for ability uploads with example data.
 
     Args:

@@ -307,7 +307,7 @@
 
     {% if avatar_form %}
 
-        var upload = '{% url 'character_profile_upload' run.get_slug character.number %}';
+        var upload = '{% url 'character_profile_upload' run.get_slug character.uuid %}';
         var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.number 1 %}';
         var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.number 0 %}';
 

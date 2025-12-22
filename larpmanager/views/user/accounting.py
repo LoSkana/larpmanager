@@ -358,7 +358,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
 
 
 @login_required
-def acc_reg(request: HttpRequest, uuid: int, method: str | None = None) -> HttpResponse:
+def acc_reg(request: HttpRequest, registration_uuid: int, method: str | None = None) -> HttpResponse:
     """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording
@@ -367,7 +367,7 @@ def acc_reg(request: HttpRequest, uuid: int, method: str | None = None) -> HttpR
 
     Args:
         request: HTTP request object with authenticated user
-        uuid: Registration UUID
+        registration_uuid: Registration UUID
         method: Optional payment method slug to pre-select
 
     Returns:
@@ -384,7 +384,7 @@ def acc_reg(request: HttpRequest, uuid: int, method: str | None = None) -> HttpR
     # Retrieve registration with related run and event data
     try:
         reg = Registration.objects.select_related("run", "run__event").get(
-            uuid=uuid,
+            uuid=registration_uuid,
             member=context["member"],
             cancellation_date__isnull=True,
             run__event__association_id=context["association_id"],
@@ -896,12 +896,12 @@ def acc_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
 
 
 @login_required
-def acc_payed(request: HttpRequest, uuid: int = 0) -> HttpResponse:
+def acc_payed(request: HttpRequest, registration_uuid: str = "0") -> HttpResponse:
     """Handle payment completion and redirect to profile check.
 
     Args:
         request: The HTTP request object containing user and association data
-        uuid: Payment uuid. If 0, no specific invoice is processed
+        registration_uuid: Payment uuid. If 0, no specific invoice is processed
 
     Returns:
         HttpResponse from acc_profile_check with success message and invoice
@@ -912,11 +912,11 @@ def acc_payed(request: HttpRequest, uuid: int = 0) -> HttpResponse:
     """
     # Check if a specific payment invoice ID was provided
     context = get_context(request)
-    if uuid:
+    if registration_uuid != "0":
         try:
             # Retrieve the payment invoice for the current user and association
             inv = PaymentInvoice.objects.get(
-                uuid=uuid,
+                uuid=registration_uuid,
                 member=context["member"],
                 association_id=context["association_id"],
             )

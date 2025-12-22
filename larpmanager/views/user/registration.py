@@ -237,7 +237,7 @@ def register_exclusive(request: HttpRequest, event_slug: str, secret_code: Any =
 
 
 def save_registration(
-    context: dict[str, Any],
+    context: dict,
     form: object,  # Registration form instance
     run: Run,
     event: Event,
@@ -572,7 +572,7 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
         )
 
 
-def init_form_submitted(context: dict[str, Any], form: object, request: HttpRequest, registration: Any = None) -> None:
+def init_form_submitted(context: dict, form: object, request: HttpRequest, registration: Any = None) -> None:
     """Initialize form submission data in context.
 
     Args:
@@ -798,7 +798,7 @@ def _add_bring_friend_discounts(context: dict) -> None:
         )
 
 
-def _register_prepare(context: dict[str, Any], registration: Any) -> Any:
+def _register_prepare(context: dict, registration: Any) -> Any:
     """Prepare registration context with payment information and locks.
 
     Args:

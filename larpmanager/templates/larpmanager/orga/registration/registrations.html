@@ -93,7 +93,7 @@
         {% for key, dc in reg_all %}
             {% if dc.list %}
                 <h2>{{ dc.type }} ({{ dc.count }})</h2>
-                <table id="regs_{{ run.id }}_{{ dc.type }}"
+                <table id="regs_{{ run.uuid }}_{{ dc.type }}"
                        class="que_load go_datatable registration_list">
                     <thead>
                         <tr>
@@ -147,9 +147,9 @@
                     </thead>
                     <tbody>
                         {% for reg in dc.list %}
-                            <tr id="{{ reg.id }}">
+                            <tr id="{{ reg.uuid }}">
                                 <td>
-                                    <a href="{% url 'orga_registrations_edit' run.get_slug reg.id %}"
+                                    <a href="{% url 'orga_registrations_edit' run.get_slug reg.uuid %}"
                                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                                 </td>
                                 <td>
@@ -171,9 +171,9 @@
                                     <td>
                                         {% for el in reg.chars %}
                                             {% include "elements/comma.html" %}
-                                            <a href="{% url 'orga_characters_edit' run.get_slug el.id %}">#{{ el.number }} {{ el.name }}</a>
+                                            <a href="{% url 'orga_characters_edit' run.get_slug el.uuid %}">#{{ el.number }} {{ el.name }}</a>
                                             {% if features.custom_character %}
-                                                <a href="{% url 'orga_registrations_customization' run.get_slug el.id %}"><i class="fas fa-user-pen"></i></a>
+                                                <a href="{% url 'orga_registrations_customization' run.get_slug el.uuid %}"><i class="fas fa-user-pen"></i></a>
                                             {% endif %}
                                         {% endfor %}
                                     </td>
@@ -184,7 +184,7 @@
                                             {% with factions|get:fnum as ft %}
                                                 {% if ft.id %}
                                                     {% include "elements/comma.html" %}
-                                                    <a href="{% url 'orga_factions_edit' run.get_slug ft.id %}">{{ ft.name }}</a>
+                                                    <a href="{% url 'orga_factions_edit' run.get_slug ft.uuid %}">{{ ft.name }}</a>
                                                 {% endif %}
                                             {% endwith %}
                                         {% endfor %}
@@ -205,7 +205,7 @@
                                                     {{ reg.custom | get:nm | safe }}
                                                 {% endif %}
                                                 {% if reg.custom|get:nm|length > 50 %}
-                                                    <a href="#" class="show_popup" pop="{{ reg.id }}" fie="{{ nm }}"><i class="fas fa-eye"></i></a>
+                                                    <a href="#" class="show_popup" pop="{{ reg.uuid }}" fie="{{ nm }}"><i class="fas fa-eye"></i></a>
                                                     <span class="popup_text {{ nm }}">
                                                         <h2>{{ reg.member }} - {{ nm | capfirst }}</h2>
                                                     {{ reg.custom | get:nm | safe }}</span>
@@ -252,7 +252,7 @@
                                             {% include "elements/comma.html" %}
                                             {{ d }}
                                         {% endfor %}
-                                        <a href="{% url 'orga_registration_discounts' run.get_slug reg.id %}">{% trans "Manage" %}</a>
+                                        <a href="{% url 'orga_registration_discounts' run.get_slug reg.uuid %}">{% trans "Manage" %}</a>
                                     </td>
                                 {% endif %}
                                 <td class="date">{{ reg.created | date:"y/m/d H:i" }}</td>

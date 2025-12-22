@@ -10,7 +10,7 @@
     {% for v in versions reversed %}
         {% if v.diff %}
             <h3>
-                <a href="{% url 'orga_version' run.get_slug typ v.id %}">{% trans "Version" %} {{ v.version }}</a>
+                <a href="{% url 'orga_version' run.get_slug typ v.uuid %}">{% trans "Version" %} {{ v.version }}</a>
                 - {{ v.member }} - {{ v.created }}
             </h3>
             <div class="diff-version plot">{{ v.diff | safe }}</div>

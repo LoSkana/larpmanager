@@ -169,7 +169,7 @@ urlpatterns = [
         name="leaderboard",
     ),
     path(
-        "badge/<int:badge_id>/",
+        "badge/<slug:badge_uuid>/",
         views_um.badge,
         name="badge",
     ),
@@ -214,12 +214,12 @@ urlpatterns = [
         name="acc_pay",
     ),
     path(
-        "accounting/registration/<slug:uuid>/",
+        "accounting/registration/<slug:registration_uuid>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
     path(
-        "accounting/registration/<slug:uuid>/<slug:method>/",
+        "accounting/registration/<slug:registration_uuid>/<slug:method>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
@@ -249,7 +249,7 @@ urlpatterns = [
         name="acc_cancelled",
     ),
     path(
-        "accounting/payed/<int:uuid>/",
+        "accounting/payed/<slug:registration_uuid>/",
         views_ua.acc_payed,
         name="acc_payed",
     ),
@@ -354,7 +354,7 @@ urlpatterns = [
         name="shuttle_new",
     ),
     path(
-        "shuttle/edit/<int:shuttle_id>/",
+        "shuttle/edit/<slug:shuttle_uuid>/",
         views_ums.shuttle_edit,
         name="shuttle_edit",
     ),

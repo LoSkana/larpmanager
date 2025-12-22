@@ -3,7 +3,7 @@
     {% for key, que in form_questions.items %}
         {% if que.typ == 'teaser' or que.typ == 'text' %}
             <td class="q_{{ key }} editable"
-                qid="{{ que.id }}"
+                qid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 {% with ed_id=que.typ|concat:'_red' %}
                     {% lookup el ed_id as value %}
@@ -18,7 +18,7 @@
             </td>
         {% elif que.typ == 'e' %}
             <td class="question q_{{ key }} editable"
-                qid="{{ que.id }}"
+                qid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 {% with ed_id=key|concat:'_red' %}
                     {% lookup el ed_id as value %}
@@ -33,13 +33,13 @@
             </td>
         {% elif que.basic_typ or que.typ == 'c' %}
             <td class="question q_{{ key }} editable"
-                qid="{{ que.id }}"
+                qid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 <!-- fill later -->
             </td>
         {% else %}
             <td class="q_{{ key }} editable"
-                qid="{{ que.id }}"
+                qid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
                 {% if que.typ == 'progress' %}
                     {% include "elements/show_progress.html" with el=el %}

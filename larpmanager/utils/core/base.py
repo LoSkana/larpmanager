@@ -169,7 +169,7 @@ def fetch_payment_details(association_id: int) -> dict:
     return get_payment_details(association)
 
 
-def check_association_context(request: HttpRequest, permission_slug: str) -> dict:
+def check_association_context(request: HttpRequest, permission_slug: str = "") -> dict:
     """Check and validate association permissions for a request.
 
     Validates that the user has the required association permission and that

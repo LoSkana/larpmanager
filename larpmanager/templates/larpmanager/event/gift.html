@@ -21,7 +21,7 @@
         {% for reg in list %}
             <tr>
                 <td>
-                    <a href="{% url 'gift_edit' run.get_slug reg.id %}"
+                    <a href="{% url 'gift_edit' run.get_slug reg.uuid %}"
                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>
