@@ -53,7 +53,7 @@ from larpmanager.utils.core.exceptions import (
     UserPermissionError,
     check_event_feature,
 )
-from larpmanager.utils.users.registration import check_signup, registration_status
+from larpmanager.utils.users.registration import check_signup, get_player_signup, registration_status
 
 
 def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks
@@ -418,7 +418,7 @@ def get_event_context(
         hide_gallery_for_non_signup = get_event_config(
             context["event"].id, "gallery_hide_signup", default_value=False, context=context
         )
-        if hide_gallery_for_non_signup and not getattr(context["run"], "reg", None):
+        if hide_gallery_for_non_signup and not get_player_signup(context):
             messages.warning(request, _("You must be registered to view this page"))
             raise RedirectError(event_url)
 

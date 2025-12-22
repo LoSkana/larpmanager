@@ -1172,9 +1172,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     """
     # Get event context and verify registration access
-    context = get_event_context(
-        request, event_slug, signup=False, feature_slug="gift", include_status=True, check_visibility=False
-    )
+    context = get_event_context(request, event_slug, feature_slug="gift", include_status=True, check_visibility=False)
     check_registration_open(context, request)
 
     # Filter registrations for current user with redeem codes (gift registrations)
@@ -1239,9 +1237,7 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
 
     """
     # Get event context and verify user has gift management permissions
-    context = get_event_context(
-        request, event_slug, signup=False, feature_slug="gift", include_status=True, check_visibility=False
-    )
+    context = get_event_context(request, event_slug, feature_slug="gift", include_status=True, check_visibility=False)
     check_registration_open(context, request)
 
     # Retrieve the specific gift registration and prepare form context
@@ -1338,9 +1334,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     """
     # Get event context and validate user permissions for gift redemption
-    context = get_event_context(
-        request, event_slug, signup=False, feature_slug="gift", include_status=True, check_visibility=False
-    )
+    context = get_event_context(request, event_slug, feature_slug="gift", include_status=True, check_visibility=False)
 
     # Check if user is already registered for this event
     if context["run"].reg:
