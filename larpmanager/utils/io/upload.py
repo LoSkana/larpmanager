@@ -761,12 +761,15 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
     question_applicable_type = QuestionApplicable.get_applicable(context["typ"])
     writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 
+    # Get the target event - use parent if in campaign and element is inheritable
+    target_event = context["event"].get_class_parent(writing_model_class)
+
     # Try to find existing element or create new one
     is_newly_created = False
     try:
-        element = writing_model_class.objects.get(event=context["event"], name__iexact=element_name)
+        element = writing_model_class.objects.get(event=target_event, name__iexact=element_name)
     except ObjectDoesNotExist:
-        element = writing_model_class.objects.create(event=context["event"], name=element_name)
+        element = writing_model_class.objects.create(event=target_event, name=element_name)
         is_newly_created = True
 
     # Initialize logging for field processing errors
