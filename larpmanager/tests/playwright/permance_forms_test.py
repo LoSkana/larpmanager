@@ -201,5 +201,5 @@ def check_exe_roles(page: Any) -> None:
     expect(page.locator('[id="\\32 "]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
     )
-    page.locator('[id="\\32 "]').get_by_role("cell", name="").click()
+    page.get_by_role("link", name="").nth(1).click()
     _check_checkboxes(checked, page)

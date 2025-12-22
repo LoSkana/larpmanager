@@ -295,7 +295,7 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
             _("You must create at least one registration question before you can create registration options"),
         )
         # Redirect to registration questions creation page
-        return redirect("orga_registration_form_edit", event_slug=event_slug, num=0)
+        return redirect("orga_registration_form_edit", event_slug=event_slug, uuid="0")
 
     # Proceed with registration option editing
     return registration_option_edit(request, context, option_uuid)

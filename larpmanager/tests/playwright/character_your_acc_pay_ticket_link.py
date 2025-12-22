@@ -107,7 +107,7 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
 
     # Set ticket price
     page.get_by_role("link", name="Tickets").click()
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(1).click()
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("100.00")

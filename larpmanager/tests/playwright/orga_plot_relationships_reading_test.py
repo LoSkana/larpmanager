@@ -62,7 +62,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # set prova presentation and text
     page.get_by_role("link", name="Characters").click()
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(1).click()
 
     fill_tinymce(page, "id_teaser", "pppresssent")
 
@@ -135,13 +135,13 @@ def relationships(live_server: Any, page: Any) -> None:
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(1).click()
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
     expect(page.locator("#form_relationships")).to_contain_text("#1 Test Character Direct Show <p>ciaaoooooo</p>")
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
-    page.locator('[id="\\31 "]').get_by_role("cell", name="").click()
+    page.get_by_role("link", name="").nth(0).click()
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
     expect(page.locator("#form_relationships")).to_contain_text("Inverse Show ciaaoooooo")
 
@@ -247,7 +247,7 @@ def plots_character(live_server: Any, page: Any) -> None:
 
     # test adding them to character
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(0).click()
     searchbox = page.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("gag")
@@ -267,7 +267,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect(page.locator('[id="\\31 "]')).to_contain_text("gaga bibi")
 
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(0).click()
 
     # remove third
     page.get_by_role("listitem", name="bibi").locator("span").click()
@@ -278,7 +278,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # check
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(0).click()
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
     expect(page.locator("#id_pl_2_tr")).to_contain_text("<p>ffff</p>")
     page.get_by_role("button", name="Confirm").click()
@@ -288,7 +288,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     expect(page.locator('[id="\\31 "]')).not_to_contain_text("bibi")
 
     # check second, then remove
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(0).click()
     page.get_by_role("listitem", name="gaga").locator("span").click()
     page.get_by_role("link", name="Instructions").click()
     page.get_by_role("button", name="Confirm").click()

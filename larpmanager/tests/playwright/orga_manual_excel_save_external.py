@@ -121,7 +121,7 @@ def excel(page: Any, live_server: Any) -> None:
     )
 
     # test manual save
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(1).click()
     fill_tinymce(page, "id_text", "ciaoooo")
     frame_locator = page.frame_locator("iframe#id_text_ifr")
     editor = frame_locator.locator("body#tinymce")
@@ -135,7 +135,7 @@ def excel(page: Any, live_server: Any) -> None:
     )
 
     # check in page
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(1).click()
     page.locator('a.my_toggle[tog="f_id_text"]').click()
     expect(page.locator("#one")).to_contain_text("Text (*) Show <p>ciaoooo</p>")
 
@@ -164,10 +164,10 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
 
     go_to(page, server, "/test/manage")
     page.get_by_role("link", name="Characters").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click(button="right")
+    page.get_by_role("link", name="").nth(0).click()
     page1 = context.new_page()
     page1.goto(server + "/test/manage/characters/edit/1/")
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.get_by_role("link", name="").nth(0).click()
     page.wait_for_timeout(2000)
     expect(page.locator("#test-larp")).to_contain_text(
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost."
