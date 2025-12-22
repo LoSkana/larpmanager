@@ -794,7 +794,7 @@ def writing_option_edit(context: dict, option_uuid: str, request: HttpRequest, o
             redirect_target,
             event_slug=context["run"].get_slug(),
             writing_type=option_type,
-            num=context["saved"].question_id,
+            question_uuid=context["saved"].question.uuid,
         )
 
     # Render edit form if no successful submission

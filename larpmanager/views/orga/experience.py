@@ -132,7 +132,7 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: 
     if not context["event"].get_elements(AbilityTypePx).exists():
         # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
-        return redirect("orga_px_ability_types_edit", event_slug=event_slug, num=0)
+        return redirect("orga_px_ability_types_edit", event_slug=event_slug, type_uuid="0")
 
     # Process ability editing with standard organization edit workflow
     return orga_edit(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm, ability_uuid)

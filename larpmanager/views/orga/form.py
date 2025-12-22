@@ -223,7 +223,7 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_
 
         # Handle "continue editing" action - redirect to create new question
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
+            return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
 
         # Determine if we need to redirect to option editing
         edit_option = False
@@ -326,7 +326,9 @@ def registration_option_edit(request: HttpRequest, context: dict, option_uuid: s
         redirect_target = "orga_registration_form_edit"
         if "continue" in request.POST:
             redirect_target = "orga_registration_options_new"
-        return redirect(redirect_target, event_slug=context["run"].get_slug(), num=context["saved"].question_id)
+        return redirect(
+            redirect_target, event_slug=context["run"].get_slug(), question_uuid=context["saved"].question.uuid
+        )
 
     return render(request, "larpmanager/orga/edit.html", context)
 

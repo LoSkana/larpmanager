@@ -162,7 +162,7 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, plot_rel_uuid: 
     exchange_order(context, PlotCharacterRel, plot_rel_uuid, order, elements)
 
     # Redirect back to character edit page
-    return redirect("orga_characters_edit", event_slug=context["run"].get_slug(), num=rel.character_id)
+    return redirect("orga_characters_edit", event_slug=context["run"].get_slug(), character_uuid=rel.character.uuid)
 
 
 @login_required
@@ -366,7 +366,7 @@ def orga_quests_edit(request: HttpRequest, event_slug: str, quest_uuid: str) -> 
     if not context["event"].get_elements(QuestType).exists():
         # Add warning message and redirect to quest types adding page
         messages.warning(request, _("You must create at least one quest type before you can create quests"))
-        return redirect("orga_quest_types_edit", event_slug=event_slug, num=0)
+        return redirect("orga_quest_types_edit", event_slug=event_slug, quest_type_uuid="0")
 
     # Load existing quest data if editing
     get_element(context, quest_uuid, "quest", Quest)
@@ -410,7 +410,7 @@ def orga_traits_edit(request: HttpRequest, event_slug: str, trait_uuid: str) -> 
     if not context["event"].get_elements(Quest).exists():
         # Add warning message and redirect to quests adding page
         messages.warning(request, _("You must create at least one quest before you can create traits"))
-        return redirect("orga_quests_edit", event_slug=event_slug, num=0)
+        return redirect("orga_quests_edit", event_slug=event_slug, quest_uuid="0")
 
     # Load existing trait data if editing (num != 0)
     get_trait(context, trait_uuid)
@@ -493,7 +493,7 @@ def orga_handouts_edit(request: HttpRequest, event_slug: str, handout_uuid: str)
     if not context["event"].get_elements(HandoutTemplate).exists():
         # Display warning and redirect to template creation page
         messages.warning(request, _("You must create at least one handout template before you can create handouts"))
-        return redirect("orga_handout_templates_edit", event_slug=event_slug, num=0)
+        return redirect("orga_handout_templates_edit", event_slug=event_slug, handout_template_uuid="0")
 
     # Load existing handout if editing (num > 0)
     get_handout(context, handout_uuid)
@@ -600,7 +600,7 @@ def orga_prologues_edit(request: HttpRequest, event_slug: str, prologue_uuid: st
     if not context["event"].get_elements(PrologueType).exists():
         # Inform user that prologue types must be created first
         messages.warning(request, _("You must create at least one prologue type before you can create prologues"))
-        return redirect("orga_prologue_types_edit", event_slug=event_slug, num=0)
+        return redirect("orga_prologue_types_edit", event_slug=event_slug, prologue_type_uuid="0")
 
     # Load existing prologue data if editing (num > 0)
     get_prologue(context, prologue_uuid)

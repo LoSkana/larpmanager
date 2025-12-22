@@ -461,7 +461,7 @@ def orga_edit(
 
         # Handle "continue editing" workflow - redirect to new object form
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
+            return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
 
         # Determine redirect target - use provided or default to permission name
         if not redirect_view:
@@ -522,7 +522,7 @@ def exe_edit(
 
         # Handle "continue editing" workflow
         if "continue" in request.POST:
-            return redirect(request.resolver_match.view_name, num=0)
+            return redirect(request.resolver_match.view_name, "0")
 
         # Determine redirect target and perform redirect
         if not redirect_view:
@@ -734,7 +734,7 @@ def _writing_save(
 
     # Handle continue editing request
     if "continue" in request.POST:
-        return redirect(request.resolver_match.view_name, event_slug=context["run"].get_slug(), num=0)
+        return redirect(request.resolver_match.view_name, context["run"].get_slug(), "0")
 
     # Handle custom redirect function if provided
     if redirect_func:

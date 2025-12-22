@@ -204,7 +204,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
             + "!"
         )
         messages.success(request, welcome_message)
-        return redirect("exe_events_edit", num=0)
+        return redirect("exe_events_edit", event_uuid="0")
 
     # Redirect to quick setup if not completed
     if not get_association_config(

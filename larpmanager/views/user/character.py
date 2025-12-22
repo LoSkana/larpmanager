@@ -349,13 +349,13 @@ def character_form(
                 messages.success(request, success_message)
 
             # Determine character number for redirect
-            character_number = None
+            character_uuid = None
             if isinstance(character, Character):
-                character_number = character.number
+                character_uuid = character.uuid
             elif isinstance(character, RegistrationCharacterRel):
-                character_number = character.character.number
+                character_uuid = character.character.uuid
             # Redirect to character detail page
-            return redirect("character", event_slug=event_slug, num=character_number)
+            return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
     else:
         # Initialize empty form for GET requests
         form = form_class(instance=instance, context=context)
@@ -819,7 +819,9 @@ def character_abilities_del(request: HttpRequest, event_slug: str, num: Any, id_
         context["character"].save()
     messages.success(request, _("Ability removed") + "!")
 
-    return redirect("character_abilities", event_slug=context["run"].get_slug(), num=context["character"].number)
+    return redirect(
+        "character_abilities", event_slug=context["run"].get_slug(), character_uuid=context["character"].uuid
+    )
 
 
 def _save_character_abilities(context: dict, request: HttpRequest) -> None:
@@ -969,7 +971,9 @@ def character_relationships_edit(
         get_player_relationship(context, other_character_uuid)
 
     if user_edit(request, context, PlayerRelationshipForm, "relationship", other_character_uuid):
-        return redirect("character_relationships", event_slug=context["run"].get_slug(), num=context["char"]["number"])
+        return redirect(
+            "character_relationships", event_slug=context["run"].get_slug(), character_uuid=context["char"]["uuid"]
+        )
     return render(request, "larpmanager/orga/edit.html", context)
 
 
