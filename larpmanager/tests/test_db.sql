@@ -4311,10 +4311,10 @@ INSERT INTO public.auth_permission VALUES (534, 'Can change social application t
 INSERT INTO public.auth_permission VALUES (535, 'Can delete social application token', 134, 'delete_socialtoken');
 INSERT INTO public.auth_permission VALUES (536, 'Can view social application token', 134, 'view_socialtoken');
 
-INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$94FrU2OVZs8gmHGLVR6UDN$zAzUoLaiAiKgYKDNh48ZtK5J17BdtzjV9tLRYrDJdN8=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$iYN9u6L2IsuYE2ceM7lPhX$snRaKpSMx32fgDHhjstQcfZCVcc6L0fPqAe9SlLVciA=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$ZQqEDRaFogqgM4jM6SJi5E$ZYuXLFobca94zd0L2Nu/mxoFoq/sVVsa8vU5fcveTFo=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$MwJFSBw86mEqKLyfEtukSK$EsyWyEmdOvZQi/FE6XtfWSd6nohWv1ERi7pOK/1XFSs=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$SfTFmWbbnrexiMEMkpHFb9$eUop7inKMSPiFN1JbToRnGqS7ohQzk90uXMEIhThU30=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$jHaifm1xy300UWpZ3JRl9e$aSt36MdpvPgANKEwTFUAfUguEndCg0bc/2/jO32gUhw=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$QuI86QC2GoVmxewsN1fbP5$KQ9EfILKNTLWTBTiCoyBnrowPBnEXJ5ojQ+v3I76cwk=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$g4M4GpE85awBsA5Fx3zmYf$bRxjYLmfmQW4YkQCUCwF4QaV8Ccf83u19AcNADe7P5M=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.background_task VALUES (1, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[1], {}]', '3ef1b43da432e47bfa6cf411b9ca320f22179ba0', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
 INSERT INTO public.background_task VALUES (2, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
