@@ -122,10 +122,20 @@ class Command(BaseCommand):
         clean_cmd = [
             "sed",
             "-i",
+            r"/^--/d;"
+            r"/^SET /d;"
             r"/^\\restrict/d;"
             r"/^\\unrestrict/d;"
-            r"/COMMENT ON SCHEMA public/d;"
-            r"/SET transaction_timeout/d",
+            r"/^COMMENT ON SCHEMA public/d",
+            "larpmanager/tests/test_db.sql",
+        ]
+        subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603
+
+        # Remove double lines
+        clean_cmd = [
+            "sed",
+            "-i",
+            r"/^$/N;/^\n$/D",
             "larpmanager/tests/test_db.sql",
         ]
         subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603
