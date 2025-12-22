@@ -763,6 +763,9 @@ def copy_class(target_event_id: int, source_event_id: int, model_class: type) ->
             source_object.event_id = target_event_id
             # noinspection PyProtectedMember
             source_object._state.adding = True  # noqa: SLF001  # Django model state
+            # Regenerate unique fields that need new values for the copy
+            if hasattr(source_object, "uuid"):
+                source_object.uuid = None  # Let UuidMixin.save() regenerate with retry logic
             for field_name, generation_function in {"access_token": my_uuid_short}.items():
                 if not hasattr(source_object, field_name):
                     continue
