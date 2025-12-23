@@ -2381,6 +2381,9 @@ msgstr "Kreditní zůstatek"
 msgid "Customisations"
 msgstr "Přizpůsobení"
 
+msgid "Default fields"
+msgstr "Výchozí pole"
+
 msgid "Disable Tokens"
 msgstr "Zakázat tokeny"
 

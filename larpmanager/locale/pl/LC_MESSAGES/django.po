@@ -2381,6 +2381,9 @@ msgstr "Saldo kredytowe"
 msgid "Customisations"
 msgstr "Personalizacja"
 
+msgid "Default fields"
+msgstr "Pola domyślne"
+
 msgid "Disable Tokens"
 msgstr "Wyłączanie tokenów"
 

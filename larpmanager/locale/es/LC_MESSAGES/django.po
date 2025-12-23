@@ -2381,6 +2381,9 @@ msgstr "Saldo acreedor"
 msgid "Customisations"
 msgstr "Personalizaciones"
 
+msgid "Default fields"
+msgstr "Campos por defecto"
+
 msgid "Disable Tokens"
 msgstr "Desactivar fichas"
 

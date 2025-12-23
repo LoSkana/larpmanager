@@ -2381,6 +2381,9 @@ msgstr "Guthaben"
 msgid "Customisations"
 msgstr "Anpassungen"
 
+msgid "Default fields"
+msgstr "Standard-Felder"
+
 msgid "Disable Tokens"
 msgstr "Token deaktivieren"
 
