@@ -133,8 +133,8 @@ def copy(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/copy/1/manage/roles/")
     row = page.locator('tr[id="12"]')
-    expect(row).to_contain_text("User Test")
-    expect(row).to_contain_text("Appearance (Navigation), Writing (Factions) ")
+    expect(first_row).to_contain_text("User Test")
+    expect(first_row).to_contain_text("Appearance (Navigation), Writing (Factions) ")
     go_to(page, live_server, "/copy/1/manage/config/")
 
     page.get_by_role("link", name="Gallery ").click()
@@ -165,6 +165,7 @@ def campaign(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/campaign/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("1")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("11")
+    first_row = page.locator('.writing_list > tbody > tr').first
+    expect(first_row).to_contain_text("12")
+    expect(first_row).to_contain_text("1")
+    expect(first_row).to_contain_text("11")

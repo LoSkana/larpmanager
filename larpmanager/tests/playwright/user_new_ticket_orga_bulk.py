@@ -148,7 +148,8 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # test bulk set quest
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\31 "]').get_by_role("cell", name="typ").click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("cell", name="typ").click()
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("Q1 q1 t2 Q2 q2 typ")
 
@@ -262,7 +263,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     expect(page.locator("#one")).to_contain_text("item3 box item2 box item1 box")
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="\\33 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator('[id="\\31 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("2")
     page.get_by_role("link", name="Execute").click()
     expect(
@@ -274,7 +276,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator("#operation").select_option("2")
     page.locator('[id="\\32 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator('[id="\\31 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("item3 box2 item2 box tag item1 box2 tag")
 
@@ -287,12 +290,14 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
 
     # check link when bulk active
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="box2").click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("link", name="box2").click()
     expect(page.locator("#banner")).to_contain_text("Warehouse items - Organization")
 
     # check link when bulk not active
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="box2").click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("link", name="box2").click()
     expect(page.locator("#id_name")).to_have_value("box2")
 
 

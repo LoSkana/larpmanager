@@ -61,7 +61,8 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/writing/form/")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("Name")
+    first_row = page.locator('.writing_list > tbody > tr').first
+    expect(first_row).to_contain_text("Name")
     expect(page.locator('[id="\\32 "]')).to_contain_text("Presentation")
     expect(page.locator('[id="\\33 "]')).to_contain_text("Sheet")
 

@@ -131,8 +131,9 @@ def bulk(page: Any) -> None:
     # test bulk
     page.get_by_role("link", name="Bulk").click()
     page.locator("td:nth-child(5)").first.click()
-    page.locator('[id="\\31 "]').get_by_role("cell", name="Box A").click()
-    page.locator('[id="\\31 "]').get_by_role("cell", name="Box A").click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("cell", name="Box A").click()
+    first_row.get_by_role("cell", name="Box A").click()
     page.get_by_role("cell", name="sadsada").click()
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text(
@@ -142,7 +143,8 @@ def bulk(page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="\\32 "]').get_by_role("cell", name="Boc B").click()
     page.locator('[id="\\32 "] > td:nth-child(5)').click()
-    page.locator('[id="\\31 "]').get_by_role("cell", name="Boc B").click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("cell", name="Boc B").click()
     page.get_by_role("cell", name="Electrical").click()
     page.get_by_role("cell", name="sadsada").click()
     page.locator("#operation").select_option("2")
@@ -209,11 +211,13 @@ def area_assigmenents(page: Any) -> None:
         "Item 3sa dsad Boc B sss Item 1 sadsada Boc B Gru sadElectrical ffff Item 2 sdsadas Boc B Gru sad"
     )
     expect(page.locator('[id="\\33 "]')).to_match_aria_snapshot('- cell ""')
-    expect(page.locator('[id="\\31 "]')).to_match_aria_snapshot('- cell ""')
+    first_row = page.locator('.writing_list > tbody > tr').first
+    expect(first_row).to_match_aria_snapshot('- cell ""')
 
     # add for second
     page.get_by_role("link", name="Area").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="Item assignments").click()
+    first_row = page.locator('.writing_list > tbody > tr').first
+    first_row.get_by_role("link", name="Item assignments").click()
     page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").click()
     page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").fill("b")
     page.locator('[id="\\31 "] > .selected').click()

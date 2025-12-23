@@ -265,7 +265,8 @@ def plots_character(live_server: Any, page: Any) -> None:
 
     # check there are all three
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("gaga bibi")
+    first_row = page.locator('.writing_list > tbody > tr').first
+    expect(first_row).to_contain_text("gaga bibi")
 
     page.get_by_role("link", name="").nth(0).click()
 
@@ -284,8 +285,9 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("gaga")
-    expect(page.locator('[id="\\31 "]')).not_to_contain_text("bibi")
+    first_row = page.locator('.writing_list > tbody > tr').first
+    expect(first_row).to_contain_text("gaga")
+    expect(first_row).not_to_contain_text("bibi")
 
     # check second, then remove
     page.get_by_role("link", name="").nth(0).click()
@@ -293,4 +295,5 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Instructions").click()
     page.get_by_role("button", name="Confirm").click()
 
-    expect(page.locator('[id="\\31 "]')).not_to_contain_text("gaga")
+    first_row = page.locator('.writing_list > tbody > tr').first
+    expect(first_row).not_to_contain_text("gaga")
