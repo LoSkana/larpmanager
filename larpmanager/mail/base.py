@@ -268,7 +268,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 "role": instance.name,
                 "event": instance.event,
             }
-            url = get_url(f"{instance.event.slug}/1/manage/", instance.event.association)
+            url = get_url(f"{instance.event.slug}/manage/", instance.event.association)
             body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 

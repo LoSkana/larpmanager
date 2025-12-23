@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.models.access import EventRole, get_event_organizers
+from larpmanager.models.base import auto_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -340,6 +341,9 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
             )
             for question_type, config in default_question_types.items()
         ]
+        # Manually set UUIDs since bulk_create doesn't trigger pre_save signals
+        for question in writing_questions:
+            auto_set_uuid(question)
         WritingQuestion.objects.bulk_create(writing_questions)
 
 

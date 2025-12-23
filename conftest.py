@@ -317,12 +317,18 @@ def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: Any) -> Non
     This fixture runs once per worker to ensure the database schema is correct.
     Uses a global flag to avoid reloading the schema multiple times per worker.
     """
+    logger = logging.getLogger(__name__)
+
     # Get worker ID for xdist parallel execution
     worker_id = getattr(request.config, "workerinput", {}).get("workerid", "master")
 
     with django_db_blocker.unblock():
         # Only check/load schema once per worker
         if worker_id not in _DB_SCHEMA_CHECKED:
+            # Log database name for this worker
+            db_name = settings.DATABASES["default"]["NAME"]
+            logger.info("Using test database: %s", db_name)
+
             if not _database_has_tables():
                 # No tables - load from SQL dump
                 _load_test_db_sql()

@@ -45,6 +45,7 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.form import RegistrationChoice
+from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import (
     RegistrationCharacterRel,
     RegistrationInstallment,
@@ -647,6 +648,11 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         ticket = self.ticket(event=run.event, price=Decimal("300.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket)
 
+        # Ensure membership has no approval date to avoid interference with deadline calculation
+        membership = get_user_membership(member, association.id)
+        membership.date = None
+        membership.save()
+
         # Set registration amounts
         registration.tot_iscr = Decimal("300.00")
         registration.tot_payed = Decimal("0.00")
@@ -693,6 +699,11 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         ticket = self.ticket(event=run.event, price=Decimal("300.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket)
 
+        # Ensure membership has no approval date to avoid interference with deadline calculation
+        membership = get_user_membership(member, association.id)
+        membership.date = None
+        membership.save()
+
         # Create installment that is close (within 30 days)
         RegistrationInstallment.objects.create(
             event=run.event, amount=Decimal("100.00"), days_deadline=10, order=1, number=1
@@ -717,6 +728,11 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         run = self.get_run()
         ticket = self.ticket(event=run.event, price=Decimal("300.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Ensure membership has no approval date to avoid interference with deadline calculation
+        membership = get_user_membership(member, association.id)
+        membership.date = None
+        membership.save()
 
         # Clean up any existing installments from previous tests
         RegistrationInstallment.objects.filter(event=run.event).delete()
@@ -771,6 +787,11 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         run = self.get_run()
         ticket = self.ticket(event=run.event, price=Decimal("300.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Ensure membership has no approval date to avoid interference with deadline calculation
+        membership = get_user_membership(member, association.id)
+        membership.date = None
+        membership.save()
 
         # Create installment close to deadline
         RegistrationInstallment.objects.create(

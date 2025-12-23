@@ -42,7 +42,6 @@ WORKERS="${1:-6}"
 export WORKERS
 
 # Ensure playwright browsers are installed
-source venv/bin/activate 2>/dev/null || true
 python -m playwright install chromium 2>/dev/null || playwright install
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
