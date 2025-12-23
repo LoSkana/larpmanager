@@ -1258,8 +1258,8 @@ def _get_excel_form(
     else:
         form = form_class(context=context, instance=element)
 
-    # Determine field key based on question type
-    field_key = f"q{question_uuid}"
+    # Determine field key based on question type (use UUID to avoid exposing numeric IDs in HTML)
+    field_key = f"q{question.uuid}"
     if question.typ not in BaseQuestionType.get_basic_types():
         field_key = question.typ
 
@@ -1302,9 +1302,9 @@ def _get_question_update(context: dict, element: Any) -> str:
                 </a>
             """
 
-    # Determine question key and slug based on question type
-    question_key = f"q{context['question'].id}"
-    question_slug = str(context["question"].id)
+    # Determine question key and slug based on question type (use UUID to avoid exposing numeric IDs in HTML)
+    question_key = f"q{context['question'].uuid}"
+    question_slug = str(context["question"].uuid)
     if context["question"].typ not in BaseQuestionType.get_basic_types():
         question_key = context["question"].typ
         question_slug = context["question"].typ

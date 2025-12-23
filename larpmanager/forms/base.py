@@ -791,8 +791,8 @@ class BaseRegistrationForm(MyFormRun):
         if question.typ == WritingQuestionType.COMPUTED:
             return None
 
-        # Generate unique field key based on question ID
-        field_key = "q" + str(question.id)
+        # Generate unique field key based on question UUID
+        field_key = "q" + str(question.uuid)
 
         # Set default field states for organizer context
         is_field_active = True
