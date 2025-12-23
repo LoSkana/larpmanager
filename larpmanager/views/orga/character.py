@@ -1225,8 +1225,8 @@ def _get_excel_form(
 
     # Validate writing form type and extract request parameters
     check_writing_form_type(context, element_type)
-    question_uuid = int(request.POST.get("qid"))
-    element_uuid = int(request.POST.get("eid"))
+    question_uuid = str(request.POST.get("qid"))
+    element_uuid = str(request.POST.get("eid"))
 
     # Fetch the writing question with proper filtering
     question = (

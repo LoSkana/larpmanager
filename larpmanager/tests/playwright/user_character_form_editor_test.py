@@ -63,7 +63,7 @@ def prepare(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/writing/form/")
     expect(page.locator('[id="u1"]')).to_contain_text("Name")
     expect(page.locator('[id="u2"]')).to_contain_text("Presentation")
-    expect(page.locator(''[id="u3"]'')).to_contain_text("Sheet")
+    expect(page.locator('[id="u3"]')).to_contain_text("Sheet")
 
 
 def field_single(page: Any, live_server: Any) -> None:
@@ -209,7 +209,7 @@ def character(page: Any, live_server: Any) -> None:
 
     # approve char
     go_to(page, live_server, "/test/manage/characters")
-    page.locator(''[id="u3"]'').get_by_role("link", name="").click()
+    page.locator('[id="u3"]').get_by_role("link", name="").click()
     page.locator("#id_status").select_option("a")
     submit_confirm(page)
 

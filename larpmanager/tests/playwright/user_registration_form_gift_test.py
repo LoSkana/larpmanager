@@ -151,7 +151,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     page.locator('[id="u4"]').get_by_role("link", name="").click()
     submit_confirm(page)
-    page.locator(''[id="u3"]'').get_by_role("link", name="").click()
+    page.locator('[id="u3"]').get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()
 
 

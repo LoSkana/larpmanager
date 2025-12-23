@@ -208,7 +208,7 @@ def area_assigmenents(page: Any) -> None:
     expect(page.locator("#one")).to_contain_text(
         "Item 3sa dsad Boc B sss Item 1 sadsada Boc B Gru sadElectrical ffff Item 2 sdsadas Boc B Gru sad"
     )
-    expect(page.locator(''[id="u3"]'')).to_match_aria_snapshot('- cell ""')
+    expect(page.locator('[id="u3"]')).to_match_aria_snapshot('- cell ""')
     expect(page.locator('[id="u1"]')).to_match_aria_snapshot('- cell ""')
 
     # add for second

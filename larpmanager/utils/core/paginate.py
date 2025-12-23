@@ -380,7 +380,7 @@ def _prepare_data_json(
             edit_url = reverse(view, args=[model_object.id])
         else:
             # For orga views, we need both slug and ID
-            edit_url = reverse(view, args=[context["run"].get_slug(), model_object.id])
+            edit_url = reverse(view, args=[context["run"].get_slug(), model_object.uuid])
 
         # Start each row with edit link in column 0
         row_data = {"0": f'<a href="{edit_url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}

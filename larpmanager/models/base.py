@@ -337,6 +337,7 @@ def debug_set_uuid(instance: Any, *, created: bool) -> None:
 
     debug_uuid = f"u{instance.id}"
     instance.__class__.objects.filter(pk=instance.pk).update(uuid=debug_uuid)
+    instance.uuid = debug_uuid
 
 
 def update_model_search_field(model_instance: Any) -> None:
