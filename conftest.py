@@ -22,6 +22,7 @@
 
 import logging
 import os
+import re
 import subprocess
 from collections.abc import Generator, Mapping
 from pathlib import Path
@@ -31,7 +32,7 @@ import pytest
 from django.conf import settings
 from django.core.cache import cache
 from django.core.management import call_command
-from django.db import connection
+from django.db import connection, transaction
 from django.test.utils import ContextList
 from playwright.sync_api import BrowserContext, BrowserType, Page, Response
 from pytest_django.fixtures import SettingsWrapper
@@ -183,21 +184,18 @@ def _get_dump_schema_version() -> str | None:
             tail = f.read().decode("utf-8", errors="ignore")
 
         # Look for version marker
-        import re
-
         match = re.search(r"-- LARPMANAGER_SCHEMA_VERSION:\s*(\S+)", tail)
         if match:
             return match.group(1)
-    except Exception:
-        pass
+    except (OSError, UnicodeDecodeError) as e:
+        logger = logging.getLogger(__name__)
+        logger.debug("Failed to read schema version from dump: %s", e)
 
     return None
 
 
 def _get_latest_migration() -> str | None:
     """Get the name of the latest migration file."""
-    from pathlib import Path
-
     migrations_dir = Path(__file__).parent / "larpmanager" / "migrations"
     if not migrations_dir.exists():
         return None
@@ -212,8 +210,6 @@ def _get_latest_migration() -> str | None:
 
 def _get_expected_migrations() -> set[str]:
     """Get list of all migration files that should be applied."""
-    from pathlib import Path
-
     migrations_dir = Path(__file__).parent / "larpmanager" / "migrations"
     if not migrations_dir.exists():
         return set()
@@ -230,20 +226,18 @@ def _get_expected_migrations() -> set[str]:
 
 def _get_applied_migrations() -> set[str]:
     """Get list of migrations that have been applied to the database."""
-    from django.db import transaction
-
     try:
-        with transaction.atomic():
-            with connection.cursor() as cursor:
-                cursor.execute("""
-                    SELECT name
-                    FROM django_migrations
-                    WHERE app = 'larpmanager'
-                """)
-                applied = {row[0] for row in cursor.fetchall()}
-        return applied
-    except Exception:
+        with transaction.atomic(), connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT name
+                FROM django_migrations
+                WHERE app = 'larpmanager'
+            """)
+            return {row[0] for row in cursor.fetchall()}
+    except (OSError, RuntimeError) as e:
         # If query fails, return empty set (schema needs reload)
+        logger = logging.getLogger(__name__)
+        logger.debug("Failed to get applied migrations: %s", e)
         return set()
 
 
@@ -279,10 +273,12 @@ def _database_has_correct_schema() -> bool:
 
     if missing_migrations:
         # Log which migrations are missing for debugging
-        import logging
-
         logger = logging.getLogger(__name__)
-        logger.warning(f"Missing {len(missing_migrations)} migrations. First 5: {sorted(missing_migrations)[:5]}")
+        logger.warning(
+            "Missing %d migrations. First 5: %s",
+            len(missing_migrations),
+            sorted(missing_migrations)[:5],
+        )
         return False
 
     return True
