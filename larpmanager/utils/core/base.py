@@ -484,7 +484,7 @@ def get_run(context: Any, event_slug: Any) -> None:
 
     """
     try:
-        run_id = get_cache_run(context["association_id"], event_slug)
+        run_uuid = get_cache_run(context["association_id"], event_slug)
         que = Run.objects.select_related("event")
         fields = [
             "search",
@@ -505,7 +505,7 @@ def get_run(context: Any, event_slug: Any) -> None:
             "event__ter_rgb",
         ]
         que = que.defer(*fields)
-        context["run"] = que.get(pk=run_id)
+        context["run"] = que.get(uuid=run_uuid)
         context["event"] = context["run"].event
     except Exception as err:
         raise UnknowRunError from err
