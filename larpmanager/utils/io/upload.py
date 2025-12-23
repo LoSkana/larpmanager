@@ -342,7 +342,7 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
 
 def _reg_field_load(
-    context: dict[str, Any],
+    context: dict,
     registration: Registration,
     field_name: str,
     field_value: str,
@@ -850,7 +850,7 @@ def _writing_load_field(
 
 
 def _writing_question_load(
-    context: dict[str, Any],
+    context: dict,
     writing_element: Character | Plot | Faction,
     question_field: str,
     question_type: WritingQuestionType,
@@ -1032,12 +1032,14 @@ def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> 
             return "ERR - unknown applicable"
 
         # Create or get writing question instance with applicable field
-        question_instance, was_created = WritingQuestion.objects.get_or_create(
-            event=context["event"],
-            name__iexact=question_name,
-            applicable=field_mappings["applicable"][applicable_value],
-            defaults={"name": question_name},
-        )
+        kwargs = {
+            "event": context["event"],
+            "name__iexact": question_name,
+            "applicable": field_mappings["applicable"][applicable_value],
+            "defaults": {"name": question_name},
+        }
+        qs = WritingQuestion.objects.filter(**kwargs).order_by("id")
+        question_instance = qs.first() if qs.exists() else WritingQuestion.objects.create(**kwargs)
 
     # Process and validate each field in the row data
     for field_name, field_value in row_data.items():
@@ -1174,7 +1176,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
 
 
 def _get_option(
-    context: dict[str, Any], option_name: str, parent_question_id: int, *, is_registration: bool
+    context: dict, option_name: str, parent_question_id: int, *, is_registration: bool
 ) -> tuple[bool, RegistrationOption | WritingOption]:
     """Get or create a question option for registration or writing forms.
 
@@ -1239,7 +1241,7 @@ def get_csv_upload_tmp(csv_upload: Any, run: Run) -> str:
     return tmp_file
 
 
-def cover_load(context: dict[str, Any], z_obj: Any) -> None:
+def cover_load(context: dict, z_obj: Any) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
     Args:
