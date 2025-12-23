@@ -653,12 +653,7 @@ def orga_writing_form_edit(
 
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
-            return redirect(
-                request.resolver_match.view_name,
-                event_slug=context["run"].get_slug(),
-                writing_type=writing_type,
-                num=0,
-            )
+            return redirect(request.resolver_match.view_name, context["run"].get_slug(), writing_type, "0")
 
         # Determine if we need to redirect to option editing
         edit_option = False
@@ -683,7 +678,7 @@ def orga_writing_form_edit(
                 orga_writing_options_new,
                 event_slug=context["run"].get_slug(),
                 writing_type=writing_type,
-                num=context["saved"].id,
+                question_uuid=context["saved"].uuid,
             )
         return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
 
@@ -775,7 +770,7 @@ def orga_writing_options_new(
     # Set question ID in context and delegate to option editor
     get_element(context, question_uuid, "question", WritingQuestion)
     if "question" in context:
-        context["question_id"] = context["question"].id
+        context["question_uuid"] = context["question"].uuid
     return writing_option_edit(context, "0", request, writing_type)
 
 
@@ -836,7 +831,7 @@ def orga_writing_options_order(
         "orga_writing_form_edit",
         event_slug=context["run"].get_slug(),
         writing_type=writing_type,
-        num=context["current"].question_id,
+        question_uuid=context["current"].question.uuid,
     )
 
 

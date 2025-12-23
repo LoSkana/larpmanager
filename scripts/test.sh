@@ -21,11 +21,29 @@ check_branch() {
   fi
 }
 
+cleanup_test_environment() {
+  echo "==> Cleaning up test environment..."
+
+  # Kill any running pytest processes
+  pkill -f "pytest" 2>/dev/null || true
+
+  # Terminate all connections to test database
+  PGPASSWORD="${PGPASSWORD:-larpmanager}" psql -U "${PGUSER:-larpmanager}" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'test_larpmanager' AND pid <> pg_backend_pid();" 2>/dev/null || true
+
+  # Drop and recreate test database
+  PGPASSWORD="${PGPASSWORD:-larpmanager}" psql -U "${PGUSER:-larpmanager}" -c "DROP DATABASE IF EXISTS test_larpmanager;" 2>/dev/null || true
+  PGPASSWORD="${PGPASSWORD:-larpmanager}" psql -U "${PGUSER:-larpmanager}" -c "CREATE DATABASE test_larpmanager;" 2>/dev/null || true
+
+  echo "Test environment cleaned successfully"
+}
+
 # Configuration
 WORKERS="${1:-6}"
 export WORKERS
 
-playwright install
+# Ensure playwright browsers are installed
+source venv/bin/activate 2>/dev/null || true
+python -m playwright install chromium 2>/dev/null || playwright install
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
@@ -38,6 +56,10 @@ echo "========================================"
 echo "LarpManager Test Suite"
 echo "========================================"
 echo "Workers: $WORKERS"
+echo ""
+
+# Clean up test environment before running tests
+cleanup_test_environment
 echo ""
 
 # Prepare databases

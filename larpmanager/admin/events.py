@@ -30,7 +30,8 @@ from larpmanager.models.event import Event, EventConfig, EventText, PreRegistrat
 class ProgressStepAdmin(DefModelAdmin):
     """Admin interface for ProgressStep model."""
 
-    search_fields = ("name",)
+    list_display: ClassVar[tuple] = ("id", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
     autocomplete_fields: ClassVar[list] = ["event"]
 
 
@@ -39,7 +40,7 @@ class EventAdmin(DefModelAdmin):
     """Admin interface for Event model."""
 
     list_display = ("name", "thumb", "slug", "association")
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
     list_filter = (AssociationFilter,)
     autocomplete_fields: ClassVar[list] = ["association", "parent", "features"]
 
@@ -49,7 +50,7 @@ class EventConfigAdmin(DefModelAdmin):
     """Admin interface for EventConfig model."""
 
     list_display = ("event", "name", "value")
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event"]
 
@@ -59,7 +60,7 @@ class RunAdmin(DefModelAdmin):
     """Admin interface for Run model."""
 
     exclude = ("search",)
-    search_fields: ClassVar[tuple] = ("search",)
+    search_fields: ClassVar[tuple] = ("id", "search")
     list_display = ("id", "event", "number", "start", "end")
     autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter, "development")
@@ -70,7 +71,7 @@ class RunConfigAdmin(DefModelAdmin):
     """Admin interface for RunConfig model."""
 
     list_display = ("run", "name", "value")
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
     list_filter = (RunFilter,)
     autocomplete_fields: ClassVar[list] = ["run"]
 

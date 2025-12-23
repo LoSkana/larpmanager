@@ -50,8 +50,8 @@ class WritingQuestionFilter(AutocompleteFilter):
 class CharacterAdmin(DefModelAdmin):
     """Admin interface for Character model."""
 
-    list_display = ("number", "name", "teaser", "event")
-    search_fields: ClassVar[tuple] = ("name", "teaser")
+    list_display = ("id", "number", "name", "teaser", "event", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "name", "teaser", "uuid")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "characters", "progress", "assigned"]
 
@@ -61,7 +61,7 @@ class CharacterConfigAdmin(DefModelAdmin):
     """Admin interface for CharacterConfig model."""
 
     list_display = ("character", "name", "value")
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
     list_filter = (CharacterFilter,)
     autocomplete_fields: ClassVar[list] = ["character"]
 
@@ -70,9 +70,20 @@ class CharacterConfigAdmin(DefModelAdmin):
 class WritingQuestionAdmin(DefModelAdmin):
     """Admin interface for WritingQuestion model."""
 
-    list_display = ("event", "typ", "name", "description_red", "order", "status", "visibility", "applicable")
+    list_display = (
+        "id",
+        "event",
+        "typ",
+        "name",
+        "description_red",
+        "order",
+        "status",
+        "visibility",
+        "applicable",
+        "uuid",
+    )
     exclude: ClassVar[tuple] = ("search",)
-    search_fields = ("search", "name")
+    search_fields: ClassVar[tuple] = ("id", "search", "name", "uuid")
     autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter, "applicable")
 
@@ -86,9 +97,9 @@ class WritingQuestionAdmin(DefModelAdmin):
 class WritingOptionAdmin(DefModelAdmin):
     """Admin interface for WritingOption model."""
 
-    list_display = ("question", "name", "event", "details_red", "max_available", "order")
+    list_display = ("id", "question", "name", "event", "details_red", "max_available", "order", "uuid")
     exclude: ClassVar[tuple] = ("search",)
-    search_fields = ("search", "name")
+    search_fields: ClassVar[tuple] = ("id", "search", "name", "uuid")
     autocomplete_fields: ClassVar[list] = ["question", "event"]
     list_filter = (WritingQuestionFilter, EventFilter)
 
@@ -148,28 +159,29 @@ class RelationshipAdmin(DefModelAdmin):
 class AbilityTypePxAdmin(DefModelAdmin):
     """Admin interface for AbilityTypePx model."""
 
-    list_display: ClassVar[tuple] = ("event", "name")
+    list_display: ClassVar[tuple] = ("id", "event", "name", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
 @admin.register(AbilityPx)
 class AbilityPxAdmin(DefModelAdmin):
     """Admin interface for AbilityPx model."""
 
-    list_display: ClassVar[tuple] = ("name", "typ", "cost", "event")
+    list_display: ClassVar[tuple] = ("id", "name", "typ", "cost", "event", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "characters", "typ", "prerequisites", "requirements"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
 @admin.register(DeliveryPx)
 class DeliveryPxAdmin(DefModelAdmin):
     """Admin interface for DeliveryPx model."""
 
-    list_display: ClassVar[tuple] = ("event", "name", "amount")
+    list_display: ClassVar[tuple] = ("id", "event", "name", "amount", "uuid")
     list_filter = (EventFilter,)
+    search_fields: ClassVar[list] = ["id", "uuid"]
     autocomplete_fields: ClassVar[list] = ["characters"]
 
 

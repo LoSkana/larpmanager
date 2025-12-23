@@ -77,7 +77,7 @@ class AlbumAdmin(DefModelAdmin):
 
     list_display: ClassVar[tuple] = ("name", "parent", "run", "show_thumb")
     autocomplete_fields: ClassVar[list] = ["parent", "run", "association"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(AlbumImage)
@@ -107,7 +107,7 @@ class WorkshopQuestionInline(admin.TabularInline):
 class WorkshopModuleAdmin(DefModelAdmin):
     """Admin interface for WorkshopModule model."""
 
-    search_fields: ClassVar[tuple] = ("search",)
+    search_fields: ClassVar[tuple] = ("id", "search")
     list_display = ("name", "event", "number", "is_generic")
     inlines: ClassVar[list] = [
         WorkshopQuestionInline,
@@ -133,7 +133,7 @@ class WorkshopOptionInline(admin.TabularInline):
 class WorkshopQuestionAdmin(DefModelAdmin):
     """Admin interface for WorkshopQuestion model."""
 
-    search_fields = ("search",)
+    search_fields: ClassVar[tuple] = ("id", "search")
     list_display = ("name", "number", "module")
     autocomplete_fields: ClassVar[tuple] = ("module", "event")
     list_filter = (WorkshopModuleFilter,)
@@ -179,7 +179,7 @@ class WarehouseContainerAdmin(DefModelAdmin):
 
     list_display: ClassVar[tuple] = ("name", "position")
     autocomplete_fields: ClassVar[list] = ["association"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(WarehouseTag)
@@ -187,7 +187,7 @@ class WarehouseTagAdmin(DefModelAdmin):
     """Admin interface for WarehouseTag model."""
 
     list_display = ("name", "description")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(WarehouseItem)
@@ -196,7 +196,7 @@ class WarehouseItemAdmin(DefModelAdmin):
 
     list_display: ClassVar[tuple] = ("name", "quantity", "container", "description")
     autocomplete_fields: ClassVar[list] = ["association", "container", "tags"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(WarehouseArea)
@@ -204,7 +204,7 @@ class WarehouseAreaAdmin(DefModelAdmin):
     """Admin interface for WarehouseArea model."""
 
     list_display = ("name", "position", "description")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(WarehouseItemAssignment)
@@ -257,7 +257,7 @@ class EmailAdmin(DefModelAdmin):
     list_display: ClassVar[tuple] = ("id", "association", "run", "recipient", "sent", "subj", "body_red")
     list_filter: ClassVar[tuple] = (AssociationFilter, RunFilter)
     autocomplete_fields: ClassVar[list] = ["association", "run"]
-    search_fields: ClassVar[list] = ["subj", "body", "recipient"]
+    search_fields: ClassVar[list] = ["id", "subj", "body", "recipient"]
 
     @staticmethod
     def body_red(instance: Email) -> str:
@@ -293,7 +293,7 @@ class OneTimeContentAdmin(DefModelAdmin):
         "active",
     )
     list_filter = ("event", "active")
-    search_fields: ClassVar[tuple] = ("name", "description", "event__name")
+    search_fields: ClassVar[tuple] = ("id", "name", "description", "event__name")
     readonly_fields: ClassVar[tuple] = ("content_type", "file_size")
     inlines: ClassVar[list] = [OneTimeAccessTokenInline]
     autocomplete_fields: ClassVar[list] = ["event"]
@@ -360,7 +360,7 @@ class OneTimeAccessTokenAdmin(DefModelAdmin):
 
     list_display = ("token_short", "content", "note", "used", "used_at", "used_by", "ip_address")
     list_filter = ("used", "used_at", "content__event")
-    search_fields: ClassVar[tuple] = ("token", "note", "content__name", "used_by__name", "ip_address")
+    search_fields: ClassVar[tuple] = ("id", "token", "note", "content__name", "used_by__name", "ip_address")
     readonly_fields = ("token", "used", "used_at", "used_by", "ip_address", "user_agent")
     autocomplete_fields: ClassVar[list] = ["content", "used_by"]
 

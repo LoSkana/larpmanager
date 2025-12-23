@@ -67,8 +67,8 @@ class RegistrationAdmin(DefModelAdmin):
     """Admin interface for Registration model."""
 
     exclude = ("search",)
-    list_display: ClassVar[tuple] = ("id", "run", "member", "ticket", "quotas", "cancellation_date")
-    search_fields = ("search",)
+    list_display: ClassVar[tuple] = ("id", "run", "member", "ticket", "quotas", "cancellation_date", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "search", "uuid")
     autocomplete_fields: ClassVar[list] = ["run", "member", "ticket"]
     list_filter = (RunFilter, MemberFilter, "cancellation_date")
 
@@ -78,7 +78,8 @@ class RegistrationTicketAdmin(DefModelAdmin):
     """Admin interface for RegistrationTicket model."""
 
     exclude: ClassVar[tuple] = ("name",)
-    search_fields = ("search",)
+    list_display: ClassVar[tuple] = ("id", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "search", "uuid")
     autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter,)
 
@@ -88,7 +89,8 @@ class RegistrationSectionAdmin(DefModelAdmin):
     """Admin interface for RegistrationSection model."""
 
     exclude: ClassVar[tuple] = ("search",)
-    search_fields = ("search",)
+    list_display: ClassVar[tuple] = ("id", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "search", "uuid")
     autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter,)
     inlines: ClassVar[list] = [
@@ -101,8 +103,8 @@ class RegistrationQuestionAdmin(DefModelAdmin):
     """Admin interface for RegistrationQuestion model."""
 
     exclude = ("search",)
-    search_fields: ClassVar[tuple] = ("search",)
-    list_display = ("typ", "event", "name", "status", "description")
+    search_fields: ClassVar[tuple] = ("id", "search", "uuid")
+    list_display = ("id", "typ", "event", "name", "status", "description", "uuid")
     autocomplete_fields: ClassVar[list] = ["event", "section", "factions", "tickets", "allowed"]
     list_filter: ClassVar[tuple] = (EventFilter,)
 
@@ -116,7 +118,8 @@ class RegistrationOptionAdmin(DefModelAdmin):
     """Admin interface for RegistrationOption model."""
 
     exclude: ClassVar[tuple] = ("search",)
-    search_fields = ("search",)
+    list_display: ClassVar[tuple] = ("id", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "search", "uuid")
     autocomplete_fields: ClassVar[list] = ["question", "event"]
     list_filter = (RegistrationQuestionFilter,)
 
@@ -147,7 +150,7 @@ class RegistrationAnswerAdmin(DefModelAdmin):
 class RegistrationCharacterRelAdmin(DefModelAdmin):
     """Admin interface for RegistrationCharacterRel model."""
 
-    list_display: ClassVar[tuple] = ("character", "reg")
-    search_fields: ClassVar[list] = ["character", "reg"]
+    list_display: ClassVar[tuple] = ("id", "character", "reg")
+    search_fields: ClassVar[list] = ["id", "character", "reg"]
     autocomplete_fields: ClassVar[list] = ["character", "reg"]
     list_filter = (CharacterFilter, RegistrationFilter)

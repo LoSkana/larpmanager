@@ -195,16 +195,12 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_
     and redirect to appropriate pages based on the question type and user actions.
 
     Args:
-        request : HttpRequest
-            The HTTP request object containing form data and user information
-        event_slug : str
-            Event slug identifier for the specific event
-        question_uuid : str
-            Question UUID to edit (0 for new questions)
+        request: The HTTP request object containing form data and user information
+        event_slug: Event slug identifier for the specific event
+        question_uuid: Question UUID to edit (0 for new questions)
 
     Returns:
-        HttpResponse
-            Either a rendered form edit page or a redirect response after successful save
+        Either a rendered form edit page or a redirect response after successful save
 
     Notes:
         - Handles both creation (num=0) and editing of existing questions
@@ -247,7 +243,7 @@ def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_
             return redirect(
                 orga_registration_options_new,
                 event_slug=context["run"].get_slug(),
-                num=context["saved"].id,
+                question_uuid=context["saved"].uuid,
             )
         return redirect(perm, event_slug=context["run"].get_slug())
 
@@ -306,7 +302,8 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str, questio
     """Create new registration option for specified question."""
     context = check_event_context(request, event_slug, "orga_registration_form")
     get_element(context, question_uuid, "question", RegistrationQuestion)
-    context["question_id"] = context["question"].id
+    if "question" in context:
+        context["question_uuid"] = context["question"].uuid
     return registration_option_edit(request, context, "0")
 
 
@@ -362,7 +359,7 @@ def orga_registration_options_order(
     return redirect(
         "orga_registration_form_edit",
         event_slug=context["run"].get_slug(),
-        num=context["current"].question_id,
+        question_uuid=context["current"].question.uuid,
     )
 
 

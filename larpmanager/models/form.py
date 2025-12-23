@@ -479,7 +479,7 @@ class WritingAnswer(BaseModel):
         ]
 
 
-class RegistrationQuestion(BaseModel):
+class RegistrationQuestion(UuidMixin, BaseModel):
     """Represents RegistrationQuestion model."""
 
     typ = models.CharField(
@@ -674,7 +674,7 @@ class RegistrationQuestion(BaseModel):
         ]
 
 
-class RegistrationOption(BaseModel):
+class RegistrationOption(UuidMixin, BaseModel):
     """Represents RegistrationOption model."""
 
     search = models.CharField(max_length=1000, editable=False)

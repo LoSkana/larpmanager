@@ -964,8 +964,8 @@ def orga_registration_discount_add(
     context["registration"].save()
     return redirect(
         "orga_registration_discounts",
-        s=context["run"].get_slug(),
-        num=context["registration"].id,
+        event_slug=context["run"].get_slug(),
+        registration_uuid=context["registration"].uuid,
     )
 
 
@@ -988,8 +988,8 @@ def orga_registration_discount_del(
     # Redirect to registration discounts page
     return redirect(
         "orga_registration_discounts",
-        s=context["run"].get_slug(),
-        num=context["registration"].id,
+        event_slug=context["run"].get_slug(),
+        registration_uuid=context["registration"].uuid,
     )
 
 

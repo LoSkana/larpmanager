@@ -46,7 +46,7 @@ class QuestAdmin(DefModelAdmin):
     ]
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["typ", "event", "progress", "assigned"]
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
 
 
 @admin.register(QuestType)
@@ -56,7 +56,7 @@ class QuestTypeAdmin(DefModelAdmin):
     list_display: ClassVar[tuple] = ("name", "event")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
 
 
 @admin.register(Casting)
