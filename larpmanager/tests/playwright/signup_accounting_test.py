@@ -85,8 +85,8 @@ def discount(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     # Check for registration data with discount applied
-    expect(page.locator("#regs_1_Participant")).to_contain_text("100")
-    expect(page.locator("#regs_1_Participant")).to_contain_text("52")
+    expect(page.locator("#regs_u1_Participant")).to_contain_text("100")
+    expect(page.locator("#regs_u1_Participant")).to_contain_text("52")
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
     expect(page.locator("#one")).to_contain_text("Total payments: 100")
@@ -97,8 +97,8 @@ def discount(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # use discount
-    go_to(page, live_server, "/test/1/manage/features/discount/on")
-    go_to(page, live_server, "/test/1/manage/discounts/")
+    go_to(page, live_server, "/test/manage/features/discount/on")
+    go_to(page, live_server, "/test/manage/discounts/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("discount")
@@ -141,12 +141,12 @@ def pay(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     # Check for registration accounting data in the table
-    expect(page.locator("#regs_1_Participant")).to_contain_text("52")
-    expect(page.locator("#regs_1_Participant")).to_contain_text("48")
-    expect(page.locator("#regs_1_Participant")).to_contain_text("100")
+    expect(page.locator("#regs_u1_Participant")).to_contain_text("52")
+    expect(page.locator("#regs_u1_Participant")).to_contain_text("48")
+    expect(page.locator("#regs_u1_Participant")).to_contain_text("100")
 
     # pay
-    go_to(page, live_server, "/accounting/registration/1/")
+    go_to(page, live_server, "/accounting/registration/u1/")
     expect(page.locator("#one")).to_contain_text("100")
     expect(page.locator("#one")).to_contain_text("48")
     expect(page.locator("#one")).to_contain_text("52")

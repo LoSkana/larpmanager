@@ -123,7 +123,7 @@ def signup(page: Any, live_server: Any) -> None:
 
 def characters(page: Any, live_server: Any) -> None:
     # Activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")

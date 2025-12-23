@@ -32,13 +32,13 @@ def test_user_pdf(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # activate relationships
-    go_to(page, live_server, "/test/1/manage/features/relationships/on")
+    go_to(page, live_server, "/test/manage/features/relationships/on")
 
     # activate pdf
-    go_to(page, live_server, "/test/1/manage/features/print_pdf/on")
+    go_to(page, live_server, "/test/manage/features/print_pdf/on")
 
     # signup
     go_to(page, live_server, "/test/register")

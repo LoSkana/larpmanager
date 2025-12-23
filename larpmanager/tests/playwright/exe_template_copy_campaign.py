@@ -91,11 +91,11 @@ def template(live_server: Any, page: Any) -> None:
 
 def setup(live_server: Any, page: Any) -> None:
     # activate factions
-    go_to(page, live_server, "/test/1/manage/features/faction/on")
+    go_to(page, live_server, "/test/manage/features/faction/on")
     # activate xp
-    go_to(page, live_server, "/test/1/manage/features/px/on")
+    go_to(page, live_server, "/test/manage/features/px/on")
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name="Gallery ").click()

@@ -234,7 +234,7 @@ def plots(live_server: Any, page: Any) -> None:
 
 
 def plots_character(live_server: Any, page: Any) -> None:
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     # create other plots
     page.get_by_role("link", name="Plots", exact=True).click()
     page.get_by_role("link", name="New").click()

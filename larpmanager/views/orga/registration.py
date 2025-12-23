@@ -678,17 +678,17 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
         for el in RegistrationChoice.objects.filter(question=q, reg__run=context["run"]):
             if el.reg_id not in res:
                 res[el.reg_id] = []
-            res[el.reg_id].append(cho[el.option_id])
+            res[el.reg.uuid].append(cho[el.option_id])
 
     elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
         que = RegistrationAnswer.objects.filter(question=q, reg__run=context["run"])
         que = que.annotate(short_text=Substr("text", 1, max_length))
-        que = que.values("reg_id", "short_text")
+        que = que.values("reg_id", "short_text", "reg__uuid")
         for el in que:
             answer = el["short_text"]
             if len(answer) == max_length:
                 popup.append(el["reg_id"])
-            res[el["reg_id"]] = answer
+            res[el["reg__uuid"]] = answer
 
     return JsonResponse({"res": res, "popup": popup, "num": q.id})
 

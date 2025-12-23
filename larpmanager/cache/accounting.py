@@ -356,7 +356,8 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
         )
 
         # Format monetary values as strings without trailing zeros
-        accounting_cache[registration.id] = {key: f"{value:g}" for key, value in accounting_data.items()}
+        # Use string UUID as key to ensure consistent JSON serialization
+        accounting_cache[str(registration.uuid)] = {key: f"{value:g}" for key, value in accounting_data.items()}
 
     return accounting_cache
 

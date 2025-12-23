@@ -34,7 +34,7 @@ def test_orga_mirror(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # show chars
     go_to(page, live_server, "/test/manage/config")
@@ -51,7 +51,7 @@ def test_orga_mirror(pw_page: Any) -> None:
     expect(page.locator("#one")).to_contain_text("Test Character")
 
     # activate casting
-    go_to(page, live_server, "/test/1/manage/features/casting/on")
+    go_to(page, live_server, "/test/manage/features/casting/on")
 
     # activate mirror
     go_to(page, live_server, "/test/manage/config")

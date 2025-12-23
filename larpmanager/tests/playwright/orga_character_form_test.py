@@ -35,10 +35,10 @@ def test_orga_character_form(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # activate player editor
-    go_to(page, live_server, "/test/1/manage/features/user_character/on")
+    go_to(page, live_server, "/test/manage/features/user_character/on")
 
     # set config
     go_to(page, live_server, "/test/manage/config")

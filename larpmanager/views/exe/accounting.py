@@ -407,7 +407,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Render statement as downloadable link
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approve button only for non-approved expenses
-                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.id])}'>{approve}</a>"
+                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}'>{approve}</a>"
                 if not el.is_approved
                 else "",
                 # Display human-readable expense type
@@ -578,7 +578,7 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
                 "causal": lambda el: el.causal,
                 "details": lambda el: el.get_details(),
                 # Show confirm action only for submitted invoices
-                "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.id])}'>{confirm}</a>"
+                "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.uuid])}'>{confirm}</a>"
                 if el.status == PaymentStatus.SUBMITTED
                 else "",
             },
@@ -701,7 +701,7 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
                 # Display human-readable status text
                 "status": lambda el: el.get_status_display(),
                 # Show action button only for unpaid refunds
-                "action": lambda el: f"<a href='{reverse('exe_refunds_confirm', args=[el.id])}'>{done}</a>"
+                "action": lambda el: f"<a href='{reverse('exe_refunds_confirm', args=[el.uuid])}'>{done}</a>"
                 if el.status != RefundStatus.PAYED
                 else "",
             },

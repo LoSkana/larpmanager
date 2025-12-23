@@ -45,10 +45,10 @@ def test_user_character_form_editor(pw_page: Any) -> None:
 
 def prepare(page: Any, live_server: Any) -> None:
     # Activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # Activate player editor
-    go_to(page, live_server, "/test/1/manage/features/user_character/on")
+    go_to(page, live_server, "/test/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
     page.get_by_role("link", name="Player editor ").click()

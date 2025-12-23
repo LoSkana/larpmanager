@@ -74,7 +74,7 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Activate gift
-    go_to(page, live_server, "/test/1/manage/features/gift/on")
+    go_to(page, live_server, "/test/manage/features/gift/on")
 
     go_to(page, live_server, "/test/manage/form/")
 
