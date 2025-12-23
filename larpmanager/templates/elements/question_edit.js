@@ -62,25 +62,19 @@
                 toggleOptions();
             });
 
-            {% if num %}
-                $('.new').on('click', function() {
-                    window.location.href = newUrl;
-                });
-            {% else %}
-                $('.new').on('click', function() {
-                    var $form = $('#main_form');
+            $('.new').on('click', function() {
+                var $form = $('#main_form');
 
-                    var $hiddenInput = $('<input>')
-                        .attr('type', 'hidden')
-                        .attr('name', 'new_option')
-                        .attr('value', 1);
+                var $hiddenInput = $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'new_option')
+                    .attr('value', 1);
 
-                    $form.append($hiddenInput);
+                $form.append($hiddenInput);
 
-                    console.log($form.action);
+                console.log($form.action);
 
-                    $form.submit();
-                });
-            {% endif %}
+                $form.submit();
+            });
         });
     });

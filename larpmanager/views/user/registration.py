@@ -437,7 +437,7 @@ def registration_redirect(
     if "payment" in context["features"] and registration.alert:
         message = _("To confirm your registration, please pay the amount indicated") + "."
         messages.success(request, message)
-        return redirect("acc_reg", uuid=registration.uuid)
+        return redirect("acc_reg", registration_uuid=registration.uuid)
 
     # All requirements satisfied - show success message and redirect to event gallery
     context = {"event": run}

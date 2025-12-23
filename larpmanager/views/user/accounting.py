@@ -353,8 +353,8 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
 
     # Redirect to payment processing with or without specific method
     if method:
-        return redirect("acc_reg", uuid=reg.uuid, method=method)
-    return redirect("acc_reg", uuid=reg.uuid)
+        return redirect("acc_reg", registration_uuid=reg.uuid, method=method)
+    return redirect("acc_reg", registration_uuid=reg.uuid)
 
 
 @login_required

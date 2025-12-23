@@ -89,10 +89,5 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
-    var newUrl = '{% url 'orga_writing_options_new' run.get_slug typ num %}';
-
-    {% include "elements/question_edit.js" %}
-
-    </script>
+    <script>{% include "elements/question_edit.js" %}</script>
 {% endblock js %}

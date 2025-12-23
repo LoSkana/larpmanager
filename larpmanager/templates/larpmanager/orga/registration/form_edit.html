@@ -71,10 +71,5 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
-    var newUrl = '{% url 'orga_registration_options_new' run.get_slug num %}';
-
-    {% include "elements/question_edit.js" %}
-
-    </script>
+    <script>{% include "elements/question_edit.js" %}</script>
 {% endblock js %}
