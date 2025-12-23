@@ -17,7 +17,6 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 import re
 from typing import Any
 
@@ -140,17 +139,21 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="NPC Transfer payment").get_by_role("button").click()
 
     # check row 1
-    assert page.get_by_role("cell", name="user@test.it").nth(22).text_content() == "user@test.it"
-    assert page.get_by_role("cell", name="user@test.it").nth(23).text_content() == "Test Character's Personal Storage"
-    assert page.get_by_role("cell", name="user@test.it").nth(24).text_content() == "NPC"
-    assert page.get_by_role("cell", name="user@test.it").nth(25).text_content() == "Credits"
-    assert page.get_by_role("cell", name="user@test.it").nth(26).text_content() == "2"
-    assert page.get_by_role("cell", name="user@test.it").nth(25).text_content() == "payment"
+    row1 = page.locator('tr:has-text("user@test.it")').first
+    cells1 = row1.evaluate("(row) => Array.from(row.querySelectorAll('td')).map(td => td.textContent)")
+    assert cells1[1] == "user@test.it"
+    assert cells1[2] == "Test Character's Personal Storage"
+    assert cells1[3] == "NPC"
+    assert cells1[4] == "Credits"
+    assert cells1[5] == "2"
+    assert cells1[6] == "payment"
 
-    #check row 2
-    assert page.get_by_role("cell", name="user@test.it").nth(29).text_content() == "orga@test.it"
-    assert page.get_by_role("cell", name="user@test.it").nth(30).text_content() == "NPC"
-    assert page.get_by_role("cell", name="user@test.it").nth(31).text_content() == "Test Character's Personal Storage"
-    assert page.get_by_role("cell", name="user@test.it").nth(32).text_content() == "Credits"
-    assert page.get_by_role("cell", name="user@test.it").nth(33).text_content() == "3"
-    assert page.get_by_role("cell", name="user@test.it").nth(34).text_content() == "test"
+    # check row 2
+    row2 = page.locator('tr:has-text("orga@test.it")').first
+    cells2 = row2.evaluate("(row) => Array.from(row.querySelectorAll('td')).map(td => td.textContent)")
+    assert cells2[1] == "orga@test.it"
+    assert cells2[2] == "NPC"
+    assert cells2[3] == "Test Character's Personal Storage"
+    assert cells2[4] == "Credits"
+    assert cells2[5] == "3"
+    assert cells2[6] == "test"
