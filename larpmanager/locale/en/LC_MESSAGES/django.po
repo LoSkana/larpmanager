@@ -1596,6 +1596,9 @@ msgid ""
 "fee"
 msgstr ""
 
+msgid "Default fields"
+msgstr ""
+
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr ""

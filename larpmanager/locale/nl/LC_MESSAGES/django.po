@@ -2381,6 +2381,9 @@ msgstr "Kredietsaldo"
 msgid "Customisations"
 msgstr "Aanpassingen"
 
+msgid "Default fields"
+msgstr "Standaardvelden"
+
 msgid "Disable Tokens"
 msgstr "Tokens uitschakelen"
 

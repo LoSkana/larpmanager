@@ -1174,7 +1174,7 @@ msgid "Refunded"
 msgstr "Remboursé"
 
 msgid "Register"
-msgstr "Registre"
+msgstr "Formulaire d'inscription"
 
 msgid "Registry"
 msgstr "Registre"
@@ -2381,6 +2381,9 @@ msgstr "Solde créditeur"
 msgid "Customisations"
 msgstr "Personnalisations"
 
+msgid "Default fields"
+msgstr "Champs par défaut"
+
 msgid "Disable Tokens"
 msgstr "Désactiver les jetons"
 
@@ -2937,7 +2940,7 @@ msgid "Cancellation date"
 msgstr "Date de désinscription"
 
 msgid "Casting algorithm"
-msgstr "Algorithme de moulage"
+msgstr "Algorithme de casting"
 
 msgid "Character profile"
 msgstr "Profil du personnage"

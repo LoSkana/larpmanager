@@ -2381,6 +2381,9 @@ msgstr "Saldo crediti"
 msgid "Customisations"
 msgstr "Personalizzazioni"
 
+msgid "Default fields"
+msgstr "Campi predefiniti"
+
 msgid "Disable Tokens"
 msgstr "Disabilita gettoni"
 
