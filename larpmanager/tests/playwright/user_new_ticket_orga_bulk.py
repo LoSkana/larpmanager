@@ -261,7 +261,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Items").click()
     expect(page.locator("#one")).to_contain_text("item3 box item2 box item1 box")
     page.get_by_role("link", name="Bulk").click()
-    page.locator(''[id="u3"]'').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("2")
     page.get_by_role("link", name="Execute").click()
@@ -312,7 +312,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # sign up with the new ticket
-    go_to(page, live_server, "test/1")
+    go_to(page, live_server, "test")
     page.get_by_role("link", name="Register").click()
     expect(page.get_by_label("Ticket")).to_match_aria_snapshot(
         '- combobox "Ticket":\n  - option "-------" [disabled] [selected]\n  - option "Standard"\n  - option "new"'

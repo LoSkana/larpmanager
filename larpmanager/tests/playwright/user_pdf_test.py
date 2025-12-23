@@ -54,7 +54,7 @@ def test_user_pdf(pw_page: Any) -> None:
     submit_confirm(page)
 
     # Go to character, test download pdf
-    go_to(page, live_server, "/test/character/1")
+    go_to(page, live_server, "/test/character/u1")
 
     check_download(page, "Portraits (PDF)")
 

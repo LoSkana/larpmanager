@@ -171,7 +171,7 @@ def orga_characters_edit(request: HttpRequest, event_slug: str, character_uuid: 
 
     # Load specific character data when editing existing character (num != 0)
     # Skip character loading for new character creation
-    if character_uuid != 0:
+    if character_uuid != "0":
         get_character_optimized(context, character_uuid)
 
     # Process character relationships for display and validation

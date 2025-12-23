@@ -43,7 +43,7 @@ def test_user_character_option_reg_ticket(pw_page: Any) -> None:
 
     logout(page)
 
-    go_to(page, live_server, "/test/character/1")
+    go_to(page, live_server, "/test/character/u1")
 
 
 def prepare(page: Any) -> None:

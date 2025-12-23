@@ -408,7 +408,7 @@ def backend_edit(  # noqa: C901 - Complex editing logic with form validation and
         context["form"] = form_type(instance=context["el"], context=context)
 
     # Set display name for existing objects
-    if element_uuid != 0:
+    if element_uuid != "0":
         context["name"] = str(context["el"])
 
     # Handle "add another" functionality for continuous adding

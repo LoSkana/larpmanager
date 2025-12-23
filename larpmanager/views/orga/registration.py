@@ -790,13 +790,13 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     context["continue_add"] = "continue" in request.POST
 
     # Load existing registration if editing (num != 0)
-    if registration_uuid != 0:
+    if registration_uuid != "0":
         get_registration(context, registration_uuid)
 
     # Handle form submission (POST request)
     if request.method == "POST":
         # Initialize form with existing instance for editing or new instance for creation
-        if registration_uuid != 0:
+        if registration_uuid != "0":
             form = OrgaRegistrationForm(
                 request.POST,
                 instance=context["registration"],
@@ -830,7 +830,7 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
             return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
     # Handle GET request: initialize form for display
-    elif registration_uuid != 0:
+    elif registration_uuid != "0":
         # Load form with existing registration data for editing
         form = OrgaRegistrationForm(instance=context["registration"], context=context)
     else:
