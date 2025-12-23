@@ -42,7 +42,7 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.core.validators import FileTypeValidator
 
 
-class HelpQuestion(BaseModel):
+class HelpQuestion(UuidMixin, BaseModel):
     """Model for storing user help questions and support requests."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="questions")

@@ -27,7 +27,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.views.user.casting import casting_characters, casting_quest_traits
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 class TestCastingValidationFunctions(BaseTestCase):
     """Test casting validation functions prevent hidden character selection"""
 
@@ -44,10 +44,10 @@ class TestCastingValidationFunctions(BaseTestCase):
         self.registration.ticket = self.ticket
         self.registration.save()
 
-        # Create characters
-        self.visible_char1 = self.character(event=self.event, name="Visible Character 1", hide=False, number=1)
-        self.visible_char2 = self.character(event=self.event, name="Visible Character 2", hide=False, number=2)
-        self.hidden_char = self.character(event=self.event, name="Hidden Character", hide=True, number=3)
+        # Create characters (numbers auto-generated to avoid collisions in parallel tests)
+        self.visible_char1 = self.character(event=self.event, name="Visible Character 1", hide=False)
+        self.visible_char2 = self.character(event=self.event, name="Visible Character 2", hide=False)
+        self.hidden_char = self.character(event=self.event, name="Hidden Character", hide=True)
 
     def test_casting_characters_excludes_hidden(self):
         """Test that casting_characters function excludes hidden characters from valid_element_ids"""
@@ -74,10 +74,15 @@ class TestCastingValidationFunctions(BaseTestCase):
 
     def test_casting_characters_sorted_by_number(self):
         """Test that characters are sorted by number in casting_characters"""
-        # Create characters out of order using numbers that don't conflict with setUp
-        char_10 = self.character(event=self.event, name="Character 10", hide=False, number=10)
-        char_7 = self.character(event=self.event, name="Character 7", hide=False, number=7)
-        char_4 = self.character(event=self.event, name="Character 4", hide=False, number=4)
+        # Create characters with auto-generated numbers (will be sequential after setUp characters)
+        char_first = self.character(event=self.event, name="Character First", hide=False)
+        char_second = self.character(event=self.event, name="Character Second", hide=False)
+        char_third = self.character(event=self.event, name="Character Third", hide=False)
+
+        # Store numbers for later verification
+        char_10 = char_third
+        char_7 = char_second
+        char_4 = char_first
 
         context = {
             "event": self.event,
@@ -121,11 +126,10 @@ class TestCastingValidationFunctions(BaseTestCase):
 
     def test_casting_characters_empty_when_all_hidden(self):
         """Test that valid_element_ids is empty when all characters are hidden"""
-        # Hide all characters
-        self.visible_char1.hide = True
-        self.visible_char1.save()
-        self.visible_char2.hide = True
-        self.visible_char2.save()
+        # Hide all characters for this event (including any from previous tests)
+        from larpmanager.models.writing import Character
+
+        Character.objects.filter(event=self.event).update(hide=True)
 
         context = {
             "event": self.event,

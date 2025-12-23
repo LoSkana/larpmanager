@@ -129,7 +129,7 @@ def user_help(request: HttpRequest, event_slug: str | None = None) -> HttpRespon
 
 
 @login_required
-def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRedirect:
+def help_attachment(request: HttpRequest, attachment_uuid: str) -> HttpResponseRedirect:
     """Handle attachment download for help questions.
 
     Validates user permissions and redirects to the attachment URL if authorized.
@@ -137,7 +137,7 @@ def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRed
 
     Args:
         request: The HTTP request object containing user information
-        attachment_id: Primary key of the HelpQuestion to get attachment from
+        attachment_uuid: UUID of the HelpQuestion to get attachment from
 
     Returns:
         HttpResponseRedirect: Redirect to the attachment URL
@@ -149,9 +149,9 @@ def help_attachment(request: HttpRequest, attachment_id: int) -> HttpResponseRed
     # Get default user context with permissions
     context = get_context(request)
 
-    # Attempt to retrieve the help question by primary key
+    # Attempt to retrieve the help question by uuid
     try:
-        hp = HelpQuestion.objects.get(pk=attachment_id)
+        hp = HelpQuestion.objects.get(uuid=attachment_uuid)
     except ObjectDoesNotExist as err:
         msg = "HelpQuestion does not exist"
         raise Http404(msg) from err

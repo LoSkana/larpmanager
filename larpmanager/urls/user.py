@@ -74,7 +74,7 @@ urlpatterns = [
         name="help",
     ),
     path(
-        "help/attachment/<int:attachment_id>/",
+        "help/attachment/<slug:attachment_uuid>/",
         views_ums.help_attachment,
         name="help_attachment",
     ),

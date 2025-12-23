@@ -150,7 +150,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     )
 
     # Define fields to extract from membership query
-    values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status")
+    values = ("member__id", "member__surname", "member__name", "member__email", "card_number", "status", "member__uuid")
     context["list"] = []
     context["sum"] = {}
 

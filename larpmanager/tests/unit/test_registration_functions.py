@@ -20,6 +20,7 @@
 
 """Tests for registration accounting functions"""
 
+import pytest
 from datetime import timedelta
 from decimal import Decimal
 
@@ -634,6 +635,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         self.assertEqual(RegistrationCharacterRel.objects.filter(reg=registration).count(), 0)
 
 
+@pytest.mark.django_db(transaction=True)
 class TestInstallmentFallbackLogic(BaseTestCase):
     """Test cases for installment payment fallback logic"""
 
@@ -715,6 +717,9 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         run = self.get_run()
         ticket = self.ticket(event=run.event, price=Decimal("300.00"))
         registration = self.create_registration(member=member, run=run, ticket=ticket)
+
+        # Clean up any existing installments from previous tests
+        RegistrationInstallment.objects.filter(event=run.event).delete()
 
         # Create installment with negative deadline (already passed)
         RegistrationInstallment.objects.create(

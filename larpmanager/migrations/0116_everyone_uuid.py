@@ -24,6 +24,7 @@ def populate_uuids(apps, schema_editor):
         'EventButton', 'EventText', 'ProgressStep', 'Run',
         'PaymentInvoice', 'ElectronicInvoice',
         'Discount', 'Collection', 'RefundRequest', 'OneTimeAccessToken',
+        'HelpQuestion',
         # Writing subclasses
         'Character', 'Plot', 'Faction', 'PrologueType', 'Prologue',
         'Handout', 'SpeedLarp', 'QuestType', 'Quest', 'Trait',
@@ -116,6 +117,7 @@ class Migration(migrations.Migration):
         ('collection', 'Collection'),
         ('refundrequest', 'RefundRequest'),
         ('onetimeaccesstoken', 'OneTimeAccessToken'),
+        ('helpquestion', 'HelpQuestion'),
         # Writing subclasses
         ('character', 'Character'),
         ('plot', 'Plot'),
