@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import os
 import secrets
 from itertools import chain
 from typing import Any, ClassVar
@@ -325,7 +326,13 @@ def auto_set_uuid(instance: Any) -> None:
 
 def debug_set_uuid(instance: Any, *, created: bool) -> None:
     """Simplifiy uuid for debug purposes."""
-    if not created or not conf_settings.DEBUG or not hasattr(instance, "uuid"):
+    debug_enviro = (
+        conf_settings.DEBUG
+        or os.getenv("CI") == "true"
+        or os.getenv("GITHUB_ACTIONS") == "true"
+        or os.getenv("PYCHARM_DEBUG") == "1"
+    )
+    if not created or not hasattr(instance, "uuid") or not debug_enviro:
         return
 
     instance.uuid = f"u{instance.id}"
