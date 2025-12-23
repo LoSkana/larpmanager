@@ -344,8 +344,12 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
         # Manually set UUIDs since bulk_create doesn't trigger pre_save signals
         for question in writing_questions:
             auto_set_uuid(question)
-            debug_set_uuid(question, created=True)
         WritingQuestion.objects.bulk_create(writing_questions)
+
+        # Update UUIDs for debug mode after bulk_create (when IDs are assigned)
+        # Note: bulk_create doesn't trigger post_save, so we need to manually update
+        for question in writing_questions:
+            debug_set_uuid(question, created=True)
 
 
 def _init_character_form_questions(

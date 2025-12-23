@@ -335,8 +335,8 @@ def debug_set_uuid(instance: Any, *, created: bool) -> None:
     if not created or not hasattr(instance, "uuid") or not debug_enviro:
         return
 
-    instance.uuid = f"u{instance.id}"
-    instance.save(update_fields=["uuid"])
+    debug_uuid = f"u{instance.id}"
+    instance.__class__.objects.filter(pk=instance.pk).update(uuid=debug_uuid)
 
 
 def update_model_search_field(model_instance: Any) -> None:
