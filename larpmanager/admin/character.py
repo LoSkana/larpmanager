@@ -25,7 +25,7 @@ from django.contrib import admin
 
 from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
 from larpmanager.models.base import BaseModel
-from larpmanager.models.experience import AbilityPx, AbilityTypePx, DeliveryPx
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import (
     WritingAnswer,
     WritingChoice,
@@ -190,3 +190,38 @@ class PlotFilter(AutocompleteFilter):
 
     title = "Plot"
     field_name = "plot"
+
+
+@admin.register(AbilityTemplatePx)
+class AbilityTemplatePxAdmin(DefModelAdmin):
+    """Admin interface for AbilityTemplatePx model."""
+
+    list_display: ClassVar[tuple] = ("id", "name", "event", "uuid")
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+    autocomplete_fields: ClassVar[list] = ["event"]
+    list_filter: ClassVar[tuple] = (EventFilter,)
+
+
+@admin.register(RulePx)
+class RulePxAdmin(DefModelAdmin):
+    """Admin interface for RulePx model."""
+
+    list_display: ClassVar[tuple] = ("id", "name", "event", "uuid")
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+    autocomplete_fields: ClassVar[list] = ["event", "abilities", "field"]
+    list_filter: ClassVar[tuple] = (EventFilter,)
+
+
+@admin.register(ModifierPx)
+class ModifierPxAdmin(DefModelAdmin):
+    """Admin interface for ModifierPx model."""
+
+    list_display: ClassVar[tuple] = ("id", "name", "event", "cost", "uuid")
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+    autocomplete_fields: ClassVar[list] = [
+        "event",
+        "abilities",
+        "prerequisites",
+        "requirements",
+    ]
+    list_filter: ClassVar[tuple] = (EventFilter,)

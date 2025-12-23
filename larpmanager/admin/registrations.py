@@ -35,7 +35,10 @@ from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, Regi
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
+    RegistrationInstallment,
+    RegistrationQuota,
     RegistrationSection,
+    RegistrationSurcharge,
     RegistrationTicket,
 )
 
@@ -154,3 +157,33 @@ class RegistrationCharacterRelAdmin(DefModelAdmin):
     search_fields: ClassVar[list] = ["id", "character", "reg"]
     autocomplete_fields: ClassVar[list] = ["character", "reg"]
     list_filter = (CharacterFilter, RegistrationFilter)
+
+
+@admin.register(RegistrationQuota)
+class RegistrationQuotaAdmin(DefModelAdmin):
+    """Admin interface for RegistrationQuota model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "number", "quotas", "days_available", "surcharge", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "uuid")
+    autocomplete_fields: ClassVar[list] = ["event"]
+    list_filter = (EventFilter,)
+
+
+@admin.register(RegistrationInstallment)
+class RegistrationInstallmentAdmin(DefModelAdmin):
+    """Admin interface for RegistrationInstallment model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "number", "order", "amount", "days_deadline", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "uuid")
+    autocomplete_fields: ClassVar[list] = ["event"]
+    list_filter = (EventFilter,)
+
+
+@admin.register(RegistrationSurcharge)
+class RegistrationSurchargeAdmin(DefModelAdmin):
+    """Admin interface for RegistrationSurcharge model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "number", "amount", "date", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "uuid")
+    autocomplete_fields: ClassVar[list] = ["event"]
+    list_filter = (EventFilter,)
