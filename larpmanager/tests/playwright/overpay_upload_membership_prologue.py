@@ -134,6 +134,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Registrations ").click()
+    page.locator("#id_registration_unique_code").check()
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
     page.get_by_role("button", name="Confirm").click()

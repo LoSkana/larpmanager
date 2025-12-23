@@ -21,6 +21,7 @@ import secrets
 from itertools import chain
 from typing import Any, ClassVar
 
+from django.conf import settings as conf_settings
 from django.core.validators import RegexValidator
 from django.db import IntegrityError, models, transaction
 from django.urls import reverse
@@ -35,6 +36,8 @@ from tinymce.models import HTMLField
 from larpmanager.models.utils import UploadToPathAndRename, get_attr, my_uuid_short
 
 AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -.")
+
+UUID_RETRY_LIMIT = 5
 
 
 class BaseModel(CloneMixin, SafeDeleteModel):
@@ -281,12 +284,7 @@ class PublisherApiKey(BaseModel):
 
 
 def auto_assign_sequential_numbers(instance: Any) -> None:
-    """Auto-populate number and order fields for model instances.
-
-    Args:
-        instance: Model instance to populate fields for
-
-    """
+    """Auto-populate number and order fields for model instances."""
     for field_name in ["number", "order"]:
         if hasattr(instance, field_name) and not getattr(instance, field_name):
             queryset = None
@@ -307,13 +305,35 @@ def auto_assign_sequential_numbers(instance: Any) -> None:
                         setattr(instance, field_name, max_value + 1)
 
 
+def auto_set_uuid(instance: Any) -> None:
+    """Set uuid field if missing value."""
+    # If the model does not have uuid field, or already has a value, skip
+    if not hasattr(instance, "uuid") or instance.uuid:
+        return
+
+    for _try in range(UUID_RETRY_LIMIT):
+        instance.uuid = my_uuid_short()
+        try:
+            with transaction.atomic():
+                return
+        except IntegrityError:
+            instance.uuid = None
+
+    msg = "UUID collision after retries"
+    raise RuntimeError(msg)
+
+
+def debug_set_uuid(instance: Any, *, created: bool) -> None:
+    """Simplifiy uuid for debug purposes."""
+    if not created or not conf_settings.DEBUG or not hasattr(instance, "uuid"):
+        return
+
+    instance.uuid = f"u{instance.id}"
+    instance.save(update_fields=["uuid"])
+
+
 def update_model_search_field(model_instance: Any) -> None:
-    """Update search field for model instances that have one.
-
-    Args:
-        model_instance: Model instance to update search field for
-
-    """
+    """Update search field for model instances that have one."""
     if hasattr(model_instance, "search"):
         model_instance.search = None
         model_instance.search = str(model_instance)
@@ -329,21 +349,5 @@ class UuidMixin(models.Model):
         editable=False,
     )
 
-    UUID_RETRY_LIMIT = 5
-
     class Meta:
         abstract = True
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Assign an unique uuid if missing."""
-        if not self.uuid:
-            for _ in range(self.UUID_RETRY_LIMIT):
-                self.uuid = my_uuid_short()
-                try:
-                    with transaction.atomic():
-                        return super().save(*args, **kwargs)
-                except IntegrityError:
-                    self.uuid = None
-            msg = "UUID collision after retries"
-            raise RuntimeError(msg)
-        return super().save(*args, **kwargs)

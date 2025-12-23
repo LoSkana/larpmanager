@@ -59,7 +59,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
 
     # check there are questions for all features
     page.get_by_role("link", name="Form").click()
-    page.get_by_role("link", name="").nth(0).click()
+    page.locator('[id="u1"]').get_by_role("cell", name="").click()
     page.get_by_text("Your registration ticket").click()
     page.get_by_text("Your registration ticket").fill("Your registration ticket2")
     page.get_by_role("button", name="Confirm").click()
@@ -67,16 +67,16 @@ def prepare_form(page: Any, live_server: Any) -> None:
     expect(page.locator("#one")).to_contain_text(
         "Ticket Your registration ticket2 Ticket Additional Reserve additional tickets beyond your own Additional Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Rate Number of installments to split the fee: payments… Rate Optional Surcharge Registration surcharge Surcharge Optional"
     )
-    page.locator('[id="\\34 "]').get_by_role("link", name="").click()
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.locator('[id="u4"]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
     expect(page.locator("#one")).to_contain_text(
         "Additional Reserve additional tickets beyond your own Additional Optional Ticket Your registration ticket2 Ticket Rate Number of installments to split the fee: payments… Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Surcharge Registration surcharge Surcharge Optional"
     )
-    page.get_by_role("link", name="").nth(1).click()
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
     page.get_by_text("Reserve additional tickets").click()
     page.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
     page.get_by_role("button", name="Confirm").click()
-    expect(page.locator('[id="\\32 "]')).to_contain_text("Reserve additional tickets beyond your own2")
+    expect(page.locator('[id="u2"]')).to_contain_text("Reserve additional tickets beyond your own2")
 
     # change ticket price
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()

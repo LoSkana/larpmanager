@@ -149,9 +149,9 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#id_description").click()
     page.locator("#id_description").fill("sarrrr")
     submit_confirm(page)
-    page.locator('[id="\\34 "]').get_by_role("link", name="").click()
+    page.locator('[id="u4"]').get_by_role("link", name="").click()
     submit_confirm(page)
-    page.locator('[id="\\33 "]').get_by_role("link", name="").click()
+    page.locator(''[id="u3"]'').get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()
 
 

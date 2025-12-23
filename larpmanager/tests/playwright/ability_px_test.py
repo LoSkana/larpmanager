@@ -141,7 +141,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.locator("iframe[title=\"Rich Text Area\"]").content_frame.get_by_label("Rich Text Area").fill("This text should show")
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Ability", exact=True).click()
-    page.get_by_role("link", name="").nth(1).click()
+    page.locator("[id='u2']").get_by_role("link", name="").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").nth(3).fill("test_template")
     page.get_by_role("option", name="test_template").click()
@@ -165,10 +165,9 @@ def delivery(live_server: Any, page: Any) -> None:
     # check px computation
     go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="XP").click()
-    first_row = page.locator('.writing_list > tbody > tr').first
-    expect(first_row).to_contain_text("12")
-    expect(first_row).to_contain_text("12")
-    expect(first_row).to_contain_text("0")
+    expect(page.locator('[id="u1"]')).to_contain_text("12")
+    expect(page.locator('[id="u1"]')).to_contain_text("12")
+    expect(page.locator('[id="u1"]')).to_contain_text("0")
     page.get_by_role("link", name="").click()
     page.wait_for_load_state("load")
     page.wait_for_timeout(2000)
@@ -179,10 +178,9 @@ def delivery(live_server: Any, page: Any) -> None:
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
     page.get_by_role("link", name="XP").click()
-    first_row = page.locator('.writing_list > tbody > tr').first
-    expect(first_row).to_contain_text("11")
-    expect(first_row).to_contain_text("12")
-    expect(first_row).to_contain_text("1")
+    expect(page.locator('[id="u1"]')).to_contain_text("11")
+    expect(page.locator('[id="u1"]')).to_contain_text("12")
+    expect(page.locator('[id="u1"]')).to_contain_text("1")
 
 
 def rules(page: Any) -> None:

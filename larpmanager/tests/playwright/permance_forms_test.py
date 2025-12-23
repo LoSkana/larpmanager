@@ -137,7 +137,7 @@ def check_orga_roles(page: Any) -> None:
     for s in checked:
         check_feature(page, s)
     submit_confirm(page)
-    expect(page.locator('[id="\\32 "]')).to_contain_text("Event (Event, Configuration), Appearance (Texts, Navigation)")
+    expect(page.locator('[id="u2"]')).to_contain_text("Event (Event, Configuration), Appearance (Texts, Navigation)")
     page.get_by_role("row", name=" testona Admin Test Event (").get_by_role("link").click()
     _check_checkboxes(checked, page)
 
@@ -198,8 +198,8 @@ def check_exe_roles(page: Any) -> None:
     for s in checked:
         check_feature(page, s)
     submit_confirm(page)
-    expect(page.locator('[id="\\32 "]')).to_contain_text(
+    expect(page.locator('[id="u2"]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
     )
-    page.get_by_role("link", name="").nth(1).click()
+    page.locator('[id="u2"]').get_by_role("cell", name="").click()
     _check_checkboxes(checked, page)

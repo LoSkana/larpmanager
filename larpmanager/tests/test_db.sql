@@ -4381,15 +4381,16 @@ INSERT INTO public.auth_permission VALUES (534, 'Can change social application t
 INSERT INTO public.auth_permission VALUES (535, 'Can delete social application token', 134, 'delete_socialtoken');
 INSERT INTO public.auth_permission VALUES (536, 'Can view social application token', 134, 'view_socialtoken');
 
-INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$dN5VePnxhw8fIpYEl27wvJ$vnvODWVsGIkyzqawTXcj6nTdO7kgmLP0tyxhLZz3gBw=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$qKHZpaVDBcxLofFPZsZcSz$bpW0XKoXo9Lgjy2C094TBjNHWpS4zFI6xNo/5UXV1BE=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$LtH3VgWFGdkJIJJQBucY6u$bCuKc/xatWq3DGG/OcgNImUlsXJuuRAEWmNZWmdBFyc=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$5dXtJ8GX6U2LcAhrbv1Jqp$2A4cn6vlEnUt9K/1zyv2Dq+IhkCNHwSxxnB3N2TzUuI=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (1, 'pbkdf2_sha256$1000000$1lfVkZD6k1g6IZ0i1Hph8w$xIh+Y2hvkefr1cpw72XHPxJvikMMqYFtZ+wo9OLTMNQ=', '2025-01-01 00:00:00.000000+01', true, 'admin', '', '', '', true, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (2, 'pbkdf2_sha256$1000000$YzrcBcDTl8CA3DH2OK1HN8$EtlRl87R7Jd2eTzr71j8KIC1j4nmPi/4glSjKCuv9XE=', '2025-01-01 00:00:00.000000+01', false, 'orga@test.it', '', '', 'orga@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (3, 'pbkdf2_sha256$1000000$ndST9BZcQvQtl5aQXWabJv$uoKVNBf9KtPPGSpiCvXVcbUq5rSW1nUjZfjz5XdXEzU=', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.auth_user VALUES (4, 'pbkdf2_sha256$1000000$tYhuFvcCIaa6QiRF1XPy4B$nCvv4hwkrzIWLYhoi3J3ZjRn7WoiX3gss35adnS3od4=', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.background_task VALUES (1, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[1], {}]', '3ef1b43da432e47bfa6cf411b9ca320f22179ba0', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
 INSERT INTO public.background_task VALUES (2, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (3, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[2], {}]', 'e99d51b68475f7e5a284b9bc6eb13ce0ecc73347', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (4, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (3, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (4, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[2], {}]', 'e99d51b68475f7e5a284b9bc6eb13ce0ecc73347', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (5, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.django_content_type VALUES (1, 'larpmanager', 'association');
 INSERT INTO public.django_content_type VALUES (2, 'larpmanager', 'feature');
@@ -4751,8 +4752,8 @@ INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 79
 
 INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1');
 
-INSERT INTO public.larpmanager_email VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Admin', 'Access the management panel <a href= https://def.larpmanager.com/manage''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Admin', 1, NULL, 'q4p7g0h9mf3r');
-INSERT INTO public.larpmanager_email VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Organizer per Test Larp', 'Access the management panel <a href= https://def.larpmanager.com/test/1/manage/''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Organizer per Test Larp', 1, NULL, 'ruiwjzxudmat');
+INSERT INTO public.larpmanager_email VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Admin', 'Access the management panel <a href= https://def.larpmanager.com/manage''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Admin', 1, NULL, 'u1');
+INSERT INTO public.larpmanager_email VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', '[Test Larp] Role approval Organizer per Test Larp', 'Access the management panel <a href= https://def.larpmanager.com/test/1/manage/''>from here</a>!<br /><br />-<br /><a href=''https://def.larpmanager.com/unsubscribe''>Unsubscribe</a>', NULL, NULL, 'admin@test.it - [Test Larp] Role approval Organizer per Test Larp', 1, NULL, 'u2');
 
 INSERT INTO public.larpmanager_event VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'test', 'Test Larp', NULL, NULL, NULL, '<p>testone</p>', '', true, '', '', '', '', '', 10, 0, 0, '', '', '', NULL, NULL, NULL, false, 1, NULL, 'u1');
 
@@ -5038,7 +5039,7 @@ INSERT INTO public.larpmanager_permissionmodule VALUES (14, NULL, false, '2025-0
 INSERT INTO public.larpmanager_permissionmodule VALUES (15, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Warehouse', 'box-open', 95, 'warehouse');
 INSERT INTO public.larpmanager_permissionmodule VALUES (16, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'One-Time', 'key', 120, 'onetime');
 
-INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'ticket', 'Test Larp - Ticket', 'Ticket', 'Your registration ticket', 1, 'm', 0, '', false, 1, NULL, 'b5498crdid69');
+INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'ticket', 'Test Larp - Ticket', 'Ticket', 'Your registration ticket', 1, 'm', 0, '', false, 1, NULL, 'u1');
 
 INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard (0.00€)', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1, 'u1');
 
@@ -5062,7 +5063,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.background_task_completedtask_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.background_task_id_seq', 4, true);
+SELECT pg_catalog.setval('public.background_task_id_seq', 5, true);
 
 SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
@@ -8672,3 +8673,7 @@ ALTER TABLE ONLY public.socialaccount_socialtoken
 
 ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+
+-- LARPMANAGER_SCHEMA_VERSION: 0117_finish_uuid

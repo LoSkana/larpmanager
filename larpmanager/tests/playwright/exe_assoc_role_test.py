@@ -47,7 +47,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     check_feature(page, "Configuration")
     check_feature(page, "Accounting")
     submit_confirm(page)
-    expect(page.locator('[id="\\32 "]')).to_contain_text("Organization (Configuration), Accounting (Accounting)")
+    expect(page.locator('[id="u2"]')).to_contain_text("Organization (Configuration), Accounting (Accounting)")
 
     logout(page)
     login_user(page, live_server)

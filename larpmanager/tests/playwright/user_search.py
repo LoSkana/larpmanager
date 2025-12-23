@@ -158,7 +158,7 @@ def prepare(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
     page.locator("#id_visibility").select_option("s")
     page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("link", name="").nth(7).click()
+    page.locator('[id="u8"]').get_by_role("link", name="").click()
     page.locator("#id_visibility").select_option("s")
     page.get_by_role("button", name="Confirm").click()
 

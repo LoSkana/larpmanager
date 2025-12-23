@@ -168,6 +168,8 @@ from larpmanager.models.base import (
     Feature,
     FeatureModule,
     auto_assign_sequential_numbers,
+    auto_set_uuid,
+    debug_set_uuid,
     update_model_search_field,
 )
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
@@ -264,24 +266,25 @@ log = logging.getLogger(__name__)
 # Generic signal handlers (no specific sender)
 @receiver(pre_save)
 def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Handle pre-save operations for automatic field population.
-
-    Automatically sets number/order fields and updates search fields
-    for models that have them. This function is designed to be used
-    as a Django model signal handler.
-
-    """
+    """Handle pre-save operations for all models."""
     # Auto-assign sequential numbers for models with number/order fields
     auto_assign_sequential_numbers(instance)
 
     # Update search fields for models that implement search functionality
     update_model_search_field(instance)
 
+    # Assign uuid for models that has it
+    auto_set_uuid(instance)
+
 
 @receiver(post_save)
-def post_save_text_fields_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Update text fields cache after model instance is saved."""
+def post_save_callback(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
+    """Handle post-save operations for all models."""
+    # Update text fields cache after model instance is saved
     update_text_fields_cache(instance)
+
+    # Set simplified uuid for debug
+    debug_set_uuid(instance, created=created)
 
 
 @receiver(post_delete)

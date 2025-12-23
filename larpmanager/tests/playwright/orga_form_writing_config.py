@@ -50,7 +50,7 @@ def feature_fields(page: Any) -> None:
     # reorder test
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
     expect(page.locator("#one")).to_contain_text("Name Name Presentation Presentation Text Sheet")
-    page.locator('[id="\\33 "]').get_by_role("link", name="").click()
+    page.locator(''[id="u3"]'').get_by_role("link", name="").click()
     expect(page.locator("#one")).to_contain_text("Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title

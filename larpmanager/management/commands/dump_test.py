@@ -139,3 +139,30 @@ class Command(BaseCommand):
             "larpmanager/tests/test_db.sql",
         ]
         subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603
+
+        # Add schema version marker at the end of dump
+        self._add_schema_version_marker("larpmanager/tests/test_db.sql")
+
+    def _add_schema_version_marker(self, file_path: str) -> None:
+        """Add a SQL comment with the latest migration number as version marker.
+
+        This helps conftest.py verify the dump is up-to-date without querying the DB.
+
+        Args:
+            file_path: Path to the SQL dump file
+        """
+        # Get latest migration file
+        migrations_dir = Path("larpmanager/migrations")
+        migration_files = sorted(migrations_dir.glob("[0-9]*.py"))
+
+        if not migration_files:
+            self.stderr.write(self.style.WARNING("No migrations found"))
+            return
+
+        latest_migration = migration_files[-1].stem
+
+        # Append version marker comment
+        with Path(file_path).open("a", encoding="utf-8") as f:
+            f.write(f"\n\n-- LARPMANAGER_SCHEMA_VERSION: {latest_migration}\n")
+
+        self.stdout.write(self.style.SUCCESS(f"Schema version marker added: {latest_migration}"))

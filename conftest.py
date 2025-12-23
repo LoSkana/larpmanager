@@ -44,6 +44,7 @@ logging.getLogger("faker.providers").setLevel(logging.ERROR)
 
 # Track database initialization state per worker
 _DB_INITIALIZED = {}
+_DB_SCHEMA_CHECKED = {}
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -165,6 +166,128 @@ def _database_has_tables() -> bool:
         return count > 0
 
 
+def _get_dump_schema_version() -> str | None:
+    """Get schema version from test_db.sql dump file marker.
+
+    Returns the migration name from the LARPMANAGER_SCHEMA_VERSION comment
+    at the end of the SQL dump, or None if not found.
+    """
+    sql_path = Path(__file__).parent / "larpmanager" / "tests" / "test_db.sql"
+    if not sql_path.exists():
+        return None
+
+    try:
+        # Read last 500 bytes to find the version marker
+        with sql_path.open("rb") as f:
+            f.seek(max(0, sql_path.stat().st_size - 500))
+            tail = f.read().decode("utf-8", errors="ignore")
+
+        # Look for version marker
+        import re
+
+        match = re.search(r"-- LARPMANAGER_SCHEMA_VERSION:\s*(\S+)", tail)
+        if match:
+            return match.group(1)
+    except Exception:
+        pass
+
+    return None
+
+
+def _get_latest_migration() -> str | None:
+    """Get the name of the latest migration file."""
+    from pathlib import Path
+
+    migrations_dir = Path(__file__).parent / "larpmanager" / "migrations"
+    if not migrations_dir.exists():
+        return None
+
+    # Get all numbered migration files and sort them
+    migration_files = sorted(migrations_dir.glob("[0-9]*.py"))
+    if migration_files:
+        return migration_files[-1].stem
+
+    return None
+
+
+def _get_expected_migrations() -> set[str]:
+    """Get list of all migration files that should be applied."""
+    from pathlib import Path
+
+    migrations_dir = Path(__file__).parent / "larpmanager" / "migrations"
+    if not migrations_dir.exists():
+        return set()
+
+    # Get all migration files (exclude __init__.py and __pycache__)
+    migration_files = set()
+    for migration_file in migrations_dir.glob("*.py"):
+        if migration_file.name != "__init__.py":
+            # Remove .py extension to get migration name
+            migration_files.add(migration_file.stem)
+
+    return migration_files
+
+
+def _get_applied_migrations() -> set[str]:
+    """Get list of migrations that have been applied to the database."""
+    from django.db import transaction
+
+    try:
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT name
+                    FROM django_migrations
+                    WHERE app = 'larpmanager'
+                """)
+                applied = {row[0] for row in cursor.fetchall()}
+        return applied
+    except Exception:
+        # If query fails, return empty set (schema needs reload)
+        return set()
+
+
+def _database_has_correct_schema() -> bool:
+    """Check if database has all required migrations applied.
+
+    Uses two-tier check:
+    1. Fast check: Compare dump schema version marker with latest migration
+    2. Full check: Compare all migration files with django_migrations table
+
+    Returns True if all migration files in larpmanager/migrations/ are present
+    in the database's django_migrations table.
+    """
+    # FAST PATH: Check if dump version marker matches latest migration
+    # This avoids DB queries if the dump is already up-to-date
+    dump_version = _get_dump_schema_version()
+    latest_migration = _get_latest_migration()
+
+    if dump_version and latest_migration and dump_version == latest_migration:
+        # Dump is up-to-date, assume DB is correct
+        return True
+
+    # FULL CHECK: Query database to verify all migrations are applied
+    expected_migrations = _get_expected_migrations()
+    applied_migrations = _get_applied_migrations()
+
+    # If we couldn't get applied migrations (error/no table), schema is wrong
+    if not applied_migrations and expected_migrations:
+        return False
+
+    # Check if all expected migrations have been applied
+    missing_migrations = expected_migrations - applied_migrations
+
+    if missing_migrations:
+        # Log which migrations are missing for debugging
+        import logging
+
+        logger = logging.getLogger(__name__)
+        logger.warning(f"Missing {len(missing_migrations)} migrations. First 5: {sorted(missing_migrations)[:5]}")
+        return False
+
+    return True
+
+
 def _load_test_db_sql() -> None:
     """Load test database from SQL file."""
     env = os.environ.copy()
@@ -193,19 +316,37 @@ def _reload_fixtures() -> None:
 
 @pytest.fixture(autouse=True)
 def _e2e_db_setup(request: pytest.FixtureRequest, django_db_blocker: Any) -> None:
-    """Set up database for e2e tests with single database per worker."""
+    """Set up database for e2e tests with single database per worker.
+
+    This fixture runs once per worker to ensure the database schema is correct.
+    Uses a global flag to avoid reloading the schema multiple times per worker.
+    """
+    # Get worker ID for xdist parallel execution
+    worker_id = getattr(request.config, "workerinput", {}).get("workerid", "master")
+
     with django_db_blocker.unblock():
-        if not _database_has_tables():
-            # No tables - load from SQL dump
-            _load_test_db_sql()
-        elif "playwright" in str(request.node.fspath):
-            # Tables exist - truncate and init
+        # Only check/load schema once per worker
+        if worker_id not in _DB_SCHEMA_CHECKED:
+            if not _database_has_tables():
+                # No tables - load from SQL dump
+                _load_test_db_sql()
+            elif not _database_has_correct_schema():
+                # Tables exist but schema is outdated (missing UUID columns)
+                # This can happen with --reuse-db when schema has changed
+                _load_test_db_sql()
+            _DB_SCHEMA_CHECKED[worker_id] = True
+
+        # For playwright tests, reload fixtures each time
+        if "playwright" in str(request.node.fspath):
             _reload_fixtures()
 
 
 @pytest.fixture(autouse=True)
-def _ensure_association_skin(db: Any) -> None:  # noqa: ARG001
-    """Ensure default AssociationSkin and AssociationRole exist for tests."""
+def _ensure_association_skin(db: Any, _e2e_db_setup: Any) -> None:  # noqa: ARG001
+    """Ensure default AssociationSkin and AssociationRole exist for tests.
+
+    Depends on _e2e_db_setup to ensure database schema is loaded first.
+    """
     if not AssociationSkin.objects.filter(pk=1).exists():
         AssociationSkin.objects.create(pk=1, name="LarpManager", domain="larpmanager.com")
 

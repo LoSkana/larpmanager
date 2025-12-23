@@ -77,7 +77,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     # Configure ticket price
     go_to(page, live_server, "test/manage")
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
-    page.get_by_role("link", name="").nth(0).click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("50")
     page.locator("#id_description").click()
@@ -121,7 +121,7 @@ def edit_additionals(page: Any, live_server: Any) -> None:
     """Test editing additional tickets count after registration."""
     # Open the registration for editing
     go_to(page, live_server, "test/manage/registrations/")
-    page.get_by_role("link", name="").nth(0).click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
 
     # Change additional tickets from 3 to 2
     page.locator("#id_additionals").fill("2")
@@ -186,7 +186,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Set ticket price
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
-    page.get_by_role("link", name="").nth(0).click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("30")
     page.get_by_role("button", name="Confirm").click()
