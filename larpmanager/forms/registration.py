@@ -652,6 +652,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     load_js: ClassVar[list] = ["characters-reg-choices"]
 
+    ticket = forms.ModelChoiceField(
+        queryset=RegistrationTicket.objects.none(),
+        to_field_name="uuid",
+        required=True,
+    )
+
     class Meta:
         model = Registration
 
@@ -791,16 +797,19 @@ class OrgaRegistrationForm(BaseRegistrationForm):
     def init_ticket(self, registration_section: Any) -> None:
         """Initialize ticket field choices and set default if only one ticket available."""
         # Fetch and format ticket choices ordered by price (highest first)
-        ticket_choices = [
-            (str(ticket.uuid), ticket.get_form_text(currency_symbol=self.params["currency_symbol"]))
-            for ticket in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
-        ]
-        self.fields["ticket"].choices = ticket_choices
+        qs = RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
+
+        self.fields["ticket"].queryset = qs
+
+        self.fields["ticket"].label_from_instance = lambda ticket: ticket.get_form_text(
+            currency_symbol=self.params["currency_symbol"]
+        )
 
         # Hide ticket selection and set default if only one option exists
-        if len(ticket_choices) == 1:
+        if qs.count() == 1:
+            ticket = qs.first()
             self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = ticket_choices[0][0]
+            self.initial["ticket"] = ticket.uuid
 
         self.sections["id_ticket"] = registration_section
 
