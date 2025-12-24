@@ -438,7 +438,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
                 popup.append(el["element_id"])
             res[el["element_id"]] = answer
 
-    return JsonResponse({"res": res, "popup": popup, "num": question.id})
+    return JsonResponse({"res": res, "popup": popup, "num": str(question.uuid)})
 
 
 @login_required

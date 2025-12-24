@@ -359,7 +359,7 @@ def save_registration_standard(
 
     # Process ticket selection and validation
     if "ticket" in form.cleaned_data:
-        sel = RegistrationTicket.objects.filter(pk=form.cleaned_data["ticket"]).select_related("event").first()
+        sel = RegistrationTicket.objects.filter(uuid=form.cleaned_data["ticket"]).select_related("event").first()
 
         # Validate ticket exists and belongs to correct event
         if not sel:
@@ -586,11 +586,12 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
     if hasattr(form, "questions"):
         for question in form.questions:
             if question.id in form.singles:
+                # Use question.id for form field keys (internal form processing)
                 context["submitted"]["q" + str(question.id)] = form.singles[question.id].option_id
 
     if registration:
         if registration.ticket_id:
-            context["submitted"]["ticket"] = registration.ticket_id
+            context["submitted"]["ticket"] = str(registration.ticket.uuid)
         if registration.quotas:
             context["submitted"]["quotas"] = registration.quotas
         if registration.additionals:
@@ -606,7 +607,7 @@ def register(
     event_slug: str,
     secret_code: str = "",
     discount_code: str = "",
-    ticket_uuid: int = 0,
+    ticket_uuid: str = "",
 ) -> HttpResponse:
     """Handle event registration form display and submission.
 
@@ -618,7 +619,7 @@ def register(
         event_slug: Event slug identifier
         secret_code: Optional scenario code for registration context
         discount_code: Optional discount code to apply
-        ticket_uuid: if provided, ticket UUID to select (default: 0)
+        ticket_uuid: if provided, ticket UUID string to select (default: "")
 
     Returns:
         HttpResponse: Rendered registration page or redirect response
@@ -696,12 +697,12 @@ def register(
     return render(request, "larpmanager/event/register.html", context)
 
 
-def _apply_ticket(context: dict, ticket_uuid: int | None, event_id: int) -> None:
+def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None:
     """Apply ticket information to context if ticket exists and belongs to the event.
 
     Args:
         context: Context dictionary to update with ticket data
-        ticket_uuid: Ticket UUID to retrieve, or None
+        ticket_uuid: Ticket UUID string to retrieve, or None
         event_id: Event ID to verify ticket ownership
 
     """
@@ -717,8 +718,8 @@ def _apply_ticket(context: dict, ticket_uuid: int | None, event_id: int) -> None
         if ticket.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in context["run"].status:
             del context["run"].status["closed"]
 
-        # Store ticket ID in context
-        context["ticket"] = ticket.id
+        # Store ticket UUID in context (used for form initialization)
+        context["ticket"] = str(ticket.uuid)
     except ObjectDoesNotExist:
         # Ticket not found or doesn't belong to this event - ignore silently
         pass

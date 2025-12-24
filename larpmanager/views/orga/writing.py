@@ -763,8 +763,8 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
     # Exclude already taken characters
     context["list"] = context["list"].exclude(pk__in=taken_characters)
 
-    # Format response as list of tuples (id, string representation)
-    res = [(el.id, str(el)) for el in context["list"]]
+    # Format response as list of tuples (uuid, string representation)
+    res = [(str(el.uuid), str(el)) for el in context["list"]]
     return JsonResponse({"res": res})
 
 
@@ -812,8 +812,8 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
         except ObjectDoesNotExist:
             return JsonResponse({"res": "ko"})
 
-    # Convert queryset to list of tuples (id, name) for JSON response
-    res = [(el.id, str(el)) for el in context["list"]]
+    # Convert queryset to list of tuples (uuid, name) for JSON response
+    res = [(str(el.uuid), str(el)) for el in context["list"]]
     return JsonResponse({"res": res})
 
 

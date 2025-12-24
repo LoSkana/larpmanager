@@ -89,8 +89,8 @@ def casting_characters(context: dict, reg: Registration) -> None:
 
         # Add each character from the faction to choices with display info, sorted by number
         for character in sorted(faction.chars, key=lambda c: c.number):
-            character_choices_by_faction[faction_name][character.id] = character.show(context["run"])
-            valid_character_ids.add(character.id)
+            character_choices_by_faction[faction_name][str(character.uuid)] = character.show(context["run"])
+            valid_character_ids.add(str(character.uuid))
             total_characters += 1
 
     # Convert faction and character data to JSON for frontend consumption
@@ -137,8 +137,8 @@ def casting_quest_traits(context: dict, typ: str) -> None:
             # Skip traits that are already assigned using pre-fetched set
             if trait.id in assigned_trait_ids_set:
                 continue
-            available_traits[trait.id] = trait.show()
-            valid_trait_ids.add(trait.id)
+            available_traits[str(trait.uuid)] = trait.show()
+            valid_trait_ids.add(str(trait.uuid))
             total_traits += 1
 
         # Only include quests that have available traits
@@ -277,7 +277,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str = "0") -> H
             k = f"choice{i}"
             if k not in request.POST:
                 continue
-            pref = int(request.POST[k])
+            pref = str(request.POST[k])
 
             # Validate element ID is in the allowed list (not hidden, etc.)
             if pref not in valid_element_ids:
@@ -435,12 +435,12 @@ def _build_preference_names_list(context: dict, typ: int) -> list[str]:
         return preference_names_list
 
     # Batch fetch all characters or traits
-    element_ids = [cp.element for cp in casting_preferences_list]
+    element_uuids = [cp.element for cp in casting_preferences_list]
 
     if typ == 0:
         # Character casting: batch fetch all characters
         characters_dict = {
-            char.id: char for char in Character.objects.filter(pk__in=element_ids).select_related("event")
+            str(char.uuid): char for char in Character.objects.filter(uuid__in=element_uuids).select_related("event")
         }
         for casting_preference in casting_preferences_list:
             character = characters_dict.get(casting_preference.element)
@@ -448,7 +448,9 @@ def _build_preference_names_list(context: dict, typ: int) -> list[str]:
                 preference_names_list.append(character.show(context["run"])["name"])
     else:
         # Trait casting: batch fetch all traits with their quests
-        traits_dict = {trait.id: trait for trait in Trait.objects.filter(pk__in=element_ids).select_related("quest")}
+        traits_dict = {
+            str(trait.uuid): trait for trait in Trait.objects.filter(uuid__in=element_uuids).select_related("quest")
+        }
         for casting_preference in casting_preferences_list:
             trait = traits_dict.get(casting_preference.element)
             if trait:
@@ -507,18 +509,18 @@ def _casting_update(request: HttpRequest, context: dict, prefs: dict) -> None:
 
 
 def get_casting_preferences(
-    element_number: int,
+    element_uuid: str,
     context: dict,
     casting_queryset: QuerySet | None = None,
 ) -> tuple[int, str, dict[int, int]]:
     """Calculate and return casting preference statistics.
 
-    Analyzes casting preferences for a specific character/element number within
+    Analyzes casting preferences for a specific character/element UUID within
     a run, calculating total preferences, average preference value, and
     distribution across preference levels.
 
     Args:
-        element_number: Character/element number to calculate preferences for
+        element_uuid: Character/element UUID to calculate preferences for
         context: Context dictionary containing 'run' and 'casting_max' keys,
              optionally 'staff' for filtering
         casting_queryset: Optional pre-filtered casting queryset. If None, will query
@@ -545,7 +547,7 @@ def get_casting_preferences(
     if "quest_type" in context:
         typ = context["quest_type"]
     if casting_queryset is None:
-        casting_queryset = Casting.objects.filter(element=element_number, run=context["run"], typ=typ)
+        casting_queryset = Casting.objects.filter(element=element_uuid, run=context["run"], typ=typ)
         # Filter active casts unless staff context is present
         if "staff" not in context:
             casting_queryset = casting_queryset.filter(active=True)
@@ -596,7 +598,7 @@ def casting_preferences_characters(context: dict) -> None:
     get_event_filter_characters(context, filters)
     context["list"] = []
 
-    # Build casting preferences dictionary indexed by character ID
+    # Build casting preferences dictionary indexed by character UUID
     castings_by_character = {}
     for casting_item in Casting.objects.filter(run=context["run"], typ=0, active=True):
         if casting_item.element not in castings_by_character:
@@ -608,17 +610,18 @@ def casting_preferences_characters(context: dict) -> None:
         for character in faction.chars:
             # Get casting preferences for current character
             character_castings = []
-            if character.id in castings_by_character:
-                character_castings = castings_by_character[character.id]
+            char_uuid = str(character.uuid)
+            if char_uuid in castings_by_character:
+                character_castings = castings_by_character[char_uuid]
 
             # Log character processing for debugging
-            logger.debug("Character %s casting preferences: %s entries", character.id, len(character_castings))
+            logger.debug("Character %s casting preferences: %s entries", char_uuid, len(character_castings))
 
             # Build character entry with faction, name, and preferences
             character_entry = {
                 "group_dis": faction.data["name"],
                 "name_dis": character.data["name"],
-                "pref": get_casting_preferences(character.id, context, character_castings),
+                "pref": get_casting_preferences(char_uuid, context, character_castings),
             }
             context["list"].append(character_entry)
 
@@ -673,7 +676,7 @@ def casting_preferences_traits(context: dict) -> None:
             trait_data = {
                 "group_dis": quest_group_name,
                 "name_dis": trait.show()["name"],
-                "pref": get_casting_preferences(trait.id, context, quest_type.number),
+                "pref": get_casting_preferences(str(trait.uuid), context, quest_type.number),
             }
             context["list"].append(trait_data)
 
@@ -758,7 +761,7 @@ def casting_history_characters(context: dict) -> None:
 
     # Build character cache for quick lookup, excluding hidden characters
     for character in context["event"].get_elements(Character).filter(hide=False).select_related("mirror"):
-        context["cache"][character.id] = character
+        context["cache"][str(character.uuid)] = character
 
     # Group casting preferences by member ID for efficient processing
     casting_preferences_by_member = {}
@@ -840,7 +843,7 @@ def casting_history_traits(context: dict) -> None:
         # Append quest name if trait belongs to a quest
         if trait.quest:
             trait_name = f"{trait_name} ({trait.quest.name})"
-        context["cache"][trait.id] = trait_name
+        context["cache"][str(trait.uuid)] = trait_name
 
     # Process registrations and attach casting preferences
     for registration in (

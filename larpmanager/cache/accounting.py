@@ -268,12 +268,12 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
     # Handle case where member has no active registrations
     if not member_registrations.exists():
         # Clean up any stale cache entries for this member's old registrations
-        for registration_id in list(cached_accounting_data.keys()):
+        for registration_uuid in list(cached_accounting_data.keys()):
             try:
-                registration = Registration.objects.get(id=registration_id, member_id=member_id)
+                registration = Registration.objects.get(uuid=registration_uuid, member_id=member_id)
                 # Remove cache entry if it belongs to this run and member
                 if registration.run_id == run.id:
-                    cached_accounting_data.pop(registration_id, None)
+                    cached_accounting_data.pop(registration_uuid, None)
             except ObjectDoesNotExist:
                 # Skip if registration no longer exists
                 pass
@@ -290,7 +290,9 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
                 features,
             )
             # Store calculated values as formatted strings in cache
-            cached_accounting_data[registration.id] = {key: f"{value:g}" for key, value in accounting_data.items()}
+            cached_accounting_data[str(registration.uuid)] = {
+                key: f"{value:g}" for key, value in accounting_data.items()
+            }
 
     # Persist the updated cache data with 1-day timeout
     cache.set(cache_key, cached_accounting_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)

@@ -192,7 +192,7 @@ def field_text(page: Any, live_server: Any) -> None:
     expect(page.locator("#register_form")).to_contain_text("text length: 12 / 100")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    page.get_by_role("link", name="Register").click()
+    page.get_by_role("link", name="Registration", exact=True).click()
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
     expect(page.get_by_label("choice")).to_contain_text("secondas")
 

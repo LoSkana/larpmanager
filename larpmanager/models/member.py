@@ -665,7 +665,7 @@ class Badge(UuidMixin, BaseModel):
     def show(self) -> dict:
         """Return a dictionary representation for display purposes."""
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "number": self.number}
+        js = {"uuid": str(self.uuid), "number": self.number}
 
         # Add localized name and description attributes
         for s in ["name", "descr"]:

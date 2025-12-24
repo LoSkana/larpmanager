@@ -379,7 +379,7 @@ class RegistrationForm(BaseRegistrationForm):
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
-            ticket_choices.append((ticket.id, ticket_display_name))
+            ticket_choices.append((str(ticket.uuid), ticket_display_name))
 
             # Add ticket description to help text if available
             if ticket.description:
@@ -390,7 +390,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
-            self.initial["ticket"] = self.instance.ticket.id
+            self.initial["ticket"] = str(self.instance.ticket.uuid)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
 
@@ -431,7 +431,7 @@ class RegistrationForm(BaseRegistrationForm):
         if registration_ticket.visible:
             return True
 
-        if "ticket" in self.params and self.params["ticket"] == registration_ticket.id:
+        if "ticket" in self.params and self.params["ticket"] == str(registration_ticket.uuid):
             return True
 
         return bool(self.instance.pk and self.instance.ticket == registration_ticket)
@@ -556,7 +556,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         """
         # If this ticket is already selected in current registration flow, don't skip it
-        if "ticket" in self.params and self.params["ticket"] == ticket.id:
+        if "ticket" in self.params and self.params["ticket"] == str(ticket.uuid):
             return False
 
         result = False
@@ -792,7 +792,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         """Initialize ticket field choices and set default if only one ticket available."""
         # Fetch and format ticket choices ordered by price (highest first)
         ticket_choices = [
-            (ticket.id, ticket.get_form_text(currency_symbol=self.params["currency_symbol"]))
+            (str(ticket.uuid), ticket.get_form_text(currency_symbol=self.params["currency_symbol"]))
             for ticket in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
         ]
         self.fields["ticket"].choices = ticket_choices

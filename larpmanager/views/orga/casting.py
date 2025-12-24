@@ -181,7 +181,7 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
 def get_casting_choices_characters(
     context: dict,
     filtering_options: dict,
-) -> tuple[dict[int, str], list[int], dict[int, str], list[int]]:
+) -> tuple[dict[str, str], list[str], dict[str, str], list[str]]:
     """Get character choices for casting with filtering and availability status.
 
     Retrieves all available characters for casting based on faction filtering,
@@ -193,14 +193,14 @@ def get_casting_choices_characters(
             - run: Run instance for registration filtering
             - features: dict of enabled features
         filtering_options: Dictionary containing:
-            - factions: List of allowed faction IDs for filtering
+            - factions: List of allowed faction UUIDs for filtering
 
     Returns:
         Tuple containing:
-            - character_choices: dict mapping character IDs to display names
-            - taken_character_ids: List of character IDs that are already assigned
-            - mirror_character_mapping: dict mapping character IDs to their mirror character IDs
-            - allowed_character_ids: List of character IDs allowed by faction filtering
+            - character_choices: dict mapping character UUIDs to display names
+            - taken_character_ids: List of character UUIDs that are already assigned
+            - mirror_character_mapping: dict mapping character UUIDs to their mirror character UUIDs
+            - allowed_character_uuids: List of character UUIDs allowed by faction filtering
 
     """
     character_choices = {}
@@ -208,60 +208,61 @@ def get_casting_choices_characters(
     taken_character_ids = []
 
     # Build list of allowed characters based on faction filtering
-    allowed_character_ids = []
+    allowed_character_uuids = []
     if "faction" in context["features"]:
         # Get primary factions for the event
         primary_factions_query = context["event"].get_elements(Faction).filter(typ=FactionType.PRIM)
         for faction_element in primary_factions_query.order_by("number"):
             # Skip factions not in the allowed filtering_options
-            if str(faction_element.id) not in filtering_options["factions"]:
+            if str(faction_element.uuid) not in filtering_options["factions"]:
                 continue
             # Add all characters from this faction to allowed list
-            allowed_character_ids.extend(faction_element.characters.values_list("id", flat=True))
+            allowed_character_uuids.extend([str(char.uuid) for char in faction_element.characters.all()])
 
     # Get characters that are already registered for this run
-    registered_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
-        "character_id",
-        flat=True,
+    registered_character_ids = set(
+        RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list("character_id", flat=True)
     )
 
     # Process all characters for the event (excluding hidden ones)
     characters_query = context["event"].get_elements(Character)
     for character in characters_query.exclude(hide=True):
+        char_uuid = str(character.uuid)
+
         # Skip characters not allowed by faction filtering
-        if allowed_character_ids and character.id not in allowed_character_ids:
+        if allowed_character_uuids and char_uuid not in allowed_character_uuids:
             continue
 
         # Mark character as taken if already registered
         if character.id in registered_character_ids:
-            taken_character_ids.append(character.id)
+            taken_character_ids.append(char_uuid)
 
         # Handle mirror character relationships
         if character.mirror_id:
             # Mark character as taken if its mirror is registered
             if character.mirror_id in registered_character_ids:
-                taken_character_ids.append(character.id)
+                taken_character_ids.append(char_uuid)
             # Store mirror relationship mapping
-            mirror_character_mapping[character.id] = str(character.mirror_id)
+            mirror_character_mapping[char_uuid] = str(character.mirror.uuid)
 
         # Add character to character_choices with display name
-        character_choices[character.id] = str(character)
+        character_choices[char_uuid] = str(character)
 
-    return character_choices, taken_character_ids, mirror_character_mapping, allowed_character_ids
+    return character_choices, taken_character_ids, mirror_character_mapping, allowed_character_uuids
 
 
-def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int], dict]:
+def get_casting_choices_quests(context: dict) -> tuple[dict[str, str], list[str], dict]:
     """Get quest-based casting choices and track assigned traits.
 
     Args:
         context: Context dict containing 'event', 'quest_type', and 'run'
 
     Returns:
-        Tuple of (choices dict, taken trait IDs, empty dict)
+        Tuple of (choices dict with uuid keys, taken trait UUIDs, empty dict)
 
     """
     trait_choices = {}
-    assigned_trait_ids = []
+    assigned_trait_uuids = []
 
     # Pre-fetch all assigned traits for this run
     assigned_trait_ids_set = set(AssignmentTrait.objects.filter(run=context["run"]).values_list("trait_id", flat=True))
@@ -274,14 +275,16 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[int, str], list[int]
     ):
         # Process traits for each quest
         for trait in quest.traits.all():
+            trait_uuid = str(trait.uuid)
+
             # Check if trait is already assigned using pre-fetched set
             if trait.id in assigned_trait_ids_set:
-                assigned_trait_ids.append(trait.id)
+                assigned_trait_uuids.append(trait_uuid)
 
             # Build choice label with quest and trait names
-            trait_choices[trait.id] = f"{quest.name} - {trait.name}"
+            trait_choices[trait_uuid] = f"{quest.name} - {trait.name}"
 
-    return trait_choices, assigned_trait_ids, {}
+    return trait_choices, assigned_trait_uuids, {}
 
 
 def check_player_skip_characters(registration_character_rel: RegistrationCharacterRel, context: dict) -> bool:

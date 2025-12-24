@@ -665,9 +665,10 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
 
         # Attach accounting information as dynamic attributes to each registration
         for registration in queryset:
-            if registration.id not in accounting_data:
+            uuid_str = str(registration.uuid)
+            if uuid_str not in accounting_data:
                 continue
-            for key, value in accounting_data[registration.id].items():
+            for key, value in accounting_data[uuid_str].items():
                 setattr(registration, key, value)
 
     return queryset

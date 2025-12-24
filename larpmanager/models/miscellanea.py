@@ -349,7 +349,7 @@ class WorkshopModule(UuidMixin, BaseModel):
     def show(self) -> dict[str, Any]:
         """Return dictionary representation of instance for display."""
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "number": self.number}
+        js = {"uuid": str(self.uuid), "number": self.number}
         self.upd_js_attr(js, "name")
         return js
 
@@ -387,11 +387,11 @@ class WorkshopQuestion(UuidMixin, BaseModel):
         """Return dictionary representation for display purposes.
 
         Returns:
-            Dictionary containing id, number and name attributes.
+            Dictionary containing uuid, number and name attributes.
 
         """
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "opt": [], "number": self.number}
+        js = {"uuid": str(self.uuid), "opt": [], "number": self.number}
         self.upd_js_attr(js, "name")
         # noinspection PyUnresolvedReferences
         for op in self.options.all():
@@ -428,12 +428,12 @@ class WorkshopOption(UuidMixin, BaseModel):
         """Return JSON-serializable dict with answer option data.
 
         Returns:
-            Dictionary with id, correctness flag, and name if present.
+            Dictionary with uuid, correctness flag, and name if present.
 
         """
         # noinspection PyUnresolvedReferences
-        # Build base dict with id and correctness status
-        js = {"id": self.id, "is_correct": self.is_correct}
+        # Build base dict with uuid and correctness status
+        js = {"uuid": str(self.uuid), "is_correct": self.is_correct}
 
         # Add name attribute if available
         self.upd_js_attr(js, "name")

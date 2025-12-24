@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.conf import settings as conf_settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.utils.translation import gettext_lazy as _
@@ -567,9 +567,9 @@ class BaseRegistrationForm(MyFormRun):
                     continue
 
             # Add valid option to choices and append description to help text
-            choices.append((option.id, option_display_name))
+            choices.append((str(option.uuid), option_display_name))
             if option.description:
-                help_text += f'<p id="hp_{option.id}"><b>{option.name}</b> {option.description}</p>'
+                help_text += f'<p id="hp_{option.uuid!s}"><b>{option.name}</b> {option.description}</p>'
 
         return choices, help_text
 
@@ -1077,8 +1077,8 @@ class BaseRegistrationForm(MyFormRun):
         )
 
         # Set initial value from previous selection if it exists
-        if question.id in self.singles:
-            self.initial[field_key] = self.singles[question.id].option_id
+        if question.id in self.singles and self.singles[question.id].option:
+            self.initial[field_key] = str(self.singles[question.id].option.uuid)
 
     def init_multiple(
         self,
@@ -1139,8 +1139,12 @@ class BaseRegistrationForm(MyFormRun):
 
         # Set initial values from previously selected options
         if question.id in self.multiples:
-            initial_option_ids = [selected_choice.option_id for selected_choice in self.multiples[question.id]]
-            self.initial[field_key] = initial_option_ids
+            initial_option_uuids = [
+                str(selected_choice.option.uuid)
+                for selected_choice in self.multiples[question.id]
+                if selected_choice.option
+            ]
+            self.initial[field_key] = initial_option_uuids
 
     def reorder_field(self, field_name: str) -> None:
         """Move field to end of fields dictionary."""
@@ -1216,30 +1220,34 @@ class BaseRegistrationForm(MyFormRun):
 
         Args:
             instance: The parent instance (registration/application)
-            oid: The option ID as string (or None)
+            oid: The option UUID as string (or None)
             q: The question object
 
         """
-        # Skip if no option ID provided
+        # Skip if no option UUID provided
         if not oid:
             return
-        oid = int(oid)
 
-        # Update existing choice: delete if 0, otherwise update option_id
+        # Look up option by UUID
+        try:
+            option = q.options.get(uuid=oid)
+        except ObjectDoesNotExist:
+            # Option not found or invalid UUID
+            return
+
+        # Update existing choice: delete if requested, otherwise update option
         if q.id in self.singles:
-            if oid == 0:
-                self.singles[q.id].delete()
-            elif oid != self.singles[q.id].option_id:
-                self.singles[q.id].option_id = oid
+            if self.singles[q.id].option_id != option.id:
+                self.singles[q.id].option_id = option.id
                 self.singles[q.id].save()
-        # Create new choice if option is not 0
-        elif oid != 0:
-            self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": oid})
+        # Create new choice
+        else:
+            self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": option.id})
 
     def save_reg_multiple(
         self,
         instance: Any,
-        oid: list[int] | None,
+        oid: list[str] | None,
         q: Any,
     ) -> None:
         """Save multiple-choice registration answers by syncing selected options.
@@ -1249,25 +1257,26 @@ class BaseRegistrationForm(MyFormRun):
         if not oid:
             return
 
-        # Convert option IDs to a set of integers
-        oid = {int(o) for o in oid}
+        # Convert option UUIDs to option IDs by looking them up
+        uuid_to_id = {str(opt.uuid): opt.id for opt in q.options.all()}
+        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in oid if uuid_str in uuid_to_id}
 
         # If question already has existing choices, sync the differences
         if q.id in self.multiples:
             old = {el.option_id for el in self.multiples[q.id]}
 
             # Create new choices for added options
-            for add in oid - old:
+            for add in selected_option_ids - old:
                 self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": add})
 
             # Delete choices for removed options
-            rem = old - oid
+            rem = old - selected_option_ids
             self.choice_class.objects.filter(
                 **{"question": q, self.instance_key: instance.id, "option_id__in": rem},
             ).delete()
         else:
             # Create all choices from scratch if none exist
-            for pkoid in oid:
+            for pkoid in selected_option_ids:
                 self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": pkoid})
 
 

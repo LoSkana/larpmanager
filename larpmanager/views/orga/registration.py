@@ -690,7 +690,7 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
                 popup.append(el["reg_id"])
             res[el["reg__uuid"]] = answer
 
-    return JsonResponse({"res": res, "popup": popup, "num": q.id})
+    return JsonResponse({"res": res, "popup": popup, "num": str(q.uuid)})
 
 
 @login_required
