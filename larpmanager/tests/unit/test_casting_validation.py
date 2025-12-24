@@ -65,12 +65,12 @@ class TestCastingValidationFunctions(BaseTestCase):
 
         valid_ids = context["valid_element_ids"]
 
-        # Hidden character should NOT be in valid IDs
-        self.assertNotIn(self.hidden_char.id, valid_ids, "Hidden character should not be in valid IDs")
+        # Hidden character should NOT be in valid IDs (now using UUID strings)
+        self.assertNotIn(str(self.hidden_char.uuid), valid_ids, "Hidden character should not be in valid IDs")
 
-        # Visible characters SHOULD be in valid IDs
-        self.assertIn(self.visible_char1.id, valid_ids, "Visible character 1 should be in valid IDs")
-        self.assertIn(self.visible_char2.id, valid_ids, "Visible character 2 should be in valid IDs")
+        # Visible characters SHOULD be in valid IDs (now using UUID strings)
+        self.assertIn(str(self.visible_char1.uuid), valid_ids, "Visible character 1 should be in valid IDs")
+        self.assertIn(str(self.visible_char2.uuid), valid_ids, "Visible character 2 should be in valid IDs")
 
     def test_casting_characters_sorted_by_number(self):
         """Test that characters are sorted by number in casting_characters"""
@@ -97,16 +97,16 @@ class TestCastingValidationFunctions(BaseTestCase):
 
         choices = json.loads(context["choices"])
 
-        # Get all character IDs in order they appear
-        character_ids = []
+        # Get all character UUIDs in order they appear (now using UUID strings)
+        character_uuids = []
         for faction_name, faction_chars in choices.items():
-            for char_id in faction_chars.keys():
-                character_ids.append(int(char_id))
+            for char_uuid in faction_chars.keys():
+                character_uuids.append(char_uuid)
 
         # Verify the characters are in the correct order (by their numbers)
-        char_4_index = character_ids.index(char_4.id)
-        char_7_index = character_ids.index(char_7.id)
-        char_10_index = character_ids.index(char_10.id)
+        char_4_index = character_uuids.index(str(char_4.uuid))
+        char_7_index = character_uuids.index(str(char_7.uuid))
+        char_10_index = character_uuids.index(str(char_10.uuid))
 
         self.assertLess(char_4_index, char_7_index, "Character with number=4 should come before number=7")
         self.assertLess(char_7_index, char_10_index, "Character with number=7 should come before number=10")
