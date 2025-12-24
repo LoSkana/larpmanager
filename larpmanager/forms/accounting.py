@@ -109,6 +109,8 @@ class OrgaExpenseForm(MyFormRun):
         """Initialize form and configure fields based on run features and association config."""
         super().__init__(*args, **kwargs)
 
+        self.fields["member"].to_field_name = "uuid"
+
         # Configure member widget with run context
         self.fields["member"].widget.set_run(self.params["run"])
 
@@ -143,6 +145,8 @@ class OrgaTokenForm(MyFormRun):
         self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
         self.page_title = self.params["tokens_name"]
 
+        self.fields["member"].to_field_name = "uuid"
+
         # Configure initial form values and widget
         self.initial["oth"] = OtherChoices.TOKEN
         self.fields["member"].widget.set_run(self.params["run"])
@@ -163,6 +167,8 @@ class OrgaCreditForm(MyFormRun):
         super().__init__(*args, **kwargs)
         # Set page title from credit name parameter
         self.page_title = self.params["credits_name"]
+
+        self.fields["member"].to_field_name = "uuid"
         # Configure form for credit transaction type
         self.initial["oth"] = OtherChoices.CREDIT
         self.fields["member"].widget.set_run(self.params["run"])
@@ -187,6 +193,8 @@ class OrgaPaymentForm(MyFormRun):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure registration field for the event."""
         super().__init__(*args, **kwargs)
+
+        self.fields["reg"].to_field_name = "uuid"
         # Configure registration widget with event context and make field required
         self.fields["reg"].widget.set_event(self.params["event"])
         self.fields["reg"].required = True
@@ -208,6 +216,9 @@ class ExeOutflowForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with association-specific run widget, default payment date, and conditional fields."""
         super().__init__(*args, **kwargs)
+
+        if not hasattr(self, "auto_run"):
+            self.fields["run"].to_field_name = "uuid"
 
         # Configure run widget with association context if not auto-populated
         if not hasattr(self, "auto_run"):
@@ -253,6 +264,9 @@ class ExeInflowForm(MyForm):
         """Initialize form with auto-populated run and payment date fields."""
         super().__init__(*args, **kwargs)
 
+        if not hasattr(self, "auto_run"):
+            self.fields["run"].to_field_name = "uuid"
+
         # Set association for run field if not auto-run mode
         if not hasattr(self, "auto_run"):
             self.fields["run"].widget.set_association_id(self.params["association_id"])
@@ -287,6 +301,8 @@ class ExeDonationForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set association for member field widget."""
         super().__init__(*args, **kwargs)
+
+        self.fields["member"].to_field_name = "uuid"
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
@@ -305,6 +321,8 @@ class ExePaymentForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with association-specific field configuration."""
         super().__init__(*args, **kwargs)
+
+        self.fields["reg"].to_field_name = "uuid"
 
         # Configure registration field widget with association context
         self.fields["reg"].widget.set_association_id(self.params["association_id"])
@@ -330,6 +348,8 @@ class ExeInvoiceForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
+
+        self.fields["member"].to_field_name = "uuid"
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
@@ -349,6 +369,9 @@ class ExeCreditForm(MyForm):
 
         # Set page title with credit name
         self.page_title = _("Assignment") + f" {self.params['credits_name']}"
+
+        self.fields["member"].to_field_name = "uuid"
+        self.fields["run"].to_field_name = "uuid"
 
         # Configure run choices and association widgets
         get_run_choices(self)
@@ -376,6 +399,9 @@ class ExeTokenForm(MyForm):
         self.page_title = _("Assignment") + f" {self.params['tokens_name']}"
         self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
 
+        self.fields["member"].to_field_name = "uuid"
+        self.fields["run"].to_field_name = "uuid"
+
         # Configure run choices and association filtering
         get_run_choices(self)
         self.fields["member"].widget.set_association_id(self.params["association_id"])
@@ -401,6 +427,9 @@ class ExeExpenseForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with run choices and association-specific widget configuration."""
         super().__init__(*args, **kwargs)
+
+        self.fields["member"].to_field_name = "uuid"
+        self.fields["run"].to_field_name = "uuid"
 
         # Configure run choices and set association context for widgets
         get_run_choices(self)
@@ -471,6 +500,8 @@ class ExeCollectionForm(CollectionNewForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member field widget with association."""
         super().__init__(*args, **kwargs)
+
+        self.fields["member"].to_field_name = "uuid"
         # Set association for member widget filtering
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
@@ -616,6 +647,8 @@ class ExeRefundRequestForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
+
+        self.fields["member"].to_field_name = "uuid"
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 

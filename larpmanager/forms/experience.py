@@ -66,6 +66,11 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
         widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti}
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with UUID configuration for FK fields."""
+        super().__init__(*args, **kwargs)
+        self.fields["characters"].to_field_name = "uuid"
+
 
 class OrgaAbilityTemplatePxForm(MyForm):
     """Form for OrgaAbilityTemplatePx."""
@@ -102,6 +107,11 @@ class OrgaAbilityPxForm(PxBaseForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with event-specific ability configuration."""
         super().__init__(*args, **kwargs)
+
+        # Configure FK/M2M fields to use UUID
+        for field_name in ["characters", "prerequisites", "requirements", "template"]:
+            if field_name in self.fields:
+                self.fields[field_name].to_field_name = "uuid"
 
         # Configure prerequisite and requirement widgets with event context
         for s in ["prerequisites", "requirements"]:
@@ -160,6 +170,9 @@ class OrgaRulePxForm(MyForm):
         super().__init__(*args, **kwargs)
         self.delete_field("name")
 
+        # Configure FK/M2M fields to use UUID
+        self.fields["abilities"].to_field_name = "uuid"
+
         # Configure abilities widget with event context
         self.fields["abilities"].widget.set_event(self.params["event"])
 
@@ -191,6 +204,10 @@ class OrgaModifierPxForm(MyForm):
         """Initialize form and configure event-related fields."""
         super().__init__(*args, **kwargs)
         self.delete_field("name")
+
+        # Configure FK/M2M fields to use UUID
+        for field in ["abilities", "prerequisites", "requirements"]:
+            self.fields[field].to_field_name = "uuid"
 
         # Configure event-specific widgets for trait-related fields
         for field in ["abilities", "prerequisites", "requirements"]:

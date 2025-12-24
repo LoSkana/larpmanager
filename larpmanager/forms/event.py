@@ -1451,6 +1451,7 @@ class ExeEventForm(OrgaEventForm):
             self.fields["template_event"] = forms.ModelChoiceField(
                 required=False,
                 queryset=qs,
+                to_field_name="uuid",
                 label=_("Template"),
                 help_text=_(
                     "You can indicate a template event from which functionality and configurations will be copied",

@@ -114,6 +114,8 @@ class PlayerRelationshipForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure target field for the event."""
         super().__init__(*args, **kwargs)
+
+        self.fields["target"].to_field_name = "uuid"
         # Configure target field widget with event from run params
         self.fields["target"].widget.set_event(self.params["run"].event)
         self.fields["target"].required = True

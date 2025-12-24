@@ -854,6 +854,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields["characters_new"] = forms.ModelMultipleChoiceField(
             label=_("Characters"),
             queryset=self.params["run"].event.get_elements(Character).exclude(pk__in=taken_characters),
+            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains", "number__icontains"]),
             required=False,
         )
@@ -1470,6 +1471,7 @@ class RegistrationTransferForm(forms.Form):
 
     registration_id = forms.ModelChoiceField(
         queryset=Registration.objects.none(),
+        to_field_name="uuid",
         label=_("Registration"),
         required=True,
         help_text=_("Select the registration you want to transfer"),
@@ -1478,6 +1480,7 @@ class RegistrationTransferForm(forms.Form):
 
     target_run_id = forms.ModelChoiceField(
         queryset=Run.objects.none(),
+        to_field_name="uuid",
         label=_("Event"),
         required=False,
         help_text=_("Select the new event"),

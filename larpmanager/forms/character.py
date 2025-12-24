@@ -112,6 +112,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
 
+        if "player" in self.fields:
+            self.fields["player"].to_field_name = "uuid"
+
         # Initialize storage for field details and metadata
         self.details: dict[str, Any] = {}
 
@@ -248,6 +251,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
+            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
             label=_("Factions"),
@@ -385,6 +389,7 @@ class OrgaCharacterForm(CharacterForm):
         self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
+            self.fields["player"].to_field_name = "uuid"
             self.fields["player"].widget.set_association_id(self.params["association_id"])
         else:
             self.delete_field("player")
@@ -428,6 +433,7 @@ class OrgaCharacterForm(CharacterForm):
         self.fields["plots"] = forms.ModelMultipleChoiceField(
             label="Plots",
             queryset=self.params["event"].get_elements(Plot),
+            to_field_name="uuid",
             required=False,
             widget=EventPlotS2WidgetMulti,
         )
@@ -520,6 +526,7 @@ class OrgaCharacterForm(CharacterForm):
         self.fields["px_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
             queryset=self.params["run"].event.get_elements(AbilityPx),
+            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
         )
@@ -531,6 +538,7 @@ class OrgaCharacterForm(CharacterForm):
         self.fields["px_delivery_list"] = forms.ModelMultipleChoiceField(
             label=_("Delivery"),
             queryset=self.params["run"].event.get_elements(DeliveryPx),
+            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
         )
@@ -565,6 +573,7 @@ class OrgaCharacterForm(CharacterForm):
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
+            to_field_name="uuid",
             widget=FactionS2WidgetMulti(),
             required=False,
             label=_("Factions"),
@@ -914,9 +923,11 @@ class OrgaWritingOptionForm(MyForm):
         if "wri_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
+            self.fields["tickets"].to_field_name = "uuid"
             self.fields["tickets"].widget.set_event(self.params["event"])
 
         if "wri_que_requirements" not in self.params["features"]:
             self.delete_field("requirements")
         else:
+            self.fields["requirements"].to_field_name = "uuid"
             self.fields["requirements"].widget.set_event(self.params["event"])

@@ -256,6 +256,7 @@ class ConfigForm(MyForm):
             ConfigType.MEMBERS: lambda: forms.ModelMultipleChoiceField(
                 label=label,
                 queryset=get_members_queryset(extra),
+                to_field_name="uuid",
                 widget=AssociationMemberS2WidgetMulti,
                 required=False,
                 help_text=help_text,
