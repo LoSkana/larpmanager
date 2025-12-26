@@ -379,7 +379,7 @@ class RegistrationForm(BaseRegistrationForm):
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
-            ticket_choices.append((str(ticket.uuid), ticket_display_name))
+            ticket_choices.append((str(ticket.id), ticket_display_name))
 
             # Add ticket description to help text if available
             if ticket.description:
@@ -390,7 +390,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
-            self.initial["ticket"] = str(self.instance.ticket.uuid)
+            self.initial["ticket"] = str(self.instance.ticket.id)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
 
@@ -654,7 +654,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     ticket = forms.ModelChoiceField(
         queryset=RegistrationTicket.objects.none(),
-        to_field_name="uuid",
         required=True,
     )
 
@@ -809,7 +808,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if qs.count() == 1:
             ticket = qs.first()
             self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = ticket.uuid
+            self.initial["ticket"] = ticket.id
 
         self.sections["id_ticket"] = registration_section
 
@@ -863,7 +862,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields["characters_new"] = forms.ModelMultipleChoiceField(
             label=_("Characters"),
             queryset=self.params["run"].event.get_elements(Character).exclude(pk__in=taken_characters),
-            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains", "number__icontains"]),
             required=False,
         )
@@ -1480,7 +1478,6 @@ class RegistrationTransferForm(forms.Form):
 
     registration_id = forms.ModelChoiceField(
         queryset=Registration.objects.none(),
-        to_field_name="uuid",
         label=_("Registration"),
         required=True,
         help_text=_("Select the registration you want to transfer"),
@@ -1489,7 +1486,6 @@ class RegistrationTransferForm(forms.Form):
 
     target_run_id = forms.ModelChoiceField(
         queryset=Run.objects.none(),
-        to_field_name="uuid",
         label=_("Event"),
         required=False,
         help_text=_("Select the new event"),

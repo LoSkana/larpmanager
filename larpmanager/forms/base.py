@@ -567,7 +567,7 @@ class BaseRegistrationForm(MyFormRun):
                     continue
 
             # Add valid option to choices and append description to help text
-            choices.append((str(option.uuid), option_display_name))
+            choices.append((str(option.id), option_display_name))
             if option.description:
                 help_text += f'<p id="hp_{option.uuid!s}"><b>{option.name}</b> {option.description}</p>'
 

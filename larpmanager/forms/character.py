@@ -248,7 +248,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
-            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
             label=_("Factions"),
@@ -429,7 +428,6 @@ class OrgaCharacterForm(CharacterForm):
         self.fields["plots"] = forms.ModelMultipleChoiceField(
             label="Plots",
             queryset=self.params["event"].get_elements(Plot),
-            to_field_name="uuid",
             required=False,
             widget=EventPlotS2WidgetMulti,
         )
@@ -522,24 +520,22 @@ class OrgaCharacterForm(CharacterForm):
         self.fields["px_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
             queryset=self.params["run"].event.get_elements(AbilityPx),
-            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
         )
 
-        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("uuid", flat=True))
+        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("id", flat=True))
         self.show_link.append("id_px_ability_list")
 
         # delivery list
         self.fields["px_delivery_list"] = forms.ModelMultipleChoiceField(
             label=_("Delivery"),
             queryset=self.params["run"].event.get_elements(DeliveryPx),
-            to_field_name="uuid",
             widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
             required=False,
         )
 
-        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("uuid", flat=True))
+        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("id", flat=True))
         self.show_link.append("id_px_delivery_list")
 
     def _save_px(self, instance: Any) -> None:
@@ -569,7 +565,6 @@ class OrgaCharacterForm(CharacterForm):
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
-            to_field_name="uuid",
             widget=FactionS2WidgetMulti(),
             required=False,
             label=_("Factions"),

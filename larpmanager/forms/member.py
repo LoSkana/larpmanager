@@ -800,7 +800,6 @@ class ExeMembershipFeeForm(forms.Form):
     member = forms.ModelChoiceField(
         label=_("Member"),
         queryset=Member.objects.none(),
-        to_field_name="uuid",
         required=False,
         widget=AssociationMemberS2Widget,
     )
@@ -862,7 +861,6 @@ class ExeMembershipDocumentForm(forms.Form):
     member = forms.ModelChoiceField(
         label=_("Member"),
         queryset=Member.objects.none(),
-        to_field_name="uuid",
         required=False,
         widget=AssociationMemberS2Widget,
     )

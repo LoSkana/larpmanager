@@ -112,7 +112,6 @@ class ExeWarehouseTagForm(MyForm):
         # Create dynamic items field filtered by association
         self.fields["items"] = forms.ModelMultipleChoiceField(
             queryset=WarehouseItem.objects.filter(association_id=self.params["association_id"]),
-            to_field_name="uuid",
             label=_("Items"),
             widget=WarehouseItemS2WidgetMulti,
             required=False,
@@ -120,7 +119,7 @@ class ExeWarehouseTagForm(MyForm):
 
         # Set initial selected items if editing existing instance
         if self.instance.pk:
-            self.initial["items"] = self.instance.items.values_list("uuid", flat=True)
+            self.initial["items"] = self.instance.items.values_list("id", flat=True)
 
         # Configure widget with association context
         self.fields["items"].widget.set_association_id(self.params["association_id"])
