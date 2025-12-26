@@ -277,8 +277,6 @@ class ExeAssociationRoleForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
-        # Configure FK/M2M fields to use UUID
-        self.fields["members"].to_field_name = "uuid"
         # Configure member widget with association context
         self.fields["members"].widget.set_association_id(self.params["association_id"])
         # Prepare role-based permissions for association

@@ -70,9 +70,6 @@ class ExeWarehouseItemForm(MyForm):
         # Initialize parent form
         super().__init__(*args, **kwargs)
 
-        self.fields["container"].to_field_name = "uuid"
-        self.fields["tags"].to_field_name = "uuid"
-
         # Configure widgets with association ID for proper filtering
         self.fields["container"].widget.set_association_id(self.params["association_id"])
         self.fields["tags"].widget.set_association_id(self.params["association_id"])
@@ -148,9 +145,6 @@ class ExeWarehouseMovementForm(MyForm):
         """Initialize form and configure warehouse item field for association."""
         super().__init__(*args, **kwargs)
 
-        # Configure FK field to use UUID
-        self.fields["item"].to_field_name = "uuid"
-
         # Configure item widget with association ID
         self.fields["item"].widget.set_association_id(self.params["association_id"])
 
@@ -190,9 +184,6 @@ class OrgaWarehouseItemAssignmentForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure event/association-specific widget settings."""
         super().__init__(*args, **kwargs)
-
-        self.fields["area"].to_field_name = "uuid"
-        self.fields["item"].to_field_name = "uuid"
 
         # Configure widget event and association contexts
         self.fields["area"].widget.set_event(self.params["event"])

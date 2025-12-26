@@ -330,7 +330,7 @@ class MyForm(forms.ModelForm):
                 if hasattr(el, "pk"):
                     old.add(el.pk)
                 else:
-                    old.add(int(el))
+                    old.add(str(el))
         else:
             old = set()
 

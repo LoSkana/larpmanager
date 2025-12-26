@@ -112,9 +112,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Initialize parent form class with all provided arguments
         super().__init__(*args, **kwargs)
 
-        if "player" in self.fields:
-            self.fields["player"].to_field_name = "uuid"
-
         # Initialize storage for field details and metadata
         self.details: dict[str, Any] = {}
 
@@ -389,7 +386,6 @@ class OrgaCharacterForm(CharacterForm):
         self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
-            self.fields["player"].to_field_name = "uuid"
             self.fields["player"].widget.set_association_id(self.params["association_id"])
         else:
             self.delete_field("player")
@@ -923,11 +919,9 @@ class OrgaWritingOptionForm(MyForm):
         if "wri_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
-            self.fields["tickets"].to_field_name = "uuid"
             self.fields["tickets"].widget.set_event(self.params["event"])
 
         if "wri_que_requirements" not in self.params["features"]:
             self.delete_field("requirements")
         else:
-            self.fields["requirements"].to_field_name = "uuid"
             self.fields["requirements"].widget.set_event(self.params["event"])

@@ -67,9 +67,8 @@ class OrgaDeliveryPxForm(PxBaseForm):
         widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with UUID configuration for FK fields."""
+        """Initialize form with event configuration."""
         super().__init__(*args, **kwargs)
-        self.fields["characters"].to_field_name = "uuid"
 
 
 class OrgaAbilityTemplatePxForm(MyForm):
@@ -108,16 +107,9 @@ class OrgaAbilityPxForm(PxBaseForm):
         """Initialize form with event-specific ability configuration."""
         super().__init__(*args, **kwargs)
 
-        # Configure FK/M2M fields to use UUID
-        for field_name in ["characters", "prerequisites", "requirements", "template"]:
-            if field_name in self.fields:
-                self.fields[field_name].to_field_name = "uuid"
-
-        # Configure prerequisite and requirement widgets with event context
-        for s in ["prerequisites", "requirements"]:
-            self.fields[s].widget.set_event(self.params["event"])
-        for field_name in ["prerequisites", "dependents", "template"]:
-            if field_name in self.fields:
+        # Configure event-specific widgets
+        for field_name in ["characters", "prerequisites", "requirements", "template", "dependents"]:
+            if field_name in self.fields and hasattr(self.fields[field_name].widget, "set_event"):
                 self.fields[field_name].widget.set_event(self.params["event"])
 
         px_user = get_event_config(self.params["event"].id, "px_user", default_value=False, context=self.params)
@@ -127,8 +119,9 @@ class OrgaAbilityPxForm(PxBaseForm):
 
         # Set ability type choices from event-specific elements
         self.fields["typ"].choices = [
-            (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("id", "name")
+            (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("uuid", "name")
         ]
+        self.fields["typ"].to_field_name = "uuid"
 
         # Remove template field if px_templates is disabled
         if not px_templates:
@@ -170,9 +163,6 @@ class OrgaRulePxForm(MyForm):
         super().__init__(*args, **kwargs)
         self.delete_field("name")
 
-        # Configure FK/M2M fields to use UUID
-        self.fields["abilities"].to_field_name = "uuid"
-
         # Configure abilities widget with event context
         self.fields["abilities"].widget.set_event(self.params["event"])
 
@@ -205,11 +195,7 @@ class OrgaModifierPxForm(MyForm):
         super().__init__(*args, **kwargs)
         self.delete_field("name")
 
-        # Configure FK/M2M fields to use UUID
-        for field in ["abilities", "prerequisites", "requirements"]:
-            self.fields[field].to_field_name = "uuid"
-
-        # Configure event-specific widgets for trait-related fields
+        # Configure event-specific widgets
         for field in ["abilities", "prerequisites", "requirements"]:
             self.fields[field].widget.set_event(self.params["event"])
 

@@ -389,9 +389,19 @@ def acc_reg(request: HttpRequest, registration_uuid: int, method: str | None = N
             cancellation_date__isnull=True,
             run__event__association_id=context["association_id"],
         )
-    except Exception as err:
-        msg = f"registration not found {err}"
-        raise Http404(msg) from err
+    except ObjectDoesNotExist as err:
+        # TODO: Remove this fallback once all registrations have UUIDs
+        # Temporary fallback: try to lookup by pk if UUID lookup fails
+        try:
+            reg = Registration.objects.select_related("run", "run__event").get(
+                pk=registration_uuid,
+                member=context["member"],
+                cancellation_date__isnull=True,
+                run__event__association_id=context["association_id"],
+            )
+        except ObjectDoesNotExist:
+            msg = f"registration not found {err}"
+            raise Http404(msg) from err
 
     # Get event context and mark as accounting page
     context = get_event_context(request, reg.run.get_slug())
