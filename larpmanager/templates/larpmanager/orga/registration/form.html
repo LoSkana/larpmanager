@@ -14,7 +14,7 @@
             {% if el.section %}
             </table>
             <h1>
-                <a href="{% url 'orga_registration_sections_edit' run.get_slug el.section_id %}">{{ el.section }}</a>
+                <a href="{% url 'orga_registration_sections_edit' run.get_slug el.section.uuid %}">{{ el.section }}</a>
             </h1>
         {% endif %}
         <table id="registration_questions_{{ el.section }}"

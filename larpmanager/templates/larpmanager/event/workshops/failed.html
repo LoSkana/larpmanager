@@ -16,7 +16,7 @@
         <p>
             {% trans "Oops! You gave one or more incorrect answers" %}.
             {% trans "Please check them below" %}.
-            <a href="{% url "workshop_answer" slug run.number workshop.uuid %}">{% trans "Retry" %}!</a>
+            <a href="{% url "workshop_answer" slug workshop.uuid %}">{% trans "Retry" %}!</a>
         </p>
         <hr class="c" />
         {% for el in list %}

@@ -531,7 +531,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("pk", flat=True))
+        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("uuid", flat=True))
         self.show_link.append("id_px_ability_list")
 
         # delivery list
@@ -543,7 +543,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("pk", flat=True))
+        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("uuid", flat=True))
         self.show_link.append("id_px_delivery_list")
 
     def _save_px(self, instance: Any) -> None:

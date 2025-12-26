@@ -18,7 +18,7 @@
         <p>
             {% for reg in payments_pending %}
                 {% include "elements/comma.html" %}
-                <b><a href="#" class="my_toggle" tog='reg_{{ reg.id }}'>{{ reg.run }}</a></b>
+                <b><a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run }}</a></b>
             {% endfor %}
         </p>
         <hr />
@@ -216,7 +216,7 @@
         <p>
             {% for reg in registration_list %}
                 {% include "elements/comma.html" %}
-                <a href="#" class="my_toggle" tog='reg_{{ reg.id }}'>{{ reg.run.search }}
+                <a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run.search }}
                     {% if reg.cancellation_date %}
                         - {% trans "Cancellation" %}
                     {% endif %}
@@ -224,7 +224,7 @@
             {% endfor %}
         </p>
         {% for reg in registration_list %}
-            <div id="reg_{{ reg.id }}" class="hide reg_{{ reg.id }}">
+            <div id="reg_{{ reg.uuid }}" class="hide reg_{{ reg.uuid }}">
                 <h3>{{ reg.run.search }}</h3>
                 {% if reg.pending %}
                     <p>

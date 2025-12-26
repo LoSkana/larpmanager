@@ -123,7 +123,7 @@ class ExeWarehouseTagForm(MyForm):
 
         # Set initial selected items if editing existing instance
         if self.instance.pk:
-            self.initial["items"] = self.instance.items.values_list("pk", flat=True)
+            self.initial["items"] = self.instance.items.values_list("uuid", flat=True)
 
         # Configure widget with association context
         self.fields["items"].widget.set_association_id(self.params["association_id"])

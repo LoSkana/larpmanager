@@ -51,11 +51,11 @@
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     {% for el in list %}
-    $('#{{ el.uuid }}_go').on('click', function() { $('#{{ el.id }}_sec').toggle(500); });
+    $('#{{ el.uuid }}_go').on('click', function() { $('#{{ el.uuid }}_sec').toggle(500); });
 
     {% if el.cmr %}
-    $('select[name="{{ el.id }}_exp"]').val("{{ el.cmr.exp }}");
-    $('textarea[name="{{ el.id }}_info"]').val("{{ el.cmr.info }}");
+    $('select[name="{{ el.uuid }}_exp"]').val("{{ el.cmr.exp }}");
+    $('textarea[name="{{ el.uuid }}_info"]').val("{{ el.cmr.info }}");
     {% endif %}
 
     {% endfor %}
