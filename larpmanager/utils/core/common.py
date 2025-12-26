@@ -24,11 +24,12 @@ import logging
 import random
 import re
 import string
+import time
 import unicodedata
 from datetime import UTC, date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pytz
 from background_task.models import Task
@@ -66,7 +67,6 @@ from larpmanager.models.writing import (
     Relationship,
     SpeedLarp,
 )
-from larpmanager.utils.core.exceptions import NotFoundError
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
@@ -162,13 +162,73 @@ def check_diff(self: object, old_text: str, new_text: str) -> None:
     self.diff = diff_engine.diff_prettyHtml(self.diff)
 
 
+def get_object_uuid(
+    model_class: type[BaseModel],
+    identifier: str | int,
+    **filters: Any,
+) -> BaseModel:
+    """Get object by UUID or ID with fallback.
+
+    Tries to fetch object by UUID.
+    Waits 2 seconds before raising 404 to handle potential race conditions.
+
+    Args:
+        model_class: Django model class to query
+        identifier: UUID string to look up
+        **filters: Additional filter kwargs (e.g., event=event, association_id=123)
+
+    Returns:
+        Model instance if found
+
+    Raises:
+        Http404: If object not found by UUID or ID (after 2 second wait)
+
+    """
+    try:
+        return model_class.objects.get(uuid=identifier, **filters)
+    except (ObjectDoesNotExist, ValueError, AttributeError):
+        # TEMPORARY Fallback to ID lookup ONLY if UUID lookup fails
+        try:
+            return model_class.objects.get(pk=identifier, **filters)
+        except ObjectDoesNotExist as err:
+            # Wait 2 seconds before raising 404 to handle race conditions
+            time.sleep(2)
+            msg = f"{model_class.__name__} does not exist"
+            raise Http404(msg) from err
+
+
+def add_context_by_uuid(
+    context: dict,
+    context_key: str,
+    model_class: type[BaseModel],
+    identifier: str | int,
+    *,
+    set_name: bool = False,
+    **filters: Any,
+) -> None:
+    """Get object by UUID and add to context.
+
+    Args:
+        context: Context dictionary to update
+        context_key: Key name to store the object in context
+        model_class: Django model class to query
+        identifier: UUID string or ID to look up
+        set_name: If True, also set context["name"] = str(object)
+        **filters: Additional filter kwargs for get_object_uuid
+
+    Raises:
+        Http404: If object not found
+
+    """
+    obj = get_object_uuid(model_class, identifier, **filters)
+    context[context_key] = obj
+    if set_name:
+        context["name"] = str(obj)
+
+
 def get_member(member_uuid: str) -> Member:
     """Get member by UUID with proper error handling."""
-    try:
-        return Member.objects.get(uuid=member_uuid)
-    except ObjectDoesNotExist as err:
-        msg = "Member does not exist"
-        raise Http404(msg) from err
+    return get_object_uuid(Member, member_uuid)
 
 
 def get_contact(member_id: int, other_member_id: int) -> object | None:
@@ -189,75 +249,37 @@ def get_contact(member_id: int, other_member_id: int) -> object | None:
 
 
 def get_event_template(context: dict, template_uuid: str) -> None:
-    """Get event template by ID and add to context.
-
-    Args:
-        context: Template context dictionary
-        template_uuid: Event template UUID
-
-    """
-    try:
-        context["event"] = Event.objects.get(
-            uuid=template_uuid, template=True, association_id=context["association_id"]
-        )
-    except ObjectDoesNotExist as err:
-        raise NotFoundError from err
+    """Get event template by ID and add to context."""
+    add_context_by_uuid(
+        context,
+        "event",
+        Event,
+        template_uuid,
+        template=True,
+        association_id=context["association_id"],
+    )
 
 
 def get_registration(context: dict, registration_uuid: str) -> None:
-    """Get registration by ID and add to context.
-
-    Args:
-        context: Template context dictionary
-        registration_uuid: Registration UUID
-
-    Raises:
-        Http404: If registration does not exist
-
-    """
-    try:
-        context["registration"] = Registration.objects.get(run=context["run"], uuid=registration_uuid)
-        context["name"] = str(context["registration"])
-    except ObjectDoesNotExist as err:
-        msg = "Registration does not exist"
-        raise Http404(msg) from err
+    """Get registration by ID and add to context."""
+    add_context_by_uuid(
+        context,
+        "registration",
+        Registration,
+        registration_uuid,
+        set_name=True,
+        run=context["run"],
+    )
 
 
 def get_discount(context: dict, discount_uuid: str) -> None:
-    """Get discount by ID and add to context.
-
-    Args:
-        context: Template context dictionary
-        discount_uuid: Discount UUID
-
-    Raises:
-        Http404: If discount does not exist
-
-    """
-    try:
-        context["discount"] = Discount.objects.get(uuid=discount_uuid)
-        context["name"] = str(context["discount"])
-    except ObjectDoesNotExist as err:
-        msg = "Discount does not exist"
-        raise Http404(msg) from err
+    """Get discount by ID and add to context."""
+    add_context_by_uuid(context, "discount", Discount, discount_uuid, set_name=True)
 
 
 def get_album(context: dict, album_uuid: str) -> None:
-    """Get album by ID and add to context.
-
-    Args:
-        context: Template context dictionary
-        album_uuid: Album UUID
-
-    Raises:
-        Http404: If album does not exist
-
-    """
-    try:
-        context["album"] = Album.objects.get(uuid=album_uuid)
-    except ObjectDoesNotExist as err:
-        msg = "Album does not exist"
-        raise Http404(msg) from err
+    """Get album by ID and add to context."""
+    add_context_by_uuid(context, "album", Album, album_uuid)
 
 
 def get_album_cod(context: dict, album_code: str) -> None:
@@ -436,20 +458,18 @@ def get_element(
     if element_uuid is None or element_uuid == "0":
         return
 
-    try:
-        # Get the parent event associated with the current event in context
-        parent_event = context["event"].get_class_parent(model_class)
+    # Get the parent event associated with the current event in context
+    parent_event = context["event"].get_class_parent(model_class)
 
-        # Lookup by uuid
-        context[context_key_name] = model_class.objects.get(event=parent_event, uuid=element_uuid)
+    # Use generic method with uuid/id fallback
+    context[context_key_name] = get_object_uuid(
+        model_class,
+        element_uuid,
+        event=parent_event,
+    )
 
-        # Store the context key name for potential later reference
-        context["class_name"] = context_key_name
-
-    except ObjectDoesNotExist as err:
-        # Raise a user-friendly 404 error if the object doesn't exist
-        msg = f"{context_key_name} does not exist"
-        raise Http404(msg) from err
+    # Store the context key name for potential later reference
+    context["class_name"] = context_key_name
 
 
 def get_relationship(context: dict, num: int) -> None:

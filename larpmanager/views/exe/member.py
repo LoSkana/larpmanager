@@ -76,6 +76,7 @@ from larpmanager.utils.core.common import (
     ensure_timezone_aware,
     format_email_body,
     get_member,
+    get_object_uuid,
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
@@ -200,7 +201,7 @@ def exe_membership_evaluation(request: HttpRequest, member_uuid: str) -> HttpRes
     context = check_association_context(request, "exe_membership")
 
     # Get member and their membership status
-    member = Member.objects.get(uuid=member_uuid)
+    member = get_object_uuid(Member, member_uuid)
     get_user_membership(member, context["association_id"])
 
     if request.method == "POST":

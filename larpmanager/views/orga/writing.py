@@ -66,6 +66,7 @@ from larpmanager.utils.core.common import (
     get_element,
     get_handout,
     get_handout_template,
+    get_object_uuid,
     get_plot,
     get_prologue,
     get_prologue_type,
@@ -144,11 +145,7 @@ def orga_plots_rels_order(request: HttpRequest, event_slug: str, plot_rel_uuid: 
     context = check_event_context(request, event_slug, "orga_plots")
 
     # Retrieve the specific plot-character relationship
-    try:
-        rel = PlotCharacterRel.objects.get(uuid=plot_rel_uuid)
-    except ObjectDoesNotExist as err:
-        msg = "plot rel not found"
-        raise Http404(msg) from err
+    rel = get_object_uuid(PlotCharacterRel, plot_rel_uuid)
 
     # Validate relationship belongs to current event
     if rel.character.event != context["event"]:

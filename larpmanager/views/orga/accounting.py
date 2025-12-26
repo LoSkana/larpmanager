@@ -49,6 +49,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.services.edit import backend_get, orga_edit
 
@@ -625,11 +626,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
         raise Http404(msg)
 
     # Retrieve the expense object or raise 404 if not found
-    try:
-        exp = AccountingItemExpense.objects.get(uuid=expense_uuid)
-    except Exception as err:
-        msg = "no id expense"
-        raise Http404(msg) from err
+    exp = get_object_uuid(AccountingItemExpense, expense_uuid)
 
     # Ensure the expense belongs to the current event
     if exp.run.event != context["event"]:

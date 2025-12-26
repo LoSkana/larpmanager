@@ -38,7 +38,7 @@ from larpmanager.models.member import FirstAidChoices, Member, Membership, Membe
 from larpmanager.models.miscellanea import Email, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member
+from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.larpmanager.tasks import send_mail_exec
 from larpmanager.utils.users.member import get_mail
@@ -338,7 +338,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
     context = check_event_context(request, event_slug, "orga_questions")
 
     # Get the member who submitted the question
-    member = Member.objects.get(uuid=member_uuid)
+    member = get_object_uuid(Member, member_uuid)
 
     # Handle form submission for organizer's answer
     if request.method == "POST":

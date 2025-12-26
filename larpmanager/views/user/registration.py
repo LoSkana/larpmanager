@@ -76,6 +76,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.utils import my_uuid
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
+from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import (
     RedirectError,
     RewokedMembershipError,
@@ -489,11 +490,7 @@ def save_registration_bring_friend(context: dict, form: object, reg: Registratio
         return
 
     # Look up the registration associated with the friend code
-    try:
-        friend = Registration.objects.get(uuid=cod)
-    except Exception as err:
-        msg = "I'm sorry, this friend code was not found"
-        raise Http404(msg) from err
+    friend = get_object_uuid(Registration, cod)
 
     # Create accounting entries atomically for both parties
     with transaction.atomic():
@@ -709,11 +706,11 @@ def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None
     if not ticket_uuid:
         return
 
-    try:
-        # Retrieve ticket and verify it belongs to the event
-        ticket = RegistrationTicket.objects.get(uuid=ticket_uuid, event_id=event_id)
-        context["tier"] = ticket.tier
+    # Retrieve ticket and verify it belongs to the event
+    ticket = get_object_uuid(RegistrationTicket, ticket_uuid, event_id=event_id)
+    context["tier"] = ticket.tier
 
+    try:
         # Remove closed status for staff/NPC tickets
         if ticket.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in context["run"].status:
             del context["run"].status["closed"]

@@ -40,8 +40,7 @@ from larpmanager.models.member import Log, Member
 from larpmanager.models.writing import Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_association_context, check_event_context
-from larpmanager.utils.core.common import html_clean
-from larpmanager.utils.core.exceptions import NotFoundError
+from larpmanager.utils.core.common import get_object_uuid, html_clean
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -312,14 +311,11 @@ def backend_get(context: dict, model_type: type, entity_uuid: str, association_f
         association_field: Optional field name for additional checks
 
     Raises:
-        NotFoundError: If object with given ID doesn't exist
+        Http404: If object with given ID doesn't exist
 
     """
-    # Retrieve object by primary key, handle any database exceptions
-    try:
-        element = model_type.objects.get(uuid=entity_uuid)
-    except Exception as err:
-        raise NotFoundError from err
+    # Retrieve object by UUID
+    element = get_object_uuid(model_type, entity_uuid)
 
     # Store object in context and perform security validations
     context["el"] = element

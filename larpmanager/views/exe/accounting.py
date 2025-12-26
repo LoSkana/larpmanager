@@ -75,6 +75,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.services.edit import backend_get, exe_edit
 
@@ -439,11 +440,7 @@ def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpRespons
     context = check_association_context(request, "exe_expenses")
 
     # Retrieve the expense object, raise 404 if not found
-    try:
-        exp = AccountingItemExpense.objects.get(uuid=expense_uuid)
-    except Exception as err:
-        msg = "no id expense"
-        raise Http404(msg) from err
+    exp = get_object_uuid(AccountingItemExpense, expense_uuid)
 
     # Verify expense belongs to current organization
     if exp.association_id != context["association_id"]:
@@ -808,7 +805,7 @@ def exe_run_accounting(request: HttpRequest, run_uuid: str) -> HttpResponse:
     context = check_association_context(request, "exe_accounting")
 
     # Get the run and verify ownership
-    context["run"] = Run.objects.get(uuid=run_uuid)
+    context["run"] = get_object_uuid(Run, run_uuid)
     if context["run"].event.association_id != context["association_id"]:
         msg = "not your run"
         raise Http404(msg)
@@ -1117,7 +1114,7 @@ def exe_verification_manual(request: HttpRequest, invoice_uuid: str) -> HttpResp
     context = check_association_context(request, "exe_verification")
 
     # Retrieve the invoice to verify
-    invoice = PaymentInvoice.objects.get(uuid=invoice_uuid)
+    invoice = get_object_uuid(PaymentInvoice, invoice_uuid)
 
     # Ensure invoice belongs to user's organization
     if invoice.association_id != context["association_id"]:

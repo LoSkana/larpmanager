@@ -25,7 +25,6 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -50,7 +49,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.writing import Handout
 from larpmanager.utils.core.base import get_context, get_event_context, is_shuttle
-from larpmanager.utils.core.common import get_album, get_workshop
+from larpmanager.utils.core.common import get_album, get_object_uuid, get_workshop
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import (
     print_handout,
@@ -150,11 +149,7 @@ def help_attachment(request: HttpRequest, attachment_uuid: str) -> HttpResponseR
     context = get_context(request)
 
     # Attempt to retrieve the help question by uuid
-    try:
-        hp = HelpQuestion.objects.get(uuid=attachment_uuid)
-    except ObjectDoesNotExist as err:
-        msg = "HelpQuestion does not exist"
-        raise Http404(msg) from err
+    hp = get_object_uuid(HelpQuestion, attachment_uuid)
 
     # Check access permissions: owner or association role required
     if hp.member != context["member"] and not context["association_role"]:
@@ -454,7 +449,7 @@ def shuttle_edit(request: HttpRequest, shuttle_uuid: Any) -> Any:
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
 
-    shuttle = ShuttleService.objects.get(uuid=shuttle_uuid)
+    shuttle = get_object_uuid(ShuttleService, shuttle_uuid)
     if request.method == "POST":
         form = ShuttleServiceEditForm(request.POST, instance=shuttle, request=request, context=context)
         if form.is_valid():

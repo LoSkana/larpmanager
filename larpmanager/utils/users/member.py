@@ -24,13 +24,13 @@ from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.http import Http404
 from django.utils import timezone
 
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import Email
+from larpmanager.utils.core.common import get_object_uuid
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
@@ -201,11 +201,7 @@ def get_mail(context: dict, email_uuid: str) -> Email:
 
     """
     # Attempt to retrieve the email by primary key
-    try:
-        email = Email.objects.get(uuid=email_uuid)
-    except ObjectDoesNotExist as err:
-        msg = "not found"
-        raise Http404(msg) from err
+    email = get_object_uuid(Email, email_uuid)
 
     # Verify email belongs to the requesting association
     if email.association_id != context["association_id"]:
@@ -292,8 +288,4 @@ def process_membership_status_updates(membership: Membership) -> None:
 
 def get_member_uuid(slug: str) -> Member:
     """Retrieves a member by their uuid."""
-    try:
-        return Member.objects.get(uuid=slug)
-    except Member.DoesNotExist as err:
-        msg = "member not found"
-        raise Http404(msg) from err
+    return get_object_uuid(Member, slug)
