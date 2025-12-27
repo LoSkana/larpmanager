@@ -311,7 +311,7 @@ def get_payment_details_path(association: Association) -> str:
     if it doesn't exist and generates a filename using the association's
     slug and encryption key identifier.
 
-    In debug/test/CI mode, includes process ID to avoid conflicts when
+    In debug/test/CI mode, includes worker ID to avoid conflicts when
     multiple tests run in parallel.
 
     Args:
@@ -333,10 +333,11 @@ def get_payment_details_path(association: Association) -> str:
     # Generate key identifier for filename security
     key_identifier = _key_id(association.key)
 
-    # In debug mode, add process ID to avoid parallel test conflicts
+    # In debug mode, add worker ID to avoid parallel test conflicts
     if conf_settings.DEBUG:
-        process_id = os.getpid()
-        filename = f"{Path(association.slug).name}.{key_identifier}.{process_id}.enc"
+        # Get pytest-xdist worker ID (e.g., 'gw0', 'gw1') or use UUID if not available
+        worker_id = os.environ.get("PYTEST_XDIST_WORKER", "main")
+        filename = f"{Path(association.slug).name}.{key_identifier}.{worker_id}.enc"
     else:
         # Create secure filename with association slug and key ID
         filename = f"{Path(association.slug).name}.{key_identifier}.enc"
