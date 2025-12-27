@@ -76,7 +76,7 @@ from larpmanager.cache.config import reset_element_configs
 from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
 from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
+from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
     on_registration_post_save_reset_event_links,
@@ -187,6 +187,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerFaq,
     LarpManagerGuide,
     LarpManagerHighlight,
@@ -1019,6 +1020,13 @@ def post_save_reset_guides_cache(sender: type, instance: object, **kwargs: dict)
 def post_delete_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
     """Reset guides cache after model deletion."""
     reset_guides_cache()
+
+
+# LarpManagerBlog signals
+@receiver(post_save, sender=LarpManagerBlog)
+def post_save_clear_blog_cache(sender: type, instance: LarpManagerBlog, **kwargs: dict) -> None:
+    """Clear blog content cache when blog is updated."""
+    clear_blog_cache(instance.id)
 
 
 # LarpManagerTicket signals

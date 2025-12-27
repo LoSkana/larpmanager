@@ -44,6 +44,11 @@ urlpatterns = [
         name="guide",
     ),
     path(
+        "blog/<slug:slug>/",
+        views_lm.blog,
+        name="blog",
+    ),
+    path(
         "tutorials/",
         views_lm.tutorials,
         name="tutorials",

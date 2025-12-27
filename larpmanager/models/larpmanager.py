@@ -144,13 +144,16 @@ class LarpManagerShowcase(BaseModel):
 
     text = HTMLField(blank=True, null=True)
 
+    blog = models.ForeignKey(
+        "LarpManagerBlog",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="showcases",
+    )
+
     def text_red(self) -> Any:
-        """Get truncated version of showcase text.
-
-        Returns:
-            str: First 100 characters of the showcase text
-
-        """
+        """Get truncated version of showcase text."""
         return self.text[:100]
 
 
@@ -166,6 +169,8 @@ class LarpManagerGuide(BaseModel):
     title = models.CharField(max_length=1000)
 
     description = models.CharField(max_length=1000, null=True)
+
+    keywords = models.CharField(max_length=1000, null=True)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
 
@@ -208,12 +213,29 @@ class LarpManagerGuide(BaseModel):
         return ""
 
     def text_red(self) -> Any:
-        """Get truncated version of text content.
+        """Get truncated version of text content."""
+        return self.text[:100]
 
-        Returns:
-            str: First 100 characters of the guide text
 
-        """
+class LarpManagerBlog(BaseModel):
+    """Model for managing blog posts with published status."""
+
+    number = models.IntegerField(blank=True, null=True)
+
+    title = models.CharField(max_length=1000)
+
+    description = models.CharField(max_length=1000, null=True)
+
+    keywords = models.CharField(max_length=1000, null=True)
+
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+
+    text = HTMLField(blank=True, null=True)
+
+    published = models.BooleanField(default=False)
+
+    def text_red(self) -> Any:
+        """Get truncated version of showcase text."""
         return self.text[:100]
 
 

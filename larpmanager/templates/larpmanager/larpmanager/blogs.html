@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 {% load i18n static %}
 {% block title %}
-    {% trans "Guides" %}
+    {% trans "Blog" %}
 {% endblock title %}
 {% block meta %}
     <meta name="keywords"
-          content="larp guides, larp tutorials, event management tips, larp best practices, larp organizer resources, larp examples">
+          content="larp blog, larp news, larp updates, larpmanager articles, larp community news, larp event updates">
     <meta name="description"
-          content="Explore practical guides and examples showing how LarpManager can help organize your LARP events. Learn tips and best practices from experienced organizers.">
+          content="Read the latest articles and updates from LarpManager. Stay informed about new features, tips, and news from the LARP community.">
 {% endblock meta %}
 {% block content %}
-    <p class="blog-intro">{% trans "See practical examples of how LarpManager can help your event" %}!</p>
+    <p class="blog-intro">{% trans "Latest articles and updates from LarpManager" %}!</p>
     {% if list %}
         <div class="guide-list">
             {% for post in list %}
                 <div class="guide-row">
                     <h3>
-                        <a href="{% url 'guide' post.slug %}">{{ post.title }}</a>
+                        <a href="{% url 'blog' post.slug %}">{{ post.title }}</a>
                     </h3>
                     {% if post.description %}<p class="blog-description">{{ post.description }}</p>{% endif %}
                 </div>
