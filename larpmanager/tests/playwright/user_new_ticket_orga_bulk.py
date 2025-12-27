@@ -317,7 +317,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     expect(page.get_by_label("Ticket")).to_match_aria_snapshot(
         '- combobox "Ticket":\n  - option "-------" [disabled] [selected]\n  - option "Standard"\n  - option "new"'
     )
-    page.get_by_label("Ticket").select_option("2")
+    page.get_by_label("Ticket").select_option("u2")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
 

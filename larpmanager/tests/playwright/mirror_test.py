@@ -64,7 +64,7 @@ def test_orga_mirror(pw_page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Mirror")
-    page.locator("#id_mirror").select_option("1")
+    page.locator("#id_mirror").select_option("u1")
     submit_confirm(page)
 
     # check gallery

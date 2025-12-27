@@ -161,13 +161,13 @@ def field_text(page: Any, live_server: Any) -> None:
     fill_tinymce(page, "id_text", "rrrr")
 
     page.wait_for_timeout(2000)
-    page.locator("#id_qu4").select_option("3")
-    page.locator("#id_qu4").select_option("1")
+    page.locator("#id_que_u4").select_option("u3")
+    page.locator("#id_que_u4").select_option("u1")
     page.get_by_role("checkbox", name="q2").check()
-    page.locator("#id_qu6").click()
-    page.locator("#id_qu6").fill("sad")
-    page.locator("#id_qu7").click()
-    page.locator("#id_qu7").fill("sadsadas")
+    page.locator("#id_que_u6").click()
+    page.locator("#id_que_u6").fill("sad")
+    page.locator("#id_que_u7").click()
+    page.locator("#id_que_u7").fill("sadsadas")
     submit_confirm(page)
 
 
@@ -186,13 +186,13 @@ def character(page: Any, live_server: Any) -> None:
 
     fill_tinymce(page, "id_text", "so braaaave")
 
-    page.locator("#id_qu4").select_option("1")
-    page.locator("#id_qu4").select_option("3")
+    page.locator("#id_que_u4").select_option("u1")
+    page.locator("#id_que_u4").select_option("u3")
     page.get_by_role("checkbox", name="- (Available 3)").check()
-    page.locator("#id_qu6").click()
-    page.locator("#id_qu6").fill("wow")
-    page.locator("#id_qu7").click()
-    page.locator("#id_qu7").fill("asdsadsa")
+    page.locator("#id_que_u6").click()
+    page.locator("#id_que_u6").fill("wow")
+    page.locator("#id_que_u7").click()
+    page.locator("#id_que_u7").fill("asdsadsa")
     submit_confirm(page)
 
     # confirm char

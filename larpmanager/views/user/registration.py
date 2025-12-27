@@ -42,6 +42,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_association_features
+from larpmanager.forms.base import get_question_key
 from larpmanager.forms.registration import (
     PreRegistrationForm,
     RegistrationForm,
@@ -584,7 +585,7 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
         for question in form.questions:
             if question.id in form.singles:
                 # Use question.id for form field keys (internal form processing)
-                context["submitted"]["q" + str(question.id)] = form.singles[question.id].option_id
+                context["submitted"][get_question_key(question)] = form.singles[question.id].option_id
 
     if registration:
         if registration.ticket_id:

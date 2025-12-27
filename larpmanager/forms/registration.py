@@ -31,7 +31,7 @@ from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.base import BaseRegistrationForm, MyForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
     AssociationMemberS2Widget,
@@ -161,12 +161,12 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         for question in self.questions:
-            k = "q" + str(question.id)
-            if k not in self.fields:
+            key = get_question_key(question)
+            if key not in self.fields:
                 continue
             tm = [i for i in question.tickets_map if i is not None]
             if ticket not in tm:
-                self.fields[k].required = False
+                self.fields[key].required = False
 
     def init_additionals(self) -> None:
         """Initialize additional tickets field if feature is enabled."""
@@ -628,7 +628,7 @@ class RegistrationGiftForm(RegistrationForm):
 
         # Build list of fields to keep: base fields plus giftable questions
         keep = ["run", "ticket"]
-        keep.extend(["q" + str(question.uuid) for question in self.questions if question.giftable])
+        keep.extend([get_question_key(question) for question in self.questions if question.giftable])
 
         # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]

@@ -123,7 +123,7 @@ def traits(page: Any, live_server: Any) -> None:
 
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
-    page.locator("#id_quest").select_option("2")
+    page.locator("#id_quest").select_option("u2")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Capriciossa")
     fill_tinymce(page, "id_teaser", "normale")
@@ -131,7 +131,7 @@ def traits(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
-    page.locator("#id_quest").select_option("2")
+    page.locator("#id_quest").select_option("u2")
     page.locator("#id_quest").press("Tab")
     page.locator("#id_name").fill("Mare")
     submit_confirm(page)

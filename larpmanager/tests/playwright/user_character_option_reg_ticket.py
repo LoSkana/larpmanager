@@ -96,13 +96,13 @@ def prepare(page: Any) -> None:
 def create_character(page: Any) -> None:
     # signup first ticket
     page.get_by_role("link", name="Register").click()
-    page.get_by_label("Ticket").select_option("1")
+    page.get_by_label("Ticket").select_option("u1")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Access character creation!").click()
 
     # check only one option
-    expect(page.locator("#id_q4")).to_match_aria_snapshot('- combobox:\n  - option "st" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "st" [selected]')
 
     # create player
     page.locator("#id_name").click()
@@ -120,7 +120,7 @@ def create_character(page: Any) -> None:
 
     # change ticket
     page.get_by_role("link", name="Registration", exact=True).click()
-    page.get_by_label("Ticket").select_option("2")
+    page.get_by_label("Ticket").select_option("u2")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
 
@@ -131,7 +131,7 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Change").click()
 
     # check only one option available
-    expect(page.locator("#id_q4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
     page.get_by_role("button", name="Confirm").click()
     expect(page.locator("#one")).to_contain_text("Player: Admin Test choose: bmb Presentation sdsa")
 
@@ -140,6 +140,6 @@ def create_character(page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     page.get_by_role("link", name="Change").click()
-    expect(page.locator("#id_q4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
     page.get_by_role("button", name="Confirm").click()
     expect(page.locator("#one")).to_contain_text("Player: Admin Test choose: bmb Presentation sdsa")

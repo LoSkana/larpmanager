@@ -432,6 +432,11 @@ def max_length_validator(maximum_allowed_length: int) -> callable:
     return validator
 
 
+def get_question_key(question: BaseModel) -> str:
+    """Gets the key of a form custom question."""
+    return f"que_{question.uuid}"
+
+
 class BaseRegistrationForm(MyFormRun):
     """Base form class for registration-related forms.
 
@@ -681,7 +686,7 @@ class BaseRegistrationForm(MyFormRun):
         if hasattr(self, "questions"):
             # Iterate through all questions to validate selected options
             for question in self.questions:
-                key = "q" + str(question.uuid)
+                key = get_question_key(question)
 
                 # Skip if this question's data is not in the form submission
                 if key not in form_data:
@@ -792,7 +797,7 @@ class BaseRegistrationForm(MyFormRun):
             return None
 
         # Generate unique field key based on question UUID
-        field_key = "q" + str(question.uuid)
+        field_key = get_question_key(question)
 
         # Set default field states for organizer context
         is_field_active = True
@@ -1164,7 +1169,7 @@ class BaseRegistrationForm(MyFormRun):
             if question.skip(instance, self.params["features"], self.params, is_organizer=is_organizer):
                 continue
 
-            key = "q" + str(question.uuid)
+            key = get_question_key(question)
             if key not in self.cleaned_data:
                 continue
             oid = self.cleaned_data[key]
