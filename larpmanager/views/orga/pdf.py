@@ -170,7 +170,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     for run in Run.objects.filter(event=context["event"], end__gte=timezone.now()):
         # Generate PDF for each character in each run
         for ch in chs:
-            print_character_bkg(context["event"].association.slug, run.get_slug(), ch.number)
+            print_character_bkg(context["event"].association.slug, run.get_slug(), ch.uuid)
 
     # Show success message and redirect
     messages.success(request, _("Regeneration pdf started") + "!")
@@ -178,13 +178,13 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate PDF character sheet for organizers.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Character number/ID
+        character_uuid: Character uuid/ID
 
     Returns:
         HTTP response containing the generated PDF
@@ -194,20 +194,20 @@ def orga_characters_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character data
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Generate and return the character sheet PDF
     return print_character(context, force=True)
 
 
 @login_required
-def orga_characters_sheet_test(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_sheet_test(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate a character sheet PDF for testing purposes.
 
     Args:
         request: The HTTP request object
         event_slug: Event slug identifier
-        num: Character number
+        character_uuid: Character uuid
 
     Returns:
         Rendered PDF template response
@@ -217,7 +217,7 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, num: int) 
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character data
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Configure context for PDF rendering
     context["pdf"] = True
@@ -229,25 +229,25 @@ def orga_characters_sheet_test(request: HttpRequest, event_slug: str, num: int) 
 
 
 @login_required
-def orga_characters_friendly_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_friendly_pdf(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate friendly PDF for a character."""
     # Check permissions for PDF generation
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate and retrieve character
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     return print_character_friendly(context, force=True)
 
 
 @login_required
-def orga_characters_friendly_test(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_friendly_test(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate friendly test character sheet PDF.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
-        num: Character number
+        character_uuid: Character uuid
 
     Returns:
         Rendered PDF template for friendly test sheet
@@ -257,7 +257,7 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, num: in
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character, ensuring user has access
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Populate context with character sheet data
     get_character_sheet(context)
@@ -266,26 +266,26 @@ def orga_characters_friendly_test(request: HttpRequest, event_slug: str, num: in
 
 
 @login_required
-def orga_characters_relationships_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_relationships_pdf(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate PDF of character relationships for organization view."""
     # Verify event permissions for PDF generation
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Retrieve and validate character data
-    get_char_check(request, context, num, bypass_access_checks=True)
+    get_char_check(request, context, character_uuid, bypass_access_checks=True)
 
     # Generate and return relationship PDF
     return print_character_rel(context, force=True)
 
 
 @login_required
-def orga_characters_relationships_test(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_characters_relationships_test(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Generate character relationships test PDF for organization view.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Character number
+        character_uuid: Character uuid
 
     Returns:
         Rendered relationships template response
@@ -295,7 +295,7 @@ def orga_characters_relationships_test(request: HttpRequest, event_slug: str, nu
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Validate character access and retrieve character data
-    get_char_check(request, context, num, restrict_non_owners=True)
+    get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Populate context with character sheet and relationship data
     get_character_sheet(context)
@@ -329,7 +329,7 @@ def orga_profiles_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Generate and download a faction sheet PDF for organizers.
 
     This view generates a comprehensive PDF document for a specific faction, including
@@ -342,7 +342,7 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> 
     Args:
         request: HTTP request object containing user authentication
         event_slug: Event slug identifier for the specific event
-        num: Faction number (not database ID) to generate the sheet for
+        faction_uuid: Faction uuid to generate the sheet for
 
     Returns:
         HttpResponse: PDF file download response with the faction sheet
@@ -356,15 +356,16 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, num: int) -> 
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Load faction data into context by faction number
-    get_element(context, num, "faction", Faction)
+    get_element(context, faction_uuid, "faction", Faction)
 
     # Load all event cache data for faction sheet rendering
     get_event_cache_all(context)
 
-    # Verify faction exists in the cache and set up sheet data
-    if num in context["factions"]:
-        context["sheet_faction"] = context["factions"][num]
-    else:
+    for faction in context["factions"].values():
+        if faction.get("uuid", "") == faction_uuid:
+            context["sheet_faction"] = faction
+
+    if "sheet_faction" not in context:
         # Faction number not found in cache
         msg = "Faction does not exist"
         raise Http404(msg)

@@ -1809,9 +1809,6 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Provisoire"
 
-msgid "Public UUID"
-msgstr "UUID public"
-
 msgid "Publication"
 msgstr "Publication"
 
@@ -1847,6 +1844,9 @@ msgstr "Raccourcir l'URL"
 
 msgid "Show closed"
 msgstr "Fermeture de l'exposition"
+
+msgid "Signup link"
+msgstr "Lien d'inscription"
 
 msgid "Simple list"
 msgstr "Liste simple"
@@ -1895,9 +1895,6 @@ msgstr "classement"
 
 msgid "text length"
 msgstr "longueur du texte"
-
-msgid "unique code"
-msgstr "code unique"
 
 msgid "Ability type"
 msgstr "Type de compétence"
@@ -5484,9 +5481,6 @@ msgstr "Il y a des quêtes sans traits : %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Cette page résume les albums photos téléchargés"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Identifiant unique pour les URL des profils publics"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Vous excluez (aucun de ces filtres)"
 
@@ -6143,9 +6137,6 @@ msgstr ""
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolérance dépassée, procéder à l'annulation"
 
-msgid "Unique registration code, used for payment checks"
-msgstr "Code d'enregistrement unique, utilisé pour les contrôles de paiement"
-
 msgid "You are including (at least one of these filters)"
 msgstr "Vous incluez (au moins l'un de) ces filtres"
 
@@ -6180,9 +6171,6 @@ msgstr "Gérer la configuration des fonctionnalités activées"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Gérer les étapes de progression des éléments d'écriture"
-
-msgid "Maximum number of characters the player can create"
-msgstr "Nombre maximum de personnages que le joueur peut créer"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Deuxième personnage de la relation (destination)"
@@ -7638,11 +7626,6 @@ msgstr ""
 "Vous pouvez ici basculer entre les pages d'administration et les pages "
 "destinées aux utilisateurs"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Si cette case est cochée, un code unique est ajouté à tous les "
-"enregistrements pour les référencer"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Si vous avez conclu un accord séparé avec nous, vous pouvez ignorer cet "
@@ -8756,6 +8739,13 @@ msgid ""
 msgstr ""
 "Dans l'événement <b>%(event)s</b>, le personnage suivant vous a été attribué"
 " : <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Nombre maximum de personnages que le joueur peut créer (par défaut=0, aucune"
+" création autorisée)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

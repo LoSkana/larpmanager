@@ -18,16 +18,16 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_px_ability_types_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_px_ability_types_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>
                         {% for ab in el.abilities.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
                 </tr>

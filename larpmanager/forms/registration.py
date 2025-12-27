@@ -31,7 +31,7 @@ from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.base import BaseRegistrationForm, MyForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
     AssociationMemberS2Widget,
@@ -161,12 +161,12 @@ class RegistrationForm(BaseRegistrationForm):
             return
 
         for question in self.questions:
-            k = "q" + str(question.id)
-            if k not in self.fields:
+            key = get_question_key(question)
+            if key not in self.fields:
                 continue
             tm = [i for i in question.tickets_map if i is not None]
             if ticket not in tm:
-                self.fields[k].required = False
+                self.fields[key].required = False
 
     def init_additionals(self) -> None:
         """Initialize additional tickets field if feature is enabled."""
@@ -226,8 +226,8 @@ class RegistrationForm(BaseRegistrationForm):
         if self.waiting_check:
             return
         self._init_reg_question(self.instance, event)
-        for q in self.questions:
-            self.init_question(q, reg_counts)
+        for question in self.questions:
+            self.init_question(question, reg_counts)
         self.tickets_map = json.dumps(self.tickets_map)
 
     def init_question(self, question: Any, registration_counts: Any) -> None:
@@ -379,7 +379,7 @@ class RegistrationForm(BaseRegistrationForm):
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
-            ticket_choices.append((ticket.id, ticket_display_name))
+            ticket_choices.append((str(ticket.uuid), ticket_display_name))
 
             # Add ticket description to help text if available
             if ticket.description:
@@ -390,7 +390,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
-            self.initial["ticket"] = self.instance.ticket.id
+            self.initial["ticket"] = str(self.instance.ticket.id)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
 
@@ -431,7 +431,7 @@ class RegistrationForm(BaseRegistrationForm):
         if registration_ticket.visible:
             return True
 
-        if "ticket" in self.params and self.params["ticket"] == registration_ticket.id:
+        if "ticket" in self.params and self.params["ticket"] == str(registration_ticket.uuid):
             return True
 
         return bool(self.instance.pk and self.instance.ticket == registration_ticket)
@@ -556,7 +556,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         """
         # If this ticket is already selected in current registration flow, don't skip it
-        if "ticket" in self.params and self.params["ticket"] == ticket.id:
+        if "ticket" in self.params and self.params["ticket"] == str(ticket.uuid):
             return False
 
         result = False
@@ -609,7 +609,7 @@ class RegistrationForm(BaseRegistrationForm):
             if cod:
                 try:
                     # Look for registration with matching special code in same event
-                    Registration.objects.get(special_cod=cod, run__event=run.event)
+                    Registration.objects.get(uuid=cod, run__event=run.event)
                 except Registration.DoesNotExist:
                     # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
@@ -628,7 +628,7 @@ class RegistrationGiftForm(RegistrationForm):
 
         # Build list of fields to keep: base fields plus giftable questions
         keep = ["run", "ticket"]
-        keep.extend(["q" + str(q.id) for q in self.questions if q.giftable])
+        keep.extend([get_question_key(question) for question in self.questions if question.giftable])
 
         # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]
@@ -651,6 +651,11 @@ class OrgaRegistrationForm(BaseRegistrationForm):
     load_templates: ClassVar[list] = ["share"]
 
     load_js: ClassVar[list] = ["characters-reg-choices"]
+
+    ticket = forms.ModelChoiceField(
+        queryset=RegistrationTicket.objects.none(),
+        required=True,
+    )
 
     class Meta:
         model = Registration
@@ -706,7 +711,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Define form sections for field organization
         reg_section = _("Registration")
         char_section = _("Character")
-        add_section = _("Details")
         main_section = _("Main")
 
         # Assign registration fields to registration section
@@ -725,13 +729,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Initialize character fields if feature is enabled
         if "character" in self.params["features"]:
             self.init_character(char_section)
-
-        # Handle unique code field based on feature flag
-        if "unique_code" in self.params["features"]:
-            self.sections["id_special_cod"] = add_section
-            self.reorder_field("special_cod")
-        else:
-            self.delete_field("special_cod")
 
         # Initialize organization-specific fields and clean up unused ones
         keys = self.init_orga_fields(main_section)
@@ -799,16 +796,19 @@ class OrgaRegistrationForm(BaseRegistrationForm):
     def init_ticket(self, registration_section: Any) -> None:
         """Initialize ticket field choices and set default if only one ticket available."""
         # Fetch and format ticket choices ordered by price (highest first)
-        ticket_choices = [
-            (ticket.id, ticket.get_form_text(currency_symbol=self.params["currency_symbol"]))
-            for ticket in RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
-        ]
-        self.fields["ticket"].choices = ticket_choices
+        qs = RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
+
+        self.fields["ticket"].queryset = qs
+
+        self.fields["ticket"].label_from_instance = lambda ticket: ticket.get_form_text(
+            currency_symbol=self.params["currency_symbol"]
+        )
 
         # Hide ticket selection and set default if only one option exists
-        if len(ticket_choices) == 1:
+        if qs.count() == 1:
+            ticket = qs.first()
             self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = ticket_choices[0][0]
+            self.initial["ticket"] = ticket.id
 
         self.sections["id_ticket"] = registration_section
 
@@ -885,13 +885,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 key = "id_" + qt_id
                 self.sections[key] = char_section
                 choices = [("0", _("--- NOT ASSIGNED ---"))]
-                for q in self.params["quests"].values():
-                    if q["typ"] != qtnum:
+                for quest in self.params["quests"].values():
+                    if quest["typ"] != qtnum:
                         continue
                     for t in available:
-                        if t.quest_id != q["id"]:
+                        if t.quest_id != quest["id"]:
                             continue
-                        choices.append((t.id, f"Q{q['number']} {q['name']} - {t}"))
+                        choices.append((t.id, f"Q{quest['number']} {quest['name']} - {t}"))
                         if t.number in assigned:
                             self.initial[qt_id] = t.id
 

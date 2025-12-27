@@ -924,9 +924,6 @@ msgid ""
 "being separated by type"
 msgstr ""
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-
 msgid "Allowed"
 msgstr ""
 
@@ -1161,7 +1158,9 @@ msgstr ""
 msgid "Maximum number"
 msgstr ""
 
-msgid "Maximum number of characters the player can create"
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
 msgstr ""
 
 msgid "Approval"
@@ -1898,9 +1897,6 @@ msgid "Manage event signups"
 msgstr ""
 
 msgid "Registration"
-msgstr ""
-
-msgid "Details"
 msgstr ""
 
 msgid "Main"
@@ -2836,6 +2832,9 @@ msgstr ""
 msgid "Request"
 msgstr ""
 
+msgid "Details"
+msgstr ""
+
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "
 "and full bank details, paypal link, etc)"
@@ -3430,12 +3429,6 @@ msgid "Driver's License"
 msgstr ""
 
 msgid "Passport"
-msgstr ""
-
-msgid "Public UUID"
-msgstr ""
-
-msgid "Unique identifier for public profile URLs"
 msgstr ""
 
 msgid "Navigation language"
@@ -7119,9 +7112,6 @@ msgstr ""
 msgid "email"
 msgstr ""
 
-msgid "unique code"
-msgstr ""
-
 msgid "age"
 msgstr ""
 
@@ -7183,9 +7173,6 @@ msgstr ""
 msgid "Sum of payments received through"
 msgstr ""
 
-msgid "Unique registration code, used for payment checks"
-msgstr ""
-
 msgid "Transfer"
 msgstr ""
 
@@ -7216,6 +7203,9 @@ msgid "Casting priority"
 msgstr ""
 
 msgid "Direct link"
+msgstr ""
+
+msgid "Signup link"
 msgstr ""
 
 msgid "Transfer registration"

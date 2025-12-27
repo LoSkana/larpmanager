@@ -22,12 +22,9 @@ fi
 
 for i in $(seq 0 $((WORKERS-1))); do
   DB="${POSTGRES_DB}_gw${i}"
-  echo "Recreating $DB"
-  psql -v ON_ERROR_STOP=1 -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB}' AND pid <> pg_backend_pid();" || true --quiet
-  psql -v ON_ERROR_STOP=1 -d postgres -c "DROP DATABASE IF EXISTS ${DB};" --quiet
-  psql -v ON_ERROR_STOP=1 -d postgres -c "CREATE DATABASE ${DB} OWNER ${POSTGRES_USER};" --quiet
-  psql -v ON_ERROR_STOP=1 -d "${DB}" -c "SET search_path TO public;" --quiet
-  psql -v ON_ERROR_STOP=1 -d "${DB}" -f "${SQL_FILE}"
+  psql -v ON_ERROR_STOP=1 -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${DB}' AND pid <> pg_backend_pid();" --quiet > /dev/null 2>&1 || true
+  psql -v ON_ERROR_STOP=1 -d postgres -c "DROP DATABASE IF EXISTS ${DB};" --quiet > /dev/null
+  psql -v ON_ERROR_STOP=1 -d postgres -c "CREATE DATABASE ${DB} OWNER ${POSTGRES_USER};" --quiet > /dev/null
+  psql -v ON_ERROR_STOP=1 -d "${DB}" -c "SET search_path TO public;" --quiet > /dev/null
+  psql -v ON_ERROR_STOP=1 -d "${DB}" -f "${SQL_FILE}" --quiet > /dev/null
 done
-
-echo "Done."

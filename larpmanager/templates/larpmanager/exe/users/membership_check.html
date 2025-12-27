@@ -23,7 +23,7 @@
             {% for el in cf %}
                 <tr>
                     <td>
-                        <a href="{% url 'exe_member' el.member_id %}">{{ el.member }}</a>
+                        <a href="{% url 'exe_member' el.member.uuid %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.membership.card_number }}</td>
                     <td>{{ el.email }}</td>

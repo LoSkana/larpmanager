@@ -148,7 +148,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # test bulk set quest
     page.get_by_role("link", name="Quest", exact=True).click()
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\31 "]').get_by_role("cell", name="typ").click()
+    page.locator('[id="u1"]').get_by_role("cell", name="typ").click()
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("Q1 q1 t2 Q2 q2 typ")
 
@@ -261,8 +261,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Items").click()
     expect(page.locator("#one")).to_contain_text("item3 box item2 box item1 box")
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\33 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator('[id="\\31 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("2")
     page.get_by_role("link", name="Execute").click()
     expect(
@@ -273,26 +273,26 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # bulk add tag
     page.get_by_role("link", name="Bulk").click()
     page.locator("#operation").select_option("2")
-    page.locator('[id="\\32 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator('[id="\\31 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("item3 box2 item2 box tag item1 box2 tag")
 
     # bulk remove tag
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\32 "]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#operation").select_option("3")
     page.get_by_role("link", name="Execute").click()
     expect(page.locator("#one")).to_contain_text("item3 box2 item2 box item1 box2 tag")
 
     # check link when bulk active
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="box2").click()
+    page.locator('[id="u1"]').get_by_role("link", name="box2").click()
     expect(page.locator("#banner")).to_contain_text("Warehouse items - Organization")
 
     # check link when bulk not active
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="box2").click()
+    page.locator('[id="u1"]').get_by_role("link", name="box2").click()
     expect(page.locator("#id_name")).to_have_value("box2")
 
 
@@ -312,12 +312,12 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # sign up with the new ticket
-    go_to(page, live_server, "test/1")
+    go_to(page, live_server, "test")
     page.get_by_role("link", name="Register").click()
     expect(page.get_by_label("Ticket")).to_match_aria_snapshot(
         '- combobox "Ticket":\n  - option "-------" [disabled] [selected]\n  - option "Standard"\n  - option "new"'
     )
-    page.get_by_label("Ticket").select_option("2")
+    page.get_by_label("Ticket").select_option("u2")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
 

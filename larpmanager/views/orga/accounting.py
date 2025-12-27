@@ -49,6 +49,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.services.edit import backend_get, orga_edit
 
@@ -66,9 +67,9 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_discounts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_discounts_edit(request: HttpRequest, event_slug: str, discount_uuid: str) -> HttpResponse:
     """Edit discount for event."""
-    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, num)
+    return orga_edit(request, event_slug, "orga_discounts", OrgaDiscountForm, discount_uuid)
 
 
 @login_required
@@ -178,7 +179,7 @@ def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Confirm a payment invoice for an organization event.
 
     This function allows organizers to confirm payment invoices that are in
@@ -188,7 +189,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> Ht
     Args:
         request: The HTTP request object containing user and session data
         event_slug: Event identifier string for URL routing
-        num: The invoice number/ID to confirm
+        invoice_uuid: The uuid of invoice to confirm
 
     Returns:
         HttpResponse: Redirect to the invoices list page with success/warning message
@@ -202,7 +203,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, num: int) -> Ht
     context = check_event_context(request, event_slug, "orga_invoices")
 
     # Retrieve the payment invoice by number
-    backend_get(context, PaymentInvoice, num)
+    backend_get(context, PaymentInvoice, invoice_uuid)
 
     # Verify invoice belongs to the current event run
     if context["el"].reg.run != context["run"]:
@@ -289,9 +290,9 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_tokens_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_tokens_edit(request: HttpRequest, event_slug: str, token_uuid: str) -> HttpResponse:
     """Edit an organization token for a specific event."""
-    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, num)
+    return orga_edit(request, event_slug, "orga_tokens", OrgaTokenForm, token_uuid)
 
 
 @login_required
@@ -336,9 +337,9 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_credits_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_credits_edit(request: HttpRequest, event_slug: str, credit_uuid: str) -> HttpResponse:
     """Edit organization credits."""
-    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, num)
+    return orga_edit(request, event_slug, "orga_credits", OrgaCreditForm, credit_uuid)
 
 
 @login_required
@@ -402,9 +403,9 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_payments_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_payments_edit(request: HttpRequest, event_slug: str, payment_uuid: str) -> HttpResponse:
     """Edit an existing payment for an event."""
-    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, num)
+    return orga_edit(request, event_slug, "orga_payments", OrgaPaymentForm, payment_uuid)
 
 
 @login_required
@@ -460,9 +461,9 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_outflows_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_outflows_edit(request: HttpRequest, event_slug: str, outflow_uuid: str) -> HttpResponse:
     """Edit an outflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, num)
+    return orga_edit(request, event_slug, "orga_outflows", OrgaOutflowForm, outflow_uuid)
 
 
 @login_required
@@ -514,9 +515,9 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_inflows_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_inflows_edit(request: HttpRequest, event_slug: str, inflow_uuid: str) -> HttpResponse:
     """Edit an existing inflow entry for an event."""
-    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, num)
+    return orga_edit(request, event_slug, "orga_inflows", OrgaInflowForm, inflow_uuid)
 
 
 @login_required
@@ -588,13 +589,13 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_expenses_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_expenses_edit(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponse:
     """Edit an expense for an event."""
-    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, num)
+    return orga_edit(request, event_slug, "orga_expenses", OrgaExpenseForm, expense_uuid)
 
 
 @login_required
-def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> HttpResponseRedirect:
+def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponseRedirect:
     """Approve an expense request for an event.
 
     This function handles the approval of expense requests by organization
@@ -604,7 +605,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
     Args:
         request: The HTTP request object containing user and session data
         event_slug: Event identifier string used for URL routing
-        num: The primary key ID of the expense to be approved
+        expense_uuid: The UUID of the expense to be approved
 
     Returns:
         HttpResponseRedirect: Redirect response to the expenses list page
@@ -625,11 +626,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, num: int) -> Ht
         raise Http404(msg)
 
     # Retrieve the expense object or raise 404 if not found
-    try:
-        exp = AccountingItemExpense.objects.get(pk=num)
-    except Exception as err:
-        msg = "no id expense"
-        raise Http404(msg) from err
+    exp = get_object_uuid(AccountingItemExpense, expense_uuid)
 
     # Ensure the expense belongs to the current event
     if exp.run.event != context["event"]:

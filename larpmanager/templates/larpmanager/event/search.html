@@ -23,7 +23,7 @@
                 {% trans "Go to the quests of type" %}:
                 {% for id, qt in quest_types.items %}
                     {% include "elements/comma.html" %}
-                    <a href="{% url 'quests' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    <a href="{% url 'quests' run.get_slug qt.uuid %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}
@@ -123,7 +123,7 @@
         <div id="teasers" class="hide">
             {% for chnum, el in chars.items %}
                 {% if not el.hide %}
-                    <div class="{{ el.id }}">{% show_char el.teaser run 1 %}</div>
+                    <div class="{{ el.uuid }}">{% show_char el.teaser run 1 %}</div>
                 {% endif %}
             {% endfor %}
         </div>

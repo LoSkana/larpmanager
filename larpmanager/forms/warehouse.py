@@ -119,7 +119,7 @@ class ExeWarehouseTagForm(MyForm):
 
         # Set initial selected items if editing existing instance
         if self.instance.pk:
-            self.initial["items"] = self.instance.items.values_list("pk", flat=True)
+            self.initial["items"] = self.instance.items.values_list("id", flat=True)
 
         # Configure widget with association context
         self.fields["items"].widget.set_association_id(self.params["association_id"])
@@ -143,6 +143,7 @@ class ExeWarehouseMovementForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure warehouse item field for association."""
         super().__init__(*args, **kwargs)
+
         # Configure item widget with association ID
         self.fields["item"].widget.set_association_id(self.params["association_id"])
 

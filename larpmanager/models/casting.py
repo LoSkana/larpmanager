@@ -141,10 +141,10 @@ class Trait(Writing):
         for s in ["role", "keywords", "safety"]:
             self.upd_js_attr(js, s)
 
-        # Add quest ID if quest exists
+        # Add quest UUID if quest exists
         if self.quest:
             # noinspection PyUnresolvedReferences
-            js["quest"] = self.quest.id
+            js["quest"] = str(self.quest.uuid)
 
         return js
 
@@ -184,7 +184,7 @@ class Casting(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
 
-    element = models.IntegerField()
+    element = models.CharField(max_length=12)
 
     pref = models.IntegerField()
 

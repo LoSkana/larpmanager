@@ -342,7 +342,7 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
 
 def _reg_field_load(
-    context: dict[str, Any],
+    context: dict,
     registration: Registration,
     field_name: str,
     field_value: str,
@@ -855,7 +855,7 @@ def _writing_load_field(
 
 
 def _writing_question_load(
-    context: dict[str, Any],
+    context: dict,
     writing_element: Character | Plot | Faction,
     question_field: str,
     question_type: WritingQuestionType,
@@ -1257,7 +1257,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
 
 
 def _get_option(
-    context: dict[str, Any], option_name: str, parent_question_id: int, *, is_registration: bool
+    context: dict, option_name: str, parent_question_id: int, *, is_registration: bool
 ) -> tuple[bool, RegistrationOption | WritingOption]:
     """Get or create a question option for registration or writing forms.
 
@@ -1340,7 +1340,7 @@ def get_csv_upload_tmp(csv_upload: Any, run: Run) -> str:
     return tmp_file
 
 
-def cover_load(context: dict[str, Any], z_obj: Any) -> None:
+def cover_load(context: dict, z_obj: Any) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
     Args:

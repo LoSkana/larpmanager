@@ -74,7 +74,7 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Activate gift
-    go_to(page, live_server, "/test/1/manage/features/gift/on")
+    go_to(page, live_server, "/test/manage/features/gift/on")
 
     go_to(page, live_server, "/test/manage/form/")
 
@@ -149,9 +149,9 @@ def field_multiple(page: Any, live_server: Any) -> None:
     page.locator("#id_description").click()
     page.locator("#id_description").fill("sarrrr")
     submit_confirm(page)
-    page.locator('[id="\\34 "]').get_by_role("link", name="").click()
+    page.locator('[id="u4"]').get_by_role("link", name="").click()
     submit_confirm(page)
-    page.locator('[id="\\33 "]').get_by_role("link", name="").click()
+    page.locator('[id="u3"]').get_by_role("link", name="").click()
     page.get_by_role("link", name="New").click()
 
 
@@ -184,7 +184,7 @@ def field_text(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     page.get_by_text("twp (10€) - (Available 2)").click()
     expect(page.locator("#register_form")).to_contain_text("options: 1 / 1")
-    page.get_by_label("choice").select_option("2")
+    page.get_by_label("choice").select_option("u2")
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("sadsadas")
     page.get_by_role("textbox", name="when").click()
@@ -192,7 +192,7 @@ def field_text(page: Any, live_server: Any) -> None:
     expect(page.locator("#register_form")).to_contain_text("text length: 12 / 100")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    page.get_by_role("link", name="Register").click()
+    page.get_by_role("link", name="Register", exact=True).click()
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
     expect(page.get_by_label("choice")).to_contain_text("secondas")
 
@@ -208,8 +208,8 @@ def gift(page: Any, live_server: Any) -> None:
     # gift
     go_to(page, live_server, "/test/gift/")
     page.get_by_role("link", name="Add new").click()
-    page.locator("#id_q3").get_by_text("one").click()
-    page.get_by_label("choice").select_option("1")
+    page.locator("#id_que_u3").get_by_text("one").click()
+    page.get_by_label("choice").select_option("u1")
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("wwww")
     page.get_by_role("textbox", name="when").click()

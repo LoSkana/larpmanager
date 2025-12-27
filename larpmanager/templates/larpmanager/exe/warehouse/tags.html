@@ -19,16 +19,16 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'exe_warehouse_tags_edit' el.id %}"
+                        <a href="{% url 'exe_warehouse_tags_edit' el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.description | truncatechars:200 }}</td>
                     <td>
                         {% for item in el.items.all %}
-                            <a href="{% url 'exe_warehouse_items_edit' item.id %}">{{ item }}</a>
+                            <a href="{% url 'exe_warehouse_items_edit' item.uuid %}">{{ item }}</a>
                         {% endfor %}
                     </td>
                 </tr>

@@ -35,7 +35,7 @@
                 <b>{% trans "Description" %}:</b> {{ area.description }}
             </p>
         {% endif %}
-        <table id="inv_manifest_itm_{{ area.id }}"
+        <table id="inv_manifest_itm_{{ area.uuid }}"
                class="go_datatable dot_links"
                no_header_cols="{{ no_header_cols }}">
             <thead>
@@ -54,9 +54,9 @@
             </thead>
             <tbody>
                 {% for el in area.items %}
-                    <tr id="{{ el.id }}">
+                    <tr id="{{ el.uuid }}">
                         <td>
-                            <a href="{% url 'orga_warehouse_assignment_item_edit' run.get_slug el.id %}"
+                            <a href="{% url 'orga_warehouse_assignment_item_edit' run.get_slug el.uuid %}"
                                qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>
                         <td>{{ el.item }}</td>

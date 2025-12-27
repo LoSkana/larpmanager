@@ -42,9 +42,9 @@ from larpmanager.models.writing import (
 class TextVersionAdmin(DefModelAdmin):
     """Admin interface for TextVersion model."""
 
-    list_display = ("id", "tp", "eid", "version", "dl")
+    list_display = ("id", "tp", "eid", "version", "dl", "uuid")
     list_filter: ClassVar[tuple] = ("tp",)
-    search_fields = ("eid",)
+    search_fields: ClassVar[tuple] = ("id", "eid", "uuid")
     autocomplete_fields: ClassVar[list] = ["member"]
 
 
@@ -52,18 +52,19 @@ class TextVersionAdmin(DefModelAdmin):
 class PlotAdmin(DefModelAdmin):
     """Admin interface for Plot model."""
 
-    list_display: ClassVar[tuple] = ("id", "name", "event")
+    list_display: ClassVar[tuple] = ("id", "name", "event", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
 @admin.register(PlotCharacterRel)
 class PlotCharacterRelAdmin(DefModelAdmin):
     """Admin interface for PlotCharacterRel model."""
 
-    list_display: ClassVar[tuple] = ("plot", "character")
+    list_display: ClassVar[tuple] = ("id", "plot", "character", "uuid")
     list_filter = (CharacterFilter, PlotFilter)
+    search_fields: ClassVar[list] = ["id", "uuid"]
     autocomplete_fields: ClassVar[list] = ["plot", "character"]
 
 
@@ -71,19 +72,19 @@ class PlotCharacterRelAdmin(DefModelAdmin):
 class FactionAdmin(DefModelAdmin):
     """Admin interface for Faction model."""
 
-    list_display: ClassVar[tuple] = ("name", "event", "number")
+    list_display: ClassVar[tuple] = ("id", "name", "event", "number", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
 @admin.register(Trait)
 class TraitAdmin(DefModelAdmin):
     """Admin interface for Trait model."""
 
-    list_display = ("number", "name", "event", "quest")
+    list_display = ("id", "number", "name", "event", "quest", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
     autocomplete_fields: ClassVar[list] = ["quest", "traits", "event", "progress", "assigned"]
 
 
@@ -91,8 +92,9 @@ class TraitAdmin(DefModelAdmin):
 class HandoutAdmin(DefModelAdmin):
     """Admin interface for Handout model."""
 
-    list_display: ClassVar[tuple] = ("event", "name", "number")
+    list_display: ClassVar[tuple] = ("id", "event", "name", "number", "uuid")
     list_filter = (EventFilter,)
+    search_fields: ClassVar[list] = ["id", "uuid"]
     autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
 
 
@@ -109,8 +111,9 @@ class HandoutTemplateAdmin(DefModelAdmin):
 class PrologueAdmin(DefModelAdmin):
     """Admin interface for Prologue model."""
 
-    list_display: ClassVar[tuple] = ("number", "typ", "event")
+    list_display: ClassVar[tuple] = ("id", "number", "typ", "event", "uuid")
     list_filter = (EventFilter,)
+    search_fields: ClassVar[list] = ["id", "uuid"]
     autocomplete_fields: ClassVar[list] = ["typ", "characters", "event", "progress", "assigned"]
 
 
@@ -118,10 +121,10 @@ class PrologueAdmin(DefModelAdmin):
 class PrologueTypeAdmin(DefModelAdmin):
     """Admin interface for PrologueType model."""
 
-    list_display: ClassVar[tuple] = ("name", "event")
+    list_display: ClassVar[tuple] = ("id", "name", "event", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
 @admin.register(AssignmentTrait)
@@ -137,5 +140,6 @@ class AssignmentTraitAdmin(DefModelAdmin):
 class SpeedLarpAdmin(DefModelAdmin):
     """Admin interface for SpeedLarp model."""
 
-    list_display = ("name", "event", "typ", "station")
+    list_display = ("id", "name", "event", "typ", "station", "uuid")
+    search_fields: ClassVar[list] = ["id", "uuid"]
     autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]

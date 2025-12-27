@@ -713,11 +713,11 @@ def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -
     print_handout_go(context, handout_id)
 
 
-def print_character_go(context: dict, character: Any) -> None:
+def print_character_go(context: dict, character_uuid: str) -> None:
     """Print character information, handling missing character gracefully."""
     try:
         # Validate character access and retrieve character data
-        get_char_check(None, context, character, bypass_access_checks=True)
+        get_char_check(None, context, character_uuid, bypass_access_checks=True)
 
         # Generate and cache character print outputs
         print_character(context, force=True)
@@ -730,11 +730,11 @@ def print_character_go(context: dict, character: Any) -> None:
 
 
 @background_auto(queue="pdf")
-def print_character_bkg(association_slug: str, event_slug: str, c: Character) -> None:
+def print_character_bkg(association_slug: str, event_slug: str, character_uuid: str) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(association_slug)
     context = get_event_context(request, event_slug)
-    print_character_go(context, c)
+    print_character_go(context, character_uuid)
 
 
 @background_auto(queue="pdf")
@@ -1003,7 +1003,7 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
         if request.POST.get(f"character_{character.id}"):
             try:
                 # Load and validate character data
-                get_char_check(request, context, character.number, restrict_non_owners=True)
+                get_char_check(request, context, character.uuid, restrict_non_owners=True)
                 filepath = context["character"].get_sheet_filepath(context["run"])
 
                 # Generate PDF if it doesn't exist or is outdated

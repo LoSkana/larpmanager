@@ -686,11 +686,11 @@ def badges(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def badge(request: HttpRequest, badge_id: int) -> HttpResponse:
+def badge(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Display a badge with shuffled member list."""
     context = get_context(request)
     check_association_feature(request, context, "badge")
-    badge = get_badge(badge_id, context)
+    badge = get_badge(context, badge_uuid)
 
     # Initialize context with badge data
     context.update({"badge": badge.show(), "list": []})

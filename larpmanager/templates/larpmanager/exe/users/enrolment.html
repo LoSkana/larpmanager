@@ -30,7 +30,7 @@
             </tr>
         </thead>
         {% for el in list %}
-            <tr id="{{ el.id }}"
+            <tr id="{{ el.uuid }}"
                 {% if not el.last_enrolment %}class="hide n_payed"{% endif %}>
                 <td>{{ el.membership.card_number }}</td>
                 <td>{{ el.surname }}</td>

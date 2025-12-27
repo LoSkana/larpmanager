@@ -32,13 +32,13 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
 
-class Writing(BaseConceptModel):
+class Writing(UuidMixin, BaseConceptModel):
     """Represents Writing model."""
 
     progress = models.ForeignKey(
@@ -81,15 +81,11 @@ class Writing(BaseConceptModel):
         """Return a dictionary representation for red display.
 
         Returns:
-            Dictionary containing id, number, and name attributes.
+            Dictionary containing number, name, and uuid attributes.
 
         """
-        # noinspection PyUnresolvedReferences
-        # Create base dictionary with id and number
-        js = {"id": self.id, "number": self.number}
-
-        # Update dictionary with name attribute
-        for s in ["name"]:
+        js = {}
+        for s in ["number", "name", "uuid"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -312,9 +308,9 @@ class Character(Writing):
     def show_factions(self, event: Event | None, js: dict) -> None:
         """Add faction information to the JavaScript data structure.
 
-        Populates the 'factions' list in the js dictionary with faction numbers
-        from the event. If no primary faction is found, adds 0 as default.
-        Also sets thumbnail URL if primary faction has cover image.
+        Populates the 'factions' list in the js dictionary with faction objects
+        containing UUID and number from the event. If no primary faction is found,
+        adds a default faction object. Also sets thumbnail URL if primary faction has cover image.
 
         Args:
             event: Event object to get factions from. If None, uses self.event.
@@ -339,12 +335,12 @@ class Character(Writing):
                 if faction.cover:
                     js["thumb"] = faction.thumb.url
 
-            # Add faction number to the list
-            js["factions"].append(faction.number)
+            # Add faction object with uuid and number
+            js["factions"].append({"uuid": str(faction.uuid), "number": faction.number})
 
         # Add default faction if no primary found
         if not has_primary_faction:
-            js["factions"].append(0)
+            js["factions"].append({"uuid": "0", "number": 0})
 
     @staticmethod
     def get_character_filepath(run: Run) -> str:
@@ -508,7 +504,7 @@ class Plot(Writing):
         )
 
 
-class PlotCharacterRel(BaseModel):
+class PlotCharacterRel(UuidMixin, BaseModel):
     """Represents PlotCharacterRel model."""
 
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
@@ -792,7 +788,7 @@ class TextVersionChoices(models.TextChoices):
     RELATIONSHIP = "l", "Relationship"
 
 
-class TextVersion(BaseModel):
+class TextVersion(UuidMixin, BaseModel):
     """Represents TextVersion model."""
 
     tp = models.CharField(max_length=1, choices=TextVersionChoices.choices)

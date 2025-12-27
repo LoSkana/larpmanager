@@ -23,9 +23,9 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_albums_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_albums_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
@@ -37,7 +37,7 @@
                         {% if el.thumb %}<img src="{{ el.thumb.url }}" alt="object photo" />{% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'orga_albums_delete' run.get_slug el.id %}"
+                        <a href="{% url 'orga_albums_delete' run.get_slug el.uuid %}"
                            class="delete">{% trans "Delete" %}</a>
                     </td>
                 </tr>

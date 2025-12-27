@@ -163,6 +163,7 @@ class OrgaCreditForm(MyFormRun):
         super().__init__(*args, **kwargs)
         # Set page title from credit name parameter
         self.page_title = self.params["credits_name"]
+
         # Configure form for credit transaction type
         self.initial["oth"] = OtherChoices.CREDIT
         self.fields["member"].widget.set_run(self.params["run"])
@@ -187,6 +188,7 @@ class OrgaPaymentForm(MyFormRun):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure registration field for the event."""
         super().__init__(*args, **kwargs)
+
         # Configure registration widget with event context and make field required
         self.fields["reg"].widget.set_event(self.params["event"])
         self.fields["reg"].required = True
@@ -287,6 +289,7 @@ class ExeDonationForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set association for member field widget."""
         super().__init__(*args, **kwargs)
+
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
@@ -330,6 +333,7 @@ class ExeInvoiceForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
+
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
@@ -471,6 +475,7 @@ class ExeCollectionForm(CollectionNewForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member field widget with association."""
         super().__init__(*args, **kwargs)
+
         # Set association for member widget filtering
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
@@ -616,6 +621,7 @@ class ExeRefundRequestForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
+
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 

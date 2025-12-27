@@ -1809,9 +1809,6 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Vorläufig"
 
-msgid "Public UUID"
-msgstr "Öffentliche UUID"
-
 msgid "Publication"
 msgstr "Veröffentlichung"
 
@@ -1847,6 +1844,9 @@ msgstr "URL kürzen"
 
 msgid "Show closed"
 msgstr "Geschlossen anzeigen"
+
+msgid "Signup link"
+msgstr "Anmeldelink"
 
 msgid "Simple list"
 msgstr "Einfache Liste"
@@ -1895,9 +1895,6 @@ msgstr "Rangliste"
 
 msgid "text length"
 msgstr "Textlänge"
-
-msgid "unique code"
-msgstr "einzigartiger Code"
 
 msgid "Ability type"
 msgstr "Art der Fertigkeit"
@@ -5485,9 +5482,6 @@ msgstr "Es gibt Quests ohne Eigenschaften: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Diese Seite fasst die hochgeladenen Fotoalben zusammen"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Eindeutiger Bezeichner für öffentliche Profil-URLs"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Sie schließen (keinen dieser Filter)"
 
@@ -6152,10 +6146,6 @@ msgstr "Diese Funktion ist für nicht wartende Tickets verfügbar"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranz überschritten, mit der Stornierung fortfahren"
 
-msgid "Unique registration code, used for payment checks"
-msgstr ""
-"Eindeutiger Registrierungscode, der für Zahlungskontrollen verwendet wird"
-
 msgid "You are including (at least one of these filters)"
 msgstr "Sie enthalten (mindestens einen) der folgenden Filter"
 
@@ -6191,9 +6181,6 @@ msgstr "Verwalten Sie die Konfiguration der aktivierten Funktionen"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Verwalten Sie die Fortschrittsschritte für die Schriftelemente"
-
-msgid "Maximum number of characters the player can create"
-msgstr "Maximale Anzahl von Charakteren, die der Spieler erstellen kann"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Zweites Zeichen in der Beziehung (Ziel)"
@@ -7702,11 +7689,6 @@ msgstr ""
 "Hier können Sie zwischen Verwaltungsseiten und benutzerorientierten Seiten "
 "wechseln"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Wenn diese Option aktiviert ist, wird allen Registrierungen ein eindeutiger "
-"Code hinzugefügt, um sie zu referenzieren"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Wenn Sie eine separate Vereinbarung mit uns haben, können Sie diese E-Mail "
@@ -8826,6 +8808,13 @@ msgid ""
 msgstr ""
 "In dem Ereignis <b>%(event)s</b> wurde dir das Zeichen <b>%(character)s</b> "
 "zugewiesen"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximale Anzahl von Charakteren, die der Spieler erstellen kann (Standard=0,"
+" keine Erstellung erlaubt)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
 from larpmanager.models.access import EventRole, get_event_organizers
+from larpmanager.models.base import auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -63,7 +64,7 @@ def get_character_filter(character: Any, character_registrations: Any, active_fi
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
+def get_event_filter_characters(context: dict, character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -340,7 +341,15 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
             )
             for question_type, config in default_question_types.items()
         ]
+        # Manually set UUIDs since bulk_create doesn't trigger pre_save signals
+        for question in writing_questions:
+            auto_set_uuid(question)
         WritingQuestion.objects.bulk_create(writing_questions)
+
+        # Update UUIDs for debug mode after bulk_create (when IDs are assigned)
+        # Note: bulk_create doesn't trigger post_save, so we need to manually update
+        for question in writing_questions:
+            debug_set_uuid(question, created=True)
 
 
 def _init_character_form_questions(

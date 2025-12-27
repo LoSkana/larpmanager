@@ -24,7 +24,7 @@ from django.db import models
 from django.db.models import Q, QuerySet, UniqueConstraint
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event
 from larpmanager.models.member import Member
 
@@ -72,7 +72,7 @@ class AssociationPermission(BaseModel):
         ]
 
 
-class AssociationRole(BaseModel):
+class AssociationRole(UuidMixin, BaseModel):
     """Represents AssociationRole model."""
 
     name = models.CharField(max_length=100)
@@ -192,7 +192,7 @@ class EventPermission(BaseModel):
         ]
 
 
-class EventRole(BaseConceptModel):
+class EventRole(UuidMixin, BaseConceptModel):
     """Represents EventRole model."""
 
     members = models.ManyToManyField(Member, related_name="event_roles")

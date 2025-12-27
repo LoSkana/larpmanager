@@ -38,7 +38,7 @@ from larpmanager.models.form import (
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
-from larpmanager.utils.core.common import get_char
+from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.services.event import has_access_character
 from larpmanager.utils.services.experience import add_char_addit
@@ -290,7 +290,7 @@ def get_character_sheet_plots(context: dict) -> None:
         context["sheet_plots"].append({"name": plot_relation.plot.name, "text": combined_text})
 
 
-def get_character_sheet_factions(context: dict[str, Any]) -> None:  # noqa: C901 - Complex faction data processing with feature checks
+def get_character_sheet_factions(context: dict) -> None:  # noqa: C901 - Complex faction data processing with feature checks
     """Retrieve and process faction data for character sheet display.
 
     Fetches factions associated with a character, along with their writing answers
@@ -397,7 +397,7 @@ def get_character_sheet_fields(context: dict) -> None:
 def get_char_check(
     request: Any,
     context: dict,
-    character_id: int,
+    character_uuid: str,
     *,
     restrict_non_owners: bool = False,
     bypass_access_checks: bool = False,
@@ -410,7 +410,7 @@ def get_char_check(
     Args:
         request: Django HTTP request object containing user and session data
         context: Context dictionary containing cached character and event data
-        character_id: Character number/ID to retrieve from the character cache
+        character_uuid: Character uuid to retrieve from the character cache
         restrict_non_owners: Whether to apply strict visibility restrictions for non-owners
         bypass_access_checks: Whether to bypass all access checks (admin override)
 
@@ -425,17 +425,19 @@ def get_char_check(
     # Load all event and character data into context cache
     get_event_cache_all(context)
 
-    # Check if requested character exists in the cached character data
-    if character_id not in context["chars"]:
-        raise NotFoundError
-
     # Set the current character in context for further processing
-    context["char"] = context["chars"][character_id]
+    for char in context["chars"].values():
+        if char.get("uuid", "") == character_uuid:
+            context["char"] = char
+        break
+
+    if "char" not in context:
+        raise NotFoundError
 
     # Allow access if bypassing checks or user has character access permissions
     if bypass_access_checks or (request.user.is_authenticated and has_access_character(request, context)):
         # Load full character data and mark as having elevated access
-        get_char(context, character_id, by_number=True)
+        get_element(context, character_uuid, "character", Character)
         context["check"] = 1
         return
 

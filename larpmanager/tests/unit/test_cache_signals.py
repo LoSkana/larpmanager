@@ -398,7 +398,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets accounting cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         mock_reset.assert_called_once_with(registration.run_id)
@@ -408,7 +408,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that Registration post_delete signal resets accounting cache"""
         registration = self.get_registration()
         run = registration.run
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.delete()
 
         mock_reset.assert_called_once_with(run.id)
@@ -611,7 +611,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_links_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets links cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         # Signal resets for the member
@@ -660,7 +660,7 @@ class TestCacheSignals(BaseTestCase):
     def test_registration_post_save_resets_registration_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets registration cache"""
         registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_registration
+        mock_reset.reset_mock()  # Reset after get_accounting_registration
         registration.save()
 
         mock_reset.assert_called_once_with(registration.run_id)

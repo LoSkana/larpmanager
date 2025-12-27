@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **[Localization Guide](docs/04-localization.md)** - How to write translatable code and manage translations
 - **[Playwright Testing Guide](docs/05-playwright-testing.md)** - How to write and run end-to-end tests
 - **[Feature Descriptions](docs/06-feature-descriptions.md)** - Complete reference of all available features
+- **[Test Database Schema Versioning](docs/07-test-database-schema-versioning.md)** - How the automatic schema version detection works
 - **[README.md](README.md)** - Installation, deployment, and contribution guidelines
 
 ## Development Commands
@@ -32,7 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Format code**: `ruff format`
 - **Translation updates**: `./scripts/translate.sh` (requires `DEEPL_API_KEY` in dev settings)
 - **Record playwright tests**: `./scripts/record-test.sh`
-- **Update test dump**: `python manage.py dump_test` (required after model/fixture changes)
+- **Update test dump**: `python manage.py dump_test` (required after model/fixture/migration changes; auto-adds schema version marker)
 
 ### Feature Management
 - **Export features to fixtures**: `python manage.py export_features` (run before pushing new features)

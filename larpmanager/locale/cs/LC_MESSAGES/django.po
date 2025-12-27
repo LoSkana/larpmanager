@@ -1809,9 +1809,6 @@ msgstr "Postup"
 msgid "Provisional"
 msgstr "Provizorní"
 
-msgid "Public UUID"
-msgstr "Veřejné UUID"
-
 msgid "Publication"
 msgstr "Publikace"
 
@@ -1847,6 +1844,9 @@ msgstr "Zkrácení adresy URL"
 
 msgid "Show closed"
 msgstr "Zobrazit uzavřeno"
+
+msgid "Signup link"
+msgstr "Odkaz na registraci"
 
 msgid "Simple list"
 msgstr "Jednoduchý seznam"
@@ -1895,9 +1895,6 @@ msgstr "žebříčku"
 
 msgid "text length"
 msgstr "délka textu"
-
-msgid "unique code"
-msgstr "jedinečný kód"
 
 msgid "Ability type"
 msgstr "Typ dovednosti"
@@ -5481,9 +5478,6 @@ msgstr "Existují úkoly bez vlastností: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Tato stránka shrnuje nahraná fotoalba"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Jedinečný identifikátor pro veřejné adresy URL profilu"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Vylučujete (žádný z těchto filtrů)"
 
@@ -6125,9 +6119,6 @@ msgstr "Tato funkce je k dispozici pro nečekané tipy"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Překročení tolerance, pokračujte ve zrušení"
 
-msgid "Unique registration code, used for payment checks"
-msgstr "Jedinečný registrační kód, který se používá při kontrolách plateb"
-
 msgid "You are including (at least one of these filters)"
 msgstr "Zahrnujete (alespoň jeden z) těchto filtrů"
 
@@ -6160,9 +6151,6 @@ msgstr "Správa konfigurace aktivovaných funkcí"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Správa kroků postupu pro prvky psaní"
-
-msgid "Maximum number of characters the player can create"
-msgstr "Maximální počet postav, které může hráč vytvořit"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Druhý znak ve vztahu (cílová destinace)"
@@ -7407,11 +7395,6 @@ msgid "Here you can switch between administration pages and user-facing pages"
 msgstr ""
 "Zde můžete přepínat mezi stránkami pro správu a stránkami pro uživatele"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Pokud je zaškrtnuto, přidá ke všem registracím jedinečný kód, který na ně "
-"odkazuje"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Pokud s námi máte uzavřenou samostatnou smlouvu, můžete tento e-mail "
@@ -8407,6 +8390,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "V události <b>%(event)s</b> vám byla přiřazena postava: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximální počet postav, které může hráč vytvořit (výchozí=0, vytváření "
+"postav není povoleno)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

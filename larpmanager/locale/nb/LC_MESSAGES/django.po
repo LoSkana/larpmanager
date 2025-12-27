@@ -1809,9 +1809,6 @@ msgstr "Progresjon"
 msgid "Provisional"
 msgstr "Foreløpig"
 
-msgid "Public UUID"
-msgstr "Offentlig UUID"
-
 msgid "Publication"
 msgstr "Utgivelse"
 
@@ -1847,6 +1844,9 @@ msgstr "Forkort URL-adressen"
 
 msgid "Show closed"
 msgstr "Vis stengt"
+
+msgid "Signup link"
+msgstr "Påmeldingslenke"
 
 msgid "Simple list"
 msgstr "Enkel liste"
@@ -1895,9 +1895,6 @@ msgstr "rangering"
 
 msgid "text length"
 msgstr "tekstlengde"
-
-msgid "unique code"
-msgstr "unik kode"
 
 msgid "Ability type"
 msgstr "Ferdighetstype"
@@ -5483,9 +5480,6 @@ msgstr "Det finnes oppdrag uten egenskaper: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Denne siden oppsummerer de opplastede fotoalbumene"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Unik identifikator for offentlige profil-URL-er"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Du ekskluderer (ingen av disse filtrene)"
 
@@ -6127,9 +6121,6 @@ msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranse overskredet, fortsett med kanselleringen"
 
-msgid "Unique registration code, used for payment checks"
-msgstr "Unik registreringskode, brukes til betalingskontroller"
-
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderer (minst ett av) disse filtrene"
 
@@ -6162,9 +6153,6 @@ msgstr "Administrer konfigurasjonen av de aktiverte funksjonene"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Administrer fremdriftstrinnene for skriveelementene"
-
-msgid "Maximum number of characters the player can create"
-msgstr "Maksimalt antall karakterer spilleren kan skape"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"
@@ -7455,11 +7443,6 @@ msgstr ""
 msgid "Here you can switch between administration pages and user-facing pages"
 msgstr "Her kan du veksle mellom administrasjonssider og brukerrettede sider"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Hvis avkrysset, legges det til en unik kode til alle registreringer for å "
-"referere til dem"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Hvis du har en separat avtale med oss, kan du se bort fra denne e-posten"
@@ -8485,6 +8468,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I hendelsen <b>%(event)s</b> ble du tildelt tegnet: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maksimalt antall karakterer spilleren kan opprette (standard=0, ingen "
+"opprettelse tillatt)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

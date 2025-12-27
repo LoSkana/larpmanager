@@ -8,7 +8,7 @@
         {% if not fact.typ == 'g' %}
             {% if show_faction and fact.number %}
                 <h2 class="c">
-                    <a href="{% url 'faction' run.get_slug fact.number %}">{{ fact.name }}</a>
+                    <a href="{% url 'faction' run.get_slug fact.uuid %}">{{ fact.name }}</a>
                 </h2>
             {% else %}
                 <h2>{{ fact.name }}</h2>

@@ -19,7 +19,7 @@
                 {% trans "Go to the preferences for" %}:
                 <a href="{% url 'casting_preferences' run.get_slug 0 %}">{% trans "characters" %}</a>,
                 {% for num, qt in quest_types.items %}
-                    , <a href="{% url 'casting_preferences' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'casting_preferences' run.get_slug qt.uuid %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
             <h3>{% trans "Preferences" %} {{ gl_name }}</h3>

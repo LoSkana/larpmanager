@@ -1809,9 +1809,6 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Provisorisk"
 
-msgid "Public UUID"
-msgstr "Publik UUID"
-
 msgid "Publication"
 msgstr "Publikation"
 
@@ -1847,6 +1844,9 @@ msgstr "Förkorta URL"
 
 msgid "Show closed"
 msgstr "Visa stängd"
+
+msgid "Signup link"
+msgstr "Länk för registrering"
 
 msgid "Simple list"
 msgstr "Enkel lista"
@@ -1895,9 +1895,6 @@ msgstr "ranking"
 
 msgid "text length"
 msgstr "textlängd"
-
-msgid "unique code"
-msgstr "unik kod"
 
 msgid "Ability type"
 msgstr "Typ av färdighet"
@@ -5483,9 +5480,6 @@ msgstr "Det finns uppdrag utan egenskaper: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Denna sida sammanfattar de uppladdade fotoalbumen"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Unik identifierare för offentliga profil-URL:er"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Du utesluter (inget av dessa filter)"
 
@@ -6126,9 +6120,6 @@ msgstr "Denna funktion är tillgänglig för icke-väntande biljetter"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleransen överskriden, fortsätt med annulleringen"
 
-msgid "Unique registration code, used for payment checks"
-msgstr "Unik registreringskod, används för betalningskontroller"
-
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderar (minst ett av) dessa filter"
 
@@ -6161,9 +6152,6 @@ msgstr "Hantera konfigurationen av de aktiverade funktionerna"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Hantera framstegsstegen för skrivelementen"
-
-msgid "Maximum number of characters the player can create"
-msgstr "Maximalt antal karaktärer som spelaren kan skapa"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i förhållandet (destination)"
@@ -7448,11 +7436,6 @@ msgstr ""
 "Här kan du växla mellan administrationssidor och sidor som vänder sig till "
 "användarna"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Om markerad, lägger till en unik kod till alla registreringar för att "
-"referera till dem"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Om du har ett separat avtal med oss kan du bortse från detta "
@@ -8490,6 +8473,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I händelsen <b>%(event)s</b> tilldelades du karaktären: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximalt antal karaktärer som spelaren kan skapa (standard=0, ingen skapelse"
+" tillåten)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

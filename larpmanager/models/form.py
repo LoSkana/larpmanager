@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
@@ -241,7 +241,7 @@ class QuestionApplicable(models.TextChoices):
         return dict(cls.choices)
 
 
-class WritingQuestion(BaseModel):
+class WritingQuestion(UuidMixin, BaseModel):
     """Form questions for character writing and story elements."""
 
     typ = models.CharField(
@@ -366,7 +366,7 @@ class WritingQuestion(BaseModel):
         ]
 
 
-class WritingOption(BaseModel):
+class WritingOption(UuidMixin, BaseModel):
     """Represents WritingOption model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -479,7 +479,7 @@ class WritingAnswer(BaseModel):
         ]
 
 
-class RegistrationQuestion(BaseModel):
+class RegistrationQuestion(UuidMixin, BaseModel):
     """Represents RegistrationQuestion model."""
 
     typ = models.CharField(
@@ -674,7 +674,7 @@ class RegistrationQuestion(BaseModel):
         ]
 
 
-class RegistrationOption(BaseModel):
+class RegistrationOption(UuidMixin, BaseModel):
     """Represents RegistrationOption model."""
 
     search = models.CharField(max_length=1000, editable=False)

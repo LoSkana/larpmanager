@@ -28,7 +28,7 @@
         </thead>
         <tbody>
             {% for el in item_all.values %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td></td>
                     <td data-order="{% if el.selected %}1{% else %}0{% endif %}"
                         class="selected">
@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', function() {
           const notes = $notes.length ? ($notes.val() || '').trim() : '';
 
           $.ajax({
-                url: '{% url "orga_warehouse_assignment_area" run.get_slug area.id %}',
+                url: '{% url "orga_warehouse_assignment_area" run.get_slug area.uuid %}',
                 method: 'POST',
                 data: {idx, selected: selected, quantity: quantity, notes: notes },
                 success: function () {

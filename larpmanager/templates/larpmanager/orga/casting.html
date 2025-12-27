@@ -13,7 +13,7 @@
                 {% trans "Casting management for" %}:
                 <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
                 {% for idx, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    , <a href="{% url 'orga_casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
                 {% endfor %}
             </p>
         {% endif %}

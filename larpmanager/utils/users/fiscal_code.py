@@ -364,7 +364,7 @@ def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 -
             member.name = name_parts[0]
 
     # Initialize validation context
-    validation_context: dict[str, Any] = {"membership_cf": True}
+    validation_context: dict = {"membership_cf": True}
 
     # Extract fiscal code components using helper functions
     last_name_code = _extract_last_name(member.surname)

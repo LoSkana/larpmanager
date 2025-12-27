@@ -21,7 +21,7 @@
                         <tr>
                             <td>
                                 <h3>
-                                    <a href="{% url 'faction' run.get_slug el.number %}">{{ el.name }}</a>
+                                    <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
                                 </h3>
                             </td>
                             {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
@@ -30,7 +30,7 @@
                                     {% include "elements/comma.html" %}
                                     {% with chars|get:chnum as ch %}
                                         {% if not ch.hide %}
-                                            <a href="{% url 'character' run.get_slug ch.number %}">{{ ch.name }}</a>
+                                            <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}</a>
                                         {% endif %}
                                     {% endwith %}
                                 {% endfor %}
@@ -57,7 +57,7 @@
                         <tr>
                             <td>
                                 <h3>
-                                    <a href="{% url 'faction' run.get_slug el.number %}">{{ el.name }}</a>
+                                    <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
                                 </h3>
                             </td>
                             {% if show_faction.teaser %}<td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>{% endif %}
@@ -65,7 +65,7 @@
                                 {% for chnum in el.characters %}
                                     {% include "elements/comma.html" %}
                                     {% with chars|get:chnum as ch %}
-                                        <a href="{% url 'character' run.get_slug ch.number %}">{{ ch.name }}</a>
+                                        <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}</a>
                                     {% endwith %}
                                 {% endfor %}
                             </td>

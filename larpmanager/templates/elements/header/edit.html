@@ -74,7 +74,7 @@
             {% for el in bulk %}
                 <select id="objs_{{ el.idx }}"
                         class="bulk-el objs {% if not forloop.first %}hide{% endif %}">
-                    {% for obj in el.objs %}<option value="{{ obj.id }}">{{ obj.name }}</option>{% endfor %}
+                    {% for obj in el.objs %}<option value="{{ obj.uuid }}">{{ obj.name }}</option>{% endfor %}
                 </select>
             {% endfor %}
             <a id="exec" class="new button my_toggle bulk-el" href="#">

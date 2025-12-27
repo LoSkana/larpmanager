@@ -7,7 +7,7 @@
     <div class="staff-list">
         <div class="orga-buttons">
             <a class="new button"
-               href="{% url 'character_relationships_edit' run.get_slug char.number 0 %}">{% trans "New" %}</a>
+               href="{% url 'character_relationships_edit' run.get_slug char.uuid 0 %}">{% trans "New" %}</a>
         </div>
     </div>
     <h3>{% trans "Relationships of your character" %}</h3>
@@ -21,7 +21,7 @@
         {% for el in rel %}
             <tr>
                 <td>
-                    <a href="{% url 'character_relationships_edit' run.get_slug char.number el.number %}"
+                    <a href="{% url 'character_relationships_edit' run.get_slug char.uuid el.uuid %}"
                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>
@@ -34,7 +34,7 @@
                     {% endif %}
                 </td>
                 <td class="rel-description">
-                    <a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a>
+                    <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
                     {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                     {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                     -
