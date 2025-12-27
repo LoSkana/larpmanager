@@ -76,21 +76,36 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         """Return string representation of the model.
 
         Returns string representation based on model attributes in order of preference:
-        1. 'name' attribute if present
-        2. 'search' attribute if present and truthy
-        3. Parent class string representation as fallback
+        1. 'name' - most common display field
+        2. 'title' - used in blog posts, guides, showcases
+        3. 'question' - used in FAQs (truncated to 100 chars)
+        4. 'author' - used in reviews
+        5. 'info' - used in highlights (truncated to 50 chars)
+        6. 'text' - truncated text content (100 chars)
+        7. 'search' - search field
+        8. Parent class string representation as fallback
 
         Returns:
-            str: Model name, search field, or default string representation.
+            str: Model representation based on available fields.
 
         """
-        # Check for 'name' attribute first - most common display field
-        if hasattr(self, "name"):
-            return self.name
+        # Define fields to check in order of preference with optional truncation length
+        field_checks = [
+            ("name", None),
+            ("title", None),
+            ("question", 100),
+            ("author", None),
+            ("info", 50),
+            ("text", 100),
+            ("search", None),
+        ]
 
-        # Fall back to 'search' attribute if it exists and has a value
-        if hasattr(self, "search") and self.search:
-            return self.search
+        # Check each field in order and return first available value
+        for field_name, max_length in field_checks:
+            if hasattr(self, field_name):
+                value = getattr(self, field_name)
+                if value:
+                    return value[:max_length] if max_length else value
 
         # Use parent class implementation as final fallback
         return super().__str__()

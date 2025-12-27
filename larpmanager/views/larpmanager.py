@@ -801,8 +801,8 @@ def blog(request: HttpRequest, slug: Any) -> Any:
     context["blog"] = blog_post
     context["sections"] = get_blog_content_with_images(blog_post.id, blog_post.text)
 
-    context["og_title"] = f"{context['guide'].title} - LarpManager"
-    context["og_description"] = f"{context['guide'].description} - LarpManager"
+    context["og_title"] = f"{context['blog'].title} - LarpManager"
+    context["og_description"] = f"{context['blog'].description} - LarpManager"
 
     return render(request, "larpmanager/larpmanager/blog.html", context)
 

@@ -222,6 +222,10 @@ class CastingAvoid(BaseModel):
 
     text = models.TextField(max_length=5000)
 
+    def __str__(self) -> str:
+        """Return string representation of the casting avoid."""
+        return f"{self.member} - {self.text[:50]}"
+
 
 def update_traits_text(instance: AssignmentTrait) -> list:
     """Extract and return trait references from instance text using pattern matching.

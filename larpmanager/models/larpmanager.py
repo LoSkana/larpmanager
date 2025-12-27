@@ -112,10 +112,6 @@ class LarpManagerHighlight(BaseModel):
         options={"quality": 80},
     )
 
-    def __str__(self) -> str:
-        """Return string representation of the highlight."""
-        return self.info[:50] if self.info else f"Highlight #{self.id}"
-
     def show_reduced(self) -> Any:
         """Generate HTML for displaying reduced-size image."""
         if self.reduced:
@@ -261,6 +257,10 @@ class LarpManagerProfiler(BaseModel):
 
     duration = models.FloatField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        """Return string representation of the profiler entry."""
+        return f"{self.view_func_name} ({self.domain})"
+
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["domain", "view_func_name"])]
 
@@ -341,3 +341,7 @@ class LarpManagerTicket(BaseModel):
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.screenshot_reduced.url)
         return ""
+
+    def __str__(self) -> str:
+        """Return string representation of the ticket."""
+        return f"Ticket #{self.id}: {self.reason or 'No reason'}"
