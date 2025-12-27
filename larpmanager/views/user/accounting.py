@@ -358,7 +358,7 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
 
 
 @login_required
-def acc_reg(request: HttpRequest, registration_uuid: int, method: str | None = None) -> HttpResponse:
+def acc_reg(request: HttpRequest, registration_uuid: str, method: str | None = None) -> HttpResponse:
     """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording
@@ -381,27 +381,7 @@ def acc_reg(request: HttpRequest, registration_uuid: int, method: str | None = N
     context = get_context(request)
     check_association_feature(request, context, "payment")
 
-    # Retrieve registration with related run and event data
-    try:
-        reg = Registration.objects.select_related("run", "run__event").get(
-            uuid=registration_uuid,
-            member=context["member"],
-            cancellation_date__isnull=True,
-            run__event__association_id=context["association_id"],
-        )
-    except ObjectDoesNotExist as err:
-        # TODO: Remove this fallback once all registrations have UUIDs
-        # Temporary fallback: try to lookup by pk if UUID lookup fails
-        try:
-            reg = Registration.objects.select_related("run", "run__event").get(
-                pk=registration_uuid,
-                member=context["member"],
-                cancellation_date__isnull=True,
-                run__event__association_id=context["association_id"],
-            )
-        except ObjectDoesNotExist:
-            msg = f"registration not found {err}"
-            raise Http404(msg) from err
+    reg = get_accounting_registration(context, registration_uuid)
 
     # Get event context and mark as accounting page
     context = get_event_context(request, reg.run.get_slug())
@@ -466,6 +446,42 @@ def acc_reg(request: HttpRequest, registration_uuid: int, method: str | None = N
     context["form"] = form
 
     return render(request, "larpmanager/member/acc_reg.html", context)
+
+
+def get_accounting_registration(context: dict, registration_uuid: str) -> Registration:
+    """Get registration by UUID with member and association validation.
+
+    Args:
+        context: Context dictionary containing member and association_id
+        registration_uuid: Registration UUID or ID (numeric fallback)
+
+    Returns:
+        Registration object with related run and event data
+
+    Raises:
+        Http404: If registration not found or access denied
+    """
+    # Build base queryset with related data
+    queryset = Registration.objects.select_related("run", "run__event")
+    filters = {
+        "member": context["member"],
+        "cancellation_date__isnull": True,
+        "run__event__association_id": context["association_id"],
+    }
+
+    # Try UUID lookup first
+    try:
+        return queryset.get(uuid=registration_uuid, **filters)
+    except (ObjectDoesNotExist, ValueError, AttributeError) as err:
+        # Fallback to pk lookup if identifier is numeric
+        if str(registration_uuid).isdigit():
+            try:
+                return queryset.get(pk=registration_uuid, **filters)
+            except ObjectDoesNotExist:
+                msg = f"registration not found {err}"
+                raise Http404(msg) from err
+        msg = f"registration not found {err}"
+        raise Http404(msg) from err
 
 
 @login_required

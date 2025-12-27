@@ -843,7 +843,7 @@ def orga_export(request: HttpRequest, event_slug: str, export_name: str) -> Http
 
 
 @login_required
-def orga_version(request: HttpRequest, event_slug: str, name: str, version_uuid: int) -> HttpResponse:
+def orga_version(request: HttpRequest, event_slug: str, name: str, version_uuid: str) -> HttpResponse:
     """Render version details for organization text content.
 
     Args:
