@@ -188,6 +188,11 @@ def _load_test_db_sql() -> None:
 
 def _reload_fixtures() -> None:
     _truncate_app_tables()
+    # Clean up payment settings files that persist between tests
+    payment_settings_dir = Path(settings.PAYMENT_SETTING_FOLDER)
+    if payment_settings_dir.exists():
+        for file in payment_settings_dir.glob("*.enc"):
+            file.unlink()
     call_command("init_db")
 
 
