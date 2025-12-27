@@ -23,16 +23,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run specific test**: `pytest larpmanager/tests/specific_test.py`
 - **Run unit tests only**: `./scripts/test_unit.sh`
 - **Run playwright tests only**: `./scripts/test_playwright.sh`
-- **Database migrations**: `python manage.py migrate`
 - **Create migrations**: `python manage.py makemigrations`
-- **Load test fixtures**: `python manage.py reset` (creates test org with users: `admin`, `orga@test.it`, `user@test.it` - password: `banana`)
+- **Apply migrations**: `python manage.py migrate`
+- **Load test fixtures**: `python manage.py reset` (creates test org with users: `admin`, `orga@test.it`, `user@test.it` - password: `banana`) - automatically runs makemigrations and migrate
 - **Create superuser**: `python manage.py createsuperuser`
 - **Run automation tasks**: `python manage.py automate` (should be scheduled daily, handles advanced features)
 - **Lint code**: `ruff check`
 - **Format code**: `ruff format`
 - **Translation updates**: `./scripts/translate.sh` (requires `DEEPL_API_KEY` in dev settings)
 - **Record playwright tests**: `./scripts/record-test.sh`
-- **Update test dump**: `python manage.py dump_test` (required after model/fixture changes)
+- **Update test dump**: `python manage.py dump_test` (required after model/fixture changes) - automatically runs makemigrations, migrate, and reset
 
 ### Feature Management
 - **Export features to fixtures**: `python manage.py export_features` (run before pushing new features)
@@ -174,7 +174,7 @@ For adding new features with views and permissions, follow the [Features and Per
 3. Configure database settings in `DATABASES`
 4. Set `SLUG_ASSOC` to organization slug (default: `test`)
 5. Add `DEEPL_API_KEY` for translation features (get free API key from DeepL)
-6. Run `python manage.py reset` to load test fixtures
+6. Run `python manage.py reset` to set up database and load test fixtures
 7. Install pre-commit hooks: `pre-commit install`
 8. Install Git LFS: `git lfs install && git lfs pull`
 

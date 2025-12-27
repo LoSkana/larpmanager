@@ -216,13 +216,20 @@ class Command(BaseCommand):
                 if not pk_field or pk_field.get_internal_type() not in ("AutoField", "BigAutoField"):
                     continue
 
-                # Generate SQL to reset the sequence
-                sequence_name = f"{table_name}_{pk_field.column}_seq"
-                sql = (
-                    f"SELECT setval('{sequence_name}', COALESCE((SELECT MAX({pk_field.column}) FROM {table_name}), 1));"  # noqa: S608
-                )
-
+                # Get the actual sequence name using pg_get_serial_sequence
+                # This handles cases where sequence names are truncated due to PostgreSQL's 63-char limit
                 try:
+                    cursor.execute(
+                        "SELECT pg_get_serial_sequence(%s, %s);",
+                        [table_name, pk_field.column],
+                    )
+                    result = cursor.fetchone()
+                    if not result or not result[0]:
+                        continue
+                    sequence_name = result[0]
+
+                    # Reset the sequence to the maximum value in the table
+                    sql = f"SELECT setval('{sequence_name}', COALESCE((SELECT MAX({pk_field.column}) FROM {table_name}), 1));"  # noqa: S608
                     cursor.execute(sql)
                 except Exception as e:  # noqa: BLE001
                     self.stdout.write(self.style.WARNING(f"Could not reset sequence for {table_name}: {e}"))

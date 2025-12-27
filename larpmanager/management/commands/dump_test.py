@@ -85,7 +85,6 @@ class Command(BaseCommand):
 
         # Reset database to clean state and apply all migrations
         call_command("reset", verbosity=0)
-        call_command("migrate", verbosity=0)
 
         # Configure environment for PostgreSQL authentication
         self.stdout.write("Dumping database to test_db.sql...")
