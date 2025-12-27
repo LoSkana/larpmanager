@@ -1214,7 +1214,7 @@ def check_registration_open(context: dict, request: HttpRequest) -> None:
 
 
 @login_required
-def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpResponse:
+def gift_edit(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResponse:
     """Handle gift registration modifications.
 
     This function manages the editing of gift registrations, allowing users to
@@ -1224,7 +1224,7 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
     Args:
         request: The HTTP request object containing user data and form submission
         event_slug: Event identifier string used to locate the specific event
-        gift_id: The registration ID for the gift card being edited
+        gift_uuid: The registration UUID to be gifted
 
     Returns:
         HttpResponse: Either renders the gift edit form template or redirects
@@ -1240,73 +1240,58 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_id: int) -> HttpRespon
     check_registration_open(context, request)
 
     # Retrieve the specific gift registration and prepare form context
-    reg = get_registration_gift(context, gift_id)
-    _register_prepare(context, reg)
+    registration = get_registration_gift(context, gift_uuid)
+    _register_prepare(context, registration)
 
     # Handle POST requests for form submission (save or delete operations)
     if request.method == "POST":
-        form = RegistrationGiftForm(request.POST, context=context, instance=reg)
+        form = RegistrationGiftForm(request.POST, context=context, instance=registration)
 
         # Validate form data before processing
         if form.is_valid():
             # Check if this is a deletion request
             if "delete" in request.POST and request.POST["delete"] == "1":
-                cancel_reg(reg)
+                cancel_reg(registration)
                 messages.success(request, _("Gift card cancelled!"))
             else:
                 # Save the updated registration data
-                save_registration(context, form, context["run"], context["event"], reg, gifted=True)
+                save_registration(context, form, context["run"], context["event"], registration, gifted=True)
                 messages.success(request, _("Operation completed") + "!")
 
             # Redirect back to gift list after successful operation
             return redirect("gift", event_slug=event_slug)
     else:
         # Handle GET requests by creating a new form with existing data
-        form = RegistrationGiftForm(context=context, instance=reg)
+        form = RegistrationGiftForm(context=context, instance=registration)
 
     # Prepare context for template rendering
     context["form"] = form
     context["gift"] = True
 
     # Initialize form submission state and validation
-    init_form_submitted(context, form, request, reg)
+    init_form_submitted(context, form, request, registration)
 
     return render(request, "larpmanager/event/gift_edit.html", context)
 
 
-def get_registration_gift(context: dict, registration_id: int | None) -> Registration | None:
-    """Get a registration with gift redeem code for the current user.
+def get_registration_gift(context: dict, gift_uuid: str) -> Registration | None:
+    """Get a registration with gift redeem code for the current user."""
+    if gift_uuid == "0":
+        return None
 
-    Args:
-        context: Context dictionary containing run information
-        registration_id: Registration primary key to lookup
-
-    Returns:
-        Registration object if found and valid, None otherwise
-
-    Raises:
-        Http404: If registration lookup fails or invalid parameters provided
-
-    """
-    registration = None
-
-    # Early return if no registration ID provided
-    if registration_id:
-        try:
-            # Query for valid gift registration matching all criteria
-            registration = Registration.objects.get(
-                pk=registration_id,
-                run=context["run"],
-                member=context["member"],
-                redeem_code__isnull=False,  # Must have a redeem code (gift)
-                cancellation_date__isnull=True,  # Must not be cancelled
-            )
-        except Exception as error:
-            # Convert any lookup error to 404 for security
-            msg = "what are you trying to do?"
-            raise Http404(msg) from error
-
-    return registration
+    try:
+        # Query for valid gift registration matching all criteria
+        return Registration.objects.get(
+            uuid=gift_uuid,
+            run=context["run"],
+            member=context["member"],
+            redeem_code__isnull=False,  # Must have a redeem code (gift)
+            cancellation_date__isnull=True,  # Must not be cancelled
+        )
+    except Exception as error:
+        # Convert any lookup error to 404 for security
+        msg = "what are you trying to do?"
+        raise Http404(msg) from error
 
 
 @login_required
