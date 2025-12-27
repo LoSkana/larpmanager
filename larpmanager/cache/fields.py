@@ -84,21 +84,21 @@ def update_event_fields(event_id: int) -> dict:
     visible_questions = (
         event.get_elements(WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
     )
-    for question_data in visible_questions.values("id", "name", "typ", "printable", "visibility", "applicable"):
+    for question_data in visible_questions.values("id", "name", "typ", "printable", "visibility", "applicable", "uuid"):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         _ensure_cache_structure(cached_fields, applicabile_label, "questions")
         cached_fields[applicabile_label]["questions"][question_data["id"]] = question_data
 
     # Fetch writing options and group by parent question's applicability
     writing_options = event.get_elements(WritingOption).order_by("order")
-    for option_data in writing_options.values("id", "name", "question_id", "question__applicable"):
+    for option_data in writing_options.values("id", "name", "question_id", "question__applicable", "uuid"):
         applicabile_label = QuestionApplicable(option_data["question__applicable"]).label
         _ensure_cache_structure(cached_fields, applicabile_label, "options")
         cached_fields[applicabile_label]["options"][option_data["id"]] = option_data
 
     # Create name and ID mappings for default writing question types
     default_type_questions = event.get_elements(WritingQuestion).filter(typ__in=get_def_writing_types())
-    for question_data in default_type_questions.values("id", "typ", "name", "applicable"):
+    for question_data in default_type_questions.values("id", "typ", "name", "applicable", "uuid"):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         question_type = question_data["typ"]
         _ensure_cache_structure(cached_fields, applicabile_label, "names")

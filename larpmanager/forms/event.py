@@ -1719,12 +1719,12 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_config_fields.extend(
                 [
                     (
-                        f".lq_{field_id}",
+                        f".lq_{field_uuid}",
                         registration_field.name
                         if len(registration_field.name) <= field_name_max_length
                         else registration_field.name[: field_name_max_length - 5] + " [...]",
                     )
-                    for field_id, registration_field in registration_fields.items()
+                    for field_uuid, registration_field in registration_fields.items()
                 ],
             )
 
@@ -1807,7 +1807,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
                     applicable=QuestionApplicable.CHARACTER,
                     typ=WritingQuestionType.FACTIONS,
                 )
-                feature_fields.insert(0, ("faction", f"q_{faction_question.id}", _("Factions")))
+                feature_fields.insert(0, ("faction", f"q_{faction_question.uuid}", _("Factions")))
 
             self.add_feature_extra(extra_config_options, feature_fields)
 
@@ -1845,7 +1845,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             if field["typ"] == "name":
                 continue
 
-            toggle_key = f".lq_{field['id']}" if field["typ"] in basic_question_types else f"q_{field['id']}"
+            toggle_key = f".lq_{field['uuid']}" if field["typ"] in basic_question_types else f"q_{field['uuid']}"
 
             compiled_options.append((toggle_key, field["name"]))
 

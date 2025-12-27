@@ -110,8 +110,14 @@ def get(value: dict[str, Any], arg: str) -> Any:
         any: Dictionary value for key, or empty string if not found
 
     """
-    if arg is not None and value and arg in value:
-        return value[arg]
+    if arg is not None and value:
+        try:
+            if arg in value:
+                return value[arg]
+        except TypeError:
+            # arg is not hashable (e.g., dict), cannot be used as dict key
+            # This can happen when iterating over cached data with dict keys
+            return ""
     return ""
 
 

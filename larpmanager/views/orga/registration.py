@@ -45,7 +45,7 @@ from larpmanager.accounting.registration import (
 )
 from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.button import clear_event_button_cache
-from larpmanager.cache.character import clear_run_cache_and_media, get_event_cache_all
+from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media, get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config, reset_element_configs
 from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache
@@ -1246,6 +1246,8 @@ def reset_all_run(event: Event, run: Run) -> None:
     # Clear event role caches
     for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
         remove_event_role_cache(event_role_id)
+
+    clear_event_cache_all_runs(event)
 
 
 def lottery_info(request: HttpRequest, context: dict) -> None:  # noqa: ARG001

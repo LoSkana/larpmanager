@@ -35,7 +35,6 @@ from django.views.decorators.http import require_POST
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.association_text import clear_association_text_cache_on_delete
 from larpmanager.cache.association_translation import clear_association_translation_cache
-from larpmanager.cache.character import clear_event_cache_all_runs
 from larpmanager.cache.config import reset_element_configs
 from larpmanager.cache.feature import get_association_features, reset_association_features
 from larpmanager.cache.links import reset_event_links
@@ -58,14 +57,15 @@ from larpmanager.forms.member import ExeProfileForm
 from larpmanager.models.access import AssociationPermission, AssociationRole
 from larpmanager.models.association import Association, AssociationText, AssociationTranslation
 from larpmanager.models.base import Feature
-from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
+from larpmanager.models.event import Run
+from larpmanager.models.member import Membership
 from larpmanager.utils.auth.permission import get_index_association_permissions
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature
 from larpmanager.utils.services.edit import backend_edit, exe_edit
 from larpmanager.views.larpmanager import get_run_lm_payment
 from larpmanager.views.orga.event import prepare_roles_list
+from larpmanager.views.orga.registration import reset_all_run
 
 
 @login_required
@@ -482,8 +482,8 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request)
 
     # Get association slug and ID
-    association_slug = context["association"]["slug"]
-    association_id = context["association"]["id"]
+    association_slug = context["slug"]
+    association_id = context["id"]
 
     # Clear association overall cache
     clear_association_cache(association_slug)
@@ -517,12 +517,12 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
         remove_association_role_cache(assoc_role_id)
 
     # Clear event links for all members of this association
-    for member_id in Member.objects.filter(associations__id=association_id).values_list("id", flat=True):
+    for member_id in Membership.objects.filter(association__id=association_id).values_list("member_id", flat=True):
         reset_event_links(member_id, association_id)
 
     # Clear all events' caches for this association
-    for event in Event.objects.filter(association_id=association_id):
-        clear_event_cache_all_runs(event)
+    for run in Run.objects.filter(event__association_id=association_id):
+        reset_all_run(run.event, run)
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))
