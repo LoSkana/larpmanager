@@ -58,6 +58,12 @@ class Command(BaseCommand):
         # Ensure we're not running on main branch
         check_branch()
 
+        # Run makemigrations and migrate before reset
+        self.stdout.write("Running makemigrations...")
+        call_command("makemigrations", verbosity=0)
+        self.stdout.write("Running migrate...")
+        call_command("migrate", verbosity=0)
+
         self.stdout.write("Resetting database...")
 
         # Handle PostgreSQL database reset

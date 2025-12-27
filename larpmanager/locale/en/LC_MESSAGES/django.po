@@ -9280,12 +9280,6 @@ msgstr ""
 msgid "Answer submitted!"
 msgstr ""
 
-msgid "You don't have permission to analyze this ticket"
-msgstr ""
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
-msgstr ""
-
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr ""
 

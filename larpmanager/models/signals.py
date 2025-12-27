@@ -23,7 +23,6 @@ import logging
 from typing import Any
 
 from django.contrib.auth.models import User
-from django.core.signals import got_request_exception
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
@@ -226,7 +225,6 @@ from larpmanager.utils.io.pdf import (
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
-from larpmanager.utils.larpmanager.ticket import create_error_ticket
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
 from larpmanager.utils.services.association import (
     apply_skin_features_to_association,
@@ -1661,23 +1659,3 @@ def paypal_ko_webhook(sender: type, **kwargs: Any) -> None:
 
     """
     handle_invalid_paypal_ipn(sender)
-
-
-@receiver(got_request_exception)
-def handle_request_exception(sender: type, request: object, **kwargs: Any) -> None:
-    """Handle request exceptions and create error tickets automatically.
-
-    This signal handler is triggered when an exception occurs during request processing.
-    It creates an error ticket with the exception details.
-
-    Args:
-        sender: The sender of the signal
-        request: The HttpRequest object
-        **kwargs: Additional keyword arguments (may contain 'exception')
-
-    """
-    try:
-        create_error_ticket(request)
-    except Exception as e:  # noqa: BLE001 - Error handler must never fail and disrupt error reporting
-        # Don't let ticket creation failure break the error handling
-        log.debug("Failed to create error ticket: %s", e)

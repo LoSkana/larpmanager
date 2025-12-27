@@ -6067,9 +6067,6 @@ msgstr "Esta página muestra los tipos de misiones del evento"
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Puede cargar un archivo en formato pdf, o una imagen"
 
-msgid "You don't have permission to analyze this ticket"
-msgstr "No tiene permiso para analizar este ticket"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Ya has pagado la cuota de afiliación de este año"
 
@@ -7483,11 +7480,6 @@ msgstr ""
 
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Esta página muestra la información para realizar el sorteo de lotería"
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
-msgstr ""
-"Análisis de entradas iniciado. Recibirá un correo electrónico cuando se haya"
-" completado"
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""

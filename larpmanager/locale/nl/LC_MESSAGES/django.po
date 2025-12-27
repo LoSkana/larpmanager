@@ -6072,9 +6072,6 @@ msgstr ""
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Je kunt een bestand in pdf-formaat of een afbeelding uploaden"
 
-msgid "You don't have permission to analyze this ticket"
-msgstr "Je hebt geen toestemming om dit ticket te analyseren"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Je hebt je lidmaatschapsgeld voor dit jaar al betaald"
 
@@ -7487,10 +7484,6 @@ msgstr ""
 
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Deze pagina toont de informatie om de lottotrekking uit te voeren"
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
-msgstr ""
-"De ticketanalyse is gestart. U ontvangt een e-mail wanneer deze is voltooid"
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
