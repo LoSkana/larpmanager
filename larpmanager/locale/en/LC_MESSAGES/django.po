@@ -1158,7 +1158,9 @@ msgstr ""
 msgid "Maximum number"
 msgstr ""
 
-msgid "Maximum number of characters the player can create"
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
 msgstr ""
 
 msgid "Approval"

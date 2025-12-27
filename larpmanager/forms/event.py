@@ -688,7 +688,9 @@ class OrgaConfigForm(ConfigForm):
 
             # Maximum character limit configuration
             max_characters_label = _("Maximum number")
-            max_characters_help_text = _("Maximum number of characters the player can create")
+            max_characters_help_text = _(
+                "Maximum number of characters the player can create (default=0, no creation allowed)"
+            )
             self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
 
             # Character approval process configuration

@@ -6150,9 +6150,6 @@ msgstr "Hantera konfigurationen av de aktiverade funktionerna"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Hantera framstegsstegen för skrivelementen"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maximalt antal karaktärer som spelaren kan skapa"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i förhållandet (destination)"
 
@@ -8473,6 +8470,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I händelsen <b>%(event)s</b> tilldelades du karaktären: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximalt antal karaktärer som spelaren kan skapa (standard=0, ingen skapelse"
+" tillåten)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

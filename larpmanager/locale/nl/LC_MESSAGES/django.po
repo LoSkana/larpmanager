@@ -6157,9 +6157,6 @@ msgstr "De configuratie van de geactiveerde functies beheren"
 msgid "Manage the progress steps for the writing elements"
 msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maximum aantal personages dat de speler kan maken"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede teken in de relatie (bestemming)"
 
@@ -8626,6 +8623,13 @@ msgid ""
 msgstr ""
 "In de gebeurtenis <b>%(event)s</b> kreeg je het personage toegewezen: "
 "<b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximum aantal karakters dat de speler kan creëren (standaard=0, geen "
+"creatie toegestaan)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

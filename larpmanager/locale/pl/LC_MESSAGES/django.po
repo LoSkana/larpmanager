@@ -6151,9 +6151,6 @@ msgstr "Zarządzanie konfiguracją aktywowanych funkcji"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Zarządzanie krokami postępu dla elementów pisania"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maksymalna liczba postaci, które może stworzyć gracz"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Druga postać w związku (miejsce docelowe)"
 
@@ -8545,6 +8542,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "W wydarzeniu <b>%(event)s</b> przydzielono ci postać: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maksymalna liczba postaci, które gracz może stworzyć (domyślnie=0, nie można"
+" tworzyć postaci)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

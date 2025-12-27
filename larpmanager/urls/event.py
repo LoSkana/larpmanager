@@ -45,14 +45,34 @@ urlpatterns = [
         name="event_register",
     ),
     path(
-        "<slug:event_slug>/character/<slug:character_uuid>/",
-        views_uc.character_view,
-        name="character",
+        "<slug:event_slug>/character/list/",
+        views_uc.character_list,
+        name="character_list",
+    ),
+    path(
+        "<slug:event_slug>/character/create/",
+        views_uc.character_create,
+        name="character_create",
+    ),
+    path(
+        "<slug:event_slug>/character/your/",
+        views_uc.character_your,
+        name="character_your",
+    ),
+    path(
+        "<slug:event_slug>/character/your/<path:path>",
+        views_uc.character_your,
+        name="character_your",
     ),
     path(
         "<slug:event_slug>/character/external/<slug:code>/",
         views_uc.character_external,
         name="character_external",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/",
+        views_uc.character_view,
+        name="character",
     ),
     path(
         "<slug:event_slug>/character/<slug:character_uuid>/change/",
@@ -73,16 +93,6 @@ urlpatterns = [
         "<slug:event_slug>/character/<slug:character_uuid>/profile/upload/",
         views_uc.character_profile_upload,
         name="character_profile_upload",
-    ),
-    path(
-        "<slug:event_slug>/character/list/",
-        views_uc.character_list,
-        name="character_list",
-    ),
-    path(
-        "<slug:event_slug>/character/create/",
-        views_uc.character_create,
-        name="character_create",
     ),
     path(
         "<slug:event_slug>/character/<slug:character_uuid>/abilities/",
@@ -123,16 +133,6 @@ urlpatterns = [
         "<slug:event_slug>/character/<slug:character_uuid>/pdf/relationships/",
         views_up.character_pdf_relationships,
         name="character_pdf_relationships",
-    ),
-    path(
-        "<slug:event_slug>/character/your/",
-        views_uc.character_your,
-        name="character_your",
-    ),
-    path(
-        "<slug:event_slug>/character/your/<path:path>",
-        views_uc.character_your,
-        name="character_your",
     ),
     path(
         "<slug:event_slug>/search/",

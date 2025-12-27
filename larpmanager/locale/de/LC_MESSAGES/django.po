@@ -6179,9 +6179,6 @@ msgstr "Verwalten Sie die Konfiguration der aktivierten Funktionen"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Verwalten Sie die Fortschrittsschritte für die Schriftelemente"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maximale Anzahl von Charakteren, die der Spieler erstellen kann"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Zweites Zeichen in der Beziehung (Ziel)"
 
@@ -8808,6 +8805,13 @@ msgid ""
 msgstr ""
 "In dem Ereignis <b>%(event)s</b> wurde dir das Zeichen <b>%(character)s</b> "
 "zugewiesen"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximale Anzahl von Charakteren, die der Spieler erstellen kann (Standard=0,"
+" keine Erstellung erlaubt)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

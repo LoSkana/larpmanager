@@ -6151,9 +6151,6 @@ msgstr "Administrer konfigurasjonen av de aktiverte funksjonene"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Administrer fremdriftstrinnene for skriveelementene"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maksimalt antall karakterer spilleren kan skape"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"
 
@@ -8468,6 +8465,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I hendelsen <b>%(event)s</b> ble du tildelt tegnet: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maksimalt antall karakterer spilleren kan opprette (standard=0, ingen "
+"opprettelse tillatt)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

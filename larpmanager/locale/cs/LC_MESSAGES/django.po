@@ -6149,9 +6149,6 @@ msgstr "Správa konfigurace aktivovaných funkcí"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Správa kroků postupu pro prvky psaní"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maximální počet postav, které může hráč vytvořit"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Druhý znak ve vztahu (cílová destinace)"
 
@@ -8390,6 +8387,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "V události <b>%(event)s</b> vám byla přiřazena postava: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximální počet postav, které může hráč vytvořit (výchozí=0, vytváření "
+"postav není povoleno)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
