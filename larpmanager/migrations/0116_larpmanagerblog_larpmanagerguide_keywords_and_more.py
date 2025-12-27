@@ -15,6 +15,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # Clean up any leftover objects from failed migrations
+        migrations.RunSQL(
+            sql="""
+            -- Remove blog_id column if it exists
+            ALTER TABLE IF EXISTS larpmanager_larpmanagershowcase DROP COLUMN IF EXISTS blog_id CASCADE;
+            -- Remove leftover indexes
+            DROP INDEX IF EXISTS larpmanager_larpmanagerblog_slug_027989eb_like CASCADE;
+            DROP INDEX IF EXISTS larpmanager_larpmanagerblog_deleted_378b7b52 CASCADE;
+            -- Remove table if it exists
+            DROP TABLE IF EXISTS larpmanager_larpmanagerblog CASCADE;
+            """,
+            reverse_sql=migrations.RunSQL.noop,
+        ),
         migrations.CreateModel(
             name='LarpManagerBlog',
             fields=[
