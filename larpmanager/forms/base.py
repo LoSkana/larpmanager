@@ -567,7 +567,7 @@ class BaseRegistrationForm(MyFormRun):
                     continue
 
             # Add valid option to choices and append description to help text
-            choices.append((str(option.id), option_display_name))
+            choices.append((str(option.uuid), option_display_name))
             if option.description:
                 help_text += f'<p id="hp_{option.uuid!s}"><b>{option.name}</b> {option.description}</p>'
 
@@ -680,20 +680,20 @@ class BaseRegistrationForm(MyFormRun):
         # Skip validation if no questions are defined on the form
         if hasattr(self, "questions"):
             # Iterate through all questions to validate selected options
-            for q in self.questions:
-                k = "q" + str(q.id)
+            for question in self.questions:
+                key = "q" + str(question.uuid)
 
                 # Skip if this question's data is not in the form submission
-                if k not in form_data:
+                if key not in form_data:
                     continue
 
                 # Handle multiple choice questions
-                if q.typ == BaseQuestionType.MULTIPLE:
-                    self._validate_multiple_choice(form_data, q, k)
+                if question.typ == BaseQuestionType.MULTIPLE:
+                    self._validate_multiple_choice(form_data, question, key)
 
                 # Handle single choice questions
-                elif q.typ == BaseQuestionType.SINGLE:
-                    self._validate_single_choice(form_data, q, k)
+                elif question.typ == BaseQuestionType.SINGLE:
+                    self._validate_single_choice(form_data, question, key)
 
         return form_data
 
@@ -1160,34 +1160,34 @@ class BaseRegistrationForm(MyFormRun):
             is_organizer (bool): Whether to save organizational questions
 
         """
-        for q in self.questions:
-            if q.skip(instance, self.params["features"], self.params, is_organizer=is_organizer):
+        for question in self.questions:
+            if question.skip(instance, self.params["features"], self.params, is_organizer=is_organizer):
                 continue
 
-            k = "q" + str(q.id)
-            if k not in self.cleaned_data:
+            key = "q" + str(question.uuid)
+            if key not in self.cleaned_data:
                 continue
-            oid = self.cleaned_data[k]
+            oid = self.cleaned_data[key]
 
-            if q.typ == BaseQuestionType.MULTIPLE:
-                self.save_reg_multiple(instance, oid, q)
-            elif q.typ == BaseQuestionType.SINGLE:
-                self.save_reg_single(instance, oid, q)
-            elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
-                self.save_reg_text(instance, oid, q)
+            if question.typ == BaseQuestionType.MULTIPLE:
+                self.save_reg_multiple(instance, oid, question)
+            elif question.typ == BaseQuestionType.SINGLE:
+                self.save_reg_single(instance, oid, question)
+            elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
+                self.save_reg_text(instance, oid, question)
 
     def save_reg_text(
         self,
         instance: Any,
-        oid: str | None,
-        q: Any,
+        value: str | None,
+        question: Any,
     ) -> None:
         """Save or update a text answer for a registration question.
 
         Args:
             instance: The registration/application instance to attach the answer to.
-            oid: The new text value to save, or None to delete the answer.
-            q: The question object being answered.
+            value: The new text value to save, or None to delete the answer.
+            question: The question object being answered.
 
         Notes:
             - Preserves disabled field values in organizer forms.
@@ -1195,89 +1195,95 @@ class BaseRegistrationForm(MyFormRun):
 
         """
         # Check if an answer already exists for this question
-        if q.id in self.answers:
-            if not oid:
+        if question.uuid in self.answers:
+            if not value:
                 # For disabled questions in organizer forms, don't delete existing answers
                 # unless the organizer explicitly submitted an empty value for an editable field
                 orga = getattr(self, "orga", False)
-                is_disabled = hasattr(q, "status") and q.status == "d"
+                is_disabled = hasattr(question, "status") and question.status == "d"
 
                 # Keep existing value for disabled fields in organizer forms
                 if orga and is_disabled:
                     pass
                 else:
-                    self.answers[q.id].delete()
-            elif oid != self.answers[q.id].text:
+                    self.answers[question.uuid].delete()
+            elif value != self.answers[question.uuid].text:
                 # Update existing answer if the value has changed
-                self.answers[q.id].text = oid
-                self.answers[q.id].save()
-        elif oid:
+                self.answers[question.uuid].text = value
+                self.answers[question.uuid].save()
+        elif value:
             # Only create new answers if there's actually content
-            self.answer_class.objects.create(**{"question": q, self.instance_key: instance.id, "text": oid})
+            self.answer_class.objects.create(**{"question": question, self.instance_key: instance.id, "text": value})
 
-    def save_reg_single(self, instance: Any, oid: str | None, q: Any) -> None:
+    def save_reg_single(self, instance: Any, option_uuid: str | None, question: Any) -> None:
         """Save or update a single-choice question response.
 
         Args:
             instance: The parent instance (registration/application)
-            oid: The option UUID as string (or None)
-            q: The question object
+            option_uuid: The option UUID as string (or None)
+            question: The question object
 
         """
         # Skip if no option UUID provided
-        if not oid:
+        if not option_uuid:
             return
 
         # Look up option by UUID
         try:
-            option = q.options.get(uuid=oid)
+            option = question.options.get(uuid=option_uuid)
         except ObjectDoesNotExist:
             # Option not found or invalid UUID
             return
 
         # Update existing choice: delete if requested, otherwise update option
-        if q.id in self.singles:
-            if self.singles[q.id].option_id != option.id:
-                self.singles[q.id].option_id = option.id
-                self.singles[q.id].save()
+        if question.uuid in self.singles:
+            if self.singles[question.uuid].option_id != option.id:
+                self.singles[question.uuid].option_id = option.id
+                self.singles[question.uuid].save()
         # Create new choice
         else:
-            self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": option.id})
+            self.choice_class.objects.create(
+                **{"question": question, self.instance_key: instance.id, "option_id": option.id}
+            )
 
     def save_reg_multiple(
         self,
         instance: Any,
-        oid: list[str] | None,
-        q: Any,
+        option_uuids: list[str] | None,
+        question: Any,
     ) -> None:
         """Save multiple-choice registration answers by syncing selected options.
 
         Creates new choices for added options and deletes removed ones.
         """
-        if not oid:
+        if not option_uuids:
             return
 
         # Convert option UUIDs to option IDs by looking them up
-        uuid_to_id = {str(opt.uuid): opt.id for opt in q.options.all()}
-        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in oid if uuid_str in uuid_to_id}
+        uuid_to_id = {str(opt.uuid): opt.id for opt in question.options.all()}
+        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids if uuid_str in uuid_to_id}
 
         # If question already has existing choices, sync the differences
-        if q.id in self.multiples:
-            old = {el.option_id for el in self.multiples[q.id]}
+        if question.uuid in self.multiples:
+            old = {el.option_id for el in self.multiples[question.uuid]}
 
             # Create new choices for added options
             for add in selected_option_ids - old:
-                self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": add})
+                self.choice_class.objects.create(
+                    **{"question": question, self.instance_key: instance.id, "option_id": add}
+                )
 
             # Delete choices for removed options
             rem = old - selected_option_ids
             self.choice_class.objects.filter(
-                **{"question": q, self.instance_key: instance.id, "option_id__in": rem},
+                **{"question": question, self.instance_key: instance.id, "option_id__in": rem},
             ).delete()
         else:
             # Create all choices from scratch if none exist
             for pkoid in selected_option_ids:
-                self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": pkoid})
+                self.choice_class.objects.create(
+                    **{"question": question, self.instance_key: instance.id, "option_id": pkoid}
+                )
 
 
 class MyCssForm(MyForm):

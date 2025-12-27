@@ -226,8 +226,8 @@ class RegistrationForm(BaseRegistrationForm):
         if self.waiting_check:
             return
         self._init_reg_question(self.instance, event)
-        for q in self.questions:
-            self.init_question(q, reg_counts)
+        for question in self.questions:
+            self.init_question(question, reg_counts)
         self.tickets_map = json.dumps(self.tickets_map)
 
     def init_question(self, question: Any, registration_counts: Any) -> None:
@@ -379,7 +379,7 @@ class RegistrationForm(BaseRegistrationForm):
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             ticket_display_name = ticket.get_form_text(currency_symbol=self.params["currency_symbol"])
-            ticket_choices.append((str(ticket.id), ticket_display_name))
+            ticket_choices.append((str(ticket.uuid), ticket_display_name))
 
             # Add ticket description to help text if available
             if ticket.description:
@@ -628,7 +628,7 @@ class RegistrationGiftForm(RegistrationForm):
 
         # Build list of fields to keep: base fields plus giftable questions
         keep = ["run", "ticket"]
-        keep.extend(["q" + str(q.id) for q in self.questions if q.giftable])
+        keep.extend(["q" + str(question.uuid) for question in self.questions if question.giftable])
 
         # Remove fields not in keep list and update mandatory tracking
         list_del = [s for s in self.fields if s not in keep]
@@ -885,13 +885,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 key = "id_" + qt_id
                 self.sections[key] = char_section
                 choices = [("0", _("--- NOT ASSIGNED ---"))]
-                for q in self.params["quests"].values():
-                    if q["typ"] != qtnum:
+                for quest in self.params["quests"].values():
+                    if quest["typ"] != qtnum:
                         continue
                     for t in available:
-                        if t.quest_id != q["id"]:
+                        if t.quest_id != quest["id"]:
                             continue
-                        choices.append((t.id, f"Q{q['number']} {q['name']} - {t}"))
+                        choices.append((t.id, f"Q{quest['number']} {quest['name']} - {t}"))
                         if t.number in assigned:
                             self.initial[qt_id] = t.id
 

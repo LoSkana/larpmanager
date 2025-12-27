@@ -392,12 +392,15 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
         event = event.parent
 
     # Get question ID from POST data
-    eid = request.POST.get("num")
+    q_uuid = request.POST.get("q_uuid")
 
     # Determine applicable question type and get related element IDs
     applicable = QuestionApplicable.get_applicable(writing_type)
     element_typ = QuestionApplicable.get_applicable_inverse(applicable)
     element_ids = element_typ.objects.filter(event=event).values_list("id", flat=True)
+
+    # Create id -> uuid mapping
+    element_mapping = dict(element_typ.objects.filter(event=event).values_list("id", "uuid"))
 
     # Initialize response data structures
     res = {}
@@ -405,7 +408,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
     max_length = 100
 
     # Get the specific question being processed
-    question = event.get_elements(WritingQuestion).get(pk=eid, applicable=applicable)
+    question = event.get_elements(WritingQuestion).get(uuid=q_uuid, applicable=applicable)
 
     # Handle single/multiple choice questions
     if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
@@ -414,15 +417,16 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
         for opt in event.get_elements(WritingOption).filter(question=question):
             cho[opt.id] = opt.name
 
-        # Process choices and group by element ID
+        # Process choices and group by element UUID
         for el in (
             WritingChoice.objects.filter(question=question, element_id__in=element_ids)
             .select_related("option")
             .order_by("option__order")
         ):
-            if el.element_id not in res:
-                res[el.element_id] = []
-            res[el.element_id].append(cho[el.option_id])
+            element_uuid = str(element_mapping[el.element_id])
+            if element_uuid not in res:
+                res[element_uuid] = []
+            res[element_uuid].append(cho[el.option_id])
 
     # Handle text, paragraph, and computed questions
     elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, WritingQuestionType.COMPUTED]:
@@ -434,11 +438,12 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
         # Process each answer and mark long texts for popup display
         for el in que:
             answer = el["short_text"]
+            element_uuid = str(element_mapping[el["element_id"]])
             if len(answer) == max_length:
-                popup.append(el["element_id"])
-            res[el["element_id"]] = answer
+                popup.append(element_uuid)
+            res[element_uuid] = answer
 
-    return JsonResponse({"res": res, "popup": popup, "num": str(question.uuid)})
+    return JsonResponse({"res": res, "popup": popup, "q_uuid": str(question.uuid)})
 
 
 @login_required
@@ -472,8 +477,8 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
         event = event.parent
 
     # Retrieve the specific writing question from POST data
-    eid = request.POST.get("num")
-    q = event.get_elements(WritingQuestion).get(pk=eid)
+    q_uuid = request.POST.get("q_uuid")
+    q = event.get_elements(WritingQuestion).get(uuid=q_uuid)
 
     # Only process single or multiple choice questions
     if q.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:

@@ -298,7 +298,8 @@ def _orga_registration_character(context: dict, registration: Any) -> None:
     for character in registration.chars:
         if "factions" in character:
             registration.factions.extend(character["factions"])
-            for faction_number in character["factions"]:
+            for faction in character["factions"]:
+                faction_number = faction["number"]
                 if faction_number in context["factions"]:
                     regs_list_add(
                         context,
@@ -422,7 +423,7 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
         Dictionary mapping question IDs to RegistrationQuestion objects that the member can access
 
     """
-    accessible_registration_questions = {}
+    registration_questions = {}
 
     # Get all registration questions for the event based on available features
     event_questions = RegistrationQuestion.get_instance_questions(context["event"], context["features"])
@@ -440,9 +441,9 @@ def _get_registration_fields(context: dict, member: Any) -> dict:
                 continue
 
         # Add accessible question to results
-        accessible_registration_questions[question.id] = question
+        registration_questions[question.uuid] = question
 
-    return accessible_registration_questions
+    return registration_questions
 
 
 def _orga_registrations_discount(context: dict) -> None:
@@ -622,9 +623,9 @@ def _load_preferences_columns(context: dict) -> None:
     # If user hasn't set preferences, automatically open ticket column by default
     if not default_fields:
         # Find the ticket question ID to add to default fields
-        for question_id, question in context["reg_questions"].items():
+        for question_uuid, question in context["reg_questions"].items():
             if question.typ == "ticket":
-                default_fields.append(f".lq_{question_id}")
+                default_fields.append(f".lq_{question_uuid}")
                 break
 
     context["default_fields"] = json.dumps(default_fields)
@@ -652,12 +653,12 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
     """
     context = check_event_context(request, event_slug, "orga_registrations")
 
-    eid = request.POST.get("num")
+    q_uuid = request.POST.get("q_uuid")
 
     q = RegistrationQuestion.objects
     if "reg_que_allowed" in context["features"]:
         q = q.annotate(allowed_map=ArrayAgg("allowed"))
-    q = q.get(event=context["event"], pk=eid)
+    q = q.get(event=context["event"], uuid=q_uuid)
 
     if "reg_que_allowed" in context["features"] and q.allowed_map[0]:
         run_id = context["run"].id
@@ -675,10 +676,11 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
         for opt in RegistrationOption.objects.filter(question=q):
             cho[opt.id] = opt.get_form_text()
 
-        for el in RegistrationChoice.objects.filter(question=q, reg__run=context["run"]):
-            if el.reg_id not in res:
-                res[el.reg_id] = []
-            res[el.reg.uuid].append(cho[el.option_id])
+        for el in RegistrationChoice.objects.filter(question=q, reg__run=context["run"]).select_related("reg"):
+            reg_uuid = str(el.reg.uuid)
+            if reg_uuid not in res:
+                res[reg_uuid] = []
+            res[reg_uuid].append(cho[el.option_id])
 
     elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
         que = RegistrationAnswer.objects.filter(question=q, reg__run=context["run"])
@@ -687,10 +689,10 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
         for el in que:
             answer = el["short_text"]
             if len(answer) == max_length:
-                popup.append(el["reg_id"])
+                popup.append(el["reg__uuid"])
             res[el["reg__uuid"]] = answer
 
-    return JsonResponse({"res": res, "popup": popup, "num": str(q.uuid)})
+    return JsonResponse({"res": res, "popup": popup, "q_uuid": str(q.uuid)})
 
 
 @login_required
@@ -715,13 +717,13 @@ def orga_registration_form_email(request: HttpRequest, event_slug: str) -> JsonR
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Extract question ID from POST request
-    eid = request.POST.get("num")
+    q_uuid = request.POST.get("q_uuid")
 
     # Query registration question with optional allowed users annotation
     q = RegistrationQuestion.objects
     if "reg_que_allowed" in context["features"]:
         q = q.annotate(allowed_map=ArrayAgg("allowed"))
-    q = q.get(event=context["event"], pk=eid)
+    q = q.get(event=context["event"], uuid=q_uuid)
 
     # Check if user has permission to access this specific question
     if "reg_que_allowed" in context["features"] and q.allowed_map[0]:

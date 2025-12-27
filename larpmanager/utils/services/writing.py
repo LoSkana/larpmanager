@@ -407,7 +407,7 @@ def _get_custom_form(context: dict) -> None:
         if question.typ in context["fields_name"]:
             context["fields_name"][question.typ] = question.name
         else:
-            context["form_questions"][question.id] = question
+            context["form_questions"][question.uuid] = question
 
 
 def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list[str], bool]:
