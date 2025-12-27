@@ -6060,9 +6060,6 @@ msgstr "Ta strona przedstawia rodzaje zadań w wydarzeniu"
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Możesz przesłać plik w formacie pdf lub obraz"
 
-msgid "You don't have permission to analyze this ticket"
-msgstr "Nie masz uprawnień do analizowania tego zgłoszenia"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Opłaciłeś już tegoroczną składkę członkowską"
 
@@ -7429,10 +7426,6 @@ msgstr "Ta strona przeprowadza kilka kontroli poprawności arkuszy postaci"
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr ""
 "Ta strona zawiera informacje potrzebne do przeprowadzenia losowania loterii"
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
-msgstr ""
-"Rozpoczęto analizę biletu. Po jej zakończeniu otrzymasz wiadomość e-mail"
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr "Aby przesłać relacje, dodaj drugi plik z następującymi kolumnami"

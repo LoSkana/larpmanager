@@ -6059,9 +6059,6 @@ msgstr "Tato stránka shrnuje typy úkolů v této akci"
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Můžete nahrát soubor ve formátu pdf nebo obrázek"
 
-msgid "You don't have permission to analyze this ticket"
-msgstr "K analýze tohoto tipu nemáte oprávnění"
-
 msgid "You have already paid this year's membership fee"
 msgstr "Již jste zaplatili letošní členský příspěvek"
 
@@ -7352,9 +7349,6 @@ msgstr "Tato stránka provádí různé kontroly správnosti karet znaků"
 
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Na této stránce jsou uvedeny informace k provedení losování"
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
-msgstr "Zahájena analýza vstupenek. Po jejím dokončení obdržíte e-mail"
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
