@@ -229,15 +229,17 @@ Create the PostgreSQL database and user:
 sudo -u postgres psql
 ```
 
-Then run the following SQL commands:
+Then run the following SQL commands (default credentials: user `larpmanager`, password `larpmanager`):
 ```sql
 CREATE DATABASE larpmanager;
 CREATE USER larpmanager WITH PASSWORD 'larpmanager';
-ALTER USER larpmanager CREATEDB;
+ALTER USER larpmanager CREATEDB;  -- Required for running tests
 ALTER DATABASE larpmanager OWNER TO larpmanager;
 GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
 \q
 ```
+
+**Note:** The `CREATEDB` privilege is required for running tests, as pytest creates temporary test databases.
 
 ### Django Configuration
 
