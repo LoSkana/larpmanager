@@ -23,6 +23,7 @@ import base64
 import hashlib
 import json
 import logging
+import os
 import random
 import string
 from html.parser import HTMLParser
@@ -310,6 +311,9 @@ def get_payment_details_path(association: Association) -> str:
     if it doesn't exist and generates a filename using the association's
     slug and encryption key identifier.
 
+    In debug/test/CI mode, includes process ID to avoid conflicts when
+    multiple tests run in parallel.
+
     Args:
         association: Association instance containing slug and key attributes
 
@@ -329,8 +333,13 @@ def get_payment_details_path(association: Association) -> str:
     # Generate key identifier for filename security
     key_identifier = _key_id(association.key)
 
-    # Create secure filename with association slug and key ID
-    filename = f"{Path(association.slug).name}.{key_identifier}.enc"
+    # In debug mode, add process ID to avoid parallel test conflicts
+    if conf_settings.DEBUG:
+        process_id = os.getpid()
+        filename = f"{Path(association.slug).name}.{key_identifier}.{process_id}.enc"
+    else:
+        # Create secure filename with association slug and key ID
+        filename = f"{Path(association.slug).name}.{key_identifier}.enc"
 
     # Return full path to encrypted payment file
     return str(Path(conf_settings.PAYMENT_SETTING_FOLDER) / filename)
