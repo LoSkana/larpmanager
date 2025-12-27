@@ -86,6 +86,9 @@ msgstr "Område"
 msgid "Band"
 msgstr "Fascia"
 
+msgid "Blog"
+msgstr "Blogg"
+
 msgid "Body"
 msgstr "Kropp"
 
@@ -5712,6 +5715,9 @@ msgstr "Hvis du ikke ser en bruker, kan du be dem om å få tilgang til"
 
 msgid "If you need a hand, feel free to let us know"
 msgstr "Hvis du trenger hjelp, er du velkommen til å gi oss beskjed"
+
+msgid "Latest articles and updates from LarpManager"
+msgstr "Siste artikler og oppdateringer fra LarpManager"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Administrere og godkjenne fakturaer og betalinger"

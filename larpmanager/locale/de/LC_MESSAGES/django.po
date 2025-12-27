@@ -86,6 +86,9 @@ msgstr "Bereich"
 msgid "Band"
 msgstr "Faszien"
 
+msgid "Blog"
+msgstr "Blog"
+
 msgid "Body"
 msgstr "Körper"
 
@@ -5722,6 +5725,9 @@ msgstr "Wenn Sie keinen Benutzer sehen, fragen Sie ihn nach dem Zugang"
 
 msgid "If you need a hand, feel free to let us know"
 msgstr "Wenn Sie Hilfe brauchen, lassen Sie es uns bitte wissen"
+
+msgid "Latest articles and updates from LarpManager"
+msgstr "Neueste Artikel und Updates von LarpManager"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Verwaltung und Genehmigung von Rechnungen und Zahlungen"

@@ -5873,6 +5873,12 @@ msgstr ""
 msgid "Passages made"
 msgstr ""
 
+msgid "Blog"
+msgstr ""
+
+msgid "Latest articles and updates from LarpManager"
+msgstr ""
+
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "
 "single aspect of event organising: signups, accounting, writing, logistics"

@@ -1103,6 +1103,15 @@ table.fixed {
   color: #47787e;
 }
 
+.showcase .text h4 a {
+  color: #47787e;
+  text-decoration: none;
+}
+
+.showcase .text h4 a:hover {
+  text-decoration: underline;
+}
+
 @media screen and (max-width: 840px) {
   .showcase .text h4 {
     font-size: 2em;

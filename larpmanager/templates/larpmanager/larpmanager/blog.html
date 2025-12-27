@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% block title %}
+    {{ blog.title }} - LarpManager
+{% endblock title %}
+{% block meta %}
+    <meta name="keywords" content="{{ blog.keywords }}">
+    <meta name="description" content="{{ blog.description }}">
+{% endblock meta %}
+{% block content %}
+    <div id="article">
+        <div class="article-content">
+            {% for section in sections %}
+                <{{ section.heading_level }}>{{ section.heading }}</{{ section.heading_level }}>
+                <div class="section-content">{{ section.content | safe }}</div>
+                {% if section.image %}
+                    <div class="section-image">
+                        <div class="image-wrapper">
+                            <img src="{{ section.image.reduced_url }}"
+                                 alt="{{ section.image.info }}"
+                                 class="img-responsive">
+                        </div>
+                        <div class="image-caption">{{ section.image.info }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

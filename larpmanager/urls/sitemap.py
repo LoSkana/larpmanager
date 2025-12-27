@@ -29,7 +29,7 @@ from django.views.decorators.cache import cache_page
 from larpmanager.cache.association import get_cache_association
 from larpmanager.models.association import Association
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.models.larpmanager import LarpManagerGuide
+from larpmanager.models.larpmanager import LarpManagerBlog, LarpManagerGuide
 
 
 @cache_page(60 * 60)
@@ -135,14 +135,21 @@ def larpmanager_sitemap() -> list[str]:
     """Generate sitemap URLs for LarpManager website.
 
     Returns:
-        List of complete URLs for static pages and blog posts.
+        List of complete URLs for static pages, guides, and blog posts.
 
     """
     # Static pages
     urls = [f"https://larpmanager.com/{page_path}/" for page_path in ["", "usage", "about-us"]]
 
-    # Blog posts from guides
-    urls.extend([f"https://larpmanager.com/guide/{guide.slug}/" for guide in LarpManagerGuide.objects.all()])
+    # Guide posts
+    urls.extend(
+        [f"https://larpmanager.com/guide/{guide.slug}/" for guide in LarpManagerGuide.objects.filter(published=True)]
+    )
+
+    # Blog posts
+    urls.extend(
+        [f"https://larpmanager.com/blog/{blog.slug}/" for blog in LarpManagerBlog.objects.filter(published=True)]
+    )
 
     return urls
 
