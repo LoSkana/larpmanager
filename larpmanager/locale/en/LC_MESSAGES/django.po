@@ -1679,6 +1679,18 @@ msgstr ""
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
+msgid "Inventories"
+msgstr ""
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+
+msgid "Pool type"
+msgstr ""
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr ""
+
 msgid "The name of our hobby, four letters"
 msgstr ""
 
@@ -4597,6 +4609,9 @@ msgstr ""
 msgid "Write here questions about your character directly to the authors"
 msgstr ""
 
+msgid "View Details"
+msgstr ""
+
 msgid "Download complete sheet"
 msgstr ""
 
@@ -5866,12 +5881,6 @@ msgstr ""
 msgid "Passages made"
 msgstr ""
 
-msgid "Blog"
-msgstr ""
-
-msgid "Latest articles and updates from LarpManager"
-msgstr ""
-
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "
 "single aspect of event organising: signups, accounting, writing, logistics"
@@ -6889,6 +6898,60 @@ msgstr ""
 msgid "This page allows you to select items to bulk download"
 msgstr ""
 
+msgid "Character Inventories"
+msgstr ""
+
+msgid "This page summarizes the character inventories"
+msgstr ""
+
+msgid "Inventory"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Character Inventory"
+msgstr ""
+
+msgid "Currencies & Materials"
+msgstr ""
+
+msgid "Transfer"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Add from NPC"
+msgstr ""
+
+msgid "Transfer Log"
+msgstr ""
+
+msgid "Actor"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Resource"
+msgstr ""
+
+msgid "No transfers yet."
+msgstr ""
+
+msgid "Character Inventory Pool Types"
+msgstr ""
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+
+msgid "Pool"
+msgstr ""
+
 msgid "Copy"
 msgstr ""
 
@@ -7179,9 +7242,6 @@ msgstr ""
 msgid "Sum of payments received through"
 msgstr ""
 
-msgid "Transfer"
-msgstr ""
-
 msgid "Recompute"
 msgstr ""
 
@@ -7227,12 +7287,6 @@ msgid "Transfer preview"
 msgstr ""
 
 msgid "Review the transfer before confirming"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "To"
 msgstr ""
 
 msgid "Errors"
@@ -7665,9 +7719,6 @@ msgid "Tipo"
 msgstr ""
 
 msgid "Selectable"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
 msgid "Handout template"
@@ -8266,6 +8317,12 @@ msgstr ""
 msgid "Now you can set the player editing settings"
 msgstr ""
 
+msgid "Allows characters to have inventories"
+msgstr ""
+
+msgid "Now characters can have inventories"
+msgstr ""
+
 msgid "Organisation tax"
 msgstr ""
 
@@ -8837,6 +8894,15 @@ msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
 
 msgid "Manage ability templates"
+msgstr ""
+
+msgid "Manage character inventories and their items"
+msgstr ""
+
+msgid "Pool Types"
+msgstr ""
+
+msgid "Manage character inventory pool types"
 msgstr ""
 
 msgid "Communications"

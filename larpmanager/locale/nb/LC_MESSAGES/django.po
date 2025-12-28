@@ -86,9 +86,6 @@ msgstr "Område"
 msgid "Band"
 msgstr "Fascia"
 
-msgid "Blog"
-msgstr "Blogg"
-
 msgid "Body"
 msgstr "Kropp"
 
@@ -209,6 +206,9 @@ msgstr "Betalt"
 msgid "Plot"
 msgstr "Tomt"
 
+msgid "Pool"
+msgstr "Basseng"
+
 msgid "Port"
 msgstr "Tilkoblingsport"
 
@@ -286,6 +286,9 @@ msgstr "gave"
 
 msgid "used"
 msgstr "brukt"
+
+msgid "Actor"
+msgstr "Skuespiller"
 
 msgid "Album"
 msgstr "Album"
@@ -614,6 +617,9 @@ msgstr "Oppdrag"
 
 msgid "Quotas"
 msgstr "Sitat"
+
+msgid "Reason"
+msgstr "Årsak"
 
 msgid "Refund"
 msgstr "Refusjon"
@@ -1185,6 +1191,9 @@ msgstr "Registrer deg"
 msgid "Reminder"
 msgstr "Påminnelse"
 
+msgid "Resource"
+msgstr "Ressurs"
+
 msgid "Returned"
 msgstr "Returnerte"
 
@@ -1323,6 +1332,9 @@ msgstr "Viktig"
 msgid "Interface"
 msgstr "Grensesnitt"
 
+msgid "Inventory"
+msgstr "Lagerbeholdning"
+
 msgid "Load list"
 msgstr "Last inn liste"
 
@@ -1349,6 +1361,9 @@ msgstr "Drift"
 
 msgid "Organizer"
 msgstr "Arrangør"
+
+msgid "Pool type"
+msgstr "Type basseng"
 
 msgid "Portraits"
 msgstr "Portretter"
@@ -1581,6 +1596,9 @@ msgstr "Prosentandel"
 msgid "Play Again"
 msgstr "Spill igjen"
 
+msgid "Pool Types"
+msgstr "Bassengtyper"
+
 msgid "Preference"
 msgstr "Preferanse"
 
@@ -1764,6 +1782,9 @@ msgstr "Informasjon"
 msgid "Installment"
 msgstr "Avbetaling"
 
+msgid "Inventories"
+msgstr "Varelager"
+
 msgid "Last change"
 msgstr "Sist endret"
 
@@ -1904,6 +1925,9 @@ msgstr "Ferdighetstype"
 
 msgid "Achievements"
 msgstr "Prestasjoner"
+
+msgid "Add from NPC"
+msgstr "Legg til fra NPC"
 
 msgid "Add prologue"
 msgstr "Legg til prolog"
@@ -2088,6 +2112,9 @@ msgstr "Totalt antall"
 msgid "Transactions"
 msgstr "Transaksjoner"
 
+msgid "Transfer Log"
+msgstr "Overføringslogg"
+
 msgid "Translations"
 msgstr "Oversettelser"
 
@@ -2105,6 +2132,9 @@ msgstr "MVA (billett)"
 
 msgid "Verification"
 msgstr "Verifisering"
+
+msgid "View Details"
+msgstr "Vis detaljer"
 
 msgid "Waiting list"
 msgstr "Venter"
@@ -3017,6 +3047,9 @@ msgstr "Måneder fri kvote"
 msgid "Move to container"
 msgstr "Flytt til container"
 
+msgid "No transfers yet."
+msgstr "Ingen overføringer ennå."
+
 msgid "One-Time Contents"
 msgstr "Engangsinnhold"
 
@@ -3253,6 +3286,9 @@ msgstr "Tildelt karakter!"
 
 msgid "Change registration"
 msgstr "Rediger oppføring"
+
+msgid "Character Inventory"
+msgstr "Karakterinventar"
 
 msgid "Character not found"
 msgstr "Tegn ikke funnet"
@@ -3550,6 +3586,9 @@ msgstr "Godkjenne refusjon"
 msgid "Assigned staff member"
 msgstr "Tildelt medarbeider"
 
+msgid "Character Inventories"
+msgstr "Tegnfortegnelser"
+
 msgid "Character not allowed"
 msgstr "Tegn ikke tillatt"
 
@@ -3721,6 +3760,9 @@ msgstr "Avsluttet og arkivert"
 
 msgid "Confirm password reset"
 msgstr "Tilbakestilling av passord bekreftet"
+
+msgid "Currencies & Materials"
+msgstr "Valutaer og materialer"
 
 msgid "Customised mail server"
 msgstr "Skreddersydd e-postserver"
@@ -4523,6 +4565,9 @@ msgstr "Kontoen din er nå aktiv"
 msgid "check excessive relationships"
 msgstr "sjekk ekstra rapporter"
 
+msgid "Character Inventory Pool Types"
+msgstr "Typer karakterbeholdning"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Fullfør betaling for %(event)s"
@@ -4986,6 +5031,9 @@ msgstr "Navn på rabatt - til internt bruk"
 msgid "No elements are currently available"
 msgstr "Ingen elementer er tilgjengelige for øyeblikket"
 
+msgid "Now characters can have inventories"
+msgstr "Nå kan karakterer ha varelager"
+
 msgid "Now set up the tokens configuration"
 msgstr "Konfigurer nå konfigurasjonen av tokens"
 
@@ -5124,6 +5172,9 @@ msgstr "Du har blitt tildelt en prestasjon"
 msgid "Added to the bottom of all mails sent"
 msgstr "Lagt til nederst i alle e-poster som sendes"
 
+msgid "Allows characters to have inventories"
+msgstr "Tillater karakterer å ha varelager"
+
 msgid "Check the validity of the fiscal code"
 msgstr "Kontroller gyldigheten av skattekoden"
 
@@ -5141,6 +5192,9 @@ msgstr "Beliggenhet - husleie, bensin, overnattinger"
 
 msgid "Manage answers for workshop questions"
 msgstr "Administrer svar på spørsmål om workshopen"
+
+msgid "Manage character inventory pool types"
+msgstr "Administrere typer karakterbeholdning"
 
 msgid "Manage expense items for contributors"
 msgstr "Administrer utgiftsposter for bidragsytere"
@@ -5710,8 +5764,8 @@ msgstr "Hvis du ikke ser en bruker, kan du be dem om å få tilgang til"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Hvis du trenger hjelp, er du velkommen til å gi oss beskjed"
 
-msgid "Latest articles and updates from LarpManager"
-msgstr "Siste artikler og oppdateringer fra LarpManager"
+msgid "Manage character inventories and their items"
+msgstr "Administrere karakterbeholdninger og deres gjenstander"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Administrere og godkjenne fakturaer og betalinger"
@@ -5902,6 +5956,9 @@ msgstr "Denne siden viser e-postlistene til abonnentene"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Denne siden oppsummerer px-leveransen til tegn"
+
+msgid "This page summarizes the character inventories"
+msgstr "Denne siden oppsummerer karakterinventarene"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt beløp holdt tilbake for overføringsprovisjoner"
@@ -6178,6 +6235,9 @@ msgstr "Påmeldingen til arrangementet ble avlyst"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Det finnes skrivefelt uten alternativer: %(list)s"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "På denne siden kan du legge til eller redigere en type ci pool"
 
 msgid "This page summarises the organization's volunteers"
 msgstr "Denne siden oppsummerer organisasjonens frivillige"
@@ -6601,6 +6661,9 @@ msgstr "Velg gruppene du vil filtrere tegnene etter"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Tegnfeltet av beregnet type som skal oppdateres"
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr "På denne siden kan du legge til eller redigere en karakterbeholdning"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Denne siden viser all regnskapsinformasjon for medlemmet"
@@ -7462,6 +7525,10 @@ msgstr ""
 
 msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr "Denne siden oppsummerer reglene som gjelder for de beregnede feltene"
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+"Denne siden oppsummerer hvilke typer bassenger et karakterinventar har"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

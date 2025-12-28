@@ -761,3 +761,23 @@
     hidden: false
     feature: templates
     module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: Character Inventory
+    descr: Manage character inventories and their items
+    slug: orga_ci_inventory
+    number: 51
+    config: null
+    hidden: false
+    feature: inventory
+    module: inventory
+- model: larpmanager.eventpermission
+  fields:
+    name: Pool Types
+    descr: Manage character inventory pool types
+    slug: orga_ci_pool_types
+    number: 53
+    config: null
+    hidden: false
+    feature: inventory
+    module: inventory

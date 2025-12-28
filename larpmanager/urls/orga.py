@@ -28,6 +28,7 @@ from larpmanager.views.orga import copy as views_oy
 from larpmanager.views.orga import event as views_oe
 from larpmanager.views.orga import experience as views_ox
 from larpmanager.views.orga import form as views_of
+from larpmanager.views.orga import inventory as views_ci
 from larpmanager.views.orga import member as views_om
 from larpmanager.views.orga import miscellanea as views_oms
 from larpmanager.views.orga import pdf as views_op
@@ -825,6 +826,36 @@ urlpatterns = [
         "<slug:event_slug>/manage/px/rules/<slug:rule_uuid>/<int:order>/",
         views_ox.orga_px_rules_order,
         name="orga_px_rules_order",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory/",
+        views_ci.orga_ci_inventory,
+        name="orga_ci_inventory",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory/edit/<int:num>/",
+        views_ci.orga_ci_inventory_edit,
+        name="orga_ci_inventory_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory/<int:num>/view/",
+        views_ci.orga_ci_inventory_view,
+        name="orga_ci_inventory_view",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory/transfer/",
+        views_ci.orga_ci_transfer,
+        name="orga_ci_transfer",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/pool_types/",
+        views_ci.orga_ci_pool_types,
+        name="orga_ci_pool_types",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/pool_types/edit/<int:num>/",
+        views_ci.orga_ci_pool_types_edit,
+        name="orga_ci_pool_types_edit",
     ),
     path(
         "<slug:event_slug>/manage/px/modifiers/",

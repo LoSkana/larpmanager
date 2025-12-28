@@ -51,7 +51,7 @@ def populate_uuids(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0116_larpmanagerblog_larpmanagerguide_keywords_and_more'),
+        ('larpmanager', '0117_merge_20251228_1844'),
     ]
 
     operations = []

@@ -287,6 +287,7 @@ class Event(UuidMixin, BaseModel):
             "abilitypx",
             "deliverypx",
             "abilitytypepx",
+            "pooltypeci",
             "writingquestion",
             "writingoption",
         ]

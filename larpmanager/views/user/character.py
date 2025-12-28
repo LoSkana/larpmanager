@@ -162,6 +162,12 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         context["event"].id, "user_character_approval", default_value=False, context=context
     )
 
+    try:
+        char_model = Character.objects.prefetch_related("inventory").get(id=context["char"]["id"])
+        context["char"]["inventory"] = char_model.inventory.all()
+    except Character.DoesNotExist:
+        context["char"]["inventory"] = []
+
     return render(request, "larpmanager/event/character.html", context)
 
 

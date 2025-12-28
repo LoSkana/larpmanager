@@ -187,6 +187,7 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.inventory import Inventory, PoolBalanceCI, PoolTypeCI
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerFaq,
@@ -738,6 +739,25 @@ def post_save_delivery_px(
 ) -> None:
     """Refresh delivery characters after save signal."""
     refresh_delivery_characters(instance)
+
+
+@receiver(post_save, sender=Character)
+def create_personal_inventory(sender: type, instance: Character, created: bool, **kwargs: Any) -> None:
+    """Create a personal inventory for newly created characters."""
+    if created:
+        inventory = Inventory.objects.create(name=f"{instance.name}'s Personal Storage", event=instance.event)
+        inventory.owners.add(instance)
+        inventory.save()
+
+
+@receiver(post_save, sender=Inventory)
+def create_pools_for_inventory(sender: type, instance: Inventory, created: bool, **kwargs: Any) -> None:
+    """Create pool balances for newly created character inventories based on event pool types."""
+    if created:
+        for pool_type in PoolTypeCI.objects.filter(event=instance.event):
+            PoolBalanceCI.objects.create(
+                inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
+            )
 
 
 @receiver(post_delete, sender=DeliveryPx)

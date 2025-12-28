@@ -86,9 +86,6 @@ msgstr "Oblast"
 msgid "Band"
 msgstr "Fascie"
 
-msgid "Blog"
-msgstr "Blog"
-
 msgid "Body"
 msgstr "Tělo"
 
@@ -209,6 +206,9 @@ msgstr "Placené"
 msgid "Plot"
 msgstr "Pozemek"
 
+msgid "Pool"
+msgstr "Bazén"
+
 msgid "Port"
 msgstr "Připojovací port"
 
@@ -286,6 +286,9 @@ msgstr "dárek"
 
 msgid "used"
 msgstr "použité"
+
+msgid "Actor"
+msgstr "Herec"
 
 msgid "Album"
 msgstr "Alba"
@@ -614,6 +617,9 @@ msgstr "Úkoly"
 
 msgid "Quotas"
 msgstr "Citace"
+
+msgid "Reason"
+msgstr "Důvod"
 
 msgid "Refund"
 msgstr "Vrácení peněz"
@@ -1185,6 +1191,9 @@ msgstr "Registrace"
 msgid "Reminder"
 msgstr "Připomínka"
 
+msgid "Resource"
+msgstr "Zdroje"
+
 msgid "Returned"
 msgstr "Vrácené"
 
@@ -1323,6 +1332,9 @@ msgstr "Důležité"
 msgid "Interface"
 msgstr "Rozhraní"
 
+msgid "Inventory"
+msgstr "Inventura"
+
 msgid "Load list"
 msgstr "Seznam zatížení"
 
@@ -1349,6 +1361,9 @@ msgstr "Operace"
 
 msgid "Organizer"
 msgstr "Organizátor"
+
+msgid "Pool type"
+msgstr "Typ bazénu"
 
 msgid "Portraits"
 msgstr "Portréty"
@@ -1581,6 +1596,9 @@ msgstr "Procento"
 msgid "Play Again"
 msgstr "Znovu si zahrát"
 
+msgid "Pool Types"
+msgstr "Typy bazénů"
+
 msgid "Preference"
 msgstr "Preference"
 
@@ -1764,6 +1782,9 @@ msgstr "Informace"
 msgid "Installment"
 msgstr "Splátky"
 
+msgid "Inventories"
+msgstr "Zásoby"
+
 msgid "Last change"
 msgstr "Naposledy upraveno"
 
@@ -1904,6 +1925,9 @@ msgstr "Typ dovednosti"
 
 msgid "Achievements"
 msgstr "Úspěchy"
+
+msgid "Add from NPC"
+msgstr "Přidat z NPC"
 
 msgid "Add prologue"
 msgstr "Přidání prologu"
@@ -2088,6 +2112,9 @@ msgstr "Celkový počet"
 msgid "Transactions"
 msgstr "Transakce"
 
+msgid "Transfer Log"
+msgstr "Protokol o přenosu"
+
 msgid "Translations"
 msgstr "Překlady"
 
@@ -2105,6 +2132,9 @@ msgstr "DPH (jízdenka)"
 
 msgid "Verification"
 msgstr "Ověřování"
+
+msgid "View Details"
+msgstr "Zobrazit podrobnosti"
 
 msgid "Waiting list"
 msgstr "Čekání"
@@ -3017,6 +3047,9 @@ msgstr "Měsíční volná kvóta"
 msgid "Move to container"
 msgstr "Přesun do kontejneru"
 
+msgid "No transfers yet."
+msgstr "Zatím žádné přestupy."
+
 msgid "One-Time Contents"
 msgstr "Jednorázový obsah"
 
@@ -3253,6 +3286,9 @@ msgstr "Přidělená postava!"
 
 msgid "Change registration"
 msgstr "Upravit položku"
+
+msgid "Character Inventory"
+msgstr "Soupis postav"
 
 msgid "Character not found"
 msgstr "Znak nebyl nalezen"
@@ -3550,6 +3586,9 @@ msgstr "Schválit vrácení peněz"
 msgid "Assigned staff member"
 msgstr "Přidělený zaměstnanec"
 
+msgid "Character Inventories"
+msgstr "Soupisy znaků"
+
 msgid "Character not allowed"
 msgstr "Postava není povolena"
 
@@ -3721,6 +3760,9 @@ msgstr "Uzavřeno a archivováno"
 
 msgid "Confirm password reset"
 msgstr "Potvrzení obnovení hesla"
+
+msgid "Currencies & Materials"
+msgstr "Měny a materiály"
 
 msgid "Customised mail server"
 msgstr "Přizpůsobený poštovní server"
@@ -4523,6 +4565,9 @@ msgstr "Váš účet je nyní aktivní"
 msgid "check excessive relationships"
 msgstr "zkontrolovat další zprávy"
 
+msgid "Character Inventory Pool Types"
+msgstr "Typy zásobníku postav"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Kompletní platba za %(event)s"
@@ -4986,6 +5031,9 @@ msgstr "Název slevy - pro interní použití"
 msgid "No elements are currently available"
 msgstr "V současné době nejsou k dispozici žádné prvky"
 
+msgid "Now characters can have inventories"
+msgstr "Nyní mohou mít postavy zásoby"
+
 msgid "Now set up the tokens configuration"
 msgstr "Nyní nastavte konfiguraci tokenů"
 
@@ -5124,6 +5172,9 @@ msgstr "Byl vám udělen úspěch"
 msgid "Added to the bottom of all mails sent"
 msgstr "Přidáno na konec všech odeslaných e-mailů"
 
+msgid "Allows characters to have inventories"
+msgstr "Umožňuje postavám mít zásoby"
+
 msgid "Check the validity of the fiscal code"
 msgstr "Zkontrolujte platnost fiskálního kódu"
 
@@ -5141,6 +5192,9 @@ msgstr "Poloha - nájemné, benzín, noclehy"
 
 msgid "Manage answers for workshop questions"
 msgstr "Správa odpovědí na otázky z workshopů"
+
+msgid "Manage character inventory pool types"
+msgstr "Správa typů inventáře postavy"
 
 msgid "Manage expense items for contributors"
 msgstr "Správa výdajových položek pro přispěvatele"
@@ -5707,8 +5761,8 @@ msgstr "Pokud uživatele nevidíte, požádejte ho o přístup k"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Pokud potřebujete pomoc, neváhejte nám dát vědět"
 
-msgid "Latest articles and updates from LarpManager"
-msgstr "Nejnovější články a aktualizace z LarpManageru"
+msgid "Manage character inventories and their items"
+msgstr "Správa inventáře postav a jejich předmětů"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Správa faktur a jejich schvalování"
@@ -5899,6 +5953,9 @@ msgstr "Tato stránka zobrazuje seznamy e-mailových odběratelů"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Tato stránka shrnuje doručení px znakům"
+
+msgid "This page summarizes the character inventories"
+msgstr "Tato stránka shrnuje soupisy postav"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Celková částka sražená na provize za převod"
@@ -6176,6 +6233,9 @@ msgstr "Registrace na akci byla zrušena"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Jsou zde pole pro zápis bez možností: %(list)s"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Tato stránka umožňuje přidat nebo upravit typ bazénu ci"
 
 msgid "This page summarises the organization's volunteers"
 msgstr "Tato stránka shrnuje dobrovolníky organizace"
@@ -6600,6 +6660,9 @@ msgstr "Vyberte skupiny, podle kterých chcete filtrovat znaky"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Pole znaků vypočteného typu, které bude aktualizováno"
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr "Na této stránce můžete přidat nebo upravit inventář postavy"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Na této stránce se zobrazují všechny účetní informace o členovi"
@@ -7415,6 +7478,10 @@ msgstr "Tato částka se automaticky odečte z registrace budoucí akce"
 msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
 "Na této stránce jsou shrnuta pravidla, která se vztahují na vypočtená pole"
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+"Tato stránka shrnuje typy fondů, které má inventář postavy k dispozici"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""

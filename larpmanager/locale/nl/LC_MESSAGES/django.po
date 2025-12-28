@@ -86,9 +86,6 @@ msgstr "Gebied"
 msgid "Band"
 msgstr "Fascia"
 
-msgid "Blog"
-msgstr "Blog"
-
 msgid "Body"
 msgstr "Lichaam"
 
@@ -209,6 +206,9 @@ msgstr "Betaald"
 msgid "Plot"
 msgstr "Plot"
 
+msgid "Pool"
+msgstr "Zwembad"
+
 msgid "Port"
 msgstr "Aansluitpoort"
 
@@ -286,6 +286,9 @@ msgstr "cadeau"
 
 msgid "used"
 msgstr "tweedehands"
+
+msgid "Actor"
+msgstr "Acteur"
 
 msgid "Album"
 msgstr "Albums"
@@ -614,6 +617,9 @@ msgstr "Zoektochten"
 
 msgid "Quotas"
 msgstr "Citaat"
+
+msgid "Reason"
+msgstr "Reden"
 
 msgid "Refund"
 msgstr "Terugbetaling"
@@ -1185,6 +1191,9 @@ msgstr "Registreer"
 msgid "Reminder"
 msgstr "Herinnering"
 
+msgid "Resource"
+msgstr "Bron"
+
 msgid "Returned"
 msgstr "Geretourneerd"
 
@@ -1323,6 +1332,9 @@ msgstr "Belangrijk"
 msgid "Interface"
 msgstr "Interface"
 
+msgid "Inventory"
+msgstr "Inventaris"
+
 msgid "Load list"
 msgstr "Lijst laden"
 
@@ -1349,6 +1361,9 @@ msgstr "Operatie"
 
 msgid "Organizer"
 msgstr "Organisator"
+
+msgid "Pool type"
+msgstr "Type zwembad"
 
 msgid "Portraits"
 msgstr "Portretten"
@@ -1581,6 +1596,9 @@ msgstr "Percentage"
 msgid "Play Again"
 msgstr "Opnieuw spelen"
 
+msgid "Pool Types"
+msgstr "Soorten zwembaden"
+
 msgid "Preference"
 msgstr "Voorkeur"
 
@@ -1764,6 +1782,9 @@ msgstr "Informatie"
 msgid "Installment"
 msgstr "Termijn"
 
+msgid "Inventories"
+msgstr "Voorraden"
+
 msgid "Last change"
 msgstr "Laatst gewijzigd"
 
@@ -1904,6 +1925,9 @@ msgstr "Type vaardigheid"
 
 msgid "Achievements"
 msgstr "Prestaties"
+
+msgid "Add from NPC"
+msgstr "Toevoegen van NPC"
 
 msgid "Add prologue"
 msgstr "Proloog toevoegen"
@@ -2088,6 +2112,9 @@ msgstr "Totaal aantal"
 msgid "Transactions"
 msgstr "Transacties"
 
+msgid "Transfer Log"
+msgstr "Overdrachtlogboek"
+
 msgid "Translations"
 msgstr "Vertalingen"
 
@@ -2105,6 +2132,9 @@ msgstr "BTW (ticket)"
 
 msgid "Verification"
 msgstr "Verificatie"
+
+msgid "View Details"
+msgstr "Details bekijken"
 
 msgid "Waiting list"
 msgstr "Wachten"
@@ -3017,6 +3047,9 @@ msgstr "Maanden vrij quotum"
 msgid "Move to container"
 msgstr "Verplaats naar container"
 
+msgid "No transfers yet."
+msgstr "Nog geen transfers."
+
 msgid "One-Time Contents"
 msgstr "Eenmalige inhoud"
 
@@ -3253,6 +3286,9 @@ msgstr "Karakter toegewezen!"
 
 msgid "Change registration"
 msgstr "Bericht bewerken"
+
+msgid "Character Inventory"
+msgstr "Karakter Inventarisatie"
 
 msgid "Character not found"
 msgstr "Karakter niet gevonden"
@@ -3550,6 +3586,9 @@ msgstr "Terugbetaling goedkeuren"
 msgid "Assigned staff member"
 msgstr "Toegewezen medewerker"
 
+msgid "Character Inventories"
+msgstr "Karakterinventarissen"
+
 msgid "Character not allowed"
 msgstr "Karakter niet toegestaan"
 
@@ -3721,6 +3760,9 @@ msgstr "Afgesloten en gearchiveerd"
 
 msgid "Confirm password reset"
 msgstr "Wachtwoord opnieuw instellen bevestigd"
+
+msgid "Currencies & Materials"
+msgstr "Valuta & materialen"
 
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
@@ -4523,6 +4565,9 @@ msgstr "Je account is nu actief"
 msgid "check excessive relationships"
 msgstr "extra rapporten controleren"
 
+msgid "Character Inventory Pool Types"
+msgstr "Character Inventory Pool Types"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Volledige betaling voor %(event)s"
@@ -4986,6 +5031,9 @@ msgstr "Naam van korting - voor intern gebruik"
 msgid "No elements are currently available"
 msgstr "Er zijn momenteel geen elementen beschikbaar"
 
+msgid "Now characters can have inventories"
+msgstr "Personages kunnen nu voorraden hebben"
+
 msgid "Now set up the tokens configuration"
 msgstr "Stel nu de tokens-configuratie in"
 
@@ -5124,6 +5172,9 @@ msgstr "Je hebt een prestatie geleverd"
 msgid "Added to the bottom of all mails sent"
 msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
 
+msgid "Allows characters to have inventories"
+msgstr "Laat personages inventarissen hebben"
+
 msgid "Check the validity of the fiscal code"
 msgstr "Controleer de geldigheid van de fiscale code"
 
@@ -5141,6 +5192,9 @@ msgstr "Locatie - huur, gas, overnachtingen"
 
 msgid "Manage answers for workshop questions"
 msgstr "Antwoorden voor workshopvragen beheren"
+
+msgid "Manage character inventory pool types"
+msgstr "Beheer typen inventarispool voor personages"
 
 msgid "Manage expense items for contributors"
 msgstr "Onkostenposten beheren voor medewerkers"
@@ -5710,8 +5764,8 @@ msgstr "Als u geen gebruiker ziet, vraag hem dan om toegang te krijgen tot"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Als je hulp nodig hebt, laat het ons weten"
 
-msgid "Latest articles and updates from LarpManager"
-msgstr "Laatste artikelen en updates van LarpManager"
+msgid "Manage character inventories and their items"
+msgstr "Beheer personage-inventarissen en hun items"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Facturen van betalingen beheren en goedkeuren"
@@ -5904,6 +5958,9 @@ msgstr "Deze pagina toont de e-maillijsten van abonnees"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Deze pagina geeft een overzicht van de px-levering aan tekens"
+
+msgid "This page summarizes the character inventories"
+msgstr "Deze pagina geeft een samenvatting van de karakterinventarisaties"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"
@@ -6184,6 +6241,9 @@ msgstr "De registratie voor het evenement werd geannuleerd"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Er zijn schrijfvelden zonder opties: %(list)s"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Op deze pagina kunt u een ci-pooltype toevoegen of bewerken"
 
 msgid "This page summarises the organization's volunteers"
 msgstr ""
@@ -6618,6 +6678,10 @@ msgstr "Selecteer de groepen waarop je de tekens wilt filteren"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Het karakterveld van het berekende type dat wordt bijgewerkt"
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+"Op deze pagina kun je een inventaris van een personage toevoegen of bewerken"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Deze pagina toont alle boekhoudkundige informatie voor het lid"
@@ -7552,6 +7616,11 @@ msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
 "Deze pagina geeft een overzicht van de regels die worden toegepast op de "
 "berekende velden"
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+"Deze pagina geeft een overzicht van de typen pools die een "
+"karakterinventaris heeft"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
