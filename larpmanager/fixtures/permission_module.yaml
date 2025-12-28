@@ -97,6 +97,6 @@
 - model: larpmanager.permissionmodule
   fields:
     name: Inventory
-    slug: characterinventory
+    slug: inventory
     order: 46
     icon: box-open

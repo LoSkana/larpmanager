@@ -36,17 +36,17 @@ logger = logging.getLogger(__name__)
 
 
 @login_required
-def orga_ci_character_inventory(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_ci_inventory(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of all character inventories for an event."""
-    context = check_event_context(request, event_slug, "orga_ci_character_inventory")
+    context = check_event_context(request, event_slug, "orga_ci_inventory")
     context["list"] = context["event"].get_elements(Inventory).order_by("number")
-    return render(request, "larpmanager/orga/ci/character_inventories.html", context)
+    return render(request, "larpmanager/orga/ci/inventories.html", context)
 
 
 @login_required
-def orga_ci_character_inventory_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_ci_inventory_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """Edit a character inventory."""
-    return orga_edit(request, event_slug, "orga_ci_character_inventory", OrgaInventoryForm, num)
+    return orga_edit(request, event_slug, "orga_ci_inventory", OrgaInventoryForm, num)
 
 
 @login_required
@@ -54,7 +54,7 @@ def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of pool types for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_pool_types")
     context["list"] = context["event"].get_elements(PoolTypeCI).order_by("number")
-    return render(request, "larpmanager/orga/ci/ci_pool_types.html", context)
+    return render(request, "larpmanager/orga/ci/pool_types.html", context)
 
 
 @login_required
@@ -64,20 +64,20 @@ def orga_ci_pool_types_edit(request: HttpRequest, event_slug: str, num: int) -> 
 
 
 @login_required
-def orga_ci_character_inventory_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_ci_inventory_view(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
     """View a specific character inventory with balances and transfer history."""
     context = get_event_context(request, event_slug, signup=True)
 
     ci = get_object_or_404(Inventory, pk=num, event=context["event"])
 
     if (
-        not has_event_permission(request, context, event_slug, "orga_ci_character_inventory")
+        not has_event_permission(request, context, event_slug, "orga_ci_inventory")
         and not ci.owners.filter(player=request.user.member).exists()
     ):
         messages.error(request, "You do not have access to this inventory.")
-        return redirect("orga_ci_character_inventory", event_slug=event_slug)
+        return redirect("orga_ci_inventory", event_slug=event_slug)
 
-    context["character_inventory"] = ci
+    context["inventory"] = ci
     context["pool_balances_list"] = ci.get_pool_balances()
     context["all_inventories"] = Inventory.objects.filter(event=context["event"]).order_by("number")
 
@@ -86,9 +86,9 @@ def orga_ci_character_inventory_view(request: HttpRequest, event_slug: str, num:
         models.Q(source_inventory=ci) | models.Q(target_inventory=ci)
     ).select_related("source_inventory", "target_inventory", "pool_type", "actor")
 
-    context["can_edit_from_npc"] = has_event_permission(request, context, event_slug, "orga_ci_character_inventory")
+    context["can_edit_from_npc"] = has_event_permission(request, context, event_slug, "orga_ci_inventory")
 
-    return render(request, "larpmanager/orga/ci/character_inventory.html", context)
+    return render(request, "larpmanager/orga/ci/inventory.html", context)
 
 
 @require_POST
@@ -112,15 +112,15 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Permission enforcement
     if source_inventory:
         if not source_inventory.owners.filter(player=request.user.member).exists() and not has_event_permission(
-            request, context, event_slug, "orga_ci_character_inventory"
+            request, context, event_slug, "orga_ci_inventory"
         ):
             messages.error(request, "Only staff can transfer from this inventory.")
             redirect_pk = target_inventory.id if target_inventory else 0
-            return redirect("orga_ci_character_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)
-    elif not has_event_permission(request, context, event_slug, "orga_ci_character_inventory"):
+            return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)
+    elif not has_event_permission(request, context, event_slug, "orga_ci_inventory"):
         messages.error(request, "Only staff can transfer from NPC.")
         redirect_pk = target_inventory.id if target_inventory else 0
-        return redirect("orga_ci_character_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)
+        return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)
 
     # Get pool type and amount
     pool_type = get_object_or_404(PoolTypeCI, id=request.POST.get("pool_type"))
@@ -129,7 +129,7 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
     except (TypeError, ValueError):
         messages.error(request, "Invalid transfer amount.")
         redirect_pk = source_inventory.id if source_inventory else 0
-        return redirect("orga_ci_character_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)
+        return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)
 
     reason = request.POST.get("reason", "").strip() or "manual"
 
@@ -143,4 +143,4 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
         messages.error(request, f"Transfer failed: {e!s}")
 
     redirect_pk = source_inventory.id if source_inventory else (target_inventory.id if target_inventory else 0)
-    return redirect("orga_ci_character_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)
+    return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), num=redirect_pk)

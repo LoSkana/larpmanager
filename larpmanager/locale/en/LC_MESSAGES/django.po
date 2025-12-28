@@ -8327,9 +8327,6 @@ msgstr ""
 msgid "Now you can set the player editing settings"
 msgstr ""
 
-msgid "Character inventory"
-msgstr ""
-
 msgid "Allows characters to have inventories"
 msgstr ""
 

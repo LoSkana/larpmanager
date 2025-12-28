@@ -3293,9 +3293,6 @@ msgstr "Modifier l'entrée"
 msgid "Character Inventory"
 msgstr "Inventaire des personnages"
 
-msgid "Character inventory"
-msgstr "Inventaire des personnages"
-
 msgid "Character not found"
 msgstr "Caractère non trouvé"
 

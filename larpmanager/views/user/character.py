@@ -163,10 +163,10 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     )
 
     try:
-        char_model = Character.objects.prefetch_related("character_inventory").get(id=context["char"]["id"])
-        context["char"]["character_inventory"] = char_model.character_inventory.all()
+        char_model = Character.objects.prefetch_related("inventory").get(id=context["char"]["id"])
+        context["char"]["inventory"] = char_model.inventory.all()
     except Character.DoesNotExist:
-        context["char"]["character_inventory"] = []
+        context["char"]["inventory"] = []
 
     return render(request, "larpmanager/event/character.html", context)
 

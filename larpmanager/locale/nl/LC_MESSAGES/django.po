@@ -3293,9 +3293,6 @@ msgstr "Bericht bewerken"
 msgid "Character Inventory"
 msgstr "Karakter Inventarisatie"
 
-msgid "Character inventory"
-msgstr "Karakterinventaris"
-
 msgid "Character not found"
 msgstr "Karakter niet gevonden"
 

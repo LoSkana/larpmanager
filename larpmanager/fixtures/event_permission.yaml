@@ -765,12 +765,12 @@
   fields:
     name: Character Inventory
     descr: Manage character inventories and their items
-    slug: orga_ci_character_inventory
+    slug: orga_ci_inventory
     number: 51
     config: null
     hidden: false
-    feature: character_inventory
-    module: characterinventory
+    feature: inventory
+    module: inventory
 - model: larpmanager.eventpermission
   fields:
     name: Pool Types
@@ -779,5 +779,5 @@
     number: 53
     config: null
     hidden: false
-    feature: character_inventory
-    module: characterinventory
+    feature: inventory
+    module: inventory

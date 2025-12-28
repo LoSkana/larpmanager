@@ -30,7 +30,7 @@ class Inventory(BaseConceptModel):
 
     name = models.CharField(max_length=150)
 
-    owners = models.ManyToManyField(Character, related_name="character_inventory", blank=True)
+    owners = models.ManyToManyField(Character, related_name="inventory", blank=True)
 
     def get_pool_balances(self) -> list[dict[str, Any]]:
         """Return a list of dicts with PoolTypeCI and corresponding PoolBalanceCI.
