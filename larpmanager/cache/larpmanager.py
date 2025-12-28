@@ -187,7 +187,7 @@ def get_blog_content_with_images(blog_id: int, html_content: str) -> list[dict]:
     if cached_sections:
         return cached_sections
 
-    # Split content by h2 and h3 tags
+    # Split content by h2 tags
     sections = _split_content_by_headings(html_content)
 
     # Get random highlights for today
@@ -218,8 +218,8 @@ def _split_content_by_headings(html_content: str) -> list[dict]:
     if not html_content:
         return []
 
-    # Pattern to match h2 or h3 tags and capture content until next heading
-    pattern = r"<(h[23])[^>]*>(.*?)</\1>(.*?)(?=<h[23]|$)"
+    # Pattern to match h2 tags and capture content until next heading
+    pattern = r"<(h[2])[^>]*>(.*?)</\1>(.*?)(?=<h[2]|$)"
     matches = re.findall(pattern, html_content, re.DOTALL | re.IGNORECASE)
 
     sections = []
