@@ -15,6 +15,44 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # Clean up any leftover objects from failed migrations
+        migrations.RunSQL(
+            sql="""
+            -- Remove leftover indexes by pattern
+            DO $$
+            DECLARE r RECORD;
+            BEGIN
+              FOR r IN
+                SELECT indexname
+                FROM pg_indexes
+                WHERE schemaname = 'public'
+                  AND (indexname LIKE 'larpmanager_larpmanagerblog_slug_%'
+                       OR indexname LIKE 'larpmanager_larpmanagerblog_deleted_%')
+              LOOP
+                EXECUTE 'DROP INDEX IF EXISTS ' || quote_ident(r.indexname) || ' CASCADE';
+              END LOOP;
+            END$$;
+            -- Remove table if it exists
+            DROP TABLE IF EXISTS larpmanager_larpmanagerblog CASCADE;
+            -- Clean up all orphaned indices that no longer have an associated table
+            DO $$
+            DECLARE r RECORD;
+            BEGIN
+              FOR r IN
+                SELECT i.indexrelid::regclass AS index_name
+                FROM pg_index i
+                JOIN pg_class c ON c.oid = i.indexrelid
+                JOIN pg_namespace n ON n.oid = c.relnamespace
+                LEFT JOIN pg_class t ON t.oid = i.indrelid
+                WHERE n.nspname = 'public'
+                  AND t.oid IS NULL
+              LOOP
+                EXECUTE 'DROP INDEX IF EXISTS ' || r.index_name;
+              END LOOP;
+            END$$;
+            """,
+            reverse_sql=migrations.RunSQL.noop,
+        ),
         migrations.CreateModel(
             name='LarpManagerBlog',
             fields=[
