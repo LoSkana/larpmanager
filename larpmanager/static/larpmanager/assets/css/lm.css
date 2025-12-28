@@ -2493,3 +2493,32 @@ input[type="number"] {
   display: none;
   visibility: hidden;
 }
+
+.section-image {
+  text-align: center;
+  margin: 30px auto;
+}
+
+.section-image .image-wrapper {
+  max-width: 70%;
+  margin: 0 auto;
+}
+
+.section-image .image-wrapper img.img-responsive {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.section-image .image-caption {
+  text-align: center;
+  margin-top: 10px;
+  font-style: italic;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .section-image .image-wrapper {
+    max-width: 90%;
+  }
+}
