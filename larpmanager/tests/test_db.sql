@@ -7446,7 +7446,7 @@ INSERT INTO public.larpmanager_permissionmodule VALUES (13, NULL, false, '2025-0
 INSERT INTO public.larpmanager_permissionmodule VALUES (14, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Communications', 'inbox', 85, 'communications');
 INSERT INTO public.larpmanager_permissionmodule VALUES (15, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Warehouse', 'box-open', 95, 'warehouse');
 INSERT INTO public.larpmanager_permissionmodule VALUES (16, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'One-Time', 'key', 120, 'onetime');
-INSERT INTO public.larpmanager_permissionmodule VALUES (17, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'CharacterInventory', 'box-open', 46, 'characterinventory');
+INSERT INTO public.larpmanager_permissionmodule VALUES (17, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Inventory', 'box-open', 46, 'characterinventory');
 
 
 --

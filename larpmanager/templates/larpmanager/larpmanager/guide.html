@@ -3,6 +3,10 @@
 {% block title %}
     {{ guide.title }} - LarpManager
 {% endblock title %}
+{% block meta %}
+    <meta name="keywords" content="{{ guide.keywords }}">
+    <meta name="description" content="{{ guide.description }}">
+{% endblock meta %}
 {% block content %}
     <div id="article">
         {% if guide.photo %}

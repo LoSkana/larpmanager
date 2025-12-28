@@ -18,29 +18,54 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from django.db import transaction
 
-from larpmanager.models.characterinventory import PoolBalanceCI, InventoryTransfer
+from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolBalanceCI, PoolTypeCI
+from larpmanager.models.member import Member
 
 
-def perform_transfer(actor, pool_type, amount, source=None, target=None, reason=""):
+def perform_transfer(
+    actor: Member,
+    pool_type: PoolTypeCI,
+    amount: int,
+    source: Inventory | None = None,
+    target: Inventory | None = None,
+    reason: str = "",
+) -> None:
+    """Perform a resource transfer between inventories or from/to the NPC bank.
+
+    Args:
+        actor: Member performing the transfer
+        pool_type: Type of pool resource being transferred
+        amount: Amount of resource to transfer
+        source: Source inventory (None means NPC bank)
+        target: Target inventory (None means NPC bank)
+        reason: Reason for transfer
+
+    Raises:
+        ValueError: If amount is not positive or source lacks resources
+    """
     if amount <= 0:
-        raise ValueError("Amount must be positive")
+        msg = "Amount must be positive"
+        raise ValueError(msg)
 
     with transaction.atomic():
         # Subtract from source (if not Bank)
         if source:
             balance, _ = PoolBalanceCI.objects.select_for_update().get_or_create(
-                inventory=source, pool_type=pool_type,
+                inventory=source,
+                pool_type=pool_type,
                 defaults={"amount": 0, "event": source.event, "number": 1},
             )
             if balance.amount < amount:
-                raise ValueError("Not enough resources")
+                msg = "Not enough resources"
+                raise ValueError(msg)
             balance.amount -= amount
             balance.save()
 
         # Add to target (if not Bank)
         if target:
             balance, _ = PoolBalanceCI.objects.select_for_update().get_or_create(
-                inventory=target, pool_type=pool_type,
+                inventory=target,
+                pool_type=pool_type,
                 defaults={"amount": 0, "event": target.event, "number": 1},
             )
             balance.amount += amount

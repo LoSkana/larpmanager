@@ -229,15 +229,17 @@ Create the PostgreSQL database and user:
 sudo -u postgres psql
 ```
 
-Then run the following SQL commands:
+Then run the following SQL commands (default credentials: user `larpmanager`, password `larpmanager`):
 ```sql
 CREATE DATABASE larpmanager;
 CREATE USER larpmanager WITH PASSWORD 'larpmanager';
-ALTER USER larpmanager CREATEDB;
+ALTER USER larpmanager CREATEDB;  -- Required for running tests
 ALTER DATABASE larpmanager OWNER TO larpmanager;
 GRANT ALL PRIVILEGES ON DATABASE larpmanager TO larpmanager;
 \q
 ```
+
+**Note:** The `CREATEDB` privilege is required for running tests, as pytest creates temporary test databases.
 
 ### Django Configuration
 
@@ -330,6 +332,11 @@ Thanks in advance for contributing! Here's the steps:
    ./scripts/record-test.sh
    ```
    To run an instance of playwright that will record all your actions, in code that can later be inserted into the test.
+   - If you wish to expand an existing test, you can place a `page.pause()` at the end of it, and then run
+   ```bash
+    PWDEBUG=1 pytest larpmanager/tests/playwright/ability_px_test.py --headed -s
+    ```
+   It will execute the text up untile the pause, so you can record the actions after it (remember to remove the `page.pause()` before committing)
 7. If you're changing the model or the fixtures, run:
    ```bash
    python manage.py dump_test

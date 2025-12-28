@@ -23,7 +23,6 @@ import logging
 from typing import Any
 
 from django.contrib.auth.models import User
-from django.core.signals import got_request_exception
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
@@ -76,7 +75,7 @@ from larpmanager.cache.config import reset_element_configs
 from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
 from larpmanager.cache.feature import clear_event_features_cache, on_association_post_save_reset_features_cache
 from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.larpmanager import clear_larpmanager_home_cache
+from larpmanager.cache.larpmanager import clear_blog_cache, clear_larpmanager_home_cache
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
     on_registration_post_save_reset_event_links,
@@ -171,7 +170,6 @@ from larpmanager.models.base import (
     update_model_search_field,
 )
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
-from larpmanager.models.characterinventory import CharacterInventory, PoolTypeCI, PoolBalanceCI
 from larpmanager.models.event import (
     Event,
     EventButton,
@@ -187,7 +185,9 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.inventory import Inventory, PoolBalanceCI, PoolTypeCI
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerFaq,
     LarpManagerGuide,
     LarpManagerHighlight,
@@ -226,7 +226,6 @@ from larpmanager.utils.io.pdf import (
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
-from larpmanager.utils.larpmanager.ticket import create_error_ticket
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
 from larpmanager.utils.services.association import (
     apply_skin_features_to_association,
@@ -740,27 +739,21 @@ def post_save_delivery_px(
 
 
 @receiver(post_save, sender=Character)
-def create_personal_inventory(sender, instance, created, **kwargs):
+def create_personal_inventory(sender: type, instance: Character, created: bool, **kwargs: Any) -> None:
+    """Create a personal inventory for newly created characters."""
     if created:
-        inventory = CharacterInventory.objects.create(
-            name=f"{instance.name}'s Personal Storage",
-            event=instance.event
-        )
+        inventory = Inventory.objects.create(name=f"{instance.name}'s Personal Storage", event=instance.event)
         inventory.owners.add(instance)
         inventory.save()
 
 
-@receiver(post_save, sender=CharacterInventory)
-def create_pools_for_inventory(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Inventory)
+def create_pools_for_inventory(sender: type, instance: Inventory, created: bool, **kwargs: Any) -> None:
+    """Create pool balances for newly created character inventories based on event pool types."""
     if created:
         for pool_type in PoolTypeCI.objects.filter(event=instance.event):
             PoolBalanceCI.objects.create(
-                inventory=instance,
-                event=instance.event,
-                number=1,
-                name=pool_type.name,
-                pool_type=pool_type,
-                amount=0
+                inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
             )
 
 
@@ -1045,6 +1038,13 @@ def post_save_reset_guides_cache(sender: type, instance: object, **kwargs: dict)
 def post_delete_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
     """Reset guides cache after model deletion."""
     reset_guides_cache()
+
+
+# LarpManagerBlog signals
+@receiver(post_save, sender=LarpManagerBlog)
+def post_save_clear_blog_cache(sender: type, instance: LarpManagerBlog, **kwargs: dict) -> None:
+    """Clear blog content cache when blog is updated."""
+    clear_blog_cache(instance.id)
 
 
 # LarpManagerTicket signals
@@ -1679,23 +1679,3 @@ def paypal_ko_webhook(sender: type, **kwargs: Any) -> None:
 
     """
     handle_invalid_paypal_ipn(sender)
-
-
-@receiver(got_request_exception)
-def handle_request_exception(sender: type, request: object, **kwargs: Any) -> None:
-    """Handle request exceptions and create error tickets automatically.
-
-    This signal handler is triggered when an exception occurs during request processing.
-    It creates an error ticket with the exception details.
-
-    Args:
-        sender: The sender of the signal
-        request: The HttpRequest object
-        **kwargs: Additional keyword arguments (may contain 'exception')
-
-    """
-    try:
-        create_error_ticket(request)
-    except Exception as e:  # noqa: BLE001 - Error handler must never fail and disrupt error reporting
-        # Don't let ticket creation failure break the error handling
-        log.debug("Failed to create error ticket: %s", e)

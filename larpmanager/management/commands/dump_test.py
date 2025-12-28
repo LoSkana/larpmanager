@@ -85,7 +85,6 @@ class Command(BaseCommand):
 
         # Reset database to clean state and apply all migrations
         call_command("reset", verbosity=0)
-        call_command("migrate", verbosity=0)
 
         # Configure environment for PostgreSQL authentication
         self.stdout.write("Dumping database to test_db.sql...")
@@ -122,7 +121,20 @@ class Command(BaseCommand):
         clean_cmd = [
             "sed",
             "-i",
-            r"/^\\restrict/d;/^\\unrestrict/d;/COMMENT ON SCHEMA public/d",
+            r"/^--/d;"
+            r"/^SET /d;"
+            r"/^\\restrict/d;"
+            r"/^\\unrestrict/d;"
+            r"/^COMMENT ON SCHEMA public/d",
+            "larpmanager/tests/test_db.sql",
+        ]
+        subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603
+
+        # Remove double lines
+        clean_cmd = [
+            "sed",
+            "-i",
+            r"/^$/N;/^\n$/D",
             "larpmanager/tests/test_db.sql",
         ]
         subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603

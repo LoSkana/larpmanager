@@ -17,41 +17,48 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import logging
+from typing import Any, ClassVar
+
 from django.utils.translation import gettext_lazy as _
-from django import forms
 
 from larpmanager.forms.base import MyForm
 from larpmanager.forms.utils import EventCharacterS2WidgetMulti
-from larpmanager.models.characterinventory import PoolTypeCI, CharacterInventory
+from larpmanager.models.inventory import Inventory, PoolTypeCI
 from larpmanager.models.writing import Character
-
-import logging
 
 log = logging.getLogger(__name__)
 
-class CharacterInventoryBaseForm(MyForm):
+
+class InventoryBaseForm(MyForm):
+    """Base form for inventory management."""
+
     class Meta:
-        model = CharacterInventory
+        model = Inventory
         exclude = ("number",)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the inventory base form."""
         super().__init__(*args, **kwargs)
 
 
-class OrgaCharacterInventoryForm(CharacterInventoryBaseForm):
-    load_js = ["characters-choices"]
+class OrgaInventoryForm(InventoryBaseForm):
+    """Form for organization-level inventory management with character selection."""
+
+    load_js: ClassVar[list[str]] = ["characters-choices"]
 
     page_title = _("Inventories")
     page_info = _("This page allows you to add or edit a character inventory")
 
     class Meta:
-        model = CharacterInventory
+        model = Inventory
         exclude = ("number",)
-        widgets = {
+        widgets: ClassVar[dict[str, type]] = {
             "owners": EventCharacterS2WidgetMulti,
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and configure character selection based on event."""
         super().__init__(*args, **kwargs)
 
         # Resolve event from instance or params
@@ -70,8 +77,9 @@ class OrgaCharacterInventoryForm(CharacterInventoryBaseForm):
             self.fields["owners"].queryset = Character.objects.none()
 
 
-
 class OrgaPoolTypePxForm(MyForm):
+    """Form for managing character inventory pool types."""
+
     page_title = _("Pool type")
 
     page_info = _("This page allows you to add or edit a ci pool type")

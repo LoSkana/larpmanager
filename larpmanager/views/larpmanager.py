@@ -42,7 +42,7 @@ from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.larpmanager import get_cache_lm_home
+from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
@@ -54,6 +54,7 @@ from larpmanager.models.association import Association, AssociationPlan, Associa
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerGuide,
     LarpManagerProfiler,
@@ -772,6 +773,38 @@ def guide(request: HttpRequest, slug: Any) -> Any:
     context["og_description"] = f"{context['guide'].description} - LarpManager"
 
     return render(request, "larpmanager/larpmanager/guide.html", context)
+
+
+def blog(request: HttpRequest, slug: Any) -> Any:
+    """Display a specific blog article by slug with split content and random images.
+
+    Args:
+        request: Django HTTP request object
+        slug: URL slug of the blog to display
+
+    Returns:
+        HttpResponse: Rendered blog template with article content and images
+
+    Raises:
+        Http404: If blog with given slug is not found or not published
+
+    """
+    context = get_lm_contact(request)
+    context["index"] = True
+
+    try:
+        blog_post = LarpManagerBlog.objects.get(slug=slug, published=True)
+    except ObjectDoesNotExist as err:
+        msg = "blog not found"
+        raise Http404(msg) from err
+
+    context["blog"] = blog_post
+    context["sections"] = get_blog_content_with_images(blog_post.id, blog_post.text)
+
+    context["og_title"] = f"{context['guide'].title} - LarpManager"
+    context["og_description"] = f"{context['guide'].description} - LarpManager"
+
+    return render(request, "larpmanager/larpmanager/blog.html", context)
 
 
 @cache_page(60 * 15)

@@ -16,26 +16,31 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from typing import Any, ClassVar
+
 from django.db import models
 
-from larpmanager.models.common import PoolTypeCommon, PoolBalanceCommon
 from larpmanager.models.event import BaseConceptModel
+from larpmanager.models.member import Member
 from larpmanager.models.writing import Character
 
 
-class CharacterInventory(BaseConceptModel):
+class Inventory(BaseConceptModel):
+    """Character inventory model for managing shared or personal resource storage."""
+
     name = models.CharField(max_length=150)
+
     owners = models.ManyToManyField(Character, related_name="character_inventory", blank=True)
 
-    def get_pool_balances(self):
-        """
-        Returns a list of dicts: each with a PoolTypeCI and the corresponding PoolBalanceCI.
+    def get_pool_balances(self) -> list[dict[str, Any]]:
+        """Return a list of dicts with PoolTypeCI and corresponding PoolBalanceCI.
+
         Automatically creates a PoolBalanceCI if it doesn't exist.
         """
         pool_balances = []
         for pool_type in self.event.get_elements(PoolTypeCI).order_by("number"):
             # Get or create the balance
-            balance, created = PoolBalanceCI.objects.get_or_create(
+            balance, _created = PoolBalanceCI.objects.get_or_create(
                 inventory=self,
                 pool_type=pool_type,
                 defaults={"amount": 0, "event": self.event, "number": 1},
@@ -44,12 +49,33 @@ class CharacterInventory(BaseConceptModel):
         return pool_balances
 
 
+class PoolTypeCommon(BaseConceptModel):
+    """Abstract pool type that other apps can extend."""
+
+    name = models.CharField(max_length=150)
+
+    class Meta:
+        abstract = True
+
+
 class PoolTypeCI(PoolTypeCommon):
-    pass
+    """Pool type model for character inventory resource types."""
+
+
+class PoolBalanceCommon(BaseConceptModel):
+    """Abstract pool balance to be subclassed by context-specific balances."""
+
+    amount = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        abstract = True
 
 
 class PoolBalanceCI(PoolBalanceCommon):
-    inventory = models.ForeignKey("CharacterInventory", on_delete=models.CASCADE, related_name="pools")
+    """Pool balance model for tracking resources in character inventories."""
+
+    inventory = models.ForeignKey("Inventory", on_delete=models.CASCADE, related_name="pools")
+
     pool_type = models.ForeignKey(PoolTypeCI, on_delete=models.CASCADE, related_name="balances")
 
     class Meta(PoolBalanceCommon.Meta):
@@ -57,28 +83,31 @@ class PoolBalanceCI(PoolBalanceCommon):
 
 
 class InventoryTransfer(models.Model):
+    """Transfer log model for tracking inventory resource movements."""
+
     source_inventory = models.ForeignKey(
-        "CharacterInventory",
-        on_delete=models.CASCADE,
-        null=True, blank=True,
-        related_name="outgoing_transfers"
+        "Inventory", on_delete=models.CASCADE, null=True, blank=True, related_name="outgoing_transfers"
     )
+
     target_inventory = models.ForeignKey(
-        "CharacterInventory",
-        on_delete=models.CASCADE,
-        null=True, blank=True,
-        related_name="incoming_transfers"
+        "Inventory", on_delete=models.CASCADE, null=True, blank=True, related_name="incoming_transfers"
     )
+
     pool_type = models.ForeignKey("PoolTypeCI", on_delete=models.CASCADE)
+
     amount = models.IntegerField()
+
     timestamp = models.DateTimeField(auto_now_add=True)
-    actor = models.ForeignKey("auth.User", on_delete=models.SET_NULL, null=True)
+
+    actor = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True)
+
     reason = models.TextField(blank=True)
 
     class Meta:
-        ordering = ["-timestamp"]
+        ordering: ClassVar[list[str]] = ["-timestamp"]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return string representation of the transfer."""
         src = self.source_inventory or "Bank"
         tgt = self.target_inventory or "Bank"
         return f"{self.amount} {self.pool_type.name} {src} → {tgt}"

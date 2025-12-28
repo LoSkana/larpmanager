@@ -7,6 +7,12 @@
         Thanks!
     {% endif %}
 {% endblock title %}
+{% block meta %}
+    <meta name="keywords"
+          content="contact larpmanager, larp support, larp help, event management support, larpmanager contact form">
+    <meta name="description"
+          content="Get in touch with the LarpManager team. We're here to help with questions, support, and feedback about our LARP event management platform.">
+{% endblock meta %}
 {% block content %}
     {% if form %}
         {% include "elements/structure/contact_form.html" with contact_form=form %}

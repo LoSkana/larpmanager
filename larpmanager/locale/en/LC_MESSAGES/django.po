@@ -816,18 +816,6 @@ msgstr ""
 msgid "Writing option"
 msgstr ""
 
-msgid "Inventories"
-msgstr ""
-
-msgid "This page allows you to add or edit a character inventory"
-msgstr ""
-
-msgid "Pool type"
-msgstr ""
-
-msgid "This page allows you to add or edit a ci pool type"
-msgstr ""
-
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
@@ -896,20 +884,20 @@ msgstr ""
 msgid "Gallery"
 msgstr ""
 
-msgid "Request login"
+msgid "Require login"
 msgstr ""
 
 msgid ""
-"If checked, the gallery will not be displayed to those not logged in to the "
-"system"
+"If checked, the characters will not be displayed to those not logged in to "
+"the system"
 msgstr ""
 
-msgid "Request registration"
+msgid "Require registration"
 msgstr ""
 
 msgid ""
-"If checked, the subscribers' gallery will not be displayed to those who are "
-"not registered to the event"
+"If checked, the characters will not be displayed to those who are not "
+"registered to the event"
 msgstr ""
 
 msgid "Hide unassigned characters"
@@ -1608,6 +1596,9 @@ msgid ""
 "fee"
 msgstr ""
 
+msgid "Default fields"
+msgstr ""
+
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr ""
@@ -1687,6 +1678,18 @@ msgid ""
 msgstr ""
 
 msgid "click on the icon to open the tutorial"
+msgstr ""
+
+msgid "Inventories"
+msgstr ""
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+
+msgid "Pool type"
+msgstr ""
+
+msgid "This page allows you to add or edit a ci pool type"
 msgstr ""
 
 msgid "The name of our hobby, four letters"
@@ -8921,9 +8924,6 @@ msgstr ""
 msgid "One-Time"
 msgstr ""
 
-msgid "CharacterInventory"
-msgstr ""
-
 msgid "Fields"
 msgstr ""
 
@@ -9347,12 +9347,6 @@ msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"
-msgstr ""
-
-msgid "You don't have permission to analyze this ticket"
-msgstr ""
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"

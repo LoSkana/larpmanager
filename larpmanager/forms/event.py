@@ -376,13 +376,13 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_section("gallery", _("Gallery"))
 
-        label = _("Request login")
-        help_text = _("If checked, the gallery will not be displayed to those not logged in to the system")
+        label = _("Require login")
+        help_text = _("If checked, the characters will not be displayed to those not logged in to the system")
         self.add_configs("gallery_hide_login", ConfigType.BOOL, label, help_text)
 
-        label = _("Request registration")
+        label = _("Require registration")
         help_text = _(
-            "If checked, the subscribers' gallery will not be displayed to those who are not registered to the event",
+            "If checked, the characters will not be displayed to those who are not registered to the event",
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
@@ -1659,7 +1659,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         basic_question_types = BaseQuestionType.get_basic_types()
         event_id = self.params["event"].id
 
-        self.set_section("open", "Default fields")
+        self.set_section("open", _("Default fields"))
 
         help_text = _("Select which fields should open automatically when the list is displayed")
 

@@ -96,7 +96,7 @@
     icon: key
 - model: larpmanager.permissionmodule
   fields:
-    name: CharacterInventory
+    name: Inventory
     slug: characterinventory
     order: 46
     icon: box-open

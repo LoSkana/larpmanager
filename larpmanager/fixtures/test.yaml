@@ -228,6 +228,8 @@
     gdpr_contract: ''
     review_done: false
     images_shared: false
+    key: !!binary |
+      UElkTmZaQ0hJekNvSTRyRlk5anZRTHRPclRyTDFWQjJxd0ZGQ1E2TFZuND0=
     payment_methods: []
     skin: 1
 - model: larpmanager.associationrole
@@ -395,6 +397,7 @@
     event: 1
     teaser: <p>Test Teaser</p>
     text: <p>Test Text</p>
+    access_token: baba
 - model: larpmanager.paymentmethod
   pk: 1
   fields:
