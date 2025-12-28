@@ -47,6 +47,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
+    page.wait_for_load_state("networkidle")
     expect(page.locator("#one")).to_contain_text("Ticket Your registration ticket Ticket")
 
     # Add features
@@ -59,6 +60,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
 
     # check there are questions for all features
     page.get_by_role("link", name="Form").click()
+    page.wait_for_load_state("networkidle")
     page.locator('[id="\\31 "]').get_by_role("cell", name="").click()
     page.get_by_text("Your registration ticket").click()
     page.get_by_text("Your registration ticket").fill("Your registration ticket2")

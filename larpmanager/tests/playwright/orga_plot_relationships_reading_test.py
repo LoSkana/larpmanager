@@ -98,6 +98,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
+    page.wait_for_load_state("networkidle")
     expect(page.locator("#one")).to_contain_text("only for testt Primary Test Character")
 
     # check reading for prova
@@ -132,6 +133,7 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
+    page.wait_for_load_state("networkidle")
     expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
@@ -182,6 +184,7 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check in plot list
     page.locator("#one").get_by_role("link", name="Characters").click()
+    page.wait_for_load_state("networkidle")
     expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww Test Character")
 
     # check it is the same
