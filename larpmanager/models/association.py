@@ -93,6 +93,10 @@ class AssociationSkin(BaseModel):
 
     managed = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        """Return string representation of the association skin."""
+        return self.name
+
 
 class Association(UuidMixin, BaseModel):
     """Represents Association model."""

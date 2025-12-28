@@ -1595,6 +1595,9 @@ msgid ""
 "fee"
 msgstr ""
 
+msgid "Default fields"
+msgstr ""
+
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr ""
@@ -5863,6 +5866,12 @@ msgstr ""
 msgid "Passages made"
 msgstr ""
 
+msgid "Blog"
+msgstr ""
+
+msgid "Latest articles and updates from LarpManager"
+msgstr ""
+
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "
 "single aspect of event organising: signups, accounting, writing, logistics"
@@ -9259,12 +9268,6 @@ msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"
-msgstr ""
-
-msgid "You don't have permission to analyze this ticket"
-msgstr ""
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"

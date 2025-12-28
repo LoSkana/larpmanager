@@ -86,6 +86,9 @@ msgstr "Bereich"
 msgid "Band"
 msgstr "Faszien"
 
+msgid "Blog"
+msgstr "Blog"
+
 msgid "Body"
 msgstr "Körper"
 
@@ -2377,6 +2380,9 @@ msgstr "Guthaben"
 
 msgid "Customisations"
 msgstr "Anpassungen"
+
+msgid "Default fields"
+msgstr "Standard-Felder"
 
 msgid "Disable Tokens"
 msgstr "Token deaktivieren"
@@ -5714,6 +5720,9 @@ msgstr "Wenn Sie keinen Benutzer sehen, fragen Sie ihn nach dem Zugang"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Wenn Sie Hilfe brauchen, lassen Sie es uns bitte wissen"
 
+msgid "Latest articles and updates from LarpManager"
+msgstr "Neueste Artikel und Updates von LarpManager"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Verwaltung und Genehmigung von Rechnungen und Zahlungen"
 
@@ -6074,9 +6083,6 @@ msgstr ""
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Sie können eine Datei im PDF-Format oder ein Bild hochladen"
-
-msgid "You don't have permission to analyze this ticket"
-msgstr "Sie haben nicht die Erlaubnis, dieses Ticket zu analysieren"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Sie haben den diesjährigen Mitgliedsbeitrag bereits bezahlt"
@@ -7620,11 +7626,6 @@ msgstr ""
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr ""
 "Auf dieser Seite finden Sie die Informationen zur Durchführung der Verlosung"
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
-msgstr ""
-"Ticket-Analyse gestartet. Sie erhalten eine E-Mail, wenn die Analyse "
-"abgeschlossen ist"
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""

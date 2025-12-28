@@ -25,6 +25,7 @@ from django.contrib import admin
 from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerFaq,
     LarpManagerFaqType,
@@ -78,10 +79,21 @@ class LarpManagerTutorialAdmin(CSRFTinyMCEModelAdmin):
 
 
 @admin.register(LarpManagerGuide)
-class LarpManagerBlogAdmin(CSRFTinyMCEModelAdmin):
+class LarpManagerGuideAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerGuide model."""
 
     list_display = ("title", "slug", "number", "published", "text_red", "show_thumb")
+    list_filter = ("published",)
+    search_fields = ("title", "description", "slug")
+
+
+@admin.register(LarpManagerBlog)
+class LarpManagerBlogAdmin(CSRFTinyMCEModelAdmin):
+    """Admin interface for LarpManagerBlog model."""
+
+    list_display = ("title", "slug", "number", "published")
+    list_filter = ("published",)
+    search_fields = ("title", "description", "slug", "keywords")
 
 
 @admin.register(LarpManagerHighlight)
@@ -96,7 +108,8 @@ class LarpManagerHighlightAdmin(DefModelAdmin):
 class LarpManagerShowcaseAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerShowcase model."""
 
-    list_display = ("title", "number", "text_red")
+    list_display = ("title", "number", "text_red", "blog")
+    autocomplete_fields: ClassVar[list] = ["blog"]
 
 
 @admin.register(LarpManagerProfiler)

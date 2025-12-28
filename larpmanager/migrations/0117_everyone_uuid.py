@@ -51,7 +51,7 @@ def populate_uuids(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0115_alter_member_uuid'),
+        ('larpmanager', '0116_larpmanagerblog_larpmanagerguide_keywords_and_more'),
     ]
 
     operations = []

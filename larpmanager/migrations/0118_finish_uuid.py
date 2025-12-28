@@ -48,7 +48,7 @@ def convert_casting_elements_to_uuid(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0116_everyone_uuid'),
+        ('larpmanager', '0117_everyone_uuid'),
     ]
 
     operations = [

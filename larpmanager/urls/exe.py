@@ -519,9 +519,4 @@ urlpatterns = [
         views_ed.working_ticket,
         name="working_ticket",
     ),
-    path(
-        "manage/ticket/analyze/<slug:ticket_uuid>/",
-        views_ems.exe_ticket_analyze,
-        name="exe_ticket_analyze",
-    ),
 ]

@@ -225,6 +225,10 @@ class Album(UuidMixin, BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        """Return string representation of the album."""
+        return self.name
+
     def __unicode__(self) -> str:
         """Return the title of the object."""
         # noinspection PyUnresolvedReferences
@@ -250,6 +254,10 @@ class AlbumUpload(BaseModel):
         (PHOTO, _("Photo")),
     ]
     typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
+
+    def __str__(self) -> str:
+        """Return string representation of the album upload."""
+        return self.name
 
 
 class AlbumImage(BaseModel):
@@ -306,6 +314,10 @@ class Competence(BaseModel):
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
     members = models.ManyToManyField(Member, related_name="competences", through="CompetenceMemberRel")
+
+    def __str__(self) -> str:
+        """Return string representation of the competence."""
+        return self.name
 
 
 class CompetenceMemberRel(BaseModel):
@@ -452,6 +464,10 @@ class WarehouseContainer(UuidMixin, BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse container."""
+        return self.name
+
 
 class WarehouseTag(UuidMixin, BaseModel):
     """Represents WarehouseTag model."""
@@ -461,6 +477,10 @@ class WarehouseTag(UuidMixin, BaseModel):
     description = models.CharField(max_length=1000, blank=True, default="")
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
+
+    def __str__(self) -> str:
+        """Return string representation of the warehouse tag."""
+        return self.name
 
 
 class WarehouseItem(UuidMixin, BaseModel):
@@ -493,6 +513,10 @@ class WarehouseItem(UuidMixin, BaseModel):
     )
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
+
+    def __str__(self) -> str:
+        """Return string representation of the warehouse item."""
+        return self.name
 
     @classmethod
     def get_optional_fields(cls) -> Any:
@@ -529,6 +553,10 @@ class WarehouseArea(UuidMixin, BaseModel):
     description = models.CharField(max_length=1000, blank=True, default="")
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
+
+    def __str__(self) -> str:
+        """Return string representation of the warehouse area."""
+        return self.name
 
 
 class WarehouseItemAssignment(BaseModel):

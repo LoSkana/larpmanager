@@ -655,6 +655,10 @@ class Badge(UuidMixin, BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        """Return string representation of the badge."""
+        return self.name
+
     def thumb(self) -> str:
         """Return HTML for thumbnail image if available, otherwise empty string."""
         if self.img_thumb:

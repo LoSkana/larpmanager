@@ -1656,7 +1656,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
         basic_question_types = BaseQuestionType.get_basic_types()
         event_id = self.params["event"].id
 
-        self.set_section("open", "Default fields")
+        self.set_section("open", _("Default fields"))
 
         help_text = _("Select which fields should open automatically when the list is displayed")
 

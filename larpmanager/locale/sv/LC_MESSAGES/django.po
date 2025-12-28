@@ -86,6 +86,9 @@ msgstr "Område"
 msgid "Band"
 msgstr "Fascia"
 
+msgid "Blog"
+msgstr "Blogg"
+
 msgid "Body"
 msgstr "Kropp"
 
@@ -2377,6 +2380,9 @@ msgstr "Kreditbalans"
 
 msgid "Customisations"
 msgstr "Anpassningar"
+
+msgid "Default fields"
+msgstr "Standardfält"
 
 msgid "Disable Tokens"
 msgstr "Inaktivera Tokens"
@@ -5703,6 +5709,9 @@ msgstr "Om du inte ser någon användare, be dem att gå in på"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Om du behöver hjälp är du välkommen att höra av dig till oss"
 
+msgid "Latest articles and updates from LarpManager"
+msgstr "Senaste artiklar och uppdateringar från LarpManager"
+
 msgid "Manage invoices of payments and approve them"
 msgstr "Hantera fakturor och betalningar och godkänna dem"
 
@@ -6049,9 +6058,6 @@ msgstr "Denna sida sammanfattar de olika typerna av uppdrag i evenemanget"
 
 msgid "You can upload a file in pdf format, or an image"
 msgstr "Du kan ladda upp en fil i pdf-format eller en bild"
-
-msgid "You don't have permission to analyze this ticket"
-msgstr "Du har inte tillåtelse att analysera den här biljetten"
 
 msgid "You have already paid this year's membership fee"
 msgstr "Du har redan betalat årets medlemsavgift"
@@ -7375,11 +7381,6 @@ msgstr "Denna sida utför olika kontroller av teckenkortens korrekthet"
 
 msgid "This page shows the information to perform the drawing of the lottery"
 msgstr "Denna sida visar informationen för att utföra lotteridragningen"
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
-msgstr ""
-"Biljettanalys påbörjad. Du kommer att få ett e-postmeddelande när den är "
-"klar"
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""

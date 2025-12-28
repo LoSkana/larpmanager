@@ -200,6 +200,10 @@ class ElectronicInvoice(UuidMixin, BaseModel):
 
     response = models.TextField(blank=True, null=True)
 
+    def __str__(self) -> str:
+        """Return string representation of the electronic invoice."""
+        return f"{self.number}/{self.year}"
+
     class Meta:
         constraints: ClassVar[list] = [
             UniqueConstraint(

@@ -112,10 +112,6 @@ class LarpManagerHighlight(BaseModel):
         options={"quality": 80},
     )
 
-    def __str__(self) -> str:
-        """Return string representation of the highlight."""
-        return self.info[:50] if self.info else f"Highlight #{self.id}"
-
     def show_reduced(self) -> Any:
         """Generate HTML for displaying reduced-size image."""
         if self.reduced:
@@ -144,13 +140,16 @@ class LarpManagerShowcase(BaseModel):
 
     text = HTMLField(blank=True, null=True)
 
+    blog = models.ForeignKey(
+        "LarpManagerBlog",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="showcases",
+    )
+
     def text_red(self) -> Any:
-        """Get truncated version of showcase text.
-
-        Returns:
-            str: First 100 characters of the showcase text
-
-        """
+        """Get truncated version of showcase text."""
         return self.text[:100]
 
 
@@ -166,6 +165,8 @@ class LarpManagerGuide(BaseModel):
     title = models.CharField(max_length=1000)
 
     description = models.CharField(max_length=1000, null=True)
+
+    keywords = models.CharField(max_length=1000, null=True)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
 
@@ -208,12 +209,29 @@ class LarpManagerGuide(BaseModel):
         return ""
 
     def text_red(self) -> Any:
-        """Get truncated version of text content.
+        """Get truncated version of text content."""
+        return self.text[:100]
 
-        Returns:
-            str: First 100 characters of the guide text
 
-        """
+class LarpManagerBlog(BaseModel):
+    """Model for managing blog posts with published status."""
+
+    number = models.IntegerField(blank=True, null=True)
+
+    title = models.CharField(max_length=1000)
+
+    description = models.CharField(max_length=1000, null=True)
+
+    keywords = models.CharField(max_length=1000, null=True)
+
+    slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True)
+
+    text = HTMLField(blank=True, null=True)
+
+    published = models.BooleanField(default=False)
+
+    def text_red(self) -> Any:
+        """Get truncated version of showcase text."""
         return self.text[:100]
 
 
@@ -238,6 +256,10 @@ class LarpManagerProfiler(BaseModel):
     view_func_name = models.CharField(max_length=100, verbose_name="View function")
 
     duration = models.FloatField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        """Return string representation of the profiler entry."""
+        return f"{self.view_func_name} ({self.domain})"
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["domain", "view_func_name"])]
@@ -319,3 +341,7 @@ class LarpManagerTicket(UuidMixin, BaseModel):
             # noinspection PyUnresolvedReferences
             return show_thumb(100, self.screenshot_reduced.url)
         return ""
+
+    def __str__(self) -> str:
+        """Return string representation of the ticket."""
+        return f"Ticket #{self.id}: {self.reason or 'No reason'}"

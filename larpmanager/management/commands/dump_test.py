@@ -63,8 +63,6 @@ class Command(BaseCommand):
         with Path(file_path).open("w", encoding="utf-8") as f:
             f.write(content)
 
-        self.stdout.write(self.style.SUCCESS("Dates normalized successfully"))
-
     def handle(self, *args: tuple, **kwargs: dict) -> None:  # noqa: ARG002
         """Django management command handler to dump test database.
 
@@ -85,12 +83,13 @@ class Command(BaseCommand):
 
         # Reset database to clean state and apply all migrations
         call_command("reset", verbosity=0)
-        call_command("migrate", verbosity=0)
 
         # Configure environment for PostgreSQL authentication
         self.stdout.write("Dumping database to test_db.sql...")
         env = os.environ.copy()
         env["PGPASSWORD"] = "larpmanager"
+
+        sql_file = Path("larpmanager/tests/test_db.sql")
 
         # Build pg_dump command with required parameters for test database
         dump_cmd = [
@@ -105,18 +104,17 @@ class Command(BaseCommand):
             "--no-owner",  # Skip ownership commands
             "--no-privileges",  # Skip privilege commands
             "-f",
-            "larpmanager/tests/test_db.sql",
+            str(sql_file),
         ]
 
         # Execute database dump with error handling
         try:
             subprocess.run(dump_cmd, check=True, env=env)  # noqa: S603
-            self.stdout.write(self.style.SUCCESS("Database dump completed: test_db.sql"))
         except subprocess.CalledProcessError as e:
             self.stderr.write(self.style.ERROR(f"Dump failed: {e}"))
 
         # Normalize dates to fixed reference dates for stable dumps
-        self.normalize_dates("larpmanager/tests/test_db.sql")
+        self.normalize_dates(str(sql_file))
 
         # Clean up PostgreSQL-specific commands that may cause test issues
         clean_cmd = [
@@ -127,7 +125,7 @@ class Command(BaseCommand):
             r"/^\\restrict/d;"
             r"/^\\unrestrict/d;"
             r"/^COMMENT ON SCHEMA public/d",
-            "larpmanager/tests/test_db.sql",
+            str(sql_file),
         ]
         subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603
 
@@ -136,33 +134,21 @@ class Command(BaseCommand):
             "sed",
             "-i",
             r"/^$/N;/^\n$/D",
-            "larpmanager/tests/test_db.sql",
+            str(sql_file),
         ]
         subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603
 
-        # Add schema version marker at the end of dump
-        self._add_schema_version_marker("larpmanager/tests/test_db.sql")
-
-    def _add_schema_version_marker(self, file_path: str) -> None:
-        """Add a SQL comment with the latest migration number as version marker.
-
-        This helps conftest.py verify the dump is up-to-date without querying the DB.
-
-        Args:
-            file_path: Path to the SQL dump file
-        """
-        # Get latest migration file
+        # Add schema version marker for test script validation
         migrations_dir = Path("larpmanager/migrations")
-        migration_files = sorted(migrations_dir.glob("[0-9]*.py"))
+        migration_files = sorted(migrations_dir.glob("[0-9]*.py"), key=lambda p: p.name)
 
-        if not migration_files:
-            self.stderr.write(self.style.WARNING("No migrations found"))
-            return
+        if migration_files:
+            latest_migration = migration_files[-1].stem  # Get filename without .py
 
-        latest_migration = migration_files[-1].stem
+            self.stdout.write(f"Adding schema marker: {latest_migration}...")
 
-        # Append version marker comment
-        with Path(file_path).open("a", encoding="utf-8") as f:
-            f.write(f"\n\n-- LARPMANAGER_SCHEMA_VERSION: {latest_migration}\n")
+            # Append schema version comment to end of file
+            with sql_file.open("a", encoding="utf-8") as f:
+                f.write(f"\n-- LARPMANAGER_SCHEMA_VERSION: {latest_migration}\n")
 
-        self.stdout.write(self.style.SUCCESS(f"Schema version marker added: {latest_migration}"))
+        self.stdout.write(self.style.SUCCESS("All done!"))

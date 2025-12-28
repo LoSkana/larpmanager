@@ -508,6 +508,10 @@ class EventText(UuidMixin, BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="texts")
 
+    def __str__(self) -> str:
+        """Return string representation of the event text."""
+        return f"{self.get_typ_display()} - {self.get_language_display()}"
+
     class Meta:
         constraints: ClassVar[list] = [
             UniqueConstraint(

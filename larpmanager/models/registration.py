@@ -190,6 +190,10 @@ class RegistrationSection(UuidMixin, BaseModel):
 
     order = models.IntegerField(default=0)
 
+    def __str__(self) -> str:
+        """Return string representation of the registration section."""
+        return self.name
+
 
 class RegistrationQuota(UuidMixin, BaseModel):
     """Represents RegistrationQuota model."""
