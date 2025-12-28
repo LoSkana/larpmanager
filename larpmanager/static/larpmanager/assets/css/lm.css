@@ -2500,14 +2500,23 @@ input[type="number"] {
 }
 
 .section-image .image-wrapper {
+  position: relative;
   max-width: 70%;
   margin: 0 auto;
+  padding-top: 56.25%; /* Rapporto 16:9 - stessa altezza massima delle foto showcase */
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 .section-image .image-wrapper img.img-responsive {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: auto;
   display: block;
+  object-fit: cover; /* Mostra solo la parte centrale */
 }
 
 .section-image .image-caption {
