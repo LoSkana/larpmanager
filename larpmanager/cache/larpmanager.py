@@ -187,7 +187,7 @@ def get_blog_content_with_images(blog_id: int, html_content: str) -> list[dict]:
     if cached_sections:
         return cached_sections
 
-    # Split content by h2 and h3 tags
+    # Split content by h2 tags
     sections = _split_content_by_headings(html_content)
 
     # Get random highlights for today
@@ -218,11 +218,26 @@ def _split_content_by_headings(html_content: str) -> list[dict]:
     if not html_content:
         return []
 
-    # Pattern to match h2 or h3 tags and capture content until next heading
-    pattern = r"<(h[23])[^>]*>(.*?)</\1>(.*?)(?=<h[23]|$)"
+    sections = []
+
+    # Check if there's content before the first h2 tag
+    first_h2_match = re.search(r"<h[2]", html_content, re.IGNORECASE)
+    if first_h2_match:
+        initial_content = html_content[: first_h2_match.start()].strip()
+        if initial_content:
+            # Add initial content as first section with no heading
+            sections.append(
+                {
+                    "heading": "",
+                    "heading_level": "h2",
+                    "content": initial_content,
+                }
+            )
+
+    # Pattern to match h2 tags and capture content until next heading
+    pattern = r"<(h[2])[^>]*>(.*?)</\1>(.*?)(?=<h[2]|$)"
     matches = re.findall(pattern, html_content, re.DOTALL | re.IGNORECASE)
 
-    sections = []
     for match in matches:
         heading_level = match[0]  # h2 or h3
         heading_text = unescape(re.sub(r"<[^>]+>", "", match[1])).strip()

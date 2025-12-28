@@ -145,6 +145,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="teeeeest").click()
     page.locator("#one").get_by_role("link", name="Plots").click()
+    page.wait_for_load_state("networkidle")
     expect(page.locator("#one")).to_contain_text(
         "#1 Test Character 211 Test Teaser Test Text eefqq gggerwe first qweeerr"
     )
@@ -157,10 +158,12 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     # reload page, check everything is correct
     go_to(page, live_server, "/test/manage/characters/")
+    page.wait_for_timeout(2000)
     page.get_by_role("link", name="XP").click()
     page.get_by_role("link", name="teeeeest").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
+    page.wait_for_load_state("networkidle")  
     expect(page.locator("#one")).to_contain_text(
         "#1 Test Character 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr"
     )
@@ -177,6 +180,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="teeeeest").click()
+    page.wait_for_load_state("networkidle")
     expect(page.locator("#one")).to_contain_text(
         "Test Character3 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr"
     )
