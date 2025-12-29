@@ -61,4 +61,8 @@ class Migration(migrations.Migration):
             name='owners',
             field=models.ManyToManyField(blank=True, related_name='inventory', to='larpmanager.character'),
         ),
+        migrations.AlterModelOptions(
+            name='inventory',
+            options={},
+        ),
     ]
