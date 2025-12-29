@@ -23,7 +23,15 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, check_feature, go_to, login_orga, submit_confirm, upload
+from larpmanager.tests.utils import (
+    check_download,
+    check_feature,
+    go_to,
+    login_orga,
+    submit_confirm,
+    upload,
+    expect_normalized_text,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -87,12 +95,14 @@ def abilities(page: Any) -> None:
     page.locator("#id_first").click()
     upload(page, "#id_first", get_path("abilities.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Loading performed, see logs Proceed Logs OK - Created swordOK - Created shieldOK - Created sneak"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created swordOK - Created shieldOK - Created sneak",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text(
-        "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword , shield rrrrrr , trtr"
+    expect_normalized_text(
+        page.locator("#one"),
+        "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword , shield rrrrrr , trtr",
     )
     check_download(page, "Download")
 
@@ -115,11 +125,11 @@ def relationships(page: Any) -> None:
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("relationships.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("OK - Relationship characcter test character")
+    expect_normalized_text(page.locator("#one"), "OK - Relationship characcter test character")
     page.get_by_role("link", name="Proceed").click()
     page.get_by_role("link", name="Relationships").click()
-    expect(page.locator("#one")).to_contain_text(
-        "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character"
+    expect_normalized_text(
+        page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character"
     )
 
 
@@ -132,15 +142,16 @@ def plots(live_server: Any, page: Any) -> None:
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("roles.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Loading performed, see logs Proceed Logs OK - Created plottOK - Plot role characcter plott"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created plottOK - Plot role characcter plott",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text("plott conceptt textt")
+    expect_normalized_text(page.locator("#one"), "plott conceptt textt")
     page.get_by_role("link", name="").click()
     page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
-    expect(page.locator("#id_char_role_2_tr")).to_contain_text("#2 characcter")
-    expect(page.locator("#id_char_role_2_tr")).to_contain_text("super start")
+    expect_normalized_text(page.locator("#id_char_role_2_tr"), "#2 characcter")
+    expect_normalized_text(page.locator("#id_char_role_2_tr"), "super start")
     go_to(page, live_server, "/test/manage/plots/")
     check_download(page, "Download")
 
@@ -159,18 +170,18 @@ def quest_trait(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("quest.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("Loading performed, see logs Proceed Logs OK - Created questt")
+    expect_normalized_text(page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created questt")
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text("Q1 questt bhbh presenttation ttext")
+    expect_normalized_text(page.locator("#one"), "Q1 questt bhbh presenttation ttext")
     check_download(page, "Download")
     page.locator("#orga_traits").get_by_role("link", name="Traits").click()
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("trait.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("Loading performed, see logs Proceed Logs OK - Created traitt")
+    expect_normalized_text(page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created traitt")
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text("T1 traitt Q1 questt ppresentation teeeext")
+    expect_normalized_text(page.locator("#one"), "T1 traitt Q1 questt ppresentation teeeext")
     check_download(page, "Download")
 
 
@@ -180,9 +191,9 @@ def registrations(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("registration.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("OK - Created User Test")
+    expect_normalized_text(page.locator("#one"), "OK - Created User Test")
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text("User Test #2 characcter")
+    expect_normalized_text(page.locator("#one"), "User Test #2 characcter")
     check_download(page, "Download")
 
 
@@ -194,12 +205,14 @@ def reg_form(page: Any) -> None:
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("reg-options.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Loading performed, see logs Proceed Logs OK - Created tbmobwOK - Created qmhcufOK - Created holdmfOK - Created lyucezOK - Created bamkzwOK - Created npyrxdOK - Created rdtbggOK - Created qkcyjrOK - Created fjxkum"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created tbmobwOK - Created qmhcufOK - Created holdmfOK - Created lyucezOK - Created bamkzwOK - Created npyrxdOK - Created rdtbggOK - Created qkcyjrOK - Created fjxkum",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text(
-        "tbmobw npyrxd Multiple choice Optional npyrxd , rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr , fjxkum"
+    expect_normalized_text(
+        page.locator("#one"),
+        "tbmobw npyrxd Multiple choice Optional npyrxd , rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr , fjxkum",
     )
     check_download(page, "Download")
 
@@ -210,10 +223,10 @@ def characters(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("character.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("OK - Created characcter")
+    expect_normalized_text(page.locator("#one"), "OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text(
-        "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr"
+    expect_normalized_text(
+        page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr"
     )
     check_download(page, "Download")
 
@@ -224,9 +237,9 @@ def factions(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("faction.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("OK - Created facction")
+    expect_normalized_text(page.locator("#one"), "OK - Created facction")
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text("facction Primary gh asd oeir sdf")
+    expect_normalized_text(page.locator("#one"), "facction Primary gh asd oeir sdf")
     check_download(page, "Download")
 
 
@@ -237,29 +250,32 @@ def char_form(page: Any) -> None:
     upload(page, "#id_first", get_path("char-questions.csv"))
     upload(page, "#id_second", get_path("char-options.csv"))
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Loading performed, see logs Proceed Logs OK - Created bibiOK - Created babaOK - Created werOK - Created asdOK - Created poiOK - Created huhuOK - Created trtrOK - Created rrrrrrOK - Created tttttt"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created bibiOK - Created babaOK - Created werOK - Created asdOK - Created poiOK - Created huhuOK - Created trtrOK - Created rrrrrrOK - Created tttttt",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu , trtr"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu , trtr",
     )
     check_download(page, "Download")
     page.get_by_role("link", name="Plot", exact=True).click()
-    expect(page.locator("#one")).to_contain_text(
-        "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
+    expect_normalized_text(
+        page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
     )
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect(page.locator("#one")).to_contain_text(
-        "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
+    expect_normalized_text(
+        page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
     )
     page.locator("#one").get_by_role("link", name="Quest").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public"
+    expect_normalized_text(
+        page.locator("#one"), "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public"
     )
     page.get_by_role("link", name="Trait", exact=True).click()
-    expect(page.locator("#one")).to_contain_text(
-        "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr , tttttt"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr , tttttt",
     )
 
 
@@ -287,8 +303,9 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     page.get_by_role("link", name=" Accounting").click()
     page.get_by_role("link", name="follow this link").click()
-    expect(page.locator("#wrapper")).to_contain_text(
-        "Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa Submit"
+    expect_normalized_text(
+        page.locator("#wrapper"),
+        "Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa Submit",
     )
 
 

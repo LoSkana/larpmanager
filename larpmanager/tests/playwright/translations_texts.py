@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized_text
 
 pytestmark = pytest.mark.e2e
 
@@ -43,38 +43,38 @@ def test_translations_text(pw_page: Any) -> None:
     page.get_by_text("After confirmation, add").click()
     page.get_by_role("button", name="Confirm").click()
 
-    fill_tinymce(page, "id_text","BUONGIORNO", show=False)
+    fill_tinymce(page, "id_text", "BUONGIORNO", show=False)
     page.locator("#id_language").select_option("it")
     page.locator("#id_default").uncheck()
     page.locator("#id_typ").select_option("h")
     page.get_by_text("After confirmation, add").click()
     page.get_by_role("button", name="Confirm").click()
 
-    fill_tinymce(page, "id_text","bonjour", show=False)
+    fill_tinymce(page, "id_text", "bonjour", show=False)
     page.locator("#id_language").select_option("fr")
     page.locator("#id_typ").select_option("h")
     page.locator("#id_default").uncheck()
     page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#one")).to_contain_text("Home fr bonjour Home it BUONGIORNO Home en Hello")
+    expect_normalized_text(page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
 
     # test languages
     go_to(page, live_server, "/")
-    expect(page.locator("#one")).to_contain_text("Hello")
+    expect_normalized_text(page.locator("#one"), "Hello")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Select Language:").select_option("it")
     page.get_by_label("Select Language:").click()
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("BUONGIORNO")
-    expect(page.locator("#topbar")).to_contain_text("Profilo Contabilità")
+    expect_normalized_text(page.locator("#one"), "BUONGIORNO")
+    expect_normalized_text(page.locator("#topbar"), "Profilo Contabilità")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Seleziona la lingua:").select_option("fr")
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("bonjour")
-    expect(page.locator("#topbar")).to_contain_text("Profil Comptabilité")
+    expect_normalized_text(page.locator("#one"), "bonjour")
+    expect_normalized_text(page.locator("#topbar"), "Profil Comptabilité")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Sélectionner la langue :").select_option("de")
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("Hello")
+    expect_normalized_text(page.locator("#one"), "Hello")

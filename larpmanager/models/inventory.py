@@ -20,12 +20,13 @@ from typing import Any, ClassVar
 
 from django.db import models
 
+from larpmanager.models.base import UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character
 
 
-class Inventory(BaseConceptModel):
+class Inventory(UuidMixin, BaseConceptModel):
     """Character inventory model for managing shared or personal resource storage."""
 
     name = models.CharField(max_length=150)
@@ -49,7 +50,7 @@ class Inventory(BaseConceptModel):
         return pool_balances
 
 
-class PoolTypeCommon(BaseConceptModel):
+class PoolTypeCommon(UuidMixin, BaseConceptModel):
     """Abstract pool type that other apps can extend."""
 
     name = models.CharField(max_length=150)
@@ -62,7 +63,7 @@ class PoolTypeCI(PoolTypeCommon):
     """Pool type model for character inventory resource types."""
 
 
-class PoolBalanceCommon(BaseConceptModel):
+class PoolBalanceCommon(UuidMixin, BaseConceptModel):
     """Abstract pool balance to be subclassed by context-specific balances."""
 
     amount = models.PositiveIntegerField(default=0)

@@ -24,7 +24,15 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, login_user, logout, submit_confirm
+from larpmanager.tests.utils import (
+    fill_tinymce,
+    go_to,
+    login_orga,
+    login_user,
+    logout,
+    submit_confirm,
+    expect_normalized_text,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -75,7 +83,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="pinoloooooooooo").click()
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test public: public Presentation baba")
+    expect_normalized_text(page.locator("#one"), "Player: Admin Test public: public Presentation baba")
 
     create_second_char(live_server, page)
 
@@ -106,12 +114,13 @@ def create_second_char(live_server: Any, page: Any) -> None:
     )
     expect(page.get_by_role("checkbox", name="few")).to_be_disabled()
     page.get_by_role("checkbox", name="many - (Available 1)").check()
-    expect(page.locator('[id="id_que_u7_tr"]')).to_contain_text("options: 1 / 2")
+    expect_normalized_text(page.locator('[id="id_que_u7_tr"]'), "options: 1 / 2")
     page.locator("#id_que_u9").click()
     page.locator("#id_que_u9").fill("asda")
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text(
-        "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds",
     )
 
 
@@ -164,19 +173,21 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect(page.locator("#id_que_u8")).to_have_value("7")
     expect(page.locator("#id_que_u10")).to_have_value("disabled")
     expect(page.locator("#id_que_u11")).to_have_value("hidden")
-    expect(page.locator("#lbl_id_que_u4")).to_contain_text("short text")
+    expect_normalized_text(page.locator("#lbl_id_que_u4"), "short text")
     page.get_by_role("cell", name="long text").dblclick()
-    expect(page.locator("#lbl_id_que_u5")).to_contain_text("long text")
-    expect(page.locator("#main_form")).to_contain_text("short descr")
+    expect_normalized_text(page.locator("#lbl_id_que_u5"), "long text")
+    expect_normalized_text(page.locator("#main_form"), "short descr")
     page.get_by_text("long descr").click()
 
 
 def recheck_char(live_server: Any, page: Any) -> None:
-    expect(page.locator("#main_form")).to_contain_text("long descr")
-    expect(page.locator("#lbl_id_que_u8")).to_contain_text("restricted")
-    expect(page.locator("#main_form")).to_contain_text("restricted textonly only descrall all descr")
-    expect(page.locator('[id="id_que_u7_tr"]')).to_contain_text("multiple text")
-    expect(page.locator('[id="id_que_u7_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
+    expect_normalized_text(page.locator("#main_form"), "long descr")
+    expect_normalized_text(page.locator("#lbl_id_que_u8"), "restricted")
+    expect_normalized_text(page.locator("#main_form"), "restricted textonly only descrall all descr")
+    expect_normalized_text(page.locator('[id="id_que_u7_tr"]'), "multiple text")
+    expect_normalized_text(
+        page.locator('[id="id_que_u7_tr"]'), "multiple descrall all descrmany many descrfew few descr"
+    )
     submit_confirm(page)
     go_to(page, live_server, "/test/character/list")
     page.get_by_role("link", name="").click()
@@ -195,10 +206,10 @@ def create_first_char(live_server: Any, page: Any) -> None:
 
     fill_presentation_text(page)
 
-    expect(page.locator("#lbl_id_text")).to_contain_text("Text (*)")
-    expect(page.locator("#lbl_id_teaser")).to_contain_text("Presentation (*)")
-    expect(page.locator("#lbl_id_name")).to_contain_text("Name (*)")
-    expect(page.locator("#main_form")).to_contain_text("short descr")
+    expect_normalized_text(page.locator("#lbl_id_text"), "Text (*)")
+    expect_normalized_text(page.locator("#lbl_id_teaser"), "Presentation (*)")
+    expect_normalized_text(page.locator("#lbl_id_name"), "Name (*)")
+    expect_normalized_text(page.locator("#main_form"), "short descr")
     page.locator("#id_que_u4").click()
     page.locator("#id_que_u4").fill("aaaaaaaaaa")
     page.locator("#id_que_u4").click()
@@ -206,21 +217,23 @@ def create_first_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u5").click()
     page.locator("#id_que_u5").fill("bbbbbbbbbb")
     expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
-    expect(page.locator("#main_form")).to_contain_text("long descr")
-    expect(page.locator("#main_form")).to_contain_text("text length: 10 / 10")
-    expect(page.locator("#lbl_id_que_u6")).to_contain_text("available text")
-    expect(page.locator("#main_form")).to_contain_text("available descrall allfew few descr")
+    expect_normalized_text(page.locator("#main_form"), "long descr")
+    expect_normalized_text(page.locator("#main_form"), "text length: 10 / 10")
+    expect_normalized_text(page.locator("#lbl_id_que_u6"), "available text")
+    expect_normalized_text(page.locator("#main_form"), "available descrall allfew few descr")
     page.locator("#id_que_u6").select_option("u1")
     page.locator("#id_que_u8").select_option("u6")
-    expect(page.locator("#lbl_id_que_u8")).to_contain_text("restricted")
-    expect(page.locator("#main_form")).to_contain_text("restricted textonly only descrall all descr")
+    expect_normalized_text(page.locator("#lbl_id_que_u8"), "restricted")
+    expect_normalized_text(page.locator("#main_form"), "restricted textonly only descrall all descr")
     page.get_by_text("many - (Available 2)").click()
     page.locator("#id_que_u7 div").filter(has_text="many - (Available 2)").click()
-    expect(page.locator("#id_que_u7")).to_contain_text("many - (Available 2)")
-    expect(page.locator("#id_que_u7")).to_contain_text("few - (Available 1)")
+    expect_normalized_text(page.locator("#id_que_u7"), "many - (Available 2)")
+    expect_normalized_text(page.locator("#id_que_u7"), "few - (Available 1)")
     page.get_by_text("multiple descrall all").click()
-    expect(page.locator('[id="id_que_u7_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
-    expect(page.locator('[id="id_que_u7_tr"]')).to_contain_text("multiple text")
+    expect_normalized_text(
+        page.locator('[id="id_que_u7_tr"]'), "multiple descrall all descrmany many descrfew few descr"
+    )
+    expect_normalized_text(page.locator('[id="id_que_u7_tr"]'), "multiple text")
     page.get_by_role("checkbox", name="all").check()
     page.get_by_role("checkbox", name="many - (Available 2)").check()
     page.get_by_text("options: 2 /").click()

@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized_text
 
 pytestmark = pytest.mark.e2e
 
@@ -47,7 +47,7 @@ def signup(live_server: Any, page: Any) -> None:
 
     # sign up
     go_to(page, live_server, "/")
-    expect(page.locator("#one")).to_contain_text("Registration is open!")
+    expect_normalized_text(page.locator("#one"), "Registration is open!")
     page.get_by_role("link", name="Registration is open!").click()
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
@@ -66,13 +66,13 @@ def signup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text("Registration confirmed")
-    expect(page.locator("#one")).to_contain_text("please fill in your profile.")
+    expect_normalized_text(page.locator("#one"), "Registration confirmed")
+    expect_normalized_text(page.locator("#one"), "please fill in your profile.")
 
     page.locator("#one").get_by_role("table").get_by_role("link", name="please fill in your profile.").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
+    expect_normalized_text(page.locator("#one"), "Registration confirmed (Standard)")
 
     # test update of signup with no payments
     go_to(page, live_server, "/test/register")
@@ -91,9 +91,9 @@ def help_questions(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check questions
-    expect(page.locator("#one")).to_contain_text("[Test Larp] - please help me (Attachment)")
+    expect_normalized_text(page.locator("#one"), "[Test Larp] - please help me (Attachment)")
     go_to(page, live_server, "/manage/questions")
-    expect(page.locator("#one")).to_contain_text("please help me")
+    expect_normalized_text(page.locator("#one"), "please help me")
 
     page.get_by_role("link", name="Answer", exact=True).click()
     page.get_by_role("textbox", name="Text").click()
@@ -131,7 +131,7 @@ def pre_register(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/")
-    expect(page.locator("#one")).to_contain_text("Pre-register to the event!")
+    expect_normalized_text(page.locator("#one"), "Pre-register to the event!")
     page.get_by_role("link", name="Pre-register to the event!").click()
 
     submit_confirm(page)
@@ -140,7 +140,7 @@ def pre_register(live_server: Any, page: Any) -> None:
     page.get_by_role("textbox", name="Informations").fill("bauuu")
     page.get_by_label("Event").select_option("1")
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text("bauuu")
+    expect_normalized_text(page.locator("#one"), "bauuu")
 
     # disable preregistration, sign up really
     go_to(page, live_server, "/test/manage/config")

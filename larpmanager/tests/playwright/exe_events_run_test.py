@@ -22,7 +22,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import go_to, login_orga, submit_confirm, expect_normalized_text
 
 pytestmark = pytest.mark.e2e
 
@@ -57,9 +57,9 @@ def test_exe_events_run(pw_page: Any) -> None:
     page.locator("#id_end").click()
     submit_confirm(page)
 
-    expect(page.locator("#one")).to_contain_text("Prova Event")
+    expect_normalized_text(page.locator("#one"), "Prova Event")
     go_to(page, live_server, "/prova/1/manage/")
 
-    expect(page.locator("#banner")).to_contain_text("Prova Event")
+    expect_normalized_text(page.locator("#banner"), "Prova Event")
     go_to(page, live_server, "")
-    expect(page.locator("#one")).to_contain_text("Prova Event")
+    expect_normalized_text(page.locator("#one"), "Prova Event")

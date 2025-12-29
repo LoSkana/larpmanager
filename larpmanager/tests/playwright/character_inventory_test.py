@@ -90,11 +90,10 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
     page.get_by_role("button", name="Confirm").click()
-    page.locator("[id=\"1\"]").get_by_role("link", name="").click()
+    page.locator('[id="1"]').get_by_role("link", name="").click()
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:
-
     # transfer credits to the test character's storage
     page.get_by_role("row", name="Credits 0 NPC Transfer Add").get_by_placeholder("Amount").click()
     page.get_by_role("row", name="Credits 0 NPC Transfer Add").get_by_placeholder("Amount").fill("3")

@@ -22,7 +22,15 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, go_to, login_orga, login_user, logout, submit_confirm
+from larpmanager.tests.utils import (
+    check_feature,
+    go_to,
+    login_orga,
+    login_user,
+    logout,
+    submit_confirm,
+    expect_normalized_text,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -33,10 +41,10 @@ def test_orga_event_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/")
-    expect(page.locator("#header")).to_contain_text("Access denied")
+    expect_normalized_text(page.locator("#header"), "Access denied")
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect(page.locator("#header")).to_contain_text("Access denied")
+    expect_normalized_text(page.locator("#header"), "Access denied")
 
     login_orga(page, live_server)
 
@@ -50,13 +58,13 @@ def test_orga_event_role(pw_page: Any) -> None:
     check_feature(page, "Configuration")
     check_feature(page, "Accounting")
     submit_confirm(page)
-    expect(page.locator('[id="u2"]')).to_contain_text("Event (Configuration), Accounting (Accounting)")
+    expect_normalized_text(page.locator('[id="u2"]'), "Event (Configuration), Accounting (Accounting)")
 
     logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect(page.locator("#banner")).to_contain_text("Event accounting - Test Larp")
+    expect_normalized_text(page.locator("#banner"), "Event accounting - Test Larp")
 
     logout(page)
     login_orga(page, live_server)
@@ -71,7 +79,7 @@ def test_orga_event_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/")
-    expect(page.locator("#header")).to_contain_text("Access denied")
+    expect_normalized_text(page.locator("#header"), "Access denied")
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect(page.locator("#header")).to_contain_text("Access denied")
+    expect_normalized_text(page.locator("#header"), "Access denied")

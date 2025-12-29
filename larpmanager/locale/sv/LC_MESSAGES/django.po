@@ -3290,6 +3290,9 @@ msgstr "Redigera post"
 msgid "Character Inventory"
 msgstr "Karaktärsinventering"
 
+msgid "Character inventory"
+msgstr "Karaktärsinventering"
+
 msgid "Character not found"
 msgstr "Tecknet hittades inte"
 

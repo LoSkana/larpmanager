@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized_text
 
 pytestmark = pytest.mark.e2e
 
@@ -47,26 +47,26 @@ def test_exe_accounting(pw_page: Any) -> None:
 
 def verify(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/accounting/")
-    expect(page.locator("#one")).to_contain_text("Total revenue: 133.00")
-    expect(page.locator("#one")).to_contain_text("Net profit: 71.00")
-    expect(page.locator("#one")).to_contain_text("Organization tax: 17.29")
-    expect(page.locator("#one")).to_contain_text("Registrations: 70.00")
-    expect(page.locator("#one")).to_contain_text("Outflows: 62.00")
-    expect(page.locator("#one")).to_contain_text("Inflows: 63.00")
-    expect(page.locator("#one")).to_contain_text("Income: 70.00")
+    expect_normalized_text(page.locator("#one"), "Total revenue: 133.00")
+    expect_normalized_text(page.locator("#one"), "Net profit: 71.00")
+    expect_normalized_text(page.locator("#one"), "Organization tax: 17.29")
+    expect_normalized_text(page.locator("#one"), "Registrations: 70.00")
+    expect_normalized_text(page.locator("#one"), "Outflows: 62.00")
+    expect_normalized_text(page.locator("#one"), "Inflows: 63.00")
+    expect_normalized_text(page.locator("#one"), "Income: 70.00")
 
     go_to(page, live_server, "/test/manage/payments/")
     # Check for payment row with value 70
     expect(page.get_by_role("row", name="Admin Test Money 70")).to_be_visible()
 
     go_to(page, live_server, "/manage/accounting/")
-    expect(page.locator("#one")).to_contain_text("20.00")
-    expect(page.locator("#one")).to_contain_text("91.00")
-    expect(page.locator("#one")).to_contain_text("70.00")
-    expect(page.locator("#one")).to_contain_text("93.00")
-    expect(page.locator("#one")).to_contain_text("72.00")
-    expect(page.locator("#one")).to_contain_text("10.00")
-    expect(page.locator("#one")).to_contain_text("30.00")
+    expect_normalized_text(page.locator("#one"), "20.00")
+    expect_normalized_text(page.locator("#one"), "91.00")
+    expect_normalized_text(page.locator("#one"), "70.00")
+    expect_normalized_text(page.locator("#one"), "93.00")
+    expect_normalized_text(page.locator("#one"), "72.00")
+    expect_normalized_text(page.locator("#one"), "10.00")
+    expect_normalized_text(page.locator("#one"), "30.00")
 
 
 def sign_up_pay(page: Any, live_server: Any) -> None:

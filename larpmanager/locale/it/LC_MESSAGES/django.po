@@ -3290,6 +3290,9 @@ msgstr "Modifica iscrizione"
 msgid "Character Inventory"
 msgstr "Inventario dei personaggi"
 
+msgid "Character inventory"
+msgstr "Inventario dei personaggi"
+
 msgid "Character not found"
 msgstr "Personaggio non trovato"
 

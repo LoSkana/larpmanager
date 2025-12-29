@@ -626,7 +626,7 @@ class BaseRegistrationForm(MyFormRun):
                 # Track unavailable options by question ID
                 if option.question_id not in self.unavail:
                     self.unavail[option.question_id] = []
-                self.unavail[option.question_id].append(option.id)
+                self.unavail[option.question_id].append(str(option.uuid))
             else:
                 # Append availability count to the display name
                 display_name += " - (" + _("Available") + f" {remaining_availability})"
@@ -647,7 +647,7 @@ class BaseRegistrationForm(MyFormRun):
                 continue
 
             # Check if selected option is unavailable
-            if question.id in self.unavail and int(sel) in self.unavail[question.id]:
+            if question.id in self.unavail and sel in self.unavail[question.id]:
                 self.add_error(field_key, _("Option no longer available"))
 
     def _validate_single_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
@@ -663,7 +663,7 @@ class BaseRegistrationForm(MyFormRun):
             return
 
         # Check if selected option is unavailable
-        if question.id in self.unavail and int(form_data[field_key]) in self.unavail[question.id]:
+        if question.id in self.unavail and form_data[field_key] in self.unavail[question.id]:
             self.add_error(field_key, _("Option no longer available"))
 
     def clean(self) -> dict:

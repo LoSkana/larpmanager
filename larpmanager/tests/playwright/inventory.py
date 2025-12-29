@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga
+from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized_text
 
 pytestmark = pytest.mark.e2e
 
@@ -66,7 +66,7 @@ def prepare(page: Any) -> None:
     page.locator("#id_position").press("Tab")
     page.locator("#id_description").fill("dsf dfsd dfsd")
     page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#one")).to_contain_text("Boc B dd dsf dfsd dfsd Box A bibi asdf dsfds dfdsfs")
+    expect_normalized_text(page.locator("#one"), "Boc B dd dsf dfsd dfsd Box A bibi asdf dsfds dfdsfs")
 
     # add new tags
     page.get_by_role("link", name="Tags").click()
@@ -101,7 +101,7 @@ def add_items(page: Any) -> None:
     load_image(page, "#id_photo")
     page.get_by_role("button", name="Confirm").click()
 
-    expect(page.locator("#one")).to_contain_text("Item 1 sadsada Box A Electrical")
+    expect_normalized_text(page.locator("#one"), "Item 1 sadsada Box A Electrical")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Item 2")
@@ -122,8 +122,8 @@ def add_items(page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # check items
-    expect(page.locator("#one")).to_contain_text(
-        "Item 3sa dsad Box A Item 2 sdsadas Boc B Item 1 sadsada Box A Electrical"
+    expect_normalized_text(
+        page.locator("#one"), "Item 3sa dsad Box A Item 2 sdsadas Boc B Item 1 sadsada Box A Electrical"
     )
 
 
@@ -135,8 +135,8 @@ def bulk(page: Any) -> None:
     page.locator('[id="u1"]').get_by_role("cell", name="Box A").click()
     page.get_by_role("cell", name="sadsada").click()
     page.get_by_role("link", name="Execute").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Item 3sa dsad Boc B Item 2 sdsadas Boc B Item 1 sadsada Boc B Electrical"
+    expect_normalized_text(
+        page.locator("#one"), "Item 3sa dsad Boc B Item 2 sdsadas Boc B Item 1 sadsada Boc B Electrical"
     )
 
     page.get_by_role("link", name="Bulk").click()
@@ -148,8 +148,8 @@ def bulk(page: Any) -> None:
     page.locator("#operation").select_option("2")
     page.locator("#objs_2").select_option("2")
     page.get_by_role("link", name="Execute").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Item 3sa dsad Boc B Item 2 sdsadas Boc B Gru sad Item 1 sadsada Boc B Gru sad Electrical"
+    expect_normalized_text(
+        page.locator("#one"), "Item 3sa dsad Boc B Item 2 sdsadas Boc B Gru sad Item 1 sadsada Boc B Gru sad Electrical"
     )
 
     # add movement
@@ -161,7 +161,7 @@ def bulk(page: Any) -> None:
     page.locator("#id_notes").click()
     page.locator("#id_notes").fill("maintenance")
     page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#one")).to_contain_text("Item 3sa maintenance")
+    expect_normalized_text(page.locator("#one"), "Item 3sa maintenance")
 
 
 def area_assigmenents(page: Any) -> None:
@@ -187,8 +187,8 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # check
-    expect(page.locator("#one")).to_contain_text(
-        "sALOON SDsad saddsadsa Item assignments Kitchen ss sds Item assignments"
+    expect_normalized_text(
+        page.locator("#one"), "sALOON SDsad saddsadsa Item assignments Kitchen ss sds Item assignments"
     )
 
     # assign items
@@ -205,8 +205,9 @@ def area_assigmenents(page: Any) -> None:
     # check
     page.get_by_role("link", name="Area").click()
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Item 3sa dsad Boc B sss Item 1 sadsada Boc B Gru sadElectrical ffff Item 2 sdsadas Boc B Gru sad"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Item 3sa dsad Boc B sss Item 1 sadsada Boc B Gru sadElectrical ffff Item 2 sdsadas Boc B Gru sad",
     )
     expect(page.locator('[id="u3"]')).to_match_aria_snapshot('- cell ""')
     expect(page.locator('[id="u1"]')).to_match_aria_snapshot('- cell ""')
@@ -223,14 +224,14 @@ def area_assigmenents(page: Any) -> None:
 def checks(page: Any) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
-    expect(page.locator("#one")).to_contain_text("New Kitchen Position: ss Description: sds")
-    expect(page.locator("#one")).to_contain_text(
-        "Item 1 Boc B - dd Item 3sa Boc B - dd b sALOON Position: SDsad Description: saddsadsa "
+    expect_normalized_text(page.locator("#one"), "New Kitchen Position: ss Description: sds")
+    expect_normalized_text(
+        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Boc B - dd b sALOON Position: SDsad Description: saddsadsa "
     )
-    expect(page.locator("#one")).to_contain_text("Item 1 Boc B - dd ffff Item 3sa Boc B - dd sss")
+    expect_normalized_text(page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Boc B - dd sss")
 
     # check checks
     page.get_by_role("link", name="Checks").click()
-    expect(page.locator("#one")).to_contain_text("Item 1 Description: sadsada Photo")
-    expect(page.locator("#one")).to_contain_text("Kitchen sALOON ffff Item 3sa Description: dsad")
-    expect(page.locator("#one")).to_contain_text("Kitchen b sALOON sss")
+    expect_normalized_text(page.locator("#one"), "Item 1 Description: sadsada Photo")
+    expect_normalized_text(page.locator("#one"), "Kitchen sALOON ffff Item 3sa Description: dsad")
+    expect_normalized_text(page.locator("#one"), "Kitchen b sALOON sss")

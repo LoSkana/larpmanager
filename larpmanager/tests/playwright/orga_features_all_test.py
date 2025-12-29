@@ -49,7 +49,7 @@ def test_orga_features_all(pw_page: Any) -> None:
 def visit_all(page: Any, live_server: Any) -> None:
     # Visit every link
     visited_links = set()
-    links_to_visit = {live_server + "/manage/"}
+    links_to_visit = {live_server + "/test/manage/"}
     while links_to_visit:
         current_link = links_to_visit.pop()
         if current_link in visited_links:

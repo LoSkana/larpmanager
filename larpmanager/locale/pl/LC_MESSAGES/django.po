@@ -3290,6 +3290,9 @@ msgstr "Zmiana rejestracji"
 msgid "Character Inventory"
 msgstr "Spis postaci"
 
+msgid "Character inventory"
+msgstr "Spis postaci"
+
 msgid "Character not found"
 msgstr "Nie znaleziono znaku"
 

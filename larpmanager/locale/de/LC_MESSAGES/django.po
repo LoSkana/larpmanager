@@ -3290,6 +3290,9 @@ msgstr "Eintrag bearbeiten"
 msgid "Character Inventory"
 msgstr "Charakter-Inventar"
 
+msgid "Character inventory"
+msgstr "Charakter-Inventar"
+
 msgid "Character not found"
 msgstr "Zeichen nicht gefunden"
 

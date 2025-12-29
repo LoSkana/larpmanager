@@ -429,7 +429,7 @@ def get_char_check(
     for char in context["chars"].values():
         if char.get("uuid", "") == character_uuid:
             context["char"] = char
-        break
+            break
 
     if "char" not in context:
         raise NotFoundError

@@ -23,7 +23,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import expect_normalized_text, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -77,7 +77,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     expect(page.get_by_label("Ticket (*)")).to_have_value("2")
     page.get_by_role("button", name="Continue").click()
     page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#one")).to_contain_text("Registration confirmed (Staff)")
+    expect_normalized_text(page.locator("#one"), "Registration confirmed (Staff)")
 
 
 def check_character_your_link(page: Any, live_server: Any) -> None:
@@ -97,8 +97,8 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
 
     # Go to your character, check result
     go_to(page, live_server, "/test/character/your")
-    expect(page.locator("#banner")).to_contain_text("Test Character - Test Larp")
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test Presentation Test Teaser Text Test Text")
+    expect_normalized_text(page.locator("#banner"), "Test Character - Test Larp")
+    expect_normalized_text(page.locator("#one"), "Player: Admin Test Presentation Test Teaser Text Test Text")
 
 
 def check_acc_pay_link(page: Any, live_server: Any) -> None:
@@ -142,13 +142,13 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="to confirm it proceed with").click()
 
     go_to(page, live_server, "/accounting/pay/test/")
-    expect(page.locator("#one")).to_contain_text("Choose the payment method: Wire sadsadsa Submit")
+    expect_normalized_text(page.locator("#one"), "Choose the payment method: Wire sadsadsa Submit")
 
     go_to(page, live_server, "/accounting/pay/test/wire/")
-    expect(page.locator("#one")).to_contain_text("You are about to make a payment of: 100 €. Follow the steps below:")
+    expect_normalized_text(page.locator("#one"), "You are about to make a payment of: 100 €. Follow the steps below:")
 
     go_to(page, live_server, "/accounting/pay/test/paypal/")
-    expect(page.locator("#one")).to_contain_text("Choose the payment method: Wire sadsadsa Submit")
+    expect_normalized_text(page.locator("#one"), "Choose the payment method: Wire sadsadsa Submit")
 
 
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
@@ -175,7 +175,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # check result
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("primaaa Primary Test Character tranver Transversal Test Character")
+    expect_normalized_text(page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
 
     # add second event in campaing
     go_to(page, live_server, "/manage")
@@ -202,7 +202,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # check we have for now the same factions
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("link", name="Factions").click()
-    expect(page.locator("#one")).to_contain_text("primaaa Primary tranver Transversal")
+    expect_normalized_text(page.locator("#one"), "primaaa Primary tranver Transversal")
 
     # set independ factions, check
     page.get_by_role("link", name="Configuration").click()
@@ -210,7 +210,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#id_campaign_faction_indep").check()
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Factions").click()
-    expect(page.locator("#one")).to_contain_text("No elements are currently available")
+    expect_normalized_text(page.locator("#one"), "No elements are currently available")
 
     # add new factions
     page.get_by_role("link", name="New").click()
@@ -232,19 +232,19 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # check situation in second event
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
+    expect_normalized_text(page.locator("#one"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
+    expect_normalized_text(page.locator("#one"), "#1 Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
 
     # check situation in first event
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Factions").click()
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("primaaa Primary Test Character tranver Transversal Test Character")
+    expect_normalized_text(page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text primaaa tranver")
+    expect_normalized_text(page.locator("#one"), "#1 Test Character Test Teaser Test Text primaaa tranver")
 
 
 def acc_refund(page: Any, live_server: Any) -> None:
@@ -275,10 +275,10 @@ def acc_refund(page: Any, live_server: Any) -> None:
     page.get_by_role("spinbutton", name="Value").click()
     page.get_by_role("spinbutton", name="Value").fill("20")
     page.get_by_role("button", name="Submit").click()
-    expect(page.locator("#one")).to_contain_text("Requests open: asdsadsadsa (20.00)")
+    expect_normalized_text(page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
 
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Refunds").click()
-    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test20200RequestDone")
+    expect_normalized_text(page.locator("#one"), "asdsadsadsaAdmin Test20200RequestDone")
     page.get_by_role("link", name="Done").click()
-    expect(page.locator("#one")).to_contain_text("asdsadsadsaAdmin Test20180Delivered")
+    expect_normalized_text(page.locator("#one"), "asdsadsadsaAdmin Test20180Delivered")

@@ -34,6 +34,8 @@ def populate_uuids(apps, schema_editor):
         'AccountingItemPayment', 'AccountingItemExpense',
         'AccountingItemOutflow', 'AccountingItemInflow',
         'AccountingItemDiscount', 'AccountingItemCollection',
+        # Inventory models
+        'Inventory', 'PoolTypeCI', 'PoolBalanceCI',
     ]
 
     for model_name in models_to_populate:
@@ -140,6 +142,10 @@ class Migration(migrations.Migration):
         ('accountingiteminflow', 'AccountingItemInflow'),
         ('accountingitemdiscount', 'AccountingItemDiscount'),
         ('accountingitemcollection', 'AccountingItemCollection'),
+        # Inventory models
+        ('inventory', 'Inventory'),
+        ('pooltypeci', 'PoolTypeCI'),
+        ('poolbalanceci', 'PoolBalanceCI'),
     ]
 
     # Step 1: Add UUID fields as nullable for all models (except Registration)

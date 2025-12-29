@@ -22,7 +22,15 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, go_to, login_orga, login_user, logout, submit_confirm
+from larpmanager.tests.utils import (
+    check_feature,
+    go_to,
+    login_orga,
+    login_user,
+    logout,
+    submit_confirm,
+    expect_normalized_text,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -33,7 +41,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect(page.locator("#header")).to_contain_text("Access denied")
+    expect_normalized_text(page.locator("#header"), "Access denied")
 
     login_orga(page, live_server)
 
@@ -47,13 +55,13 @@ def test_exe_association_role(pw_page: Any) -> None:
     check_feature(page, "Configuration")
     check_feature(page, "Accounting")
     submit_confirm(page)
-    expect(page.locator('[id="u2"]')).to_contain_text("Organization (Configuration), Accounting (Accounting)")
+    expect_normalized_text(page.locator('[id="u2"]'), "Organization (Configuration), Accounting (Accounting)")
 
     logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/accounting/")
-    expect(page.locator("#banner")).to_contain_text("Accounting - Organization")
+    expect_normalized_text(page.locator("#banner"), "Accounting - Organization")
 
     logout(page)
     login_orga(page, live_server)
@@ -68,4 +76,4 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect(page.locator("#header")).to_contain_text("Access denied")
+    expect_normalized_text(page.locator("#header"), "Access denied")

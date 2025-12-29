@@ -921,7 +921,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Process each element: set display type and generate view URL
         for el in context["list"]:
             el.type = _(model_name)
-            el.url = reverse(f"orga_{model_name}s_view", args=[context["run"].get_slug(), el.id])
+            el.url = reverse(f"orga_{model_name}s_view", args=[context["run"].get_slug(), el.uuid])
 
         # Add all elements of this type to the combined list
         context["alls"].extend(context["list"])

@@ -3290,6 +3290,9 @@ msgstr "Upravit položku"
 msgid "Character Inventory"
 msgstr "Soupis postav"
 
+msgid "Character inventory"
+msgstr "Soupis postav"
+
 msgid "Character not found"
 msgstr "Znak nebyl nalezen"
 

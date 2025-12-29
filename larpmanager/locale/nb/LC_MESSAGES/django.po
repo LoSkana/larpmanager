@@ -3290,6 +3290,9 @@ msgstr "Rediger oppføring"
 msgid "Character Inventory"
 msgstr "Karakterinventar"
 
+msgid "Character inventory"
+msgstr "Karakterinventar"
+
 msgid "Character not found"
 msgstr "Tegn ikke funnet"
 

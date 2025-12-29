@@ -111,7 +111,6 @@ class TestCastingValidationFunctions(BaseTestCase):
         self.assertLess(char_4_index, char_7_index, "Character with number=4 should come before number=7")
         self.assertLess(char_7_index, char_10_index, "Character with number=7 should come before number=10")
 
-
     def test_valid_element_ids_type(self):
         """Test that valid_element_ids is a set"""
         context = {

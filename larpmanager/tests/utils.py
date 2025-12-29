@@ -21,6 +21,7 @@
 import io
 import logging
 import os
+import re
 import zipfile
 from pathlib import Path
 from typing import Any, NoReturn
@@ -241,3 +242,27 @@ def upload(page: Any, element_id: Any, image_path: Any) -> None:
     inp.scroll_into_view_if_needed()
     expect(inp).to_be_visible(timeout=60000)
     inp.set_input_files(str(image_path))
+
+
+def normalize_whitespace(text: str) -> str:
+    """Normalize whitespace by removing newlines and collapsing multiple spaces."""
+
+    # Replace newlines and tabs with spaces
+    text = text.replace("\n", " ").replace("\r", " ").replace("\t", " ")
+    # Collapse multiple spaces into single space
+    text = re.sub(r"\s+", " ", text)
+    # Strip leading/trailing whitespace
+    return text.strip()
+
+
+def expect_normalized_text(locator: Any, expected_text: str) -> None:
+    """Assert that locator contains expected text after normalizing whitespace."""
+    actual_text = locator.inner_text()
+    normalized_actual = normalize_whitespace(actual_text)
+    normalized_expected = normalize_whitespace(expected_text)
+
+    assert normalized_expected in normalized_actual, (
+        f"Expected text not found.\n"
+        f"Expected (normalized): {normalized_expected}\n"
+        f"Actual (normalized): {normalized_actual}"
+    )

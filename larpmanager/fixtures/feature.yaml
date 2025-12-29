@@ -756,7 +756,7 @@
     module: event
 - model: larpmanager.feature
   fields:
-    name: Inventory
+    name: Character inventory
     descr: Allows characters to have inventories
     slug: inventory
     overall: false

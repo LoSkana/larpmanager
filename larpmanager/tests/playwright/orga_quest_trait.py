@@ -22,7 +22,14 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, fill_tinymce, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import (
+    check_feature,
+    fill_tinymce,
+    go_to,
+    login_orga,
+    submit_confirm,
+    expect_normalized_text,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -43,13 +50,15 @@ def test_quest_trait(pw_page: Any) -> None:
     # check result
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Test Character").nth(1).click()
-    expect(page.locator("#one")).to_contain_text(
-        "Player: Admin Test Presentation Test Teaser Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Player: Admin Test Presentation Test Teaser Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Torta - Strudel saleee Test CharacterTest CharacterPlayer: Admin TestTest Teaser (...)veronese Torta - Strudel Test Character Player: Admin Test"
+    expect_normalized_text(
+        page.locator("#one"),
+        "Torta - Strudel saleee Test CharacterTest CharacterPlayer: Admin TestTest Teaser (...)veronese Torta - Strudel Test Character Player: Admin Test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
 
@@ -87,7 +96,7 @@ def quests(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    expect(page.locator("#one")).to_contain_text("Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
+    expect_normalized_text(page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
 
 
 def traits(page: Any, live_server: Any) -> None:
@@ -139,9 +148,9 @@ def traits(page: Any, live_server: Any) -> None:
     # check how they appear on user side
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
-    expect(page.locator("#one")).to_contain_text("Name Quest Lore Torta , Pizza")
+    expect_normalized_text(page.locator("#one"), "Name Quest Lore Torta , Pizza")
     page.get_by_role("link", name="Torta").click()
-    expect(page.locator("#one")).to_contain_text("Presentation zucchero Traits Strudel - trentina Nonna - amelia")
+    expect_normalized_text(page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
 def signups(page: Any, live_server: Any) -> None:
@@ -209,8 +218,8 @@ def casting(page: Any, live_server: Any) -> None:
     # check signups
     page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="Lore").click()
-    expect(page.locator("#one")).to_contain_text(
-        "User Test Standard #2 Another Admin Test Standard #1 Test Character Torta - Nonna"
+    expect_normalized_text(
+        page.locator("#one"), "User Test Standard #2 Another Admin Test Standard #1 Test Character Torta - Nonna"
     )
 
     # manual trait assignments
@@ -220,6 +229,7 @@ def casting(page: Any, live_server: Any) -> None:
 
     # check result
     page.get_by_role("link", name="Lore").click()
-    expect(page.locator("#one")).to_contain_text(
-        "User Test Standard #2 Another Torta - Strudel Admin Test Standard #1 Test Character Torta - Nonna"
+    expect_normalized_text(
+        page.locator("#one"),
+        "User Test Standard #2 Another Torta - Strudel Admin Test Standard #1 Test Character Torta - Nonna",
     )
