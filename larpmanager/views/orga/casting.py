@@ -138,9 +138,9 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
 
     # Process each assignment in the results string
     for assignment_string in assignment_results.split():
-        parts = assignment_string.split("_")
+        parts = assignment_string.split("_", 1)  # Split only on first underscore for safety
         try:
-            # Extract member ID and get member object
+            # Extract member UUID and get member object
             member_uuid = parts[0]
             member = Member.objects.get(uuid=member_uuid)
 
@@ -165,7 +165,7 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
                 get_element(temp_context, entity_uuid, "trait", Trait)
                 # Create trait assignment for non-character types
                 AssignmentTrait.objects.create(
-                    trait_id=context["trait"].id,
+                    trait_id=temp_context["trait"].id,  # Fixed: use temp_context instead of context
                     run_id=registration.run_id,
                     member=member,
                     typ=context["quest_type"].number,

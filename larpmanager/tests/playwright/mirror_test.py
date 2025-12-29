@@ -96,6 +96,7 @@ def casting(live_server: Any, page: Any) -> None:
     page.locator("#choice0").click()
     expect_normalized(page.locator("#casting"), "Mirror")
     expect_normalized(page.locator("#casting"), "Test Character")
+    page.wait_for_timeout(5000)
     page.locator("#choice0").select_option("u2")
     submit(page)
 
