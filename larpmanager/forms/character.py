@@ -908,8 +908,8 @@ class OrgaWritingOptionForm(MyForm):
         """
         super().__init__(*args, **kwargs)
 
-        if "question_id" in self.params:
-            self.initial["question"] = self.params["question_id"]
+        if "question_uuid" in self.params:
+            self.initial["question"] = self.params["question_uuid"]
 
         if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")

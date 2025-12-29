@@ -401,6 +401,8 @@ class TemplateS2Widget(s2forms.ModelSelect2Widget):
 class AssocMS2:
     """Represents AssocMS2 model."""
 
+    to_field_name = "uuid"
+
     search_fields: ClassVar[list] = [
         "name__icontains",
         "surname__icontains",

@@ -652,11 +652,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     load_js: ClassVar[list] = ["characters-reg-choices"]
 
-    ticket = forms.ModelChoiceField(
-        queryset=RegistrationTicket.objects.none(),
-        required=True,
-    )
-
     class Meta:
         model = Registration
 
@@ -1272,8 +1267,8 @@ class OrgaRegistrationOptionForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Set initial question value from params if question_id is present
-        if "question_id" in self.params:
-            self.initial["question"] = self.params["question_id"]
+        if "question_uuid" in self.params:
+            self.initial["question"] = self.params["question_uuid"]
 
 
 class OrgaRegistrationQuotaForm(MyForm):
