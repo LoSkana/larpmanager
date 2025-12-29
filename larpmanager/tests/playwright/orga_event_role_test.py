@@ -29,7 +29,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     submit_confirm,
-    expect_normalized_text,
+    expect_normalized,
 )
 
 pytestmark = pytest.mark.e2e
@@ -41,10 +41,10 @@ def test_orga_event_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/")
-    expect_normalized_text(page.locator("#header"), "Access denied")
+    expect_normalized(page.locator("#header"), "Access denied")
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect_normalized_text(page.locator("#header"), "Access denied")
+    expect_normalized(page.locator("#header"), "Access denied")
 
     login_orga(page, live_server)
 
@@ -58,13 +58,13 @@ def test_orga_event_role(pw_page: Any) -> None:
     check_feature(page, "Configuration")
     check_feature(page, "Accounting")
     submit_confirm(page)
-    expect_normalized_text(page.locator('[id="u2"]'), "Event (Configuration), Accounting (Accounting)")
+    expect_normalized(page.locator('[id="u2"]'), "Event (Configuration), Accounting (Accounting)")
 
     logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect_normalized_text(page.locator("#banner"), "Event accounting - Test Larp")
+    expect_normalized(page.locator("#banner"), "Event accounting - Test Larp")
 
     logout(page)
     login_orga(page, live_server)
@@ -79,7 +79,7 @@ def test_orga_event_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/")
-    expect_normalized_text(page.locator("#header"), "Access denied")
+    expect_normalized(page.locator("#header"), "Access denied")
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect_normalized_text(page.locator("#header"), "Access denied")
+    expect_normalized(page.locator("#header"), "Access denied")

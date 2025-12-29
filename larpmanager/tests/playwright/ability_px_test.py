@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized_text, fill_tinymce, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -167,9 +167,9 @@ def delivery(live_server: Any, page: Any) -> None:
     # check px computation
     go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="XP").click()
-    expect_normalized_text(page.locator('[id="u1"]'), "12")
-    expect_normalized_text(page.locator('[id="u1"]'), "12")
-    expect_normalized_text(page.locator('[id="u1"]'), "0")
+    expect_normalized(page.locator('[id="u1"]'), "12")
+    expect_normalized(page.locator('[id="u1"]'), "12")
+    expect_normalized(page.locator('[id="u1"]'), "0")
     page.get_by_role("link", name="").click()
     page.wait_for_load_state("load")
     page.wait_for_timeout(2000)
@@ -180,9 +180,9 @@ def delivery(live_server: Any, page: Any) -> None:
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
     page.get_by_role("link", name="XP").click()
-    expect_normalized_text(page.locator('[id="u1"]'), "11")
-    expect_normalized_text(page.locator('[id="u1"]'), "12")
-    expect_normalized_text(page.locator('[id="u1"]'), "1")
+    expect_normalized(page.locator('[id="u1"]'), "11")
+    expect_normalized(page.locator('[id="u1"]'), "12")
+    expect_normalized(page.locator('[id="u1"]'), "1")
 
 
 def rules(page: Any) -> None:
@@ -208,7 +208,7 @@ def rules(page: Any) -> None:
     # check value
     page.get_by_role("link", name="Characters").click()
     page.get_by_role("link", name="Hit Point").click()
-    expect_normalized_text(page.locator("#one"), "#1 Test Character Test Teaser Test Text 6")
+    expect_normalized(page.locator("#one"), "#1 Test Character Test Teaser Test Text 6")
 
     # remove ability
     page.get_by_role("link", name="").click()
@@ -218,7 +218,7 @@ def rules(page: Any) -> None:
 
     # recheck value
     page.get_by_role("link", name="Hit Point").click()
-    expect_normalized_text(page.locator("#one"), "#1 Test Character Test Teaser Test Text 2")
+    expect_normalized(page.locator("#one"), "#1 Test Character Test Teaser Test Text 2")
 
     # readd ability
     page.get_by_role("link", name="").click()
@@ -252,7 +252,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Ability").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select abilitydouble shield - 2 Submit",
     )
@@ -260,7 +260,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     # get ability
     page.locator("#ability_select").select_option("2")
     page.get_by_role("button", name="Submit", exact=True).click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Experience points Total Used Available 12 3 9 Abilities base ability double shield (2) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit",
     )
@@ -268,11 +268,11 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
 
     # remove ability
     page.get_by_role("heading", name="double shield (2) ").get_by_role("link").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select abilitydouble shield - 2 Submit",
     )
-    expect_normalized_text(page.locator("#ability_select"), "--- Select abilitydouble shield - 2")
+    expect_normalized(page.locator("#ability_select"), "--- Select abilitydouble shield - 2")
 
 
 def modifiers(page: Any, live_server: Any) -> None:
@@ -294,7 +294,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Ability").click()
 
     # ability is not there
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select abilitydouble shield - 2 Submit",
     )
@@ -304,7 +304,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Ability").click()
     # ability is there (i got the correct class)
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Experience points Total Used Available 12 1 11 Abilities base ability double shield (0) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit",
     )
@@ -314,7 +314,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Ability").click()
     # ability is not there (changed class)
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get base ability --- Select abilitydouble shield - 2 Submit",
     )
@@ -338,7 +338,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Ability").click()
     page.locator("#ability_select").select_option("2")
     page.get_by_role("button", name="Submit").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability Submit",
     )

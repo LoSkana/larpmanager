@@ -22,7 +22,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized_text
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -49,9 +49,9 @@ def feature_fields(page: Any) -> None:
 
     # reorder test
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-    expect_normalized_text(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
     page.locator('[id="u3"]').get_by_role("link", name="").click()
-    expect_normalized_text(page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
+    expect_normalized(page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").click()
@@ -61,7 +61,7 @@ def feature_fields(page: Any) -> None:
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-    expect_normalized_text(page.locator("#one"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
+    expect_normalized(page.locator("#one"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
 
     # add config fields - cover, assigned
     page.get_by_role("link", name="Configuration").click()
@@ -73,7 +73,7 @@ def feature_fields(page: Any) -> None:
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Cover Cover Hidden",
     )
@@ -91,7 +91,7 @@ def feature_fields2(page: Any) -> None:
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
 
@@ -114,7 +114,7 @@ def feature_fields2(page: Any) -> None:
 
     # check it has not been deleted
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden comp Computed Private",
     )
@@ -126,7 +126,7 @@ def feature_fields2(page: Any) -> None:
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
 
@@ -143,15 +143,15 @@ def form_other_writing(page: Any) -> None:
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
     page.get_by_role("link", name="Plot", exact=True).click()
     page.get_by_role("link", name="Character", exact=True).click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden Faction Factions Hidden",
     )
     page.get_by_role("link", name="Plot", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Name Name Concept Presentation Text Sheet")
+    expect_normalized(page.locator("#one"), "Name Name Concept Presentation Text Sheet")
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
     page.locator("#one").get_by_role("link", name="Quest").click()
-    expect_normalized_text(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
     page.get_by_role("link", name="Trait", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page.locator("#one"), "Name Name Presentation Presentation Text Sheet")

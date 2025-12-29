@@ -255,9 +255,14 @@ def normalize_whitespace(text: str) -> str:
     return text.strip().lower()
 
 
-def expect_normalized_text(locator: Any, expected_text: str) -> None:
+def expect_normalized(locator: Any, expected_text: str) -> None:
     """Assert that locator contains expected text after normalizing whitespace."""
-    actual_text = locator.inner_text()
+
+    # Wait for the element to be attached
+    expect(locator).to_be_attached()
+
+    # Get all text including non-visible elements
+    actual_text = locator.text_content() or ""
     normalized_actual = normalize_whitespace(actual_text)
     normalized_expected = normalize_whitespace(expected_text)
 

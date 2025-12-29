@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, load_image, login_orga, expect_normalized_text
+from larpmanager.tests.utils import fill_tinymce, go_to, load_image, login_orga, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -80,7 +80,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     # Check signup accounting
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Admin Test Standard 84060100 60")
+    expect_normalized(page.locator("#one"), "Admin Test Standard 84060100 60")
 
 
 def check_overpay_2(page: Any, live_server: Any) -> None:
@@ -98,11 +98,11 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check signup accounting
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Admin Test Standard 100100 6040")
+    expect_normalized(page.locator("#one"), "Admin Test Standard 100100 6040")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
-    expect_normalized_text(page.locator("#one"), "Tokens Total: 20.00")
+    expect_normalized(page.locator("#one"), "Tokens Total: 20.00")
 
     # Change ticket price
     go_to(page, live_server, "/test/manage")
@@ -115,17 +115,17 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check accounting
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Admin Test Standard -2010080204040")
+    expect_normalized(page.locator("#one"), "Admin Test Standard -2010080204040")
 
     # Perform save
     page.get_by_role("link", name="").click()
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Admin Test Standard 8080 4040")
+    expect_normalized(page.locator("#one"), "Admin Test Standard 8080 4040")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Credits Total: 20.00€. They will be used automatically when you sign up for a new event! Tokens Total: 20.00. They will be used automatically when you sign up for a new event! Registration history Test Larp Test Larp Ticket chosen Standard (80.00€)",
     )
@@ -140,14 +140,14 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator("#id_registration_reg_que_allowed").check()
     page.get_by_role("button", name="Confirm").click()
     page.get_by_role("link", name="Registrations", exact=True).click()
-    expect_normalized_text(page.locator("#one"), "Admin Test Standard")
+    expect_normalized(page.locator("#one"), "Admin Test Standard")
     page.get_by_role("link", name="").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#main_form"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it Details Unique code Confirm",
     )
     page.get_by_role("button", name="Confirm").click()
-    expect_normalized_text(page.locator("#one"), "Admin Test Standard")
+    expect_normalized(page.locator("#one"), "Admin Test Standard")
 
 
 def prologues(page: Any) -> None:
@@ -177,7 +177,7 @@ def prologues(page: Any) -> None:
 
     # check result
     page.get_by_role("link", name="Characters").click()
-    expect_normalized_text(page.locator("#one"), "P1 ffff (test) #1 Test Character")
+    expect_normalized(page.locator("#one"), "P1 ffff (test) #1 Test Character")
 
 
 def upload_membership(page: Any, live_server: Any) -> None:
@@ -207,7 +207,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # Try accessing member form
-    expect_normalized_text(page.locator("#one"), "Test Admin orga@test.it Accepted 1")
+    expect_normalized(page.locator("#one"), "Test Admin orga@test.it Accepted 1")
     page.get_by_role("link", name="").click()
 
     # Check result
@@ -216,9 +216,9 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Submit").click()
     go_to(page, live_server, "/membership")
 
-    expect_normalized_text(page.locator("#one"), "You are a regular member of our Organization")
-    expect_normalized_text(page.locator("#one"), "In the membership book the number of your membership card is: 0001")
-    expect_normalized_text(
+    expect_normalized(page.locator("#one"), "You are a regular member of our Organization")
+    expect_normalized(page.locator("#one"), "In the membership book the number of your membership card is: 0001")
+    expect_normalized(
         page.locator("#one"), "The payment of your membership fee for this year has NOT been receive"
     )
 
@@ -250,6 +250,6 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Confirm").click()
 
     # check
-    expect_normalized_text(page.locator("#one"), "Test Admin orga@test.it Payed 1")
+    expect_normalized(page.locator("#one"), "Test Admin orga@test.it Payed 1")
     page.get_by_role("link", name="Invoices").click()
-    expect_normalized_text(page.locator("#one"), "Admin TestWiremembershipConfirmed10Membership fee of Admin Test")
+    expect_normalized(page.locator("#one"), "Admin TestWiremembershipConfirmed10Membership fee of Admin Test")

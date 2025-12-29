@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, submit, expect_normalized_text
+from larpmanager.tests.utils import go_to, load_image, submit, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -73,4 +73,4 @@ def test_exe_join(pw_page: Any) -> None:
     page.wait_for_timeout(1000)
     go_to(page, live_server, "/debug/prova")
 
-    expect_normalized_text(page.locator("#header"), "Prova Larp")
+    expect_normalized(page.locator("#header"), "Prova Larp")

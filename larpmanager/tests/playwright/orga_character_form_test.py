@@ -31,7 +31,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     submit_confirm,
-    expect_normalized_text,
+    expect_normalized,
 )
 
 pytestmark = pytest.mark.e2e
@@ -83,7 +83,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="pinoloooooooooo").click()
-    expect_normalized_text(page.locator("#one"), "Player: Admin Test public: public Presentation baba")
+    expect_normalized(page.locator("#one"), "Player: Admin Test public: public Presentation baba")
 
     create_second_char(live_server, page)
 
@@ -114,11 +114,11 @@ def create_second_char(live_server: Any, page: Any) -> None:
     )
     expect(page.get_by_role("checkbox", name="few")).to_be_disabled()
     page.get_by_role("checkbox", name="many - (Available 1)").check()
-    expect_normalized_text(page.locator('[id="id_que_u7_tr"]'), "options: 1 / 2")
+    expect_normalized(page.locator('[id="id_que_u7_tr"]'), "options: 1 / 2")
     page.locator("#id_que_u9").click()
     page.locator("#id_que_u9").fill("asda")
     submit_confirm(page)
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds",
     )
@@ -173,19 +173,19 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect(page.locator("#id_que_u8")).to_have_value("7")
     expect(page.locator("#id_que_u10")).to_have_value("disabled")
     expect(page.locator("#id_que_u11")).to_have_value("hidden")
-    expect_normalized_text(page.locator("#lbl_id_que_u4"), "short text")
+    expect_normalized(page.locator("#lbl_id_que_u4"), "short text")
     page.get_by_role("cell", name="long text").dblclick()
-    expect_normalized_text(page.locator("#lbl_id_que_u5"), "long text")
-    expect_normalized_text(page.locator("#main_form"), "short descr")
+    expect_normalized(page.locator("#lbl_id_que_u5"), "long text")
+    expect_normalized(page.locator("#main_form"), "short descr")
     page.get_by_text("long descr").click()
 
 
 def recheck_char(live_server: Any, page: Any) -> None:
-    expect_normalized_text(page.locator("#main_form"), "long descr")
-    expect_normalized_text(page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized_text(page.locator("#main_form"), "restricted textonly only descrall all descr")
-    expect_normalized_text(page.locator('[id="id_que_u7_tr"]'), "multiple text")
-    expect_normalized_text(
+    expect_normalized(page.locator("#main_form"), "long descr")
+    expect_normalized(page.locator("#lbl_id_que_u8"), "restricted")
+    expect_normalized(page.locator("#main_form"), "restricted textonly only descrall all descr")
+    expect_normalized(page.locator('[id="id_que_u7_tr"]'), "multiple text")
+    expect_normalized(
         page.locator('[id="id_que_u7_tr"]'), "multiple descrall all descrmany many descrfew few descr"
     )
     submit_confirm(page)
@@ -206,10 +206,10 @@ def create_first_char(live_server: Any, page: Any) -> None:
 
     fill_presentation_text(page)
 
-    expect_normalized_text(page.locator("#lbl_id_text"), "Text (*)")
-    expect_normalized_text(page.locator("#lbl_id_teaser"), "Presentation (*)")
-    expect_normalized_text(page.locator("#lbl_id_name"), "Name (*)")
-    expect_normalized_text(page.locator("#main_form"), "short descr")
+    expect_normalized(page.locator("#lbl_id_text"), "Text (*)")
+    expect_normalized(page.locator("#lbl_id_teaser"), "Presentation (*)")
+    expect_normalized(page.locator("#lbl_id_name"), "Name (*)")
+    expect_normalized(page.locator("#main_form"), "short descr")
     page.locator("#id_que_u4").click()
     page.locator("#id_que_u4").fill("aaaaaaaaaa")
     page.locator("#id_que_u4").click()
@@ -217,23 +217,23 @@ def create_first_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u5").click()
     page.locator("#id_que_u5").fill("bbbbbbbbbb")
     expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
-    expect_normalized_text(page.locator("#main_form"), "long descr")
-    expect_normalized_text(page.locator("#main_form"), "text length: 10 / 10")
-    expect_normalized_text(page.locator("#lbl_id_que_u6"), "available text")
-    expect_normalized_text(page.locator("#main_form"), "available descrall allfew few descr")
+    expect_normalized(page.locator("#main_form"), "long descr")
+    expect_normalized(page.locator("#main_form"), "text length: 10 / 10")
+    expect_normalized(page.locator("#lbl_id_que_u6"), "available text")
+    expect_normalized(page.locator("#main_form"), "available descrall allfew few descr")
     page.locator("#id_que_u6").select_option("u1")
     page.locator("#id_que_u8").select_option("u6")
-    expect_normalized_text(page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized_text(page.locator("#main_form"), "restricted textonly only descrall all descr")
+    expect_normalized(page.locator("#lbl_id_que_u8"), "restricted")
+    expect_normalized(page.locator("#main_form"), "restricted textonly only descrall all descr")
     page.get_by_text("many - (Available 2)").click()
     page.locator("#id_que_u7 div").filter(has_text="many - (Available 2)").click()
-    expect_normalized_text(page.locator("#id_que_u7"), "many - (Available 2)")
-    expect_normalized_text(page.locator("#id_que_u7"), "few - (Available 1)")
+    expect_normalized(page.locator("#id_que_u7"), "many - (Available 2)")
+    expect_normalized(page.locator("#id_que_u7"), "few - (Available 1)")
     page.get_by_text("multiple descrall all").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator('[id="id_que_u7_tr"]'), "multiple descrall all descrmany many descrfew few descr"
     )
-    expect_normalized_text(page.locator('[id="id_que_u7_tr"]'), "multiple text")
+    expect_normalized(page.locator('[id="id_que_u7_tr"]'), "multiple text")
     page.get_by_role("checkbox", name="all").check()
     page.get_by_role("checkbox", name="many - (Available 2)").check()
     page.get_by_text("options: 2 /").click()

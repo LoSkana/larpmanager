@@ -22,7 +22,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized_text
+from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -100,8 +100,8 @@ def check_orga_features(page: Any) -> None:
         check_feature(page, s)
 
     submit_confirm(page)
-    expect_normalized_text(page.locator("#one"), "Now you can set customization options")
-    expect_normalized_text(
+    expect_normalized(page.locator("#one"), "Now you can set customization options")
+    expect_normalized(
         page.locator("#one"), "You have activated the following features, for each here's the links to follow"
     )
     page.get_by_role("link", name="Features").click()
@@ -137,7 +137,7 @@ def check_orga_roles(page: Any) -> None:
     for s in checked:
         check_feature(page, s)
     submit_confirm(page)
-    expect_normalized_text(page.locator('[id="u2"]'), "Event (Event, Configuration), Appearance (Texts, Navigation)")
+    expect_normalized(page.locator('[id="u2"]'), "Event (Event, Configuration), Appearance (Texts, Navigation)")
     page.get_by_role("row", name=" testona Admin Test Event (").get_by_role("link").click()
     _check_checkboxes(checked, page)
 
@@ -181,7 +181,7 @@ def check_exe_features(page: Any) -> None:
         check_feature(page, s)
 
     submit_confirm(page)
-    expect_normalized_text(page.locator("#one"), "Now you can create event templates")
+    expect_normalized(page.locator("#one"), "Now you can create event templates")
     page.get_by_role("link", name="Features").click()
     _check_checkboxes(checked, page, True)
 

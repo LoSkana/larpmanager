@@ -24,7 +24,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     check_feature,
-    expect_normalized_text,
+    expect_normalized,
     fill_tinymce,
     go_to,
     go_to_check,
@@ -54,7 +54,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     page.locator("#id_name").press("End")
     page.locator("#id_name").fill("Test Character2")
     submit_confirm(page)
-    expect_normalized_text(page.locator("#one"), "Test Character2 Test Teaser Test Text")
+    expect_normalized(page.locator("#one"), "Test Character2 Test Teaser Test Text")
 
     # change teaser
     page.get_by_role("cell", name="Test Teaser").dblclick()
@@ -63,7 +63,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser + 2")
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").press("ControlOrMeta+s")
     submit_confirm(page)
-    expect_normalized_text(page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text")
+    expect_normalized(page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text")
 
     # change text
     page.get_by_role("cell", name="Test Text").dblclick()
@@ -73,7 +73,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect_normalized_text(page.locator("#one"), "#1 Test Character2 Test Teaser + 2 Test Text ff")
+    expect_normalized(page.locator("#one"), "#1 Test Character2 Test Teaser + 2 Test Text ff")
 
     # add new
     page.get_by_role("link", name="New").click()
@@ -91,7 +91,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     # check
     page.wait_for_timeout(2000)
     submit_confirm(page)
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "#1 Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1",
     )
@@ -118,7 +118,7 @@ def excel(page: Any, live_server: Any) -> None:
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1",
     )
@@ -133,7 +133,7 @@ def excel(page: Any, live_server: Any) -> None:
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1 ciaoooo",
     )
@@ -141,7 +141,7 @@ def excel(page: Any, live_server: Any) -> None:
     # check in page
     page.locator('[id="u2"]').get_by_role("link", name="").click()
     page.locator('a.my_toggle[tog="f_id_text"]').click()
-    expect_normalized_text(page.locator("#one"), "Text (*) Show <p>ciaoooo</p>")
+    expect_normalized(page.locator("#one"), "Text (*) Show <p>ciaoooo</p>")
 
 
 def external(page: Any, live_server: Any) -> None:
@@ -158,7 +158,7 @@ def external(page: Any, live_server: Any) -> None:
     # logout, then go to the page
     logout(page)
     go_to_check(page, live_server + url)
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#one"),
         "Presentation good friends with Test Character2Test Character2Test Teaser + 2 (...) Text ciaoooo",
     )
@@ -174,7 +174,7 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page1.goto(server + "/test/manage/characters/edit/1/")
     page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.wait_for_timeout(2000)
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#test-larp"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
@@ -187,7 +187,7 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     page1 = context.new_page()
     page1.goto(server + "/test/manage/config")
     page.wait_for_timeout(2000)
-    expect_normalized_text(
+    expect_normalized(
         page.locator("#test-larp"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )

@@ -29,7 +29,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     submit_confirm,
-    expect_normalized_text,
+    expect_normalized,
 )
 
 pytestmark = pytest.mark.e2e
@@ -41,7 +41,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect_normalized_text(page.locator("#header"), "Access denied")
+    expect_normalized(page.locator("#header"), "Access denied")
 
     login_orga(page, live_server)
 
@@ -55,13 +55,13 @@ def test_exe_association_role(pw_page: Any) -> None:
     check_feature(page, "Configuration")
     check_feature(page, "Accounting")
     submit_confirm(page)
-    expect_normalized_text(page.locator('[id="u2"]'), "Organization (Configuration), Accounting (Accounting)")
+    expect_normalized(page.locator('[id="u2"]'), "Organization (Configuration), Accounting (Accounting)")
 
     logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/accounting/")
-    expect_normalized_text(page.locator("#banner"), "Accounting - Organization")
+    expect_normalized(page.locator("#banner"), "Accounting - Organization")
 
     logout(page)
     login_orga(page, live_server)
@@ -76,4 +76,4 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect_normalized_text(page.locator("#header"), "Access denied")
+    expect_normalized(page.locator("#header"), "Access denied")
