@@ -50,6 +50,9 @@ msgstr "Konec"
 msgid "Fee"
 msgstr "Poplatek"
 
+msgid "Low"
+msgstr "Nízká"
+
 msgid "NPC"
 msgstr "NPC"
 
@@ -139,6 +142,9 @@ msgstr "Nápověda"
 
 msgid "Hide"
 msgstr "Skrýt"
+
+msgid "High"
+msgstr "Vysoká"
 
 msgid "Home"
 msgstr "Home"
@@ -582,6 +588,9 @@ msgstr "Mark"
 msgid "Master"
 msgstr "Otec"
 
+msgid "Medium"
+msgstr "Střední"
+
 msgid "Member"
 msgstr "Člen"
 
@@ -950,6 +959,9 @@ msgstr "Webové stránky"
 
 msgid "Welcome"
 msgstr "Vítejte na"
+
+msgid "Working"
+msgstr "Pracovní stránky"
 
 msgid "Writing"
 msgstr "Psaní"

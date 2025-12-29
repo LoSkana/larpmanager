@@ -3401,6 +3401,21 @@ msgstr ""
 msgid "Photo"
 msgstr ""
 
+msgid "Working"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "High"
+msgstr ""
+
 msgid "How can we contact you"
 msgstr ""
 
@@ -4437,9 +4452,6 @@ msgid "Welcome to"
 msgstr ""
 
 msgid "And that is all"
-msgstr ""
-
-msgid "Done"
 msgstr ""
 
 msgid "Tax code verification"

@@ -50,6 +50,9 @@ msgstr "Fin"
 msgid "Fee"
 msgstr "Commission"
 
+msgid "Low"
+msgstr "Faible"
+
 msgid "NPC"
 msgstr "PNJ"
 
@@ -139,6 +142,9 @@ msgstr "Aide"
 
 msgid "Hide"
 msgstr "Cacher"
+
+msgid "High"
+msgstr "Haut"
 
 msgid "Home"
 msgstr "Accueil"
@@ -582,6 +588,9 @@ msgstr "Marque"
 msgid "Master"
 msgstr "Père"
 
+msgid "Medium"
+msgstr "Moyen"
+
 msgid "Member"
 msgstr "Membre"
 
@@ -950,6 +959,9 @@ msgstr "Site web"
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+msgid "Working"
+msgstr "Travailler"
 
 msgid "Writing"
 msgstr "Rédaction"

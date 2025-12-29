@@ -288,6 +288,22 @@ class LarpManagerDiscover(BaseModel):
     )
 
 
+class TicketStatus(models.TextChoices):
+    """Status choices for LarpManagerTicket."""
+
+    OPEN = "open", _("Open")
+    WORKING = "working", _("Working")
+    DONE = "done", _("Done")
+
+
+class TicketPriority(models.TextChoices):
+    """Priority choices for LarpManagerTicket."""
+
+    LOW = "low", _("Low")
+    MEDIUM = "medium", _("Medium")
+    HIGH = "high", _("High")
+
+
 class LarpManagerTicket(UuidMixin, BaseModel):
     """Model for managing support tickets and requests.
 
@@ -324,9 +340,19 @@ class LarpManagerTicket(UuidMixin, BaseModel):
         options={"quality": 80},
     )
 
-    status = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=20,
+        choices=TicketStatus.choices,
+        default=TicketStatus.OPEN,
+        verbose_name=_("Status"),
+    )
 
-    priority = models.CharField(max_length=100, verbose_name=_("Priority"), default="")
+    priority = models.CharField(
+        max_length=20,
+        choices=TicketPriority.choices,
+        default=TicketPriority.LOW,
+        verbose_name=_("Priority"),
+    )
 
     analysis = models.CharField(max_length=10000, verbose_name=_("Analysis"), default="")
 

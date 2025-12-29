@@ -50,6 +50,9 @@ msgstr "Einde"
 msgid "Fee"
 msgstr "Commissie"
 
+msgid "Low"
+msgstr "Laag"
+
 msgid "NPC"
 msgstr "NPC"
 
@@ -139,6 +142,9 @@ msgstr "Help"
 
 msgid "Hide"
 msgstr "Verberg"
+
+msgid "High"
+msgstr "Hoog"
 
 msgid "Home"
 msgstr "Home"
@@ -582,6 +588,9 @@ msgstr "Mark"
 msgid "Master"
 msgstr "Vader"
 
+msgid "Medium"
+msgstr "Medium"
+
 msgid "Member"
 msgstr "Lid"
 
@@ -950,6 +959,9 @@ msgstr "Website"
 
 msgid "Welcome"
 msgstr "Welkom"
+
+msgid "Working"
+msgstr "Werken"
 
 msgid "Writing"
 msgstr "Schrijven"

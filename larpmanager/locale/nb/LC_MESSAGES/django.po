@@ -50,6 +50,9 @@ msgstr "Slutt"
 msgid "Fee"
 msgstr "Kommisjonen"
 
+msgid "Low"
+msgstr "Lav"
+
 msgid "NPC"
 msgstr "NPC"
 
@@ -139,6 +142,9 @@ msgstr "Hjelp"
 
 msgid "Hide"
 msgstr "Skjul"
+
+msgid "High"
+msgstr "Høy"
 
 msgid "Home"
 msgstr "Hjem"
@@ -582,6 +588,9 @@ msgstr "Mark"
 msgid "Master"
 msgstr "Far"
 
+msgid "Medium"
+msgstr "Medium"
+
 msgid "Member"
 msgstr "Medlem"
 
@@ -950,6 +959,9 @@ msgstr "Nettsted"
 
 msgid "Welcome"
 msgstr "Velkommen"
+
+msgid "Working"
+msgstr "Arbeider"
 
 msgid "Writing"
 msgstr "Skriving"
