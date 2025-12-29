@@ -56,10 +56,11 @@
 {% block js %}
     {% include "elements/form/max_length.js" %}
     {% include "elements/helpers/factions-choices.js" %}
+    {{ form.unavail|json_script:"unavail" }}
     <script>
     var dependencies = {{ dependencies | safe }};
 
-    var unavail = {{ form.unavail }};
+    var unavail = JSON.parse(document.getElementById('unavail').textContent);
 
     var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};
 
@@ -77,7 +78,7 @@
 
             Object.entries(unavail).forEach(([question, values]) => {
                 values.forEach(value => {
-                    const selectorPrefix = '#id_q' + question + '_tr ';
+                    const selectorPrefix = '#id_que_' + question + '_tr ';
                     if (hide_unavailable) {
                         $(selectorPrefix + 'option[value="' + value + '"]').remove();
                         $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();

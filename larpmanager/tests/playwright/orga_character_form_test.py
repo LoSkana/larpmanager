@@ -141,9 +141,9 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect(page.locator("#id_que_u4")).to_have_value("aaaaaaaaaa")
     page.get_by_text("bbbbbbbbbb").click()
     expect(page.get_by_text("bbbbbbbbbb")).to_have_value("bbbbbbbbbb")
-    expect(page.locator("#id_que_u6")).to_have_value("1")
+    expect(page.locator("#id_que_u6")).to_have_value("u1")
     page.locator("#id_que_u8").click()
-    expect(page.locator("#id_que_u8")).to_have_value("6")
+    expect(page.locator("#id_que_u8")).to_have_value("u6")
     expect(page.locator("#id_que_u7")).to_match_aria_snapshot(
         '- checkbox "all" [checked]\n- text: all\n- checkbox "many" [checked]\n- text: many\n- checkbox "few - (Available 1)" [disabled]\n- text: few - (Available 1)'
     )
@@ -169,8 +169,8 @@ def check_first_char(page: Any, live_server: Any) -> None:
     page.locator('[id="u2"]').get_by_role("link", name="").click()
     expect(page.locator("#id_que_u4")).to_have_value("cccccccccc")
     expect(page.get_by_text("dddddddddd")).to_have_value("dddddddddd")
-    expect(page.locator("#id_que_u6")).to_have_value("2")
-    expect(page.locator("#id_que_u8")).to_have_value("7")
+    expect(page.locator("#id_que_u6")).to_have_value("u2")
+    expect(page.locator("#id_que_u8")).to_have_value("u7")
     expect(page.locator("#id_que_u10")).to_have_value("disabled")
     expect(page.locator("#id_que_u11")).to_have_value("hidden")
     expect_normalized(page.locator("#lbl_id_que_u4"), "short text")

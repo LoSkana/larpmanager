@@ -96,6 +96,11 @@ class MyForm(forms.ModelForm):
         # Call parent ModelForm initialization with remaining arguments
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
+        # Set to_field_name="uuid" for all ModelChoiceField fields
+        for field in self.fields.values():
+            if isinstance(field, forms.ModelChoiceField):
+                field.to_field_name = "uuid"
+
         # Remove system fields that shouldn't be user-editable
         for m in ["deleted", "temp"]:
             self.delete_field(m)
@@ -107,6 +112,18 @@ class MyForm(forms.ModelForm):
             self.fields["characters"].queryset = self.fields["characters"].widget.get_queryset()
 
         # Handle automatic fields based on instance state
+        self.handle_automatic()
+
+        # Initialize tracking dictionaries for form state management
+        self.mandatory = []
+        self.answers = {}
+        self.singles = {}
+        self.multiples = {}
+        self.unavail = {}
+        self.max_lengths = {}
+
+    def handle_automatic(self) -> None:
+        """Handle automatic fields, that should be automatically populated."""
         for s in self.get_automatic_field():
             if s in self.fields:
                 if self.instance.pk:
@@ -117,21 +134,8 @@ class MyForm(forms.ModelForm):
                     self.fields[s].widget = forms.HiddenInput()
                     self.fields[s].required = False
 
-        # Initialize tracking dictionaries for form state management
-        self.mandatory = []
-        self.answers = {}
-        self.singles = {}
-        self.multiples = {}
-        self.unavail = {}
-        self.max_lengths = {}
-
     def get_automatic_field(self) -> Any:
-        """Get list of fields that should be automatically populated.
-
-        Returns:
-            list: Field names that are automatically set and hidden from user
-
-        """
+        """Get list of fields that should be automatically populated."""
         automatic_fields = ["event", "association"]
         if hasattr(self, "auto_run"):
             automatic_fields.extend(["run"])
@@ -624,9 +628,9 @@ class BaseRegistrationForm(MyFormRun):
             # Handle unavailable options or add availability info to name
             if remaining_availability <= 0:
                 # Track unavailable options by question ID
-                if option.question_id not in self.unavail:
-                    self.unavail[option.question_id] = []
-                self.unavail[option.question_id].append(str(option.uuid))
+                if option.question.uuid not in self.unavail:
+                    self.unavail[option.question.uuid] = []
+                self.unavail[option.question.uuid].append(str(option.uuid))
             else:
                 # Append availability count to the display name
                 display_name += " - (" + _("Available") + f" {remaining_availability})"
@@ -647,7 +651,7 @@ class BaseRegistrationForm(MyFormRun):
                 continue
 
             # Check if selected option is unavailable
-            if question.id in self.unavail and sel in self.unavail[question.id]:
+            if question.uuid in self.unavail and sel in self.unavail[question.uuid]:
                 self.add_error(field_key, _("Option no longer available"))
 
     def _validate_single_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
@@ -663,7 +667,7 @@ class BaseRegistrationForm(MyFormRun):
             return
 
         # Check if selected option is unavailable
-        if question.id in self.unavail and form_data[field_key] in self.unavail[question.id]:
+        if question.uuid in self.unavail and form_data[field_key] in self.unavail[question.uuid]:
             self.add_error(field_key, _("Option no longer available"))
 
     def clean(self) -> dict:

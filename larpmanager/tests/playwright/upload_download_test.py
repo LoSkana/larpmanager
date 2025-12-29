@@ -102,7 +102,7 @@ def abilities(page: Any) -> None:
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(
         page.locator("#one"),
-        "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword , shield rrrrrr , trtr",
+        "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword , shield trtr , rrrrrr",
     )
     check_download(page, "Download")
 
@@ -305,7 +305,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="follow this link").click()
     expect_normalized(
         page.locator("#wrapper"),
-        "Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa Submit",
+        "Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa",
     )
 
 

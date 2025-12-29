@@ -397,7 +397,7 @@ class OrgaCharacterForm(CharacterForm):
         if get_event_config(self.params["event"].id, "casting_mirror", default_value=False, context=self.params):
             if "mirror" in self.fields:
                 characters_query = self.params["run"].event.get_elements(Character).all()
-                character_choices = [(character.id, character.name) for character in characters_query]
+                character_choices = [(character.uuid, character.name) for character in characters_query]
                 self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
         else:
             self.delete_field("mirror")

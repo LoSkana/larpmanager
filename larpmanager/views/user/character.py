@@ -631,17 +631,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
 
 @login_required
 def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Handle character editing form for specific character.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-        character_uuid: Character UUID
-
-    Returns:
-        HttpResponse: Character editing form
-
-    """
+    """Handle user character editing form."""
     context = get_event_context(request, event_slug, include_status=True, signup=True)
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
     return character_form(request, context, event_slug, context["character"], CharacterForm)

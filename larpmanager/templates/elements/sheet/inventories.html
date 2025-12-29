@@ -1,5 +1,5 @@
 {% load i18n %}
-{% if char.inventory %}
+{% if features.inventory and char.inventory %}
     <div class="character-inventories">
         <h3>{% trans "Inventories" %}</h3>
         <div class="inventory-cards">
