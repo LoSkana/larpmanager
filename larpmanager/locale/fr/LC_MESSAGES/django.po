@@ -5047,9 +5047,6 @@ msgstr "Nom de la remise - pour usage interne"
 msgid "No elements are currently available"
 msgstr "Aucun élément n'est actuellement disponible"
 
-msgid "Now characters can have inventories"
-msgstr "Les personnages peuvent désormais avoir des inventaires"
-
 msgid "Now set up the tokens configuration"
 msgstr "Il faut maintenant configurer les jetons"
 

@@ -29,7 +29,7 @@ from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normal
 pytestmark = pytest.mark.e2e
 
 
-def test_inventory(pw_page: Any) -> None:
+def test_warehouse(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)

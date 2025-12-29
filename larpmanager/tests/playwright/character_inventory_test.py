@@ -22,7 +22,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -90,7 +90,7 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
     page.get_by_role("button", name="Confirm").click()
-    page.locator('[id="1"]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:
@@ -138,21 +138,9 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="NPC Transfer payment").get_by_role("button").click()
 
     # check row 1
-    row1 = page.locator('tr:has-text("user@test.it")').first
-    cells1 = row1.evaluate("(row) => Array.from(row.querySelectorAll('td')).map(td => td.textContent)")
-    assert cells1[1] == "user@test.it"
-    assert cells1[2] == "Test Character's Personal Storage"
-    assert cells1[3] == "NPC"
-    assert cells1[4] == "Credits"
-    assert cells1[5] == "2"
-    assert cells1[6] == "payment"
+    row1 = page.locator('#transfer_log tbody tr').first
+    expect_normalized(row1, "User Test	Test Character's Personal Storage	NPC	Credits	2	payment")
 
     # check row 2
-    row2 = page.locator('tr:has-text("orga@test.it")').first
-    cells2 = row2.evaluate("(row) => Array.from(row.querySelectorAll('td')).map(td => td.textContent)")
-    assert cells2[1] == "orga@test.it"
-    assert cells2[2] == "NPC"
-    assert cells2[3] == "Test Character's Personal Storage"
-    assert cells2[4] == "Credits"
-    assert cells2[5] == "3"
-    assert cells2[6] == "test"
+    row2 = page.locator('#transfer_log tbody tr').nth(1)
+    expect_normalized(row2, "Admin Test	NPC	Test Character's Personal Storage	Credits	3	test")

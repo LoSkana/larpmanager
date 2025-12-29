@@ -5046,9 +5046,6 @@ msgstr "Naam van korting - voor intern gebruik"
 msgid "No elements are currently available"
 msgstr "Er zijn momenteel geen elementen beschikbaar"
 
-msgid "Now characters can have inventories"
-msgstr "Personages kunnen nu voorraden hebben"
-
 msgid "Now set up the tokens configuration"
 msgstr "Stel nu de tokens-configuratie in"
 

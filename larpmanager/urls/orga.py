@@ -833,12 +833,12 @@ urlpatterns = [
         name="orga_ci_inventory",
     ),
     path(
-        "<slug:event_slug>/manage/ci/inventory/edit/<int:num>/",
+        "<slug:event_slug>/manage/ci/inventory/edit/<slug:inventory_uuid>/",
         views_ci.orga_ci_inventory_edit,
         name="orga_ci_inventory_edit",
     ),
     path(
-        "<slug:event_slug>/manage/ci/inventory/<int:num>/view/",
+        "<slug:event_slug>/manage/ci/inventory/<slug:inventory_uuid>/view/",
         views_ci.orga_ci_inventory_view,
         name="orga_ci_inventory_view",
     ),
@@ -853,7 +853,7 @@ urlpatterns = [
         name="orga_ci_pool_types",
     ),
     path(
-        "<slug:event_slug>/manage/ci/pool_types/edit/<int:num>/",
+        "<slug:event_slug>/manage/ci/pool_types/edit/<slug:pool_uuid>/",
         views_ci.orga_ci_pool_types_edit,
         name="orga_ci_pool_types_edit",
     ),

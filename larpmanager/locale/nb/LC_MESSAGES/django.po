@@ -5046,9 +5046,6 @@ msgstr "Navn på rabatt - til internt bruk"
 msgid "No elements are currently available"
 msgstr "Ingen elementer er tilgjengelige for øyeblikket"
 
-msgid "Now characters can have inventories"
-msgstr "Nå kan karakterer ha varelager"
-
 msgid "Now set up the tokens configuration"
 msgstr "Konfigurer nå konfigurasjonen av tokens"
 

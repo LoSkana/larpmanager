@@ -5047,9 +5047,6 @@ msgstr "Name des Rabatts - für den internen Gebrauch"
 msgid "No elements are currently available"
 msgstr "Derzeit sind keine Elemente verfügbar"
 
-msgid "Now characters can have inventories"
-msgstr "Jetzt können Charaktere Inventare haben"
-
 msgid "Now set up the tokens configuration"
 msgstr "Richten Sie nun die Konfiguration der Token ein"
 

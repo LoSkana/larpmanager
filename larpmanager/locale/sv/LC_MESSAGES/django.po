@@ -5046,9 +5046,6 @@ msgstr "Namn på rabatt - för internt bruk"
 msgid "No elements are currently available"
 msgstr "Inga element är för närvarande tillgängliga"
 
-msgid "Now characters can have inventories"
-msgstr "Nu kan karaktärer ha inventarier"
-
 msgid "Now set up the tokens configuration"
 msgstr "Ställ nu in konfigurationen för tokens"
 

@@ -5046,9 +5046,6 @@ msgstr "Název slevy - pro interní použití"
 msgid "No elements are currently available"
 msgstr "V současné době nejsou k dispozici žádné prvky"
 
-msgid "Now characters can have inventories"
-msgstr "Nyní mohou mít postavy zásoby"
-
 msgid "Now set up the tokens configuration"
 msgstr "Nyní nastavte konfiguraci tokenů"
 

@@ -8335,9 +8335,6 @@ msgstr ""
 msgid "Allows characters to have inventories"
 msgstr ""
 
-msgid "Now characters can have inventories"
-msgstr ""
-
 msgid "Organisation tax"
 msgstr ""
 

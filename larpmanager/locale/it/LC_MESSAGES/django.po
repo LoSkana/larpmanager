@@ -5046,9 +5046,6 @@ msgstr "Nome dello sconto - ad uso interno"
 msgid "No elements are currently available"
 msgstr "Non ci sono elementi attualmente disponibili"
 
-msgid "Now characters can have inventories"
-msgstr "Ora i personaggi possono avere un inventario"
-
 msgid "Now set up the tokens configuration"
 msgstr "Ora imposta la configurazione dei token"
 
