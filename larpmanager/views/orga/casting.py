@@ -35,7 +35,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.config import get_event_config
 from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
-from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType
+from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
     Registration,
@@ -141,28 +141,31 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
         parts = assignment_string.split("_")
         try:
             # Extract member ID and get member object
-            member = Member.objects.get(pk=parts[0].replace("p", ""))
+            member_uuid = parts[0]
+            member = Member.objects.get(uuid=member_uuid)
 
             # Get active registration for this member and run
             registration = Registration.objects.get(member=member, run=context["run"], cancellation_date__isnull=True)
 
-            # Extract entity ID (character or trait)
-            entity_id = parts[1].replace("c", "")
+            # Extract entity UUID (character or trait)
+            entity_uuid = parts[1]
 
             # Handle character assignment
+            temp_context = {"event": context["event"]}
             if "quest_type" not in context:
+                get_element(temp_context, entity_uuid, "character", Character)
+                entity_id = temp_context["character"].id
                 # Check for mirror character redirection
-                if mirror_enabled:
-                    character = Character.objects.get(pk=entity_id)
-                    if character.mirror:
-                        entity_id = character.mirror_id
+                if mirror_enabled and temp_context["character"].mirror:
+                    entity_id = temp_context["character"].mirror_id
 
                 # Create character assignment relationship
                 RegistrationCharacterRel.objects.create(character_id=entity_id, reg=registration)
             else:
+                get_element(temp_context, entity_uuid, "trait", Trait)
                 # Create trait assignment for non-character types
                 AssignmentTrait.objects.create(
-                    trait_id=entity_id,
+                    trait_id=context["trait"].id,
                     run_id=registration.run_id,
                     member=member,
                     typ=context["quest_type"].number,
@@ -302,7 +305,7 @@ def check_player_skip_quests(registration: Registration, quest_type: QuestType) 
     """Check if player has traits allowing quest skipping."""
     return AssignmentTrait.objects.filter(
         run_id=registration.run_id,
-        member_id=registration.member_id,
+        member_uuid=registration.member.uuid,
         typ=quest_type.number,
     ).exists()
 
@@ -336,12 +339,12 @@ def check_casting_player(
     # Filter by membership status when membership feature is enabled
     if "membership" in context["features"]:
         # Skip if member not found in membership cache
-        if registration.member_id not in cached_membership_statuses:
+        if registration.member.uuid not in cached_membership_statuses:
             return True
 
         # Determine actual membership status, accounting for AIM membership
-        membership_status = cached_membership_statuses[registration.member_id]
-        if membership_status == "a" and registration.member_id in cached_aim_memberships:
+        membership_status = cached_membership_statuses[registration.member.uuid]
+        if membership_status == "a" and registration.member.uuid in cached_aim_memberships:
             membership_status = "p"  # Override status for AIM members
 
         # Skip if membership status not in allowed list
@@ -445,9 +448,9 @@ def get_casting_data(
 
         # Track players who didn't submit preferences
         if len(player_choice_list) == 0:
-            players_without_choices.append(registration.member_id)
+            players_without_choices.append(registration.member.uuid)
         else:
-            player_preferences[registration.member_id] = player_choice_list
+            player_preferences[registration.member.uuid] = player_choice_list
 
     # Add random unchosen characters to resolve ties fairly
     unchosen_characters, unchosen_padding = _fill_not_chosen(
@@ -462,7 +465,7 @@ def get_casting_data(
     avoidance_texts = {}
     typ = context.get("quest_type", 0)
     for avoidance_entry in CastingAvoid.objects.filter(run=context["run"], typ=typ):
-        avoidance_texts[avoidance_entry.member_id] = avoidance_entry.text
+        avoidance_texts[avoidance_entry.member.uuid] = avoidance_entry.text
 
     # Serialize all data to JSON for client-side casting algorithm
     context["num_choices"] = min(context["casting_max"] + unchosen_padding, len(available_choices))
@@ -493,29 +496,30 @@ def _casting_prepare(context: dict) -> tuple[set, dict[Any, Any], dict[Any, list
     Returns:
         tuple: A tuple containing:
             - membership_fee_year: Membership fee year for the association
-            - member_id_to_status: Dictionary mapping member IDs to their membership status
-            - member_id_to_castings: Dictionary mapping member IDs to their list of casting objects
+            - member_uuid_to_status: Dictionary mapping member IDs to their membership status
+            - member_uuid_to_castings: Dictionary mapping member IDs to their list of casting objects
 
     """
     # Get the membership fee year for the current association
     membership_fee_year = get_membership_fee_year(context["association_id"])
 
     # Build cache of member statuses for the association
-    member_id_to_status = {}
+    member_uuid_to_status = {}
     membership_query = Membership.objects.filter(association_id=context["association_id"])
-    for membership in membership_query.values("member_id", "status"):
-        member_id_to_status[membership["member_id"]] = membership["status"]
+    for membership in membership_query.select_related("member").values("member__uuid", "status"):
+        member_uuid_to_status[membership["member__uuid"]] = membership["status"]
 
     # Group casting objects by member ID for the specified run and type
-    member_id_to_castings = {}
+    member_uuid_to_castings = {}
     typ = context["quest_type"].number if "quest_type" in context else 0
-    for casting in Casting.objects.filter(run=context["run"], typ=typ).order_by("pref"):
+    query_castings = Casting.objects.filter(run=context["run"], typ=typ).order_by("pref")
+    for casting in query_castings.select_related("member"):
         # Initialize member's casting list if not exists
-        if casting.member_id not in member_id_to_castings:
-            member_id_to_castings[casting.member_id] = []
-        member_id_to_castings[casting.member_id].append(casting)
+        if casting.member.uuid not in member_uuid_to_castings:
+            member_uuid_to_castings[casting.member.uuid] = []
+        member_uuid_to_castings[casting.member.uuid].append(casting)
 
-    return membership_fee_year, member_id_to_status, member_id_to_castings
+    return membership_fee_year, member_uuid_to_status, member_uuid_to_castings
 
 
 def _get_player_info(players: dict, registration: Registration) -> None:
@@ -530,7 +534,7 @@ def _get_player_info(players: dict, registration: Registration) -> None:
 
     """
     # Initialize basic player information with default priority
-    players[registration.member_id] = {
+    players[registration.member.uuid] = {
         "name": str(registration.member),
         "prior": 1,
         "email": registration.member.email,
@@ -538,13 +542,13 @@ def _get_player_info(players: dict, registration: Registration) -> None:
 
     # Override priority if ticket has casting priority defined
     if registration.ticket:
-        players[registration.member_id]["prior"] = registration.ticket.casting_priority
+        players[registration.member.uuid]["prior"] = registration.ticket.casting_priority
 
     # Calculate registration days (number of days from registration creation)
-    players[registration.member_id]["reg_days"] = -get_time_diff_today(registration.created.date()) + 1
+    players[registration.member.uuid]["reg_days"] = -get_time_diff_today(registration.created.date()) + 1
 
     # Calculate payment days (number of days from full payment, default to 1 if unpaid)
-    players[registration.member_id]["pay_days"] = (
+    players[registration.member.uuid]["pay_days"] = (
         -get_time_diff_today(registration.payment_date) + 1 if registration.payment_date else 1
     )
 
@@ -570,9 +574,9 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
     preferences = []
 
     # Check if this member has any casting choices
-    if reg.member_id in castings:
+    if reg.member.uuid in castings:
         # Process each casting choice for this member
-        for casting_choice in castings[reg.member_id]:
+        for casting_choice in castings[reg.member.uuid]:
             # Skip elements not in allowed set (if filtering is enabled)
             if allowed and casting_choice.element not in allowed:
                 continue
@@ -584,9 +588,9 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
 
             # Track rejected preferences ("nopes") for this member
             if casting_choice.nope:
-                if reg.member_id not in nopes:
-                    nopes[reg.member_id] = []
-                nopes[reg.member_id].append(element)
+                if reg.member.uuid not in nopes:
+                    nopes[reg.member.uuid] = []
+                nopes[reg.member.uuid].append(element)
 
     return preferences
 
@@ -712,7 +716,7 @@ def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str
         oid = request.POST["oid"]
 
         # Retrieve and toggle the casting entry's nope status
-        c = Casting.objects.get(run=context["run"], typ=typ, member_id=pid, element=oid)
+        c = Casting.objects.get(run=context["run"], typ=typ, member__uuid=pid, element=oid)
         c.nope = not c.nope
         c.save()
 

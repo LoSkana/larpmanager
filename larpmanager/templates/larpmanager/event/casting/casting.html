@@ -138,7 +138,7 @@
             var faction = faction_list[iy];
             for (kkey in choices_dict[faction]) {
 
-                if (parseInt(kkey) !== parseInt(elem)) continue;
+                if (kkey !== elem) continue;
 
                 $('#faction' + ix + ' option[value="'+faction+'"]').attr('selected', 'selected');
                 update_el_dict(ix);

@@ -79,7 +79,7 @@ def casting_characters(context: dict, reg: Registration) -> None:
     character_choices_by_faction = {}
     faction_names = []
     total_characters = 0
-    valid_character_ids = set()
+    valid_character_uuids = set()
 
     # Process each faction and organize characters within it
     for faction in context["factions"]:
@@ -90,13 +90,13 @@ def casting_characters(context: dict, reg: Registration) -> None:
         # Add each character from the faction to choices with display info, sorted by number
         for character in sorted(faction.chars, key=lambda c: c.number):
             character_choices_by_faction[faction_name][str(character.uuid)] = character.show(context["run"])
-            valid_character_ids.add(str(character.uuid))
+            valid_character_uuids.add(str(character.uuid))
             total_characters += 1
 
     # Convert faction and character data to JSON for frontend consumption
     context["factions"] = json.dumps(faction_names)
     context["choices"] = json.dumps(character_choices_by_faction)
-    context["valid_element_ids"] = valid_character_ids
+    context["valid_element_ids"] = valid_character_uuids
 
     # Add faction filter for transversal faction types
     context["faction_filter"] = context["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
@@ -246,12 +246,6 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str = "0") -> H
 
     # Load casting details and options for the specified type
     casting_details(context)
-    logger.debug(
-        "Casting context for casting_type %s: %s, features: %s",
-        casting_type,
-        context.get("gl_name", "Unknown"),
-        list(context.get("features", {}).keys()),
-    )
 
     # Set template path for rendering
     red = "larpmanager/event/casting/casting.html"

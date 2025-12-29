@@ -161,7 +161,7 @@ function load_grid() {
     // Build list of mirrored character IDs (characters linked to other characters)
     var mirrored = [];
     for (const [key, value] of Object.entries(mirrors)) {
-        mirrored.push(parseInt(value));
+        mirrored.push(value);
     }
     mirrored.sort();
 
@@ -213,13 +213,13 @@ function load_grid() {
             aux += ' <option value="99">NAN</option>';
 
             // Determine status of this preference and display accordingly
-            if (k == '' || !(parseInt(k) in choices))
+            if (k == '' || !(k in choices))
                 // EP = Empty/Invalid choice
                 aux += '</select><br /><span class="dis EP">EP</span></td>';
-            else if (mirrored.includes(parseInt(k))) {
+            else if (mirrored.includes(k)) {
                 // MR = Mirrored character (linked to another character)
                 aux += '</select><br /><span class="dis MR">MR</span></td>';
-            } else if (taken.includes(parseInt(k))) {
+            } else if (taken.includes(k)) {
                 // CH = Already chosen/taken by another player
                 aux += '</select><br /><span class="dis CH">CH</span></td>';
             } else {
@@ -434,13 +434,13 @@ function exec_assigner() {
                 el.addClass('sel');
                 counter[ix] += 1;  // Increment counter for this preference level
                 tot += 1;
-                vl += id + ' ' ;
+                vl += '{0}_{1}'.format(key, ch) + ' ' ;
 
                 // Build assignment string (handle mirrored characters)
                 if (mirrors[ch] !== undefined) {
-                    ass[parseInt(mirrors[ch])] = '{2} - {0} [-> {1}]'.format(players[key]['name'], choices[ch], choices[mirrors[ch]]);
+                    ass[mirrors[ch]] = '{2} - {0} [-> {1}]'.format(players[key]['name'], choices[ch], choices[mirrors[ch]]);
                 } else {
-                    ass[parseInt(ch)] = '{1} - {0}'.format(players[key]['name'], choices[ch]);
+                    ass[ch] = '{1} - {0}'.format(players[key]['name'], choices[ch]);
                 }
 
             }

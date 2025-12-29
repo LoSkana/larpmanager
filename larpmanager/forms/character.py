@@ -399,6 +399,7 @@ class OrgaCharacterForm(CharacterForm):
                 characters_query = self.params["run"].event.get_elements(Character).all()
                 character_choices = [(character.uuid, character.name) for character in characters_query]
                 self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
+                self.fields["mirror"].to_field_name = "uuid"
         else:
             self.delete_field("mirror")
 
