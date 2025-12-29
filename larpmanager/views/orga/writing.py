@@ -29,7 +29,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, reset_event_cache_all
 from larpmanager.forms.event import OrgaProgressStepForm
 from larpmanager.forms.writing import (
     FactionForm,
@@ -236,6 +236,9 @@ def orga_factions_order(request: HttpRequest, event_slug: str, faction_uuid: str
 
     # Exchange faction positions
     exchange_order(context, Faction, faction_uuid, order)
+
+    # Reset cache to be re-organized
+    reset_event_cache_all(context["run"])
 
     return redirect("orga_factions", event_slug=context["run"].get_slug())
 

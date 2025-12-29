@@ -380,7 +380,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         result["factions_typ"][FactionType.PRIM] = [0]
 
     # Process real factions from the event
-    for faction in context["event"].get_elements(Faction).order_by("number"):
+    for faction in context["event"].get_elements(Faction).order_by("order"):
         # Get faction display data
         faction_data = faction.show_red()
         faction_data["characters"] = []

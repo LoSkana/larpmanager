@@ -11,7 +11,7 @@
                     {% if f.name %}
                         <h1 class="title">
                             {% if show_faction %}
-                                <a href="{% url 'faction' run.get_slug fnum %}">{{ f.name }}</a>
+                                <a href="{% url 'faction' run.get_slug f.uuid %}">{{ f.name }}</a>
                             {% else %}
                                 {{ f.name }}
                             {% endif %}

@@ -100,7 +100,7 @@ urlpatterns = [
         name="character_abilities",
     ),
     path(
-        "<slug:event_slug>/character/<slug:character_uuid>/abilities/<slug:id_del>/",
+        "<slug:event_slug>/character/<slug:character_uuid>/abilities/<slug:ability_uuid>/",
         views_uc.character_abilities_del,
         name="character_abilities_del",
     ),

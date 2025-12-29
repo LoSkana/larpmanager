@@ -1241,10 +1241,10 @@ class BaseRegistrationForm(MyFormRun):
             return
 
         # Update existing choice: delete if requested, otherwise update option
-        if question.uuid in self.singles:
-            if self.singles[question.uuid].option_id != option.id:
-                self.singles[question.uuid].option_id = option.id
-                self.singles[question.uuid].save()
+        if question.id in self.singles:
+            if self.singles[question.id].option_id != option.id:
+                self.singles[question.id].option_id = option.id
+                self.singles[question.id].save()
         # Create new choice
         else:
             self.choice_class.objects.create(
@@ -1269,8 +1269,8 @@ class BaseRegistrationForm(MyFormRun):
         selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids if uuid_str in uuid_to_id}
 
         # If question already has existing choices, sync the differences
-        if question.uuid in self.multiples:
-            old = {el.option_id for el in self.multiples[question.uuid]}
+        if question.id in self.multiples:
+            old = {el.option_id for el in self.multiples[question.id]}
 
             # Create new choices for added options
             for add in selected_option_ids - old:

@@ -275,7 +275,8 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
 
         # Check for PDF generation errors and raise with diagnostic information
         if pdf_result.err:
-            raise Http404("We had some errors <pre>" + html_content + "</pre>")
+            msg = "We had some errors <pre>" + html_content + "</pre>"
+            raise Http404(msg)
 
 
 def get_membership_request(context: dict, member: Member) -> HttpResponse:

@@ -509,7 +509,7 @@ def _prepare_writing_list(context: dict) -> None:
     )
     if context["default_fields"] == "[]" and model_name in context["writing_fields"]:
         question_field_list = [
-            f"q_{question_id}" for name, question_id in context["writing_fields"][model_name]["ids"].items()
+            f"q_{question_uuid}" for name, question_uuid in context["writing_fields"][model_name]["uuids"].items()
         ]
         context["default_fields"] = json.dumps(question_field_list)
 

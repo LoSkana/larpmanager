@@ -876,13 +876,13 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
+def faction(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Display detailed information for a specific faction.
 
     Args:
         request: HTTP request object
         event_slug: Event slug string
-        faction_id: Faction identifier string
+        faction_uuid: Faction UUID
 
     Returns:
         HttpResponse: Rendered faction detail page
@@ -893,20 +893,23 @@ def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
 
     get_event_cache_all(context)
 
-    typ = None
-    if faction_id in context["factions"]:
-        context["faction"] = context["factions"][faction_id]
-        typ = context["faction"]["typ"]
+    faction = None
+    for faction_data in context["factions"].values():
+        if faction_uuid == faction_data.get("uuid"):
+            faction = faction_data
+            break
 
-    if "faction" not in context or typ == "g" or "id" not in context["faction"]:
+    if not faction or faction["typ"] == FactionType.SECRET:
         msg = "Faction does not exist"
         raise Http404(msg)
+
+    context["faction"] = faction
 
     context["fact"] = get_writing_element_fields(
         context,
         "faction",
         QuestionApplicable.FACTION,
-        context["faction"]["id"],
+        faction["id"],
         only_visible=True,
     )
 

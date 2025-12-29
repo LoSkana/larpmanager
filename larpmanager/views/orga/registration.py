@@ -298,8 +298,7 @@ def _orga_registration_character(context: dict, registration: Any) -> None:
     for character in registration.chars:
         if "factions" in character:
             registration.factions.extend(character["factions"])
-            for faction in character["factions"]:
-                faction_number = faction["number"]
+            for faction_number in character["factions"]:
                 if faction_number in context["factions"]:
                     regs_list_add(
                         context,

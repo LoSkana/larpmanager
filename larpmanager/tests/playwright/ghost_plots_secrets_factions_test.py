@@ -180,6 +180,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("cell", name="#1 Test Character").dblclick()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Character3")
+    page.wait_for_timeout(2000)
     page.get_by_role("button", name="Confirm").click()
 
     # reload page, check everything is correct

@@ -50,6 +50,7 @@ from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
 from larpmanager.forms.writing import PlayerRelationshipForm
 from larpmanager.models.event import EventTextType
+from larpmanager.models.experience import AbilityPx
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingOption,
@@ -63,7 +64,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_player_relationship
+from larpmanager.utils.core.common import get_element, get_player_relationship
 from larpmanager.utils.services.character import (
     check_missing_mandatory,
     get_char_check,
@@ -798,33 +799,22 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
 
 
 @login_required
-def character_abilities_del(request: HttpRequest, event_slug: str, num: Any, id_del: Any) -> Any:
-    """Remove character ability with validation and dependency handling.
+def character_abilities_del(request: HttpRequest, event_slug: str, character_uuid: str, ability_uuid: str) -> Any:
+    """Remove ability from character, if the ability was added recently enough."""
+    context = check_char_abilities(request, event_slug, character_uuid)
 
-    Args:
-        request: HTTP request object
-        event_slug: Event slug
-        num: Character number
-        id_del: Ability ID to delete
+    get_element(context, ability_uuid, "ability", AbilityPx)
 
-    Returns:
-        HttpResponse: Redirect to character abilities page
-
-    Raises:
-        Http404: If ability is outside undo window
-
-    """
-    context = check_char_abilities(request, event_slug, num)
     undo_abilities = get_undo_abilities(context, context["character"])
-    if id_del not in undo_abilities:
+    if context["ability"].id not in undo_abilities:
         msg = "ability out of undo window"
         raise Http404(msg)
 
     with transaction.atomic():
-        remove_char_ability(context["character"], id_del)
+        remove_char_ability(context["character"], context["ability"].id)
         context["character"].save()
-    messages.success(request, _("Ability removed") + "!")
 
+    messages.success(request, _("Ability removed") + "!")
     return redirect(
         "character_abilities", event_slug=context["run"].get_slug(), character_uuid=context["character"].uuid
     )

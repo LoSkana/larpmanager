@@ -85,7 +85,7 @@ class Writing(UuidMixin, BaseConceptModel):
 
         """
         js = {}
-        for s in ["number", "name", "uuid"]:
+        for s in ["id", "number", "name", "uuid"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -336,11 +336,11 @@ class Character(Writing):
                     js["thumb"] = faction.thumb.url
 
             # Add faction object with uuid and number
-            js["factions"].append({"uuid": str(faction.uuid), "number": faction.number})
+            js["factions"].append(faction.number)
 
         # Add default faction if no primary found
         if not has_primary_faction:
-            js["factions"].append({"uuid": "0", "number": 0})
+            js["factions"].append(0)
 
     @staticmethod
     def get_character_filepath(run: Run) -> str:

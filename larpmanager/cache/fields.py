@@ -101,10 +101,13 @@ def update_event_fields(event_id: int) -> dict:
     for question_data in default_type_questions.values("id", "typ", "name", "applicable", "uuid"):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         question_type = question_data["typ"]
-        _ensure_cache_structure(cached_fields, applicabile_label, "names")
-        _ensure_cache_structure(cached_fields, applicabile_label, "ids")
-        cached_fields[applicabile_label]["names"][question_type] = question_data["name"]
-        cached_fields[applicabile_label]["ids"][question_type] = question_data["id"]
+        for key, value in (
+            ("names", question_data["name"]),
+            ("ids", question_data["id"]),
+            ("uuids", question_data["uuid"]),
+        ):
+            _ensure_cache_structure(cached_fields, applicabile_label, key)
+            cached_fields[applicabile_label][key][question_type] = value
 
     # Cache the complete result structure with 1-day timeout
     cache.set(event_fields_key(event_id), cached_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)

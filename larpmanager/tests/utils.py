@@ -247,6 +247,17 @@ def upload(page: Any, element_id: Any, image_path: Any) -> None:
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace by removing newlines and collapsing multiple spaces."""
 
+    lines = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if line.startswith("document.") or "addeventlistener" in line:
+            continue
+        lines.append(line)
+
+    text = " ".join(" ".join(lines).split())
+
     # Replace newlines and tabs with spaces
     text = text.replace("\n", " ").replace("\r", " ").replace("\t", " ")
     # Collapse multiple spaces into single space
@@ -255,19 +266,17 @@ def normalize_whitespace(text: str) -> str:
     return text.strip().lower()
 
 
-def expect_normalized(locator: Any, expected_text: str) -> None:
-    """Assert that locator contains expected text after normalizing whitespace."""
+def expect_normalized(locator, expected: str, timeout=10000):
 
-    # Wait for the element to be attached
-    expect(locator).to_be_attached()
+    locator.wait_for(state="visible", timeout=timeout)
 
-    # Get all text including non-visible elements
-    actual_text = locator.text_content() or ""
-    normalized_actual = normalize_whitespace(actual_text)
-    normalized_expected = normalize_whitespace(expected_text)
+    raw = locator.text_content() or ""
+    actual = normalize_whitespace(raw)
+    exp = normalize_whitespace(expected)
 
-    assert normalized_expected in normalized_actual, (
-        f"Expected text not found.\n"
-        f"Expected (normalized): {normalized_expected}\n"
-        f"Actual (normalized): {normalized_actual}"
-    )
+    if exp not in actual:
+        raise AssertionError(
+            "Text mismatch\n\n"
+            f"EXPECTED:\n{exp}\n\n"
+            f"ACTUAL:\n{actual}"
+        )

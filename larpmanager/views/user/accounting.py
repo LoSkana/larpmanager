@@ -995,7 +995,8 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
     elif payment_method == "any":
         form = AnyInvoiceSubmitForm(request.POST, request.FILES)
     else:
-        raise Http404("unknown value: " + payment_method)
+        msg = "unknown value: " + payment_method
+        raise Http404(msg)
 
     # Validate form data and uploaded files
     if not form.is_valid():
