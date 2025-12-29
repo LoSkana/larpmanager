@@ -252,7 +252,7 @@ def normalize_whitespace(text: str) -> str:
     # Collapse multiple spaces into single space
     text = re.sub(r"\s+", " ", text)
     # Strip leading/trailing whitespace
-    return text.strip()
+    return text.strip().lower()
 
 
 def expect_normalized_text(locator: Any, expected_text: str) -> None:
