@@ -96,11 +96,6 @@ class MyForm(forms.ModelForm):
         # Call parent ModelForm initialization with remaining arguments
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
-        # Set to_field_name="uuid" for all ModelChoiceField fields
-        for field in self.fields.values():
-            if isinstance(field, forms.ModelChoiceField):
-                field.to_field_name = "uuid"
-
         # Remove system fields that shouldn't be user-editable
         for m in ["deleted", "temp"]:
             self.delete_field(m)
