@@ -142,13 +142,13 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="to confirm it proceed with").click()
 
     go_to(page, live_server, "/accounting/pay/test/")
-    expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa Submit")
+    expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
 
     go_to(page, live_server, "/accounting/pay/test/wire/")
     expect_normalized(page, page.locator("#one"), "You are about to make a payment of: 100 €. Follow the steps below:")
 
     go_to(page, live_server, "/accounting/pay/test/paypal/")
-    expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa Submit")
+    expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
 
 
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
@@ -251,7 +251,8 @@ def acc_refund(page: Any, live_server: Any) -> None:
     # activate features
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Features").click()
-    page.get_by_role("checkbox", name=re.compile(r"^Tokens")).check()
+    page.get_by_role("checkbox", name="Tokens").check()
+    page.get_by_role("checkbox", name="Credits").check()
     page.get_by_role("checkbox", name="Refunds").check()
     page.get_by_role("button", name="Confirm").click()
 
@@ -279,6 +280,6 @@ def acc_refund(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Refunds").click()
-    expect_normalized(page, page.locator("#one"), "asdsadsadsaAdmin Test20200RequestDone")
+    expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
     page.get_by_role("link", name="Done").click()
-    expect_normalized(page, page.locator("#one"), "asdsadsadsaAdmin Test20180Delivered")
+    expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 180 delivered")

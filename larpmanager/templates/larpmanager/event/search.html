@@ -139,7 +139,7 @@ window['facs'] = {{ factions_json | safe }};
 
 window['blank'] = "{% static 'larpmanager/assets/blank-avatar.svg' %}";
 
-window['char_url'] = "{% url 'character' run.get_slug 0 %}";
+window['char_url'] = "{% url 'character' run.get_slug '0' %}";
 
 window['prof_url'] = "{% url 'public' '0' %}";
 

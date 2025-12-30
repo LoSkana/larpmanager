@@ -431,7 +431,7 @@ function search(key) {
             // Build character card HTML
             characters += '<div class="gallery single list" id="num{0}">'.format(el['number']);
             characters += '<div class="el"><div class="icon"><img src="{0}" /></div></div>'.format(pf);
-            characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['number']), name);
+            characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['uuid']), name);
             characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
 
             // Add custom field values

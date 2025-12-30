@@ -571,7 +571,7 @@ def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Com
                 name = rcr.character.name
                 if rcr.custom_name:
                     name = rcr.custom_name
-                el.chars[rcr.character.number] = name
+                el.chars[rcr.character.uuid] = name
 
     # Validate and mark social contact as URL if valid
     validate = URLValidator()

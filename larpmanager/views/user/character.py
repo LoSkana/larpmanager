@@ -227,19 +227,19 @@ def character_your_link(context: dict, character: Any, path: str | None = None) 
 
     Args:
         context: Context dictionary containing run information
-        character: Character object with number attribute
+        character: Character object with uuid attribute
         path: Optional path parameter to append to URL
 
     Returns:
         Complete URL string for the character page
 
     """
-    # Build base URL using character number and run slug
+    # Build base URL using character uuid and run slug
     url = reverse(
         "character",
         kwargs={
             "event_slug": context["run"].get_slug(),
-            "num": character.number,
+            "character_uuid": character.uuid,
         },
     )
 

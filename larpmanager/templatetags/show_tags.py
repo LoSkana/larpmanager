@@ -279,9 +279,9 @@ def go_character(
     # Get character data from context
     character_data = context["chars"][character_number]
 
-    # Generate character URL using run slug and character number
+    # Generate character URL using run slug and character uuid
     character_url = get_url(
-        reverse("character", args=[run.get_slug(), character_data["number"]]),
+        reverse("character", args=[run.get_slug(), character_data["uuid"]]),
         context["association_slug"],
     ).replace('"', "")
 
@@ -485,7 +485,7 @@ def go_trait(
 
         # Build character page URL
         character_url = get_url(
-            reverse("character", args=[run.get_slug(), character_data["number"]]),
+            reverse("character", args=[run.get_slug(), character_data["uuid"]]),
             context["slug"],
         )
 
