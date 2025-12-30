@@ -1080,9 +1080,12 @@ class BaseRegistrationForm(MyFormRun):
             help_text=help_text,
         )
 
-        # Set initial value from previous selection if it exists
+        # Set initial value from previous selection if it exists and is still valid
         if question.id in self.singles and self.singles[question.id].option:
-            self.initial[field_key] = str(self.singles[question.id].option.uuid)
+            option_uuid_str = str(self.singles[question.id].option.uuid)
+            # Only set initial value if the option is still available in the current context
+            if any(choice[0] == option_uuid_str for choice in available_choices):
+                self.initial[field_key] = option_uuid_str
 
     def init_multiple(
         self,
@@ -1141,12 +1144,13 @@ class BaseRegistrationForm(MyFormRun):
             validators=field_validators,
         )
 
-        # Set initial values from previously selected options
+        # Set initial values from previously selected options that are still available
         if question.id in self.multiples:
+            available_choice_uuids = {choice[0] for choice in available_choices}
             initial_option_uuids = [
                 str(selected_choice.option.uuid)
                 for selected_choice in self.multiples[question.id]
-                if selected_choice.option
+                if selected_choice.option and str(selected_choice.option.uuid) in available_choice_uuids
             ]
             self.initial[field_key] = initial_option_uuids
 

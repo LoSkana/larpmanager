@@ -252,7 +252,19 @@ def normalize_whitespace(text: str) -> str:
         line = line.strip()
         if not line:
             continue
-        if line.startswith("document.") or "addeventlistener" in line:
+        line_lower = line.lower()
+        # Filter out JavaScript code patterns
+        js_patterns = [
+            "addeventlistener",
+            "preventdefault",
+            "window.location",
+            ".split(",
+            ".href",
+            "let ",
+            "const ",
+            "var ",
+        ]
+        if line_lower.startswith("document.") or any(pattern in line_lower for pattern in js_patterns):
             continue
         lines.append(line)
 
@@ -266,11 +278,17 @@ def normalize_whitespace(text: str) -> str:
     return text.strip().lower()
 
 
-def expect_normalized(locator, expected: str, timeout=10000):
+def expect_normalized(page, locator, expected: str, timeout=10000):
 
     locator.wait_for(state="visible", timeout=timeout)
 
-    raw = locator.text_content() or ""
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
+    page.wait_for_load_state("networkidle")
+
+    page.wait_for_timeout(2000)
+
+    raw = locator.inner_text() or ""
     actual = normalize_whitespace(raw)
     exp = normalize_whitespace(expected)
 

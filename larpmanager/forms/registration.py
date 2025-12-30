@@ -390,7 +390,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
-            self.initial["ticket"] = str(self.instance.ticket.id)
+            self.initial["ticket"] = str(self.instance.ticket.uuid)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
 
@@ -1187,9 +1187,10 @@ class OrgaRegistrationQuestionForm(MyForm):
         if "reg_que_sections" not in self.params["features"]:
             self.delete_field("section")
         else:
-            ch = [(m.id, str(m)) for m in RegistrationSection.objects.filter(event=self.params["run"].event)]
+            ch = [(m.uuid, str(m)) for m in RegistrationSection.objects.filter(event=self.params["run"].event)]
             ch.insert(0, ("", _("--- Empty")))
             self.fields["section"].choices = ch
+            self.fields["section"].to_field_name = "uuid"
 
         if "reg_que_allowed" not in self.params["features"]:
             self.delete_field("allowed")
@@ -1205,8 +1206,9 @@ class OrgaRegistrationQuestionForm(MyForm):
             self.delete_field("factions")
         else:
             self.fields["factions"].choices = [
-                (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
+                (m.uuid, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
             ]
+            self.fields["factions"].to_field_name = "uuid"
 
         if "gift" not in self.params["features"]:
             self.delete_field("giftable")

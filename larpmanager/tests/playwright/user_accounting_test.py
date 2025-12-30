@@ -89,8 +89,8 @@ def donation(page: Any, live_server: Any) -> None:
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect_normalized(page.locator("#one"), "test beneficiary")
-    expect_normalized(page.locator("#one"), "test iban")
+    expect_normalized(page, page.locator("#one"), "test beneficiary")
+    expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
@@ -99,8 +99,8 @@ def donation(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")
-    expect_normalized(page.locator("#one"), "Donations done")
-    expect_normalized(page.locator("#one"), "(10.00€)")
+    expect_normalized(page, page.locator("#one"), "Donations done")
+    expect_normalized(page, page.locator("#one"), "(10.00€)")
 
 
 def membership_fees(page: Any, live_server: Any) -> None:
@@ -138,17 +138,17 @@ def membership_fees(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/accounting")
-    expect_normalized(page.locator("#one"), "Payment membership fee")
+    expect_normalized(page, page.locator("#one"), "Payment membership fee")
     page.get_by_role("link", name="Pay the annual fee").click()
     page.get_by_role("cell", name="test wire").click()
     submit(page)
 
-    expect_normalized(page.locator("#one"), "15")
+    expect_normalized(page, page.locator("#one"), "15")
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect_normalized(page.locator("#one"), "test beneficiary")
-    expect_normalized(page.locator("#one"), "test iban")
+    expect_normalized(page, page.locator("#one"), "test beneficiary")
+    expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
@@ -175,16 +175,16 @@ def collections(page: Any, live_server: Any) -> None:
     page.locator("#id_amount").fill("20")
     submit(page)
 
-    expect_normalized(page.locator("#one"), "20")
+    expect_normalized(page, page.locator("#one"), "20")
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect_normalized(page.locator("#one"), "test beneficiary")
-    expect_normalized(page.locator("#one"), "test iban")
+    expect_normalized(page, page.locator("#one"), "test beneficiary")
+    expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
-    expect_normalized(page.locator("#one"), "Collected contribution of Admin Test for User")
+    expect_normalized(page, page.locator("#one"), "Collected contribution of Admin Test for User")
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")

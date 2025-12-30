@@ -72,7 +72,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
 
     # Verify feature is enabled and form question is created
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
-    expect_normalized(page.locator("#one"), "Additional")
+    expect_normalized(page, page.locator("#one"), "Additional")
 
     # Configure ticket price
     go_to(page, live_server, "test/manage")
@@ -98,14 +98,14 @@ def registration_with_additionals(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Continue").click()
 
     # Verify price calculation: 50€ (base) + 150€ (3 additional) = 200€
-    expect_normalized(page.locator("#riepilogo"), "200€")
+    expect_normalized(page, page.locator("#riepilogo"), "200€")
 
     # Confirm registration
     page.get_by_role("button", name="Confirm").click()
 
     # Verify registration confirmation shows correct total
     go_to(page, live_server, "accounting/")
-    expect_normalized(page.locator("#one"), "200€")
+    expect_normalized(page, page.locator("#one"), "200€")
 
 
 def verify_organizer_view(page: Any, live_server: Any) -> None:
@@ -114,7 +114,7 @@ def verify_organizer_view(page: Any, live_server: Any) -> None:
 
     # Verify additional tickets column is visible
     page.locator("#one").get_by_role("link", name="Additional").click()
-    expect_normalized(page.locator("#one"), "3")
+    expect_normalized(page, page.locator("#one"), "3")
 
 
 def edit_additionals(page: Any, live_server: Any) -> None:
@@ -132,7 +132,7 @@ def edit_additionals(page: Any, live_server: Any) -> None:
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
     page.locator("#one").get_by_role("link", name="Additional").click()
-    expect_normalized(page.locator("#one"), "2")
+    expect_normalized(page, page.locator("#one"), "2")
 
 
 def additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
@@ -147,7 +147,7 @@ def additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Continue").click()
 
     # Verify price is just the base ticket: 50€
-    expect_normalized(page.locator("#riepilogo"), "50€")
+    expect_normalized(page, page.locator("#riepilogo"), "50€")
     page.get_by_role("button", name="Confirm").click()
 
     # Test with maximum (5) additional tickets
@@ -161,7 +161,7 @@ def additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Continue").click()
 
     # Verify price: 50€ (base) + 250€ (5 additional) = 300€
-    expect_normalized(page.locator("#riepilogo"), "300€")
+    expect_normalized(page, page.locator("#riepilogo"), "300€")
     page.get_by_role("button", name="Confirm").click()
 
 
@@ -205,13 +205,13 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
 
     # Verify total: 30€ (base) + 60€ (2 additional) + 10€ (donation) = 100€
-    expect_normalized(page.locator("#riepilogo"), "100€")
+    expect_normalized(page, page.locator("#riepilogo"), "100€")
     page.get_by_role("button", name="Confirm").click()
 
     # Verify in organizer view
     go_to(page, live_server, "test/manage/registrations/")
     page.locator("#one").get_by_role("link", name="Additional").click()
-    expect_normalized(page.locator("#one"), "2")
+    expect_normalized(page, page.locator("#one"), "2")
 
 
 def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:

@@ -50,13 +50,13 @@ def test_quest_trait(pw_page: Any) -> None:
     # check result
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Test Character").nth(1).click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "Player: Admin Test Presentation Test Teaser Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "Torta - Strudel saleee Test CharacterTest CharacterPlayer: Admin TestTest Teaser (...)veronese Torta - Strudel Test Character Player: Admin Test",
     )
@@ -96,7 +96,7 @@ def quests(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    expect_normalized(page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
+    expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
 
 
 def traits(page: Any, live_server: Any) -> None:
@@ -148,9 +148,9 @@ def traits(page: Any, live_server: Any) -> None:
     # check how they appear on user side
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
-    expect_normalized(page.locator("#one"), "Name Quest Lore Torta , Pizza")
+    expect_normalized(page, page.locator("#one"), "Name Quest Lore Torta , Pizza")
     page.get_by_role("link", name="Torta").click()
-    expect_normalized(page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
+    expect_normalized(page, page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
 def signups(page: Any, live_server: Any) -> None:
@@ -218,7 +218,7 @@ def casting(page: Any, live_server: Any) -> None:
     # check signups
     page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="Lore").click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"), "User Test Standard #2 Another Admin Test Standard #1 Test Character Torta - Nonna"
     )
 
@@ -229,7 +229,7 @@ def casting(page: Any, live_server: Any) -> None:
 
     # check result
     page.get_by_role("link", name="Lore").click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "User Test Standard #2 Another Torta - Strudel Admin Test Standard #1 Test Character Torta - Nonna",
     )

@@ -48,7 +48,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     # check initial reg form
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
     page.wait_for_load_state("networkidle")
-    expect_normalized(page.locator("#one"), "Ticket Your registration ticket Ticket")
+    expect_normalized(page, page.locator("#one"), "Ticket Your registration ticket Ticket")
 
     # Add features
     page.get_by_role("link", name="Features").click()
@@ -66,13 +66,13 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.get_by_text("Your registration ticket").fill("Your registration ticket2")
     page.get_by_role("button", name="Confirm").click()
 
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "Ticket Your registration ticket2 Ticket Additional Reserve additional tickets beyond your own Additional Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Rate Number of installments to split the fee: payments… Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
     page.locator('[id="u4"]').get_by_role("link", name="").click()
     page.locator('[id="u2"]').get_by_role("link", name="").click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "Additional Reserve additional tickets beyond your own Additional Optional Ticket Your registration ticket2 Ticket Rate Number of installments to split the fee: payments… Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want Optional Surcharge Registration surcharge Surcharge Optional",
     )
@@ -80,7 +80,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.get_by_text("Reserve additional tickets").click()
     page.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
     page.get_by_role("button", name="Confirm").click()
-    expect_normalized(page.locator('[id="u2"]'), "Reserve additional tickets beyond your own2")
+    expect_normalized(page, page.locator('[id="u2"]'), "Reserve additional tickets beyond your own2")
 
     # change ticket price
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
@@ -131,14 +131,14 @@ def signup(page: Any, live_server: Any) -> None:
     page.get_by_role("spinbutton", name="Pay what you want").click()
     page.get_by_role("spinbutton", name="Pay what you want").fill("4")
     page.get_by_role("button", name="Continue").click()
-    expect_normalized(page.locator("#riepilogo"), "Your updated registration total is: 29€")
+    expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 29€")
     page.get_by_role("button", name="Confirm").click()
-    expect_normalized(page.locator("#one"), "The total registration fee is: 29€")
+    expect_normalized(page, page.locator("#one"), "The total registration fee is: 29€")
 
     # check form
     page.get_by_role("link", name="Event").click()
     page.get_by_role("link", name="Registration", exact=True).click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#register_form"),
         "(*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge",
     )

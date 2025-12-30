@@ -57,9 +57,9 @@ def test_exe_events_run(pw_page: Any) -> None:
     page.locator("#id_end").click()
     submit_confirm(page)
 
-    expect_normalized(page.locator("#one"), "Prova Event")
+    expect_normalized(page, page.locator("#one"), "Prova Event")
     go_to(page, live_server, "/prova/1/manage/")
 
-    expect_normalized(page.locator("#banner"), "Prova Event")
+    expect_normalized(page, page.locator("#banner"), "Prova Event")
     go_to(page, live_server, "")
-    expect_normalized(page.locator("#one"), "Prova Event")
+    expect_normalized(page, page.locator("#one"), "Prova Event")

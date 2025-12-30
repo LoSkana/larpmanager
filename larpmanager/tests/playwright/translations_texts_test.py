@@ -55,26 +55,26 @@ def test_translations_text(pw_page: Any) -> None:
     page.locator("#id_typ").select_option("h")
     page.locator("#id_default").uncheck()
     page.get_by_role("button", name="Confirm").click()
-    expect_normalized(page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
+    expect_normalized(page, page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
 
     # test languages
     go_to(page, live_server, "/")
-    expect_normalized(page.locator("#one"), "Hello")
+    expect_normalized(page, page.locator("#one"), "Hello")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Select Language:").select_option("it")
     page.get_by_label("Select Language:").click()
     page.get_by_role("button", name="Submit").click()
-    expect_normalized(page.locator("#one"), "BUONGIORNO")
-    expect_normalized(page.locator("#topbar"), "Profilo Contabilità")
+    expect_normalized(page, page.locator("#one"), "BUONGIORNO")
+    expect_normalized(page, page.locator("#topbar"), "Profilo Contabilità")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Seleziona la lingua:").select_option("fr")
     page.get_by_role("button", name="Submit").click()
-    expect_normalized(page.locator("#one"), "bonjour")
-    expect_normalized(page.locator("#topbar"), "Profil Comptabilité")
+    expect_normalized(page, page.locator("#one"), "bonjour")
+    expect_normalized(page, page.locator("#topbar"), "Profil Comptabilité")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Sélectionner la langue :").select_option("de")
     page.get_by_role("button", name="Submit").click()
-    expect_normalized(page.locator("#one"), "Hello")
+    expect_normalized(page, page.locator("#one"), "Hello")

@@ -584,8 +584,8 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
     if hasattr(form, "questions"):
         for question in form.questions:
             if question.id in form.singles:
-                # Use question.id for form field keys (internal form processing)
-                context["submitted"][get_question_key(question)] = form.singles[question.id].option_id
+                # Use question.uuid for form field keys (internal form processing)
+                context["submitted"][get_question_key(question)] = str(form.singles[question.id].option.uuid)
 
     if registration:
         if registration.ticket_id:

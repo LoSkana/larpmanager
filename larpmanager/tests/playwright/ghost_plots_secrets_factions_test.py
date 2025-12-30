@@ -152,7 +152,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="teeeeest").click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     page.wait_for_load_state("networkidle")
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character 211 Test Teaser Test Text eefqq gggerwe first qweeerr",
     )
@@ -171,7 +171,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     page.wait_for_load_state("networkidle")
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr",
     )
@@ -191,7 +191,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="teeeeest").click()
     page.wait_for_load_state("networkidle")
     page.wait_for_timeout(2000)
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "Test Character3 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr",
     )
@@ -201,11 +201,11 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Test Larp").click()
     page.get_by_role("link", name="Test Character").click()
-    expect_normalized(page.locator("#wrapper"), "Presentation Test Teaser2 eefqq")
+    expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser2 eefqq")
     expect(page.locator("#wrapper")).not_to_contain_text("gggerwe")
 
     page.get_by_role("link", name="eefqq").click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "Characters Test Character3 Presentation: Test Teaser2 Factions: eefqq",
     )
@@ -214,4 +214,4 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.goto(f"{live_server}/test/faction/2/")
     banner = page.locator("#banner")
     if banner.count() > 0:
-        expect_normalized(banner, "404")
+        expect_normalized(page, banner, "404")

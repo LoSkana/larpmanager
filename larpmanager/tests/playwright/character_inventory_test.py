@@ -139,8 +139,8 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
 
     # check row 1
     row1 = page.locator('#transfer_log tbody tr').first
-    expect_normalized(row1, "User Test	Test Character's Personal Storage	NPC	Credits	2	payment")
+    expect_normalized(page, row1, "User Test	Test Character's Personal Storage	NPC	Credits	2	payment")
 
     # check row 2
     row2 = page.locator('#transfer_log tbody tr').nth(1)
-    expect_normalized(row2, "Admin Test	NPC	Test Character's Personal Storage	Credits	3	test")
+    expect_normalized(page, row2, "Admin Test	NPC	Test Character's Personal Storage	Credits	3	test")

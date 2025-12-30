@@ -73,4 +73,4 @@ def test_exe_join(pw_page: Any) -> None:
     page.wait_for_timeout(1000)
     go_to(page, live_server, "/debug/prova")
 
-    expect_normalized(page.locator("#header"), "Prova Larp")
+    expect_normalized(page, page.locator("#header"), "Prova Larp")

@@ -50,34 +50,34 @@ def filter_multi(page: Any) -> None:
     # filter multi choice
     page.get_by_role("link", name="tag").click()
     page.get_by_role("link", name="wunder").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder None anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser",
     )
     page.get_by_role("link", name="qerfi").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder, qerfi None anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser",
     )
     page.get_by_role("link", name="wunder").click()
     page.get_by_role("link", name="zapyr").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) tag: qerfi, zapyr tag: wunder Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser Test Teaser",
     )
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="zapyr").click()
     page.get_by_role("link", name="zapyr").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All tag: wunder, qerfi Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser Test Teaser",
     )
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="wunder").click()
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="qerfi").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All tag: qerfi Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser wheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser",
     )
 
@@ -86,13 +86,13 @@ def filter_single(page: Any) -> None:
     # filter single choice
     page.get_by_role("link", name="color").click()
     page.get_by_role("link", name="red").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) color: red None Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser Test Teaser",
     )
     page.get_by_role("link", name="red").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All color: red anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser",
     )
     page.get_by_role("link", name="red").click()
@@ -101,19 +101,19 @@ def filter_single(page: Any) -> None:
 
 def filter_faction(page: Any) -> None:
     # filter factions
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All None Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser",
     )
     page.get_by_role("link", name="Factions").nth(1).click()
     page.locator("#factions").get_by_role("link", name="fassione").click()
-    expect_normalized(
-        page.locator("#one"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) Factions: fassione None Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser wheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser",
     )
     page.locator("#factions").get_by_role("link", name="fassione").click()
-    expect_normalized(
-        page.locator("#wrapper"),
+    expect_normalized(page,
+        page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione anotherPlayer: Absentcolor: bluetag: qerfi, wunder Test Teaser",
     )
     page.get_by_role("link", name="fassione").click()
@@ -202,7 +202,7 @@ def characters(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="color").first.click()
     page.get_by_role("link", name="tag").first.click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character Test Teaser Test Text fassione redzapyr #2 another bluewunder, qerfi #3 wheel fassione bluewunder",
     )

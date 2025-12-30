@@ -62,11 +62,11 @@ def test_exe_membership(pw_page: Any) -> None:
 
     # go to memberships
     go_to(page, live_server, "/manage/membership/")
-    expect_normalized(page.locator("#one"), "Total members: 1 - Request: 1")
-    expect_normalized(page.locator("#one"), "Test")
-    expect_normalized(page.locator("#one"), "Admin")
-    expect_normalized(page.locator("#one"), "orga@test.it")
-    expect_normalized(page.locator("#one"), "Test Larp")
+    expect_normalized(page, page.locator("#one"), "Total members: 1 - Request: 1")
+    expect_normalized(page, page.locator("#one"), "Test")
+    expect_normalized(page, page.locator("#one"), "Admin")
+    expect_normalized(page, page.locator("#one"), "orga@test.it")
+    expect_normalized(page, page.locator("#one"), "Test Larp")
 
     # approve
     go_to(page, live_server, "/manage/membership/")
@@ -74,8 +74,8 @@ def test_exe_membership(pw_page: Any) -> None:
     submit_confirm(page)
 
     # test
-    expect_normalized(page.locator("#one"), "Total members: 1 - Accepted: 1")
-    expect_normalized(page.locator("#one"), "Test")
-    expect_normalized(page.locator("#one"), "Admin")
-    expect_normalized(page.locator("#one"), "orga@test.it")
-    expect_normalized(page.locator("#one"), "Test Larp")
+    expect_normalized(page, page.locator("#one"), "Total members: 1 - Accepted: 1")
+    expect_normalized(page, page.locator("#one"), "Test")
+    expect_normalized(page, page.locator("#one"), "Admin")
+    expect_normalized(page, page.locator("#one"), "orga@test.it")
+    expect_normalized(page, page.locator("#one"), "Test Larp")

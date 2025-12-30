@@ -77,15 +77,15 @@ def template(live_server: Any, page: Any) -> None:
 
     # check roles
     go_to(page, live_server, "/fromtemplate/1/manage/roles/")
-    expect_normalized(page.locator('[id="u6"]'), "User Test")
-    expect_normalized(page.locator('[id="u6"]'), "Texts")
+    expect_normalized(page, page.locator('[id="u6"]'), "User Test")
+    expect_normalized(page, page.locator('[id="u6"]'), "Texts")
     # check configuration
     go_to(page, live_server, "/fromtemplate/1/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
     # check features
     go_to(page, live_server, "/fromtemplate/1/manage/characters")
-    expect_normalized(page.locator("#header"), "Characters")
+    expect_normalized(page, page.locator("#header"), "Characters")
     go_to(page, live_server, "/fromtemplate/1/manage/copy")
 
 
@@ -133,8 +133,8 @@ def copy(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/copy/1/manage/roles/")
     row = page.locator('tr[id="12"]')
-    expect_normalized(row, "User Test")
-    expect_normalized(row, "Appearance (Navigation), Writing (Factions) ")
+    expect_normalized(page, row, "User Test")
+    expect_normalized(page, row, "Appearance (Navigation), Writing (Factions) ")
     go_to(page, live_server, "/copy/1/manage/config/")
 
     page.get_by_role("link", name="Gallery ").click()
@@ -144,9 +144,9 @@ def copy(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/copy/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
-    expect_normalized(page.locator('[id="u2"]'), "12")
-    expect_normalized(page.locator('[id="u2"]'), "1")
-    expect_normalized(page.locator('[id="u2"]'), "11")
+    expect_normalized(page, page.locator('[id="u2"]'), "12")
+    expect_normalized(page, page.locator('[id="u2"]'), "1")
+    expect_normalized(page, page.locator('[id="u2"]'), "11")
 
 
 def campaign(live_server: Any, page: Any) -> None:
@@ -165,6 +165,6 @@ def campaign(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/campaign/1/manage/characters/")
     page.get_by_role("link", name="XP").click()
-    expect_normalized(page.locator('[id="u1"]'), "12")
-    expect_normalized(page.locator('[id="u1"]'), "1")
-    expect_normalized(page.locator('[id="u1"]'), "11")
+    expect_normalized(page, page.locator('[id="u1"]'), "12")
+    expect_normalized(page, page.locator('[id="u1"]'), "1")
+    expect_normalized(page, page.locator('[id="u1"]'), "11")
