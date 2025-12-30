@@ -183,7 +183,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
 def recheck_char(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#main_form"), "long descr")
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted textonly only descr all all descr")
+    expect_normalized(page, page.locator("#main_form"), "restricted text only only descr all all descr")
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
     expect_normalized(page,
         page.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
@@ -224,12 +224,11 @@ def create_first_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u6").select_option("u1")
     page.locator("#id_que_u8").select_option("u6")
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted textonly only descr all all descr")
+    expect_normalized(page, page.locator("#main_form"), "restricted text only only descr all all descr")
     page.get_by_text("many - (Available 2)").click()
     page.locator("#id_que_u7 div").filter(has_text="many - (Available 2)").click()
     expect_normalized(page, page.locator("#id_que_u7"), "many - (Available 2)")
     expect_normalized(page, page.locator("#id_que_u7"), "few - (Available 1)")
-    page.get_by_text("multiple descr all all").click()
     expect_normalized(page,
         page.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
     )

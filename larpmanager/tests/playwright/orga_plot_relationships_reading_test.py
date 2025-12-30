@@ -147,7 +147,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
     page.locator('[id="u1"]').get_by_role("cell", name="").click()
-    page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
+    page.locator('#rel_2_tr a.my_toggle[tog="f_2_inverse"]').click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery
@@ -196,7 +196,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Show <p>prova</p>")
+    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova")
     locator.click()
 
     # change it

@@ -77,7 +77,7 @@ def test_orga_mirror(pw_page: Any) -> None:
 
 def casting(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
+    page.get_by_role("link", name="Casting ").click()
     page.locator("#id_casting_characters").click()
     page.locator("#id_casting_characters").fill("1")
     page.locator("#id_casting_min").click()

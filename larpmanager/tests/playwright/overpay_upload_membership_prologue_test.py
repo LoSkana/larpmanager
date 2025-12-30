@@ -257,4 +257,4 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     # check
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Payed 1")
     page.get_by_role("link", name="Invoices").click()
-    expect_normalized(page, page.locator("#one"), "Admin TestWiremembershipConfirmed10Membership fee of Admin Test")
+    expect_normalized(page, page.locator("#one"), "Admin Test Wire membership Confirmed 10 Membership fee of Admin Test")
