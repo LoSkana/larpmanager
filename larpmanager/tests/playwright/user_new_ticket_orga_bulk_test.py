@@ -57,20 +57,20 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("checkbox", name="Factions").check()
     page.get_by_role("checkbox", name="Quests and Traits").check()
     page.get_by_role("checkbox", name="Experience points").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add plot
     page.get_by_role("link", name="Plots", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("plot")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add faction
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("faz")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check base
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
@@ -122,7 +122,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("typ")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def bulk_questbuilder(live_server: Any, page: Any) -> None:
@@ -131,11 +131,11 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q1")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("q2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create second quest type
     page.get_by_role("link", name="Quest type").click()
@@ -143,7 +143,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.locator("#one div").filter(has_text="New").nth(3).click()
     page.get_by_role("row", name="Name").locator("td").click()
     page.locator("#id_name").fill("t2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test bulk set quest
     page.get_by_role("link", name="Quest", exact=True).click()
@@ -157,7 +157,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("t1")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test bulk set quest
     page.get_by_role("link", name="Bulk").click()
@@ -173,11 +173,11 @@ def bulk_px(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("t1")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create ability
     page.get_by_role("link", name="Ability", exact=True).click()
@@ -186,7 +186,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
     page.locator("#id_name").fill("swor")
     page.locator("#id_cost").click()
     page.locator("#id_cost").fill("1")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test bulk set type
     page.get_by_role("link", name="Bulk").click()
@@ -207,20 +207,20 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "manage/")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Warehouse").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add box
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("box")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add tag
     page.get_by_role("link", name="Tags").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("tag")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add items
     page.get_by_role("link", name="Items").click()
@@ -231,7 +231,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").nth(1).fill("bo")
     page.locator(".select2-results__option").first.click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.locator("#id_name").click()
     page.locator("#id_name").fill("item2")
@@ -239,21 +239,21 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").nth(1).fill("box")
     page.locator(".select2-results__option").first.click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.locator("#id_name").click()
     page.locator("#id_name").fill("item3")
     page.locator("#select2-id_container-container").click()
     page.get_by_role("searchbox").nth(1).fill("box")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add second container
     page.get_by_role("link", name="Containers").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("box2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def bulk_warehouse2(live_server: Any, page: Any) -> None:
@@ -301,7 +301,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
 
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="New player").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add ticket
     page.get_by_role("link", name="New").click()
@@ -309,7 +309,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.locator("#id_tier").select_option("y")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("new")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # sign up with the new ticket
     go_to(page, live_server, "test")
@@ -319,7 +319,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     )
     page.get_by_label("Ticket").select_option("u2")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create new event
     go_to(page, live_server, "manage/")
@@ -328,19 +328,19 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("newevent")
     # don't set slug, let it be auto filled
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add feature also to this
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="New player").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add new ticket
     page.get_by_role("link", name="New").click()
     page.locator("#id_tier").select_option("y")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("new")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # set end date
     go_to(page, live_server, "newevent/1/manage/")

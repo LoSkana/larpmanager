@@ -41,10 +41,10 @@ def test_orga_event_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/")
-    expect_normalized(page, page.locator("#header"), "Access denied")
+    expect_normalized(page, page.locator("#banner"), "Access denied")
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect_normalized(page, page.locator("#header"), "Access denied")
+    expect_normalized(page, page.locator("#banner"), "Access denied")
 
     login_orga(page, live_server)
 
@@ -79,7 +79,7 @@ def test_orga_event_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/test/manage/")
-    expect_normalized(page, page.locator("#header"), "Access denied")
+    expect_normalized(page, page.locator("#banner"), "Access denied")
 
     go_to(page, live_server, "/test/manage/accounting/")
-    expect_normalized(page, page.locator("#header"), "Access denied")
+    expect_normalized(page, page.locator("#banner"), "Access denied")

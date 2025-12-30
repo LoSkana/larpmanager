@@ -87,7 +87,7 @@ def help_questions(live_server: Any, page: Any) -> None:
     page.get_by_role("textbox", name="Text").click()
     page.get_by_role("textbox", name="Text").fill("please help me")
     load_image(page, "#id_attachment")
-    page.get_by_label("Event").select_option("1")
+    page.get_by_label("Event").select_option("u1")
     submit_confirm(page)
 
     # check questions
@@ -138,7 +138,7 @@ def pre_register(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Delete").click()
     page.get_by_role("textbox", name="Informations").click()
     page.get_by_role("textbox", name="Informations").fill("bauuu")
-    page.get_by_label("Event").select_option("1")
+    page.get_by_label("Event").select_option("u1")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "bauuu")
 

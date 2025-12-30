@@ -85,7 +85,7 @@ def signup(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Check we are on payment page
-    expect_normalized(page, page.locator("#header"), "Payment")
+    expect_normalized(page, page.locator("#banner"), "Payment")
     expect_normalized(page, page.locator("b"), "100")
 
     # check reg status

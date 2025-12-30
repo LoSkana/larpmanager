@@ -210,3 +210,10 @@ def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool
                 if option_data["question_id"] not in context["searchable"]:
                     context["searchable"][option_data["question_id"]] = []
                 context["searchable"][option_data["question_id"]].append(option_data["id"])
+
+        # Sort searchable options by their order field
+        for question_id in context["searchable"]:
+            context["searchable"][question_id] = sorted(
+                context["searchable"][question_id],
+                key=lambda opt_id: context["options"].get(opt_id, {}).get("order", 0),
+            )

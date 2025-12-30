@@ -201,11 +201,11 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.locator("#faction0").select_option("Torta")
-    page.locator("#choice0").select_option("2")
+    page.locator("#choice0").select_option("u2")
     page.locator("#faction1").select_option("Torta")
-    page.locator("#choice1").select_option("1")
+    page.locator("#choice1").select_option("u1")
     page.locator("#faction2").select_option("Pizza")
-    page.locator("#choice2").select_option("3")
+    page.locator("#choice2").select_option("u3")
     page.get_by_role("button", name="Submit").click()
 
     # make casting
@@ -224,7 +224,7 @@ def casting(page: Any, live_server: Any) -> None:
 
     # manual trait assignments
     page.locator('[id="u2"]').get_by_role("link", name="").click()
-    page.locator("#id_qt_1").select_option("1")
+    page.locator("#id_qt_1").select_option("u1")
     submit_confirm(page)
 
     # check result

@@ -1437,7 +1437,7 @@ class PreRegistrationForm(forms.Form):
 
         self.pre_reg = 1 + len(self.context["already"])
 
-        cho = [("", "----")] + [(c.id, c.name) for c in self.context["choices"]]
+        cho = [("", "----")] + [(c.uuid, c.name) for c in self.context["choices"]]
         self.fields["new_event"] = forms.ChoiceField(
             required=False,
             choices=cho,

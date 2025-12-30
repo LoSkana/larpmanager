@@ -54,7 +54,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Experience points").check()
     page.get_by_role("checkbox", name="Characters").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
@@ -82,7 +82,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_description").click()
     page.locator("#id_description").fill("sasad")
     page.locator("#id_name").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create class field
     page.get_by_role("link", name="New").click()
@@ -92,15 +92,15 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Mage")
     page.locator("#main_form div").filter(has_text="After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Rogue")
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Cleric")
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
+    submit_confirm(page)
 
 
 def ability(live_server: Any, page: Any) -> None:
@@ -141,13 +141,13 @@ def ability(live_server: Any, page: Any) -> None:
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
         "This text should show"
     )
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Ability", exact=True).click()
     page.locator("[id='u2']").get_by_role("link", name="").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").nth(3).fill("test_template")
     page.get_by_role("option", name="test_template").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Ability", exact=True).click()
     page.get_by_role("cell", name="This text should show").click()
 
@@ -193,7 +193,7 @@ def rules(page: Any) -> None:
     page.locator("#id_amount").click()
     page.locator("#id_amount").fill("2")
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("searchbox").click()
 
     # create second rule - only for sword
@@ -203,7 +203,7 @@ def rules(page: Any) -> None:
     page.locator("#id_operation").select_option("MUL")
     page.locator("#id_amount").click()
     page.locator("#id_amount").fill("3")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check value
     page.get_by_role("link", name="Characters").click()
@@ -214,7 +214,7 @@ def rules(page: Any) -> None:
     page.get_by_role("link", name="").click()
     page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
     page.get_by_role("listitem", name="sword1").locator("span").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # recheck value
     page.get_by_role("link", name="Hit Point").click()
@@ -238,7 +238,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Registration is open!").click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Assign char
     go_to(page, live_server, "/test/manage")
@@ -247,7 +247,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # choose
     go_to(page, live_server, "/test")
@@ -287,7 +287,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
     page.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("ro")
     page.get_by_role("option", name="Test Larp - Class Rogue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test out free ability
     go_to(page, live_server, "/test")
@@ -302,7 +302,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Change").click()
     page.locator("#id_que_u5").select_option("u2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Ability").click()
     # ability is there (i got the correct class)
     expect_normalized(page,
@@ -312,7 +312,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Change").click()
     page.locator("#id_que_u5").select_option("u1")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Ability").click()
     # ability is not there (changed class)
     expect_normalized(page,
@@ -332,7 +332,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
     page.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("mage")
     page.get_by_role("option", name="Test Larp - Class Mage").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()

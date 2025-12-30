@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -56,7 +56,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Dynamic rates").check()
     page.get_by_role("checkbox", name="Surcharge").check()
     page.get_by_role("checkbox", name="Pay what you want").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check there are questions for all features
     page.get_by_role("link", name="Form").click()
@@ -64,7 +64,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.locator('[id="u1"]').get_by_role("cell", name="").click()
     page.get_by_text("Your registration ticket").click()
     page.get_by_text("Your registration ticket").fill("Your registration ticket2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     expect_normalized(page,
         page.locator("#one"),
@@ -79,7 +79,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.locator('[id="u2"]').get_by_role("link", name="").click()
     page.get_by_text("Reserve additional tickets").click()
     page.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Reserve additional tickets beyond your own2")
 
     # change ticket price
@@ -89,7 +89,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.locator("#id_price").fill("5")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("sadsadsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def prepare_surcharge(page: Any, live_server: Any) -> None:
@@ -102,13 +102,13 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     page.locator("#id_date").fill("2024-06-11")
     page.wait_for_timeout(2000)
     page.locator("#id_date").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # set up payments
     go_to(page, live_server, "manage")
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Payments", exact=True).check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("dasdsadsa")
@@ -120,7 +120,7 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_iban").fill("dasda")
     page.locator("#id_wire_fee").click()
     page.locator("#id_wire_fee").fill("0")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def signup(page: Any, live_server: Any) -> None:
@@ -132,7 +132,7 @@ def signup(page: Any, live_server: Any) -> None:
     page.get_by_role("spinbutton", name="Pay what you want").fill("4")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 29€")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "The total registration fee is: 29€")
 
     # check form
@@ -140,7 +140,7 @@ def signup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Registration", exact=True).click()
     expect_normalized(page,
         page.locator("#register_form"),
-        "(*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge",
+        "(*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2 Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge",
     )
 
 
@@ -149,11 +149,11 @@ def check_filler(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Filler").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Event").click()
     page.locator("#id_form1-max_filler").click()
     page.locator("#id_form1-max_filler").fill("5")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check filler is not there
     go_to(page, live_server, "test/")
@@ -168,7 +168,7 @@ def check_filler(page: Any, live_server: Any) -> None:
     page.locator("#orga_config").get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Ticket Filler ").click()
     page.locator("#id_filler_always").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check filler is not available
     go_to(page, live_server, "test/")

@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, load_image, login_orga, expect_normalized
+from larpmanager.tests.utils import fill_tinymce, go_to, load_image, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -50,7 +50,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Tokens").check()
     page.get_by_role("checkbox", name="Credits").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Set ticket price
     go_to(page, live_server, "/test/manage")
@@ -58,14 +58,14 @@ def check_overpay(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Signup
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Registration is open!").click()
     page.locator("#register_form").click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Add credits
     go_to(page, live_server, "/test/manage")
@@ -76,12 +76,12 @@ def check_overpay(page: Any, live_server: Any) -> None:
     page.locator(".select2-results__option").first.click()
     page.locator("#id_value").fill("60")
     page.locator("#id_descr").fill("cre")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Check signup accounting
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard 84060100 60")
+    expect_normalized(page, page.locator("#one"), "Admin Test Standard 8 40 60 100 60")
 
 
 def check_overpay_2(page: Any, live_server: Any) -> None:
@@ -94,7 +94,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     page.locator("#id_value").press("Home")
     page.locator("#id_value").fill("60")
     page.locator("#id_descr").fill("www")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Check signup accounting
     page.get_by_role("link", name="Registrations").click()
@@ -111,7 +111,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("80.00")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Check accounting
     page.get_by_role("link", name="Registrations").click()
@@ -120,7 +120,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
 
     # Perform save
     page.get_by_role("link", name="").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 8080 4040")
 
@@ -139,7 +139,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator("#id_registration_unique_code").check()
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Registrations", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
     page.get_by_role("link", name="").click()
@@ -147,7 +147,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
         page.locator("#main_form"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it Details Unique code Confirm",
     )
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
 
 
@@ -155,13 +155,13 @@ def prologues(page: Any) -> None:
     # activate prologues
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Prologues").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # redirected to prologue types
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("test")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add prologue
     page.get_by_role("link", name="Prologues", exact=True).click()
@@ -174,7 +174,7 @@ def prologues(page: Any) -> None:
     page.get_by_role("searchbox").fill("tes")
     page.locator(".select2-results__option").first.click()
     page.locator("#main_form").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check result
     page.get_by_role("link", name="Characters").click()
@@ -187,12 +187,12 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.locator("#exe_features").click()
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Membership").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Set membership fee
     page.locator("#id_membership_fee").click()
     page.locator("#id_membership_fee").fill("10")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Upload membership
     page.get_by_role("link", name="Membership").click()
@@ -205,7 +205,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.locator("#id_date").fill("2024-06-11")
     page.wait_for_timeout(2000)
     page.locator("#id_date").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Try accessing member form
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
@@ -230,7 +230,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Payments", exact=True).check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("rwerewrwe")
@@ -240,7 +240,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_payee").fill("3123213213")
     page.locator("#id_wire_iban").click()
     page.locator("#id_wire_iban").fill("321321321")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="Membership").click()
     page.get_by_role("link", name="Upload membership fee").click()
@@ -248,7 +248,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").fill("adm")
     page.locator(".select2-results__option").first.click()
     load_image(page, "#id_invoice")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Payed 1")

@@ -24,7 +24,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized
+from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -47,7 +47,7 @@ def prepare(page: Any) -> None:
     # Activate feature inventory
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Warehouse").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create new boxes
     page.get_by_role("link", name="New").click()
@@ -58,14 +58,14 @@ def prepare(page: Any) -> None:
     page.locator("#id_position").press("Tab")
     page.locator("#id_description").fill("asdf dsfds dfdsfs")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Boc B")
     page.locator("#id_name").press("Tab")
     page.locator("#id_position").fill("dd")
     page.locator("#id_position").press("Tab")
     page.locator("#id_description").fill("dsf dfsd dfsd")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Boc B dd dsf dfsd dfsd Box A bibi asdf dsfds dfdsfs")
 
     # add new tags
@@ -76,12 +76,12 @@ def prepare(page: Any) -> None:
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("gg ds")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Gru sad ")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("dsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def add_items(page: Any) -> None:
@@ -99,7 +99,7 @@ def add_items(page: Any) -> None:
     page.get_by_role("searchbox").fill("ele")
     page.locator(".select2-results__option").first.click()
     load_image(page, "#id_photo")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     expect_normalized(page, page.locator("#one"), "Item 1 sadsada Box A Electrical")
     page.get_by_role("link", name="New").click()
@@ -111,7 +111,7 @@ def add_items(page: Any) -> None:
     page.get_by_role("searchbox").nth(1).fill("boc")
     page.locator(".select2-results__option").first.click()
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Item 3sa")
     page.locator("#id_description").click()
@@ -119,7 +119,7 @@ def add_items(page: Any) -> None:
     page.locator("#select2-id_container-container").click()
     page.get_by_role("searchbox").nth(1).fill("box")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check items
     expect_normalized(page,
@@ -160,7 +160,7 @@ def bulk(page: Any) -> None:
     page.get_by_role("option", name="Item 3sa").click()
     page.locator("#id_notes").click()
     page.locator("#id_notes").fill("maintenance")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Item 3sa maintenance")
 
 
@@ -175,7 +175,7 @@ def area_assigmenents(page: Any) -> None:
     page.locator("#id_description").fill("sds")
     page.locator("#id_description").press("CapsLock")
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.locator("#id_name").fill("sALOON")
     page.locator("#id_name").press("Tab")
@@ -184,7 +184,7 @@ def area_assigmenents(page: Any) -> None:
     page.locator("#id_position").fill("SDsad ")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("saddsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     expect_normalized(page,

@@ -209,6 +209,7 @@ def submit_confirm(page: Any) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click()
+    page.wait_for_timeout(2000)
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:

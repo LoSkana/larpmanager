@@ -41,20 +41,20 @@ def test_translations_text(pw_page: Any) -> None:
     fill_tinymce(page, "id_text", "Hello", show=False)
     page.locator("#id_typ").select_option("h")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     fill_tinymce(page, "id_text", "BUONGIORNO", show=False)
     page.locator("#id_language").select_option("it")
     page.locator("#id_default").uncheck()
     page.locator("#id_typ").select_option("h")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     fill_tinymce(page, "id_text", "bonjour", show=False)
     page.locator("#id_language").select_option("fr")
     page.locator("#id_typ").select_option("h")
     page.locator("#id_default").uncheck()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
 
     # test languages

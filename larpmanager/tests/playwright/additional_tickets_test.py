@@ -68,7 +68,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     # Enable additional tickets feature
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Additional tickets").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Verify feature is enabled and form question is created
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
@@ -82,7 +82,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     page.locator("#id_price").fill("50")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("Standard ticket with meals")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def registration_with_additionals(page: Any, live_server: Any) -> None:
@@ -101,7 +101,7 @@ def registration_with_additionals(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#riepilogo"), "200€")
 
     # Confirm registration
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Verify registration confirmation shows correct total
     go_to(page, live_server, "accounting/")
@@ -148,7 +148,7 @@ def additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
 
     # Verify price is just the base ticket: 50€
     expect_normalized(page, page.locator("#riepilogo"), "50€")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Test with maximum (5) additional tickets
     logout(page)
@@ -162,7 +162,7 @@ def additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
 
     # Verify price: 50€ (base) + 250€ (5 additional) = 300€
     expect_normalized(page, page.locator("#riepilogo"), "300€")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def test_additional_tickets_with_other_options(pw_page: Any) -> None:
@@ -182,14 +182,14 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Additional tickets").check()
     page.get_by_role("checkbox", name="Pay what you want").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Set ticket price
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
     page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("30")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Register with both additional tickets and pay what you want
     go_to(page, live_server, "test/")
@@ -206,7 +206,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Verify total: 30€ (base) + 60€ (2 additional) + 10€ (donation) = 100€
     expect_normalized(page, page.locator("#riepilogo"), "100€")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Verify in organizer view
     go_to(page, live_server, "test/manage/registrations/")
@@ -227,7 +227,7 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
     # Uncheck additional tickets if it's checked
     if page.get_by_role("checkbox", name="Additional tickets").is_checked():
         page.get_by_role("checkbox", name="Additional tickets").uncheck()
-        page.get_by_role("button", name="Confirm").click()
+        submit_confirm(page)
 
     # Navigate to registration
     go_to(page, live_server, "test/")
@@ -238,7 +238,7 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
 
     # Verify form can still be submitted
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Verify registration succeeded
     expect(page.locator("#one")).to_be_visible()

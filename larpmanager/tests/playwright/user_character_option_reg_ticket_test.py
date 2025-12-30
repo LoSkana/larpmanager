@@ -23,7 +23,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -51,7 +51,7 @@ def prepare(page: Any) -> None:
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Characters").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Player editor ").click()
@@ -59,14 +59,14 @@ def prepare(page: Any) -> None:
     page.locator("#id_user_character_max").fill("1")
     page.get_by_role("link", name="Character form ").click()
     page.locator("#id_character_form_wri_que_tickets").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create ticket
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bambi")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # set option based on ticket
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -81,16 +81,16 @@ def prepare(page: Any) -> None:
     page.get_by_role("searchbox").fill("st")
     page.locator(".select2-results__option").first.click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bmb")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("bam")
     page.locator(".select2-results__option").first.click()
     page.locator("#main_form").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#options"), "st Standard bmb bambi")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def create_character(page: Any) -> None:
@@ -98,7 +98,7 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Register").click()
     page.get_by_label("Ticket").select_option("u1")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Access character creation!").click()
 
     # check only one option
@@ -109,7 +109,7 @@ def create_character(page: Any) -> None:
     page.locator("#id_name").fill("myyyy")
     fill_tinymce(page, "id_teaser", "sdsa")
     fill_tinymce(page, "id_text", "asadas")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check status, resubmit reg
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
@@ -132,7 +132,7 @@ def create_character(page: Any) -> None:
 
     # check only one option available
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
 
     # check with registration resubmit
@@ -141,5 +141,5 @@ def create_character(page: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     page.get_by_role("link", name="Change").click()
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")

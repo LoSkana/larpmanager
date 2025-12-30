@@ -50,7 +50,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.get_by_role("checkbox", name="Character inventory").check()
     # Writing
     page.get_by_role("checkbox", name="Characters").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
@@ -60,7 +60,7 @@ def setup(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/quick/")
 
@@ -70,11 +70,11 @@ def character_inventory_pool_types(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="+ New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Credits")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="+ New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Junk")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def character_inventory_pools(live_server: Any, page: Any) -> None:
@@ -83,13 +83,13 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("NPC")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Character's Bank")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator('[id="u1"]').get_by_role("link", name="").click()
 
 
@@ -110,7 +110,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="User Test - user@test.it").click()
     # page.once("dialog", lambda dialog: dialog.dismiss())
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # log out and log in as the test user
     page.get_by_role("link", name=" Hi, Admin Test!").click()
@@ -128,7 +128,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     # do transfers as a user
     page.get_by_role("link", name="View Details").first.click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="View Details").first.click()
     page.get_by_role("row", name="Credits 3 NPC Transfer").get_by_role("spinbutton").click()

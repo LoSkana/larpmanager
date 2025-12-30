@@ -246,10 +246,10 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("gaga")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bibi")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test adding them to character
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
@@ -265,7 +265,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     # Wait for search results to appear and click first option
     page.locator(".select2-results__option").first.wait_for(state="visible")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.wait_for_timeout(2000)
 
@@ -281,13 +281,13 @@ def plots_character(live_server: Any, page: Any) -> None:
     # change second
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show").click()
     fill_tinymce(page, "id_pl_2", "ffff")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
     expect_normalized(page, page.locator("#id_pl_2_tr"), "<p>ffff</p>")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator('[id="u1"]'), "gaga")
@@ -297,6 +297,6 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.get_by_role("listitem", name="gaga").locator("span").click()
     page.get_by_role("link", name="Instructions").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     expect(page.locator('[id="u1"]')).not_to_contain_text("gaga")

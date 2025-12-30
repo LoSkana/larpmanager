@@ -22,7 +22,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -45,7 +45,7 @@ def feature_fields(page: Any) -> None:
     # set feature
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Characters").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # reorder test
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -57,7 +57,7 @@ def feature_fields(page: Any) -> None:
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_title").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -69,7 +69,7 @@ def feature_fields(page: Any) -> None:
     page.locator("#id_writing_title").uncheck()
     page.locator("#id_writing_cover").check()
     page.locator("#id_writing_assigned").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -87,7 +87,7 @@ def feature_fields2(page: Any) -> None:
     page.locator("#id_writing_cover").uncheck()
     page.locator("#id_writing_hide").check()
     page.locator("#id_writing_assigned").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -98,7 +98,7 @@ def feature_fields2(page: Any) -> None:
     # set experience point
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Experience points").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # add field computed
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -106,11 +106,11 @@ def feature_fields2(page: Any) -> None:
     page.locator("#id_typ").select_option("c")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("comp")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test save
     page.get_by_role("link", name="Event").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check it has not been deleted
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -122,7 +122,7 @@ def feature_fields2(page: Any) -> None:
     # remove px
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Experience points").uncheck()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -137,7 +137,7 @@ def form_other_writing(page: Any) -> None:
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
     page.get_by_role("checkbox", name="Quests and Traits").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()

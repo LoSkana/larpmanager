@@ -252,6 +252,6 @@ def gift(page: Any, live_server: Any) -> None:
 
     login_user(page, live_server)
     go_to(page, live_server, href)
-    expect_normalized(page, page.locator("#header"), "Redeem registration")
+    expect_normalized(page, page.locator("#banner"), "Redeem registration")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Registration confirmed")

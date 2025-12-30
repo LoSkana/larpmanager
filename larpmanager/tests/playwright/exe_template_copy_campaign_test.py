@@ -85,7 +85,7 @@ def template(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
     # check features
     go_to(page, live_server, "/fromtemplate/1/manage/characters")
-    expect_normalized(page, page.locator("#header"), "Characters")
+    expect_normalized(page, page.locator("#banner"), "Characters")
     go_to(page, live_server, "/fromtemplate/1/manage/copy")
 
 

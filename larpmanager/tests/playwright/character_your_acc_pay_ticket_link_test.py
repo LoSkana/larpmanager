@@ -50,7 +50,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Tickets ").click()
     page.locator("#id_ticket_npc").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Create ticket
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
@@ -59,7 +59,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Staff")
     page.locator("#id_visible").uncheck()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Test signup (shouldn't be visible)
     go_to(page, live_server, "/test/")
@@ -76,7 +76,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     page.locator('[id="u2"]').get_by_role("link", name="Link").click()
     expect(page.get_by_label("Ticket (*)")).to_have_value("u2")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Staff)")
 
 
@@ -85,7 +85,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Characters").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="").click()
     page.get_by_role("cell", name="Show available characters").click()
@@ -93,7 +93,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # Go to your character, check result
     go_to(page, live_server, "/test/character/your")
@@ -111,7 +111,7 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
     page.locator("#id_price").click()
     page.locator("#id_price").press("Home")
     page.locator("#id_price").fill("100.00")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="please fill in your profile.").click()
@@ -119,13 +119,13 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("button", name="Submit").click()
     page.get_by_role("link", name="Registration confirmed (Staff)").click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # set up payments
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Payments", exact=True).check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("sadsadsa")
@@ -135,7 +135,7 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_payee").fill("dasdsadsasa")
     page.locator("#id_wire_iban").click()
     page.locator("#id_wire_iban").fill("dsasadas")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check payments
     go_to(page, live_server, "/test/")
@@ -156,7 +156,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Factions").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("primaaa")
@@ -164,14 +164,14 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="#1 Test Character").click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_typ").select_option("t")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("tranver")
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check result
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -181,7 +181,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Campaign").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Events").click()
     page.get_by_role("link", name="New event").click()
     page.locator("#id_name").click()
@@ -189,15 +189,15 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="Test Larp").click()
-    page.get_by_role("button", name="Confirm").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
+    submit_confirm(page)
     page.locator("#id_start").fill("2045-06-11")
     page.wait_for_timeout(2000)
     page.locator("#id_start").click()
     page.locator("#id_end").fill("2045-06-13")
     page.wait_for_timeout(2000)
     page.locator("#id_end").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check we have for now the same factions
     page.locator("#orga_features").get_by_role("link", name="Features").click()
@@ -208,7 +208,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Campaign ").click()
     page.locator("#id_campaign_faction_indep").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Factions").click()
     expect_normalized(page, page.locator("#one"), "No elements are currently available")
 
@@ -221,14 +221,14 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").fill("TE")
     page.get_by_role("option", name="#1 Test Character").click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_typ").select_option("t")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("TRANVERSA")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("TE")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check situation in second event
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -254,7 +254,7 @@ def acc_refund(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Tokens").check()
     page.get_by_role("checkbox", name="Credits").check()
     page.get_by_role("checkbox", name="Refunds").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # give out credits
     page.get_by_role("link", name="Credits", exact=True).click()
