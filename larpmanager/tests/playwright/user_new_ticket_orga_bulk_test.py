@@ -33,7 +33,7 @@ def test_user_new_ticket_orga_bulk(pw_page: Any) -> None:
 
     login_orga(page, live_server)
 
-    go_to(page, live_server, "test/1/manage/")
+    go_to(page, live_server, "test/manage/")
 
     new_ticket(live_server, page)
 
@@ -50,7 +50,7 @@ def test_user_new_ticket_orga_bulk(pw_page: Any) -> None:
 
 def bulk_writing(live_server: Any, page: Any) -> None:
     # set feature
-    go_to(page, live_server, "test/1/manage/")
+    go_to(page, live_server, "test/manage/")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Plots").check()
@@ -343,7 +343,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # set end date
-    go_to(page, live_server, "newevent/1/manage/")
+    go_to(page, live_server, "newevent/manage/")
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2045-06-11")
     page.wait_for_timeout(2000)

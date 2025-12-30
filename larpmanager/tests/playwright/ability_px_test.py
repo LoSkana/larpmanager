@@ -338,7 +338,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Ability").click()
     page.locator("#ability_select").select_option("2")
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
         "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability",

@@ -117,7 +117,7 @@ def signup(page: Any, live_server: Any) -> None:
 
     # Approve sharing
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
 
 

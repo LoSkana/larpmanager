@@ -94,7 +94,7 @@ def abilities(page: Any) -> None:
     check_download(page, "Download example template")
     page.locator("#id_first").click()
     upload(page, "#id_first", get_path("abilities.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created sword OK - Created shield OK - Created sneak",
@@ -124,7 +124,7 @@ def relationships(page: Any) -> None:
     check_download(page, "Download example template")
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("relationships.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), " OK - Relationship characcter test character")
     page.get_by_role("link", name="Proceed").click()
     page.get_by_role("link", name="Relationships").click()
@@ -141,7 +141,7 @@ def plots(live_server: Any, page: Any) -> None:
     upload(page, "#id_first", get_path("plot.csv"))
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("roles.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created plott OK - Plot role characcter plott",
@@ -169,7 +169,7 @@ def quest_trait(page: Any) -> None:
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("quest.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created questt")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "Q1 questt bhbh presenttation ttext")
@@ -178,7 +178,7 @@ def quest_trait(page: Any) -> None:
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("trait.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created traitt")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "T1 traitt Q1 questt ppresentation teeeext")
@@ -190,7 +190,7 @@ def registrations(page: Any) -> None:
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("registration.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), " OK - Created User Test")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "User Test #2 characcter")
@@ -204,7 +204,7 @@ def reg_form(page: Any) -> None:
     upload(page, "#id_first", get_path("reg-questions.csv"))
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("reg-options.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created tbmobw OK - Created qmhcuf OK - Created holdmf OK - Created lyucez OK - Created bamkzw OK - Created npyrxd OK - Created rdtbgg OK - Created qkcyjr OK - Created fjxkum",
@@ -222,7 +222,7 @@ def characters(page: Any) -> None:
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("character.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), " OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page,
@@ -236,7 +236,7 @@ def factions(page: Any) -> None:
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("faction.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), " OK - Created facction")
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "facction Primary gh asd oeir sdf")
@@ -249,7 +249,7 @@ def char_form(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("char-questions.csv"))
     upload(page, "#id_second", get_path("char-options.csv"))
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created bibi OK - Created baba OK - Created wer OK - Created asd OK - Created poi OK - Created huhu OK - Created trtr OK - Created rrrrrr OK - Created tttttt",

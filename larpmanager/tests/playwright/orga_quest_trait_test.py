@@ -206,7 +206,7 @@ def casting(page: Any, live_server: Any) -> None:
     page.locator("#choice1").select_option("u1")
     page.locator("#faction2").select_option("Pizza")
     page.locator("#choice2").select_option("u3")
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
 
     # make casting
     go_to(page, live_server, "/test/manage/")

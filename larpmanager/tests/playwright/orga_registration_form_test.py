@@ -270,7 +270,7 @@ def signup_check(live_server: Any, page: Any) -> None:
     expect(page.get_by_role("checkbox", name="few (30€)")).to_be_checked()
     page.get_by_text("multiple descrall all").click()
     page.get_by_text("many many descr").click()
-    expect_normalized(page, page.locator("#register_form"), "multiple descrall all descrmany many descrfew few")
+    expect_normalized(page, page.locator("#register_form"), "multiple descr all all descr many many descr few few")
     expect_normalized(page, page.locator("#register_form"), "options: 2 / 2")
     expect_normalized(page, page.locator("#register_form"), "mandatory (*)")
     page.get_by_role("button", name="Continue").click()

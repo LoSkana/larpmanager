@@ -229,14 +229,14 @@ def gift(page: Any, live_server: Any) -> None:
 
     # pay
     page.get_by_role("link", name="10€ within 8 days").click()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
     submit(page)
 
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/gift/")
     expect_normalized(page, page.locator("#one"), "Payment currently in review by the staff.")

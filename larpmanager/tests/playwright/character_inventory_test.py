@@ -121,7 +121,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("textbox", name="email").fill("user@test.it")
     page.get_by_role("textbox", name="email").press("Tab")
     page.get_by_role("textbox", name="password").fill("banana")
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Test Larp").click()
     page.get_by_role("link", name="Test Character").click()
 

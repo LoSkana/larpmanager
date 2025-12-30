@@ -56,7 +56,7 @@ def login(page: Any, live_server: Any, name: Any) -> None:
 
     page.locator("#id_username").fill(name)
     page.locator("#id_password").fill(password)
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect(page.locator("#banner")).not_to_contain_text("Login")
 
 
@@ -100,7 +100,7 @@ def go_to_check(page: Any, path: Any) -> None:
 
 
 def submit(page: Any) -> None:
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     page.wait_for_load_state("networkidle")
     page.wait_for_load_state("load")
     ooops_check(page)
@@ -205,7 +205,10 @@ def _checkboxes(page: Any, check: Any = True) -> None:
 
 
 def submit_confirm(page: Any) -> None:
-    submit_btn = page.get_by_role("button", name="Confirm", exact=True)
+    submit_btn = page.get_by_role(
+        "button",
+        name=re.compile(r"^(Confirm|Submit)$", re.IGNORECASE)
+    )
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click()
@@ -278,18 +281,31 @@ def normalize_whitespace(text: str) -> str:
     # Strip leading/trailing whitespace
     return text.strip().lower()
 
-
 def expect_normalized(page, locator, expected: str, timeout=10000):
-
     locator.wait_for(state="visible", timeout=timeout)
 
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
     page.wait_for_load_state("networkidle")
 
-    page.wait_for_timeout(2000)
+    raw_parts = []
 
-    raw = locator.inner_text() or ""
+    # testo elemento principale
+    raw_parts.append(locator.inner_text() or "")
+
+    # iframe discendenti (same-origin)
+    iframes = locator.locator("iframe")
+    count = iframes.count()
+
+    for i in range(count):
+        frame_locator = iframes.nth(i).frame_locator(":scope")
+        try:
+            raw_parts.append(frame_locator.locator("body").inner_text())
+        except:
+            pass  # iframe non accessibile / cross-origin
+
+    raw = "\n".join(raw_parts)
+
     actual = normalize_whitespace(raw)
     exp = normalize_whitespace(expected)
 

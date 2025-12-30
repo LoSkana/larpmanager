@@ -116,7 +116,7 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="please fill in your profile.").click()
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Registration confirmed (Staff)").click()
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
@@ -275,7 +275,7 @@ def acc_refund(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="Details").fill("asdsadsadsa")
     page.get_by_role("spinbutton", name="Value").click()
     page.get_by_role("spinbutton", name="Value").fill("20")
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
 
     go_to(page, live_server, "/manage")

@@ -96,7 +96,7 @@ def membership(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "please upload your membership application to proceed")
     page.get_by_role("link", name="please upload your membership").click()
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     # compile request
     load_image(page, "#id_request")
     load_image(page, "#id_document")

@@ -214,7 +214,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     # Check result
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     go_to(page, live_server, "/membership")
 
     expect_normalized(page, page.locator("#one"), "You are a regular member of our Organization")

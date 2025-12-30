@@ -77,7 +77,7 @@ def sign_up_pay(page: Any, live_server: Any) -> None:
     page.locator("#id_price").fill("50.00")
     submit_confirm(page)
 
-    go_to(page, live_server, "test/1/manage/form/")
+    go_to(page, live_server, "test/manage/form/")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("pay")
