@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import re
 from typing import Any
 
 import pytest
@@ -36,7 +37,7 @@ def test_orga_form_writing_config(pw_page: Any) -> None:
 
     feature_fields(page)
 
-    feature_fields2(page)
+    feature_fields2(page, live_server)
 
     form_other_writing(page)
 
@@ -79,7 +80,7 @@ def feature_fields(page: Any) -> None:
     )
 
 
-def feature_fields2(page: Any) -> None:
+def feature_fields2(page: Any, live_server: Any) -> None:
     # add config hide, assigned
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Writing ").click()
@@ -98,6 +99,11 @@ def feature_fields2(page: Any) -> None:
     # set experience point
     page.get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Experience points").check()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    page.locator("#id_px_rules").check()
     submit_confirm(page)
 
     # add field computed

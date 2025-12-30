@@ -66,7 +66,7 @@ def prepare(page: Any) -> None:
     page.locator("#id_position").press("Tab")
     page.locator("#id_description").fill("dsf dfsd dfsd")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#inv_containers tbody"), "Boc B dd dsf dfsd dfsd Box A bibi asdf dsfds dfdsfs")
+    expect_normalized(page, page.locator("#inv_containers tbody"), "box a bibi asdf dsfds dfdsfs boc b dd dsf dfsd dfsd")
 
     # add new tags
     page.get_by_role("link", name="Tags").click()

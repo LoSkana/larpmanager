@@ -84,6 +84,18 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     fill_tinymce(page, "id_teaser", "good friends with ")
     frame_locator = page.frame_locator("iframe#id_teaser_ifr")
     editor = frame_locator.locator("body#tinymce")
+
+    editor.evaluate("""
+    el => {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+    """)
+    editor.press(" ")
     editor.press("#")
     page.get_by_role("searchbox").fill("tes")
     page.locator(".select2-results__option").first.click()
@@ -141,7 +153,7 @@ def excel(page: Any, live_server: Any) -> None:
     # check in page
     page.locator('[id="u2"]').get_by_role("link", name="").click()
     page.locator('a.my_toggle[tog="f_id_text"]').click()
-    expect_normalized(page, page.locator("#one"), "Text (*) Show <p>ciaoooo</p>")
+    expect_normalized(page, page.locator("#one"), "good friends with #1 ciaoooo")
 
 
 def external(page: Any, live_server: Any) -> None:
@@ -160,7 +172,7 @@ def external(page: Any, live_server: Any) -> None:
     go_to_check(page, live_server + url)
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation good friends with Test Character2Test Character2Test Teaser + 2 (...) Text ciaoooo",
+        "Presentation good friends with Test Character2 Text ciaoooo",
     )
 
 

@@ -162,7 +162,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # test bulk set quest
     page.get_by_role("link", name="Bulk").click()
     page.locator("td:nth-child(5)").click()
-    page.locator("#objs_9").select_option("2")
+    page.locator("#objs_9").select_option("u2")
     page.get_by_role("link", name="Execute").click()
     expect_normalized(page, page.locator("#one"), "T1 t1 Q2 q2")
 
@@ -197,7 +197,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
     # test bulk change type
     page.get_by_role("link", name="Bulk").click()
     page.locator("td:nth-child(5)").click()
-    page.locator("#objs_10").select_option("1")
+    page.locator("#objs_10").select_option("u1")
     page.get_by_role("link", name="Execute").click()
     expect_normalized(page, page.locator("#one"), "swor t1 1")
 
@@ -263,7 +263,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator("#objs_1").select_option("2")
+    page.locator("#objs_1").select_option("U2")
     page.get_by_role("link", name="Execute").click()
     expect(
         page.get_by_text("newevent Test Larp Organization This page shows the warehouse items - Config")

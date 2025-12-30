@@ -287,6 +287,7 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
     page.wait_for_load_state("networkidle")
+    page.wait_for_timeout(2000)
 
     raw_parts = []
 

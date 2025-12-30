@@ -464,7 +464,7 @@ def get_casting_data(
     # Load character avoidance texts (reasons players can't play certain characters)
     avoidance_texts = {}
     typ = context.get("quest_type", 0)
-    for avoidance_entry in CastingAvoid.objects.filter(run=context["run"], typ=typ):
+    for avoidance_entry in CastingAvoid.objects.filter(run=context["run"], typ=typ.number):
         avoidance_texts[avoidance_entry.member.uuid] = avoidance_entry.text
 
     # Serialize all data to JSON for client-side casting algorithm
