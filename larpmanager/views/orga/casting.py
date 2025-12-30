@@ -305,7 +305,7 @@ def check_player_skip_quests(registration: Registration, quest_type: QuestType) 
     """Check if player has traits allowing quest skipping."""
     return AssignmentTrait.objects.filter(
         run_id=registration.run_id,
-        member_uuid=registration.member.uuid,
+        member__uuid=registration.member.uuid,
         typ=quest_type.number,
     ).exists()
 

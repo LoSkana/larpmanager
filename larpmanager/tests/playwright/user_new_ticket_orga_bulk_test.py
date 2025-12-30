@@ -259,7 +259,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
 def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # bulk move to box
     page.get_by_role("link", name="Items").click()
-    expect_normalized(page, page.locator("#one"), "item3 box item2 box item1 box")
+    expect_normalized(page, page.locator("#one"), "item1 box item2 box item3 box")
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()

@@ -183,10 +183,10 @@ def check_first_char(page: Any, live_server: Any) -> None:
 def recheck_char(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#main_form"), "long descr")
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted textonly only descrall all descr")
+    expect_normalized(page, page.locator("#main_form"), "restricted textonly only descr all all descr")
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
     expect_normalized(page,
-        page.locator('[id="id_que_u7_tr"]'), "multiple descrall all descrmany many descrfew few descr"
+        page.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
     )
     submit_confirm(page)
     go_to(page, live_server, "/test/character/list")
@@ -220,18 +220,18 @@ def create_first_char(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#main_form"), "long descr")
     expect_normalized(page, page.locator("#main_form"), "text length: 10 / 10")
     expect_normalized(page, page.locator("#lbl_id_que_u6"), "available text")
-    expect_normalized(page, page.locator("#main_form"), "available descrall allfew few descr")
+    expect_normalized(page, page.locator("#main_form"), "available descr all all few few descr")
     page.locator("#id_que_u6").select_option("u1")
     page.locator("#id_que_u8").select_option("u6")
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted textonly only descrall all descr")
+    expect_normalized(page, page.locator("#main_form"), "restricted textonly only descr all all descr")
     page.get_by_text("many - (Available 2)").click()
     page.locator("#id_que_u7 div").filter(has_text="many - (Available 2)").click()
     expect_normalized(page, page.locator("#id_que_u7"), "many - (Available 2)")
     expect_normalized(page, page.locator("#id_que_u7"), "few - (Available 1)")
-    page.get_by_text("multiple descrall all").click()
+    page.get_by_text("multiple descr all all").click()
     expect_normalized(page,
-        page.locator('[id="id_que_u7_tr"]'), "multiple descrall all descrmany many descrfew few descr"
+        page.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
     )
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
     page.get_by_role("checkbox", name="all").check()

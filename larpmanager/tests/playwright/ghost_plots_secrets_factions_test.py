@@ -193,7 +193,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.wait_for_timeout(2000)
     expect_normalized(page,
         page.locator("#one"),
-        "Test Character3 211 Test Teaser2 Test Text eefqq gggerwe first qweeerr",
+        "Test Character3 2 1 1 Test Teaser2 Test Text eefqq gggerwe first qweeerr",
     )
 
     # check secret factions

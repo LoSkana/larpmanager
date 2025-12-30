@@ -99,7 +99,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check signup accounting
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard 100100 6040")
+    expect_normalized(page, page.locator("#one"), "Admin Test Standard 100 100 60 40")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
@@ -116,13 +116,13 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check accounting
     page.get_by_role("link", name="Registrations").click()
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard -2010080204040")
+    expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
 
     # Perform save
     page.get_by_role("link", name="").click()
     submit_confirm(page)
     page.get_by_role("link", name="accounting", exact=True).click()
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard 8080 4040")
+    expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
