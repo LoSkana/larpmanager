@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Mirror character functionality with casting integration.
+Verifies mirror character creation linked to primary characters, gallery visibility
+of both mirror and primary, casting algorithm handling, and assignment resolution.
+"""
+
 import re
 from typing import Any
 

@@ -18,7 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-"""Playwright tests for additional tickets feature."""
+"""
+Test: Additional tickets feature with pricing and availability.
+Verifies additional ticket configuration, price calculation with additional tickets,
+organizer view of additional tickets, editing counts, and edge cases with min/max tickets.
+"""
 
 from typing import Any
 

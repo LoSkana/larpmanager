@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Quests and Traits system with casting integration.
+Verifies quest types, quest creation, trait creation with character references,
+and casting algorithm integration with quest/trait assignments.
+"""
+
 from typing import Any
 
 import pytest
@@ -81,7 +88,7 @@ def quests(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # create two quests
-    page.get_by_role("link", name="Quest", exact=True).click()
+    page.get_by_role("link", name="Quest", exact=True).click(force=True)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("Torta")
     fill_tinymce(page, "id_teaser", "zucchero")
@@ -213,23 +220,27 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
+    page.wait_for_timeout(2000)
     page.get_by_role("button", name="Upload").click()
 
     # check signups
     page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
-        page.locator("#one"), "User Test Standard #2 Another Admin Test Standard #1 Test Character Torta - Nonna"
+        page.locator("#one"), "User Test #2 Another Standard "
+    )
+    expect_normalized(page,
+        page.locator("#one"), "Admin Test #1 Test Character Torta - Nonna Standard"
     )
 
     # manual trait assignments
     page.locator('[id="u2"]').get_by_role("link", name="").click()
-    page.locator("#id_qt_1").select_option("u1")
+    page.locator("#id_qt_u1").select_option("u1")
     submit_confirm(page)
 
     # check result
     page.get_by_role("link", name="Lore").click()
     expect_normalized(page,
         page.locator("#one"),
-        "User Test Standard #2 Another Torta - Strudel Admin Test Standard #1 Test Character Torta - Nonna",
+        "User Test #2 Another Torta - Strudel Standard Admin Test #1 Test Character Torta - Nonna Standard",
     )

@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -41,7 +41,7 @@ from larpmanager.forms.utils import (
     TicketS2WidgetMulti,
     TransferTargetRunS2Widget,
 )
-from larpmanager.models.casting import Trait
+from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
     QuestionStatus,
@@ -62,6 +62,9 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.users.registration import get_reduced_available_count
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 
 class RegistrationForm(BaseRegistrationForm):
@@ -838,13 +841,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.initial["quotas"] = self.instance.quotas
         self.sections["id_quotas"] = registration_section
 
-    def init_character(self, char_section: Any) -> None:  # noqa: C901 - Complex character field initialization with feature-dependent logic
-        """Initialize character selection fields in registration forms.
-
-        Manages character assignment options based on event configuration
-        and user permissions for character-based events.
-        """
-        # CHARACTER AND QUESTS
+    def init_character(self, char_section: str) -> None:
+        """Initialize character fields in registration form editing."""
         if "orga_characters" not in self.params or not self.params["orga_characters"]:
             return
 
@@ -867,35 +865,61 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         )
         self.sections["id_characters_new"] = char_section
 
-        if "questbuilder" in self.params["features"]:
-            already = []
-            assigned = []
-            char = None
-            char_ids = self.get_init_multi_character()
-            if char_ids:
-                char = Character.objects.get(pk=char_ids[0])
-            for tnum, trait in self.params["traits"].items():
-                if char and char.number == trait["char"]:
-                    assigned.append(tnum)
-                    continue
-                already.append(tnum)
-            available = Trait.objects.filter(event=self.event).exclude(number__in=already)
-            for qtnum, qt in self.params["quest_types"].items():
-                qt_id = f"qt_{qt['number']}"
-                key = "id_" + qt_id
-                self.sections[key] = char_section
-                choices = [("0", _("--- NOT ASSIGNED ---"))]
-                for quest in self.params["quests"].values():
-                    if quest["typ"] != qtnum:
-                        continue
-                    for t in available:
-                        if t.quest_id != quest["id"]:
-                            continue
-                        choices.append((t.id, f"Q{quest['number']} {quest['name']} - {t}"))
-                        if t.number in assigned:
-                            self.initial[qt_id] = t.id
+        self._init_quest_traits(char_section)
 
-                self.fields[qt_id] = forms.ChoiceField(required=True, choices=choices, label=qt["name"])
+    def _init_quest_traits(self, char_section: str) -> None:
+        """Initialize manual questbuilder assignment in orga registration form editing."""
+        if "questbuilder" not in self.params["features"]:
+            return
+
+        # Get traits already assigned to other members
+        already_assigned_trait_ids = set()
+        member_assignments = {}
+        current_member_id = None
+
+        # If editing existing registration, get assignments for this member
+        if self.instance and self.instance.pk and hasattr(self.instance, "member") and self.instance.member_id:
+            current_member_id = self.instance.member_id
+
+        # Get all assignments for this run
+        all_assignments = AssignmentTrait.objects.filter(run=self.params["run"]).select_related("trait")
+
+        for assignment in all_assignments:
+            if current_member_id and assignment.member_id == current_member_id:
+                # Track this member's assignments by quest type number
+                member_assignments[assignment.typ] = assignment.trait.uuid
+            else:
+                # Track traits assigned to other members
+                already_assigned_trait_ids.add(assignment.trait_id)
+
+        # Get available traits (excluding those assigned to others)
+        available = Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids)
+
+        for qt in self.params["quest_types"].values():
+            self._init_traits(available, char_section, member_assignments, qt)
+
+    def _init_traits(
+        self, available: QuerySet, char_section: str, member_assignments: dict, quest_type: QuestType
+    ) -> None:
+        """Init fields for manual trait assignment in orga registration form editing."""
+        qt_uuid = f"qt_{quest_type['uuid']}"
+        qt_number = quest_type["number"]
+        key = "id_" + qt_uuid
+        self.sections[key] = char_section
+        choices = [("0", _("--- NOT ASSIGNED ---"))]
+        for quest in self.params["quests"].values():
+            if quest["typ"] != qt_number:
+                continue
+            for trait in available:
+                if trait.quest_id != quest["id"]:
+                    continue
+                choices.append((trait.uuid, f"Q{quest['number']} {quest['name']} - {trait}"))
+
+        # Set initial value if this member has an assigned trait for this quest type
+        if qt_number in member_assignments:
+            self.initial[qt_uuid] = member_assignments[qt_number]
+
+        self.fields[qt_uuid] = forms.ChoiceField(required=True, choices=choices, label=quest_type["name"])
 
     def clean_member(self) -> Any:
         """Validate member field to prevent duplicate registrations.

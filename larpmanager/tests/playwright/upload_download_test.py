@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: CSV upload and download functionality for all features.
+Verifies bulk upload/download for character forms, factions, characters, registration forms,
+registrations, quests/traits, plots, relationships, abilities, and full backup.
+"""
+
 from pathlib import Path
 from typing import Any
 

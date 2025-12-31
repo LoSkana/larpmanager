@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Writing form configuration with dynamic fields.
+Verifies character/plot/faction/quest/trait form field reordering, configuration-based
+fields (title, cover, assigned, hide), computed fields, and form persistence.
+"""
+
 import re
 from typing import Any
 

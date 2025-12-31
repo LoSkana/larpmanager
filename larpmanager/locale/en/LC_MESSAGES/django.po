@@ -6850,7 +6850,7 @@ msgstr ""
 msgid "This page summarises the available questions of the character form"
 msgstr ""
 
-msgid "Go to the form for"
+msgid "Configure form"
 msgstr ""
 
 msgid "Modifiable"

@@ -44,7 +44,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element, get_time_diff_today
+from larpmanager.utils.core.common import get_element, get_element_event, get_time_diff_today
 from larpmanager.utils.users.deadlines import get_membership_fee_year
 from larpmanager.views.user.casting import (
     casting_details,
@@ -151,21 +151,20 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
             entity_uuid = parts[1]
 
             # Handle character assignment
-            temp_context = {"event": context["event"]}
             if "quest_type" not in context:
-                get_element(temp_context, entity_uuid, "character", Character)
-                entity_id = temp_context["character"].id
+                character = get_element_event(context, entity_uuid, Character)
+                entity_id = character.id
                 # Check for mirror character redirection
-                if mirror_enabled and temp_context["character"].mirror:
-                    entity_id = temp_context["character"].mirror_id
+                if mirror_enabled and character.mirror:
+                    entity_id = character.mirror_id
 
                 # Create character assignment relationship
                 RegistrationCharacterRel.objects.create(character_id=entity_id, reg=registration)
             else:
-                get_element(temp_context, entity_uuid, "trait", Trait)
+                trait = get_element_event(context, entity_uuid, Trait)
                 # Create trait assignment for non-character types
                 AssignmentTrait.objects.create(
-                    trait_id=temp_context["trait"].id,  # Fixed: use temp_context instead of context
+                    trait_id=trait.id,  # Fixed: use temp_context instead of context
                     run_id=registration.run_id,
                     member=member,
                     typ=context["quest_type"].number,
@@ -673,6 +672,7 @@ def orga_casting(
     # Set context variables for template rendering
     context["typ"] = casting_type
     context["tick"] = ticket
+    get_element(context, casting_type, "quest_type", QuestType)
 
     # Handle POST request for casting assignment
     if request.method == "POST":
@@ -692,7 +692,6 @@ def orga_casting(
         form = OrganizerCastingOptionsForm(context=context)
 
     # Retrieve and populate casting details for the specified type
-    get_element(context, casting_type, "quest_type", QuestType)
     casting_details(context)
 
     # Get casting data and populate form with current selections

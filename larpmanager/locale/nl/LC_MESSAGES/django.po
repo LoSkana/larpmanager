@@ -2417,6 +2417,9 @@ msgstr "Verzamelen voor"
 msgid "Communications"
 msgstr "Communicatie"
 
+msgid "Configure form"
+msgstr "Formulier configureren"
+
 msgid "Credit balance"
 msgstr "Kredietsaldo"
 
@@ -3184,9 +3187,6 @@ msgstr "Elektronische factuur"
 
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
-
-msgid "Go to the form for"
-msgstr "Ga naar het formulier voor"
 
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"

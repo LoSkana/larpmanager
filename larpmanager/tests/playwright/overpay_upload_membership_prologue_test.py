@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Overpayments with tokens/credits, membership uploads, and special codes.
+Verifies overpayment handling with tokens and credits, registration accounting adjustments,
+membership document/fee uploads, and special payment code configuration.
+"""
 
 from typing import Any
 

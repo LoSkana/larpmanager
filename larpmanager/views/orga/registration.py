@@ -67,7 +67,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
 )
-from larpmanager.models.casting import AssignmentTrait, QuestType
+from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
 from larpmanager.models.event import Event, EventText, PreRegistration, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -88,7 +88,7 @@ from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import (
     get_discount,
-    get_element,
+    get_element_event,
     get_registration,
     get_time_diff,
 )
@@ -141,13 +141,13 @@ def _orga_registrations_traits(registration: Any, context: dict) -> None:
             trait = context["traits"][trait_number]
             quest = context["quests"][trait["quest"]]
             quest_type = context["quest_types"][quest["typ"]]
-            quest_type_number = quest_type["number"]
-            if quest_type_number not in registration.traits:
-                registration.traits[quest_type_number] = []
-            registration.traits[quest_type_number].append(f"{quest['name']} - {trait['name']}")
+            quest_type_uuid = quest_type["uuid"]
+            if quest_type_uuid not in registration.traits:
+                registration.traits[quest_type_uuid] = []
+            registration.traits[quest_type_uuid].append(f"{quest['name']} - {trait['name']}")
 
-    for quest_type_number in registration.traits:
-        registration.traits[quest_type_number] = ",".join(registration.traits[quest_type_number])
+    for quest_type_uuid in registration.traits:
+        registration.traits[quest_type_uuid] = ",".join(registration.traits[quest_type_uuid])
 
 
 def _orga_registrations_tickets(registration: Any, context: dict) -> None:
@@ -855,19 +855,20 @@ def _save_questbuilder(context: dict, form: object, reg: Any) -> None:
 
     """
     for qt in QuestType.objects.filter(event=context["event"]):
-        qt_id = f"qt_{qt.number}"
-        tid = int(form.cleaned_data[qt_id])
+        qt_uuid = f"qt_{qt.uuid}"
+        trait_uuid = form.cleaned_data[qt_uuid]
         base_kwargs = {"run": context["run"], "member": reg.member, "typ": qt.number}
 
-        if tid:
+        if trait_uuid and trait_uuid != "0":
             ait = AssignmentTrait.objects.filter(**base_kwargs).first()
+            trait = get_element_event(context, trait_uuid, Trait)
 
-            if ait and ait.trait_id != tid:
+            if ait and ait.trait != trait:
                 ait.delete()
                 ait = None
 
             if not ait:
-                AssignmentTrait.objects.create(**base_kwargs, trait_id=tid)
+                AssignmentTrait.objects.create(**base_kwargs, trait=trait)
         else:
             AssignmentTrait.objects.filter(**base_kwargs).delete()
 
@@ -887,9 +888,9 @@ def orga_registrations_customization(request: HttpRequest, event_slug: str, char
     """
     context = check_event_context(request, event_slug, "orga_registrations")
     get_event_cache_all(context)
-    get_element(context, character_uuid, "character", Character)
+    character = get_element_event(context, character_uuid, Character)
     rcr = RegistrationCharacterRel.objects.get(
-        character_id=context["character"].id,
+        character_id=character.id,
         reg__run_id=context["run"].id,
         reg__cancellation_date__isnull=True,
     )

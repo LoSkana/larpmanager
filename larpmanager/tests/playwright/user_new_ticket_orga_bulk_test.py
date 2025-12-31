@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: New player tickets and bulk operations.
+Verifies new player ticket creation and availability, bulk operations for warehouse
+(containers, tags), writing (factions, plots), quest builder, and experience points.
+"""
+
 import re
 from typing import Any
 
@@ -263,7 +270,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator("#objs_1").select_option("U2")
+    page.locator("#objs_1").select_option("u2")
     page.get_by_role("link", name="Execute").click()
     expect(
         page.get_by_text("newevent Test Larp Organization This page shows the warehouse items - Config")

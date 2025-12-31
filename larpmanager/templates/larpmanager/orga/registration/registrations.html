@@ -85,7 +85,7 @@
                     Questbuilder:
                     {% for key, qt in quest_types.items %}
                         {% include "elements/comma.html" %}
-                        <a href="#" class="table_toggle" tog='qt_{{ qt.number }}'>{{ qt.name }}</a>
+                        <a href="#" class="table_toggle" tog='qt_{{ qt.uuid }}'>{{ qt.name }}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -117,7 +117,7 @@
                                 <th class="factions">{% trans "Factions" %}</th>
                             {% endif %}
                             {% if features.questbuilder %}
-                                {% for key, qt in quest_types.items %}<th class="qt_{{ qt.number }}">{{ qt.name }}</th>{% endfor %}
+                                {% for key, qt in quest_types.items %}<th class="qt_{{ qt.uuid }}">{{ qt.name }}</th>{% endfor %}
                             {% endif %}
                             {% if features.custom_character %}
                                 {% for nm in custom_info %}<th class="custom">{{ nm | capfirst }}</th>{% endfor %}
@@ -192,7 +192,7 @@
                                 {% endif %}
                                 {% if features.questbuilder %}
                                     {% for key, qt in quest_types.items %}
-                                        <th class="qt_{{ qt.number }}"  tooltip="{{ qt.name }}">{{ reg.traits | get:qt.number }}</th>
+                                        <td class="qt_{{ qt.uuid }}"  tooltip="{{ qt.name }}">{{ reg.traits | get:qt.uuid }}</td>
                                     {% endfor %}
                                 {% endif %}
                                 {% if features.custom_character %}

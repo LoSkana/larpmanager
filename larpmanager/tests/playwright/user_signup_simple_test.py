@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Simple registration workflow with pre-registration and help system.
+Verifies basic signup flow, profile confirmation, pre-registration feature,
+help question submission and answering, and email notifications.
+"""
+
 import re
 from typing import Any
 

@@ -2417,6 +2417,9 @@ msgstr "Kolekcja dla"
 msgid "Communications"
 msgstr "Komunikacja"
 
+msgid "Configure form"
+msgstr "Konfiguracja formularza"
+
 msgid "Credit balance"
 msgstr "Saldo kredytowe"
 
@@ -3184,9 +3187,6 @@ msgstr "Faktura elektroniczna"
 
 msgid "Enable preferences"
 msgstr "Włącz preferencje"
-
-msgid "Go to the form for"
-msgstr "Przejdź do formularza dla"
 
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"

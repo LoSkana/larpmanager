@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character form options restricted by registration ticket.
+Verifies that character form field options are filtered based on the user's
+selected ticket tier, enforcing ticket-specific restrictions on character creation.
+"""
+
 import re
 from typing import Any
 

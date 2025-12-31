@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Technical support ticket system.
+Verifies ticket submission with and without login, with and without screenshots,
+and email change requests through the support system.
+"""
 
 from typing import Any
 

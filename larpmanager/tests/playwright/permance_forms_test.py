@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Persistence of form configurations.
+Verifies that organization and event roles, features, configuration settings,
+and preferences persist correctly across page reloads and navigation.
+"""
+
 from typing import Any
 
 import pytest

@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Manual editing, Excel-style editing, external access, and working tickets.
+Verifies character editing via modal and Excel-style interface, character finder,
+auto-save functionality, external access URLs, and concurrent editing warnings.
+"""
+
 from typing import Any
 
 import pytest
@@ -54,19 +61,19 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     page.locator("#id_name").press("End")
     page.locator("#id_name").fill("Test Character2")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Test Character2 Test Teaser Test Text")
+    expect_normalized(page, page.locator('[id="u1"]'), "Test Character2 Test Teaser Test Text")
 
     # change teaser
-    page.get_by_role("cell", name="Test Teaser").dblclick()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Teaser").dblclick()
     page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Teaser").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser + 2")
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").press("ControlOrMeta+s")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text")
+    expect_normalized(page, page.locator('[id="u1"]'), "Test Character2 Test Teaser + 2 Test Text")
 
     # change text
-    page.get_by_role("cell", name="Test Text").dblclick()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text").dblclick()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Text").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Text ff")
     submit_confirm(page)
@@ -95,7 +102,9 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
         sel.addRange(range);
     }
     """)
+    page.wait_for_timeout(2000)
     editor.press(" ")
+    page.wait_for_timeout(2000)
     editor.press("#")
     page.get_by_role("searchbox").fill("tes")
     page.locator(".select2-results__option").first.click()
@@ -119,7 +128,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
 def excel(page: Any, live_server: Any) -> None:
     # test char finder on excel edit
-    page.get_by_role("cell", name="Test Text ff").dblclick()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text ff").dblclick()
     frame = page.locator('iframe[title="Rich Text Area"]').content_frame
     frame.get_by_label("Rich Text Area").fill("Test Text ff kinda hate ")
     frame.get_by_label("Rich Text Area").press("#")

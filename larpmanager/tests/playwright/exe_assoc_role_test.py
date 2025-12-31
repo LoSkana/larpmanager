@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Organization role-based permissions.
+Verifies creation of organization roles, permission assignment, access control,
+and role deletion with permission revocation.
+"""
+
 from typing import Any
 
 import pytest

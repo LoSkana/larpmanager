@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Multilingual support and custom texts.
+Verifies custom text management in multiple languages (English, Italian, French, German),
+language switching, and translation of interface elements.
+"""
+
 import re
 from typing import Any
 

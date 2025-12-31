@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Character fields, plots, abilities, and secret factions visibility.
+Verifies Excel-style character editing, ability assignments, plot character roles,
+secret vs public faction visibility, and character field display configurations.
+"""
 
 from typing import Any
 

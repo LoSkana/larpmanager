@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Membership request and approval workflow.
+Verifies membership application submission with document uploads, profile confirmation,
+request approval process, and membership status tracking.
+"""
 
 from typing import Any
 

@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Event copying, campaigns, and templates.
+Verifies copying events with all settings/data, creating campaign events inheriting from parents,
+and creating event templates for reusable configurations.
+"""
+
 import re
 from typing import Any
 

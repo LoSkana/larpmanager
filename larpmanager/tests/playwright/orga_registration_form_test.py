@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration form with various field types.
+Verifies text/paragraph fields, single/multiple choice with pricing and availability,
+hidden/disabled fields, mandatory fields, and organizer editing capabilities.
+"""
 
 from typing import Any
 

@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character form editor with player editor feature.
+Verifies dynamic character form creation with single/multiple choice fields, text fields,
+prerequisites, availability limits, and player character creation/approval workflow.
+"""
+
 from typing import Any
 
 import pytest

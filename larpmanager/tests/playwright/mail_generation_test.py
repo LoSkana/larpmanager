@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Email generation for chat, badge, membership, and expenses.
+Verifies automated email workflows for chat messages, badge assignments, membership application
+submission/approval/rejection, and expense submission with proper email triggers.
+"""
+
 import re
 from typing import Any
 

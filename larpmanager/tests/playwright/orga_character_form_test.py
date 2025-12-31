@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Character form creation with complex field types and player editor.
+Verifies text/paragraph fields, single/multiple choice with availability limits,
+restricted/mandatory/hidden/disabled fields, character creation/approval workflow, and field visibility.
+"""
+
 import re
 from typing import Any
 

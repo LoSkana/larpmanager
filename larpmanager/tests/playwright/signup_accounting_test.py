@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration accounting with payments, tokens, credits, and discounts.
+Verifies signup payment workflows, token/credit management, discount codes,
+payment confirmation, and registration cancellation with refunds.
+"""
+
 import re
 from typing import Any
 

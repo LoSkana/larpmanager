@@ -463,18 +463,18 @@ def get_element(
     if element_uuid is None or element_uuid == "0":
         return
 
-    # Get the parent event associated with the current event in context
-    parent_event = context["event"].get_class_parent(model_class)
+    context[context_key_name] = get_element_event(context, element_uuid, model_class)
+    context["class_name"] = context_key_name
 
-    # Use generic method with uuid/id fallback
-    context[context_key_name] = get_object_uuid(
+
+def get_element_event(context: dict, element_uuid: str, model_class: type[BaseModel]) -> BaseModel:
+    """Retrieves an element by UUID taking into account event parent hierarchy."""
+    parent_event = context["event"].get_class_parent(model_class)
+    return get_object_uuid(
         model_class,
         element_uuid,
         event=parent_event,
     )
-
-    # Store the context key name for potential later reference
-    context["class_name"] = context_key_name
 
 
 def get_relationship(context: dict, num: int) -> None:

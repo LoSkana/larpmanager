@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: PDF generation for character sheets.
+Verifies PDF download functionality for character portraits, profiles, complete sheets,
+light sheets, and relationship documents.
+"""
+
 from typing import Any
 
 import pytest

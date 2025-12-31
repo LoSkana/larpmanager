@@ -29,7 +29,7 @@ from larpmanager.forms.inventory import OrgaInventoryForm, OrgaPoolTypePxForm
 from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolTypeCI
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.common import get_element_event
 from larpmanager.utils.services.edit import orga_edit
 from larpmanager.utils.services.inventory import perform_transfer
 
@@ -69,8 +69,7 @@ def orga_ci_inventory_view(request: HttpRequest, event_slug: str, inventory_uuid
     """View a specific character inventory with balances and transfer history."""
     context = get_event_context(request, event_slug, signup=True)
 
-    get_element(context, inventory_uuid, "inventory", Inventory)
-    ci = context["inventory"]
+    ci = get_element_event(context, inventory_uuid, Inventory)
 
     if (
         not has_event_permission(request, context, event_slug, "orga_ci_inventory")

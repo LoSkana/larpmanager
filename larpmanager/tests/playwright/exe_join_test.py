@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Organization registration and creation.
+Verifies new user registration, organization creation with automatic slug generation,
+profile picture upload, and organization dashboard access.
+"""
 
 from typing import Any
 

@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character "your" link, accounting/payment links, direct ticket links, and refunds.
+Verifies invisible tickets with direct links, character "your" shortcut, accounting/payment
+URL shortcuts, independent campaign factions, and refund request workflow.
+"""
+
 import re
 from typing import Any
 

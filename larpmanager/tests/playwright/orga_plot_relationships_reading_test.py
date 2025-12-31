@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Plots, character relationships, and reading functionality.
+Verifies plot creation with character roles, relationship management (direct/inverse),
+reading view for characters and plots, and faction integration in reading view.
+"""
+
 import re
 from typing import Any
 
@@ -76,7 +83,7 @@ def reading(live_server: Any, page: Any) -> None:
     page.get_by_role("row", name=" prova character pppresssent").get_by_role("link").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Test Larp Presentation pppresssent Text totxeet testona wwwwwbruuuu Relationships Test Character ciaaoooooo",
+        "Test Larp Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character ciaaoooooo",
     )
 
     # test reading with factions
@@ -108,7 +115,7 @@ def reading(live_server: Any, page: Any) -> None:
     page.get_by_role("row", name=" prova character pppresssent").get_by_role("link").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Test Larp Presentation pppresssent Text totxeet testona wwwwwbruuuu Relationships Test Character Factions: only for testt ciaaoooooo",
+        "Test Larp Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt ciaaoooooo",
     )
 
     # check reading plot
@@ -141,13 +148,15 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in char
     page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.wait_for_timeout(2000)
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
     page.locator('[id="u1"]').get_by_role("cell", name="").click()
-    page.locator('#rel_2_tr a.my_toggle[tog="f_2_inverse"]').click()
+    page.wait_for_timeout(2000)
+    page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery
@@ -211,7 +220,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "#1 Test Character Show <p>prova222</p>")
+    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova222")
 
     # remove first char
     page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
@@ -236,7 +245,7 @@ def plots(live_server: Any, page: Any) -> None:
     # check in user
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
-    expect_normalized(page, page.locator("#one"), "testona wwwwwbruuuu")
+    expect_normalized(page, page.locator("#one"), "testona wwwww bruuuu")
 
 
 def plots_character(live_server: Any, page: Any) -> None:
@@ -286,7 +295,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     # check
     page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
-    expect_normalized(page, page.locator("#id_pl_2_tr"), "<p>ffff</p>")
+    expect_normalized(page, page.locator("#id_pl_2_tr"), "gaga ffff")
     submit_confirm(page)
 
     page.locator("#one").get_by_role("link", name="Plots").click()

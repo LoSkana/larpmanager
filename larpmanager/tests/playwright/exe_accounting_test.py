@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Organization accounting with payments, taxes, inflows, and outflows.
+Verifies organization and event-level accounting entries, VAT calculations,
+organization tax percentages, payment tracking, and consolidated accounting reports.
+"""
 
 from typing import Any
 

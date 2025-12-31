@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Experience points system with abilities, deliveries, rules, and modifiers.
+Verifies ability creation with prerequisites, XP delivery, computed field rules,
+player ability selection with undo functionality, and conditional ability modifiers.
+"""
+
 import re
 from typing import Any
 
@@ -143,6 +149,8 @@ def ability(live_server: Any, page: Any) -> None:
     )
     submit_confirm(page)
     page.get_by_role("link", name="Ability", exact=True).click()
+    page.wait_for_load_state("load")
+    page.wait_for_timeout(2000)
     page.locator("[id='u2']").get_by_role("link", name="").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").nth(3).fill("test_template")
@@ -213,7 +221,8 @@ def rules(page: Any) -> None:
     # remove ability
     page.get_by_role("link", name="").click()
     page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
-    page.get_by_role("listitem", name="sword1").locator("span").click()
+    page.wait_for_timeout(2000)
+    page.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove").click()
     submit_confirm(page)
 
     # recheck value

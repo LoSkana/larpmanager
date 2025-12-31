@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: User organization profile modification.
+Verifies user profile editing functionality including gender selection, birth place,
+document type, and dietary preferences both in organization and user contexts.
+"""
+
 from typing import Any
 
 import pytest

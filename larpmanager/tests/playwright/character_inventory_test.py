@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character inventory system with pool types and transfers.
+Verifies inventory pool type creation, character-specific inventory pools,
+resource transfers between pools, and transfer history logging.
+"""
+
 import re
 from typing import Any
 

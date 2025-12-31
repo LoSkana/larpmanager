@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Event role-based permissions.
+Verifies creation of event-specific roles, permission assignment, access control,
+and role deletion with permission revocation at event level.
+"""
+
 from typing import Any
 
 import pytest

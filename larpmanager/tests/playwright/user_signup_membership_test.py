@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration requiring membership approval and payment.
+Verifies signup blocked until membership approval, membership application workflow,
+payment after membership approval, and ticket availability updates.
+"""
+
 import re
 from typing import Any
 

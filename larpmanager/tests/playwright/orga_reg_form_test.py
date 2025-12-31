@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration form with multiple features and surcharges.
+Verifies registration form configuration with additional tickets, dynamic rates,
+surcharges, pay what you want, and filler tickets.
+"""
 
 from typing import Any
 

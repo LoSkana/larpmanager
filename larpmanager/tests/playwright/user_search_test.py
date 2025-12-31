@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Character search with filters.
+Verifies character search functionality with faction filters, single-choice filters,
+and multi-choice filters with include/exclude logic.
+"""
 
 from typing import Any
 

@@ -981,7 +981,7 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
     )
 
     traits = []
-    for el in context["quest"].traits.all():
+    for el in context["quest"].traits.order_by("number"):
         res = get_writing_element_fields(context, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
         res.update(el.show())
         traits.append(res)

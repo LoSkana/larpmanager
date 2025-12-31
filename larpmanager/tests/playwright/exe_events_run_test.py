@@ -17,6 +17,13 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Event creation and basic setup.
+Verifies creation of new events with slug generation, quick setup workflow,
+date configuration, and event dashboard access.
+"""
+
 from typing import Any
 
 import pytest

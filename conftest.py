@@ -90,6 +90,15 @@ def pw_page(
 
     page.on("dialog", lambda dialog: dialog.accept())
 
+    page.add_style_tag(
+        content="""
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+    """
+    )
+
     def on_response(response: Response) -> None:
         error_status = 500
         if response.status == error_status:

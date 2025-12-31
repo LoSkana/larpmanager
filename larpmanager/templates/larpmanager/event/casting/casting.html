@@ -8,9 +8,17 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Go to the casting for" %}:
-                <a href="{% url 'casting' run.get_slug 0 %}">{% trans "Characters" %}</a>
+                {% if typ == 0 %}
+                    <strong>{% trans "Characters" %}</strong>
+                {% else %}
+                    <a href="{% url 'casting' run.get_slug 0 %}">{% trans "Characters" %}</a>
+                {% endif %}
                 {% for qtnum, qt in quest_types.items %}
-                    , <a href="{% url 'casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% if typ == qtnum %}
+                        | <strong>{{ qt.name }}</strong>
+                    {% else %}
+                        | <a href="{% url 'casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% endif %}
                 {% endfor %}
             </p>
             <h3>Casting {{ gl_name }}</h3>

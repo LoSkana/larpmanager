@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Gift registration with giftable form fields and payment.
+Verifies giftable ticket/field configuration, gift purchase workflow,
+payment for gifts, approval process, and gift redemption by recipients.
+"""
+
 import re
 from typing import Any
 

@@ -11,9 +11,17 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Casting management for" %}:
-                <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
+                {% if typ == 0 %}
+                    <strong>{% trans "characters" %}</strong>
+                {% else %}
+                    <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
+                {% endif %}
                 {% for idx, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% if typ == idx %}
+                        | <strong>{{ qt.name }}</strong>
+                    {% else %}
+                        | <a href="{% url 'orga_casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% endif %}
                 {% endfor %}
             </p>
         {% endif %}

@@ -18,6 +18,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration with payment requirement.
+Verifies signup requiring payment, provisional registration status, wire transfer payment,
+receipt upload, payment confirmation by organizer, and character assignment/removal emails.
+"""
+
 import re
 from typing import Any
 

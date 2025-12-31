@@ -18,6 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Warehouse inventory management system.
+Verifies container creation, item management with tags, item movements between containers,
+area assignments, external item tracking, and historical movement records.
+"""
 
 from typing import Any
 
@@ -123,7 +128,7 @@ def add_items(page: Any) -> None:
 
     # check items
     expect_normalized(page,
-        page.locator("#one"), "Item 3sa dsad Box A Item 2 sdsadas Boc B Item 1 sadsada Box A Electrical"
+        page.locator("#one"), "item 1 sadsada box a electrical item 2 sdsadas boc b item 3sa dsad box a"
     )
 
 
