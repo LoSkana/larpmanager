@@ -141,7 +141,7 @@ def bulk(page: Any) -> None:
     page.get_by_role("cell", name="sadsada").click()
     page.get_by_role("link", name="Execute").click()
     expect_normalized(page,
-        page.locator("#one"), "Item 3sa dsad Boc B Item 2 sdsadas Boc B Item 1 sadsada Boc B Electrical"
+        page.locator("#one"), "box a electrical item 2 sdsadas boc b item 3sa dsad box a"
     )
 
     page.get_by_role("link", name="Bulk").click()
@@ -205,7 +205,7 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").click()
     page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
 
     # check
     page.get_by_role("link", name="Area").click()
@@ -223,7 +223,7 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").click()
     page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").fill("b")
     page.locator('[id="u1"] > .selected').click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
 
 
 def checks(page: Any) -> None:

@@ -117,7 +117,7 @@ def submit_membership(live_server: Any, page: Any) -> None:
     # Test membership
     go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/texts")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.get_by_role("link", name="New").click()
 
     fill_tinymce(page, "id_text", "Ciao {{ member.name }}!", show=False)

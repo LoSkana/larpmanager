@@ -89,6 +89,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # test char finder
     fill_tinymce(page, "id_teaser", "good friends with ")
+    page.wait_for_timeout(1000)
     frame_locator = page.frame_locator("iframe#id_teaser_ifr")
     editor = frame_locator.locator("body#tinymce")
 
@@ -102,16 +103,16 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
         sel.addRange(range);
     }
     """)
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     editor.press(" ")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     editor.press("#")
     page.get_by_role("searchbox").fill("tes")
     page.locator(".select2-results__option").first.click()
+    page.wait_for_timeout(1000)
 
-    # check
-    page.wait_for_timeout(2000)
     submit_confirm(page)
+    page.wait_for_timeout(1000)
     expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1",
@@ -134,7 +135,7 @@ def excel(page: Any, live_server: Any) -> None:
     frame.get_by_label("Rich Text Area").press("#")
     page.get_by_role("searchbox").fill("an")
     page.locator(".select2-results__option").first.click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     submit_confirm(page)
 
     # check by reload
@@ -150,7 +151,7 @@ def excel(page: Any, live_server: Any) -> None:
     frame_locator = page.frame_locator("iframe#id_text_ifr")
     editor = frame_locator.locator("body#tinymce")
     editor.press("ControlOrMeta+s")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
@@ -194,7 +195,7 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page1 = context.new_page()
     page1.goto(server + "/test/manage/characters/edit/u1/")
     page.locator('[id="u1"]').get_by_role("link", name="").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     expect_normalized(page,
         page.locator("#test-larp"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
@@ -207,7 +208,7 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     go_to(page, server, "/test/manage/config")
     page1 = context.new_page()
     page1.goto(server + "/test/manage/config")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     expect_normalized(page,
         page.locator("#test-larp"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",

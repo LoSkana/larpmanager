@@ -212,7 +212,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     load_image(page, "#id_request")
     load_image(page, "#id_document")
     page.locator("#id_date").fill("2024-06-11")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("#id_date").click()
     submit_confirm(page)
 

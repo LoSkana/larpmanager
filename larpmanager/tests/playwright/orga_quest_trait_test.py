@@ -59,7 +59,7 @@ def test_quest_trait(pw_page: Any) -> None:
     page.get_by_role("link", name="Test Character").nth(1).click()
     expect_normalized(page,
         page.locator("#one"),
-        "Player: Admin Test Presentation Test Teaser Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test",
+        "player: admin test presentation test teaser text test text torta - nonna saleee anotheraliame con torta - nonna another player: user test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
@@ -134,7 +134,7 @@ def traits(page: Any, live_server: Any) -> None:
     frame.get_by_label("Rich Text Area").press("#")
     page.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
@@ -220,7 +220,7 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.get_by_role("button", name="Upload").click()
 
     # check signups

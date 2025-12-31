@@ -76,7 +76,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     go_to(page, live_server, "/manage/roles")
     page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.get_by_role("button", name="Confirmation delete").click()
 
     logout(page)

@@ -107,7 +107,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    page.wait_for_load_state("networkidle")
+
     expect_normalized(page, page.locator("#one"), "only for testt Primary Test Character")
 
     # check reading for prova
@@ -143,19 +143,19 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    page.wait_for_load_state("networkidle")
+    page.wait_for_timeout(1000)
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').get_by_role("link", name="").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
     page.locator('[id="u1"]').get_by_role("cell", name="").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
@@ -170,7 +170,6 @@ def plots(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="New").click()
-    page.wait_for_load_state("networkidle")
 
     page.locator("#id_name").click()
     page.locator("#id_name").fill("testona")
@@ -196,7 +195,6 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check in plot list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    page.wait_for_load_state("networkidle")
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character")
 
     # check it is the same
@@ -276,7 +274,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
 
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
 
     # check there are all three
     page.locator("#one").get_by_role("link", name="Plots").click()

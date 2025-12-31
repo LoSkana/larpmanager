@@ -207,7 +207,7 @@ def campaign(live_server: Any, page: Any) -> None:
     page.locator("#id_name").fill("campaign")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("campaign")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp", exact=True).click()

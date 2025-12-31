@@ -150,7 +150,7 @@ def ability(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     page.get_by_role("link", name="Ability", exact=True).click()
     page.wait_for_load_state("load")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("[id='u2']").get_by_role("link", name="").click()
     page.get_by_text("---------").click()
     page.get_by_role("searchbox").nth(3).fill("test_template")
@@ -180,7 +180,7 @@ def delivery(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator('[id="u1"]'), "0")
     page.get_by_role("link", name="").click()
     page.wait_for_load_state("load")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     row = page.get_by_role("row", name="Abilities Show")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
@@ -221,19 +221,20 @@ def rules(page: Any) -> None:
     # remove ability
     page.get_by_role("link", name="").click()
     page.get_by_role("row", name="Abilities Show").get_by_role("link").click()
-    page.wait_for_timeout(2000)
-    page.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove").click()
+    page.wait_for_timeout(1000)
+    btn = page.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
+    btn.evaluate("el => el.click()")
     submit_confirm(page)
 
     # recheck value
     page.get_by_role("link", name="Hit Point").click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text 2")
 
     # readd ability
     page.get_by_role("link", name="").click()
     page.wait_for_load_state("load")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     row = page.get_by_role("row", name="Abilities Show")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()

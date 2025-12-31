@@ -57,10 +57,10 @@ def test_exe_events_run(pw_page: Any) -> None:
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2055-06-11")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("#id_start").click()
     page.locator("#id_end").fill("2055-06-13")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("#id_end").click()
     submit_confirm(page)
 

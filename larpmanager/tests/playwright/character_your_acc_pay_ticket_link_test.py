@@ -199,10 +199,10 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     submit_confirm(page)
     page.locator("#id_start").fill("2045-06-11")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("#id_start").click()
     page.locator("#id_end").fill("2045-06-13")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("#id_end").click()
     submit_confirm(page)
 

@@ -156,7 +156,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="teeeeest").click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-    page.wait_for_load_state("networkidle")
+
     expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character 2 1 1 Test Teaser Test Text eefqq gggerwe first qweeerr",
@@ -170,7 +170,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     # reload page, check everything is correct
     go_to(page, live_server, "/test/manage/characters/")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.get_by_role("link", name="XP").click()
     page.get_by_role("link", name="teeeeest").click()
     page.get_by_role("link", name="Faction", exact=True).click()
@@ -185,7 +185,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("cell", name="#1 Test Character").dblclick()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Character3")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     submit_confirm(page)
 
     # reload page, check everything is correct
@@ -194,8 +194,6 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="teeeeest").click()
-    page.wait_for_load_state("networkidle")
-    page.wait_for_timeout(2000)
     expect_normalized(page,
         page.locator("#one"),
         "Test Character3 2 1 1 Test Teaser2 Test Text eefqq gggerwe first qweeerr",

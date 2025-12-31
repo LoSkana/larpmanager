@@ -25,6 +25,7 @@ import os
 import re
 import subprocess
 from collections.abc import Generator, Mapping
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -70,8 +71,19 @@ def _cache_isolation(settings: SettingsWrapper) -> None:
     cache.clear()
 
 
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo) -> Generator[None, Any, None]:
+    """Hook to capture test results and make them available to fixtures."""
+    outcome = yield
+    rep = outcome.get_result()
+
+    # Store test result in the item for fixture access
+    setattr(item, f"rep_{rep.when}", rep)
+
+
 @pytest.fixture
 def pw_page(
+    request: pytest.FixtureRequest,
     pytestconfig: pytest.Config,
     browser_type: BrowserType,
     live_server: ContextList,
@@ -79,25 +91,27 @@ def pw_page(
     """Prepares browser, context and finally page, for playwright tests."""
     headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
 
+    # Check if running in CI/GitHub Actions
+    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+
+    # Configure video recording (only if not in CI)
+    video_dir = None
+    if not is_ci:
+        video_dir = Path(__file__).parent / "test_videos"
+        video_dir.mkdir(exist_ok=True)
+
     browser = browser_type.launch(headless=not headed, slow_mo=50)
     context = browser.new_context(
         storage_state=None,
         viewport={"width": 1280, "height": 800},
+        record_video_dir=str(video_dir) if video_dir else None,
+        record_video_size={"width": 1280, "height": 800} if video_dir else None,
     )
     page = context.new_page()
     base_url = live_server.url
     page.set_default_timeout(60000)
 
     page.on("dialog", lambda dialog: dialog.accept())
-
-    page.add_style_tag(
-        content="""
-    * {
-      transition: none !important;
-      animation: none !important;
-    }
-    """
-    )
 
     def on_response(response: Response) -> None:
         error_status = 500
@@ -109,8 +123,59 @@ def pw_page(
 
     yield page, base_url, context
 
+    # Capture screenshot, HTML and video if test failed
+    video_obj = None
+    base_filename = None
+    if hasattr(request.node, "rep_call") and request.node.rep_call.failed:
+        screenshot_dir = Path(__file__).parent / "test_screenshots"
+        screenshot_dir.mkdir(exist_ok=True)
+
+        # Generate filename with timestamp and test name
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        test_name = request.node.name
+        base_filename = f"{timestamp}_{test_name}"
+        screenshot_path = screenshot_dir / f"{base_filename}.png"
+        html_path = screenshot_dir / f"{base_filename}.html"
+
+        logger = logging.getLogger(__name__)
+
+        # Save screenshot
+        try:
+            page.screenshot(path=str(screenshot_path))
+            logger.info("Screenshot saved: %s", screenshot_path)
+        except Exception as e:
+            logger.warning("Failed to save screenshot: %s", e)
+
+        # Save HTML content
+        try:
+            html_content = page.content()
+            html_path.write_text(html_content, encoding="utf-8")
+            logger.info("HTML content saved: %s", html_path)
+        except Exception as e:
+            logger.warning("Failed to save HTML content: %s", e)
+
+        # Get video object before closing (only if not in CI)
+        if not is_ci and video_dir:
+            try:
+                video_obj = page.video
+            except Exception as e:
+                logger.warning("Failed to get video object: %s", e)
+
+    # Close context (this finalizes the video)
     context.close()
     browser.close()
+
+    # Move video after context is closed (only if test failed and not in CI)
+    if video_obj and base_filename:
+        try:
+            video_path = video_obj.path()
+            if video_path and Path(video_path).exists():
+                screenshot_dir = Path(__file__).parent / "test_screenshots"
+                video_dest = screenshot_dir / f"{base_filename}.webm"
+                Path(video_path).rename(video_dest)
+                logging.getLogger(__name__).info("Video saved: %s", video_dest)
+        except Exception as e:
+            logging.getLogger(__name__).warning("Failed to save video: %s", e)
 
 
 def _truncate_app_tables() -> None:

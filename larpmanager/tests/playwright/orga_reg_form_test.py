@@ -52,7 +52,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
     page.locator("#orga_registration_form").get_by_role("link", name="Form").click()
-    page.wait_for_load_state("networkidle")
+
     expect_normalized(page, page.locator("#one"), "Ticket Your registration ticket Ticket")
 
     # Add features
@@ -65,7 +65,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
 
     # check there are questions for all features
     page.get_by_role("link", name="Form").click()
-    page.wait_for_load_state("networkidle")
+
     page.locator('[id="u1"]').get_by_role("cell", name="").click()
     page.get_by_text("Your registration ticket").click()
     page.get_by_text("Your registration ticket").fill("Your registration ticket2")
@@ -105,7 +105,7 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     page.locator("#id_amount").click()
     page.locator("#id_amount").fill("5")
     page.locator("#id_date").fill("2024-06-11")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
     page.locator("#id_date").click()
     submit_confirm(page)
 

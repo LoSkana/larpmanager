@@ -158,7 +158,7 @@ def check_download(page: Any, link: str) -> None:
                 raise
 
 
-def fill_tinymce(page: Any, iframe_id: Any, text: Any, show: Any = True, timeout: Any = 10000) -> None:
+def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
@@ -168,7 +168,9 @@ def fill_tinymce(page: Any, iframe_id: Any, text: Any, show: Any = True, timeout
         show_link = page.locator(show_link_selector)
         show_link.wait_for(state="attached", timeout=timeout)
         show_link.scroll_into_view_if_needed()
+        page.wait_for_timeout(1000)
         show_link.click()
+        page.wait_for_timeout(1000)
 
     # Wait for TinyMCE to initialize the editor instance
     page.wait_for_function(
@@ -212,7 +214,7 @@ def submit_confirm(page: Any) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
@@ -286,8 +288,7 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
 
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    page.wait_for_load_state("networkidle")
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(1000)
 
     raw_parts = []
 
