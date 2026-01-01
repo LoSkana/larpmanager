@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -57,10 +57,10 @@ def test_exe_events_run(pw_page: Any) -> None:
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2055-06-11")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_start").click()
     page.locator("#id_end").fill("2055-06-13")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_end").click()
     submit_confirm(page)
 

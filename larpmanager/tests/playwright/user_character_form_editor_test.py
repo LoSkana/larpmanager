@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -157,9 +157,9 @@ def field_text(page: Any, live_server: Any) -> None:
 
     # Create new character
     go_to(page, live_server, "/test/manage/characters")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("link", name="New").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("provaaaa")
 
@@ -167,7 +167,7 @@ def field_text(page: Any, live_server: Any) -> None:
 
     fill_tinymce(page, "id_text", "rrrr")
 
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_que_u4").select_option("u3")
     page.locator("#id_que_u4").select_option("u1")
     page.get_by_role("checkbox", name="q2").check()
@@ -185,7 +185,7 @@ def character(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Access character creation!")
     page.get_by_role("link", name="Access character creation!").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("my character")
 

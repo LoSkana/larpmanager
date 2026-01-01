@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -205,7 +205,7 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").click()
     page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
 
     # check
     page.get_by_role("link", name="Area").click()
@@ -223,7 +223,7 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").click()
     page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").fill("b")
     page.locator('[id="u1"] > .selected').click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
 
 
 def checks(page: Any) -> None:

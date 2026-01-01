@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, submit, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, submit, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -75,7 +75,7 @@ def test_exe_join(pw_page: Any) -> None:
     page.locator("#slug").fill("prova")
     submit(page)
 
-    page.wait_for_timeout(1000)
+    just_wait(page)
     go_to(page, live_server, "/debug/prova")
 
     expect_normalized(page, page.locator("#banner"), "Prova Larp")

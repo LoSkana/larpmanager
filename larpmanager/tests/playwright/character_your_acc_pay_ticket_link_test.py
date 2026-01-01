@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -199,10 +199,10 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     submit_confirm(page)
     page.locator("#id_start").fill("2045-06-11")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_start").click()
     page.locator("#id_end").fill("2045-06-13")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_end").click()
     submit_confirm(page)
 

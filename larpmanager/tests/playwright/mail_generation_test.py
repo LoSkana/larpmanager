@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import check_download, fill_tinymce, go_to, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, go_to, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -117,7 +117,7 @@ def submit_membership(live_server: Any, page: Any) -> None:
     # Test membership
     go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/texts")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("link", name="New").click()
 
     fill_tinymce(page, "id_text", "Ciao {{ member.name }}!", show=False)

@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -46,7 +46,7 @@ def test_exe_profile(pw_page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/profile")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("textbox", name="Name (*)", exact=True).click()
     page.get_by_role("textbox", name="Name (*)", exact=True).press("End")
     page.get_by_role("textbox", name="Name (*)", exact=True).fill("Orga")

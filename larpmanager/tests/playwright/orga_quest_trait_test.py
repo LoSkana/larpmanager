@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     check_feature,
     fill_tinymce,
     go_to,
@@ -65,7 +65,7 @@ def test_quest_trait(pw_page: Any) -> None:
     page.get_by_role("link", name="Another").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Torta - Strudel saleee Test CharacterTest CharacterPlayer: Admin TestTest Teaser (...)veronese Torta - Strudel Test Character Player: Admin Test",
+        "your character is test character player: user test torta - strudel saleee test characterveronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
 
@@ -134,7 +134,7 @@ def traits(page: Any, live_server: Any) -> None:
     frame.get_by_label("Rich Text Area").press("#")
     page.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
@@ -220,7 +220,7 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("button", name="Upload").click()
 
     # check signups

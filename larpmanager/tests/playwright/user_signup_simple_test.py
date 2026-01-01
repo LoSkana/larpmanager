@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -65,7 +65,7 @@ def signup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     page.locator("a:has(i.fas.fa-edit)").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
 
     # sign up, confirm profile

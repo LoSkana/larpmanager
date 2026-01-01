@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     check_feature,
     go_to,
     login_orga,
@@ -76,7 +76,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     go_to(page, live_server, "/manage/roles")
     page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
 
     logout(page)

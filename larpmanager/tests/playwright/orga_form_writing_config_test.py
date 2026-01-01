@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 

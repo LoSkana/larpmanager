@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     _checkboxes,
     add_links_to_visit,
     go_to,

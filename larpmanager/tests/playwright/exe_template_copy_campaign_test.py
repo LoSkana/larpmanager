@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, _checkboxes, \
+from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized, _checkboxes, \
     fill_tinymce
 
 pytestmark = pytest.mark.e2e
@@ -207,7 +207,7 @@ def campaign(live_server: Any, page: Any) -> None:
     page.locator("#id_name").fill("campaign")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("campaign")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp", exact=True).click()

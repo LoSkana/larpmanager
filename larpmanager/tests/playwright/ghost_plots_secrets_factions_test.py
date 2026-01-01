@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     expect_normalized,
     fill_tinymce,
     go_to,
@@ -170,7 +170,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     # reload page, check everything is correct
     go_to(page, live_server, "/test/manage/characters/")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("link", name="XP").click()
     page.get_by_role("link", name="teeeeest").click()
     page.get_by_role("link", name="Faction", exact=True).click()
@@ -185,7 +185,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("cell", name="#1 Test Character").dblclick()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Character3")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     submit_confirm(page)
 
     # reload page, check everything is correct

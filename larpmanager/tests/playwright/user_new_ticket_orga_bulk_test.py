@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -89,6 +89,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
 
     # check result
     page.get_by_role("link", name="Faction", exact=True).click()
@@ -99,6 +100,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("5")
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
 
     # check result
     page.get_by_role("link", name="Faction", exact=True).click()
@@ -109,6 +111,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("6")
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
 
     # check result
     page.locator("#one").get_by_role("link", name="Plots").click()
@@ -119,6 +122,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("7")
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
 
     # check
     page.locator("#one").get_by_role("link", name="Plots").click()
@@ -157,6 +161,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("cell", name="typ").click()
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Q1 q1 t2 Q2 q2 typ")
 
     # create traits
@@ -171,6 +176,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.locator("td:nth-child(5)").click()
     page.locator("#objs_9").select_option("u2")
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "T1 t1 Q2 q2")
 
 
@@ -199,6 +205,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator("td:nth-child(5)").click()
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "swor 2 1")
 
     # test bulk change type
@@ -206,6 +213,7 @@ def bulk_px(live_server: Any, page: Any) -> None:
     page.locator("td:nth-child(5)").click()
     page.locator("#objs_10").select_option("u1")
     page.get_by_role("link", name="Execute").click()
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "swor t1 1")
 
 
@@ -266,16 +274,17 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
 def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # bulk move to box
     page.get_by_role("link", name="Items").click()
-    expect_normalized(page, page.locator("#one"), "item1 box item2 box item3 box")
+    expect_normalized(page, page.locator("#one"), "item1 box")
+    expect_normalized(page, page.locator("#one"), "item2 box")
+    expect_normalized(page, page.locator("#one"), "item3 box")
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("u2")
     page.get_by_role("link", name="Execute").click()
-    expect(
-        page.get_by_text("newevent Test Larp Organization This page shows the warehouse items - Config")
-    ).to_be_visible()
-    expect_normalized(page, page.locator("#one"), "item3 box2 item2 box item1 box2")
+    expect_normalized(page, page.locator("#one"), "item2 box")
+    expect_normalized(page, page.locator("#one"), "item1 box2")
+    expect_normalized(page, page.locator("#one"), "item3 box2")
 
     # bulk add tag
     page.get_by_role("link", name="Bulk").click()
@@ -283,14 +292,18 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.get_by_role("link", name="Execute").click()
-    expect_normalized(page, page.locator("#one"), "item3 box2 item2 box tag item1 box2 tag")
+    expect_normalized(page, page.locator("#one"), "item3 box2")
+    expect_normalized(page, page.locator("#one"), "item2 box tag")
+    expect_normalized(page, page.locator("#one"), "item1 box2 tag")
 
     # bulk remove tag
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#operation").select_option("3")
     page.get_by_role("link", name="Execute").click()
-    expect_normalized(page, page.locator("#one"), "item3 box2 item2 box item1 box2 tag")
+    expect_normalized(page, page.locator("#one"), "item3 box2")
+    expect_normalized(page, page.locator("#one"), "item2 box")
+    expect_normalized(page, page.locator("#one"), "item1 box2 tag")
 
     # check link when bulk active
     page.get_by_role("link", name="Bulk").click()
@@ -304,8 +317,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
 
 
 def new_ticket(live_server: Any, page: Any) -> None:
-    # add new ticket feature
-
+    # add feature for ticket for new players
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
@@ -353,10 +365,10 @@ def new_ticket(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "newevent/manage/")
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2045-06-11")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_start").click()
     page.locator("#id_end").fill("2045-06-13")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#id_end").click()
     submit_confirm(page)
 

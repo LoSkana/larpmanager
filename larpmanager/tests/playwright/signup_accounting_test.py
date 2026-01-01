@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -67,7 +67,7 @@ def check_delete(live_server: Any, page: Any) -> None:
     page.wait_for_selector("a:has(i.fas.fa-edit)", timeout=100)
     page.locator("a:has(i.fas.fa-edit)").click(force=True)
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/cancellations")
     expect(page.get_by_role("row", name="100 52 24 4 Admin Test")).to_contain_text("orga@test.it")
@@ -76,17 +76,17 @@ def check_delete(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/tokens")
     page.get_by_role("row", name="Admin Test Test Larp teeest").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("row", name="Admin Test Test Larp testet").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/payments")
     page.get_by_role("row", name="Admin Test Wire Money").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
 
 
@@ -130,7 +130,7 @@ def discount(live_server: Any, page: Any) -> None:
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
     page.locator("#discount_go").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     expect_normalized(page,
         page.locator("#discount_res"),
         "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed",
@@ -138,7 +138,7 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#discount_tbl"), "20.00€")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 80€.")
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.locator("#register_go").click()
 
 

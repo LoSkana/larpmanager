@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     check_feature,
     fill_tinymce,
     go_to,
@@ -143,19 +143,19 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').get_by_role("link", name="").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
     page.locator('[id="u1"]').get_by_role("cell", name="").click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
     expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
@@ -274,7 +274,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
 
-    page.wait_for_timeout(1000)
+    just_wait(page)
 
     # check there are all three
     page.locator("#one").get_by_role("link", name="Plots").click()

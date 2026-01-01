@@ -168,9 +168,9 @@ def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
         show_link = page.locator(show_link_selector)
         show_link.wait_for(state="attached", timeout=timeout)
         show_link.scroll_into_view_if_needed()
-        page.wait_for_timeout(1000)
+        just_wait(page)
         show_link.click()
-        page.wait_for_timeout(1000)
+        just_wait(page)
 
     # Wait for TinyMCE to initialize the editor instance
     page.wait_for_function(
@@ -214,7 +214,7 @@ def submit_confirm(page: Any) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click()
-    page.wait_for_timeout(1000)
+    just_wait(page)
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
@@ -288,7 +288,7 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
 
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    page.wait_for_timeout(1000)
+    just_wait(page)
 
     raw_parts = []
 
@@ -317,3 +317,8 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
             f"EXPECTED:\n{exp}\n\n"
             f"ACTUAL:\n{actual}"
         )
+
+def just_wait(page):
+    page.wait_for_timeout(1000)
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
