@@ -68,7 +68,7 @@ urlpatterns = [
         name="orga_casting_preferences",
     ),
     path(
-        "<slug:event_slug>/manage/casting/preferences/<slug:casting_type>/",
+        "<slug:event_slug>/manage/casting/preferences/<str:casting_type>/",
         views_oca.orga_casting_preferences,
         name="orga_casting_preferences",
     ),
@@ -78,7 +78,7 @@ urlpatterns = [
         name="orga_casting_history",
     ),
     path(
-        "<slug:event_slug>/manage/casting/history/<slug:casting_type>/",
+        "<slug:event_slug>/manage/casting/history/<str:casting_type>/",
         views_oca.orga_casting_history,
         name="orga_casting_history",
     ),
@@ -833,12 +833,12 @@ urlpatterns = [
         name="orga_ci_inventory",
     ),
     path(
-        "<slug:event_slug>/manage/ci/inventory/edit/<int:num>/",
+        "<slug:event_slug>/manage/ci/inventory/edit/<slug:inventory_uuid>/",
         views_ci.orga_ci_inventory_edit,
         name="orga_ci_inventory_edit",
     ),
     path(
-        "<slug:event_slug>/manage/ci/inventory/<int:num>/view/",
+        "<slug:event_slug>/manage/ci/inventory/<slug:inventory_uuid>/view/",
         views_ci.orga_ci_inventory_view,
         name="orga_ci_inventory_view",
     ),
@@ -853,7 +853,7 @@ urlpatterns = [
         name="orga_ci_pool_types",
     ),
     path(
-        "<slug:event_slug>/manage/ci/pool_types/edit/<int:num>/",
+        "<slug:event_slug>/manage/ci/pool_types/edit/<slug:pool_uuid>/",
         views_ci.orga_ci_pool_types_edit,
         name="orga_ci_pool_types_edit",
     ),
@@ -878,19 +878,19 @@ urlpatterns = [
         name="orga_casting",
     ),
     path(
-        "<slug:event_slug>/manage/casting/<slug:casting_type>/",
+        "<slug:event_slug>/manage/casting/<str:casting_type>/",
         views_oca.orga_casting,
         name="orga_casting",
     ),
     path(
-        "<slug:event_slug>/manage/casting/<slug:casting_type>/<slug:ticket>/",
-        views_oca.orga_casting,
-        name="orga_casting",
-    ),
-    path(
-        "<slug:event_slug>/manage/casting/toggle/<slug:casting_type>/",
+        "<slug:event_slug>/manage/casting/toggle/<str:casting_type>/",
         views_oca.orga_casting_toggle,
         name="orga_casting_toggle",
+    ),
+    path(
+        "<slug:event_slug>/manage/casting/<str:casting_type>/<slug:ticket>/",
+        views_oca.orga_casting,
+        name="orga_casting",
     ),
     path(
         "<slug:event_slug>/manage/accounting/",

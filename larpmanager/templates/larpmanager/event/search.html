@@ -102,24 +102,26 @@
             <span class="helptext">{% trans "Click on a name to go and view it directly" %}.</span>
         </div>
         <br />
-        <h3>
-            {% trans "Characters list" %} (<span class="num"></span>)
-        </h3>
-        <table>
-            <tr>
-                <th>{% trans "You are including (at least one of these filters)" %}</th>
-                <th>{% trans "You are excluding (none of these filters)" %}</th>
-            </tr>
-            <tr>
-                <td>
-                    <span class="incl"></span>
-                </td>
-                <td>
-                    <span class="escl"></span>
-                </td>
-            </tr>
-        </table>
-        <div id="characters"></div>
+        <div id="search-results">
+            <h3>
+                {% trans "Characters list" %} (<span class="num"></span>)
+            </h3>
+            <table>
+                <tr>
+                    <th>{% trans "You are including (at least one of these filters)" %}</th>
+                    <th>{% trans "You are excluding (none of these filters)" %}</th>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="incl"></span>
+                    </td>
+                    <td>
+                        <span class="escl"></span>
+                    </td>
+                </tr>
+            </table>
+            <div id="characters"></div>
+        </div>
         <div id="teasers" class="hide">
             {% for chnum, el in chars.items %}
                 {% if not el.hide %}
@@ -137,7 +139,7 @@ window['facs'] = {{ factions_json | safe }};
 
 window['blank'] = "{% static 'larpmanager/assets/blank-avatar.svg' %}";
 
-window['char_url'] = "{% url 'character' run.get_slug 0 %}";
+window['char_url'] = "{% url 'character' run.get_slug '0' %}";
 
 window['prof_url'] = "{% url 'public' '0' %}";
 

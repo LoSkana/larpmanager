@@ -10,11 +10,11 @@
 {% block content %}
     {% if available_typ|length > 1 %}
         <p>
-            {% trans "Go to the form for" %}:
+            {% trans "Configure form" %}:
             {% for nm in available_typ.keys %}
-                {% include "elements/comma.html" %}
+                {% if not forloop.first %}|{% endif %}
                 {% if nm == label_typ %}
-                    {% trans nm as name %}{{ name }}
+                    <b>{% trans nm as name %}{{ name }}</b>
                 {% else %}
                     <a href="{% url 'orga_writing_form' run.get_slug nm %}">{% trans nm as name %}{{ name }}</a>
                 {% endif %}

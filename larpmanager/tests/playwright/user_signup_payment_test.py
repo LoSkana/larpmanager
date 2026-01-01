@@ -18,13 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration with payment requirement.
+Verifies signup requiring payment, provisional registration status, wire transfer payment,
+receipt upload, payment confirmation by organizer, and character assignment/removal emails.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -81,23 +87,23 @@ def signup(page: Any, live_server: Any) -> None:
     # Signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
-    expect_normalized(page.locator("#riepilogo"), "provisional status")
+    expect_normalized(page, page.locator("#riepilogo"), "provisional status")
     submit_confirm(page)
 
     # Check we are on payment page
-    expect_normalized(page.locator("#header"), "Payment")
-    expect_normalized(page.locator("b"), "100")
+    expect_normalized(page, page.locator("#banner"), "Payment")
+    expect_normalized(page, page.locator("b"), "100")
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect_normalized(page.locator("#one"), "Provisional registration")
-    expect_normalized(page.locator("#one"), "to confirm it proceed with payment")
+    expect_normalized(page, page.locator("#one"), "Provisional registration")
+    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
 
     # pay
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
-    expect_normalized(page.locator("b"), "100")
+    expect_normalized(page, page.locator("b"), "100")
     submit(page)
 
     load_image(page, "#id_invoice")
@@ -111,14 +117,14 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect_normalized(page.locator("#one"), "Registration confirmed")
-    expect_normalized(page.locator("#one"), "please fill in your profile")
+    expect_normalized(page, page.locator("#one"), "Registration confirmed")
+    expect_normalized(page, page.locator("#one"), "please fill in your profile")
     page.get_by_role("link", name=re.compile(r"please fill in your")).click()
 
     # Approve sharing
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
-    expect_normalized(page.locator("#one"), "Registration confirmed (Standard)")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
 
 
 def characters(page: Any, live_server: Any) -> None:

@@ -83,17 +83,19 @@ class WritingForm(MyForm):
 
         if WritingQuestionType.ASSIGNED in question_types:
             staffer_choices = [
-                (member.id, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
+                (member.uuid, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
             ]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
+            self.fields["assigned"].to_field_name = "uuid"
         else:
             self.delete_field("assigned")
 
         if WritingQuestionType.PROGRESS in question_types:
             self.fields["progress"].choices = [
-                (step.id, str(step))
+                (step.uuid, str(step))
                 for step in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
+            self.fields["progress"].to_field_name = "uuid"
         else:
             self.delete_field("progress")
 
@@ -464,7 +466,8 @@ class QuestForm(WritingForm, BaseWritingForm):
 
         # Populate quest type choices from event elements
         que = self.params["run"].event.get_elements(QuestType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
+        self.fields["typ"].to_field_name = "uuid"
 
 
 class TraitForm(WritingForm, BaseWritingForm):
@@ -488,7 +491,8 @@ class TraitForm(WritingForm, BaseWritingForm):
 
         # Populate quest choices from event elements
         que = self.params["run"].event.get_elements(Quest)
-        self.fields["quest"].choices = [(m.id, m.name) for m in que]
+        self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
+        self.fields["quest"].to_field_name = "uuid"
 
 
 class HandoutForm(WritingForm):
@@ -507,10 +511,13 @@ class HandoutForm(WritingForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and populate template choices from run's handout templates."""
         super().__init__(*args, **kwargs)
+
         # Retrieve handout templates for the associated run's event
         que = self.params["run"].event.get_elements(HandoutTemplate)
+
         # Populate template field choices with template IDs and names
-        self.fields["template"].choices = [(m.id, m.name) for m in que]
+        self.fields["template"].choices = [(m.uuid, m.name) for m in que]
+        self.fields["template"].to_field_name = "uuid"
 
 
 class HandoutTemplateForm(WritingForm):
@@ -559,7 +566,8 @@ class PrologueForm(WritingForm, BaseWritingForm):
 
         # Populate prologue type choices from event elements
         que = self.params["run"].event.get_elements(PrologueType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
+        self.fields["typ"].to_field_name = "uuid"
 
         # Initialize organization-specific fields and reorder characters
         self.init_orga_fields()

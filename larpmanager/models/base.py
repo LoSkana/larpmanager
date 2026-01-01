@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import os
 import secrets
+import sys
 from itertools import chain
 from typing import Any, ClassVar
 
@@ -341,11 +342,15 @@ def auto_set_uuid(instance: Any) -> None:
 
 def debug_set_uuid(instance: Any, *, created: bool) -> None:
     """Simplifiy uuid for debug purposes."""
+    # Check if running in PyCharm via pytest runner
+    is_pycharm = (
+        os.getenv("PYCHARM_DEBUG") == "1"
+        or os.getenv("PYCHARM_HOSTED") == "1"
+        or any("_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv)
+    )
+
     debug_enviro = (
-        conf_settings.DEBUG
-        or os.getenv("CI") == "true"
-        or os.getenv("GITHUB_ACTIONS") == "true"
-        or os.getenv("PYCHARM_DEBUG") == "1"
+        conf_settings.DEBUG or os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true" or is_pycharm
     )
     if not created or not hasattr(instance, "uuid") or not debug_enviro:
         return

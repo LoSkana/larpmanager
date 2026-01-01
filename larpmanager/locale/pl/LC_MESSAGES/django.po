@@ -2417,6 +2417,9 @@ msgstr "Kolekcja dla"
 msgid "Communications"
 msgstr "Komunikacja"
 
+msgid "Configure form"
+msgstr "Konfiguracja formularza"
+
 msgid "Credit balance"
 msgstr "Saldo kredytowe"
 
@@ -3184,9 +3187,6 @@ msgstr "Faktura elektroniczna"
 
 msgid "Enable preferences"
 msgstr "Włącz preferencje"
-
-msgid "Go to the form for"
-msgstr "Przejdź do formularza dla"
 
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"
@@ -5045,9 +5045,6 @@ msgstr "Nazwa rabatu - do użytku wewnętrznego"
 
 msgid "No elements are currently available"
 msgstr "Żadne elementy nie są obecnie dostępne"
-
-msgid "Now characters can have inventories"
-msgstr "Teraz postacie mogą posiadać ekwipunek"
 
 msgid "Now set up the tokens configuration"
 msgstr "Teraz należy ustawić konfigurację tokenów"

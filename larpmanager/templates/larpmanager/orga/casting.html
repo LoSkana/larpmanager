@@ -11,9 +11,17 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Casting management for" %}:
-                <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
+                {% if typ == 0 %}
+                    <strong>{% trans "characters" %}</strong>
+                {% else %}
+                    <a href="{% url 'orga_casting' run.get_slug 0 %}">{% trans "characters" %}</a>
+                {% endif %}
                 {% for idx, qt in quest_types.items %}
-                    , <a href="{% url 'orga_casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% if typ == idx %}
+                        | <strong>{{ qt.name }}</strong>
+                    {% else %}
+                        | <a href="{% url 'orga_casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% endif %}
                 {% endfor %}
             </p>
         {% endif %}
@@ -101,10 +109,10 @@
 window['num_pref'] = {{ num_choices }};
 window['choices'] = {{ choices | safe }};
 window['players'] = {{ players | safe }};
-window['chosen'] = {{ chosen }};
-window['not_chosen'] = {{ not_chosen }};
+window['chosen'] = {{ chosen | safe }};
+window['not_chosen'] = {{ not_chosen | safe }};
 window['preferences'] = {{ preferences | safe }};
-window['didnt_choose'] = {{ didnt_choose }};
+window['didnt_choose'] = {{ didnt_choose | safe }};
 window['nopes'] = {{ nopes | safe }};
 window['taken'] = {{ taken | safe }};
 window['mirrors'] = {{ mirrors | safe }};

@@ -138,7 +138,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     if event_slug:
         # Get context for specific event and verify pre-register feature is active
         context = get_event(request, event_slug)
-        context["sel"] = context["event"].id
+        context["sel"] = context["event"].uuid
         check_event_feature(request, context, "pre_register")
 
         # Check if we should redirect to regular registration
@@ -182,13 +182,14 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     if request.method == "POST":
         form = PreRegistrationForm(request.POST, context=context)
         if form.is_valid():
-            nr = form.cleaned_data["new_event"]
+            new_event_uuid = form.cleaned_data["new_event"]
             # Only save if an event was actually selected
-            if nr != "":
+            if new_event_uuid != "":
                 with transaction.atomic():
+                    new_event = get_object_uuid(Event, new_event_uuid)
                     PreRegistration(
                         member=context["member"],
-                        event_id=nr,
+                        event=new_event,
                         pref=form.cleaned_data["new_pref"],
                         info=form.cleaned_data["new_info"],
                     ).save()
@@ -584,8 +585,8 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
     if hasattr(form, "questions"):
         for question in form.questions:
             if question.id in form.singles:
-                # Use question.id for form field keys (internal form processing)
-                context["submitted"][get_question_key(question)] = form.singles[question.id].option_id
+                # Use question.uuid for form field keys (internal form processing)
+                context["submitted"][get_question_key(question)] = str(form.singles[question.id].option.uuid)
 
     if registration:
         if registration.ticket_id:

@@ -17,12 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Quests and Traits system with casting integration.
+Verifies quest types, quest creation, trait creation with character references,
+and casting algorithm integration with quest/trait assignments.
+"""
+
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     check_feature,
     fill_tinymce,
     go_to,
@@ -50,15 +57,15 @@ def test_quest_trait(pw_page: Any) -> None:
     # check result
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Test Character").nth(1).click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
-        "Player: Admin Test Presentation Test Teaser Text Test Text Torta - Nonna saleee aliame con AnotherAnotherPlayer: User Test",
+        "player: admin test presentation test teaser text test text torta - nonna saleee anotheraliame con torta - nonna another player: user test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
-        "Torta - Strudel saleee Test CharacterTest CharacterPlayer: Admin TestTest Teaser (...)veronese Torta - Strudel Test Character Player: Admin Test",
+        "your character is test character player: user test torta - strudel saleee test characterveronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
 
@@ -81,7 +88,7 @@ def quests(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # create two quests
-    page.get_by_role("link", name="Quest", exact=True).click()
+    page.get_by_role("link", name="Quest", exact=True).click(force=True)
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("Torta")
     fill_tinymce(page, "id_teaser", "zucchero")
@@ -96,7 +103,7 @@ def quests(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    expect_normalized(page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
+    expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
 
 
 def traits(page: Any, live_server: Any) -> None:
@@ -127,7 +134,7 @@ def traits(page: Any, live_server: Any) -> None:
     frame.get_by_label("Rich Text Area").press("#")
     page.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     submit_confirm(page)
 
     page.get_by_role("link", name="New").click()
@@ -148,9 +155,9 @@ def traits(page: Any, live_server: Any) -> None:
     # check how they appear on user side
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
-    expect_normalized(page.locator("#one"), "Name Quest Lore Torta , Pizza")
+    expect_normalized(page, page.locator("#one"), "Name Quest Lore Torta , Pizza")
     page.get_by_role("link", name="Torta").click()
-    expect_normalized(page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
+    expect_normalized(page, page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
 def signups(page: Any, live_server: Any) -> None:
@@ -201,35 +208,39 @@ def casting(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.locator("#faction0").select_option("Torta")
-    page.locator("#choice0").select_option("2")
+    page.locator("#choice0").select_option("u2")
     page.locator("#faction1").select_option("Torta")
-    page.locator("#choice1").select_option("1")
+    page.locator("#choice1").select_option("u1")
     page.locator("#faction2").select_option("Pizza")
-    page.locator("#choice2").select_option("3")
-    page.get_by_role("button", name="Submit").click()
+    page.locator("#choice2").select_option("u3")
+    submit_confirm(page)
 
     # make casting
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
+    just_wait(page)
     page.get_by_role("button", name="Upload").click()
 
     # check signups
     page.get_by_role("link", name="Registrations", exact=True).click()
     page.get_by_role("link", name="Lore").click()
-    expect_normalized(
-        page.locator("#one"), "User Test Standard #2 Another Admin Test Standard #1 Test Character Torta - Nonna"
+    expect_normalized(page,
+        page.locator("#one"), "User Test #2 Another Standard "
+    )
+    expect_normalized(page,
+        page.locator("#one"), "Admin Test #1 Test Character Torta - Nonna Standard"
     )
 
     # manual trait assignments
     page.locator('[id="u2"]').get_by_role("link", name="").click()
-    page.locator("#id_qt_1").select_option("1")
+    page.locator("#id_qt_u1").select_option("u1")
     submit_confirm(page)
 
     # check result
     page.get_by_role("link", name="Lore").click()
-    expect_normalized(
+    expect_normalized(page,
         page.locator("#one"),
-        "User Test Standard #2 Another Torta - Strudel Admin Test Standard #1 Test Character Torta - Nonna",
+        "User Test #2 Another Torta - Strudel Standard Admin Test #1 Test Character Torta - Nonna Standard",
     )

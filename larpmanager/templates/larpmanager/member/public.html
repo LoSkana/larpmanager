@@ -58,9 +58,9 @@
                                 <a href="{% url 'gallery' el.run.get_slug %}">{{ el.run }}</a>
                             </td>
                             <td>
-                                {% for num, name in el.chars.items %}
+                                {% for uuid, name in el.chars.items %}
                                     {% include "elements/comma.html" %}
-                                    <a href="{% url 'character' el.run.get_slug num %}">{{ name }}</a>
+                                    <a href="{% url 'character' el.run.get_slug uuid %}">{{ name }}</a>
                                 {% endfor %}
                             </td>
                         </tr>

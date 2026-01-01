@@ -2417,6 +2417,9 @@ msgstr "Sbírejte pro"
 msgid "Communications"
 msgstr "Komunikace"
 
+msgid "Configure form"
+msgstr "Konfigurace formuláře"
+
 msgid "Credit balance"
 msgstr "Kreditní zůstatek"
 
@@ -3184,9 +3187,6 @@ msgstr "Elektronická faktura"
 
 msgid "Enable preferences"
 msgstr "Povolení předvoleb"
-
-msgid "Go to the form for"
-msgstr "Přejděte na formulář pro"
 
 msgid "Hide not available"
 msgstr "Skrýt není k dispozici"
@@ -5045,9 +5045,6 @@ msgstr "Název slevy - pro interní použití"
 
 msgid "No elements are currently available"
 msgstr "V současné době nejsou k dispozici žádné prvky"
-
-msgid "Now characters can have inventories"
-msgstr "Nyní mohou mít postavy zásoby"
 
 msgid "Now set up the tokens configuration"
 msgstr "Nyní nastavte konfiguraci tokenů"

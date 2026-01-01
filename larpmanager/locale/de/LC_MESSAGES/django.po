@@ -2417,6 +2417,9 @@ msgstr "Sammeln für"
 msgid "Communications"
 msgstr "Kommunikation"
 
+msgid "Configure form"
+msgstr "Formular konfigurieren"
+
 msgid "Credit balance"
 msgstr "Guthaben"
 
@@ -3184,9 +3187,6 @@ msgstr "Elektronische Rechnung"
 
 msgid "Enable preferences"
 msgstr "Einstellungen aktivieren"
-
-msgid "Go to the form for"
-msgstr "Weiter zum Formular für"
 
 msgid "Hide not available"
 msgstr "Ausblenden nicht verfügbar"
@@ -5046,9 +5046,6 @@ msgstr "Name des Rabatts - für den internen Gebrauch"
 
 msgid "No elements are currently available"
 msgstr "Derzeit sind keine Elemente verfügbar"
-
-msgid "Now characters can have inventories"
-msgstr "Jetzt können Charaktere Inventare haben"
 
 msgid "Now set up the tokens configuration"
 msgstr "Richten Sie nun die Konfiguration der Token ein"

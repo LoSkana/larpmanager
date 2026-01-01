@@ -2417,6 +2417,9 @@ msgstr "Collecter pour"
 msgid "Communications"
 msgstr "Communications"
 
+msgid "Configure form"
+msgstr "Configurer le formulaire"
+
 msgid "Credit balance"
 msgstr "Solde créditeur"
 
@@ -3184,9 +3187,6 @@ msgstr "Facture électronique"
 
 msgid "Enable preferences"
 msgstr "Activer les préférences"
-
-msgid "Go to the form for"
-msgstr "Accéder au formulaire pour"
 
 msgid "Hide not available"
 msgstr "Masquer non disponible"
@@ -5046,9 +5046,6 @@ msgstr "Nom de la remise - pour usage interne"
 
 msgid "No elements are currently available"
 msgstr "Aucun élément n'est actuellement disponible"
-
-msgid "Now characters can have inventories"
-msgstr "Les personnages peuvent désormais avoir des inventaires"
 
 msgid "Now set up the tokens configuration"
 msgstr "Il faut maintenant configurer les jetons"

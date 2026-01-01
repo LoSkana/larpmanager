@@ -18,13 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Gift registration with giftable form fields and payment.
+Verifies giftable ticket/field configuration, gift purchase workflow,
+payment for gifts, approval process, and gift redemption by recipients.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     go_to,
     load_image,
     login_orga,
@@ -191,13 +197,13 @@ def field_text(page: Any, live_server: Any) -> None:
     # sign up
     go_to(page, live_server, "/test/register/")
     page.get_by_text("twp (10€) - (Available 2)").click()
-    expect_normalized(page.locator("#register_form"), "options: 1 / 1")
+    expect_normalized(page, page.locator("#register_form"), "options: 1 / 1")
     page.get_by_label("choice").select_option("u2")
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("sadsadas")
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("sadsadsadsad")
-    expect_normalized(page.locator("#register_form"), "text length: 12 / 100")
+    expect_normalized(page, page.locator("#register_form"), "text length: 12 / 100")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     page.get_by_role("link", name="Register", exact=True).click()
@@ -224,22 +230,22 @@ def gift(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="when").fill("fffdsfs")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect_normalized(page.locator("#one"), "( Standard ) wow - one , choice - prima (10.00€)")
-    expect_normalized(page.locator("#one"), "10€ within 8 days")
+    expect_normalized(page, page.locator("#one"), "( Standard ) wow - one , choice - prima (10.00€)")
+    expect_normalized(page, page.locator("#one"), "10€ within 8 days")
 
     # pay
     page.get_by_role("link", name="10€ within 8 days").click()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
     submit(page)
 
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/gift/")
-    expect_normalized(page.locator("#one"), "Payment currently in review by the staff.")
+    expect_normalized(page, page.locator("#one"), "Payment currently in review by the staff.")
 
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")
@@ -247,11 +253,11 @@ def gift(page: Any, live_server: Any) -> None:
 
     # redeem
     go_to(page, live_server, "/test/gift/")
-    expect_normalized(page.locator("#one"), "Access link")
+    expect_normalized(page, page.locator("#one"), "Access link")
     href = page.get_by_role("link", name="Access link").get_attribute("href")
 
     login_user(page, live_server)
     go_to(page, live_server, href)
-    expect_normalized(page.locator("#header"), "Redeem registration")
+    expect_normalized(page, page.locator("#banner"), "Redeem registration")
     submit_confirm(page)
-    expect_normalized(page.locator("#one"), "Registration confirmed")
+    expect_normalized(page, page.locator("#one"), "Registration confirmed")

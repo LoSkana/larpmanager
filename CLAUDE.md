@@ -15,6 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **[Playwright Testing Guide](docs/05-playwright-testing.md)** - How to write and run end-to-end tests
 - **[Feature Descriptions](docs/06-feature-descriptions.md)** - Complete reference of all available features
 - **[Test Database Schema Versioning](docs/07-test-database-schema-versioning.md)** - How the automatic schema version detection works
+- **[Security Best Practices](docs/08-security-best-practices.md)** - Critical security requirements including UUID usage
 - **[README.md](README.md)** - Installation, deployment, and contribution guidelines
 
 ## Development Commands
@@ -68,6 +69,7 @@ Models are organized in `larpmanager/models/` by domain:
 - **Forms & Questions**: `form.py` - Dynamic form system for registration/applications
 - **Other domains**: `casting.py`, `experience.py`, `miscellanea.py`
 - **IMPORTANT**: Only add new fields to models if they are used by EVERY instance. Otherwise use `EventConfig`, `RunConfig`, or `AssocConfig`
+- **SECURITY**: Models referenced in URLs or frontend must inherit from `UuidMixin` (see [Security Best Practices](docs/08-security-best-practices.md))
 
 ### Core Features Architecture
 - **Feature System**: Modular feature flags system (see [Features and Permissions Guide](docs/01-features-and-permissions.md))
@@ -141,6 +143,7 @@ Models are organized in `larpmanager/models/` by domain:
    - For new features with UI, see [Features and Permissions Guide](docs/01-features-and-permissions.md)
    - Follow naming conventions: `orga_*` for event views, `exe_*` for organization views
    - Only add model fields if used by EVERY instance (otherwise use Config models)
+   - **CRITICAL**: Follow [Security Best Practices](docs/08-security-best-practices.md) - especially UUID usage
 
 3. **Update fixtures if needed**:
    - Models/fixtures changed: `python manage.py dump_test`

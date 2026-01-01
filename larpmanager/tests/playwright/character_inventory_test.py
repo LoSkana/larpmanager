@@ -17,12 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character inventory system with pool types and transfers.
+Verifies inventory pool type creation, character-specific inventory pools,
+resource transfers between pools, and transfer history logging.
+"""
+
 import re
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -50,7 +57,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.get_by_role("checkbox", name="Character inventory").check()
     # Writing
     page.get_by_role("checkbox", name="Characters").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
@@ -60,7 +67,7 @@ def setup(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/quick/")
 
@@ -70,11 +77,11 @@ def character_inventory_pool_types(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="+ New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Credits")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="+ New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Junk")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def character_inventory_pools(live_server: Any, page: Any) -> None:
@@ -83,14 +90,14 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("NPC")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Character's Bank")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="#1 Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
-    page.locator('[id="1"]').get_by_role("link", name="").click()
+    submit_confirm(page)
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:
@@ -110,7 +117,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="User Test - user@test.it").click()
     # page.once("dialog", lambda dialog: dialog.dismiss())
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # log out and log in as the test user
     page.get_by_role("link", name=" Hi, Admin Test!").click()
@@ -121,14 +128,14 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("textbox", name="email").fill("user@test.it")
     page.get_by_role("textbox", name="email").press("Tab")
     page.get_by_role("textbox", name="password").fill("banana")
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Test Larp").click()
     page.get_by_role("link", name="Test Character").click()
 
     # do transfers as a user
     page.get_by_role("link", name="View Details").first.click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="View Details").first.click()
     page.get_by_role("row", name="Credits 3 NPC Transfer").get_by_role("spinbutton").click()
@@ -138,21 +145,9 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="NPC Transfer payment").get_by_role("button").click()
 
     # check row 1
-    row1 = page.locator('tr:has-text("user@test.it")').first
-    cells1 = row1.evaluate("(row) => Array.from(row.querySelectorAll('td')).map(td => td.textContent)")
-    assert cells1[1] == "user@test.it"
-    assert cells1[2] == "Test Character's Personal Storage"
-    assert cells1[3] == "NPC"
-    assert cells1[4] == "Credits"
-    assert cells1[5] == "2"
-    assert cells1[6] == "payment"
+    row1 = page.locator('#transfer_log tbody tr').first
+    expect_normalized(page, row1, "User Test	Test Character's Personal Storage	NPC	Credits	2	payment")
 
     # check row 2
-    row2 = page.locator('tr:has-text("orga@test.it")').first
-    cells2 = row2.evaluate("(row) => Array.from(row.querySelectorAll('td')).map(td => td.textContent)")
-    assert cells2[1] == "orga@test.it"
-    assert cells2[2] == "NPC"
-    assert cells2[3] == "Test Character's Personal Storage"
-    assert cells2[4] == "Credits"
-    assert cells2[5] == "3"
-    assert cells2[6] == "test"
+    row2 = page.locator('#transfer_log tbody tr').nth(1)
+    expect_normalized(page, row2, "Admin Test	NPC	Test Character's Personal Storage	Credits	3	test")

@@ -219,12 +219,12 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
     # Fetch available containers for the current association
     available_containers = (
         WarehouseContainer.objects.filter(association_id=context["association_id"])
-        .values("id", "name")
+        .values("uuid", "name")
         .order_by("name")
     )
     # Fetch available tags for the current association
     available_tags = (
-        WarehouseTag.objects.filter(association_id=context["association_id"]).values("id", "name").order_by("name")
+        WarehouseTag.objects.filter(association_id=context["association_id"]).values("uuid", "name").order_by("name")
     )
 
     # Populate context with bulk operation choices and their associated objects
@@ -359,7 +359,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add faction-related operations if faction feature is enabled
     if "faction" in context["features"]:
-        factions = context["event"].get_elements(Faction).values("id", "name").order_by("name")
+        factions = context["event"].get_elements(Faction).values("uuid", "name").order_by("name")
         context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_FACT, "label": _("Add to faction"), "objs": factions},
@@ -369,7 +369,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add plot-related operations if plot feature is enabled
     if "plot" in context["features"]:
-        plots = context["event"].get_elements(Plot).values("id", "name").order_by("name")
+        plots = context["event"].get_elements(Plot).values("uuid", "name").order_by("name")
         context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_PLOT, "label": _("Add to plot"), "objs": plots},
@@ -379,7 +379,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add prologue-related operations if prologue feature is enabled
     if "prologue" in context["features"]:
-        prologues = context["event"].get_elements(Prologue).values("id", "name").order_by("name")
+        prologues = context["event"].get_elements(Prologue).values("uuid", "name").order_by("name")
         context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_PROLOGUE, "label": _("Add prologue"), "objs": prologues},
@@ -389,7 +389,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add XP delivery operations if px feature is enabled
     if "px" in context["features"]:
-        delivery = context["event"].get_elements(DeliveryPx).values("id", "name")
+        delivery = context["event"].get_elements(DeliveryPx).values("uuid", "name")
         context["bulk"].extend(
             [
                 {"idx": Operations.ADD_CHAR_DELIVERY, "label": _("Add to xp delivery"), "objs": delivery},
@@ -399,7 +399,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add progress step operation if progress feature is enabled
     if "progress" in context["features"]:
-        progress_steps = context["event"].get_elements(ProgressStep).values("id", "name").order_by("order")
+        progress_steps = context["event"].get_elements(ProgressStep).values("uuid", "name").order_by("order")
         context["bulk"].append(
             {"idx": Operations.SET_CHAR_PROGRESS, "label": _("Set progress step"), "objs": progress_steps},
         )
@@ -408,14 +408,14 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
     if "assigned" in context["features"]:
         # Get event staff members using the same function used in writing utils
         event_staff = get_event_staffers(context["event"])
-        staff_members = [{"id": m.id, "name": m.show_nick()} for m in event_staff]
+        staff_members = [{"uuid": m.uuid, "name": m.show_nick()} for m in event_staff]
         context["bulk"].append(
             {"idx": Operations.SET_CHAR_ASSIGNED, "label": _("Set assigned staff member"), "objs": staff_members},
         )
 
     # Add status assignment operation if enabled
     if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
-        status_choices = [{"id": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
+        status_choices = [{"uuid": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
         context["bulk"].append(
             {"idx": Operations.SET_CHAR_STATUS, "label": _("Set character status"), "objs": status_choices},
         )
@@ -444,7 +444,7 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
         raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}))
 
     # Get available quest types for the event, ordered by name
-    quest_types = context["event"].get_elements(QuestType).values("id", "name").order_by("name")
+    quest_types = context["event"].get_elements(QuestType).values("uuid", "name").order_by("name")
 
     # Set up bulk operation options in context
     context["bulk"] = [
@@ -471,7 +471,7 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
         raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}))
 
     # Get available quests for the current event
-    quests = context["event"].get_elements(Quest).values("id", "name").order_by("name")
+    quests = context["event"].get_elements(Quest).values("uuid", "name").order_by("name")
 
     # Configure bulk operation options
     context["bulk"] = [
@@ -504,7 +504,7 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
         raise ReturnNowError(exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}))
 
     # Get ability types for the event, ordered by name
-    ability_types = context["event"].get_elements(AbilityTypePx).values("id", "name").order_by("name")
+    ability_types = context["event"].get_elements(AbilityTypePx).values("uuid", "name").order_by("name")
 
     # Setup bulk operations context
     context["bulk"] = [

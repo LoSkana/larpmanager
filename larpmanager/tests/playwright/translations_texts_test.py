@@ -18,13 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Multilingual support and custom texts.
+Verifies custom text management in multiple languages (English, Italian, French, German),
+language switching, and translation of interface elements.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -41,40 +47,40 @@ def test_translations_text(pw_page: Any) -> None:
     fill_tinymce(page, "id_text", "Hello", show=False)
     page.locator("#id_typ").select_option("h")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     fill_tinymce(page, "id_text", "BUONGIORNO", show=False)
     page.locator("#id_language").select_option("it")
     page.locator("#id_default").uncheck()
     page.locator("#id_typ").select_option("h")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     fill_tinymce(page, "id_text", "bonjour", show=False)
     page.locator("#id_language").select_option("fr")
     page.locator("#id_typ").select_option("h")
     page.locator("#id_default").uncheck()
-    page.get_by_role("button", name="Confirm").click()
-    expect_normalized(page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
 
     # test languages
     go_to(page, live_server, "/")
-    expect_normalized(page.locator("#one"), "Hello")
+    expect_normalized(page, page.locator("#one"), "Hello")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Select Language:").select_option("it")
     page.get_by_label("Select Language:").click()
-    page.get_by_role("button", name="Submit").click()
-    expect_normalized(page.locator("#one"), "BUONGIORNO")
-    expect_normalized(page.locator("#topbar"), "Profilo Contabilità")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "BUONGIORNO")
+    expect_normalized(page, page.locator("#topbar"), "Profilo Contabilità")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Seleziona la lingua:").select_option("fr")
-    page.get_by_role("button", name="Submit").click()
-    expect_normalized(page.locator("#one"), "bonjour")
-    expect_normalized(page.locator("#topbar"), "Profil Comptabilité")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "bonjour")
+    expect_normalized(page, page.locator("#topbar"), "Profil Comptabilité")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Sélectionner la langue :").select_option("de")
-    page.get_by_role("button", name="Submit").click()
-    expect_normalized(page.locator("#one"), "Hello")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Hello")

@@ -18,13 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration accounting with payments, tokens, credits, and discounts.
+Verifies signup payment workflows, token/credit management, discount codes,
+payment confirmation, and registration cancellation with refunds.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -61,7 +67,7 @@ def check_delete(live_server: Any, page: Any) -> None:
     page.wait_for_selector("a:has(i.fas.fa-edit)", timeout=100)
     page.locator("a:has(i.fas.fa-edit)").click(force=True)
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/cancellations")
     expect(page.get_by_role("row", name="100 52 24 4 Admin Test")).to_contain_text("orga@test.it")
@@ -70,17 +76,17 @@ def check_delete(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/tokens")
     page.get_by_role("row", name="Admin Test Test Larp teeest").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("row", name="Admin Test Test Larp testet").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
     go_to(page, live_server, "/test/manage/payments")
     page.get_by_role("row", name="Admin Test Wire Money").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
 
 
@@ -89,11 +95,11 @@ def discount(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     # Check for registration data with discount applied
-    expect_normalized(page.locator("#regs_u1_Participant"), "100")
-    expect_normalized(page.locator("#regs_u1_Participant"), "52")
+    expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
+    expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect_normalized(page.locator("#one"), "Total payments: 100")
+    expect_normalized(page, page.locator("#one"), "Total payments: 100")
 
     # update signup
     go_to(page, live_server, "/test/register")
@@ -124,15 +130,15 @@ def discount(live_server: Any, page: Any) -> None:
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
     page.locator("#discount_go").click()
-    page.wait_for_timeout(2000)
-    expect_normalized(
+    just_wait(page)
+    expect_normalized(page,
         page.locator("#discount_res"),
         "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed",
     )
-    expect_normalized(page.locator("#discount_tbl"), "20.00€")
+    expect_normalized(page, page.locator("#discount_tbl"), "20.00€")
     page.get_by_role("button", name="Continue").click()
-    expect_normalized(page.locator("#riepilogo"), "Your updated registration total is: 80€.")
-    page.wait_for_timeout(2000)
+    expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 80€.")
+    just_wait(page)
     page.locator("#register_go").click()
 
 
@@ -140,26 +146,26 @@ def pay(live_server: Any, page: Any) -> None:
     # check accounting
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect_normalized(page.locator("#one"), "Total registration fee: 100")
-    expect_normalized(page.locator("#one"), "Total payments: 48")
-    expect_normalized(page.locator("#one"), "Next payment: 52")
+    expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
+    expect_normalized(page, page.locator("#one"), "Total payments: 48")
+    expect_normalized(page, page.locator("#one"), "Next payment: 52")
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     # Check for registration accounting data in the table
-    expect_normalized(page.locator("#regs_u1_Participant"), "52")
-    expect_normalized(page.locator("#regs_u1_Participant"), "48")
-    expect_normalized(page.locator("#regs_u1_Participant"), "100")
+    expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
+    expect_normalized(page, page.locator("#regs_u1_Participant"), "48")
+    expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
 
     # pay
     go_to(page, live_server, "/accounting/registration/u1/")
-    expect_normalized(page.locator("#one"), "100")
-    expect_normalized(page.locator("#one"), "48")
-    expect_normalized(page.locator("#one"), "52")
+    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#one"), "48")
+    expect_normalized(page, page.locator("#one"), "52")
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect_normalized(page.locator("#one"), "52")
+    expect_normalized(page, page.locator("#one"), "52")
     submit(page)
 
     # confirm payment
@@ -223,23 +229,23 @@ def signup_pay(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
     go_to(page, live_server, "/test/register")
-    expect_normalized(page.locator("#one"), "Provisional registration")
+    expect_normalized(page, page.locator("#one"), "Provisional registration")
     page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect_normalized(page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#one"), "100")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
-    expect_normalized(page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#one"), "100")
 
     # check pay
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"proceed with payment")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
-    expect_normalized(page.locator("b"), "100")
+    expect_normalized(page, page.locator("b"), "100")
     submit(page)
-    expect_normalized(page.locator("#one"), "100")
-    expect_normalized(page.locator("#one"), "test beneficiary")
-    expect_normalized(page.locator("#one"), "test iban")
+    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("#one"), "test beneficiary")
+    expect_normalized(page, page.locator("#one"), "test iban")
 
 
 def setup_payment(live_server: Any, page: Any) -> None:

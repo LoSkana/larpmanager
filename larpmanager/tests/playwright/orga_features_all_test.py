@@ -17,11 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Access to all event-level (orga) feature pages.
+Verifies that all event dashboard links are accessible after enabling/disabling features,
+ensuring no broken links or permission issues across all event-specific feature pages.
+"""
+
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     _checkboxes,
     add_links_to_visit,
     go_to,

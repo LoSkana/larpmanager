@@ -2417,6 +2417,9 @@ msgstr "Verzamelen voor"
 msgid "Communications"
 msgstr "Communicatie"
 
+msgid "Configure form"
+msgstr "Formulier configureren"
+
 msgid "Credit balance"
 msgstr "Kredietsaldo"
 
@@ -3184,9 +3187,6 @@ msgstr "Elektronische factuur"
 
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
-
-msgid "Go to the form for"
-msgstr "Ga naar het formulier voor"
 
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
@@ -5045,9 +5045,6 @@ msgstr "Naam van korting - voor intern gebruik"
 
 msgid "No elements are currently available"
 msgstr "Er zijn momenteel geen elementen beschikbaar"
-
-msgid "Now characters can have inventories"
-msgstr "Personages kunnen nu voorraden hebben"
 
 msgid "Now set up the tokens configuration"
 msgstr "Stel nu de tokens-configuratie in"

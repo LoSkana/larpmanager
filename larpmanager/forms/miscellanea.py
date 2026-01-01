@@ -178,8 +178,9 @@ class WorkshopQuestionForm(MyForm):
         super().__init__(*args, **kwargs)
         # Filter workshop modules by event and populate dropdown choices
         self.fields["module"].choices = [
-            (m.id, m.name) for m in WorkshopModule.objects.filter(event=self.params["event"])
+            (m.uuid, m.name) for m in WorkshopModule.objects.filter(event=self.params["event"])
         ]
+        self.fields["module"].to_field_name = "uuid"
 
 
 class WorkshopOptionForm(MyForm):
@@ -194,8 +195,9 @@ class WorkshopOptionForm(MyForm):
         super().__init__(*args, **kwargs)
         # Filter workshop questions by event and populate choices
         self.fields["question"].choices = [
-            (m.id, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
+            (m.uuid, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
         ]
+        self.fields["question"].to_field_name = "uuid"
 
 
 class OrgaAlbumForm(MyForm):
@@ -215,8 +217,9 @@ class OrgaAlbumForm(MyForm):
         super().__init__(*args, **kwargs)
         # Build choices: unassigned option + existing albums excluding self
         self.fields["parent"].choices = [("", _("--- NOT ASSIGNED ---"))] + [
-            (m.id, m.name) for m in Album.objects.filter(run=self.params["run"]).exclude(pk=self.instance.id)
+            (m.uuid, m.name) for m in Album.objects.filter(run=self.params["run"]).exclude(pk=self.instance.id)
         ]
+        self.fields["parent"].to_field_name = "uuid"
 
 
 class OrgaProblemForm(MyForm):

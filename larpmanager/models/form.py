@@ -324,12 +324,12 @@ class WritingQuestion(UuidMixin, BaseModel):
         """Return JSON-serializable dictionary of object attributes.
 
         Returns:
-            Dictionary containing description and name fields.
+            Dictionary containing description, name, and order fields.
 
         """
         js = {}
-        # Update JSON dict with description and name attributes
-        for s in ["description", "name"]:
+        # Update JSON dict with description, name, and order attributes
+        for s in ["description", "name", "order"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -429,8 +429,8 @@ class WritingOption(UuidMixin, BaseModel):
         # Initialize response with max available count
         js = {"max_available": self.max_available}
 
-        # Update with name and description attributes
-        for s in ["name", "description"]:
+        # Update with name, description, and order attributes
+        for s in ["name", "description", "order"]:
             self.upd_js_attr(js, s)
 
         return js

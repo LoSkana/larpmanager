@@ -165,7 +165,7 @@ urlpatterns = [
         name="casting",
     ),
     path(
-        "<slug:event_slug>/casting/<slug:casting_type>/",
+        "<slug:event_slug>/casting/<str:casting_type>/",
         views_uca.casting,
         name="casting",
     ),
@@ -175,7 +175,7 @@ urlpatterns = [
         name="casting_preferences",
     ),
     path(
-        "<slug:event_slug>/casting/preferences/<slug:casting_type>/",
+        "<slug:event_slug>/casting/preferences/<str:casting_type>/",
         views_uca.casting_preferences,
         name="casting_preferences",
     ),
@@ -185,7 +185,7 @@ urlpatterns = [
         name="casting_history",
     ),
     path(
-        "<slug:event_slug>/casting/history/<slug:casting_type>/",
+        "<slug:event_slug>/casting/history/<str:casting_type>/",
         views_uca.casting_history,
         name="casting_history",
     ),

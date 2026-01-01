@@ -283,11 +283,8 @@ def orga_config(
     section: str | None = None,
 ) -> HttpResponse:
     """Configure organization settings with optional section navigation."""
-    # Prepare context with optional section jump
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
-
-    # Delegate to orga_edit with config form
     return orga_edit(request, event_slug, "orga_config", OrgaConfigForm, None, "manage", additional_context=add_ctx)
 
 

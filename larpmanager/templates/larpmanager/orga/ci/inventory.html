@@ -74,8 +74,8 @@
                           action="{% url 'orga_ci_transfer' run.get_slug %}"
                           class="ci-transfer-form">
                         {% csrf_token %}
-                        <input type="hidden" name="source_inventory" value="{{ inventory.id }}">
-                        <input type="hidden" name="pool_type" value="{{ entry.type.id }}">
+                        <input type="hidden" name="source_inventory" value="{{ inventory.uuid }}">
+                        <input type="hidden" name="pool_type" value="{{ entry.type.uuid }}">
                         <div class="ci-transfer-row">
                             <input type="number"
                                    name="amount"
@@ -85,7 +85,7 @@
                             <select name="target_inventory" class="ci-target-select">
                                 <option value="">NPC</option>
                                 {% for inv in all_inventories %}
-                                    {% if inv.id != inventory.id %}<option value="{{ inv.id }}">{{ inv.name }}</option>{% endif %}
+                                    {% if inv.id != inventory.id %}<option value="{{ inv.uuid }}">{{ inv.name }}</option>{% endif %}
                                 {% endfor %}
                             </select>
                             <button type="submit" class="ci-submit-btn">Transfer</button>
@@ -106,8 +106,8 @@
                             {% csrf_token %}
                             <input type="hidden" name="source_inventory" value="">
                             {# NPC = None #}
-                            <input type="hidden" name="target_inventory" value="{{ inventory.id }}">
-                            <input type="hidden" name="pool_type" value="{{ entry.type.id }}">
+                            <input type="hidden" name="target_inventory" value="{{ inventory.uuid }}">
+                            <input type="hidden" name="pool_type" value="{{ entry.type.uuid }}">
                             <div class="ci-transfer-add-row">
                                 <input type="number"
                                        name="amount"
@@ -129,30 +129,34 @@
         {% endfor %}
     </table>
     <h2>{% trans "Transfer Log" %}</h2>
-    <table class="mob tight">
-        <tr>
-            <th>{% trans "Time" %}</th>
-            <th>{% trans "Actor" %}</th>
-            <th>{% trans "From" %}</th>
-            <th>{% trans "To" %}</th>
-            <th>{% trans "Resource" %}</th>
-            <th>{% trans "Amount" %}</th>
-            <th>{% trans "Reason" %}</th>
-        </tr>
-        {% for t in transfers %}
+    <table class="mob tight" id="transfer_log">
+        <thead>
             <tr>
-                <td>{{ t.timestamp|date:"Y-m-d H:i" }}</td>
-                <td>{{ t.actor|default:"-" }}</td>
-                <td>{{ t.source_inventory.name|default:"NPC" }}</td>
-                <td>{{ t.target_inventory.name|default:"NPC" }}</td>
-                <td>{{ t.pool_type.name }}</td>
-                <td>{{ t.amount }}</td>
-                <td>{{ t.reason }}</td>
+                <th>{% trans "Time" %}</th>
+                <th>{% trans "Actor" %}</th>
+                <th>{% trans "From" %}</th>
+                <th>{% trans "To" %}</th>
+                <th>{% trans "Resource" %}</th>
+                <th>{% trans "Amount" %}</th>
+                <th>{% trans "Reason" %}</th>
             </tr>
-        {% empty %}
-            <tr>
-                <td colspan="7" class="ci-empty-row">{% trans "No transfers yet." %}</td>
-            </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+            {% for t in transfers %}
+                <tr>
+                    <td>{{ t.timestamp|date:"Y-m-d H:i" }}</td>
+                    <td>{{ t.actor|default:"-" }}</td>
+                    <td>{{ t.source_inventory.name|default:"NPC" }}</td>
+                    <td>{{ t.target_inventory.name|default:"NPC" }}</td>
+                    <td>{{ t.pool_type.name }}</td>
+                    <td>{{ t.amount }}</td>
+                    <td>{{ t.reason }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="ci-empty-row">{% trans "No transfers yet." %}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% endblock content %}

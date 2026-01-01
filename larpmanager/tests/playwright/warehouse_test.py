@@ -18,18 +18,23 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Warehouse inventory management system.
+Verifies container creation, item management with tags, item movements between containers,
+area assignments, external item tracking, and historical movement records.
+"""
 
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
 
-def test_inventory(pw_page: Any) -> None:
+def test_warehouse(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -47,7 +52,7 @@ def prepare(page: Any) -> None:
     # Activate feature inventory
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Warehouse").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create new boxes
     page.get_by_role("link", name="New").click()
@@ -58,15 +63,15 @@ def prepare(page: Any) -> None:
     page.locator("#id_position").press("Tab")
     page.locator("#id_description").fill("asdf dsfds dfdsfs")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Boc B")
     page.locator("#id_name").press("Tab")
     page.locator("#id_position").fill("dd")
     page.locator("#id_position").press("Tab")
     page.locator("#id_description").fill("dsf dfsd dfsd")
-    page.get_by_role("button", name="Confirm").click()
-    expect_normalized(page.locator("#one"), "Boc B dd dsf dfsd dfsd Box A bibi asdf dsfds dfdsfs")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#inv_containers tbody"), "box a bibi asdf dsfds dfdsfs boc b dd dsf dfsd dfsd")
 
     # add new tags
     page.get_by_role("link", name="Tags").click()
@@ -76,12 +81,12 @@ def prepare(page: Any) -> None:
     page.locator("#id_name").press("Tab")
     page.locator("#id_description").fill("gg ds")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Gru sad ")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("dsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def add_items(page: Any) -> None:
@@ -99,9 +104,9 @@ def add_items(page: Any) -> None:
     page.get_by_role("searchbox").fill("ele")
     page.locator(".select2-results__option").first.click()
     load_image(page, "#id_photo")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
-    expect_normalized(page.locator("#one"), "Item 1 sadsada Box A Electrical")
+    expect_normalized(page, page.locator("#one"), "Item 1 sadsada Box A Electrical")
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Item 2")
@@ -111,7 +116,7 @@ def add_items(page: Any) -> None:
     page.get_by_role("searchbox").nth(1).fill("boc")
     page.locator(".select2-results__option").first.click()
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Item 3sa")
     page.locator("#id_description").click()
@@ -119,25 +124,28 @@ def add_items(page: Any) -> None:
     page.locator("#select2-id_container-container").click()
     page.get_by_role("searchbox").nth(1).fill("box")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check items
-    expect_normalized(
-        page.locator("#one"), "Item 3sa dsad Box A Item 2 sdsadas Boc B Item 1 sadsada Box A Electrical"
+    expect_normalized(page,
+        page.locator("#one"), "item 1 sadsada box a electrical item 2 sdsadas boc b item 3sa dsad box a"
     )
 
 
 def bulk(page: Any) -> None:
     # test bulk
     page.get_by_role("link", name="Bulk").click()
-    page.locator("td:nth-child(5)").first.click()
+
+    # Test links not working when bulk active
+    page.locator('[id="u1"]').get_by_role("cell", name="Electrical").click()
     page.locator('[id="u1"]').get_by_role("cell", name="Box A").click()
-    page.locator('[id="u1"]').get_by_role("cell", name="Box A").click()
-    page.get_by_role("cell", name="sadsada").click()
+    page.locator('[id="u1"]').get_by_role("cell", name="sadsada").click()
     page.get_by_role("link", name="Execute").click()
-    expect_normalized(
-        page.locator("#one"), "Item 3sa dsad Boc B Item 2 sdsadas Boc B Item 1 sadsada Boc B Electrical"
-    )
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "item 1 sadsada boc b electrical")
+    expect_normalized(page, page.locator("#one"), "item 2 sdsadas boc b")
+    expect_normalized(page, page.locator("#one"), "item 3sa dsad box a")
+
 
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u2"]').get_by_role("cell", name="Boc B").click()
@@ -146,11 +154,13 @@ def bulk(page: Any) -> None:
     page.get_by_role("cell", name="Electrical").click()
     page.get_by_role("cell", name="sadsada").click()
     page.locator("#operation").select_option("2")
-    page.locator("#objs_2").select_option("2")
+    page.locator("#objs_2").select_option("u2")
     page.get_by_role("link", name="Execute").click()
-    expect_normalized(
-        page.locator("#one"), "Item 3sa dsad Boc B Item 2 sdsadas Boc B Gru sad Item 1 sadsada Boc B Gru sad Electrical"
-    )
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "item 3sa dsad box a")
+    expect_normalized(page, page.locator("#one"), "Item 2 sdsadas Boc B Gru sad")
+    expect_normalized(page, page.locator("#one"), "Item 1 sadsada Boc B Electrical Gru sad")
+
 
     # add movement
     page.get_by_role("link", name="Movements").click()
@@ -160,8 +170,8 @@ def bulk(page: Any) -> None:
     page.get_by_role("option", name="Item 3sa").click()
     page.locator("#id_notes").click()
     page.locator("#id_notes").fill("maintenance")
-    page.get_by_role("button", name="Confirm").click()
-    expect_normalized(page.locator("#one"), "Item 3sa maintenance")
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Item 3sa maintenance")
 
 
 def area_assigmenents(page: Any) -> None:
@@ -175,7 +185,7 @@ def area_assigmenents(page: Any) -> None:
     page.locator("#id_description").fill("sds")
     page.locator("#id_description").press("CapsLock")
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.locator("#id_name").fill("sALOON")
     page.locator("#id_name").press("Tab")
@@ -184,54 +194,56 @@ def area_assigmenents(page: Any) -> None:
     page.locator("#id_position").fill("SDsad ")
     page.locator("#id_description").click()
     page.locator("#id_description").fill("saddsadsa")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
-    expect_normalized(
-        page.locator("#one"), "sALOON SDsad saddsadsa Item assignments Kitchen ss sds Item assignments"
-    )
+    expect_normalized(page, page.locator("#one"), "sALOON SDsad saddsadsa Item assignments")
+    expect_normalized(page, page.locator("#one"), "Kitchen ss sds Item assignments")
 
     # assign items
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
     page.locator(".selected").first.click()
-    page.get_by_role("row", name=" Item 3sa dsad Boc B").get_by_role("textbox").click()
-    page.get_by_role("row", name=" Item 3sa dsad Boc B").get_by_role("textbox").fill("sss")
+    page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").click()
+    page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").fill("sss")
     page.locator('[id="u1"] > .selected').click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").fill("ffff")
+    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical | Gru sad").get_by_role("textbox").click()
+    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical | Gru sad").get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
 
     # check
     page.get_by_role("link", name="Area").click()
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
-    expect_normalized(
-        page.locator("#one"),
-        "Item 3sa dsad Boc B sss Item 1 sadsada Boc B Gru sadElectrical ffff Item 2 sdsadas Boc B Gru sad",
-    )
-    expect(page.locator('[id="u3"]')).to_match_aria_snapshot('- cell ""')
-    expect(page.locator('[id="u1"]')).to_match_aria_snapshot('- cell ""')
+
+    row = page.locator("tr#u1")
+    assert row.locator("textarea").input_value() == "ffff"
+
+    row = page.locator("tr#u2")
+    assert row.locator("textarea").input_value() == ""
+
+    row = page.locator("tr#u3")
+    assert row.locator("textarea").input_value() == "sss"
 
     # add for second
     page.get_by_role("link", name="Area").click()
     page.locator('[id="u1"]').get_by_role("link", name="Item assignments").click()
-    page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").click()
-    page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").fill("b")
+    page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").click()
+    page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").fill("b")
     page.locator('[id="u1"] > .selected').click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
 
 
 def checks(page: Any) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
-    expect_normalized(page.locator("#one"), "New Kitchen Position: ss Description: sds")
-    expect_normalized(
-        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Boc B - dd b sALOON Position: SDsad Description: saddsadsa "
+    expect_normalized(page, page.locator("#one"), "New Kitchen Position: ss Description: sds")
+    expect_normalized(page,
+        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
     )
-    expect_normalized(page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Boc B - dd sss")
+    expect_normalized(page, page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
 
     # check checks
     page.get_by_role("link", name="Checks").click()
-    expect_normalized(page.locator("#one"), "Item 1 Description: sadsada Photo")
-    expect_normalized(page.locator("#one"), "Kitchen sALOON ffff Item 3sa Description: dsad")
-    expect_normalized(page.locator("#one"), "Kitchen b sALOON sss")
+    expect_normalized(page, page.locator("#one"), "Item 1 Description: sadsada Photo")
+    expect_normalized(page, page.locator("#one"), "Kitchen sALOON ffff Item 3sa Description: dsad")
+    expect_normalized(page, page.locator("#one"), "Kitchen b sALOON sss")

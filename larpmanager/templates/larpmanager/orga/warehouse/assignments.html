@@ -38,7 +38,10 @@
                     <td>{{ el.description }}</td>
                     <td>{{ el.container }}</td>
                     <td>
-                        {% for tag in el.tags.all %}{{ tag }}{% endfor %}
+                        {% for tag in el.tags.all %}
+                            {% if not forloop.first %}|{% endif %}
+                            {{ tag }}
+                        {% endfor %}
                     </td>
                     {% if optionals.quantity %}
                         <td>{{ el.available }}</td>

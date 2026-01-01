@@ -2417,6 +2417,9 @@ msgstr "Samle inn for"
 msgid "Communications"
 msgstr "Kommunikasjon"
 
+msgid "Configure form"
+msgstr "Konfigurer skjema"
+
 msgid "Credit balance"
 msgstr "Kredittsaldo"
 
@@ -3184,9 +3187,6 @@ msgstr "Elektronisk faktura"
 
 msgid "Enable preferences"
 msgstr "Aktiver innstillinger"
-
-msgid "Go to the form for"
-msgstr "Gå til skjemaet for"
 
 msgid "Hide not available"
 msgstr "Skjul ikke tilgjengelig"
@@ -5045,9 +5045,6 @@ msgstr "Navn på rabatt - til internt bruk"
 
 msgid "No elements are currently available"
 msgstr "Ingen elementer er tilgjengelige for øyeblikket"
-
-msgid "Now characters can have inventories"
-msgstr "Nå kan karakterer ha varelager"
 
 msgid "Now set up the tokens configuration"
 msgstr "Konfigurer nå konfigurasjonen av tokens"

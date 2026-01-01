@@ -17,12 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Organization role-based permissions.
+Verifies creation of organization roles, permission assignment, access control,
+and role deletion with permission revocation.
+"""
+
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     check_feature,
     go_to,
     login_orga,
@@ -41,7 +48,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect_normalized(page.locator("#header"), "Access denied")
+    expect_normalized(page, page.locator("#banner"), "Access denied")
 
     login_orga(page, live_server)
 
@@ -55,13 +62,13 @@ def test_exe_association_role(pw_page: Any) -> None:
     check_feature(page, "Configuration")
     check_feature(page, "Accounting")
     submit_confirm(page)
-    expect_normalized(page.locator('[id="u2"]'), "Organization (Configuration), Accounting (Accounting)")
+    expect_normalized(page, page.locator('[id="u2"]'), "Organization (Configuration), Accounting (Accounting)")
 
     logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/accounting/")
-    expect_normalized(page.locator("#banner"), "Accounting - Organization")
+    expect_normalized(page, page.locator("#banner"), "Accounting - Organization")
 
     logout(page)
     login_orga(page, live_server)
@@ -69,11 +76,11 @@ def test_exe_association_role(pw_page: Any) -> None:
     go_to(page, live_server, "/manage/roles")
     page.get_by_role("row", name=" test role User Test").get_by_role("link").click()
     page.get_by_role("link", name="Delete").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("button", name="Confirmation delete").click()
 
     logout(page)
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect_normalized(page.locator("#header"), "Access denied")
+    expect_normalized(page, page.locator("#banner"), "Access denied")

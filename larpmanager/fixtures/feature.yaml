@@ -762,8 +762,8 @@
     overall: false
     placeholder: false
     order: 31
-    after_text: Now characters can have inventories
-    after_link: config/inventory
+    after_text: ''
+    after_link: ''
     hidden: false
     module: event
 - model: larpmanager.feature

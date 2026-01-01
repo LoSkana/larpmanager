@@ -5,6 +5,7 @@
  * This file is part of LarpManager and is dual-licensed:
  *
  * 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+ * 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
  *    as published by the Free Software Foundation. You may use, modify, and
  *    distribute this file under those terms.
  *
@@ -431,11 +432,16 @@ function search(key) {
             // Build character card HTML
             characters += '<div class="gallery single list" id="num{0}">'.format(el['number']);
             characters += '<div class="el"><div class="icon"><img src="{0}" /></div></div>'.format(pf);
-            characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['number']), name);
+            characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['uuid']), name);
             characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
 
-            // Add custom field values
-            for (const [k, value] of Object.entries(questions)) {
+            // Add custom field values sorted by order
+            // Convert questions object to array and sort by order field
+            var sortedQuestions = Object.entries(questions).sort((a, b) => {
+                return (a[1]['order'] || 0) - (b[1]['order'] || 0);
+            });
+
+            for (const [k, value] of sortedQuestions) {
                 if (el['fields'][k]) {
                     var field = el['fields'][k];
                     if (Array.isArray(field)) {
@@ -467,7 +473,7 @@ function search(key) {
 
             // Add character teaser if enabled
             if (show_teaser && el['teaser'].length > 0) {
-                teaser = $('#teasers .' + el['id']).text();  // Get from hidden div, text only to prevent XSS
+                teaser = $('#teasers .' + el['uuid']).text();  // Get from hidden div, text only to prevent XSS
                 characters += '<div class="go-inline">{0}</div>'.format(escapeHtml(teaser));
             }
 

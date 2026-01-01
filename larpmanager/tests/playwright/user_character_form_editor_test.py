@@ -17,12 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character form editor with player editor feature.
+Verifies dynamic character form creation with single/multiple choice fields, text fields,
+prerequisites, availability limits, and player character creation/approval workflow.
+"""
+
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -61,9 +68,9 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/writing/form/")
-    expect_normalized(page.locator('[id="u1"]'), "Name")
-    expect_normalized(page.locator('[id="u2"]'), "Presentation")
-    expect_normalized(page.locator('[id="u3"]'), "Sheet")
+    expect_normalized(page, page.locator('[id="u1"]'), "Name")
+    expect_normalized(page, page.locator('[id="u2"]'), "Presentation")
+    expect_normalized(page, page.locator('[id="u3"]'), "Sheet")
 
 
 def field_single(page: Any, live_server: Any) -> None:
@@ -150,9 +157,9 @@ def field_text(page: Any, live_server: Any) -> None:
 
     # Create new character
     go_to(page, live_server, "/test/manage/characters")
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("link", name="New").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("provaaaa")
 
@@ -160,7 +167,7 @@ def field_text(page: Any, live_server: Any) -> None:
 
     fill_tinymce(page, "id_text", "rrrr")
 
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.locator("#id_que_u4").select_option("u3")
     page.locator("#id_que_u4").select_option("u1")
     page.get_by_role("checkbox", name="q2").check()
@@ -176,9 +183,9 @@ def character(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect_normalized(page.locator("#one"), "Access character creation!")
+    expect_normalized(page, page.locator("#one"), "Access character creation!")
     page.get_by_role("link", name="Access character creation!").click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("my character")
 
@@ -196,7 +203,7 @@ def character(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # confirm char
-    expect_normalized(page.locator("#one"), "my character (Creation)")
+    expect_normalized(page, page.locator("#one"), "my character (Creation)")
     page.get_by_role("link", name="my character (Creation)").click()
     page.get_by_role("link", name="Change").click()
     page.get_by_role("cell", name="Click here to confirm that").click()
@@ -205,7 +212,7 @@ def character(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check char
-    expect_normalized(page.locator("#one"), "my character (Proposed)")
+    expect_normalized(page, page.locator("#one"), "my character (Proposed)")
 
     # approve char
     go_to(page, live_server, "/test/manage/characters")
@@ -215,7 +222,7 @@ def character(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page.locator("#one"), "my character")
+    expect_normalized(page, page.locator("#one"), "my character")
 
     go_to(page, live_server, "/test")
-    expect_normalized(page.locator("#one"), "my character")
+    expect_normalized(page, page.locator("#one"), "my character")
