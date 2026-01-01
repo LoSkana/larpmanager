@@ -206,8 +206,8 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").click()
     page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").fill("sss")
     page.locator('[id="u1"] > .selected').click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical, Gru sad").get_by_role("textbox").click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical, Gru sad").get_by_role("textbox").fill("ffff")
+    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical | Gru sad").get_by_role("textbox").click()
+    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical | Gru sad").get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
     just_wait(page)
 
@@ -238,9 +238,9 @@ def checks(page: Any) -> None:
     page.get_by_role("link", name="Manifest").click()
     expect_normalized(page, page.locator("#one"), "New Kitchen Position: ss Description: sds")
     expect_normalized(page,
-        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Boc B - dd b sALOON Position: SDsad Description: saddsadsa "
+        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
     )
-    expect_normalized(page, page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Boc B - dd sss")
+    expect_normalized(page, page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
 
     # check checks
     page.get_by_role("link", name="Checks").click()

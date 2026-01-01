@@ -39,7 +39,7 @@
                     <td>{{ el.container }}</td>
                     <td>
                         {% for tag in el.tags.all %}
-                            {% include "elements/comma.html" %}
+                            {% if not forloop.first %}|{% endif %}
                             {{ tag }}
                         {% endfor %}
                     </td>
