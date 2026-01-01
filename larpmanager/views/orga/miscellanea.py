@@ -580,15 +580,16 @@ def orga_warehouse_assignment_area(request: HttpRequest, event_slug: str, area_u
     notes = request.POST.get("notes")
     quantity = int(request.POST.get("quantity", "0"))
     selected = request.POST.get("selected").lower() == "true"
+    get_element(context, idx, "item", WarehouseItem)
 
     # Handle item deselection - remove existing assignment
     if not selected:
-        WarehouseItemAssignment.objects.filter(item_id=idx, area=context["area"]).delete()
+        WarehouseItemAssignment.objects.filter(item=context["item"], area=context["area"]).delete()
         return JsonResponse({"ok": True})
 
     # Handle item selection - create or update assignment
     (assign, _cr) = WarehouseItemAssignment.objects.get_or_create(
-        item_id=idx,
+        item=context["item"],
         area=context["area"],
         event=context["event"],
     )

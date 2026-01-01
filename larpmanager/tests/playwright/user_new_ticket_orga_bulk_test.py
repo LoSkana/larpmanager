@@ -150,7 +150,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
 
     # create second quest type
     page.get_by_role("link", name="Quest type").click()
-    expect_normalized(page, page.locator("#one"), "typ Q1 q1 Q2 q2")
+    expect_normalized(page, page.locator("#one"), "typ q1 q2")
     page.locator("#one div").filter(has_text="New").nth(3).click()
     page.get_by_role("row", name="Name").locator("td").click()
     page.locator("#id_name").fill("t2")

@@ -135,14 +135,17 @@ def add_items(page: Any) -> None:
 def bulk(page: Any) -> None:
     # test bulk
     page.get_by_role("link", name="Bulk").click()
-    page.locator("td:nth-child(5)").first.click()
+
+    # Test links not working when bulk active
+    page.locator('[id="u1"]').get_by_role("cell", name="Electrical").click()
     page.locator('[id="u1"]').get_by_role("cell", name="Box A").click()
-    page.locator('[id="u1"]').get_by_role("cell", name="Box A").click()
-    page.get_by_role("cell", name="sadsada").click()
+    page.locator('[id="u1"]').get_by_role("cell", name="sadsada").click()
     page.get_by_role("link", name="Execute").click()
-    expect_normalized(page,
-        page.locator("#one"), "box a electrical item 2 sdsadas boc b item 3sa dsad box a"
-    )
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "item 1 sadsada boc b electrical")
+    expect_normalized(page, page.locator("#one"), "item 2 sdsadas boc b")
+    expect_normalized(page, page.locator("#one"), "item 3sa dsad box a")
+
 
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u2"]').get_by_role("cell", name="Boc B").click()
@@ -151,11 +154,13 @@ def bulk(page: Any) -> None:
     page.get_by_role("cell", name="Electrical").click()
     page.get_by_role("cell", name="sadsada").click()
     page.locator("#operation").select_option("2")
-    page.locator("#objs_2").select_option("2")
+    page.locator("#objs_2").select_option("u2")
     page.get_by_role("link", name="Execute").click()
-    expect_normalized(page,
-        page.locator("#one"), "Item 3sa dsad Boc B Item 2 sdsadas Boc B Gru sad Item 1 sadsada Boc B Gru sad Electrical"
-    )
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "item 3sa dsad box a")
+    expect_normalized(page, page.locator("#one"), "Item 2 sdsadas Boc B Gru sad")
+    expect_normalized(page, page.locator("#one"), "Item 1 sadsada Boc B Electrical Gru sad")
+
 
     # add movement
     page.get_by_role("link", name="Movements").click()
@@ -192,36 +197,38 @@ def area_assigmenents(page: Any) -> None:
     submit_confirm(page)
 
     # check
-    expect_normalized(page,
-        page.locator("#one"), "sALOON SDsad saddsadsa Item assignments Kitchen ss sds Item assignments"
-    )
+    expect_normalized(page, page.locator("#one"), "sALOON SDsad saddsadsa Item assignments")
+    expect_normalized(page, page.locator("#one"), "Kitchen ss sds Item assignments")
 
     # assign items
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
     page.locator(".selected").first.click()
-    page.get_by_role("row", name=" Item 3sa dsad Boc B").get_by_role("textbox").click()
-    page.get_by_role("row", name=" Item 3sa dsad Boc B").get_by_role("textbox").fill("sss")
+    page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").click()
+    page.get_by_role("row", name=" item 3sa dsad box a").get_by_role("textbox").fill("sss")
     page.locator('[id="u1"] > .selected').click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").click()
-    page.get_by_role("row", name=" Item 1 sadsada Boc B Gru").get_by_role("textbox").fill("ffff")
+    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical, Gru sad").get_by_role("textbox").click()
+    page.get_by_role("row", name=" Item 1 sadsada Boc B Electrical, Gru sad").get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
     just_wait(page)
 
     # check
     page.get_by_role("link", name="Area").click()
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
-    expect_normalized(page,
-        page.locator("#one"),
-        "Item 3sa dsad Boc B sss Item 1 sadsada Boc B Gru sadElectrical ffff Item 2 sdsadas Boc B Gru sad",
-    )
-    expect(page.locator('[id="u3"]')).to_match_aria_snapshot('- cell ""')
-    expect(page.locator('[id="u1"]')).to_match_aria_snapshot('- cell ""')
+
+    row = page.locator("tr#u1")
+    assert row.locator("textarea").input_value() == "ffff"
+
+    row = page.locator("tr#u2")
+    assert row.locator("textarea").input_value() == ""
+
+    row = page.locator("tr#u3")
+    assert row.locator("textarea").input_value() == "sss"
 
     # add for second
     page.get_by_role("link", name="Area").click()
     page.locator('[id="u1"]').get_by_role("link", name="Item assignments").click()
-    page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").click()
-    page.get_by_role("row", name="Item 3sa dsad Boc B").get_by_role("textbox").fill("b")
+    page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").click()
+    page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").fill("b")
     page.locator('[id="u1"] > .selected').click()
     just_wait(page)
 

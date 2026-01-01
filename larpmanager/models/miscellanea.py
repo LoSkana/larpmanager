@@ -559,7 +559,7 @@ class WarehouseArea(UuidMixin, BaseModel):
         return self.name
 
 
-class WarehouseItemAssignment(BaseModel):
+class WarehouseItemAssignment(UuidMixin, BaseModel):
     """Represents WarehouseItemAssignment model."""
 
     quantity = models.IntegerField(blank=True, null=True)

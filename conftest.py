@@ -205,7 +205,7 @@ def pw_page(
     browser.close()
 
     # Save video after context is closed (only if test failed and not in CI)
-    if video_info:
+    if video_info and False:  # noqa: SIM223 # Enable when needed
         video_obj, base_filename = video_info
         screenshot_dir = Path(__file__).parent / "test_screenshots"
         _save_video(video_obj, base_filename, screenshot_dir)
