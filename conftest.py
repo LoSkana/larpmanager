@@ -72,7 +72,7 @@ def _cache_isolation(settings: SettingsWrapper) -> None:
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item: pytest.Item, _call: pytest.CallInfo) -> Generator[None, Any, None]:
+def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo) -> Generator[None, Any, None]:  # noqa: ARG001
     """Hook to capture test results and make them available to fixtures."""
     outcome = yield
     rep = outcome.get_result()
