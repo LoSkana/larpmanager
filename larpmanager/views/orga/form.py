@@ -303,7 +303,7 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str, questio
     context = check_event_context(request, event_slug, "orga_registration_form")
     get_element(context, question_uuid, "question", RegistrationQuestion)
     if "question" in context:
-        context["question_id"] = context["question"].id
+        context["question_uuid"] = context["question"].uuid
     return registration_option_edit(request, context, "0")
 
 

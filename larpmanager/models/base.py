@@ -42,6 +42,20 @@ AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowe
 UUID_RETRY_LIMIT = 5
 
 
+class UuidMixin(models.Model):
+    """Adds an uuid field to the model."""
+
+    uuid = models.CharField(
+        max_length=12,
+        unique=True,
+        db_index=True,
+        editable=False,
+    )
+
+    class Meta:
+        abstract = True
+
+
 class BaseModel(CloneMixin, SafeDeleteModel):
     """Represents BaseModel model."""
 
@@ -236,7 +250,7 @@ class Feature(BaseModel):
         return f"{self.name} - {self.module}"
 
 
-class PaymentMethod(BaseModel):
+class PaymentMethod(UuidMixin, BaseModel):
     """Represents PaymentMethod model."""
 
     name = models.CharField(max_length=100)
@@ -365,17 +379,3 @@ def update_model_search_field(model_instance: Any) -> None:
     if hasattr(model_instance, "search"):
         model_instance.search = None
         model_instance.search = str(model_instance)
-
-
-class UuidMixin(models.Model):
-    """Adds an uuid field to the model."""
-
-    uuid = models.CharField(
-        max_length=12,
-        unique=True,
-        db_index=True,
-        editable=False,
-    )
-
-    class Meta:
-        abstract = True

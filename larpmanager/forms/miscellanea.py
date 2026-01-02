@@ -180,7 +180,6 @@ class WorkshopQuestionForm(BaseModelForm):
         self.fields["module"].choices = [
             (m.uuid, m.name) for m in WorkshopModule.objects.filter(event=self.params["event"])
         ]
-        self.fields["module"].to_field_name = "uuid"
 
 
 class WorkshopOptionForm(BaseModelForm):
@@ -197,7 +196,6 @@ class WorkshopOptionForm(BaseModelForm):
         self.fields["question"].choices = [
             (m.uuid, m.name) for m in WorkshopQuestion.objects.filter(module__event=self.params["event"])
         ]
-        self.fields["question"].to_field_name = "uuid"
 
 
 class OrgaAlbumForm(BaseModelForm):
@@ -219,7 +217,6 @@ class OrgaAlbumForm(BaseModelForm):
         self.fields["parent"].choices = [("", _("--- NOT ASSIGNED ---"))] + [
             (m.uuid, m.name) for m in Album.objects.filter(run=self.params["run"]).exclude(pk=self.instance.id)
         ]
-        self.fields["parent"].to_field_name = "uuid"
 
 
 class OrgaProblemForm(BaseModelForm):

@@ -775,7 +775,7 @@ def orga_writing_options_new(
     # Set question ID in context and delegate to option editor
     get_element(context, question_uuid, "question", WritingQuestion)
     if "question" in context:
-        context["question_id"] = context["question"].id
+        context["question_uuid"] = context["question"].uuid
     return writing_option_edit(context, "0", request, writing_type)
 
 

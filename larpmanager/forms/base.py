@@ -96,6 +96,16 @@ class BaseModelForm(forms.ModelForm):
         # Call parent ModelForm initialization with remaining arguments
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
+        # Set to use uuid
+        for field in self.fields.values():
+            # Check if field is a ModelChoiceField / ModelMultipleChoiceField
+            if isinstance(field, forms.ModelChoiceField):
+                # Skip if it's a Select2 widget
+                if isinstance(field.widget, (s2forms.ModelSelect2Widget, s2forms.ModelSelect2MultipleWidget)):
+                    continue
+
+                field.to_field_name = "uuid"
+
         # Remove system fields that shouldn't be user-editable
         for m in ["deleted", "temp"]:
             self.delete_field(m)

@@ -1214,7 +1214,6 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             ch = [(m.uuid, str(m)) for m in RegistrationSection.objects.filter(event=self.params["run"].event)]
             ch.insert(0, ("", _("--- Empty")))
             self.fields["section"].choices = ch
-            self.fields["section"].to_field_name = "uuid"
 
         if "reg_que_allowed" not in self.params["features"]:
             self.delete_field("allowed")
@@ -1232,7 +1231,6 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             self.fields["factions"].choices = [
                 (m.uuid, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
             ]
-            self.fields["factions"].to_field_name = "uuid"
 
         if "gift" not in self.params["features"]:
             self.delete_field("giftable")
@@ -1298,8 +1296,8 @@ class OrgaRegistrationOptionForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Set initial question value from params if question_id is present
-        if "question_id" in self.params:
-            self.initial["question"] = self.params["question_id"]
+        if "question_uuid" in self.params:
+            self.initial["question"] = self.params["question_uuid"]
 
 
 class OrgaRegistrationQuotaForm(BaseModelForm):

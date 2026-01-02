@@ -121,7 +121,6 @@ class OrgaAbilityPxForm(PxBaseForm):
         self.fields["typ"].choices = [
             (el[0], el[1]) for el in self.params["event"].get_elements(AbilityTypePx).values_list("uuid", "name")
         ]
-        self.fields["typ"].to_field_name = "uuid"
 
         # Remove template field if px_templates is disabled
         if not px_templates:

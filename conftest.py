@@ -167,6 +167,7 @@ def pw_page(
 
     # Check if running in CI/GitHub Actions
     is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+    is_ci = True  # Enable when video needed
 
     # Configure video recording (only if not in CI)
     video_dir = None
@@ -205,7 +206,7 @@ def pw_page(
     browser.close()
 
     # Save video after context is closed (only if test failed and not in CI)
-    if video_info and False:  # noqa: SIM223 # Enable when needed
+    if video_info:
         video_obj, base_filename = video_info
         screenshot_dir = Path(__file__).parent / "test_screenshots"
         _save_video(video_obj, base_filename, screenshot_dir)

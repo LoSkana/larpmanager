@@ -399,7 +399,6 @@ class OrgaCharacterForm(CharacterForm):
                 characters_query = self.params["run"].event.get_elements(Character).all()
                 character_choices = [(character.uuid, character.name) for character in characters_query]
                 self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
-                self.fields["mirror"].to_field_name = "uuid"
         else:
             self.delete_field("mirror")
 
@@ -909,8 +908,8 @@ class OrgaWritingOptionForm(BaseModelForm):
         """
         super().__init__(*args, **kwargs)
 
-        if "question_id" in self.params:
-            self.initial["question"] = self.params["question_id"]
+        if "question_uuid" in self.params:
+            self.initial["question"] = self.params["question_uuid"]
 
         if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")

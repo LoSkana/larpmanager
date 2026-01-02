@@ -159,4 +159,8 @@ class Migration(migrations.Migration):
             field=models.CharField(max_length=12),
         ),
         migrations.RunPython(convert_casting_elements_to_uuid, reverse_code=migrations.RunPython.noop),
+        migrations.AlterModelOptions(
+            name='paymentmethod',
+            options={},
+        ),
     ]
