@@ -3,40 +3,6 @@
 from django.db import migrations, models
 
 
-def migrate_ticket_data(apps, schema_editor):
-    """Migrate existing ticket data to new status and priority choices."""
-    LarpManagerTicket = apps.get_model("larpmanager", "LarpManagerTicket")
-
-    for ticket in LarpManagerTicket.objects.all():
-        # Convert boolean status to text choices
-        # False (not resolved) → "open"
-        # True (resolved) → "done"
-        if isinstance(ticket.status, bool):
-            ticket.status = "done" if ticket.status else "open"
-        elif ticket.status in ["False", "0", ""]:
-            ticket.status = "open"
-        elif ticket.status in ["True", "1"]:
-            ticket.status = "done"
-
-        # Convert empty priority to "low"
-        if not ticket.priority or ticket.priority == "":
-            ticket.priority = "low"
-
-        ticket.save(update_fields=["status", "priority"])
-
-
-def reverse_migrate_ticket_data(apps, schema_editor):
-    """Reverse migration for ticket data."""
-    LarpManagerTicket = apps.get_model("larpmanager", "LarpManagerTicket")
-
-    for ticket in LarpManagerTicket.objects.all():
-        # Convert text status back to boolean
-        # "done" → True
-        # anything else → False
-        ticket.status = ticket.status == "done"
-        ticket.save(update_fields=["status"])
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -44,15 +10,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # First, change status to CharField without choices
         migrations.AlterField(
             model_name='larpmanagerticket',
             name='status',
             field=models.CharField(max_length=20, default='open'),
         ),
-        # Migrate the data
-        migrations.RunPython(migrate_ticket_data, reverse_migrate_ticket_data),
-        # Then add the choices and update priority
         migrations.AlterField(
             model_name='larpmanagerticket',
             name='priority',

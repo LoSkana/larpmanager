@@ -40,14 +40,25 @@ def populate_uuids(apps, schema_editor):
 
     for model_name in models_to_populate:
         Model = apps.get_model('larpmanager', model_name)
-        for instance in Model.objects.filter(uuid__isnull=True):
-            # Generate unique UUIDs, checking for collisions
+        instances_to_update = list(Model.objects.filter(uuid__isnull=True))
+
+        if not instances_to_update:
+            continue
+
+        # Get all existing UUIDs in one query for efficient collision detection
+        existing_uuids = set(Model.objects.exclude(uuid__isnull=True).values_list('uuid', flat=True))
+
+        # Generate unique UUIDs for all instances
+        for instance in instances_to_update:
             while True:
                 new_uuid = larpmanager.models.utils.my_uuid_short()
-                if not Model.objects.filter(uuid=new_uuid).exists():
+                if new_uuid not in existing_uuids:
                     instance.uuid = new_uuid
-                    instance.save(update_fields=['uuid'])
+                    existing_uuids.add(new_uuid)
                     break
+
+        # Use bulk_update to avoid triggering signals
+        Model.objects.bulk_update(instances_to_update, ['uuid'], batch_size=500)
 
 
 class Migration(migrations.Migration):
