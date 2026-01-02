@@ -1305,16 +1305,10 @@ class OrgaRegistrationOptionForm(BaseModelForm):
 
     def save(self, commit: bool = True) -> RegistrationOption:  # noqa: FBT001, FBT002
         """Save the form instance, setting question for new instances."""
-        instance = super().save(commit=False)
+        if not self.instance.pk and "question" in self.params:
+            self.instance.question = self.params["question"]
 
-        # Set question for new instances
-        if not instance.pk and "question" in self.params:
-            instance.question = self.params["question"]
-
-        if commit:
-            instance.save()
-
-        return instance
+        return super().save(commit=commit)
 
 
 class OrgaRegistrationQuotaForm(BaseModelForm):

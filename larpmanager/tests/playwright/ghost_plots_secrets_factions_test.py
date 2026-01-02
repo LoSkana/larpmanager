@@ -164,8 +164,10 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     # change teaser
     page.get_by_role("cell", name="Test Teaser").dblclick()
+    just_wait(page)
     page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser2")
+    just_wait(page)
     submit_confirm(page)
 
     # reload page, check everything is correct
@@ -183,6 +185,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     # change new field value
     page.get_by_role("cell", name="#1 Test Character").dblclick()
+    just_wait(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Character3")
     just_wait(page)
