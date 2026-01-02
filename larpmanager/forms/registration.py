@@ -1297,16 +1297,24 @@ class OrgaRegistrationOptionForm(BaseModelForm):
 
     class Meta:
         model = RegistrationOption
-        exclude: ClassVar[list] = ["order"]
-        widgets: ClassVar[dict] = {"question": forms.HiddenInput()}
+        exclude: ClassVar[list] = ["order", "question"]
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set question field from params if provided."""
         super().__init__(*args, **kwargs)
 
-        # Set initial question value from params if question_id is present
-        if "question_uuid" in self.params:
-            self.initial["question"] = self.params["question_uuid"]
+    def save(self, commit: bool = True) -> RegistrationOption:  # noqa: FBT001, FBT002
+        """Save the form instance, setting question for new instances."""
+        instance = super().save(commit=False)
+
+        # Set question for new instances
+        if not instance.pk and "question" in self.params:
+            instance.question = self.params["question"]
+
+        if commit:
+            instance.save()
+
+        return instance
 
 
 class OrgaRegistrationQuotaForm(BaseModelForm):

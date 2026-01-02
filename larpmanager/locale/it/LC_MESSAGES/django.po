@@ -4917,6 +4917,9 @@ msgstr "Ritardo nell'iscrizione associativa"
 msgid "Empty relationship check (no text)"
 msgstr "Check relazione vuota (niente testo)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Inserire una data valida nel formato GG-MM"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Funzionalità %(name)s già attivata"

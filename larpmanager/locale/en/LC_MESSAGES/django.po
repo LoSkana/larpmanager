@@ -478,6 +478,9 @@ msgstr ""
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
 
+msgid "Enter a valid date in DD-MM format"
+msgstr ""
+
 msgid "Months free quota"
 msgstr ""
 

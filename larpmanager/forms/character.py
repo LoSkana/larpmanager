@@ -888,10 +888,9 @@ class OrgaWritingOptionForm(BaseModelForm):
 
     class Meta:
         model = WritingOption
-        exclude: ClassVar[list] = ["order"]
+        exclude: ClassVar[list] = ["order", "question"]
         widgets: ClassVar[dict] = {
             "requirements": EventWritingOptionS2WidgetMulti,
-            "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,
         }
 
@@ -908,9 +907,6 @@ class OrgaWritingOptionForm(BaseModelForm):
         """
         super().__init__(*args, **kwargs)
 
-        if "question_uuid" in self.params:
-            self.initial["question"] = self.params["question_uuid"]
-
         if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")
 
@@ -923,3 +919,16 @@ class OrgaWritingOptionForm(BaseModelForm):
             self.delete_field("requirements")
         else:
             self.fields["requirements"].widget.set_event(self.params["event"])
+
+    def save(self, commit: bool = True) -> WritingOption:  # noqa: FBT001, FBT002
+        """Save the form instance, setting question for new instances."""
+        instance = super().save(commit=False)
+
+        # Set question for new instances
+        if not instance.pk and "question" in self.params:
+            instance.question = self.params["question"]
+
+        if commit:
+            instance.save()
+
+        return instance

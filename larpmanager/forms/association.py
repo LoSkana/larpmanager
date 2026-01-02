@@ -23,6 +23,7 @@ from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
@@ -589,7 +590,12 @@ class ExeConfigForm(ConfigForm):
             # Membership year start date configuration
             field_label = _("Start day")
             field_help_text = _("Day of the year from which the membership year begins, in DD-MM format")
-            self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text)
+            # Regex validator for DD-MM format (01-31 for day, 01-12 for month)
+            day_validator = RegexValidator(
+                regex=r"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])$",
+                message=_("Enter a valid date in DD-MM format") + " (e.g., 01-01, 15-06, 31-12)",
+            )
+            self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text, [day_validator])
 
             # Grace period for membership fee payment
             field_label = _("Months free quota")

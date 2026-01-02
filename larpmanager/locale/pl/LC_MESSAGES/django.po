@@ -4917,6 +4917,9 @@ msgstr "Opóźnienie w rejestracji organizacji"
 msgid "Empty relationship check (no text)"
 msgstr "Pusta kontrola relacji (bez tekstu)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Wprowadź prawidłową datę w formacie DD-MM"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Funkcja %(name)s już aktywowana"

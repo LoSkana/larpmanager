@@ -4917,6 +4917,9 @@ msgstr "Försening i registrering av organisation"
 msgid "Empty relationship check (no text)"
 msgstr "Kontroll av tom rapport (ingen text)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Ange ett giltigt datum i DD-MM-format"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Funktionen %(name)s är redan aktiverad"

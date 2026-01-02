@@ -299,7 +299,7 @@ class BaseModelForm(forms.ModelForm):
                 queryset = model.objects.filter(**{field_name: field_value}, event_id=parent_event_id)
 
             # Apply additional filters if question context exists
-            question = self.cleaned_data.get("question")
+            question = self.params.get("question")
             if question:
                 queryset = queryset.filter(question_id=question.id)
 

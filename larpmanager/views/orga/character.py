@@ -772,10 +772,9 @@ def orga_writing_options_new(
     # Ensure the writing form type is valid
     check_writing_form_type(context, writing_type)
 
-    # Set question ID in context and delegate to option editor
+    # Get parent question
     get_element(context, question_uuid, "question", WritingQuestion)
-    if "question" in context:
-        context["question_uuid"] = context["question"].uuid
+
     return writing_option_edit(context, "0", request, writing_type)
 
 

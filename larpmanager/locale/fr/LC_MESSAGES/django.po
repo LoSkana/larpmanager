@@ -4918,6 +4918,9 @@ msgstr "Retard dans l'enregistrement de l'organisation"
 msgid "Empty relationship check (no text)"
 msgstr "Vérification du rapport vide (pas de texte)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Saisir une date valide au format JJ-MM"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Fonctionnalité %(name)s déjà activée"

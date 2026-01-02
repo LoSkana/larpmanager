@@ -185,6 +185,7 @@ def delivery(live_server: Any, page: Any) -> None:
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
+    just_wait(page)
     page.locator(".select2-results__option").first.click()
     submit_confirm(page)
     page.get_by_role("link", name="XP").click()

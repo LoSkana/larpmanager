@@ -4917,6 +4917,9 @@ msgstr "Zpoždění při registraci organizace"
 msgid "Empty relationship check (no text)"
 msgstr "Kontrola prázdného hlášení (bez textu)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Zadejte platné datum ve formátu DD-MM"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Funkce %(name)s je již aktivována"

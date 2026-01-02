@@ -4917,6 +4917,9 @@ msgstr "Vertraging in de registratie van organisaties"
 msgid "Empty relationship check (no text)"
 msgstr "Leeg rapport (geen tekst)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Voer een geldige datum in DD-MM-formaat in"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Functie %(name)s is al geactiveerd"

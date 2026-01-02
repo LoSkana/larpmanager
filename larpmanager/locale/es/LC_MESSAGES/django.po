@@ -4917,6 +4917,9 @@ msgstr "Retraso en el registro de la organización"
 msgid "Empty relationship check (no text)"
 msgstr "Comprobación de relaciones vacías (sin texto)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Introduzca una fecha válida en formato DD-MM"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "La función %(name)s ya está activada"
