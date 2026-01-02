@@ -65,7 +65,7 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/manage/methods")
-    page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
+    page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")
     page.locator("#id_wire_fee").fill("0")

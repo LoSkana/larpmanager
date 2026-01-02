@@ -298,9 +298,9 @@ class BaseModelForm(forms.ModelForm):
                 # For other models, filter by event ID
                 queryset = model.objects.filter(**{field_name: field_value}, event_id=parent_event_id)
 
-            # Apply additional filters if question context exists
+            # Apply additional filters if question context exists and model has question field
             question = self.params.get("question")
-            if question:
+            if question and hasattr(model, "question"):
                 queryset = queryset.filter(question_id=question.id)
 
             # Filter by applicability if the check method exists
