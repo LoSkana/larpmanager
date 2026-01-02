@@ -6,7 +6,7 @@ window.disable_jump = true;
 
 const methodsMapping = {
     {% for obj in form.methods %}
-        {{ obj.uuid }}: "{{ obj.name | slugify }}"{% if not forloop.last %},{% endif %}
+        "{{ obj.uuid }}": "{{ obj.name | slugify }}"{% if not forloop.last %},{% endif %}
     {% endfor %}
 };
 

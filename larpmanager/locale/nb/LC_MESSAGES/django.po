@@ -7600,6 +7600,11 @@ msgstr ""
 "forhåndsregistrere deg"
 
 msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Velg et gyldig valg. Dette valget er ikke et av de tilgjengelige valgene."
+
+msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 "Noen aktiverte funksjoner trenger \"Credits\"-funksjonen, men den er ikke "

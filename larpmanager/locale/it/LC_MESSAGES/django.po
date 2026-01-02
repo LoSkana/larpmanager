@@ -7709,6 +7709,11 @@ msgstr ""
 "iscriverti"
 
 msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Selezionare una scelta valida. Questa scelta non è tra quelle disponibili."
+
+msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 "Alcune funzioni attivate necessitano della funzione \"Crediti\", ma questa "

@@ -7597,6 +7597,12 @@ msgstr ""
 "Anmälan till detta evenemang är inte öppen ännu, men du kan föranmäla dig"
 
 msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Välj ett giltigt val. Det här valet är inte ett av de tillgängliga "
+"alternativen."
+
+msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 "Vissa aktiverade funktioner behöver funktionen \"Credits\", men den är inte "

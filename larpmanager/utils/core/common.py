@@ -357,7 +357,8 @@ def get_trait(character_context: dict, trait_uuid: str) -> None:
 def get_handout(context: dict, handout_uuid: str) -> None:
     """Fetch handout from database and populate context with its data."""
     get_element(context, handout_uuid, "handout", Handout)
-    context["handout"].data = context["handout"].show()
+    if "handout" in context:
+        context["handout"].data = context["handout"].show()
 
 
 def get_handout_template(context: dict, handout_template_uuid: str) -> dict:

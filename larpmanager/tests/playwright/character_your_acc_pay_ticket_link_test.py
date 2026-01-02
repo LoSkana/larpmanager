@@ -134,6 +134,7 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
+    just_wait(page)
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("sadsadsa")
     page.locator("#id_wire_fee").click()

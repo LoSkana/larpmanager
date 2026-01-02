@@ -7551,6 +7551,10 @@ msgstr ""
 "zaregistrovat"
 
 msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr "Vyberte platnou volbu. Tato volba není jednou z dostupných možností."
+
+msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 "Některé aktivované funkce potřebují funkci \"Kredity\", ale ta není aktivní"

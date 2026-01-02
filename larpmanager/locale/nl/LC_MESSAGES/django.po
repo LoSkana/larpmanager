@@ -7694,6 +7694,12 @@ msgstr ""
 "wel alvast registreren"
 
 msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare "
+"keuzes."
+
+msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 "Sommige geactiveerde functies hebben de functie 'Credits' nodig, maar deze "

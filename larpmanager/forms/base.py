@@ -189,9 +189,6 @@ class BaseModelForm(forms.ModelForm):
         # Optimize query and order by end date
         available_runs = available_runs.select_related("event").order_by("end")
 
-        # Set initial value to current run
-        self.initial["run"] = self.params["run"].uuid
-
         # Handle field visibility based on number of available runs
         if len(available_runs) <= 1:
             if self.instance.pk:
@@ -200,6 +197,8 @@ class BaseModelForm(forms.ModelForm):
             else:
                 # For new instances, hide the field
                 self.fields["run"].widget = forms.HiddenInput()
+                # Set initial value to current run
+                self.initial["run"] = self.params["run"].uuid
         else:
             # Multiple runs available
             self.fields["run"] = forms.ChoiceField(
@@ -208,6 +207,11 @@ class BaseModelForm(forms.ModelForm):
                 label=self.fields["run"].label,
                 help_text=self.fields["run"].help_text,
             )
+            # Set initial value from existing instance or current run parameter
+            if self.instance.pk and hasattr(self.instance, "run") and self.instance.run:
+                self.initial["run"] = self.instance.run.uuid
+            else:
+                self.initial["run"] = self.params["run"].uuid
             # noinspection PyUnresolvedReferences
             del self.auto_run
 
@@ -220,10 +224,19 @@ class BaseModelForm(forms.ModelForm):
         # Get the value from cleaned_data
         run_value = self.cleaned_data["run"]
 
+        if not run_value:
+            return None
+
+        # If it's already a Run instance, return it
         if isinstance(run_value, Run):
             return run_value
 
-        return Run.objects.get(uuid=run_value)
+        # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
+        try:
+            return Run.objects.get(uuid=run_value)
+        except ObjectDoesNotExist as err:
+            msg = _("Select a valid choice. That choice is not one of the available choices.")
+            raise ValidationError(msg) from err
 
     def clean_event(self) -> Event:
         """Return the appropriate event based on form configuration.

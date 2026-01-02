@@ -292,6 +292,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     check_feature(page, "Payments")
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
+    just_wait(page)
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("aaaa")
     page.locator("#id_wire_fee").click()

@@ -7639,6 +7639,10 @@ msgstr ""
 "rejestracji wstępnej"
 
 msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr "Wybierz prawidłowy wybór. Ten wybór nie jest jednym z dostępnych."
+
+msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 "Niektóre aktywowane funkcje wymagają funkcji \"Kredyty\", ale nie jest ona "

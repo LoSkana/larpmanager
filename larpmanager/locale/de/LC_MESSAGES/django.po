@@ -7861,6 +7861,12 @@ msgstr ""
 " sich vorab anmelden"
 
 msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Wählen Sie eine gültige Auswahl. Diese Auswahl gehört nicht zu den "
+"verfügbaren Auswahlmöglichkeiten."
+
+msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 "Einige aktivierte Funktionen benötigen die Funktion \"Credits\", aber sie "
