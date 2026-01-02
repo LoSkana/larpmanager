@@ -417,7 +417,9 @@ class WritingOption(UuidMixin, BaseModel):
 
     def __str__(self) -> str:
         """Return string representation."""
-        return f"{self.question} {self.name}"
+        if self.question_id:
+            return f"{self.question} {self.name}"
+        return self.name
 
     def get_form_text(self, currency_symbol: str | None = None) -> str:  # noqa: ARG002
         """Return the display name for this ticket tier."""
