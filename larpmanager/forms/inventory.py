@@ -22,7 +22,7 @@ from typing import Any, ClassVar
 
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import EventCharacterS2WidgetMulti
 from larpmanager.models.inventory import Inventory, PoolTypeCI
 from larpmanager.models.writing import Character
@@ -30,7 +30,7 @@ from larpmanager.models.writing import Character
 log = logging.getLogger(__name__)
 
 
-class InventoryBaseForm(MyForm):
+class InventoryBaseForm(BaseModelForm):
     """Base form for inventory management."""
 
     class Meta:
@@ -77,7 +77,7 @@ class OrgaInventoryForm(InventoryBaseForm):
             self.fields["owners"].queryset = Character.objects.none()
 
 
-class OrgaPoolTypePxForm(MyForm):
+class OrgaPoolTypePxForm(BaseModelForm):
     """Form for managing character inventory pool types."""
 
     page_title = _("Pool type")

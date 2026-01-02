@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
+from larpmanager.forms.base import BaseAccForm, BaseModelForm, BaseModelFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -58,7 +58,7 @@ from larpmanager.models.utils import save_payment_details
 from larpmanager.utils.core.validators import FileTypeValidator
 
 
-class OrgaPersonalExpenseForm(MyFormRun):
+class OrgaPersonalExpenseForm(BaseModelFormRun):
     """Form for contributors to add/edit their personal expenses.
 
     Allows expense tracking with optional balance integration
@@ -89,7 +89,7 @@ class OrgaPersonalExpenseForm(MyFormRun):
             self.delete_field("balance")
 
 
-class OrgaExpenseForm(MyFormRun):
+class OrgaExpenseForm(BaseModelFormRun):
     """Form for organizers to manage contributor expenses.
 
     Full expense management including approval workflow
@@ -123,7 +123,7 @@ class OrgaExpenseForm(MyFormRun):
             self.delete_field("is_approved")
 
 
-class OrgaTokenForm(MyFormRun):
+class OrgaTokenForm(BaseModelFormRun):
     """Form for managing token accounting items.
 
     Handles token-based payments and transactions
@@ -148,7 +148,7 @@ class OrgaTokenForm(MyFormRun):
         self.fields["member"].widget.set_run(self.params["run"])
 
 
-class OrgaCreditForm(MyFormRun):
+class OrgaCreditForm(BaseModelFormRun):
     """Form for OrgaCredit."""
 
     page_info = _("Manage credit assignments")
@@ -169,7 +169,7 @@ class OrgaCreditForm(MyFormRun):
         self.fields["member"].widget.set_run(self.params["run"])
 
 
-class OrgaPaymentForm(MyFormRun):
+class OrgaPaymentForm(BaseModelFormRun):
     """Form for managing payment accounting records.
 
     Handles payment processing, validation, and
@@ -194,7 +194,7 @@ class OrgaPaymentForm(MyFormRun):
         self.fields["reg"].required = True
 
 
-class ExeOutflowForm(MyForm):
+class ExeOutflowForm(BaseModelForm):
     """Form for ExeOutflow."""
 
     page_title = _("Outflows")
@@ -238,7 +238,7 @@ class OrgaOutflowForm(ExeOutflowForm):
         super().__init__(*args, **kwargs)
 
 
-class ExeInflowForm(MyForm):
+class ExeInflowForm(BaseModelForm):
     """Form for ExeInflow."""
 
     page_title = _("Inflows")
@@ -276,7 +276,7 @@ class OrgaInflowForm(ExeInflowForm):
         super().__init__(*args, **kwargs)
 
 
-class ExeDonationForm(MyForm):
+class ExeDonationForm(BaseModelForm):
     """Form for ExeDonation."""
 
     page_title = _("Donations")
@@ -293,7 +293,7 @@ class ExeDonationForm(MyForm):
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
-class ExePaymentForm(MyForm):
+class ExePaymentForm(BaseModelForm):
     """Form for ExePayment."""
 
     page_title = _("Payments")
@@ -318,7 +318,7 @@ class ExePaymentForm(MyForm):
             self.delete_field("vat_options")
 
 
-class ExeInvoiceForm(MyForm):
+class ExeInvoiceForm(BaseModelForm):
     """Form for ExeInvoice."""
 
     page_title = _("Invoices")
@@ -337,7 +337,7 @@ class ExeInvoiceForm(MyForm):
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
-class ExeCreditForm(MyForm):
+class ExeCreditForm(BaseModelForm):
     """Form for ExeCredit."""
 
     page_info = _("Manage credit assignments")
@@ -364,7 +364,7 @@ class ExeCreditForm(MyForm):
         self.initial["oth"] = OtherChoices.CREDIT
 
 
-class ExeTokenForm(MyForm):
+class ExeTokenForm(BaseModelForm):
     """Form for ExeToken."""
 
     class Meta:
@@ -390,7 +390,7 @@ class ExeTokenForm(MyForm):
         self.initial["oth"] = OtherChoices.TOKEN
 
 
-class ExeExpenseForm(MyForm):
+class ExeExpenseForm(BaseModelForm):
     """Form for ExeExpense."""
 
     page_title = _("Expenses")
@@ -449,7 +449,7 @@ class PaymentForm(BaseAccForm):
         )
 
 
-class CollectionNewForm(MyForm):
+class CollectionNewForm(BaseModelForm):
     """Form for CollectionNew."""
 
     class Meta:
@@ -480,7 +480,7 @@ class ExeCollectionForm(CollectionNewForm):
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
-class OrgaDiscountForm(MyForm):
+class OrgaDiscountForm(BaseModelForm):
     """Form for OrgaDiscount."""
 
     page_info = _("Manage discounts")
@@ -585,7 +585,7 @@ class AnyInvoiceSubmitForm(InvoiceSubmitForm):
     )
 
 
-class RefundRequestForm(MyForm):
+class RefundRequestForm(BaseModelForm):
     """Form for RefundRequest."""
 
     class Meta:
@@ -608,7 +608,7 @@ class RefundRequestForm(MyForm):
         self.fields["value"] = forms.DecimalField(max_value=self.params["membership"].credit, decimal_places=2)
 
 
-class ExeRefundRequestForm(MyForm):
+class ExeRefundRequestForm(BaseModelForm):
     """Form for ExeRefundRequest."""
 
     page_title = _("Request refund")
@@ -625,7 +625,7 @@ class ExeRefundRequestForm(MyForm):
         self.fields["member"].widget.set_association_id(self.params["association_id"])
 
 
-class ExePaymentSettingsForm(MyForm):
+class ExePaymentSettingsForm(BaseModelForm):
     """Form for ExePaymentSettings."""
 
     page_title = _("Payment Methods")

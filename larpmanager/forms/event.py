@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.forms.association import ExePreferencesForm
-from larpmanager.forms.base import MyCssForm, MyForm
+from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
@@ -128,7 +128,7 @@ class EventCharactersPdfForm(ConfigForm):
         self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer"), _("Insert the html code for the footer"))
 
 
-class OrgaEventForm(MyForm):
+class OrgaEventForm(BaseModelForm):
     """Form for managing general event settings and basic configuration."""
 
     page_title = _("Event")
@@ -1015,7 +1015,7 @@ class OrgaConfigForm(ConfigForm):
             )
 
 
-class OrgaAppearanceForm(MyCssForm):
+class OrgaAppearanceForm(BaseModelCssForm):
     """Form for customizing event appearance and styling."""
 
     page_title = _("Event Appearance")
@@ -1096,7 +1096,7 @@ class OrgaAppearanceForm(MyCssForm):
         return f"css/{event_instance.association.slug}_{event_instance.slug}_{event_instance.css_code}.css"
 
 
-class OrgaEventTextForm(MyForm):
+class OrgaEventTextForm(BaseModelForm):
     """Form for managing event-specific text content and messages."""
 
     page_title = _("Texts")
@@ -1197,7 +1197,7 @@ class OrgaEventTextForm(MyForm):
         return cleaned_data
 
 
-class OrgaEventRoleForm(MyForm):
+class OrgaEventRoleForm(BaseModelForm):
     """Form for managing event access roles and permissions."""
 
     page_title = _("Roles")
@@ -1226,7 +1226,7 @@ class OrgaEventRoleForm(MyForm):
         return instance
 
 
-class OrgaEventButtonForm(MyForm):
+class OrgaEventButtonForm(BaseModelForm):
     """Form for editing event navigation buttons."""
 
     page_title = _("Navigation")
@@ -1425,7 +1425,7 @@ class OrgaRunForm(ConfigForm):
         return cleaned_data
 
 
-class OrgaProgressStepForm(MyForm):
+class OrgaProgressStepForm(BaseModelForm):
     """Form for managing event progression steps."""
 
     page_title = _("Progression")

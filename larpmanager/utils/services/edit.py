@@ -45,7 +45,7 @@ from larpmanager.utils.core.common import get_object_uuid, html_clean
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from larpmanager.forms.base import MyForm
+    from larpmanager.forms.base import BaseModelForm
 
 
 def save_log(member: Member, cls: type, element: Any, *, to_delete: bool = False) -> None:
@@ -329,7 +329,7 @@ def backend_get(context: dict, model_type: type, entity_uuid: str, association_f
 def backend_edit(  # noqa: C901 - Complex editing logic with form validation and POST processing
     request: HttpRequest,
     context: dict,
-    form_type: type[MyForm],
+    form_type: type[BaseModelForm],
     element_uuid: str | None,
     additional_field: str | None = None,
     *,
@@ -419,7 +419,7 @@ def orga_edit(
     request: HttpRequest,
     event_slug: str,
     permission: str | None,
-    form_type: type[MyForm],
+    form_type: type[BaseModelForm],
     entity_uuid: str | None = None,
     redirect_view: str | None = None,
     additional_context: dict | None = None,
@@ -472,7 +472,7 @@ def orga_edit(
 
 def exe_edit(
     request: HttpRequest,
-    form_type: type[MyForm],
+    form_type: type[BaseModelForm],
     entity_uuid: str | None,
     permission: str,
     redirect_view: str | None = None,
@@ -569,7 +569,7 @@ def set_suggestion(context: dict, permission: str) -> None:
 def writing_edit(
     request: HttpRequest,
     context: dict,
-    form_type: type[MyForm],
+    form_type: type[BaseModelForm],
     element_name: str,
     element_type: str | None,
     redirect_url: str | None = None,
@@ -673,7 +673,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
 
 def _writing_save(
     context: dict,
-    form: MyForm,
+    form: BaseModelForm,
     form_type: type,
     nm: str,
     redirect_func: Callable | None,
@@ -746,7 +746,7 @@ def writing_edit_cache_key(event_id: int | str, writing_type: str) -> str:
     return f"orga_edit_{event_id}_{writing_type}"
 
 
-def writing_edit_save_ajax(form: MyForm, request: HttpRequest) -> JsonResponse:
+def writing_edit_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse:
     """Handle AJAX save requests for writing elements with locking validation.
 
     This function processes AJAX requests to save writing elements while validating

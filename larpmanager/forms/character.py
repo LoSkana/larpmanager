@@ -30,7 +30,7 @@ from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     EventCharacterS2WidgetMulti,
@@ -714,7 +714,7 @@ class OrgaCharacterForm(CharacterForm):
             CharacterConfig.objects.filter(character=instance, name="inactive").delete()
 
 
-class OrgaWritingQuestionForm(MyForm):
+class OrgaWritingQuestionForm(BaseModelForm):
     """Form for OrgaWritingQuestion."""
 
     page_info = _("Manage form questions for writing elements")
@@ -880,7 +880,7 @@ class OrgaWritingQuestionForm(MyForm):
         return ",".join(self.cleaned_data["editable"])
 
 
-class OrgaWritingOptionForm(MyForm):
+class OrgaWritingOptionForm(BaseModelForm):
     """Form for OrgaWritingOption."""
 
     page_info = _("Manage options in form questions for writing elements")

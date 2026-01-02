@@ -23,7 +23,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     AbilityTemplateS2WidgetMulti,
@@ -34,7 +34,7 @@ from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityT
 from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
 
-class PxBaseForm(MyForm):
+class PxBaseForm(BaseModelForm):
     """Form for PxBase."""
 
     class Meta:
@@ -71,7 +71,7 @@ class OrgaDeliveryPxForm(PxBaseForm):
         super().__init__(*args, **kwargs)
 
 
-class OrgaAbilityTemplatePxForm(MyForm):
+class OrgaAbilityTemplatePxForm(BaseModelForm):
     """Form for OrgaAbilityTemplatePx."""
 
     page_title = _("Ability Template")
@@ -134,7 +134,7 @@ class OrgaAbilityPxForm(PxBaseForm):
             self.delete_field("visible")
 
 
-class OrgaAbilityTypePxForm(MyForm):
+class OrgaAbilityTypePxForm(BaseModelForm):
     """Form for OrgaAbilityTypePx."""
 
     page_title = _("Ability type")
@@ -146,7 +146,7 @@ class OrgaAbilityTypePxForm(MyForm):
         exclude = ("number",)
 
 
-class OrgaRulePxForm(MyForm):
+class OrgaRulePxForm(BaseModelForm):
     """Form for OrgaRulePx."""
 
     page_title = _("Rule")
@@ -171,7 +171,7 @@ class OrgaRulePxForm(MyForm):
         self.fields["field"].queryset = qs
 
 
-class OrgaModifierPxForm(MyForm):
+class OrgaModifierPxForm(BaseModelForm):
     """Form for OrgaModifierPx."""
 
     page_title = _("Rule")

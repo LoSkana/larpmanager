@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import pgettext
 
 from larpmanager.cache.feature import get_association_features, reset_association_features
-from larpmanager.forms.base import MyCssForm, MyForm
+from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
@@ -45,7 +45,7 @@ from larpmanager.models.member import Member
 logger = logging.getLogger(__name__)
 
 
-class ExeAssociationForm(MyForm):
+class ExeAssociationForm(BaseModelForm):
     """Form for editing main association settings.
 
     Allows executives to modify core association properties
@@ -97,7 +97,7 @@ class ExeAssociationForm(MyForm):
             self.delete_field(field_name)
 
 
-class ExeAssociationTextForm(MyForm):
+class ExeAssociationTextForm(BaseModelForm):
     """Form for managing association text content.
 
     Handles custom text snippets used throughout the
@@ -231,7 +231,7 @@ class ExeAssociationTextForm(MyForm):
         return cleaned_data
 
 
-class ExeAssociationTranslationForm(MyForm):
+class ExeAssociationTranslationForm(BaseModelForm):
     """Django form for creating and editing association-specific translation overrides.
 
     This form provides the interface for organization administrators to create custom
@@ -256,7 +256,7 @@ class ExeAssociationTranslationForm(MyForm):
         exclude = ("number",)
 
 
-class ExeAssociationRoleForm(MyForm):
+class ExeAssociationRoleForm(BaseModelForm):
     """Form for managing association roles and permissions.
 
     Allows configuration of role-based access control
@@ -289,7 +289,7 @@ class ExeAssociationRoleForm(MyForm):
         return instance
 
 
-class ExeAppearanceForm(MyCssForm):
+class ExeAppearanceForm(BaseModelCssForm):
     """Form for ExeAppearance."""
 
     page_title = _("Appearance")
@@ -857,7 +857,7 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, field_label, field_help_text)
 
 
-class FirstAssociationForm(MyForm):
+class FirstAssociationForm(BaseModelForm):
     """Form for creating a new association during initial setup.
 
     Simplified form for first-time association creation

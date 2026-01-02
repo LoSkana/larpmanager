@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.base import BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -52,7 +52,7 @@ from larpmanager.models.writing import (
 from larpmanager.utils.core.validators import FileTypeValidator
 
 
-class WritingForm(MyForm):
+class WritingForm(BaseModelForm):
     """Form for Writing."""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
@@ -100,7 +100,7 @@ class WritingForm(MyForm):
             self.delete_field("progress")
 
 
-class PlayerRelationshipForm(MyForm):
+class PlayerRelationshipForm(BaseModelForm):
     """Form for PlayerRelationship."""
 
     page_title = _("Character Relationship")

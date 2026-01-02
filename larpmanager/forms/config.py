@@ -9,7 +9,7 @@ from django.forms import Textarea
 from django.utils.html import escape, format_html_join
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, CSRFTinyMCE, get_members_queryset
 
 if TYPE_CHECKING:
@@ -75,7 +75,7 @@ class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
         )
 
 
-class ConfigForm(MyForm):
+class ConfigForm(BaseModelForm):
     """Form for Config."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

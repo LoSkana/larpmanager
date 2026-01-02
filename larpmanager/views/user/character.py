@@ -86,7 +86,7 @@ from larpmanager.views.user.registration import init_form_submitted
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from larpmanager.forms.base import MyForm
+    from larpmanager.forms.base import BaseModelForm
 
 
 def character_view(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
@@ -308,7 +308,7 @@ def character_form(
     context: dict,
     event_slug: str,
     instance: Character | RegistrationCharacterRel | None,
-    form_class: type[MyForm],
+    form_class: type[BaseModelForm],
 ) -> HttpResponse:
     """Handle character creation and editing form processing.
 
@@ -382,7 +382,7 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
-def _update_character(context: dict, character: Any, form: MyForm, message: str) -> str:
+def _update_character(context: dict, character: Any, form: BaseModelForm, message: str) -> str:
     """Update character status based on form data and event configuration.
 
     Args:

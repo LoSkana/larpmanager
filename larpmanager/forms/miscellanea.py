@@ -26,7 +26,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -106,7 +106,7 @@ class SendMailForm(forms.Form):
         self.show_link = ["id_reply_to", "id_raw"]
 
 
-class UtilForm(MyForm):
+class UtilForm(BaseModelForm):
     """Form for Util."""
 
     class Meta:
@@ -121,7 +121,7 @@ class UtilForm(MyForm):
             self.initial["cod"] = unique_util_cod()
 
 
-class HelpQuestionForm(MyForm):
+class HelpQuestionForm(BaseModelForm):
     """Form for HelpQuestion."""
 
     class Meta:
@@ -142,7 +142,7 @@ class HelpQuestionForm(MyForm):
             self.initial["run"] = self.params["run"]
 
 
-class OrgaHelpQuestionForm(MyForm):
+class OrgaHelpQuestionForm(BaseModelForm):
     """Form for OrgaHelpQuestion."""
 
     page_info = _("Manage participant questions")
@@ -158,7 +158,7 @@ class OrgaHelpQuestionForm(MyForm):
         }
 
 
-class WorkshopModuleForm(MyForm):
+class WorkshopModuleForm(BaseModelForm):
     """Form for WorkshopModule."""
 
     class Meta:
@@ -166,7 +166,7 @@ class WorkshopModuleForm(MyForm):
         exclude = ("members", "number")
 
 
-class WorkshopQuestionForm(MyForm):
+class WorkshopQuestionForm(BaseModelForm):
     """Form for WorkshopQuestion."""
 
     class Meta:
@@ -183,7 +183,7 @@ class WorkshopQuestionForm(MyForm):
         self.fields["module"].to_field_name = "uuid"
 
 
-class WorkshopOptionForm(MyForm):
+class WorkshopOptionForm(BaseModelForm):
     """Form for WorkshopOption."""
 
     class Meta:
@@ -200,7 +200,7 @@ class WorkshopOptionForm(MyForm):
         self.fields["question"].to_field_name = "uuid"
 
 
-class OrgaAlbumForm(MyForm):
+class OrgaAlbumForm(BaseModelForm):
     """Form for OrgaAlbum."""
 
     page_info = _("Manage albums")
@@ -222,7 +222,7 @@ class OrgaAlbumForm(MyForm):
         self.fields["parent"].to_field_name = "uuid"
 
 
-class OrgaProblemForm(MyForm):
+class OrgaProblemForm(BaseModelForm):
     """Form for OrgaProblem."""
 
     page_info = _("Manage reported problems")
@@ -276,7 +276,7 @@ class CompetencesForm(forms.Form):
     # ~ captcha = ReCaptchaField()
 
 
-class ExeUrlShortnerForm(MyForm):
+class ExeUrlShortnerForm(BaseModelForm):
     """Form for ExeUrlShortner."""
 
     page_info = _("Manage URL shorteners")
@@ -288,7 +288,7 @@ class ExeUrlShortnerForm(MyForm):
         exclude = ("number",)
 
 
-def _delete_optionals_warehouse(warehouse_form: MyForm) -> None:
+def _delete_optionals_warehouse(warehouse_form: BaseModelForm) -> None:
     """Remove optional warehouse fields not enabled in association configuration.
 
     Args:
@@ -308,7 +308,7 @@ def _delete_optionals_warehouse(warehouse_form: MyForm) -> None:
             warehouse_form.delete_field(optional_field_name)
 
 
-class ExeCompetenceForm(MyForm):
+class ExeCompetenceForm(BaseModelForm):
     """Form for ExeCompetence."""
 
     page_info = _("Manage competencies")
@@ -414,7 +414,7 @@ class OrganizerCastingOptionsForm(forms.Form):
         return field_data
 
 
-class ShuttleServiceForm(MyForm):
+class ShuttleServiceForm(BaseModelForm):
     """Form for ShuttleService."""
 
     class Meta:
@@ -550,7 +550,7 @@ def unique_util_cod() -> str:
     raise ValueError(msg)
 
 
-class OneTimeContentForm(MyForm):
+class OneTimeContentForm(BaseModelForm):
     """Form for OneTimeContent."""
 
     page_info = _("Manage content that should be accessed only one time with a specific token")
@@ -566,7 +566,7 @@ class OneTimeContentForm(MyForm):
         }
 
 
-class OneTimeAccessTokenForm(MyForm):
+class OneTimeAccessTokenForm(BaseModelForm):
     """Form for OneTimeAccessToken."""
 
     page_info = _("Manage tokens to access the one-time content")

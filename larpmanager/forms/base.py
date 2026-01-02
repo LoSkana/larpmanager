@@ -55,7 +55,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class MyForm(forms.ModelForm):
+class BaseModelForm(forms.ModelForm):
     """Base form class with context parameter handling.
 
     Extends Django's ModelForm to support additional context parameters
@@ -353,7 +353,7 @@ class MyForm(forms.ModelForm):
             del self.fields[field_key]
 
 
-class MyFormRun(MyForm):
+class BaseModelFormRun(BaseModelForm):
     """Form class for run-specific operations.
 
     Extends MyForm with automatic run handling functionality.
@@ -436,7 +436,7 @@ def get_question_key(question: BaseModel) -> str:
     return f"que_{question.uuid}"
 
 
-class BaseRegistrationForm(MyFormRun):
+class BaseRegistrationForm(BaseModelFormRun):
     """Base form class for registration-related forms.
 
     Provides common functionality for handling registration questions,
@@ -1294,7 +1294,7 @@ class BaseRegistrationForm(MyFormRun):
                 )
 
 
-class MyCssForm(MyForm):
+class BaseModelCssForm(BaseModelForm):
     """Form class for handling CSS customization.
 
     Manages CSS file upload, editing, and processing for styling
@@ -1336,7 +1336,7 @@ class MyCssForm(MyForm):
         self.instance.css_code = generate_id(32)
 
         # Save instance and write CSS file
-        instance = super(MyForm, self).save()
+        instance = super(BaseModelForm, self).save()
         self.save_css(instance)
 
         return instance

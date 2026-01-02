@@ -31,7 +31,7 @@ from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import BaseRegistrationForm, MyForm, get_question_key
+from larpmanager.forms.base import BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
     AssociationMemberS2Widget,
@@ -1026,7 +1026,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         return data
 
 
-class RegistrationCharacterRelForm(MyForm):
+class RegistrationCharacterRelForm(BaseModelForm):
     """Form for RegistrationCharacterRel."""
 
     class Meta:
@@ -1064,7 +1064,7 @@ class RegistrationCharacterRelForm(MyForm):
             self.delete_field("custom_" + m)
 
 
-class OrgaRegistrationTicketForm(MyForm):
+class OrgaRegistrationTicketForm(BaseModelForm):
     """Form for OrgaRegistrationTicket."""
 
     page_info = _("Manage ticket types for participant registration")
@@ -1164,7 +1164,7 @@ class OrgaRegistrationTicketForm(MyForm):
         return available_tiers
 
 
-class OrgaRegistrationSectionForm(MyForm):
+class OrgaRegistrationSectionForm(BaseModelForm):
     """Form for OrgaRegistrationSection."""
 
     page_info = _("Manage signup form sections")
@@ -1176,7 +1176,7 @@ class OrgaRegistrationSectionForm(MyForm):
         exclude: ClassVar[list] = ["order"]
 
 
-class OrgaRegistrationQuestionForm(MyForm):
+class OrgaRegistrationQuestionForm(BaseModelForm):
     """Form for OrgaRegistrationQuestion."""
 
     page_info = _("Manage signup form questions")
@@ -1281,7 +1281,7 @@ class OrgaRegistrationQuestionForm(MyForm):
         self.fields["typ"].choices = available_choices
 
 
-class OrgaRegistrationOptionForm(MyForm):
+class OrgaRegistrationOptionForm(BaseModelForm):
     """Form for OrgaRegistrationOption."""
 
     page_info = _("Manage signup form question options")
@@ -1302,7 +1302,7 @@ class OrgaRegistrationOptionForm(MyForm):
             self.initial["question"] = self.params["question_id"]
 
 
-class OrgaRegistrationQuotaForm(MyForm):
+class OrgaRegistrationQuotaForm(BaseModelForm):
     """Form for OrgaRegistrationQuota."""
 
     page_info = _("Manage dynamic payment installments for participants")
@@ -1335,7 +1335,7 @@ class OrgaRegistrationQuotaForm(MyForm):
         return quotas
 
 
-class OrgaRegistrationInstallmentForm(MyForm):
+class OrgaRegistrationInstallmentForm(BaseModelForm):
     """Form for OrgaRegistrationInstallment."""
 
     page_info = _("Manage fixed payment installments for participants")
@@ -1431,7 +1431,7 @@ class OrgaRegistrationInstallmentForm(MyForm):
         return cleaned_data
 
 
-class OrgaRegistrationSurchargeForm(MyForm):
+class OrgaRegistrationSurchargeForm(BaseModelForm):
     """Form for OrgaRegistrationSurcharge."""
 
     page_info = _("Manage registration surcharges")
