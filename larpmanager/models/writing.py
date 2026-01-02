@@ -694,7 +694,7 @@ class Prologue(Writing):
         return f"P{self.number} {self.name} ({self.typ})"
 
 
-class HandoutTemplate(BaseModel):
+class HandoutTemplate(UuidMixin, BaseModel):
     """Represents HandoutTemplate model."""
 
     number = models.IntegerField()

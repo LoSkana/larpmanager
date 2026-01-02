@@ -27,7 +27,7 @@ def populate_uuids(apps, schema_editor):
         'HelpQuestion', 'PaymentMethod',
         # Writing subclasses
         'Character', 'Plot', 'Faction', 'PrologueType', 'Prologue',
-        'Handout', 'SpeedLarp', 'QuestType', 'Quest', 'Trait',
+        'Handout', 'SpeedLarp', 'QuestType', 'Quest', 'Trait', 'HandoutTemplate',
         # AccountingItem subclasses
         'AccountingItemTransaction', 'AccountingItemMembership',
         'AccountingItemDonation', 'AccountingItemOther',
@@ -129,6 +129,7 @@ class Migration(migrations.Migration):
         ('prologuetype', 'PrologueType'),
         ('prologue', 'Prologue'),
         ('handout', 'Handout'),
+        ('handouttemplate', 'HandoutTemplate'),
         ('speedlarp', 'SpeedLarp'),
         ('questtype', 'QuestType'),
         ('quest', 'Quest'),

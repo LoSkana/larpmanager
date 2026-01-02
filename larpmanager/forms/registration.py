@@ -655,11 +655,6 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     load_js: ClassVar[list] = ["characters-reg-choices"]
 
-    ticket = forms.ModelChoiceField(
-        queryset=RegistrationTicket.objects.none(),
-        required=True,
-    )
-
     class Meta:
         model = Registration
 
@@ -801,17 +796,22 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Fetch and format ticket choices ordered by price (highest first)
         qs = RegistrationTicket.objects.filter(event=self.params["run"].event).order_by("-price")
 
-        self.fields["ticket"].queryset = qs
-
-        self.fields["ticket"].label_from_instance = lambda ticket: ticket.get_form_text(
-            currency_symbol=self.params["currency_symbol"]
+        self.fields["ticket"] = forms.ChoiceField(
+            required=self.fields["ticket"].required,
+            label=self.fields["ticket"].label,
+            help_text=self.fields["ticket"].help_text,
+            choices=[(ticket.uuid, ticket.get_form_text(self.params["currency_symbol"])) for ticket in qs],
         )
+
+        # Set initial value if editing existing instance
+        if self.instance.pk and self.instance.ticket:
+            self.initial["ticket"] = self.instance.ticket.uuid
 
         # Hide ticket selection and set default if only one option exists
         if qs.count() == 1:
             ticket = qs.first()
             self.fields["ticket"].widget = forms.HiddenInput()
-            self.initial["ticket"] = ticket.id
+            self.initial["ticket"] = ticket.uuid
 
         self.sections["id_ticket"] = registration_section
 
@@ -960,6 +960,15 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         data = self.cleaned_data.get("pay_what")
         # Convert None or empty string to 0 to prevent NULL constraint violations
         return data if data is not None else 0
+
+    def clean_ticket(self) -> RegistrationTicket:
+        """Convert UUID from ChoiceField to RegistrationTicket instance."""
+        ticket_value = self.cleaned_data.get("ticket")
+
+        if isinstance(ticket_value, RegistrationTicket):
+            return ticket_value
+
+        return RegistrationTicket.objects.get(uuid=ticket_value)
 
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""

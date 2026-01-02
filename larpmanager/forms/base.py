@@ -190,7 +190,7 @@ class BaseModelForm(forms.ModelForm):
         available_runs = available_runs.select_related("event").order_by("end")
 
         # Set initial value to current run
-        self.initial["run"] = self.params["run"].id
+        self.initial["run"] = self.params["run"].uuid
 
         # Handle field visibility based on number of available runs
         if len(available_runs) <= 1:
@@ -201,8 +201,13 @@ class BaseModelForm(forms.ModelForm):
                 # For new instances, hide the field
                 self.fields["run"].widget = forms.HiddenInput()
         else:
-            # Multiple runs available, populate choices
-            self.fields["run"].choices = [(run.id, str(run)) for run in available_runs]
+            # Multiple runs available
+            self.fields["run"] = forms.ChoiceField(
+                choices=[(run.uuid, str(run)) for run in available_runs],
+                required=self.fields["run"].required,
+                label=self.fields["run"].label,
+                help_text=self.fields["run"].help_text,
+            )
             # noinspection PyUnresolvedReferences
             del self.auto_run
 
@@ -211,7 +216,14 @@ class BaseModelForm(forms.ModelForm):
         # Use params if auto_run is set, otherwise use cleaned form data
         if hasattr(self, "auto_run"):
             return self.params["run"]
-        return self.cleaned_data["run"]
+
+        # Get the value from cleaned_data
+        run_value = self.cleaned_data["run"]
+
+        if isinstance(run_value, Run):
+            return run_value
+
+        return Run.objects.get(uuid=run_value)
 
     def clean_event(self) -> Event:
         """Return the appropriate event based on form configuration.

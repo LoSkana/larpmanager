@@ -520,8 +520,6 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
     if "run" in self.params:
         self.initial["run"] = self.params["run"].uuid
 
-    self.fields["run"].to_field_name = "uuid"
-
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):
     """Represents EventRegS2Widget model."""
