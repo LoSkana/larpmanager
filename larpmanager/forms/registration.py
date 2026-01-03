@@ -893,7 +893,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 already_assigned_trait_ids.add(assignment.trait_id)
 
         # Get available traits (excluding those assigned to others)
-        available = Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids)
+        available = (
+            Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids).select_related("quest")
+        )
 
         for qt in self.params["quest_types"].values():
             self._init_traits(available, char_section, member_assignments, qt)
@@ -911,7 +913,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             if quest["typ"] != qt_number:
                 continue
             for trait in available:
-                if trait.quest_id != quest["id"]:
+                if trait.quest.uuid != quest["uuid"]:
                     continue
                 choices.append((trait.uuid, f"Q{quest['number']} {quest['name']} - {trait}"))
 
