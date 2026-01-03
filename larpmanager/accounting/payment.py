@@ -160,8 +160,8 @@ def set_data_invoice(
     if invoice.typ == PaymentType.REGISTRATION:
         invoice.causal = _("Registration fee %(number)d of %(user)s per %(event)s") % {
             "user": member_real_display_name,
-            "event": str(context["reg"].run),
-            "number": context["reg"].num_payments,
+            "event": str(context["registration"].run),
+            "number": context["registration"].num_payments,
         }
         # Apply custom registration reason if applicable
         _custom_reason_reg(context, invoice, member_real_display_name)
@@ -211,11 +211,13 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
 
     """
     # Set invoice registration references
-    invoice.idx = context["reg"].id
-    invoice.reg = context["reg"]
+    invoice.idx = context["registration"].id
+    invoice.reg = context["registration"]
 
     # Get custom reason template from event configuration
-    custom_reason_template = get_event_config(context["reg"].run.event_id, "payment_custom_reason", context=context)
+    custom_reason_template = get_event_config(
+        context["registration"].run.event_id, "payment_custom_reason", context=context
+    )
     if not custom_reason_template:
         return
 
@@ -237,7 +239,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
         # Look for a registration question with matching name
         try:
             registration_question = RegistrationQuestion.objects.get(
-                event=context["reg"].run.event,
+                event=context["registration"].run.event,
                 name__iexact=question_name,
             )
 
@@ -245,7 +247,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 user_choices = RegistrationChoice.objects.filter(
                     question=registration_question,
-                    reg_id=context["reg"].id,
+                    reg_id=context["registration"].id,
                 )
 
                 # Collect all selected option names
@@ -255,7 +257,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
                 # Handle text-based questions
                 answer_value = RegistrationAnswer.objects.get(
                     question=registration_question,
-                    reg_id=context["reg"].id,
+                    reg_id=context["registration"].id,
                 ).text
             placeholder_values[question_name] = answer_value
         except ObjectDoesNotExist:

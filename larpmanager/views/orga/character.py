@@ -1263,7 +1263,7 @@ def _get_excel_form(
         form = form_class(context=context, instance=element)
 
     # Determine field key based on question type (use UUID to avoid exposing numeric IDs in HTML)
-    field_key = f"q{question.uuid}"
+    field_key = f"que_{question.uuid}"
     if question.typ not in BaseQuestionType.get_basic_types():
         field_key = question.typ
 
@@ -1307,7 +1307,7 @@ def _get_question_update(context: dict, element: Any) -> str:
             """
 
     # Determine question key and slug based on question type (use UUID to avoid exposing numeric IDs in HTML)
-    question_key = f"q{context['question'].uuid}"
+    question_key = f"que_{context['question'].uuid}"
     question_slug = str(context["question"].uuid)
     if context["question"].typ not in BaseQuestionType.get_basic_types():
         question_key = context["question"].typ
@@ -1323,8 +1323,8 @@ def _get_question_update(context: dict, element: Any) -> str:
     # Handle multiple choice and single choice questions
     if context["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
-        option_ids = [int(option_value) for option_value in display_value]
-        query = context["event"].get_elements(WritingOption).filter(pk__in=option_ids).order_by("order")
+        option_uuids = [str(option_value) for option_value in display_value]
+        query = context["event"].get_elements(WritingOption).filter(uuid__in=option_uuids).order_by("order")
         display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
         # check if it is over the character limit

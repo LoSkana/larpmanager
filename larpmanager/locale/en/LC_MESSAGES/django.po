@@ -6179,21 +6179,6 @@ msgstr ""
 msgid "Indicates the details of the request"
 msgstr ""
 
-msgid "The total registration fee is"
-msgstr ""
-
-msgid "So far you have paid a total of"
-msgstr ""
-
-msgid "We ask you to pay the amount requested for the next instalment"
-msgstr ""
-
-msgid "We ask you to pay the remaining amount"
-msgstr ""
-
-msgid "Would you like to pay a different amount"
-msgstr ""
-
 msgid "Go to the tokens history"
 msgstr ""
 
@@ -6370,6 +6355,21 @@ msgid "To access the history"
 msgstr ""
 
 msgid "click here"
+msgstr ""
+
+msgid "The total registration fee is"
+msgstr ""
+
+msgid "So far you have paid a total of"
+msgstr ""
+
+msgid "We ask you to pay the amount requested for the next instalment"
+msgstr ""
+
+msgid "We ask you to pay the remaining amount"
+msgstr ""
+
+msgid "Would you like to pay a different amount"
 msgstr ""
 
 msgid "User"

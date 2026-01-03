@@ -440,7 +440,7 @@ def registration_redirect(
     if "payment" in context["features"] and registration.alert:
         message = _("To confirm your registration, please pay the amount indicated") + "."
         messages.success(request, message)
-        return redirect("acc_reg", registration_uuid=registration.uuid)
+        return redirect("accounting_registration", registration_uuid=registration.uuid)
 
     # All requirements satisfied - show success message and redirect to event gallery
     context = {"event": run}
@@ -643,10 +643,7 @@ def register(
         return redirect("gallery", event_slug=current_run.get_slug())
 
     # Set up registration context for the current run
-    if hasattr(current_run, "reg"):
-        context["run_reg"] = current_run.reg
-    else:
-        context["run_reg"] = None
+    registration = context.get("registration")
 
     # Apply ticket selection if provided, verifying it belongs to this event
     _apply_ticket(context, ticket_uuid, current_event.pk)
@@ -655,7 +652,7 @@ def register(
     context["payment_feature"] = "payment" in get_association_features(context["association_id"])
 
     # Prepare new registration or load existing one
-    is_new_registration = _register_prepare(context, context["run_reg"])
+    is_new_registration = _register_prepare(context, registration)
 
     # Handle registration redirects for new registrations
     if is_new_registration:
@@ -673,7 +670,7 @@ def register(
 
     # Process form submission or display registration form
     if request.method == "POST":
-        form = RegistrationForm(request.POST, context=context, instance=context["run_reg"])
+        form = RegistrationForm(request.POST, context=context, instance=registration)
         form.sel_ticket_map(request.POST.get("ticket", ""))
         # Validate form and save registration if valid
         if form.is_valid():
@@ -682,17 +679,17 @@ def register(
                 form,
                 current_run,
                 current_event,
-                context["run_reg"],
+                registration,
             )
             return registration_redirect(
                 request, context, saved_registration, current_run, is_new_registration=is_new_registration
             )
     else:
         # Display empty form for GET requests
-        form = RegistrationForm(context=context, instance=context["run_reg"])
+        form = RegistrationForm(context=context, instance=registration)
 
     # Prepare additional registration information and render page
-    register_info(request, context, form, context["run_reg"], discount_code)
+    register_info(request, context, form, registration, discount_code)
     return render(request, "larpmanager/event/register.html", context)
 
 
@@ -1133,18 +1130,20 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
 
     # check if user is actually registered
     try:
-        reg = Registration.objects.get(run=context["run"], member=context["member"], cancellation_date__isnull=True)
+        registration = Registration.objects.get(
+            run=context["run"], member=context["member"], cancellation_date__isnull=True
+        )
     except ObjectDoesNotExist as err:
         msg = "Registration does not exist"
         raise Http404(msg) from err
 
     if request.method == "POST":
-        cancel_reg(reg)
+        cancel_reg(registration)
         mes = _("You have correctly cancelled the registration to the %(event)s event") % {"event": context["event"]}
         messages.success(request, mes)
         return redirect("accounting")
 
-    context["reg"] = reg
+    context["registration"] = registration
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
     context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
     return render(request, "larpmanager/event/unregister.html", context)
@@ -1187,21 +1186,21 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
     info_accounting(context)
 
     # Attach payment and accounting info to each registration
-    for reg in context["list"]:
+    for registration in context["list"]:
         # Check for pending payments
         for el in context["payments_todo"]:
-            if reg.id == el.id:
-                reg.payment = el
+            if registration.id == el.id:
+                registration.payment = el
 
         # Check for pending transactions
         for el in context["payments_pending"]:
-            if reg.id == el.id:
-                reg.pending = el
+            if registration.id == el.id:
+                registration.pending = el
 
         # Attach additional registration info
         for el in context["registration_list"]:
-            if reg.id == el.id:
-                reg.info = el
+            if registration.id == el.id:
+                registration.info = el
 
     return render(request, "larpmanager/event/gift.html", context)
 
@@ -1322,13 +1321,13 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
     context = get_event_context(request, event_slug, feature_slug="gift", include_status=True, check_visibility=False)
 
     # Check if user is already registered for this event
-    if context["run"].reg:
+    if context["registration"]:
         messages.success(request, _("You cannot redeem a membership, you are already a member!"))
         return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Attempt to find valid registration with the provided redemption code
     try:
-        reg = Registration.objects.get(
+        registration = Registration.objects.get(
             redeem_code=code,
             cancellation_date__isnull=True,
             run__event__association_id=context["association_id"],
@@ -1341,15 +1340,15 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
     if request.method == "POST":
         # Use atomic transaction to ensure data consistency during redemption
         with transaction.atomic():
-            reg.member = context["member"]
-            reg.redeem_code = None
-            reg.save()
+            registration.member = context["member"]
+            registration.redeem_code = None
+            registration.save()
 
         # Notify user of successful redemption and redirect to event gallery
         messages.success(request, _("Your gifted registration has been redeemed!"))
         return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Add registration object to context for template rendering
-    context["reg"] = reg
+    context["registration"] = registration
 
     return render(request, "larpmanager/event/gift_redeem.html", context)

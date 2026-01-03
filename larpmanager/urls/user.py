@@ -205,23 +205,23 @@ urlpatterns = [
     ),
     path(
         "accounting/pay/<slug:event_slug>/",
-        views_ua.acc_pay,
-        name="acc_pay",
+        views_ua.accounting_payment,
+        name="accounting_payment",
     ),
     path(
         "accounting/pay/<slug:event_slug>/<slug:method>/",
-        views_ua.acc_pay,
-        name="acc_pay",
+        views_ua.accounting_payment,
+        name="accounting_payment",
     ),
     path(
         "accounting/registration/<slug:registration_uuid>/",
-        views_ua.acc_reg,
-        name="acc_reg",
+        views_ua.accounting_registration,
+        name="accounting_registration",
     ),
     path(
         "accounting/registration/<slug:registration_uuid>/<slug:method>/",
-        views_ua.acc_reg,
-        name="acc_reg",
+        views_ua.accounting_registration,
+        name="accounting_registration",
     ),
     path(
         "accounting/membership/",

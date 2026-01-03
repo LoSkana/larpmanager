@@ -593,7 +593,7 @@ def check_gallery_visibility(request: HttpRequest, context: dict) -> bool:
         context["hide_login"] = True
         return False
 
-    if hide_gallery_for_non_signup and not context["run"].reg:
+    if hide_gallery_for_non_signup and not context["registration"]:
         context["hide_signup"] = True
         return False
 
@@ -904,12 +904,14 @@ def faction(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpRes
         raise Http404(msg)
 
     context["faction"] = faction
+    faction_number = faction["number"]
+    faction_id = context["fac_mapping"][faction_number]
 
     context["fact"] = get_writing_element_fields(
         context,
         "faction",
         QuestionApplicable.FACTION,
-        faction["id"],
+        faction_id,
         only_visible=True,
     )
 

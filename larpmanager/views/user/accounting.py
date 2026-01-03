@@ -304,7 +304,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) -> HttpResponse:
+def accounting_payment(request: HttpRequest, event_slug: str, method: str | None = None) -> HttpResponse:
     """Handle payment redirection for event registration.
 
     Validates user permissions and registration status before redirecting to
@@ -331,13 +331,13 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
     check_association_feature(request, context, "payment")
 
     # Verify user has valid registration for this event
-    if not context["run"].reg:
+    if not context["registration"]:
         messages.warning(
             request,
             _("We cannot find your registration for this event. Are you logged in as the correct user") + "?",
         )
         return redirect("accounting")
-    reg = context["run"].reg
+    reg = context["registration"]
 
     # Validate fiscal code if feature is enabled for this association
     if "fiscal_code_check" in context["features"]:
@@ -353,12 +353,12 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
 
     # Redirect to payment processing with or without specific method
     if method:
-        return redirect("acc_reg", registration_uuid=reg.uuid, method=method)
-    return redirect("acc_reg", registration_uuid=reg.uuid)
+        return redirect("accounting_registration", registration_uuid=reg.uuid, method=method)
+    return redirect("accounting_registration", registration_uuid=reg.uuid)
 
 
 @login_required
-def acc_reg(request: HttpRequest, registration_uuid: str, method: str | None = None) -> HttpResponse:
+def accounting_registration(request: HttpRequest, registration_uuid: str, method: str | None = None) -> HttpResponse:
     """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording
@@ -381,25 +381,25 @@ def acc_reg(request: HttpRequest, registration_uuid: str, method: str | None = N
     context = get_context(request)
     check_association_feature(request, context, "payment")
 
-    reg = get_accounting_registration(context, registration_uuid)
-
     # Get event context and mark as accounting page
-    context = get_event_context(request, reg.run.get_slug())
+    registration = get_accounting_registration(context, registration_uuid)
+    context = get_event_context(request, registration.run.get_slug())
     context["show_accounting"] = True
+    context["registration"] = registration
 
     # Load membership status for permission checks
-    reg.membership = get_user_membership(reg.member, context["association_id"])
+    registration.membership = get_user_membership(registration.member, context["association_id"])
 
     # Check if registration is already fully paid
-    if reg.tot_iscr == reg.tot_payed:
+    if registration.tot_iscr == registration.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event") + "!")
-        return redirect("gallery", event_slug=reg.run.get_slug())
+        return redirect("gallery", event_slug=registration.run.get_slug())
 
     # Check for pending payment verification
     pending = (
         PaymentInvoice.objects.filter(
-            idx=reg.id,
-            member_id=reg.member_id,
+            idx=registration.id,
+            member_id=registration.member_id,
             status=PaymentStatus.SUBMITTED,
             typ=PaymentType.REGISTRATION,
         ).count()
@@ -407,25 +407,22 @@ def acc_reg(request: HttpRequest, registration_uuid: str, method: str | None = N
     )
     if pending:
         messages.success(request, _("You have already sent a payment pending verification"))
-        return redirect("gallery", event_slug=reg.run.get_slug())
+        return redirect("gallery", event_slug=registration.run.get_slug())
 
     # Verify membership approval if membership feature is enabled
-    if "membership" in context["features"] and not reg.membership.date:
+    if "membership" in context["features"] and not registration.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
-        return redirect("gallery", event_slug=reg.run.get_slug())
-
-    # Add registration to context
-    context["reg"] = reg
+        return redirect("gallery", event_slug=registration.run.get_slug())
 
     # Calculate payment quota - use installment quota if set, otherwise full balance
-    if reg.quota:
-        context["quota"] = reg.quota
+    if registration.quota:
+        context["quota"] = registration.quota
     else:
-        context["quota"] = reg.tot_iscr - reg.tot_payed
+        context["quota"] = registration.tot_iscr - registration.tot_payed
 
     # Generate unique key for payment tracking
-    key = f"{reg.id}_{reg.num_payments}"
+    key = f"{registration.id}_{registration.num_payments}"
 
     # Load association configuration for payment display
     context["association"] = Association.objects.get(pk=context["association_id"])
@@ -437,15 +434,15 @@ def acc_reg(request: HttpRequest, registration_uuid: str, method: str | None = N
 
     # Handle payment form submission
     if request.method == "POST":
-        form = PaymentForm(request.POST, reg=reg, context=context)
+        form = PaymentForm(request.POST, reg=registration, context=context)
         if form.is_valid():
             # Process payment through selected gateway
             get_payment_form(request, form, PaymentType.REGISTRATION, context, key)
     else:
-        form = PaymentForm(reg=reg, context=context)
+        form = PaymentForm(reg=registration, context=context)
     context["form"] = form
 
-    return render(request, "larpmanager/member/acc_reg.html", context)
+    return render(request, "larpmanager/member/accounting_registration.html", context)
 
 
 def get_accounting_registration(context: dict, registration_uuid: str) -> Registration:

@@ -295,12 +295,10 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
     # Special handling for character model: build character-to-member assignments
     if model == "character":
         context["assignments"] = {}
-        for registration_character_relation in RegistrationCharacterRel.objects.filter(
+        for relation in RegistrationCharacterRel.objects.filter(
             reg__run=context["run"],
         ).select_related("reg", "reg__member"):
-            context["assignments"][registration_character_relation.character_id] = (
-                registration_character_relation.reg.member
-            )
+            context["assignments"][relation.character_id] = relation.reg.member
 
     # Update context with all prepared export data
     context["applicable"] = applicable_questions

@@ -53,7 +53,7 @@ from larpmanager.utils.core.exceptions import (
     UserPermissionError,
     check_event_feature,
 )
-from larpmanager.utils.users.registration import check_signup, get_player_signup, registration_status
+from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
 
 def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks
@@ -372,7 +372,14 @@ def get_event_context(
     # Get base event context with run information
     context = get_event(request, event_slug)
 
-    # Validate user signup eligibility if requested
+    # Find user's registration and store in context
+    registration = registration_find(context["run"], context["member"], context)
+    context["registration"] = registration
+
+    # Check if the user is staff
+    is_staff = has_event_permission(request, context, event_slug)
+
+    # Validate the signup if requested
     if signup:
         check_signup(context)
 
@@ -382,10 +389,10 @@ def get_event_context(
 
     # Add registration status details to context
     if include_status:
-        registration_status(context["run"], context["member"], context)
+        registration_status(context["run"], context["member"], context, registration)
 
     # Configure user permissions and sidebar for authorized users
-    if has_event_permission(request, context, event_slug):
+    if is_staff:
         get_index_event_permissions(request, context, event_slug)
         context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
@@ -404,7 +411,7 @@ def get_event_context(
     prepare_run(context)
 
     # Check character visibility restrictions if requested (skip for users with event permissions)
-    if check_visibility and not has_event_permission(request, context, event_slug):
+    if check_visibility and not is_staff:
         event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
         # Check if gallery is hidden for non-authenticated users
         hide_gallery_for_non_login = get_event_config(
@@ -418,7 +425,7 @@ def get_event_context(
         hide_gallery_for_non_signup = get_event_config(
             context["event"].id, "gallery_hide_signup", default_value=False, context=context
         )
-        if hide_gallery_for_non_signup and not get_player_signup(context):
+        if hide_gallery_for_non_signup and not registration:
             messages.warning(request, _("You must be registered to view this page"))
             raise RedirectError(event_url)
 
