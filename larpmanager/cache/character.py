@@ -206,23 +206,25 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
         return
 
     # Extract question IDs from context for database filtering
-    question_ids = context["questions"].keys()
+    question_uuids = context["questions"].keys()
 
     # Query the Character table to get id -> number mapping for the event
     character_id_mapping = dict(context["event"].get_elements(Character).values_list("id", "number"))
 
     # Retrieve and process multiple choice answers for characters
     # Each choice can have multiple options selected per question
-    choice_answers = WritingChoice.objects.filter(question_id__in=question_ids)
-    for element_id, question_id, option_id in choice_answers.values_list("element_id", "question_id", "option_id"):
+    choice_answers = WritingChoice.objects.filter(question__uuid__in=question_uuids)
+    for element_id, question_uuid, option_uuid in choice_answers.values_list(
+        "element_id", "question__uuid", "option__uuid"
+    ):
         # Skip if character not in current event mapping
         if element_id not in character_id_mapping:
             continue
 
         # Map database values to result structure
         character_index = character_id_mapping[element_id]
-        question = question_id
-        value = option_id
+        question = str(question_uuid)
+        value = str(option_uuid)
 
         # Initialize fields list for question if not exists, then append choice
         fields = res["chars"][character_index]["fields"]
@@ -232,15 +234,15 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
 
     # Retrieve and process text answers for characters
     # Each text answer is a single value per question
-    text_answers = WritingAnswer.objects.filter(question_id__in=question_ids)
-    for element_id, question_id, text_value in text_answers.values_list("element_id", "question_id", "text"):
+    text_answers = WritingAnswer.objects.filter(question__uuid__in=question_uuids)
+    for element_id, question_uuid, text_value in text_answers.values_list("element_id", "question__uuid", "text"):
         # Skip if character not in current event mapping
         if element_id not in character_id_mapping:
             continue
 
         # Map database values to result structure
         character_index = character_id_mapping[element_id]
-        question = question_id
+        question = str(question_uuid)
         value = text_value
 
         # Set text answer directly (single value, not list)
