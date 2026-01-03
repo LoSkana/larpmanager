@@ -74,12 +74,7 @@ urlpatterns = [
         name="help",
     ),
     path(
-        "help/<int:run_id>/",
-        views_ums.help_red,
-        name="help_red",
-    ),
-    path(
-        "help/attachment/<int:attachment_id>/",
+        "help/attachment/<slug:attachment_uuid>/",
         views_ums.help_attachment,
         name="help_attachment",
     ),
@@ -174,7 +169,7 @@ urlpatterns = [
         name="leaderboard",
     ),
     path(
-        "badge/<int:badge_id>/",
+        "badge/<slug:badge_uuid>/",
         views_um.badge,
         name="badge",
     ),
@@ -210,23 +205,23 @@ urlpatterns = [
     ),
     path(
         "accounting/pay/<slug:event_slug>/",
-        views_ua.acc_pay,
-        name="acc_pay",
+        views_ua.accounting_payment,
+        name="accounting_payment",
     ),
     path(
         "accounting/pay/<slug:event_slug>/<slug:method>/",
-        views_ua.acc_pay,
-        name="acc_pay",
+        views_ua.accounting_payment,
+        name="accounting_payment",
     ),
     path(
-        "accounting/registration/<int:reg_id>/",
-        views_ua.acc_reg,
-        name="acc_reg",
+        "accounting/registration/<slug:registration_uuid>/",
+        views_ua.accounting_registration,
+        name="accounting_registration",
     ),
     path(
-        "accounting/registration/<int:reg_id>/<slug:method>/",
-        views_ua.acc_reg,
-        name="acc_reg",
+        "accounting/registration/<slug:registration_uuid>/<slug:method>/",
+        views_ua.accounting_registration,
+        name="accounting_registration",
     ),
     path(
         "accounting/membership/",
@@ -254,7 +249,7 @@ urlpatterns = [
         name="acc_cancelled",
     ),
     path(
-        "accounting/payed/<int:payment_id>/",
+        "accounting/payed/<slug:registration_uuid>/",
         views_ua.acc_payed,
         name="acc_payed",
     ),
@@ -359,7 +354,7 @@ urlpatterns = [
         name="shuttle_new",
     ),
     path(
-        "shuttle/edit/<int:shuttle_id>/",
+        "shuttle/edit/<slug:shuttle_uuid>/",
         views_ums.shuttle_edit,
         name="shuttle_edit",
     ),

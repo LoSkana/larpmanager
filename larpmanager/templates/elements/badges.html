@@ -3,11 +3,12 @@
     {% for bd in badges %}
         <div class="el badge lm_tooltip">
             <div class="icon">
-                <a href="{% url 'badge' bd.id %}">
+                <a href="{% url 'badge' bd.uuid %}">
                     {% if bd.img_url %}
-                        <img src="{{ bd.img_url }}" />
+                        <img src="{{ bd.img_url }}" alt="Badge image" />
                     {% else %}
-                        <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}" />
+                        <img src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
+                             alt="Member image" />
                     {% endif %}
                     <div class="icon-name">
                         <p>{{ bd.name }}</p>

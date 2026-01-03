@@ -218,9 +218,9 @@
                 </thead>
                 {% for el in list %}
                     {% if el.tokens %}
-                        <tr id="tokens_{{ el.id }}">
+                        <tr id="tokens_{{ el.uuid }}">
                             <td>
-                                <a href="{% url 'exe_member' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
                             <td>{{ el }}</td>
                             <td>{{ el.tokens }}</td>
@@ -243,9 +243,9 @@
                 </thead>
                 {% for el in list %}
                     {% if el.credits %}
-                        <tr id="credits_{{ el.id }}">
+                        <tr id="credits_{{ el.uuid }}">
                             <td>
-                                <a href="{% url 'exe_member' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
                             <td>{{ el }}</td>
                             <td>{{ el.credits }}</td>
@@ -269,7 +269,7 @@
             {% for el in runs %}
                 <tr>
                     <td>
-                        <a href="{% url 'exe_run_accounting' el.id %}">{{ el }}</a>
+                        <a href="{% url 'exe_run_accounting' el.uuid %}">{{ el }}</a>
                     </td>
                     <td>{{ el.balance }}</td>
                     <td>

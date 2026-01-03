@@ -25,6 +25,8 @@ from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.db import connection
 
+from larpmanager.management.commands.utils import check_virtualenv
+
 
 class Command(BaseCommand):
     """Django management command to reset PostgreSQL sequences."""
@@ -50,6 +52,9 @@ class Command(BaseCommand):
         This command fixes the issue where PostgreSQL sequences get out of sync
         with the actual data when records are inserted with explicit IDs (e.g., from fixtures).
         """
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
+
         if connection.vendor != "postgresql":
             self.stdout.write(self.style.WARNING("This command only works with PostgreSQL databases"))
             return

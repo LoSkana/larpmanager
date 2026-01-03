@@ -43,12 +43,13 @@
             {% for el in list %}
                 <tr class="member">
                     <td>
-                        <a href="{% url 'exe_member' el.member__id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                        <a href="{% url 'exe_membership_status' el.member__id %}"
+                        <a href="{% url 'exe_member' el.member__uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_membership_status' el.member__uuid %}"
                            qtip="{% trans "Edit membership" %}"><i class="fas fa-id-card"></i></a>
-                        <a href="{% url 'exe_member_accounting' el.member__id %}"
+                        <a href="{% url 'exe_member_accounting' el.member__uuid %}"
                            qtip="{% trans "View accounting" %}"><i class="fas fa-money-bill"></i></a>
-                        <a href="{% url 'exe_member_registrations' el.member__id %}"
+                        <a href="{% url 'exe_member_registrations' el.member__uuid %}"
                            qtip="{% trans "View registrations" %}"><i class="fas fa-calendar-check"></i></a>
                     </td>
                     <td>{{ el.member__surname | title }}</td>
@@ -61,7 +62,7 @@
                     <td>{{ el.run_names }}</td>
                     <td>
                         {% if el.status == "s" %}
-                            <a href="{% url 'exe_membership_evaluation' el.member__id %}">{% trans "Request" %}</a>
+                            <a href="{% url 'exe_membership_evaluation' el.member__uuid %}">{% trans "Request" %}</a>
                         {% endif %}
                     </td>
                 </tr>

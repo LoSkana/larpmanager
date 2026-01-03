@@ -18,13 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Character search with filters.
+Verifies character search functionality with faction filters, single-choice filters,
+and multi-choice filters with include/exclude logic.
+"""
 
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -50,30 +55,35 @@ def filter_multi(page: Any) -> None:
     # filter multi choice
     page.get_by_role("link", name="tag").click()
     page.get_by_role("link", name="wunder").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder None anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder None another Player: Absent color: blue tag: wunder, qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
     page.get_by_role("link", name="qerfi").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder, qerfi None anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder, qerfi None another Player: Absent color: blue tag: wunder, qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
     page.get_by_role("link", name="wunder").click()
     page.get_by_role("link", name="zapyr").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) tag: qerfi, zapyr tag: wunder Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) tag: qerfi, zapyr tag: wunder Test Character Player: Absent color: red tag: zapyr Factions: fassione",
     )
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="zapyr").click()
     page.get_by_role("link", name="zapyr").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: wunder, qerfi Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: wunder, qerfi Test Character Player: Absent color: red tag: zapyr Factions: fassione",
     )
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="wunder").click()
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="qerfi").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: qerfi Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser wheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: qerfi Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
 
 
@@ -81,12 +91,14 @@ def filter_single(page: Any) -> None:
     # filter single choice
     page.get_by_role("link", name="color").click()
     page.get_by_role("link", name="red").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) color: red None Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) color: red None Test Character Player: Absent color: red tag: zapyr Factions: fassione",
     )
     page.get_by_role("link", name="red").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) All color: red anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) All color: red another Player: Absent color: blue tag: wunder, qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
     page.get_by_role("link", name="red").click()
     page.get_by_role("link", name="color").click()
@@ -94,20 +106,23 @@ def filter_single(page: Any) -> None:
 
 def filter_faction(page: Any) -> None:
     # filter factions
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) All None Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser anotherPlayer: Absentcolor: bluetag: qerfi, wunderwheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) All None Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser another Player: Absent color: blue tag: wunder, qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
-    page.get_by_role("link", name="Factions").nth(1).click()
+    page.get_by_role("link", name="Factions").nth(0).click()
     page.locator("#factions").get_by_role("link", name="fassione").click()
-    expect(page.locator("#one")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) Factions: fassione None Test CharacterPlayer: Absentcolor: redtag: zapyrFactions: fassioneTest Teaser wheelPlayer: Absentcolor: bluetag: wunderFactions: fassione Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) Factions: fassione None Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
     page.locator("#factions").get_by_role("link", name="fassione").click()
-    expect(page.locator("#wrapper")).to_contain_text(
-        "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione anotherPlayer: Absentcolor: bluetag: qerfi, wunder Test Teaser"
+    expect_normalized(page,
+        page.locator("#search-results"),
+        "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione another Player: Absent color: blue tag: wunder, qerfi",
     )
     page.get_by_role("link", name="fassione").click()
-    page.get_by_role("link", name="Factions").nth(1).click()
+    page.get_by_role("link", name="Factions").nth(0).click()
 
 
 def prepare(page: Any, live_server: Any) -> None:
@@ -117,14 +132,14 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Factions").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create faction
     page.get_by_role("link", name="Factions", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("fassione")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create form options
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -135,12 +150,12 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("red")
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("blue")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_typ").select_option("m")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("tag")
@@ -148,19 +163,19 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("wunder")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("zapyr")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("qerfi")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_visibility").select_option("s")
-    page.get_by_role("button", name="Confirm").click()
-    page.locator('[id="\\38 "]').get_by_role("link", name="").click()
+    submit_confirm(page)
+    page.locator('[id="u8"]').get_by_role("link", name="").click()
     page.locator("#id_visibility").select_option("s")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
 
 def characters(page: Any, live_server: Any) -> None:
@@ -170,28 +185,29 @@ def characters(page: Any, live_server: Any) -> None:
     page.get_by_role("list").click()
     page.get_by_role("searchbox").fill("fas")
     page.get_by_role("option", name="fassione (P)").click()
-    page.locator("#id_q8").select_option("1")
+    page.locator("#id_que_u8").select_option("u1")
     page.get_by_role("checkbox", name="zapyr").check()
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("another")
-    page.locator("#id_q8").select_option("2")
-    page.locator("#id_q9 div").filter(has_text="qerfi").click()
+    page.locator("#id_que_u8").select_option("u2")
+    page.locator("#id_que_u9 div").filter(has_text="qerfi").click()
     page.get_by_role("checkbox", name="wunder").check()
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("wheel")
-    page.locator("#id_q8").select_option("2")
+    page.locator("#id_que_u8").select_option("u2")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("fa")
     page.get_by_role("option", name="fassione (P)").click()
     page.get_by_role("checkbox", name="wunder").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="color").first.click()
     page.get_by_role("link", name="tag").first.click()
-    expect(page.locator("#one")).to_contain_text(
-        "#1 Test Character Test Teaser Test Text fassione redzapyr #2 another bluewunder, qerfi #3 wheel fassione bluewunder"
+    expect_normalized(page,
+        page.locator("#one"),
+        "#1 Test Character Test Teaser Test Text fassione red zapyr #2 another blue wunder, qerfi #3 wheel fassione blue wunder",
     )

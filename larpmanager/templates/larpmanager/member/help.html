@@ -23,7 +23,7 @@
             {% if el.run %}[{{ el.run }}] -{% endif %}
             {{ el.text }}
             {% if el.attachment %}
-                &nbsp;&nbsp;&nbsp;(<a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>)
+                &nbsp;&nbsp;&nbsp;(<a href="{% url 'help_attachment' el.uuid %}" target="_blank">{% trans "Attachment" %}</a>)
             {% endif %}
         </div>
     {% endfor %}

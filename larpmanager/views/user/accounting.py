@@ -62,6 +62,7 @@ from larpmanager.models.accounting import (
     AccountingItemMembership,
     AccountingItemOther,
     AccountingItemPayment,
+    Collection,
     CollectionStatus,
     OtherChoices,
     PaymentChoices,
@@ -279,7 +280,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Save refund request with transaction safety
             with transaction.atomic():
-                p = form.save(commit=False)
+                p: PaymentInvoice = form.save(commit=False)
                 p.member = context["member"]
                 p.association_id = context["association_id"]
                 p.save()
@@ -303,7 +304,7 @@ def acc_refund(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) -> HttpResponse:
+def accounting_payment(request: HttpRequest, event_slug: str, method: str | None = None) -> HttpResponse:
     """Handle payment redirection for event registration.
 
     Validates user permissions and registration status before redirecting to
@@ -330,13 +331,13 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
     check_association_feature(request, context, "payment")
 
     # Verify user has valid registration for this event
-    if not context["run"].reg:
+    if not context["registration"]:
         messages.warning(
             request,
             _("We cannot find your registration for this event. Are you logged in as the correct user") + "?",
         )
         return redirect("accounting")
-    reg = context["run"].reg
+    reg = context["registration"]
 
     # Validate fiscal code if feature is enabled for this association
     if "fiscal_code_check" in context["features"]:
@@ -352,12 +353,12 @@ def acc_pay(request: HttpRequest, event_slug: str, method: str | None = None) ->
 
     # Redirect to payment processing with or without specific method
     if method:
-        return redirect("acc_reg", reg_id=reg.id, method=method)
-    return redirect("acc_reg", reg_id=reg.id)
+        return redirect("accounting_registration", registration_uuid=reg.uuid, method=method)
+    return redirect("accounting_registration", registration_uuid=reg.uuid)
 
 
 @login_required
-def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> HttpResponse:
+def accounting_registration(request: HttpRequest, registration_uuid: str, method: str | None = None) -> HttpResponse:
     """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording
@@ -366,7 +367,7 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
     Args:
         request: HTTP request object with authenticated user
-        reg_id: Registration ID to process payment for
+        registration_uuid: Registration UUID
         method: Optional payment method slug to pre-select
 
     Returns:
@@ -380,35 +381,25 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     context = get_context(request)
     check_association_feature(request, context, "payment")
 
-    # Retrieve registration with related run and event data
-    try:
-        reg = Registration.objects.select_related("run", "run__event").get(
-            id=reg_id,
-            member=context["member"],
-            cancellation_date__isnull=True,
-            run__event__association_id=context["association_id"],
-        )
-    except Exception as err:
-        msg = f"registration not found {err}"
-        raise Http404(msg) from err
-
     # Get event context and mark as accounting page
-    context = get_event_context(request, reg.run.get_slug())
+    registration = get_accounting_registration(context, registration_uuid)
+    context = get_event_context(request, registration.run.get_slug())
     context["show_accounting"] = True
+    context["registration"] = registration
 
     # Load membership status for permission checks
-    reg.membership = get_user_membership(reg.member, context["association_id"])
+    registration.membership = get_user_membership(registration.member, context["association_id"])
 
     # Check if registration is already fully paid
-    if reg.tot_iscr == reg.tot_payed:
+    if registration.tot_iscr == registration.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event") + "!")
-        return redirect("gallery", event_slug=reg.run.get_slug())
+        return redirect("gallery", event_slug=registration.run.get_slug())
 
     # Check for pending payment verification
     pending = (
         PaymentInvoice.objects.filter(
-            idx=reg.id,
-            member_id=reg.member_id,
+            idx=registration.id,
+            member_id=registration.member_id,
             status=PaymentStatus.SUBMITTED,
             typ=PaymentType.REGISTRATION,
         ).count()
@@ -416,25 +407,22 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
     )
     if pending:
         messages.success(request, _("You have already sent a payment pending verification"))
-        return redirect("gallery", event_slug=reg.run.get_slug())
+        return redirect("gallery", event_slug=registration.run.get_slug())
 
     # Verify membership approval if membership feature is enabled
-    if "membership" in context["features"] and not reg.membership.date:
+    if "membership" in context["features"] and not registration.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
-        return redirect("gallery", event_slug=reg.run.get_slug())
-
-    # Add registration to context
-    context["reg"] = reg
+        return redirect("gallery", event_slug=registration.run.get_slug())
 
     # Calculate payment quota - use installment quota if set, otherwise full balance
-    if reg.quota:
-        context["quota"] = reg.quota
+    if registration.quota:
+        context["quota"] = registration.quota
     else:
-        context["quota"] = reg.tot_iscr - reg.tot_payed
+        context["quota"] = registration.tot_iscr - registration.tot_payed
 
     # Generate unique key for payment tracking
-    key = f"{reg.id}_{reg.num_payments}"
+    key = f"{registration.id}_{registration.num_payments}"
 
     # Load association configuration for payment display
     context["association"] = Association.objects.get(pk=context["association_id"])
@@ -446,15 +434,51 @@ def acc_reg(request: HttpRequest, reg_id: int, method: str | None = None) -> Htt
 
     # Handle payment form submission
     if request.method == "POST":
-        form = PaymentForm(request.POST, reg=reg, context=context)
+        form = PaymentForm(request.POST, reg=registration, context=context)
         if form.is_valid():
             # Process payment through selected gateway
             get_payment_form(request, form, PaymentType.REGISTRATION, context, key)
     else:
-        form = PaymentForm(reg=reg, context=context)
+        form = PaymentForm(reg=registration, context=context)
     context["form"] = form
 
-    return render(request, "larpmanager/member/acc_reg.html", context)
+    return render(request, "larpmanager/member/accounting_registration.html", context)
+
+
+def get_accounting_registration(context: dict, registration_uuid: str) -> Registration:
+    """Get registration by UUID with member and association validation.
+
+    Args:
+        context: Context dictionary containing member and association_id
+        registration_uuid: Registration UUID or ID (numeric fallback)
+
+    Returns:
+        Registration object with related run and event data
+
+    Raises:
+        Http404: If registration not found or access denied
+    """
+    # Build base queryset with related data
+    queryset = Registration.objects.select_related("run", "run__event")
+    filters = {
+        "member": context["member"],
+        "cancellation_date__isnull": True,
+        "run__event__association_id": context["association_id"],
+    }
+
+    # Try UUID lookup first
+    try:
+        return queryset.get(uuid=registration_uuid, **filters)
+    except (ObjectDoesNotExist, ValueError, AttributeError) as err:
+        # Fallback to pk lookup if identifier is numeric
+        if str(registration_uuid).isdigit():
+            try:
+                return queryset.get(pk=registration_uuid, **filters)
+            except ObjectDoesNotExist:
+                msg = f"registration not found {err}"
+                raise Http404(msg) from err
+        msg = f"registration not found {err}"
+        raise Http404(msg) from err
 
 
 @login_required
@@ -594,7 +618,7 @@ def acc_collection(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Create collection within atomic transaction to ensure data consistency
             with transaction.atomic():
-                p = form.save(commit=False)
+                p: Collection = form.save(commit=False)
                 p.organizer = context["member"]
                 p.association_id = context["association_id"]
                 p.save()
@@ -895,12 +919,12 @@ def acc_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
 
 
 @login_required
-def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
+def acc_payed(request: HttpRequest, registration_uuid: str = "0") -> HttpResponse:
     """Handle payment completion and redirect to profile check.
 
     Args:
         request: The HTTP request object containing user and association data
-        payment_id: Payment invoice primary key. If 0, no specific invoice is processed
+        registration_uuid: Payment uuid. If 0, no specific invoice is processed
 
     Returns:
         HttpResponse from acc_profile_check with success message and invoice
@@ -911,11 +935,11 @@ def acc_payed(request: HttpRequest, payment_id: int = 0) -> HttpResponse:
     """
     # Check if a specific payment invoice ID was provided
     context = get_context(request)
-    if payment_id:
+    if registration_uuid != "0":
         try:
             # Retrieve the payment invoice for the current user and association
             inv = PaymentInvoice.objects.get(
-                pk=payment_id,
+                uuid=registration_uuid,
                 member=context["member"],
                 association_id=context["association_id"],
             )
@@ -968,7 +992,8 @@ def acc_submit(request: HttpRequest, payment_method: str, redirect_path: str) ->
     elif payment_method == "any":
         form = AnyInvoiceSubmitForm(request.POST, request.FILES)
     else:
-        raise Http404("unknown value: " + payment_method)
+        msg = "unknown value: " + payment_method
+        raise Http404(msg)
 
     # Validate form data and uploaded files
     if not form.is_valid():

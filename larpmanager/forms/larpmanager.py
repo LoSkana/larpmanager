@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.common import get_recaptcha_secrets
 
@@ -94,7 +94,7 @@ class LarpManagerContact(LarpManagerCheck):
         return verification
 
 
-class LarpManagerTicketForm(MyForm):
+class LarpManagerTicketForm(BaseModelForm):
     """Form for LarpManagerTicket."""
 
     class Meta:

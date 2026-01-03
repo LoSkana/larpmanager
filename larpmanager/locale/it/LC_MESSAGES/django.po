@@ -50,6 +50,9 @@ msgstr "Fine"
 msgid "Fee"
 msgstr "Commissione"
 
+msgid "Low"
+msgstr "Basso"
+
 msgid "NPC"
 msgstr "PNG"
 
@@ -85,9 +88,6 @@ msgstr "Area"
 
 msgid "Band"
 msgstr "Fascia"
-
-msgid "Blog"
-msgstr "Blog"
 
 msgid "Body"
 msgstr "Corpo"
@@ -142,6 +142,9 @@ msgstr "Aiuto"
 
 msgid "Hide"
 msgstr "Nascondi"
+
+msgid "High"
+msgstr "Alto"
 
 msgid "Home"
 msgstr "Home"
@@ -208,6 +211,9 @@ msgstr "Pagato"
 
 msgid "Plot"
 msgstr "Trama"
+
+msgid "Pool"
+msgstr "Piscina"
 
 msgid "Port"
 msgstr "Porta di connessione"
@@ -286,6 +292,9 @@ msgstr "regalo"
 
 msgid "used"
 msgstr "usato"
+
+msgid "Actor"
+msgstr "Attore"
 
 msgid "Album"
 msgstr "Album"
@@ -579,6 +588,9 @@ msgstr "Segnati"
 msgid "Master"
 msgstr "Padre"
 
+msgid "Medium"
+msgstr "Medio"
+
 msgid "Member"
 msgstr "Socio"
 
@@ -614,6 +626,9 @@ msgstr "Missioni"
 
 msgid "Quotas"
 msgstr "Quote"
+
+msgid "Reason"
+msgstr "Motivo"
 
 msgid "Refund"
 msgstr "Rimborso"
@@ -945,6 +960,9 @@ msgstr "Website"
 msgid "Welcome"
 msgstr "Benvenuto"
 
+msgid "Working"
+msgstr "Lavorazione"
+
 msgid "Writing"
 msgstr "Scrittura"
 
@@ -1185,6 +1203,9 @@ msgstr "Registro"
 msgid "Reminder"
 msgstr "Promemoria"
 
+msgid "Resource"
+msgstr "Risorse"
+
 msgid "Returned"
 msgstr "Restituiti"
 
@@ -1323,6 +1344,9 @@ msgstr "Importante"
 msgid "Interface"
 msgstr "Interfaccia"
 
+msgid "Inventory"
+msgstr "Inventario"
+
 msgid "Load list"
 msgstr "Carica lista"
 
@@ -1349,6 +1373,9 @@ msgstr "Funzionamento"
 
 msgid "Organizer"
 msgstr "Organizzatore"
+
+msgid "Pool type"
+msgstr "Tipo di pool"
 
 msgid "Portraits"
 msgstr "Ritratti"
@@ -1581,6 +1608,9 @@ msgstr "Percentuale"
 msgid "Play Again"
 msgstr "Play Again"
 
+msgid "Pool Types"
+msgstr "Tipi di pool"
+
 msgid "Preference"
 msgstr "Preferenza"
 
@@ -1764,6 +1794,9 @@ msgstr "Informazioni"
 msgid "Installment"
 msgstr "Rata"
 
+msgid "Inventories"
+msgstr "Inventari"
+
 msgid "Last change"
 msgstr "Ultima modifica"
 
@@ -1812,9 +1845,6 @@ msgstr "Progressione"
 msgid "Provisional"
 msgstr "Provvisorie"
 
-msgid "Public UUID"
-msgstr "UUID pubblico"
-
 msgid "Publication"
 msgstr "Pubblicazione"
 
@@ -1850,6 +1880,9 @@ msgstr "Accorcia URL"
 
 msgid "Show closed"
 msgstr "Mostra chiusi"
+
+msgid "Signup link"
+msgstr "Link per l'iscrizione"
 
 msgid "Simple list"
 msgstr "Lista semplice"
@@ -1899,14 +1932,14 @@ msgstr "classifica"
 msgid "text length"
 msgstr "lunghezza del testo"
 
-msgid "unique code"
-msgstr "codice unico"
-
 msgid "Ability type"
 msgstr "Tipo abilità"
 
 msgid "Achievements"
 msgstr "Achievements"
+
+msgid "Add from NPC"
+msgstr "Aggiungi da PNG"
 
 msgid "Add prologue"
 msgstr "Aggiungi prologo"
@@ -2091,6 +2124,9 @@ msgstr "Numero totale"
 msgid "Transactions"
 msgstr "Transazioni"
 
+msgid "Transfer Log"
+msgstr "Registro di trasferimento"
+
 msgid "Translations"
 msgstr "Traduzioni"
 
@@ -2108,6 +2144,9 @@ msgstr "IVA (biglietto)"
 
 msgid "Verification"
 msgstr "Verifica"
+
+msgid "View Details"
+msgstr "Visualizza dettagli"
 
 msgid "Waiting list"
 msgstr "In attesa"
@@ -2377,6 +2416,9 @@ msgstr "Colletta per"
 
 msgid "Communications"
 msgstr "Comunicazioni"
+
+msgid "Configure form"
+msgstr "Configura il form"
 
 msgid "Credit balance"
 msgstr "Saldo crediti"
@@ -3020,6 +3062,9 @@ msgstr "Mesi quota libera"
 msgid "Move to container"
 msgstr "Sposta in un contenitore"
 
+msgid "No transfers yet."
+msgstr "Non ci sono ancora trasferimenti."
+
 msgid "One-Time Contents"
 msgstr "Contenuti una tantum"
 
@@ -3143,9 +3188,6 @@ msgstr "Fattura elettronica"
 msgid "Enable preferences"
 msgstr "Abilita le preferenze"
 
-msgid "Go to the form for"
-msgstr "Vai al modulo per"
-
 msgid "Hide not available"
 msgstr "Nascondi non disponibili"
 
@@ -3256,6 +3298,12 @@ msgstr "Personaggio assegnato!"
 
 msgid "Change registration"
 msgstr "Modifica iscrizione"
+
+msgid "Character Inventory"
+msgstr "Inventario dei personaggi"
+
+msgid "Character inventory"
+msgstr "Inventario dei personaggi"
 
 msgid "Character not found"
 msgstr "Personaggio non trovato"
@@ -3502,7 +3550,7 @@ msgid "Relationships (Test)"
 msgstr "Relazioni (Test)"
 
 msgid "Require registration"
-msgstr "Richiedi registrazione"
+msgstr "Richiedere la registrazione"
 
 msgid "Returning percentage"
 msgstr "Percentuale restituzione"
@@ -3552,6 +3600,9 @@ msgstr "Approva rimborso"
 
 msgid "Assigned staff member"
 msgstr "Membro dello staff assegnato"
+
+msgid "Character Inventories"
+msgstr "Inventari dei personaggi"
 
 msgid "Character not allowed"
 msgstr "Carattere non ammesso"
@@ -3724,6 +3775,9 @@ msgstr "Concluso e archiviato"
 
 msgid "Confirm password reset"
 msgstr "Password reset confermato"
+
+msgid "Currencies & Materials"
+msgstr "Valute e materiali"
 
 msgid "Customised mail server"
 msgstr "Server mail personalizzato"
@@ -4279,7 +4333,7 @@ msgid "Waiting list registrations"
 msgstr "Iscrizioni in lista d'attesa"
 
 msgid "Wrong number of characters"
-msgstr "Numero di caratteri errato"
+msgstr "Numero di personaggi errato"
 
 msgid "You can't access this way!"
 msgstr "Non puoi accedere così!"
@@ -4525,6 +4579,9 @@ msgstr "Il tuo account ora è attivo"
 
 msgid "check excessive relationships"
 msgstr "check relazioni in più"
+
+msgid "Character Inventory Pool Types"
+msgstr "Tipi di pool dell'inventario dei personaggi"
 
 #, python-format
 msgid "Complete payment for %(event)s"
@@ -4860,6 +4917,9 @@ msgstr "Ritardo nell'iscrizione associativa"
 msgid "Empty relationship check (no text)"
 msgstr "Check relazione vuota (niente testo)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Inserire una data valida nel formato GG-MM"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Funzionalità %(name)s già attivata"
@@ -5127,6 +5187,9 @@ msgstr "Ti è stato assegnato un achievement"
 msgid "Added to the bottom of all mails sent"
 msgstr "Aggiunto in fondo a tutte le mail inviate"
 
+msgid "Allows characters to have inventories"
+msgstr "Permette ai personaggi di avere un inventario"
+
 msgid "Check the validity of the fiscal code"
 msgstr "Verifica la validità del codice fiscale"
 
@@ -5144,6 +5207,9 @@ msgstr "Location - affitto, gas, pernottamenti"
 
 msgid "Manage answers for workshop questions"
 msgstr "Gestisci le risposte alle domande dei workshop"
+
+msgid "Manage character inventory pool types"
+msgstr "Gestire i tipi di pool dell'inventario dei personaggi"
 
 msgid "Manage expense items for contributors"
 msgstr "Gestisci le voci di spesa per i collaboratori"
@@ -5484,9 +5550,6 @@ msgstr "Ci sono missioni senza tratti: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Questa pagina riepiloga gli album foto caricati"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Identificatore univoco per gli URL dei profili pubblici"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Stai escludendo (nessuno di questi filtri)"
 
@@ -5713,8 +5776,8 @@ msgstr "Se non vedi un utente, chiedigli di accedere a"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Se hai bisogno di una mano, faccelo sapere"
 
-msgid "Latest articles and updates from LarpManager"
-msgstr "Ultimi articoli e aggiornamenti di LarpManager"
+msgid "Manage character inventories and their items"
+msgstr "Gestire gli inventari dei personaggi e i loro oggetti"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Gestisci le ricevute dei pagamenti e approvale"
@@ -5906,6 +5969,9 @@ msgstr "Questa pagina mostra gli elenchi di e-mail degli abbonati"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Questa pagina riassume le consegne di px ai personaggi"
+
+msgid "This page summarizes the character inventories"
+msgstr "Questa pagina riassume gli inventari dei personaggi"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Importo totale trattenuto per commissioni di trasferimento"
@@ -6129,10 +6195,6 @@ msgstr "Questa funzione è disponibile per i biglietti non in attesa"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolleranza superata, procedere all'annullamento"
 
-msgid "Unique registration code, used for payment checks"
-msgstr ""
-"Codice di registrazione univoco, utilizzato per i controlli di pagamento"
-
 msgid "You are including (at least one of these filters)"
 msgstr "Stai includendo (almeno una di questi filtri)"
 
@@ -6167,9 +6229,6 @@ msgstr "Gestisci la configurazione delle funzionalità attivate"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Gestisci le fasi di avanzamento degli elementi di scrittura"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Numero massimo di personaggi che il giocatore può creare"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Secondo personaggio della relazione (destinazione)"
 
@@ -6191,6 +6250,9 @@ msgstr "L'iscrizione all'evento è stata disdetta"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Ci sono campi di scrittura senza opzioni: %(list)s"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Questa pagina consente di aggiungere o modificare un tipo di pool"
 
 msgid "This page summarises the organization's volunteers"
 msgstr "Questa pagina riassume i volontari dell'organizzazione"
@@ -6627,6 +6689,11 @@ msgstr "Selezioni i gruppi su cui vuoi filtrare i personaggi"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Il campo personaggio di tipo computato che verrà aggiornato"
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+"Questa pagina consente di aggiungere o modificare l'inventario di un "
+"personaggio"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Questa pagina mostra tutte le informazioni contabili del socio"
@@ -7554,11 +7621,6 @@ msgstr ""
 "Qui è possibile passare dalle pagine di amministrazione a quelle rivolte "
 "agli utenti"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Se selezionata, aggiunge a tutte le iscrizioni un codice univoco di "
-"riferimento"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr "Se hai un accordo separato con noi, puoi anche ignorare questa e-mail"
 
@@ -7580,6 +7642,11 @@ msgstr ""
 
 msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr "Questa pagina riepiloga le regole applicate ai campi computati"
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+"Questa pagina riassume i tipi di pool di cui dispone l'inventario di un "
+"personaggio"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -7643,6 +7710,11 @@ msgid ""
 msgstr ""
 "Le iscrizioni per questo evento non sono ancora aperte, ma è possibile pre-"
 "iscriverti"
+
+msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Selezionare una scelta valida. Questa scelta non è tra quelle disponibili."
 
 msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
@@ -7742,8 +7814,8 @@ msgstr ""
 msgid ""
 "Set maximum length on character relationships (default 10000 characters)"
 msgstr ""
-"Impostare la lunghezza massima delle relazioni di caratteri (default: 10000 "
-"caratteri)"
+"Impostare la lunghezza massima delle relazioni dei personaggi (default: "
+"10000 caratteri)"
 
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient"
@@ -8659,6 +8731,13 @@ msgid ""
 msgstr ""
 "Nell'evento <b>%(event)s</b> ti è stato assegnato il personaggio: "
 "<b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Numero massimo di personaggi che il giocatore può creare (default=0, nessuna"
+" creazione consentita)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

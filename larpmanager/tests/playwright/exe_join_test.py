@@ -18,13 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Organization registration and creation.
+Verifies new user registration, organization creation with automatic slug generation,
+profile picture upload, and organization dashboard access.
+"""
 
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, submit
+from larpmanager.tests.utils import just_wait, go_to, load_image, submit, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -70,7 +75,7 @@ def test_exe_join(pw_page: Any) -> None:
     page.locator("#slug").fill("prova")
     submit(page)
 
-    page.wait_for_timeout(1000)
+    just_wait(page)
     go_to(page, live_server, "/debug/prova")
 
-    expect(page.locator("#header")).to_contain_text("Prova Larp")
+    expect_normalized(page, page.locator("#banner"), "Prova Larp")

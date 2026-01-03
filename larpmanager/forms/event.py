@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.forms.association import ExePreferencesForm
-from larpmanager.forms.base import MyCssForm, MyForm
+from larpmanager.forms.base import BaseModelCssForm, BaseModelForm
 from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
@@ -128,7 +128,7 @@ class EventCharactersPdfForm(ConfigForm):
         self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer"), _("Insert the html code for the footer"))
 
 
-class OrgaEventForm(MyForm):
+class OrgaEventForm(BaseModelForm):
     """Form for managing general event settings and basic configuration."""
 
     page_title = _("Event")
@@ -419,11 +419,6 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("registration_no_grouping", ConfigType.BOOL, grouping_label, grouping_help_text)
 
-        # Add unique code generation for registrations
-        unique_code_label = _("Unique code")
-        unique_code_help_text = _("If checked, adds to all registrations an unique code to reference them")
-        self.add_configs("registration_unique_code", ConfigType.BOOL, unique_code_label, unique_code_help_text)
-
         # Configure staff visibility permissions for registration questions
         allowed_label = _("Allowed")
         allowed_help_text = _(
@@ -693,7 +688,9 @@ class OrgaConfigForm(ConfigForm):
 
             # Maximum character limit configuration
             max_characters_label = _("Maximum number")
-            max_characters_help_text = _("Maximum number of characters the player can create")
+            max_characters_help_text = _(
+                "Maximum number of characters the player can create (default=0, no creation allowed)"
+            )
             self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
 
             # Character approval process configuration
@@ -1018,7 +1015,7 @@ class OrgaConfigForm(ConfigForm):
             )
 
 
-class OrgaAppearanceForm(MyCssForm):
+class OrgaAppearanceForm(BaseModelCssForm):
     """Form for customizing event appearance and styling."""
 
     page_title = _("Event Appearance")
@@ -1099,7 +1096,7 @@ class OrgaAppearanceForm(MyCssForm):
         return f"css/{event_instance.association.slug}_{event_instance.slug}_{event_instance.css_code}.css"
 
 
-class OrgaEventTextForm(MyForm):
+class OrgaEventTextForm(BaseModelForm):
     """Form for managing event-specific text content and messages."""
 
     page_title = _("Texts")
@@ -1200,7 +1197,7 @@ class OrgaEventTextForm(MyForm):
         return cleaned_data
 
 
-class OrgaEventRoleForm(MyForm):
+class OrgaEventRoleForm(BaseModelForm):
     """Form for managing event access roles and permissions."""
 
     page_title = _("Roles")
@@ -1229,7 +1226,7 @@ class OrgaEventRoleForm(MyForm):
         return instance
 
 
-class OrgaEventButtonForm(MyForm):
+class OrgaEventButtonForm(BaseModelForm):
     """Form for editing event navigation buttons."""
 
     page_title = _("Navigation")
@@ -1428,7 +1425,7 @@ class OrgaRunForm(ConfigForm):
         return cleaned_data
 
 
-class OrgaProgressStepForm(MyForm):
+class OrgaProgressStepForm(BaseModelForm):
     """Form for managing event progression steps."""
 
     page_title = _("Progression")
@@ -1703,7 +1700,6 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ("", "#load_accounting", _("Accounting")),
             ("", "email", _("Email")),
             ("", "date", _("Chronology")),
-            ("unique_code", "special_cod", _("Unique code")),
             ("additional_tickets", "additionals", _("Additional")),
             ("gift", "gift", _("Gift")),
             ("membership", "membership", _("Member")),
@@ -1725,12 +1721,12 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_config_fields.extend(
                 [
                     (
-                        f".lq_{field_id}",
+                        f".lq_{field_uuid}",
                         registration_field.name
                         if len(registration_field.name) <= field_name_max_length
                         else registration_field.name[: field_name_max_length - 5] + " [...]",
                     )
-                    for field_id, registration_field in registration_fields.items()
+                    for field_uuid, registration_field in registration_fields.items()
                 ],
             )
 
@@ -1813,7 +1809,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
                     applicable=QuestionApplicable.CHARACTER,
                     typ=WritingQuestionType.FACTIONS,
                 )
-                feature_fields.insert(0, ("faction", f"q_{faction_question.id}", _("Factions")))
+                feature_fields.insert(0, ("faction", f"q_{faction_question.uuid}", _("Factions")))
 
             self.add_feature_extra(extra_config_options, feature_fields)
 
@@ -1851,7 +1847,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             if field["typ"] == "name":
                 continue
 
-            toggle_key = f".lq_{field['id']}" if field["typ"] in basic_question_types else f"q_{field['id']}"
+            toggle_key = f".lq_{field['uuid']}" if field["typ"] in basic_question_types else f"q_{field['uuid']}"
 
             compiled_options.append((toggle_key, field["name"]))
 

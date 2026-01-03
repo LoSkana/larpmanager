@@ -23,7 +23,7 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.db import connection, transaction
 
-from larpmanager.management.commands.utils import check_branch
+from larpmanager.management.commands.utils import check_branch, check_virtualenv
 
 
 class Command(BaseCommand):
@@ -55,6 +55,9 @@ class Command(BaseCommand):
             - Loads initial fixtures via init_db command
 
         """
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
+
         # Ensure we're not running on main branch
         check_branch()
 

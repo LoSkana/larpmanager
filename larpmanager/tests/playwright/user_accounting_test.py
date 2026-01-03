@@ -18,13 +18,19 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: User accounting with donations, membership fees, and collections.
+Verifies payment method configuration, donation workflows, membership fee payments,
+collection creation/participation, invoice generation, and payment confirmation.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -62,7 +68,7 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/manage/methods")
-    page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
+    page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")
     page.locator("#id_wire_fee").fill("0")
@@ -89,8 +95,8 @@ def donation(page: Any, live_server: Any) -> None:
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect(page.locator("#one")).to_contain_text("test beneficiary")
-    expect(page.locator("#one")).to_contain_text("test iban")
+    expect_normalized(page, page.locator("#one"), "test beneficiary")
+    expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
@@ -99,8 +105,8 @@ def donation(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")
-    expect(page.locator("#one")).to_contain_text("Donations done")
-    expect(page.locator("#one")).to_contain_text("(10.00€)")
+    expect_normalized(page, page.locator("#one"), "Donations done")
+    expect_normalized(page, page.locator("#one"), "(10.00€)")
 
 
 def membership_fees(page: Any, live_server: Any) -> None:
@@ -138,17 +144,17 @@ def membership_fees(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/accounting")
-    expect(page.locator("#one")).to_contain_text("Payment membership fee")
+    expect_normalized(page, page.locator("#one"), "Payment membership fee")
     page.get_by_role("link", name="Pay the annual fee").click()
     page.get_by_role("cell", name="test wire").click()
     submit(page)
 
-    expect(page.locator("#one")).to_contain_text("15")
+    expect_normalized(page, page.locator("#one"), "15")
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect(page.locator("#one")).to_contain_text("test beneficiary")
-    expect(page.locator("#one")).to_contain_text("test iban")
+    expect_normalized(page, page.locator("#one"), "test beneficiary")
+    expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
@@ -175,16 +181,16 @@ def collections(page: Any, live_server: Any) -> None:
     page.locator("#id_amount").fill("20")
     submit(page)
 
-    expect(page.locator("#one")).to_contain_text("20")
+    expect_normalized(page, page.locator("#one"), "20")
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect(page.locator("#one")).to_contain_text("test beneficiary")
-    expect(page.locator("#one")).to_contain_text("test iban")
+    expect_normalized(page, page.locator("#one"), "test beneficiary")
+    expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
     go_to(page, live_server, "/manage/invoices")
-    expect(page.locator("#one")).to_contain_text("Collected contribution of Admin Test for User")
+    expect_normalized(page, page.locator("#one"), "Collected contribution of Admin Test for User")
     page.get_by_role("link", name="Confirm").click()
 
     go_to(page, live_server, "/accounting")

@@ -56,10 +56,11 @@
 {% block js %}
     {% include "elements/form/max_length.js" %}
     {% include "elements/helpers/factions-choices.js" %}
+    {{ form.unavail|json_script:"unavail" }}
     <script>
     var dependencies = {{ dependencies | safe }};
 
-    var unavail = {{ form.unavail }};
+    var unavail = JSON.parse(document.getElementById('unavail').textContent);
 
     var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};
 
@@ -77,7 +78,7 @@
 
             Object.entries(unavail).forEach(([question, values]) => {
                 values.forEach(value => {
-                    const selectorPrefix = '#id_q' + question + '_tr ';
+                    const selectorPrefix = '#id_que_' + question + '_tr ';
                     if (hide_unavailable) {
                         $(selectorPrefix + 'option[value="' + value + '"]').remove();
                         $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();
@@ -307,9 +308,9 @@
 
     {% if avatar_form %}
 
-        var upload = '{% url 'character_profile_upload' run.get_slug character.number %}';
-        var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.number 1 %}';
-        var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.number 0 %}';
+        var upload = '{% url 'character_profile_upload' run.get_slug character.uuid %}';
+        var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.uuid 1 %}';
+        var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.uuid 0 %}';
 
         function profile_update(src) {
             timestamp = (new Date()).getTime();

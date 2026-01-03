@@ -32,7 +32,7 @@
                 <td>{{ el.active_registrations }}</td>
                 <td>{{ el.total }}</td>
                 <td>
-                    <a href='{% url "lm_payments_confirm" el.id %}' class="confirm-link">Confirm</a>
+                    <a href='{% url "lm_payments_confirm" el.uuid %}' class="confirm-link">Confirm</a>
                 </td>
             {% endfor %}
         </tr>

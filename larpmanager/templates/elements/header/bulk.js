@@ -29,27 +29,27 @@ $("#main_bulk #exec").on("click", function(e) {
 
     if (!confirm("Confirm? Are you sure, like, really sure?")) return;
 
-    // get operation
+  // get operation
   var operation = $("#main_bulk #operation").val();
 
-// get non hidden target choice
+  // get non hidden target choice
   var $activeObjs = $("#main_bulk .objs").not(".hide").first();
   var target = $activeObjs.find("option:selected").first().val();
 
   // get ids from selected table rows
-  var ids = [];
+  var uuids = [];
   Object.keys(window.datatables).forEach(function(key) {
     var table = window.datatables[key];
     table.rows('.selected').every(function() {
-      var id = this.node().id;
-      if (id) ids.push(id);
+      var uuid = this.node().id;
+      if (uuid) uuids.push(uuid);
     });
   });
 
   var payload = {
     operation: operation,
     target: target,
-    ids: ids
+    uuids: uuids
   };
 
   $.ajax({

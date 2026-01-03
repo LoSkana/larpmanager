@@ -1,16 +1,16 @@
 {% load show_tags i18n %}
 {% if show_addit.print_pdf and not external_access %}
     <p>
-        <a href="{% url 'character_pdf_sheet' run.get_slug char.number %}"
+        <a href="{% url 'character_pdf_sheet' run.get_slug char.uuid %}"
            download>{% trans "Download complete sheet" %}</a>
     </p>
     <p>
-        <a href="{% url 'character_pdf_sheet_friendly' run.get_slug char.number %}"
+        <a href="{% url 'character_pdf_sheet_friendly' run.get_slug char.uuid %}"
            download>{% trans "Download light sheet" %}</a>
     </p>
     {% if features.relationships or features.player_relationships %}
         <p>
-            <a href="{% url 'character_pdf_relationships' run.get_slug char.number %}"
+            <a href="{% url 'character_pdf_relationships' run.get_slug char.uuid %}"
                download>{% trans "Download relationships" %}</a>
         </p>
     {% endif %}

@@ -18,13 +18,26 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration form with various field types.
+Verifies text/paragraph fields, single/multiple choice with pricing and availability,
+hidden/disabled fields, mandatory fields, and organizer editing capabilities.
+"""
 
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, login_user, logout, submit_confirm
+from larpmanager.tests.utils import (just_wait,
+    go_to,
+    load_image,
+    login_orga,
+    login_user,
+    logout,
+    submit_confirm,
+    expect_normalized,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -218,10 +231,10 @@ def signup_first(live_server: Any, page: Any) -> None:
     page.get_by_role("textbox", name="long text").press("CapsLock")
     page.get_by_role("textbox", name="long text").fill("BBBBBBBBBB")
     expect(page.get_by_role("textbox", name="long text")).to_have_value("BBBBBBBBBB")
-    page.get_by_label("choice").select_option("2")
-    page.get_by_label("rescrited").select_option("5")
-    expect(page.locator("#id_q6")).to_contain_text("many (20€) - (Available 2)")
-    expect(page.locator("#id_q6")).to_contain_text("few (30€) - (Available 1)")
+    page.get_by_label("choice").select_option("u2")
+    page.get_by_label("rescrited").select_option("u5")
+    expect_normalized(page, page.locator("#id_que_u6"), "many (20€) - (Available 2)")
+    expect_normalized(page, page.locator("#id_que_u6"), "few (30€) - (Available 1)")
     page.get_by_role("checkbox", name="many (20€) - (Available 2)").check()
     page.get_by_role("checkbox", name="few (30€) - (Available 1)").check()
     expect(page.get_by_role("checkbox", name="all (10€)")).to_be_disabled()
@@ -245,15 +258,15 @@ def signup_first(live_server: Any, page: Any) -> None:
 def signup_check(live_server: Any, page: Any) -> None:
     # check values
     go_to(page, live_server, "/test/register")
-    expect(page.locator("#register_form")).to_contain_text("short description")
+    expect_normalized(page, page.locator("#register_form"), "short description")
     expect(page.get_by_role("textbox", name="short text")).to_have_value("aaaaaaaaaa")
-    expect(page.locator("#register_form")).to_contain_text("long description")
-    expect(page.locator("#register_form")).to_contain_text("text length: 10 / 10")
+    expect_normalized(page, page.locator("#register_form"), "long description")
+    expect_normalized(page, page.locator("#register_form"), "text length: 10 / 10")
     expect(page.get_by_role("textbox", name="long text")).to_have_value("BBBBBBBBBB")
-    expect(page.get_by_label("choice")).to_have_value("2")
-    expect(page.locator("#register_form")).to_contain_text("choice descrfree freemany manyfew few descr")
-    expect(page.get_by_label("rescrited")).to_have_value("5")
-    expect(page.locator("#register_form")).to_contain_text("rescrited descrall all descronly only")
+    expect(page.get_by_label("choice")).to_have_value("u2")
+    expect_normalized(page, page.locator("#register_form"), "choice descr free free many many few few descr")
+    expect(page.get_by_label("rescrited")).to_have_value("u5")
+    expect_normalized(page, page.locator("#register_form"), "rescrited descr all all descr only only")
     expect(page.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
     expect(page.get_by_role("checkbox", name="many (20€)")).to_be_checked()
     expect(page.get_by_role("checkbox", name="few (30€)")).to_be_checked()
@@ -262,16 +275,16 @@ def signup_check(live_server: Any, page: Any) -> None:
     expect(page.get_by_role("checkbox", name="few (30€)")).to_be_checked()
     page.get_by_text("multiple descrall all").click()
     page.get_by_text("many many descr").click()
-    expect(page.locator("#register_form")).to_contain_text("multiple descrall all descrmany many descrfew few")
-    expect(page.locator("#register_form")).to_contain_text("options: 2 / 2")
-    expect(page.locator("#register_form")).to_contain_text("mandatory (*)")
+    expect_normalized(page, page.locator("#register_form"), "multiple descr all all descr many many descr few few")
+    expect_normalized(page, page.locator("#register_form"), "options: 2 / 2")
+    expect_normalized(page, page.locator("#register_form"), "mandatory (*)")
     page.get_by_role("button", name="Continue").click()
-    expect(page.locator("#register_form")).to_contain_text("Please select a value")
-    expect(page.locator("#register_form")).to_contain_text("mandatory text")
+    expect_normalized(page, page.locator("#register_form"), "Please select a value")
+    expect_normalized(page, page.locator("#register_form"), "mandatory text")
     page.get_by_role("textbox", name="mandatory (*)").click()
     page.get_by_role("textbox", name="mandatory (*)").fill("ggggg")
     page.get_by_role("button", name="Continue").click()
-    expect(page.locator("#riepilogo")).to_contain_text("Your updated registration total is: 90€.")
+    expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 90€.")
     submit_confirm(page)
 
 
@@ -279,37 +292,37 @@ def orga_check(live_server: Any, page: Any) -> None:
     # check signups
     go_to(page, live_server, "/test/manage/registrations/")
     page.get_by_role("link", name="").click()
-    expect(page.locator("#id_q2")).to_have_value("aaaaaaaaaa")
+    expect(page.locator("#id_que_u2")).to_have_value("aaaaaaaaaa")
     expect(page.get_by_text("BBBBBBBBBB")).to_have_value("BBBBBBBBBB")
-    expect(page.locator("#id_q4")).to_have_value("2")
-    expect(page.locator("#id_q5")).to_have_value("5")
+    expect(page.locator("#id_que_u4")).to_have_value("u2")
+    expect(page.locator("#id_que_u5")).to_have_value("u5")
     expect(page.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
     expect(page.get_by_role("checkbox", name="many (20€)")).to_be_checked()
     expect(page.get_by_role("checkbox", name="few (30€)")).to_be_checked()
-    page.locator("#id_q7").click()
-    expect(page.locator("#lbl_id_q7")).to_contain_text("hidden")
-    page.locator("#id_q7").click()
-    page.locator("#id_q7").fill("dsadsadsa")
-    expect(page.locator("#main_form")).to_contain_text("hidden descr")
-    page.locator("#id_q8").click()
-    page.locator("#id_q8").fill("asdsadsa")
-    expect(page.locator("#id_q9")).to_have_value("ggggg")
+    page.locator("#id_que_u7").click()
+    expect_normalized(page, page.locator("#lbl_id_que_u7"), "hidden")
+    page.locator("#id_que_u7").click()
+    page.locator("#id_que_u7").fill("dsadsadsa")
+    expect_normalized(page, page.locator("#main_form"), "hidden descr")
+    page.locator("#id_que_u8").click()
+    page.locator("#id_que_u8").fill("asdsadsa")
+    expect(page.locator("#id_que_u9")).to_have_value("ggggg")
     submit_confirm(page)
     page.get_by_role("link", name="").click()
-    expect(page.locator("#id_q7")).to_have_value("dsadsadsa")
-    expect(page.locator("#id_q8")).to_have_value("asdsadsa")
+    expect(page.locator("#id_que_u7")).to_have_value("dsadsadsa")
+    expect(page.locator("#id_que_u8")).to_have_value("asdsadsa")
 
 
 def user_signup(live_server: Any, page: Any) -> None:
     # signup as user
     logout(page)
     login_user(page, live_server)
-    expect(page.locator("#one")).to_contain_text("Hurry: only 9 tickets available.")
+    expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available.")
     go_to(page, live_server, "/test/register/")
-    page.get_by_label("choice").select_option("2")
-    expect(page.get_by_label("choice")).to_have_value("2")
-    page.get_by_label("rescrited").select_option("4")
-    expect(page.get_by_label("rescrited")).to_have_value("4")
+    page.get_by_label("choice").select_option("u2")
+    expect(page.get_by_label("choice")).to_have_value("u2")
+    page.get_by_label("rescrited").select_option("u4")
+    expect(page.get_by_label("rescrited")).to_have_value("u4")
     expect(page.get_by_label("rescrited")).to_match_aria_snapshot(
         '- combobox "rescrited":\n  - option "all" [selected]\n  - option /only \\(\\d+€\\)/ [disabled]'
     )
@@ -320,8 +333,8 @@ def user_signup(live_server: Any, page: Any) -> None:
     page.get_by_role("textbox", name="mandatory (*)").click()
     page.get_by_role("textbox", name="mandatory (*)").fill("aaaa")
     page.get_by_label("rescrited").click()
-    expect(page.get_by_label("rescrited")).to_have_value("4")
+    expect(page.get_by_label("rescrited")).to_have_value("u4")
     page.get_by_text("rescrited descrall all").click()
     page.get_by_role("button", name="Continue").click()
-    expect(page.locator("#riepilogo")).to_contain_text("40€")
+    expect_normalized(page, page.locator("#riepilogo"), "40€")
     submit_confirm(page)
