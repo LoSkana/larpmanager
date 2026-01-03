@@ -45,11 +45,11 @@
                 <td>
                     {% if reg.payment %}
                         {% if reg.deadline > 0 %}
-                            <a href="{% url 'acc_reg' reg.uuid %}">
+                            <a href="{% url 'accounting_registration' reg.uuid %}">
                                 {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
                             {% trans "within" %} {{ reg.payment.deadline }} {% trans "days" %}</a>
                         {% else %}
-                            <a href="{% url 'acc_reg' reg.uuid %}">
+                            <a href="{% url 'accounting_registration' reg.uuid %}">
                                 {{ reg.payment.quota | format_decimal }}{{ currency_symbol }}
                                 {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                             {% endif %}

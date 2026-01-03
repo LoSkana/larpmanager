@@ -378,7 +378,7 @@ def _status_payment(register_text: str, run: Run, registration: Registration, co
     if registration.alert:
         # Handle wire transfer specific messaging
         if wire_created_invoices:
-            payment_url = reverse("acc_reg", args=[registration.uuid])
+            payment_url = reverse("accounting_registration", args=[registration.uuid])
             message = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{payment_url}'>{message}</a>"
             note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
@@ -386,7 +386,7 @@ def _status_payment(register_text: str, run: Run, registration: Registration, co
             return True
 
         # Handle general payment alert with deadline warning
-        payment_url = reverse("acc_reg", args=[registration.uuid])
+        payment_url = reverse("accounting_registration", args=[registration.uuid])
         message = _("to confirm it proceed with payment") + "."
         text_url = f", <a href='{payment_url}'>{message}</a>"
 
@@ -434,9 +434,6 @@ def registration_status(  # noqa: C901
     if registration is None:
         registration = registration_find(run, member, context)
         context["registration"] = registration
-
-    # Set run.reg for backward compatibility with templates that iterate over runs
-    run.reg = registration
 
     features = _get_features_map(run, context)
 

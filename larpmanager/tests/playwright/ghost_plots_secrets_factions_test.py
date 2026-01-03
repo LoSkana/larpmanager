@@ -177,7 +177,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="teeeeest").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-
+    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character 2 1 1 Test Teaser2 Test Text eefqq gggerwe first qweeerr",

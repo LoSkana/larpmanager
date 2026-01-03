@@ -1023,13 +1023,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             assigned_qs = assigned_qs.exclude(reg__id=self.instance.pk)
 
         # Create dict of assigned characters for fast lookup
-        assigned_chars = {rel.character_id: rel for rel in assigned_qs}
+        assigned_chars = {relation.character_id: relation for relation in assigned_qs}
 
         # Check each character against batch-fetched assignments
         for ch_id in character_ids:
             if ch_id in assigned_chars:
-                rel = assigned_chars[ch_id]
-                msg = f"Character '{rel.character}' already assigned to the player '{rel.reg.member}' for this event!"
+                relation = assigned_chars[ch_id]
+                msg = f"Character '{relation.character}' already assigned to the player '{relation.reg.member}' for this event!"
                 raise ValidationError(msg)
 
         return data
