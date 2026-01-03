@@ -25,7 +25,7 @@ from __future__ import annotations
 import logging
 import math
 import re
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -325,7 +325,7 @@ def update_invoice_gross_fee(
 
 def _prepare_gateway_form(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     invoice: PaymentInvoice,
     payment_amount: Decimal,
     payment_method_slug: str,
@@ -371,7 +371,7 @@ def get_payment_form(
     request: HttpRequest,
     form: Form,
     payment_type: str,
-    context: dict[str, Any],
+    context: dict,
     invoice_key: str | None = None,
 ) -> None:
     """Create or update payment invoice and prepare gateway-specific form.

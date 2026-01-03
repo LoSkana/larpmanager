@@ -19,8 +19,40 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 import os
 import subprocess
+import sys
 
 from django.core.management.base import CommandError
+
+
+def check_virtualenv() -> None:
+    """Ensure the command is running inside a virtual environment.
+
+    This function checks if the current Python interpreter is running inside
+    a virtual environment. If not, it raises an error unless running in a
+    CI/production environment (GitHub Actions, Docker, or other CI systems).
+    This helps prevent accidental execution of management commands outside
+    of the proper development environment.
+
+    Raises:
+        CommandError: If not in a virtual environment and not in CI/production.
+
+    """
+    # Skip check if running in CI or production environment
+    if os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true" or os.getenv("DOCKER") == "true":
+        return
+
+    # Check if running in a virtual environment
+    # Python sets sys.prefix != sys.base_prefix when in a virtualenv
+    in_virtualenv = hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix)
+
+    if not in_virtualenv:
+        msg = (
+            "This command must be run inside a virtual environment.\n"
+            "Please activate your virtual environment first:\n"
+            "  source venv/bin/activate  # Linux/Mac\n"
+            "  venv\\Scripts\\activate     # Windows"
+        )
+        raise CommandError(msg)
 
 
 def check_branch() -> None:

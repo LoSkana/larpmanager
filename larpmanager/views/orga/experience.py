@@ -55,9 +55,9 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
     """Edit a delivery for an event."""
-    return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, num)
+    return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, delivery_uuid)
 
 
 @login_required
@@ -113,13 +113,13 @@ def orga_px_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_abilities_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_abilities_edit(request: HttpRequest, event_slug: str, ability_uuid: str) -> HttpResponse:
     """Edit organization PX abilities with validation for ability types.
 
     Args:
         request: HTTP request object
         event_slug: Event slug identifier
-        num: Ability ID number for editing
+        ability_uuid: Ability UUID for editing
 
     Returns:
         HTTP response for ability editing or redirect
@@ -132,10 +132,10 @@ def orga_px_abilities_edit(request: HttpRequest, event_slug: str, num: int) -> H
     if not context["event"].get_elements(AbilityTypePx).exists():
         # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
-        return redirect("orga_px_ability_types_edit", event_slug=event_slug, num=0)
+        return redirect("orga_px_ability_types_edit", event_slug=event_slug, type_uuid="0")
 
     # Process ability editing with standard organization edit workflow
-    return orga_edit(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm, num)
+    return orga_edit(request, event_slug, "orga_px_abilities", OrgaAbilityPxForm, ability_uuid)
 
 
 @login_required
@@ -151,9 +151,9 @@ def orga_px_ability_types(request: HttpRequest, event_slug: str) -> HttpResponse
 
 
 @login_required
-def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_ability_types_edit(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
     """Edit ability type for PX system."""
-    return orga_edit(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm, num)
+    return orga_edit(request, event_slug, "orga_px_ability_types", OrgaAbilityTypePxForm, type_uuid)
 
 
 @login_required
@@ -173,22 +173,22 @@ def orga_px_ability_templates(request: HttpRequest, event_slug: str) -> HttpResp
 
 
 @login_required
-def orga_px_ability_templates_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_ability_templates_edit(request: HttpRequest, event_slug: str, template_uuid: str) -> HttpResponse:
     """Edit a specific rule for an event."""
-    return orga_edit(request, event_slug, "orga_px_ability_templates", OrgaAbilityTemplatePxForm, num)
+    return orga_edit(request, event_slug, "orga_px_ability_templates", OrgaAbilityTemplatePxForm, template_uuid)
 
 
 @login_required
-def orga_px_rules_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
     """Edit a specific rule for an event."""
-    return orga_edit(request, event_slug, "orga_px_rules", OrgaRulePxForm, num)
+    return orga_edit(request, event_slug, "orga_px_rules", OrgaRulePxForm, rule_uuid)
 
 
 @login_required
 def orga_px_rules_order(
     request: HttpRequest,
     event_slug: str,
-    num: int,
+    rule_uuid: str,
     order: int,
 ) -> HttpResponse:
     """Reorder PX rules for an event."""
@@ -196,7 +196,7 @@ def orga_px_rules_order(
     context = check_event_context(request, event_slug, "orga_px_rules")
 
     # Exchange rule order in database
-    exchange_order(context, RulePx, num, order)
+    exchange_order(context, RulePx, rule_uuid, order)
 
     return redirect("orga_px_rules", event_slug=context["run"].get_slug())
 
@@ -214,16 +214,16 @@ def orga_px_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_px_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Edit experience modifier for an event."""
-    return orga_edit(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm, num)
+    return orga_edit(request, event_slug, "orga_px_modifiers", OrgaModifierPxForm, modifier_uuid)
 
 
 @login_required
 def orga_px_modifiers_order(
     request: HttpRequest,
     event_slug: str,
-    num: int,
+    modifier_uuid: str,
     order: int,
 ) -> HttpResponse:
     """Reorder experience modifiers in the organizer interface."""
@@ -231,6 +231,6 @@ def orga_px_modifiers_order(
     context = check_event_context(request, event_slug, "orga_px_modifiers")
 
     # Exchange modifier order
-    exchange_order(context, ModifierPx, num, order)
+    exchange_order(context, ModifierPx, modifier_uuid, order)
 
     return redirect("orga_px_modifiers", event_slug=context["run"].get_slug())

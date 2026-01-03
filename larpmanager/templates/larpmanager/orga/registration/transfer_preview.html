@@ -55,8 +55,10 @@
         <form method="post"
               action="{% url 'orga_registration_transfer_confirm' event_slug=run.get_slug %}">
             {% csrf_token %}
-            <input type="hidden" name="registration_id" value="{{ registration.id }}">
-            <input type="hidden" name="target_run_id" value="{{ target_run.id }}">
+            <input type="hidden"
+                   name="registration_uuid"
+                   value="{{ registration.uuid }}">
+            <input type="hidden" name="target_run_uuid" value="{{ target_run.uuid }}">
             <input type="hidden" name="move_registration" value="true">
             <div class="form-group">
                 <button type="submit" class="btn btn-danger">{% trans "Transfer" %}</button>

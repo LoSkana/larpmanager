@@ -17,11 +17,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: User organization profile modification.
+Verifies user profile editing functionality including gender selection, birth place,
+document type, and dietary preferences both in organization and user contexts.
+"""
+
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -39,7 +46,7 @@ def test_exe_profile(pw_page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/profile")
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("textbox", name="Name (*)", exact=True).click()
     page.get_by_role("textbox", name="Name (*)", exact=True).press("End")
     page.get_by_role("textbox", name="Name (*)", exact=True).fill("Orga")

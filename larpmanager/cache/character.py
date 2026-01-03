@@ -152,6 +152,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
         # Build character data and search for player information
         character_data = character.show(context["run"])
+        # Add ID to cache data for internal lookups (not exposed to frontend)
+        character_data["id"] = character.id
         character_data["fields"] = {}
         search_player(character, character_data, context)
 
@@ -378,7 +380,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         result["factions_typ"][FactionType.PRIM] = [0]
 
     # Process real factions from the event
-    for faction in context["event"].get_elements(Faction).order_by("number"):
+    for faction in context["event"].get_elements(Faction).order_by("order"):
         # Get faction display data
         faction_data = faction.show_red()
         faction_data["characters"] = []
@@ -477,6 +479,8 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
     # Process each assigned trait and link to character
     for assignment_trait in assignment_traits_query.select_related("trait", "trait__quest", "trait__quest__typ"):
         trait_data = assignment_trait.trait.show()
+        # Add ID to cache data for internal lookups (not exposed to frontend)
+        trait_data["id"] = assignment_trait.trait.id
         trait_data["quest"] = assignment_trait.trait.quest.number
         trait_data["typ"] = assignment_trait.trait.quest.typ.number
         trait_data["traits"] = trait_relationships[assignment_trait.trait.number]
@@ -638,6 +642,9 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
     # Generate character display data for the specific run
     character_display_data = instance.show(run)
 
+    # Add ID to cache data for internal lookups (not exposed to frontend)
+    character_display_data["id"] = instance.id
+
     # Update character fields with the generated data
     update_character_fields(instance, character_display_data)
 
@@ -655,6 +662,8 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 def update_event_cache_all_faction(instance: Faction, res: dict[str, dict]) -> None:
     """Update or add faction data in the cache result dictionary."""
     faction_data = instance.show()
+    # Add ID to cache data for internal lookups (not exposed to frontend)
+    faction_data["id"] = instance.id
     if instance.number in res["factions"]:
         res["factions"][instance.number].update(faction_data)
     else:

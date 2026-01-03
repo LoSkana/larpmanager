@@ -268,7 +268,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 "role": instance.name,
                 "event": instance.event,
             }
-            url = get_url(f"{instance.event.slug}/1/manage/", instance.event.association)
+            url = get_url(f"{instance.event.slug}/manage/", instance.event.association)
             body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 
@@ -315,7 +315,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     email_subject = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
 
     # Start email body with the user's personal discount code
-    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
+    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.uuid}
 
     # Add instructions for sharing the code and friend's discount amount
     email_body += (

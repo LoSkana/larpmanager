@@ -17,15 +17,30 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from typing import Any
 
 from cryptography.fernet import Fernet
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Max
 
-from larpmanager.models.access import AssociationPermission
-from larpmanager.models.association import Association
+from larpmanager.cache.association import clear_association_cache
+from larpmanager.cache.association_text import clear_association_text_cache_on_delete
+from larpmanager.cache.association_translation import clear_association_translation_cache
+from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.feature import reset_association_features
+from larpmanager.cache.links import reset_event_links
+from larpmanager.cache.permission import clear_index_permission_cache
+from larpmanager.cache.role import remove_association_role_cache
+from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
+from larpmanager.models.access import AssociationPermission, AssociationRole
+from larpmanager.models.association import Association, AssociationText
+from larpmanager.models.event import Run
+from larpmanager.models.member import Membership
+from larpmanager.utils.services.event import reset_all_run
 
 
 def generate_association_encryption_key(association: Any) -> None:
@@ -135,3 +150,45 @@ def apply_skin_features_to_association(association: Association) -> None:
 
     # Schedule the feature update to run after the current transaction commits
     transaction.on_commit(update_features)
+
+
+def _reset_all_association(association_id: int, association_slug: str) -> None:
+    """Reset all cache of one association."""
+    # Clear association overall cache
+    clear_association_cache(association_slug)
+
+    # Clear association features cache
+    reset_association_features(association_id)
+
+    # Clear association translation caches for all languages
+    for language_code, _language_name in settings.LANGUAGES:
+        clear_association_translation_cache(association_id, language_code)
+
+    # Clear association config cache
+    association_obj = Association.objects.get(id=association_id)
+    reset_element_configs(association_obj)
+
+    # Clear permission index caches (for both association and event)
+    clear_index_permission_cache("association")
+    clear_index_permission_cache("event")
+
+    # Clear global WWYLTD caches (guides, tutorials, features)
+    reset_guides_cache()
+    reset_tutorials_cache()
+    reset_features_cache()
+
+    # Clear association text caches for all AssociationText instances
+    for assoc_text in AssociationText.objects.filter(association_id=association_id):
+        clear_association_text_cache_on_delete(assoc_text)
+
+    # Clear association role caches
+    for assoc_role_id in AssociationRole.objects.filter(association_id=association_id).values_list("id", flat=True):
+        remove_association_role_cache(assoc_role_id)
+
+    # Clear event links for all members of this association
+    for member_id in Membership.objects.filter(association__id=association_id).values_list("member_id", flat=True):
+        reset_event_links(member_id, association_id)
+
+    # Clear all events' caches for this association
+    for run in Run.objects.filter(event__association_id=association_id):
+        reset_all_run(run.event, run)

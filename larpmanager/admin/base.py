@@ -158,7 +158,7 @@ class LogAdmin(DefModelAdmin):
     """Admin interface for Log model."""
 
     list_display: ClassVar[tuple] = ("member", "cls", "eid", "dl")
-    search_fields = ("member", "cls", "dl")
+    search_fields: ClassVar[tuple] = ("id", "member", "cls", "dl")
     autocomplete_fields: ClassVar[list] = ["member"]
 
 
@@ -167,7 +167,7 @@ class FeatureModuleAdmin(DefModelAdmin):
     """Admin interface for FeatureModule model."""
 
     list_display = ("name", "order")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 class FeatureResource(resources.ModelResource):
@@ -194,7 +194,7 @@ class FeatureAdmin(DefModelAdmin):
     )
     list_filter: ClassVar[tuple] = ("module",)
     autocomplete_fields: ClassVar[list] = ["module", "associations", "events"]
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
     resource_classes: ClassVar[list] = [FeatureResource]
 
 
@@ -203,4 +203,4 @@ class PaymentMethodAdmin(DefModelAdmin):
     """Admin interface for PaymentMethod model."""
 
     list_display = ("name", "slug")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]

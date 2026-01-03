@@ -88,7 +88,7 @@ cleanup_test_environment() {
 }
 
 # Configuration
-WORKERS="${1:-6}"
+WORKERS="${1:-4}"
 export WORKERS
 
 # Ensure playwright browsers are installed

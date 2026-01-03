@@ -478,6 +478,9 @@ msgstr ""
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
 
+msgid "Enter a valid date in DD-MM format"
+msgstr ""
+
 msgid "Months free quota"
 msgstr ""
 
@@ -745,6 +748,9 @@ msgstr ""
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
 
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
 msgid "already used"
 msgstr ""
 
@@ -922,9 +928,6 @@ msgstr ""
 msgid ""
 "If checked, all registrations are displayed in a single table rather than "
 "being separated by type"
-msgstr ""
-
-msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 
 msgid "Allowed"
@@ -1161,7 +1164,9 @@ msgstr ""
 msgid "Maximum number"
 msgstr ""
 
-msgid "Maximum number of characters the player can create"
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
 msgstr ""
 
 msgid "Approval"
@@ -1680,6 +1685,18 @@ msgstr ""
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
+msgid "Inventories"
+msgstr ""
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+
+msgid "Pool type"
+msgstr ""
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr ""
+
 msgid "The name of our hobby, four letters"
 msgstr ""
 
@@ -1898,9 +1915,6 @@ msgid "Manage event signups"
 msgstr ""
 
 msgid "Registration"
-msgstr ""
-
-msgid "Details"
 msgstr ""
 
 msgid "Main"
@@ -2836,6 +2850,9 @@ msgstr ""
 msgid "Request"
 msgstr ""
 
+msgid "Details"
+msgstr ""
+
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "
 "and full bank details, paypal link, etc)"
@@ -3390,6 +3407,21 @@ msgstr ""
 msgid "Photo"
 msgstr ""
 
+msgid "Working"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "High"
+msgstr ""
+
 msgid "How can we contact you"
 msgstr ""
 
@@ -3430,12 +3462,6 @@ msgid "Driver's License"
 msgstr ""
 
 msgid "Passport"
-msgstr ""
-
-msgid "Public UUID"
-msgstr ""
-
-msgid "Unique identifier for public profile URLs"
 msgstr ""
 
 msgid "Navigation language"
@@ -4434,9 +4460,6 @@ msgstr ""
 msgid "And that is all"
 msgstr ""
 
-msgid "Done"
-msgstr ""
-
 msgid "Tax code verification"
 msgstr ""
 
@@ -4602,6 +4625,9 @@ msgid "Questions"
 msgstr ""
 
 msgid "Write here questions about your character directly to the authors"
+msgstr ""
+
+msgid "View Details"
 msgstr ""
 
 msgid "Download complete sheet"
@@ -5873,12 +5899,6 @@ msgstr ""
 msgid "Passages made"
 msgstr ""
 
-msgid "Blog"
-msgstr ""
-
-msgid "Latest articles and updates from LarpManager"
-msgstr ""
-
 msgid ""
 "The larpmanager has a over 100 different features. There is one for every "
 "single aspect of event organising: signups, accounting, writing, logistics"
@@ -6836,7 +6856,7 @@ msgstr ""
 msgid "This page summarises the available questions of the character form"
 msgstr ""
 
-msgid "Go to the form for"
+msgid "Configure form"
 msgstr ""
 
 msgid "Modifiable"
@@ -6894,6 +6914,60 @@ msgid "Pdf bulk"
 msgstr ""
 
 msgid "This page allows you to select items to bulk download"
+msgstr ""
+
+msgid "Character Inventories"
+msgstr ""
+
+msgid "This page summarizes the character inventories"
+msgstr ""
+
+msgid "Inventory"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Character Inventory"
+msgstr ""
+
+msgid "Currencies & Materials"
+msgstr ""
+
+msgid "Transfer"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Add from NPC"
+msgstr ""
+
+msgid "Transfer Log"
+msgstr ""
+
+msgid "Actor"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Resource"
+msgstr ""
+
+msgid "No transfers yet."
+msgstr ""
+
+msgid "Character Inventory Pool Types"
+msgstr ""
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+
+msgid "Pool"
 msgstr ""
 
 msgid "Copy"
@@ -7125,9 +7199,6 @@ msgstr ""
 msgid "email"
 msgstr ""
 
-msgid "unique code"
-msgstr ""
-
 msgid "age"
 msgstr ""
 
@@ -7189,12 +7260,6 @@ msgstr ""
 msgid "Sum of payments received through"
 msgstr ""
 
-msgid "Unique registration code, used for payment checks"
-msgstr ""
-
-msgid "Transfer"
-msgstr ""
-
 msgid "Recompute"
 msgstr ""
 
@@ -7224,6 +7289,9 @@ msgstr ""
 msgid "Direct link"
 msgstr ""
 
+msgid "Signup link"
+msgstr ""
+
 msgid "Transfer registration"
 msgstr ""
 
@@ -7237,12 +7305,6 @@ msgid "Transfer preview"
 msgstr ""
 
 msgid "Review the transfer before confirming"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "To"
 msgstr ""
 
 msgid "Errors"
@@ -7675,9 +7737,6 @@ msgid "Tipo"
 msgstr ""
 
 msgid "Selectable"
-msgstr ""
-
-msgid "View"
 msgstr ""
 
 msgid "Handout template"
@@ -8276,6 +8335,12 @@ msgstr ""
 msgid "Now you can set the player editing settings"
 msgstr ""
 
+msgid "Character inventory"
+msgstr ""
+
+msgid "Allows characters to have inventories"
+msgstr ""
+
 msgid "Organisation tax"
 msgstr ""
 
@@ -8847,6 +8912,15 @@ msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
 
 msgid "Manage ability templates"
+msgstr ""
+
+msgid "Manage character inventories and their items"
+msgstr ""
+
+msgid "Pool Types"
+msgstr ""
+
+msgid "Manage character inventory pool types"
 msgstr ""
 
 msgid "Communications"

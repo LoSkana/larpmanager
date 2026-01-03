@@ -55,7 +55,7 @@ from larpmanager.models.writing import (
 )
 
 if TYPE_CHECKING:
-    from larpmanager.forms.base import MyForm
+    from larpmanager.forms.base import BaseModelForm
 
 # defer script loaded by form
 
@@ -211,7 +211,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return _(obj.name)
 
 
-def prepare_permissions_role(form: MyForm, typ: type) -> None:
+def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
@@ -298,7 +298,7 @@ def prepare_permissions_role(form: MyForm, typ: type) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance: EventRole | AssociationRole, form: MyForm) -> None:
+def save_permissions_role(instance: EventRole | AssociationRole, form: BaseModelForm) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -511,14 +511,14 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
     if past:
         reference_date = timezone.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
-    choices.extend([(run.id, str(run)) for run in runs])
+    choices.extend([(run.uuid, str(run)) for run in runs])
 
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
     self.fields["run"].choices = choices
     if "run" in self.params:
-        self.initial["run"] = self.params["run"].id
+        self.initial["run"] = self.params["run"].uuid
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):

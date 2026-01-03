@@ -876,13 +876,13 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/factions.html", context)
 
 
-def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
+def faction(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Display detailed information for a specific faction.
 
     Args:
         request: HTTP request object
         event_slug: Event slug string
-        faction_id: Faction identifier string
+        faction_uuid: Faction UUID
 
     Returns:
         HttpResponse: Rendered faction detail page
@@ -893,33 +893,36 @@ def faction(request: HttpRequest, event_slug: str, faction_id: Any) -> Any:
 
     get_event_cache_all(context)
 
-    typ = None
-    if faction_id in context["factions"]:
-        context["faction"] = context["factions"][faction_id]
-        typ = context["faction"]["typ"]
+    faction = None
+    for faction_data in context["factions"].values():
+        if faction_uuid == faction_data.get("uuid"):
+            faction = faction_data
+            break
 
-    if "faction" not in context or typ == "g" or "id" not in context["faction"]:
+    if not faction or faction["typ"] == FactionType.SECRET:
         msg = "Faction does not exist"
         raise Http404(msg)
+
+    context["faction"] = faction
 
     context["fact"] = get_writing_element_fields(
         context,
         "faction",
         QuestionApplicable.FACTION,
-        context["faction"]["id"],
+        faction["id"],
         only_visible=True,
     )
 
     return render(request, "larpmanager/event/faction.html", context)
 
 
-def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = None) -> HttpResponse:
+def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = None) -> HttpResponse:
     """Display quest types or quests for a specific type in an event.
 
     Args:
         request: The HTTP request object
         event_slug: Event identifier string
-        quest_type_id: Optional quest type number. If None, shows all quest types
+        quest_type_uuid: Optional quest type number. If None, shows all quest types
 
     Returns:
         HttpResponse: Rendered template with quest types or specific quests
@@ -930,12 +933,12 @@ def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = No
     check_visibility(context, "quest", _("Quest"))
 
     # If no quest type specified, show all quest types for the event
-    if not quest_type_id:
+    if not quest_type_uuid:
         context["list"] = QuestType.objects.filter(event=context["event"]).order_by("number").prefetch_related("quests")
         return render(request, "larpmanager/event/quest_types.html", context)
 
     # Get specific quest type and build list of visible quests
-    get_element(context, quest_type_id, "quest_type", QuestType, by_number=True)
+    get_element(context, quest_type_uuid, "quest_type", QuestType)
     context["list"] = []
 
     # Filter quests by event, visibility, and type, then add complete quest data
@@ -949,13 +952,13 @@ def quests(request: HttpRequest, event_slug: str, quest_type_id: int | None = No
     return render(request, "larpmanager/event/quests.html", context)
 
 
-def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
+def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpResponse:
     """Display individual quest details and associated traits.
 
     Args:
         request: HTTP request object
         event_slug: Event slug
-        quest_id: Quest number
+        quest_uuid: Quest uuid
 
     Returns:
         HttpResponse: Rendered quest template
@@ -964,7 +967,7 @@ def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
     context = get_event_context(request, event_slug, include_status=True)
     check_visibility(context, "quest", _("Quest"))
 
-    get_element(context, quest_id, "quest", Quest, by_number=True)
+    get_element(context, quest_uuid, "quest", Quest)
 
     # Reload quest with prefetched traits
     context["quest"] = Quest.objects.prefetch_related("traits").get(pk=context["quest"].id)
@@ -978,7 +981,7 @@ def quest(request: HttpRequest, event_slug: str, quest_id: Any) -> Any:
     )
 
     traits = []
-    for el in context["quest"].traits.all():
+    for el in context["quest"].traits.order_by("number"):
         res = get_writing_element_fields(context, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
         res.update(el.show())
         traits.append(res)

@@ -24,7 +24,7 @@ from pathlib import Path
 
 from django.core.management import BaseCommand, call_command
 
-from larpmanager.management.commands.utils import check_branch
+from larpmanager.management.commands.utils import check_branch, check_virtualenv
 
 
 class Command(BaseCommand):
@@ -78,6 +78,9 @@ class Command(BaseCommand):
             subprocess.CalledProcessError: If database dump or cleaning operations fail
 
         """
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
+
         # Verify we're on the correct branch before proceeding
         check_branch()
 

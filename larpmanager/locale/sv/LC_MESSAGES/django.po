@@ -50,6 +50,9 @@ msgstr "Slut"
 msgid "Fee"
 msgstr "Kommissionen"
 
+msgid "Low"
+msgstr "Låg"
+
 msgid "NPC"
 msgstr "NPC"
 
@@ -85,9 +88,6 @@ msgstr "Område"
 
 msgid "Band"
 msgstr "Fascia"
-
-msgid "Blog"
-msgstr "Blogg"
 
 msgid "Body"
 msgstr "Kropp"
@@ -142,6 +142,9 @@ msgstr "Hjälp"
 
 msgid "Hide"
 msgstr "Dölj"
+
+msgid "High"
+msgstr "Hög"
 
 msgid "Home"
 msgstr "Hem"
@@ -208,6 +211,9 @@ msgstr "Betalade"
 
 msgid "Plot"
 msgstr "Tomt"
+
+msgid "Pool"
+msgstr "Pool"
 
 msgid "Port"
 msgstr "Anslutningsport"
@@ -286,6 +292,9 @@ msgstr "gåva"
 
 msgid "used"
 msgstr "används"
+
+msgid "Actor"
+msgstr "Skådespelare"
 
 msgid "Album"
 msgstr "Album"
@@ -579,6 +588,9 @@ msgstr "Mark"
 msgid "Master"
 msgstr "Fader"
 
+msgid "Medium"
+msgstr "Medium"
+
 msgid "Member"
 msgstr "Ledamot"
 
@@ -614,6 +626,9 @@ msgstr "Uppdrag"
 
 msgid "Quotas"
 msgstr "Citat"
+
+msgid "Reason"
+msgstr "Anledning"
 
 msgid "Refund"
 msgstr "Återbetalning"
@@ -945,6 +960,9 @@ msgstr "Webbplats"
 msgid "Welcome"
 msgstr "Välkommen"
 
+msgid "Working"
+msgstr "Arbetar"
+
 msgid "Writing"
 msgstr "Skrivande"
 
@@ -1185,6 +1203,9 @@ msgstr "Registrera"
 msgid "Reminder"
 msgstr "Påminnelse"
 
+msgid "Resource"
+msgstr "Resurs"
+
 msgid "Returned"
 msgstr "Återvände"
 
@@ -1323,6 +1344,9 @@ msgstr "Viktigt"
 msgid "Interface"
 msgstr "Gränssnitt"
 
+msgid "Inventory"
+msgstr "Inventarieförteckning"
+
 msgid "Load list"
 msgstr "Ladda lista"
 
@@ -1349,6 +1373,9 @@ msgstr "Drift"
 
 msgid "Organizer"
 msgstr "Organisatör"
+
+msgid "Pool type"
+msgstr "Typ av pool"
 
 msgid "Portraits"
 msgstr "Porträtt"
@@ -1581,6 +1608,9 @@ msgstr "Procentuell andel"
 msgid "Play Again"
 msgstr "Spela igen"
 
+msgid "Pool Types"
+msgstr "Pooltyper"
+
 msgid "Preference"
 msgstr "Preferens"
 
@@ -1764,6 +1794,9 @@ msgstr "Information om"
 msgid "Installment"
 msgstr "Avbetalning"
 
+msgid "Inventories"
+msgstr "Varulager"
+
 msgid "Last change"
 msgstr "Senast ändrad"
 
@@ -1812,9 +1845,6 @@ msgstr "Progression"
 msgid "Provisional"
 msgstr "Provisorisk"
 
-msgid "Public UUID"
-msgstr "Publik UUID"
-
 msgid "Publication"
 msgstr "Publikation"
 
@@ -1850,6 +1880,9 @@ msgstr "Förkorta URL"
 
 msgid "Show closed"
 msgstr "Visa stängd"
+
+msgid "Signup link"
+msgstr "Länk för registrering"
 
 msgid "Simple list"
 msgstr "Enkel lista"
@@ -1899,14 +1932,14 @@ msgstr "ranking"
 msgid "text length"
 msgstr "textlängd"
 
-msgid "unique code"
-msgstr "unik kod"
-
 msgid "Ability type"
 msgstr "Typ av färdighet"
 
 msgid "Achievements"
 msgstr "Prestationer"
+
+msgid "Add from NPC"
+msgstr "Lägg till från NPC"
 
 msgid "Add prologue"
 msgstr "Lägg till prolog"
@@ -2091,6 +2124,9 @@ msgstr "Totalt antal"
 msgid "Transactions"
 msgstr "Transaktioner"
 
+msgid "Transfer Log"
+msgstr "Överföringslogg"
+
 msgid "Translations"
 msgstr "Översättningar"
 
@@ -2108,6 +2144,9 @@ msgstr "Moms (biljett)"
 
 msgid "Verification"
 msgstr "Verifiering"
+
+msgid "View Details"
+msgstr "Visa detaljer"
 
 msgid "Waiting list"
 msgstr "Väntar"
@@ -2377,6 +2416,9 @@ msgstr "Samla för"
 
 msgid "Communications"
 msgstr "Kommunikation"
+
+msgid "Configure form"
+msgstr "Konfigurera formulär"
 
 msgid "Credit balance"
 msgstr "Kreditbalans"
@@ -3020,6 +3062,9 @@ msgstr "Månader fri kvot"
 msgid "Move to container"
 msgstr "Flytta till container"
 
+msgid "No transfers yet."
+msgstr "Inga överföringar ännu."
+
 msgid "One-Time Contents"
 msgstr "Innehåll av engångskaraktär"
 
@@ -3143,9 +3188,6 @@ msgstr "Elektronisk faktura"
 msgid "Enable preferences"
 msgstr "Aktivera inställningar"
 
-msgid "Go to the form for"
-msgstr "Gå till formuläret för"
-
 msgid "Hide not available"
 msgstr "Dölj inte tillgängligt"
 
@@ -3256,6 +3298,12 @@ msgstr "Tilldelad karaktär!"
 
 msgid "Change registration"
 msgstr "Redigera post"
+
+msgid "Character Inventory"
+msgstr "Karaktärsinventering"
+
+msgid "Character inventory"
+msgstr "Karaktärsinventering"
 
 msgid "Character not found"
 msgstr "Tecknet hittades inte"
@@ -3553,6 +3601,9 @@ msgstr "Godkänna återbetalning"
 msgid "Assigned staff member"
 msgstr "Utsedd tjänsteman"
 
+msgid "Character Inventories"
+msgstr "Karaktärsinventeringar"
+
 msgid "Character not allowed"
 msgstr "Karaktär inte tillåten"
 
@@ -3724,6 +3775,9 @@ msgstr "Avslutad och arkiverad"
 
 msgid "Confirm password reset"
 msgstr "Återställning av lösenord bekräftad"
+
+msgid "Currencies & Materials"
+msgstr "Valutor & material"
 
 msgid "Customised mail server"
 msgstr "Skräddarsydd e-postserver"
@@ -4526,6 +4580,9 @@ msgstr "Ditt konto är nu aktivt"
 msgid "check excessive relationships"
 msgstr "kontrollera extra rapporter"
 
+msgid "Character Inventory Pool Types"
+msgstr "Pooltyper för karaktärsinventering"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Fullständig betalning för %(event)s"
@@ -4860,6 +4917,9 @@ msgstr "Försening i registrering av organisation"
 msgid "Empty relationship check (no text)"
 msgstr "Kontroll av tom rapport (ingen text)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Ange ett giltigt datum i DD-MM-format"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Funktionen %(name)s är redan aktiverad"
@@ -5127,6 +5187,9 @@ msgstr "Du har tilldelats en prestation"
 msgid "Added to the bottom of all mails sent"
 msgstr "Läggs till längst ner i alla utskickade mail"
 
+msgid "Allows characters to have inventories"
+msgstr "Tillåter karaktärer att ha inventarier"
+
 msgid "Check the validity of the fiscal code"
 msgstr "Kontrollera att skattekoden är giltig"
 
@@ -5144,6 +5207,9 @@ msgstr "Plats - hyra, gas, övernattningar"
 
 msgid "Manage answers for workshop questions"
 msgstr "Hantera svar på frågor från workshops"
+
+msgid "Manage character inventory pool types"
+msgstr "Hantera pooltyper för karaktärsinventarier"
 
 msgid "Manage expense items for contributors"
 msgstr "Hantera utgiftsposter för bidragsgivare"
@@ -5486,9 +5552,6 @@ msgstr "Det finns uppdrag utan egenskaper: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Denna sida sammanfattar de uppladdade fotoalbumen"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Unik identifierare för offentliga profil-URL:er"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Du utesluter (inget av dessa filter)"
 
@@ -5715,8 +5778,8 @@ msgstr "Om du inte ser någon användare, be dem att gå in på"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Om du behöver hjälp är du välkommen att höra av dig till oss"
 
-msgid "Latest articles and updates from LarpManager"
-msgstr "Senaste artiklar och uppdateringar från LarpManager"
+msgid "Manage character inventories and their items"
+msgstr "Hantera karaktärernas inventarier och deras föremål"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Hantera fakturor och betalningar och godkänna dem"
@@ -5907,6 +5970,9 @@ msgstr "På den här sidan visas e-postlistorna för prenumeranterna"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Denna sida sammanfattar px-leverans till tecken"
+
+msgid "This page summarizes the character inventories"
+msgstr "På denna sida sammanfattas karaktärsinventeringarna"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt belopp som innehållits för överföringsprovisioner"
@@ -6129,9 +6195,6 @@ msgstr "Denna funktion är tillgänglig för icke-väntande biljetter"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleransen överskriden, fortsätt med annulleringen"
 
-msgid "Unique registration code, used for payment checks"
-msgstr "Unik registreringskod, används för betalningskontroller"
-
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderar (minst ett av) dessa filter"
 
@@ -6165,9 +6228,6 @@ msgstr "Hantera konfigurationen av de aktiverade funktionerna"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Hantera framstegsstegen för skrivelementen"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maximalt antal karaktärer som spelaren kan skapa"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i förhållandet (destination)"
 
@@ -6189,6 +6249,9 @@ msgstr "Anmälan till evenemanget avbröts"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Det finns skrivfält utan alternativ: %(list)s"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "På den här sidan kan du lägga till eller redigera en ci pooltyp"
 
 msgid "This page summarises the organization's volunteers"
 msgstr "Denna sida sammanfattar organisationens volontärer"
@@ -6609,6 +6672,10 @@ msgstr "Välj de grupper som du vill filtrera tecknen på"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Det teckenfält av beräknad typ som kommer att uppdateras"
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+"På den här sidan kan du lägga till eller redigera en karaktärsinventering"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Denna sida visar all redovisningsinformation för medlemmen"
@@ -7446,11 +7513,6 @@ msgstr ""
 "Här kan du växla mellan administrationssidor och sidor som vänder sig till "
 "användarna"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Om markerad, lägger till en unik kod till alla registreringar för att "
-"referera till dem"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Om du har ett separat avtal med oss kan du bortse från detta "
@@ -7474,6 +7536,11 @@ msgstr ""
 msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
 "På den här sidan sammanfattas de regler som tillämpas på de beräknade fälten"
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+"På den här sidan sammanfattas de typer av pooler som en karaktärsinventering"
+" har"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -7531,6 +7598,12 @@ msgid ""
 "Registrations for this event are not open yet, but you can pre-register"
 msgstr ""
 "Anmälan till detta evenemang är inte öppen ännu, men du kan föranmäla dig"
+
+msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Välj ett giltigt val. Det här valet är inte ett av de tillgängliga "
+"alternativen."
 
 msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
@@ -8488,6 +8561,13 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I händelsen <b>%(event)s</b> tilldelades du karaktären: <b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximalt antal karaktärer som spelaren kan skapa (standard=0, ingen skapelse"
+" tillåten)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

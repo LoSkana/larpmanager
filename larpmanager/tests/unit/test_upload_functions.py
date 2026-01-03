@@ -20,11 +20,14 @@
 
 """Tests for upload utility functions"""
 
+import pytest
+
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.io.upload import element_load
 
 
+@pytest.mark.django_db(transaction=True)
 class TestUploadFunctions(BaseTestCase):
     """Test cases for upload utility functions"""
 
@@ -54,7 +57,7 @@ class TestUploadFunctions(BaseTestCase):
         self.assertIn("Test Character", result)
 
         # Verify character exists in the event
-        character = Character.objects.get(name="Test Character")
+        character = Character.objects.get(name="Test Character", event=event)
         self.assertEqual(character.event, event)
 
     def test_element_load_character_with_campaign(self) -> None:

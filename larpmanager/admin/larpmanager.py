@@ -63,7 +63,7 @@ class LarpManagerFaqTypeAdmin(DefModelAdmin):
     """Admin interface for LarpManagerFaqType model."""
 
     list_display = ("name", "order")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(LarpManagerTutorial)
@@ -101,7 +101,7 @@ class LarpManagerHighlightAdmin(DefModelAdmin):
     """Admin interface for LarpManagerHighlight model."""
 
     list_display = ("info", "show_reduced")
-    search_fields: ClassVar[list] = ["info"]
+    search_fields: ClassVar[list] = ["id", "info"]
 
 
 @admin.register(LarpManagerShowcase)
@@ -147,7 +147,8 @@ class LMReviewAdmin(DefModelAdmin):
 class LarpManagerTicketAdmin(DefModelAdmin):
     """Admin interface for LarpManagerTicket model."""
 
-    list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb")
+    list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb", "uuid")
+    search_fields: ClassVar[list] = ["id", "uuid"]
 
     @staticmethod
     def content_red(instance: LarpManagerTicket) -> str:

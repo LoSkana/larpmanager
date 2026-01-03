@@ -43,7 +43,7 @@ from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, MyForm
+from larpmanager.forms.base import BaseAccForm, BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     AssociationMemberS2WidgetMulti,
@@ -461,7 +461,7 @@ class ResidenceField(forms.MultiValueField):
         return self.compress(cleaned_data)
 
 
-class BaseProfileForm(MyForm):
+class BaseProfileForm(BaseModelForm):
     """Form for BaseProfile."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -711,7 +711,7 @@ class MembershipResponseForm(forms.Form):
     )
 
 
-class ExeVolunteerRegistryForm(MyForm):
+class ExeVolunteerRegistryForm(BaseModelForm):
     """Form for ExeVolunteerRegistry."""
 
     page_title = _("Volounteer data")
@@ -771,7 +771,7 @@ class ExeMemberForm(BaseProfileForm):
             self.fields["profile"].required = False
 
 
-class ExeMembershipForm(MyForm):
+class ExeMembershipForm(BaseModelForm):
     """Form for ExeMembership."""
 
     page_info = _("Manage member membership status")
@@ -932,7 +932,7 @@ class ExeMembershipDocumentForm(forms.Form):
         return card_number
 
 
-class ExeBadgeForm(MyForm):
+class ExeBadgeForm(BaseModelForm):
     """Form for ExeBadge."""
 
     page_info = _("Manage badges and user assignments")
@@ -953,7 +953,7 @@ class ExeBadgeForm(MyForm):
         self.fields["members"].widget.set_association_id(self.params["association_id"])
 
 
-class ExeProfileForm(MyForm):
+class ExeProfileForm(BaseModelForm):
     """Form for ExeProfile."""
 
     page_title = _("Profile")

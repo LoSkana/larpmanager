@@ -18,13 +18,20 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Event copying, campaigns, and templates.
+Verifies copying events with all settings/data, creating campaign events inheriting from parents,
+and creating event templates for reusable configurations.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized, _checkboxes, \
+    fill_tinymce
 
 pytestmark = pytest.mark.e2e
 
@@ -34,13 +41,13 @@ def test_exe_template_copy(pw_page: Any) -> None:
 
     login_orga(page, live_server)
 
-    template(live_server, page)
-
     setup(live_server, page)
 
     copy(live_server, page)
 
     campaign(live_server, page)
+
+    template(live_server, page)
 
 
 def template(live_server: Any, page: Any) -> None:
@@ -76,30 +83,34 @@ def template(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # check roles
-    go_to(page, live_server, "/fromtemplate/1/manage/roles/")
-    expect(page.locator('[id="\\36 "]')).to_contain_text("User Test")
-    expect(page.locator('[id="\\36 "]')).to_contain_text("Texts")
+    go_to(page, live_server, "/fromtemplate/manage/roles/")
+    row = page.locator('tr:has-text("User Test")')
+    expect_normalized(page, row, "User Test")
+    expect_normalized(page, row, "Texts")
     # check configuration
-    go_to(page, live_server, "/fromtemplate/1/manage/config/")
+    go_to(page, live_server, "/fromtemplate/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
     # check features
-    go_to(page, live_server, "/fromtemplate/1/manage/characters")
-    expect(page.locator("#header")).to_contain_text("Characters")
-    go_to(page, live_server, "/fromtemplate/1/manage/copy")
-
+    go_to(page, live_server, "/fromtemplate/manage/features")
+    expect(page.get_by_role("checkbox", name="Characters")).to_be_checked()
+    expect(page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']")).to_be_checked()
 
 def setup(live_server: Any, page: Any) -> None:
     # activate factions
-    go_to(page, live_server, "/test/1/manage/features/faction/on")
+    go_to(page, live_server, "/test/manage/features/faction/on")
     # activate xp
-    go_to(page, live_server, "/test/1/manage/features/px/on")
+    go_to(page, live_server, "/test/manage/features/px/on")
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
+    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    page.locator("#id_px_start").click()
+    page.locator("#id_px_start").fill("10")
+
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/roles/")
@@ -113,6 +124,40 @@ def setup(live_server: Any, page: Any) -> None:
     check_feature(page, "Factions")
     submit_confirm(page)
 
+    # give ability xp
+    go_to(page, live_server, "/test/manage/px/ability_types/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("base ability")
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/px/abilities/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("standard")
+    page.locator("#id_cost").click()
+    page.locator("#id_name").dblclick()
+    page.locator("#id_name").fill("sword")
+    page.locator("#id_cost").click()
+    page.locator("#id_cost").fill("1")
+    fill_tinymce(page, "id_descr", "sdsfdsfds", False)
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    submit_confirm(page)
+
+    # give delivery xp
+    go_to(page, live_server, "/test/manage/px/deliveries/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("first live")
+    page.locator("#id_name").press("Tab")
+    page.locator("#id_amount").fill("2")
+    page.get_by_role("searchbox").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="#1 Test Character").click()
+    submit_confirm(page)
+
 
 def copy(live_server: Any, page: Any) -> None:
     # copy event
@@ -124,29 +169,33 @@ def copy(live_server: Any, page: Any) -> None:
     page.locator("#slug").fill("copy")
     submit_confirm(page)
 
-    go_to(page, live_server, "/copy/1/manage/features/copy/on")
-    go_to(page, live_server, "/copy/1/manage/copy/")
+    go_to(page, live_server, "/copy/manage/features/copy/on")
+    go_to(page, live_server, "/copy/manage/copy/")
+
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp").click()
-    page.get_by_role("button", name="Submit").click()
 
-    go_to(page, live_server, "/copy/1/manage/roles/")
-    row = page.locator('tr[id="12"]')
-    expect(row).to_contain_text("User Test")
-    expect(row).to_contain_text("Appearance (Navigation), Writing (Factions) ")
-    go_to(page, live_server, "/copy/1/manage/config/")
+    # copy everything
+    _checkboxes(page, True)
 
+    go_to(page, live_server, "/copy/manage/roles/")
+    row = page.locator('tr:has-text("User Test")')
+    expect_normalized(page, row, "User Test")
+    expect_normalized(page, row, "Appearance (Navigation), Writing (Factions) ")
+
+    go_to(page, live_server, "/copy/manage/config/")
     page.get_by_role("link", name="Gallery ").click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
     page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
     expect(page.locator("#id_px_start")).to_have_value("10")
 
-    go_to(page, live_server, "/copy/1/manage/characters/")
+    go_to(page, live_server, "/copy/manage/characters/")
     page.get_by_role("link", name="XP").click()
-    expect(page.locator('[id="\\32 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("1")
-    expect(page.locator('[id="\\32 "]')).to_contain_text("11")
+    char_row = page.locator('tr:has-text("Test Character")').first
+    expect_normalized(page, char_row, "12")
+    expect_normalized(page, char_row, "1")
+    expect_normalized(page, char_row, "11")
 
 
 def campaign(live_server: Any, page: Any) -> None:
@@ -158,13 +207,14 @@ def campaign(live_server: Any, page: Any) -> None:
     page.locator("#id_name").fill("campaign")
     page.locator("#id_name").press("Tab")
     page.locator("#slug").fill("campaign")
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp", exact=True).click()
     submit_confirm(page)
-    go_to(page, live_server, "/campaign/1/manage/characters/")
+    go_to(page, live_server, "/campaign/manage/characters/")
     page.get_by_role("link", name="XP").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("12")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("1")
-    expect(page.locator('[id="\\31 "]')).to_contain_text("11")
+    char_row = page.locator('tr:has-text("Test Character")').first
+    expect_normalized(page, char_row, "12")
+    expect_normalized(page, char_row, "1")
+    expect_normalized(page, char_row, "11")

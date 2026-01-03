@@ -756,6 +756,18 @@
     module: event
 - model: larpmanager.feature
   fields:
+    name: Character inventory
+    descr: Allows characters to have inventories
+    slug: inventory
+    overall: false
+    placeholder: false
+    order: 31
+    after_text: ''
+    after_link: ''
+    hidden: false
+    module: event
+- model: larpmanager.feature
+  fields:
     name: Organisation tax
     descr: Allows you to set a 'tax' percentage on event income that must be set aside
       for the organisation

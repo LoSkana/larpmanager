@@ -18,13 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Membership request and approval workflow.
+Verifies membership application submission with document uploads, profile confirmation,
+request approval process, and membership status tracking.
+"""
 
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
 
 pytestmark = pytest.mark.e2e
 
@@ -62,11 +67,11 @@ def test_exe_membership(pw_page: Any) -> None:
 
     # go to memberships
     go_to(page, live_server, "/manage/membership/")
-    expect(page.locator("#one")).to_contain_text("Total members: 1 - Request: 1")
-    expect(page.locator("#one")).to_contain_text("Test")
-    expect(page.locator("#one")).to_contain_text("Admin")
-    expect(page.locator("#one")).to_contain_text("orga@test.it")
-    expect(page.locator("#one")).to_contain_text("Test Larp")
+    expect_normalized(page, page.locator("#one"), "Total members: 1 - Request: 1")
+    expect_normalized(page, page.locator("#one"), "Test")
+    expect_normalized(page, page.locator("#one"), "Admin")
+    expect_normalized(page, page.locator("#one"), "orga@test.it")
+    expect_normalized(page, page.locator("#one"), "Test Larp")
 
     # approve
     go_to(page, live_server, "/manage/membership/")
@@ -74,8 +79,8 @@ def test_exe_membership(pw_page: Any) -> None:
     submit_confirm(page)
 
     # test
-    expect(page.locator("#one")).to_contain_text("Total members: 1 - Accepted: 1")
-    expect(page.locator("#one")).to_contain_text("Test")
-    expect(page.locator("#one")).to_contain_text("Admin")
-    expect(page.locator("#one")).to_contain_text("orga@test.it")
-    expect(page.locator("#one")).to_contain_text("Test Larp")
+    expect_normalized(page, page.locator("#one"), "Total members: 1 - Accepted: 1")
+    expect_normalized(page, page.locator("#one"), "Test")
+    expect_normalized(page, page.locator("#one"), "Admin")
+    expect_normalized(page, page.locator("#one"), "orga@test.it")
+    expect_normalized(page, page.locator("#one"), "Test Larp")

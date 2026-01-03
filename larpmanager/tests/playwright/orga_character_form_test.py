@@ -18,13 +18,27 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Character form creation with complex field types and player editor.
+Verifies text/paragraph fields, single/multiple choice with availability limits,
+restricted/mandatory/hidden/disabled fields, character creation/approval workflow, and field visibility.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, login_user, logout, submit_confirm
+from larpmanager.tests.utils import (just_wait,
+    fill_tinymce,
+    go_to,
+    login_orga,
+    login_user,
+    logout,
+    submit_confirm,
+    expect_normalized,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -35,10 +49,10 @@ def test_orga_character_form(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # activate characters
-    go_to(page, live_server, "/test/1/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # activate player editor
-    go_to(page, live_server, "/test/1/manage/features/user_character/on")
+    go_to(page, live_server, "/test/manage/features/user_character/on")
 
     # set config
     go_to(page, live_server, "/test/manage/config")
@@ -75,7 +89,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="pinoloooooooooo").click()
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test public: public Presentation baba")
+    expect_normalized(page, page.locator("#one"), "Player: Admin Test public: public Presentation baba")
 
     create_second_char(live_server, page)
 
@@ -92,26 +106,27 @@ def create_second_char(live_server: Any, page: Any) -> None:
     fill_tinymce(page, "id_teaser", "dsfdfsd")
 
     fill_tinymce(page, "id_text", "sdfdsfds")
-    expect(page.locator("#id_q6")).to_match_aria_snapshot(
+    expect(page.locator("#id_que_u6")).to_match_aria_snapshot(
         '- combobox:\n  - option "-------" [disabled] [selected]\n  - option "all"\n  - option "few - (Available 1)"'
     )
-    page.locator("#id_q6").select_option("2")
-    page.locator("#id_q8").click()
-    page.locator("#id_q8").click()
-    expect(page.locator("#id_q8")).to_match_aria_snapshot(
+    page.locator("#id_que_u6").select_option("u2")
+    page.locator("#id_que_u8").click()
+    page.locator("#id_que_u8").click()
+    expect(page.locator("#id_que_u8")).to_match_aria_snapshot(
         '- combobox:\n  - option "-------" [disabled] [selected]\n  - option "only" [disabled]\n  - option "all"'
     )
-    expect(page.locator("#id_q7")).to_match_aria_snapshot(
+    expect(page.locator("#id_que_u7")).to_match_aria_snapshot(
         '- checkbox "all"\n- text: all\n- checkbox "many - (Available 1)"\n- text: many - (Available 1)\n- checkbox "few" [disabled]\n- text: few'
     )
     expect(page.get_by_role("checkbox", name="few")).to_be_disabled()
     page.get_by_role("checkbox", name="many - (Available 1)").check()
-    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("options: 1 / 2")
-    page.locator("#id_q9").click()
-    page.locator("#id_q9").fill("asda")
+    expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "options: 1 / 2")
+    page.locator("#id_que_u9").click()
+    page.locator("#id_que_u9").fill("asda")
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text(
-        "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds"
+    expect_normalized(page,
+        page.locator("#one"),
+        "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds",
     )
 
 
@@ -129,58 +144,60 @@ def show_chars(page: Any, live_server: Any) -> None:
 
 def check_first_char(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Change").click()
-    expect(page.locator("#id_q4")).to_have_value("aaaaaaaaaa")
+    expect(page.locator("#id_que_u4")).to_have_value("aaaaaaaaaa")
     page.get_by_text("bbbbbbbbbb").click()
     expect(page.get_by_text("bbbbbbbbbb")).to_have_value("bbbbbbbbbb")
-    expect(page.locator("#id_q6")).to_have_value("1")
-    page.locator("#id_q8").click()
-    expect(page.locator("#id_q8")).to_have_value("6")
-    expect(page.locator("#id_q7")).to_match_aria_snapshot(
+    expect(page.locator("#id_que_u6")).to_have_value("u1")
+    page.locator("#id_que_u8").click()
+    expect(page.locator("#id_que_u8")).to_have_value("u6")
+    expect(page.locator("#id_que_u7")).to_match_aria_snapshot(
         '- checkbox "all" [checked]\n- text: all\n- checkbox "many" [checked]\n- text: many\n- checkbox "few - (Available 1)" [disabled]\n- text: few - (Available 1)'
     )
-    expect(page.locator("#id_q9")).to_have_value("fill mandatory")
-    expect(page.locator("#id_q12")).to_have_value("public")
+    expect(page.locator("#id_que_u9")).to_have_value("fill mandatory")
+    expect(page.locator("#id_que_u12")).to_have_value("public")
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/characters/")
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
-    page.locator("#id_q4").click()
-    page.locator("#id_q4").fill("cccccccccc")
-    page.locator("#id_q4").press("Tab")
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    page.locator("#id_que_u4").click()
+    page.locator("#id_que_u4").fill("cccccccccc")
+    page.locator("#id_que_u4").press("Tab")
     page.get_by_text("bbbbbbbbbb").click()
     page.get_by_text("bbbbbbbbbb").fill("dddddddddd")
-    page.locator("#id_q6").select_option("2")
-    page.locator("#id_q8").select_option("7")
+    page.locator("#id_que_u6").select_option("u2")
+    page.locator("#id_que_u8").select_option("u7")
     page.get_by_role("checkbox", name="all").uncheck()
     page.get_by_role("checkbox", name="few").check()
-    page.locator("#id_q10").fill("disabled")
-    page.locator("#id_q11").fill("hidden")
+    page.locator("#id_que_u10").fill("disabled")
+    page.locator("#id_que_u11").fill("hidden")
     page.locator("#id_status").select_option("a")
     submit_confirm(page)
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
-    expect(page.locator("#id_q4")).to_have_value("cccccccccc")
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    expect(page.locator("#id_que_u4")).to_have_value("cccccccccc")
     expect(page.get_by_text("dddddddddd")).to_have_value("dddddddddd")
-    expect(page.locator("#id_q6")).to_have_value("2")
-    expect(page.locator("#id_q8")).to_have_value("7")
-    expect(page.locator("#id_q10")).to_have_value("disabled")
-    expect(page.locator("#id_q11")).to_have_value("hidden")
-    expect(page.locator("#lbl_id_q4")).to_contain_text("short text")
+    expect(page.locator("#id_que_u6")).to_have_value("u2")
+    expect(page.locator("#id_que_u8")).to_have_value("u7")
+    expect(page.locator("#id_que_u10")).to_have_value("disabled")
+    expect(page.locator("#id_que_u11")).to_have_value("hidden")
+    expect_normalized(page, page.locator("#lbl_id_que_u4"), "short text")
     page.get_by_role("cell", name="long text").dblclick()
-    expect(page.locator("#lbl_id_q5")).to_contain_text("long text")
-    expect(page.locator("#main_form")).to_contain_text("short descr")
+    expect_normalized(page, page.locator("#lbl_id_que_u5"), "long text")
+    expect_normalized(page, page.locator("#main_form"), "short descr")
     page.get_by_text("long descr").click()
 
 
 def recheck_char(live_server: Any, page: Any) -> None:
-    expect(page.locator("#main_form")).to_contain_text("long descr")
-    expect(page.locator("#lbl_id_q8")).to_contain_text("restricted")
-    expect(page.locator("#main_form")).to_contain_text("restricted textonly only descrall all descr")
-    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple text")
-    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
+    expect_normalized(page, page.locator("#main_form"), "long descr")
+    expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
+    expect_normalized(page, page.locator("#main_form"), "restricted text only only descr all all descr")
+    expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
+    expect_normalized(page,
+        page.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
+    )
     submit_confirm(page)
     go_to(page, live_server, "/test/character/list")
     page.get_by_role("link", name="").click()
-    expect(page.locator("#id_q10")).to_have_value("disabled")
+    expect(page.locator("#id_que_u10")).to_have_value("disabled")
     submit_confirm(page)
 
 
@@ -195,41 +212,42 @@ def create_first_char(live_server: Any, page: Any) -> None:
 
     fill_presentation_text(page)
 
-    expect(page.locator("#lbl_id_text")).to_contain_text("Text (*)")
-    expect(page.locator("#lbl_id_teaser")).to_contain_text("Presentation (*)")
-    expect(page.locator("#lbl_id_name")).to_contain_text("Name (*)")
-    expect(page.locator("#main_form")).to_contain_text("short descr")
-    page.locator("#id_q4").click()
-    page.locator("#id_q4").fill("aaaaaaaaaa")
-    page.locator("#id_q4").click()
+    expect_normalized(page, page.locator("#lbl_id_text"), "Text (*)")
+    expect_normalized(page, page.locator("#lbl_id_teaser"), "Presentation (*)")
+    expect_normalized(page, page.locator("#lbl_id_name"), "Name (*)")
+    expect_normalized(page, page.locator("#main_form"), "short descr")
+    page.locator("#id_que_u4").click()
+    page.locator("#id_que_u4").fill("aaaaaaaaaa")
+    page.locator("#id_que_u4").click()
     page.get_by_text("long text").click()
-    page.locator("#id_q5").click()
-    page.locator("#id_q5").fill("bbbbbbbbbb")
-    expect(page.locator("#id_q5")).to_have_value("bbbbbbbbbb")
-    expect(page.locator("#main_form")).to_contain_text("long descr")
-    expect(page.locator("#main_form")).to_contain_text("text length: 10 / 10")
-    expect(page.locator("#lbl_id_q6")).to_contain_text("available text")
-    expect(page.locator("#main_form")).to_contain_text("available descrall allfew few descr")
-    page.locator("#id_q6").select_option("1")
-    page.locator("#id_q8").select_option("6")
-    expect(page.locator("#lbl_id_q8")).to_contain_text("restricted")
-    expect(page.locator("#main_form")).to_contain_text("restricted textonly only descrall all descr")
+    page.locator("#id_que_u5").click()
+    page.locator("#id_que_u5").fill("bbbbbbbbbb")
+    expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
+    expect_normalized(page, page.locator("#main_form"), "long descr")
+    expect_normalized(page, page.locator("#main_form"), "text length: 10 / 10")
+    expect_normalized(page, page.locator("#lbl_id_que_u6"), "available text")
+    expect_normalized(page, page.locator("#main_form"), "available descr all all few few descr")
+    page.locator("#id_que_u6").select_option("u1")
+    page.locator("#id_que_u8").select_option("u6")
+    expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
+    expect_normalized(page, page.locator("#main_form"), "restricted text only only descr all all descr")
     page.get_by_text("many - (Available 2)").click()
-    page.locator("#id_q7 div").filter(has_text="many - (Available 2)").click()
-    expect(page.locator("#id_q7")).to_contain_text("many - (Available 2)")
-    expect(page.locator("#id_q7")).to_contain_text("few - (Available 1)")
-    page.get_by_text("multiple descrall all").click()
-    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple descrall all descrmany many descrfew few descr")
-    expect(page.locator('[id="id_q7_tr"]')).to_contain_text("multiple text")
+    page.locator("#id_que_u7 div").filter(has_text="many - (Available 2)").click()
+    expect_normalized(page, page.locator("#id_que_u7"), "many - (Available 2)")
+    expect_normalized(page, page.locator("#id_que_u7"), "few - (Available 1)")
+    expect_normalized(page,
+        page.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
+    )
+    expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
     page.get_by_role("checkbox", name="all").check()
     page.get_by_role("checkbox", name="many - (Available 2)").check()
     page.get_by_text("options: 2 /").click()
-    page.locator("#id_q12").click()
-    page.locator("#id_q12").fill("public")
-    page.locator("#id_q12").press("Tab")
-    page.locator("#id_q13").fill("create")
+    page.locator("#id_que_u12").click()
+    page.locator("#id_que_u12").fill("public")
+    page.locator("#id_que_u12").press("Tab")
+    page.locator("#id_que_u13").fill("create")
     submit_confirm(page)
-    page.locator("#id_q9").fill("fill mandatory")
+    page.locator("#id_que_u9").fill("fill mandatory")
     page.locator("#id_propose").check()
     submit_confirm(page)
 
@@ -305,10 +323,10 @@ def add_field_restricted(page: Any) -> None:
     page.locator("#id_max_available").fill("1")
     submit_confirm(page)
     submit_confirm(page)
-    page.locator('[id="\\38 "]').get_by_role("link", name="").click()
-    page.locator('[id="\\38 "]').get_by_role("link", name="").click()
+    page.locator('[id="u8"]').get_by_role("link", name="").click()
+    page.locator('[id="u8"]').get_by_role("link", name="").click()
     page.get_by_role("link", name="").click()
-    page.locator('[id="\\37 "]').get_by_role("link", name="").click()
+    page.locator('[id="u7"]').get_by_role("link", name="").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("w")
     page.locator("#id_name").press("Home")

@@ -30,12 +30,12 @@ from larpmanager.forms.registration import RegistrationTransferForm
 from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.services.transfer import (
     get_suggested_ticket_mapping,
     move_registration_between_runs,
     validate_transfer_feasibility,
 )
-from larpmanager.views.orga.registration import reset_all_run
 
 
 @login_required
@@ -77,17 +77,17 @@ def orga_registration_transfer_preview(request: HttpRequest, event_slug: str) ->
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Get registration and target run from POST data
-    registration_id = request.POST.get("registration_id")
-    target_run_id = request.POST.get("target_run_id")
+    registration_uuid = request.POST.get("registration_uuid")
+    target_run_uuid = request.POST.get("target_run_uuid")
 
-    if not registration_id or not target_run_id:
+    if not registration_uuid or not target_run_uuid:
         messages.error(request, _("Please select both a registration and an event"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Get the registration
     try:
         registration = Registration.objects.select_related("member", "ticket", "run").get(
-            id=registration_id, run=context["run"]
+            uuid=registration_uuid, run=context["run"]
         )
     except Registration.DoesNotExist:
         messages.error(request, _("Registration not found"))
@@ -95,7 +95,7 @@ def orga_registration_transfer_preview(request: HttpRequest, event_slug: str) ->
 
     # Get the target run
     try:
-        target_run = Run.objects.select_related("event").get(id=target_run_id)
+        target_run = Run.objects.select_related("event").get(uuid=target_run_uuid)
     except Run.DoesNotExist:
         messages.error(request, _("Target event not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
@@ -129,18 +129,18 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Get registration and target run from POST data
-    registration_id = request.POST.get("registration_id")
-    target_run_id = request.POST.get("target_run_id")
+    registration_uuid = request.POST.get("registration_uuid")
+    target_run_uuid = request.POST.get("target_run_uuid")
     move_registration = request.POST.get("move_registration", "true") == "true"
 
-    if not registration_id or not target_run_id:
+    if not registration_uuid or not target_run_uuid:
         messages.error(request, _("Invalid request"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Get the registration
     try:
         registration = Registration.objects.select_related("member", "ticket", "run").get(
-            id=registration_id, run=context["run"]
+            uuid=registration_uuid, run=context["run"]
         )
     except Registration.DoesNotExist:
         messages.error(request, _("Registration not found"))
@@ -148,7 +148,7 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
 
     # Get the target run
     try:
-        target_run = Run.objects.select_related("event").get(id=target_run_id)
+        target_run = Run.objects.select_related("event").get(uuid=target_run_uuid)
     except Run.DoesNotExist:
         messages.error(request, _("Target session not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)

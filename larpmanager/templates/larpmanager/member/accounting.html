@@ -18,7 +18,7 @@
         <p>
             {% for reg in payments_pending %}
                 {% include "elements/comma.html" %}
-                <b><a href="#" class="my_toggle" tog='reg_{{ reg.id }}'>{{ reg.run }}</a></b>
+                <b><a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run }}</a></b>
             {% endfor %}
         </p>
         <hr />
@@ -30,7 +30,7 @@
             {% for reg in payments_todo %}
                 {% include "elements/comma.html" %}
                 <b>{{ reg.run }}</b> -
-                <a href="{% url 'acc_reg' reg.id %}">
+                <a href="{% url 'acc_reg' reg.uuid %}">
                     {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
                     {% if reg.deadline > 0 %}
                         {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}
@@ -216,7 +216,7 @@
         <p>
             {% for reg in registration_list %}
                 {% include "elements/comma.html" %}
-                <a href="#" class="my_toggle" tog='reg_{{ reg.id }}'>{{ reg.run.search }}
+                <a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run.search }}
                     {% if reg.cancellation_date %}
                         - {% trans "Cancellation" %}
                     {% endif %}
@@ -224,7 +224,7 @@
             {% endfor %}
         </p>
         {% for reg in registration_list %}
-            <div id="reg_{{ reg.id }}" class="hide reg_{{ reg.id }}">
+            <div id="reg_{{ reg.uuid }}" class="hide reg_{{ reg.uuid }}">
                 <h3>{{ reg.run.search }}</h3>
                 {% if reg.pending %}
                     <p>
@@ -232,7 +232,7 @@
                     </p>
                 {% elif reg.quota > 0 %}
                     <p>
-                        <a href="{% url 'acc_reg' reg.id %}">
+                        <a href="{% url 'acc_reg' reg.uuid %}">
                             {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
                             {% if reg.deadline > 0 %}
                                 {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}

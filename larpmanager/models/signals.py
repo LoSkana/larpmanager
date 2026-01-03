@@ -167,6 +167,8 @@ from larpmanager.models.base import (
     Feature,
     FeatureModule,
     auto_assign_sequential_numbers,
+    auto_set_uuid,
+    debug_set_uuid,
     update_model_search_field,
 )
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait, refresh_all_instance_traits
@@ -185,6 +187,7 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.inventory import Inventory, PoolBalanceCI, PoolTypeCI
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerFaq,
@@ -263,24 +266,25 @@ log = logging.getLogger(__name__)
 # Generic signal handlers (no specific sender)
 @receiver(pre_save)
 def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Handle pre-save operations for automatic field population.
-
-    Automatically sets number/order fields and updates search fields
-    for models that have them. This function is designed to be used
-    as a Django model signal handler.
-
-    """
+    """Handle pre-save operations for all models."""
     # Auto-assign sequential numbers for models with number/order fields
     auto_assign_sequential_numbers(instance)
 
     # Update search fields for models that implement search functionality
     update_model_search_field(instance)
 
+    # Assign uuid for models that has it
+    auto_set_uuid(instance)
+
 
 @receiver(post_save)
-def post_save_text_fields_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Update text fields cache after model instance is saved."""
+def post_save_callback(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
+    """Handle post-save operations for all models."""
+    # Update text fields cache after model instance is saved
     update_text_fields_cache(instance)
+
+    # Set simplified uuid for debug
+    debug_set_uuid(instance, created=created)
 
 
 @receiver(post_delete)
@@ -735,6 +739,25 @@ def post_save_delivery_px(
 ) -> None:
     """Refresh delivery characters after save signal."""
     refresh_delivery_characters(instance)
+
+
+@receiver(post_save, sender=Character)
+def create_personal_inventory(sender: type, instance: Character, created: bool, **kwargs: Any) -> None:
+    """Create a personal inventory for newly created characters."""
+    if created:
+        inventory = Inventory.objects.create(name=f"{instance.name}'s Personal Storage", event=instance.event)
+        inventory.owners.add(instance)
+        inventory.save()
+
+
+@receiver(post_save, sender=Inventory)
+def create_pools_for_inventory(sender: type, instance: Inventory, created: bool, **kwargs: Any) -> None:
+    """Create pool balances for newly created character inventories based on event pool types."""
+    if created:
+        for pool_type in PoolTypeCI.objects.filter(event=instance.event):
+            PoolBalanceCI.objects.create(
+                inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
+            )
 
 
 @receiver(post_delete, sender=DeliveryPx)

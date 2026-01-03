@@ -377,7 +377,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
     if run.reg.alert:
         # Handle wire transfer specific messaging
         if wire_created_invoices:
-            payment_url = reverse("acc_reg", args=[run.reg.id])
+            payment_url = reverse("acc_reg", args=[run.reg.uuid])
             message = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{payment_url}'>{message}</a>"
             note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
@@ -385,7 +385,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
             return True
 
         # Handle general payment alert with deadline warning
-        payment_url = reverse("acc_reg", args=[run.reg.id])
+        payment_url = reverse("acc_reg", args=[run.reg.uuid])
         message = _("to confirm it proceed with payment") + "."
         text_url = f", <a href='{payment_url}'>{message}</a>"
 
@@ -664,7 +664,7 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
     # Build list of character links with names and approval status
     character_links = []
     for character_rel in registration_character_rels:
-        character_url = reverse("character", args=[run.get_slug(), character_rel.character.number])
+        character_url = reverse("character", args=[run.get_slug(), character_rel.character.uuid])
         character_name = character_rel.character.name
 
         # Use custom name if provided

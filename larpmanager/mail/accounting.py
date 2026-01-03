@@ -137,8 +137,9 @@ def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
     )
 
     # Add document download link if available
-    document_download_url = get_url(instance.download(), instance)
-    email_body += f"<br /><br /><a href='{document_download_url}'>" + _("download document") + "</a>"
+    if instance.invoice:
+        document_download_url = get_url(instance.download(), instance)
+        email_body += f"<br /><br /><a href='{document_download_url}'>" + _("download document") + "</a>"
 
     # Add approval prompt and confirmation link
     email_body += "<br /><br />" + _("Did you check and is it correct") + "?"

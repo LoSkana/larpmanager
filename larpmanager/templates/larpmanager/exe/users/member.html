@@ -9,17 +9,17 @@
 {% block content %}
     <p>Email: {{ member_edit.email }}</p>
     <p>
-        <a href="{% url 'exe_member_registrations' member_edit.id %}"
+        <a href="{% url 'exe_member_registrations' member_edit.uuid %}"
            qtip="{% trans "View registrations" %}">
             <i class="fas fa-calendar-check"></i> {% trans "Registrations" %}
         </a>
         |
-        <a href="{% url 'exe_member_accounting' member_edit.id %}"
+        <a href="{% url 'exe_member_accounting' member_edit.uuid %}"
            qtip="{% trans "View accounting" %}">
             <i class="fas fa-file-invoice-dollar"></i> {% trans "Accounting" %}
         </a>
         |
-        <a href="{% url 'exe_membership_status' member_edit.id %}"
+        <a href="{% url 'exe_membership_status' member_edit.uuid %}"
            qtip="{% trans "Edit membership" %}">
             <i class="fas fa-id-card"></i> {% trans "Membership" %}
         </a>
