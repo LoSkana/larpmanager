@@ -593,7 +593,7 @@ def check_gallery_visibility(request: HttpRequest, context: dict) -> bool:
         context["hide_login"] = True
         return False
 
-    if hide_gallery_for_non_signup and not context["run"].reg:
+    if hide_gallery_for_non_signup and not context["registration"]:
         context["hide_signup"] = True
         return False
 

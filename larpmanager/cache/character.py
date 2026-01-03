@@ -129,8 +129,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     # Build assignments mapping from character number to registration relation
     context["assignments"] = {}
     registration_query = RegistrationCharacterRel.objects.filter(reg__run=context["run"])
-    for registration_character_rel in registration_query.select_related("character", "reg", "reg__member"):
-        context["assignments"][registration_character_rel.character.number] = registration_character_rel
+    for relation in registration_query.select_related("character", "reg", "reg__member"):
+        context["assignments"][relation.character.number] = relation
 
     # Get event configuration for hiding uncasted characters
     hide_uncasted_characters = get_event_config(
@@ -695,8 +695,8 @@ def update_member_event_character_cache(instance: Member) -> None:
     active_character_registrations = active_character_registrations.select_related("character", "reg", "reg__run")
 
     # Update cache for each character registration
-    for registration_character_rel in active_character_registrations:
-        update_event_cache_all(registration_character_rel.reg.run, registration_character_rel)
+    for relation in active_character_registrations:
+        update_event_cache_all(relation.reg.run, relation)
 
 
 def on_character_pre_save_update_cache(char: Character) -> None:

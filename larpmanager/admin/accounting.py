@@ -31,6 +31,7 @@ from django.contrib import admin
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, MemberFilter, RegistrationFilter, RunFilter
 from larpmanager.models.accounting import (
+    AccountingItem,
     AccountingItemCollection,
     AccountingItemDiscount,
     AccountingItemDonation,
@@ -49,7 +50,6 @@ from larpmanager.models.accounting import (
     RefundRequest,
 )
 from larpmanager.models.event import Run
-from larpmanager.models.registration import Registration
 
 
 class InvoiceFilter(AutocompleteFilter):
@@ -68,9 +68,9 @@ class AccountingItemAdmin(DefModelAdmin):
     search_fields: ClassVar[tuple] = ("id", "search")
 
     @admin.display(ordering="reg__run", description="Run")
-    def get_run(self, registration: Registration) -> Run:
-        """Get run from registration for admin display."""
-        return registration.reg.run
+    def get_run(self, instance: AccountingItem) -> Run:
+        """Get run from instance for admin display."""
+        return instance.reg.run
 
 
 @admin.register(AccountingItemTransaction)

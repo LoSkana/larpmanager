@@ -230,13 +230,14 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str = "0") -> H
     check_event_feature(request, context, "casting")
 
     # Verify user has completed event registration
-    if context["run"].reg is None:
+    registration = context.get("registration")
+    if not registration:
         messages.success(request, _("You must signed up in order to select your preferences") + "!")
         return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Check if user is on waiting list (cannot set preferences)
-    if context["run"].reg and context["run"].reg.ticket and context["run"].reg.ticket.tier == TicketTier.WAITING:
-        messages.success(
+    if registration.ticket and registration.ticket.tier == TicketTier.WAITING:
+        messages.warning(
             request,
             _(
                 "You are on the waiting list, you must be registered with a regular ticket to be "
@@ -334,7 +335,7 @@ def _get_previous(request: HttpRequest, context: dict) -> None:
     # Handle different casting types with appropriate data population
     if not casting_type:
         # For character casting, populate available characters
-        casting_characters(context, context["run"].reg)
+        casting_characters(context, context["registration"])
     else:
         # For quest casting, verify permissions and populate quest data
         check_event_feature(request, context, "questbuilder")
@@ -362,11 +363,11 @@ def _check_already_done(context: dict) -> None:
     # Check if character assignment already done (type 0)
     if "quest_type" not in context:
         casting_chars = int(get_event_config(context["run"].event_id, "casting_characters", default_value=1))
-        if context["run"].reg.rcrs.count() >= casting_chars:
+        if context["registration"].rcrs.count() >= casting_chars:
             # Collect names of all assigned characters
             character_names = [
                 context["chars"][character_number]["name"]
-                for character_number in context["run"].reg.rcrs.values_list("character__number", flat=True)
+                for character_number in context["registration"].rcrs.values_list("character__number", flat=True)
             ]
             context["assigned"] = ", ".join(character_names)
     else:
@@ -715,7 +716,7 @@ def casting_preferences(request: HttpRequest, event_slug: str, casting_type: str
     registration_status(context["run"], context["member"], context)
 
     # Verify user has valid registration for this event
-    if context["run"].reg is None:
+    if context["registration"] is None:
         msg = "not registered"
         raise Http404(msg)
 
@@ -901,7 +902,7 @@ def casting_history(request: HttpRequest, event_slug: str, casting_type: str = "
         raise Http404(msg)
 
     # Verify user registration or staff access
-    if context["run"].reg is None and "staff" not in context:
+    if context["registration"] is None and "staff" not in context:
         msg = "not registered"
         raise Http404(msg)
 

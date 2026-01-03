@@ -503,7 +503,7 @@ def get_player_relationship(context: dict, other_character_uuid: str) -> None:
     try:
         # Get relationship for the run's registration targeting the specified player
         context["relationship"] = PlayerRelationship.objects.get(
-            reg=context["run"].reg,
+            reg=context["registration"],
             target__uuid=other_character_uuid,
         )
     except ObjectDoesNotExist as err:

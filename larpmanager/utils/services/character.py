@@ -146,15 +146,7 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
 
 
 def get_character_sheet(context: dict) -> None:
-    """Build complete character sheet data for display.
-
-    Args:
-        context: Context dictionary with character data
-
-    Returns:
-        dict: Complete character sheet with all sections
-
-    """
+    """Build complete character sheet data for display."""
     context["sheet_char"] = context["character"].show_complete()
 
     get_character_sheet_fields(context)
@@ -170,6 +162,16 @@ def get_character_sheet(context: dict) -> None:
     get_character_sheet_prologue(context)
 
     get_character_sheet_px(context)
+
+    get_character_sheet_inventory(context)
+
+
+def get_character_sheet_inventory(context: dict) -> None:
+    """Populate the character sheet with inventory summary data."""
+    if "inventory" not in context["features"]:
+        return
+
+    context["sheet_inventory"] = context["character"].inventory.all()
 
 
 def get_character_sheet_px(context: dict) -> None:
@@ -507,13 +509,7 @@ def get_chars_relations(text: str, character_numbers: list[int]) -> tuple[list[i
 
 
 def check_missing_mandatory(context: dict) -> None:
-    """Check for missing mandatory character writing fields.
-
-    Args:
-        context: Context dictionary containing character and event data.
-              Updates context with 'missing_fields' list.
-
-    """
+    """Check for missing mandatory character writing fields."""
     context["missing_fields"] = []
     missing_question_names = []
 
