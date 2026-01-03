@@ -485,6 +485,15 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     association_slug = context["slug"]
     association_id = context["id"]
 
+    _reset_cache_association(association_id, association_slug)
+
+    # Notify user of successful cache reset
+    messages.success(request, _("Cache reset!"))
+    return redirect("manage")
+
+
+def _reset_cache_association(association_id: int, association_slug: str) -> None:
+    """Reset all cache of one association."""
     # Clear association overall cache
     clear_association_cache(association_slug)
 
@@ -523,7 +532,3 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     # Clear all events' caches for this association
     for run in Run.objects.filter(event__association_id=association_id):
         reset_all_run(run.event, run)
-
-    # Notify user of successful cache reset
-    messages.success(request, _("Cache reset!"))
-    return redirect("manage")
