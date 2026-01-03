@@ -85,7 +85,7 @@ class Writing(UuidMixin, BaseConceptModel):
 
         """
         js = {}
-        for s in ["id", "number", "name", "uuid"]:
+        for s in ["number", "name", "uuid"]:
             self.upd_js_attr(js, s)
         return js
 

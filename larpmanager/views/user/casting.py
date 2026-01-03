@@ -77,24 +77,26 @@ def casting_characters(context: dict, reg: Registration) -> None:
 
     # Initialize data structures for organizing characters by faction
     character_choices_by_faction = {}
-    faction_names = []
+    faction_dict = {}
     total_characters = 0
     valid_character_uuids = set()
 
     # Process each faction and organize characters within it
     for faction in context["factions"]:
+        # Use "all" as key for default faction (when faction feature is disabled)
+        faction_key = "all" if faction.number == 0 and faction.name == "all" else str(faction.uuid)
         faction_name = faction.data["name"]
-        character_choices_by_faction[faction_name] = {}
-        faction_names.append(faction_name)
+        character_choices_by_faction[faction_key] = {}
+        faction_dict[faction_key] = faction_name
 
         # Add each character from the faction to choices with display info, sorted by number
         for character in sorted(faction.chars, key=lambda c: c.number):
-            character_choices_by_faction[faction_name][str(character.uuid)] = character.show(context["run"])
+            character_choices_by_faction[faction_key][str(character.uuid)] = character.show(context["run"])
             valid_character_uuids.add(str(character.uuid))
             total_characters += 1
 
     # Convert faction and character data to JSON for frontend consumption
-    context["factions"] = json.dumps(faction_names)
+    context["factions_json"] = json.dumps(faction_dict)
     context["choices"] = json.dumps(character_choices_by_faction)
     context["valid_element_ids"] = valid_character_uuids
 
@@ -118,7 +120,7 @@ def casting_quest_traits(context: dict, typ: str) -> None:
 
     """
     trait_choices = {}
-    faction_names = []
+    quest_dict = {}
     total_traits = 0
     valid_trait_ids = set()
 
@@ -129,7 +131,8 @@ def casting_quest_traits(context: dict, typ: str) -> None:
     for quest in (
         Quest.objects.filter(event=context["event"], typ=typ, hide=False).order_by("number").prefetch_related("traits")
     ):
-        faction_name = quest.show()["name"]
+        quest_uuid = str(quest.uuid)
+        quest_name = quest.show()["name"]
         available_traits = {}
 
         # Collect traits for this quest that aren't already assigned
@@ -145,12 +148,12 @@ def casting_quest_traits(context: dict, typ: str) -> None:
         if len(available_traits.keys()) == 0:
             continue
 
-        # Add quest and its traits to choices, track faction name
-        trait_choices[faction_name] = available_traits
-        faction_names.append(faction_name)
+        # Add quest and its traits to choices, track quest UUID and name
+        trait_choices[quest_uuid] = available_traits
+        quest_dict[quest_uuid] = quest_name
 
     # Serialize data as JSON for frontend consumption
-    context["factions"] = json.dumps(list(faction_names))
+    context["factions_json"] = json.dumps(quest_dict)
     context["choices"] = json.dumps(trait_choices)
     context["valid_element_ids"] = valid_trait_ids
 
