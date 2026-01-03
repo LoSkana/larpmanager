@@ -2,30 +2,30 @@
 {% if run.status.text %}
     <p>
         {{ run.status.text | safe }}
-        {% if features.payment and run.reg and run.reg.tot_iscr %}
+        {% if features.payment and registration and registration.tot_iscr %}
             (<a href="#" class="my_toggle" tog="reg_accounting">{% trans "Accounting" %}</a>)
         {% endif %}
     </p>
 {% endif %}
-{% if features.payment and run.reg and run.reg.tot_iscr %}
+{% if features.payment and registration and registration.tot_iscr %}
     <span class="hide reg_accounting">
-        {% if run.reg.tot_payed %}
-            {% trans "Total registration fee" %}: {{ run.reg.tot_iscr|format_decimal }}, {% trans "Total payments" %}: {{ run.reg.tot_payed|format_decimal }}.
+        {% if registration.tot_payed %}
+            {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }}, {% trans "Total payments" %}: {{ registration.tot_payed|format_decimal }}.
         {% else %}
-            {% trans "Total registration fee" %}: {{ run.reg.tot_iscr|format_decimal }}.
+            {% trans "Total registration fee" %}: {{ registration.tot_iscr|format_decimal }}.
         {% endif %}
-        {% if run.reg.quota %}
-            <a href="{% url 'acc_reg' run.reg.uuid %}">
-                {% trans "Next payment" %}: {{ run.reg.quota | format_decimal }}{{ currency_symbol }},
-                {% if run.reg.deadline > 0 %}
-                    {% trans "expected within" %} {{ run.reg.deadline }} {% trans "days" %}
+        {% if registration.quota %}
+            <a href="{% url 'acc_reg' registration.uuid %}">
+                {% trans "Next payment" %}: {{ registration.quota | format_decimal }}{{ currency_symbol }},
+                {% if registration.deadline > 0 %}
+                    {% trans "expected within" %} {{ registration.deadline }} {% trans "days" %}
                 {% else %}
-                    {% trans "overdue by" %} {{ run.reg.deadline | abs_value }} {% trans "days" %}
+                    {% trans "overdue by" %} {{ registration.deadline | abs_value }} {% trans "days" %}
                 {% endif %}
             </a>
-        {% elif run.reg.tot_iscr > run.reg.tot_payed %}
+        {% elif registration.tot_iscr > registration.tot_payed %}
             {% trans "No additional payments are required at this time" %},
-            <a href="{% url 'acc_reg' run.reg.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+            <a href="{% url 'acc_reg' registration.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
         {% endif %}
     </span>
 {% endif %}

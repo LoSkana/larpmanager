@@ -78,7 +78,6 @@ from larpmanager.utils.users.registration import (
     check_assign_character,
     check_character_maximum,
     get_player_characters,
-    registration_find,
 )
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
@@ -488,13 +487,12 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
 
     # Get event context and validate user permissions
     context = get_event_context(request, event_slug, signup=True)
-    registration_find(context["run"], context["member"], None)
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Retrieve character registration relationship
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["run"].reg,
+            reg=context["registration"],
             characterr=context["char"],
         )
     except ObjectDoesNotExist:

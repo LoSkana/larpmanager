@@ -214,7 +214,7 @@ def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
 
 def registration_status_signed(  # noqa: C901 - Complex registration status logic with feature checks
     run: Run,
-    reg: Registration,
+    registration: Registration,
     member: Member,
     features: dict[str, Any],
     register_url: str,
@@ -224,7 +224,7 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
 
     Args:
         run: The run object containing event and status information
-        reg: The registration object with ticket and user details
+        registration: The registration object with ticket and user details
         member: The member object for the registered user
         features: Dictionary of enabled features for the event
         register_url: URL for the registration page
@@ -244,22 +244,22 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         context = {}
 
     # Initialize character registration status for the run
-    registration_status_characters(run, features, context)
+    registration_status_characters(run, registration, features, context)
 
     # Get user membership for the event's association
     user_membership = get_user_membership(member, run.event.association_id)
 
     # Build base registration message with ticket info if available
     registration_message = _("Registration confirmed")
-    is_provisional = is_reg_provisional(reg, features=features, event=run.event, context=context)
+    is_provisional = is_reg_provisional(registration, features=features, event=run.event, context=context)
 
     # Update message for provisional registrations
     if is_provisional:
         registration_message = _("Provisional registration")
 
     # Append ticket name if ticket exists
-    if reg.ticket:
-        registration_message += f" ({reg.ticket.name})"
+    if registration.ticket:
+        registration_message += f" ({registration.ticket.name})"
     registration_text = f"<a href='{register_url}'>{registration_message}</a>"
 
     # Handle membership feature requirements and status checks
@@ -283,7 +283,7 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
 
     # Handle payment feature processing and related status updates
     # Process payment status and return if payment handling is complete
-    if "payment" in features and _status_payment(registration_text, run, context):
+    if "payment" in features and _status_payment(registration_text, run, registration, context):
         return
 
     # Check for incomplete user profile and prompt completion
@@ -303,11 +303,11 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
     run.status["text"] = registration_text
 
     # Add patron appreciation message for patron tier tickets
-    if reg.ticket and reg.ticket.tier == TicketTier.PATRON:
+    if registration.ticket and registration.ticket.tier == TicketTier.PATRON:
         run.status["text"] += " " + _("Thanks for your support") + "!"
 
 
-def _status_payment(register_text: str, run: Run, context: dict | None = None) -> bool:
+def _status_payment(register_text: str, run: Run, registration: Registration, context: dict | None = None) -> bool:
     """Check payment status and update registration status text accordingly.
 
     Handles pending payments, wire transfers, and payment alerts with
@@ -315,7 +315,8 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
 
     Args:
         register_text: Base registration status text to append to
-        run: Registration run object containing registration and status info
+        run: Registration run object containing status info
+        registration: The registration object with payment details
         context: Optional context dictionary containing cached data:
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
 
@@ -331,7 +332,7 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
 
     # Get payment invoices for this registration
     if payment_invoices_dict is not None:
-        invoices = payment_invoices_dict.get(run.reg.id, [])
+        invoices = payment_invoices_dict.get(registration.id, [])
         # Filter for pending payments
         pending_invoices = [
             invoice
@@ -352,16 +353,16 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
         # Fallback to database queries if no precalculated data available
         pending_invoices = list(
             PaymentInvoice.objects.filter(
-                idx=run.reg.id,
-                member_id=run.reg.member_id,
+                idx=registration.id,
+                member_id=registration.member_id,
                 status=PaymentStatus.SUBMITTED,
                 typ=PaymentType.REGISTRATION,
             ),
         )
         wire_created_invoices = list(
             PaymentInvoice.objects.filter(
-                idx=run.reg.id,
-                member_id=run.reg.member_id,
+                idx=registration.id,
+                member_id=registration.member_id,
                 status=PaymentStatus.CREATED,
                 typ=PaymentType.REGISTRATION,
                 method__slug="wire",
@@ -374,10 +375,10 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
         return True
 
     # Process payment alerts for unpaid registrations
-    if run.reg.alert:
+    if registration.alert:
         # Handle wire transfer specific messaging
         if wire_created_invoices:
-            payment_url = reverse("acc_reg", args=[run.reg.uuid])
+            payment_url = reverse("acc_reg", args=[registration.uuid])
             message = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{payment_url}'>{message}</a>"
             note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
@@ -385,12 +386,12 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
             return True
 
         # Handle general payment alert with deadline warning
-        payment_url = reverse("acc_reg", args=[run.reg.uuid])
+        payment_url = reverse("acc_reg", args=[registration.uuid])
         message = _("to confirm it proceed with payment") + "."
         text_url = f", <a href='{payment_url}'>{message}</a>"
 
         # Add cancellation warning if deadline passed
-        if run.reg.deadline < 0:
+        if registration.deadline < 0:
             text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
 
         run.status["text"] = register_text + text_url
@@ -399,10 +400,11 @@ def _status_payment(register_text: str, run: Run, context: dict | None = None) -
     return False
 
 
-def registration_status(  # noqa: C901 - Complex registration status determination with event rules
+def registration_status(  # noqa: C901
     run: Run,
     member: Member,
     context: dict,
+    registration: Registration | None = None,
 ) -> None:
     """Determine registration status and availability for users.
 
@@ -419,6 +421,7 @@ def registration_status(  # noqa: C901 - Complex registration status determinati
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
+        registration: Optional provided registration
 
     """
     # Extract values from context dictionary if provided
@@ -427,7 +430,13 @@ def registration_status(  # noqa: C901 - Complex registration status determinati
 
     run.status = {"open": True, "details": "", "text": "", "additional": ""}
 
-    registration_find(run, member, context)
+    # Find user's registration if not already provided
+    if registration is None:
+        registration = registration_find(run, member, context)
+        context["registration"] = registration
+
+    # Set run.reg for backward compatibility with templates that iterate over runs
+    run.reg = registration
 
     features = _get_features_map(run, context)
 
@@ -439,8 +448,8 @@ def registration_status(  # noqa: C901 - Complex registration status determinati
         if membership.status in [MembershipStatus.REWOKED]:
             return
 
-        if run.reg:
-            registration_status_signed(run, run.reg, member, features, register_url, context)
+        if registration:
+            registration_status_signed(run, registration, member, features, register_url, context)
             return
 
     if run.end and get_time_diff_today(run.end) < 0:
@@ -553,11 +562,11 @@ def _get_features_map(run: Run, context: dict) -> Any:
     return features_map[run.event_id]
 
 
-def registration_find(run: Run, member: Member, context: dict | None = None) -> None:
-    """Find and attach registration for a user to a run.
+def registration_find(run: Run, member: Member, context: dict | None = None) -> Registration | None:
+    """Find registration for a user to a run.
 
     Searches for an active registration (non-cancelled, non-redeemed) for the given
-    user and run. Sets run.reg to the found registration or None if not found.
+    user and run.
 
     Args:
         run: The Run object to find registration for
@@ -566,28 +575,24 @@ def registration_find(run: Run, member: Member, context: dict | None = None) -> 
             - my_regs: Pre-fetched registrations queryset for performance optimization
 
     Returns:
-        None: Function modifies run.reg attribute in-place
+        Registration | None: The found registration or None if not found
 
     """
-    # Extract values from context dictionary if provided
-    if context is None:
-        context = {}
-
     # Early return if user is not authenticated
     if not member:
-        run.reg = None
-        return
+        return None
 
     # Use pre-fetched registrations if provided
+    if context is None:
+        context = {}
     cached_registrations = context.get("my_regs")
     if cached_registrations is not None:
-        run.reg = cached_registrations.get(run.id)
-        return
+        return cached_registrations.get(run.id)
 
     # Query database for active registration (non-cancelled, non-redeemed)
     try:
         registration_queryset = Registration.objects.select_related("ticket")
-        run.reg = registration_queryset.get(
+        return registration_queryset.get(
             run=run,
             member=member,
             redeem_code__isnull=True,
@@ -595,7 +600,7 @@ def registration_find(run: Run, member: Member, context: dict | None = None) -> 
         )
     except ObjectDoesNotExist:
         # No active registration found for this user and run
-        run.reg = None
+        return None
 
 
 def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
@@ -629,14 +634,17 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
     return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
 
 
-def registration_status_characters(run: Run, features: dict, context: dict | None = None) -> None:
+def registration_status_characters(
+    run: Run, registration: Registration, features: dict, context: dict | None = None
+) -> None:
     """Update registration status with character assignment information.
 
     Displays assigned characters with approval status and provides links
     for character creation or selection based on event configuration.
 
     Args:
-        run: The run object containing registration information
+        run: The run object containing status information
+        registration: The registration object with character relationships
         features: Dictionary of enabled event features
         context: Optional context dictionary containing cached data:
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
@@ -653,9 +661,9 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
 
     # Get character relationships either from provided dict or database query
     if character_rels_dict is not None:
-        registration_character_rels = character_rels_dict.get(run.reg.id, [])
+        registration_character_rels = character_rels_dict.get(registration.id, [])
     else:
-        query = RegistrationCharacterRel.objects.filter(reg_id=run.reg.id)
+        query = RegistrationCharacterRel.objects.filter(reg_id=registration.id)
         registration_character_rels = query.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
@@ -687,10 +695,10 @@ def registration_status_characters(run: Run, features: dict, context: dict | Non
 
     is_assigned = len(character_links) == 0
 
-    _status_approval(run, features, is_character_assigned=is_assigned)
+    _status_approval(run, registration, features, is_character_assigned=is_assigned)
 
 
-def _status_approval(run: Run, features: dict, *, is_character_assigned: bool) -> None:
+def _status_approval(run: Run, registration: Registration, features: dict, *, is_character_assigned: bool) -> None:
     """Add character creation/selection links to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
@@ -698,7 +706,8 @@ def _status_approval(run: Run, features: dict, *, is_character_assigned: bool) -
     links to the run status details.
 
     Args:
-        run: Run object containing registration and event information
+        run: Run object containing event information
+        registration: The registration object
         features: Dictionary of enabled features for the event
         is_character_assigned: Boolean indicating if character is already assigned
 
@@ -711,11 +720,11 @@ def _status_approval(run: Run, features: dict, *, is_character_assigned: bool) -
         return
 
     # Skip if registration is on waiting list
-    if run.reg.ticket and run.reg.ticket.tier == TicketTier.WAITING:
+    if registration.ticket and registration.ticket.tier == TicketTier.WAITING:
         return
 
     # Get character creation limits for this user and event
-    can_create_character, maximum_characters = check_character_maximum(run.event, run.reg.member)
+    can_create_character, maximum_characters = check_character_maximum(run.event, registration.member)
 
     # Show character creation link if user can create more characters
     if not can_create_character:
@@ -802,6 +811,9 @@ def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
 
 def get_player_signup(context: dict) -> Registration | None:
     """Get active registration for current user in the given run context."""
+    if "registration" in context:
+        return context["registration"]
+
     # Filter registrations for current run and user, excluding cancelled ones
     active_registrations = Registration.objects.filter(
         run=context["run"],
@@ -827,7 +839,7 @@ def check_signup(context: dict) -> None:
         WaitingError: If signup ticket is in waiting tier
 
     """
-    # Get player registration for current run
+    # Get registration
     registration = get_player_signup(context)
     if not registration:
         raise SignupError(context["run"].get_slug())
@@ -850,7 +862,7 @@ def check_assign_character(context: dict) -> None:
         None: Function performs side effects only
 
     """
-    # Get the player's registration for this event
+    # Get registration
     registration = get_player_signup(context)
     if not registration:
         return
