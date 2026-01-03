@@ -51,7 +51,7 @@ def get_users_data(member_ids: Any) -> Any:
     ]
 
 
-def get_membership_fee_year(association_id: Any, year: Any = None) -> Any:
+def get_membership_fee_year(association_id: int, year: Any = None) -> set:
     """Get set of member IDs who paid membership fee for given year.
 
     Args:

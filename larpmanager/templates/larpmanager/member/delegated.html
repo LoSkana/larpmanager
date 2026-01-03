@@ -58,11 +58,11 @@
                         {% endfor %}
                     </td>
                     <td>
-                        <form action="{{ request.path }}" method="post" id="login_{{ el.id }}">
+                        <form action="{{ request.path }}" method="post" id="login_{{ el.uuid }}">
                             {% csrf_token %}
-                            <input type="hidden" name="account" value="{{ el.id }}" />
+                            <input type="hidden" name="account" value="{{ el.uuid }}" />
                         </form>
-                        <a href="#" onclick="submitForm('login_{{ el.id }}'); return false;">{% trans "Login" %}</a>
+                        <a href="#" onclick="submitForm('login_{{ el.uuid }}'); return false;">{% trans "Login" %}</a>
                     </td>
                 </tr>
             {% endfor %}

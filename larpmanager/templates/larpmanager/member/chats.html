@@ -24,7 +24,7 @@
                         {% if el.num_unread > 0 %}{{ el.num_unread }}{% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'chat' el.you.id %}">Chat</a>
+                        <a href="{% url 'chat' el.you.uuid %}">Chat</a>
                     </td>
                 </tr>
             {% endfor %}

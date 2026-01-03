@@ -102,8 +102,8 @@ class TestRegistrationCreation(BaseTestCase):
         registration = Registration(member=member, run=run, tot_iscr=Decimal("100.00"), quotas=1)
         registration.save()
 
-        self.assertIsNotNone(registration.special_cod)
-        self.assertGreater(len(registration.special_cod), 0)
+        self.assertIsNotNone(registration.uuid)
+        self.assertGreater(len(registration.uuid), 0)
 
     @patch("larpmanager.mail.registration.my_send_mail")
     def test_create_registration_with_additionals(self, mock_mail: Any) -> None:

@@ -30,6 +30,8 @@ from django.core.management.base import BaseCommand
 from django.db import connection, transaction
 from django.db.models import ForeignKey, ManyToManyField
 
+from larpmanager.management.commands.utils import check_virtualenv
+
 
 class Command(BaseCommand):
     """Django management command."""
@@ -42,6 +44,8 @@ class Command(BaseCommand):
         Loads modules, features, permissions, and other system configuration
         from YAML fixtures with proper handling of foreign keys and many-to-many relations.
         """
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
         models_to_reset = set()
 
         for fixture in [

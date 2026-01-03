@@ -122,7 +122,7 @@
                         </td>
                         <td data-title="{% trans "Character" %}">
                             {% if run.reg and run.reg.character %}
-                                <a href="{% url 'character' run.get_slug run.reg.character.number %}">{{ run.reg.display_character }}</a>
+                                <a href="{% url 'character' run.get_slug run.reg.character.uuid %}">{{ run.reg.display_character }}</a>
                             {% endif %}
                         </td>
                     </tr>

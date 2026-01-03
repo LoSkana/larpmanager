@@ -15,7 +15,7 @@
             {% trans "Total registration fee" %}: {{ run.reg.tot_iscr|format_decimal }}.
         {% endif %}
         {% if run.reg.quota %}
-            <a href="{% url 'acc_reg' run.reg.id %}">
+            <a href="{% url 'acc_reg' run.reg.uuid %}">
                 {% trans "Next payment" %}: {{ run.reg.quota | format_decimal }}{{ currency_symbol }},
                 {% if run.reg.deadline > 0 %}
                     {% trans "expected within" %} {{ run.reg.deadline }} {% trans "days" %}
@@ -25,7 +25,7 @@
             </a>
         {% elif run.reg.tot_iscr > run.reg.tot_payed %}
             {% trans "No additional payments are required at this time" %},
-            <a href="{% url 'acc_reg' run.reg.id %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+            <a href="{% url 'acc_reg' run.reg.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
         {% endif %}
     </span>
 {% endif %}

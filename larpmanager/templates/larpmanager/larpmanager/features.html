@@ -42,7 +42,7 @@
                 </thead>
                 <tbody>
                     {% for el in mod.features.all %}
-                        <tr id="{{ el.id }}" class="fea">
+                        <tr id="{{ el.uuid }}" class="fea">
                             <td class="hide">{{ el.order }}</td>
                             <th>{{ el.name|template_trans }}</th>
                             <td>

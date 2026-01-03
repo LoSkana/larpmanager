@@ -42,8 +42,8 @@ from larpmanager.models.association import (
 class AssociationAdmin(DefModelAdmin):
     """Admin interface for LARP organizations and associations."""
 
-    list_display = ("name", "slug")
-    search_fields: ClassVar[tuple] = ("name",)
+    list_display = ("id", "name", "slug", "uuid")
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
     autocomplete_fields: ClassVar[list] = ["payment_methods", "features", "maintainers"]
 
@@ -53,7 +53,7 @@ class AssociationConfigAdmin(DefModelAdmin):
     """Admin interface for association-specific configuration key-value pairs."""
 
     list_display = ("association", "name", "value")
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
     list_filter = (AssociationFilter,)
     autocomplete_fields: ClassVar[list] = ["association"]
 
@@ -62,8 +62,9 @@ class AssociationConfigAdmin(DefModelAdmin):
 class AssociationTextAdmin(DefModelAdmin):
     """Admin interface for association custom text content by language and type."""
 
-    list_display: ClassVar[tuple] = ("association", "typ", "language", "default")
+    list_display: ClassVar[tuple] = ("id", "association", "typ", "language", "default", "uuid")
     list_filter = (AssociationFilter, "typ", "language")
+    search_fields: ClassVar[list] = ["id", "uuid"]
     autocomplete_fields: ClassVar[list] = ["association"]
 
 
@@ -77,9 +78,9 @@ class AssociationTranslationAdmin(DefModelAdmin):
     long text for better readability, and allows quick activation/deactivation.
     """
 
-    list_display = ("association", "language", "msgid_preview", "msgstr_preview", "active")
+    list_display = ("id", "association", "language", "msgid_preview", "msgstr_preview", "active", "uuid")
     list_filter: ClassVar[tuple] = (AssociationFilter, "language", "active")
-    search_fields = ("msgid", "msgstr")
+    search_fields: ClassVar[tuple] = ("id", "msgid", "msgstr", "uuid")
     autocomplete_fields: ClassVar[list] = ["association"]
     list_editable = ("active",)
 
@@ -119,7 +120,7 @@ class AssociationSkinAdmin(DefModelAdmin):
     """Admin interface for association visual themes and skins."""
 
     list_display = ("name",)
-    search_fields: ClassVar[tuple] = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name")
 
     autocomplete_fields: ClassVar[list] = [
         "default_features",

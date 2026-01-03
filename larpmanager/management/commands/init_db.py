@@ -23,7 +23,7 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-from larpmanager.management.commands.utils import check_branch
+from larpmanager.management.commands.utils import check_branch, check_virtualenv
 from larpmanager.models.association import Association, AssociationSkin
 from larpmanager.models.base import Feature
 
@@ -49,6 +49,9 @@ class Command(BaseCommand):
             None
 
         """
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
+
         # Ensure we're not running on main branch
         check_branch()
 

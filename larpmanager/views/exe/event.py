@@ -38,7 +38,6 @@ from larpmanager.forms.event import (
     ExeEventForm,
     ExeTemplateForm,
     ExeTemplateRolesForm,
-    OrgaAppearanceForm,
     OrgaConfigForm,
     OrgaRunForm,
 )
@@ -77,7 +76,7 @@ def exe_events(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
     """Handle editing of existing events or creation of new executive events.
 
     This function manages both the creation of new events and the editing of existing events/runs.
@@ -86,7 +85,7 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
 
     Args:
         request: HTTP request object containing user session and form data
-        num: Event number identifier (0 for new event creation, >0 for existing event editing)
+        event_uuid: Event number UUID (0 for new event creation)
 
     Returns:
         HttpResponse: Either a redirect to the appropriate page after successful operation
@@ -100,10 +99,10 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
     # Check user has executive events permission for the association
     context = check_association_context(request, "exe_events")
 
-    if num:
-        # Handle editing of existing event or run
+    # Handle editing of existing event or run
+    if event_uuid != "0":
         # Retrieve the run object and set it in context
-        backend_get(context, Run, num, "event")
+        backend_get(context, Run, event_uuid, "event")
         # Delegate to full event edit with executive flag enabled
         return full_event_edit(context, request, context["el"].event, context["el"], is_executive=True)
 
@@ -112,9 +111,9 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
     context["exe"] = True
 
     # Process form submission and handle creation logic
-    if backend_edit(request, context, ExeEventForm, num, quiet=True):
+    if backend_edit(request, context, ExeEventForm, event_uuid, quiet=True):
         # Check if event was successfully created (saved context and new event)
-        if "saved" in context and num == 0:
+        if "saved" in context and event_uuid == "0":
             # Automatically add requesting user as event organizer
             # Get or create organizer role (number=1 is standard organizer role)
             (er, _created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
@@ -145,15 +144,9 @@ def exe_events_edit(request: HttpRequest, num: int) -> HttpResponse:
 
 
 @login_required
-def exe_runs_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_runs_edit(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Edit organization-wide run with event field."""
-    return exe_edit(request, OrgaRunForm, num, "exe_events", additional_field="event")
-
-
-@login_required
-def exe_events_appearance(request: HttpRequest, num: int) -> HttpResponse:
-    """Edit organization appearance settings for an event."""
-    return exe_edit(request, OrgaAppearanceForm, num, "exe_events", additional_context={"add_another": False})
+    return exe_edit(request, OrgaRunForm, run_uuid, "exe_events", additional_field="event")
 
 
 @login_required
@@ -179,31 +172,31 @@ def exe_templates(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_templates_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_templates_edit(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Edit an existing executive template."""
-    return exe_edit(request, ExeTemplateForm, num, "exe_templates")
+    return exe_edit(request, ExeTemplateForm, template_uuid, "exe_templates")
 
 
 @login_required
-def exe_templates_config(request: HttpRequest, num: int) -> HttpResponse:
+def exe_templates_config(request: HttpRequest, template_uuid: str) -> HttpResponse:
     """Configure templates for organization events."""
     # Initialize user context and get event template
     add_ctx = get_context(request)
-    get_event_template(add_ctx, num)
+    get_event_template(add_ctx, template_uuid)
 
     # Update context with event features and configuration
     add_ctx["features"].update(get_event_features(add_ctx["event"].id))
     add_ctx["add_another"] = False
 
-    return exe_edit(request, OrgaConfigForm, num, "exe_templates", additional_context=add_ctx)
+    return exe_edit(request, OrgaConfigForm, template_uuid, "exe_templates", additional_context=add_ctx)
 
 
 @login_required
-def exe_templates_roles(request: HttpRequest, event_id: int, num: int | None) -> HttpResponse:
+def exe_templates_roles(request: HttpRequest, event_uuid: str, role_uuid: str | None) -> HttpResponse:
     """Edit or create template roles for an event."""
     add_ctx = get_context(request)
-    get_event_template(add_ctx, event_id)
-    return exe_edit(request, ExeTemplateRolesForm, num, "exe_templates", additional_context=add_ctx)
+    get_event_template(add_ctx, event_uuid)
+    return exe_edit(request, ExeTemplateRolesForm, role_uuid, "exe_templates", additional_context=add_ctx)
 
 
 @login_required

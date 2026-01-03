@@ -375,14 +375,11 @@ def _prepare_data_json(
 
     # Process each element and build row data
     for model_object in elements:
-        # Generate appropriate URL based on view type (exe vs orga)
+        # Generate edit url (in orga need to add event slug)
         if is_executive:
-            edit_url = reverse(view, args=[model_object.id])
+            edit_url = reverse(view, args=[model_object.uuid])
         else:
-            # For orga views, we need both slug and ID
-            edit_url = reverse(view, args=[context["run"].get_slug(), model_object.id])
-
-        # Start each row with edit link in column 0
+            edit_url = reverse(view, args=[context["run"].get_slug(), model_object.uuid])
         row_data = {"0": f'<a href="{edit_url}" qtip="{edit}"><i class="fas fa-edit"></i></a>'}
 
         # Add data for each configured field, starting from column 1
@@ -394,7 +391,7 @@ def _prepare_data_json(
     return table_rows_data
 
 
-def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type[Model]) -> QuerySet:
+def _apply_custom_queries(context: dict, elements: QuerySet, typ: type[Model]) -> QuerySet:
     """Apply custom queries and optimizations based on model type.
 
     Args:
@@ -479,7 +476,7 @@ def _apply_custom_queries(context: dict[str, Any], elements: QuerySet, typ: type
 
 def exe_paginate(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     pagination_model: type[Model],
     template_name: str,
     view_name: str,

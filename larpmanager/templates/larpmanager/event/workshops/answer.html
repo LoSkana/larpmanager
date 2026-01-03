@@ -6,7 +6,7 @@
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
     <div class="lm_tooltip">
-        <a href="{% url 'workshops' slug run.number %}">Workshop</a>
+        <a href="{% url 'workshops' slug run.uuid %}">Workshop</a>
         <div class="lm_tooltiptext">{% trans "Fill out the event prep questions" %}!</div>
     </div>
 {% endblock nav %}
@@ -24,8 +24,8 @@
                         <div class="option">
                             <p>
                                 <input type="checkbox"
-                                       id="{{ el.id }}_{{ op.id }}"
-                                       name="{{ el.id }}_{{ op.id }}">
+                                       id="{{ el.uuid }}_{{ op.uuid }}"
+                                       name="{{ el.uuid }}_{{ op.uuid }}">
                                 {{ op.name }}
                             </p>
                         </div>

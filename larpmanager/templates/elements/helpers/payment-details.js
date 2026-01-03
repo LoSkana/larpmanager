@@ -6,7 +6,7 @@ window.disable_jump = true;
 
 const methodsMapping = {
     {% for obj in form.methods %}
-        {{ obj.id }}: "{{ obj.name | slugify }}"{% if not forloop.last %},{% endif %}
+        "{{ obj.uuid }}": "{{ obj.name | slugify }}"{% if not forloop.last %},{% endif %}
     {% endfor %}
 };
 
@@ -17,7 +17,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const checkboxes = document.querySelectorAll('#id_payment_methods input[type="checkbox"]');
 
         checkboxes.forEach(cb => {
-            const slug = methodsMapping[parseInt(cb.value)];
+            const slug = methodsMapping[cb.value];
             var link = $('a[tog="sec_' + slug + '"]');
             if (!cb.checked) {
                 link.hide();
