@@ -2654,6 +2654,9 @@ msgstr "Filtruj frakcje"
 msgid "Invalid request"
 msgstr "Nieprawidłowe żądanie"
 
+msgid "Load from event"
+msgstr "Wczytywanie ze zdarzenia"
+
 msgid "Mail assignment"
 msgstr "Przydział poczty"
 
@@ -7971,6 +7974,13 @@ msgid ""
 msgstr ""
 "(Opcjonalnie) Nazwy postaci do przypisania graczowi, oddzielone przecinkami"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Postacie z wydarzenia '{run}' zostały wczytane. Przejrzyj i potwierdź, aby "
+"zapisać."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9710,6 +9720,13 @@ msgid ""
 msgstr ""
 "Jeśli opcja ta jest zaznaczona, opcje niedostępne w formularzu są ukrywane, "
 "zamiast być wyświetlane jako wyłączone"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Jeśli wybierzesz wydarzenie, wszystkie znaki z rejestracji tego wydarzenia "
+"zostaną automatycznie załadowane"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

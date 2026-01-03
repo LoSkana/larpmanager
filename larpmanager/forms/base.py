@@ -112,9 +112,7 @@ class BaseModelForm(forms.ModelForm):
 
         # Configure characters field widget with event context
         if "characters" in self.fields:
-            self.fields["characters"].widget.set_event(self.params["event"])
-            # Optimize queryset to load only necessary fields for rendering
-            self.fields["characters"].queryset = self.fields["characters"].widget.get_queryset()
+            self.configure_field_event("characters", self.params["event"])
 
         # Handle automatic fields based on instance state
         self.handle_automatic()
@@ -145,6 +143,24 @@ class BaseModelForm(forms.ModelForm):
         if hasattr(self, "auto_run"):
             automatic_fields.extend(["run"])
         return automatic_fields
+
+    def configure_field_event(self, field_name: str, event: Event) -> None:
+        """Configure a form field's widget and queryset for a specific event."""
+        field = self.fields[field_name]
+        field.widget.set_event(event)
+        field.queryset = field.widget.get_queryset()
+
+    def configure_field_association(self, field_name: str, association_id: int) -> None:
+        """Configure a form field's widget and queryset for a specific association."""
+        field = self.fields[field_name]
+        field.widget.set_association_id(association_id)
+        field.queryset = field.widget.get_queryset()
+
+    def configure_field_run(self, field_name: str, run: Run) -> None:
+        """Configure a form field's widget and queryset for a specific run."""
+        field = self.fields[field_name]
+        field.widget.set_run(run)
+        field.queryset = field.widget.get_queryset()
 
     def allow_run_choice(self) -> None:
         """Configure run selection field based on available runs.

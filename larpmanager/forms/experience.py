@@ -29,7 +29,9 @@ from larpmanager.forms.utils import (
     AbilityTemplateS2WidgetMulti,
     EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
+    RunCampaignS2Widget,
 )
+from larpmanager.models.event import Run
 from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
 from larpmanager.models.form import WritingQuestion, WritingQuestionType
 
@@ -60,6 +62,16 @@ class OrgaDeliveryPxForm(PxBaseForm):
 
     page_info = _("Manage experience point deliveries")
 
+    auto_populate_run = forms.ModelChoiceField(
+        queryset=Run.objects.none(),
+        required=False,
+        label=_("Load from event"),
+        help_text=_(
+            "If you select an event, all characters from that event's registrations will be automatically loaded"
+        ),
+        widget=RunCampaignS2Widget,
+    )
+
     class Meta:
         model = DeliveryPx
         exclude = ("number",)
@@ -69,6 +81,8 @@ class OrgaDeliveryPxForm(PxBaseForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with event configuration."""
         super().__init__(*args, **kwargs)
+
+        self.configure_field_event("auto_populate_run", self.params["event"])
 
 
 class OrgaAbilityTemplatePxForm(BaseModelForm):
@@ -110,7 +124,7 @@ class OrgaAbilityPxForm(PxBaseForm):
         # Configure event-specific widgets
         for field_name in ["characters", "prerequisites", "requirements", "template", "dependents"]:
             if field_name in self.fields and hasattr(self.fields[field_name].widget, "set_event"):
-                self.fields[field_name].widget.set_event(self.params["event"])
+                self.configure_field_event(field_name, self.params["event"])
 
         px_user = get_event_config(self.params["event"].id, "px_user", default_value=False, context=self.params)
         px_templates = get_event_config(
@@ -163,7 +177,7 @@ class OrgaRulePxForm(BaseModelForm):
         self.delete_field("name")
 
         # Configure abilities widget with event context
-        self.fields["abilities"].widget.set_event(self.params["event"])
+        self.configure_field_event("abilities", self.params["event"])
 
         # Filter writing questions to computed type only
         qs = WritingQuestion.objects.filter(event=self.params["event"], typ=WritingQuestionType.COMPUTED)
@@ -196,7 +210,7 @@ class OrgaModifierPxForm(BaseModelForm):
 
         # Configure event-specific widgets
         for field in ["abilities", "prerequisites", "requirements"]:
-            self.fields[field].widget.set_event(self.params["event"])
+            self.configure_field_event(field, self.params["event"])
 
 
 class SelectNewAbility(forms.Form):

@@ -458,7 +458,7 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
             self.initial["working"] = self.params["member"]
 
         # Configure widget with association context
-        self.fields["working"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("working", self.params["association_id"])
 
 
 class OrgaCopyForm(forms.Form):
@@ -484,7 +484,7 @@ class OrgaCopyForm(forms.Form):
             help_text="The event from which you will copy the elements",
         )
         self.fields["parent"].widget = EventS2Widget()
-        self.fields["parent"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("parent", self.params["association_id"])
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [

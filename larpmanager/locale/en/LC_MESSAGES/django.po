@@ -1653,6 +1653,14 @@ msgstr ""
 msgid "Manage experience point deliveries"
 msgstr ""
 
+msgid "Load from event"
+msgstr ""
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+
 msgid "Ability Template"
 msgstr ""
 
@@ -9643,6 +9651,11 @@ msgid "Elements uploaded"
 msgstr ""
 
 msgid "Unknow error on upload"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
 msgstr ""
 
 msgid ""

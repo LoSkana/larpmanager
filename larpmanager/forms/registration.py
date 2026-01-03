@@ -702,7 +702,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.event = self.params["run"].event
 
         # Configure member widget with association
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
         self.allow_run_choice()
 
@@ -1213,7 +1213,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         """
         super().__init__(*args, **kwargs)
 
-        self.fields["factions"].widget.set_event(self.params["event"])
+        self.configure_field_event("factions", self.params["event"])
 
         self._init_type()
 
@@ -1227,12 +1227,12 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         if "reg_que_allowed" not in self.params["features"]:
             self.delete_field("allowed")
         else:
-            self.fields["allowed"].widget.set_event(self.params["event"])
+            self.configure_field_event("allowed", self.params["event"])
 
         if "reg_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
-            self.fields["tickets"].widget.set_event(self.params["event"])
+            self.configure_field_event("tickets", self.params["event"])
 
         if "reg_que_faction" not in self.params["features"]:
             self.delete_field("factions")
@@ -1363,7 +1363,7 @@ class OrgaRegistrationInstallmentForm(BaseModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure event-specific ticket widget."""
         super().__init__(*args, **kwargs)
-        self.fields["tickets"].widget.set_event(self.params["event"])
+        self.configure_field_event("tickets", self.params["event"])
 
     def clean_order(self) -> int:
         """Validate that the order is unique for installments of this event.
@@ -1532,5 +1532,5 @@ class RegistrationTransferForm(forms.Form):
         self.context = kwargs.pop("context")
         super().__init__(*args, **kwargs)
 
-        self.fields["registration_id"].widget.set_run(self.context["run"])
-        self.fields["target_run_id"].widget.set_event(self.context["event"])
+        self.configure_field_run("registration_id", self.context["run"])
+        self.configure_field_event("target_run_id", self.context["event"])

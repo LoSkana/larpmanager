@@ -110,7 +110,7 @@ class OrgaExpenseForm(BaseModelFormRun):
         super().__init__(*args, **kwargs)
 
         # Configure member widget with run context
-        self.fields["member"].widget.set_run(self.params["run"])
+        self.configure_field_run("member", self.params["run"])
 
         # Remove balance field if Italian balance feature is disabled
         if "ita_balance" not in self.params["features"]:
@@ -145,7 +145,7 @@ class OrgaTokenForm(BaseModelFormRun):
 
         # Configure initial form values and widget
         self.initial["oth"] = OtherChoices.TOKEN
-        self.fields["member"].widget.set_run(self.params["run"])
+        self.configure_field_run("member", self.params["run"])
 
 
 class OrgaCreditForm(BaseModelFormRun):
@@ -166,7 +166,7 @@ class OrgaCreditForm(BaseModelFormRun):
 
         # Configure form for credit transaction type
         self.initial["oth"] = OtherChoices.CREDIT
-        self.fields["member"].widget.set_run(self.params["run"])
+        self.configure_field_run("member", self.params["run"])
 
 
 class OrgaPaymentForm(BaseModelFormRun):
@@ -190,7 +190,7 @@ class OrgaPaymentForm(BaseModelFormRun):
         super().__init__(*args, **kwargs)
 
         # Configure registration widget with event context and make field required
-        self.fields["reg"].widget.set_event(self.params["event"])
+        self.configure_field_event("reg", self.params["event"])
         self.fields["reg"].required = True
 
 
@@ -213,7 +213,7 @@ class ExeOutflowForm(BaseModelForm):
 
         # Configure run widget with association context if not auto-populated
         if not hasattr(self, "auto_run"):
-            self.fields["run"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("run", self.params["association_id"])
 
         # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -257,7 +257,7 @@ class ExeInflowForm(BaseModelForm):
 
         # Set association for run field if not auto-run mode
         if not hasattr(self, "auto_run"):
-            self.fields["run"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("run", self.params["association_id"])
 
         # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -290,7 +290,7 @@ class ExeDonationForm(BaseModelForm):
         """Initialize form and set association for member field widget."""
         super().__init__(*args, **kwargs)
 
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
 
 class ExePaymentForm(BaseModelForm):
@@ -310,7 +310,7 @@ class ExePaymentForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Configure registration field widget with association context
-        self.fields["reg"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("reg", self.params["association_id"])
 
         # Remove VAT field if feature is not enabled
         if "vat" not in self.params["features"]:
@@ -334,7 +334,7 @@ class ExeInvoiceForm(BaseModelForm):
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
 
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
 
 class ExeCreditForm(BaseModelForm):
@@ -356,8 +356,8 @@ class ExeCreditForm(BaseModelForm):
 
         # Configure run choices and association widgets
         get_run_choices(self)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
-        self.fields["run"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("run", self.params["association_id"])
 
         # Set other field as hidden with credit value
         self.fields["oth"].widget = forms.HiddenInput()
@@ -382,8 +382,8 @@ class ExeTokenForm(BaseModelForm):
 
         # Configure run choices and association filtering
         get_run_choices(self)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
-        self.fields["run"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("run", self.params["association_id"])
 
         # Hide 'oth' field and set default value
         self.fields["oth"].widget = forms.HiddenInput()
@@ -408,8 +408,8 @@ class ExeExpenseForm(BaseModelForm):
 
         # Configure run choices and set association context for widgets
         get_run_choices(self)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
-        self.fields["run"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("run", self.params["association_id"])
 
         # Remove balance field if feature not enabled
         if "ita_balance" not in self.params["features"]:
@@ -477,7 +477,7 @@ class ExeCollectionForm(CollectionNewForm):
         super().__init__(*args, **kwargs)
 
         # Set association for member widget filtering
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
 
 class OrgaDiscountForm(BaseModelForm):
@@ -622,7 +622,7 @@ class ExeRefundRequestForm(BaseModelForm):
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
 
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
 
 class ExePaymentSettingsForm(BaseModelForm):

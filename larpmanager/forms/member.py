@@ -731,7 +731,7 @@ class ExeVolunteerRegistryForm(BaseModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association ID."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
     def clean_member(self) -> Member:
         """Validate member is not already registered as volunteer for this association."""
@@ -823,7 +823,7 @@ class ExeMembershipFeeForm(forms.Form):
         association_id = self.params.get("association_id", None)
 
         # Configure member field widget and queryset for the association
-        self.fields["member"].widget.set_association_id(association_id)
+        self.configure_field_association("member", association_id)
         self.fields["member"].queryset = get_members_queryset(association_id)
 
         # Build payment method choices from association's available methods
@@ -892,7 +892,7 @@ class ExeMembershipDocumentForm(forms.Form):
         self.association_id = self.params.get("association_id", None)
 
         # Configure member field with association-specific queryset and widget
-        self.fields["member"].widget.set_association_id(self.association_id)
+        self.configure_field_association("member", self.association_id)
         self.fields["member"].queryset = get_members_queryset(self.association_id)
 
         # Calculate next available card number for the association
@@ -950,7 +950,7 @@ class ExeBadgeForm(BaseModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
-        self.fields["members"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("members", self.params["association_id"])
 
 
 class ExeProfileForm(BaseModelForm):

@@ -116,7 +116,7 @@ class PlayerRelationshipForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Configure target field widget with event from run params
-        self.fields["target"].widget.set_event(self.params["run"].event)
+        self.configure_field_event("target", self.params["run"].event)
         self.fields["target"].required = True
 
     def clean(self) -> dict:
