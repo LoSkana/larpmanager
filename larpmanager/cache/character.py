@@ -204,26 +204,24 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
     # Extract question IDs from context for database filtering
     question_ids = context["questions"].keys()
 
-    # Create mapping from character IDs to their position numbers in results
-    character_id_to_position = {}
-    for character_position, character_data in res["chars"].items():
-        character_id_to_position[character_data["id"]] = character_position
+    # Query the Character table to get id -> number mapping for the event
+    character_id_mapping = dict(context["event"].get_elements(Character).values_list("id", "number"))
 
     # Retrieve and process multiple choice answers for characters
     # Each choice can have multiple options selected per question
     choice_answers = WritingChoice.objects.filter(question_id__in=question_ids)
     for element_id, question_id, option_id in choice_answers.values_list("element_id", "question_id", "option_id"):
         # Skip if character not in current event mapping
-        if element_id not in character_id_to_position:
+        if element_id not in character_id_mapping:
             continue
 
         # Map database values to result structure
-        character_position = character_id_to_position[element_id]
+        character_index = character_id_mapping[element_id]
         question = question_id
         value = option_id
 
         # Initialize fields list for question if not exists, then append choice
-        fields = res["chars"][character_position]["fields"]
+        fields = res["chars"][character_index]["fields"]
         if question not in fields:
             fields[question] = []
         fields[question].append(value)
@@ -233,16 +231,16 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
     text_answers = WritingAnswer.objects.filter(question_id__in=question_ids)
     for element_id, question_id, text_value in text_answers.values_list("element_id", "question_id", "text"):
         # Skip if character not in current event mapping
-        if element_id not in character_id_to_position:
+        if element_id not in character_id_mapping:
             continue
 
         # Map database values to result structure
-        character_position = character_id_to_position[element_id]
+        character_index = character_id_mapping[element_id]
         question = question_id
         value = text_value
 
         # Set text answer directly (single value, not list)
-        res["chars"][character_position]["fields"][question] = value
+        res["chars"][character_index]["fields"][question] = value
 
 
 def get_character_element_fields(
