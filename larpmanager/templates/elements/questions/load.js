@@ -200,7 +200,7 @@ window.addEventListener('DOMContentLoaded', function() {
             var tog = $(this).attr("tog");
             $(this).toggleClass('select');
 
-            var index_list = window.hideColumnsIndexMap[tog];
+            var index_list = window.hideColumnsIndexMap[tog] || [];
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
 

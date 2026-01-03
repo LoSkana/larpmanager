@@ -166,6 +166,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("cell", name="Test Teaser").dblclick()
     just_wait(page)
     page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
+    just_wait(page)
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser2")
     just_wait(page)
     submit_confirm(page)
@@ -177,7 +178,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="teeeeest").click()
     page.get_by_role("link", name="Faction", exact=True).click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-
+    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character 2 1 1 Test Teaser2 Test Text eefqq gggerwe first qweeerr",
