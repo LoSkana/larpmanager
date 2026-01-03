@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import BaseRegistrationForm, MyForm
+from larpmanager.forms.base import BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -52,7 +52,7 @@ from larpmanager.models.writing import (
 from larpmanager.utils.core.validators import FileTypeValidator
 
 
-class WritingForm(MyForm):
+class WritingForm(BaseModelForm):
     """Form for Writing."""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
@@ -83,7 +83,7 @@ class WritingForm(MyForm):
 
         if WritingQuestionType.ASSIGNED in question_types:
             staffer_choices = [
-                (member.id, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
+                (member.uuid, member.show_nick()) for member in get_event_staffers(self.params["run"].event)
             ]
             self.fields["assigned"].choices = [("", _("--- NOT ASSIGNED ---")), *staffer_choices]
         else:
@@ -91,14 +91,14 @@ class WritingForm(MyForm):
 
         if WritingQuestionType.PROGRESS in question_types:
             self.fields["progress"].choices = [
-                (step.id, str(step))
+                (step.uuid, str(step))
                 for step in ProgressStep.objects.filter(event=self.params["run"].event).order_by("order")
             ]
         else:
             self.delete_field("progress")
 
 
-class PlayerRelationshipForm(MyForm):
+class PlayerRelationshipForm(BaseModelForm):
     """Form for PlayerRelationship."""
 
     page_title = _("Character Relationship")
@@ -114,6 +114,7 @@ class PlayerRelationshipForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure target field for the event."""
         super().__init__(*args, **kwargs)
+
         # Configure target field widget with event from run params
         self.fields["target"].widget.set_event(self.params["run"].event)
         self.fields["target"].required = True
@@ -463,7 +464,7 @@ class QuestForm(WritingForm, BaseWritingForm):
 
         # Populate quest type choices from event elements
         que = self.params["run"].event.get_elements(QuestType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
 class TraitForm(WritingForm, BaseWritingForm):
@@ -487,7 +488,7 @@ class TraitForm(WritingForm, BaseWritingForm):
 
         # Populate quest choices from event elements
         que = self.params["run"].event.get_elements(Quest)
-        self.fields["quest"].choices = [(m.id, m.name) for m in que]
+        self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
 class HandoutForm(WritingForm):
@@ -506,10 +507,12 @@ class HandoutForm(WritingForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and populate template choices from run's handout templates."""
         super().__init__(*args, **kwargs)
+
         # Retrieve handout templates for the associated run's event
         que = self.params["run"].event.get_elements(HandoutTemplate)
+
         # Populate template field choices with template IDs and names
-        self.fields["template"].choices = [(m.id, m.name) for m in que]
+        self.fields["template"].choices = [(m.uuid, m.name) for m in que]
 
 
 class HandoutTemplateForm(WritingForm):
@@ -558,7 +561,7 @@ class PrologueForm(WritingForm, BaseWritingForm):
 
         # Populate prologue type choices from event elements
         que = self.params["run"].event.get_elements(PrologueType)
-        self.fields["typ"].choices = [(m.id, m.name) for m in que]
+        self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
         # Initialize organization-specific fields and reorder characters
         self.init_orga_fields()

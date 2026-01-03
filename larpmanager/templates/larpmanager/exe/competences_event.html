@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
                         <a href="{% url 'exe_competences_event_detail' el.slug %}">{{ el.name }}</a>
                     </td>

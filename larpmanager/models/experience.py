@@ -25,12 +25,13 @@ from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
+from larpmanager.models.base import UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
-class AbilityTemplatePx(BaseConceptModel):
+class AbilityTemplatePx(UuidMixin, BaseConceptModel):
     """Represents AbilityTemplatePx model."""
 
     name = models.CharField(max_length=150)
@@ -45,7 +46,7 @@ class AbilityTemplatePx(BaseConceptModel):
         return self.name
 
 
-class AbilityTypePx(BaseConceptModel):
+class AbilityTypePx(UuidMixin, BaseConceptModel):
     """Represents AbilityTypePx model."""
 
     name = models.CharField(max_length=150, blank=True)
@@ -65,7 +66,7 @@ class AbilityTypePx(BaseConceptModel):
         ]
 
 
-class AbilityPx(BaseConceptModel):
+class AbilityPx(UuidMixin, BaseConceptModel):
     """Represents AbilityPx model."""
 
     typ = models.ForeignKey(
@@ -139,7 +140,7 @@ class AbilityPx(BaseConceptModel):
         return self.template.descr if self.template else self.descr
 
 
-class DeliveryPx(BaseConceptModel):
+class DeliveryPx(UuidMixin, BaseConceptModel):
     """Represents DeliveryPx model."""
 
     amount = models.IntegerField()
@@ -174,7 +175,7 @@ class Operation(models.TextChoices):
     DIVISION = "DIV", _("Division")
 
 
-class RulePx(BaseConceptModel):
+class RulePx(UuidMixin, BaseConceptModel):
     """Represents RulePx model."""
 
     abilities = models.ManyToManyField(
@@ -204,7 +205,7 @@ class RulePx(BaseConceptModel):
     order = models.IntegerField(default=0)
 
 
-class ModifierPx(BaseConceptModel):
+class ModifierPx(UuidMixin, BaseConceptModel):
     """Represents ModifierPx model."""
 
     abilities = models.ManyToManyField(AbilityPx, related_name="modifiers_abilities", blank=True)

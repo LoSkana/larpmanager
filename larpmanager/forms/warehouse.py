@@ -24,7 +24,7 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.miscellanea import _delete_optionals_warehouse
 from larpmanager.forms.utils import (
     WarehouseAreaS2Widget,
@@ -43,7 +43,7 @@ from larpmanager.models.miscellanea import (
 )
 
 
-class ExeWarehouseItemForm(MyForm):
+class ExeWarehouseItemForm(BaseModelForm):
     """Form for ExeWarehouseItem."""
 
     page_info = _("Manage warehouse items")
@@ -78,7 +78,7 @@ class ExeWarehouseItemForm(MyForm):
         _delete_optionals_warehouse(self)
 
 
-class ExeWarehouseContainerForm(MyForm):
+class ExeWarehouseContainerForm(BaseModelForm):
     """Form for ExeWarehouseContainer."""
 
     page_info = _("Manage warehouse containers")
@@ -91,7 +91,7 @@ class ExeWarehouseContainerForm(MyForm):
         widgets: ClassVar[dict] = {"description": Textarea(attrs={"rows": 5})}
 
 
-class ExeWarehouseTagForm(MyForm):
+class ExeWarehouseTagForm(BaseModelForm):
     """Form for ExeWarehouseTag."""
 
     page_info = _("Manage warehouse item tags")
@@ -119,13 +119,13 @@ class ExeWarehouseTagForm(MyForm):
 
         # Set initial selected items if editing existing instance
         if self.instance.pk:
-            self.initial["items"] = self.instance.items.values_list("pk", flat=True)
+            self.initial["items"] = self.instance.items.values_list("id", flat=True)
 
         # Configure widget with association context
         self.fields["items"].widget.set_association_id(self.params["association_id"])
 
 
-class ExeWarehouseMovementForm(MyForm):
+class ExeWarehouseMovementForm(BaseModelForm):
     """Form for ExeWarehouseMovement."""
 
     page_info = _("Manage warehouse item movements, loans, and repairs")
@@ -143,6 +143,7 @@ class ExeWarehouseMovementForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure warehouse item field for association."""
         super().__init__(*args, **kwargs)
+
         # Configure item widget with association ID
         self.fields["item"].widget.set_association_id(self.params["association_id"])
 
@@ -150,7 +151,7 @@ class ExeWarehouseMovementForm(MyForm):
         _delete_optionals_warehouse(self)
 
 
-class OrgaWarehouseAreaForm(MyForm):
+class OrgaWarehouseAreaForm(BaseModelForm):
     """Form for OrgaWarehouseArea."""
 
     page_info = _("Manage event areas")
@@ -163,7 +164,7 @@ class OrgaWarehouseAreaForm(MyForm):
         widgets: ClassVar[dict] = {"description": Textarea(attrs={"rows": 5})}
 
 
-class OrgaWarehouseItemAssignmentForm(MyForm):
+class OrgaWarehouseItemAssignmentForm(BaseModelForm):
     """Form for OrgaWarehouseItemAssignment."""
 
     page_info = _("Manage warehouse item assignments to event areas")

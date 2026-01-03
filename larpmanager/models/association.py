@@ -32,7 +32,14 @@ from pilkit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, FeatureNationality, PaymentMethod
+from larpmanager.models.base import (
+    AlphanumericValidator,
+    BaseModel,
+    Feature,
+    FeatureNationality,
+    PaymentMethod,
+    UuidMixin,
+)
 from larpmanager.models.utils import UploadToPathAndRename
 from larpmanager.utils.core.validators import FileTypeValidator
 
@@ -91,7 +98,7 @@ class AssociationSkin(BaseModel):
         return self.name
 
 
-class Association(BaseModel):
+class Association(UuidMixin, BaseModel):
     """Represents Association model."""
 
     skin = models.ForeignKey(AssociationSkin, on_delete=models.CASCADE, default=1)
@@ -357,7 +364,7 @@ class AssociationTextType(models.TextChoices):
     REMINDER_PROFILE = "rr", _("Reminder profile")
 
 
-class AssociationText(BaseModel):
+class AssociationText(UuidMixin, BaseModel):
     """Represents AssociationText model."""
 
     number = models.IntegerField(null=True, blank=True)
@@ -403,7 +410,7 @@ class AssociationText(BaseModel):
         ]
 
 
-class AssociationTranslation(BaseModel):
+class AssociationTranslation(UuidMixin, BaseModel):
     """Per-organization custom translation overrides for Django i18n strings.
 
     This model enables multi-tenant translation customization, allowing each

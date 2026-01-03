@@ -55,9 +55,9 @@ def exe_urlshortner(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_urlshortner_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_urlshortner_edit(request: HttpRequest, url_uuid: str) -> HttpResponse:
     """Edit an existing URL shortener entry."""
-    return exe_edit(request, ExeUrlShortnerForm, num, "exe_urlshortner")
+    return exe_edit(request, ExeUrlShortnerForm, url_uuid, "exe_urlshortner")
 
 
 @login_required
@@ -73,9 +73,9 @@ def exe_warehouse_containers(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_containers_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_containers_edit(request: HttpRequest, container_uuid: str) -> HttpResponse:
     """Edit warehouse container using generic edit handler."""
-    return exe_edit(request, ExeWarehouseContainerForm, num, "exe_warehouse_containers")
+    return exe_edit(request, ExeWarehouseContainerForm, container_uuid, "exe_warehouse_containers")
 
 
 @login_required
@@ -91,9 +91,9 @@ def exe_warehouse_tags(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_tags_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_tags_edit(request: HttpRequest, tag_uuid: str) -> HttpResponse:
     """Edit warehouse tag via generic edit view."""
-    return exe_edit(request, ExeWarehouseTagForm, num, "exe_warehouse_tags")
+    return exe_edit(request, ExeWarehouseTagForm, tag_uuid, "exe_warehouse_tags")
 
 
 @login_required
@@ -116,9 +116,9 @@ def exe_warehouse_items(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_items_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_items_edit(request: HttpRequest, item_uuid: str) -> HttpResponse:
     """Delegate to exe_edit for warehouse item form handling."""
-    return exe_edit(request, ExeWarehouseItemForm, num, "exe_warehouse_items")
+    return exe_edit(request, ExeWarehouseItemForm, item_uuid, "exe_warehouse_items")
 
 
 @login_required
@@ -137,6 +137,6 @@ def exe_warehouse_movements(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
-def exe_warehouse_movements_edit(request: HttpRequest, num: int) -> HttpResponse:
+def exe_warehouse_movements_edit(request: HttpRequest, movement_uuid: str) -> HttpResponse:
     """Edit a specific warehouse movement by delegating to the generic exe_edit view."""
-    return exe_edit(request, ExeWarehouseMovementForm, num, "exe_warehouse_movements")
+    return exe_edit(request, ExeWarehouseMovementForm, movement_uuid, "exe_warehouse_movements")

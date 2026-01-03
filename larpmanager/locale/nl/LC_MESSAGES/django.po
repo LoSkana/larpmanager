@@ -50,6 +50,9 @@ msgstr "Einde"
 msgid "Fee"
 msgstr "Commissie"
 
+msgid "Low"
+msgstr "Laag"
+
 msgid "NPC"
 msgstr "NPC"
 
@@ -85,9 +88,6 @@ msgstr "Gebied"
 
 msgid "Band"
 msgstr "Fascia"
-
-msgid "Blog"
-msgstr "Blog"
 
 msgid "Body"
 msgstr "Lichaam"
@@ -142,6 +142,9 @@ msgstr "Help"
 
 msgid "Hide"
 msgstr "Verberg"
+
+msgid "High"
+msgstr "Hoog"
 
 msgid "Home"
 msgstr "Home"
@@ -208,6 +211,9 @@ msgstr "Betaald"
 
 msgid "Plot"
 msgstr "Plot"
+
+msgid "Pool"
+msgstr "Zwembad"
 
 msgid "Port"
 msgstr "Aansluitpoort"
@@ -286,6 +292,9 @@ msgstr "cadeau"
 
 msgid "used"
 msgstr "tweedehands"
+
+msgid "Actor"
+msgstr "Acteur"
 
 msgid "Album"
 msgstr "Albums"
@@ -579,6 +588,9 @@ msgstr "Mark"
 msgid "Master"
 msgstr "Vader"
 
+msgid "Medium"
+msgstr "Medium"
+
 msgid "Member"
 msgstr "Lid"
 
@@ -614,6 +626,9 @@ msgstr "Zoektochten"
 
 msgid "Quotas"
 msgstr "Citaat"
+
+msgid "Reason"
+msgstr "Reden"
 
 msgid "Refund"
 msgstr "Terugbetaling"
@@ -945,6 +960,9 @@ msgstr "Website"
 msgid "Welcome"
 msgstr "Welkom"
 
+msgid "Working"
+msgstr "Werken"
+
 msgid "Writing"
 msgstr "Schrijven"
 
@@ -1185,6 +1203,9 @@ msgstr "Registreer"
 msgid "Reminder"
 msgstr "Herinnering"
 
+msgid "Resource"
+msgstr "Bron"
+
 msgid "Returned"
 msgstr "Geretourneerd"
 
@@ -1323,6 +1344,9 @@ msgstr "Belangrijk"
 msgid "Interface"
 msgstr "Interface"
 
+msgid "Inventory"
+msgstr "Inventaris"
+
 msgid "Load list"
 msgstr "Lijst laden"
 
@@ -1349,6 +1373,9 @@ msgstr "Operatie"
 
 msgid "Organizer"
 msgstr "Organisator"
+
+msgid "Pool type"
+msgstr "Type zwembad"
 
 msgid "Portraits"
 msgstr "Portretten"
@@ -1581,6 +1608,9 @@ msgstr "Percentage"
 msgid "Play Again"
 msgstr "Opnieuw spelen"
 
+msgid "Pool Types"
+msgstr "Soorten zwembaden"
+
 msgid "Preference"
 msgstr "Voorkeur"
 
@@ -1764,6 +1794,9 @@ msgstr "Informatie"
 msgid "Installment"
 msgstr "Termijn"
 
+msgid "Inventories"
+msgstr "Voorraden"
+
 msgid "Last change"
 msgstr "Laatst gewijzigd"
 
@@ -1812,9 +1845,6 @@ msgstr "Progressie"
 msgid "Provisional"
 msgstr "Voorlopig"
 
-msgid "Public UUID"
-msgstr "Openbare UUID"
-
 msgid "Publication"
 msgstr "Publicatie"
 
@@ -1850,6 +1880,9 @@ msgstr "URL verkorten"
 
 msgid "Show closed"
 msgstr "Toon gesloten"
+
+msgid "Signup link"
+msgstr "Link aanmelden"
 
 msgid "Simple list"
 msgstr "Eenvoudige lijst"
@@ -1899,14 +1932,14 @@ msgstr "ranking"
 msgid "text length"
 msgstr "tekstlengte"
 
-msgid "unique code"
-msgstr "unieke code"
-
 msgid "Ability type"
 msgstr "Type vaardigheid"
 
 msgid "Achievements"
 msgstr "Prestaties"
+
+msgid "Add from NPC"
+msgstr "Toevoegen van NPC"
 
 msgid "Add prologue"
 msgstr "Proloog toevoegen"
@@ -2091,6 +2124,9 @@ msgstr "Totaal aantal"
 msgid "Transactions"
 msgstr "Transacties"
 
+msgid "Transfer Log"
+msgstr "Overdrachtlogboek"
+
 msgid "Translations"
 msgstr "Vertalingen"
 
@@ -2108,6 +2144,9 @@ msgstr "BTW (ticket)"
 
 msgid "Verification"
 msgstr "Verificatie"
+
+msgid "View Details"
+msgstr "Details bekijken"
 
 msgid "Waiting list"
 msgstr "Wachten"
@@ -2377,6 +2416,9 @@ msgstr "Verzamelen voor"
 
 msgid "Communications"
 msgstr "Communicatie"
+
+msgid "Configure form"
+msgstr "Formulier configureren"
 
 msgid "Credit balance"
 msgstr "Kredietsaldo"
@@ -3020,6 +3062,9 @@ msgstr "Maanden vrij quotum"
 msgid "Move to container"
 msgstr "Verplaats naar container"
 
+msgid "No transfers yet."
+msgstr "Nog geen transfers."
+
 msgid "One-Time Contents"
 msgstr "Eenmalige inhoud"
 
@@ -3143,9 +3188,6 @@ msgstr "Elektronische factuur"
 msgid "Enable preferences"
 msgstr "Voorkeuren inschakelen"
 
-msgid "Go to the form for"
-msgstr "Ga naar het formulier voor"
-
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
@@ -3256,6 +3298,12 @@ msgstr "Karakter toegewezen!"
 
 msgid "Change registration"
 msgstr "Bericht bewerken"
+
+msgid "Character Inventory"
+msgstr "Karakter Inventarisatie"
+
+msgid "Character inventory"
+msgstr "Karakterinventaris"
 
 msgid "Character not found"
 msgstr "Karakter niet gevonden"
@@ -3553,6 +3601,9 @@ msgstr "Terugbetaling goedkeuren"
 msgid "Assigned staff member"
 msgstr "Toegewezen medewerker"
 
+msgid "Character Inventories"
+msgstr "Karakterinventarissen"
+
 msgid "Character not allowed"
 msgstr "Karakter niet toegestaan"
 
@@ -3724,6 +3775,9 @@ msgstr "Afgesloten en gearchiveerd"
 
 msgid "Confirm password reset"
 msgstr "Wachtwoord opnieuw instellen bevestigd"
+
+msgid "Currencies & Materials"
+msgstr "Valuta & materialen"
 
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
@@ -4526,6 +4580,9 @@ msgstr "Je account is nu actief"
 msgid "check excessive relationships"
 msgstr "extra rapporten controleren"
 
+msgid "Character Inventory Pool Types"
+msgstr "Character Inventory Pool Types"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Volledige betaling voor %(event)s"
@@ -4860,6 +4917,9 @@ msgstr "Vertraging in de registratie van organisaties"
 msgid "Empty relationship check (no text)"
 msgstr "Leeg rapport (geen tekst)"
 
+msgid "Enter a valid date in DD-MM format"
+msgstr "Voer een geldige datum in DD-MM-formaat in"
+
 #, python-format
 msgid "Feature %(name)s already activated"
 msgstr "Functie %(name)s is al geactiveerd"
@@ -5127,6 +5187,9 @@ msgstr "Je hebt een prestatie geleverd"
 msgid "Added to the bottom of all mails sent"
 msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
 
+msgid "Allows characters to have inventories"
+msgstr "Laat personages inventarissen hebben"
+
 msgid "Check the validity of the fiscal code"
 msgstr "Controleer de geldigheid van de fiscale code"
 
@@ -5144,6 +5207,9 @@ msgstr "Locatie - huur, gas, overnachtingen"
 
 msgid "Manage answers for workshop questions"
 msgstr "Antwoorden voor workshopvragen beheren"
+
+msgid "Manage character inventory pool types"
+msgstr "Beheer typen inventarispool voor personages"
 
 msgid "Manage expense items for contributors"
 msgstr "Onkostenposten beheren voor medewerkers"
@@ -5486,9 +5552,6 @@ msgstr "Er zijn quests zonder eigenschappen: %(list)s"
 msgid "This page shows the uploaded photo albums"
 msgstr "Deze pagina geeft een overzicht van de geüploade fotoalbums"
 
-msgid "Unique identifier for public profile URLs"
-msgstr "Unieke identifier voor openbare profiel-URL's"
-
 msgid "You are excluding (none of these filters)"
 msgstr "Je sluit (geen van deze filters) uit"
 
@@ -5716,8 +5779,8 @@ msgstr "Als u geen gebruiker ziet, vraag hem dan om toegang te krijgen tot"
 msgid "If you need a hand, feel free to let us know"
 msgstr "Als je hulp nodig hebt, laat het ons weten"
 
-msgid "Latest articles and updates from LarpManager"
-msgstr "Laatste artikelen en updates van LarpManager"
+msgid "Manage character inventories and their items"
+msgstr "Beheer personage-inventarissen en hun items"
 
 msgid "Manage invoices of payments and approve them"
 msgstr "Facturen van betalingen beheren en goedkeuren"
@@ -5910,6 +5973,9 @@ msgstr "Deze pagina toont de e-maillijsten van abonnees"
 
 msgid "This page summarizes px delivery to characters"
 msgstr "Deze pagina geeft een overzicht van de px-levering aan tekens"
+
+msgid "This page summarizes the character inventories"
+msgstr "Deze pagina geeft een samenvatting van de karakterinventarisaties"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"
@@ -6135,9 +6201,6 @@ msgstr "Deze functie is beschikbaar voor tickets zonder wachttijd"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
 
-msgid "Unique registration code, used for payment checks"
-msgstr "Unieke registratiecode, gebruikt voor betalingscontroles"
-
 msgid "You are including (at least one of these filters)"
 msgstr "U bevat (ten minste een van) deze filters"
 
@@ -6172,9 +6235,6 @@ msgstr "De configuratie van de geactiveerde functies beheren"
 msgid "Manage the progress steps for the writing elements"
 msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 
-msgid "Maximum number of characters the player can create"
-msgstr "Maximum aantal personages dat de speler kan maken"
-
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede teken in de relatie (bestemming)"
 
@@ -6196,6 +6256,9 @@ msgstr "De registratie voor het evenement werd geannuleerd"
 #, python-format
 msgid "There are writing fields without options: %(list)s"
 msgstr "Er zijn schrijfvelden zonder opties: %(list)s"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Op deze pagina kunt u een ci-pooltype toevoegen of bewerken"
 
 msgid "This page summarises the organization's volunteers"
 msgstr ""
@@ -6630,6 +6693,10 @@ msgstr "Selecteer de groepen waarop je de tekens wilt filteren"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Het karakterveld van het berekende type dat wordt bijgewerkt"
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+"Op deze pagina kun je een inventaris van een personage toevoegen of bewerken"
 
 msgid "This page shows all accounting information for the member"
 msgstr "Deze pagina toont alle boekhoudkundige informatie voor het lid"
@@ -7539,11 +7606,6 @@ msgid "Here you can switch between administration pages and user-facing pages"
 msgstr ""
 "Hier kun je schakelen tussen beheerpagina's en pagina's voor gebruikers"
 
-msgid "If checked, adds to all registrations an unique code to reference them"
-msgstr ""
-"Als deze optie is ingeschakeld, wordt aan alle registraties een unieke code "
-"toegevoegd om ernaar te verwijzen"
-
 msgid "If you have a separate agreement with us, you may disregard this email"
 msgstr ""
 "Als u een afzonderlijke overeenkomst met ons hebt, kunt u deze e-mail "
@@ -7569,6 +7631,11 @@ msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
 "Deze pagina geeft een overzicht van de regels die worden toegepast op de "
 "berekende velden"
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+"Deze pagina geeft een overzicht van de typen pools die een "
+"karakterinventaris heeft"
 
 msgid "You can only add users who approved data sharing with the organization"
 msgstr ""
@@ -7628,6 +7695,12 @@ msgid ""
 msgstr ""
 "De inschrijvingen voor dit evenement zijn nog niet geopend, maar je kunt je "
 "wel alvast registreren"
+
+msgid ""
+"Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare "
+"keuzes."
 
 msgid ""
 "Some activated features need the 'Credits' feature, but it isn't active"
@@ -8642,6 +8715,13 @@ msgid ""
 msgstr ""
 "In de gebeurtenis <b>%(event)s</b> kreeg je het personage toegewezen: "
 "<b>%(character)s</b>"
+
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
+msgstr ""
+"Maximum aantal karakters dat de speler kan creëren (standaard=0, geen "
+"creatie toegestaan)"
 
 msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "

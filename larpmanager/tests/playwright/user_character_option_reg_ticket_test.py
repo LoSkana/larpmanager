@@ -17,13 +17,20 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Character form options restricted by registration ticket.
+Verifies that character form field options are filtered based on the user's
+selected ticket tier, enforcing ticket-specific restrictions on character creation.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout
+from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -43,7 +50,7 @@ def test_user_character_option_reg_ticket(pw_page: Any) -> None:
 
     logout(page)
 
-    go_to(page, live_server, "/test/character/1")
+    go_to(page, live_server, "/test/character/u1")
 
 
 def prepare(page: Any) -> None:
@@ -51,7 +58,7 @@ def prepare(page: Any) -> None:
     page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Characters").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     page.get_by_role("link", name="Configuration").click()
     page.get_by_role("link", name="Player editor ").click()
@@ -59,14 +66,14 @@ def prepare(page: Any) -> None:
     page.locator("#id_user_character_max").fill("1")
     page.get_by_role("link", name="Character form ").click()
     page.locator("#id_character_form_wri_que_tickets").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # create ticket
     page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bambi")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # set option based on ticket
     page.locator("#orga_character_form").get_by_role("link", name="Form").click()
@@ -81,65 +88,65 @@ def prepare(page: Any) -> None:
     page.get_by_role("searchbox").fill("st")
     page.locator(".select2-results__option").first.click()
     page.get_by_role("checkbox", name="After confirmation, add").check()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bmb")
     page.get_by_role("searchbox").click()
     page.get_by_role("searchbox").fill("bam")
     page.locator(".select2-results__option").first.click()
     page.locator("#main_form").click()
-    page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#options")).to_contain_text("st Standard bmb bambi")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#options"), "st Standard bmb bambi")
+    submit_confirm(page)
 
 
 def create_character(page: Any) -> None:
     # signup first ticket
     page.get_by_role("link", name="Register").click()
-    page.get_by_label("Ticket").select_option("1")
+    page.get_by_label("Ticket").select_option("u1")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.get_by_role("link", name="Access character creation!").click()
 
     # check only one option
-    expect(page.locator("#id_q4")).to_match_aria_snapshot('- combobox:\n  - option "st" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "st" [selected]')
 
     # create player
     page.locator("#id_name").click()
     page.locator("#id_name").fill("myyyy")
     fill_tinymce(page, "id_teaser", "sdsa")
     fill_tinymce(page, "id_text", "asadas")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check status, resubmit reg
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test choose: st Presentation sdsa")
+    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
     page.get_by_role("link", name="Registration", exact=True).click()
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test choose: st Presentation sdsa")
+    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket
     page.get_by_role("link", name="Registration", exact=True).click()
-    page.get_by_label("Ticket").select_option("2")
+    page.get_by_label("Ticket").select_option("u2")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
 
     # check previous option is not selected anymore
-    expect(page.locator("#one")).to_contain_text("The character have missing values in mandatory fields: choose")
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test Presentation sdsa Text asadas")
+    expect_normalized(page, page.locator("#one"), "The character have missing values in mandatory fields: choose")
+    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation sdsa Text asadas")
     page.get_by_role("link", name="myyyy").click()
     page.get_by_role("link", name="Change").click()
 
     # check only one option available
-    expect(page.locator("#id_q4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
-    page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test choose: bmb Presentation sdsa")
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
 
     # check with registration resubmit
     page.get_by_role("link", name="Registration", exact=True).click()
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     page.get_by_role("link", name="Change").click()
-    expect(page.locator("#id_q4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
-    page.get_by_role("button", name="Confirm").click()
-    expect(page.locator("#one")).to_contain_text("Player: Admin Test choose: bmb Presentation sdsa")
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")

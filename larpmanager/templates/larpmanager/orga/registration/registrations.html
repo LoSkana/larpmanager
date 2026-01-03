@@ -43,9 +43,6 @@
                 <a href="#" id="load_accounting">{% trans "accounting" %}</a>
                 <a href="#" class="table_toggle hide" tog='acc'>hidden</a>
                 <a href="#" class="table_toggle" tog='email'>{% trans "email" %}</a>
-                {% if features.unique_code %}
-                    <a href="#" class="table_toggle" tog='special_cod'>{% trans "unique code" %}</a>
-                {% endif %}
                 {% if registration_reg_que_age %}
                     <a href="#" class="table_toggle" tog='age'>{% trans "age" %}</a>
                 {% endif %}
@@ -88,7 +85,7 @@
                     Questbuilder:
                     {% for key, qt in quest_types.items %}
                         {% include "elements/comma.html" %}
-                        <a href="#" class="table_toggle" tog='qt_{{ qt.number }}'>{{ qt.name }}</a>
+                        <a href="#" class="table_toggle" tog='qt_{{ qt.uuid }}'>{{ qt.name }}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -96,7 +93,7 @@
         {% for key, dc in reg_all %}
             {% if dc.list %}
                 <h2>{{ dc.type }} ({{ dc.count }})</h2>
-                <table id="regs_{{ run.id }}_{{ dc.type }}"
+                <table id="regs_{{ run.uuid }}_{{ dc.type }}"
                        class="que_load go_datatable registration_list">
                     <thead>
                         <tr>
@@ -120,7 +117,7 @@
                                 <th class="factions">{% trans "Factions" %}</th>
                             {% endif %}
                             {% if features.questbuilder %}
-                                {% for key, qt in quest_types.items %}<th class="qt_{{ qt.number }}">{{ qt.name }}</th>{% endfor %}
+                                {% for key, qt in quest_types.items %}<th class="qt_{{ qt.uuid }}">{{ qt.name }}</th>{% endfor %}
                             {% endif %}
                             {% if features.custom_character %}
                                 {% for nm in custom_info %}<th class="custom">{{ nm | capfirst }}</th>{% endfor %}
@@ -146,21 +143,18 @@
                             <th class="acc pay_a">{% trans "Money" %}</th>
                             {% if 'credits' in association.features %}<th class="acc pay_b">{{ credits_name }}</th>{% endif %}
                             {% if 'tokens' in association.features %}<th class="acc pay_c">{{ tokens_name }}</th>{% endif %}
-                            {% if features.unique_code %}
-                                <th class="special_cod">{% trans "Code" %}</th>
-                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
                         {% for reg in dc.list %}
-                            <tr id="{{ reg.id }}">
+                            <tr id="{{ reg.uuid }}">
                                 <td>
-                                    <a href="{% url 'orga_registrations_edit' run.get_slug reg.id %}"
+                                    <a href="{% url 'orga_registrations_edit' run.get_slug reg.uuid %}"
                                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                                 </td>
                                 <td>
                                     {{ reg.member | title }}
-                                    <a href="#" class="post_popup_member" pop="{{ reg.member_id }}"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="post_popup_member" pop="{{ reg.member.uuid }}"><i class="fas fa-eye"></i></a>
                                 </td>
                                 {% if registration_reg_que_age %}<td class="age">{{ reg.age }}</td>{% endif %}
                                 <td class="email">{{ reg.member.email }}</td>
@@ -177,9 +171,9 @@
                                     <td>
                                         {% for el in reg.chars %}
                                             {% include "elements/comma.html" %}
-                                            <a href="{% url 'orga_characters_edit' run.get_slug el.id %}">#{{ el.number }} {{ el.name }}</a>
+                                            <a href="{% url 'orga_characters_edit' run.get_slug el.uuid %}">#{{ el.number }} {{ el.name }}</a>
                                             {% if features.custom_character %}
-                                                <a href="{% url 'orga_registrations_customization' run.get_slug el.id %}"><i class="fas fa-user-pen"></i></a>
+                                                <a href="{% url 'orga_registrations_customization' run.get_slug el.uuid %}"><i class="fas fa-user-pen"></i></a>
                                             {% endif %}
                                         {% endfor %}
                                     </td>
@@ -190,7 +184,7 @@
                                             {% with factions|get:fnum as ft %}
                                                 {% if ft.id %}
                                                     {% include "elements/comma.html" %}
-                                                    <a href="{% url 'orga_factions_edit' run.get_slug ft.id %}">{{ ft.name }}</a>
+                                                    <a href="{% url 'orga_factions_edit' run.get_slug ft.uuid %}">{{ ft.name }}</a>
                                                 {% endif %}
                                             {% endwith %}
                                         {% endfor %}
@@ -198,7 +192,7 @@
                                 {% endif %}
                                 {% if features.questbuilder %}
                                     {% for key, qt in quest_types.items %}
-                                        <th class="qt_{{ qt.number }}"  tooltip="{{ qt.name }}">{{ reg.traits | get:qt.number }}</th>
+                                        <td class="qt_{{ qt.uuid }}"  tooltip="{{ qt.name }}">{{ reg.traits | get:qt.uuid }}</td>
                                     {% endfor %}
                                 {% endif %}
                                 {% if features.custom_character %}
@@ -211,7 +205,7 @@
                                                     {{ reg.custom | get:nm | safe }}
                                                 {% endif %}
                                                 {% if reg.custom|get:nm|length > 50 %}
-                                                    <a href="#" class="show_popup" pop="{{ reg.id }}" fie="{{ nm }}"><i class="fas fa-eye"></i></a>
+                                                    <a href="#" class="show_popup" pop="{{ reg.uuid }}" fie="{{ nm }}"><i class="fas fa-eye"></i></a>
                                                     <span class="popup_text {{ nm }}">
                                                         <h2>{{ reg.member }} - {{ nm | capfirst }}</h2>
                                                     {{ reg.custom | get:nm | safe }}</span>
@@ -258,7 +252,7 @@
                                             {% include "elements/comma.html" %}
                                             {{ d }}
                                         {% endfor %}
-                                        <a href="{% url 'orga_registration_discounts' run.get_slug reg.id %}">{% trans "Manage" %}</a>
+                                        <a href="{% url 'orga_registration_discounts' run.get_slug reg.uuid %}">{% trans "Manage" %}</a>
                                     </td>
                                 {% endif %}
                                 <td class="date">{{ reg.created | date:"y/m/d H:i" }}</td>
@@ -312,12 +306,6 @@
                                     <td class="acc pay_c"
                                         tooltip="{% trans "Sum of payments received through" %} {{ tokens_name }}">
                                         <!-- filled later -->
-                                    </td>
-                                {% endif %}
-                                {% if features.unique_code %}
-                                    <td class="special_cod"
-                                        tooltip="{% trans "Unique registration code, used for payment checks" %}">
-                                        {% if reg.special_cod %}{{ reg.special_cod }}{% endif %}
                                     </td>
                                 {% endif %}
                             </tr>

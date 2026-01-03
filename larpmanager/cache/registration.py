@@ -170,11 +170,11 @@ def on_character_update_registration_cache(instance: Character) -> None:
 
     # Trigger registration updates if character approval is enabled
     if get_event_config(instance.event_id, "user_character_approval", default_value=False):
-        for registration_character_relation in RegistrationCharacterRel.objects.filter(character=instance):
-            registration_character_relation.reg.save()
+        for relation in RegistrationCharacterRel.objects.filter(character=instance):
+            relation.reg.save()
 
 
-def search_player(character: Character, json_output: dict[str, Any], context: dict[str, Any]) -> None:
+def search_player(character: Character, json_output: dict[str, Any], context: dict) -> None:
     """Search for players in registration cache and populate results.
 
     This function attempts to find player registration data for a given character,

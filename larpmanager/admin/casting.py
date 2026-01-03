@@ -40,23 +40,23 @@ class TraitInline(admin.TabularInline):
 class QuestAdmin(DefModelAdmin):
     """Admin interface for Quest model."""
 
-    list_display = ("number", "name", "event")
+    list_display = ("number", "name", "event", "uuid")
     inlines: ClassVar[list] = [
         TraitInline,
     ]
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["typ", "event", "progress", "assigned"]
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
 
 @admin.register(QuestType)
 class QuestTypeAdmin(DefModelAdmin):
     """Admin interface for QuestType model."""
 
-    list_display: ClassVar[tuple] = ("name", "event")
+    list_display: ClassVar[tuple] = ("name", "event", "uuid")
     list_filter = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "progress", "assigned"]
-    search_fields = ("name",)
+    search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
 
 @admin.register(Casting)

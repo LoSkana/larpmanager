@@ -1,8 +1,10 @@
 {% load tz show_tags static  i18n %}
 
+{{ form.unavail|json_script:"unavail" }}
+
 <script>
 
-var unavail = {{ form.unavail }};
+var unavail = JSON.parse(document.getElementById('unavail').textContent);
 
 var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};
 
@@ -70,7 +72,7 @@ $(document).ready(function(){
         // console.log(question);
         // console.log(values);
         values.forEach(value => {
-            const selectorPrefix = '#id_q' + question + '_tr ';
+            const selectorPrefix = '#id_que_' + question + '_tr ';
             if (hide_unavailable) {
                 $(selectorPrefix + 'option[value="' + value + '"]').remove();
                 $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();

@@ -26,9 +26,9 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'exe_warehouse_items_edit' el.id %}"
+                        <a href="{% url 'exe_warehouse_items_edit' el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
@@ -39,11 +39,11 @@
                     {% endif %}
                     <td>{{ el.description | truncatechars:200 }}</td>
                     <td>
-                        <a href="{% url 'exe_warehouse_containers_edit' el.container.id %}">{{ el.container }}</a>
+                        <a href="{% url 'exe_warehouse_containers_edit' el.container.uuid %}">{{ el.container }}</a>
                     </td>
                     <td>
                         {% for tag in el.tags.all %}
-                            <a href="{% url 'exe_warehouse_tags_edit' tag.id %}">{{ tag }}</a>
+                            <a href="{% url 'exe_warehouse_tags_edit' tag.uuid %}">{{ tag }}</a>
                         {% endfor %}
                     </td>
                     <td>

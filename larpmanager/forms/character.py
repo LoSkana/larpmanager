@@ -30,7 +30,7 @@ from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import MyForm
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     EventCharacterS2WidgetMulti,
@@ -394,10 +394,13 @@ class OrgaCharacterForm(CharacterForm):
         ):
             self.delete_field("status")
 
-        if "mirror" in self.fields:
-            characters_query = self.params["run"].event.get_elements(Character).all()
-            character_choices = [(character.id, character.name) for character in characters_query]
-            self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
+        if get_event_config(self.params["event"].id, "casting_mirror", default_value=False, context=self.params):
+            if "mirror" in self.fields:
+                characters_query = self.params["run"].event.get_elements(Character).all()
+                character_choices = [(character.uuid, character.name) for character in characters_query]
+                self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
+        else:
+            self.delete_field("mirror")
 
         # Add active field for campaign feature
         if "campaign" in self.params["features"]:
@@ -524,7 +527,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("pk", flat=True))
+        self.initial["px_ability_list"] = list(self.instance.px_ability_list.values_list("id", flat=True))
         self.show_link.append("id_px_ability_list")
 
         # delivery list
@@ -535,7 +538,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
         )
 
-        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("pk", flat=True))
+        self.initial["px_delivery_list"] = list(self.instance.px_delivery_list.values_list("id", flat=True))
         self.show_link.append("id_px_delivery_list")
 
     def _save_px(self, instance: Any) -> None:
@@ -710,7 +713,7 @@ class OrgaCharacterForm(CharacterForm):
             CharacterConfig.objects.filter(character=instance, name="inactive").delete()
 
 
-class OrgaWritingQuestionForm(MyForm):
+class OrgaWritingQuestionForm(BaseModelForm):
     """Form for OrgaWritingQuestion."""
 
     page_info = _("Manage form questions for writing elements")
@@ -876,7 +879,7 @@ class OrgaWritingQuestionForm(MyForm):
         return ",".join(self.cleaned_data["editable"])
 
 
-class OrgaWritingOptionForm(MyForm):
+class OrgaWritingOptionForm(BaseModelForm):
     """Form for OrgaWritingOption."""
 
     page_info = _("Manage options in form questions for writing elements")
@@ -885,10 +888,9 @@ class OrgaWritingOptionForm(MyForm):
 
     class Meta:
         model = WritingOption
-        exclude: ClassVar[list] = ["order"]
+        exclude: ClassVar[list] = ["order", "question"]
         widgets: ClassVar[dict] = {
             "requirements": EventWritingOptionS2WidgetMulti,
-            "question": forms.HiddenInput(),
             "tickets": TicketS2WidgetMulti,
         }
 
@@ -905,9 +907,6 @@ class OrgaWritingOptionForm(MyForm):
         """
         super().__init__(*args, **kwargs)
 
-        if "question_id" in self.params:
-            self.initial["question"] = self.params["question_id"]
-
         if "wri_que_max" not in self.params["features"]:
             self.delete_field("max_available")
 
@@ -920,3 +919,10 @@ class OrgaWritingOptionForm(MyForm):
             self.delete_field("requirements")
         else:
             self.fields["requirements"].widget.set_event(self.params["event"])
+
+    def save(self, commit: bool = True) -> WritingOption:  # noqa: FBT001, FBT002
+        """Save the form instance, setting question for new instances."""
+        if not self.instance.pk and "question" in self.params:
+            self.instance.question = self.params["question"]
+
+        return super().save(commit=commit)

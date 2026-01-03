@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 {% load i18n show_tags %}
 {% block title %}
-    {% trans "Payment" %} - {{ reg.run }}
+    {% trans "Payment" %} - {{ registration.run }}
 {% endblock title %}
 {% block content %}
     {% if invoice %}
         {% include "elements/payment_go.html" %}
     {% else %}
         <p>
-            {% trans "The total registration fee is" %}: <b>{{ reg.tot_iscr|format_decimal }}{{ currency_symbol }}</b>
+            {% trans "The total registration fee is" %}: <b>{{ registration.tot_iscr|format_decimal }}{{ currency_symbol }}</b>
         </p>
-        {% if reg.tot_payed %}
+        {% if registration.tot_payed %}
             <p>
-                {% trans "So far you have paid a total of" %}: <b>{{ reg.tot_payed|format_decimal }}{{ currency_symbol }}</b>
+                {% trans "So far you have paid a total of" %}: <b>{{ registration.tot_payed|format_decimal }}{{ currency_symbol }}</b>
             </p>
         {% endif %}
         {% if features.reg_installments or features.reg_quotas %}
-            {% if reg.quota %}
+            {% if registration.quota %}
                 <p>
-                    {% trans "We ask you to pay the amount requested for the next instalment" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
+                    {% trans "We ask you to pay the amount requested for the next instalment" %}: <b>{{ registration.quota|format_decimal }}{{ currency_symbol }}</b>
                 </p>
             {% else %}
                 <p>
@@ -26,9 +26,9 @@
                 </p>
             {% endif %}
         {% else %}
-            {% if reg.tot_payed %}
+            {% if registration.tot_payed %}
                 <p>
-                    {% trans "We ask you to pay the remaining amount" %}: <b>{{ reg.quota|format_decimal }}{{ currency_symbol }}</b>
+                    {% trans "We ask you to pay the remaining amount" %}: <b>{{ registration.quota|format_decimal }}{{ currency_symbol }}</b>
                 </p>
             {% endif %}
         {% endif %}

@@ -18,12 +18,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Technical support ticket system.
+Verifies ticket submission with and without login, with and without screenshots,
+and email change requests through the support system.
+"""
 
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_user, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
