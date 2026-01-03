@@ -350,6 +350,8 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
     result["factions"] = {}
     result["factions_typ"] = {}
 
+    result["fac_mapping"] = {}
+
     # If faction feature is not enabled, create single default faction with all characters
     if "faction" not in get_event_features(context["event"].id):
         result["factions"][0] = {
@@ -399,6 +401,8 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         if faction.typ not in result["factions_typ"]:
             result["factions_typ"][faction.typ] = []
         result["factions_typ"][faction.typ].append(faction.number)
+
+        result["fac_mapping"][faction.number] = faction.id
 
 
 def _build_trait_relationships(event: Event) -> dict:
