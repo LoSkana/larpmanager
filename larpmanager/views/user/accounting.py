@@ -381,12 +381,11 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     context = get_context(request)
     check_association_feature(request, context, "payment")
 
-    # Retrieve registration
-    registration = get_accounting_registration(context, registration_uuid)
-
     # Get event context and mark as accounting page
+    registration = get_accounting_registration(context, registration_uuid)
     context = get_event_context(request, registration.run.get_slug())
     context["show_accounting"] = True
+    context["registration"] = registration
 
     # Load membership status for permission checks
     registration.membership = get_user_membership(registration.member, context["association_id"])
@@ -443,7 +442,6 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
         form = PaymentForm(reg=registration, context=context)
     context["form"] = form
 
-    context["registration"] = registration
     return render(request, "larpmanager/member/accounting_registration.html", context)
 
 
