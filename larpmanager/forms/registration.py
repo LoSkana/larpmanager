@@ -31,7 +31,7 @@ from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_reg_counts
-from larpmanager.forms.base import BaseModelForm, BaseRegistrationForm, get_question_key
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
     AssociationMemberS2Widget,
@@ -1454,7 +1454,7 @@ class OrgaRegistrationSurchargeForm(BaseModelForm):
         widgets: ClassVar[dict] = {"date": DatePickerInput}
 
 
-class PreRegistrationForm(forms.Form):
+class PreRegistrationForm(BaseForm):
     """Form for PreRegistration."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -1508,7 +1508,7 @@ class PreRegistrationForm(forms.Form):
         )
 
 
-class RegistrationTransferForm(forms.Form):
+class RegistrationTransferForm(BaseForm):
     """Form for selecting registration and target for transfer."""
 
     registration_id = forms.ModelChoiceField(

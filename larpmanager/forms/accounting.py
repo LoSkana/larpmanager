@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, BaseModelForm, BaseModelFormRun
+from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, BaseModelFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -517,7 +517,7 @@ class OrgaDiscountForm(BaseModelForm):
             self.initial["runs"] = [r.id for r in self.instance.runs.all()]
 
 
-class InvoiceSubmitForm(forms.Form):
+class InvoiceSubmitForm(BaseForm):
     """Form for InvoiceSubmit."""
 
     cod = forms.CharField(widget=forms.HiddenInput())

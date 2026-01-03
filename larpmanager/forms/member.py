@@ -43,7 +43,7 @@ from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, BaseModelForm
+from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     AssociationMemberS2WidgetMulti,
@@ -317,13 +317,13 @@ class MyPasswordResetForm(PasswordResetForm):
         my_send_mail(subject, body, to_email, association)
 
 
-class AvatarForm(forms.Form):
+class AvatarForm(BaseForm):
     """Form for uploading user avatar images."""
 
     image = forms.ImageField(label="Select an image")
 
 
-class LanguageForm(forms.Form):
+class LanguageForm(BaseForm):
     """Form for selecting user interface language."""
 
     language = forms.ChoiceField(
@@ -689,7 +689,7 @@ class MembershipRequestForm(forms.ModelForm):
     )
 
 
-class MembershipConfirmForm(forms.Form):
+class MembershipConfirmForm(BaseForm):
     """Form for MembershipConfirm."""
 
     confirm_1 = forms.BooleanField(required=True, initial=False)
@@ -698,7 +698,7 @@ class MembershipConfirmForm(forms.Form):
     confirm_4 = forms.BooleanField(required=True, initial=False)
 
 
-class MembershipResponseForm(forms.Form):
+class MembershipResponseForm(BaseForm):
     """Form for MembershipResponse."""
 
     is_approved = forms.BooleanField(required=False, initial=True)
@@ -790,7 +790,7 @@ class ExeMembershipForm(BaseModelForm):
         )
 
 
-class ExeMembershipFeeForm(forms.Form):
+class ExeMembershipFeeForm(BaseForm):
     """Form for ExeMembershipFee."""
 
     page_info = _("Manage membership fee invoice upload")
@@ -847,7 +847,7 @@ class ExeMembershipFeeForm(forms.Form):
         return member
 
 
-class ExeMembershipDocumentForm(forms.Form):
+class ExeMembershipDocumentForm(BaseForm):
     """Form for ExeMembershipDocument."""
 
     page_info = (

@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import BaseModelForm, BaseRegistrationForm
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import EventCharacterS2Widget, EventCharacterS2WidgetMulti, WritingTinyMCE
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -172,7 +172,7 @@ class PlayerRelationshipForm(BaseModelForm):
         return instance
 
 
-class UploadElementsForm(forms.Form):
+class UploadElementsForm(BaseForm):
     """Form for UploadElements."""
 
     allowed_types: ClassVar[list] = [

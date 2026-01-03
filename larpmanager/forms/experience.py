@@ -23,7 +23,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.forms.base import BaseModelForm
+from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     AbilityTemplateS2WidgetMulti,
@@ -213,7 +213,7 @@ class OrgaModifierPxForm(BaseModelForm):
             self.configure_field_event(field, self.params["event"])
 
 
-class SelectNewAbility(forms.Form):
+class SelectNewAbility(BaseForm):
     """Represents SelectNewAbility model."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

@@ -9837,7 +9837,7 @@ msgid ""
 "If you select an event, all characters from that event's registrations will "
 "be automatically loaded"
 msgstr ""
-"Se si seleziona un evento, tutti i caratteri delle registrazioni di "
+"Se si seleziona un evento, tutti i personaggi delle registrazioni di "
 "quell'evento verranno caricati automaticamente"
 
 msgid ""
