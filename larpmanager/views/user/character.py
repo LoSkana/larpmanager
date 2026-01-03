@@ -141,8 +141,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Determine access level and load appropriate character data
-    is_staff_view = "check" in context
-    if is_staff_view:
+    if "check" in context:
         # Load full character data for staff/admin users
         get_character_sheet(context)
         get_character_relationships(context)
@@ -161,12 +160,6 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     context["approval"] = get_event_config(
         context["event"].id, "user_character_approval", default_value=False, context=context
     )
-
-    try:
-        char_model = Character.objects.prefetch_related("inventory").get(id=context["char"]["id"])
-        context["char"]["inventory"] = char_model.inventory.all()
-    except Character.DoesNotExist:
-        context["char"]["inventory"] = []
 
     return render(request, "larpmanager/event/character.html", context)
 

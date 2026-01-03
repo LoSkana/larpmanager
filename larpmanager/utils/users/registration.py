@@ -808,7 +808,7 @@ def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
 
 def get_player_signup(context: dict) -> Registration | None:
     """Get active registration for current user in the given run context."""
-    if "registration" in context:
+    if "registration" in context and context["registration"] is not None:
         return context["registration"]
 
     # Filter registrations for current run and user, excluding cancelled ones
