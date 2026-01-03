@@ -66,6 +66,7 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_player_relationship
 from larpmanager.utils.services.character import (
+    _get_character_cache_id,
     check_missing_mandatory,
     get_char_check,
     get_character_relationships,
@@ -140,8 +141,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         messages.warning(request, _("Character not visible"))
         return redirect("gallery", event_slug=context["run"].get_slug())
 
-    character_number = context["char"]["number"]
-    character_id = context["char_mapping"][character_number]
+    character_id = _get_character_cache_id(context)
 
     # Determine access level and load appropriate character data
     if "check" in context:
@@ -683,7 +683,8 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     elif not context["character"].is_active:
         messages.error(request, _("This character is inactive and cannot be assigned to players"))
     else:
-        RegistrationCharacterRel.objects.create(reg_id=context["registration"].id, character_id=context["character"].id)
+        character_id = _get_character_cache_id(context)
+        RegistrationCharacterRel.objects.create(reg_id=context["registration"].id, character_id=character_id)
         messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)

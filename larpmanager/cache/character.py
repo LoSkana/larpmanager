@@ -300,32 +300,36 @@ def get_writing_element_fields(
     # Filter questions based on visibility configuration
     # Only include questions that are explicitly shown or when show_all is enabled
     visible_question_ids = []
-    for question_id in context["questions"]:
-        question_config_key = str(question_id)
+    for question_uuid in context["questions"]:
+        question_config_key = str(question_uuid)
         # Skip questions not marked as visible unless showing all
         if "show_all" not in context and question_config_key not in context[f"show_{feature_name}"]:
             continue
-        visible_question_ids.append(question_id)
+        visible_question_ids.append(question_uuid)
 
     # Retrieve text answers for visible questions
     # Store direct text responses in fields dictionary
-    question_id_to_value = {}
+    question_uuid_to_value = {}
 
     # Retrieve text answers for visible questions
     # Query WritingAnswer model for text-based responses
-    text_answers_query = WritingAnswer.objects.filter(element_id=element_id, question_id__in=visible_question_ids)
-    question_id_to_value.update(dict(text_answers_query.values_list("question_id", "text")))
+    text_answers_query = WritingAnswer.objects.filter(
+        element_id=element_id, question__uuid__in=visible_question_ids
+    ).select_related("question")
+    question_uuid_to_value.update(dict(text_answers_query.values_list("question__uuid", "text")))
 
     # Retrieve choice answers for visible questions
     # Group multiple choice options into lists per question
-    choice_answers_query = WritingChoice.objects.filter(element_id=element_id, question_id__in=visible_question_ids)
-    for question_id, option_id in choice_answers_query.values_list("question_id", "option_id"):
+    choice_answers_query = WritingChoice.objects.filter(
+        element_id=element_id, question__uuid__in=visible_question_ids
+    ).select_related("question", "option")
+    for question_uuid, option_uuid in choice_answers_query.values_list("question__uuid", "option__uuid"):
         # Initialize list if question not yet in fields
-        if question_id not in question_id_to_value:
-            question_id_to_value[question_id] = []
-        question_id_to_value[question_id].append(option_id)
+        if question_uuid not in question_uuid_to_value:
+            question_uuid_to_value[question_uuid] = []
+        question_uuid_to_value[question_uuid].append(option_uuid)
 
-    return {"questions": context["questions"], "options": context["options"], "fields": question_id_to_value}
+    return {"questions": context["questions"], "options": context["options"], "fields": question_uuid_to_value}
 
 
 def get_event_cache_factions(context: dict, result: dict) -> None:
