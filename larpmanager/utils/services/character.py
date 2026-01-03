@@ -46,7 +46,7 @@ from larpmanager.utils.services.experience import add_char_addit
 logger = logging.getLogger(__name__)
 
 
-def get_character_relationships(context: dict, *, restrict: bool = True) -> None:  # noqa: C901 - Complex relationship data aggregation
+def get_character_relationships(context: dict, *, restrict: bool = True) -> None:
     """Get character relationships with faction and player input data.
 
     Retrieves and processes character relationships from both system-defined
@@ -67,16 +67,126 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
         - Updates context['pr'] with player relationship objects
 
     """
-    relationship_text_by_character_id = {}
-    character_data_by_id = {}
+    relationship_text_mapping = {}
+    character_data_mapping = {}
 
-    # Process system-defined relationships from the database
-    for target_character_number, relationship_text in Relationship.objects.values_list("target__number", "text").filter(
-        source=context["character"],
+    _build_relationships_mappings(context, character_data_mapping, relationship_text_mapping)
+
+    _build_player_relationships_mappings(context, character_data_mapping, relationship_text_mapping)
+
+    # Build final relationship list sorted by text length
+    context["rel"] = []
+    for character_uuid in sorted(
+        relationship_text_mapping,
+        key=lambda k: len(relationship_text_mapping[k]),
+        reverse=True,
     ):
+        # Skip if character data not found
+        if character_uuid not in character_data_mapping:
+            logger.debug(
+                "Character UUID %s not found in data keys: %s...",
+                character_uuid,
+                list(character_data_mapping.keys())[:5],
+            )
+            continue
+
+        relationship_entry = character_data_mapping[character_uuid]
+        # Filter empty relationships if restrict is enabled
+        if restrict and len(relationship_text_mapping[character_uuid]) == 0:
+            continue
+
+        # Add relationship text and calculate font size based on content length
+        relationship_entry["text"] = relationship_text_mapping[character_uuid]
+        relationship_entry["font_size"] = int(100 - ((len(relationship_entry["text"]) / 50) * 4))
+        context["rel"].append(relationship_entry)
+
+
+def _build_player_relationships_mappings(
+    context: dict, character_data_mapping: dict, relationship_text_mapping: dict
+) -> None:
+    """Build mappings for player-inputted relationships and store in context.
+
+    Processes PlayerRelationship objects for the current player's character,
+    overriding system relationships where applicable and adding character data
+    for relationships that don't exist in the system.
+
+    Args:
+        context: Context dictionary containing character, run, and factions data.
+            Must include 'char' with 'player_id', and 'run'. Updates context['pr']
+            with player relationship objects.
+        character_data_mapping: Dictionary mapping character UUIDs to character data.
+            Updated in-place with character data for any new relationships.
+        relationship_text_mapping: Dictionary mapping character UUIDs to relationship
+            text. Updated in-place, overriding system relationships with player input.
+
+    Side Effects:
+        - Updates character_data_mapping with new character data if needed
+        - Updates relationship_text_mapping with player-inputted text
+        - Sets context['pr'] with player relationships mapping by UUID
+
+    """
+    player_relationships_mapping = {}
+    # Update with player-inputted relationship data
+    if "player_id" in context["char"]:
+        for player_relationship in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
+            reg__member_id=context["char"]["player_id"],
+            reg__run=context["run"],
+        ):
+            target_uuid = str(player_relationship.target.uuid)
+            player_relationships_mapping[target_uuid] = player_relationship
+            # Player input overrides system relationships
+            relationship_text_mapping[target_uuid] = player_relationship.text
+
+            # Add character data if not already present (fixes bug where player relationships
+            # with characters that don't have system relationships are lost)
+            if target_uuid not in character_data_mapping:
+                character_data = player_relationship.target.show(context["run"])
+                # Build faction list for display purposes
+                character_data["factions_list"] = []
+                for faction_number in character_data["factions"]:
+                    if not faction_number or faction_number not in context["factions"]:
+                        continue
+                    faction_data = context["factions"][faction_number]
+                    # Skip empty names or secret factions
+                    if not faction_data["name"] or faction_data["typ"] == FactionType.SECRET:
+                        continue
+                    character_data["factions_list"].append(faction_data["name"])
+                character_data["factions_list"] = ", ".join(character_data["factions_list"])
+                character_data_mapping[target_uuid] = character_data
+
+    # Store player relationships for additional processing
+    context["pr"] = player_relationships_mapping
+
+
+def _build_relationships_mappings(context: dict, character_data_mapping: dict, relationship_text_mapping: dict) -> None:
+    """Build mappings for system-defined character relationships.
+
+    Processes Relationship objects for the source character, retrieves target
+    character data with faction information, and populates the mapping dictionaries.
+    Uses character UUIDs as keys for security.
+
+    Args:
+        context: Context dictionary containing character, event, run, and factions data.
+            Must include 'character' (source), 'event', 'run', and may include cached
+            'chars' data and 'factions' for faction lookups.
+        character_data_mapping: Dictionary to populate with character UUID to character
+            data mappings. Updated in-place.
+        relationship_text_mapping: Dictionary to populate with character UUID to
+            relationship text mappings. Updated in-place.
+
+    Side Effects:
+        - Updates character_data_mapping with character data for all relationship targets
+        - Updates relationship_text_mapping with relationship text for all targets
+        - Each character data includes a 'factions_list' field with comma-separated
+          faction names (excluding secret factions)
+
+    """
+    # Process character relationships from the source
+    queryset = Relationship.objects.values_list("target__number", "text").filter(source=context["character"])
+    for target_character_number, relationship_text in queryset:
         # Check if character data is already cached in context
         if "chars" in context and target_character_number in context["chars"]:
-            character_display_data = context["chars"][target_character_number]
+            character_data = context["chars"][target_character_number]
         else:
             # Fetch character data from database if not cached
             try:
@@ -84,65 +194,26 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
                     event=context["event"],
                     number=target_character_number,
                 )
-                character_display_data = target_character.show(context["run"])
+                character_data = target_character.show(context["run"])
             except ObjectDoesNotExist:
                 continue
 
         # Build faction list for display purposes
-        character_display_data["factions_list"] = []
-        for faction_number in character_display_data["factions"]:
+        character_data["factions_list"] = []
+        for faction_number in character_data["factions"]:
             if not faction_number or faction_number not in context["factions"]:
                 continue
             faction_data = context["factions"][faction_number]
             # Skip empty names or secret factions
             if not faction_data["name"] or faction_data["typ"] == FactionType.SECRET:
                 continue
-            character_display_data["factions_list"].append(faction_data["name"])
+            character_data["factions_list"].append(faction_data["name"])
 
-        # Join faction names and store character data
-        character_display_data["factions_list"] = ", ".join(character_display_data["factions_list"])
-        character_data_by_id[character_display_data["id"]] = character_display_data
-        relationship_text_by_character_id[character_display_data["id"]] = relationship_text
-
-    player_relationships_by_target_id = {}
-    # Update with player-inputted relationship data
-    if "player_id" in context["char"]:
-        for player_relationship in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
-            reg__member_id=context["char"]["player_id"],
-            reg__run=context["run"],
-        ):
-            player_relationships_by_target_id[player_relationship.target_id] = player_relationship
-            # Player input overrides system relationships
-            relationship_text_by_character_id[player_relationship.target_id] = player_relationship.text
-
-    # Build final relationship list sorted by text length
-    context["rel"] = []
-    for character_id in sorted(
-        relationship_text_by_character_id,
-        key=lambda k: len(relationship_text_by_character_id[k]),
-        reverse=True,
-    ):
-        # Skip if character data not found
-        if character_id not in character_data_by_id:
-            logger.debug(
-                "Character index %s not found in data keys: %s...",
-                character_id,
-                list(character_data_by_id.keys())[:5],
-            )
-            continue
-
-        relationship_entry = character_data_by_id[character_id]
-        # Filter empty relationships if restrict is enabled
-        if restrict and len(relationship_text_by_character_id[character_id]) == 0:
-            continue
-
-        # Add relationship text and calculate font size based on content length
-        relationship_entry["text"] = relationship_text_by_character_id[character_id]
-        relationship_entry["font_size"] = int(100 - ((len(relationship_entry["text"]) / 50) * 4))
-        context["rel"].append(relationship_entry)
-
-    # Store player relationships for additional processing
-    context["pr"] = player_relationships_by_target_id
+        # Join faction names and store character data using UUID as key
+        character_data["factions_list"] = ", ".join(character_data["factions_list"])
+        character_uuid = str(character_data["uuid"])
+        character_data_mapping[character_uuid] = character_data
+        relationship_text_mapping[character_uuid] = relationship_text
 
 
 def get_character_sheet(context: dict) -> None:
@@ -488,7 +559,6 @@ def get_chars_relations(text: str, character_numbers: list[int]) -> tuple[list[i
     max_character_number = character_numbers[0]
 
     # Search from high to low numbers to avoid partial matching issues
-    # (e.g., matching #1 when #10 exists)
     for number in range(max_character_number + 100, 0, -1):
         character_reference = f"#{number}"
 
@@ -519,9 +589,11 @@ def check_missing_mandatory(context: dict) -> None:
     }
 
     questions = context["event"].get_elements(WritingQuestion)
+    character_number = context["char"]["number"]
+    character_id = context["char_mapping"][character_number]
     for question in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
         model = question_type_to_model.get(question.typ)
-        if model and not model.objects.filter(element_id=context["char"]["id"], question=question).exists():
+        if model and not model.objects.filter(element_id=character_id, question=question).exists():
             missing_question_names.append(question.name)
 
     context["missing_fields"] = ", ".join(missing_question_names)

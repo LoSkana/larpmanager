@@ -122,6 +122,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     """
     cache_result["chars"] = {}
+    # Character number to character id mapping
+    cache_result["char_mapping"] = {}
 
     # Check if mirror feature is enabled for character filtering
     is_mirror_enabled = "mirror" in context["features"]
@@ -159,7 +161,9 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
         if hide_uncasted_characters and character_data["player_id"] == 0:
             character_data["hide"] = True
 
-        cache_result["chars"][int(character_data["number"])] = character_data
+        character_number = int(character_data["number"])
+        cache_result["chars"][character_number] = character_data
+        cache_result["char_mapping"][character_number] = character.id
 
     # Add field data to the cache
     get_event_cache_fields(context, cache_result)

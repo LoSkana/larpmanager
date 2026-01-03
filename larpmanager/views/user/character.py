@@ -140,6 +140,9 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         messages.warning(request, _("Character not visible"))
         return redirect("gallery", event_slug=context["run"].get_slug())
 
+    character_number = context["char"]["number"]
+    character_id = context["char_mapping"][character_number]
+
     # Determine access level and load appropriate character data
     if "check" in context:
         # Load full character data for staff/admin users
@@ -149,12 +152,12 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         check_missing_mandatory(context)
     else:
         # Load only visible elements for regular users
-        context["char"].update(get_character_element_fields(context, context["char"]["id"], only_visible=True))
+        context["char"].update(get_character_element_fields(context, character_id, only_visible=True))
 
     # Load casting details and preferences if applicable
     casting_details(context)
     if context["casting_show_pref"] and not context["char"]["player_id"]:
-        context["pref"] = get_casting_preferences(context["char"]["id"], context)
+        context["pref"] = get_casting_preferences(context["char"]["uuid"], context)
 
     # Set character approval configuration for template rendering
     context["approval"] = get_event_config(
