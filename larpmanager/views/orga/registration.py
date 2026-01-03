@@ -1287,11 +1287,11 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
     """
     # Check organizer permissions for registration management
     context = check_event_context(request, event_slug, "orga_registrations")
-    member_id = request.POST.get("mid")
+    member_uuid = request.POST.get("mid")
 
     # Validate member existence
     try:
-        member = Member.objects.get(pk=member_id)
+        member = Member.objects.get(uuid=member_uuid)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
