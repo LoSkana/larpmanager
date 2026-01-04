@@ -3041,6 +3041,9 @@ msgstr "Foto av ID-dokument"
 msgid "Identity document"
 msgstr "Identitetsdokument"
 
+msgid "Invalid selection"
+msgstr "Ugyldig valg"
+
 msgid "Invoice not found"
 msgstr "Faktura ikke funnet"
 
@@ -3557,9 +3560,6 @@ msgstr "Avkastning i prosent"
 
 msgid "Select the new event"
 msgstr "Velg den nye hendelsen"
-
-msgid "Selezione non valida"
-msgstr "Selezione non valida"
 
 msgid "Set character status"
 msgstr "Angi tegnstatus"

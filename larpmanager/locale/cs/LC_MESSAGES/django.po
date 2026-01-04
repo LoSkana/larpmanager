@@ -3041,6 +3041,9 @@ msgstr "Fotografie na dokladu totožnosti"
 msgid "Identity document"
 msgstr "Doklad totožnosti"
 
+msgid "Invalid selection"
+msgstr "Neplatný výběr"
+
 msgid "Invoice not found"
 msgstr "Faktura nebyla nalezena"
 
@@ -3557,9 +3560,6 @@ msgstr "Procento návratnosti"
 
 msgid "Select the new event"
 msgstr "Vyberte novou událost"
-
-msgid "Selezione non valida"
-msgstr "Selezione non valida"
 
 msgid "Set character status"
 msgstr "Nastavení stavu znaku"

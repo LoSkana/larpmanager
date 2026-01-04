@@ -3041,6 +3041,9 @@ msgstr "Foto ID-document"
 msgid "Identity document"
 msgstr "Identiteitsbewijs"
 
+msgid "Invalid selection"
+msgstr "Ongeldige selectie"
+
 msgid "Invoice not found"
 msgstr "Factuur niet gevonden"
 
@@ -3557,9 +3560,6 @@ msgstr "Rendement percentage"
 
 msgid "Select the new event"
 msgstr "Selecteer de nieuwe gebeurtenis"
-
-msgid "Selezione non valida"
-msgstr "Selezione non valida"
 
 msgid "Set character status"
 msgstr "Tekenstatus instellen"

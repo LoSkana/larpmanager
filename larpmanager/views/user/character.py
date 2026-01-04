@@ -64,7 +64,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_element, get_player_relationship
+from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
 from larpmanager.utils.services.character import (
     check_missing_mandatory,
     get_char_check,
@@ -724,10 +724,10 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     context["available"] = {}
     for ability in get_available_ability_px(context["character"]):
         # Create type entry if it doesn't exist
-        if ability.typ_id not in context["available"]:
-            context["available"][ability.typ_id] = {"name": ability.typ.name, "order": ability.typ.id, "list": {}}
+        if ability.typ.uuid not in context["available"]:
+            context["available"][ability.typ.uuid] = {"name": ability.typ.name, "order": ability.typ.number, "list": {}}
         # Add ability with name and cost to the type's list
-        context["available"][ability.typ_id]["list"][ability.id] = f"{ability.name} - {ability.cost}"
+        context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = f"{ability.name} - {ability.cost}"
 
     # Build current character abilities organized by type name
     context["sheet_abilities"] = {}
@@ -796,7 +796,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, character_uui
     get_element(context, ability_uuid, "ability", AbilityPx)
 
     undo_abilities = get_undo_abilities(context, context["character"])
-    if context["ability"].id not in undo_abilities:
+    if context["ability"].uuid not in undo_abilities:
         msg = "ability out of undo window"
         raise Http404(msg)
 
@@ -823,53 +823,53 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
         messages.error(request, _("Ability type missing"))
         return
 
-    selected_type = int(selected_type)
-    selected_id = request.POST.get("ability_select")
-    if not selected_id:
+    selected_uuid = request.POST.get("ability_select")
+    if not selected_uuid:
         messages.error(request, _("Ability missing"))
         return
 
-    selected_id = int(selected_id)
-    if selected_type not in context["available"] or selected_id not in context["available"][selected_type]["list"]:
-        messages.error(request, _("Selezione non valida"))
+    if selected_type not in context["available"] or selected_uuid not in context["available"][selected_type]["list"]:
+        messages.error(request, _("Invalid selection"))
         return
 
+    ability = get_element_event(context, selected_uuid, AbilityPx)
+
     with transaction.atomic():
-        context["character"].px_ability_list.add(selected_id)
+        context["character"].px_ability_list.add(ability)
         context["character"].save()
     messages.success(request, _("Ability acquired") + "!")
 
-    get_undo_abilities(context, context["character"], selected_id)
+    get_undo_abilities(context, context["character"], ability)
 
 
-def get_undo_abilities(context: dict, char: Any, new_ability_id: Any = None) -> Any:
+def get_undo_abilities(context: dict, char: Any, new_ability: Any = None) -> Any:
     """Get list of recently acquired abilities that can be undone.
 
     Args:
         context: Context dictionary containing event data
         char: Character object
-        new_ability_id: ID of newly acquired ability to track (optional)
+        new_ability: AbilityPx object of newly acquired ability to track (optional)
 
     Returns:
-        list: List of ability IDs that can be undone
+        list: List of ability UUID objects that can be undone
 
     """
     undo_window_hours = int(get_event_config(context["event"].id, "px_undo", default_value=0, context=context))
-    config_key = f"added_px_{char.id}"
+    config_key = f"added_px_{char.uuid}"
     stored_config_value = char.get_config(config_key, default_value="{}")
     ability_timestamp_map = ast.literal_eval(stored_config_value)
     current_timestamp = int(time.time())
     # clean from abilities out of the undo time windows
-    for ability_id_key in list(ability_timestamp_map.keys()):
-        if ability_timestamp_map[ability_id_key] < current_timestamp - undo_window_hours * 3600:
-            del ability_timestamp_map[ability_id_key]
+    for ability_uuid_key in list(ability_timestamp_map.keys()):
+        if ability_timestamp_map[ability_uuid_key] < current_timestamp - undo_window_hours * 3600:
+            del ability_timestamp_map[ability_uuid_key]
     # add newly acquired ability and save it
-    if undo_window_hours and new_ability_id:
-        ability_timestamp_map[str(new_ability_id)] = current_timestamp
+    if undo_window_hours and new_ability:
+        ability_timestamp_map[str(new_ability.uuid)] = current_timestamp
         save_single_config(char, config_key, json.dumps(ability_timestamp_map))
 
-    # return map of abilities recently added, with int key
-    return [int(ability_id) for ability_id in ability_timestamp_map]
+    # return list of ability UUIDs
+    return ability_timestamp_map.keys()
 
 
 @login_required

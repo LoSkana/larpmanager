@@ -3041,6 +3041,9 @@ msgstr "Foto del documento de identidad"
 msgid "Identity document"
 msgstr "Documento de identidad"
 
+msgid "Invalid selection"
+msgstr "Selección no válida"
+
 msgid "Invoice not found"
 msgstr "Factura no encontrada"
 
@@ -3557,9 +3560,6 @@ msgstr "Porcentaje de devolución"
 
 msgid "Select the new event"
 msgstr "Seleccione el nuevo evento"
-
-msgid "Selezione non valida"
-msgstr "Selección no validada"
 
 msgid "Set character status"
 msgstr "Establecer el estado de los caracteres"

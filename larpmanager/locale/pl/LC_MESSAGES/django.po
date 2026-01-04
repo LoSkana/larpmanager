@@ -3041,6 +3041,9 @@ msgstr "Zdjęcie dokumentu tożsamości"
 msgid "Identity document"
 msgstr "Dokument tożsamości"
 
+msgid "Invalid selection"
+msgstr "Nieprawidłowy wybór"
+
 msgid "Invoice not found"
 msgstr "Nie znaleziono faktury"
 
@@ -3557,9 +3560,6 @@ msgstr "Zwracający się procent"
 
 msgid "Select the new event"
 msgstr "Wybierz nowe zdarzenie"
-
-msgid "Selezione non valida"
-msgstr "Wybór nie jest prawidłowy"
 
 msgid "Set character status"
 msgstr "Ustawianie stanu znaków"
