@@ -315,7 +315,7 @@ function in_custom_fields(el) {
 function in_spec(el) {
     specs = new Set();
 
-    if (el['player_id'] > 0) specs.add('pl');  // 'pl' = has player
+    if (el['player_uuid']) specs.add('pl');  // 'pl' = has player
 
     return check_selection('spec', specs)
 }
@@ -423,7 +423,7 @@ function search(key) {
 
             // Build player assignment text and link
             var player = window['texts']['abs'];  // Default "absent" text
-            if (el['player_id'] > 0) {
+            if (el['player_uuid']) {
                 player = '<a href="{0}">{1}</a>'.format(prof_url.replace("/0", "/"+el['player_uuid']), escapeHtml(el['player']))
                 if (el['player_prof'])
                     pf = el['player_prof'];  // Use player's profile picture if assigned

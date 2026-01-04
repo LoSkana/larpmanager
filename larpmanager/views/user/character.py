@@ -155,7 +155,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
 
     # Load casting details and preferences if applicable
     casting_details(context)
-    if context["casting_show_pref"] and not context["char"]["player_id"]:
+    if context["casting_show_pref"] and not context["char"]["player_uuid"]:
         context["pref"] = get_casting_preferences(context["char"]["id"], context)
 
     # Set character approval configuration for template rendering
@@ -906,7 +906,7 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
 
     # Query player relationships for the current character's player in this run
     que = PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
-        reg__member_id=context["char"]["player_id"],
+        reg__member__uuid=context["char"]["player_uuid"],
         reg__run=context["run"],
     )
 

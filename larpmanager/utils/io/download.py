@@ -579,7 +579,7 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
         "owner",
         "player",
         "player_full",
-        "player_id",
+        "player_uuid",
         "first_aid",
         "player_prof",
         "profile",

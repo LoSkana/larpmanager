@@ -106,9 +106,9 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
 
     player_relationships_by_target_id = {}
     # Update with player-inputted relationship data
-    if "player_id" in context["char"]:
+    if "player_uuid" in context["char"]:
         for player_relationship in PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
-            reg__member_id=context["char"]["player_id"],
+            reg__member__uuid=context["char"]["player_uuid"],
             reg__run=context["run"],
         ):
             player_relationships_by_target_id[player_relationship.target_id] = player_relationship
@@ -246,7 +246,7 @@ def get_character_sheet_questbuilder(context: dict) -> None:
     if "char" not in context:
         return
 
-    if "player_id" not in context["char"] or "traits" not in context["char"]:
+    if "player_uuid" not in context["char"] or "traits" not in context["char"]:
         return
 
     context["sheet_traits"] = []

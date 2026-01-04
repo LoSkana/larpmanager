@@ -513,7 +513,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
         # Add character name and player name if available
         res[el.option_id]["emails"].append(char["name"])
-        if char["player_id"]:
+        if char["player_uuid"]:
             res[el.option_id]["names"].append(char["player"])
 
     # Convert option IDs to option names in final result

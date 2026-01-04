@@ -8,7 +8,7 @@
                     <div class="el">
                         <div class="icon">
                             <div class="img_cover"
-                                 style="background-image:url('{% if el.player_id > 0 %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                                 style="background-image:url('{% if el.player_uuid %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
                             </div>
                         </div>
                     </div>
@@ -18,7 +18,7 @@
                             {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                             {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                         </div>
-                        {% if el.player_id > 0 %}
+                        {% if el.player_uuid %}
                             <div class="go-inline">
                                 <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                             </div>

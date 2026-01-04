@@ -133,7 +133,7 @@ def get_tooltip(context: dict, character: dict[str, Any]) -> str:
 
     """
     avatar_url = static("larpmanager/assets/blank-avatar.svg")
-    if "player_id" in character and character["player_id"] > 0 and character["player_prof"]:
+    if character.get("player_uuid") and character["player_prof"]:
         avatar_url = character["player_prof"]
     tooltip = f"<img src='{escape(avatar_url)}'>"
 
@@ -168,7 +168,7 @@ def tooltip_fields(character: dict[str, Any], tooltip: str) -> str:
 
     tooltip += "</span>"
 
-    if "player_id" in character and character["player_id"] > 0:
+    if character.get("player_uuid"):
         tooltip += "<span>" + str(_("Player")) + ": <b>" + escape(character["player_full"]) + "</b></span>"
 
     return tooltip

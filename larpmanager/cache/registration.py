@@ -224,5 +224,4 @@ def search_player(character: Character, json_output: dict[str, Any], context: di
         _search_char_reg(context, character, json_output)
     else:
         # No registration found, set default player ID and UUID
-        json_output["player_id"] = 0
         json_output["player_uuid"] = None

@@ -276,7 +276,7 @@ class Character(Writing):
 
         if self.player:
             # noinspection PyUnresolvedReferences
-            js["owner_id"] = self.player_id
+            js["owner_id"] = self.player_uuid
             # noinspection PyUnresolvedReferences
             js["owner"] = self.player.display_member()
 
