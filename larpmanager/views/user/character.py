@@ -442,7 +442,7 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=context["run"].reg,
-            character=context["char"],
+            character__uuid=context["char"]["uuid"],
         )
         if rgr.custom_profile:
             context["custom_profile"] = rgr.profile_thumb.url
@@ -543,7 +543,7 @@ def character_profile_rotate(
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=context["run"].reg,
-            character=context["char"],
+            character__uuid=context["char"]["uuid"],
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})

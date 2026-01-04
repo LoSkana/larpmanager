@@ -274,7 +274,7 @@ def get_character_sheet_plots(context: dict) -> None:
     context["sheet_plots"] = []
 
     # Get all plot relations for the character ordered by sequence
-    plot_relations = PlotCharacterRel.objects.filter(character=context["character"])
+    plot_relations = PlotCharacterRel.objects.filter(character__uuid=context["character"]["uuid"])
 
     for plot_relation in plot_relations.order_by("order"):
         # Start with the base plot text
