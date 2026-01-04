@@ -1352,7 +1352,7 @@ class OrgaRunForm(ConfigForm):
             for question_field in questions.values():
                 question_type = question_field["typ"]
                 if question_type in basic_types:
-                    question_type = str(question_field["id"])
+                    question_type = str(question_field["uuid"])
 
                 field_choices.append((question_type, question_field["name"]))
 
