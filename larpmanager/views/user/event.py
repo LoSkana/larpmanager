@@ -787,9 +787,9 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
 
             # Remove fields that shouldn't be shown to current user
             fields_to_remove = [
-                question_id
-                for question_id in list(character_fields)
-                if str(question_id) not in context.get("show_character", []) and "show_all" not in context
+                question_uuid
+                for question_uuid in list(character_fields)
+                if str(question_uuid) not in context.get("show_character", []) and "show_all" not in context
             ]
             for question_id in fields_to_remove:
                 del character_fields[question_id]
