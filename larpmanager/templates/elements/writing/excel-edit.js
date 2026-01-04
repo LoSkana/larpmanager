@@ -190,22 +190,20 @@ window.addEventListener('DOMContentLoaded', function() {
                     });
                 }
 
-                /*
                 setTimeout(() => {
-                    if (res.tinymce) {
-                        // prepare tinymce count
-                        prepare_tinymce(res.key, res.max_length);
-                    }
-
                     // set up max length
                     if (res.max_length > 0) {
-                        update_count(res.key, res.max_length, res.typ);
-                        $('#' + res.key).on('input', function() {
+                        if (res.tinymce) {
+                            // prepare tinymce count
+                            prepare_tinymce(res.key, res.max_length);
+                        } else {
                             update_count(res.key, res.max_length, res.typ);
-                        });
+                            $('#' + res.key).on('input', function() {
+                                update_count(res.key, res.max_length, res.typ);
+                            });
+                        }
                     }
                 }, 100);
-                */
 
                 $('#excel-edit input[type="submit"]').on("click", function() {
                     submitExcelForm(false);

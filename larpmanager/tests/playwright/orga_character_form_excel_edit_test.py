@@ -315,7 +315,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
 def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     """Test editing Multiple Choice field inline for both characters."""
 
-    page.get_by_role("link", name="Multiple Choice").click()
+    page.get_by_role("link", name="Multiple Choice").first.click()
 
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
@@ -343,7 +343,7 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Advanced Question").click()
 
     # Edit u1 (existing value)
-    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Text 2 value 1").dblclick()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Advanced value 1").dblclick()
     just_wait(page)
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
         "Text 2 modified"
@@ -367,6 +367,12 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
 def verify_after_refresh(page: Any, live_server: Any) -> None:
     """Refresh the page and verify all edited values are still correct."""
     go_to(page, live_server, "/test/manage/characters/")
+
+    page.get_by_role("link", name="Text Question").click()
+    page.get_by_role("link", name="Paragraph Question").click()
+    page.get_by_role("link", name="Single Choice").first.click()
+    page.get_by_role("link", name="Multiple Choice").first.click()
+    page.get_by_role("link", name="Advanced Question").click()
     just_wait(page)
 
     # Verify u1 values

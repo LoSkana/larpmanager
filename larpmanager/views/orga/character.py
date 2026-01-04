@@ -1323,6 +1323,8 @@ def _get_question_update(context: dict, element: Any) -> str:
     # Handle multiple choice and single choice questions
     if context["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
+        if not isinstance(display_value, list):
+            display_value = [display_value]
         query = context["event"].get_elements(WritingOption).filter(uuid__in=display_value).order_by("order")
         display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
