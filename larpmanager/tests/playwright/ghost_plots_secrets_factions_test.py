@@ -166,13 +166,13 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Test Larp").click()
     page.get_by_role("link", name="Test Character").click()
-    expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser2 eefqq")
+    expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser eefqq")
     expect(page.locator("#wrapper")).not_to_contain_text("gggerwe")
 
     page.get_by_role("link", name="eefqq").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Characters Test Character3 Presentation: Test Teaser2 Factions: eefqq",
+        "Characters Test Character3 Presentation: Test Teaser Factions: eefqq",
     )
 
     # if i try to go to secret faction, blocked
