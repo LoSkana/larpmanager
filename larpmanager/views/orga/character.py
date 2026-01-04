@@ -1323,8 +1323,7 @@ def _get_question_update(context: dict, element: Any) -> str:
     # Handle multiple choice and single choice questions
     if context["question"].typ in [BaseQuestionType.MULTIPLE, BaseQuestionType.SINGLE]:
         # get option names
-        option_uuids = [str(option_value) for option_value in display_value]
-        query = context["event"].get_elements(WritingOption).filter(uuid__in=option_uuids).order_by("order")
+        query = context["event"].get_elements(WritingOption).filter(uuid__in=display_value).order_by("order")
         display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
         # check if it is over the character limit

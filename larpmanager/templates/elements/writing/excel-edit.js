@@ -190,6 +190,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     });
                 }
 
+                /*
                 setTimeout(() => {
                     if (res.tinymce) {
                         // prepare tinymce count
@@ -204,6 +205,7 @@ window.addEventListener('DOMContentLoaded', function() {
                         });
                     }
                 }, 100);
+                */
 
                 $('#excel-edit input[type="submit"]').on("click", function() {
                     submitExcelForm(false);
