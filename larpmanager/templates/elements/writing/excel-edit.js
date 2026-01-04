@@ -115,7 +115,33 @@ window.addEventListener('DOMContentLoaded', function() {
             // success
             if (res.k == 1) {
                 closeEdit();
-                $('#' + res.eid + ' [qid=' + res.qid + ']').html(res.update);
+                // Update DataTables instead of direct HTML manipulation
+                Object.keys(window.datatables).forEach(function(key) {
+                    const table = window.datatables[key];
+                    // Try to find cell by class first (most common case)
+                    let cell = table.cell('#' + res.eid, '.q_' + res.qid);
+
+                    // If not found, try to find by qid attribute (for name and other special fields)
+                    if (!cell || !cell.node()) {
+                        const row = table.row('#' + res.eid);
+                        if (row.length > 0) {
+                            const rowNode = row.node();
+                            const targetCell = $(rowNode).find('[qid="' + res.qid + '"]');
+                            if (targetCell.length > 0) {
+                                const cellIndex = targetCell.index();
+                                cell = table.cell(rowNode, cellIndex);
+                            }
+                        }
+                    }
+
+                    if (cell && cell.node()) {
+                        // Update cell HTML directly to preserve attributes
+                        const cellNode = cell.node();
+                        cellNode.innerHTML = res.update;
+                        // Invalidate cell to sync DataTables internal state with DOM
+                        cell.invalidate('dom');
+                    }
+                });
                 return;
             }
             // form error

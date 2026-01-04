@@ -148,12 +148,12 @@ def _init_element_cache_text_field(
     questions = element.event.get_elements(WritingQuestion).filter(applicable=applicable)
 
     # Process editor-type questions and cache their answers
-    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        answers = WritingAnswer.objects.filter(question_id=question_id, element_id=element.id)
+    for question in questions.filter(typ=BaseQuestionType.EDITOR).values("pk", "uuid"):
+        answers = WritingAnswer.objects.filter(question_id=question["pk"], element_id=element.id)
         if answers:
             # Cache the text content of the first matching answer
             answer_text = answers.first().text
-            field_key = str(question_id)
+            field_key = f"q_{question['uuid']}"
             result_cache[element.id][field_key] = get_single_cache_text_field(element.id, field_key, answer_text)
 
 
@@ -218,7 +218,7 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
     cached_text_fields = get_cache_text_field(applicable_type, event)
 
     # Prepare field identifier and ensure element structure exists
-    question_field_id = str(instance.question_id)
+    question_field_id = f"q_{instance.question.uuid}"
     if instance.element_id not in cached_text_fields:
         cached_text_fields[instance.element_id] = {}
 

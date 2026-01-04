@@ -464,8 +464,8 @@ def writing_list_text_fields(context: dict, text_fields: Any, writing_element_ty
     """
     # add editor type questions
     writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
-    for question_id in writing_questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        text_fields.append(str(question_id))
+    for question_uuid in writing_questions.filter(typ=BaseQuestionType.EDITOR).values_list("uuid", flat=True):
+        text_fields.append(f"q_{question_uuid}")
 
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
