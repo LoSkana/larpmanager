@@ -712,7 +712,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         prev = Character.objects.get(pk=char.pk)
 
         # Check if cache-affecting fields changed
-        lst = ["player_uuid", "mirror_id"]
+        lst = ["player_id", "mirror_id"]
         if has_different_cache_values(char, prev, lst):
             clear_event_cache_all_runs(char.event)
         else:

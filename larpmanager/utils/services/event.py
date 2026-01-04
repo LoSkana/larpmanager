@@ -154,7 +154,7 @@ def has_access_character(request: HttpRequest, context: dict) -> bool:
 
     current_member_uuid = context["member"].uuid
 
-    if "owner_id" in context["char"] and context["char"]["owner_id"] == current_member_uuid:
+    if "owner_uuid" in context["char"] and context["char"]["owner_uuid"] == current_member_uuid:
         return True
 
     return bool("player_uuid" in context["char"] and context["char"]["player_uuid"] == current_member_uuid)

@@ -575,7 +575,7 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
     skip_fields = [
         "id",
         "show",
-        "owner_id",
+        "owner_uuid",
         "owner",
         "player",
         "player_full",
