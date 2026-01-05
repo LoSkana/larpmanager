@@ -1262,7 +1262,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         """
         # Check if an answer already exists for this question
-        if question.uuid in self.answers:
+        if question.id in self.answers:
             if not value:
                 # For disabled questions in organizer forms, don't delete existing answers
                 # unless the organizer explicitly submitted an empty value for an editable field
@@ -1273,11 +1273,11 @@ class BaseRegistrationForm(BaseModelFormRun):
                 if orga and is_disabled:
                     pass
                 else:
-                    self.answers[question.uuid].delete()
-            elif value != self.answers[question.uuid].text:
+                    self.answers[question.id].delete()
+            elif value != self.answers[question.id].text:
                 # Update existing answer if the value has changed
-                self.answers[question.uuid].text = value
-                self.answers[question.uuid].save()
+                self.answers[question.id].text = value
+                self.answers[question.id].save()
         elif value:
             # Only create new answers if there's actually content
             self.answer_class.objects.create(**{"question": question, self.instance_key: instance.id, "text": value})
