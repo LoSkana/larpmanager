@@ -30,12 +30,12 @@ from larpmanager.forms.registration import RegistrationTransferForm
 from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.services.transfer import (
     get_suggested_ticket_mapping,
     move_registration_between_runs,
     validate_transfer_feasibility,
 )
-from larpmanager.views.orga.registration import reset_all_run
 
 
 @login_required

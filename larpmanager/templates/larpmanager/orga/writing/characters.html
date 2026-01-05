@@ -183,7 +183,7 @@
             {% for key, que in form_questions.items %}
                 {% if que.typ == 's' or que.typ == 'm' %}
                     <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
-                    <a href="#" class="table_toggle hide" tog='email_que_{{ key }}'>hidden</a>
+                    <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
                 {% endif %}
             {% endfor %}
         </div>

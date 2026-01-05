@@ -125,7 +125,11 @@ def accounting(request: HttpRequest) -> HttpResponse:
 
         # Process accounting info for each delegated member
         for el in context["delegated"]:
-            del_ctx = {"member": el, "association_id": context["association_id"]}
+            del_ctx = {
+                "member": el,
+                "association_id": context["association_id"],
+                "features": context["features"],
+            }
             info_accounting(del_ctx)
 
             # Attach context to member object for template access

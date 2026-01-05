@@ -65,11 +65,10 @@ class OrgaInventoryForm(InventoryBaseForm):
         event = getattr(self.instance, "event", None) or self.params.get("event", None)
 
         if event:
-            # Set event on the widget so it can filter characters properly
-            self.fields["owners"].widget.set_event(event)
+            # Configure field with event for security and functionality
+            self.configure_field_event("owners", event)
 
-            # Set initial queryset and selection
-            self.fields["owners"].queryset = Character.objects.filter(event=event)
+            # Set initial selection for existing instances
             if self.instance.pk:
                 self.fields["owners"].initial = self.instance.owners.all()
         else:

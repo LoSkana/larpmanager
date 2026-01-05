@@ -665,6 +665,41 @@ class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     """Represents EventCharacterS2Widget model."""
 
 
+class RunCampaignS2:
+    """Manages loading run from a campaign."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event to look for other campaign events."""
+        if event.parent_id:
+            # Event is in a campaign - get parent and all siblings
+            parent_event = Event.objects.get(id=event.parent_id)
+            # Get all children of the parent (siblings) plus the parent itself
+            event_ids = list(Event.objects.filter(parent_id=parent_event.id).values_list("id", flat=True))
+            event_ids.append(parent_event.id)
+        else:
+            # Event is standalone or parent - get this event and all children
+            event_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))
+            event_ids.append(event.id)
+
+        self.event_ids = event_ids
+
+    def get_queryset(self) -> QuerySet[Character]:
+        """Return queryset of runs of allowed event ids."""
+        return Run.objects.filter(event_id__in=self.event_ids).order_by("-end")
+
+
+class RunCampaignS2WidgetMulti(RunCampaignS2, s2forms.ModelSelect2MultipleWidget):
+    """Represents RunCampaignS2WidgetMulti model."""
+
+
+class RunCampaignS2Widget(RunCampaignS2, s2forms.ModelSelect2Widget):
+    """Represents RunCampaignS2Widget model."""
+
+
 class EventPlotS2:
     """Represents EventPlotS2 model."""
 

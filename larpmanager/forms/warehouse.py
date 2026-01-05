@@ -71,8 +71,8 @@ class ExeWarehouseItemForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Configure widgets with association ID for proper filtering
-        self.fields["container"].widget.set_association_id(self.params["association_id"])
-        self.fields["tags"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("container", self.params["association_id"])
+        self.configure_field_association("tags", self.params["association_id"])
 
         # Remove optional warehouse fields based on configuration
         _delete_optionals_warehouse(self)
@@ -122,7 +122,7 @@ class ExeWarehouseTagForm(BaseModelForm):
             self.initial["items"] = self.instance.items.values_list("id", flat=True)
 
         # Configure widget with association context
-        self.fields["items"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("items", self.params["association_id"])
 
 
 class ExeWarehouseMovementForm(BaseModelForm):
@@ -145,7 +145,7 @@ class ExeWarehouseMovementForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Configure item widget with association ID
-        self.fields["item"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("item", self.params["association_id"])
 
         # Remove optional warehouse fields
         _delete_optionals_warehouse(self)
@@ -185,8 +185,8 @@ class OrgaWarehouseItemAssignmentForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Configure widget event and association contexts
-        self.fields["area"].widget.set_event(self.params["event"])
-        self.fields["item"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_event("area", self.params["event"])
+        self.configure_field_association("item", self.params["association_id"])
 
         _delete_optionals_warehouse(self)
 

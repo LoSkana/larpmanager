@@ -26,7 +26,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseModelForm
+from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -65,7 +65,7 @@ PAY_CHOICES = (
 )
 
 
-class SendMailForm(forms.Form):
+class SendMailForm(BaseForm):
     """Form for SendMail."""
 
     players = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))
@@ -239,13 +239,13 @@ class OrgaProblemForm(BaseModelForm):
         }
 
 
-class UploadAlbumsForm(forms.Form):
+class UploadAlbumsForm(BaseForm):
     """Form for UploadAlbums."""
 
     file = forms.FileField(validators=[FileTypeValidator(allowed_types=["application/zip"])])
 
 
-class CompetencesForm(forms.Form):
+class CompetencesForm(BaseForm):
     """Form for Competences."""
 
     def __init__(self, *args: tuple, **kwargs: dict) -> None:
@@ -264,7 +264,7 @@ class CompetencesForm(forms.Form):
             self.fields[f"{el.id}_exp"] = forms.IntegerField(required=False)
             self.fields[f"{el.id}_info"] = forms.CharField(required=False)
 
-        # ~ class ContactForm(forms.Form):
+        # ~ class ContactForm(BaseForm):
 
     # ~ name = forms.CharField(max_length=100)
     # ~ email = forms.CharField(max_length=100)
@@ -319,7 +319,7 @@ class ExeCompetenceForm(BaseModelForm):
         }
 
 
-class OrganizerCastingOptionsForm(forms.Form):
+class OrganizerCastingOptionsForm(BaseForm):
     """Form for OrganizerCastingOptions."""
 
     pays = forms.MultipleChoiceField(
@@ -458,10 +458,10 @@ class ShuttleServiceEditForm(ShuttleServiceForm):
             self.initial["working"] = self.params["member"]
 
         # Configure widget with association context
-        self.fields["working"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("working", self.params["association_id"])
 
 
-class OrgaCopyForm(forms.Form):
+class OrgaCopyForm(BaseForm):
     """Form for OrgaCopy."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -484,7 +484,7 @@ class OrgaCopyForm(forms.Form):
             help_text="The event from which you will copy the elements",
         )
         self.fields["parent"].widget = EventS2Widget()
-        self.fields["parent"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("parent", self.params["association_id"])
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
         cho = [

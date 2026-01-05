@@ -273,10 +273,28 @@ def get_writing_element_fields(
     *,
     only_visible: bool = True,
 ) -> dict[str, dict]:
-    """Get writing fields for a specific element with visibility filtering.
+    """Get writing fields for a specific element with visibility filtering."""
+    batch_results = get_writing_element_fields_batch(
+        context,
+        feature_name,
+        applicable,
+        [element_id],
+        only_visible=only_visible,
+    )
+    return batch_results.get(
+        element_id, {"questions": context.get("questions", {}), "options": context.get("options", {}), "fields": {}}
+    )
 
-    Retrieves writing questions, options, and field values for a given element,
-    applying visibility filters based on context configuration.
+
+def get_writing_element_fields_batch(
+    context: dict,
+    feature_name: str,
+    applicable: str,
+    element_ids: list[int],
+    *,
+    only_visible: bool = True,
+) -> dict[int, dict[str, dict]]:
+    """Get writing fields for multiple elements with visibility filtering.
 
     Args:
         context: Context dictionary containing event and configuration data including
@@ -284,11 +302,11 @@ def get_writing_element_fields(
         feature_name: Name of the feature (e.g., 'character', 'faction') used
                      for determining visibility key
         applicable: QuestionApplicable enum value defining question scope
-        element_id: Unique identifier of the element to retrieve fields for
+        element_ids: List of element IDs to retrieve fields for
         only_visible: Whether to include only visible fields. Defaults to True
 
     Returns:
-        Dictionary containing:
+        Dictionary mapping element_id to:
             - questions: Available questions from context
             - options: Available options from context
             - fields: Mapping of question_id to field values (text or list of option_ids)
@@ -307,29 +325,39 @@ def get_writing_element_fields(
             continue
         visible_question_ids.append(question_uuid)
 
-    # Retrieve text answers for visible questions
-    # Store direct text responses in fields dictionary
-    question_uuid_to_value = {}
+    # Initialize results dictionary for all elements
+    results = {element_id: {} for element_id in element_ids}
 
-    # Retrieve text answers for visible questions
+    # Retrieve text answers for all elements
     # Query WritingAnswer model for text-based responses
     text_answers_query = WritingAnswer.objects.filter(
-        element_id=element_id, question__uuid__in=visible_question_ids
+        element_id__in=element_ids, question__uuid__in=visible_question_ids
     ).select_related("question")
-    question_uuid_to_value.update(dict(text_answers_query.values_list("question__uuid", "text")))
+    for element_id, question_uuid, text in text_answers_query.values_list("element_id", "question__uuid", "text"):
+        results[element_id][question_uuid] = text
 
-    # Retrieve choice answers for visible questions
+    # Retrieve choice answers for all elements
     # Group multiple choice options into lists per question
     choice_answers_query = WritingChoice.objects.filter(
-        element_id=element_id, question__uuid__in=visible_question_ids
+        element_id__in=element_ids, question__uuid__in=visible_question_ids
     ).select_related("question", "option")
-    for question_uuid, option_uuid in choice_answers_query.values_list("question__uuid", "option__uuid"):
+    for element_id, question_uuid, option_uuid in choice_answers_query.values_list(
+        "element_id", "question__uuid", "option__uuid"
+    ):
         # Initialize list if question not yet in fields
-        if question_uuid not in question_uuid_to_value:
-            question_uuid_to_value[question_uuid] = []
-        question_uuid_to_value[question_uuid].append(option_uuid)
+        if question_uuid not in results[element_id]:
+            results[element_id][question_uuid] = []
+        results[element_id][question_uuid].append(option_uuid)
 
-    return {"questions": context["questions"], "options": context["options"], "fields": question_uuid_to_value}
+    # Return full format for each element
+    return {
+        element_id: {
+            "questions": context["questions"],
+            "options": context["options"],
+            "fields": fields,
+        }
+        for element_id, fields in results.items()
+    }
 
 
 def get_event_cache_factions(context: dict, result: dict) -> None:

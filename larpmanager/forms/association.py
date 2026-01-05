@@ -279,7 +279,7 @@ class ExeAssociationRoleForm(BaseModelForm):
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure member widget with association context
-        self.fields["members"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("members", self.params["association_id"])
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
 

@@ -19,9 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 """
-Test: Character fields, plots, abilities, and secret factions visibility.
-Verifies Excel-style character editing, ability assignments, plot character roles,
-secret vs public faction visibility, and character field display configurations.
+Test: plots, abilities, and secret factions visibility.
+Verifies ability assignments, plot character roles, secret vs public faction
+visibility, and character field display configurations.
 """
 
 from typing import Any
@@ -156,50 +156,9 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="teeeeest").click()
     page.locator("#one").get_by_role("link", name="Plots").click()
-
     expect_normalized(page,
         page.locator("#one"),
         "#1 Test Character 2 1 1 Test Teaser Test Text eefqq gggerwe first qweeerr",
-    )
-
-    # change teaser
-    page.get_by_role("cell", name="Test Teaser").dblclick()
-    just_wait(page)
-    page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser2")
-    just_wait(page)
-    submit_confirm(page)
-
-    # reload page, check everything is correct
-    go_to(page, live_server, "/test/manage/characters/")
-    just_wait(page)
-    page.get_by_role("link", name="XP").click()
-    page.get_by_role("link", name="teeeeest").click()
-    page.get_by_role("link", name="Faction", exact=True).click()
-    page.locator("#one").get_by_role("link", name="Plots").click()
-    just_wait(page)
-    expect_normalized(page,
-        page.locator("#one"),
-        "#1 Test Character 2 1 1 Test Teaser2 Test Text eefqq gggerwe first qweeerr",
-    )
-
-    # change new field value
-    page.get_by_role("cell", name="#1 Test Character").dblclick()
-    just_wait(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Test Character3")
-    just_wait(page)
-    submit_confirm(page)
-
-    # reload page, check everything is correct
-    go_to(page, live_server, "/test/manage/characters/")
-    page.get_by_role("link", name="XP").click()
-    page.get_by_role("link", name="Faction", exact=True).click()
-    page.locator("#one").get_by_role("link", name="Plots").click()
-    page.get_by_role("link", name="teeeeest").click()
-    expect_normalized(page,
-        page.locator("#one"),
-        "Test Character3 2 1 1 Test Teaser2 Test Text eefqq gggerwe first qweeerr",
     )
 
     # check secret factions
@@ -207,17 +166,17 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Test Larp").click()
     page.get_by_role("link", name="Test Character").click()
-    expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser2 eefqq")
+    expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser eefqq")
     expect(page.locator("#wrapper")).not_to_contain_text("gggerwe")
 
     page.get_by_role("link", name="eefqq").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Characters Test Character3 Presentation: Test Teaser2 Factions: eefqq",
+        "Characters Test Character Presentation: Test Teaser Factions: eefqq",
     )
 
     # if i try to go to secret faction, blocked
-    page.goto(f"{live_server}/test/faction/2/")
+    page.goto(f"{live_server}/test/faction/u2/")
     banner = page.locator("#banner")
     if banner.count() > 0:
         expect_normalized(page, banner, "404")

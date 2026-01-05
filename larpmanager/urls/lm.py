@@ -109,6 +109,11 @@ urlpatterns = [
         name="lm_profile",
     ),
     path(
+        "lm/reset/",
+        views_lm.lm_reset,
+        name="lm_reset",
+    ),
+    path(
         "redirect/<path:path>",
         views_lm.redr,
         name="redr",

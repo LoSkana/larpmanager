@@ -891,45 +891,33 @@ def delegated(request: HttpRequest) -> HttpResponse:
     context = get_context(request)
     check_association_feature(request, context, "delegated_members")
 
-    # Disable last login update to avoid tracking when switching accounts
-    user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
-    backend = get_user_backend()
-
     # Handle delegated user trying to return to parent account
     if request.user.member.parent:
         if request.method == "POST":
-            # Log back in as parent account
-            login(request, request.user.member.parent.user, backend=backend)
-            messages.success(
-                request,
-                _("You are now logged in with your main account") + ":" + str(request.user.member),
-            )
-            return redirect("home")
+            message = _("You are now logged in with your main account") + ": " + str(request.user.member.parent)
+            return _switch_account(request, request.user.member.parent.user, message)
         # Show option to return to parent account
         return render(request, "larpmanager/member/delegated.html", context)
 
-    # Handle parent account managing delegated accounts
     # Retrieve all delegated child accounts for this parent
     context["list"] = Member.objects.filter(parent=request.user.member)
-    del_dict = {el.id: el for el in context["list"]}
+    del_dict = {el.uuid: el for el in context["list"]}
 
     # Process POST requests for account switching or creation
     if request.method == "POST":
         account_login = request.POST.get("account")
         # Handle switching to an existing delegated account
         if account_login:
-            account_login = int(account_login)
+            account_login = str(account_login)
             if account_login not in del_dict:
                 msg = f"delegated account not found: {account_login}"
                 raise Http404(msg)
             delegated = del_dict[account_login]
-            # Log in as the selected delegated account
-            login(request, delegated.user, backend=backend)
-            messages.success(request, _("You are now logged in with the delegate account") + ":" + str(delegated))
-            return redirect("home")
+            message = _("You are now logged in with the delegate account") + ": " + str(delegated)
+            return _switch_account(request, delegated.user, message)
 
         # Handle creating a new delegated account
-        form = ProfileForm(request.POST, ontext=context)
+        form = ProfileForm(request.POST, context=context)
         if form.is_valid():
             data = form.cleaned_data
             # Generate unique username and email for delegated account
@@ -960,7 +948,11 @@ def delegated(request: HttpRequest) -> HttpResponse:
 
     # Add accounting information for each delegated account
     for el in context["list"]:
-        del_ctx = {"member": el, "association_id": context["association_id"]}
+        del_ctx = {
+            "member": el,
+            "association_id": context["association_id"],
+            "features": context["features"],
+        }
         info_accounting(del_ctx)
         el.context = del_ctx
     return render(request, "larpmanager/member/delegated.html", context)
@@ -969,6 +961,33 @@ def delegated(request: HttpRequest) -> HttpResponse:
 def get_user_backend() -> str:
     """Return the authentication backend path for allauth."""
     return "allauth.account.auth_backends.AuthenticationBackend"
+
+
+def _switch_account(request: HttpRequest, target_user: User, success_message: str) -> HttpResponse:
+    """Switch to a different user account (parent or delegated).
+
+    Args:
+        request: HTTP request from current user
+        target_user: User object to switch to
+        success_message: Message to display after successful switch
+
+    Returns:
+        Redirect to home page after switching accounts
+    """
+    # Disable last login update to avoid tracking when switching accounts
+    user_logged_in.disconnect(update_last_login, dispatch_uid="update_last_login")
+    try:
+        # Log in as the target user using Django's ModelBackend
+        # We use ModelBackend instead of allauth because delegated users don't have EmailAddress records
+        login(request, target_user, backend="django.contrib.auth.backends.ModelBackend")
+        # Explicitly save the session to ensure login persists
+        request.session.save()
+    finally:
+        # Re-enable last login update signal
+        user_logged_in.connect(update_last_login, dispatch_uid="update_last_login")
+
+    messages.success(request, success_message)
+    return redirect("home")
 
 
 @login_required
