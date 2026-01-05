@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (
+    just_wait,
     check_download,
     check_feature,
     go_to,
@@ -51,6 +52,9 @@ def test_upload_download(pw_page: Any) -> None:
 
     # check shows fee
     check_user_fee(live_server, page)
+
+    # Test auto-activation of features
+    auto_activation_features(live_server, page)
 
     # prepare
     go_to(page, live_server, "/test/manage/")
@@ -102,12 +106,14 @@ def abilities(page: Any) -> None:
     page.locator("#id_first").click()
     upload(page, "#id_first", get_path("abilities.csv"))
     submit_confirm(page)
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created sword OK - Created shield OK - Created sneak",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword , shield trtr , rrrrrr",
     )
@@ -135,8 +141,10 @@ def relationships(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), " OK - Relationship characcter test character")
     page.get_by_role("link", name="Proceed").click()
     page.get_by_role("link", name="Relationships").click()
-    expect_normalized(page,
-        page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character"
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr Test Character",
     )
 
 
@@ -149,7 +157,8 @@ def plots(live_server: Any, page: Any) -> None:
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("roles.csv"))
     submit_confirm(page)
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created plott OK - Plot role characcter plott",
     )
@@ -212,12 +221,14 @@ def reg_form(page: Any) -> None:
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("reg-options.csv"))
     submit_confirm(page)
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created tbmobw OK - Created qmhcuf OK - Created holdmf OK - Created lyucez OK - Created bamkzw OK - Created npyrxd OK - Created rdtbgg OK - Created qkcyjr OK - Created fjxkum",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "tbmobw npyrxd Multiple choice Optional npyrxd , rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr , fjxkum",
     )
@@ -232,8 +243,8 @@ def characters(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), " OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page,
-        page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr"
+    expect_normalized(
+        page, page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 characcter trg poor ertd fewr"
     )
     check_download(page, "Download")
 
@@ -257,30 +268,35 @@ def char_form(page: Any) -> None:
     upload(page, "#id_first", get_path("char-questions.csv"))
     upload(page, "#id_second", get_path("char-options.csv"))
     submit_confirm(page)
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "Loading performed, see logs Proceed Logs OK - Created bibi OK - Created baba OK - Created wer OK - Created asd OK - Created poi OK - Created huhu OK - Created trtr OK - Created rrrrrr OK - Created tttttt",
     )
     page.get_by_role("link", name="Proceed").click()
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu , trtr",
     )
     check_download(page, "Download")
     page.get_by_role("link", name="Plot", exact=True).click()
-    expect_normalized(page,
-        page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
+    expect_normalized(
+        page, page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
     )
     page.get_by_role("link", name="Faction", exact=True).click()
-    expect_normalized(page,
-        page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
+    expect_normalized(
+        page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
     )
     page.locator("#one").get_by_role("link", name="Quest").click()
-    expect_normalized(page,
-        page.locator("#one"), "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public"
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public",
     )
     page.get_by_role("link", name="Trait", exact=True).click()
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#one"),
         "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr , tttttt",
     )
@@ -311,10 +327,80 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     page.get_by_role("link", name=" Accounting").click()
     page.get_by_role("link", name="follow this link").click()
-    expect_normalized(page,
+    expect_normalized(
+        page,
         page.locator("#wrapper"),
         "Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa",
     )
+
+
+def auto_activation_features(live_server: Any, page: Any) -> None:
+    # Create a new event for auto-activation testing
+    go_to(page, live_server, "/manage/events/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Auto Activation Test")
+    page.locator("#id_slug").click()
+    page.locator("#id_slug").fill("auto-test")
+    submit_confirm(page)
+
+    # Verify we're on the new event
+    go_to(page, live_server, "/auto-test/manage/")
+
+    # Enable character feature but NOT factions feature initially
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    check_feature(page, "Characters")
+    submit_confirm(page)
+
+    # Create character form questions with faction and title types
+    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
+
+    # Add Factions question (this is a feature)
+    page.get_by_role("link", name="Character", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Factions")
+    page.locator("#id_typ").select_option("faction")
+    submit_confirm(page)
+
+    # Add Title question (this is a config)
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("Title")
+    page.locator("#id_typ").select_option("title")
+    submit_confirm(page)
+
+    # Verify faction feature is NOT enabled
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    expect(page.get_by_role("checkbox", name="Factions")).not_to_be_checked()
+
+    # Verify title config is NOT enabled in Character configuration
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Characters ").click()
+    expect(page.locator("#id_character_title")).not_to_be_checked()
+
+    # Go back to dashboard
+    page.get_by_role("link", name="Dashboard").click()
+
+    # Upload a CSV with faction and title columns
+    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
+    page.get_by_role("link", name="Upload").click()
+
+    # Create and upload a CSV with faction and title columns
+    upload(page, "#id_first", get_path("character_with_features.csv"))
+    submit_confirm(page)
+
+    # The upload should succeed and activate the feature and config automatically
+    expect_normalized(page, page.locator("#one"), "OK")
+
+    # Go to features page and verify faction is now enabled
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    expect(page.get_by_role("checkbox", name="Factions")).to_be_checked()
+
+    # Verify title config is now enabled in Character configuration
+    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Characters ").click()
+    expect(page.locator("#id_character_title")).to_be_checked()
 
 
 def get_path(file: Any) -> Any:
