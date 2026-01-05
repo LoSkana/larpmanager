@@ -227,6 +227,9 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
         value = str(option_uuid)
 
         # Initialize fields list for question if not exists, then append choice
+        if character_index not in res["chars"]:
+            continue
+
         fields = res["chars"][character_index]["fields"]
         if question not in fields:
             fields[question] = []
@@ -242,10 +245,13 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
 
         # Map database values to result structure
         character_index = character_id_mapping[element_id]
+
         question = str(question_uuid)
         value = text_value
 
         # Set text answer directly (single value, not list)
+        if character_index not in res["chars"]:
+            continue
         res["chars"][character_index]["fields"][question] = value
 
 
