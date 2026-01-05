@@ -2654,6 +2654,9 @@ msgstr "Filtrera grupper"
 msgid "Invalid request"
 msgstr "Ogiltig begäran"
 
+msgid "Load from event"
+msgstr "Ladda från evenemang"
+
 msgid "Mail assignment"
 msgstr "Tilldelning av post"
 
@@ -7919,6 +7922,12 @@ msgstr ""
 "(Valfritt) De karaktärsnamn som ska tilldelas spelaren, åtskilda med "
 "kommatecken"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Tecken från eventet '{run}' har laddats. Granska och bekräfta för att spara."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9647,6 +9656,13 @@ msgid ""
 msgstr ""
 "Om den är markerad döljs alternativ som inte längre är tillgängliga i "
 "formuläret, istället för att visas inaktiverade"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Om du väljer ett evenemang laddas alla tecken från det evenemangets "
+"registreringar automatiskt"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

@@ -18,8 +18,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-"""
-Test: Experience points system with abilities, deliveries, rules, and modifiers.
+"""Test: Experience points system with abilities, deliveries, rules, and modifiers.
 Verifies ability creation with prerequisites, XP delivery, computed field rules,
 player ability selection with undo functionality, and conditional ability modifiers.
 """
@@ -30,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, fill_tinymce, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, just_wait, login_orga, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -51,6 +50,8 @@ def test_px(pw_page: Any) -> None:
     player_choice_undo(page, live_server)
 
     modifiers(page, live_server)
+
+    delivery_auto_populate(page, live_server)
 
 
 def setup(live_server: Any, page: Any) -> None:
@@ -354,3 +355,29 @@ def modifiers(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         "Experience points Total Used Available 12 4 8 Abilities base ability double shield (3) This text should show sword1 (1) sdsfdsfds Deliveries first live (2) Obtain ability Select the new ability to get --- Select ability",
     )
+
+
+def delivery_auto_populate(page: Any, live_server: Any) -> None:
+    """Test auto-populate delivery from run."""
+    # Go to deliveries page
+    go_to(page, live_server, "/test/manage/px/deliveries/")
+    page.get_by_role("link", name="New").click()
+
+    # Fill in delivery name and amount
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("auto populated delivery")
+    page.locator("#id_amount").click()
+    page.locator("#id_amount").fill("5")
+
+    # Select run in auto_populate_run field
+    page.locator("#select2-id_auto_populate_run-container").click()
+    page.get_by_role("searchbox").nth(1).fill("tes")
+    page.get_by_role("option", name="Test Larp").click()
+
+    # Confirm the form
+    submit_confirm(page)
+
+    # Resubmit with auto-populated characters
+    submit_confirm(page)
+
+    expect_normalized(page, page.locator('[id="u2"]'), "5 Test Character")

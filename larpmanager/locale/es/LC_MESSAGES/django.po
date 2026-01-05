@@ -2654,6 +2654,9 @@ msgstr "Filtrar facciones"
 msgid "Invalid request"
 msgstr "Solicitud no válida"
 
+msgid "Load from event"
+msgstr "Cargar desde evento"
+
 msgid "Mail assignment"
 msgstr "Correo de asignación"
 
@@ -8037,6 +8040,13 @@ msgstr ""
 "(Opcional) Los nombres de los personajes a asignar al jugador, separados por"
 " comas"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Se han cargado los personajes del evento '{run}'. Revise y confirme para "
+"guardar."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9790,6 +9800,13 @@ msgid ""
 msgstr ""
 "Si está marcada, las opciones que ya no están disponibles en el formulario "
 "se ocultan, en lugar de mostrarse desactivadas"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Si selecciona un evento, se cargarán automáticamente todos los caracteres de"
+" las inscripciones de ese evento"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

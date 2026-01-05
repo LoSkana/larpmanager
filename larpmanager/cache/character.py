@@ -263,18 +263,15 @@ def get_character_element_fields(
     )
 
 
-def get_writing_element_fields(
+def get_writing_element_fields_batch(
     context: dict,
     feature_name: str,
     applicable: str,
-    element_id: int,
+    element_ids: list[int],
     *,
     only_visible: bool = True,
-) -> dict[str, dict]:
-    """Get writing fields for a specific element with visibility filtering.
-
-    Retrieves writing questions, options, and field values for a given element,
-    applying visibility filters based on context configuration.
+) -> dict[int, dict[str, dict]]:
+    """Get writing fields for multiple elements with visibility filtering.
 
     Args:
         context: Context dictionary containing event and configuration data including
@@ -282,11 +279,11 @@ def get_writing_element_fields(
         feature_name: Name of the feature (e.g., 'character', 'faction') used
                      for determining visibility key
         applicable: QuestionApplicable enum value defining question scope
-        element_id: Unique identifier of the element to retrieve fields for
+        element_ids: List of element IDs to retrieve fields for
         only_visible: Whether to include only visible fields. Defaults to True
 
     Returns:
-        Dictionary containing:
+        Dictionary mapping element_id to:
             - questions: Available questions from context
             - options: Available options from context
             - fields: Mapping of question_id to field values (text or list of option_ids)
@@ -305,25 +302,56 @@ def get_writing_element_fields(
             continue
         visible_question_ids.append(question_id)
 
-    # Retrieve text answers for visible questions
-    # Store direct text responses in fields dictionary
-    question_id_to_value = {}
+    # Initialize results dictionary for all elements
+    results = {element_id: {} for element_id in element_ids}
 
-    # Retrieve text answers for visible questions
-    # Query WritingAnswer model for text-based responses
-    text_answers_query = WritingAnswer.objects.filter(element_id=element_id, question_id__in=visible_question_ids)
-    question_id_to_value.update(dict(text_answers_query.values_list("question_id", "text")))
+    # Retrieve text answers for all elements
+    text_answers_query = WritingAnswer.objects.filter(element_id__in=element_ids, question_id__in=visible_question_ids)
+    for element_id, question_id, text in text_answers_query.values_list("element_id", "question_id", "text"):
+        results[element_id][question_id] = text
 
-    # Retrieve choice answers for visible questions
-    # Group multiple choice options into lists per question
-    choice_answers_query = WritingChoice.objects.filter(element_id=element_id, question_id__in=visible_question_ids)
-    for question_id, option_id in choice_answers_query.values_list("question_id", "option_id"):
+    # Retrieve choice answers for all elements
+    choice_answers_query = WritingChoice.objects.filter(
+        element_id__in=element_ids, question_id__in=visible_question_ids
+    )
+    for element_id, question_id, option_id in choice_answers_query.values_list(
+        "element_id", "question_id", "option_id"
+    ):
         # Initialize list if question not yet in fields
-        if question_id not in question_id_to_value:
-            question_id_to_value[question_id] = []
-        question_id_to_value[question_id].append(option_id)
+        if question_id not in results[element_id]:
+            results[element_id][question_id] = []
+        results[element_id][question_id].append(option_id)
 
-    return {"questions": context["questions"], "options": context["options"], "fields": question_id_to_value}
+    # Return full format for each element
+    return {
+        element_id: {
+            "questions": context["questions"],
+            "options": context["options"],
+            "fields": fields,
+        }
+        for element_id, fields in results.items()
+    }
+
+
+def get_writing_element_fields(
+    context: dict,
+    feature_name: str,
+    applicable: str,
+    element_id: int,
+    *,
+    only_visible: bool = True,
+) -> dict[str, dict]:
+    """Get writing fields for a specific element with visibility filtering."""
+    batch_results = get_writing_element_fields_batch(
+        context,
+        feature_name,
+        applicable,
+        [element_id],
+        only_visible=only_visible,
+    )
+    return batch_results.get(
+        element_id, {"questions": context.get("questions", {}), "options": context.get("options", {}), "fields": {}}
+    )
 
 
 def get_event_cache_factions(context: dict, result: dict) -> None:

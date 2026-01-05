@@ -2654,6 +2654,9 @@ msgstr "Groupes de filtres"
 msgid "Invalid request"
 msgstr "Demande non valide"
 
+msgid "Load from event"
+msgstr "Chargement à partir d'un événement"
+
 msgid "Mail assignment"
 msgstr "Affectation du courrier"
 
@@ -8153,6 +8156,13 @@ msgstr ""
 "(Facultatif) Les noms des personnages à attribuer au joueur, séparés par des"
 " virgules"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Les personnages de l'événement '{run}' ont été chargés. Vérifiez et "
+"confirmez pour sauvegarder."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9920,6 +9930,13 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, les options qui ne sont plus disponibles dans le "
 "formulaire sont masquées, au lieu d'être affichées désactivées"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Si vous sélectionnez un événement, tous les caractères des enregistrements "
+"de cet événement seront automatiquement chargés"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

@@ -744,7 +744,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
     else:
         # Handle other class types (abilities, etc.)
         eid = request.POST.get("eid", "")
-        perms = {"abilitypx": "orga_px_abilities"}
+        perms = {"abilitypx": "orga_px_abilities", "deliverypx": "orga_px_abilities"}
 
         # Determine permission based on class name
         perm = perms[class_name] if class_name in perms else "orga_" + class_name + "s"

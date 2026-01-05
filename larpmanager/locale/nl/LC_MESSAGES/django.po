@@ -2654,6 +2654,9 @@ msgstr "Filtergroepen"
 msgid "Invalid request"
 msgstr "Ongeldig verzoek"
 
+msgid "Load from event"
+msgstr "Laden van gebeurtenis"
+
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
@@ -8045,6 +8048,13 @@ msgstr ""
 "(Optioneel) De karakternamen om aan de speler toe te wijzen, gescheiden door"
 " komma's"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Tekens van evenement '{run}' zijn geladen. Controleer en bevestig om op te "
+"slaan."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9807,6 +9817,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, worden opties die niet langer beschikbaar zijn"
 " in het formulier verborgen in plaats van uitgeschakeld weergegeven"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Als je een evenement selecteert, worden alle tekens uit de registraties van "
+"dat evenement automatisch geladen"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

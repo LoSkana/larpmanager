@@ -38,6 +38,7 @@ from larpmanager.cache.registration import clear_registration_counts_cache
 from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import remove_event_role_cache
 from larpmanager.cache.run import reset_cache_run
+from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.base import auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
@@ -656,3 +657,6 @@ def reset_all_run(event: Event, run: Run) -> None:
         remove_event_role_cache(event_role_id)
 
     clear_event_cache_all_runs(event)
+
+    # Clear text fields cache
+    reset_text_fields_cache(run)
