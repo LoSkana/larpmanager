@@ -493,7 +493,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=context["registration"],
-            characterr=context["char"],
+            character=context["char"],
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
