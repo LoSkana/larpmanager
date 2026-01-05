@@ -213,7 +213,7 @@ def submit_confirm(page: Any) -> None:
     )
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
-    submit_btn.click()
+    submit_btn.click(force=True)
     just_wait(page)
 
 

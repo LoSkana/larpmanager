@@ -602,7 +602,6 @@ class BaseRegistrationForm(BaseModelFormRun):
         """
         choices = []
         help_text = question.description
-        event_run = self.params["run"]
 
         # Early return if no options available for this question
         if question.id not in all_options:
@@ -626,7 +625,8 @@ class BaseRegistrationForm(BaseModelFormRun):
             # Validate ticket compatibility if ticket mapping exists
             if registration_count and hasattr(option, "tickets_map"):
                 valid_ticket_ids = [ticket_id for ticket_id in option.tickets_map if ticket_id is not None]
-                if valid_ticket_ids and event_run.reg.ticket_id not in valid_ticket_ids:
+                registration = self.params.get("registration")
+                if valid_ticket_ids and registration and registration.ticket_id not in valid_ticket_ids:
                     continue
 
             # Add valid option to choices and append description to help text

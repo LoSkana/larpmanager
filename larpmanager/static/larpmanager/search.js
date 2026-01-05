@@ -315,7 +315,7 @@ function in_custom_fields(el) {
 function in_spec(el) {
     specs = new Set();
 
-    if (el['player_id'] > 0) specs.add('pl');  // 'pl' = has player
+    if (el['player_uuid'] && el['player_uuid'] !== null) specs.add('pl');  // 'pl' = has player
 
     return check_selection('spec', specs)
 }
@@ -410,7 +410,7 @@ function search(key) {
 
             // Add to top navigation and separator
             if (first) first = false; else { top += ", "; characters += '<hr class="clear" />'; }
-            top += "<small style='display: inline-block'><a href='#num{0}'>{1}</a></small>".format(el['number'], name);
+            top += "<small style='display: inline-block'><a href='#char{0}'>{1}</a></small>".format(el['uuid'], name);
 
             // Determine which profile image to use
             var pf = blank;  // Default to blank image
@@ -423,14 +423,14 @@ function search(key) {
 
             // Build player assignment text and link
             var player = window['texts']['abs'];  // Default "absent" text
-            if (el['player_id'] > 0) {
+            if (el['player_uuid'] && el['player_uuid'] !== null) {
                 player = '<a href="{0}">{1}</a>'.format(prof_url.replace("/0", "/"+el['player_uuid']), escapeHtml(el['player']))
                 if (el['player_prof'])
                     pf = el['player_prof'];  // Use player's profile picture if assigned
             };
 
             // Build character card HTML
-            characters += '<div class="gallery single list" id="num{0}">'.format(el['number']);
+            characters += '<div class="gallery single list" id="char{0}">'.format(el['uuid']);
             characters += '<div class="el"><div class="icon"><img src="{0}" /></div></div>'.format(pf);
             characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['uuid']), name);
             characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
@@ -465,7 +465,7 @@ function search(key) {
                     if (fac.number == 0) continue;      // Skip faction 0
                     if (fac.typ == 'g') continue;       // Skip groups
                     if (j != 0) gr += ", ";
-                    gr += '<a href="{0}">{1}</a></h3>'.format(faction_url.replace("/0", "/" + fac.number), escapeHtml(fac.name));
+                    gr += '<a href="{0}">{1}</a></h3>'.format(faction_url.replace("/0", "/" + fac.uuid), escapeHtml(fac.name));
                 }
 
                 if (gr) characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(gr, window['texts']['factions']);

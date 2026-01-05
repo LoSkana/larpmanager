@@ -70,6 +70,7 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_player_relationship
 from larpmanager.utils.services.character import (
+    _get_character_cache_id,
     check_missing_mandatory,
     get_char_check,
     get_character_relationships,
@@ -82,7 +83,6 @@ from larpmanager.utils.users.registration import (
     check_assign_character,
     check_character_maximum,
     get_player_characters,
-    registration_find,
 )
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
@@ -145,9 +145,10 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         messages.warning(request, _("Character not visible"))
         return redirect("gallery", event_slug=context["run"].get_slug())
 
+    character_id = _get_character_cache_id(context)
+
     # Determine access level and load appropriate character data
-    is_staff_view = "check" in context
-    if is_staff_view:
+    if "check" in context:
         # Load full character data for staff/admin users
         get_character_sheet(context)
         get_character_relationships(context)
@@ -155,23 +156,17 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         check_missing_mandatory(context)
     else:
         # Load only visible elements for regular users
-        context["char"].update(get_character_element_fields(context, context["char"]["id"], only_visible=True))
+        context["char"].update(get_character_element_fields(context, character_id, only_visible=True))
 
     # Load casting details and preferences if applicable
     casting_details(context)
     if context["casting_show_pref"] and not context["char"]["player_id"]:
-        context["pref"] = get_casting_preferences(context["char"]["id"], context)
+        context["pref"] = get_casting_preferences(context["char"]["uuid"], context)
 
     # Set character approval configuration for template rendering
     context["approval"] = get_event_config(
         context["event"].id, "user_character_approval", default_value=False, context=context
     )
-
-    try:
-        char_model = Character.objects.prefetch_related("inventory").get(id=context["char"]["id"])
-        context["char"]["inventory"] = char_model.inventory.all()
-    except Character.DoesNotExist:
-        context["char"]["inventory"] = []
 
     return render(request, "larpmanager/event/character.html", context)
 
@@ -279,7 +274,7 @@ def character_your(request: HttpRequest, event_slug: str, path: str | None = Non
 
     # Retrieve all registration character relationships for this run
     # Use select_related to optimize database queries for character data
-    rcrs = list(context["run"].reg.rcrs.select_related("character").all())
+    rcrs = list(context["registration"].rcrs.select_related("character").all())
 
     # Handle case where user has no characters assigned to this event
     if not rcrs:
@@ -445,7 +440,7 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
 
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["run"].reg,
+            reg=context["registration"],
             character__uuid=context["char"]["uuid"],
         )
         if rgr.custom_profile:
@@ -492,14 +487,13 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
 
     # Get event context and validate user permissions
     context = get_event_context(request, event_slug, signup=True)
-    registration_find(context["run"], context["member"], None)
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     # Retrieve character registration relationship
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["run"].reg,
-            characterr=context["char"],
+            reg=context["registration"],
+            character=context["char"],
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
@@ -546,7 +540,7 @@ def character_profile_rotate(
     # Retrieve character registration relationship with related objects
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["run"].reg,
+            reg=context["registration"],
             character__uuid=context["char"]["uuid"],
         )
     except ObjectDoesNotExist:
@@ -612,7 +606,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     context["approval"] = get_event_config(
         context["event"].id, "user_character_approval", default_value=False, context=context
     )
-    context["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).count()
+    context["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=context["registration"].id).count()
     return render(request, "larpmanager/event/character/list.html", context)
 
 
@@ -694,12 +688,13 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
-    if RegistrationCharacterRel.objects.filter(reg_id=context["run"].reg.id).exists():
+    if RegistrationCharacterRel.objects.filter(reg_id=context["registration"].id).exists():
         messages.warning(request, _("You already have an assigned character"))
     elif not context["character"].is_active:
         messages.error(request, _("This character is inactive and cannot be assigned to players"))
     else:
-        RegistrationCharacterRel.objects.create(reg_id=context["run"].reg.id, character_id=context["character"].id)
+        character_id = _get_character_cache_id(context)
+        RegistrationCharacterRel.objects.create(reg_id=context["registration"].id, character_id=character_id)
         messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)

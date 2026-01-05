@@ -76,6 +76,7 @@ def prepare(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
+    page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
 
 

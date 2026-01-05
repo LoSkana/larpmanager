@@ -893,7 +893,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 already_assigned_trait_ids.add(assignment.trait_id)
 
         # Get available traits (excluding those assigned to others)
-        available = Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids)
+        available = (
+            Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids).select_related("quest")
+        )
 
         for qt in self.params["quest_types"].values():
             self._init_traits(available, char_section, member_assignments, qt)
@@ -911,7 +913,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             if quest["typ"] != qt_number:
                 continue
             for trait in available:
-                if trait.quest_id != quest["id"]:
+                if trait.quest.uuid != quest["uuid"]:
                     continue
                 choices.append((trait.uuid, f"Q{quest['number']} {quest['name']} - {trait}"))
 
@@ -1023,13 +1025,13 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             assigned_qs = assigned_qs.exclude(reg__id=self.instance.pk)
 
         # Create dict of assigned characters for fast lookup
-        assigned_chars = {rel.character_id: rel for rel in assigned_qs}
+        assigned_chars = {relation.character_id: relation for relation in assigned_qs}
 
         # Check each character against batch-fetched assignments
         for ch_id in character_ids:
             if ch_id in assigned_chars:
-                rel = assigned_chars[ch_id]
-                msg = f"Character '{rel.character}' already assigned to the player '{rel.reg.member}' for this event!"
+                relation = assigned_chars[ch_id]
+                msg = f"Character '{relation.character}' already assigned to the player '{relation.reg.member}' for this event!"
                 raise ValidationError(msg)
 
         return data

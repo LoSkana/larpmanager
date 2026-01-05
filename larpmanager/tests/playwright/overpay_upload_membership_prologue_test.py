@@ -250,6 +250,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_payee").fill("3123213213")
     page.locator("#id_wire_iban").click()
     page.locator("#id_wire_iban").fill("321321321")
+    page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
 
     page.get_by_role("link", name="Membership").click()

@@ -594,7 +594,7 @@ def check_gallery_visibility(request: HttpRequest, context: dict) -> bool:
         context["hide_login"] = True
         return False
 
-    if hide_gallery_for_non_signup and not context["run"].reg:
+    if hide_gallery_for_non_signup and not context["registration"]:
         context["hide_signup"] = True
         return False
 
@@ -780,20 +780,32 @@ def search(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Determine which writing fields should be visible
         visible_writing_fields(context, QuestionApplicable.CHARACTER)
 
+        # Remove fields that shouldn't be shown to current user
+        fields_to_remove = [
+            question_uuid
+            for question_uuid in context["questions"]
+            if str(question_uuid) not in context.get("show_character", []) and "show_all" not in context
+        ]
+
+        context["questions"] = {
+            key: value for key, value in context["questions"].items() if key not in fields_to_remove
+        }
+
+        context["options"] = {
+            key: value
+            for key, value in context["options"].items()
+            if value.get("question__uuid") not in fields_to_remove
+        }
+
+        context["searchable"] = {
+            key: value for key, value in context["searchable"].items() if key not in fields_to_remove
+        }
+
         # Filter character fields based on visibility settings
         for character_data in context["chars"].values():
-            character_fields = character_data.get("fields")
-            if not character_fields:
-                continue
-
-            # Remove fields that shouldn't be shown to current user
-            fields_to_remove = [
-                question_id
-                for question_id in list(character_fields)
-                if str(question_id) not in context.get("show_character", []) and "show_all" not in context
-            ]
-            for question_id in fields_to_remove:
-                del character_fields[question_id]
+            character_data["fields"] = {
+                key: value for key, value in character_data.get("fields", {}).items() if key not in fields_to_remove
+            }
 
     # Serialize context data to JSON for frontend consumption
     for context_key in ["chars", "factions", "questions", "options", "searchable"]:
@@ -905,12 +917,14 @@ def faction(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpRes
         raise Http404(msg)
 
     context["faction"] = faction
+    faction_number = faction["number"]
+    faction_id = context["fac_mapping"][faction_number]
 
     context["fact"] = get_writing_element_fields(
         context,
         "faction",
         QuestionApplicable.FACTION,
-        faction["id"],
+        faction_id,
         only_visible=True,
     )
 

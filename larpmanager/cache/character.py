@@ -122,6 +122,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     """
     cache_result["chars"] = {}
+    # Character number to character id mapping
+    cache_result["char_mapping"] = {}
 
     # Check if mirror feature is enabled for character filtering
     is_mirror_enabled = "mirror" in context["features"]
@@ -129,8 +131,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     # Build assignments mapping from character number to registration relation
     context["assignments"] = {}
     registration_query = RegistrationCharacterRel.objects.filter(reg__run=context["run"])
-    for registration_character_rel in registration_query.select_related("character", "reg", "reg__member"):
-        context["assignments"][registration_character_rel.character.number] = registration_character_rel
+    for relation in registration_query.select_related("character", "reg", "reg__member"):
+        context["assignments"][relation.character.number] = relation
 
     # Get event configuration for hiding uncasted characters
     hide_uncasted_characters = get_event_config(
@@ -152,8 +154,6 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
         # Build character data and search for player information
         character_data = character.show(context["run"])
-        # Add ID to cache data for internal lookups (not exposed to frontend)
-        character_data["id"] = character.id
         character_data["fields"] = {}
         search_player(character, character_data, context)
 
@@ -161,7 +161,9 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
         if hide_uncasted_characters and character_data["player_id"] == 0:
             character_data["hide"] = True
 
-        cache_result["chars"][int(character_data["number"])] = character_data
+        character_number = int(character_data["number"])
+        cache_result["chars"][character_number] = character_data
+        cache_result["char_mapping"][character_number] = character.id
 
     # Add field data to the cache
     get_event_cache_fields(context, cache_result)
@@ -204,47 +206,47 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
         return
 
     # Extract question IDs from context for database filtering
-    question_ids = context["questions"].keys()
+    question_uuids = context["questions"].keys()
 
-    # Create mapping from character IDs to their position numbers in results
-    character_id_to_position = {}
-    for character_position, character_data in res["chars"].items():
-        character_id_to_position[character_data["id"]] = character_position
+    # Query the Character table to get id -> number mapping for the event
+    character_id_mapping = dict(context["event"].get_elements(Character).values_list("id", "number"))
 
     # Retrieve and process multiple choice answers for characters
     # Each choice can have multiple options selected per question
-    choice_answers = WritingChoice.objects.filter(question_id__in=question_ids)
-    for element_id, question_id, option_id in choice_answers.values_list("element_id", "question_id", "option_id"):
+    choice_answers = WritingChoice.objects.filter(question__uuid__in=question_uuids)
+    for element_id, question_uuid, option_uuid in choice_answers.values_list(
+        "element_id", "question__uuid", "option__uuid"
+    ):
         # Skip if character not in current event mapping
-        if element_id not in character_id_to_position:
+        if element_id not in character_id_mapping:
             continue
 
         # Map database values to result structure
-        character_position = character_id_to_position[element_id]
-        question = question_id
-        value = option_id
+        character_index = character_id_mapping[element_id]
+        question = str(question_uuid)
+        value = str(option_uuid)
 
         # Initialize fields list for question if not exists, then append choice
-        fields = res["chars"][character_position]["fields"]
+        fields = res["chars"][character_index]["fields"]
         if question not in fields:
             fields[question] = []
         fields[question].append(value)
 
     # Retrieve and process text answers for characters
     # Each text answer is a single value per question
-    text_answers = WritingAnswer.objects.filter(question_id__in=question_ids)
-    for element_id, question_id, text_value in text_answers.values_list("element_id", "question_id", "text"):
+    text_answers = WritingAnswer.objects.filter(question__uuid__in=question_uuids)
+    for element_id, question_uuid, text_value in text_answers.values_list("element_id", "question__uuid", "text"):
         # Skip if character not in current event mapping
-        if element_id not in character_id_to_position:
+        if element_id not in character_id_mapping:
             continue
 
         # Map database values to result structure
-        character_position = character_id_to_position[element_id]
-        question = question_id
+        character_index = character_id_mapping[element_id]
+        question = str(question_uuid)
         value = text_value
 
         # Set text answer directly (single value, not list)
-        res["chars"][character_position]["fields"][question] = value
+        res["chars"][character_index]["fields"][question] = value
 
 
 def get_character_element_fields(
@@ -260,6 +262,27 @@ def get_character_element_fields(
         QuestionApplicable.CHARACTER,
         character_id,
         only_visible=only_visible,
+    )
+
+
+def get_writing_element_fields(
+    context: dict,
+    feature_name: str,
+    applicable: str,
+    element_id: int,
+    *,
+    only_visible: bool = True,
+) -> dict[str, dict]:
+    """Get writing fields for a specific element with visibility filtering."""
+    batch_results = get_writing_element_fields_batch(
+        context,
+        feature_name,
+        applicable,
+        [element_id],
+        only_visible=only_visible,
+    )
+    return batch_results.get(
+        element_id, {"questions": context.get("questions", {}), "options": context.get("options", {}), "fields": {}}
     )
 
 
@@ -295,32 +318,36 @@ def get_writing_element_fields_batch(
     # Filter questions based on visibility configuration
     # Only include questions that are explicitly shown or when show_all is enabled
     visible_question_ids = []
-    for question_id in context["questions"]:
-        question_config_key = str(question_id)
+    for question_uuid in context["questions"]:
+        question_config_key = str(question_uuid)
         # Skip questions not marked as visible unless showing all
         if "show_all" not in context and question_config_key not in context[f"show_{feature_name}"]:
             continue
-        visible_question_ids.append(question_id)
+        visible_question_ids.append(question_uuid)
 
     # Initialize results dictionary for all elements
     results = {element_id: {} for element_id in element_ids}
 
     # Retrieve text answers for all elements
-    text_answers_query = WritingAnswer.objects.filter(element_id__in=element_ids, question_id__in=visible_question_ids)
-    for element_id, question_id, text in text_answers_query.values_list("element_id", "question_id", "text"):
-        results[element_id][question_id] = text
+    # Query WritingAnswer model for text-based responses
+    text_answers_query = WritingAnswer.objects.filter(
+        element_id__in=element_ids, question__uuid__in=visible_question_ids
+    ).select_related("question")
+    for element_id, question_uuid, text in text_answers_query.values_list("element_id", "question__uuid", "text"):
+        results[element_id][question_uuid] = text
 
     # Retrieve choice answers for all elements
+    # Group multiple choice options into lists per question
     choice_answers_query = WritingChoice.objects.filter(
-        element_id__in=element_ids, question_id__in=visible_question_ids
-    )
-    for element_id, question_id, option_id in choice_answers_query.values_list(
-        "element_id", "question_id", "option_id"
+        element_id__in=element_ids, question__uuid__in=visible_question_ids
+    ).select_related("question", "option")
+    for element_id, question_uuid, option_uuid in choice_answers_query.values_list(
+        "element_id", "question__uuid", "option__uuid"
     ):
         # Initialize list if question not yet in fields
-        if question_id not in results[element_id]:
-            results[element_id][question_id] = []
-        results[element_id][question_id].append(option_id)
+        if question_uuid not in results[element_id]:
+            results[element_id][question_uuid] = []
+        results[element_id][question_uuid].append(option_uuid)
 
     # Return full format for each element
     return {
@@ -331,27 +358,6 @@ def get_writing_element_fields_batch(
         }
         for element_id, fields in results.items()
     }
-
-
-def get_writing_element_fields(
-    context: dict,
-    feature_name: str,
-    applicable: str,
-    element_id: int,
-    *,
-    only_visible: bool = True,
-) -> dict[str, dict]:
-    """Get writing fields for a specific element with visibility filtering."""
-    batch_results = get_writing_element_fields_batch(
-        context,
-        feature_name,
-        applicable,
-        [element_id],
-        only_visible=only_visible,
-    )
-    return batch_results.get(
-        element_id, {"questions": context.get("questions", {}), "options": context.get("options", {}), "fields": {}}
-    )
 
 
 def get_event_cache_factions(context: dict, result: dict) -> None:
@@ -377,6 +383,8 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
     # Initialize faction data structures
     result["factions"] = {}
     result["factions_typ"] = {}
+
+    result["fac_mapping"] = {}
 
     # If faction feature is not enabled, create single default faction with all characters
     if "faction" not in get_event_features(context["event"].id):
@@ -427,6 +435,8 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         if faction.typ not in result["factions_typ"]:
             result["factions_typ"][faction.typ] = []
         result["factions_typ"][faction.typ].append(faction.number)
+
+        result["fac_mapping"][faction.number] = faction.id
 
 
 def _build_trait_relationships(event: Event) -> dict:
@@ -507,8 +517,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
     # Process each assigned trait and link to character
     for assignment_trait in assignment_traits_query.select_related("trait", "trait__quest", "trait__quest__typ"):
         trait_data = assignment_trait.trait.show()
-        # Add ID to cache data for internal lookups (not exposed to frontend)
-        trait_data["id"] = assignment_trait.trait.id
+
         trait_data["quest"] = assignment_trait.trait.quest.number
         trait_data["typ"] = assignment_trait.trait.quest.typ.number
         trait_data["traits"] = trait_relationships[assignment_trait.trait.number]
@@ -670,9 +679,6 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
     # Generate character display data for the specific run
     character_display_data = instance.show(run)
 
-    # Add ID to cache data for internal lookups (not exposed to frontend)
-    character_display_data["id"] = instance.id
-
     # Update character fields with the generated data
     update_character_fields(instance, character_display_data)
 
@@ -690,8 +696,7 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 def update_event_cache_all_faction(instance: Faction, res: dict[str, dict]) -> None:
     """Update or add faction data in the cache result dictionary."""
     faction_data = instance.show()
-    # Add ID to cache data for internal lookups (not exposed to frontend)
-    faction_data["id"] = instance.id
+
     if instance.number in res["factions"]:
         res["factions"][instance.number].update(faction_data)
     else:
@@ -732,8 +737,8 @@ def update_member_event_character_cache(instance: Member) -> None:
     active_character_registrations = active_character_registrations.select_related("character", "reg", "reg__run")
 
     # Update cache for each character registration
-    for registration_character_rel in active_character_registrations:
-        update_event_cache_all(registration_character_rel.reg.run, registration_character_rel)
+    for relation in active_character_registrations:
+        update_event_cache_all(relation.reg.run, relation)
 
 
 def on_character_pre_save_update_cache(char: Character) -> None:

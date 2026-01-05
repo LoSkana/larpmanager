@@ -63,6 +63,28 @@ class Command(BaseCommand):
         with Path(file_path).open("w", encoding="utf-8") as f:
             f.write(content)
 
+    def normalize_passwords(self, file_path: str) -> None:
+        """Normalize password hashes in auth_user table to fixed hash."""
+        self.stdout.write("Normalizing passwords in SQL dump...")
+
+        # Read the SQL file
+        with Path(file_path).open(encoding="utf-8") as f:
+            content = f.read()
+
+        # Fixed password hash for "banana"
+        banana_hash = "banana"
+
+        # Replace password hashes in auth_user INSERT statements
+        content = re.sub(
+            r"(INSERT INTO (?:public\.)?auth_user VALUES \(\d+, )'[^']*'",
+            rf"\1'{banana_hash}'",
+            content,
+        )
+
+        # Write the normalized content back
+        with Path(file_path).open("w", encoding="utf-8") as f:
+            f.write(content)
+
     def handle(self, *args: tuple, **kwargs: dict) -> None:  # noqa: ARG002
         """Django management command handler to dump test database.
 
@@ -118,6 +140,9 @@ class Command(BaseCommand):
 
         # Normalize dates to fixed reference dates for stable dumps
         self.normalize_dates(str(sql_file))
+
+        # Normalize passwords to fixed "banana" hash for consistent fixtures
+        self.normalize_passwords(str(sql_file))
 
         # Clean up PostgreSQL-specific commands that may cause test issues
         clean_cmd = [

@@ -92,11 +92,11 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
     context["factions"] = []
 
     character_registrations = {}
-    for registration_character_relation in RegistrationCharacterRel.objects.filter(
+    for relation in RegistrationCharacterRel.objects.filter(
         reg__run=context["run"],
         reg__cancellation_date__isnull=True,
     ).select_related("reg", "reg__member"):
-        character_registrations[registration_character_relation.character_id] = registration_character_relation.reg
+        character_registrations[relation.character_id] = relation.reg
 
     characters_by_id = {}
     for character in context["event"].get_elements(Character).filter(hide=False):
