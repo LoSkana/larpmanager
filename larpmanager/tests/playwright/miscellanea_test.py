@@ -76,6 +76,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     page.locator("#id_wire_payee").fill("2asdsadas")
     page.locator("#id_wire_iban").click()
     page.locator("#id_wire_iban").fill("3sadsadsa")
+    page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
     page.locator("#exe_features").get_by_role("link", name="Features").click()
     check_feature(page, "Donation")
