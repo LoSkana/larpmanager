@@ -172,7 +172,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.get_by_role("link", name="eefqq").click()
     expect_normalized(page,
         page.locator("#one"),
-        "Characters Test Character3 Presentation: Test Teaser Factions: eefqq",
+        "Characters Test Character Presentation: Test Teaser Factions: eefqq",
     )
 
     # if i try to go to secret faction, blocked
