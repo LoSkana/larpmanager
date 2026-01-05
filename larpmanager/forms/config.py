@@ -313,7 +313,7 @@ class ConfigForm(BaseModelForm):
 
         # Configure widget for MEMBERS field type
         if field_type == ConfigType.MEMBERS:
-            self.fields[field_key].widget.set_association_id(config["extra"])
+            self.configure_field_association(field_key, config["extra"])
             if initial_value:
                 initial_value = [s.strip() for s in initial_value.split(",")]
 

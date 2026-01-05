@@ -2654,6 +2654,9 @@ msgstr "Filtergrupper"
 msgid "Invalid request"
 msgstr "Ugyldig forespørsel"
 
+msgid "Load from event"
+msgstr "Last inn fra hendelse"
+
 msgid "Mail assignment"
 msgstr "Tildeling av post"
 
@@ -7915,6 +7918,13 @@ msgid ""
 msgstr ""
 "(Valgfritt) Karakternavnene som skal tildeles spilleren, atskilt med komma"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Tegn fra hendelsen '{run}' har blitt lastet inn. Gå gjennom og bekreft for å"
+" lagre."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9631,6 +9641,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, skjules alternativer som ikke lenger er tilgjengelige i "
 "skjemaet, i stedet for å vises deaktivert"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Hvis du velger et arrangement, lastes alle tegnene fra registreringene til "
+"dette arrangementet automatisk inn"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "
