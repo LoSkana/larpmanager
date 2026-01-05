@@ -405,14 +405,3 @@
     text: <p>Test Text</p>
     uuid: u1
     access_token: baba
-- model: larpmanager.paymentmethod
-  pk: 1
-  fields:
-    deleted: null
-    deleted_by_cascade: false
-    created: 2025-03-21 10:42:36.831317
-    updated: 2025-03-21 10:42:36.841097
-    name: Wire
-    slug: wire
-    instructions: <p>Wire instructions</p>
-    fields: payee, iban
