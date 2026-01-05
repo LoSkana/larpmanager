@@ -442,7 +442,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
         for field_name in deferred_text_fields:
             context["list"] = context["list"].defer(field_name)
 
-    # Apply ordering based on available fields: order > number > updated (newest first)
+    # Apply ordering based on available fields: order > number > updated
     if check_field(model_type, "order"):
         context["list"] = context["list"].order_by("order")
     elif check_field(model_type, "number"):
@@ -464,8 +464,7 @@ def writing_list_text_fields(context: dict, text_fields: Any, writing_element_ty
     """
     # add editor type questions
     writing_questions = context["event"].get_elements(WritingQuestion).filter(applicable=context["writing_typ"])
-    for question_id in writing_questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        text_fields.append(str(question_id))
+    text_fields.extend(writing_questions.filter(typ=BaseQuestionType.EDITOR).values_list("uuid", flat=True))
 
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
