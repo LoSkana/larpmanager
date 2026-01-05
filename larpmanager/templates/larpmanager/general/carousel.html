@@ -39,10 +39,11 @@
 {% block js2 %}
     <!-- JavaScript -->
     <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js" defer></script>
+    {{ json|json_script:"carousel-data" }}
     <script>
 const base_url = "{% url 'event_register' '0' %}";
 
-var dict = {{ json | safe }};
+const dict = JSON.parse(document.getElementById('carousel-data').textContent);
 
 window.addEventListener('DOMContentLoaded', function() {
 (function ($) {
@@ -156,7 +157,8 @@ function show(index) {
 
     descr = el['carousel_text'];
     if (descr == null) descr = el['description'];
-    $('.description').html(el['carousel_text']);
+    // Use text() to prevent XSS - carousel_text should be sanitized server-side if HTML is needed
+    $('.description').text(descr || '');
 
     if ('website' in el && el['website'].length > 0) {
         $('#website').attr("href", el['website']);

@@ -594,7 +594,7 @@ def get_sumup_form(
     invoice.save()
 
 
-def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple security checks require multiple returns
+def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple security checks require early returns
     """Handle SumUp webhook notifications for payment processing.
 
     Processes incoming webhook requests from SumUp payment gateway,
@@ -609,57 +609,59 @@ def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple sec
               failed, signature invalid, or was not successful
 
     """
-    # Get context and payment configuration
-    context = get_context(request)
-    update_payment_details(context)
-
-    # Verify HMAC signature if configured
-    sumup_webhook_secret = context.get("sumup_webhook_secret")
-    if sumup_webhook_secret:
-        # Get signature from headers
-        signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
-        if not signature_header:
-            logger.error("SumUp webhook: Missing signature header")
-            return False
-
-        # Compute expected signature using HMAC-SHA256
-        expected_signature = hmac.new(sumup_webhook_secret.encode("utf-8"), request.body, hashlib.sha256).hexdigest()
-
-        # Verify signature matches
-        if not hmac.compare_digest(signature_header, expected_signature):
-            logger.error(
-                "SumUp webhook: Invalid signature. Expected: %s, Got: %s", expected_signature, signature_header
-            )
-            return False
-
-    # Parse the JSON payload from the webhook request body
+    # Parse the JSON payload to get payment ID and status
     try:
         webhook_payload = json.loads(request.body)
-        payment_status = webhook_payload["status"]
         payment_id = webhook_payload["id"]
+        payment_status = webhook_payload["status"]
     except (json.JSONDecodeError, KeyError) as e:
         error_msg = f"Failed to parse SumUp webhook payload: {e}\nBody: {request.body}"
         logger.exception(error_msg)
         notify_admins("SumUp webhook JSON error", error_msg)
         return False
 
-    # Check if the payment status indicates failure or non-success
-    if payment_status != "SUCCESSFUL":
-        return False
-
-    # Get invoice to verify amount and currency
+    # Get invoice to retrieve association-specific context
     try:
         invoice = PaymentInvoice.objects.get(cod=payment_id)
     except ObjectDoesNotExist:
-        logger.exception("SumUp webhook: Invoice not found: %s", payment_id)
+        error_msg = f"SumUp webhook - invoice not found: {payment_id}"
+        logger.error(error_msg)  # noqa: TRY400 - ObjectDoesNotExist is expected, no traceback needed
+        notify_admins("SumUp webhook - invalid invoice", error_msg)
         return False
 
-    # Extract amount and currency from webhook payload
+    # Get association context and payment configuration
+    context = {"association_id": invoice.association_id}
+    update_payment_details(context)
+
+    # Verify HMAC signature if webhook secret is configured
+    sumup_webhook_secret = context.get("sumup_webhook_secret")
+    if sumup_webhook_secret:
+        signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
+        if not signature_header:
+            error_msg = "SumUp webhook signature header missing"
+            logger.error(error_msg)
+            notify_admins("SumUp webhook security error", error_msg)
+            return False
+
+        # Compute expected HMAC-SHA256 signature
+        expected_signature = hmac.new(sumup_webhook_secret.encode(), request.body, hashlib.sha256).hexdigest()
+
+        # Verify signature matches using constant-time comparison
+        if not hmac.compare_digest(signature_header, expected_signature):
+            error_msg = f"SumUp webhook signature mismatch. Payment ID: {payment_id}"
+            logger.error(error_msg)
+            notify_admins("SumUp webhook signature verification failed", error_msg)
+            return False
+
+    # Only process successful payments
+    if payment_status != "SUCCESSFUL":
+        return False
+
+    # Verify amount and currency match expectations
     sumup_amount = webhook_payload.get("amount")
     sumup_currency = webhook_payload.get("currency")
-
-    # Verify currency if available
     expected_currency = context.get("payment_currency")
+
     if expected_currency and sumup_currency and sumup_currency != expected_currency:
         logger.error(
             "SumUp webhook: Currency mismatch. Expected: %s, Got: %s, Invoice: %s",
@@ -669,7 +671,7 @@ def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple sec
         )
         return False
 
-    # Process the successful payment using the transaction ID
+    # Process the successful payment
     sumup_amount_decimal = Decimal(str(sumup_amount)) if sumup_amount is not None else None
     return invoice_received_money(
         payment_id, expected_amount=invoice.mc_gross, gross_amount=sumup_amount_decimal, payment_method="sumup"
