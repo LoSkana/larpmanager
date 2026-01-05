@@ -17,9 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-
 from django.urls import path
 
+import larpmanager.views.orga.event
 from larpmanager.views import manage as views_mg
 from larpmanager.views.orga import accounting as views_oa
 from larpmanager.views.orga import casting as views_oca
@@ -294,7 +294,7 @@ urlpatterns = [
     ),
     path(
         "<slug:event_slug>/manage/cache/",
-        views_or.orga_reload_cache,
+        larpmanager.views.orga.event.orga_reload_cache,
         name="orga_reload_cache",
     ),
     path(

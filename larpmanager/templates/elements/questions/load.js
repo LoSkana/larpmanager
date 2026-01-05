@@ -92,12 +92,13 @@ function load_question(el) {
             updates.forEach(function(update) {
                 const cell = table.cell(update.rowSelector, update.columnClass);
                 if (cell && cell.node()) {
-                    cell.data(update.value);
+                    // Update cell HTML directly to preserve attributes
+                    const cellNode = cell.node();
+                    cellNode.innerHTML = update.value;
+                    // Invalidate cell to sync DataTables internal state with DOM
+                    cell.invalidate('dom');
                 }
             });
-
-            // Single draw call per table instead of multiple
-            table.draw(false);
         });
 
          done[q_uuid] = 1;
@@ -200,7 +201,7 @@ window.addEventListener('DOMContentLoaded', function() {
             var tog = $(this).attr("tog");
             $(this).toggleClass('select');
 
-            var index_list = window.hideColumnsIndexMap[tog];
+            var index_list = window.hideColumnsIndexMap[tog] || [];
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
 

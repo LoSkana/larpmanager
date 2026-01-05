@@ -42,7 +42,11 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from PIL import Image, UnidentifiedImageError
 
-from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.character import (
+    get_character_element_fields,
+    get_event_cache_all,
+    get_writing_element_fields_batch,
+)
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.forms.character import CharacterForm
@@ -437,7 +441,7 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=context["registration"],
-            character=context["char"],
+            character__uuid=context["char"]["uuid"],
         )
         if rgr.custom_profile:
             context["custom_profile"] = rgr.profile_thumb.url
@@ -537,7 +541,7 @@ def character_profile_rotate(
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=context["registration"],
-            character=context["char"],
+            character__uuid=context["char"]["uuid"],
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})
@@ -586,8 +590,14 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     context["list"] = get_player_characters(context["member"], context["event"])
     # add character configs
     char_add_addit(context)
+
+    # Get character fields info
+    char_ids = [el.id for el in context["list"]]
+    fields_batch = get_writing_element_fields_batch(
+        context, "character", QuestionApplicable.CHARACTER, char_ids, only_visible=True
+    )
     for el in context["list"]:
-        res = get_character_element_fields(context, el.id, only_visible=True)
+        res = fields_batch.get(el.id, {"questions": {}, "options": {}, "fields": {}})
         el.fields = res["fields"]
         context.update(res)
 

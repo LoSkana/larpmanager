@@ -2654,6 +2654,9 @@ msgstr "Skupiny filtrů"
 msgid "Invalid request"
 msgstr "Neplatný požadavek"
 
+msgid "Load from event"
+msgstr "Načtení z události"
+
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
 
@@ -7857,6 +7860,12 @@ msgid ""
 msgstr ""
 "(Nepovinné) Jména postav, která se mají hráči přiřadit, oddělená čárkami"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Byly načteny znaky z události '{run}'. Zkontrolujte a potvrďte uložení."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9527,6 +9536,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, možnosti, které již nejsou ve formuláři k dispozici, se"
 " skryjí, místo aby se zobrazily zakázané"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Pokud vyberete událost, automaticky se načtou všechny znaky z registrací "
+"této události"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

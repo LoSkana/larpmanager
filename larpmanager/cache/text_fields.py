@@ -148,13 +148,18 @@ def _init_element_cache_text_field(
     questions = element.event.get_elements(WritingQuestion).filter(applicable=applicable)
 
     # Process editor-type questions and cache their answers
-    for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
-        answers = WritingAnswer.objects.filter(question_id=question_id, element_id=element.id)
-        if answers:
-            # Cache the text content of the first matching answer
-            answer_text = answers.first().text
-            field_key = str(question_id)
-            result_cache[element.id][field_key] = get_single_cache_text_field(element.id, field_key, answer_text)
+    for question in questions.filter(typ=BaseQuestionType.EDITOR).values("pk", "uuid"):
+        field_key = question["uuid"]
+        if field_key in result_cache[element.id]:
+            continue
+
+        answers = WritingAnswer.objects.filter(question_id=question["pk"], element_id=element.id).order_by("-updated")
+        if not answers:
+            continue
+
+        # Cache the text content of the first matching answer
+        answer_text = answers.first().text
+        result_cache[element.id][field_key] = get_single_cache_text_field(element.id, field_key, answer_text)
 
 
 def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:
@@ -184,10 +189,34 @@ def update_cache_text_fields(el: object) -> None:
     element_type = el.__class__
     event = el.event
 
-    # Generate cache key and retrieve current cache data
+    # Generate cache key
     cache_key = cache_text_field_key(element_type, event)
-    cached_data = get_cache_text_field(element_type, event)
 
+    # Use cache lock to prevent race conditions with concurrent updates
+    lock_key = f"{cache_key}_lock"
+    try:
+        with cache.lock(lock_key, timeout=5):
+            _update_cache_text_fields(cache_key, el, element_type, event)
+    except AttributeError:
+        # Fallback for cache backends that don't support locking
+        _update_cache_text_fields(cache_key, el, element_type, event)
+
+
+def _update_cache_text_fields(cache_key: str, el: object, element_type: type[BaseModel], event: Event) -> None:
+    """Update cache for text fields - internal helper.
+
+    This is a helper function used by update_cache_text_fields to avoid
+    code duplication in the lock try-except block.
+
+    Args:
+        cache_key: The cache key to update
+        el: Element object to update cache for
+        element_type: Element type class for determining applicable questions
+        event: Event instance associated with the element
+
+    """
+    # Retrieve current cache data inside lock
+    cached_data = get_cache_text_field(element_type, event)
     # Initialize element cache and update cache storage
     _init_element_cache_text_field(el, cached_data, element_type)
     cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -213,12 +242,43 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
     applicable_type = QuestionApplicable.get_applicable_inverse(instance.question.applicable)
     event = instance.question.event
 
-    # Generate cache key and retrieve existing cached data
+    # Generate cache key
     cache_key = cache_text_field_key(applicable_type, event)
+
+    # Use cache lock to prevent race conditions with concurrent updates
+    lock_key = f"{cache_key}_lock"
+    try:
+        with cache.lock(lock_key, timeout=5):
+            _update_cache_text_fields_answer(applicable_type, cache_key, event, instance)
+    except AttributeError:
+        # Fallback for cache backends that don't support locking
+        _update_cache_text_fields_answer(applicable_type, cache_key, event, instance)
+
+
+def _update_cache_text_fields_answer(
+    applicable_type: type[BaseModel],
+    cache_key: str,
+    event: Event,
+    instance: BaseModel,
+) -> None:
+    """Update cache for editor-type question answer - internal helper.
+
+    This is a helper function used by update_cache_text_fields_answer to avoid
+    code duplication in the lock try-except block. Updates a single editor question
+    answer in the cache.
+
+    Args:
+        applicable_type: Model class type that the question applies to (e.g., Character)
+        cache_key: The cache key to update
+        event: Event instance associated with the answer
+        instance: WritingAnswer instance containing the question, element_id, and text data
+
+    """
+    # Retrieve existing cached data inside lock
     cached_text_fields = get_cache_text_field(applicable_type, event)
 
     # Prepare field identifier and ensure element structure exists
-    question_field_id = str(instance.question_id)
+    question_field_id = instance.question.uuid
     if instance.element_id not in cached_text_fields:
         cached_text_fields[instance.element_id] = {}
 
@@ -228,6 +288,7 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
         question_field_id,
         instance.text,
     )
+
     cache.set(cache_key, cached_text_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
@@ -387,3 +448,24 @@ def update_text_fields_cache(model_instance: object) -> None:
     # Update cache for RegistrationAnswer model instances
     if issubclass(model_instance.__class__, RegistrationAnswer):
         update_cache_reg_fields_answer(model_instance)
+
+
+def reset_text_fields_cache(run: Run) -> None:
+    """Reset all text fields cache for a run."""
+    # Invalidate text field caches for all Writing model types
+    for applicable_type in ["character", "faction", "plot", "quest", "trait", "prologue"]:
+        # Get the model class for this applicable type
+        try:
+            applicable_code = QuestionApplicable.get_applicable(applicable_type)
+            if applicable_code:
+                model_class = QuestionApplicable.get_applicable_inverse(applicable_code)
+                # Delete cache for this model type and event
+                cache_key = cache_text_field_key(model_class, run.event)
+                cache.delete(cache_key)
+        except (ValueError, LookupError):
+            # Skip if applicable type doesn't exist
+            pass
+
+    # Invalidate registration text field cache
+    cache_key = cache_text_field_key(Registration, run)
+    cache.delete(cache_key)

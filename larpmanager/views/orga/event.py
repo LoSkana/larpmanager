@@ -69,6 +69,7 @@ from larpmanager.utils.io.download import (
 )
 from larpmanager.utils.io.upload import go_upload
 from larpmanager.utils.services.edit import backend_edit, orga_edit
+from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
 if TYPE_CHECKING:
@@ -872,3 +873,29 @@ def _writing_template(
             ),
         )
     return template_exports
+
+
+@login_required
+def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Reset all cache entries for the specified event run.
+
+    Clears multiple cache layers including run media, event features,
+    registration counts, and relationship caches to ensure fresh data.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        event_slug: String identifier for the event run slug
+
+    Returns:
+        HttpResponse: Redirect to the manage page for the event run
+
+    """
+    # Verify user permissions and get event context
+    context = check_event_context(request, event_slug)
+
+    # Reset everything
+    reset_all_run(context["event"], context["run"])
+
+    # Notify user of successful cache reset
+    messages.success(request, _("Cache reset!"))
+    return redirect("manage", event_slug=context["run"].get_slug())

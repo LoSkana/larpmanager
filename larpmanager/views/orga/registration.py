@@ -43,24 +43,13 @@ from larpmanager.accounting.registration import (
     get_accounting_refund,
     get_reg_payments,
 )
-from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.button import clear_event_button_cache
-from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media, get_event_cache_all
-from larpmanager.cache.config import get_association_config, get_event_config, reset_element_configs
-from larpmanager.cache.event_text import reset_event_text
-from larpmanager.cache.feature import clear_event_features_cache
-from larpmanager.cache.fields import clear_event_fields_cache
-from larpmanager.cache.links import clear_run_event_links_cache
-from larpmanager.cache.registration import clear_registration_counts_cache
-from larpmanager.cache.rels import clear_event_relationships_cache
-from larpmanager.cache.role import remove_event_role_cache
-from larpmanager.cache.run import reset_cache_run
+from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.text_fields import get_cache_reg_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
 )
-from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -68,7 +57,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
-from larpmanager.models.event import Event, EventText, PreRegistration, Run
+from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -1178,78 +1167,6 @@ def orga_pre_registrations(request: HttpRequest, event_slug: str) -> HttpRespons
     return render(request, "larpmanager/orga/registration/pre_registrations.html", context)
 
 
-@login_required
-def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Reset all cache entries for the specified event run.
-
-    Clears multiple cache layers including run media, event features,
-    registration counts, and relationship caches to ensure fresh data.
-
-    Args:
-        request: The HTTP request object containing user and session data
-        event_slug: String identifier for the event run slug
-
-    Returns:
-        HttpResponse: Redirect to the manage page for the event run
-
-    """
-    # Verify user permissions and get event context
-    context = check_event_context(request, event_slug)
-
-    # Reset everything
-    reset_all_run(context["event"], context["run"])
-
-    # Notify user of successful cache reset
-    messages.success(request, _("Cache reset!"))
-    return redirect("manage", event_slug=context["run"].get_slug())
-
-
-def reset_all_run(event: Event, run: Run) -> None:
-    """Clear all caches for a given event and run.
-
-    This function comprehensively clears all cached data related to an event
-    and its run, including character data, features, configurations, registrations,
-    accounting, and role information.
-
-    Args:
-        event: Event instance
-        run: Run instance
-
-    """
-    # Clear run-specific cache and associated media files
-    clear_run_cache_and_media(run)
-    reset_cache_run(event.association_id, run.get_slug())
-
-    # Clear event-level feature and configuration caches
-    clear_event_features_cache(event.id)
-    clear_run_event_links_cache(event)
-
-    # Clear event button cache
-    clear_event_button_cache(event.id)
-
-    # Clear event config cache
-    reset_element_configs(event)
-
-    # Clear run config cache
-    reset_element_configs(run)
-
-    # Clear registration-related caches
-    clear_registration_counts_cache(run.id)
-    clear_registration_accounting_cache(run.id)
-    clear_event_fields_cache(event.id)
-    clear_event_relationships_cache(event.id)
-
-    # Clear event text caches for all EventText instances
-    for event_text in EventText.objects.filter(event_id=event.id):
-        reset_event_text(event_text)
-
-    # Clear event role caches
-    for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
-        remove_event_role_cache(event_role_id)
-
-    clear_event_cache_all_runs(event)
-
-
 def lottery_info(request: HttpRequest, context: dict) -> None:  # noqa: ARG001
     """Add lottery-related information to the context dictionary.
 
@@ -1370,11 +1287,11 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
     """
     # Check organizer permissions for registration management
     context = check_event_context(request, event_slug, "orga_registrations")
-    member_id = request.POST.get("mid")
+    member_uuid = request.POST.get("mid")
 
     # Validate member existence
     try:
-        member = Member.objects.get(pk=member_id)
+        member = Member.objects.get(uuid=member_uuid)
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 

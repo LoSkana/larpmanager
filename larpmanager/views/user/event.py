@@ -36,6 +36,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import (
     get_event_cache_all,
     get_writing_element_fields,
+    get_writing_element_fields_batch,
 )
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
@@ -982,9 +983,15 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
         only_visible=True,
     )
 
+    # Get traits fields
+    trait_list = list(context["quest"].traits.order_by("number"))
+    trait_ids = [t.id for t in trait_list]
+    fields_batch = get_writing_element_fields_batch(
+        context, "trait", QuestionApplicable.TRAIT, trait_ids, only_visible=True
+    )
     traits = []
-    for el in context["quest"].traits.order_by("number"):
-        res = get_writing_element_fields(context, "trait", QuestionApplicable.TRAIT, el.id, only_visible=True)
+    for el in trait_list:
+        res = fields_batch.get(el.id, {"questions": {}, "options": {}, "fields": {}})
         res.update(el.show())
         traits.append(res)
     context["traits"] = traits
