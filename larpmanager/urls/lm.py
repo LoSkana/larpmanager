@@ -44,6 +44,11 @@ urlpatterns = [
         name="guide",
     ),
     path(
+        "blog/<slug:slug>/",
+        views_lm.blog,
+        name="blog",
+    ),
+    path(
         "tutorials/",
         views_lm.tutorials,
         name="tutorials",
@@ -102,6 +107,11 @@ urlpatterns = [
         "lm/profile/",
         views_lm.lm_profile,
         name="lm_profile",
+    ),
+    path(
+        "lm/reset/",
+        views_lm.lm_reset,
+        name="lm_reset",
     ),
     path(
         "redirect/<path:path>",

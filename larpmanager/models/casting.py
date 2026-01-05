@@ -141,10 +141,10 @@ class Trait(Writing):
         for s in ["role", "keywords", "safety"]:
             self.upd_js_attr(js, s)
 
-        # Add quest ID if quest exists
+        # Add quest UUID if quest exists
         if self.quest:
             # noinspection PyUnresolvedReferences
-            js["quest"] = self.quest.id
+            js["quest"] = str(self.quest.uuid)
 
         return js
 
@@ -184,7 +184,7 @@ class Casting(BaseModel):
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="castings", blank=True, null=True)
 
-    element = models.IntegerField()
+    element = models.CharField(max_length=12)
 
     pref = models.IntegerField()
 
@@ -222,6 +222,10 @@ class CastingAvoid(BaseModel):
 
     text = models.TextField(max_length=5000)
 
+    def __str__(self) -> str:
+        """Return string representation of the casting avoid."""
+        return f"{self.member} - {self.text[:50]}"
+
 
 def update_traits_text(instance: AssignmentTrait) -> list:
     """Extract and return trait references from instance text using pattern matching.
@@ -252,7 +256,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
             traits.append(trait)
-        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
+        except Trait.DoesNotExist as error:
             logger.warning("Error getting trait %s: %s", trait_number, error)
 
     # Extract all @number patterns for validation (not added to return list)
@@ -262,7 +266,7 @@ def update_traits_text(instance: AssignmentTrait) -> list:
     for trait_number in set(trait_numbers_to_validate):
         try:
             trait = Trait.objects.get(event_id=instance.event_id, number=trait_number)
-        except Trait.DoesNotExist as error:  # noqa: PERF203 - Need per-item error handling to log warnings and continue
+        except Trait.DoesNotExist as error:
             logger.warning("Error getting trait %s in assignment: %s", trait_number, error)
 
     return traits

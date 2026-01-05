@@ -4,6 +4,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+msgid "Tokens"
+msgstr ""
+
+msgid "Total issued"
+msgstr ""
+
+msgid "Credits"
+msgstr ""
+
 msgid "Expenses"
 msgstr ""
 
@@ -38,15 +47,6 @@ msgid "Refunds"
 msgstr ""
 
 msgid "Total amount refunded to participants"
-msgstr ""
-
-msgid "Tokens"
-msgstr ""
-
-msgid "Total issued"
-msgstr ""
-
-msgid "Credits"
 msgstr ""
 
 msgid "Discount"
@@ -478,6 +478,9 @@ msgstr ""
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
 
+msgid "Enter a valid date in DD-MM format"
+msgstr ""
+
 msgid "Months free quota"
 msgstr ""
 
@@ -574,16 +577,13 @@ msgid ""
 "registration options"
 msgstr ""
 
-msgid "Tokens / Credits"
-msgstr ""
-
 msgid "Token name"
 msgstr ""
 
 msgid "Name to be displayed for tokens"
 msgstr ""
 
-msgid "Name credits"
+msgid "Credits name"
 msgstr ""
 
 msgid "Name to be displayed for credits"
@@ -748,6 +748,9 @@ msgstr ""
 msgid "If checked: collpase sidebars links, and expand on mouse hover"
 msgstr ""
 
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
 msgid "already used"
 msgstr ""
 
@@ -887,20 +890,20 @@ msgstr ""
 msgid "Gallery"
 msgstr ""
 
-msgid "Request login"
+msgid "Require login"
 msgstr ""
 
 msgid ""
-"If checked, the gallery will not be displayed to those not logged in to the "
-"system"
+"If checked, the characters will not be displayed to those not logged in to "
+"the system"
 msgstr ""
 
-msgid "Request registration"
+msgid "Require registration"
 msgstr ""
 
 msgid ""
-"If checked, the subscribers' gallery will not be displayed to those who are "
-"not registered to the event"
+"If checked, the characters will not be displayed to those who are not "
+"registered to the event"
 msgstr ""
 
 msgid "Hide unassigned characters"
@@ -925,9 +928,6 @@ msgstr ""
 msgid ""
 "If checked, all registrations are displayed in a single table rather than "
 "being separated by type"
-msgstr ""
-
-msgid "If checked, adds to all registrations an unique code to reference them"
 msgstr ""
 
 msgid "Allowed"
@@ -1135,13 +1135,38 @@ msgstr ""
 msgid "Initial value of experience points for all characters"
 msgstr ""
 
+msgid "Ability templates"
+msgstr ""
+
+msgid ""
+"If checked, enables ability templates that can be reused across multiple "
+"abilities"
+msgstr ""
+
+msgid "Rules"
+msgstr ""
+
+msgid ""
+"If checked, enables rules for computed character fields based on abilities"
+msgstr ""
+
+msgid "Modifiers"
+msgstr ""
+
+msgid ""
+"If checked, enables modifiers that can adjust ability costs based on "
+"prerequisites and requirements"
+msgstr ""
+
 msgid "Player editor"
 msgstr ""
 
 msgid "Maximum number"
 msgstr ""
 
-msgid "Maximum number of characters the player can create"
+msgid ""
+"Maximum number of characters the player can create (default=0, no creation "
+"allowed)"
 msgstr ""
 
 msgid "Approval"
@@ -1576,6 +1601,9 @@ msgid ""
 "fee"
 msgstr ""
 
+msgid "Default fields"
+msgstr ""
+
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr ""
@@ -1625,6 +1653,20 @@ msgstr ""
 msgid "Manage experience point deliveries"
 msgstr ""
 
+msgid "Load from event"
+msgstr ""
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+
+msgid "Ability Template"
+msgstr ""
+
+msgid "This page allows you to add or edit an ability template"
+msgstr ""
+
 msgid "Ability"
 msgstr ""
 
@@ -1649,6 +1691,18 @@ msgid ""
 msgstr ""
 
 msgid "click on the icon to open the tutorial"
+msgstr ""
+
+msgid "Inventories"
+msgstr ""
+
+msgid "This page allows you to add or edit a character inventory"
+msgstr ""
+
+msgid "Pool type"
+msgstr ""
+
+msgid "This page allows you to add or edit a ci pool type"
 msgstr ""
 
 msgid "The name of our hobby, four letters"
@@ -1871,9 +1925,6 @@ msgstr ""
 msgid "Registration"
 msgstr ""
 
-msgid "Details"
-msgstr ""
-
 msgid "Main"
 msgstr ""
 
@@ -1919,10 +1970,23 @@ msgstr ""
 msgid "Dynamic rates"
 msgstr ""
 
+#, python-format
+msgid "A quota with %(quotas)d payments already exists for this event"
+msgstr ""
+
 msgid "Manage fixed payment installments for participants"
 msgstr ""
 
 msgid "Fixed instalments"
+msgstr ""
+
+msgid "You must select at least one ticket for this installment"
+msgstr ""
+
+#, python-format
+msgid ""
+"An installment with order %(order)d already exists with the following common "
+"ticket(s): %(tickets)s"
 msgstr ""
 
 msgid "Manage registration surcharges"
@@ -1942,6 +2006,12 @@ msgid "Informations"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us"
+msgstr ""
+
+msgid "Select the registration you want to transfer"
+msgstr ""
+
+msgid "Select the new event"
 msgstr ""
 
 msgid "Manage warehouse items"
@@ -2095,7 +2165,7 @@ msgid "Utilisation %(tokens)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(tokens)s were used to participate in this event"
+msgid "%(amount)s %(tokens)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -2103,7 +2173,7 @@ msgid "Utilisation %(credits)s per %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)d %(credits)s were used to participate in this event"
+msgid "%(amount)s %(credits)s were used to participate in this event"
 msgstr ""
 
 #, python-format
@@ -2788,6 +2858,9 @@ msgstr ""
 msgid "Request"
 msgstr ""
 
+msgid "Details"
+msgstr ""
+
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "
 "and full bank details, paypal link, etc)"
@@ -3126,6 +3199,9 @@ msgid ""
 "default or customize it"
 msgstr ""
 
+msgid "Optional template associated with this ability."
+msgstr ""
+
 msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr ""
 
@@ -3337,6 +3413,21 @@ msgid "Quests"
 msgstr ""
 
 msgid "Photo"
+msgstr ""
+
+msgid "Working"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Medium"
+msgstr ""
+
+msgid "High"
 msgstr ""
 
 msgid "How can we contact you"
@@ -4377,9 +4468,6 @@ msgstr ""
 msgid "And that is all"
 msgstr ""
 
-msgid "Done"
-msgstr ""
-
 msgid "Tax code verification"
 msgstr ""
 
@@ -4508,6 +4596,12 @@ msgstr ""
 msgid "you can still pay the remaining amount if you wish"
 msgstr ""
 
+msgid "List"
+msgstr ""
+
+msgid "Players"
+msgstr ""
+
 msgid "Organization"
 msgstr ""
 
@@ -4539,6 +4633,9 @@ msgid "Questions"
 msgstr ""
 
 msgid "Write here questions about your character directly to the authors"
+msgstr ""
+
+msgid "View Details"
 msgstr ""
 
 msgid "Download complete sheet"
@@ -4595,9 +4692,6 @@ msgid "Messages"
 msgstr ""
 
 msgid "Achievements"
-msgstr ""
-
-msgid "List"
 msgstr ""
 
 msgid "Mail"
@@ -4853,12 +4947,6 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-msgid "Characters are only visible to logged in users"
-msgstr ""
-
-msgid "Characters are only visible to participants"
-msgstr ""
-
 msgid "Registered"
 msgstr ""
 
@@ -5086,6 +5174,12 @@ msgid "Registration conditions"
 msgstr ""
 
 msgid "Conditions of"
+msgstr ""
+
+msgid "Characters are only visible to logged in users"
+msgstr ""
+
+msgid "Characters are only visible to participants"
 msgstr ""
 
 msgid "Character are not visible at the moment"
@@ -6590,6 +6684,11 @@ msgstr ""
 msgid "Returning type"
 msgstr ""
 
+msgid ""
+"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
+"processed as virtual currency."
+msgstr ""
+
 msgid "Only"
 msgstr ""
 
@@ -6602,6 +6701,9 @@ msgstr ""
 msgid "Approve reimbursement"
 msgstr ""
 
+msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgstr ""
+
 msgid "Cancellations"
 msgstr ""
 
@@ -6612,9 +6714,6 @@ msgid "Show cancellations"
 msgstr ""
 
 msgid "no payment"
-msgstr ""
-
-msgid "money"
 msgstr ""
 
 msgid "Days"
@@ -6765,7 +6864,7 @@ msgstr ""
 msgid "This page summarises the available questions of the character form"
 msgstr ""
 
-msgid "Go to the form for"
+msgid "Configure form"
 msgstr ""
 
 msgid "Modifiable"
@@ -6823,6 +6922,60 @@ msgid "Pdf bulk"
 msgstr ""
 
 msgid "This page allows you to select items to bulk download"
+msgstr ""
+
+msgid "Character Inventories"
+msgstr ""
+
+msgid "This page summarizes the character inventories"
+msgstr ""
+
+msgid "Inventory"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Character Inventory"
+msgstr ""
+
+msgid "Currencies & Materials"
+msgstr ""
+
+msgid "Transfer"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Add from NPC"
+msgstr ""
+
+msgid "Transfer Log"
+msgstr ""
+
+msgid "Actor"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Resource"
+msgstr ""
+
+msgid "No transfers yet."
+msgstr ""
+
+msgid "Character Inventory Pool Types"
+msgstr ""
+
+msgid "This page summarizes the types of pools that a character inventory has"
+msgstr ""
+
+msgid "Pool"
 msgstr ""
 
 msgid "Copy"
@@ -6902,7 +7055,18 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-msgid "Players"
+msgid "Ability Templates"
+msgstr ""
+
+msgid ""
+"This page summarizes the reusable ability templates that can be assigned to "
+"abilities"
+msgstr ""
+
+msgid "Template Name"
+msgstr ""
+
+msgid "Components"
 msgstr ""
 
 msgid "Ability types"
@@ -6915,18 +7079,12 @@ msgstr ""
 msgid "This page summarizes px delivery to characters"
 msgstr ""
 
-msgid "Modifiers"
-msgstr ""
-
 msgid ""
 "This page summarizes the modifiers that are applied to abilities based on "
 "other abilities, or character fields"
 msgstr ""
 
 msgid "New cost"
-msgstr ""
-
-msgid "Rules"
 msgstr ""
 
 msgid "This page summarizes the rules that are applied to the computed fields"
@@ -7049,9 +7207,6 @@ msgstr ""
 msgid "email"
 msgstr ""
 
-msgid "unique code"
-msgstr ""
-
 msgid "age"
 msgstr ""
 
@@ -7113,10 +7268,7 @@ msgstr ""
 msgid "Sum of payments received through"
 msgstr ""
 
-msgid "Unique registration code, used for payment checks"
-msgstr ""
-
-msgid "Recalculate"
+msgid "Recompute"
 msgstr ""
 
 msgid "No registrations have been received for this event yet"
@@ -7143,6 +7295,33 @@ msgid "Casting priority"
 msgstr ""
 
 msgid "Direct link"
+msgstr ""
+
+msgid "Signup link"
+msgstr ""
+
+msgid "Transfer registration"
+msgstr ""
+
+msgid "Transfer a registration from this event to another"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Transfer preview"
+msgstr ""
+
+msgid "Review the transfer before confirming"
+msgstr ""
+
+msgid "Errors"
+msgstr ""
+
+msgid "Warnings"
+msgstr ""
+
+msgid "Information"
 msgstr ""
 
 msgid ""
@@ -7568,9 +7747,6 @@ msgstr ""
 msgid "Selectable"
 msgstr ""
 
-msgid "View"
-msgstr ""
-
 msgid "Handout template"
 msgstr ""
 
@@ -7616,12 +7792,6 @@ msgid "This page shows the quests for the event"
 msgstr ""
 
 msgid "This page shows the relationships between characters"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "To"
 msgstr ""
 
 msgid "This page shows the roles of the characters"
@@ -8082,11 +8252,19 @@ msgid "Now crew can upload expenses, and you can review them"
 msgstr ""
 
 msgid ""
-"Allows managing Tokens and Credits, which participants can use instead of "
-"money for registration fees. Credits can also be redeemed for cash"
+"Allows managing Tokens, which participants can use instead of money for "
+"registration fees"
 msgstr ""
 
-msgid "Now set up the token and credits configuration"
+msgid "Now set up the tokens configuration"
+msgstr ""
+
+msgid ""
+"Allows managing Credits, which participants can use instead of money for "
+"registration fees. Credits can also be redeemed for cash"
+msgstr ""
+
+msgid "Now set up the credits configuration"
 msgstr ""
 
 msgid ""
@@ -8163,6 +8341,12 @@ msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 
 msgid "Now you can set the player editing settings"
+msgstr ""
+
+msgid "Character inventory"
+msgstr ""
+
+msgid "Allows characters to have inventories"
 msgstr ""
 
 msgid "Organisation tax"
@@ -8366,8 +8550,7 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 
 msgid ""
-"Manages credits used by participants to cover the registration fee on all "
-"events"
+"Manages credits used by participants to cover the event registration fees"
 msgstr ""
 
 msgid "Manage refund requests"
@@ -8461,8 +8644,7 @@ msgid "Check consistency of the participants’ personal data"
 msgstr ""
 
 msgid ""
-"Manages tokens used by participants to cover the registration fee for all "
-"events"
+"Manages tokens used by participants to cover the event registration fees"
 msgstr ""
 
 msgid "Display all participants data as registry"
@@ -8737,6 +8919,18 @@ msgstr ""
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
 
+msgid "Manage ability templates"
+msgstr ""
+
+msgid "Manage character inventories and their items"
+msgstr ""
+
+msgid "Pool Types"
+msgstr ""
+
+msgid "Manage character inventory pool types"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -8750,6 +8944,12 @@ msgid "No elements are currently available"
 msgstr ""
 
 msgid "Show available characters"
+msgstr ""
+
+msgid "You must be logged in to view this page"
+msgstr ""
+
+msgid "You must be registered to view this page"
 msgstr ""
 
 msgid "Welcome"
@@ -9121,6 +9321,9 @@ msgstr ""
 msgid "Feature %(name)s deactivated"
 msgstr ""
 
+msgid "Cache reset!"
+msgstr ""
+
 msgid "Your event has been created"
 msgstr ""
 
@@ -9157,12 +9360,6 @@ msgid "Sent"
 msgstr ""
 
 msgid "Answer submitted!"
-msgstr ""
-
-msgid "You don't have permission to analyze this ticket"
-msgstr ""
-
-msgid "Ticket analysis started. You will receive an email when it's complete"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"
@@ -9304,9 +9501,7 @@ msgid ""
 "participants"
 msgstr ""
 
-msgid ""
-"Some activated features need the 'Token / Credit' feature, but it isn't "
-"active"
+msgid "Some activated features need the 'Credits' feature, but it isn't active"
 msgstr ""
 
 #, python-format
@@ -9458,6 +9653,11 @@ msgstr ""
 msgid "Unknow error on upload"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+
 msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
@@ -9500,7 +9700,29 @@ msgstr ""
 msgid "Player customisation updated"
 msgstr ""
 
-msgid "Cache reset!"
+msgid "Invalid request"
+msgstr ""
+
+msgid "Please select both a registration and an event"
+msgstr ""
+
+msgid "Registration not found"
+msgstr ""
+
+msgid "Target event not found"
+msgstr ""
+
+msgid "Target session not found"
+msgstr ""
+
+msgid "moved"
+msgstr ""
+
+msgid "copied"
+msgstr ""
+
+#, python-format
+msgid "Registration for %(member)s successfully %(action)s to %(run)s"
 msgstr ""
 
 msgid "You must create at least one quest type before you can create quests"
@@ -9595,7 +9817,10 @@ msgid ""
 "be able to select your preferences!"
 msgstr ""
 
-msgid "You have indicated several preferences towards the same element!"
+msgid "Invalid selection detected, please select from the available options"
+msgstr ""
+
+msgid "You have indicated more than one preferences towards the same element"
 msgstr ""
 
 msgid "Preferences saved!"
@@ -9764,6 +9989,15 @@ msgid "You have use a friend code"
 msgstr ""
 
 msgid "Your friend code has been used"
+msgstr ""
+
+msgid "This event has concluded"
+msgstr ""
+
+msgid "This event has been cancelled"
+msgstr ""
+
+msgid "The registration code is not active at the moment"
 msgstr ""
 
 msgid "Not available, kiddo"

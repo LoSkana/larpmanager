@@ -453,6 +453,11 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
     # Clean up duplicate spaces in subject line
     subject = subject.replace("  ", " ")
 
+    # Determine language for translations (extract before processing body)
+    language_code = None
+    if isinstance(recipient, Member):
+        language_code = recipient.language
+
     # Initialize context variables for database relationships
     run_id = None
     association_id = None
@@ -478,7 +483,7 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
 
         # Add organization signature if available
         if association_id:
-            signature = get_association_text(association_id, AssociationTextType.SIGNATURE)
+            signature = get_association_text(association_id, AssociationTextType.SIGNATURE, language_code)
             if signature:
                 body += signature
 
@@ -507,7 +512,7 @@ def my_send_mail(  # noqa: C901 - Complex mail sending with template and attachm
     my_send_mail_bkg(email.pk, schedule=schedule)
 
 
-def notify_admins(subject: Any, message_text: Any, exception: Any = None) -> None:
+def notify_admins(subject: str, message_text: str = "", exception: Exception | None = None) -> None:
     """Send notification email to system administrators.
 
     Args:

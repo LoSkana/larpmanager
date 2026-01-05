@@ -24,10 +24,10 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}"
+                <tr id="{{ el.uuid }}"
                     {% if el.status == 'p' %}class="hide done"{% endif %}>
                     <td>
-                        <a href="{% url 'exe_collections_edit' el.id %}"
+                        <a href="{% url 'exe_collections_edit' el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.request }}</td>

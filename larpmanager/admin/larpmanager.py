@@ -25,10 +25,12 @@ from django.contrib import admin
 from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerFaq,
     LarpManagerFaqType,
     LarpManagerGuide,
+    LarpManagerHighlight,
     LarpManagerProfiler,
     LarpManagerReview,
     LarpManagerShowcase,
@@ -61,7 +63,7 @@ class LarpManagerFaqTypeAdmin(DefModelAdmin):
     """Admin interface for LarpManagerFaqType model."""
 
     list_display = ("name", "order")
-    search_fields: ClassVar[list] = ["name"]
+    search_fields: ClassVar[list] = ["id", "name"]
 
 
 @admin.register(LarpManagerTutorial)
@@ -77,24 +79,44 @@ class LarpManagerTutorialAdmin(CSRFTinyMCEModelAdmin):
 
 
 @admin.register(LarpManagerGuide)
-class LarpManagerBlogAdmin(CSRFTinyMCEModelAdmin):
+class LarpManagerGuideAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerGuide model."""
 
     list_display = ("title", "slug", "number", "published", "text_red", "show_thumb")
+    list_filter = ("published",)
+    search_fields = ("title", "description", "slug")
+
+
+@admin.register(LarpManagerBlog)
+class LarpManagerBlogAdmin(CSRFTinyMCEModelAdmin):
+    """Admin interface for LarpManagerBlog model."""
+
+    list_display = ("title", "slug", "number", "published")
+    list_filter = ("published",)
+    search_fields = ("title", "description", "slug", "keywords")
+
+
+@admin.register(LarpManagerHighlight)
+class LarpManagerHighlightAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerHighlight model."""
+
+    list_display = ("info", "show_reduced")
+    search_fields: ClassVar[list] = ["id", "info"]
 
 
 @admin.register(LarpManagerShowcase)
 class LarpManagerShowcaseAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerShowcase model."""
 
-    list_display = ("title", "number", "text_red", "show_reduced")
+    list_display = ("title", "number", "text_red", "blog")
+    autocomplete_fields: ClassVar[list] = ["blog"]
 
 
 @admin.register(LarpManagerProfiler)
 class LarpManagerProfilerAdmin(DefModelAdmin):
     """Admin interface for LarpManagerProfiler model."""
 
-    list_display = ("id", "view_func_name", "domain", "duration", "created")
+    list_display = ("id", "view_func_name", "domain", "duration")
 
 
 @admin.register(LarpManagerDiscover)
@@ -125,7 +147,8 @@ class LMReviewAdmin(DefModelAdmin):
 class LarpManagerTicketAdmin(DefModelAdmin):
     """Admin interface for LarpManagerTicket model."""
 
-    list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb")
+    list_display = ("id", "reason", "association", "email", "member", "content_red", "show_thumb", "uuid")
+    search_fields: ClassVar[list] = ["id", "uuid"]
 
     @staticmethod
     def content_red(instance: LarpManagerTicket) -> str:

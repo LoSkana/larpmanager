@@ -7,13 +7,13 @@
     {% trans "This page shows all accounting information for the member" %}
 {% endblock info %}
 {% block content %}
-    {% if member_edit.membership and 'token_credit' in features %}
-        <h3>{% trans "Balance" %}</h3>
-        <p>
-            <strong>{% trans "Credit balance" %}:</strong> {{ member_edit.membership.credit|format_decimal }}
-            <br>
-            <strong>{% trans "Token balance" %}:</strong> {{ member_edit.membership.tokens|format_decimal }}
-        </p>
+    {% if member_edit.membership %}
+        {% if features.tokens %}
+            <h3>{% trans "Credit balance" %}: {{ member_edit.membership.credit|format_decimal }}</h3>
+        {% endif %}
+        {% if features.credits %}
+            <h3>{% trans "Token balance" %}: {{ member_edit.membership.tokens|format_decimal }}</h3>
+        {% endif %}
     {% endif %}
     {% if pays %}
         <h2>{% trans "Payments" %}</h2>

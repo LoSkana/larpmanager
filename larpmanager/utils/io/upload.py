@@ -78,6 +78,45 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _normalize_numeric(value: str) -> str:
+    """Normalize numeric string by replacing comma decimal separator with dot.
+
+    Args:
+        value: Numeric string that may use comma or dot as decimal separator
+
+    Returns:
+        Normalized string with dot as decimal separator
+
+    """
+    return str(value).replace(",", ".")
+
+
+def _to_int(value: str) -> int:
+    """Convert numeric string to integer, handling both comma and dot decimal separators.
+
+    Args:
+        value: Numeric string that may use comma or dot as decimal separator
+
+    Returns:
+        Integer value (decimals are truncated)
+
+    """
+    return int(float(_normalize_numeric(value)))
+
+
+def _to_decimal(value: str) -> Decimal:
+    """Convert numeric string to Decimal, handling both comma and dot decimal separators.
+
+    Args:
+        value: Numeric string that may use comma or dot as decimal separator
+
+    Returns:
+        Decimal value
+
+    """
+    return Decimal(_normalize_numeric(value))
+
+
 def go_upload(context: dict, upload_form_data: Any) -> Any:
     """Route uploaded files to appropriate processing functions.
 
@@ -154,7 +193,7 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
 
             # Parse CSV with automatic delimiter detection
             return pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
-        except Exception as parsing_error:  # noqa: PERF203, BLE001 - Must try all encodings on any parsing error
+        except Exception as parsing_error:  # noqa: BLE001 - Must try all encodings on any parsing error
             # Log error and continue to next encoding
             logger.debug("Failed to parse CSV with encoding %s: %s", encoding, parsing_error)
             continue
@@ -303,7 +342,7 @@ def _reg_load(context: dict, csv_row: dict, registration_questions: dict) -> str
 
 
 def _reg_field_load(
-    context: dict[str, Any],
+    context: dict,
     registration: Registration,
     field_name: str,
     field_value: str,
@@ -332,7 +371,7 @@ def _reg_field_load(
     elif field_name == "characters":
         _reg_assign_characters(context, registration, field_value, error_logs)
     elif field_name == "pwyw":
-        registration.pay_what = Decimal(field_value)
+        registration.pay_what = _to_decimal(field_value)
     else:
         _assign_choice_answer(
             registration,
@@ -366,18 +405,22 @@ def _assign_elem(
         error_logs: List to append error messages to
 
     """
-    try:
-        # Check if value is a digit to determine lookup method
-        if lookup_value.isdigit():
-            # Look up element by number for the given event
+    # Check if value is a digit to determine lookup method
+    if lookup_value.isdigit():
+        # Look up element by number for the given event
+        try:
             element = model_type.objects.get(event=context["event"], number=int(lookup_value))
-        else:
-            # Look up element by name (case-insensitive) for the given event
-            element = model_type.objects.get(event=context["event"], name__iexact=lookup_value)
-    except ObjectDoesNotExist:
-        # Log error if element not found and return without assignment
-        error_logs.append(f"ERR - element {field_name} not found")
-        return
+        except ObjectDoesNotExist:
+            # Log error if element not found and return without assignment
+            error_logs.append(f"ERR - element {field_name} not found")
+            return
+    else:
+        # Look up element by name (case-insensitive) for the given event
+        element = model_type.objects.filter(event=context["event"], name__iexact=lookup_value).first()
+        if not element:
+            # Log error if element not found and return without assignment
+            error_logs.append(f"ERR - element {field_name} not found")
+            return
 
     # Assign the found element to the object field
     target_object.__setattr__(field_name, element)
@@ -409,9 +452,8 @@ def _reg_assign_characters(
             continue
 
         # Find character by name in the current event
-        try:
-            character = Character.objects.get(event=context["event"], name__iexact=character_name)
-        except ObjectDoesNotExist:
+        character = Character.objects.filter(event=context["event"], name__iexact=character_name).first()
+        if not character:
             error_logs.append(f"ERR - Character not found: {character_name}")
             continue
 
@@ -722,12 +764,15 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
     question_applicable_type = QuestionApplicable.get_applicable(context["typ"])
     writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 
+    # Get the target event - use parent if in campaign and element is inheritable
+    target_event = context["event"].get_class_parent(writing_model_class)
+
     # Try to find existing element or create new one
-    is_newly_created = False
-    try:
-        element = writing_model_class.objects.get(event=context["event"], name__iexact=element_name)
-    except ObjectDoesNotExist:
-        element = writing_model_class.objects.create(event=context["event"], name=element_name)
+    element = writing_model_class.objects.filter(event=target_event, name__iexact=element_name).first()
+    if element:
+        is_newly_created = False
+    else:
+        element = writing_model_class.objects.create(event=target_event, name=element_name)
         is_newly_created = True
 
     # Initialize logging for field processing errors
@@ -777,17 +822,19 @@ def _writing_load_field(
 
     # Handle quest type field with case-insensitive lookup
     if field == "typ":
-        try:
-            element.typ = context["event"].get_elements(QuestType).get(name__iexact=value)
-        except ObjectDoesNotExist:
+        quest_type = context["event"].get_elements(QuestType).filter(name__iexact=value).first()
+        if quest_type:
+            element.typ = quest_type
+        else:
             logs.append(f"ERR - quest type not found: {value}")
         return
 
     # Handle quest field with case-insensitive lookup
     if field == "quest":
-        try:
-            element.quest = context["event"].get_elements(Quest).get(name__iexact=value)
-        except ObjectDoesNotExist:
+        quest = context["event"].get_elements(Quest).filter(name__iexact=value).first()
+        if quest:
+            element.quest = quest
+        else:
             logs.append(f"ERR - quest not found: {value}")
         return
 
@@ -808,7 +855,7 @@ def _writing_load_field(
 
 
 def _writing_question_load(
-    context: dict[str, Any],
+    context: dict,
     writing_element: Character | Plot | Faction,
     question_field: str,
     question_type: WritingQuestionType,
@@ -852,9 +899,10 @@ def _get_mirror_instance(
     error_logs: list[str],
 ) -> None:
     """Fetch and assign mirror character instance from event."""
-    try:
-        character_element.mirror = context["event"].get_elements(Character).get(name__iexact=mirror_character_name)
-    except ObjectDoesNotExist:
+    mirror_character = context["event"].get_elements(Character).filter(name__iexact=mirror_character_name).first()
+    if mirror_character:
+        character_element.mirror = mirror_character
+    else:
         error_logs.append(f"ERR - mirror not found: {mirror_character_name}")
 
 
@@ -870,15 +918,14 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
     """
     # Process each faction name in the comma-separated list
     for faction_name in value.split(","):
-        try:
-            # Find faction by case-insensitive name match for the event
-            faction = Faction.objects.get(name__iexact=faction_name.strip(), event=context["event"])
-
+        # Find faction by case-insensitive name match for the event
+        faction = Faction.objects.filter(name__iexact=faction_name.strip(), event=context["event"]).first()
+        if faction:
             # Save element and add to faction's characters
             element.save()  # to be sure
             faction.characters.add(element)
             faction.save()
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+        else:
             # Log faction not found errors
             logs.append(f"Faction not found: {faction_name}")
 
@@ -950,6 +997,113 @@ def invert_dict(dictionary: dict[str, str]) -> dict[str, str]:
     return {value.lower().strip(): key for key, value in dictionary.items()}
 
 
+def _get_or_create_registration_question(context: dict, question_name: str) -> tuple[RegistrationQuestion, bool]:
+    """Get or create a registration question instance.
+
+    Args:
+        context: Context dictionary containing event information
+        question_name: Name of the question to create or retrieve
+
+    Returns:
+        Tuple of (question_instance, was_created)
+
+    """
+    matching_questions = RegistrationQuestion.objects.filter(
+        event=context["event"],
+        name__iexact=question_name,
+    )
+    if matching_questions.exists():
+        return matching_questions.first(), False
+
+    return (
+        RegistrationQuestion.objects.create(
+            event=context["event"],
+            name=question_name,
+        ),
+        True,
+    )
+
+
+def _get_or_create_writing_question(
+    context: dict, question_name: str, row_data: dict, field_mappings: dict
+) -> tuple[WritingQuestion | None, bool] | str:
+    """Get or create a writing question instance.
+
+    Args:
+        context: Context dictionary containing event information
+        question_name: Name of the question to create or retrieve
+        row_data: Row data containing applicable field
+        field_mappings: Field validation mappings
+
+    Returns:
+        Tuple of (question_instance, was_created) or error string
+
+    """
+    if "applicable" not in row_data:
+        return "ERR - missing applicable column"
+
+    applicable_value = row_data["applicable"]
+    if applicable_value not in field_mappings["applicable"]:
+        return "ERR - unknown applicable"
+
+    matching_questions = WritingQuestion.objects.filter(
+        event=context["event"],
+        name__iexact=question_name,
+        applicable=field_mappings["applicable"][applicable_value],
+    )
+    if matching_questions.exists():
+        return matching_questions.first(), False
+
+    return (
+        WritingQuestion.objects.create(
+            event=context["event"],
+            name=question_name,
+            applicable=field_mappings["applicable"][applicable_value],
+        ),
+        True,
+    )
+
+
+def _process_question_field(
+    field_name: str,
+    field_value: str,
+    field_mappings: dict,
+    question_instance: RegistrationQuestion | WritingQuestion,
+) -> str | None:
+    """Process and validate a single question field.
+
+    Args:
+        field_name: Name of the field to process
+        field_value: Value of the field
+        field_mappings: Field validation mappings
+        question_instance: Question instance to update
+
+    Returns:
+        Error message string if validation fails, None otherwise
+
+    """
+    # Skip empty values and already processed fields
+    if not field_value or pd.isna(field_value) or field_name in ["applicable", "name"]:
+        return None
+
+    validated_value = field_value
+
+    # Apply mapping validation if field has defined mappings
+    if field_name in field_mappings:
+        validated_value = validated_value.lower().strip()
+        if validated_value not in field_mappings[field_name]:
+            return f"ERR - unknow value {field_value} for field {field_name}"
+        validated_value = field_mappings[field_name][validated_value]
+
+    # Handle special case for max_length field conversion
+    if field_name == "max_length":
+        validated_value = _to_int(field_value)
+
+    # Set the validated value on the instance
+    setattr(question_instance, field_name, validated_value)
+    return None
+
+
 def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> str:
     """Load and validate question data from upload files.
 
@@ -974,49 +1128,20 @@ def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> 
     # Get field validation mappings for the question type
     field_mappings = _get_mappings(is_registration=is_registration)
 
+    # Get or create the question instance
     if is_registration:
-        # Create or get registration question instance
-        question_instance, was_created = RegistrationQuestion.objects.get_or_create(
-            event=context["event"],
-            name__iexact=question_name,
-            defaults={"name": question_name},
-        )
+        question_instance, was_created = _get_or_create_registration_question(context, question_name)
     else:
-        # Writing questions require additional 'applicable' field validation
-        if "applicable" not in row_data:
-            return "ERR - missing applicable column"
-        applicable_value = row_data["applicable"]
-        if applicable_value not in field_mappings["applicable"]:
-            return "ERR - unknown applicable"
-
-        # Create or get writing question instance with applicable field
-        question_instance, was_created = WritingQuestion.objects.get_or_create(
-            event=context["event"],
-            name__iexact=question_name,
-            applicable=field_mappings["applicable"][applicable_value],
-            defaults={"name": question_name},
-        )
+        result = _get_or_create_writing_question(context, question_name, row_data, field_mappings)
+        if isinstance(result, str):
+            return result
+        question_instance, was_created = result
 
     # Process and validate each field in the row data
     for field_name, field_value in row_data.items():
-        # Skip empty values and already processed fields
-        if not field_value or pd.isna(field_value) or field_name in ["applicable", "name"]:
-            continue
-
-        validated_value = field_value
-        # Apply mapping validation if field has defined mappings
-        if field_name in field_mappings:
-            validated_value = validated_value.lower().strip()
-            if validated_value not in field_mappings[field_name]:
-                return f"ERR - unknow value {field_value} for field {field_name}"
-            validated_value = field_mappings[field_name][validated_value]
-
-        # Handle special case for max_length field conversion
-        if field_name == "max_length":
-            validated_value = int(field_value)
-
-        # Set the validated value on the instance
-        setattr(question_instance, field_name, validated_value)
+        error = _process_question_field(field_name, field_value, field_mappings, question_instance)
+        if error:
+            return error
 
     # Save the configured instance to database
     question_instance.save()
@@ -1109,8 +1234,10 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
             continue
 
         # Convert numeric fields to appropriate types
-        if field_name in ["max_available", "price"]:
-            processed_value = int(processed_value)
+        if field_name == "max_available":
+            processed_value = _to_int(processed_value)
+        elif field_name == "price":
+            processed_value = _to_decimal(processed_value)
 
         # Handle requirements field with special processing
         if field_name == "requirements":
@@ -1130,7 +1257,7 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
 
 
 def _get_option(
-    context: dict[str, Any], option_name: str, parent_question_id: int, *, is_registration: bool
+    context: dict, option_name: str, parent_question_id: int, *, is_registration: bool
 ) -> tuple[bool, RegistrationOption | WritingOption]:
     """Get or create a question option for registration or writing forms.
 
@@ -1145,19 +1272,37 @@ def _get_option(
 
     """
     if is_registration:
-        option_instance, was_created = RegistrationOption.objects.get_or_create(
+        matching_options = RegistrationOption.objects.filter(
             event=context["event"],
             question_id=parent_question_id,
             name__iexact=option_name,
-            defaults={"name": option_name},
         )
+        if matching_options.exists():
+            option_instance = matching_options.first()
+            was_created = False
+        else:
+            option_instance = RegistrationOption.objects.create(
+                event=context["event"],
+                question_id=parent_question_id,
+                name=option_name,
+            )
+            was_created = True
     else:
-        option_instance, was_created = WritingOption.objects.get_or_create(
+        matching_options = WritingOption.objects.filter(
             event=context["event"],
             name__iexact=option_name,
             question_id=parent_question_id,
-            defaults={"name": option_name},
         )
+        if matching_options.exists():
+            option_instance = matching_options.first()
+            was_created = False
+        else:
+            option_instance = WritingOption.objects.create(
+                event=context["event"],
+                name=option_name,
+                question_id=parent_question_id,
+            )
+            was_created = True
     return was_created, option_instance
 
 
@@ -1195,7 +1340,7 @@ def get_csv_upload_tmp(csv_upload: Any, run: Run) -> str:
     return tmp_file
 
 
-def cover_load(context: dict[str, Any], z_obj: Any) -> None:
+def cover_load(context: dict, z_obj: Any) -> None:
     """Handle cover image upload and processing from ZIP archive.
 
     Args:
@@ -1301,9 +1446,9 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
 
         # Convert numeric fields to appropriate types
         if field_name == "max_available":
-            processed_value = int(field_value)
+            processed_value = _to_int(field_value)
         if field_name == "price":
-            processed_value = float(field_value)
+            processed_value = _to_decimal(field_value)
 
         # Set the field value on the ticket object
         setattr(ticket, field_name, processed_value)
@@ -1382,7 +1527,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
         # Convert cost field to integer
         if field_name == "cost":
-            processed_value = int(field_value)
+            processed_value = _to_int(field_value)
 
         # Handle prerequisites field parsing
         if field_name == "prerequisites":
@@ -1426,10 +1571,11 @@ def _assign_type(
         ability_type_name: Name of ability type to find
 
     """
-    try:
-        # Query ability type by name from event context
-        ability_element.typ = context["event"].get_elements(AbilityTypePx).get(name__iexact=ability_type_name)
-    except ObjectDoesNotExist:
+    # Query ability type by name from event context
+    ability_type = context["event"].get_elements(AbilityTypePx).filter(name__iexact=ability_type_name).first()
+    if ability_type:
+        ability_element.typ = ability_type
+    else:
         # Log error if ability type not found
         error_logs.append(f"ERR - quest type not found: {ability_type_name}")
 
@@ -1451,14 +1597,15 @@ def _assign_prereq(
     """
     # Parse each prerequisite name from the comma-separated string
     for prerequisite_name in value.split(","):
-        try:
-            # Look up prerequisite ability by name (case-insensitive)
-            prerequisite_element = context["event"].get_elements(AbilityPx).get(name__iexact=prerequisite_name.strip())
-
+        # Look up prerequisite ability by name (case-insensitive)
+        prerequisite_element = (
+            context["event"].get_elements(AbilityPx).filter(name__iexact=prerequisite_name.strip()).first()
+        )
+        if prerequisite_element:
             # Ensure element is saved before adding M2M relationship
             element.save()
             element.prerequisites.add(prerequisite_element)
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+        else:
             logs.append(f"Prerequisite not found: {prerequisite_name}")
 
 
@@ -1479,12 +1626,14 @@ def _assign_requirements(
     """
     # Process each requirement name from comma-separated string
     for requirement_name in requirement_names.split(","):
-        try:
-            # Look up writing option by case-insensitive name match
-            writing_option = context["event"].get_elements(WritingOption).get(name__iexact=requirement_name.strip())
+        # Look up writing option by case-insensitive name match
+        writing_option = (
+            context["event"].get_elements(WritingOption).filter(name__iexact=requirement_name.strip()).first()
+        )
+        if writing_option:
             writing_element.save()  # to be sure
 
             # Add the requirement to the writing element
             writing_element.requirements.add(writing_option)
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to log and continue
+        else:
             error_logs.append(f"requirements not found: {requirement_name}")

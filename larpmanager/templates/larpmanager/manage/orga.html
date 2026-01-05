@@ -102,9 +102,18 @@
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
         <hr />
-        <a href="{% url 'orga_reload_cache' run.get_slug %}">Reload cache</a>
-        -
-        <a href="{% url 'orga_backup' run.get_slug %}">Full backup</a>
+        <div class="staff-list">
+            <div class="orga-buttons">
+                <a class="new button" href="{% url 'orga_reload_cache' run.get_slug %}">
+                    <i class="fas fa-sync"></i>
+                    Reset cache
+                </a>
+                <a class="new button" href="{% url 'orga_backup' run.get_slug %}">
+                    <i class="fas fa-save"></i>
+                    Full backup
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock content %}
 {% block css %}

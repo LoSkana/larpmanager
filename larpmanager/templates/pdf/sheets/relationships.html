@@ -104,13 +104,13 @@
                                      alt="player profile" />
                             {% endif %}
                             <p>
-                                <span class="name"><a href="{% url 'character' run.get_slug el.number %}">{{ el.name }}</a></span>
+                                <span class="name"><a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a></span>
                                 {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                                 {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                             </p>
                             {% if el.player_id > 0 %}
                                 <p>
-                                    <b>Player:</b> <a href="{% url 'public' el.player_id %}">{{ el.player }}</a>
+                                    <b>Player:</b> <a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                                 </p>
                             {% endif %}
                             {% if el.factions_list %}

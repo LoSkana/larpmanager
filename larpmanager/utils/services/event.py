@@ -17,18 +17,29 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Prefetch, Q
-from django.http import HttpRequest
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.accounting import clear_registration_accounting_cache
+from larpmanager.cache.button import clear_event_button_cache
+from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
+from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.event_text import reset_event_text
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
+from larpmanager.cache.links import clear_run_event_links_cache
+from larpmanager.cache.registration import clear_registration_counts_cache
+from larpmanager.cache.rels import clear_event_relationships_cache
+from larpmanager.cache.role import remove_event_role_cache
+from larpmanager.cache.run import reset_cache_run
 from larpmanager.models.access import EventRole, get_event_organizers
+from larpmanager.models.base import auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -44,6 +55,9 @@ from larpmanager.models.registration import RegistrationCharacterRel, Registrati
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import copy_class
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 
 def get_character_filter(character: Any, character_registrations: Any, active_filters: Any) -> bool:
@@ -63,7 +77,7 @@ def get_character_filter(character: Any, character_registrations: Any, active_fi
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context: dict[str, Any], character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
+def get_event_filter_characters(context: dict, character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -115,7 +129,8 @@ def get_event_filter_characters(context: dict[str, Any], character_filters: Any)
         default_faction.name = "all"
         default_faction.data = default_faction.show_red()
         default_faction.chars = []
-        for character in characters_by_id.values():
+        # Sort characters by number for consistent ordering
+        for character in sorted(characters_by_id.values(), key=lambda c: c.number):
             if not get_character_filter(character, character_registrations, character_filters):
                 continue
             character.data = character.show_red()
@@ -339,7 +354,15 @@ def _init_writing_element(instance: object, default_question_types: Any, questio
             )
             for question_type, config in default_question_types.items()
         ]
+        # Manually set UUIDs since bulk_create doesn't trigger pre_save signals
+        for question in writing_questions:
+            auto_set_uuid(question)
         WritingQuestion.objects.bulk_create(writing_questions)
+
+        # Update UUIDs for debug mode after bulk_create (when IDs are assigned)
+        # Note: bulk_create doesn't trigger post_save, so we need to manually update
+        for question in writing_questions:
+            debug_set_uuid(question, created=True)
 
 
 def _init_character_form_questions(
@@ -587,3 +610,49 @@ def assign_previous_campaign_character(registration: Any) -> None:
             attribute_value = getattr(previous_character_relation, "custom_" + custom_attribute_name)
             setattr(new_character_relation, "custom_" + custom_attribute_name, attribute_value)
     new_character_relation.save()
+
+
+def reset_all_run(event: Event, run: Run) -> None:
+    """Clear all caches for a given event and run.
+
+    This function comprehensively clears all cached data related to an event
+    and its run, including character data, features, configurations, registrations,
+    accounting, and role information.
+
+    Args:
+        event: Event instance
+        run: Run instance
+
+    """
+    # Clear run-specific cache and associated media files
+    clear_run_cache_and_media(run)
+    reset_cache_run(event.association_id, run.get_slug())
+
+    # Clear event-level feature and configuration caches
+    clear_event_features_cache(event.id)
+    clear_run_event_links_cache(event)
+
+    # Clear event button cache
+    clear_event_button_cache(event.id)
+
+    # Clear event config cache
+    reset_element_configs(event)
+
+    # Clear run config cache
+    reset_element_configs(run)
+
+    # Clear registration-related caches
+    clear_registration_counts_cache(run.id)
+    clear_registration_accounting_cache(run.id)
+    clear_event_fields_cache(event.id)
+    clear_event_relationships_cache(event.id)
+
+    # Clear event text caches for all EventText instances
+    for event_text in EventText.objects.filter(event_id=event.id):
+        reset_event_text(event_text)
+
+    # Clear event role caches
+    for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
+        remove_event_role_cache(event_role_id)
+
+    clear_event_cache_all_runs(event)

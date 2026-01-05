@@ -17,6 +17,9 @@
                 <th>{% trans "Cost" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Players" %}</th>
+                {% if px_templates %}
+                    <th>{% trans "Template" %}</th>
+                {% endif %}
                 {% if px_user %}
                     <th>{% trans "Visible" %}</th>
                     <th>{% trans "Prerequisites" %}</th>
@@ -26,35 +29,40 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_px_abilities_edit' run.get_slug el.id %}"
+                        <a href="{% url 'orga_px_abilities_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     <td>{{ el.typ }}</td>
                     <td>{{ el.cost }}</td>
                     <td>
-                        {{ el.descr | safe | clean_tags | truncatechars:80 }}
+                        {{ el.get_description | safe | clean_tags | truncatechars:80 }}
                         {% if el.descr_ln > 80 %}
-                            <a href="#" class="show_popup" pop="{{ el.id }}" fie="descr"><i class="fas fa-eye"></i></a>
+                            <a href="#" class="show_popup" pop="{{ el.uuid }}" fie="descr"><i class="fas fa-eye"></i></a>
                             <span class="popup_text descr">
                                 <h2>{{ el.name }}</h2>
-                            {% show_char el.descr run 1 %} </span>
+                            {% show_char el.get_description run 1 %} </span>
                         {% endif %}
                     </td>
                     <td>
                         {% for ab in el.characters.all %}
                             {% include "elements/comma.html" %}
-                            <a href="{% url 'orga_characters_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
+                            <a href="{% url 'orga_characters_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
                         {% endfor %}
                     </td>
+                    {% if px_templates %}
+                        <td>
+                            {% if el.template %}{{ el.template.get_full_name }}{% endif %}
+                        </td>
+                    {% endif %}
                     {% if px_user %}
                         <td>{{ el.visible }}</td>
                         <td>
                             {% for ab in el.prerequisites.all %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.id %}">{{ ab.name }}</a>
+                                <a href="{% url 'orga_px_abilities_edit' run.get_slug ab.uuid %}">{{ ab.name }}</a>
                             {% endfor %}
                         </td>
                         <td>

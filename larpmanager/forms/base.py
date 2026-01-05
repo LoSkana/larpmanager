@@ -19,11 +19,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.conf import settings as conf_settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.utils.translation import gettext_lazy as _
@@ -51,8 +52,36 @@ if TYPE_CHECKING:
 
     from larpmanager.models.base import BaseModel
 
+logger = logging.getLogger(__name__)
 
-class MyForm(forms.ModelForm):
+
+class FormMixin:
+    """Mixin for common form operations."""
+
+    def configure_field_event(self, field_name: str, event: Event) -> None:
+        """Configure a form field's widget and queryset for a specific event."""
+        field = self.fields[field_name]
+        field.widget.set_event(event)
+        field.queryset = field.widget.get_queryset()
+
+    def configure_field_association(self, field_name: str, association_id: int) -> None:
+        """Configure a form field's widget and queryset for a specific association."""
+        field = self.fields[field_name]
+        field.widget.set_association_id(association_id)
+        field.queryset = field.widget.get_queryset()
+
+    def configure_field_run(self, field_name: str, run: Run) -> None:
+        """Configure a form field's widget and queryset for a specific run."""
+        field = self.fields[field_name]
+        field.widget.set_run(run)
+        field.queryset = field.widget.get_queryset()
+
+
+class BaseForm(FormMixin, forms.Form):
+    """Base for all non-models form."""
+
+
+class BaseModelForm(FormMixin, forms.ModelForm):
     """Base form class with context parameter handling.
 
     Extends Django's ModelForm to support additional context parameters
@@ -93,27 +122,26 @@ class MyForm(forms.ModelForm):
         # Call parent ModelForm initialization with remaining arguments
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
+        # Set to use uuid
+        for field in self.fields.values():
+            # Check if field is a ModelChoiceField / ModelMultipleChoiceField
+            if isinstance(field, forms.ModelChoiceField):
+                # Skip if it's a Select2 widget
+                if isinstance(field.widget, (s2forms.ModelSelect2Widget, s2forms.ModelSelect2MultipleWidget)):
+                    continue
+
+                field.to_field_name = "uuid"
+
         # Remove system fields that shouldn't be user-editable
         for m in ["deleted", "temp"]:
-            if m in self.fields:
-                del self.fields[m]
+            self.delete_field(m)
 
         # Configure characters field widget with event context
         if "characters" in self.fields:
-            self.fields["characters"].widget.set_event(self.params["event"])
-            # Optimize queryset to load only necessary fields for rendering
-            self.fields["characters"].queryset = self.fields["characters"].widget.get_queryset()
+            self.configure_field_event("characters", self.params["event"])
 
         # Handle automatic fields based on instance state
-        for s in self.get_automatic_field():
-            if s in self.fields:
-                if self.instance.pk:
-                    # Remove automatic fields for existing instances
-                    del self.fields[s]
-                else:
-                    # Hide automatic fields for new instances
-                    self.fields[s].widget = forms.HiddenInput()
-                    self.fields[s].required = False
+        self.handle_automatic()
 
         # Initialize tracking dictionaries for form state management
         self.mandatory = []
@@ -123,13 +151,20 @@ class MyForm(forms.ModelForm):
         self.unavail = {}
         self.max_lengths = {}
 
+    def handle_automatic(self) -> None:
+        """Handle automatic fields, that should be automatically populated."""
+        for s in self.get_automatic_field():
+            if s in self.fields:
+                if self.instance.pk:
+                    # Remove automatic fields for existing instances
+                    self.delete_field(s)
+                else:
+                    # Hide automatic fields for new instances
+                    self.fields[s].widget = forms.HiddenInput()
+                    self.fields[s].required = False
+
     def get_automatic_field(self) -> Any:
-        """Get list of fields that should be automatically populated.
-
-        Returns:
-            list: Field names that are automatically set and hidden from user
-
-        """
+        """Get list of fields that should be automatically populated."""
         automatic_fields = ["event", "association"]
         if hasattr(self, "auto_run"):
             automatic_fields.extend(["run"])
@@ -153,7 +188,9 @@ class MyForm(forms.ModelForm):
         available_runs = Run.objects.filter(event=self.params["event"])
 
         # If campaign switch is active, expand to include related events
-        if get_association_config(self.params["event"].association_id, "campaign_switch", default_value=False, context=self.params):
+        if get_association_config(
+            self.params["event"].association_id, "campaign_switch", default_value=False, context=self.params
+        ):
             # Start with current event ID
             related_event_ids = {self.params["event"].id}
 
@@ -176,9 +213,6 @@ class MyForm(forms.ModelForm):
         # Optimize query and order by end date
         available_runs = available_runs.select_related("event").order_by("end")
 
-        # Set initial value to current run
-        self.initial["run"] = self.params["run"].id
-
         # Handle field visibility based on number of available runs
         if len(available_runs) <= 1:
             if self.instance.pk:
@@ -187,9 +221,21 @@ class MyForm(forms.ModelForm):
             else:
                 # For new instances, hide the field
                 self.fields["run"].widget = forms.HiddenInput()
+                # Set initial value to current run
+                self.initial["run"] = self.params["run"].uuid
         else:
-            # Multiple runs available, populate choices
-            self.fields["run"].choices = [(run.id, str(run)) for run in available_runs]
+            # Multiple runs available
+            self.fields["run"] = forms.ChoiceField(
+                choices=[(run.uuid, str(run)) for run in available_runs],
+                required=self.fields["run"].required,
+                label=self.fields["run"].label,
+                help_text=self.fields["run"].help_text,
+            )
+            # Set initial value from existing instance or current run parameter
+            if self.instance.pk and hasattr(self.instance, "run") and self.instance.run:
+                self.initial["run"] = self.instance.run.uuid
+            else:
+                self.initial["run"] = self.params["run"].uuid
             # noinspection PyUnresolvedReferences
             del self.auto_run
 
@@ -198,7 +244,23 @@ class MyForm(forms.ModelForm):
         # Use params if auto_run is set, otherwise use cleaned form data
         if hasattr(self, "auto_run"):
             return self.params["run"]
-        return self.cleaned_data["run"]
+
+        # Get the value from cleaned_data
+        run_value = self.cleaned_data["run"]
+
+        if not run_value:
+            return None
+
+        # If it's already a Run instance, return it
+        if isinstance(run_value, Run):
+            return run_value
+
+        # Otherwise, it's a UUID (from ChoiceField), convert to Run instance
+        try:
+            return Run.objects.get(uuid=run_value)
+        except ObjectDoesNotExist as err:
+            msg = _("Select a valid choice. That choice is not one of the available choices.")
+            raise ValidationError(msg) from err
 
     def clean_event(self) -> Event:
         """Return the appropriate event based on form configuration.
@@ -260,9 +322,9 @@ class MyForm(forms.ModelForm):
                 # For other models, filter by event ID
                 queryset = model.objects.filter(**{field_name: field_value}, event_id=parent_event_id)
 
-            # Apply additional filters if question context exists
-            question = self.cleaned_data.get("question")
-            if question:
+            # Apply additional filters if question context exists and model has question field
+            question = self.params.get("question")
+            if question and hasattr(model, "question"):
                 queryset = queryset.filter(question_id=question.id)
 
             # Filter by applicability if the check method exists
@@ -326,7 +388,7 @@ class MyForm(forms.ModelForm):
                 if hasattr(el, "pk"):
                     old.add(el.pk)
                 else:
-                    old.add(int(el))
+                    old.add(str(el))
         else:
             old = set()
 
@@ -350,7 +412,7 @@ class MyForm(forms.ModelForm):
             del self.fields[field_key]
 
 
-class MyFormRun(MyForm):
+class BaseModelFormRun(BaseModelForm):
     """Form class for run-specific operations.
 
     Extends MyForm with automatic run handling functionality.
@@ -428,7 +490,12 @@ def max_length_validator(maximum_allowed_length: int) -> callable:
     return validator
 
 
-class BaseRegistrationForm(MyFormRun):
+def get_question_key(question: BaseModel) -> str:
+    """Gets the key of a form custom question."""
+    return f"que_{question.uuid}"
+
+
+class BaseRegistrationForm(BaseModelFormRun):
     """Base form class for registration-related forms.
 
     Provides common functionality for handling registration questions,
@@ -563,9 +630,9 @@ class BaseRegistrationForm(MyFormRun):
                     continue
 
             # Add valid option to choices and append description to help text
-            choices.append((option.id, option_display_name))
+            choices.append((str(option.uuid), option_display_name))
             if option.description:
-                help_text += f'<p id="hp_{option.id}"><b>{option.name}</b> {option.description}</p>'
+                help_text += f'<p id="hp_{option.uuid!s}"><b>{option.name}</b> {option.description}</p>'
 
         return choices, help_text
 
@@ -615,9 +682,9 @@ class BaseRegistrationForm(MyFormRun):
             # Handle unavailable options or add availability info to name
             if remaining_availability <= 0:
                 # Track unavailable options by question ID
-                if option.question_id not in self.unavail:
-                    self.unavail[option.question_id] = []
-                self.unavail[option.question_id].append(option.id)
+                if option.question.uuid not in self.unavail:
+                    self.unavail[option.question.uuid] = []
+                self.unavail[option.question.uuid].append(str(option.uuid))
             else:
                 # Append availability count to the display name
                 display_name += " - (" + _("Available") + f" {remaining_availability})"
@@ -638,7 +705,7 @@ class BaseRegistrationForm(MyFormRun):
                 continue
 
             # Check if selected option is unavailable
-            if question.id in self.unavail and int(sel) in self.unavail[question.id]:
+            if question.uuid in self.unavail and sel in self.unavail[question.uuid]:
                 self.add_error(field_key, _("Option no longer available"))
 
     def _validate_single_choice(self, form_data: dict, question: BaseModel, field_key: str) -> None:
@@ -654,7 +721,7 @@ class BaseRegistrationForm(MyFormRun):
             return
 
         # Check if selected option is unavailable
-        if question.id in self.unavail and int(form_data[field_key]) in self.unavail[question.id]:
+        if question.uuid in self.unavail and form_data[field_key] in self.unavail[question.uuid]:
             self.add_error(field_key, _("Option no longer available"))
 
     def clean(self) -> dict:
@@ -676,20 +743,20 @@ class BaseRegistrationForm(MyFormRun):
         # Skip validation if no questions are defined on the form
         if hasattr(self, "questions"):
             # Iterate through all questions to validate selected options
-            for q in self.questions:
-                k = "q" + str(q.id)
+            for question in self.questions:
+                key = get_question_key(question)
 
                 # Skip if this question's data is not in the form submission
-                if k not in form_data:
+                if key not in form_data:
                     continue
 
                 # Handle multiple choice questions
-                if q.typ == BaseQuestionType.MULTIPLE:
-                    self._validate_multiple_choice(form_data, q, k)
+                if question.typ == BaseQuestionType.MULTIPLE:
+                    self._validate_multiple_choice(form_data, question, key)
 
                 # Handle single choice questions
-                elif q.typ == BaseQuestionType.SINGLE:
-                    self._validate_single_choice(form_data, q, k)
+                elif question.typ == BaseQuestionType.SINGLE:
+                    self._validate_single_choice(form_data, question, key)
 
         return form_data
 
@@ -787,8 +854,8 @@ class BaseRegistrationForm(MyFormRun):
         if question.typ == WritingQuestionType.COMPUTED:
             return None
 
-        # Generate unique field key based on question ID
-        field_key = "q" + str(question.id)
+        # Generate unique field key based on question UUID
+        field_key = get_question_key(question)
 
         # Set default field states for organizer context
         is_field_active = True
@@ -1072,9 +1139,12 @@ class BaseRegistrationForm(MyFormRun):
             help_text=help_text,
         )
 
-        # Set initial value from previous selection if it exists
-        if question.id in self.singles:
-            self.initial[field_key] = self.singles[question.id].option_id
+        # Set initial value from previous selection if it exists and is still valid
+        if question.id in self.singles and self.singles[question.id].option:
+            option_uuid_str = str(self.singles[question.id].option.uuid)
+            # Only set initial value if the option is still available in the current context
+            if any(choice[0] == option_uuid_str for choice in available_choices):
+                self.initial[field_key] = option_uuid_str
 
     def init_multiple(
         self,
@@ -1133,10 +1203,15 @@ class BaseRegistrationForm(MyFormRun):
             validators=field_validators,
         )
 
-        # Set initial values from previously selected options
+        # Set initial values from previously selected options that are still available
         if question.id in self.multiples:
-            initial_option_ids = [selected_choice.option_id for selected_choice in self.multiples[question.id]]
-            self.initial[field_key] = initial_option_ids
+            available_choice_uuids = {choice[0] for choice in available_choices}
+            initial_option_uuids = [
+                str(selected_choice.option.uuid)
+                for selected_choice in self.multiples[question.id]
+                if selected_choice.option and str(selected_choice.option.uuid) in available_choice_uuids
+            ]
+            self.initial[field_key] = initial_option_uuids
 
     def reorder_field(self, field_name: str) -> None:
         """Move field to end of fields dictionary."""
@@ -1152,34 +1227,34 @@ class BaseRegistrationForm(MyFormRun):
             is_organizer (bool): Whether to save organizational questions
 
         """
-        for q in self.questions:
-            if q.skip(instance, self.params["features"], self.params, is_organizer=is_organizer):
+        for question in self.questions:
+            if question.skip(instance, self.params["features"], self.params, is_organizer=is_organizer):
                 continue
 
-            k = "q" + str(q.id)
-            if k not in self.cleaned_data:
+            key = get_question_key(question)
+            if key not in self.cleaned_data:
                 continue
-            oid = self.cleaned_data[k]
+            oid = self.cleaned_data[key]
 
-            if q.typ == BaseQuestionType.MULTIPLE:
-                self.save_reg_multiple(instance, oid, q)
-            elif q.typ == BaseQuestionType.SINGLE:
-                self.save_reg_single(instance, oid, q)
-            elif q.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
-                self.save_reg_text(instance, oid, q)
+            if question.typ == BaseQuestionType.MULTIPLE:
+                self.save_reg_multiple(instance, oid, question)
+            elif question.typ == BaseQuestionType.SINGLE:
+                self.save_reg_single(instance, oid, question)
+            elif question.typ in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
+                self.save_reg_text(instance, oid, question)
 
     def save_reg_text(
         self,
         instance: Any,
-        oid: str | None,
-        q: Any,
+        value: str | None,
+        question: Any,
     ) -> None:
         """Save or update a text answer for a registration question.
 
         Args:
             instance: The registration/application instance to attach the answer to.
-            oid: The new text value to save, or None to delete the answer.
-            q: The question object being answered.
+            value: The new text value to save, or None to delete the answer.
+            question: The question object being answered.
 
         Notes:
             - Preserves disabled field values in organizer forms.
@@ -1187,87 +1262,98 @@ class BaseRegistrationForm(MyFormRun):
 
         """
         # Check if an answer already exists for this question
-        if q.id in self.answers:
-            if not oid:
+        if question.id in self.answers:
+            if not value:
                 # For disabled questions in organizer forms, don't delete existing answers
                 # unless the organizer explicitly submitted an empty value for an editable field
                 orga = getattr(self, "orga", False)
-                is_disabled = hasattr(q, "status") and q.status == "d"
+                is_disabled = hasattr(question, "status") and question.status == "d"
 
                 # Keep existing value for disabled fields in organizer forms
                 if orga and is_disabled:
                     pass
                 else:
-                    self.answers[q.id].delete()
-            elif oid != self.answers[q.id].text:
+                    self.answers[question.id].delete()
+            elif value != self.answers[question.id].text:
                 # Update existing answer if the value has changed
-                self.answers[q.id].text = oid
-                self.answers[q.id].save()
-        elif oid:
+                self.answers[question.id].text = value
+                self.answers[question.id].save()
+        elif value:
             # Only create new answers if there's actually content
-            self.answer_class.objects.create(**{"question": q, self.instance_key: instance.id, "text": oid})
+            self.answer_class.objects.create(**{"question": question, self.instance_key: instance.id, "text": value})
 
-    def save_reg_single(self, instance: Any, oid: str | None, q: Any) -> None:
+    def save_reg_single(self, instance: Any, option_uuid: str | None, question: Any) -> None:
         """Save or update a single-choice question response.
 
         Args:
             instance: The parent instance (registration/application)
-            oid: The option ID as string (or None)
-            q: The question object
+            option_uuid: The option UUID as string (or None)
+            question: The question object
 
         """
-        # Skip if no option ID provided
-        if not oid:
+        # Skip if no option UUID provided
+        if not option_uuid:
             return
-        oid = int(oid)
 
-        # Update existing choice: delete if 0, otherwise update option_id
-        if q.id in self.singles:
-            if oid == 0:
-                self.singles[q.id].delete()
-            elif oid != self.singles[q.id].option_id:
-                self.singles[q.id].option_id = oid
-                self.singles[q.id].save()
-        # Create new choice if option is not 0
-        elif oid != 0:
-            self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": oid})
+        # Look up option by UUID
+        try:
+            option = question.options.get(uuid=option_uuid)
+        except ObjectDoesNotExist:
+            # Option not found or invalid UUID
+            return
+
+        # Update existing choice: delete if requested, otherwise update option
+        if question.id in self.singles:
+            if self.singles[question.id].option_id != option.id:
+                self.singles[question.id].option_id = option.id
+                self.singles[question.id].save()
+        # Create new choice
+        else:
+            self.choice_class.objects.create(
+                **{"question": question, self.instance_key: instance.id, "option_id": option.id}
+            )
 
     def save_reg_multiple(
         self,
         instance: Any,
-        oid: list[int] | None,
-        q: Any,
+        option_uuids: list[str] | None,
+        question: Any,
     ) -> None:
         """Save multiple-choice registration answers by syncing selected options.
 
         Creates new choices for added options and deletes removed ones.
         """
-        if not oid:
+        if not option_uuids:
             return
 
-        # Convert option IDs to a set of integers
-        oid = {int(o) for o in oid}
+        # Convert option UUIDs to option IDs by looking them up
+        uuid_to_id = {str(opt.uuid): opt.id for opt in question.options.all()}
+        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids if uuid_str in uuid_to_id}
 
         # If question already has existing choices, sync the differences
-        if q.id in self.multiples:
-            old = {el.option_id for el in self.multiples[q.id]}
+        if question.id in self.multiples:
+            old = {el.option_id for el in self.multiples[question.id]}
 
             # Create new choices for added options
-            for add in oid - old:
-                self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": add})
+            for add in selected_option_ids - old:
+                self.choice_class.objects.create(
+                    **{"question": question, self.instance_key: instance.id, "option_id": add}
+                )
 
             # Delete choices for removed options
-            rem = old - oid
+            rem = old - selected_option_ids
             self.choice_class.objects.filter(
-                **{"question": q, self.instance_key: instance.id, "option_id__in": rem},
+                **{"question": question, self.instance_key: instance.id, "option_id__in": rem},
             ).delete()
         else:
             # Create all choices from scratch if none exist
-            for pkoid in oid:
-                self.choice_class.objects.create(**{"question": q, self.instance_key: instance.id, "option_id": pkoid})
+            for pkoid in selected_option_ids:
+                self.choice_class.objects.create(
+                    **{"question": question, self.instance_key: instance.id, "option_id": pkoid}
+                )
 
 
-class MyCssForm(MyForm):
+class BaseModelCssForm(BaseModelForm):
     """Form class for handling CSS customization.
 
     Manages CSS file upload, editing, and processing for styling
@@ -1285,11 +1371,15 @@ class MyCssForm(MyForm):
         # Load and parse existing CSS file
         path = self.get_css_path(self.instance)
         if default_storage.exists(path):
-            css = default_storage.open(path).read().decode("utf-8")
-            # Extract CSS content before delimiter if present
-            if css_delimeter in css:
-                css = css.split(css_delimeter)[0]
-            self.initial[self.get_input_css()] = css
+            try:
+                css = default_storage.open(path).read().decode("utf-8")
+                # Extract CSS content before delimiter if present
+                if css_delimeter in css:
+                    css = css.split(css_delimeter)[0]
+                self.initial[self.get_input_css()] = css
+            except (OSError, UnicodeDecodeError, PermissionError):
+                logger.exception("Failed to load CSS file")
+                # Continue without loading CSS - form will work with empty CSS
 
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
         """Save form instance with generated CSS code and custom CSS file.
@@ -1305,7 +1395,7 @@ class MyCssForm(MyForm):
         self.instance.css_code = generate_id(32)
 
         # Save instance and write CSS file
-        instance = super(MyForm, self).save()
+        instance = super(BaseModelForm, self).save()
         self.save_css(instance)
 
         return instance
@@ -1369,7 +1459,7 @@ class MyCssForm(MyForm):
         return ""
 
 
-class BaseAccForm(forms.Form):
+class BaseAccForm(BaseForm):
     """Base form class for accounting and payment processing.
 
     Handles payment method selection and fee configuration

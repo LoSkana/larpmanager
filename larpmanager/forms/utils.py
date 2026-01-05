@@ -39,7 +39,7 @@ from larpmanager.models.event import (
     Event,
     Run,
 )
-from larpmanager.models.experience import AbilityPx
+from larpmanager.models.experience import AbilityPx, AbilityTemplatePx
 from larpmanager.models.form import WritingOption
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
@@ -55,7 +55,7 @@ from larpmanager.models.writing import (
 )
 
 if TYPE_CHECKING:
-    from larpmanager.forms.base import MyForm
+    from larpmanager.forms.base import BaseModelForm
 
 # defer script loaded by form
 
@@ -211,7 +211,7 @@ class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         return _(obj.name)
 
 
-def prepare_permissions_role(form: MyForm, typ: type) -> None:
+def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
     """Prepare permission fields for role forms based on enabled features.
 
     Creates dynamic form fields for permissions organized by modules,
@@ -298,7 +298,7 @@ def prepare_permissions_role(form: MyForm, typ: type) -> None:
         form.modules.append(field_name)
 
 
-def save_permissions_role(instance: EventRole | AssociationRole, form: MyForm) -> None:
+def save_permissions_role(instance: EventRole | AssociationRole, form: BaseModelForm) -> None:
     """Save selected permissions for a role instance.
 
     Args:
@@ -511,14 +511,14 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
     if past:
         reference_date = timezone.now() - timedelta(days=30)
         runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
-    choices.extend([(run.id, str(run)) for run in runs])
+    choices.extend([(run.uuid, str(run)) for run in runs])
 
     if "run" not in self.fields:
         self.fields["run"] = forms.ChoiceField(label=_("Session"))
 
     self.fields["run"].choices = choices
     if "run" in self.params:
-        self.initial["run"] = self.params["run"].id
+        self.initial["run"] = self.params["run"].uuid
 
 
 class EventRegS2Widget(s2forms.ModelSelect2Widget):
@@ -588,6 +588,52 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         return Run.objects.filter(event__association_id=self.association_id)
 
 
+class RunRegS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for registrations filtered by run."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_run(self, run: Run) -> None:
+        """Set the run for this instance."""
+        self.run = run
+
+    def get_queryset(self) -> QuerySet[Registration]:
+        """Return non-cancelled registrations for the current run."""
+        return (
+            Registration.objects.filter(run=self.run, cancellation_date__isnull=True)
+            .select_related("member", "ticket")
+            .order_by("member__name", "member__surname")
+        )
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return formatted label for registration instance."""
+        return str(obj)
+
+
+class TransferTargetRunS2Widget(s2forms.ModelSelect2Widget):
+    """Select2 widget for target runs in registration transfers."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the current event to exclude runs from the same event."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[Run]:
+        """Return runs from different events that are not concluded or cancelled."""
+        return (
+            Run.objects.filter(event__association_id=self.event.association_id)
+            .exclude(event_id=self.event.id)
+            .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
+            .select_related("event")
+            .order_by("-start")
+        )
+
+
 class EventCharacterS2:
     """Represents EventCharacterS2 model."""
 
@@ -617,6 +663,41 @@ class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2Multiple
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     """Represents EventCharacterS2Widget model."""
+
+
+class RunCampaignS2:
+    """Manages loading run from a campaign."""
+
+    search_fields: ClassVar[list] = [
+        "search__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event to look for other campaign events."""
+        if event.parent_id:
+            # Event is in a campaign - get parent and all siblings
+            parent_event = Event.objects.get(id=event.parent_id)
+            # Get all children of the parent (siblings) plus the parent itself
+            event_ids = list(Event.objects.filter(parent_id=parent_event.id).values_list("id", flat=True))
+            event_ids.append(parent_event.id)
+        else:
+            # Event is standalone or parent - get this event and all children
+            event_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))
+            event_ids.append(event.id)
+
+        self.event_ids = event_ids
+
+    def get_queryset(self) -> QuerySet[Character]:
+        """Return queryset of runs of allowed event ids."""
+        return Run.objects.filter(event_id__in=self.event_ids).order_by("-end")
+
+
+class RunCampaignS2WidgetMulti(RunCampaignS2, s2forms.ModelSelect2MultipleWidget):
+    """Represents RunCampaignS2WidgetMulti model."""
+
+
+class RunCampaignS2Widget(RunCampaignS2, s2forms.ModelSelect2Widget):
+    """Represents RunCampaignS2Widget model."""
 
 
 class EventPlotS2:
@@ -726,6 +807,26 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
     def get_queryset(self) -> QuerySet[AbilityPx]:
         """Return ability experience entries for this event."""
         return self.event.get_elements(AbilityPx)
+
+
+class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
+    """Represents AbilityTemplateS2WidgetMulti model."""
+
+    search_fields: ClassVar[list] = [
+        "name__icontains",
+    ]
+
+    def set_event(self, event: Event) -> None:
+        """Set the event for this instance."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet[RegistrationTicket]:
+        """Return registration tickets for the event."""
+        return self.event.get_elements(AbilityTemplatePx)
+
+    def label_from_instance(self, obj: Any) -> str:
+        """Return string representation of the given object."""
+        return obj.get_full_name()
 
 
 class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):

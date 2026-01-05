@@ -30,7 +30,6 @@ from django.db.models import F, QuerySet
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.registration import round_to_nearest_cent
 from larpmanager.cache.accounting import get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs
@@ -518,16 +517,17 @@ def _header_regs(context: dict, registration: object, column_headers: list, colu
         column_values.append(registration.options_price)
         column_headers.append(_("Options"))
 
-    # Token and credit payment methods if token credit feature is enabled
-    if "token_credit" in context["features"]:
-        _expand_val(column_values, registration, "pay_a")
-        column_headers.append(_("Money"))
+    # Token and credit payment methods if tokens or credits feature is enabled
+    _expand_val(column_values, registration, "pay_a")
+    column_headers.append(_("Money"))
 
+    if "tokens" in context["features"]:
         _expand_val(column_values, registration, "pay_b")
-        column_headers.append(context.get("credit_name", _("Credits")))
+        column_headers.append(context.get("credits_name", _("Credits")))
 
+    if "tokens" in context["features"]:
         _expand_val(column_values, registration, "pay_c")
-        column_headers.append(context.get("token_name", _("Credits")))
+        column_headers.append(context.get("tokens_name", _("Tokens")))
 
 
 def _get_standard_row(context: dict, element: object) -> tuple[list, list]:
@@ -665,9 +665,10 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
 
         # Attach accounting information as dynamic attributes to each registration
         for registration in queryset:
-            if registration.id not in accounting_data:
+            uuid_str = str(registration.uuid)
+            if uuid_str not in accounting_data:
                 continue
-            for key, value in accounting_data[registration.id].items():
+            for key, value in accounting_data[uuid_str].items():
                 setattr(registration, key, value)
 
     return queryset
@@ -866,75 +867,13 @@ def _orga_registrations_acc(context: Any, registrations: Any = None) -> Any:
     if registrations:
         result = {}
         for registration in registrations:
-            if registration.id in cached_data:
-                result[registration.id] = cached_data[registration.id]
+            # Use string UUID for consistency with cache keys
+            uuid_str = str(registration.uuid)
+            if uuid_str in cached_data:
+                result[uuid_str] = cached_data[uuid_str]
         return result
 
     return cached_data
-
-
-def _orga_registrations_acc_reg(reg: Any, context: dict, cache_aip: dict) -> dict:
-    """Process registration accounting data for organizer downloads.
-
-    Calculates payment breakdowns, remaining balances, and ticket pricing
-    information for registration accounting reports.
-
-    Args:
-        reg: Registration instance containing payment and ticket data
-        context: Context dictionary containing:
-            - features: Available feature flags
-            - reg_tickets: Ticket information by ID
-        cache_aip: Cached accounting payment data indexed by member_id
-            containing payment type breakdown ('b', 'c' payment types)
-
-    Returns:
-        dict: Processed accounting data containing:
-            - Payment amounts (tot_payed, tot_iscr, quota, etc.)
-            - Payment type breakdown (pay_a, pay_b, pay_c) if token_credit enabled
-            - Remaining balance calculation
-            - Ticket and options pricing breakdown
-
-    """
-    dt = {}
-
-    # Maximum rounding threshold for balance calculations
-    max_rounding = 0.05
-
-    # Round all monetary values to nearest cent
-    for k in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
-        dt[k] = round_to_nearest_cent(getattr(reg, k, 0))
-
-    # Process payment breakdown if token credit feature is enabled
-    if "token_credit" in context["features"]:
-        if reg.member_id in cache_aip:
-            # Extract payment types 'b' and 'c' from cache
-            for pay in ["b", "c"]:
-                v = 0
-                if pay in cache_aip[reg.member_id]:
-                    v = cache_aip[reg.member_id][pay]
-                dt["pay_" + pay] = float(v)
-            # Calculate remaining payment type 'a' as difference
-            dt["pay_a"] = dt["tot_payed"] - (dt["pay_b"] + dt["pay_c"])
-        else:
-            # If no cached data, all payment is type 'a'
-            dt["pay_a"] = dt["tot_payed"]
-
-    # Calculate remaining balance with rounding tolerance
-    dt["remaining"] = dt["tot_iscr"] - dt["tot_payed"]
-    if abs(dt["remaining"]) < max_rounding:
-        dt["remaining"] = 0
-
-    # Calculate ticket and options pricing breakdown
-    if reg.ticket_id in context["reg_tickets"]:
-        t = context["reg_tickets"][reg.ticket_id]
-        dt["ticket_price"] = t.price
-        # Add pay-what-you-want amount to base ticket price
-        if reg.pay_what:
-            dt["ticket_price"] += reg.pay_what
-        # Calculate options price as difference between total and ticket
-        dt["options_price"] = reg.tot_iscr - dt["ticket_price"]
-
-    return dt
 
 
 def _get_column_names(context: dict) -> None:

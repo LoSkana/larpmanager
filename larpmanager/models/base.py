@@ -17,13 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import os
 import secrets
+import sys
 from itertools import chain
 from typing import Any, ClassVar
 
+from django.conf import settings as conf_settings
 from django.core.validators import RegexValidator
-from django.db import models
-from django.db.models import Max
+from django.db import IntegrityError, models, transaction
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -33,9 +35,25 @@ from pilkit.processors import ResizeToFill
 from safedelete.models import SOFT_DELETE_CASCADE, SafeDeleteModel
 from tinymce.models import HTMLField
 
-from larpmanager.models.utils import UploadToPathAndRename, get_attr
+from larpmanager.models.utils import UploadToPathAndRename, get_attr, my_uuid_short
 
 AlphanumericValidator = RegexValidator(r"^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -.")
+
+UUID_RETRY_LIMIT = 5
+
+
+class UuidMixin(models.Model):
+    """Adds an uuid field to the model."""
+
+    uuid = models.CharField(
+        max_length=12,
+        unique=True,
+        db_index=True,
+        editable=False,
+    )
+
+    class Meta:
+        abstract = True
 
 
 class BaseModel(CloneMixin, SafeDeleteModel):
@@ -51,47 +69,56 @@ class BaseModel(CloneMixin, SafeDeleteModel):
         abstract = True
         ordering: ClassVar[list] = ["-updated"]
 
-    def upd_js_attr(self, javascript_object: dict, attribute_name: str) -> dict:
-        """Update JavaScript object with model attribute value.
+    def upd_js_attr(self, dict_object: dict, attribute_name: str) -> dict:
+        """Update dict object with model attribute value.
 
         Retrieves the value of the specified attribute from the model instance
-        and adds it to the provided JavaScript object dictionary.
+        and adds it to the provided object dictionary.
 
         Args:
-            javascript_object: JavaScript object dictionary to update
+            dict_object: object dictionary to update
             attribute_name: Name of the model attribute to retrieve and add
 
         Returns:
-            Updated JavaScript object dictionary with the new attribute
-
-        Example:
-            >>> obj.upd_js_attr({'existing': 'value'}, 'name')
-            {'existing': 'value', 'name': 'John'}
-
+            Updated dict object dictionary with the new attribute
         """
-        # Get attribute value from model instance and add to JS object
-        javascript_object[attribute_name] = get_attr(self, attribute_name)
-        return javascript_object
+        dict_object[attribute_name] = get_attr(self, attribute_name)
+        return dict_object
 
     def __str__(self) -> str:
         """Return string representation of the model.
 
         Returns string representation based on model attributes in order of preference:
-        1. 'name' attribute if present
-        2. 'search' attribute if present and truthy
-        3. Parent class string representation as fallback
+        1. 'name' - most common display field
+        2. 'title' - used in blog posts, guides, showcases
+        3. 'question' - used in FAQs (truncated to 100 chars)
+        4. 'author' - used in reviews
+        5. 'info' - used in highlights (truncated to 50 chars)
+        6. 'text' - truncated text content (100 chars)
+        7. 'search' - search field
+        8. Parent class string representation as fallback
 
         Returns:
-            str: Model name, search field, or default string representation.
+            str: Model representation based on available fields.
 
         """
-        # Check for 'name' attribute first - most common display field
-        if hasattr(self, "name"):
-            return self.name
+        # Define fields to check in order of preference with optional truncation length
+        field_checks = [
+            ("name", None),
+            ("title", None),
+            ("question", 100),
+            ("author", None),
+            ("info", 50),
+            ("text", 100),
+            ("search", None),
+        ]
 
-        # Fall back to 'search' attribute if it exists and has a value
-        if hasattr(self, "search") and self.search:
-            return self.search
+        # Check each field in order and return first available value
+        for field_name, max_length in field_checks:
+            if hasattr(self, field_name):
+                value = getattr(self, field_name)
+                if value:
+                    return value[:max_length] if max_length else value
 
         # Use parent class implementation as final fallback
         return super().__str__()
@@ -129,14 +156,7 @@ class BaseModel(CloneMixin, SafeDeleteModel):
 
         Returns:
             A dictionary with field names as keys and field values as data.
-            Many-to-many fields are represented as lists of related object IDs.
-
-        Example:
-            >>> instance = MyModel.objects.get(id=1)
-            >>> data = instance.as_dict()
-            >>> print(data)
-            {'id': 1, 'name': 'example', 'tags': [1, 2, 3]}
-
+            Many-to-many fields are represented as lists of related object IDs
         """
         # Get model metadata for field introspection
         # noinspection PyUnresolvedReferences
@@ -230,7 +250,7 @@ class Feature(BaseModel):
         return f"{self.name} - {self.module}"
 
 
-class PaymentMethod(BaseModel):
+class PaymentMethod(UuidMixin, BaseModel):
     """Represents PaymentMethod model."""
 
     name = models.CharField(max_length=100)
@@ -295,12 +315,7 @@ class PublisherApiKey(BaseModel):
 
 
 def auto_assign_sequential_numbers(instance: Any) -> None:
-    """Auto-populate number and order fields for model instances.
-
-    Args:
-        instance: Model instance to populate fields for
-
-    """
+    """Auto-populate number and order fields for model instances."""
     for field_name in ["number", "order"]:
         if hasattr(instance, field_name) and not getattr(instance, field_name):
             queryset = None
@@ -311,20 +326,56 @@ def auto_assign_sequential_numbers(instance: Any) -> None:
             if hasattr(instance, "character") and instance.character:
                 queryset = instance.__class__.objects.filter(character=instance.character)
             if queryset is not None:
-                max_value = queryset.aggregate(Max(field_name))[f"{field_name}__max"]
-                if not max_value:
-                    setattr(instance, field_name, 1)
-                else:
-                    setattr(instance, field_name, max_value + 1)
+                # Use select_for_update() to lock rows and prevent race conditions
+                with transaction.atomic():
+                    max_instance = queryset.select_for_update().order_by(f"-{field_name}").first()
+                    if not max_instance:
+                        setattr(instance, field_name, 1)
+                    else:
+                        max_value = getattr(max_instance, field_name)
+                        setattr(instance, field_name, max_value + 1)
+
+
+def auto_set_uuid(instance: Any) -> None:
+    """Set uuid field if missing value."""
+    # If the model does not have uuid field, or already has a value, skip
+    if not hasattr(instance, "uuid") or instance.uuid:
+        return
+
+    for _try in range(UUID_RETRY_LIMIT):
+        instance.uuid = my_uuid_short()
+        try:
+            with transaction.atomic():
+                return
+        except IntegrityError:
+            instance.uuid = None
+
+    msg = "UUID collision after retries"
+    raise RuntimeError(msg)
+
+
+def debug_set_uuid(instance: Any, *, created: bool) -> None:
+    """Simplifiy uuid for debug purposes."""
+    # Check if running in PyCharm via pytest runner
+    is_pycharm = (
+        os.getenv("PYCHARM_DEBUG") == "1"
+        or os.getenv("PYCHARM_HOSTED") == "1"
+        or any("_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv)
+    )
+
+    debug_enviro = (
+        conf_settings.DEBUG or os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true" or is_pycharm
+    )
+    if not created or not hasattr(instance, "uuid") or not debug_enviro:
+        return
+
+    debug_uuid = f"u{instance.id}"
+    instance.__class__.objects.filter(pk=instance.pk).update(uuid=debug_uuid)
+    instance.uuid = debug_uuid
 
 
 def update_model_search_field(model_instance: Any) -> None:
-    """Update search field for model instances that have one.
-
-    Args:
-        model_instance: Model instance to update search field for
-
-    """
+    """Update search field for model instances that have one."""
     if hasattr(model_instance, "search"):
         model_instance.search = None
         model_instance.search = str(model_instance)

@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 import logging
 
 from django.conf import settings as conf_settings
@@ -72,7 +74,8 @@ def get_association_text_cache(association_id: int, typ: str, lang: str) -> str:
 
     """
     # Try to get cached text
-    cached_text = cache.get(association_text_key(association_id, typ, lang))
+    cache_key = association_text_key(association_id, typ, lang)
+    cached_text = cache.get(cache_key)
 
     # Update cache if not found
     if cached_text is None:

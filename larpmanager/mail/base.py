@@ -26,7 +26,6 @@ import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import activate
 from django.utils.translation import gettext_lazy as _
@@ -269,7 +268,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 "role": instance.name,
                 "event": instance.event,
             }
-            url = get_url(f"{instance.event.slug}/1/manage/", instance.event.association)
+            url = get_url(f"{instance.event.slug}/manage/", instance.event.association)
             body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
             my_send_mail(subj, body, mb, instance.event)
 
@@ -316,7 +315,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     email_subject = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
 
     # Start email body with the user's personal discount code
-    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.special_cod}
+    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.uuid}
 
     # Add instructions for sharing the code and friend's discount amount
     email_body += (
@@ -515,8 +514,14 @@ def send_character_status_update_email(instance: Character) -> None:
             # Construct email subject with event, character, and status info
             email_subject = f"{hdr(instance.event)} - {instance!s} - {instance.get_status_display()}"
 
+            # Determine context for email
+            email_context = instance.event
+            if instance.event.runs.exists():
+                # Use the last run if the event has any runs
+                email_context = instance.event.runs.last()
+
             # Send the notification email to the player
-            my_send_mail(email_subject, email_body, instance.player, instance.event)
+            my_send_mail(email_subject, email_body, instance.player, email_context)
 
 
 def notify_organization_exe(
@@ -631,14 +636,6 @@ def send_support_ticket_email(instance: Any) -> None:
     # Send to association maintainers
     for maintainer in get_association_maintainers(instance.association):
         my_send_mail(subject, body, maintainer.email)
-
-    # Add analyze button for superusers
-    analyze_path = reverse("exe_ticket_analyze", kwargs={"ticket_id": instance.id})
-    analyze_url = get_url(analyze_path.lstrip("/"), instance.association)
-    body += "<br /><br /><hr /><br />"
-    body += "<p><strong>Start automatic ticket analysis:</strong></p>"
-    body += f"<p><a href='{analyze_url}' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;'>Analyze Ticket</a></p>"
-    body += "<p><small>Note: Only superusers and association maintainers can start the analysis.</small></p>"
 
     # Send to admins
     for _admin_name, admin_email in conf_settings.ADMINS:

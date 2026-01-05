@@ -619,7 +619,7 @@ def copy(
 
 
 def copy_event(
-    context: dict[str, Any],
+    context: dict,
     target_event_id: Any,
     elements_to_copy: Any,
     target_event: object,
@@ -654,7 +654,7 @@ def copy_event(
             copy_actions[element_type]()
 
 
-def _copy_event_fields(context: dict[str, Any], event: object, parent_event: object) -> None:
+def _copy_event_fields(context: dict, event: object, parent_event: object) -> None:
     """Copy basic event fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaEventForm, context):
         if field_name == "slug":
@@ -664,7 +664,7 @@ def _copy_event_fields(context: dict[str, Any], event: object, parent_event: obj
     event.name = "copy - " + event.name
 
 
-def _copy_appearance_fields(context: dict[str, Any], child_event: object, parent_event: object) -> None:
+def _copy_appearance_fields(context: dict, child_event: object, parent_event: object) -> None:
     """Copy appearance fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaAppearanceForm, context):
         if field_name == "event_css":
@@ -788,7 +788,7 @@ def copy_writing(target_event_id: int, targets: list[str], parent_event_id: int)
         correct_workshop(target_event_id, parent_event_id)
 
 
-def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
+def copy_css(context: dict, event: Event, parent: Any) -> None:
     """Copy CSS file from parent event to current event.
 
     Args:
@@ -806,12 +806,16 @@ def copy_css(context: dict[str, Any], event: Event, parent: Any) -> None:
         return
 
     # Read CSS content from source file
-    css_content = default_storage.open(source_css_path).read().decode("utf-8")
+    try:
+        css_content = default_storage.open(source_css_path).read().decode("utf-8")
 
-    # Generate new CSS ID and save to target event
-    event.css_code = generate_id(32)
-    target_css_path = appearance_form.get_css_path(event)
-    default_storage.save(target_css_path, ContentFile(css_content))
+        # Generate new CSS ID and save to target event
+        event.css_code = generate_id(32)
+        target_css_path = appearance_form.get_css_path(event)
+        default_storage.save(target_css_path, ContentFile(css_content))
+    except (OSError, UnicodeDecodeError, PermissionError):
+        logger.exception("Failed to copy CSS file from %s", source_css_path)
+        # Continue without copying CSS - event will work without custom CSS
 
 
 @login_required
@@ -845,7 +849,7 @@ def orga_copy(request: HttpRequest, event_slug: str) -> Any:
     return render(request, "larpmanager/orga/copy.html", context)
 
 
-def get_all_fields_from_form(form_class: Any, context: dict[str, Any]) -> Any:
+def get_all_fields_from_form(form_class: Any, context: dict) -> Any:
     """Return names of all available fields from given Form instance."""
     fields = list(form_class(context=context).base_fields)
 

@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, MyForm, MyFormRun
+from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, BaseModelFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -58,7 +58,7 @@ from larpmanager.models.utils import save_payment_details
 from larpmanager.utils.core.validators import FileTypeValidator
 
 
-class OrgaPersonalExpenseForm(MyFormRun):
+class OrgaPersonalExpenseForm(BaseModelFormRun):
     """Form for contributors to add/edit their personal expenses.
 
     Allows expense tracking with optional balance integration
@@ -89,7 +89,7 @@ class OrgaPersonalExpenseForm(MyFormRun):
             self.delete_field("balance")
 
 
-class OrgaExpenseForm(MyFormRun):
+class OrgaExpenseForm(BaseModelFormRun):
     """Form for organizers to manage contributor expenses.
 
     Full expense management including approval workflow
@@ -110,7 +110,7 @@ class OrgaExpenseForm(MyFormRun):
         super().__init__(*args, **kwargs)
 
         # Configure member widget with run context
-        self.fields["member"].widget.set_run(self.params["run"])
+        self.configure_field_run("member", self.params["run"])
 
         # Remove balance field if Italian balance feature is disabled
         if "ita_balance" not in self.params["features"]:
@@ -123,7 +123,7 @@ class OrgaExpenseForm(MyFormRun):
             self.delete_field("is_approved")
 
 
-class OrgaTokenForm(MyFormRun):
+class OrgaTokenForm(BaseModelFormRun):
     """Form for managing token accounting items.
 
     Handles token-based payments and transactions
@@ -140,15 +140,15 @@ class OrgaTokenForm(MyFormRun):
         super().__init__(*args, **kwargs)
 
         # Set page metadata with token name
-        self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
-        self.page_title = self.params["token_name"]
+        self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
+        self.page_title = self.params["tokens_name"]
 
         # Configure initial form values and widget
         self.initial["oth"] = OtherChoices.TOKEN
-        self.fields["member"].widget.set_run(self.params["run"])
+        self.configure_field_run("member", self.params["run"])
 
 
-class OrgaCreditForm(MyFormRun):
+class OrgaCreditForm(BaseModelFormRun):
     """Form for OrgaCredit."""
 
     page_info = _("Manage credit assignments")
@@ -162,13 +162,14 @@ class OrgaCreditForm(MyFormRun):
         """Initialize credit form with page title and run-specific member field."""
         super().__init__(*args, **kwargs)
         # Set page title from credit name parameter
-        self.page_title = self.params["credit_name"]
+        self.page_title = self.params["credits_name"]
+
         # Configure form for credit transaction type
         self.initial["oth"] = OtherChoices.CREDIT
-        self.fields["member"].widget.set_run(self.params["run"])
+        self.configure_field_run("member", self.params["run"])
 
 
-class OrgaPaymentForm(MyFormRun):
+class OrgaPaymentForm(BaseModelFormRun):
     """Form for managing payment accounting records.
 
     Handles payment processing, validation, and
@@ -187,12 +188,13 @@ class OrgaPaymentForm(MyFormRun):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure registration field for the event."""
         super().__init__(*args, **kwargs)
+
         # Configure registration widget with event context and make field required
-        self.fields["reg"].widget.set_event(self.params["event"])
+        self.configure_field_event("reg", self.params["event"])
         self.fields["reg"].required = True
 
 
-class ExeOutflowForm(MyForm):
+class ExeOutflowForm(BaseModelForm):
     """Form for ExeOutflow."""
 
     page_title = _("Outflows")
@@ -211,7 +213,7 @@ class ExeOutflowForm(MyForm):
 
         # Configure run widget with association context if not auto-populated
         if not hasattr(self, "auto_run"):
-            self.fields["run"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("run", self.params["association_id"])
 
         # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -236,7 +238,7 @@ class OrgaOutflowForm(ExeOutflowForm):
         super().__init__(*args, **kwargs)
 
 
-class ExeInflowForm(MyForm):
+class ExeInflowForm(BaseModelForm):
     """Form for ExeInflow."""
 
     page_title = _("Inflows")
@@ -255,7 +257,7 @@ class ExeInflowForm(MyForm):
 
         # Set association for run field if not auto-run mode
         if not hasattr(self, "auto_run"):
-            self.fields["run"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("run", self.params["association_id"])
 
         # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
@@ -274,7 +276,7 @@ class OrgaInflowForm(ExeInflowForm):
         super().__init__(*args, **kwargs)
 
 
-class ExeDonationForm(MyForm):
+class ExeDonationForm(BaseModelForm):
     """Form for ExeDonation."""
 
     page_title = _("Donations")
@@ -287,10 +289,11 @@ class ExeDonationForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set association for member field widget."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+
+        self.configure_field_association("member", self.params["association_id"])
 
 
-class ExePaymentForm(MyForm):
+class ExePaymentForm(BaseModelForm):
     """Form for ExePayment."""
 
     page_title = _("Payments")
@@ -307,7 +310,7 @@ class ExePaymentForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Configure registration field widget with association context
-        self.fields["reg"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("reg", self.params["association_id"])
 
         # Remove VAT field if feature is not enabled
         if "vat" not in self.params["features"]:
@@ -315,7 +318,7 @@ class ExePaymentForm(MyForm):
             self.delete_field("vat_options")
 
 
-class ExeInvoiceForm(MyForm):
+class ExeInvoiceForm(BaseModelForm):
     """Form for ExeInvoice."""
 
     page_title = _("Invoices")
@@ -330,10 +333,11 @@ class ExeInvoiceForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+
+        self.configure_field_association("member", self.params["association_id"])
 
 
-class ExeCreditForm(MyForm):
+class ExeCreditForm(BaseModelForm):
     """Form for ExeCredit."""
 
     page_info = _("Manage credit assignments")
@@ -348,19 +352,19 @@ class ExeCreditForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Set page title with credit name
-        self.page_title = _("Assignment") + f" {self.params['credit_name']}"
+        self.page_title = _("Assignment") + f" {self.params['credits_name']}"
 
         # Configure run choices and association widgets
         get_run_choices(self)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
-        self.fields["run"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("run", self.params["association_id"])
 
         # Set other field as hidden with credit value
         self.fields["oth"].widget = forms.HiddenInput()
         self.initial["oth"] = OtherChoices.CREDIT
 
 
-class ExeTokenForm(MyForm):
+class ExeTokenForm(BaseModelForm):
     """Form for ExeToken."""
 
     class Meta:
@@ -373,20 +377,20 @@ class ExeTokenForm(MyForm):
         super().__init__(*args, **kwargs)
 
         # Set page title and info with token name
-        self.page_title = _("Assignment") + f" {self.params['token_name']}"
-        self.page_info = _("Manage") + f" {self.params['token_name']} " + _("assignments")
+        self.page_title = _("Assignment") + f" {self.params['tokens_name']}"
+        self.page_info = _("Manage") + f" {self.params['tokens_name']} " + _("assignments")
 
         # Configure run choices and association filtering
         get_run_choices(self)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
-        self.fields["run"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("run", self.params["association_id"])
 
         # Hide 'oth' field and set default value
         self.fields["oth"].widget = forms.HiddenInput()
         self.initial["oth"] = OtherChoices.TOKEN
 
 
-class ExeExpenseForm(MyForm):
+class ExeExpenseForm(BaseModelForm):
     """Form for ExeExpense."""
 
     page_title = _("Expenses")
@@ -404,8 +408,8 @@ class ExeExpenseForm(MyForm):
 
         # Configure run choices and set association context for widgets
         get_run_choices(self)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
-        self.fields["run"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
+        self.configure_field_association("run", self.params["association_id"])
 
         # Remove balance field if feature not enabled
         if "ita_balance" not in self.params["features"]:
@@ -445,7 +449,7 @@ class PaymentForm(BaseAccForm):
         )
 
 
-class CollectionNewForm(MyForm):
+class CollectionNewForm(BaseModelForm):
     """Form for CollectionNew."""
 
     class Meta:
@@ -471,11 +475,12 @@ class ExeCollectionForm(CollectionNewForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member field widget with association."""
         super().__init__(*args, **kwargs)
+
         # Set association for member widget filtering
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("member", self.params["association_id"])
 
 
-class OrgaDiscountForm(MyForm):
+class OrgaDiscountForm(BaseModelForm):
     """Form for OrgaDiscount."""
 
     page_info = _("Manage discounts")
@@ -512,7 +517,7 @@ class OrgaDiscountForm(MyForm):
             self.initial["runs"] = [r.id for r in self.instance.runs.all()]
 
 
-class InvoiceSubmitForm(forms.Form):
+class InvoiceSubmitForm(BaseForm):
     """Form for InvoiceSubmit."""
 
     cod = forms.CharField(widget=forms.HiddenInput())
@@ -580,7 +585,7 @@ class AnyInvoiceSubmitForm(InvoiceSubmitForm):
     )
 
 
-class RefundRequestForm(MyForm):
+class RefundRequestForm(BaseModelForm):
     """Form for RefundRequest."""
 
     class Meta:
@@ -603,7 +608,7 @@ class RefundRequestForm(MyForm):
         self.fields["value"] = forms.DecimalField(max_value=self.params["membership"].credit, decimal_places=2)
 
 
-class ExeRefundRequestForm(MyForm):
+class ExeRefundRequestForm(BaseModelForm):
     """Form for ExeRefundRequest."""
 
     page_title = _("Request refund")
@@ -616,10 +621,11 @@ class ExeRefundRequestForm(MyForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure member widget with association."""
         super().__init__(*args, **kwargs)
-        self.fields["member"].widget.set_association_id(self.params["association_id"])
+
+        self.configure_field_association("member", self.params["association_id"])
 
 
-class ExePaymentSettingsForm(MyForm):
+class ExePaymentSettingsForm(BaseModelForm):
     """Form for ExePaymentSettings."""
 
     page_title = _("Payment Methods")

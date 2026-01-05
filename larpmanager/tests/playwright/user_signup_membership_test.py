@@ -18,13 +18,27 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+"""
+Test: Registration requiring membership approval and payment.
+Verifies signup blocked until membership approval, membership application workflow,
+payment after membership approval, and ticket availability updates.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, go_to, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import (just_wait,
+    check_download,
+    go_to,
+    load_image,
+    login_orga,
+    submit,
+    submit_confirm,
+    expect_normalized,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -59,7 +73,7 @@ def signup(live_server: Any, page: Any) -> None:
 
     submit_confirm(page)
     go_to(page, live_server, "/manage/methods")
-    page.locator('#id_payment_methods input[type="checkbox"][value="1"]').check()
+    page.get_by_role("checkbox", name="Wire").check()
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("test wire")
     page.locator("#id_wire_fee").fill("0")
@@ -77,18 +91,18 @@ def signup(live_server: Any, page: Any) -> None:
     # signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
-    expect(page.locator("#riepilogo")).to_contain_text("you must request to register as a member")
+    expect_normalized(page, page.locator("#riepilogo"), "you must request to register as a member")
     submit_confirm(page)
 
 
 def membership(live_server: Any, page: Any) -> None:
     # send membership
     go_to(page, live_server, "/test/register")
-    expect(page.locator("#one")).to_contain_text("Provisional registration")
-    expect(page.locator("#one")).to_contain_text("please upload your membership application to proceed")
+    expect_normalized(page, page.locator("#one"), "Provisional registration")
+    expect_normalized(page, page.locator("#one"), "please upload your membership application to proceed")
     page.get_by_role("link", name="please upload your membership").click()
     page.get_by_role("checkbox", name="Authorisation").check()
-    page.get_by_role("button", name="Submit").click()
+    submit_confirm(page)
     # compile request
     load_image(page, "#id_request")
     load_image(page, "#id_document")
@@ -108,14 +122,14 @@ def membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     # check register
     go_to(page, live_server, "/test/register")
-    expect(page.locator("#one")).to_contain_text("to confirm it proceed with payment")
+    expect_normalized(page, page.locator("#one"), "to confirm it proceed with payment")
     page.get_by_role("link", name="to confirm it proceed with").click()
 
 
 def pay(live_server: Any, page: Any) -> None:
     # pay
     page.get_by_role("cell", name="Wire", exact=True).click()
-    expect(page.locator("b")).to_contain_text("100")
+    expect_normalized(page, page.locator("b"), "100")
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
@@ -126,10 +140,10 @@ def pay(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Confirm", exact=True).click()
     # check payment
     go_to(page, live_server, "/test/register")
-    expect(page.locator("#one")).to_contain_text("Registration confirmed (Standard)")
+    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
     page.locator("a#menu-open").click()
     page.get_by_role("link", name="Logout").click()
-    expect(page.locator("#one")).to_contain_text("Registration is open!")
-    expect(page.locator("#one")).to_contain_text("Hurry: only 9 tickets available")
+    expect_normalized(page, page.locator("#one"), "Registration is open!")
+    expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available")
     # test mails
     go_to(page, live_server, "/debug/mail")

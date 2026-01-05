@@ -23,6 +23,7 @@ import yaml
 from django.core.management.base import BaseCommand
 from django.db.models import ForeignKey, ImageField
 
+from larpmanager.management.commands.utils import check_virtualenv
 from larpmanager.models.access import AssociationPermission, EventPermission, PermissionModule
 from larpmanager.models.association import AssociationSkin
 from larpmanager.models.base import Feature, FeatureModule, PaymentMethod
@@ -56,6 +57,9 @@ class Command(BaseCommand):
             - payment_methods.yaml: PaymentMethod configurations
 
         """
+        # Ensure we're running inside a virtual environment
+        check_virtualenv()
+
         # Define models to export with their respective fields for serialization
         export_models = {
             "skin": (

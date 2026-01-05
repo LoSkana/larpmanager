@@ -47,7 +47,7 @@ def cache_run_key(association_id: int, slug: str) -> str:
     return f"run_{association_id}_{slug}"
 
 
-def get_cache_run(association_id: int, slug: str) -> int:
+def get_cache_run(association_id: int, slug: str) -> str:
     """Get cached run data for association and slug."""
     # Generate cache key for the association and slug
     cache_key = cache_run_key(association_id, slug)
@@ -91,7 +91,7 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
     except ObjectDoesNotExist:
         return None
     else:
-        return run.id
+        return run.uuid
 
 
 def on_run_pre_save_invalidate_cache(instance: Run) -> None:

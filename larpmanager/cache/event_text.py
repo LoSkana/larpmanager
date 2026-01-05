@@ -170,7 +170,7 @@ def update_event_text_cache_on_save(instance: EventText) -> None:
         update_event_text_def(instance.event_id, instance.typ)
 
 
-def clear_event_text_cache_on_delete(instance: EventText) -> None:
+def reset_event_text(instance: EventText) -> None:
     """Clear event text cache entries when an EventText instance is deleted."""
     # Clear cache for specific language variant
     cache.delete(event_text_key(instance.event_id, instance.typ, instance.language))

@@ -17,18 +17,26 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Plots, character relationships, and reading functionality.
+Verifies plot creation with character roles, relationship management (direct/inverse),
+reading view for characters and plots, and faction integration in reading view.
+"""
+
 import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     check_feature,
     fill_tinymce,
     go_to,
     login_orga,
     submit_confirm,
+    expect_normalized,
 )
 
 pytestmark = pytest.mark.e2e
@@ -62,7 +70,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     # set prova presentation and text
     page.get_by_role("link", name="Characters").click()
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
 
     fill_tinymce(page, "id_teaser", "pppresssent")
 
@@ -73,8 +81,9 @@ def reading(live_server: Any, page: Any) -> None:
     # now read it
     page.get_by_role("link", name="Reading").click()
     page.get_by_role("row", name=" prova character pppresssent").get_by_role("link").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Test Larp Presentation pppresssent Text totxeet testona wwwwwbruuuu Relationships Test Character ciaaoooooo"
+    expect_normalized(page,
+        page.locator("#one"),
+        "Test Larp Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character ciaaoooooo",
     )
 
     # test reading with factions
@@ -98,19 +107,21 @@ def reading(live_server: Any, page: Any) -> None:
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("only for testt Primary Test Character")
+
+    expect_normalized(page, page.locator("#one"), "only for testt Primary Test Character")
 
     # check reading for prova
     page.get_by_role("link", name="Reading").click()
     page.get_by_role("row", name=" prova character pppresssent").get_by_role("link").click()
-    expect(page.locator("#one")).to_contain_text(
-        "Test Larp Presentation pppresssent Text totxeet testona wwwwwbruuuu Relationships Test Character Factions: only for testt ciaaoooooo"
+    expect_normalized(page,
+        page.locator("#one"),
+        "Test Larp Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character Factions: only for testt ciaaoooooo",
     )
 
     # check reading plot
     page.get_by_role("link", name="Reading").click()
     page.get_by_role("row", name=" testona plot asadsadas wwwww").get_by_role("link").click()
-    expect(page.locator("#one")).to_contain_text("testona Text wwwww prova bruuuu")
+    expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
 
 
 def relationships(live_server: Any, page: Any) -> None:
@@ -132,23 +143,26 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Test Teaser Test Text #2 prova Test Character")
+    just_wait(page)
+    expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text #2 prova Test Character")
 
     # check in char
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
+    just_wait(page)
     page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
-    expect(page.locator("#form_relationships")).to_contain_text("#1 Test Character Direct Show <p>ciaaoooooo</p>")
+    expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
-    page.locator('[id="\\31 "]').get_by_role("cell", name="").click()
+    page.locator('[id="u1"]').get_by_role("cell", name="").click()
+    just_wait(page)
     page.get_by_role("row", name="Inverse Show How the").get_by_role("link").click()
-    expect(page.locator("#form_relationships")).to_contain_text("Inverse Show ciaaoooooo")
+    expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
-    expect(page.locator("#one")).to_contain_text("Relationships Test Character ciaaoooooo")
+    expect_normalized(page, page.locator("#one"), "Relationships Test Character ciaaoooooo")
 
 
 def plots(live_server: Any, page: Any) -> None:
@@ -156,7 +170,6 @@ def plots(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="New").click()
-    page.wait_for_load_state("networkidle")
 
     page.locator("#id_name").click()
     page.locator("#id_name").fill("testona")
@@ -182,7 +195,7 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check in plot list
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww Test Character")
+    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character")
 
     # check it is the same
     page.get_by_role("link", name="").click()
@@ -190,7 +203,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Show <p>prova</p>")
+    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova")
     locator.click()
 
     # change it
@@ -199,13 +212,13 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww Test Character")
+    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character")
     page.get_by_role("link", name="").click()
     # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character Show <p>prova222</p>")
+    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova222")
 
     # remove first char
     page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
@@ -220,7 +233,7 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("testona asadsadas wwwww prova")
+    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww prova")
 
     # set text
     page.get_by_role("link", name="").click()
@@ -230,24 +243,24 @@ def plots(live_server: Any, page: Any) -> None:
     # check in user
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
-    expect(page.locator("#one")).to_contain_text("testona wwwwwbruuuu")
+    expect_normalized(page, page.locator("#one"), "testona wwwww bruuuu")
 
 
 def plots_character(live_server: Any, page: Any) -> None:
-    go_to(page, live_server, "/test/1/manage/")
+    go_to(page, live_server, "/test/manage/")
     # create other plots
     page.get_by_role("link", name="Plots", exact=True).click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").fill("gaga")
     page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bibi")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # test adding them to character
     page.locator("#orga_characters").get_by_role("link", name="Characters").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
     searchbox = page.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("gag")
@@ -259,15 +272,15 @@ def plots_character(live_server: Any, page: Any) -> None:
     # Wait for search results to appear and click first option
     page.locator(".select2-results__option").first.wait_for(state="visible")
     page.locator(".select2-results__option").first.click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
-    page.wait_for_timeout(2000)
+    just_wait(page)
 
     # check there are all three
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("gaga bibi")
+    expect_normalized(page, page.locator('[id="u1"]'), "gaga bibi")
 
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
 
     # remove third
     page.get_by_role("listitem", name="bibi").locator("span").click()
@@ -275,22 +288,22 @@ def plots_character(live_server: Any, page: Any) -> None:
     # change second
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show").click()
     fill_tinymce(page, "id_pl_2", "ffff")
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
     # check
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
-    expect(page.locator("#id_pl_2_tr")).to_contain_text("<p>ffff</p>")
-    page.get_by_role("button", name="Confirm").click()
+    expect_normalized(page, page.locator("#id_pl_2_tr"), "gaga ffff")
+    submit_confirm(page)
 
     page.locator("#one").get_by_role("link", name="Plots").click()
-    expect(page.locator('[id="\\31 "]')).to_contain_text("gaga")
-    expect(page.locator('[id="\\31 "]')).not_to_contain_text("bibi")
+    expect_normalized(page, page.locator('[id="u1"]'), "gaga")
+    expect(page.locator('[id="u1"]')).not_to_contain_text("bibi")
 
     # check second, then remove
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
     page.get_by_role("listitem", name="gaga").locator("span").click()
     page.get_by_role("link", name="Instructions").click()
-    page.get_by_role("button", name="Confirm").click()
+    submit_confirm(page)
 
-    expect(page.locator('[id="\\31 "]')).not_to_contain_text("gaga")
+    expect(page.locator('[id="u1"]')).not_to_contain_text("gaga")

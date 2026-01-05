@@ -18,7 +18,7 @@
         <p>
             {% for reg in payments_pending %}
                 {% include "elements/comma.html" %}
-                <b><a href="#" class="my_toggle" tog='reg_{{ reg.id }}'>{{ reg.run }}</a></b>
+                <b><a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run }}</a></b>
             {% endfor %}
         </p>
         <hr />
@@ -30,7 +30,7 @@
             {% for reg in payments_todo %}
                 {% include "elements/comma.html" %}
                 <b>{{ reg.run }}</b> -
-                <a href="{% url 'acc_reg' reg.id %}">
+                <a href="{% url 'acc_reg' reg.uuid %}">
                     {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
                     {% if reg.deadline > 0 %}
                         {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}
@@ -60,7 +60,7 @@
         <hr />
     {% endif %}
     {% if member.membership.credit %}
-        <h2>{{ credit_name }}</h2>
+        <h2>{{ credits_name }}</h2>
         <p>
             {% trans "Total" %}: <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
             {% if member.membership.credit > 0 %}
@@ -81,7 +81,7 @@
         <hr />
     {% endif %}
     {% if member.membership.tokens %}
-        <h2>{{ token_name }}</h2>
+        <h2>{{ tokens_name }}</h2>
         <p>
             {% trans "Total" %}: <b>{{ member.membership.tokens }}</b>.
             {% if member.membership.tokens > 0 %}
@@ -216,7 +216,7 @@
         <p>
             {% for reg in registration_list %}
                 {% include "elements/comma.html" %}
-                <a href="#" class="my_toggle" tog='reg_{{ reg.id }}'>{{ reg.run.search }}
+                <a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run.search }}
                     {% if reg.cancellation_date %}
                         - {% trans "Cancellation" %}
                     {% endif %}
@@ -224,7 +224,7 @@
             {% endfor %}
         </p>
         {% for reg in registration_list %}
-            <div id="reg_{{ reg.id }}" class="hide reg_{{ reg.id }}">
+            <div id="reg_{{ reg.uuid }}" class="hide reg_{{ reg.uuid }}">
                 <h3>{{ reg.run.search }}</h3>
                 {% if reg.pending %}
                     <p>
@@ -232,7 +232,7 @@
                     </p>
                 {% elif reg.quota > 0 %}
                     <p>
-                        <a href="{% url 'acc_reg' reg.id %}">
+                        <a href="{% url 'acc_reg' reg.uuid %}">
                             {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
                             {% if reg.deadline > 0 %}
                                 {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}
@@ -304,16 +304,16 @@
         <hr />
     {% endif %}
     {% if acc_tokens > 0 %}
-        <h2>{% trans "History" %} {{ token_name }}</h2>
+        <h2>{% trans "History" %} {{ tokens_name }}</h2>
         <p>
-            {% trans "To access the history" %} {{ token_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
+            {% trans "To access the history" %} {{ tokens_name }}, <a href="{% url 'accounting_tokens' %}">{% trans "click here" %}</a>
         </p>
         <hr />
     {% endif %}
     {% if acc_credits > 0 %}
-        <h2>{% trans "History" %} {{ credit_name }}</h2>
+        <h2>{% trans "History" %} {{ credits_name }}</h2>
         <p>
-            {% trans "To access the history" %} {{ credit_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
+            {% trans "To access the history" %} {{ credits_name }}, <a href="{% url 'accounting_credits' %}">{% trans "click here" %}</a>
         </p>
         <hr />
     {% endif %}

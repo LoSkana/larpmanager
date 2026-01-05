@@ -22,6 +22,7 @@ from __future__ import annotations
 from typing import Any
 
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest
 from django.urls import reverse
@@ -47,11 +48,12 @@ from larpmanager.utils.core.exceptions import (
     FeatureError,
     MainPageError,
     MembershipError,
+    RedirectError,
     UnknowRunError,
     UserPermissionError,
     check_event_feature,
 )
-from larpmanager.utils.users.registration import check_signup, registration_status
+from larpmanager.utils.users.registration import check_signup, get_player_signup, registration_status
 
 
 def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks
@@ -120,11 +122,10 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         context["is_staff"] = request.user.is_staff
 
     # Set default names for token/credit system if feature enabled
-    if "token_credit" in context["features"]:
-        if not context["token_name"]:
-            context["token_name"] = _("Tokens")
-        if not context["credit_name"]:
-            context["credit_name"] = _("Credits")
+    for feature, default_name in [("tokens", _("Tokens")), ("credits", _("Credits"))]:
+        name_key = f"{feature}_name"
+        if feature in context["features"] and not context.get(name_key):
+            context[name_key] = default_name
 
     # Add TinyMCE editor configuration
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
@@ -168,7 +169,7 @@ def fetch_payment_details(association_id: int) -> dict:
     return get_payment_details(association)
 
 
-def check_association_context(request: HttpRequest, permission_slug: str) -> dict:
+def check_association_context(request: HttpRequest, permission_slug: str = "") -> dict:
     """Check and validate association permissions for a request.
 
     Validates that the user has the required association permission and that
@@ -199,7 +200,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
         raise UserPermissionError
 
     # Retrieve feature configuration for this permission
-    (required_feature, tutorial_identifier, config_slug) = get_association_permission_feature(permission_slug)
+    (required_feature, tutorial_slug, config_slug) = get_association_permission_feature(permission_slug)
 
     # Check if required feature is enabled for this association
     if required_feature != "def" and required_feature not in context["features"]:
@@ -215,7 +216,7 @@ def check_association_context(request: HttpRequest, permission_slug: str) -> dic
 
     # Add tutorial information if not already present
     if "tutorial" not in context:
-        context["tutorial"] = tutorial_identifier
+        context["tutorial"] = tutorial_slug
 
     # Add configuration URL if user has config permissions
     if config_slug and has_association_permission(request, context, "exe_config"):
@@ -263,11 +264,11 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
             permission_slug = permission_slug[0]
 
         # Get feature configuration for this permission
-        (feature_name, tutorial_key, config_section) = get_event_permission_feature(permission_slug)
+        (feature_name, tutorial_slug, config_section) = get_event_permission_feature(permission_slug)
 
         # Add tutorial information if not already present
         if "tutorial" not in context:
-            context["tutorial"] = tutorial_key
+            context["tutorial"] = tutorial_slug
 
         # Add configuration link if user has config permissions
         if config_section and has_event_permission(request, context, event_slug, "orga_config"):
@@ -339,6 +340,7 @@ def get_event_context(
     *,
     signup: bool = False,
     include_status: bool = False,
+    check_visibility: bool = True,
 ) -> dict:
     """Get comprehensive event run context with permissions and features.
 
@@ -351,6 +353,7 @@ def get_event_context(
         signup: Whether to check and validate signup eligibility for the user
         feature_slug: Optional feature slug to verify user access permissions
         include_status: Whether to include detailed registration status information
+        check_visibility: Whether to enforce visibility restrictions
 
     Returns:
         Complete event context dictionary containing:
@@ -400,6 +403,25 @@ def get_event_context(
     # Finalize run context preparation and return complete context
     prepare_run(context)
 
+    # Check character visibility restrictions if requested (skip for users with event permissions)
+    if check_visibility and not has_event_permission(request, context, event_slug):
+        event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
+        # Check if gallery is hidden for non-authenticated users
+        hide_gallery_for_non_login = get_event_config(
+            context["event"].id, "gallery_hide_login", default_value=False, context=context
+        )
+        if hide_gallery_for_non_login and not request.user.is_authenticated:
+            messages.warning(request, _("You must be logged in to view this page"))
+            raise RedirectError(event_url)
+
+        # Check if gallery is hidden for non-registered users
+        hide_gallery_for_non_signup = get_event_config(
+            context["event"].id, "gallery_hide_signup", default_value=False, context=context
+        )
+        if hide_gallery_for_non_signup and not get_player_signup(context):
+            messages.warning(request, _("You must be registered to view this page"))
+            raise RedirectError(event_url)
+
     return context
 
 
@@ -437,6 +459,15 @@ def prepare_run(context: Any) -> None:
 
     context["writing_fields"] = get_event_fields_cache(context["event"].id)
 
+    # Check if there are visible factions with characters for nav display
+    context["has_visible_factions"] = False
+    if "faction" in context.get("features", {}) and "factions" in context:
+        for faction_data in context["factions"].values():
+            # Check if faction has a name and has characters
+            if faction_data.get("name") and faction_data.get("characters"):
+                context["has_visible_factions"] = True
+                break
+
 
 def get_run(context: Any, event_slug: Any) -> None:
     """Load run and event data from cache and database.
@@ -453,7 +484,7 @@ def get_run(context: Any, event_slug: Any) -> None:
 
     """
     try:
-        run_id = get_cache_run(context["association_id"], event_slug)
+        run_uuid = get_cache_run(context["association_id"], event_slug)
         que = Run.objects.select_related("event")
         fields = [
             "search",
@@ -474,7 +505,7 @@ def get_run(context: Any, event_slug: Any) -> None:
             "event__ter_rgb",
         ]
         que = que.defer(*fields)
-        context["run"] = que.get(pk=run_id)
+        context["run"] = que.get(uuid=run_uuid)
         context["event"] = context["run"].event
     except Exception as err:
         raise UnknowRunError from err

@@ -17,12 +17,19 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Email generation for chat, badge, membership, and expenses.
+Verifies automated email workflows for chat messages, badge assignments, membership application
+submission/approval/rejection, and expense submission with proper email triggers.
+"""
+
 import re
 from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import check_download, fill_tinymce, go_to, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, go_to, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -110,7 +117,7 @@ def submit_membership(live_server: Any, page: Any) -> None:
     # Test membership
     go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/texts")
-    page.wait_for_timeout(2000)
+    just_wait(page)
     page.get_by_role("link", name="New").click()
 
     fill_tinymce(page, "id_text", "Ciao {{ member.name }}!", show=False)
@@ -165,7 +172,7 @@ def badge(live_server: Any, page: Any) -> None:
 def chat(live_server: Any, page: Any) -> None:
     # Test chat
     go_to(page, live_server, "/manage/features/chat/on")
-    go_to(page, live_server, "/public/3/")
+    go_to(page, live_server, "/public/uIT2O97q9XKA/")
     page.get_by_role("link", name="Chat").click()
     page.get_by_role("textbox").fill("ciao!")
     submit(page)

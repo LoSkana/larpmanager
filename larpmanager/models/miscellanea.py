@@ -33,7 +33,7 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -42,7 +42,7 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.core.validators import FileTypeValidator
 
 
-class HelpQuestion(BaseModel):
+class HelpQuestion(UuidMixin, BaseModel):
     """Model for storing user help questions and support requests."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="questions")
@@ -147,7 +147,7 @@ class ChatMessage(BaseModel):
         return f"CM - {self.sender} {self.message[:20]}"
 
 
-class Util(BaseModel):
+class Util(UuidMixin, BaseModel):
     """Represents Util model."""
 
     number = models.IntegerField()
@@ -158,7 +158,7 @@ class Util(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-    util = models.FileField(upload_to=UploadToPathAndRename("../utils/"))
+    util = models.FileField(upload_to=UploadToPathAndRename("utils/"))
 
     def __str__(self) -> str:
         """Return string representation with member number and name."""
@@ -177,7 +177,7 @@ class Util(BaseModel):
         return Path(self.util.url).name
 
 
-class UrlShortner(BaseModel):
+class UrlShortner(UuidMixin, BaseModel):
     """Represents UrlShortner model."""
 
     number = models.IntegerField()
@@ -195,7 +195,7 @@ class UrlShortner(BaseModel):
         return f"U{self.number} {self.name}"
 
 
-class Album(BaseModel):
+class Album(UuidMixin, BaseModel):
     """Represents Album model."""
 
     name = models.CharField(max_length=70)
@@ -225,6 +225,10 @@ class Album(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        """Return string representation of the album."""
+        return self.name
+
     def __unicode__(self) -> str:
         """Return the title of the object."""
         # noinspection PyUnresolvedReferences
@@ -250,6 +254,10 @@ class AlbumUpload(BaseModel):
         (PHOTO, _("Photo")),
     ]
     typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
+
+    def __str__(self) -> str:
+        """Return string representation of the album upload."""
+        return self.name
 
 
 class AlbumImage(BaseModel):
@@ -307,6 +315,10 @@ class Competence(BaseModel):
 
     members = models.ManyToManyField(Member, related_name="competences", through="CompetenceMemberRel")
 
+    def __str__(self) -> str:
+        """Return string representation of the competence."""
+        return self.name
+
 
 class CompetenceMemberRel(BaseModel):
     """Through model linking members to competences with experience levels."""
@@ -327,7 +339,7 @@ class CompetenceMemberRel(BaseModel):
         unique_together: ClassVar[list] = ["competence", "member", "deleted"]
 
 
-class WorkshopModule(BaseModel):
+class WorkshopModule(UuidMixin, BaseModel):
     """Model for managing workshop modules and member participation."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -349,7 +361,7 @@ class WorkshopModule(BaseModel):
     def show(self) -> dict[str, Any]:
         """Return dictionary representation of instance for display."""
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "number": self.number}
+        js = {"uuid": str(self.uuid), "number": self.number}
         self.upd_js_attr(js, "name")
         return js
 
@@ -366,7 +378,7 @@ class WorkshopMemberRel(BaseModel):
         return f"{self.workshop} - {self.member}"
 
 
-class WorkshopQuestion(BaseModel):
+class WorkshopQuestion(UuidMixin, BaseModel):
     """Represents WorkshopQuestion model."""
 
     search = models.CharField(max_length=200, editable=False)
@@ -387,11 +399,11 @@ class WorkshopQuestion(BaseModel):
         """Return dictionary representation for display purposes.
 
         Returns:
-            Dictionary containing id, number and name attributes.
+            Dictionary containing uuid, number and name attributes.
 
         """
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "opt": [], "number": self.number}
+        js = {"uuid": str(self.uuid), "opt": [], "number": self.number}
         self.upd_js_attr(js, "name")
         # noinspection PyUnresolvedReferences
         for op in self.options.all():
@@ -405,7 +417,7 @@ class WorkshopQuestion(BaseModel):
         ]
 
 
-class WorkshopOption(BaseModel):
+class WorkshopOption(UuidMixin, BaseModel):
     """Represents WorkshopOption model."""
 
     search = models.CharField(max_length=500, editable=False)
@@ -428,12 +440,12 @@ class WorkshopOption(BaseModel):
         """Return JSON-serializable dict with answer option data.
 
         Returns:
-            Dictionary with id, correctness flag, and name if present.
+            Dictionary with uuid, correctness flag, and name if present.
 
         """
         # noinspection PyUnresolvedReferences
-        # Build base dict with id and correctness status
-        js = {"id": self.id, "is_correct": self.is_correct}
+        # Build base dict with uuid and correctness status
+        js = {"uuid": str(self.uuid), "is_correct": self.is_correct}
 
         # Add name attribute if available
         self.upd_js_attr(js, "name")
@@ -441,7 +453,7 @@ class WorkshopOption(BaseModel):
         return js
 
 
-class WarehouseContainer(BaseModel):
+class WarehouseContainer(UuidMixin, BaseModel):
     """Represents WarehouseContainer model."""
 
     name = models.CharField(max_length=100, help_text=_("Code of the box or shelf"))
@@ -452,8 +464,12 @@ class WarehouseContainer(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="containers")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse container."""
+        return self.name
 
-class WarehouseTag(BaseModel):
+
+class WarehouseTag(UuidMixin, BaseModel):
     """Represents WarehouseTag model."""
 
     name = models.CharField(max_length=100)
@@ -462,8 +478,12 @@ class WarehouseTag(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="tags")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse tag."""
+        return self.name
 
-class WarehouseItem(BaseModel):
+
+class WarehouseItem(UuidMixin, BaseModel):
     """Represents WarehouseItem model."""
 
     name = models.CharField(max_length=100)
@@ -494,13 +514,17 @@ class WarehouseItem(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="items")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse item."""
+        return self.name
+
     @classmethod
     def get_optional_fields(cls) -> Any:
         """Return list of optional field names."""
         return ["quantity"]
 
 
-class WarehouseMovement(BaseModel):
+class WarehouseMovement(UuidMixin, BaseModel):
     """Represents WarehouseMovement model."""
 
     quantity = models.IntegerField(blank=True, null=True)
@@ -519,7 +543,7 @@ class WarehouseMovement(BaseModel):
     completed = models.BooleanField(default=False)
 
 
-class WarehouseArea(BaseModel):
+class WarehouseArea(UuidMixin, BaseModel):
     """Represents WarehouseArea model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of event area"))
@@ -530,8 +554,12 @@ class WarehouseArea(BaseModel):
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="area")
 
+    def __str__(self) -> str:
+        """Return string representation of the warehouse area."""
+        return self.name
 
-class WarehouseItemAssignment(BaseModel):
+
+class WarehouseItemAssignment(UuidMixin, BaseModel):
     """Represents WarehouseItemAssignment model."""
 
     quantity = models.IntegerField(blank=True, null=True)
@@ -570,7 +598,7 @@ class ShuttleStatus(models.TextChoices):
     DONE = "2", _("Arrived safe and sound")
 
 
-class ShuttleService(BaseModel):
+class ShuttleService(UuidMixin, BaseModel):
     """Represents ShuttleService model."""
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="shuttle_services_requests")
@@ -646,7 +674,7 @@ class ProblemSeverity(models.TextChoices):
     GREEN = "g", "4 - GREEN"
 
 
-class Problem(BaseModel):
+class Problem(UuidMixin, BaseModel):
     """Represents Problem model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -773,7 +801,7 @@ class PlayerRelationship(BaseModel):
         ]
 
 
-class Email(BaseModel):
+class Email(UuidMixin, BaseModel):
     """Represents Email model."""
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, blank=True, null=True)
@@ -797,7 +825,7 @@ class Email(BaseModel):
         return f"{self.recipient} - {self.subj}"
 
 
-class OneTimeContent(BaseModel):
+class OneTimeContent(UuidMixin, BaseModel):
     """Model to store multimedia content for one-time access via tokens.
 
     Organizers can upload video/audio files and generate access tokens.
@@ -910,7 +938,7 @@ class OneTimeContent(BaseModel):
         }
 
 
-class OneTimeAccessToken(BaseModel):
+class OneTimeAccessToken(UuidMixin, BaseModel):
     """Access token for one-time viewing of content.
 
     Each token can only be used once.

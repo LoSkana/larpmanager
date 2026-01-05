@@ -110,12 +110,18 @@ def get(value: dict[str, Any], arg: str) -> Any:
         any: Dictionary value for key, or empty string if not found
 
     """
-    if arg is not None and value and arg in value:
-        return value[arg]
+    if arg is not None and value:
+        try:
+            if arg in value:
+                return value[arg]
+        except TypeError:
+            # arg is not hashable (e.g., dict), cannot be used as dict key
+            # This can happen when iterating over cached data with dict keys
+            return ""
     return ""
 
 
-def get_tooltip(context: dict[str, Any], character: dict[str, Any]) -> str:
+def get_tooltip(context: dict, character: dict[str, Any]) -> str:
     """Generate HTML tooltip for character display.
 
     Args:
@@ -168,7 +174,7 @@ def tooltip_fields(character: dict[str, Any], tooltip: str) -> str:
     return tooltip
 
 
-def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip: str) -> str:
+def tooltip_factions(character: dict[str, Any], context: dict, tooltip: str) -> str:
     """Add faction information to character tooltip.
 
     Args:
@@ -195,7 +201,7 @@ def tooltip_factions(character: dict[str, Any], context: dict[str, Any], tooltip
 
 
 @register.simple_tag(takes_context=True)
-def replace_chars(context: dict[str, Any], text: str, limit: int = 200) -> str:
+def replace_chars(context: dict, text: str, limit: int = 200) -> str:
     """Template tag to replace character number references with names.
 
     Replaces #XX, @XX, and ^XX patterns with character names in text.
@@ -274,9 +280,9 @@ def go_character(
     # Get character data from context
     character_data = context["chars"][character_number]
 
-    # Generate character URL using run slug and character number
+    # Generate character URL using run slug and character uuid
     character_url = get_url(
-        reverse("character", args=[run.get_slug(), character_data["number"]]),
+        reverse("character", args=[run.get_slug(), character_data["uuid"]]),
         context["association_slug"],
     ).replace('"', "")
 
@@ -480,7 +486,7 @@ def go_trait(
 
         # Build character page URL
         character_url = get_url(
-            reverse("character", args=[run.get_slug(), character_data["number"]]),
+            reverse("character", args=[run.get_slug(), character_data["uuid"]]),
             context["slug"],
         )
 
@@ -495,7 +501,7 @@ def go_trait(
 
 
 @register.simple_tag(takes_context=True)
-def show_trait(context: dict[str, Any], text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
+def show_trait(context: dict, text: str, run: Run, tooltip: bool) -> str:  # noqa: FBT001
     """Template tag to process text and convert trait references to character links.
 
     Args:

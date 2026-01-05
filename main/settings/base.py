@@ -338,6 +338,16 @@ IGNORABLE_PROFILER_URLS = [
     re.compile(r'accounts/google/login/callback'),
 ]
 
+# 404 ERRORS TO IGNORE
+IGNORABLE_404_URLS = [
+    re.compile(r'/functions/webhook\.js'),
+    re.compile(r'/\.well-known/'),
+    re.compile(r'apple-touch-icon'),
+    re.compile(r'favicon\.ico'),
+    re.compile(r'/wp-'),
+    re.compile(r'/xmlrpc\.php'),
+]
+
 # PAYMENT SETTINGS
 PAYMENT_SETTING_FOLDER = 'main/payment_settings/'
 

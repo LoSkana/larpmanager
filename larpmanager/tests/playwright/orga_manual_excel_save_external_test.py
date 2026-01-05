@@ -17,13 +17,21 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
+"""
+Test: Manual editing, Excel-style editing, external access, and working tickets.
+Verifies character editing via modal and Excel-style interface, character finder,
+auto-save functionality, external access URLs, and concurrent editing warnings.
+"""
+
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (just_wait,
     check_feature,
+    expect_normalized,
     fill_tinymce,
     go_to,
     go_to_check,
@@ -53,26 +61,26 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     page.locator("#id_name").press("End")
     page.locator("#id_name").fill("Test Character2")
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text("Test Character2 Test Teaser Test Text")
+    expect_normalized(page, page.locator('[id="u1"]'), "Test Character2 Test Teaser Test Text")
 
     # change teaser
-    page.get_by_role("cell", name="Test Teaser").dblclick()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Teaser").dblclick()
     page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Teaser").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser + 2")
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").press("ControlOrMeta+s")
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text("Test Character2 Test Teaser + 2 Test Text")
+    expect_normalized(page, page.locator('[id="u1"]'), "Test Character2 Test Teaser + 2 Test Text")
 
     # change text
-    page.get_by_role("cell", name="Test Text").dblclick()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text").dblclick()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Text").click()
     page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Text ff")
     submit_confirm(page)
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text("#1 Test Character2 Test Teaser + 2 Test Text ff")
+    expect_normalized(page, page.locator("#one"), "#1 Test Character2 Test Teaser + 2 Test Text ff")
 
     # add new
     page.get_by_role("link", name="New").click()
@@ -81,17 +89,33 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # test char finder
     fill_tinymce(page, "id_teaser", "good friends with ")
+    just_wait(page)
     frame_locator = page.frame_locator("iframe#id_teaser_ifr")
     editor = frame_locator.locator("body#tinymce")
+
+    editor.evaluate("""
+    el => {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+    """)
+    just_wait(page)
+    editor.press(" ")
+    just_wait(page)
     editor.press("#")
     page.get_by_role("searchbox").fill("tes")
     page.locator(".select2-results__option").first.click()
+    just_wait(page)
 
-    # check
-    page.wait_for_timeout(2000)
     submit_confirm(page)
-    expect(page.locator("#one")).to_contain_text(
-        "#1 Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1"
+    just_wait(page)
+    expect_normalized(page,
+        page.locator("#one"),
+        "#1 Test Character2 Test Teaser + 2 Test Text ff #2 Another good friends with #1",
     )
 
     excel(page, server)
@@ -105,39 +129,41 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
 def excel(page: Any, live_server: Any) -> None:
     # test char finder on excel edit
-    page.get_by_role("cell", name="Test Text ff").dblclick()
+    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text ff").dblclick()
     frame = page.locator('iframe[title="Rich Text Area"]').content_frame
     frame.get_by_label("Rich Text Area").fill("Test Text ff kinda hate ")
     frame.get_by_label("Rich Text Area").press("#")
     page.get_by_role("searchbox").fill("an")
     page.locator(".select2-results__option").first.click()
-    page.wait_for_timeout(2000)
+    just_wait(page)
     submit_confirm(page)
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text(
-        "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1"
+    expect_normalized(page,
+        page.locator("#one"),
+        "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1",
     )
 
     # test manual save
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
     fill_tinymce(page, "id_text", "ciaoooo")
     frame_locator = page.frame_locator("iframe#id_text_ifr")
     editor = frame_locator.locator("body#tinymce")
     editor.press("ControlOrMeta+s")
-    page.wait_for_timeout(2000)
+    just_wait(page)
 
     # check by reload
     page.get_by_role("link", name="Characters").click()
-    expect(page.locator("#one")).to_contain_text(
-        "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1 ciaoooo"
+    expect_normalized(page,
+        page.locator("#one"),
+        "#1 Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 #2 Another good friends with #1 ciaoooo",
     )
 
     # check in page
-    page.locator('[id="\\32 "]').get_by_role("link", name="").click()
+    page.locator('[id="u2"]').get_by_role("link", name="").click()
     page.locator('a.my_toggle[tog="f_id_text"]').click()
-    expect(page.locator("#one")).to_contain_text("Text (*) Show <p>ciaoooo</p>")
+    expect_normalized(page, page.locator("#one"), "good friends with #1 ciaoooo")
 
 
 def external(page: Any, live_server: Any) -> None:
@@ -149,13 +175,14 @@ def external(page: Any, live_server: Any) -> None:
 
     # get url
     page.get_by_role("link", name="Characters").click()
-    url = page.locator('[id="\\32 "]').get_by_role("link", name="").get_attribute("href")
+    url = page.locator('[id="u2"]').get_by_role("link", name="").get_attribute("href")
 
     # logout, then go to the page
     logout(page)
     go_to_check(page, live_server + url)
-    expect(page.locator("#one")).to_contain_text(
-        "Presentation good friends with Test Character2Test Character2Test Teaser + 2 (...) Text ciaoooo"
+    expect_normalized(page,
+        page.locator("#one"),
+        "Presentation good friends with Test Character2 Text ciaoooo",
     )
 
 
@@ -164,13 +191,14 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
 
     go_to(page, server, "/test/manage")
     page.get_by_role("link", name="Characters").click()
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click(button="right")
+    page.locator('[id="u1"]').get_by_role("link", name="").click(button="right")
     page1 = context.new_page()
-    page1.goto(server + "/test/manage/characters/edit/1/")
-    page.locator('[id="\\31 "]').get_by_role("link", name="").click()
-    page.wait_for_timeout(2000)
-    expect(page.locator("#test-larp")).to_contain_text(
-        "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost."
+    page1.goto(server + "/test/manage/characters/edit/u1/")
+    page.locator('[id="u1"]').get_by_role("link", name="").click()
+    just_wait(page)
+    expect_normalized(page,
+        page.locator("#test-larp"),
+        "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
 
 
@@ -180,7 +208,8 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     go_to(page, server, "/test/manage/config")
     page1 = context.new_page()
     page1.goto(server + "/test/manage/config")
-    page.wait_for_timeout(2000)
-    expect(page.locator("#test-larp")).to_contain_text(
-        "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost."
+    just_wait(page)
+    expect_normalized(page,
+        page.locator("#test-larp"),
+        "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )

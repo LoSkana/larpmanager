@@ -179,9 +179,15 @@ def _init_features(association: Association, cache_element: dict) -> None:
             cache_element[config_key] = association.get_config(config_key, default_value="")
 
     # Configure token and credit naming if feature is enabled
-    if "token_credit" in cache_element["features"]:
-        for setting in ["token_name", "credit_name"]:
-            cache_element[setting] = association.get_config("token_credit_" + setting, default_value=None)
+    for setting in ["tokens", "credits"]:
+        if setting in cache_element["features"]:
+            name_key = f"{setting}_name"
+            # Try new config key first, fallback to old token_credit_* key for backward compatibility
+            old_key = f"token_credit_{setting[:-1]}_name"  # tokens->token, credits->credit
+            new_value = association.get_config(name_key, default_value=None)
+            if new_value is None:
+                new_value = association.get_config(old_key, default_value=None)
+            cache_element[name_key] = new_value
 
     # Configure Centauri probability settings if feature is enabled
     if "centauri" in cache_element["features"]:

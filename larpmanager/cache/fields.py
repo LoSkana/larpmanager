@@ -84,27 +84,30 @@ def update_event_fields(event_id: int) -> dict:
     visible_questions = (
         event.get_elements(WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
     )
-    for question_data in visible_questions.values("id", "name", "typ", "printable", "visibility", "applicable"):
+    for question_data in visible_questions.values("id", "name", "typ", "printable", "visibility", "applicable", "uuid"):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         _ensure_cache_structure(cached_fields, applicabile_label, "questions")
         cached_fields[applicabile_label]["questions"][question_data["id"]] = question_data
 
     # Fetch writing options and group by parent question's applicability
     writing_options = event.get_elements(WritingOption).order_by("order")
-    for option_data in writing_options.values("id", "name", "question_id", "question__applicable"):
+    for option_data in writing_options.values("id", "name", "question_id", "question__applicable", "uuid"):
         applicabile_label = QuestionApplicable(option_data["question__applicable"]).label
         _ensure_cache_structure(cached_fields, applicabile_label, "options")
         cached_fields[applicabile_label]["options"][option_data["id"]] = option_data
 
     # Create name and ID mappings for default writing question types
     default_type_questions = event.get_elements(WritingQuestion).filter(typ__in=get_def_writing_types())
-    for question_data in default_type_questions.values("id", "typ", "name", "applicable"):
+    for question_data in default_type_questions.values("id", "typ", "name", "applicable", "uuid"):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         question_type = question_data["typ"]
-        _ensure_cache_structure(cached_fields, applicabile_label, "names")
-        _ensure_cache_structure(cached_fields, applicabile_label, "ids")
-        cached_fields[applicabile_label]["names"][question_type] = question_data["name"]
-        cached_fields[applicabile_label]["ids"][question_type] = question_data["id"]
+        for key, value in (
+            ("names", question_data["name"]),
+            ("ids", question_data["id"]),
+            ("uuids", question_data["uuid"]),
+        ):
+            _ensure_cache_structure(cached_fields, applicabile_label, key)
+            cached_fields[applicabile_label][key][question_type] = value
 
     # Cache the complete result structure with 1-day timeout
     cache.set(event_fields_key(event_id), cached_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -207,3 +210,10 @@ def visible_writing_fields(context: dict, applicable: str, *, only_visible: bool
                 if option_data["question_id"] not in context["searchable"]:
                     context["searchable"][option_data["question_id"]] = []
                 context["searchable"][option_data["question_id"]].append(option_data["id"])
+
+        # Sort searchable options by their order field
+        for question_id in context["searchable"]:
+            context["searchable"][question_id] = sorted(
+                context["searchable"][question_id],
+                key=lambda opt_id: context["options"].get(opt_id, {}).get("order", 0),
+            )

@@ -15,7 +15,7 @@
             {% for el in subs %}
                 <div class="el">
                     <div class="icon album-icon">
-                        <a href="{% url 'album_sub' run.get_slug el.id %}">
+                        <a href="{% url 'album_sub' run.get_slug el.uuid %}">
                             <div class="icon-name">
                                 <p>{{ el.name }}</p>
                             </div>
@@ -270,7 +270,13 @@
                             captionEl.children[0].innerText = '';
                             return false;
                         }
-                        captionEl.children[0].innerHTML = item.title +  '<br /><small>Photo: ' + item.author + '</small>';
+                        // Escape user input to prevent XSS
+                        var escapeHtml = function(text) {
+                            var div = document.createElement('div');
+                            div.textContent = text;
+                            return div.innerHTML;
+                        };
+                        captionEl.children[0].innerHTML = escapeHtml(item.title) +  '<br /><small>Photo: ' + escapeHtml(item.author) + '</small>';
                         return true;
                     },
 

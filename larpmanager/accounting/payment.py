@@ -25,7 +25,7 @@ from __future__ import annotations
 import logging
 import math
 import re
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -258,7 +258,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
                     reg_id=context["reg"].id,
                 ).text
             placeholder_values[question_name] = answer_value
-        except ObjectDoesNotExist:  # noqa: PERF203 - Need per-item error handling to skip missing questions
+        except ObjectDoesNotExist:
             # Skip missing questions/answers
             pass
 
@@ -325,7 +325,7 @@ def update_invoice_gross_fee(
 
 def _prepare_gateway_form(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     invoice: PaymentInvoice,
     payment_amount: Decimal,
     payment_method_slug: str,
@@ -371,7 +371,7 @@ def get_payment_form(
     request: HttpRequest,
     form: Form,
     payment_type: str,
-    context: dict[str, Any],
+    context: dict,
     invoice_key: str | None = None,
 ) -> None:
     """Create or update payment invoice and prepare gateway-specific form.
@@ -538,7 +538,12 @@ def _process_payment(invoice: PaymentInvoice) -> None:
         invoice: Invoice object to process payment for
 
     """
-    registration = Registration.objects.get(pk=invoice.idx)
+    if not AccountingItemPayment.objects.filter(inv=invoice).exists():
+        try:
+            registration = Registration.objects.get(pk=invoice.idx)
+        except ObjectDoesNotExist:
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
+            return
 
     # Use get_or_create to prevent race condition from duplicate webhook deliveries
     _, created = AccountingItemPayment.objects.get_or_create(
@@ -549,7 +554,7 @@ def _process_payment(invoice: PaymentInvoice) -> None:
             "reg": registration,
             "value": invoice.mc_gross,
             "association_id": invoice.association_id,
-        }
+        },
     )
 
     if created:
@@ -589,9 +594,12 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
 
     # For registration payments, link the transaction to the registration
     if invoice.typ == PaymentType.REGISTRATION:
-        registration = Registration.objects.get(pk=invoice.idx)
-        accounting_transaction.reg = registration
-        accounting_transaction.save()
+        try:
+            registration = Registration.objects.get(pk=invoice.idx)
+            accounting_transaction.reg = registration
+            accounting_transaction.save()
+        except ObjectDoesNotExist:
+            logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)
 
 
 def process_payment_invoice_status_change(invoice: PaymentInvoice) -> None:
@@ -658,7 +666,7 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
             "oth": OtherChoices.REFUND,
             "descr": f"Delivered refund of {refund_request.value:.2f}",
             "association_id": refund_request.association_id,
-        }
+        },
     )
 
 

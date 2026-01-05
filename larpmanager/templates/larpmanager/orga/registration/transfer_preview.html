@@ -1,0 +1,68 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Transfer preview" %} - {{ run }}
+{% endblock title %}
+{% block info %}
+    {% trans "Review the transfer before confirming" %}
+{% endblock info %}
+{% block content %}
+    <table class="table">
+        <tr>
+            <th>{% trans "Participant" %}</th>
+            <td>{{ registration.member.display_member }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "From" %}</th>
+            <td>{{ registration.run }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "To" %}</th>
+            <td>{{ target_run }} ({{ target_run.event.name }})</td>
+        </tr>
+        {% if registration.ticket %}
+            <tr>
+                <th>{% trans "Ticket" %}:</th>
+                <td>{{ registration.ticket.name }} ({{ registration.ticket.get_tier_display }})</td>
+            </tr>
+        {% endif %}
+    </table>
+    {% if validation.errors %}
+        <div class="alert alert-danger">
+            <h4>{% trans "Errors" %}</h4>
+            <ul>
+                {% for error in validation.errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if validation.warnings %}
+        <div class="alert alert-warning">
+            <h4>{% trans "Warnings" %}</h4>
+            <ul>
+                {% for warning in validation.warnings %}<li>{{ warning }}</li>{% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if validation.info %}
+        <div class="alert alert-info">
+            <h4>{% trans "Information" %}</h4>
+            <ul>
+                {% for info in validation.info %}<li>{{ info }}</li>{% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if not validation.errors %}
+        <form method="post"
+              action="{% url 'orga_registration_transfer_confirm' event_slug=run.get_slug %}">
+            {% csrf_token %}
+            <input type="hidden"
+                   name="registration_uuid"
+                   value="{{ registration.uuid }}">
+            <input type="hidden" name="target_run_uuid" value="{{ target_run.uuid }}">
+            <input type="hidden" name="move_registration" value="true">
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger">{% trans "Transfer" %}</button>
+            </div>
+        </form>
+    {% endif %}
+{% endblock content %}

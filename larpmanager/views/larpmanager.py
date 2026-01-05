@@ -42,7 +42,7 @@ from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.larpmanager import get_cache_lm_home
+from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import SendMailForm
@@ -54,6 +54,7 @@ from larpmanager.models.association import Association, AssociationPlan, Associa
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import (
+    LarpManagerBlog,
     LarpManagerDiscover,
     LarpManagerGuide,
     LarpManagerProfiler,
@@ -66,6 +67,7 @@ from larpmanager.utils.auth.permission import has_association_permission, has_ev
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
+from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.views.user.member import get_user_backend
 
 
@@ -777,6 +779,38 @@ def guide(request: HttpRequest, slug: Any) -> Any:
     return render(request, "larpmanager/larpmanager/guide.html", context)
 
 
+def blog(request: HttpRequest, slug: Any) -> Any:
+    """Display a specific blog article by slug with split content and random images.
+
+    Args:
+        request: Django HTTP request object
+        slug: URL slug of the blog to display
+
+    Returns:
+        HttpResponse: Rendered blog template with article content and images
+
+    Raises:
+        Http404: If blog with given slug is not found or not published
+
+    """
+    context = get_lm_contact(request)
+    context["index"] = True
+
+    try:
+        blog_post = LarpManagerBlog.objects.get(slug=slug, published=True)
+    except ObjectDoesNotExist as err:
+        msg = "blog not found"
+        raise Http404(msg) from err
+
+    context["blog"] = blog_post
+    context["sections"] = get_blog_content_with_images(blog_post.id, blog_post.text)
+
+    context["og_title"] = f"{context['blog'].title} - LarpManager"
+    context["og_description"] = f"{context['blog'].description} - LarpManager"
+
+    return render(request, "larpmanager/larpmanager/blog.html", context)
+
+
 @cache_page(60 * 15)
 def privacy(request: HttpRequest) -> Any:
     """Display privacy policy page.
@@ -895,7 +929,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     min_registrations = 5
 
     # Get all unpaid runs ordered by start date
-    que = Run.objects.filter(paid__isnull=True).order_by("start")
+    que = Run.objects.filter(paid__isnull=True).exclude(plan=AssociationPlan.FREE).order_by("start")
 
     # Initialize lists and totals for unpaid runs
     context["list"] = []
@@ -1057,6 +1091,18 @@ def lm_profile(request: HttpRequest) -> HttpResponse:
 
     # Render the profiling template with aggregated performance data
     return render(request, "larpmanager/larpmanager/profile.html", context)
+
+
+@login_required
+def lm_reset(request: HttpRequest) -> HttpResponse:
+    """Reset cache for all associations and events."""
+    check_lm_admin(request)
+
+    for association in Association.objects.all():
+        _reset_all_association(association.id, association.slug)
+
+    messages.success(request, "Global cache reset")
+    return HttpResponseRedirect("/")
 
 
 @ratelimit(key="ip", rate="5/m", block=True)

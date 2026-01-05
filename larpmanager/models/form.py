@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
@@ -241,7 +241,7 @@ class QuestionApplicable(models.TextChoices):
         return dict(cls.choices)
 
 
-class WritingQuestion(BaseModel):
+class WritingQuestion(UuidMixin, BaseModel):
     """Form questions for character writing and story elements."""
 
     typ = models.CharField(
@@ -324,12 +324,12 @@ class WritingQuestion(BaseModel):
         """Return JSON-serializable dictionary of object attributes.
 
         Returns:
-            Dictionary containing description and name fields.
+            Dictionary containing description, name, and order fields.
 
         """
         js = {}
-        # Update JSON dict with description and name attributes
-        for s in ["description", "name"]:
+        # Update JSON dict with description, name, and order attributes
+        for s in ["description", "name", "order"]:
             self.upd_js_attr(js, s)
         return js
 
@@ -366,7 +366,7 @@ class WritingQuestion(BaseModel):
         ]
 
 
-class WritingOption(BaseModel):
+class WritingOption(UuidMixin, BaseModel):
     """Represents WritingOption model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -429,8 +429,8 @@ class WritingOption(BaseModel):
         # Initialize response with max available count
         js = {"max_available": self.max_available}
 
-        # Update with name and description attributes
-        for s in ["name", "description"]:
+        # Update with name, description, and order attributes
+        for s in ["name", "description", "order"]:
             self.upd_js_attr(js, s)
 
         return js
@@ -479,7 +479,7 @@ class WritingAnswer(BaseModel):
         ]
 
 
-class RegistrationQuestion(BaseModel):
+class RegistrationQuestion(UuidMixin, BaseModel):
     """Represents RegistrationQuestion model."""
 
     typ = models.CharField(
@@ -662,7 +662,12 @@ class RegistrationQuestion(BaseModel):
             run_id = params["run"].id
             is_run_organizer = run_id in params["all_runs"] and 1 in params["all_runs"][run_id]
             # noinspection PyUnresolvedReferences
-            if not is_run_organizer and self.allowed_map and self.allowed_map[0] and params["member"].id not in self.allowed_map:
+            if (
+                not is_run_organizer
+                and self.allowed_map
+                and self.allowed_map[0]
+                and params["member"].id not in self.allowed_map
+            ):
                 return True
 
         return False
@@ -674,7 +679,7 @@ class RegistrationQuestion(BaseModel):
         ]
 
 
-class RegistrationOption(BaseModel):
+class RegistrationOption(UuidMixin, BaseModel):
     """Represents RegistrationOption model."""
 
     search = models.CharField(max_length=1000, editable=False)

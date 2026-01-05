@@ -102,8 +102,8 @@ def update_registration_status(instance: Any) -> None:
 
     # Add custom messages from event and association configurations
     for custom_message in [
-        get_event_text(instance.run.event_id, EventTextType.SIGNUP),
-        get_association_text(instance.run.event.association_id, AssociationTextType.SIGNUP),
+        get_event_text(instance.run.event_id, EventTextType.SIGNUP, instance.member.language),
+        get_association_text(instance.run.event.association_id, AssociationTextType.SIGNUP, instance.member.language),
     ]:
         if custom_message:
             email_body += "<br />" + custom_message

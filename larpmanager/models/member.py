@@ -37,7 +37,7 @@ from pilkit.processors import ResizeToFill
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.core.codes import countries
 
@@ -75,7 +75,7 @@ class DocumentChoices(models.TextChoices):
     PASS = "s", _("Passport")
 
 
-class Member(BaseModel):
+class Member(UuidMixin, BaseModel):
     """Represents Member model."""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
@@ -615,7 +615,7 @@ class VolunteerRegistry(BaseModel):
         ]
 
 
-class Badge(BaseModel):
+class Badge(UuidMixin, BaseModel):
     """Represents Badge model."""
 
     name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Short name"))
@@ -655,6 +655,10 @@ class Badge(BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        """Return string representation of the badge."""
+        return self.name
+
     def thumb(self) -> str:
         """Return HTML for thumbnail image if available, otherwise empty string."""
         if self.img_thumb:
@@ -665,7 +669,7 @@ class Badge(BaseModel):
     def show(self) -> dict:
         """Return a dictionary representation for display purposes."""
         # noinspection PyUnresolvedReferences
-        js = {"id": self.id, "number": self.number}
+        js = {"uuid": str(self.uuid), "number": self.number}
 
         # Add localized name and description attributes
         for s in ["name", "descr"]:

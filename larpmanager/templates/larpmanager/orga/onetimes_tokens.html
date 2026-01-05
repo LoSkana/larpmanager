@@ -24,12 +24,12 @@
         </thead>
         <tbody>
             {% for el in list %}
-                <tr id="{{ el.id }}">
+                <tr id="{{ el.uuid }}">
                     <td>
-                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.content.id %}">{{ el.content.name }}</a>
+                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.content.uuid %}">{{ el.content.name }}</a>
                     </td>
                     <td>
-                        <a href="{% url 'orga_onetimes_tokens_edit' run.get_slug el.id %}">
+                        <a href="{% url 'orga_onetimes_tokens_edit' run.get_slug el.uuid %}">
                             <code>{{ el.token|truncatechars:16 }}</code>
                         </a>
                     </td>

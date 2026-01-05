@@ -29,6 +29,7 @@ import json
 import logging
 import math
 import re
+from decimal import Decimal
 from pprint import pformat
 from typing import Any, ClassVar
 
@@ -44,6 +45,7 @@ from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.models import ST_PP_COMPLETED
 from satispaython.utils import load_key
 
+from larpmanager.accounting.base import get_payment_details
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.association import Association
@@ -59,7 +61,7 @@ logger = logging.getLogger(__name__)
 CURRENCY_TO_CENTS_MULTIPLIER = 100
 
 
-def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
+def get_satispay_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create Satispay payment form and initialize payment.
 
     Creates a new Satispay payment request using the provided invoice and amount,
@@ -82,7 +84,7 @@ def get_satispay_form(request: HttpRequest, context: dict[str, Any], invoice: Pa
 
     """
     # Build redirect and callback URLs for payment flow
-    context["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.id]))
+    context["redirect"] = request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid]))
     context["callback"] = request.build_absolute_uri(reverse("acc_webhook_satispay")) + "?payment_id={uuid}"
 
     # Load Satispay authentication credentials
@@ -209,17 +211,29 @@ def satispay_verify(context: dict, payment_code: str) -> None:
     # Parse response and extract payment details
     try:
         payment_data = json.loads(response.content)
-        payment_amount = int(payment_data["amount_unit"]) / float(CURRENCY_TO_CENTS_MULTIPLIER)
+        payment_amount = Decimal(str(int(payment_data["amount_unit"]))) / Decimal(str(CURRENCY_TO_CENTS_MULTIPLIER))
         payment_status = payment_data["status"]
+        payment_currency = payment_data.get("currency")
     except (json.JSONDecodeError, KeyError, ValueError) as e:
         error_msg = f"Failed to parse Satispay payment verification: {e}\nResponse: {response.content}"
         logger.exception(error_msg)
         notify_admins("Satispay verification JSON error", error_msg)
         return
 
+    # Verify currency if available
+    expected_currency = context.get("payment_currency")
+    if expected_currency and payment_currency and payment_currency != expected_currency:
+        logger.error(
+            "Satispay Security Alert: Currency Mismatch - Expected: %s, Got: %s, Invoice: %s - REJECTED",
+            expected_currency,
+            payment_currency,
+            invoice.cod,
+        )
+        return
+
     # Process payment if Satispay marked it as accepted
     if payment_status == "ACCEPTED":
-        invoice_received_money(invoice.cod, payment_amount)
+        invoice_received_money(invoice.cod, payment_amount, expected_amount=invoice.mc_gross, payment_method="satispay")
 
 
 def satispay_webhook(request: HttpRequest) -> None:
@@ -254,7 +268,7 @@ def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice
         "item_name": invoice.causal,
         "invoice": invoice.cod,
         "notify_url": request.build_absolute_uri(reverse("paypal-ipn")),
-        "return": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
+        "return": request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
         "cancel_return": request.build_absolute_uri(reverse("acc_cancelled")),
     }
     context["paypal_form"] = PayPalPaymentsForm(initial=paypal_payment_data)
@@ -271,26 +285,51 @@ def handle_valid_paypal_ipn(ipn_obj: Any) -> bool | None:
 
     """
     if ipn_obj.payment_status == ST_PP_COMPLETED:
-        # Validate receiver email to prevent payment hijacking
-        # Get invoice to verify against expected PayPal business account
+        # SECURITY: Verify receiver email matches expected business email
+        # This prevents attackers from crediting invoices with payments to their own PayPal account
         try:
             invoice = PaymentInvoice.objects.get(cod=ipn_obj.invoice)
-            context = {"association_id": invoice.association_id}
-            update_payment_details(context)
-
-            # Check that the receiver email matches the configured PayPal account
-            if ipn_obj.receiver_email != context.get("paypal_id"):
-                # Not a valid payment - receiver email doesn't match
-                notify_admins(
-                    "PayPal receiver email mismatch",
-                    f"Expected: {context.get('paypal_id')}, Received: {ipn_obj.receiver_email}, Invoice: {ipn_obj.invoice}"
-                )
-                return None
         except ObjectDoesNotExist:
-            notify_admins("PayPal IPN - invoice not found", f"Invoice code: {ipn_obj.invoice}")
+            logger.exception("PayPal IPN: Invoice not found: %s, TxnID: %s", ipn_obj.invoice, ipn_obj.txn_id)
             return None
 
-        return invoice_received_money(ipn_obj.invoice, ipn_obj.mc_gross, ipn_obj.mc_fee, ipn_obj.txn_id)
+        # Get payment configuration for invoice's association
+        payment_config = get_payment_details(invoice.association)
+        expected_paypal_email = payment_config.get("paypal_id")
+        if not expected_paypal_email:
+            logger.error("PayPal IPN: No PayPal ID configured for association %s", invoice.association.slug)
+            return None
+
+        # Verify receiver email matches (case-insensitive)
+        if ipn_obj.receiver_email.lower() != expected_paypal_email.lower():
+            logger.error(
+                "PayPal IPN: Receiver email mismatch. Expected: %s, Got: %s, Invoice: %s, TxnID: %s",
+                expected_paypal_email,
+                ipn_obj.receiver_email,
+                ipn_obj.invoice,
+                ipn_obj.txn_id,
+            )
+            return None
+
+        # Verify payment currency matches expected currency
+        expected_currency = payment_config.get("payment_currency")
+        if expected_currency and ipn_obj.mc_currency != expected_currency:
+            logger.error(
+                "PayPal IPN: Currency mismatch. Expected: %s, Got: %s, Invoice: %s",
+                expected_currency,
+                ipn_obj.mc_currency,
+                ipn_obj.invoice,
+            )
+            return None
+
+        return invoice_received_money(
+            ipn_obj.invoice,
+            ipn_obj.mc_gross,
+            ipn_obj.mc_fee,
+            ipn_obj.txn_id,
+            expected_amount=invoice.mc_gross,
+            payment_method="paypal",
+        )
     return None
 
 
@@ -302,16 +341,15 @@ def handle_invalid_paypal_ipn(invalid_ipn_object: Any) -> None:
 
     """
     if invalid_ipn_object:
-        logger.info("PayPal IPN object: %s", invalid_ipn_object)
-    # TODO: send mail
+        logger.error("PayPal IPN object: %s", invalid_ipn_object)
+
     formatted_ipn_body = pformat(invalid_ipn_object)
-    logger.info("PayPal IPN body: %s", formatted_ipn_body)
-    notify_admins("paypal ko", formatted_ipn_body)
+    logger.error("PayPal IPN body: %s", formatted_ipn_body)
 
 
 def get_stripe_form(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     invoice: PaymentInvoice,
     amount: float,
 ) -> None:
@@ -355,7 +393,7 @@ def get_stripe_form(
             },
         ],
         mode="payment",
-        success_url=request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
+        success_url=request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
         cancel_url=request.build_absolute_uri(reverse("acc_cancelled")),
     )
 
@@ -403,13 +441,40 @@ def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
         # assume only one
         first_line_item = line_items["data"][0]
         price_id = first_line_item["price"]["id"]
-        return invoice_received_money(price_id)
+
+        # Get invoice to verify amount and currency
+        try:
+            invoice = PaymentInvoice.objects.get(cod=price_id)
+        except ObjectDoesNotExist:
+            logger.exception("Stripe webhook: Invoice not found for price_id: %s", price_id)
+            return False
+
+        # Verify currency if configured
+        expected_currency = context.get("payment_currency")
+        stripe_currency = first_line_item["price"]["currency"].upper()
+        if expected_currency and stripe_currency != expected_currency.upper():
+            logger.error(
+                "Stripe webhook: Currency mismatch. Expected: %s, Got: %s, Invoice: %s",
+                expected_currency,
+                stripe_currency,
+                price_id,
+            )
+            return False
+
+        # Get amount in base currency
+        stripe_amount = Decimal(str(first_line_item["price"]["unit_amount"])) / Decimal(
+            str(CURRENCY_TO_CENTS_MULTIPLIER)
+        )
+
+        return invoice_received_money(
+            price_id, expected_amount=invoice.mc_gross, gross_amount=stripe_amount, payment_method="stripe"
+        )
     return True
 
 
 def get_sumup_form(
     request: HttpRequest,
-    context: dict[str, Any],
+    context: dict,
     invoice: PaymentInvoice,
     amount: float,
 ) -> None:
@@ -483,7 +548,7 @@ def get_sumup_form(
             "description": invoice.causal,
             # Configure callback URLs for payment flow
             "return_url": request.build_absolute_uri(reverse("acc_webhook_sumup")),
-            "redirect_url": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
+            "redirect_url": request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
             "payment_type": "boleto",
         },
     )
@@ -505,7 +570,7 @@ def get_sumup_form(
     )
 
     # Validate checkout response
-    expected_success_code = 200
+    expected_success_code = 201
     if checkout_response.status_code != expected_success_code:
         error_msg = f"SumUp checkout failed with status {checkout_response.status_code}: {checkout_response.text}"
         logger.error(error_msg)
@@ -529,75 +594,88 @@ def get_sumup_form(
     invoice.save()
 
 
-def sumup_webhook(request: HttpRequest) -> bool:
+def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple security checks require early returns
     """Handle SumUp webhook notifications for payment processing.
 
     Processes incoming webhook requests from SumUp payment gateway,
-    validates the signature, and triggers invoice payment processing
-    for successful transactions.
+    validates the HMAC signature, payment status, and triggers invoice
+    payment processing for successful transactions.
 
     Args:
         request: HTTP request object containing webhook payload from SumUp
 
     Returns:
         bool: True if payment was processed successfully, False if payment
-              failed or was not successful
+              failed, signature invalid, or was not successful
 
     """
-    # Validate webhook signature to prevent unauthorized requests
-    signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
-
-    # Get invoice to retrieve association for webhook secret
+    # Parse the JSON payload to get payment ID and status
     try:
         webhook_payload = json.loads(request.body)
         payment_id = webhook_payload["id"]
-
-        # Get invoice to retrieve association context
-        invoice = PaymentInvoice.objects.get(cod=payment_id)
-        context = {"association_id": invoice.association_id}
-        update_payment_details(context)
-
-        # Verify webhook signature if secret is configured
-        sumup_webhook_secret = context.get("sumup_webhook_secret")
-        if sumup_webhook_secret:
-            if not signature_header:
-                error_msg = "SumUp webhook signature header missing"
-                logger.error(error_msg)
-                notify_admins("SumUp webhook security error", error_msg)
-                return False
-
-            # Compute expected HMAC-SHA256 signature
-            expected_signature = hmac.new(
-                sumup_webhook_secret.encode(),
-                request.body,
-                hashlib.sha256
-            ).hexdigest()
-
-            # Verify signature matches
-            if not hmac.compare_digest(signature_header, expected_signature):
-                error_msg = f"SumUp webhook signature mismatch. Payment ID: {payment_id}"
-                logger.error(error_msg)
-                notify_admins("SumUp webhook signature verification failed", error_msg)
-                return False
-
         payment_status = webhook_payload["status"]
     except (json.JSONDecodeError, KeyError) as e:
         error_msg = f"Failed to parse SumUp webhook payload: {e}\nBody: {request.body}"
         logger.exception(error_msg)
         notify_admins("SumUp webhook JSON error", error_msg)
         return False
+
+    # Get invoice to retrieve association-specific context
+    try:
+        invoice = PaymentInvoice.objects.get(cod=payment_id)
     except ObjectDoesNotExist:
         error_msg = f"SumUp webhook - invoice not found: {payment_id}"
-        logger.error(error_msg)  # noqa: TRY400
+        logger.error(error_msg)  # noqa: TRY400 - ObjectDoesNotExist is expected, no traceback needed
         notify_admins("SumUp webhook - invalid invoice", error_msg)
         return False
 
-    # Check if the payment status indicates failure or non-success
+    # Get association context and payment configuration
+    context = {"association_id": invoice.association_id}
+    update_payment_details(context)
+
+    # Verify HMAC signature if webhook secret is configured
+    sumup_webhook_secret = context.get("sumup_webhook_secret")
+    if sumup_webhook_secret:
+        signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
+        if not signature_header:
+            error_msg = "SumUp webhook signature header missing"
+            logger.error(error_msg)
+            notify_admins("SumUp webhook security error", error_msg)
+            return False
+
+        # Compute expected HMAC-SHA256 signature
+        expected_signature = hmac.new(sumup_webhook_secret.encode(), request.body, hashlib.sha256).hexdigest()
+
+        # Verify signature matches using constant-time comparison
+        if not hmac.compare_digest(signature_header, expected_signature):
+            error_msg = f"SumUp webhook signature mismatch. Payment ID: {payment_id}"
+            logger.error(error_msg)
+            notify_admins("SumUp webhook signature verification failed", error_msg)
+            return False
+
+    # Only process successful payments
     if payment_status != "SUCCESSFUL":
         return False
 
-    # Process the successful payment using the transaction ID
-    return invoice_received_money(payment_id)
+    # Verify amount and currency match expectations
+    sumup_amount = webhook_payload.get("amount")
+    sumup_currency = webhook_payload.get("currency")
+    expected_currency = context.get("payment_currency")
+
+    if expected_currency and sumup_currency and sumup_currency != expected_currency:
+        logger.error(
+            "SumUp webhook: Currency mismatch. Expected: %s, Got: %s, Invoice: %s",
+            expected_currency,
+            sumup_currency,
+            payment_id,
+        )
+        return False
+
+    # Process the successful payment
+    sumup_amount_decimal = Decimal(str(sumup_amount)) if sumup_amount is not None else None
+    return invoice_received_money(
+        payment_id, expected_amount=invoice.mc_gross, gross_amount=sumup_amount_decimal, payment_method="sumup"
+    )
 
 
 def redsys_invoice_cod() -> str:
@@ -625,7 +703,7 @@ def redsys_invoice_cod() -> str:
     raise ValueError(msg)
 
 
-def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: PaymentInvoice, amount: float) -> None:
+def get_redsys_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: float) -> None:
     """Create Redsys payment form with encrypted parameters.
 
     Generates a secure payment form for Redsys payment gateway by creating
@@ -675,7 +753,7 @@ def get_redsys_form(request: HttpRequest, context: dict[str, Any], invoice: Paym
     payment_parameters.update(
         {
             "DS_MERCHANT_MERCHANTURL": request.build_absolute_uri(reverse("acc_webhook_redsys")),
-            "DS_MERCHANT_URLOK": request.build_absolute_uri(reverse("acc_payed", args=[invoice.id])),
+            "DS_MERCHANT_URLOK": request.build_absolute_uri(reverse("acc_payed", args=[invoice.uuid])),
             "DS_MERCHANT_URLKO": request.build_absolute_uri(reverse("acc_redsys_ko")),
         },
     )
@@ -730,7 +808,27 @@ def redsys_webhook(request: HttpRequest) -> bool:
 
     # Process successful payment if signature validation passed
     if order_code:
-        return invoice_received_money(order_code)
+        # Get invoice to verify amount
+        try:
+            invoice = PaymentInvoice.objects.get(cod=order_code)
+        except ObjectDoesNotExist:
+            logger.exception("Redsys webhook: Invoice not found: %s", order_code)
+            return False
+
+        # Decode merchant parameters to get payment details
+        try:
+            payment_data = json.loads(base64.b64decode(merchant_parameters).decode())
+            # Redsys amount is in cents
+            redsys_amount = Decimal(str(int(payment_data.get("Ds_Amount", 0)))) / Decimal(
+                str(CURRENCY_TO_CENTS_MULTIPLIER)
+            )
+        except (json.JSONDecodeError, ValueError, KeyError):
+            logger.exception("Redsys webhook: Failed to parse payment amount from merchant parameters")
+            redsys_amount = None
+
+        return invoice_received_money(
+            order_code, expected_amount=invoice.mc_gross, gross_amount=redsys_amount, payment_method="redsys"
+        )
 
     return False
 
@@ -962,10 +1060,12 @@ class RedSysClient:
                 - Base64 params (first 100 chars): {b64_merchant_parameters[:100]}...
                 - Merchant parameters: {pformat(merchant_parameters)}
                 """
-            error_message = f"Different signature redsys: {signature} vs {computed_signature.decode()}"
+            error_message = (
+                f"Redsys Security Alert: Signature Verification Failed - {signature} vs {computed_signature.decode()}"
+            )
             error_message += debug_info
-
-            return notify_admins("Redsys signature verification failed", error_message)
+            logger.error(error_message)
+            return None
 
         # Return order number for successful payment processing
         return order_number

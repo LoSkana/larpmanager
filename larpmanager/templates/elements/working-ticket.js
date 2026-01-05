@@ -4,7 +4,7 @@
 
 {% if num %}
 
-var w_eid = {{ num }};
+var w_eid = '{{ num }}';
 var w_type = '{{ type }}';
 
 var w_timeout = 1 * 1000;

@@ -8,9 +8,17 @@
         {% if features.questbuilder %}
             <p>
                 {% trans "Go to the casting for" %}:
-                <a href="{% url 'casting' run.get_slug 0 %}">{% trans "Characters" %}</a>
+                {% if typ == 0 %}
+                    <strong>{% trans "Characters" %}</strong>
+                {% else %}
+                    <a href="{% url 'casting' run.get_slug 0 %}">{% trans "Characters" %}</a>
+                {% endif %}
                 {% for qtnum, qt in quest_types.items %}
-                    , <a href="{% url 'casting' run.get_slug qt.number %}">{{ qt.name }}</a>
+                    {% if typ == qtnum %}
+                        | <strong>{{ qt.name }}</strong>
+                    {% else %}
+                        | <a href="{% url 'casting' run.get_slug qt.uuid %}">{{ qt.name }}</a>
+                    {% endif %}
                 {% endfor %}
             </p>
             <h3>Casting {{ gl_name }}</h3>
@@ -39,7 +47,9 @@
                 <span class="helptext">{% trans "Select the faction on which you want to filter characters" %}.</span>
                 <div id="factions" class="nav hide factions">
                     {% for f in faction_filter %}
-                        <a id="f{{ f.id }}" href="#" onclick="return select_f({{ f.id }});">{{ f.name }}</a>
+                        <a id="f{{ f.uuid }}"
+                           href="#"
+                           onclick="return select_f('{{ f.uuid }}');">{{ f.name }}</a>
                     {% endfor %}
                 </div>
                 <br />
@@ -69,7 +79,7 @@
                        name="subm"
                        id="submit"
                        value="{% trans "Submit" %}"
-                       onClick="return confirm('{% trans "Confirm your choices" %}?');">
+                       onClick="return confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
                 <p id="err"></p>
             </form>
         </div>
@@ -136,7 +146,7 @@
             var faction = faction_list[iy];
             for (kkey in choices_dict[faction]) {
 
-                if (parseInt(kkey) !== parseInt(elem)) continue;
+                if (kkey !== elem) continue;
 
                 $('#faction' + ix + ' option[value="'+faction+'"]').attr('selected', 'selected');
                 update_el_dict(ix);
@@ -159,7 +169,15 @@
         // alert(faction);
         $('#choice' + ix).empty();
         $('#choice' + ix).append('<option value=\'\' selected disabled>Choose here</option>');
-        for (key in choices_dict[faction]) {
+
+        // Sort keys by character number for consistent ordering
+        var keys = Object.keys(choices_dict[faction]);
+        keys.sort(function(a, b) {
+            return choices_dict[faction][a]['number'] - choices_dict[faction][b]['number'];
+        });
+
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
             var el = choices_dict[faction][key];
             if (!in_faction(el)) continue;
             var text = "#{0} {1}".format(el['number'], el['name']);
@@ -177,7 +195,7 @@
 
         for (var ix = 0; ix < casting_min; ix++) {
             var pref = $('#choice' + ix).children('option:selected').val();
-            if (pref === undefined || pref === '') { show_err('{% trans "You have not reached the minimum number of preferences" %}'); return; }
+            if (pref === undefined || pref === '') { show_err('{% filter escapejs %}{% trans "You have not reached the minimum number of preferences" %}{% endfilter %}'); return; }
         }
 
         for (var ix = 0; ix < casting_max; ix++) {
@@ -185,7 +203,7 @@
             if (pref1 === undefined) continue;
             for (var iy = ix + 1; iy < casting_max; iy++) {
                 var pref2 = $('#choice' + iy).children('option:selected').val();
-                if (pref1 === pref2) { show_err('{% trans "You have chosen the same option in more than one preference" %}'); return; }
+                if (pref1 === pref2) { show_err('{% filter escapejs %}{% trans "You have chosen the same option in more than one preference" %}{% endfilter %}'); return; }
             }
         }
 
@@ -219,11 +237,15 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-    function select_f(id) {
-        $('#f' + id).toggleClass('sel');
+    function select_f(uuid) {
+        $('#f' + uuid).toggleClass('sel');
 
-        if (faction_filter.includes(id)) faction_filter.pop(id);
-        else faction_filter.push(id);
+        var index = faction_filter.indexOf(uuid);
+        if (index > -1) {
+            faction_filter.splice(index, 1);
+        } else {
+            faction_filter.push(uuid);
+        }
 
         return false;
     }
@@ -234,7 +256,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var el_f = [];
         for (var ix = 0; ix < el.factions.length; ix++) {
-            el_f.push(el.factions[ix].id);
+            el_f.push(el.factions[ix].uuid);
         }
         el_f.sort();
 

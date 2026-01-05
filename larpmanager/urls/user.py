@@ -74,12 +74,7 @@ urlpatterns = [
         name="help",
     ),
     path(
-        "help/<int:run_id>/",
-        views_ums.help_red,
-        name="help_red",
-    ),
-    path(
-        "help/attachment/<int:attachment_id>/",
+        "help/attachment/<slug:attachment_uuid>/",
         views_ums.help_attachment,
         name="help_attachment",
     ),
@@ -154,7 +149,7 @@ urlpatterns = [
         name="membership_request_test",
     ),
     path(
-        "public/<int:member_id>/",
+        "public/<slug:slug>/",
         views_um.public,
         name="public",
     ),
@@ -174,7 +169,7 @@ urlpatterns = [
         name="leaderboard",
     ),
     path(
-        "badge/<int:badge_id>/",
+        "badge/<slug:badge_uuid>/",
         views_um.badge,
         name="badge",
     ),
@@ -184,7 +179,7 @@ urlpatterns = [
         name="chats",
     ),
     path(
-        "chat/<int:member_id>/",
+        "chat/<slug:slug>/",
         views_um.chat,
         name="chat",
     ),
@@ -219,12 +214,12 @@ urlpatterns = [
         name="acc_pay",
     ),
     path(
-        "accounting/registration/<int:reg_id>/",
+        "accounting/registration/<slug:registration_uuid>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
     path(
-        "accounting/registration/<int:reg_id>/<slug:method>/",
+        "accounting/registration/<slug:registration_uuid>/<slug:method>/",
         views_ua.acc_reg,
         name="acc_reg",
     ),
@@ -254,7 +249,7 @@ urlpatterns = [
         name="acc_cancelled",
     ),
     path(
-        "accounting/payed/<int:payment_id>/",
+        "accounting/payed/<slug:registration_uuid>/",
         views_ua.acc_payed,
         name="acc_payed",
     ),
@@ -359,7 +354,7 @@ urlpatterns = [
         name="shuttle_new",
     ),
     path(
-        "shuttle/edit/<int:shuttle_id>/",
+        "shuttle/edit/<slug:shuttle_uuid>/",
         views_ums.shuttle_edit,
         name="shuttle_edit",
     ),

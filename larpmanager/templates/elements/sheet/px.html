@@ -24,7 +24,7 @@
                             <h4>
                                 {{ el.name }} ({{ el.cost }})
                                 {% if undo_abilities and el.id in undo_abilities %}
-                                    <a href="{% url 'character_abilities_del' run.get_slug character.number el.id %}"
+                                    <a href="{% url 'character_abilities_del' run.get_slug character.uuid el.uuid %}"
                                        qtip="{% trans "Remove" %}">
                                         <i class="fa-solid fa-xmark"></i>
                                     </a>
@@ -32,7 +32,7 @@
                             </h4>
                         </th>
                         <td>
-                            {% if el.descr %}{{ el.descr | safe }}{% endif %}
+                            {% if el.get_description %}{{ el.get_description | safe }}{% endif %}
                         </td>
                     </tr>
                 {% endfor %}

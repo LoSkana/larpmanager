@@ -69,6 +69,7 @@ from larpmanager.utils.io.download import (
 )
 from larpmanager.utils.io.upload import go_upload
 from larpmanager.utils.services.edit import backend_edit, orga_edit
+from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
 if TYPE_CHECKING:
@@ -160,7 +161,7 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 def prepare_roles_list(
-    context: dict[str, Any],
+    context: dict,
     permission_type: type[EventPermission | AssociationPermission],
     role_queryset: QuerySet[EventRole] | QuerySet[AssociationRole],
     default_callback: Callable[[dict], EventRole | AssociationRole],
@@ -213,9 +214,9 @@ def prepare_roles_list(
 
 
 @login_required
-def orga_roles_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_roles_edit(request: HttpRequest, event_slug: str, role_uuid: str) -> HttpResponse:
     """Edit organization event role."""
-    return orga_edit(request, event_slug, "orga_roles", OrgaEventRoleForm, num)
+    return orga_edit(request, event_slug, "orga_roles", OrgaEventRoleForm, role_uuid)
 
 
 @login_required
@@ -236,13 +237,13 @@ def orga_appearance(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_run(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render the event run edit form with cached run data."""
     # Retrieve cached run data and render edit form
-    run_id = get_cache_run(request.association["id"], event_slug)
+    run_uuid = get_cache_run(request.association["id"], event_slug)
     return orga_edit(
         request,
         event_slug,
         "orga_event",
         OrgaRunForm,
-        run_id,
+        run_uuid,
         "manage",
         additional_context={"add_another": False},
     )
@@ -257,9 +258,9 @@ def orga_texts(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_texts_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_texts_edit(request: HttpRequest, event_slug: str, text_uuid: str) -> HttpResponse:
     """Edit organization event text entry."""
-    return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, num)
+    return orga_edit(request, event_slug, "orga_texts", OrgaEventTextForm, text_uuid)
 
 
 @login_required
@@ -271,9 +272,9 @@ def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_buttons_edit(request: HttpRequest, event_slug: str, num: int) -> HttpResponse:
+def orga_buttons_edit(request: HttpRequest, event_slug: str, button_uuid: str) -> HttpResponse:
     """Edit a specific button configuration for an event."""
-    return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, num)
+    return orga_edit(request, event_slug, "orga_buttons", OrgaEventButtonForm, button_uuid)
 
 
 @login_required
@@ -283,11 +284,8 @@ def orga_config(
     section: str | None = None,
 ) -> HttpResponse:
     """Configure organization settings with optional section navigation."""
-    # Prepare context with optional section jump
     add_ctx = {"jump_section": section} if section else {}
     add_ctx["add_another"] = False
-
-    # Delegate to orga_edit with config form
     return orga_edit(request, event_slug, "orga_config", OrgaConfigForm, None, "manage", additional_context=add_ctx)
 
 
@@ -673,7 +671,7 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
     return zip_exports(context, exports, "template")
 
 
-def _ability_template(context: dict[str, Any]) -> Any:
+def _ability_template(context: dict) -> Any:
     """Generate template for ability uploads with example data.
 
     Args:
@@ -875,3 +873,29 @@ def _writing_template(
             ),
         )
     return template_exports
+
+
+@login_required
+def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Reset all cache entries for the specified event run.
+
+    Clears multiple cache layers including run media, event features,
+    registration counts, and relationship caches to ensure fresh data.
+
+    Args:
+        request: The HTTP request object containing user and session data
+        event_slug: String identifier for the event run slug
+
+    Returns:
+        HttpResponse: Redirect to the manage page for the event run
+
+    """
+    # Verify user permissions and get event context
+    context = check_event_context(request, event_slug)
+
+    # Reset everything
+    reset_all_run(context["event"], context["run"])
+
+    # Notify user of successful cache reset
+    messages.success(request, _("Cache reset!"))
+    return redirect("manage", event_slug=context["run"].get_slug())

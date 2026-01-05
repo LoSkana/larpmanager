@@ -53,15 +53,17 @@
                 <b>{{ balance_sum }}</b>
             </td>
         </tr>
-        {% if features.token_credit %}
+        {% if features.tokens %}
             <tr>
-                <td>{{ token_name }} {% trans "issued" %}</td>
+                <td>{{ tokens_name }} {% trans "issued" %}</td>
                 <td>
                     <b>{{ tokens_sum }}</b>
                 </td>
             </tr>
+        {% endif %}
+        {% if features.credits %}
             <tr>
-                <td>{{ credit_name }} {% trans "issued" %}</td>
+                <td>{{ credits_name }} {% trans "issued" %}</td>
                 <td>
                     <b>{{ credits_sum }}</b>
                 </td>
@@ -137,9 +139,8 @@
             <a href="#" class="summary" tog='{{ year }}'>{% trans "Summary" %} {{ year }}</a>,
             <a href="#" class="my_toggle hide" tog='sum_{{ year }}'>hidden</a>
         {% endfor %}
-        {% if features.token_credit %}
-            <a href="#" class="my_toggle" tog='tcm'>{{ token_name }} / {{ credit_name }}</a>,
-        {% endif %}
+        {% if features.tokens %}<a href="#" class="my_toggle" tog='tokens'>{{ tokens_name }}</a>,{% endif %}
+        {% if features.credits %}<a href="#" class="my_toggle" tog='credits'>{{ credits_name }}</a>,{% endif %}
         <a href="#" class="my_toggle" tog='runs'>{% trans "Event balance" %}</a>
     </p>
     {% for year in sum_year %}
@@ -204,29 +205,56 @@
             </table>
         </div>
     {% endfor %}
-    <div class="hide tcm">
-        <h2>{{ token_name }} / {{ credit_name }}</h2>
-        <table id="member_report" class="go_datatable">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>{% trans "Participant" %}</th>
-                    <th>{{ token_name }}</th>
-                    <th>{{ credit_name }}</th>
-                </tr>
-            </thead>
-            {% for el in list %}
-                <tr id="{{ el.id }}">
-                    <td>
-                        <a href="{% url 'exe_member' el.id %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                    </td>
-                    <td>{{ el }}</td>
-                    <td>{{ el.tokens }}</td>
-                    <td>{{ el.credit }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+    {% if features.tokens %}
+        <div class="hide tokens">
+            <h2>{{ tokens_name }}</h2>
+            <table id="member_tokens" class="go_datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Participant" %}</th>
+                        <th>{{ tokens_name }}</th>
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    {% if el.tokens %}
+                        <tr id="tokens_{{ el.uuid }}">
+                            <td>
+                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                            </td>
+                            <td>{{ el }}</td>
+                            <td>{{ el.tokens }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    {% if features.credits %}
+        <div class="hide credits">
+            <h2>{{ credits_name }}</h2>
+            <table id="member_credits" class="go_datatable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{% trans "Participant" %}</th>
+                        <th>{{ credits_name }}</th>
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    {% if el.credits %}
+                        <tr id="credits_{{ el.uuid }}">
+                            <td>
+                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                            </td>
+                            <td>{{ el }}</td>
+                            <td>{{ el.credits }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
     <div class="hide runs">
         <h2>{% trans "Event balance" %}</h2>
         <table id="run_balance" class="go_datatable">
@@ -241,7 +269,7 @@
             {% for el in runs %}
                 <tr>
                     <td>
-                        <a href="{% url 'exe_run_accounting' el.id %}">{{ el }}</a>
+                        <a href="{% url 'exe_run_accounting' el.uuid %}">{{ el }}</a>
                     </td>
                     <td>{{ el.balance }}</td>
                     <td>

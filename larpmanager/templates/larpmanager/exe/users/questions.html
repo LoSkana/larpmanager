@@ -33,14 +33,14 @@
                     <td>{{ el.text }}</td>
                     <td>
                         {% if el.attachment %}
-                            <a href="{% url 'help_attachment' el.id %}" target="_blank">{% trans "Attachment" %}</a>
+                            <a href="{% url 'help_attachment' el.uuid %}" target="_blank">{% trans "Attachment" %}</a>
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'exe_questions_answer' el.member_id %}">{% trans "Answer" %}</a>
+                        <a href="{% url 'exe_questions_answer' el.member.uuid %}">{% trans "Answer" %}</a>
                     </td>
                     <td>
-                        <a href="{% url 'exe_questions_close' el.member_id %}">{% trans "Close" %}</a>
+                        <a href="{% url 'exe_questions_close' el.member.uuid %}">{% trans "Close" %}</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -75,7 +75,7 @@
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
                         <td>
-                            <a href="{% url 'exe_questions_answer' el.member_id %}">{% trans "Answer" %}</a>
+                            <a href="{% url 'exe_questions_answer' el.member.uuid %}">{% trans "Answer" %}</a>
                         </td>
                     </tr>
                 {% endfor %}
