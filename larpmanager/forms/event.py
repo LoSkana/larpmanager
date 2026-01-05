@@ -217,7 +217,7 @@ class OrgaEventForm(BaseModelForm):
     def init_campaign(self, disabled_fields: list) -> None:
         """Initialize campaign field by setting association and exclusions."""
         # Set association for parent widget and exclude current instance if editing
-        self.fields["parent"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("parent", self.params["association_id"])
         if self.instance and self.instance.pk:
             self.fields["parent"].widget.set_exclude(self.instance.pk)
 
@@ -1215,7 +1215,7 @@ class OrgaEventRoleForm(BaseModelForm):
         """Initialize form and configure members widget with association context."""
         super().__init__(*args, **kwargs)
         # Configure members widget with association ID from params
-        self.fields["members"].widget.set_association_id(self.params["association_id"])
+        self.configure_field_association("members", self.params["association_id"])
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
 
@@ -1280,7 +1280,7 @@ class OrgaRunForm(ConfigForm):
             )
             self.fields = {"event": event_field} | self.fields
             self.fields["event"].widget = EventS2Widget()
-            self.fields["event"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("event", self.params["association_id"])
             self.fields["event"].help_text = _("Select the event of this new session")
             self.choose_event = True
             self.page_info = _("Manage new session for an existing event")
@@ -1460,7 +1460,7 @@ class ExeEventForm(OrgaEventForm):
                 widget=TemplateS2Widget(),
             )
 
-            self.fields["template_event"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("template_event", self.params["association_id"])
 
             if qs.count() == 1:
                 self.initial["template_event"] = qs.first()

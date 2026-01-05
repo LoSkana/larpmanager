@@ -385,7 +385,7 @@ class OrgaCharacterForm(CharacterForm):
         self._init_custom_fields()
 
         if "user_character" in self.params["features"]:
-            self.fields["player"].widget.set_association_id(self.params["association_id"])
+            self.configure_field_association("player", self.params["association_id"])
         else:
             self.delete_field("player")
 
@@ -434,7 +434,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
             widget=EventPlotS2WidgetMulti,
         )
-        self.fields["plots"].widget.set_event(self.params["event"])
+        self.configure_field_event("plots", self.params["event"])
 
         self.plots = self.instance.get_plot_characters()
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
@@ -572,7 +572,7 @@ class OrgaCharacterForm(CharacterForm):
             required=False,
             label=_("Factions"),
         )
-        self.fields["factions_list"].widget.set_event(self.params["event"])
+        self.configure_field_event("factions_list", self.params["event"])
 
         self.show_available_factions = _("Show available factions")
 
@@ -913,12 +913,12 @@ class OrgaWritingOptionForm(BaseModelForm):
         if "wri_que_tickets" not in self.params["features"]:
             self.delete_field("tickets")
         else:
-            self.fields["tickets"].widget.set_event(self.params["event"])
+            self.configure_field_event("tickets", self.params["event"])
 
         if "wri_que_requirements" not in self.params["features"]:
             self.delete_field("requirements")
         else:
-            self.fields["requirements"].widget.set_event(self.params["event"])
+            self.configure_field_event("requirements", self.params["event"])
 
     def save(self, commit: bool = True) -> WritingOption:  # noqa: FBT001, FBT002
         """Save the form instance, setting question for new instances."""

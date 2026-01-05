@@ -20,6 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -33,9 +34,11 @@ from larpmanager.forms.experience import (
     OrgaModifierPxForm,
     OrgaRulePxForm,
 )
+from larpmanager.models.event import Run
 from larpmanager.models.experience import AbilityPx, AbilityTemplatePx, AbilityTypePx, DeliveryPx, ModifierPx, RulePx
+from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import exchange_order
+from larpmanager.utils.core.common import exchange_order, get_object_uuid
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.io.download import export_abilities, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
@@ -56,7 +59,64 @@ def orga_px_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 @login_required
 def orga_px_deliveries_edit(request: HttpRequest, event_slug: str, delivery_uuid: str) -> HttpResponse:
-    """Edit a delivery for an event."""
+    """Edit a delivery for an event.
+
+    When creating a new delivery (delivery_uuid == "0"), if a run is selected via the
+    auto_populate_run field, the form will be reloaded with characters from that run's
+    registrations pre-populated in the characters field.
+    """
+    # Check user permissions and get base context for the event
+    context = check_event_context(request, event_slug, "orga_px_deliveries")
+
+    # Handle auto-population from run selection
+    if request.method == "POST" and delivery_uuid == "0":
+        run_uuid = request.POST.get("auto_populate_run")
+
+        # If a run was selected, get all characters from that run's registrations
+        if run_uuid:
+            try:
+                run = get_object_uuid(Run, run_uuid)
+
+                # Get all characters assigned to registrations for this run
+                character_ids = (
+                    Registration.objects.filter(run=run, cancellation_date__isnull=True)
+                    .values_list("characters__id", flat=True)
+                    .distinct()
+                )
+
+                # Filter registrations without characters
+                character_ids = [cid for cid in character_ids if cid is not None]
+
+                # Pass the POST data but override the characters field
+                form_data = request.POST.copy()
+                form_data.setlist("characters", [str(cid) for cid in character_ids])
+
+                # Create the form with pre-populated data
+                form = OrgaDeliveryPxForm(form_data, instance=None, context=context)
+
+                # Hide the auto_populate_run field now that characters are loaded
+                form.fields.pop("auto_populate_run", None)
+
+                # Set up context for rendering
+                context["form"] = form
+                context["num"] = "0"
+                context["add_another"] = True
+                context["continue_add"] = False
+                context["elementTyp"] = DeliveryPx
+
+                # Add success message to inform user
+                messages.info(
+                    request,
+                    _("Characters from event '{run}' have been loaded. Review and confirm to save.").format(run=run),
+                )
+
+                return render(request, "larpmanager/orga/edit.html", context)
+
+            except (ValueError, ObjectDoesNotExist):
+                # If run retrieval fails, continue with normal flow
+                pass
+
+    # Use standard orga_edit for all other cases
     return orga_edit(request, event_slug, "orga_px_deliveries", OrgaDeliveryPxForm, delivery_uuid)
 
 

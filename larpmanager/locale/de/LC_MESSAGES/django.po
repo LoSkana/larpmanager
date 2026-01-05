@@ -2654,6 +2654,9 @@ msgstr "Gruppen filtern"
 msgid "Invalid request"
 msgstr "Ungültige Anfrage"
 
+msgid "Load from event"
+msgstr "Laden aus Ereignis"
+
 msgid "Mail assignment"
 msgstr "Zuordnung der Post"
 
@@ -8220,6 +8223,13 @@ msgstr ""
 "(Optional) Die Charakternamen, die dem Spieler zugewiesen werden sollen, "
 "getrennt durch Kommas"
 
+#, python-brace-format
+msgid ""
+"Characters from event '{run}' have been loaded. Review and confirm to save."
+msgstr ""
+"Es wurden Zeichen aus dem Ereignis '{run}' geladen. Überprüfen und "
+"bestätigen Sie zum Speichern."
+
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9992,6 +10002,13 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, werden Optionen, die im Formular nicht mehr"
 " verfügbar sind, ausgeblendet, anstatt deaktiviert angezeigt zu werden"
+
+msgid ""
+"If you select an event, all characters from that event's registrations will "
+"be automatically loaded"
+msgstr ""
+"Wenn Sie ein Ereignis auswählen, werden automatisch alle Zeichen aus den "
+"Registrierungen für dieses Ereignis geladen"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

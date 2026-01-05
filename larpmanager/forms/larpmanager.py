@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV3
 
-from larpmanager.forms.base import BaseModelForm
+from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.common import get_recaptcha_secrets
 
@@ -52,7 +52,7 @@ def _get_captcha(form: forms.Form, request: HttpRequest | None) -> None:
     )
 
 
-class LarpManagerCheck(forms.Form):
+class LarpManagerCheck(BaseForm):
     """Represents LarpManagerCheck model."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
