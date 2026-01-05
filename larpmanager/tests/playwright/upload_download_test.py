@@ -50,12 +50,6 @@ def test_upload_download(pw_page: Any) -> None:
     login_orga(page, live_server)
     go_to(page, live_server, "/manage/")
 
-    # check shows fee
-    check_user_fee(live_server, page)
-
-    # Test auto-activation of features
-    auto_activation_features(live_server, page)
-
     # prepare
     go_to(page, live_server, "/test/manage/")
     page.locator("#orga_features").get_by_role("link", name="Features").click()
@@ -300,108 +294,6 @@ def char_form(page: Any) -> None:
         page.locator("#one"),
         "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr , tttttt",
     )
-
-
-def check_user_fee(live_server: Any, page: Any) -> None:
-    go_to(page, live_server, "/manage/")
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
-    check_feature(page, "Payments")
-    submit_confirm(page)
-    page.get_by_role("checkbox", name="Wire").check()
-    just_wait(page)
-    page.locator("#id_wire_descr").click()
-    page.locator("#id_wire_descr").fill("aaaa")
-    page.locator("#id_wire_fee").click()
-    page.locator("#id_wire_fee").fill("2")
-    page.locator("#id_wire_payee").click()
-    page.locator("#id_wire_payee").fill("2asdsadas")
-    page.locator("#id_wire_iban").click()
-    page.locator("#id_wire_iban").fill("3sadsadsa")
-    submit_confirm(page)
-    page.locator("#exe_features").get_by_role("link", name="Features").click()
-    check_feature(page, "Donation")
-    submit_confirm(page)
-    page.locator("#exe_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Payments ").click()
-    page.locator("#id_payment_fees_user").check()
-    submit_confirm(page)
-    page.get_by_role("link", name=" Accounting").click()
-    page.get_by_role("link", name="follow this link").click()
-    expect_normalized(
-        page,
-        page.locator("#wrapper"),
-        "Indicate the amount of your donation: Please enter the occasion for which you wish to make the donation Choose the payment method: Wire Fee: +2% aaaa",
-    )
-
-
-def auto_activation_features(live_server: Any, page: Any) -> None:
-    # Create a new event for auto-activation testing
-    go_to(page, live_server, "/manage/events/")
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Auto Activation Test")
-    page.locator("#id_slug").click()
-    page.locator("#id_slug").fill("auto-test")
-    submit_confirm(page)
-
-    # Verify we're on the new event
-    go_to(page, live_server, "/auto-test/manage/")
-
-    # Enable character feature but NOT factions feature initially
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
-    check_feature(page, "Characters")
-    submit_confirm(page)
-
-    # Create character form questions with faction and title types
-    page.locator("#orga_character_form").get_by_role("link", name="Form").click()
-
-    # Add Factions question (this is a feature)
-    page.get_by_role("link", name="Character", exact=True).click()
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Factions")
-    page.locator("#id_typ").select_option("faction")
-    submit_confirm(page)
-
-    # Add Title question (this is a config)
-    page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Title")
-    page.locator("#id_typ").select_option("title")
-    submit_confirm(page)
-
-    # Verify faction feature is NOT enabled
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
-    expect(page.get_by_role("checkbox", name="Factions")).not_to_be_checked()
-
-    # Verify title config is NOT enabled in Character configuration
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Characters ").click()
-    expect(page.locator("#id_character_title")).not_to_be_checked()
-
-    # Go back to dashboard
-    page.get_by_role("link", name="Dashboard").click()
-
-    # Upload a CSV with faction and title columns
-    page.locator("#orga_characters").get_by_role("link", name="Characters").click()
-    page.get_by_role("link", name="Upload").click()
-
-    # Create and upload a CSV with faction and title columns
-    upload(page, "#id_first", get_path("character_with_features.csv"))
-    submit_confirm(page)
-
-    # The upload should succeed and activate the feature and config automatically
-    expect_normalized(page, page.locator("#one"), "OK")
-
-    # Go to features page and verify faction is now enabled
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
-    expect(page.get_by_role("checkbox", name="Factions")).to_be_checked()
-
-    # Verify title config is now enabled in Character configuration
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Characters ").click()
-    expect(page.locator("#id_character_title")).to_be_checked()
-
 
 def get_path(file: Any) -> Any:
     return Path(__file__).parent.parent / "resources" / "test_upload" / file

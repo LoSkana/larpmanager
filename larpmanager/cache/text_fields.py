@@ -387,3 +387,24 @@ def update_text_fields_cache(model_instance: object) -> None:
     # Update cache for RegistrationAnswer model instances
     if issubclass(model_instance.__class__, RegistrationAnswer):
         update_cache_reg_fields_answer(model_instance)
+
+
+def reset_text_fields_cache(run: Run) -> None:
+    """Reset all text fields cache for a run."""
+    # Invalidate text field caches for all Writing model types
+    for applicable_type in ["character", "faction", "plot", "quest", "trait", "prologue"]:
+        # Get the model class for this applicable type
+        try:
+            applicable_code = QuestionApplicable.get_applicable(applicable_type)
+            if applicable_code:
+                model_class = QuestionApplicable.get_applicable_inverse(applicable_code)
+                # Delete cache for this model type and event
+                cache_key = cache_text_field_key(model_class, run.event)
+                cache.delete(cache_key)
+        except (ValueError, LookupError):
+            # Skip if applicable type doesn't exist
+            pass
+
+    # Invalidate registration text field cache
+    cache_key = cache_text_field_key(Registration, run)
+    cache.delete(cache_key)
