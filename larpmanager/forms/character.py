@@ -259,8 +259,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if not self.instance.pk:
             return
 
-        for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
-            self.initial["factions_list"].append(faction_data[0])
+        self.initial["factions_list"] = list(
+            self.instance.factions_list.order_by("number").values_list("id", flat=True)
+        )
 
     def _save_multi(self, field: str, instance: Any) -> None:
         """Save multi-select field data for the given instance.
@@ -580,9 +581,9 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # Initial factions values
-        self.initial["factions_list"] = []
-        for faction_data in self.instance.factions_list.order_by("number").values_list("id", "number", "name", "text"):
-            self.initial["factions_list"].append(faction_data[0])
+        self.initial["factions_list"] = list(
+            self.instance.factions_list.order_by("number").values_list("id", flat=True)
+        )
 
     def _save_relationships(self, instance: Any) -> None:
         """Save character relationships from form data.
