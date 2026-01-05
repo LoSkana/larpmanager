@@ -424,7 +424,7 @@ def get_character_sheet_factions(context: dict) -> None:  # noqa: C901 - Complex
         # Bulk fetch all writing choices and group by faction and question
         for faction_id, question_id, option_id in WritingChoice.objects.filter(
             element_id__in=faction_ids,
-            question_uuid__in=visible_question_ids,
+            question__uuid__in=visible_question_ids,
         ).values_list("element_id", "question_id", "option_id"):
             # Initialize nested dictionary and list structures as needed
             if faction_id not in faction_answers_map:
