@@ -382,16 +382,13 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     if "faction" not in context["features"]:
         return
 
-    # Get the parent event that handles factions
-    faction_event = context["event"].get_class_parent("faction")
-    context["sheet_factions"] = []
-
-    # Fetch all factions associated with the character
-    factions = list(context["character"].factions_list.filter(event=faction_event))
-
-    # Early return if no factions found
-    if not factions:
+    faction_numbers = context["char"].get("factions")
+    if not faction_numbers:
         return
+
+    faction_ids = [context.get("fac_mapping", {}).get(number) for number in faction_numbers]
+
+    context["sheet_factions"] = []
 
     # Prepare writing fields query data for faction-applicable questions
     visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=only_visible)
@@ -406,41 +403,39 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
                 continue
             visible_question_ids.append(question_id)
 
-    # Extract faction IDs for bulk database queries
-    faction_ids = [faction.id for faction in factions]
-
     # Build comprehensive answer mapping: faction_id -> {question_id -> text/choices}
     faction_answers_map = {}
     if visible_question_ids:
         # Bulk fetch all writing answers for performance
-        for faction_id, question_id, answer_text in WritingAnswer.objects.filter(
+        for faction_id, question__uuid, answer_text in WritingAnswer.objects.filter(
             element_id__in=faction_ids,
             question__uuid__in=visible_question_ids,
-        ).values_list("element_id", "question_id", "text"):
+        ).values_list("element_id", "question__uuid", "text"):
             # Initialize nested dictionary structure as needed
             if faction_id not in faction_answers_map:
                 faction_answers_map[faction_id] = {}
-            faction_answers_map[faction_id][question_id] = answer_text
+            faction_answers_map[faction_id][question__uuid] = answer_text
 
         # Bulk fetch all writing choices and group by faction and question
-        for faction_id, question_id, option_id in WritingChoice.objects.filter(
+        for faction_id, question__uuid, option_id in WritingChoice.objects.filter(
             element_id__in=faction_ids,
             question__uuid__in=visible_question_ids,
-        ).values_list("element_id", "question_id", "option_id"):
+        ).values_list("element_id", "question__uuid", "option_id"):
             # Initialize nested dictionary and list structures as needed
             if faction_id not in faction_answers_map:
                 faction_answers_map[faction_id] = {}
-            if question_id not in faction_answers_map[faction_id]:
-                faction_answers_map[faction_id][question_id] = []
-            faction_answers_map[faction_id][question_id].append(option_id)
+            if question__uuid not in faction_answers_map[faction_id]:
+                faction_answers_map[faction_id][question__uuid] = []
+            faction_answers_map[faction_id][question__uuid].append(option_id)
 
     # Process each faction and prepare display data
-    for faction in factions:
+    for faction_number in faction_numbers:
         # Get base faction data
-        faction_display_data = faction.show_complete()
+        faction_display_data = context["factions"].get(faction_number)
+        faction_id = context.get("fac_mapping", {}).get(faction_number)
 
         # Merge in writing fields from pre-fetched bulk data
-        faction_writing_fields = faction_answers_map.get(faction.id, {})
+        faction_writing_fields = faction_answers_map.get(faction_id, {})
         faction_display_data.update(
             {
                 "questions": context.get("questions", {}),

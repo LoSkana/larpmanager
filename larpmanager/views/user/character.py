@@ -156,9 +156,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         context["intro"] = get_event_text(context["event"].id, EventTextType.INTRO)
         check_missing_mandatory(context)
     else:
-        # Load only visible elements for regular users
         context["char"].update(get_character_element_fields(context, character_id, only_visible=True))
-        # Load faction fields with visibility restrictions
         get_character_sheet_factions(context, only_visible=True)
 
     # Load casting details and preferences if applicable
