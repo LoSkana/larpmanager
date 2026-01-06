@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     load_image,
     login_orga,
     login_user,
-    submit_confirm,
+    submit_confirm, logout,
 )
 
 pytestmark = pytest.mark.e2e
@@ -170,34 +170,32 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
     # Check that public field is visible
     expect_normalized(page, page.locator("body"), "This is my public character description")
 
-    # Check that private field is visible (user can see their own private field)
+    # Check that private field is visible
     expect_normalized(page, page.locator("body"), "This is my private character note")
 
     # Check pronoun is visible
     expect_normalized(page, page.locator("body"), "they/them")
 
     # Verify profile image is visible (if implemented in the character view)
-    # Note: The image visibility depends on the character view template implementation
+    avatar = page.locator("#char_profile")
+    expect(avatar).to_be_visible()
+    expect(avatar).not_to_have_attribute(
+        "src",
+        r"assets/blank-avatar\.svg"
+    )
 
-    # Now login as orga to verify public/private visibility
-    login_orga(page, live_server)
+    # Now logout to check visibility
+    logout(page)
     go_to(page, live_server, "/test")
-    just_wait(page)
-
-    # Search for the character
-    page.get_by_role("link", name="Characters").click()
-    just_wait(page)
-
-    # Find Test Character in the list
     page.get_by_text("My Custom Name").click()
-    just_wait(page)
 
-    # Verify public field is visible to other users
+    # Verify public field is visible to other users, but not private
     expect_normalized(page, page.locator("body"), "This is my public character description")
+    expect(page.locator("body")).not_to_contain_text("private")
 
     # Verify orga can see private field (as staff)
     login_orga(page, live_server)
-    go_to(page, live_server, "/test/manage/characters")
+    go_to(page, live_server, "/test/")
     just_wait(page)
 
     # Find and view character

@@ -363,7 +363,7 @@ def get_character_sheet_plots(context: dict) -> None:
         context["sheet_plots"].append({"name": plot_relation.plot.name, "text": combined_text})
 
 
-def get_character_sheet_factions(context: dict) -> None:  # noqa: C901 - Complex faction data processing with feature checks
+def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -> None:  # noqa: C901 - Complex faction data processing with feature checks
     """Retrieve and process faction data for character sheet display.
 
     Fetches factions associated with a character, along with their writing answers
@@ -372,6 +372,7 @@ def get_character_sheet_factions(context: dict) -> None:  # noqa: C901 - Complex
     Args:
         context: Context dictionary containing character, event, features, and other
              rendering data. Modified in-place to add 'sheet_factions' key.
+        only_visible: Whether to include only visible fields. Defaults to False.
 
     Returns:
         None: Function modifies context dictionary in-place.
@@ -393,7 +394,7 @@ def get_character_sheet_factions(context: dict) -> None:  # noqa: C901 - Complex
         return
 
     # Prepare writing fields query data for faction-applicable questions
-    visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=False)
+    visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=only_visible)
 
     # Determine which questions should be visible based on configuration
     visible_question_ids = []
