@@ -109,7 +109,7 @@ def abilities(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword , shield trtr , rrrrrr",
+        "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword | shield trtr | rrrrrr",
     )
     check_download(page, "Download")
 
@@ -224,7 +224,7 @@ def reg_form(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "tbmobw npyrxd Multiple choice Optional npyrxd , rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr , fjxkum",
+        "tbmobw npyrxd Multiple choice Optional npyrxd | rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr | fjxkum",
     )
     check_download(page, "Download")
 
@@ -271,7 +271,7 @@ def char_form(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu , trtr",
+        "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu | trtr",
     )
     check_download(page, "Download")
     page.get_by_role("link", name="Plot", exact=True).click()
@@ -292,7 +292,7 @@ def char_form(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr , tttttt",
+        "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr | tttttt",
     )
 
 def get_path(file: Any) -> Any:

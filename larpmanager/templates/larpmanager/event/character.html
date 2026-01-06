@@ -69,11 +69,11 @@ function go_chart() {
     var myChart = new Chart(context, {
         type: 'bar',
         data: {
-            labels: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %} "{{ forloop.counter }}"{% endfor %}{% endwith %}],
+            labels: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" with separator="," %} "{{ forloop.counter }}"{% endfor %}{% endwith %}],
             datasets: [{
                 label: '',
-                data:[{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}{% get_field pref.2 forloop.counter %}{% endfor %}{% endwith %}],
-                backgroundColor: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" %}'rgba(54, 162, 235, 0.8)'{% endfor %}{% endwith %}],
+                data:[{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" with separator="," %}{% get_field pref.2 forloop.counter %}{% endfor %}{% endwith %}],
+                backgroundColor: [{% with ""|center:casting_max as range %}{% for _ in range %}{% include "elements/comma.html" with separator="," %}'rgba(54, 162, 235, 0.8)'{% endfor %}{% endwith %}],
                 borderWidth: 0
             }]
         },

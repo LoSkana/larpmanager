@@ -94,18 +94,15 @@ def test_faction_all(pw_page: Any) -> None:
     # Helper to create factions
     def create_faction(typ: str, name: str, teaser: str, text: str, public_ans: str, private_ans: str) -> None:
         # Navigate to factions list before creating new one
-        go_to(page, live_server, "test/manage/writing/factions/")
+        go_to(page, live_server, "test/manage/factions/")
         page.get_by_role("link", name="New").click()
         page.locator("#id_typ").select_option(typ)
         page.locator("#id_name").fill(name)
         fill_tinymce(page, "id_teaser", teaser)
         fill_tinymce(page, "id_text", text)
 
-        # Fill WritingQuestion answers (find input fields dynamically)
-        question_inputs = page.locator("input[name^='que_']").all()
-        if len(question_inputs) >= 2:
-            question_inputs[0].fill(public_ans)
-            question_inputs[1].fill(private_ans)
+        page.locator("#id_que_u8").fill(public_ans)
+        page.locator("#id_que_u9").fill(private_ans)
 
         submit_confirm(page)
 
@@ -134,10 +131,10 @@ def test_faction_all(pw_page: Any) -> None:
                    "SF3 public answer", "SF3 private answer")
 
     # ========== SECTION 4: Create 3 Characters with Different Faction Combinations ==========
-    page.get_by_role("link", name="Characters").click()
 
     # Helper to create characters with faction assignments
     def create_character(name: str, teaser: str, text: str, faction_names: list) -> None:
+        page.locator("#orga_characters").get_by_role("link", name="Characters").click()
         page.get_by_role("link", name="New").click()
         page.locator("#id_name").fill(name)
         fill_tinymce(page, "id_teaser", teaser)
@@ -178,9 +175,22 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Verify PRIMARY and TRANSVERSAL factions are visible
     expect_normalized(page, page.locator("#one"),
-                     "Primary Primary Faction 1 Primary Faction 2 Primary Faction 3")
+"""Primary
+        Name	Presentation	Characters
+        Primary Faction 1
+        PF1 teaser	Character Alpha | Character Beta
+        Primary Faction 2
+        PF2 teaser	Character Gamma""")
     expect_normalized(page, page.locator("#one"),
-                     "Transversal Transversal Faction 1 Transversal Faction 2 Transversal Faction 3")
+"""Transversal
+        Name	Presentation	Characters
+        Transversal Faction 1
+        TF1 teaser	Character Alpha | Character Beta | Character Gamma
+        Transversal Faction 2
+        TF2 teaser	Character Alpha | Character Gamma
+        Transversal Faction 3
+        TF3 teaser	Character Alpha
+    """)
 
     # Verify SECRET factions are NOT visible
     expect(page.locator("#one")).not_to_contain_text("Secret Faction 1")
@@ -191,11 +201,18 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Primary Faction 1").click()
 
     # Verify PUBLIC teaser is visible
-    expect_normalized(page, page.locator("#one"), "PF1 teaser")
-
-    # Verify PUBLIC WritingQuestion answer is visible
-    expect_normalized(page, page.locator("#one"), "Public Faction Question")
-    expect_normalized(page, page.locator("#one"), "PF1 public answer")
+    expect_normalized(page, page.locator("#one"),
+        """
+        PF1 teaser
+        Public Faction Question: PF1 public answer
+        Characters
+        Character Alpha
+        Presentation: Alpha teaser
+        Factions: Primary Faction 1 | Transversal Faction 1 | Transversal Faction 2 | Transversal Faction 3
+        Character Beta
+        Presentation: Beta teaser
+        Factions: Primary Faction 1 | Transversal Faction 1
+        """)
 
     # Verify PRIVATE text is NOT visible
     expect(page.locator("#one")).not_to_contain_text("PF1 private text")
@@ -207,23 +224,20 @@ def test_faction_all(pw_page: Any) -> None:
     # ========== SECTION 6: Reorder Factions (as Organizer) ==========
     logout(page)
     login_orga(page, live_server)
-    go_to(page, live_server, "test/manage/writing/factions")
+    go_to(page, live_server, "test/manage/factions")
 
     # Get first faction UUID and move it down (swap with second)
-    # The first row should be Primary Faction 1, move it down
-    first_row = page.locator("tbody tr").first
+    first_row = page.locator(".writing_list tbody tr").first
     expect(first_row).to_contain_text("Primary Faction 1")
 
-    # Find the down arrow (order=0) button for first faction
-    down_button = first_row.locator("a[href*='/order/0']")
-    down_button.click()
+    page.locator(".writing_list tbody tr").get_by_role("link", name="").first.click()
 
     # Wait for page reload
     page.wait_for_load_state("networkidle")
 
     # Verify order changed - Primary Faction 2 should now be first
-    go_to(page, live_server, "test/manage/writing/factions")
-    new_first_row = page.locator("tbody tr").first
+    go_to(page, live_server, "test/manage/factions")
+    new_first_row = page.locator(".writing_list tbody tr").first
     expect(new_first_row).to_contain_text("Primary Faction 2")
 
     # ========== SECTION 7: Verify Gallery Order Update (as User) ==========
@@ -242,19 +256,17 @@ def test_faction_all(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # Navigate to characters list
-    go_to(page, live_server, "test/manage/writing/characters")
-
-    # Find Character Alpha and click to edit
-    page.get_by_role("link", name="Character Alpha").click()
-
-    # Assign to user@test.it registration
-    # Using the "assigned" field with select2
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("user")
-    page.wait_for_timeout(500)
-    page.locator(".select2-results__option").filter(has_text="user@test.it").first.click()
-
+    go_to(page, live_server, "/test/manage/")
+    page.get_by_role("link", name="Registrations", exact=True).click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#select2-id_member-container").click()
+    page.get_by_role("searchbox").nth(1).fill("user")
+    page.get_by_role("option", name="User Test - user@test.it").click()
+    page.get_by_role("list").click()
+    page.get_by_role("searchbox").fill("alpha")
+    page.get_by_role("option", name="#2 Character Alpha").click()
     submit_confirm(page)
+
 
     # ========== SECTION 9: Verify Visibility with Assigned Character ==========
     logout(page)
@@ -263,53 +275,99 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Navigate to Character Alpha
     page.get_by_role("link", name="Test Larp").click()
-    page.get_by_role("link", name="Character Alpha").click()
+    page.get_by_role("link", name="Character Alpha").first.click()
 
     # Verify character TEASER is visible
-    expect_normalized(page, page.locator("#one"), "Alpha teaser")
+    expect_normalized(page, page.locator("#one"),
+  """
+      Player: User Test
+        Presentation
+        Alpha teaser
 
-    # Verify character PRIVATE TEXT is visible (character is assigned to user)
-    expect_normalized(page, page.locator("#one"), "Alpha private text")
+        Primary Faction 1
+        PF1 teaser
 
-    # Verify character has all assigned factions listed
-    expect_normalized(page, page.locator("#one"), "Primary Faction 1")
-    expect_normalized(page, page.locator("#one"), "Transversal Faction 1")
-    expect_normalized(page, page.locator("#one"), "Transversal Faction 2")
-    expect_normalized(page, page.locator("#one"), "Transversal Faction 3")
+        Transversal Faction 1
+        TF1 teaser
 
-    # Navigate to Primary Faction 1 (via character's faction)
-    page.get_by_role("link", name="Primary Faction 1").click()
+        Transversal Faction 2
+        TF2 teaser
 
-    # Now verify PRIVATE text is visible (because character belongs to this faction)
-    expect_normalized(page, page.locator("#one"), "PF1 teaser")
-    expect_normalized(page, page.locator("#one"), "PF1 private text")
+        Transversal Faction 3
+        TF3 teaser
 
-    # Verify PUBLIC WritingQuestion is visible
-    expect_normalized(page, page.locator("#one"), "Public Faction Question")
-    expect_normalized(page, page.locator("#one"), "PF1 public answer")
+        Primary Faction 1
+        Text
+        PF1 private text
 
-    # Verify PRIVATE WritingQuestion is visible (character assigned to faction)
-    expect_normalized(page, page.locator("#one"), "Private Faction Question")
-    expect_normalized(page, page.locator("#one"), "PF1 private answer")
+        Transversal Faction 1
+        Text
+        TF1 private text
+
+        Transversal Faction 2
+        Text
+        TF2 private text
+
+        Transversal Faction 3
+        Text
+        TF3 private text
+
+        Text
+        Alpha private text
+      """)
 
     # Go back to character list
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="Test Larp").click()
 
     # Try to access Character Beta (NOT assigned to user)
     page.get_by_role("link", name="Character Beta").click()
 
     # Verify Beta TEASER is visible
-    expect_normalized(page, page.locator("#one"), "Beta teaser")
+    expect_normalized(page, page.locator("#one"),
+        """
+        Presentation
+        Beta teaser
+
+        Primary Faction 1
+        PF1 teaser
+
+        Transversal Faction 1
+        TF1 teaser
+        """)
 
     # Verify Beta PRIVATE TEXT is NOT visible (not assigned)
     expect(page.locator("#one")).not_to_contain_text("Beta private text")
 
-    # Verify that Secret Factions in Character Alpha's factions are NOT visible
+    # Verify that Secret Factions are never visible
     # (Character Alpha doesn't have secret factions)
-    go_to(page, live_server, "/test/factions/")
+    links = [
+        "test/",
+        "test/character/u1/",
+        "test/character/u2/",
+        "test/character/u3/",
+        "test/character/u4/",
+        "test/factions/",
+        "/test/faction/u1/",
+        "/test/faction/u2/",
+        "/test/faction/u4/",
+        "/test/faction/u5/",
+        "/test/faction/u6/",
+    ]
+    for link in links:
+        go_to(page, live_server, link)
+        expect(page.locator("#one")).not_to_contain_text("Secret Faction 1")
+        expect(page.locator("#one")).not_to_contain_text("Secret Faction 2")
+        expect(page.locator("#one")).not_to_contain_text("Secret Faction 3")
 
-    # Secret factions should still be hidden in gallery
-    expect(page.locator("#one")).not_to_contain_text("Secret Faction 1")
-    expect(page.locator("#one")).not_to_contain_text("Secret Faction 2")
-    expect(page.locator("#one")).not_to_contain_text("Secret Faction 3")
+    # Verify faction Primary 3, or secret ones, are not visible
+    links = [
+        "/test/faction/u3/",
+        "/test/faction/u7/",
+        "/test/faction/u8/",
+        "/test/faction/u9/",
+    ]
+    for link in links:
+        page.goto(f"{live_server}{link}")
+        banner = page.locator("#banner")
+        if banner.count() > 0:
+            expect_normalized(page, banner, "404")

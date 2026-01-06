@@ -79,7 +79,7 @@
                 <th>{% trans "Request" %}</th>
                 <td>
                     {% for el in s %}
-                        {% include "elements/comma.html" %}
+                        {% include "elements/comma.html" with separator="," %}
                         {{ el.3 }}
                     {% endfor %}
                 </td>
@@ -88,7 +88,7 @@
                 <th>{% trans "Accepted" %}</th>
                 <td>
                     {% for el in a %}
-                        {% include "elements/comma.html" %}
+                        {% include "elements/comma.html" with separator="," %}
                         {{ el.3 }}
                     {% endfor %}
                 </td>
@@ -97,7 +97,7 @@
                 <th>{% trans "Paid current year" %}</th>
                 <td>
                     {% for el in p %}
-                        {% include "elements/comma.html" %}
+                        {% include "elements/comma.html" with separator="," %}
                         {{ el.3 }}
                     {% endfor %}
                 </td>
@@ -106,7 +106,7 @@
                 <th>{% trans "Kicked out" %}</th>
                 <td>
                     {% for el in r %}
-                        {% include "elements/comma.html" %}
+                        {% include "elements/comma.html" with separator="," %}
                         {{ el.3 }}
                     {% endfor %}
                 </td>
@@ -115,7 +115,7 @@
                 <th>{% trans "Absent" %}</th>
                 <td>
                     {% for el in e %}
-                        {% include "elements/comma.html" %}
+                        {% include "elements/comma.html" with separator="," %}
                         {{ el.3 }}
                     {% endfor %}
                 </td>

@@ -13,21 +13,21 @@
         <h4>{% trans "All comunications" %}</h4>
         <p>
             {% for el in value.a %}
-                {% include "elements/comma.html" %}
+                {% include "elements/comma.html" with separator="," %}
                 {{ el }}
             {% endfor %}
         </p>
         <h4>{% trans "Only really important communications" %}</h4>
         <p>
             {% for el in value.o %}
-                {% include "elements/comma.html" %}
+                {% include "elements/comma.html" with separator="," %}
                 {{ el }}
             {% endfor %}
         </p>
         <h4>{% trans "No comunications" %}</h4>
         <p>
             {% for el in value.n %}
-                {% include "elements/comma.html" %}
+                {% include "elements/comma.html" with separator="," %}
                 {{ el }}
             {% endfor %}
         </p>

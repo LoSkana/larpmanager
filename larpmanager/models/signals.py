@@ -109,6 +109,7 @@ from larpmanager.cache.run import (
     on_event_pre_save_invalidate_cache,
     on_run_post_save_reset_config_cache,
     on_run_pre_save_invalidate_cache,
+    update_visible_factions,
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
@@ -635,21 +636,12 @@ def post_character_update_px(sender: type, instance: Character, *args: Any, **kw
 
 
 @receiver(post_save, sender=Character)
-def post_save_character(sender: type, instance: Character, **kwargs: Any) -> None:
+def post_save_character(sender: type, instance: Character, created: bool, **kwargs: Any) -> None:
     """Handle post-save operations for Character model instances.
 
     This signal handler performs several maintenance tasks after a Character
     instance is saved, including PDF cleanup, cache updates, and relationship
     refreshes to maintain data consistency across the application.
-
-    Args:
-        sender: The model class that sent the signal (Character).
-        instance: The Character instance that was saved.
-        **kwargs: Additional keyword arguments from the signal.
-
-    Returns:
-        None
-
     """
     # Clean up any outdated PDF files associated with this character
     cleanup_character_pdfs_on_save(instance)
@@ -666,6 +658,15 @@ def post_save_character(sender: type, instance: Character, **kwargs: Any) -> Non
 
     # Update all other character-related caches (experience, skills, etc.)
     refresh_character_related_caches(instance)
+
+    # Update visible factions
+    update_visible_factions(instance.event)
+
+    # Create a personal inventory for newly created characters
+    if created:
+        inventory = Inventory.objects.create(name=f"{instance.name}'s Personal Storage", event=instance.event)
+        inventory.owners.add(instance)
+        inventory.save()
 
 
 @receiver(pre_delete, sender=Character)
@@ -687,6 +688,9 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
     # Refresh cache for characters that had this character as target
     for rel in Relationship.objects.filter(target=instance):
         refresh_character_relationships(rel.source)
+
+    # Update visible factions
+    update_visible_factions(instance.event)
 
 
 # CharacterConfig signals
@@ -739,15 +743,6 @@ def post_save_delivery_px(
 ) -> None:
     """Refresh delivery characters after save signal."""
     refresh_delivery_characters(instance)
-
-
-@receiver(post_save, sender=Character)
-def create_personal_inventory(sender: type, instance: Character, created: bool, **kwargs: Any) -> None:
-    """Create a personal inventory for newly created characters."""
-    if created:
-        inventory = Inventory.objects.create(name=f"{instance.name}'s Personal Storage", event=instance.event)
-        inventory.owners.add(instance)
-        inventory.save()
 
 
 @receiver(post_save, sender=Inventory)
@@ -927,6 +922,9 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
     # Clean up faction PDFs after save operation
     cleanup_faction_pdfs_on_save(instance)
 
+    # Update visible factions config
+    update_visible_factions(instance.event)
+
 
 @receiver(pre_delete, sender=Faction)
 def pre_delete_faction(sender: type, instance: Faction, **kwargs: dict) -> None:
@@ -944,6 +942,9 @@ def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any
 
     # Remove faction from cache
     remove_item_from_cache_section(instance.event_id, "factions", instance.id)
+
+    # Update visible factions config
+    update_visible_factions(instance.event)
 
 
 # Feature signals
