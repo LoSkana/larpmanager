@@ -277,7 +277,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Test Larp").click()
     page.get_by_role("link", name="Character Alpha").first.click()
 
-    # Verify character TEASER is visible
+    # Verify character info are visible
     expect_normalized(page, page.locator("#one"),
   """
       Player: User Test
@@ -336,7 +336,7 @@ def test_faction_all(pw_page: Any) -> None:
         """)
 
     # Verify Beta PRIVATE TEXT is NOT visible (not assigned)
-    expect(page.locator("#one")).not_to_contain_text("Beta private text")
+    expect(page.locator("#one")).not_to_contain_text("private")
 
     # Verify that Secret Factions are never visible
     # (Character Alpha doesn't have secret factions)
@@ -355,9 +355,7 @@ def test_faction_all(pw_page: Any) -> None:
     ]
     for link in links:
         go_to(page, live_server, link)
-        expect(page.locator("#one")).not_to_contain_text("Secret Faction 1")
-        expect(page.locator("#one")).not_to_contain_text("Secret Faction 2")
-        expect(page.locator("#one")).not_to_contain_text("Secret Faction 3")
+        expect(page.locator("#one")).not_to_contain_text("Secret")
 
     # Verify faction Primary 3, or secret ones, are not visible
     links = [
