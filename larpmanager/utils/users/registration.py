@@ -161,9 +161,6 @@ def _available_filler(run: Run, run_status: dict, registration_counts: Any) -> b
     Returns:
         bool: True if filler tickets are available, False otherwise
 
-    Side Effects:
-        Modifies run_status dictionary with filler availability information
-
     """
     # Handle infinite filler tickets case
     if run.event.max_filler == 0:
