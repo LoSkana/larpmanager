@@ -332,7 +332,7 @@ def check_casting_player(
         True if player should be skipped in casting, False otherwise
     """
     # Filter by ticket type - skip if player's ticket not in allowed list
-    if "tickets" in casting_filter_options and str(registration.ticket_id) not in casting_filter_options["tickets"]:
+    if "tickets" in casting_filter_options and str(registration.ticket.uuid) not in casting_filter_options["tickets"]:
         return True
 
     # Filter by membership status when membership feature is enabled
