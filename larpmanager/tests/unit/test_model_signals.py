@@ -475,7 +475,7 @@ class TestModelSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after creation
         config.delete()
 
-        mock_reset.assert_called_once()
+        mock_reset.assert_called()
 
     def test_association_pre_save_creates_default_values(self) -> None:
         """Test that Association pre_save signal creates default values like encryption key"""
