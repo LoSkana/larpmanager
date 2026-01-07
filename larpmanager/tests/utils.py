@@ -318,6 +318,6 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
         )
 
 def just_wait(page):
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(500)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
