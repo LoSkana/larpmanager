@@ -708,11 +708,12 @@ def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None
     # Retrieve ticket and verify it belongs to the event
     ticket = get_object_uuid(RegistrationTicket, ticket_uuid, event_id=event_id)
     context["tier"] = ticket.tier
+    run_status = context.get("run_status", {})
 
     try:
         # Remove closed status for staff/NPC tickets
-        if ticket.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in context["run"].status:
-            del context["run"].status["closed"]
+        if ticket.tier in [TicketTier.STAFF, TicketTier.NPC] and "closed" in run_status:
+            del run_status["closed"]
 
         # Store ticket UUID in context (used for form initialization)
         context["ticket"] = str(ticket.uuid)
@@ -746,7 +747,7 @@ def _check_redirect_registration(  # noqa: PLR0911
 
     """
     # Check if event registration is closed
-    if "closed" in context["run"].status:
+    if "closed" in context.get("run_status", {}):
         return render(request, "larpmanager/event/closed.html", context)
 
     # Validate secret code if secret registration is enabled
@@ -1207,7 +1208,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 def check_registration_open(context: dict, request: HttpRequest) -> None:
     """Check if registrations are open, redirect to home if closed."""
-    if not context["run"].status["open"]:
+    if not context.get("run_status", {})["open"]:
         messages.warning(request, _("Registrations not open!"))
         msg = "home"
         raise RedirectError(msg)
