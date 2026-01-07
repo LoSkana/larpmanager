@@ -9263,7 +9263,7 @@ msgstr ""
 msgid "Your characters are"
 msgstr ""
 
-msgid "Access character creation!"
+msgid "Create your character"
 msgstr ""
 
 msgid "Select your character!"

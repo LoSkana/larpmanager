@@ -3625,6 +3625,9 @@ msgstr "Collecties geleverd"
 msgid "Complete sheet (Test)"
 msgstr "Volledig blad (Test)"
 
+msgid "Create your character"
+msgstr "Creëer je personage"
+
 msgid "Current profile image"
 msgstr "Huidige profielafbeelding"
 
@@ -4264,9 +4267,6 @@ msgstr "annuleer je registratie"
 
 msgid "choice value not provided"
 msgstr "keuzewaarde niet opgegeven"
-
-msgid "Access character creation!"
-msgstr "Toegang tot het maken van personages!"
 
 msgid "Access the event dashboard"
 msgstr "Toegang tot het dashboard van het evenement"

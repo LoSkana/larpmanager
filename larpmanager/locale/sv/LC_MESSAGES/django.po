@@ -3625,6 +3625,9 @@ msgstr "Levererade kollektioner"
 msgid "Complete sheet (Test)"
 msgstr "Komplett ark (Test)"
 
+msgid "Create your character"
+msgstr "Skapa din karaktär"
+
 msgid "Current profile image"
 msgstr "Aktuell profilbild"
 
@@ -4264,9 +4267,6 @@ msgstr "avboka din registrering"
 
 msgid "choice value not provided"
 msgstr "valfritt värde anges inte"
-
-msgid "Access character creation!"
-msgstr "Få tillgång till karaktärsskapande!"
 
 msgid "Access the event dashboard"
 msgstr "Få tillgång till evenemangets instrumentpanel"

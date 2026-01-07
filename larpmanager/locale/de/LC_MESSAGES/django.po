@@ -3625,6 +3625,9 @@ msgstr "Gelieferte Sammlungen"
 msgid "Complete sheet (Test)"
 msgstr "Vollständiger Bogen (Test)"
 
+msgid "Create your character"
+msgstr "Erstellen Sie Ihren Charakter"
+
 msgid "Current profile image"
 msgstr "Aktuelles Profilbild"
 
@@ -4264,9 +4267,6 @@ msgstr "Ihre Anmeldung stornieren"
 
 msgid "choice value not provided"
 msgstr "Auswahlwert nicht angegeben"
-
-msgid "Access character creation!"
-msgstr "Zugang zur Charaktererstellung!"
 
 msgid "Access the event dashboard"
 msgstr "Zugriff auf das Ereignis-Dashboard"
