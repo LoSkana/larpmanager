@@ -102,11 +102,11 @@ def registration_available(run: Run, features: dict, run_status: dict, context: 
         return
 
     # Check if filler tickets are available (fallback option)
-    if "filler" in features and _available_filler(run, registration_counts):
+    if "filler" in features and _available_filler(run, run_status, registration_counts):
         return
 
     # Check if waiting list is available (last resort option)
-    if "waiting" in features and _available_waiting(run, registration_counts):
+    if "waiting" in features and _available_waiting(run, run_status, registration_counts):
         return
 
     # No registration options available - mark as closed
@@ -114,36 +114,34 @@ def registration_available(run: Run, features: dict, run_status: dict, context: 
     return
 
 
-def _available_waiting(registration: Registration, registration_counts: dict) -> bool:
+def _available_waiting(run: Run, run_status: dict, registration_counts: dict) -> bool:
     """Check if waiting list spots are available for a registration.
 
     Args:
-        registration: Registration object with event and status attributes
+        run: Run object
         registration_counts: Dictionary containing registration counts including 'count_wait'
+        run_status: Dictionary with run status
 
     Returns:
         bool: True if waiting list spots are available, False otherwise
 
-    Side Effects:
-        Modifies registration.status dictionary with waiting availability information
-
     """
     # Handle infinite waiting list capacity
-    if registration.event.max_waiting == 0:
-        registration.status["waiting"] = True
-        registration.status["count"] = None  # Infinite
+    if run.event.max_waiting == 0:
+        run_status["waiting"] = True
+        run_status["count"] = None  # Infinite
         return True
 
     # Check if limited waiting list has available spots
-    if registration.event.max_waiting > 0:
+    if run.event.max_waiting > 0:
         # Calculate remaining waiting list capacity
-        remaining_waiting_spots = registration.event.max_waiting - registration_counts["count_wait"]
+        remaining_waiting_spots = run.event.max_waiting - registration_counts["count_wait"]
 
         # Set status if spots are available
         if remaining_waiting_spots > 0:
-            registration.status["waiting"] = True
-            registration.status["count"] = remaining_waiting_spots
-            registration.status["additional"] = (
+            run_status["waiting"] = True
+            run_status["count"] = remaining_waiting_spots
+            run_status["additional"] = (
                 _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting_spots} + "."
             )
             return True
@@ -152,39 +150,38 @@ def _available_waiting(registration: Registration, registration_counts: dict) ->
     return False
 
 
-def _available_filler(registration: Any, registration_counts: Any) -> bool:
+def _available_filler(run: Run, run_status: dict, registration_counts: Any) -> bool:
     """Check if filler tickets are available for the given registration.
 
     Args:
-        registration: Registration object with event and status attributes
+        run: Run object
         registration_counts: Dictionary containing registration counts including 'count_fill'
+        run_status: Dictionary with run status
 
     Returns:
         bool: True if filler tickets are available, False otherwise
 
     Side Effects:
-        Modifies registration.status dictionary with filler availability information
+        Modifies run_status dictionary with filler availability information
 
     """
     # Handle infinite filler tickets case
-    if registration.event.max_filler == 0:
-        registration.status["filler"] = True
-        registration.status["count"] = None  # Infinite
+    if run.event.max_filler == 0:
+        run_status["filler"] = True
+        run_status["count"] = None  # Infinite
         return True
 
     # Handle limited filler tickets case
-    if registration.event.max_filler > 0:
+    if run.event.max_filler > 0:
         # Calculate remaining filler tickets
-        remaining_filler = registration.event.max_filler - registration_counts["count_fill"]
+        remaining_filler = run.event.max_filler - registration_counts["count_fill"]
 
         # Check if any filler tickets are still available
         if remaining_filler > 0:
-            registration.status["filler"] = True
-            registration.status["count"] = remaining_filler
+            run_status["filler"] = True
+            run_status["count"] = remaining_filler
             # Add urgency message for limited availability
-            registration.status["additional"] = (
-                _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
-            )
+            run_status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
             return True
 
     # No filler tickets available
