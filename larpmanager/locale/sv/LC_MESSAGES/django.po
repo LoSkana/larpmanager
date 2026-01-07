@@ -3044,6 +3044,9 @@ msgstr "Foto av ID-handling"
 msgid "Identity document"
 msgstr "Identitetshandling"
 
+msgid "Invalid selection"
+msgstr "Ogiltigt val"
+
 msgid "Invoice not found"
 msgstr "Fakturan hittades inte"
 
@@ -3560,9 +3563,6 @@ msgstr "Procentuell avkastning"
 
 msgid "Select the new event"
 msgstr "Välj det nya evenemanget"
-
-msgid "Selezione non valida"
-msgstr "Valet är inte giltigt"
 
 msgid "Set character status"
 msgstr "Ange teckenstatus"
