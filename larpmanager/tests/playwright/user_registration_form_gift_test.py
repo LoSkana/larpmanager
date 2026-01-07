@@ -231,7 +231,7 @@ def gift(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="when").fill("fffdsfs")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "( Standard ) wow - one , choice - prima (10.00€)")
+    expect_normalized(page, page.locator("#one"), "( Standard ) wow - one | choice - prima (10.00€)")
     expect_normalized(page, page.locator("#one"), "10€ within 8 days")
 
     # pay

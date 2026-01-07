@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
+from larpmanager.cache.accounting import refresh_member_accounting_cache
 from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
@@ -89,11 +90,14 @@ def transfer_registration_between_runs(
         msg = f"Member {registration.member} already has a registration in run {target_run}"
         raise ValidationError(msg)
 
+    source_run = registration.run
+    member_id = registration.member_id
+
     with transaction.atomic():
-        # 1. Find matching ticket in the new run
+        # Find matching ticket in the new run
         target_ticket = _find_matching_ticket(registration.ticket, target_run, ticket_mapping)
 
-        # 2. Create the new registration
+        # Create the new registration
         new_registration = Registration.objects.create(
             run=target_run,
             member=registration.member,
@@ -112,25 +116,32 @@ def transfer_registration_between_runs(
             modified=0,
         )
 
-        # 3. Transfer choices and answers if requested
+        # Transfer choices and answers if requested
         if preserve_choices:
             _transfer_choices(registration, new_registration)
 
         if preserve_answers:
             _transfer_answers(registration, new_registration)
 
-        # 4. Transfer associated characters
+        # Transfer associated characters
         _transfer_character_relations(registration, new_registration)
 
-        # 5. Transfer accounting items if requested
+        # Transfer accounting items if requested
         if preserve_accounting:
             _transfer_accounting_items(registration, new_registration)
 
-        # 6. Delete original registration and related data if moving
+        # Delete original registration and related data if moving
         if move_registration:
             _delete_original_registration_data(registration)
 
-        return new_registration
+    # Refresh cache for target run (where registration was moved/copied to)
+    refresh_member_accounting_cache(target_run, member_id)
+
+    # If moving (not copying), refresh cache for source run as well
+    if move_registration:
+        refresh_member_accounting_cache(source_run, member_id)
+
+    return new_registration
 
 
 def _find_matching_ticket(
