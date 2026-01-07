@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
 from larpmanager.cache.character import (
-    _find_registration_by_member_id,
+    _find_registration,
     get_character_element_fields,
     get_event_cache_all,
 )
@@ -324,7 +324,7 @@ def get_character_sheet_questbuilder(context: dict) -> None:
         return
 
     # Find the registration-character relation for this member
-    assignment = _find_registration_by_member_id(context.get("assignments", {}), context["member"].id)
+    assignment = _find_registration(context.get("assignments", {}), context["member"].id)
     if not assignment:
         return
 

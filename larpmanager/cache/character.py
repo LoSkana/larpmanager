@@ -465,16 +465,8 @@ def _build_trait_relationships(event: Event) -> dict:
     return trait_relationships
 
 
-def _find_registration_by_member_id(assignments: dict, member_id: int) -> RegistrationCharacterRel | None:
-    """Find a registration-character relation by member ID.
-
-    Args:
-        assignments: Dictionary mapping character numbers to RegistrationCharacterRel
-        member_id: Member ID to search for
-
-    Returns:
-        RegistrationCharacterRel if found, None otherwise
-    """
+def _find_registration(assignments: dict, member_id: int) -> RegistrationCharacterRel | None:
+    """Find a registration-character relation by member ID."""
     for assignment in assignments.values():
         if assignment.reg.member_id == member_id:
             return assignment
@@ -527,7 +519,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
         trait_data["traits"] = trait_relationships[assignment_trait.trait.number]
 
         # Find the registration-character relation for this member
-        found_assignment = _find_registration_by_member_id(context.get("assignments", {}), assignment_trait.member_id)
+        found_assignment = _find_registration(context.get("assignments", {}), assignment_trait.member_id)
 
         # Skip if registration not found
         if not found_assignment:
