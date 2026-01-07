@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block nav %}
     {% include "larpmanager/manage/nav.html" %}
-    {% if char.player_id == request.user.member.id %}
+    {% if char.player_uuid == request.user.member.uuid %}
         {% include "elements/sheet/char_nav.html" %}
     {% endif %}
 {% endblock nav %}

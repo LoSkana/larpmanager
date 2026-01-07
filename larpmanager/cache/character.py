@@ -158,7 +158,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
         search_player(character, character_data, context)
 
         # Hide uncasted characters if configuration is enabled
-        if hide_uncasted_characters and character_data["player_id"] == 0:
+        if hide_uncasted_characters and not character_data["player_uuid"]:
             character_data["hide"] = True
 
         character_number = int(character_data["number"])
@@ -465,18 +465,10 @@ def _build_trait_relationships(event: Event) -> dict:
     return trait_relationships
 
 
-def _find_character_by_member_id(chars: dict, member_id: int) -> dict | None:
-    """Find a character in the cache by member ID.
-
-    Args:
-        chars: Dictionary of characters from cache
-        member_id: Member ID to search for
-
-    Returns:
-        Character dictionary if found, None otherwise
-    """
+def _find_character(chars: dict, member_uuid: str) -> dict | None:
+    """Find a character in the cache by member UUID."""
     for character in chars.values():
-        if "player_id" in character and character["player_id"] == member_id:
+        if character.get("player_uuid") == member_uuid:
             return character
     return None
 
@@ -529,7 +521,7 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
         trait_data["traits"] = trait_relationships[assignment_trait.trait.number]
 
         # Find the character this trait is assigned to
-        found_character = _find_character_by_member_id(res["chars"], assignment_trait.member_id)
+        found_character = _find_character(res["chars"], assignment_trait.member.uuid)
 
         # Skip if character not found in cache
         if not found_character:

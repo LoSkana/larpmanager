@@ -1,6 +1,6 @@
 {% load show_tags static %}
 <td>
-    {% if el.player_id > 0 and el.player_prof %}
+    {% if el.player_uuid and el.player_prof %}
         <img class="cover" src="{{ el.player_prof }}" alt="player profile" />
     {% else %}
         <img class="cover"

@@ -68,7 +68,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that Character pre_save signal resets character cache"""
         character = self.character()
         mock_reset.reset_mock()  # Reset after character creation
-        # Modify a field that triggers cache reset (player_id)
+        # Modify a field that triggers cache reset (player_uuid)
         character.player = self.get_member()
         character.save()
 

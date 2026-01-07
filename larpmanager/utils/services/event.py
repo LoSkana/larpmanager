@@ -153,12 +153,12 @@ def has_access_character(request: HttpRequest, context: dict) -> bool:
     if has_event_permission(request, context, context["event"].slug, "orga_characters"):
         return True
 
-    current_member_id = context["member"].id
+    current_member_uuid = context["member"].uuid
 
-    if "owner_id" in context["char"] and context["char"]["owner_id"] == current_member_id:
+    if "owner_uuid" in context["char"] and context["char"]["owner_uuid"] == current_member_uuid:
         return True
 
-    return bool("player_id" in context["char"] and context["char"]["player_id"] == current_member_id)
+    return bool("player_uuid" in context["char"] and context["char"]["player_uuid"] == current_member_uuid)
 
 
 def update_run_plan_on_event_change(run_instance: Any) -> None:
