@@ -12,7 +12,7 @@
         <p>
             {% trans "Configure form" %}:
             {% for nm in available_typ.keys %}
-                {% if not forloop.first %}|{% endif %}
+                {% include "elements/comma.html" %}
                 {% if nm == label_typ %}
                     <b>{% trans nm as name %}{{ name }}</b>
                 {% else %}

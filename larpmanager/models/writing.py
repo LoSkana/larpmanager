@@ -325,9 +325,10 @@ class Character(Writing):
         # Track if we find a primary faction
         has_primary_faction = False
 
-        # Process all factions for this event
+        # Process all public factions for this event
         # noinspection PyUnresolvedReferences
-        for faction in self.factions_list.filter(event=faction_event):
+        query = self.factions_list.filter(event=faction_event).exclude(typ=FactionType.SECRET)
+        for faction in query.order_by("order"):
             # Check if this is a primary faction
             if faction.typ == FactionType.PRIM:
                 has_primary_faction = True

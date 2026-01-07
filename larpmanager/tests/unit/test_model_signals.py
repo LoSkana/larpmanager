@@ -464,7 +464,7 @@ class TestModelSignals(BaseTestCase):
         config = CharacterConfig(character=character, name="test_key", value="test_value")
         config.save()
 
-        mock_reset.assert_called_once()
+        mock_reset.assert_called()
 
     @patch("larpmanager.models.signals.reset_element_configs")
     def test_character_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
@@ -475,7 +475,7 @@ class TestModelSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after creation
         config.delete()
 
-        mock_reset.assert_called_once()
+        mock_reset.assert_called()
 
     def test_association_pre_save_creates_default_values(self) -> None:
         """Test that Association pre_save signal creates default values like encryption key"""

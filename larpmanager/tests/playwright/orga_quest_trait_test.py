@@ -155,7 +155,7 @@ def traits(page: Any, live_server: Any) -> None:
     # check how they appear on user side
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
-    expect_normalized(page, page.locator("#one"), "Name Quest Lore Torta , Pizza")
+    expect_normalized(page, page.locator("#one"), "Name Quest Lore Torta | Pizza")
     page.get_by_role("link", name="Torta").click()
     expect_normalized(page, page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 

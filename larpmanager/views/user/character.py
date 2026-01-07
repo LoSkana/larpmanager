@@ -75,6 +75,7 @@ from larpmanager.utils.services.character import (
     get_char_check,
     get_character_relationships,
     get_character_sheet,
+    get_character_sheet_factions,
 )
 from larpmanager.utils.services.edit import user_edit
 from larpmanager.utils.services.experience import get_available_ability_px, get_current_ability_px, remove_char_ability
@@ -155,8 +156,8 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         context["intro"] = get_event_text(context["event"].id, EventTextType.INTRO)
         check_missing_mandatory(context)
     else:
-        # Load only visible elements for regular users
         context["char"].update(get_character_element_fields(context, character_id, only_visible=True))
+        get_character_sheet_factions(context, only_visible=True)
 
     # Load casting details and preferences if applicable
     casting_details(context)
@@ -493,7 +494,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
     try:
         rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
             reg=context["registration"],
-            character=context["char"],
+            character__uuid=context["char"]["uuid"],
         )
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko"})

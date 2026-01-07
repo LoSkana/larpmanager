@@ -110,7 +110,7 @@ def filter_faction(page: Any) -> None:
         page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All None Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser another Player: Absent color: blue tag: wunder, qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
-    page.get_by_role("link", name="Factions").nth(0).click()
+    page.get_by_role("link", name="Factions").nth(1).click()
     page.locator("#factions").get_by_role("link", name="fassione").click()
     expect_normalized(page,
         page.locator("#search-results"),
@@ -122,7 +122,7 @@ def filter_faction(page: Any) -> None:
         "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione another Player: Absent color: blue tag: wunder, qerfi",
     )
     page.get_by_role("link", name="fassione").click()
-    page.get_by_role("link", name="Factions").nth(0).click()
+    page.get_by_role("link", name="Factions").nth(1).click()
 
 
 def prepare(page: Any, live_server: Any) -> None:

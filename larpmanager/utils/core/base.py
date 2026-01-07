@@ -444,9 +444,15 @@ def prepare_run(context: Any) -> None:
     """
     run_configuration = get_cache_config_run(context["run"])
 
-    if "staff" in context or not get_event_config(
-        context["event"].id, "writing_field_visibility", default_value=False, context=context
-    ):
+    configs = [
+        ("has_visible_factions", False),
+        ("writing_field_visibility", False),
+    ]
+    event_id = context["event"].id
+    for context_key, default in configs:
+        context[context_key] = get_event_config(event_id, context_key, default_value=default, context=context)
+
+    if "staff" in context or not context.get("writing_field_visibility"):
         context["show_all"] = "1"
 
         for writing_element in ["character", "faction", "quest", "trait"]:
@@ -464,16 +470,7 @@ def prepare_run(context: Any) -> None:
 
     context.update(run_configuration)
 
-    context["writing_fields"] = get_event_fields_cache(context["event"].id)
-
-    # Check if there are visible factions with characters for nav display
-    context["has_visible_factions"] = False
-    if "faction" in context.get("features", {}) and "factions" in context:
-        for faction_data in context["factions"].values():
-            # Check if faction has a name and has characters
-            if faction_data.get("name") and faction_data.get("characters"):
-                context["has_visible_factions"] = True
-                break
+    context["writing_fields"] = get_event_fields_cache(event_id)
 
 
 def get_run(context: Any, event_slug: Any) -> None:
