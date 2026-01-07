@@ -95,14 +95,13 @@ def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    page.wait_for_load_state("networkidle")
     ooops_check(page)
 
 
 def submit(page: Any) -> None:
     submit_confirm(page)
-    page.wait_for_load_state("networkidle")
     page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
     ooops_check(page)
 
 

@@ -360,7 +360,7 @@ class OrganizerCastingOptionsForm(BaseForm):
         ticks = (
             RegistrationTicket.objects.filter(event=self.params["event"])
             .exclude(tier__in=[TicketTier.WAITING])
-            .values_list("id", "name")
+            .values_list("uuid", "name")
         )
 
         # Create ticket selection field with all available tickets
@@ -377,7 +377,7 @@ class OrganizerCastingOptionsForm(BaseForm):
                 .get_elements(Faction)
                 .filter(typ=FactionType.PRIM)
                 .order_by("number")
-                .values_list("id", "name")
+                .values_list("uuid", "name")
             )
 
             # Create faction selection field with primary factions
