@@ -106,7 +106,7 @@ def create_character(page: Any) -> None:
     page.get_by_label("Ticket").select_option("u1")
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
-    page.get_by_role("link", name="Access character creation!").click()
+    page.get_by_role("link", name="Create your character!").click()
 
     # check only one option
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "st" [selected]')

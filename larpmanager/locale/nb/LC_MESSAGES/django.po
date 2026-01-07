@@ -3625,6 +3625,9 @@ msgstr "Leverte samlinger"
 msgid "Complete sheet (Test)"
 msgstr "Komplett ark (Test)"
 
+msgid "Create your character"
+msgstr "Lag karakteren din"
+
 msgid "Current profile image"
 msgstr "Nåværende profilbilde"
 
@@ -4264,9 +4267,6 @@ msgstr "avbestille registreringen"
 
 msgid "choice value not provided"
 msgstr "valgverdi ikke oppgitt"
-
-msgid "Access character creation!"
-msgstr "Få tilgang til karakteroppretting!"
 
 msgid "Access the event dashboard"
 msgstr "Få tilgang til hendelsesoversikten"

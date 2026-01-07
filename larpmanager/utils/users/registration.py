@@ -690,7 +690,7 @@ def registration_status_characters(
     elif len(character_links) > 1:
         run.status["details"] += _("Your characters are") + ": " + ", ".join(character_links)
 
-    is_assigned = len(character_links) == 0
+    is_assigned = len(character_links) > 0
 
     _status_approval(run, registration, features, is_character_assigned=is_assigned)
 
@@ -728,7 +728,7 @@ def _status_approval(run: Run, registration: Registration, features: dict, *, is
         url = reverse("character_create", args=[run.get_slug()])
         if run.status["details"]:
             run.status["details"] += " - "
-        message = _("Access character creation!")
+        message = _("Create your character") + "!"
         run.status["details"] += f"<a href='{url}'>{message}</a>"
 
     # Show character selection link if no characters assigned but max chars available

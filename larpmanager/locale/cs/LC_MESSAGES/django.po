@@ -3625,6 +3625,9 @@ msgstr "Dodané sbírky"
 msgid "Complete sheet (Test)"
 msgstr "Kompletní list (Test)"
 
+msgid "Create your character"
+msgstr "Vytvořte si postavu"
+
 msgid "Current profile image"
 msgstr "Aktuální profilový obrázek"
 
@@ -4264,9 +4267,6 @@ msgstr "zrušit svou registraci"
 
 msgid "choice value not provided"
 msgstr "hodnota výběru není uvedena"
-
-msgid "Access character creation!"
-msgstr "Přístup k tvorbě postavy!"
 
 msgid "Access the event dashboard"
 msgstr "Přístup k ovládacímu panelu události"
