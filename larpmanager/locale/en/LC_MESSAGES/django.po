@@ -9870,7 +9870,7 @@ msgstr ""
 msgid "Ability missing"
 msgstr ""
 
-msgid "Selezione non valida"
+msgid "Invalid selection"
 msgstr ""
 
 msgid "Ability acquired"

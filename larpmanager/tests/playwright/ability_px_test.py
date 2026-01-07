@@ -271,7 +271,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     )
 
     # get ability
-    page.locator("#ability_select").select_option("2")
+    page.locator("#ability_select").select_option("u2")
     page.get_by_role("button", name="Submit", exact=True).click()
     expect_normalized(page,
         page.locator("#one"),
@@ -349,7 +349,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Ability").click()
-    page.locator("#ability_select").select_option("2")
+    page.locator("#ability_select").select_option("u2")
     submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
