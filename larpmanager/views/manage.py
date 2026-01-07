@@ -101,15 +101,14 @@ def _get_registration_status_code(run: Run) -> tuple[str, Any]:
             return "future", run.registration_open
 
     # Check registration availability
-    run.status = {}
-    registration_available(run, features)
-    registration_status = run.status
+    run_status = {}
+    registration_available(run, features, run_status)
 
     # Determine status based on availability
     status_priority = ["primary", "filler", "waiting"]
     for status_type in status_priority:
-        if status_type in registration_status:
-            return status_type, registration_status.get("count")
+        if status_type in run_status:
+            return status_type, run_status.get("count")
 
     return "closed", None
 

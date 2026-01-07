@@ -203,7 +203,7 @@ $(document).ready(function(){
 
     {% if not gift %}
 
-        {% if features.discount and 'waiting' not in run.status %}
+        {% if features.discount and 'waiting' not in run_status %}
 
             show_discount_list();
 

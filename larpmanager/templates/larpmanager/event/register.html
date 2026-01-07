@@ -36,7 +36,7 @@
     {% else %}
         <p>{% trans "To register for the event, please fill in the following form and click on confirm" %}.</p>
     {% endif %}
-    {% if registration or not run.status.closed %}
+    {% if registration or not run_status.closed %}
         {% if event.website %}
             <hr />
             <p>
@@ -67,7 +67,7 @@
                     <table class="mob">
                         {% include "elements/form/register.html" %}
                     </table>
-                    {% if features.discount and 'waiting' not in run.status %}
+                    {% if features.discount and 'waiting' not in run_status %}
                         <h1 class="head_discount">
                             <a href="#" class="my_toggle section-link" tog='sec_discount'>
                                 {% trans "Discounts" %} <i class="fa-solid fa-chevron-down"></i>

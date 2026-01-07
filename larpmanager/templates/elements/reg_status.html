@@ -1,7 +1,7 @@
 {% load i18n show_tags %}
-{% if run.status.text %}
+{% if run_status.text %}
     <p>
-        {{ run.status.text | safe }}
+        {{ run_status.text | safe }}
         {% if features.payment and registration and registration.tot_iscr %}
             (<a href="#" class="my_toggle" tog="reg_accounting">{% trans "Accounting" %}</a>)
         {% endif %}
@@ -29,4 +29,4 @@
         {% endif %}
     </span>
 {% endif %}
-{% if run.status.details %}<p>{{ run.status.details | safe }}</p>{% endif %}
+{% if run_status.details %}<p>{{ run_status.details | safe }}</p>{% endif %}

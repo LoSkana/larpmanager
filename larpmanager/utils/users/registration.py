@@ -50,7 +50,7 @@ if TYPE_CHECKING:
     from django.db.models import QuerySet
 
 
-def registration_available(run: Run, features: dict, context: dict | None = None) -> None:
+def registration_available(run: Run, features: dict, run_status: dict, context: dict | None = None) -> None:
     """Check if registration is available based on capacity and rules.
 
     Validates registration availability considering maximum participants,
@@ -60,11 +60,8 @@ def registration_available(run: Run, features: dict, context: dict | None = None
     Args:
         run: The run object containing event and status information
         features: Dictionary of enabled features for the event
+        run_status: Dictionary with run status
         context: Optional context dictionary containing cached data
-
-    Returns:
-        None: Function modifies run.status in-place
-
     """
     # Extract values from context dictionary if provided
     if context is None:
@@ -72,7 +69,7 @@ def registration_available(run: Run, features: dict, context: dict | None = None
 
     # Skip advanced registration rules if no maximum participant limit is set
     if run.event.max_pg == 0:
-        run.status["primary"] = True
+        run_status["primary"] = True
         return
 
     # Get registration counts if not provided
@@ -89,7 +86,7 @@ def registration_available(run: Run, features: dict, context: dict | None = None
 
     # Check if primary tickets are available
     if remaining_primary_tickets > 0:
-        run.status["primary"] = True
+        run_status["primary"] = True
 
         # Show urgency warning when tickets are running low
         percentage_threshold_for_urgency = 0.3
@@ -98,8 +95,8 @@ def registration_available(run: Run, features: dict, context: dict | None = None
             remaining_primary_tickets < absolute_threshold_for_urgency
             or remaining_primary_tickets * 1.0 / run.event.max_pg < percentage_threshold_for_urgency
         ):
-            run.status["count"] = remaining_primary_tickets
-            run.status["additional"] = (
+            run_status["count"] = remaining_primary_tickets
+            run_status["additional"] = (
                 _(" Hurry: only %(num)d tickets available") % {"num": remaining_primary_tickets} + "."
             )
         return
@@ -113,7 +110,7 @@ def registration_available(run: Run, features: dict, context: dict | None = None
         return
 
     # No registration options available - mark as closed
-    run.status["closed"] = True
+    run_status["closed"] = True
     return
 
 
@@ -218,6 +215,7 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
     member: Member,
     features: dict[str, Any],
     register_url: str,
+    run_status: dict,
     context: dict | None = None,
 ) -> None:
     """Update the registration status for a signed user based on membership and payment features.
@@ -228,12 +226,10 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         member: The member object for the registered user
         features: Dictionary of enabled features for the event
         register_url: URL for the registration page
+        run_status: Dictionary with run status
         context: Optional context dictionary containing cached data:
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
-
-    Returns:
-        None: Updates run.status["text"] in place
 
     Raises:
         RewokedMembershipError: When membership status is revoked
@@ -244,7 +240,7 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         context = {}
 
     # Initialize character registration status for the run
-    registration_status_characters(run, registration, features, context)
+    registration_status_characters(run, registration, run_status, features, context)
 
     # Get user membership for the event's association
     user_membership = get_user_membership(member, run.event.association_id)
@@ -273,17 +269,17 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
             membership_url = reverse("membership")
             completion_message = _("please upload your membership application to proceed") + "."
             text_url = f", <a href='{membership_url}'>{completion_message}</a>"
-            run.status["text"] = registration_text + text_url
+            run_status["text"] = registration_text + text_url
             return
 
         # Handle pending membership approval (submitted but not approved)
         if user_membership.status in [MembershipStatus.SUBMITTED]:
-            run.status["text"] = registration_text + ", " + _("awaiting member approval to proceed with payment")
+            run_status["text"] = registration_text + ", " + _("awaiting member approval to proceed with payment")
             return
 
     # Handle payment feature processing and related status updates
     # Process payment status and return if payment handling is complete
-    if "payment" in features and _status_payment(registration_text, run, registration, context):
+    if "payment" in features and _status_payment(registration_text, registration, run_status, context):
         return
 
     # Check for incomplete user profile and prompt completion
@@ -291,23 +287,25 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         profile_url = reverse("profile")
         completion_message = _("please fill in your profile") + "."
         text_url = f", <a href='{profile_url}'>{completion_message}</a>"
-        run.status["text"] = registration_text + text_url
+        run_status["text"] = registration_text + text_url
         return
 
     # Handle provisional registration status (no further action needed)
     if is_provisional:
-        run.status["text"] = registration_text
+        run_status["text"] = registration_text
         return
 
     # Set final confirmed registration status for completed registrations
-    run.status["text"] = registration_text
+    run_status["text"] = registration_text
 
     # Add patron appreciation message for patron tier tickets
     if registration.ticket and registration.ticket.tier == TicketTier.PATRON:
-        run.status["text"] += " " + _("Thanks for your support") + "!"
+        run_status["text"] += " " + _("Thanks for your support") + "!"
 
 
-def _status_payment(register_text: str, run: Run, registration: Registration, context: dict | None = None) -> bool:
+def _status_payment(
+    register_text: str, registration: Registration, run_status: dict, context: dict | None = None
+) -> bool:
     """Check payment status and update registration status text accordingly.
 
     Handles pending payments, wire transfers, and payment alerts with
@@ -315,8 +313,8 @@ def _status_payment(register_text: str, run: Run, registration: Registration, co
 
     Args:
         register_text: Base registration status text to append to
-        run: Registration run object containing status info
         registration: The registration object with payment details
+        run_status: Dictionary with run status
         context: Optional context dictionary containing cached data:
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
 
@@ -371,7 +369,7 @@ def _status_payment(register_text: str, run: Run, registration: Registration, co
 
     # Handle pending payment status
     if pending_invoices:
-        run.status["text"] = register_text + ", " + _("payment pending confirmation")
+        run_status["text"] = register_text + ", " + _("payment pending confirmation")
         return True
 
     # Process payment alerts for unpaid registrations
@@ -382,7 +380,7 @@ def _status_payment(register_text: str, run: Run, registration: Registration, co
             message = _("to confirm it proceed with payment") + "."
             text_url = f", <a href='{payment_url}'>{message}</a>"
             note = _("If you have made a transfer, please upload the receipt for it to be processed") + "!"
-            run.status["text"] = f"{register_text}{text_url} ({note})"
+            run_status["text"] = f"{register_text}{text_url} ({note})"
             return True
 
         # Handle general payment alert with deadline warning
@@ -394,7 +392,7 @@ def _status_payment(register_text: str, run: Run, registration: Registration, co
         if registration.deadline < 0:
             text_url += "<i> (" + _("If no payment is received, registration may be cancelled") + ")</i>"
 
-        run.status["text"] = register_text + text_url
+        run_status["text"] = register_text + text_url
         return True
 
     return False
@@ -405,7 +403,7 @@ def registration_status(  # noqa: C901
     member: Member,
     context: dict,
     registration: Registration | None = None,
-) -> None:
+) -> dict:
     """Determine registration status and availability for users.
 
     Checks registration constraints, deadlines, and feature requirements
@@ -423,12 +421,15 @@ def registration_status(  # noqa: C901
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
         registration: Optional provided registration
 
+    Returns:
+        Dict with run status informations
+
     """
     # Extract values from context dictionary if provided
     if context is None:
         context = {}
 
-    run.status = {"open": True, "details": "", "text": "", "additional": ""}
+    run_status = {"open": True, "details": "", "text": "", "additional": ""}
 
     # Find user's registration if not already provided
     if registration is None:
@@ -437,42 +438,41 @@ def registration_status(  # noqa: C901
 
     features = _get_features_map(run, context)
 
-    registration_available(run, features, context)
+    registration_available(run, features, run_status, context)
     register_url = reverse("register", args=[run.get_slug()])
 
     if member:
         membership = context["membership"]
         if membership.status in [MembershipStatus.REWOKED]:
-            return
+            return run_status
 
         if registration:
-            registration_status_signed(run, registration, member, features, register_url, context)
-            return
+            registration_status_signed(run, registration, member, features, register_url, run_status, context)
+            return run_status
 
     if run.end and get_time_diff_today(run.end) < 0:
-        return
+        return run_status
 
     # check pre-register
     if get_event_config(run.event_id, "pre_register_active", default_value=False, context=context):
-        _status_preregister(run, member, context)
+        _status_preregister(run, member, run_status, context)
 
     current_datetime = timezone.now()
     # check registration open
     if "registration_open" in features:
         if not run.registration_open:
-            run.status["open"] = False
-            run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
-            return
+            run_status["open"] = False
+            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+            return run_status
         if run.registration_open > current_datetime:
-            run.status["open"] = False
-            run.status["text"] = run.status.get("text") or _("Registrations not open") + "!"
-            run.status["details"] = _("Opening at: %(date)s") % {
+            run_status["open"] = False
+            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+            run_status["details"] = _("Opening at: %(date)s") % {
                 "date": run.registration_open.strftime(format_datetime),
             }
-            return
+            return run_status
 
     # signup open, not already signed in
-    status = run.status
     messages = {
         "primary": _("Registration is open!"),
         "filler": _("Sign up as a filler!"),
@@ -480,19 +480,21 @@ def registration_status(  # noqa: C901
     }
 
     # pick the first matching message (or None)
-    selected_message = next((msg for key, msg in messages.items() if key in status), None)
+    selected_message = next((msg for key, msg in messages.items() if key in run_status), None)
 
     # if it's a primary/filler, copy over the additional details
-    if selected_message and any(key in status for key in ("primary", "filler")):
-        status["details"] = status["additional"]
+    if selected_message and any(key in run_status for key in ("primary", "filler")):
+        run_status["details"] = run_status["additional"]
 
     # wrap in a link if we have a message, otherwise show closed
-    status["text"] = (
+    run_status["text"] = (
         f"<a href='{register_url}'>{selected_message}</a>" if selected_message else _("Registration closed") + "."
     )
 
+    return run_status
 
-def _status_preregister(run: Run, member: Member, context: dict | None = None) -> None:
+
+def _status_preregister(run: Run, member: Member, run_status: dict, context: dict | None = None) -> None:
     """Update run status based on user's pre-registration state.
 
     Sets the run status text to either confirm existing pre-registration
@@ -501,6 +503,7 @@ def _status_preregister(run: Run, member: Member, context: dict | None = None) -
     Args:
         run: Event run object to update status for
         member: Member object to check pre-registration status
+        run_status: Dictionary with run status
         context: Optional context dictionary containing cached pre-registration data
 
     """
@@ -529,12 +532,12 @@ def _status_preregister(run: Run, member: Member, context: dict | None = None) -
     # Set status message based on pre-registration state
     if has_pre_registration:
         status_message = _("Pre-registration confirmed") + "!"
-        run.status["text"] = status_message
+        run_status["text"] = status_message
     else:
         # Create pre-registration link for unauthenticated or non-pre-registered users
         status_message = _("Pre-register to the event") + "!"
         preregister_url = reverse("pre_register", args=[run.event.slug])
-        run.status["text"] = f"<a href='{preregister_url}'>{status_message}</a>"
+        run_status["text"] = f"<a href='{preregister_url}'>{status_message}</a>"
 
 
 def _get_features_map(run: Run, context: dict) -> Any:
@@ -632,7 +635,7 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
 
 
 def registration_status_characters(
-    run: Run, registration: Registration, features: dict, context: dict | None = None
+    run: Run, registration: Registration, run_status: dict, features: dict, context: dict | None = None
 ) -> None:
     """Update registration status with character assignment information.
 
@@ -643,11 +646,9 @@ def registration_status_characters(
         run: The run object containing status information
         registration: The registration object with character relationships
         features: Dictionary of enabled event features
+        run_status: Dictionary with run status
         context: Optional context dictionary containing cached data:
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
-
-    Returns:
-        None: Function modifies run.status["details"] in place
 
     """
     # Extract values from context dictionary if provided
@@ -686,16 +687,18 @@ def registration_status_characters(
 
     # Add character information to status details based on number of characters
     if len(character_links) == 1:
-        run.status["details"] += _("Your character is") + " " + character_links[0]
+        run_status["details"] += _("Your character is") + " " + character_links[0]
     elif len(character_links) > 1:
-        run.status["details"] += _("Your characters are") + ": " + ", ".join(character_links)
+        run_status["details"] += _("Your characters are") + ": " + ", ".join(character_links)
 
     is_assigned = len(character_links) > 0
 
-    _status_approval(run, registration, features, is_character_assigned=is_assigned)
+    _status_approval(run, registration, run_status, features, is_character_assigned=is_assigned)
 
 
-def _status_approval(run: Run, registration: Registration, features: dict, *, is_character_assigned: bool) -> None:
+def _status_approval(
+    run: Run, registration: Registration, run_status: dict, features: dict, *, is_character_assigned: bool
+) -> None:
     """Add character creation/selection links to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
@@ -706,10 +709,8 @@ def _status_approval(run: Run, registration: Registration, features: dict, *, is
         run: Run object containing event information
         registration: The registration object
         features: Dictionary of enabled features for the event
+        run_status: Dictionary with run status
         is_character_assigned: Boolean indicating if character is already assigned
-
-    Returns:
-        None: Modifies run.status["details"] in place
 
     """
     # Check if user_character feature is enabled
@@ -726,18 +727,18 @@ def _status_approval(run: Run, registration: Registration, features: dict, *, is
     # Show character creation link if user can create more characters
     if not can_create_character:
         url = reverse("character_create", args=[run.get_slug()])
-        if run.status["details"]:
-            run.status["details"] += " - "
+        if run_status["details"]:
+            run_status["details"] += " - "
         message = _("Create your character") + "!"
-        run.status["details"] += f"<a href='{url}'>{message}</a>"
+        run_status["details"] += f"<a href='{url}'>{message}</a>"
 
     # Show character selection link if no characters assigned but max chars available
     elif not is_character_assigned and maximum_characters:
         url = reverse("character_list", args=[run.get_slug()])
-        if run.status["details"]:
-            run.status["details"] += " - "
+        if run_status["details"]:
+            run_status["details"] += " - "
         message = _("Select your character!")
-        run.status["details"] += f"<a href='{url}'>{message}</a>"
+        run_status["details"] += f"<a href='{url}'>{message}</a>"
 
 
 def get_registration_options(instance: object) -> list[tuple[str, str]]:
