@@ -281,11 +281,11 @@ def _orga_registration_character(context: dict, registration: Any) -> None:
         registration: Registration instance to update
 
     """
-    if registration.member_id not in context["reg_chars"]:
+    if registration.member.uuid not in context["reg_chars"]:
         return
 
     registration.factions = []
-    registration.chars = context["reg_chars"][registration.member_id]
+    registration.chars = context["reg_chars"][registration.member.uuid]
     for character in registration.chars:
         if "factions" in character:
             registration.factions.extend(character["factions"])
@@ -386,11 +386,11 @@ def _orga_registrations_prepare(context: dict) -> None:
     """
     context["reg_chars"] = {}
     for character in context["chars"].values():
-        if "player_id" not in character:
+        if "player_uuid" not in character:
             continue
-        if character["player_id"] not in context["reg_chars"]:
-            context["reg_chars"][character["player_id"]] = []
-        context["reg_chars"][character["player_id"]].append(character)
+        if character["player_uuid"] not in context["reg_chars"]:
+            context["reg_chars"][character["player_uuid"]] = []
+        context["reg_chars"][character["player_uuid"]].append(character)
     context["reg_tickets"] = {}
     for ticket in RegistrationTicket.objects.filter(event=context["event"]).order_by("-price"):
         ticket.emails = []

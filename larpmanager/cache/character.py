@@ -158,7 +158,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
         search_player(character, character_data, context)
 
         # Hide uncasted characters if configuration is enabled
-        if hide_uncasted_characters and character_data["player_id"] == 0:
+        if hide_uncasted_characters and not character_data["player_uuid"]:
             character_data["hide"] = True
 
         character_number = int(character_data["number"])
@@ -470,6 +470,14 @@ def _find_registration(assignments: dict, member_id: int) -> RegistrationCharact
     for assignment in assignments.values():
         if assignment.reg.member_id == member_id:
             return assignment
+    return None
+
+
+def _find_character(chars: dict, member_uuid: str) -> dict | None:
+    """Find a character in the cache by member UUID."""
+    for character in chars.values():
+        if character.get("player_uuid") == member_uuid:
+            return character
     return None
 
 

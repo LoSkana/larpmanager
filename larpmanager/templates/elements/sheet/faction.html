@@ -17,7 +17,7 @@
                     <h3>
                         <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
                     </h3>
-                    {% if el.player_id > 0 %}
+                    {% if el.player_uuid %}
                         <div class="go-inline">
                             <p>
                                 <b>{% trans "Player" %}: </b> <a href="{% url 'public' el.player_uuid %}">

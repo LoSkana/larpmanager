@@ -95,14 +95,13 @@ def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    page.wait_for_load_state("networkidle")
     ooops_check(page)
 
 
 def submit(page: Any) -> None:
     submit_confirm(page)
-    page.wait_for_load_state("networkidle")
     page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
     ooops_check(page)
 
 
@@ -319,6 +318,6 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
         )
 
 def just_wait(page):
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(500)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")

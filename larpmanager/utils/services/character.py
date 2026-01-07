@@ -213,11 +213,10 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
                 continue
             character_data["factions_list"].append(faction_data["name"])
 
-        # Join faction names and store character data using UUID as key
+        # Join faction names and store character data
         character_data["factions_list"] = ", ".join(character_data["factions_list"])
-        character_uuid = str(character_data["uuid"])
-        character_data_mapping[character_uuid] = character_data
-        relationship_text_mapping[character_uuid] = relationship_text
+        character_data_mapping[character_data["uuid"]] = character_data
+        relationship_text_mapping[character_data["uuid"]] = relationship_text
 
 
 def get_character_sheet(context: dict) -> None:

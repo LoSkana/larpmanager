@@ -101,13 +101,13 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build mapping of member IDs to their character list
     member_chars = {}
     for el in context["chars"].values():
-        if "player_id" not in el:
+        if "player_uuid" not in el:
             continue
         # Initialize member's character list if not exists
-        if el["player_id"] not in member_chars:
-            member_chars[el["player_id"]] = []
+        if el["player_uuid"] not in member_chars:
+            member_chars[el["player_uuid"]] = []
         # Add formatted character info to member's list
-        member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
+        member_chars[el["player_uuid"]].append(f"#{el['number']} {el['name']}")
 
     # Query registered members with safety information
     context["list"] = []
@@ -120,7 +120,7 @@ def orga_safety(request: HttpRequest, event_slug: str) -> HttpResponse:
         if len(el.member.safety) > min_length:
             # Attach character list to member if available
             if el.member_id in member_chars:
-                el.member.chars = member_chars[el.member_id]
+                el.member.chars = member_chars[el.member.uuid]
             context["list"].append(el.member)
 
     # Sort members alphabetically by display name
@@ -157,11 +157,11 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build mapping of member IDs to their character names and numbers
     member_chars = {}
     for el in context["chars"].values():
-        if "player_id" not in el:
+        if "player_uuid" not in el:
             continue
-        if el["player_id"] not in member_chars:
-            member_chars[el["player_id"]] = []
-        member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
+        if el["player_uuid"] not in member_chars:
+            member_chars[el["player_uuid"]] = []
+        member_chars[el["player_uuid"]].append(f"#{el['number']} {el['name']}")
 
     # Query all non-cancelled registrations with dietary preferences
     context["list"] = []
@@ -172,7 +172,7 @@ def orga_diet(request: HttpRequest, event_slug: str) -> HttpResponse:
     for el in que:
         if len(el.member.diet) > min_length:
             if el.member_id in member_chars:
-                el.member.chars = member_chars[el.member_id]
+                el.member.chars = member_chars[el.member.uuid]
             context["list"].append(el.member)
 
     # Sort members alphabetically by display name
@@ -371,11 +371,11 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
     context["reg_factions"] = []
     for char in context["chars"].values():
         # Skip characters without assigned players
-        if "player_id" not in char:
+        if "player_uuid" not in char:
             continue
 
         # Add character if it belongs to the current member
-        if char["player_id"] == member.id:
+        if char["player_uuid"] == member.uuid:
             context["reg_characters"].append(char)
             # Collect all factions for this member's characters
             for fnum in char["factions"]:
@@ -570,11 +570,11 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Build mapping of member IDs to their character assignments
     member_chars = {}
     for el in context["chars"].values():
-        if "player_id" not in el:
+        if "player_uuid" not in el:
             continue
-        if el["player_id"] not in member_chars:
-            member_chars[el["player_id"]] = []
-        member_chars[el["player_id"]].append(f"#{el['number']} {el['name']}")
+        if el["player_uuid"] not in member_chars:
+            member_chars[el["player_uuid"]] = []
+        member_chars[el["player_uuid"]].append(f"#{el['number']} {el['name']}")
 
     # Collect all relevant member IDs (registered participants + staff)
     member_list = list(
@@ -593,8 +593,8 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list"] = Member.objects.filter(id__in=member_list).order_by("created")
     for el in context["list"]:
         # Attach character assignments to each member
-        if el.id in member_chars:
-            el.chars = member_chars[el.id]
+        if el.uuid in member_chars:
+            el.chars = member_chars[el.uuid]
 
         # Apply field corrections/formatting
         member_field_correct(el, member_fields)

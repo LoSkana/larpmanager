@@ -36,13 +36,13 @@ var chosen = window['chosen'];
 // Characters that were not selected by any player
 var not_chosen = window['not_chosen'];
 
-// Player preferences (player_id -> [character_ids in preference order])
+// Player preferences (player_uuid -> [character_ids in preference order])
 var preferences = window['preferences'];
 
 // Players who didn't submit character preferences
 var didnt_choose = window['didnt_choose'];
 
-// Player choices that have been manually excluded (player_id -> [character_ids])
+// Player choices that have been manually excluded (player_uuid -> [character_ids])
 var nopes = window['nopes'];
 
 // Characters already assigned/taken
@@ -54,7 +54,7 @@ var mirrors = window['mirrors'];
 // Whether the avoid system is enabled
 var casting_avoid = window['casting_avoid'];
 
-// Players to avoid pairing (player_id -> avoid_list_string)
+// Players to avoid pairing (player_uuid -> avoid_list_string)
 var avoids = window['avoids'];
 
 // CSRF token for POST requests
@@ -165,7 +165,7 @@ function load_grid() {
     }
     mirrored.sort();
 
-    // Convert order object to array of [player_id, priority_score] pairs for sorting
+    // Convert order object to array of [player_uuid, priority_score] pairs for sorting
     for (var key in order) {
       keyValues.push([ key, order[key] ])
     }
