@@ -414,7 +414,7 @@ def get_character_sheet_factions(context: dict) -> None:  # noqa: C901 - Complex
         # Bulk fetch all writing answers for performance
         for faction_id, question_id, answer_text in WritingAnswer.objects.filter(
             element_id__in=faction_ids,
-            question_id__in=visible_question_ids,
+            question__uuid__in=visible_question_ids,
         ).values_list("element_id", "question_id", "text"):
             # Initialize nested dictionary structure as needed
             if faction_id not in faction_answers_map:
@@ -424,7 +424,7 @@ def get_character_sheet_factions(context: dict) -> None:  # noqa: C901 - Complex
         # Bulk fetch all writing choices and group by faction and question
         for faction_id, question_id, option_id in WritingChoice.objects.filter(
             element_id__in=faction_ids,
-            question_id__in=visible_question_ids,
+            question__uuid__in=visible_question_ids,
         ).values_list("element_id", "question_id", "option_id"):
             # Initialize nested dictionary and list structures as needed
             if faction_id not in faction_answers_map:
@@ -464,7 +464,8 @@ def get_character_sheet_fields(context: dict) -> None:
         return
 
     # Update sheet character context with element fields
-    context["sheet_char"].update(get_character_element_fields(context, context["character"].id, only_visible=False))
+    character_id = _get_character_cache_id(context)
+    context["sheet_char"].update(get_character_element_fields(context, character_id, only_visible=False))
 
 
 def get_char_check(
@@ -589,11 +590,16 @@ def check_missing_mandatory(context: dict) -> None:
     }
 
     questions = context["event"].get_elements(WritingQuestion)
-    character_number = context["char"]["number"]
-    character_id = context["char_mapping"][character_number]
+    character_id = _get_character_cache_id(context)
     for question in questions.filter(applicable=QuestionApplicable.CHARACTER, status=QuestionStatus.MANDATORY):
         model = question_type_to_model.get(question.typ)
         if model and not model.objects.filter(element_id=character_id, question=question).exists():
             missing_question_names.append(question.name)
 
     context["missing_fields"] = ", ".join(missing_question_names)
+
+
+def _get_character_cache_id(context: dict) -> int:
+    """Get id of loaded character in context."""
+    character_number = context["char"]["number"]
+    return context["char_mapping"][character_number]

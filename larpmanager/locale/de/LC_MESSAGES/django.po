@@ -3044,6 +3044,9 @@ msgstr "Ausweisdokument Foto"
 msgid "Identity document"
 msgstr "Ausweisdokument"
 
+msgid "Invalid selection"
+msgstr "Ungültige Auswahl"
+
 msgid "Invoice not found"
 msgstr "Rechnung nicht gefunden"
 
@@ -3560,9 +3563,6 @@ msgstr "Prozentsatz der Rendite"
 
 msgid "Select the new event"
 msgstr "Wählen Sie das neue Ereignis"
-
-msgid "Selezione non valida"
-msgstr "Ungültige Auswahl"
 
 msgid "Set character status"
 msgstr "Zeichenstatus einstellen"
