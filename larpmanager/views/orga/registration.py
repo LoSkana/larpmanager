@@ -110,7 +110,7 @@ def check_time(times: Any, step: Any, start: Any = None) -> Any:
 
 
 def _orga_registrations_traits(registration: Any, context: dict) -> None:
-    """Process and organize character traits for registration display.
+    """Process and organize traits for registration display.
 
     Args:
         registration: Registration instance to process
@@ -121,19 +121,21 @@ def _orga_registrations_traits(registration: Any, context: dict) -> None:
         return
 
     registration.traits = {}
-    if not hasattr(registration, "chars"):
+
+    # Get traits directly from registration mapping
+    registration_id = registration.id
+    if registration_id not in context.get("traits_by_reg", {}):
         return
-    for character in registration.chars:
-        if "traits" not in character:
-            continue
-        for trait_number in character["traits"]:
-            trait = context["traits"][trait_number]
-            quest = context["quests"][trait["quest"]]
-            quest_type = context["quest_types"][quest["typ"]]
-            quest_type_uuid = quest_type["uuid"]
-            if quest_type_uuid not in registration.traits:
-                registration.traits[quest_type_uuid] = []
-            registration.traits[quest_type_uuid].append(f"{quest['name']} - {trait['name']}")
+
+    # Process each trait assigned to this registration
+    for trait_number in context["traits_by_reg"][registration_id]:
+        trait = context["traits"][trait_number]
+        quest = context["quests"][trait["quest"]]
+        quest_type = context["quest_types"][quest["typ"]]
+        quest_type_uuid = quest_type["uuid"]
+        if quest_type_uuid not in registration.traits:
+            registration.traits[quest_type_uuid] = []
+        registration.traits[quest_type_uuid].append(f"{quest['name']} - {trait['name']}")
 
     for quest_type_uuid in registration.traits:
         registration.traits[quest_type_uuid] = ",".join(registration.traits[quest_type_uuid])

@@ -465,32 +465,28 @@ def _build_trait_relationships(event: Event) -> dict:
     return trait_relationships
 
 
-def _find_character_by_member_id(chars: dict, member_id: int) -> dict | None:
-    """Find a character in the cache by member ID.
+def _find_registration_by_member_id(assignments: dict, member_id: int) -> RegistrationCharacterRel | None:
+    """Find a registration-character relation by member ID.
 
     Args:
-        chars: Dictionary of characters from cache
+        assignments: Dictionary mapping character numbers to RegistrationCharacterRel
         member_id: Member ID to search for
 
     Returns:
-        Character dictionary if found, None otherwise
+        RegistrationCharacterRel if found, None otherwise
     """
-    for character in chars.values():
-        if "player_id" in character and character["player_id"] == member_id:
-            return character
+    for assignment in assignments.values():
+        if assignment.reg.member_id == member_id:
+            return assignment
     return None
 
 
 def get_event_cache_traits(context: dict, res: dict) -> None:
-    """Build cached trait and quest data for events.
-
-    Organizes character traits, quest types, and related game mechanics data,
-    including trait relationships, character assignments, and quest type
-    mappings for efficient event cache operations.
+    """Build cached trait and quest data for events, linking them to registrations.
 
     Args:
-        context: Context dictionary containing event information with 'event' and 'run' keys
-        res: Result dictionary to be populated with trait and quest data, must contain 'chars' key
+        context: Context dictionary containing event information with 'event', 'run', and 'assignments' keys
+        res: Result dictionary to be populated with trait and quest data
 
     Returns:
         None: Function modifies res in-place, adding quest types, traits, and relationships
@@ -499,7 +495,8 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
         Modifies res dictionary by adding:
         - quest_types: Mapping of quest type numbers to their display data
         - quests: Mapping of quest numbers to their display data
-        - traits: Mapping of trait numbers to enhanced trait data with relationships
+        - traits: Mapping of trait numbers to trait data with registration links
+        - traits_by_reg: Mapping of registration IDs to lists of trait numbers
         - max_tr_number: Maximum trait number or 0 if no traits exist
 
     """
@@ -516,11 +513,12 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
     # Build trait relationships mapping (traits that reference other traits)
     trait_relationships = _build_trait_relationships(context["event"])
 
-    # Build main traits mapping with character assignments
+    # Build main traits mapping with registration assignments
     res["traits"] = {}
+    res["traits_by_reg"] = {}  # Map registration_id -> [trait_numbers]
     assignment_traits_query = AssignmentTrait.objects.filter(run=context["run"]).order_by("typ")
 
-    # Process each assigned trait and link to character
+    # Process each assigned trait and link to registration
     for assignment_trait in assignment_traits_query.select_related("trait", "trait__quest", "trait__quest__typ"):
         trait_data = assignment_trait.trait.show()
 
@@ -528,21 +526,22 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
         trait_data["typ"] = assignment_trait.trait.quest.typ.number
         trait_data["traits"] = trait_relationships[assignment_trait.trait.number]
 
-        # Find the character this trait is assigned to
-        found_character = _find_character_by_member_id(res["chars"], assignment_trait.member_id)
+        # Find the registration-character relation for this member
+        found_assignment = _find_registration_by_member_id(context.get("assignments", {}), assignment_trait.member_id)
 
-        # Skip if character not found in cache
-        if not found_character:
+        # Skip if registration not found
+        if not found_assignment:
             continue
 
-        # Initialize character traits list if needed
-        if "traits" not in found_character:
-            found_character["traits"] = []
-
-        # Link trait to character and vice versa
-        found_character["traits"].append(trait_data["number"])
-        trait_data["char"] = found_character["number"]
+        # Get registration info
+        registration_id = found_assignment.reg.id
+        trait_data["reg_id"] = registration_id
         res["traits"][trait_data["number"]] = trait_data
+
+        # Add trait to registration's trait list
+        if registration_id not in res["traits_by_reg"]:
+            res["traits_by_reg"][registration_id] = []
+        res["traits_by_reg"][registration_id].append(trait_data["number"])
 
     # Set maximum trait number for cache optimization
     if res["traits"]:

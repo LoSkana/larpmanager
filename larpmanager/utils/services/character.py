@@ -24,7 +24,11 @@ from typing import Any
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.character import (
+    _find_registration_by_member_id,
+    get_character_element_fields,
+    get_event_cache_all,
+)
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.models.casting import Trait
 from larpmanager.models.form import (
@@ -307,7 +311,7 @@ def get_character_sheet_questbuilder(context: dict) -> None:
     """Build character sheet with quest and trait relationships.
 
     Args:
-        context: Context dictionary with character, quest, and trait data
+        context: Context dictionary with character, quest, trait data, and run info
 
     Side effects:
         Updates context with sheet_traits containing complete trait and quest information
@@ -316,14 +320,21 @@ def get_character_sheet_questbuilder(context: dict) -> None:
     if "questbuilder" not in context["features"]:
         return
 
-    if "char" not in context:
+    if "char" not in context or "character" not in context:
         return
 
-    if "player_id" not in context["char"] or "traits" not in context["char"]:
+    # Find the registration-character relation for this member
+    assignment = _find_registration_by_member_id(context.get("assignments", {}), context["member"].id)
+    if not assignment:
+        return
+
+    # Get trait numbers for this registration
+    registration_id = assignment.reg.id
+    if registration_id not in context.get("traits_by_reg", {}):
         return
 
     context["sheet_traits"] = []
-    for trait_number in context["char"]["traits"]:
+    for trait_number in context["traits_by_reg"][registration_id]:
         trait_element = context["traits"][trait_number]
         trait_object = Trait.objects.get(event=context["event"], number=trait_element["number"])
         trait_data = trait_object.show_complete()
