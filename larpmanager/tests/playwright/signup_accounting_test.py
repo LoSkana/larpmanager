@@ -273,6 +273,7 @@ def setup_payment(live_server: Any, page: Any) -> None:
     page.locator("#id_wire_payee").fill("test beneficiary")
     page.locator("#id_wire_payee").press("Tab")
     page.locator("#id_wire_iban").fill("test iban")
+    page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
 
     # set ticket price

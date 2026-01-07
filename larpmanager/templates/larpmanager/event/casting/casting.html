@@ -89,7 +89,7 @@
     <script>
     var casting_max = {{ casting_max }};
     var casting_min = {{ casting_min }};
-    var faction_list = {{ factions | safe }};
+    var factions_dict = {{ factions_json | safe }};
     var choices_dict = {{ choices | safe }};
 
     var faction_filter = [];
@@ -107,14 +107,12 @@
 
     function load_choice() {
 
-        // debug(faction_list);
-        // debug(choices_dict);
-        // debug(faction_list.length);
-
+        var faction_keys = Object.keys(factions_dict);
         for (var ix = 0; ix < casting_max; ix++) {
-            for (var iy = 0; iy < faction_list.length; iy++) {
-                // debug(faction_list[iy]);
-                $('#faction' + ix).append(new Option(faction_list[iy], faction_list[iy]));
+            for (var iy = 0; iy < faction_keys.length; iy++) {
+                var faction_key = faction_keys[iy];
+                var faction_name = factions_dict[faction_key];
+                $('#faction' + ix).append(new Option(faction_name, faction_key));
             }
 
             const g = ix;
@@ -142,15 +140,16 @@
 
     function load_already_el(ix, elem) {
 
-        for (var iy = 0; iy < faction_list.length; iy++) {
-            var faction = faction_list[iy];
-            for (kkey in choices_dict[faction]) {
+        var faction_keys = Object.keys(factions_dict);
+        for (var iy = 0; iy < faction_keys.length; iy++) {
+            var faction_key = faction_keys[iy];
+            for (kkey in choices_dict[faction_key]) {
 
                 if (kkey !== elem) continue;
 
-                $('#faction' + ix + ' option[value="'+faction+'"]').attr('selected', 'selected');
+                $('#faction' + ix + ' option[value="'+faction_key+'"]').attr('selected', 'selected');
                 update_el_dict(ix);
-                // debug(kkey);
+
                 $('#choice' + ix + ' option[value="'+kkey+'"]').attr('selected', 'selected');
                 return;
             }

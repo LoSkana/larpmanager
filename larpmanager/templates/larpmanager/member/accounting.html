@@ -30,7 +30,7 @@
             {% for reg in payments_todo %}
                 {% include "elements/comma.html" %}
                 <b>{{ reg.run }}</b> -
-                <a href="{% url 'acc_reg' reg.uuid %}">
+                <a href="{% url 'accounting_registration' reg.uuid %}">
                     {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
                     {% if reg.deadline > 0 %}
                         {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}
@@ -232,7 +232,7 @@
                     </p>
                 {% elif reg.quota > 0 %}
                     <p>
-                        <a href="{% url 'acc_reg' reg.uuid %}">
+                        <a href="{% url 'accounting_registration' reg.uuid %}">
                             {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
                             {% if reg.deadline > 0 %}
                                 {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}

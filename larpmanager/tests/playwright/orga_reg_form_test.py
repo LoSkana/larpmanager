@@ -126,6 +126,7 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     page.locator("#id_wire_iban").fill("dasda")
     page.locator("#id_wire_fee").click()
     page.locator("#id_wire_fee").fill("0")
+    page.locator("#id_wire_bic").fill("test iban")
     submit_confirm(page)
 
 
