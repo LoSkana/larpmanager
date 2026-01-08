@@ -317,7 +317,7 @@ def print_character(context: dict, *, force: bool = False) -> HttpResponse:
         xhtml_pdf(context, "pdf/sheets/auxiliary.html", file_path)
 
     # Return the PDF response
-    return return_pdf(file_path, f"{context['character']}")
+    return return_pdf(file_path, context["character"].name)
 
 
 def print_character_friendly(context: dict, *, force: bool = False) -> HttpResponse:
@@ -341,7 +341,7 @@ def print_character_friendly(context: dict, *, force: bool = False) -> HttpRespo
         xhtml_pdf(context, "pdf/sheets/friendly.html", file_path)
 
     # Return the PDF file as HTTP response
-    return return_pdf(file_path, f"{context['character']} - " + _("Lightweight"))
+    return return_pdf(file_path, f"{context['character'].name} - " + _("Lightweight"))
 
 
 def print_faction(context: dict, *, force: bool = False) -> HttpResponse:
@@ -380,7 +380,7 @@ def print_faction(context: dict, *, force: bool = False) -> HttpResponse:
         xhtml_pdf(context, "pdf/sheets/faction.html", file_path)
 
     # Return the PDF file as HTTP response with faction name in filename
-    return return_pdf(file_path, f"{context['faction']}")
+    return return_pdf(file_path, context["faction"].name)
 
 
 def print_character_rel(context: dict, *, force: bool = False) -> HttpResponse:
@@ -404,7 +404,7 @@ def print_character_rel(context: dict, *, force: bool = False) -> HttpResponse:
         xhtml_pdf(context, "pdf/sheets/relationships.html", filepath)
 
     # Return the PDF response with localized filename
-    return return_pdf(filepath, f"{context['character']} - " + _("Relationships"))
+    return return_pdf(filepath, f"{context['character'].name} - " + _("Relationships"))
 
 
 def print_gallery(context: dict, *, force: bool = False) -> HttpResponse:

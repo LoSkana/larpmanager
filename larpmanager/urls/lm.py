@@ -39,7 +39,7 @@ urlpatterns = [
         name="guides",
     ),
     path(
-        "guides/<slug:slug>/",
+        "guide/<slug:slug>/",
         views_lm.guide,
         name="guide",
     ),

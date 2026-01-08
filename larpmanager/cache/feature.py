@@ -175,6 +175,7 @@ def update_event_features(ev_id: int) -> dict[str, int]:
             for feature_slug in config_feature_slugs:
                 if event.get_config(f"{config_type}_{feature_slug}", default_value=False):
                     features_dict[feature_slug] = 1
+
     except ObjectDoesNotExist:
         return {}
     else:

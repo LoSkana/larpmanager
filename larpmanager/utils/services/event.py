@@ -56,6 +56,7 @@ from larpmanager.models.registration import RegistrationCharacterRel, Registrati
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import copy_class
+from larpmanager.utils.services.inventory import generate_base_inventories
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -660,3 +661,11 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear text fields cache
     reset_text_fields_cache(run)
+
+
+def init_features(event: Event, features_dict: list[str]) -> None:
+    """Perform initializazion on new features activation."""
+    if "inventory" in features_dict:
+        # Generate inventories for all existing characters in this event
+        for character in event.get_elements(Character):
+            generate_base_inventories(character)

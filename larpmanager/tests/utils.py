@@ -275,6 +275,8 @@ def normalize_whitespace(text: str) -> str:
 
     text = " ".join(" ".join(lines).split())
 
+    # Remove pipes separator
+    text = text.replace("|", "")
     # Replace newlines and tabs with spaces
     text = text.replace("\n", " ").replace("\r", " ").replace("\t", " ")
     # Collapse multiple spaces into single space

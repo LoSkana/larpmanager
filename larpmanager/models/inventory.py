@@ -20,7 +20,7 @@ from typing import Any, ClassVar
 
 from django.db import models
 
-from larpmanager.models.base import UuidMixin
+from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character
@@ -83,7 +83,7 @@ class PoolBalanceCI(PoolBalanceCommon):
         unique_together = ("inventory", "pool_type")
 
 
-class InventoryTransfer(models.Model):
+class InventoryTransfer(BaseModel):
     """Transfer log model for tracking inventory resource movements."""
 
     source_inventory = models.ForeignKey(

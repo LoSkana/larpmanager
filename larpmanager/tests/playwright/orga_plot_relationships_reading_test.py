@@ -180,7 +180,7 @@ def plots(live_server: Any, page: Any) -> None:
     # set text
     fill_tinymce(page, "id_text", "wwwww")
 
-    # set char role
+    # set first char role
     searchbox = page.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("te")
@@ -191,11 +191,21 @@ def plots(live_server: Any, page: Any) -> None:
     page.wait_for_timeout(5000)
     fill_tinymce(page, "ch_1", "prova")
 
+    # add second char role
+    searchbox = page.get_by_role("searchbox")
+    searchbox.fill("pro")
+    # Wait for the option to appear and click it
+    option = page.get_by_role("option", name="#2 prova")
+    option.wait_for(state="visible")
+    option.click()
+    page.wait_for_timeout(5000)
+    fill_tinymce(page, "ch_2", "second char role")
+
     submit_confirm(page)
 
-    # check in plot list
+    # check in plot list - both characters should be there
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character")
+    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
 
     # check it is the same
     page.get_by_role("link", name="").click()
@@ -203,7 +213,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova")
+    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova second char role")
     locator.click()
 
     # change it
@@ -212,13 +222,13 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character")
+    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
     page.get_by_role("link", name="").click()
     # Wait for the toggle element to be ready
     locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova222")
+    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova222 second char role")
 
     # remove first char
     page.get_by_role("listitem", name="#1 Test Character").locator("span").click()
