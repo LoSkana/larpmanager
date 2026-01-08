@@ -190,7 +190,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     features = get_association_features(context["association_id"])
 
     # Redirect to event creation if no events exist and feature is available
-    if "onboarding" in context and "exe_events" in features:
+    if context.get("onboarding") and "exe_events" in features:
         return redirect("exe_events_edit", event_uuid="0")
 
     # Redirect to quick setup if not completed
