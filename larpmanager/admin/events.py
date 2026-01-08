@@ -33,6 +33,7 @@ from larpmanager.models.event import (
     Run,
     RunConfig,
 )
+from larpmanager.models.inventory import Inventory, InventoryTransfer
 
 
 @admin.register(ProgressStep)
@@ -112,3 +113,17 @@ class EventButtonAdmin(DefModelAdmin):
     search_fields: ClassVar[tuple] = ("id", "name", "uuid")
     autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter,)
+
+
+@admin.register(Inventory)
+class InventoryAdmin(DefModelAdmin):
+    """Admin interface for Inventory model."""
+
+    list_display: ClassVar[tuple] = ("id", "name")
+
+
+@admin.register(InventoryTransfer)
+class InventoryTransferAdmin(DefModelAdmin):
+    """Admin interface for Inventory model."""
+
+    list_display: ClassVar[tuple] = ("id", "source_inventory", "target_inventory", "pool_type", "amount")

@@ -83,7 +83,7 @@ class PoolBalanceCI(PoolBalanceCommon):
         unique_together = ("inventory", "pool_type")
 
 
-class InventoryTransfer(models.Model):
+class InventoryTransfer(BaseConceptModel):
     """Transfer log model for tracking inventory resource movements."""
 
     source_inventory = models.ForeignKey(
