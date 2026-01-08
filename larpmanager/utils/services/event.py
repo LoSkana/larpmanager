@@ -40,7 +40,7 @@ from larpmanager.cache.role import remove_event_role_cache
 from larpmanager.cache.run import reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.models.access import EventRole, get_event_organizers
-from larpmanager.models.base import auto_set_uuid, debug_set_uuid
+from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, EventConfig, EventText, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -661,6 +661,38 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear text fields cache
     reset_text_fields_cache(run)
+
+
+def on_event_features_m2m_changed(
+    sender: type,  # noqa: ARG001
+    instance: Event,
+    action: str,
+    pk_set: set[int] | None,
+    **kwargs: Any,  # noqa: ARG001
+) -> None:
+    """Handle event-feature m2m relationship changes.
+
+    Called when features are added/removed from an event via the m2m_changed signal.
+    Uses a single bulk query to fetch all feature slugs and passes them to init_features.
+
+    Args:
+        sender: The through model class
+        instance: The Event instance
+        action: The m2m action (post_add, post_remove, post_clear)
+        pk_set: Set of Feature PKs being added/removed
+        **kwargs: Additional signal arguments
+
+    """
+    # Only process post_add actions for newly activated features
+    if action != "post_add" or not pk_set:
+        return
+
+    # Single bulk query to get all slugs at once
+    feature_slugs = list(Feature.objects.filter(pk__in=pk_set).values_list("slug", flat=True))
+
+    # Initialize the newly added features
+    if feature_slugs:
+        init_features(instance, feature_slugs)
 
 
 def init_features(event: Event, features_dict: list[str]) -> None:

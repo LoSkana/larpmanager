@@ -29,7 +29,6 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.models.base import Feature, FeatureModule
-from larpmanager.utils.services.event import init_features
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
@@ -187,13 +186,6 @@ class FeatureForm(BaseModelForm):
 
         new_features = set(features_id)
         self.added_features = new_features - old_features
-
-        # Initialize newly added features
-        if self.added_features and hasattr(instance, "slug"):
-            added_feature_slugs = list(
-                Feature.objects.filter(pk__in=self.added_features).values_list("slug", flat=True),
-            )
-            init_features(instance, added_feature_slugs)
 
 
 class QuickSetupForm(BaseModelForm):
