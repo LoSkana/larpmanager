@@ -407,6 +407,9 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
     # Find characters without a primary faction (faction 0)
     characters_without_primary_faction = []
     for character_number, character_data in result["chars"].items():
+        if character_data["hide"]:
+            continue
+
         if "factions" in character_data and 0 in character_data["factions"]:
             characters_without_primary_faction.append(character_number)
 
@@ -423,26 +426,32 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
 
     # Process real factions from the event
     for faction in context["event"].get_elements(Faction).order_by("order"):
-        # Get faction display data
-        faction_data = faction.show_red()
-        faction_data["characters"] = []
+        _process_faction_cache(faction, result)
 
-        # Find characters belonging to this faction
-        for character_number, character_data in result["chars"].items():
-            if faction_data["number"] in character_data["factions"]:
-                faction_data["characters"].append(character_number)
 
-        # Skip factions with no characters
-        if not faction_data["characters"]:
+def _process_faction_cache(faction: Faction, result: dict) -> None:
+    """Process a faction adding its values into the result cache."""
+    # Get faction display data
+    faction_data = faction.show_red()
+    faction_data["characters"] = []
+    # Find characters belonging to this faction
+    for character_number, character_data in result["chars"].items():
+        if character_data["hide"]:
             continue
 
-        # Add faction to results and organize by type
-        result["factions"][faction.number] = faction_data
-        if faction.typ not in result["factions_typ"]:
-            result["factions_typ"][faction.typ] = []
-        result["factions_typ"][faction.typ].append(faction.number)
+        if faction_data["number"] in character_data["factions"]:
+            faction_data["characters"].append(character_number)
 
-        result["fac_mapping"][faction.number] = faction.id
+    # Skip factions with no characters
+    if not faction_data["characters"]:
+        return
+
+    # Add faction to results and organize by type
+    result["factions"][faction.number] = faction_data
+    if faction.typ not in result["factions_typ"]:
+        result["factions_typ"][faction.typ] = []
+    result["factions_typ"][faction.typ].append(faction.number)
+    result["fac_mapping"][faction.number] = faction.id
 
 
 def _build_trait_relationships(event: Event) -> dict:
