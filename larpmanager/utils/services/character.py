@@ -392,18 +392,8 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     # Prepare writing fields query data for faction-applicable questions
     visible_writing_fields(context, QuestionApplicable.FACTION, only_visible=only_visible)
 
-    # Determine which questions should be visible based on configuration
-    visible_question_ids = []
-    if "questions" in context:
-        for question_id in context["questions"]:
-            question_config_key = str(question_id)
-            # Skip questions that are not configured to show for factions
-            if "show_all" not in context and question_config_key not in context.get("show_faction", {}):
-                continue
-            visible_question_ids.append(question_id)
-
     # Build comprehensive answer mapping: faction_id -> {question_id -> text/choices}
-    faction_answers_map = _get_factions_answers_choices(faction_ids, visible_question_ids)
+    faction_answers_map = _get_factions_answers_choices(context, faction_ids)
 
     faction_complete = {}
     if not only_visible:
@@ -419,6 +409,9 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
             faction_display_data = faction_complete.get(faction_number)
         faction_id = context.get("fac_mapping", {}).get(faction_number)
 
+        if not faction_display_data:
+            continue
+
         # Merge in writing fields from pre-fetched bulk data
         faction_writing_fields = faction_answers_map.get(faction_id, {})
         faction_display_data.update(
@@ -433,8 +426,18 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
         context["sheet_factions"].append(faction_display_data)
 
 
-def _get_factions_answers_choices(faction_ids: list, visible_question_ids: list) -> dict:
+def _get_factions_answers_choices(context: dict, faction_ids: list) -> dict:
     """Build comprehensive answer mapping: faction_id -> {question_id -> text/choices}."""
+    # Determine which questions should be visible based on configuration
+    visible_question_ids = []
+    if "questions" in context:
+        for question_id in context["questions"]:
+            question_config_key = str(question_id)
+            # Skip questions that are not configured to show for factions
+            if "show_all" not in context and question_config_key not in context.get("show_faction", {}):
+                continue
+            visible_question_ids.append(question_id)
+
     faction_answers_map = {}
     if visible_question_ids:
         # Bulk fetch all writing answers for performance
