@@ -49,8 +49,8 @@
                     {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
                 {% elif que.typ == 'faction' %}
                     {% for g in el.faction_rels.list %}
+                        {% include "elements/comma.html" %}
                         <a href="{% url 'orga_factions_edit' run.get_slug g.0 %}">{{ g.1 }}</a>
-                        <br />
                     {% endfor %}
                 {% elif que.typ == 'mirror' %}
                     {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}

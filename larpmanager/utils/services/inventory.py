@@ -16,10 +16,18 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.db import transaction
 
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolBalanceCI, PoolTypeCI
-from larpmanager.models.member import Member
+
+if TYPE_CHECKING:
+    from larpmanager.models.member import Member
+    from larpmanager.models.writing import Character
 
 
 def perform_transfer(
@@ -80,3 +88,14 @@ def perform_transfer(
             actor=actor,
             reason=reason,
         )
+
+
+def generate_base_inventories(instance: Character) -> None:
+    """Create a personal inventory for newly created characters."""
+    event_features = get_event_features(instance.event_id)
+    if "inventory" not in event_features:
+        return
+
+    inventory = Inventory.objects.create(name=f"{instance.name}'s Personal Storage", event=instance.event)
+    inventory.owners.add(instance)
+    inventory.save()

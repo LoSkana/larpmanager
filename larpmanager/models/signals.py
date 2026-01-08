@@ -253,6 +253,7 @@ from larpmanager.utils.services.experience import (
     update_characters_experience_on_modifier_change,
     update_characters_experience_on_rule_change,
 )
+from larpmanager.utils.services.inventory import generate_base_inventories
 from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
 from larpmanager.utils.services.writing import replace_character_names_before_save
 from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
@@ -664,9 +665,7 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
 
     # Create a personal inventory for newly created characters
     if created:
-        inventory = Inventory.objects.create(name=f"{instance.name}'s Personal Storage", event=instance.event)
-        inventory.owners.add(instance)
-        inventory.save()
+        generate_base_inventories(instance)
 
 
 @receiver(pre_delete, sender=Character)

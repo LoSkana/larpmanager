@@ -505,7 +505,7 @@ class Plot(Writing):
         )
 
 
-class PlotCharacterRel(UuidMixin, BaseModel):
+class PlotCharacterRel(BaseModel):
     """Represents PlotCharacterRel model."""
 
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)

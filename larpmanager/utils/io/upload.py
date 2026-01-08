@@ -22,6 +22,7 @@ from __future__ import annotations
 import io
 import logging
 import os
+import re
 import shutil
 from decimal import Decimal
 from pathlib import Path
@@ -117,6 +118,11 @@ def _to_decimal(value: str) -> Decimal:
 
     """
     return Decimal(_normalize_numeric(value))
+
+
+def _strip_number_prefix(name: str) -> str:
+    """Strip initial '#number ' pattern from name."""
+    return re.sub(r"^#\d+\s+", "", name)
 
 
 def go_upload(context: dict, upload_form_data: Any) -> Any:
@@ -869,6 +875,9 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
 
     # Extract element name and determine the appropriate model class
     element_name = csv_row[primary_field_name]
+
+    # Remove initial "#number " pattern from name
+    element_name = _strip_number_prefix(element_name)
     question_applicable_type = QuestionApplicable.get_applicable(context["typ"])
     writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 

@@ -35,6 +35,7 @@
                     <td>{{ el.teaser_red | safe }}</td>
                     <td class="dot_links">
                         {% for q in el.quest_rels.list %}
+                            {% include "elements/comma.html" %}
                             <a href="{% url 'orga_quests_edit' run.get_slug q.0 %}">{{ q.1 }}</a>
                         {% endfor %}
                     </td>

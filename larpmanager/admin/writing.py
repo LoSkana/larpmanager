@@ -62,9 +62,9 @@ class PlotAdmin(DefModelAdmin):
 class PlotCharacterRelAdmin(DefModelAdmin):
     """Admin interface for PlotCharacterRel model."""
 
-    list_display: ClassVar[tuple] = ("id", "plot", "character", "uuid")
+    list_display: ClassVar[tuple] = ("id", "plot", "character", "order")
     list_filter = (CharacterFilter, PlotFilter)
-    search_fields: ClassVar[list] = ["id", "uuid"]
+    search_fields: ClassVar[list] = ["id", "plot__name", "character__name"]
     autocomplete_fields: ClassVar[list] = ["plot", "character"]
 
 

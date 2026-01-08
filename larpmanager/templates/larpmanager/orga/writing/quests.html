@@ -39,6 +39,7 @@
             {% include "elements/writing/questions_body.html" %}
             <td class="hide traits dot_links">
                 {% for t in el.trait_rels.list %}
+                    {% include "elements/comma.html" %}
                     <a href="{% url 'orga_traits_edit' run.get_slug t.0 %}">{{ t.1 }}</a>
                 {% endfor %}
             </td>
