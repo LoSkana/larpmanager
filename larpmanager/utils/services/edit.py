@@ -601,7 +601,7 @@ def writing_edit(
 
     # Configure element identification and naming
     if element_name in context:
-        context["eid"] = context[element_name].id
+        context["eid"] = context[element_name].uuid
         context["name"] = str(context[element_name])
     else:
         context[element_name] = None

@@ -143,7 +143,7 @@ def update_leaderboard(association_id: int) -> list[dict]:
     for membership in Membership.objects.filter(association_id=association_id):
         # Build member data with badge count and basic info
         member_entry = {
-            "id": membership.member_id,
+            "uuid": membership.member.uuid,
             "count": membership.member.badges.filter(association_id=association_id).count(),
             "created": membership.created,
             "name": membership.member.display_member(),
