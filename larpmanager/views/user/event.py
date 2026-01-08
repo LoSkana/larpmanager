@@ -166,7 +166,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     # Process each run to determine registration status and categorize
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
-        registration_status(run, context["member"], context)
+        run.status = registration_status(run, context["member"], context)
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -486,9 +486,9 @@ def event_register(request: HttpRequest, event_slug: str) -> Any:
         return redirect("register", event_slug=run.get_slug())
     context["list"] = []
     context.update({"features_map": {context["event"].id: context["features"]}})
-    for r in runs:
-        registration_status(r, context["member"], context)
-        context["list"].append(r)
+    for run in runs:
+        run.status = registration_status(run, context["member"], context)
+        context["list"].append(run)
     return render(request, "larpmanager/general/event_register.html", context)
 
 
@@ -556,7 +556,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     # Process each run to add registration status information
     for run in runs_list:
         # Update run object with registration status data
-        registration_status(run, context["member"], context)
+        run.status = registration_status(run, context["member"], context)
 
         # Add processed run to context list
         context["list"].append(run)
@@ -716,18 +716,18 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     context.update({"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map})
 
     # Process each run to determine registration status and categorize by timing
-    for r in runs:
-        if not r.end:
+    for run in runs:
+        if not run.end:
             continue
 
         # Update run with registration status information
-        registration_status(r, context["member"], context)
+        run.status = registration_status(run, context["member"], context)
 
         # Categorize run as coming (recent) or past based on end date
-        if r.end > ref.date():
-            context["coming"].append(r)
+        if run.end > ref.date():
+            context["coming"].append(run)
         else:
-            context["past"].append(r)
+            context["past"].append(run)
 
     # Refresh event object to ensure latest data
     context["event"] = Event.objects.get(pk=context["event"].pk)

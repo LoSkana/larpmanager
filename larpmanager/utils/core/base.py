@@ -389,7 +389,7 @@ def get_event_context(
 
     # Add registration status details to context
     if include_status:
-        registration_status(context["run"], context["member"], context, registration)
+        context["run_status"] = registration_status(context["run"], context["member"], context, registration)
 
     # Configure user permissions and sidebar for authorized users
     if is_staff:

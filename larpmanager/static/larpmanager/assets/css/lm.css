@@ -2503,7 +2503,7 @@ input[type="number"] {
   position: relative;
   max-width: 70%;
   margin: 0 auto;
-  padding-top: 56.25%; /* Rapporto 16:9 - stessa altezza massima delle foto showcase */
+  padding-top: 36.25%;
   overflow: hidden;
   border-radius: 10px;
 }

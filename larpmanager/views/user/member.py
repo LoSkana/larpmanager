@@ -1025,7 +1025,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
     # Process each registration to calculate status and append to results
     for reg in my_regs:
         # Calculate registration status
-        registration_status(reg.run, context["member"], context)
+        reg.run.status = registration_status(reg.run, context["member"], context)
         nt.append(reg)
 
     # Render template with processed registration list

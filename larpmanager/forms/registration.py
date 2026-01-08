@@ -111,6 +111,7 @@ class RegistrationForm(BaseRegistrationForm):
         run = self.params["run"]
         event = run.event
         self.event = event
+        self.run_status = self.params.get("run_status", {})
 
         # Get current registration counts for quota calculations and availability checks
         # This data determines ticket availability and waiting list status
@@ -124,7 +125,7 @@ class RegistrationForm(BaseRegistrationForm):
         # Checks existing registration status or current run capacity
         self.waiting_check = (
             self.instance and self.instance.ticket and self.instance.ticket.tier == TicketTier.WAITING
-        ) or (not self.instance and "waiting" in run.status)
+        ) or (not self.instance and "waiting" in self.run_status)
 
         # Initialize quota management system and additional registration options
         # Sets up capacity limits and optional registration features
@@ -133,7 +134,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Setup payment-related form fields including pricing and surcharges
         # Configures payment options and calculates total costs
-        self.init_pay_what(run)
+        self.init_pay_what()
         self.init_surcharge(event)
 
         # Add dynamic registration questions based on event configuration and requirements
@@ -275,19 +276,14 @@ class RegistrationForm(BaseRegistrationForm):
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
         self.fields["surcharge"] = forms.ChoiceField(required=True, choices=ch)
 
-    def init_pay_what(self, run: Run) -> None:
-        """Initialize pay-what-you-want donation field for non-waiting runs.
-
-        Args:
-            run: The Run instance to check status for field initialization.
-
-        """
+    def init_pay_what(self) -> None:
+        """Initialize pay-what-you-want donation field for non-waiting runs."""
         # Skip if pay-what-you-want feature is not enabled
         if "pay_what_you_want" not in self.params["features"]:
             return
 
         # Skip for waiting runs
-        if "waiting" in run.status:
+        if "waiting" in self.run_status:
             return
 
         # Create the pay-what-you-want field with validation (0-1000 range)
@@ -314,7 +310,7 @@ class RegistrationForm(BaseRegistrationForm):
         quota_choices = []
 
         # Check if quota feature is enabled and run is not in waiting status
-        if "reg_quotas" in self.params["features"] and "waiting" not in run.status:
+        if "reg_quotas" in self.params["features"] and "waiting" not in self.run_status:
             # Define labels for different quota options (1-5 quotas)
             quota_labels = [
                 _("Single payment"),
@@ -467,7 +463,7 @@ class RegistrationForm(BaseRegistrationForm):
                 return RegistrationTicket.objects.filter(event=event, tier=tier).order_by("order")
 
         # Prevent new registrations if inscriptions are closed
-        if not self.instance.pk and "closed" in run.status:
+        if not self.instance.pk and "closed" in self.run_status:
             return []
 
         # Build list of available player tickets
@@ -574,7 +570,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Show waiting tickets only if run allows waiting or member already has waiting ticket
         elif ticket.tier == TicketTier.WAITING:
-            if "waiting" not in run.status and not self.has_ticket(TicketTier.WAITING):
+            if "waiting" not in self.run_status and not self.has_ticket(TicketTier.WAITING):
                 result = True
 
         # Handle filler ticket visibility based on event config and member status
@@ -583,17 +579,17 @@ class RegistrationForm(BaseRegistrationForm):
             if filler_alway:
                 # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
-                    "filler" not in run.status
-                    and "primary" not in run.status
+                    "filler" not in self.run_status
+                    and "primary" not in self.run_status
                     and not self.has_ticket(TicketTier.FILLER)
                 ):
                     result = True
             # Without filler_always, show only if run supports filler or member has filler ticket
-            elif "filler" not in run.status and not self.has_ticket(TicketTier.FILLER):
+            elif "filler" not in self.run_status and not self.has_ticket(TicketTier.FILLER):
                 result = True
 
         # Show primary tickets only if run supports primary registration or member has primary ticket
-        elif "primary" not in run.status and not self.has_ticket_primary():
+        elif "primary" not in self.run_status and not self.has_ticket_primary():
             result = True
 
         return result
