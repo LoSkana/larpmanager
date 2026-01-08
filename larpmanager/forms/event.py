@@ -1439,13 +1439,7 @@ class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize ExeEventForm with template event selection.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-
-        """
+        """Initialize ExeEventForm with template event selection."""
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:

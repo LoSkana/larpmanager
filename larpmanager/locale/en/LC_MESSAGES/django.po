@@ -4273,6 +4273,17 @@ msgstr ""
 msgid "Attention! The form contains errors in the fields"
 msgstr ""
 
+msgid "Welcome to"
+msgstr ""
+
+msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr ""
+
+msgid "Simply follow the instructions and provide the required information"
+msgstr ""
+
 msgid "These fields are mandatory"
 msgstr ""
 
@@ -4460,9 +4471,6 @@ msgid "Click the tutorial to open it and follow the step-by-step instructions"
 msgstr ""
 
 msgid "Write to us if you need help in setting things up!"
-msgstr ""
-
-msgid "Welcome to"
 msgstr ""
 
 msgid "And that is all"
@@ -9396,12 +9404,6 @@ msgstr ""
 
 #, python-format
 msgid "Registrations opening at: %(date)s"
-msgstr ""
-
-msgid "You don't have any events yet"
-msgstr ""
-
-msgid "Please create your first event to get started"
 msgstr ""
 
 msgid ""

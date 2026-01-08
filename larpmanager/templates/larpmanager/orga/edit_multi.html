@@ -3,7 +3,7 @@
 {% block title %}
     {{ form1.page_title }}
     {% if nonum is None %}
-        {% if num %}
+        {% if num != "0" %}
             - {% trans "Change" %}
         {% else %}
             - {% trans "New" %}

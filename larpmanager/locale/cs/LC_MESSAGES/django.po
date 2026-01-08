@@ -4571,9 +4571,6 @@ msgstr "Nepřepočtené předběžné registrace"
 msgid "Unknown choice type: %(type)s"
 msgstr "Neznámý typ výběru: %(type)s"
 
-msgid "You don't have any events yet"
-msgstr "Zatím nemáte žádné události"
-
 msgid "You're not allowed to sign up"
 msgstr "Nesmíte se zaregistrovat"
 
@@ -5874,9 +5871,6 @@ msgstr "Nyní můžete nastavit datum zahájení registrace"
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
-
-msgid "Please create your first event to get started"
-msgstr "Vytvořte svou první událost a začněte"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
@@ -7263,6 +7257,9 @@ msgstr ""
 "Nyní si můžete prohlédnout bezpečnostní informace, které účastníci "
 "předložili"
 
+msgid "Simply follow the instructions and provide the required information"
+msgstr "Stačí postupovat podle pokynů a zadat požadované informace"
+
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Hledaný objekt neexistuje, možná byl nedávno odstraněn"
 
@@ -8218,6 +8215,12 @@ msgid ""
 msgstr ""
 "K tomuto obsahu lze přistupovat pouze jednou. Před pokračováním si prosím "
 "pozorně přečtěte"
+
+msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr ""
+"Tato stránka vás krok za krokem provede vytvořením vaší první události"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"

@@ -2531,3 +2531,7 @@ input[type="number"] {
     max-width: 90%;
   }
 }
+
+#welcome_message {
+  font-size: 130%;
+}
