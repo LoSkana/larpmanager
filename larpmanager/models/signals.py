@@ -664,8 +664,7 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     update_visible_factions(instance.event)
 
     # Create a personal inventory for newly created characters
-    if created:
-        generate_base_inventories(instance)
+    generate_base_inventories(instance)
 
 
 @receiver(pre_delete, sender=Character)
