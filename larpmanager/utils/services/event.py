@@ -700,4 +700,4 @@ def init_features(event: Event, features_dict: list[str]) -> None:
     if "inventory" in features_dict:
         # Generate inventories for all existing characters in this event
         for character in event.get_elements(Character):
-            generate_base_inventories(character)
+            generate_base_inventories(character, check=True)
