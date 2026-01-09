@@ -602,7 +602,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
 
     # Check for pending payment approvals
     pending_payments_count = PaymentInvoice.objects.filter(
-        reg__run=context["run"],
+        registration__run=context["run"],
         status=PaymentStatus.SUBMITTED,
     ).count()
     if pending_payments_count:

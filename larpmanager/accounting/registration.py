@@ -103,7 +103,7 @@ def get_reg_iscr(registration: Registration) -> int:
         total_registration_fee += registration.pay_what
 
     # Add registration choice options (extras, meals, etc.)
-    for choice in RegistrationChoice.objects.filter(reg=registration).select_related("option"):
+    for choice in RegistrationChoice.objects.filter(registration=registration).select_related("option"):
         total_registration_fee += choice.option.price
 
     # Apply discounts only for non-gifted registrations
@@ -140,7 +140,7 @@ def get_reg_payments(
     """
     if accounting_payments is None:
         accounting_payments = AccountingItemPayment.objects.filter(
-            reg=registration,
+            registration=registration,
         ).exclude(hide=True)
 
     total_paid = 0
@@ -167,7 +167,7 @@ def get_reg_transactions(registration: Registration) -> int:
     """
     total_transaction_fees = 0
 
-    accounting_transactions = AccountingItemTransaction.objects.filter(reg=registration, user_burden=True)
+    accounting_transactions = AccountingItemTransaction.objects.filter(registration=registration, user_burden=True)
 
     for accounting_item_transaction in accounting_transactions:
         total_transaction_fees += accounting_item_transaction.value
@@ -534,15 +534,17 @@ def cancel_run(instance: Run) -> None:
         AccountingItemPayment.objects.filter(
             member_id=r.member_id,
             pay=PaymentChoices.TOKEN,
-            reg__run=instance,
+            registration__run=instance,
         ).delete()
         AccountingItemPayment.objects.filter(
             member_id=r.member_id,
             pay=PaymentChoices.CREDIT,
-            reg__run=instance,
+            registration__run=instance,
         ).delete()
         money = get_sum(
-            AccountingItemPayment.objects.filter(member_id=r.member_id, pay=PaymentChoices.MONEY, reg__run=instance),
+            AccountingItemPayment.objects.filter(
+                member_id=r.member_id, pay=PaymentChoices.MONEY, registration__run=instance
+            ),
         )
         if money > 0:
             AccountingItemOther.objects.create(
@@ -571,7 +573,7 @@ def cancel_reg(registration: Registration) -> None:
     registration.save()
 
     # delete characters related
-    RegistrationCharacterRel.objects.filter(reg=registration).delete()
+    RegistrationCharacterRel.objects.filter(registration=registration).delete()
 
     # delete trait assignments
     AssignmentTrait.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
@@ -698,8 +700,10 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
         # Transfer both payments and transactions from cancelled registrations
         if cancelled_registration_ids:
             for accounting_item_type in [AccountingItemPayment, AccountingItemTransaction]:
-                for accounting_item in accounting_item_type.objects.filter(reg__id__in=cancelled_registration_ids):
-                    accounting_item.reg = registration
+                for accounting_item in accounting_item_type.objects.filter(
+                    registration__id__in=cancelled_registration_ids
+                ):
+                    accounting_item.registration = registration
                     accounting_item.save()
 
     # Store provisional status before accounting updates

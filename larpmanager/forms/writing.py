@@ -105,7 +105,7 @@ class PlayerRelationshipForm(BaseModelForm):
 
     class Meta:
         model = PlayerRelationship
-        exclude: ClassVar[list] = ["reg"]
+        exclude: ClassVar[list] = ["registration"]
         widgets: ClassVar[dict] = {
             "target": EventCharacterS2Widget,
         }
@@ -141,7 +141,9 @@ class PlayerRelationshipForm(BaseModelForm):
 
         # Check for existing relationships with same target and registration
         try:
-            rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
+            rel = PlayerRelationship.objects.get(
+                registration=self.params["run"].registration, target=self.cleaned_data["target"]
+            )
             # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
                 self.add_error("target", _("Already existing relationship") + "!")
@@ -165,7 +167,7 @@ class PlayerRelationshipForm(BaseModelForm):
 
         # Set registration for new instances
         if not instance.pk:
-            instance.reg = self.params["run"].reg
+            instance.registration = self.params["run"].registration
 
         instance.save()
 

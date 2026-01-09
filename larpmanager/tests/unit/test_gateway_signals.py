@@ -53,7 +53,7 @@ class TestGatewaySignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -135,7 +135,7 @@ class TestGatewaySignals(BaseTestCase):
         character = self.character()
         from larpmanager.models.registration import RegistrationCharacterRel
 
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         # Create payment for registration
@@ -145,7 +145,7 @@ class TestGatewaySignals(BaseTestCase):
             member=registration.member,
             value=Decimal("100.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -153,8 +153,8 @@ class TestGatewaySignals(BaseTestCase):
         # All related objects should be created successfully
         self.assertIsNotNone(rel.id)
         self.assertIsNotNone(payment.id)
-        self.assertEqual(rel.reg, registration)
-        self.assertEqual(payment.reg, registration)
+        self.assertEqual(rel.registration, registration)
+        self.assertEqual(payment.registration, registration)
 
     def test_signal_performance_characteristics(self) -> None:
         """Test signal performance characteristics"""
@@ -192,7 +192,7 @@ class TestGatewaySignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.CREDIT,
         )
         credit_payment.save()

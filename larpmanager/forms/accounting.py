@@ -132,7 +132,7 @@ class OrgaTokenForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
         widgets: ClassVar[dict] = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -155,7 +155,7 @@ class OrgaCreditForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
         widgets: ClassVar[dict] = {"member": RunMemberS2Widget, "oth": forms.HiddenInput()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -183,15 +183,15 @@ class OrgaPaymentForm(BaseModelFormRun):
     class Meta:
         model = AccountingItemPayment
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
-        widgets: ClassVar[dict] = {"reg": EventRegS2Widget}
+        widgets: ClassVar[dict] = {"registration": EventRegS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure registration field for the event."""
         super().__init__(*args, **kwargs)
 
         # Configure registration widget with event context and make field required
-        self.configure_field_event("reg", self.params["event"])
-        self.fields["reg"].required = True
+        self.configure_field_event("registration", self.params["event"])
+        self.fields["registration"].required = True
 
 
 class ExeOutflowForm(BaseModelForm):
@@ -303,14 +303,14 @@ class ExePaymentForm(BaseModelForm):
     class Meta:
         model = AccountingItemPayment
         exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
-        widgets: ClassVar[dict] = {"reg": AssocRegS2Widget}
+        widgets: ClassVar[dict] = {"registration": AssocRegS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with association-specific field configuration."""
         super().__init__(*args, **kwargs)
 
         # Configure registration field widget with association context
-        self.configure_field_association("reg", self.params["association_id"])
+        self.configure_field_association("registration", self.params["association_id"])
 
         # Remove VAT field if feature is not enabled
         if "vat" not in self.params["features"]:
@@ -327,7 +327,7 @@ class ExeInvoiceForm(BaseModelForm):
 
     class Meta:
         model = PaymentInvoice
-        exclude = ("hide", "reg", "key", "idx", "txn_id")
+        exclude = ("hide", "registration", "key", "idx", "txn_id")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -344,7 +344,7 @@ class ExeCreditForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -369,7 +369,7 @@ class ExeTokenForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "reg", "cancellation", "ref_addit")
+        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -437,13 +437,13 @@ class PaymentForm(BaseAccForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with registration-specific amount field."""
         # Extract registration instance from kwargs
-        self.reg = kwargs.pop("reg")
+        self.registration = kwargs.pop("registration")
         super().__init__(*args, **kwargs)
 
         # Configure amount field with dynamic validation based on registration balance
         self.fields["amount"] = forms.DecimalField(
             min_value=0.01,
-            max_value=self.reg.tot_iscr - self.reg.tot_payed,
+            max_value=self.registration.tot_iscr - self.registration.tot_payed,
             decimal_places=2,
             initial=self.context["quota"],
         )

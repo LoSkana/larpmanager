@@ -132,7 +132,7 @@ def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple
     payment_types = get_special_payment_types(features)
     if payment_types:
         # Query accounting item payments for this run
-        payments_query = AccountingItemPayment.objects.filter(reg__run=run)
+        payments_query = AccountingItemPayment.objects.filter(registration__run=run)
 
         # Apply member filter if specified
         if member_filter:

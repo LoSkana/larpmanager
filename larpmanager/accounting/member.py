@@ -190,17 +190,17 @@ def _init_choices(member: Member) -> dict[int, dict[int, dict[str, RegistrationQ
 
     """
     choices = {}
-    choice_queryset = RegistrationChoice.objects.filter(reg__member_id=member.id)
+    choice_queryset = RegistrationChoice.objects.filter(registration__member_id=member.id)
     choice_queryset = choice_queryset.select_related("option", "question").order_by("question__order")
     for registration_choice in choice_queryset:
-        if registration_choice.reg_id not in choices:
-            choices[registration_choice.reg_id] = {}
-        if registration_choice.question_id not in choices[registration_choice.reg_id]:
-            choices[registration_choice.reg_id][registration_choice.question_id] = {
+        if registration_choice.registration_id not in choices:
+            choices[registration_choice.registration_id] = {}
+        if registration_choice.question_id not in choices[registration_choice.registration_id]:
+            choices[registration_choice.registration_id][registration_choice.question_id] = {
                 "question": registration_choice.question,
                 "selected_options": [],
             }
-        choices[registration_choice.reg_id][registration_choice.question_id]["selected_options"].append(
+        choices[registration_choice.registration_id][registration_choice.question_id]["selected_options"].append(
             registration_choice.option,
         )
     return choices

@@ -80,7 +80,7 @@ def _apply_tokens(
         pay=PaymentChoices.TOKEN,
         value=tokens_to_use,
         member_id=registration.member_id,
-        reg=registration,
+        registration=registration,
         association_id=association_id,
     )
     return remaining - tokens_to_use
@@ -120,7 +120,7 @@ def _apply_credits(
         pay=PaymentChoices.CREDIT,
         value=credits_to_use,
         member_id=registration.member_id,
-        reg=registration,
+        registration=registration,
         association_id=association_id,
     )
     return remaining - credits_to_use
@@ -233,7 +233,7 @@ def registration_tokens_credits_overpay(
         # Build queryset with payment priority annotation and locking
         payment_items_queryset = (
             AccountingItemPayment.objects.select_for_update()
-            .filter(reg=reg, association_id=association_id, pay__in=payment_types)
+            .filter(registration=reg, association_id=association_id, pay__in=payment_types)
             .annotate(
                 pay_priority=Case(
                     *priority_cases,
@@ -335,13 +335,13 @@ def get_regs(association: Association) -> QuerySet[Registration]:
 
 def update_token_credit_on_payment_save(instance: AccountingItemPayment, *, created: bool) -> None:
     """Handle accounting item payment post-save token/credit updates."""
-    if not created and instance.reg:
+    if not created and instance.registration:
         update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
 def update_token_credit_on_payment_delete(instance: AccountingItemPayment) -> None:
     """Handle accounting item payment post-delete token/credit updates."""
-    if instance.reg:
+    if instance.registration:
         update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 

@@ -148,7 +148,9 @@ def update_reg_counts(run: Run) -> dict[str, int]:
         add_count(counts, f"tk_{registration.ticket_id}", num_tickets)
 
     # Count registration choices (form options selected)
-    registration_choices = RegistrationChoice.objects.filter(reg__run=run, reg__cancellation_date__isnull=True)
+    registration_choices = RegistrationChoice.objects.filter(
+        registration__run=run, registration__cancellation_date__isnull=True
+    )
     for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):
         counts[f"option_{choice_data['option_id']}"] = choice_data["total"]
 
@@ -171,7 +173,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
     # Trigger registration updates if character approval is enabled
     if get_event_config(instance.event_id, "user_character_approval", default_value=False):
         for relation in RegistrationCharacterRel.objects.filter(character=instance):
-            relation.reg.save()
+            relation.registration.save()
 
 
 def search_player(character: Character, json_output: dict[str, Any], context: dict) -> None:
@@ -196,31 +198,31 @@ def search_player(character: Character, json_output: dict[str, Any], context: di
         if character.number in context["assignments"]:
             # Populate character with cached registration data
             character.rcr = context["assignments"][character.number]
-            character.reg = character.rcr.reg
-            character.member = character.reg.member
+            character.registration = character.rcr.registration
+            character.member = character.registration.member
         else:
             # Character not found in assignments cache
             character.rcr = None
-            character.reg = None
+            character.registration = None
             character.member = None
     else:
         # No cache available, query database directly
         try:
             # Fetch registration character relationship with related objects
-            character.rcr = RegistrationCharacterRel.objects.select_related("reg", "reg__member").get(
-                reg__run_id=context["run"].id,
+            character.rcr = RegistrationCharacterRel.objects.select_related("registration", "registration__member").get(
+                registration__run_id=context["run"].id,
                 character=character,
             )
-            character.reg = character.rcr.reg
-            character.member = character.reg.member
+            character.registration = character.rcr.registration
+            character.member = character.registration.member
         except RegistrationCharacterRel.DoesNotExist:
             # Registration not found or database error
             character.rcr = None
-            character.reg = None
+            character.registration = None
             character.member = None
 
     # Process character registration data if available
-    if character.reg:
+    if character.registration:
         _search_char_reg(context, character, json_output)
     else:
         # No registration found, set default player ID and UUID

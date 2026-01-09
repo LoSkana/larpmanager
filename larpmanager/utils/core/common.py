@@ -503,7 +503,7 @@ def get_player_relationship(context: dict, other_character_uuid: str) -> None:
     try:
         # Get relationship for the run's registration targeting the specified player
         context["relationship"] = PlayerRelationship.objects.get(
-            reg=context["registration"],
+            registration=context["registration"],
             target__uuid=other_character_uuid,
         )
     except ObjectDoesNotExist as err:
@@ -885,17 +885,17 @@ def _search_char_reg(context: dict, character: object, search_result: dict) -> N
         search_result["name"] = character.rcr.custom_name
 
     # Extract player information from registration
-    search_result["player"] = character.reg.display_member()
-    search_result["player_full"] = str(character.reg.member)
-    search_result["player_uuid"] = character.reg.member.uuid
-    search_result["first_aid"] = character.reg.member.first_aid
+    search_result["player"] = character.registration.display_member()
+    search_result["player_full"] = str(character.registration.member)
+    search_result["player_uuid"] = character.registration.member.uuid
+    search_result["first_aid"] = character.registration.member.first_aid
 
     # Set profile image with fallback hierarchy: character custom -> member -> None
     if character.rcr.profile_thumb:
         search_result["player_prof"] = character.rcr.profile_thumb.url
         search_result["profile"] = character.rcr.profile_thumb.url
-    elif character.reg.member.profile_thumb:
-        search_result["player_prof"] = character.reg.member.profile_thumb.url
+    elif character.registration.member.profile_thumb:
+        search_result["player_prof"] = character.registration.member.profile_thumb.url
     else:
         search_result["player_prof"] = None
 

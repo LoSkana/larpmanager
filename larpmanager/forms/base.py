@@ -508,7 +508,7 @@ class BaseRegistrationForm(BaseModelFormRun):
     choice_class = RegistrationChoice
     option_class = RegistrationOption
     question_class = RegistrationQuestion
-    instance_key = "reg_id"
+    instance_key = "registration_id"
 
     class Meta:
         abstract = True

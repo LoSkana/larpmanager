@@ -429,9 +429,9 @@ def post_save_payment_accounting_cache(
 ) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
     # Update registration and member accounting cache if payment has associated registration
-    if instance.reg and instance.reg.run:
-        instance.reg.save()
-        refresh_member_accounting_cache(instance.reg.run, instance.member_id)
+    if instance.registration and instance.registration.run:
+        instance.registration.save()
+        refresh_member_accounting_cache(instance.registration.run, instance.member_id)
 
     # Update token credits based on payment changes
     update_token_credit_on_payment_save(instance, created=created)
@@ -450,8 +450,8 @@ def post_delete_payment_accounting_cache(
     update_token_credit_on_payment_delete(instance)
 
     # Refresh member accounting cache if payment is linked to a registration
-    if instance.reg and instance.reg.run:
-        refresh_member_accounting_cache(instance.reg.run, instance.member_id)
+    if instance.registration and instance.registration.run:
+        refresh_member_accounting_cache(instance.registration.run, instance.member_id)
 
 
 # AssignmentTrait signals

@@ -77,7 +77,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         self.assertEqual(membership.tokens, Decimal("20.00"))
 
         # Check payment was created
-        token_payments = AccountingItemPayment.objects.filter(member=member, reg=registration, pay=PaymentChoices.TOKEN)
+        token_payments = AccountingItemPayment.objects.filter(member=member, registration=registration, pay=PaymentChoices.TOKEN)
         self.assertEqual(token_payments.count(), 1)
         self.assertEqual(token_payments.first().value, Decimal("30.00"))
 
@@ -157,10 +157,10 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
 
         # Create token and credit payments
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.CREDIT, value=Decimal("40.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.CREDIT, value=Decimal("40.00")
         )
 
         # Reverse 50 overpayment (should remove credit first)
@@ -168,9 +168,9 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
 
         # Check credit payment reduced/removed, token payment untouched
         credit_payments = AccountingItemPayment.objects.filter(
-            member=member, reg=registration, pay=PaymentChoices.CREDIT
+            member=member, registration=registration, pay=PaymentChoices.CREDIT
         )
-        token_payments = AccountingItemPayment.objects.filter(member=member, reg=registration, pay=PaymentChoices.TOKEN)
+        token_payments = AccountingItemPayment.objects.filter(member=member, registration=registration, pay=PaymentChoices.TOKEN)
 
         # Credit should be completely removed (40) and token reduced by 10
         self.assertEqual(credit_payments.count(), 0)
@@ -211,7 +211,7 @@ class TestRegistrationTokenCreditFunctions(BaseTestCase):
         # Should not create any payments
         registration_tokens_credits_use(registration, Decimal("-10.00"), association.id, mock_features.return_value)
 
-        payments = AccountingItemPayment.objects.filter(member=member, reg=registration)
+        payments = AccountingItemPayment.objects.filter(member=member, registration=registration)
         self.assertEqual(payments.count(), 0)
 
 
@@ -305,7 +305,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         # Add paid option
         question, option1, option2 = self.question_with_options(event=run.event)
-        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+        RegistrationChoice.objects.create(registration=registration, option=option1, question=question)
 
         total = get_reg_iscr(registration)
 
@@ -327,7 +327,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         total = get_reg_payments(registration)
@@ -341,13 +341,13 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("10.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("10.00")
         )
 
         total = get_reg_payments(registration)
@@ -427,7 +427,7 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         # Add payment
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # Update accounting
@@ -470,7 +470,7 @@ class TestAccountingEdgeCases(BaseTestCase):
         registration = self.create_registration(member=member, tot_iscr=Decimal("100.00"))
 
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         # Get total before deletion
@@ -512,7 +512,7 @@ class TestAccountingEdgeCases(BaseTestCase):
         self.assertEqual(membership.tokens, Decimal("0.00"))
 
         # Check payment is for actual amount used
-        token_payments = AccountingItemPayment.objects.filter(member=member, reg=registration, pay=PaymentChoices.TOKEN)
+        token_payments = AccountingItemPayment.objects.filter(member=member, registration=registration, pay=PaymentChoices.TOKEN)
         self.assertEqual(token_payments.first().value, Decimal("10.00"))
 
     def test_round_to_nearest_cent_with_none(self) -> None:

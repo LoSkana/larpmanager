@@ -161,12 +161,12 @@ def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Build optimized query with select_related to prevent N+1 queries
     que = (
-        PaymentInvoice.objects.filter(reg__run=context["run"], status=PaymentStatus.SUBMITTED)
+        PaymentInvoice.objects.filter(registration__run=context["run"], status=PaymentStatus.SUBMITTED)
         .select_related(
             "member",  # For {{ el.member }} in template
             "method",  # For {{ el.method }} in template
-            "reg",  # For confirmation URL generation
-            "reg__run",  # For run.get_slug() in confirmation URL
+            "registration",  # For confirmation URL generation
+            "registration__run",  # For run.get_slug() in confirmation URL
         )
         .order_by("-created")  # Show newest invoices first
     )
@@ -206,7 +206,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
     backend_get(context, PaymentInvoice, invoice_uuid)
 
     # Verify invoice belongs to the current event run
-    if context["el"].reg.run != context["run"]:
+    if context["el"].registration.run != context["run"]:
         msg = "i'm sorry, what?"
         raise Http404(msg)
 
@@ -377,12 +377,14 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     context.update(
         {
             # Define select_related fields for efficient database queries
-            "selrel": ("reg__member", "reg__run", "inv", "inv__method"),
-            "afield": "reg",
+            "selrel": ("registration__member", "registration__run", "inv", "inv__method"),
+            "afield": "registration",
             "fields": fields,
             # Define callback functions for data formatting
             "callbacks": {
-                "member": lambda row: str(row.reg.member) if row.reg and row.reg.member else "",
+                "member": lambda row: str(row.registration.member)
+                if row.registration and row.registration.member
+                else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",

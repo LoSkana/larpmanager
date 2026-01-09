@@ -188,7 +188,7 @@ class TestVATFunctions(BaseTestCase):
         registration = self.create_registration(member=member)
 
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # calculate_payment_vat doesn't return a value, it updates DB
@@ -219,7 +219,7 @@ class TestVATFunctions(BaseTestCase):
         registration.save()
 
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # calculate_payment_vat doesn't return value, updates DB
@@ -239,7 +239,7 @@ class TestVATFunctions(BaseTestCase):
         registration = self.create_registration(member=member)
 
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         # Pass the MODEL class, not the Choice
@@ -257,7 +257,7 @@ class TestVATFunctions(BaseTestCase):
 
         # Create earlier payment
         payment1 = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         # Wait a moment to ensure different timestamps
@@ -267,7 +267,7 @@ class TestVATFunctions(BaseTestCase):
 
         # Create another payment
         payment2 = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
 
         result = get_previous_sum(payment2, AccountingItemPayment)

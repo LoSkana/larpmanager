@@ -772,7 +772,7 @@ class Problem(UuidMixin, BaseModel):
 class PlayerRelationship(BaseModel):
     """Represents PlayerRelationship model."""
 
-    reg = models.ForeignKey(Registration, on_delete=models.CASCADE)
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
 
     target = models.ForeignKey(Character, related_name="target_players", on_delete=models.CASCADE)
 
@@ -781,20 +781,20 @@ class PlayerRelationship(BaseModel):
     def __str__(self) -> str:
         """Return string representation with registration, target, and run number."""
         # noinspection PyUnresolvedReferences
-        return f"{self.reg} - {self.target} ({self.reg.run.number})"
+        return f"{self.registration} - {self.target} ({self.registration.run.number})"
 
     class Meta:
         indexes: ClassVar[list] = [
-            models.Index(fields=["reg"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
+            models.Index(fields=["registration"], condition=Q(deleted__isnull=True), name="prel_reg_act"),
             models.Index(fields=["target"], condition=Q(deleted__isnull=True), name="prel_target_act"),
         ]
         constraints: ClassVar[list] = [
             UniqueConstraint(
-                fields=["reg", "target", "deleted"],
+                fields=["registration", "target", "deleted"],
                 name="unique_player_relationship_with_optional",
             ),
             UniqueConstraint(
-                fields=["reg", "target"],
+                fields=["registration", "target"],
                 condition=Q(deleted=None),
                 name="unique_player_relationship_without_optional",
             ),

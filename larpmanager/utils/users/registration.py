@@ -655,7 +655,7 @@ def registration_status_characters(
     if character_rels_dict is not None:
         registration_character_rels = character_rels_dict.get(registration.id, [])
     else:
-        query = RegistrationCharacterRel.objects.filter(reg_id=registration.id)
+        query = RegistrationCharacterRel.objects.filter(registration_id=registration.id)
         registration_character_rels = query.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
@@ -769,12 +769,14 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
     # Fetch text answers for all relevant questions
     text_answers_by_question = {}
-    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids_cache, reg=instance):
+    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids_cache, registration=instance):
         text_answers_by_question[answer.question_id] = answer.text
 
     # Fetch choice answers and group by question
     choice_options_by_question = {}
-    for choice in RegistrationChoice.objects.filter(question_id__in=question_ids_cache, reg=instance).select_related(
+    for choice in RegistrationChoice.objects.filter(
+        question_id__in=question_ids_cache, registration=instance
+    ).select_related(
         "option",
     ):
         if choice.question_id not in choice_options_by_question:
@@ -883,7 +885,7 @@ def check_assign_character(context: dict) -> None:
         return
 
     # Auto-assign the first active character to the registration
-    RegistrationCharacterRel.objects.create(character_id=active_characters[0].id, reg=registration)
+    RegistrationCharacterRel.objects.create(character_id=active_characters[0].id, registration=registration)
 
 
 def get_reduced_available_count(run: Any) -> int:
@@ -961,7 +963,7 @@ def process_registration_event_change(registration: Registration) -> None:
 
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event
-    for registration_choice in RegistrationChoice.objects.filter(reg=registration):
+    for registration_choice in RegistrationChoice.objects.filter(registration=registration):
         question_name = registration_choice.question.name
         option_name = registration_choice.option.name
 
@@ -982,7 +984,7 @@ def process_registration_event_change(registration: Registration) -> None:
 
     # Process all registration answers (free-form question responses)
     # Attempt to preserve answers by finding matching questions
-    for registration_answer in RegistrationAnswer.objects.filter(reg=registration):
+    for registration_answer in RegistrationAnswer.objects.filter(registration=registration):
         question_name = registration_answer.question.name
 
         try:

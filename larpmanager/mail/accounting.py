@@ -277,8 +277,8 @@ def send_payment_confirmation_email(payment_item: AccountingItemPayment) -> None
         return
 
     # Extract related objects for email context
-    event_run = payment_item.reg.run
-    registered_member = payment_item.reg.member
+    event_run = payment_item.registration.run
+    registered_member = payment_item.registration.member
 
     # Check if payment notifications are enabled for this association
     if not get_association_config(event_run.event.association_id, "mail_payment", default_value=False):
@@ -876,9 +876,9 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
             my_send_mail(email_subject, email_body, organizer, inv)
 
     # For registration invoices, notify event organizers when no treasurer feature
-    elif inv.typ == PaymentType.REGISTRATION and inv.reg:
+    elif inv.typ == PaymentType.REGISTRATION and inv.registration:
         # Get all organizers for the event associated with this registration
-        for organizer in get_event_organizers(inv.reg.run.event):
+        for organizer in get_event_organizers(inv.registration.run.event):
             # Set language context and prepare email content
             activate(organizer.language)
             email_subject, email_body = get_invoice_email(inv)

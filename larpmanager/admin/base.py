@@ -150,7 +150,7 @@ class RegistrationFilter(AutocompleteFilter):
     """Admin filter for Registration autocomplete."""
 
     title = "Registration"
-    field_name = "reg"
+    field_name = "registration"
 
 
 @admin.register(Log)
