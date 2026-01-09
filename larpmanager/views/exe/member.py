@@ -465,7 +465,7 @@ def member_add_accountingitempayment(context: dict, member: Member) -> None:
         member=member,
         hide=False,
         association_id=context["association_id"],
-    ).select_related("reg")
+    ).select_related("registration")
 
     # Set display type based on payment method
     for payment in context["pays"]:

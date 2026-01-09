@@ -159,7 +159,7 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
                     entity_id = character.mirror_id
 
                 # Create character assignment relationship
-                RegistrationCharacterRel.objects.create(character_id=entity_id, reg=registration)
+                RegistrationCharacterRel.objects.create(character_id=entity_id, registration=registration)
             else:
                 trait = get_element_event(context, entity_uuid, Trait)
                 # Create trait assignment for non-character types
@@ -223,7 +223,7 @@ def get_casting_choices_characters(
 
     # Get characters that are already registered for this run
     registered_character_ids = set(
-        RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list("character_id", flat=True)
+        RegistrationCharacterRel.objects.filter(registration__run=context["run"]).values_list("character_id", flat=True)
     )
 
     # Process all characters for the event (excluding hidden ones)
@@ -297,7 +297,7 @@ def check_player_skip_characters(relation: RegistrationCharacterRel, context: di
     )
 
     # Check if current character count meets or exceeds limit
-    return RegistrationCharacterRel.objects.filter(reg=relation).count() >= max_characters_allowed
+    return RegistrationCharacterRel.objects.filter(registration=relation).count() >= max_characters_allowed
 
 
 def check_player_skip_quests(registration: Registration, quest_type: QuestType) -> bool:

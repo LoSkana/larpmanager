@@ -181,7 +181,7 @@ class TestModelSignals(BaseTestCase):
             member=member,
             value=Decimal("10.00"),
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.TOKEN,
         )
 
@@ -202,7 +202,7 @@ class TestModelSignals(BaseTestCase):
         payment = AccountingItemPayment(
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,  # Changed from AccountingItemPayment.MONEY
         )
         payment.save()

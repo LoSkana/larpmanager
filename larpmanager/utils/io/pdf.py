@@ -620,8 +620,8 @@ def cleanup_relationship_pdfs_before_delete(instance: object) -> None:
         instance: PlayerRelationship instance being deleted
 
     """
-    for relationship_character_run in instance.reg.rcrs.all():
-        delete_character_pdf_files(relationship_character_run.character, instance.reg.run)
+    for relationship_character_run in instance.registration.rcrs.all():
+        delete_character_pdf_files(relationship_character_run.character, instance.registration.run)
 
 
 def cleanup_relationship_pdfs_after_save(instance: object) -> None:
@@ -631,8 +631,8 @@ def cleanup_relationship_pdfs_after_save(instance: object) -> None:
         instance: PlayerRelationship instance that was saved
 
     """
-    for el in instance.reg.rcrs.all():
-        delete_character_pdf_files(el.character, instance.reg.run)
+    for el in instance.registration.rcrs.all():
+        delete_character_pdf_files(el.character, instance.registration.run)
 
 
 def cleanup_faction_pdfs_before_delete(instance: object) -> None:
@@ -824,8 +824,8 @@ def get_trait_character(run: Run, number: int) -> Character | None:
 
         # Find the character registered for this member in the run
         registration_character_rels = RegistrationCharacterRel.objects.filter(
-            reg__run=run,
-            reg__member=member,
+            registration__run=run,
+            registration__member=member,
         ).select_related("character")
 
         if not registration_character_rels.exists():

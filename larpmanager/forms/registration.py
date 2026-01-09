@@ -847,7 +847,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.initial["characters_new"] = self.get_init_multi_character()
             mine.update(list(self.initial["characters_new"]))
         taken_characters = set(
-            RegistrationCharacterRel.objects.filter(reg__run_id=self.params["run"].id).values_list(
+            RegistrationCharacterRel.objects.filter(registration__run_id=self.params["run"].id).values_list(
                 "character_id",
                 flat=True,
             ),
@@ -970,7 +970,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     def get_init_multi_character(self) -> list[int]:
         """Get initial character IDs for multi-character registration."""
-        character_registrations = RegistrationCharacterRel.objects.filter(reg__id=self.instance.pk)
+        character_registrations = RegistrationCharacterRel.objects.filter(registration__id=self.instance.pk)
         return character_registrations.values_list("character_id", flat=True)
 
     def _save_multi(self, field: str, instance: Registration) -> None:
@@ -990,11 +990,11 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Remove characters no longer selected
         for ch in old - new:
-            RegistrationCharacterRel.objects.filter(character_id=ch, reg_id=instance.pk).delete()
+            RegistrationCharacterRel.objects.filter(character_id=ch, registration_id=instance.pk).delete()
 
         # Add newly selected characters
         for ch in new - old:
-            RegistrationCharacterRel.objects.create(character_id=ch, reg_id=instance.pk)
+            RegistrationCharacterRel.objects.create(character_id=ch, registration_id=instance.pk)
         return None
 
     def clean_characters_new(self) -> Any:
@@ -1013,12 +1013,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Batch fetch all assigned characters
         assigned_qs = RegistrationCharacterRel.objects.filter(
             character_id__in=character_ids,
-            reg__run=self.params["run"],
-            reg__cancellation_date__isnull=True,
-        ).select_related("character", "reg__member")
+            registration__run=self.params["run"],
+            registration__cancellation_date__isnull=True,
+        ).select_related("character", "registration__member")
 
         if self.instance.pk:
-            assigned_qs = assigned_qs.exclude(reg__id=self.instance.pk)
+            assigned_qs = assigned_qs.exclude(registration__id=self.instance.pk)
 
         # Create dict of assigned characters for fast lookup
         assigned_chars = {relation.character_id: relation for relation in assigned_qs}
@@ -1027,7 +1027,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         for ch_id in character_ids:
             if ch_id in assigned_chars:
                 relation = assigned_chars[ch_id]
-                msg = f"Character '{relation.character}' already assigned to the player '{relation.reg.member}' for this event!"
+                msg = f"Character '{relation.character}' already assigned to the player '{relation.registration.member}' for this event!"
                 raise ValidationError(msg)
 
         return data
@@ -1038,7 +1038,7 @@ class RegistrationCharacterRelForm(BaseModelForm):
 
     class Meta:
         model = RegistrationCharacterRel
-        exclude = ("reg", "character")
+        exclude = ("registration", "character")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with dynamic field configuration based on event settings.
