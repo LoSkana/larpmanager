@@ -1067,7 +1067,7 @@ def characters(request: HttpRequest) -> HttpResponse:
     # Batch load character configs
     _configs_character_rels(my_character_rels)
 
-    context["oneshots"] = {rel.id: rel for rel in my_character_rels if not rel.character.player}
+    context["oneshots"] = [rel for rel in my_character_rels if not rel.character.player]
 
     campaigns = {}
     for rel in my_character_rels:

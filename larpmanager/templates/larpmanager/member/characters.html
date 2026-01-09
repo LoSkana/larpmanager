@@ -35,7 +35,7 @@
             {% endfor %}
         {% endif %}
         {% if oneshots %}
-            <table class="go_datatable">
+            <table class="go_datatable" no_header_cols="all">
                 <thead>
                     <tr>
                         <th>{% trans "Character" %}</th>
@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for rel in oneshots.values %}
+                    {% for rel in oneshots %}
                         <tr>
                             <td>
                                 <a href="{% url 'character' rel.reg.run.get_slug rel.character.uuid %}">
