@@ -1061,13 +1061,13 @@ def characters(request: HttpRequest) -> HttpResponse:
             reg__cancellation_date__isnull=True,
         )
         .select_related("character", "reg__run")
-        .order_by("reg__run__end")
+        .order_by("-reg__run__end")
     )
 
     # Batch load character configs
     _configs_character_rels(my_character_rels)
 
-    context["oneshots"] = [rel for rel in my_character_rels if not rel.character.player]
+    context["oneshots"] = {rel.id: rel for rel in my_character_rels if not rel.character.player}
 
     campaigns = {}
     for rel in my_character_rels:

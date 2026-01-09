@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for rel in oneshots %}
+                    {% for rel in oneshots.values %}
                         <tr>
                             <td>
                                 <a href="{% url 'character' rel.reg.run.get_slug rel.character.uuid %}">
