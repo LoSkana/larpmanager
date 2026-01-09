@@ -652,7 +652,7 @@ class EventCharacterS2:
         """Return optimized queryset of event characters ordered by number."""
         return (
             self.event.get_elements(Character)
-            .only("id", "name", "number", "teaser", "title", "event_id")
+            .only("id", "uuid", "name", "number", "teaser", "title", "event_id")
             .order_by("number")
         )
 
@@ -663,6 +663,21 @@ class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2Multiple
 
 class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
     """Represents EventCharacterS2Widget model."""
+
+
+class EventCharacterS2WidgetUuid(EventCharacterS2, s2forms.ModelSelect2Widget):
+    """Select2 widget for characters that returns UUID instead of ID as value."""
+
+    def label_from_instance(self, obj: Character) -> str:
+        """Return formatted label for character instance."""
+        return f"#{obj.number} {obj.name}"
+
+    def result_from_instance(self, obj: Character, request: Any = None) -> dict:  # noqa: ARG002
+        """Override to return UUID instead of ID in select2 results."""
+        return {
+            "id": obj.uuid,
+            "text": self.label_from_instance(obj),
+        }
 
 
 class RunCampaignS2:

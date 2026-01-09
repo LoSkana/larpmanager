@@ -27,7 +27,7 @@
                 <a href="{% url 'orga_prologues_edit' run.get_slug el.uuid %}"
                    qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
             </td>
-            <td class="editable" qid="{{ name_que_id }}">{{ el }}</td>
+            <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
             <td>
                 <a href="{% url 'orga_prologues_view' run.get_slug el.uuid %}"
                    qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>

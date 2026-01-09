@@ -7,8 +7,8 @@
 window.addEventListener('DOMContentLoaded', function() {
 
     var keyTinyMCE;
-    var qid;
-    var eid;
+    var question_uuid;
+    var edit_uuid;
     var workingTicketInterval = null;
 
     function closeEdit () {
@@ -40,12 +40,12 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function callWorkingTicket() {
-        if (!eid) return;
+        if (!edit_uuid) return;
 
         $.ajax({
             type: "POST",
             url: "{% url 'working_ticket' %}",
-            data: {eid: eid, type: '{{ label_typ }}', token: token},
+            data: {edit_uuid: edit_uuid, type: '{{ label_typ }}', token: token},
             success: function(msg) {
                 if (msg.warn) {
                     $.toast({
@@ -80,8 +80,8 @@ window.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('form-excel');
         const formData = new FormData(form);
 
-        formData.append('eid', eid);
-        formData.append('qid', qid);
+        formData.append('edit_uuid', edit_uuid);
+        formData.append('question_uuid', question_uuid);
         formData.append('auto', auto ? 1 : 0);
         formData.append('token', token);
 
@@ -119,14 +119,14 @@ window.addEventListener('DOMContentLoaded', function() {
                 Object.keys(window.datatables).forEach(function(key) {
                     const table = window.datatables[key];
                     // Try to find cell by class first (most common case)
-                    let cell = table.cell('#' + res.eid, '.q_' + res.qid);
+                    let cell = table.cell('#' + res.edit_uuid, '.q_' + res.question_uuid);
 
-                    // If not found, try to find by qid attribute (for name and other special fields)
+                    // If not found, try to find by question_uuid attribute (for name and other special fields)
                     if (!cell || !cell.node()) {
-                        const row = table.row('#' + res.eid);
+                        const row = table.row('#' + res.edit_uuid);
                         if (row.length > 0) {
                             const rowNode = row.node();
-                            const targetCell = $(rowNode).find('[qid="' + res.qid + '"]');
+                            const targetCell = $(rowNode).find('[question_uuid="' + res.question_uuid + '"]');
                             if (targetCell.length > 0) {
                                 const cellIndex = targetCell.index();
                                 cell = table.cell(rowNode, cellIndex);
@@ -161,13 +161,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
             if ($("#main_bulk").is(":visible")) return;
 
-            eid = $(this).parent().attr("id");
-            qid = $(this).attr("qid");
+            edit_uuid = $(this).parent().attr("id");
+            question_uuid = $(this).attr("question_uuid");
 
             request = $.ajax({
                 url: "{% url 'orga_writing_excel_edit' run.get_slug label_typ %}",
                 method: "POST",
-                data: { qid: qid, eid: eid},
+                data: { question_uuid: question_uuid, edit_uuid: edit_uuid},
                 datatype: "json",
             });
 

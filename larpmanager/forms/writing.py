@@ -50,6 +50,7 @@ from larpmanager.models.writing import (
     SpeedLarp,
 )
 from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.services.character import _get_character_cache_id
 
 
 class WritingForm(BaseModelForm):
@@ -136,18 +137,21 @@ class PlayerRelationshipForm(BaseModelForm):
         cleaned_data = super().clean()
 
         # Check if user is trying to create relationship with themselves
-        if self.cleaned_data["target"].id == self.params["char"]["id"]:
+        character_id = _get_character_cache_id(self.params)
+        if self.cleaned_data["target"].id == character_id:
             self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
-
-        # Check for existing relationships with same target and registration
-        try:
-            rel = PlayerRelationship.objects.get(reg=self.params["run"].reg, target=self.cleaned_data["target"])
-            # Allow editing existing relationship, but prevent duplicates
-            if rel.id != self.instance.id:
-                self.add_error("target", _("Already existing relationship") + "!")
-        except ObjectDoesNotExist:
-            # No existing relationship found - this is valid
-            pass
+        else:
+            # Check for existing relationships with same target and registration
+            try:
+                rel = PlayerRelationship.objects.get(
+                    reg=self.params["registration"], target=self.cleaned_data["target"]
+                )
+                # Allow editing existing relationship, but prevent duplicates
+                if rel.id != self.instance.id:
+                    self.add_error("target", _("Already existing relationship") + "!")
+            except ObjectDoesNotExist:
+                # No existing relationship found - this is valid
+                pass
 
         return cleaned_data
 
@@ -165,7 +169,7 @@ class PlayerRelationshipForm(BaseModelForm):
 
         # Set registration for new instances
         if not instance.pk:
-            instance.reg = self.params["run"].reg
+            instance.reg = self.params["registration"]
 
         instance.save()
 

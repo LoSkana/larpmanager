@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', function() {
             request = $.ajax({
                 url: "{% url 'orga_multichoice_available' run.get_slug %}",
                 method: "POST",
-                data: {'eid': '{{ eid }}', 'type': '{{ type }}'},
+                data: {'edit_uuid': '{{ edit_uuid }}', 'type': '{{ type }}'},
                 datatype: "json",
             });
 

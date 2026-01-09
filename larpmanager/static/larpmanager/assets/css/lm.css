@@ -1275,6 +1275,7 @@ th select {
 
 .rel-img {
   width: 100%;
+  max-width: 8em;
 }
 
 .centerized {

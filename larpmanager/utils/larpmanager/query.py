@@ -235,24 +235,19 @@ def query_index(request: HttpRequest) -> JsonResponse:
     Args:
         request: Django HTTP request object containing POST data with:
             - q: Search query string
-            - r: Optional run ID for event-specific search
+            - r: Optional run UUID for event-specific search
 
     Returns:
         JsonResponse containing search results with guides, tutorials, and links.
         Returns empty JsonResponse if run lookup fails.
 
     Raises:
-        ValueError: If run_id cannot be converted to integer (handled internally)
-        TypeError: If run_id is None (handled internally)
         ObjectDoesNotExist: If specified run doesn't exist (handled internally)
 
     """
     # Extract and validate input parameters
     original_search_query: str = request.POST.get("q", "")
-    try:
-        run_id: int = int(request.POST.get("r", "0"))
-    except (ValueError, TypeError):
-        run_id = 0
+    run_uuid: str = request.POST.get("r", "")
 
     # Translate query string to English for consistent search
     translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
@@ -263,10 +258,12 @@ def query_index(request: HttpRequest) -> JsonResponse:
 
     # Build permission-based navigation links
     permission_links: list[dict[str, str]] = []
-    if run_id:
+    if run_uuid:
         # Event-specific permissions and links
         try:
-            run = Run.objects.select_related("event").get(pk=run_id, event__association_id=request.association["id"])
+            run = Run.objects.select_related("event").get(
+                uuid=run_uuid, event__association_id=request.association["id"]
+            )
         except ObjectDoesNotExist:
             return JsonResponse({})
 
