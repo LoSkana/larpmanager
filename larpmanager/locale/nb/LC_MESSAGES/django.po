@@ -3881,6 +3881,9 @@ msgstr "Inngangsavgift"
 msgid "Registrations not open"
 msgstr "Registreringen er ennå ikke åpnet"
 
+msgid "Registrations shortcut"
+msgstr "Snarvei til registreringer"
+
 msgid "Reimbursement approved"
 msgstr "Godkjent refusjon"
 
@@ -5183,6 +5186,9 @@ msgstr "Se den komplette listen over arrangementene våre"
 
 msgid "You are currently logged in with the"
 msgstr "Du er for øyeblikket logget inn med"
+
+msgid "You don't have any registrations yet"
+msgstr "Du har ingen registreringer ennå"
 
 msgid "You have been awarded an achievement"
 msgstr "Du har blitt tildelt en prestasjon"
@@ -7577,6 +7583,12 @@ msgid ""
 msgstr ""
 "Få disse dataene fra banken eller tilsvarende, for å verifisere oppføringene"
 " som er merket"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Hvis avkrysset: viser en lenke i topplinjen for å se alle "
+"brukerregistreringer"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

@@ -3881,6 +3881,9 @@ msgstr "Toeslag"
 msgid "Registrations not open"
 msgstr "De inschrijving is nog niet geopend"
 
+msgid "Registrations shortcut"
+msgstr "Snelkoppeling registraties"
+
 msgid "Reimbursement approved"
 msgstr "Vergoeding goedgekeurd"
 
@@ -5183,6 +5186,9 @@ msgstr "Bekijk de volledige lijst van onze evenementen"
 
 msgid "You are currently logged in with the"
 msgstr "U bent momenteel aangemeld met de"
+
+msgid "You don't have any registrations yet"
+msgstr "Je hebt nog geen registraties"
 
 msgid "You have been awarded an achievement"
 msgstr "Je hebt een prestatie geleverd"
@@ -7673,6 +7679,12 @@ msgid ""
 msgstr ""
 "Vraag deze gegevens op bij de bank of gelijkwaardig, om de gemarkeerde "
 "boekingen te verifiëren"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Indien aangevinkt: toont een link in de bovenbalk om alle registraties van "
+"gebruikers te bekijken"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

@@ -3881,6 +3881,9 @@ msgstr "Supplément d'entrée"
 msgid "Registrations not open"
 msgstr "L'inscription n'est pas encore ouverte "
 
+msgid "Registrations shortcut"
+msgstr "Raccourci inscriptions"
+
 msgid "Reimbursement approved"
 msgstr "Remboursement approuvé"
 
@@ -5184,6 +5187,9 @@ msgstr "Consultez la liste complète de nos événements"
 
 msgid "You are currently logged in with the"
 msgstr "Vous êtes actuellement connecté avec le"
+
+msgid "You don't have any registrations yet"
+msgstr "Vous n'avez pas encore d'inscription"
 
 msgid "You have been awarded an achievement"
 msgstr "Vous avez reçu une récompense"
@@ -7777,6 +7783,12 @@ msgid ""
 msgstr ""
 "Obtenez ces données auprès de la banque ou d'un organisme équivalent, afin "
 "de vérifier les entrées marquées d'un astérisque"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Si coché : affiche un lien dans la barre supérieure pour afficher les "
+"enregistrements de tous les utilisateurs"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

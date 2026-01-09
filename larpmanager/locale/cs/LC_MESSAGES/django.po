@@ -3881,6 +3881,9 @@ msgstr "Vstupní příplatek"
 msgid "Registrations not open"
 msgstr "Registrace ještě není otevřena"
 
+msgid "Registrations shortcut"
+msgstr "Zkratka pro registrace"
+
 msgid "Reimbursement approved"
 msgstr "Schválená úhrada"
 
@@ -5183,6 +5186,9 @@ msgstr "Prohlédněte si kompletní seznam našich akcí"
 
 msgid "You are currently logged in with the"
 msgstr "V současné době jste přihlášeni pomocí"
+
+msgid "You don't have any registrations yet"
+msgstr "Zatím nemáte žádné registrace"
 
 msgid "You have been awarded an achievement"
 msgstr "Byl vám udělen úspěch"
@@ -7532,6 +7538,12 @@ msgid ""
 msgstr ""
 "Získejte tyto údaje od banky nebo rovnocenného subjektu, abyste ověřili "
 "označené položky"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Pokud je zaškrtnuto: zobrazí odkaz v horním panelu pro zobrazení všech "
+"registrací uživatelů"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

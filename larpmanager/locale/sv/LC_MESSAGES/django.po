@@ -3881,6 +3881,9 @@ msgstr "Tillägg för inresa"
 msgid "Registrations not open"
 msgstr "Registreringen är ännu inte öppen"
 
+msgid "Registrations shortcut"
+msgstr "Genväg till registreringar"
+
 msgid "Reimbursement approved"
 msgstr "Ersättning godkänd"
 
@@ -5183,6 +5186,9 @@ msgstr "Se den fullständiga listan över våra evenemang"
 
 msgid "You are currently logged in with the"
 msgstr "Du är för närvarande inloggad med"
+
+msgid "You don't have any registrations yet"
+msgstr "Du har inga registreringar ännu"
 
 msgid "You have been awarded an achievement"
 msgstr "Du har tilldelats en prestation"
@@ -7576,6 +7582,12 @@ msgid ""
 msgstr ""
 "Hämta dessa uppgifter från banken eller motsvarande för att verifiera de "
 "poster som är markerade"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Om markerad: visar en länk i toppfältet för att visa alla användares "
+"registreringar"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

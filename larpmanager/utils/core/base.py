@@ -29,7 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import get_event_fields_cache
 from larpmanager.cache.links import cache_event_links
@@ -120,11 +120,6 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
             "interface_collapse_sidebar", default_value=False
         )
         context["is_staff"] = request.user.is_staff
-
-        # Add characters shortcut configuration
-        context["user_characters_shortcut"] = get_association_config(
-            context["association_id"], "user_characters_shortcut", default_value=False, context=context
-        )
 
     # Set default names for token/credit system if feature enabled
     for feature, default_name in [("tokens", _("Tokens")), ("credits", _("Credits"))]:

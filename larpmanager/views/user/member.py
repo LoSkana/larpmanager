@@ -1010,7 +1010,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
     nt = []
     context = get_context(request)
 
-    # Get user's registrations filtered by association for caching optimization
+    # Get user's registrations in this association
     my_regs = Registration.objects.filter(member=context["member"], run__event_id=context["association_id"])
     my_regs_dict = {reg.run_id: reg for reg in my_regs}
 

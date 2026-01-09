@@ -3881,6 +3881,9 @@ msgstr "Einreise-Zuschlag"
 msgid "Registrations not open"
 msgstr "Die Anmeldung ist noch nicht geöffnet"
 
+msgid "Registrations shortcut"
+msgstr "Abkürzung für Registrierungen"
+
 msgid "Reimbursement approved"
 msgstr "Rückerstattung genehmigt"
 
@@ -5184,6 +5187,9 @@ msgstr "Sehen Sie sich die vollständige Liste unserer Veranstaltungen an"
 
 msgid "You are currently logged in with the"
 msgstr "Sie sind derzeit mit dem"
+
+msgid "You don't have any registrations yet"
+msgstr "Sie haben noch keine Registrierungen"
 
 msgid "You have been awarded an achievement"
 msgstr "Sie haben eine Auszeichnung erhalten"
@@ -7840,6 +7846,12 @@ msgid ""
 msgstr ""
 "Holen Sie diese Daten von der Bank oder einer gleichwertigen Stelle ein, um "
 "die markierten Einträge zu überprüfen"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Wenn angekreuzt: zeigt einen Link in der oberen Leiste an, um alle "
+"Registrierungen des Benutzers zu sehen"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

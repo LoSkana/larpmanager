@@ -291,6 +291,12 @@ msgstr ""
 msgid "If checked: shows a link in the topbar to view all user's characters"
 msgstr ""
 
+msgid "Registrations shortcut"
+msgstr ""
+
+msgid "If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+
 msgid "Website"
 msgstr ""
 
@@ -6627,6 +6633,9 @@ msgid "Attendance"
 msgstr ""
 
 msgid "Show all"
+msgstr ""
+
+msgid "You don't have any registrations yet"
 msgstr ""
 
 msgid "Sharing"

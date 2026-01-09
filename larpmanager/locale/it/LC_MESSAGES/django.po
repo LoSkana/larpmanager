@@ -3881,6 +3881,9 @@ msgstr "Sovrapprezzo di iscrizione"
 msgid "Registrations not open"
 msgstr "Le iscrizioni non sono ancora aperte"
 
+msgid "Registrations shortcut"
+msgstr "Scorciatoia registrazioni"
+
 msgid "Reimbursement approved"
 msgstr "Rimborso approvato"
 
@@ -5183,6 +5186,9 @@ msgstr "Visualizza la lista completa dei nostri eventi"
 
 msgid "You are currently logged in with the"
 msgstr "Al momento sei collegato con l'account"
+
+msgid "You don't have any registrations yet"
+msgstr "Non hai ancora nessuna registrazione"
 
 msgid "You have been awarded an achievement"
 msgstr "Ti è stato assegnato un achievement"
@@ -7687,6 +7693,12 @@ msgid ""
 msgstr ""
 "Ottenere questi dati dalla banca o da un ente equivalente, per verificare le"
 " voci segnate"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Se selezionato: mostra un link nella barra in alto per visualizzare tutte le"
+" registrazioni di un utente"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

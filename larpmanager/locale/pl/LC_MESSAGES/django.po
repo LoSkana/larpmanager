@@ -3881,6 +3881,9 @@ msgstr "Dopłata za rejestrację"
 msgid "Registrations not open"
 msgstr "Rejestracja nie jest otwarta"
 
+msgid "Registrations shortcut"
+msgstr "Skrót do rejestracji"
+
 msgid "Reimbursement approved"
 msgstr "Zwrot kosztów zatwierdzony"
 
@@ -5183,6 +5186,9 @@ msgstr "Zobacz pełną listę naszych wydarzeń"
 
 msgid "You are currently logged in with the"
 msgstr "Jesteś obecnie zalogowany przy użyciu"
+
+msgid "You don't have any registrations yet"
+msgstr "Nie masz jeszcze żadnych rejestracji"
 
 msgid "You have been awarded an achievement"
 msgstr "Otrzymałeś osiągnięcie"
@@ -7619,6 +7625,12 @@ msgid ""
 msgstr ""
 "Uzyskaj te dane z banku lub jego odpowiednika, aby zweryfikować zaznaczone "
 "wpisy"
+
+msgid ""
+"If checked: shows a link in the topbar to view all user's registrations"
+msgstr ""
+"Jeśli zaznaczone: wyświetla link na górnym pasku, aby wyświetlić wszystkie "
+"rejestracje użytkownika"
 
 msgid ""
 "List of users who have not registered for a future session of the event"

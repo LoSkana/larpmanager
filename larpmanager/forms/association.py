@@ -402,6 +402,11 @@ class ExeConfigForm(ConfigForm):
             field_help_text = _("If checked: shows a link in the topbar to view all user's characters")
             self.add_configs("user_characters_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
+        # Configure user characters shortcut
+        field_label = _("Registrations shortcut")
+        field_help_text = _("If checked: shows a link in the topbar to view all user's registrations")
+        self.add_configs("user_registrations_shortcut", ConfigType.BOOL, field_label, field_help_text)
+
         # Configure website link display for each event
         website_label = _("Website")
         website_help_text = _("If checked: shows the website for each event")
