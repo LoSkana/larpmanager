@@ -6277,9 +6277,6 @@ msgstr "Pro tuto položku a oblast již existuje přiřazení"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Zde je krok za krokem popsáno rozhraní"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Několikrát jsem to dělal, mám základní zkušenosti"
 
@@ -8744,6 +8741,13 @@ msgid ""
 msgstr ""
 "Nepovinný kontext pro disambiguaci, když má stejný text různé významy "
 "(msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Vaše první událost byla vytvořena! Tato stránka je ovládací panel, nyní si "
+"ukážeme jednotlivé části"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

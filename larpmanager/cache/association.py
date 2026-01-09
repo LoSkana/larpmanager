@@ -29,6 +29,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
+from larpmanager.models.event import Run
 from larpmanager.models.registration import Registration
 
 logger = logging.getLogger(__name__)
@@ -134,6 +135,13 @@ def init_cache_association(a_slug: str) -> dict | None:
     association_dict["demo"] = (
         Registration.objects.filter(run__event__association_id=association.id).count() < MAX_DEMO_REGISTRATIONS
     )
+
+    # Check if association has completed runs (onboarding mode if no runs with start and end dates)
+    association_dict["onboarding"] = not Run.objects.filter(
+        event__association=association,
+        start__isnull=False,
+        end__isnull=False,
+    ).exists()
 
     return association_dict
 

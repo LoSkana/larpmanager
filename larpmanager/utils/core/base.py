@@ -36,7 +36,7 @@ from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.association import Association
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Run
 from larpmanager.models.member import get_user_membership
 from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
@@ -126,9 +126,6 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
         name_key = f"{feature}_name"
         if feature in context["features"] and not context.get(name_key):
             context[name_key] = default_name
-
-    # Check if association has no events (onboarding mode)
-    context["onboarding"] = not Event.objects.filter(association_id=context["association_id"]).exists()
 
     # Add TinyMCE editor configuration
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG

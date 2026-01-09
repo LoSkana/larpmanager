@@ -6279,9 +6279,6 @@ msgstr "Esiste già un'assegnazione per questo oggetto e area"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Assegnato %(amount).2f %(elements)s per '%(reason) s'"
 
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Ecco una descrizione passo-passo dell'interfaccia"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "L'ho fatto qualche volta, ho una esperienza di base"
 
@@ -9027,6 +9024,13 @@ msgid ""
 msgstr ""
 "Contesto opzionale per la disambiguazione quando lo stesso testo ha "
 "significati diversi (msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Il primo evento è stato creato! Questa pagina è la dashboard, ora mostreremo"
+" ogni parte"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

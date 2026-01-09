@@ -6278,9 +6278,6 @@ msgstr "Ett uppdrag för detta objekt och område finns redan"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tilldelad %(amount).2f %(elements)s för '%(reason)s'"
 
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Här följer en steg-för-steg-genomgång av gränssnittet"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 
@@ -8852,6 +8849,13 @@ msgid ""
 msgstr ""
 "Valfri kontext för disambiguering när samma text har olika betydelser "
 "(msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Ditt första evenemang har skapats! Den här sidan är instrumentpanelen, vi "
+"kommer nu att visa varje del"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

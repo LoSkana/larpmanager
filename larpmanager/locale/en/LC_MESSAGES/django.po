@@ -4430,7 +4430,9 @@ msgid ""
 "always of the same macrotype)"
 msgstr ""
 
-msgid "Here is a step-by-step walkthrough of the interface"
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
 msgstr ""
 
 msgid ""
