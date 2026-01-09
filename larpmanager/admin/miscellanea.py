@@ -243,7 +243,7 @@ class PlayerRelationshipAdmin(DefModelAdmin):
 
     list_display: ClassVar[tuple] = ("reg_red", "target", "text_red")
     list_filter = (TargetFilter,)
-    autocomplete_fields: ClassVar[list] = ["target", "reg"]
+    autocomplete_fields: ClassVar[list] = ["target", "registration"]
 
     @staticmethod
     def text_red(instance: PlayerRelationship) -> str:
@@ -253,7 +253,7 @@ class PlayerRelationshipAdmin(DefModelAdmin):
     @staticmethod
     def reg_red(instance: PlayerRelationship) -> str:
         """Return registration with run number for admin display."""
-        return f"{instance.reg} ({instance.reg.run.number})"
+        return f"{instance.registration} ({instance.registration.run.number})"
 
 
 @admin.register(Email)

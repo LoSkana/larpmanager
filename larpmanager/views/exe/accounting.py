@@ -494,12 +494,12 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     # Configure pagination context with field definitions and data callbacks
     context.update(
         {
-            "selrel": ("reg__member", "reg__run", "inv", "inv__method"),  # Related fields to select
-            "afield": "reg",  # Main field for filtering
+            "selrel": ("registration__member", "registration__run", "inv", "inv__method"),  # Related fields to select
+            "afield": "registration",  # Main field for filtering
             "fields": fields,  # Table column definitions
             # Callbacks for formatting display values in each column
             "callbacks": {
-                "run": lambda row: str(row.reg.run) if row.reg and row.reg.run else "",
+                "run": lambda row: str(row.registration.run) if row.registration and row.registration.run else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
@@ -1058,8 +1058,8 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
 
     # Create mapping from invoice ID to run-member identifier
     # Build sets of unique run and member IDs for efficient querying
-    aux = {acc.inv_id: f"{acc.reg.run_id}-{acc.member_id}" for acc in payments}
-    run_ids = {acc.reg.run_id for acc in payments}
+    aux = {acc.inv_id: f"{acc.registration.run_id}-{acc.member_id}" for acc in payments}
+    run_ids = {acc.registration.run_id for acc in payments}
     member_ids = {acc.member_id for acc in payments}
 
     # Cache registration special codes using run-member composite key

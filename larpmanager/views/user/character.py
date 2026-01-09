@@ -440,8 +440,8 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
 
     try:
-        rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["registration"],
+        rgr = RegistrationCharacterRel.objects.select_related("character", "registration", "registration__member").get(
+            registration=context["registration"],
             character__uuid=context["char"]["uuid"],
         )
         if rgr.custom_profile:
@@ -492,8 +492,8 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
 
     # Retrieve character registration relationship
     try:
-        rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["registration"],
+        rgr = RegistrationCharacterRel.objects.select_related("character", "registration", "registration__member").get(
+            registration=context["registration"],
             character__uuid=context["char"]["uuid"],
         )
     except ObjectDoesNotExist:
@@ -540,8 +540,8 @@ def character_profile_rotate(
 
     # Retrieve character registration relationship with related objects
     try:
-        rgr = RegistrationCharacterRel.objects.select_related("character", "reg", "reg__member").get(
-            reg=context["registration"],
+        rgr = RegistrationCharacterRel.objects.select_related("character", "registration", "registration__member").get(
+            registration=context["registration"],
             character__uuid=context["char"]["uuid"],
         )
     except ObjectDoesNotExist:
@@ -607,7 +607,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     context["approval"] = get_event_config(
         context["event"].id, "user_character_approval", default_value=False, context=context
     )
-    context["assigned"] = RegistrationCharacterRel.objects.filter(reg_id=context["registration"].id).count()
+    context["assigned"] = RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).count()
     return render(request, "larpmanager/event/character/list.html", context)
 
 
@@ -689,13 +689,13 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
     get_char_check(request, context, character_uuid, restrict_non_owners=True)
-    if RegistrationCharacterRel.objects.filter(reg_id=context["registration"].id).exists():
+    if RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).exists():
         messages.warning(request, _("You already have an assigned character"))
     elif not context["character"].is_active:
         messages.error(request, _("This character is inactive and cannot be assigned to players"))
     else:
         character_id = _get_character_cache_id(context)
-        RegistrationCharacterRel.objects.create(reg_id=context["registration"].id, character_id=character_id)
+        RegistrationCharacterRel.objects.create(registration_id=context["registration"].id, character_id=character_id)
         messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)
@@ -911,9 +911,9 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
     context["rel"] = []
 
     # Query player relationships for the current character's player in this run
-    que = PlayerRelationship.objects.select_related("target", "reg", "reg__member").filter(
-        reg__member__uuid=context["char"]["player_uuid"],
-        reg__run=context["run"],
+    que = PlayerRelationship.objects.select_related("target", "registration", "registration__member").filter(
+        registration__member__uuid=context["char"]["player_uuid"],
+        registration__run=context["run"],
     )
 
     # Process each relationship and build display data

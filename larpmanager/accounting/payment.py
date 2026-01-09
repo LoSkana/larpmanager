@@ -212,7 +212,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     """
     # Set invoice registration references
     invoice.idx = context["registration"].id
-    invoice.reg = context["registration"]
+    invoice.registration = context["registration"]
 
     # Get custom reason template from event configuration
     custom_reason_template = get_event_config(
@@ -247,7 +247,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             if registration_question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
                 user_choices = RegistrationChoice.objects.filter(
                     question=registration_question,
-                    reg_id=context["registration"].id,
+                    registration_id=context["registration"].id,
                 )
 
                 # Collect all selected option names
@@ -257,7 +257,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
                 # Handle text-based questions
                 answer_value = RegistrationAnswer.objects.get(
                     question=registration_question,
-                    reg_id=context["registration"].id,
+                    registration_id=context["registration"].id,
                 ).text
             placeholder_values[question_name] = answer_value
         except ObjectDoesNotExist:
@@ -550,7 +550,7 @@ def _process_payment(invoice: PaymentInvoice) -> None:
         accounting_item = AccountingItemPayment()
         accounting_item.pay = PaymentChoices.MONEY
         accounting_item.member_id = invoice.member_id
-        accounting_item.reg = registration
+        accounting_item.registration = registration
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
         accounting_item.association_id = invoice.association_id
@@ -594,7 +594,7 @@ def _process_fee(fee_percentage: float, invoice: PaymentInvoice) -> None:
     if invoice.typ == PaymentType.REGISTRATION:
         try:
             registration = Registration.objects.get(pk=invoice.idx)
-            accounting_transaction.reg = registration
+            accounting_transaction.registration = registration
             accounting_transaction.save()
         except ObjectDoesNotExist:
             logger.exception("Registration not found for invoice %s with idx %s", invoice.pk, invoice.idx)

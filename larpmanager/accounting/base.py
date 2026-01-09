@@ -145,7 +145,7 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
     """
     # Set member from registration if not already set
     if not instance.member:
-        instance.member = instance.reg.member
+        instance.member = instance.registration.member
 
     # Skip further processing for new instances (no pk yet)
     if not instance.pk:
@@ -158,9 +158,9 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
     instance._update_reg = prev.value != instance.value  # noqa: SLF001  # Internal flag for registration update
 
     # Update all related transactions if registration changed
-    if prev.reg != instance.reg:
+    if prev.registration != instance.registration:
         for trans in AccountingItemTransaction.objects.filter(inv_id=instance.inv_id):
-            trans.reg = instance.reg
+            trans.registration = instance.registration
             trans.save()
 
 
