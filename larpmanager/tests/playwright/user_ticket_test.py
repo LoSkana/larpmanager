@@ -23,7 +23,7 @@ Test: Technical support ticket system.
 Verifies ticket submission with and without login, with and without screenshots,
 and email change requests through the support system.
 """
-
+import re
 from typing import Any
 
 import pytest
