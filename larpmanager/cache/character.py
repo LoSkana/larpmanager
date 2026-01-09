@@ -673,6 +673,11 @@ def update_event_cache_all_character_reg(character_registration: Any, cache_resu
     # Update character data in result
     cache_result["chars"][character.number].update(character_display_data)
 
+    # Update char_mapping to keep character number -> id mapping in sync
+    if "char_mapping" not in cache_result:
+        cache_result["char_mapping"] = {}
+    cache_result["char_mapping"][character.number] = character.id
+
 
 def update_event_cache_all_character(instance: Character, res: dict, run: Run) -> None:
     """Update character cache data for event display.
@@ -698,6 +703,11 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 
     # Update the character data in results
     res["chars"][instance.number].update(character_display_data)
+
+    # Update char_mapping to keep character number -> id mapping in sync
+    if "char_mapping" not in res:
+        res["char_mapping"] = {}
+    res["char_mapping"][instance.number] = instance.id
 
 
 def update_event_cache_all_faction(instance: Faction, res: dict[str, dict]) -> None:
@@ -760,7 +770,8 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         prev = Character.objects.get(pk=char.pk)
 
         # Check if cache-affecting fields changed
-        lst = ["player_id", "mirror_id"]
+        # Note: number is included because char_mapping uses number as key
+        lst = ["player_id", "mirror_id", "number"]
         if has_different_cache_values(char, prev, lst):
             clear_event_cache_all_runs(char.event)
         else:

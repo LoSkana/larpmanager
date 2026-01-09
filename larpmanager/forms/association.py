@@ -389,13 +389,18 @@ class ExeConfigForm(ConfigForm):
         association's interface customization. Configures calendar display options,
         email notification preferences, and delegates to other configuration methods.
         """
-        # CALENDAR SECTION - Configure calendar display options
-        self.set_section("calendar", _("Calendar"))
+        self.set_section("interface", _("Interface"))
 
         # Configure visibility of past events link in calendar
         past_events_label = _("Past events")
         past_events_help_text = _("If checked: shows a link in the calendar to past events")
         self.add_configs("calendar_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
+
+        if self.params.get("skin_id") == 1:
+            # Configure user characters shortcut
+            field_label = _("Characters shortcut")
+            field_help_text = _("If checked: shows a link in the topbar to view all user's characters")
+            self.add_configs("user_characters_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
         # Configure website link display for each event
         website_label = _("Website")

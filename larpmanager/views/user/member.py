@@ -68,8 +68,9 @@ from larpmanager.models.miscellanea import (
     ChatMessage,
     Contact,
 )
-from larpmanager.models.registration import Registration
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.utils import generate_id
+from larpmanager.models.writing import CharacterConfig
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_badge, get_channel, get_contact
 from larpmanager.utils.core.exceptions import check_association_feature
@@ -1031,3 +1032,86 @@ def registrations(request: HttpRequest) -> HttpResponse:
     # Render template with processed registration list
     context["registration_list"] = nt
     return render(request, "larpmanager/member/registrations.html", context)
+
+
+@login_required
+def characters(request: HttpRequest) -> HttpResponse:
+    """Display user's characters grouped by campaign with status and last event.
+
+    Retrieves and displays all characters assigned to the current user within their
+    association, grouped by campaign (event or parent event). Shows character status
+    (active/inactive) and links to the last event where the character was played.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing user and
+            association information.
+
+    Returns:
+        HttpResponse: Rendered template displaying the user's characters
+            grouped by campaign.
+
+    """
+    context = get_context(request)
+
+    # Get all assignments of characters to the user
+    my_character_rels = (
+        RegistrationCharacterRel.objects.filter(
+            reg__member=context["member"],
+            reg__run__event__association_id=context["association_id"],
+            reg__cancellation_date__isnull=True,
+        )
+        .select_related("character", "reg__run")
+        .order_by("reg__run__end")
+    )
+
+    # Batch load character configs
+    _configs_character_rels(my_character_rels)
+
+    context["oneshots"] = [rel for rel in my_character_rels if not rel.character.player]
+
+    campaigns = {}
+    for rel in my_character_rels:
+        if not rel.character.player:
+            continue
+
+        # Determine campaign: use parent if exists, otherwise the event itself
+        character = rel.character
+        event = character.event
+        campaign = event.parent if event.parent_id else event
+        if campaign.id not in campaigns:
+            campaigns[campaign.id] = {
+                "campaign": campaign,
+                "characters": {},
+                "event": event,
+            }
+
+        if character.id in campaigns[campaign.id]["characters"]:
+            continue
+
+        campaigns[campaign.id]["characters"][character.id] = rel
+
+    context["campaigns"] = campaigns
+
+    return render(request, "larpmanager/member/characters.html", context)
+
+
+def _configs_character_rels(character_rels: list[RegistrationCharacterRel]) -> None:
+    """Batch load character configs."""
+    # Collect all character IDs
+    char_ids = {rel.character.id for rel in character_rels}
+
+    if not char_ids:
+        return
+
+    # Batch query for CharacterConfig
+    configs_mapping = {}
+    configs_query = CharacterConfig.objects.filter(character_id__in=char_ids).values_list(
+        "character_id", "name", "value"
+    )
+    for character_id, name, value in configs_query:
+        if character_id not in configs_mapping:
+            configs_mapping[character_id] = {}
+        configs_mapping[character_id][name] = value
+
+    for rel in character_rels:
+        rel.character.configs_dict = configs_mapping.get(rel.character_id, {})

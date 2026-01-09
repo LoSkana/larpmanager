@@ -276,13 +276,19 @@ msgstr ""
 msgid "Manage configuration of activated features"
 msgstr ""
 
-msgid "Calendar"
+msgid "Interface"
 msgstr ""
 
 msgid "Past events"
 msgstr ""
 
 msgid "If checked: shows a link in the calendar to past events"
+msgstr ""
+
+msgid "Characters shortcut"
+msgstr ""
+
+msgid "If checked: shows a link in the topbar to view all user's characters"
 msgstr ""
 
 msgid "Website"
@@ -737,9 +743,6 @@ msgid "Personal preferences"
 msgstr ""
 
 msgid "Manage your personal interface preferences"
-msgstr ""
-
-msgid "Interface"
 msgstr ""
 
 msgid "Collapse sidebar"
@@ -6022,9 +6025,6 @@ msgstr ""
 msgid "Browse the presentation website"
 msgstr ""
 
-msgid "Access the list of your characters"
-msgstr ""
-
 msgid "Discover the game factions"
 msgstr ""
 
@@ -6388,6 +6388,12 @@ msgid "We ask you to pay the remaining amount"
 msgstr ""
 
 msgid "Would you like to pay a different amount"
+msgstr ""
+
+msgid "Last Event"
+msgstr ""
+
+msgid "You don't have any characters yet"
 msgstr ""
 
 msgid "User"
