@@ -69,7 +69,7 @@ from larpmanager.utils.io.download import (
 )
 from larpmanager.utils.io.upload import go_upload
 from larpmanager.utils.services.edit import backend_edit, orga_edit
-from larpmanager.utils.services.event import init_features, reset_all_run
+from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
 if TYPE_CHECKING:
@@ -361,7 +361,6 @@ def orga_features_go(request: HttpRequest, context: dict, slug: str, *, to_activ
         if target_feature_id not in current_event_feature_ids:
             context["event"].features.add(target_feature_id)
             message = _("Feature %(name)s activated") + "!"
-            init_features(context["event"], [slug])
         else:
             message = _("Feature %(name)s already activated") + "!"
     elif target_feature_id not in current_event_feature_ids:

@@ -4571,9 +4571,6 @@ msgstr "Niet omgezette voorregistraties"
 msgid "Unknown choice type: %(type)s"
 msgstr "Type keuze onbekend: %(type)s"
 
-msgid "You don't have any events yet"
-msgstr "Je hebt nog geen evenementen"
-
 msgid "You're not allowed to sign up"
 msgstr "Je mag je niet aanmelden"
 
@@ -5878,9 +5875,6 @@ msgstr "Nu kun je de openingsdatum van de registratie instellen"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 
-msgid "Please create your first event to get started"
-msgstr "Maak je eerste evenement aan om te beginnen"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Bijgewerkte invoer van %(event)s door %(user)s"
@@ -6291,9 +6285,6 @@ msgstr "Er bestaat al een opdracht voor dit item en gebied"
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
-
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Hier volgt een stap-voor-stap uitleg van de interface"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
@@ -7375,6 +7366,9 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "U kunt nu de veiligheidsinformatie bekijken die deelnemers hebben ingediend"
 
+msgid "Simply follow the instructions and provide the required information"
+msgstr "Volg gewoon de instructies en geef de vereiste informatie"
+
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Het gezochte object bestaat niet, misschien is het onlangs verwijderd"
 
@@ -8443,6 +8437,12 @@ msgstr ""
 "verder gaat"
 
 msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr ""
+"Deze pagina leidt je stap voor stap door de creatie van je eerste evenement"
+
+msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
 " of"
 msgstr ""
@@ -9006,6 +9006,13 @@ msgid ""
 msgstr ""
 "Optionele context voor disambiguatie als dezelfde tekst verschillende "
 "betekenissen heeft (msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Je eerste evenement is aangemaakt! Deze pagina is het dashboard, we zullen "
+"nu elk onderdeel laten zien"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

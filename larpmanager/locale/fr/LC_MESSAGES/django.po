@@ -4571,9 +4571,6 @@ msgstr "Préinscriptions non converties"
 msgid "Unknown choice type: %(type)s"
 msgstr "Type de choix inconnu : %(type)s"
 
-msgid "You don't have any events yet"
-msgstr "Vous n'avez pas encore d'événements"
-
 msgid "You're not allowed to sign up"
 msgstr "Vous n'êtes pas autorisé à vous inscrire"
 
@@ -5883,9 +5880,6 @@ msgstr "Vous pouvez maintenant fixer la date d'ouverture de l'inscription"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lieu de naissance ne figurant pas dans la liste ISTAT"
 
-msgid "Please create your first event to get started"
-msgstr "Veuillez créer votre premier événement pour commencer"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Entrée mise à jour en %(event)s par %(user)s"
@@ -6304,9 +6298,6 @@ msgstr "Une affectation pour ce poste et ce domaine existe déjà"
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Attribué %(amount).2f %(elements)s pour '%(reason)s'"
-
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Voici un aperçu de l'interface, étape par étape"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base"
@@ -7451,6 +7442,10 @@ msgstr ""
 "Vous pouvez maintenant passer en revue les informations de sécurité soumises"
 " par les participants"
 
+msgid "Simply follow the instructions and provide the required information"
+msgstr ""
+"Il suffit de suivre les instructions et de fournir les informations requises"
+
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr ""
 "L'objet recherché n'existe pas, peut-être a-t-il été récemment supprimé"
@@ -8553,6 +8548,13 @@ msgstr ""
 "avant de poursuivre"
 
 msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr ""
+"Cette page vous guidera pas à pas dans la création de votre premier "
+"événement"
+
+msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
 " of"
 msgstr ""
@@ -9118,6 +9120,13 @@ msgid ""
 msgstr ""
 "Contexte facultatif pour la désambiguïsation lorsqu'un même texte a des "
 "significations différentes (msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Votre premier événement a été créé ! Cette page est le tableau de bord, nous"
+" allons maintenant montrer chaque partie"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

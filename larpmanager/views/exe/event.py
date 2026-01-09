@@ -138,6 +138,9 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
         # Redirect back to events list after successful edit
         return redirect("exe_events")
 
+    if "onboarding" in context:
+        context["welcome_message"] = True
+
     # Configure form context and render edit template
     context["add_another"] = False
     return render(request, "larpmanager/exe/edit.html", context)

@@ -1,4 +1,13 @@
 {% load i18n tz show_tags static %}
+{% if welcome_message %}
+    <div id="welcome_message">
+        <h2>{% trans "Welcome to" %} {{ platform }}!</h2>
+        <p>{% trans "This page will guide you through the creation of your first event, step by step" %}.</p>
+        <p>{% trans "Simply follow the instructions and provide the required information" %}.</p>
+    </div>
+    <hr />
+    <br />
+{% endif %}
 {% if form.has_mandatory %}
     <p>
         <i>(*) : {% trans "These fields are mandatory" %}</i>

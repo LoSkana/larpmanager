@@ -90,14 +90,12 @@ def perform_transfer(
         )
 
 
-def generate_base_inventories(instance: Character) -> None:
-    """Create a personal inventory for newly created characters.
-
-    Checks if inventory already exists to avoid duplicates.
-    """
-    event_features = get_event_features(instance.event_id)
-    if "inventory" not in event_features:
-        return
+def generate_base_inventories(instance: Character, *, check: bool = False) -> None:
+    """Create a personal inventory for newly created characters."""
+    if check:
+        event_features = get_event_features(instance.event_id)
+        if "inventory" not in event_features:
+            return
 
     inventory_name = f"{instance.name}'s Personal Storage"
     # Check if the character already has a personal inventory

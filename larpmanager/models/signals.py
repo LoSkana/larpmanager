@@ -244,6 +244,7 @@ from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
     copy_parent_event_to_campaign,
     create_default_event_setup,
+    on_event_features_m2m_changed,
     prepare_campaign_event_data,
     update_run_plan_on_event_change,
 )
@@ -1518,6 +1519,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 
     clear_run_event_links_cache(instance.event)
 
+    # Clear association cache to update onboarding status
+    clear_association_cache(instance.event.association.slug)
+
 
 @receiver(pre_delete, sender=Run)
 def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
@@ -1529,6 +1533,9 @@ def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
 def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event links cache when a run link is deleted."""
     clear_run_event_links_cache(instance.event)
+
+    # Clear association cache to update onboarding status
+    clear_association_cache(instance.event.association.slug)
 
 
 # RunConfig signals
@@ -1664,6 +1671,8 @@ m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.mem
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
+
+m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 
 
 @receiver(valid_ipn_received)

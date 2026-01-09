@@ -1596,7 +1596,7 @@ th select {
   padding: 3em;
   border-radius: 10px;
   min-width: 320px;
-  z-index: 10000;
+  z-index: 1000;
 }
 
 #char-finder-close {
@@ -2531,4 +2531,8 @@ input[type="number"] {
   .section-image .image-wrapper {
     max-width: 90%;
   }
+}
+
+#welcome_message {
+  font-size: 130%;
 }

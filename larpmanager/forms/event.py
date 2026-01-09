@@ -243,7 +243,7 @@ class OrgaEventForm(BaseModelForm):
         logger.debug("Validating event slug: %s", data)
 
         # Check if slug is already used by another event
-        lst = Event.objects.filter(slug=data)
+        lst = Event.objects.filter(association_id=self.params["association_id"], slug=data)
         if self.instance is not None and self.instance.pk is not None:
             lst.exclude(pk=self.instance.pk)
         if lst.count() > 0:
@@ -1439,13 +1439,7 @@ class ExeEventForm(OrgaEventForm):
     """Extended event form for executors with template support."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize ExeEventForm with template event selection.
-
-        Args:
-            *args: Variable length argument list
-            **kwargs: Arbitrary keyword arguments
-
-        """
+        """Initialize ExeEventForm with template event selection."""
         super().__init__(*args, **kwargs)
 
         if "template" in self.params["features"] and not self.instance.pk:

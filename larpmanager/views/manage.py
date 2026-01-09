@@ -189,20 +189,8 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Get available features for this association
     features = get_association_features(context["association_id"])
 
-    # Check if association has any events
-    context["event_counts"] = Event.objects.filter(association_id=context["association_id"]).count()
-
     # Redirect to event creation if no events exist and feature is available
-    if not context["event_counts"] and "exe_events" in features:
-        welcome_message = (
-            _("Welcome")
-            + "! "
-            + _("You don't have any events yet")
-            + ". "
-            + _("Please create your first event to get started")
-            + "!"
-        )
-        messages.success(request, welcome_message)
+    if context.get("onboarding") and "exe_events" in features:
         return redirect("exe_events_edit", event_uuid="0")
 
     # Redirect to quick setup if not completed

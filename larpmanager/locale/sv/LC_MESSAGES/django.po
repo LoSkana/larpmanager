@@ -4571,9 +4571,6 @@ msgstr "Förhandsregistreringar som inte konverterats"
 msgid "Unknown choice type: %(type)s"
 msgstr "Okänd typ av val: %(type)s"
 
-msgid "You don't have any events yet"
-msgstr "Du har inga evenemang ännu"
-
 msgid "You're not allowed to sign up"
 msgstr "Du får inte registrera dig"
 
@@ -5877,9 +5874,6 @@ msgstr "Nu kan du ställa in öppningsdatum för registrering"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Födelseort som inte finns med i ISTAT:s förteckning"
 
-msgid "Please create your first event to get started"
-msgstr "Skapa ditt första event för att komma igång"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Uppdaterad registrering av %(event)s av %(user)s"
@@ -6283,9 +6277,6 @@ msgstr "Ett uppdrag för detta objekt och område finns redan"
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tilldelad %(amount).2f %(elements)s för '%(reason)s'"
-
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Här följer en steg-för-steg-genomgång av gränssnittet"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
@@ -7298,6 +7289,9 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Nu kan du granska den säkerhetsinformation som deltagarna har lämnat in"
 
+msgid "Simply follow the instructions and provide the required information"
+msgstr "Följ bara instruktionerna och fyll i den information som krävs"
+
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "Det sökta objektet finns inte, kanske har det nyligen tagits bort"
 
@@ -8291,6 +8285,13 @@ msgid ""
 msgstr "Detta innehåll kan endast nås en gång. Läs noga innan du fortsätter"
 
 msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr ""
+"Den här sidan guidar dig genom skapandet av ditt första evenemang, steg för "
+"steg"
+
+msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
 " of"
 msgstr ""
@@ -8848,6 +8849,13 @@ msgid ""
 msgstr ""
 "Valfri kontext för disambiguering när samma text har olika betydelser "
 "(msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Ditt första evenemang har skapats! Den här sidan är instrumentpanelen, vi "
+"kommer nu att visa varje del"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

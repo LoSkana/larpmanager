@@ -4571,9 +4571,6 @@ msgstr "Preinscripciones no convertidas"
 msgid "Unknown choice type: %(type)s"
 msgstr "Tipo de elección desconocido: %(type)s"
 
-msgid "You don't have any events yet"
-msgstr "Aún no tienes ningún evento"
-
 msgid "You're not allowed to sign up"
 msgstr "No puedes inscribirte"
 
@@ -5875,9 +5872,6 @@ msgstr "Ahora puede fijar la fecha de apertura de la inscripción"
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Lugar de nacimiento no incluido en la lista ISTAT"
 
-msgid "Please create your first event to get started"
-msgstr "Cree su primer evento para empezar"
-
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Inscripción a %(event)s actualizada por %(user)s"
@@ -6285,9 +6279,6 @@ msgstr "Ya existe una asignación para este artículo y área"
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Asignado %(amount).2f %(elements)s para '%(reason)s'"
-
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Aquí tienes un recorrido paso a paso por la interfaz"
 
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Lo he hecho unas cuantas veces, tengo cierta experiencia"
@@ -7364,6 +7355,10 @@ msgstr ""
 "Ahora puede revisar la información sobre seguridad enviada por los "
 "participantes"
 
+msgid "Simply follow the instructions and provide the required information"
+msgstr ""
+"Sólo tiene que seguir las instrucciones y facilitar la información requerida"
+
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr "El objeto buscado no existe, ¿quizás ha sido borrado recientemente"
 
@@ -8427,6 +8422,11 @@ msgstr ""
 "continuar"
 
 msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr "Esta página le guiará paso a paso en la creación de su primer evento"
+
+msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
 " of"
 msgstr ""
@@ -8989,6 +8989,13 @@ msgid ""
 msgstr ""
 "Contexto opcional para la desambiguación cuando el mismo texto tiene "
 "significados diferentes (msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"¡Tu primer evento ha sido creado! Esta página es el tablero de instrumentos,"
+" ahora vamos a mostrar cada parte"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
