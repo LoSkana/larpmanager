@@ -240,6 +240,7 @@ from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
     copy_parent_event_to_campaign,
     create_default_event_setup,
+    on_event_features_m2m_changed,
     prepare_campaign_event_data,
     update_run_plan_on_event_change,
 )
@@ -1654,6 +1655,8 @@ m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.mem
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)
 
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
+
+m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 
 
 @receiver(valid_ipn_received)
