@@ -6286,9 +6286,6 @@ msgstr "Er bestaat al een opdracht voor dit item en gebied"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
 
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Hier volgt een stap-voor-stap uitleg van de interface"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
 
@@ -9009,6 +9006,13 @@ msgid ""
 msgstr ""
 "Optionele context voor disambiguatie als dezelfde tekst verschillende "
 "betekenissen heeft (msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Je eerste evenement is aangemaakt! Deze pagina is het dashboard, we zullen "
+"nu elk onderdeel laten zien"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "

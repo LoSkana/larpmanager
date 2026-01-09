@@ -1509,6 +1509,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 
     clear_run_event_links_cache(instance.event)
 
+    # Clear association cache to update onboarding status
+    clear_association_cache(instance.event.association.slug)
+
 
 @receiver(pre_delete, sender=Run)
 def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
@@ -1520,6 +1523,9 @@ def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
 def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event links cache when a run link is deleted."""
     clear_run_event_links_cache(instance.event)
+
+    # Clear association cache to update onboarding status
+    clear_association_cache(instance.event.association.slug)
 
 
 # RunConfig signals

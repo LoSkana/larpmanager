@@ -6299,9 +6299,6 @@ msgstr "Une affectation pour ce poste et ce domaine existe déjà"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Attribué %(amount).2f %(elements)s pour '%(reason)s'"
 
-msgid "Here is a step-by-step walkthrough of the interface"
-msgstr "Voici un aperçu de l'interface, étape par étape"
-
 msgid "I've done it a few times, I have a basic experience"
 msgstr "Je l'ai fait plusieurs fois, j'ai une expérience de base"
 
@@ -9123,6 +9120,13 @@ msgid ""
 msgstr ""
 "Contexte facultatif pour la désambiguïsation lorsqu'un même texte a des "
 "significations différentes (msgctxt)"
+
+msgid ""
+"Your first event has been created! This page is the dashboard, we'll now "
+"show each part"
+msgstr ""
+"Votre premier événement a été créé ! Cette page est le tableau de bord, nous"
+" allons maintenant montrer chaque partie"
 
 msgid ""
 "If checked: Send a notification email to the organisers for cancellation of "
