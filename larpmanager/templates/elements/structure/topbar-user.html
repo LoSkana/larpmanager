@@ -11,17 +11,7 @@
                         </a>
                     </span>
                 </td>
-                <td class="right">
-                    <div class="el">
-                        <a href="{% url 'profile' %}"><i class="fa-solid fa-user"></i> <span class="no_mobile">{% trans "Profile" %}</span></a>
-                    </div>
-                    <div class="el">
-                        <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> <span class="no_mobile">{% trans "Accounting" %}</span></a>
-                    </div>
-                    <div class="el">
-                        <a id="menu-open" href="#menu"><i class="fa-solid fa-bars"></i> <span class="no_mobile">{% trans "Hi" %}, {{ user.member.display_member }}!</span></a>
-                    </div>
-                </td>
+                {% include "elements/structure/topbar-right.html" %}
             </tr>
         </table>
     </div>

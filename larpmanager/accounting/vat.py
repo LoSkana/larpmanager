@@ -80,10 +80,10 @@ def calculate_payment_vat(instance: AccountingItemPayment) -> None:
 
     # Calculate total ticket cost including both base price and custom amounts
     ticket_total_cost = Decimal(0)
-    if instance.reg.pay_what is not None:
-        ticket_total_cost += Decimal(str(instance.reg.pay_what))
-    if instance.reg.ticket:
-        ticket_total_cost += Decimal(str(instance.reg.ticket.price))
+    if instance.registration.pay_what is not None:
+        ticket_total_cost += Decimal(str(instance.registration.pay_what))
+    if instance.registration.ticket:
+        ticket_total_cost += Decimal(str(instance.registration.ticket.price))
 
     # Determine net payment amount after accounting for refund transactions
     # Ensure we're working with Decimal for monetary calculations
@@ -127,7 +127,9 @@ def get_previous_sum(aip: AccountingItemPayment, typ: type) -> Decimal:
 
     """
     # Filter items by same member and run, created before reference item
-    previous_items = typ.objects.filter(reg__member=aip.reg.member, reg__run=aip.reg.run, created__lt=aip.created)
+    previous_items = typ.objects.filter(
+        registration__member=aip.registration.member, registration__run=aip.registration.run, created__lt=aip.created
+    )
 
     # Aggregate the sum of values and return Decimal(0) if no items found
     return previous_items.aggregate(total=Sum("value"))["total"] or Decimal(0)

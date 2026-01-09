@@ -199,6 +199,11 @@ urlpatterns = [
         name="delegated",
     ),
     path(
+        "characters/",
+        views_um.characters,
+        name="characters",
+    ),
+    path(
         "accounting/",
         views_ua.accounting,
         name="accounting",

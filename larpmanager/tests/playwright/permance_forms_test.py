@@ -165,13 +165,13 @@ def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
 
 def check_exe_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Calendar ").click()
+    page.get_by_role("link", name="Interface ").click()
     page.locator("#id_calendar_past_events").check()
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
     submit_confirm(page)
     page.locator("#exe_config").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name="Calendar ").click()
+    page.get_by_role("link", name="Interface ").click()
     expect(page.locator("#id_calendar_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
     expect(page.locator("#id_calendar_where")).not_to_be_checked()

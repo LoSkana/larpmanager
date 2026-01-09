@@ -257,7 +257,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
             member=registration.member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
 
@@ -268,7 +268,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         # Verify tot_payed was updated (automatic calculation may vary based on conditions)
         self.assertIsNotNone(updated_registration.tot_payed)
         # Verify payment exists
-        self.assertTrue(AccountingItemPayment.objects.filter(reg=registration).exists())
+        self.assertTrue(AccountingItemPayment.objects.filter(registration=registration).exists())
 
     @patch("larpmanager.mail.registration.my_send_mail")
     @patch("larpmanager.cache.feature.get_event_features")
@@ -284,14 +284,14 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
             member=registration.member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         AccountingItemPayment.objects.create(
             member=registration.member,
             value=Decimal("30.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
 
@@ -300,7 +300,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         updated_registration = Registration.objects.get(id=registration.id)
 
         # Verify multiple payments exist
-        payment_count = AccountingItemPayment.objects.filter(reg=registration).count()
+        payment_count = AccountingItemPayment.objects.filter(registration=registration).count()
         self.assertEqual(payment_count, 2)
         # Verify tot_payed was calculated
         self.assertIsNotNone(updated_registration.tot_payed)
@@ -361,14 +361,14 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         registration.save()
 
         # Add choice with question field
-        choice = RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+        choice = RegistrationChoice.objects.create(registration=registration, option=option1, question=question)
 
         registration.save()
         # Get fresh instance from database
         updated_registration = Registration.objects.get(id=registration.id)
 
         # Verify choice was created
-        self.assertTrue(RegistrationChoice.objects.filter(reg=registration).exists())
+        self.assertTrue(RegistrationChoice.objects.filter(registration=registration).exists())
         # Verify tot_iscr was calculated
         self.assertIsNotNone(updated_registration.tot_iscr)
 
@@ -436,7 +436,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
             member=registration.member,
             value=Decimal("100.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
 
@@ -445,7 +445,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         updated_registration = Registration.objects.get(id=registration.id)
 
         # Verify payment was created and registration was updated
-        self.assertTrue(AccountingItemPayment.objects.filter(reg=registration).exists())
+        self.assertTrue(AccountingItemPayment.objects.filter(registration=registration).exists())
         # payment_date may or may not be set depending on exact amount match and other conditions
         # Just verify the field exists
         self.assertIsNotNone(updated_registration.id)
@@ -464,7 +464,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
             member=registration.member,
             value=Decimal("100.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
 
@@ -473,7 +473,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
             member=registration.member,
             value=Decimal("5.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             user_burden=True,
         )
 
@@ -482,7 +482,7 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         updated_registration = Registration.objects.get(id=registration.id)
 
         # Verify transaction was created
-        self.assertTrue(AccountingItemTransaction.objects.filter(reg=registration).exists())
+        self.assertTrue(AccountingItemTransaction.objects.filter(registration=registration).exists())
         # Verify tot_payed was calculated
         self.assertIsNotNone(updated_registration.tot_payed)
 

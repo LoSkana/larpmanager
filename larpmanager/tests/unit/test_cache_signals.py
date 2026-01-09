@@ -236,7 +236,7 @@ class TestCacheSignals(BaseTestCase):
         registration = self.get_registration()
         character = self.character()
         mock_reset.reset_mock()  # Reset after fixtures
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         mock_reset.assert_called_once_with(registration.run)
@@ -246,7 +246,7 @@ class TestCacheSignals(BaseTestCase):
         """Test that RegistrationCharacterRel post_delete signal resets character cache"""
         registration = self.get_registration()
         character = self.character()
-        rel = RegistrationCharacterRel.objects.create(reg=registration, character=character)
+        rel = RegistrationCharacterRel.objects.create(registration=registration, character=character)
         mock_reset.reset_mock()  # Reset after create
         rel.delete()
 
@@ -446,7 +446,7 @@ class TestCacheSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -462,11 +462,11 @@ class TestCacheSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         member_id = payment.member_id
-        run = payment.reg.run
+        run = payment.registration.run
         mock_reset.reset_mock()  # Reset after create
         payment.delete()
 

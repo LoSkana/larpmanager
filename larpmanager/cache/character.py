@@ -130,8 +130,8 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     # Build assignments mapping from character number to registration relation
     context["assignments"] = {}
-    registration_query = RegistrationCharacterRel.objects.filter(reg__run=context["run"])
-    for relation in registration_query.select_related("character", "reg", "reg__member"):
+    registration_query = RegistrationCharacterRel.objects.filter(registration__run=context["run"])
+    for relation in registration_query.select_related("character", "registration", "registration__member"):
         context["assignments"][relation.character.number] = relation
 
     # Get event configuration for hiding uncasted characters
@@ -140,7 +140,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     )
 
     # Get list of assigned character IDs for mirror filtering
-    assigned_character_ids = RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list(
+    assigned_character_ids = RegistrationCharacterRel.objects.filter(registration__run=context["run"]).values_list(
         "character_id",
         flat=True,
     )
@@ -673,6 +673,11 @@ def update_event_cache_all_character_reg(character_registration: Any, cache_resu
     # Update character data in result
     cache_result["chars"][character.number].update(character_display_data)
 
+    # Update char_mapping to keep character number -> id mapping in sync
+    if "char_mapping" not in cache_result:
+        cache_result["char_mapping"] = {}
+    cache_result["char_mapping"][character.number] = character.id
+
 
 def update_event_cache_all_character(instance: Character, res: dict, run: Run) -> None:
     """Update character cache data for event display.
@@ -698,6 +703,11 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 
     # Update the character data in results
     res["chars"][instance.number].update(character_display_data)
+
+    # Update char_mapping to keep character number -> id mapping in sync
+    if "char_mapping" not in res:
+        res["char_mapping"] = {}
+    res["char_mapping"][instance.number] = instance.id
 
 
 def update_event_cache_all_faction(instance: Faction, res: dict[str, dict]) -> None:
@@ -738,14 +748,16 @@ def update_member_event_character_cache(instance: Member) -> None:
     """Update event cache for all active character registrations of a member."""
     # Get all active character registrations for this member
     active_character_registrations = RegistrationCharacterRel.objects.filter(
-        reg__member_id=instance.id,
-        reg__cancellation_date__isnull=True,
+        registration__member_id=instance.id,
+        registration__cancellation_date__isnull=True,
     )
-    active_character_registrations = active_character_registrations.select_related("character", "reg", "reg__run")
+    active_character_registrations = active_character_registrations.select_related(
+        "character", "registration", "registration__run"
+    )
 
     # Update cache for each character registration
     for relation in active_character_registrations:
-        update_event_cache_all(relation.reg.run, relation)
+        update_event_cache_all(relation.registration.run, relation)
 
 
 def on_character_pre_save_update_cache(char: Character) -> None:
@@ -760,7 +772,8 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         prev = Character.objects.get(pk=char.pk)
 
         # Check if cache-affecting fields changed
-        lst = ["player_id", "mirror_id"]
+        # Note: number is included because char_mapping uses number as key
+        lst = ["player_id", "mirror_id", "number"]
         if has_different_cache_values(char, prev, lst):
             clear_event_cache_all_runs(char.event)
         else:
@@ -869,10 +882,10 @@ def update_event_cache_all_runs(event: Event, instance: BaseModel) -> None:
 def reset_character_registration_cache(rcr: RegistrationCharacterRel) -> None:
     """Reset cache for character's registration and run."""
     # Save registration to trigger cache invalidation
-    if rcr.reg:
-        rcr.reg.save()
+    if rcr.registration:
+        rcr.registration.save()
     # Clear run-level cache and media
-    clear_run_cache_and_media(rcr.reg.run)
+    clear_run_cache_and_media(rcr.registration.run)
 
 
 def clear_event_cache_all_runs(event: Event) -> None:

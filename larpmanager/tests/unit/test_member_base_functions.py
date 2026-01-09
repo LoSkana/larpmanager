@@ -63,7 +63,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
         question, option1, option2 = self.question_with_options(event=run.event)
 
         # Create registration choice
-        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+        RegistrationChoice.objects.create(registration=registration, option=option1, question=question)
 
         result = _init_choices(member)
 
@@ -81,8 +81,8 @@ class TestMemberAccountingFunctions(BaseTestCase):
         question, option1, option2 = self.question_with_options(event=run.event)
 
         # Create multiple registration choices
-        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
-        RegistrationChoice.objects.create(reg=registration, option=option2, question=question)
+        RegistrationChoice.objects.create(registration=registration, option=option1, question=question)
+        RegistrationChoice.objects.create(registration=registration, option=option2, question=question)
 
         result = _init_choices(member)
 

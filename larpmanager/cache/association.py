@@ -27,6 +27,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.accounting.base import get_payment_details
+from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
@@ -142,6 +143,13 @@ def init_cache_association(a_slug: str) -> dict | None:
         start__isnull=False,
         end__isnull=False,
     ).exists()
+
+    # Add configs
+    temp_context = {}
+    for config in ["user_characters_shortcut", "user_registrations_shortcut"]:
+        association_dict[config] = get_association_config(
+            association.id, config, default_value=False, context=temp_context
+        )
 
     return association_dict
 

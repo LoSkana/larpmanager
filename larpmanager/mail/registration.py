@@ -272,24 +272,24 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
 
     """
     # Set the language context for email localization
-    activate(instance.reg.member.language)
+    activate(instance.registration.member.language)
 
     # Early return if no character is assigned
     if not instance.character:
         return
 
     # Check if character assignment emails are disabled for this event
-    if get_event_config(instance.reg.run.event_id, "mail_character", default_value=False):
+    if get_event_config(instance.registration.run.event_id, "mail_character", default_value=False):
         return
 
     # Prepare context data for email template
     email_context = {
-        "event": instance.reg.run,
+        "event": instance.registration.run,
         "character": instance.character,
     }
 
     # Construct email subject with event header and localized text
-    email_subject = hdr(instance.reg.run.event) + _("Character assigned for %(event)s") % email_context
+    email_subject = hdr(instance.registration.run.event) + _("Character assigned for %(event)s") % email_context
 
     # Build the main email body with character assignment information
     email_body = (
@@ -298,20 +298,20 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
 
     # Generate URL for character access page
     character_url = get_url(
-        f"{instance.reg.run.get_slug()}/character/your",
-        instance.reg.run.event,
+        f"{instance.registration.run.get_slug()}/character/your",
+        instance.registration.run.event,
     )
 
     # Add character access link to email body
     email_body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": character_url} + "!"
 
     # Append custom assignment message if configured for the event
-    custom_assignment_message = get_event_text(instance.reg.run.event_id, EventTextType.ASSIGNMENT)
+    custom_assignment_message = get_event_text(instance.registration.run.event_id, EventTextType.ASSIGNMENT)
     if custom_assignment_message:
         email_body += "<br />" + custom_assignment_message
 
     # Send the email to the registered member
-    my_send_mail(email_subject, email_body, instance.reg.member, instance.reg.run)
+    my_send_mail(email_subject, email_body, instance.registration.member, instance.registration.run)
 
 
 def update_registration_cancellation(instance: Registration) -> None:

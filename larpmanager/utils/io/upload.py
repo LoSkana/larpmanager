@@ -552,7 +552,7 @@ def _reg_assign_characters(
 
     """
     # Clear existing character assignments for this registration
-    RegistrationCharacterRel.objects.filter(reg=registration).delete()
+    RegistrationCharacterRel.objects.filter(registration=registration).delete()
 
     # Handle multiple characters separated by commas
     character_names = [name.strip() for name in character_names_string.split(",")]
@@ -569,16 +569,16 @@ def _reg_assign_characters(
 
         # Check if character is already assigned to another active registration
         existing_assignments = RegistrationCharacterRel.objects.filter(
-            reg__run=context["run"],
-            reg__cancellation_date__isnull=True,
+            registration__run=context["run"],
+            registration__cancellation_date__isnull=True,
             character=character,
         )
-        if existing_assignments.exclude(reg_id=registration.id).exists():
+        if existing_assignments.exclude(registration_id=registration.id).exists():
             error_logs.append(f"ERR - character already assigned: {character_name}")
             continue
 
         # Create the character assignment relationship
-        RegistrationCharacterRel.objects.get_or_create(reg=registration, character=character)
+        RegistrationCharacterRel.objects.get_or_create(registration=registration, character=character)
 
 
 def writing_load(context: dict, form: Form) -> list[str]:
@@ -819,7 +819,9 @@ def _assign_choice_answer(
     # check if answer
     if question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
         if is_registration:
-            answer, _ = RegistrationAnswer.objects.get_or_create(reg_id=target_element.id, question_id=question["id"])
+            answer, _ = RegistrationAnswer.objects.get_or_create(
+                registration_id=target_element.id, question_id=question["id"]
+            )
         else:
             answer, _ = WritingAnswer.objects.get_or_create(element_id=target_element.id, question_id=question["id"])
         answer.text = field_value
@@ -828,7 +830,7 @@ def _assign_choice_answer(
     # check if choice
     else:
         if is_registration:
-            RegistrationChoice.objects.filter(reg_id=target_element.id, question_id=question["id"]).delete()
+            RegistrationChoice.objects.filter(registration_id=target_element.id, question_id=question["id"]).delete()
         else:
             WritingChoice.objects.filter(element_id=target_element.id, question_id=question["id"]).delete()
 
@@ -841,7 +843,7 @@ def _assign_choice_answer(
 
             if is_registration:
                 RegistrationChoice.objects.create(
-                    reg_id=target_element.id,
+                    registration_id=target_element.id,
                     question_id=question["id"],
                     option_id=option_id,
                 )

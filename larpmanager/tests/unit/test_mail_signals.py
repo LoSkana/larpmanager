@@ -121,7 +121,7 @@ class TestMailSignals(BaseTestCase):
         registration = self.get_registration()
         character = self.character()
 
-        rel = RegistrationCharacterRel(reg=registration, character=character)
+        rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
         # Should be created successfully
@@ -149,12 +149,12 @@ class TestMailSignals(BaseTestCase):
         from larpmanager.models.registration import Registration
 
         registration = self.get_registration()
-        reg_id = registration.id
+        registration_id = registration.id
         registration.delete()
 
         # Should be deleted successfully (soft delete keeps id)
         # Check if it exists in the database
-        self.assertFalse(Registration.objects.filter(id=reg_id, deleted__isnull=True).exists())
+        self.assertFalse(Registration.objects.filter(id=registration_id, deleted__isnull=True).exists())
 
     @patch("larpmanager.mail.registration.my_send_mail")
     def test_pre_registration_can_be_created(self, mock_mail: Any) -> None:
@@ -220,7 +220,7 @@ class TestMailSignals(BaseTestCase):
             member=member,
             value=Decimal("100.00"),
             association=self.get_association(),
-            reg=self.get_registration(),
+            registration=self.get_registration(),
             pay=PaymentChoices.MONEY,
         )
 
@@ -350,7 +350,7 @@ class TestMailSignals(BaseTestCase):
                 member=member,
                 value=Decimal("50.00"),
                 association=self.get_association(),
-                reg=self.get_registration(),
+                registration=self.get_registration(),
                 pay=payment_type,
             )
             payment.save()

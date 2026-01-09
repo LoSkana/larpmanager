@@ -33,13 +33,6 @@
                         <div class="lm_tooltiptext">{% trans "Browse the presentation website" %}!</div>
                     </div>
                 {% endif %}
-                {% if user_character_max %}
-                    <div class="lm_tooltip">
-                        <a href="{% url 'character_list' run.get_slug %}"
-                           {% if request_func_name == "character_list" %}class="select"{% endif %}>{% trans "Characters" %}</a>
-                        <div class="lm_tooltiptext">{% trans "Access the list of your characters" %}!</div>
-                    </div>
-                {% endif %}
                 {% if features.faction and show_faction and has_visible_factions %}
                     <div class="lm_tooltip">
                         <a href="{% url 'factions' run.get_slug %}"

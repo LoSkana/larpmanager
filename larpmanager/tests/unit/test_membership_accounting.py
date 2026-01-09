@@ -246,7 +246,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use tokens
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -316,7 +316,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use credit
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.CREDIT, value=Decimal("25.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.CREDIT, value=Decimal("25.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -428,7 +428,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use some tokens
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("2.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("2.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -473,7 +473,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use some credit
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.CREDIT, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.CREDIT, value=Decimal("30.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -530,7 +530,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Try to use 5 tokens (should work)
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("5.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("5.00")
         )
         # Trigger signal by saving again (signal only fires on update, not create)
         payment.save()
@@ -599,7 +599,7 @@ class TestMembershipAccountingAutomation(BaseTestCase):
 
         # Use some tokens
         payment = AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("3.00")
         )
         # Trigger signal for initial creation
         payment.save()

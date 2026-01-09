@@ -438,12 +438,12 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
 
     # Handle payment form submission
     if request.method == "POST":
-        form = PaymentForm(request.POST, reg=registration, context=context)
+        form = PaymentForm(request.POST, registration=registration, context=context)
         if form.is_valid():
             # Process payment through selected gateway
             get_payment_form(request, form, PaymentType.REGISTRATION, context, key)
     else:
-        form = PaymentForm(reg=registration, context=context)
+        form = PaymentForm(registration=registration, context=context)
     context["form"] = form
 
     return render(request, "larpmanager/member/accounting_registration.html", context)

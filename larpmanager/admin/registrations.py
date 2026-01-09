@@ -131,7 +131,7 @@ class RegistrationOptionAdmin(DefModelAdmin):
 class RegistrationChoiceAdmin(DefModelAdmin):
     """Admin interface for RegistrationChoice model."""
 
-    autocomplete_fields: ClassVar[list] = ["question", "option", "reg"]
+    autocomplete_fields: ClassVar[list] = ["question", "option", "registration"]
     list_filter = (
         RegistrationFilter,
         RegistrationQuestionFilter,
@@ -142,7 +142,7 @@ class RegistrationChoiceAdmin(DefModelAdmin):
 class RegistrationAnswerAdmin(DefModelAdmin):
     """Admin interface for RegistrationAnswer model."""
 
-    autocomplete_fields: ClassVar[list] = ["question", "reg"]
+    autocomplete_fields: ClassVar[list] = ["question", "registration"]
     list_filter = (
         RegistrationFilter,
         RegistrationQuestionFilter,
@@ -153,9 +153,9 @@ class RegistrationAnswerAdmin(DefModelAdmin):
 class RegistrationCharacterRelAdmin(DefModelAdmin):
     """Admin interface for RegistrationCharacterRel model."""
 
-    list_display: ClassVar[tuple] = ("id", "character", "reg")
-    search_fields: ClassVar[list] = ["id", "character", "reg"]
-    autocomplete_fields: ClassVar[list] = ["character", "reg"]
+    list_display: ClassVar[tuple] = ("id", "character", "registration")
+    search_fields: ClassVar[list] = ["id", "character", "registration"]
+    autocomplete_fields: ClassVar[list] = ["character", "registration"]
     list_filter = (CharacterFilter, RegistrationFilter)
 
 

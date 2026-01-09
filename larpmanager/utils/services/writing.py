@@ -616,8 +616,8 @@ def writing_list_char(context: dict) -> None:  # noqa: C901 - Complex character 
             has_registration=Exists(
                 RegistrationCharacterRel.objects.filter(
                     character=OuterRef("pk"),
-                    reg__run_id=context["run"].id,
-                    reg__cancellation_date__isnull=True,
+                    registration__run_id=context["run"].id,
+                    registration__cancellation_date__isnull=True,
                 ),
             ),
         )

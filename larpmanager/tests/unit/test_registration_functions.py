@@ -128,7 +128,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         question, option1, option2 = self.question_with_options(event=run.event)
         option1.price = Decimal("15.00")
         option1.save()
-        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+        RegistrationChoice.objects.create(registration=registration, option=option1, question=question)
 
         result = get_reg_iscr(registration)
 
@@ -205,7 +205,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         question, option1, option2 = self.question_with_options(event=run.event)
         option1.price = Decimal("20.00")
         option1.save()
-        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+        RegistrationChoice.objects.create(registration=registration, option=option1, question=question)
 
         # Add surcharge
         registration.surcharge = Decimal("15.00")
@@ -265,7 +265,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         option1.price = Decimal("10.00")
         option1.save()
 
-        RegistrationChoice.objects.create(reg=registration, option=option1, question=question)
+        RegistrationChoice.objects.create(registration=registration, option=option1, question=question)
 
         result = get_reg_iscr(registration)
 
@@ -377,7 +377,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         result = get_reg_payments(registration)
@@ -392,10 +392,10 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
         )
 
         result = get_reg_payments(registration)
@@ -410,12 +410,12 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
             member=member,
             association=association,
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
             value=Decimal("20.00"),
             hide=True,
@@ -434,10 +434,10 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.TOKEN, value=Decimal("20.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("20.00")
         )
 
         get_reg_payments(registration)
@@ -455,7 +455,7 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemTransaction.objects.create(
-            member=member, association=association, reg=registration, value=Decimal("2.50"), user_burden=True
+            member=member, association=association, registration=registration, value=Decimal("2.50"), user_burden=True
         )
 
         result = get_reg_transactions(registration)
@@ -470,10 +470,10 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemTransaction.objects.create(
-            member=member, association=association, reg=registration, value=Decimal("2.50"), user_burden=True
+            member=member, association=association, registration=registration, value=Decimal("2.50"), user_burden=True
         )
         AccountingItemTransaction.objects.create(
-            member=member, association=association, reg=registration, value=Decimal("3.00"), user_burden=False
+            member=member, association=association, registration=registration, value=Decimal("3.00"), user_burden=False
         )
 
         result = get_reg_transactions(registration)
@@ -628,12 +628,12 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
         character = self.character(event=run.event)
 
-        RegistrationCharacterRel.objects.create(reg=registration, character=character)
+        RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
         cancel_reg(registration)
 
         # Should delete character relationships
-        self.assertEqual(RegistrationCharacterRel.objects.filter(reg=registration).count(), 0)
+        self.assertEqual(RegistrationCharacterRel.objects.filter(registration=registration).count(), 0)
 
 
 @pytest.mark.django_db(transaction=True)

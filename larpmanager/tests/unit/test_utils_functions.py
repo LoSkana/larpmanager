@@ -193,7 +193,7 @@ class TestDataAggregationFunctions(BaseTestCase):
         registration = self.create_registration(member=member)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         queryset = AccountingItemPayment.objects.filter(member=member)
@@ -210,13 +210,13 @@ class TestDataAggregationFunctions(BaseTestCase):
         registration = self.create_registration(member=member)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
         )
 
         queryset = AccountingItemPayment.objects.filter(member=member)
