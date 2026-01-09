@@ -4571,9 +4571,6 @@ msgstr "Nicht umgewandelte Vorregistrierungen"
 msgid "Unknown choice type: %(type)s"
 msgstr "Unbekannter Auswahltyp: %(type)s"
 
-msgid "You don't have any events yet"
-msgstr "Sie haben noch keine Veranstaltungen"
-
 msgid "You're not allowed to sign up"
 msgstr "Du darfst dich nicht anmelden"
 
@@ -5890,9 +5887,6 @@ msgstr ""
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Geburtsort nicht in der ISTAT-Liste enthalten"
-
-msgid "Please create your first event to get started"
-msgstr "Bitte erstellen Sie Ihre erste Veranstaltung, um loszulegen"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
@@ -7506,6 +7500,11 @@ msgstr ""
 "Jetzt können Sie die von den Teilnehmern eingereichten "
 "Sicherheitsinformationen einsehen"
 
+msgid "Simply follow the instructions and provide the required information"
+msgstr ""
+"Folgen Sie einfach den Anweisungen und geben Sie die erforderlichen "
+"Informationen an"
+
 msgid "The searched object does not exist, perhaps it was recently deleted"
 msgstr ""
 "Das gesuchte Objekt existiert nicht, vielleicht wurde es kürzlich gelöscht"
@@ -8619,6 +8618,13 @@ msgid ""
 msgstr ""
 "Dieser Inhalt kann nur einmal aufgerufen werden. Bitte sorgfältig lesen, "
 "bevor Sie fortfahren"
+
+msgid ""
+"This page will guide you through the creation of your first event, step by "
+"step"
+msgstr ""
+"Diese Seite wird Sie Schritt für Schritt durch die Erstellung Ihrer ersten "
+"Veranstaltung führen"
 
 msgid ""
 "To participate in this event, you will have to pay the annual membership fee"
