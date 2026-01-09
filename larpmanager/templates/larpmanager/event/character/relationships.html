@@ -37,7 +37,7 @@
                     <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
                     {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                     {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                    -
+                    <br />
                     {% if el.player_uuid %}
                         <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_uuid %}">
                             {% if run.id in all_runs %}
@@ -47,7 +47,7 @@
                             {% endif %}
                         </a>
                     {% endif %}
-                    -
+                    <br />
                     <b>{% trans "Factions" %}:</b>
                     {% for g in el.factions %}
                         {% if not g.typ == 'g' %}

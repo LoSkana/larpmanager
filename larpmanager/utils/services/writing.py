@@ -498,7 +498,7 @@ def _prepare_writing_list(context: dict) -> None:
             .get_elements(WritingQuestion)
             .filter(applicable=context["writing_typ"], typ=WritingQuestionType.NAME)
         )
-        context["name_que_id"] = name_question.values_list("uuid", flat=True)[0]
+        context["name_que_uuid"] = name_question.values_list("uuid", flat=True)[0]
     except IndexError as e:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 

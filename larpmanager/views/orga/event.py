@@ -138,7 +138,7 @@ def full_event_edit(
     # Add forms and metadata to template context
     context["form1"] = event_form
     context["form2"] = run_form
-    context["num"] = event.id
+    context["num"] = event.uuid
     context["type"] = "event"
 
     return render(request, "larpmanager/orga/edit_multi.html", context)

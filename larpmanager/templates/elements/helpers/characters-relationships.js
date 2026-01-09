@@ -4,10 +4,10 @@
 
 const editUrl = "{% url 'orga_characters_edit' run.get_slug 0 %}";
 
-{% if eid %}
-    var eid = {{ eid }};
+{% if edit_uuid %}
+    var edit_uuid = '{{ edit_uuid }}';
 {% else %}
-    var eid = null;
+    var edit_uuid = '';
 {% endif %}
 
 // Get relationship length limit from form context
@@ -77,7 +77,7 @@ window.addEventListener('DOMContentLoaded', function() {
             var value = $(this).val();
             if (value == null || value == '') return;
 
-            if (value == eid) {
+            if (value == edit_uuid) {
                 alert('You have selected the character you are editing');
             }
             else if (already.includes(value)) {

@@ -743,7 +743,7 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
         )
     else:
         # Handle other class types (abilities, etc.)
-        eid = request.POST.get("eid", "")
+        edit_uuid = request.POST.get("edit_uuid", "")
         perms = {"abilitypx": "orga_px_abilities", "deliverypx": "orga_px_abilities"}
 
         # Determine permission based on class name
@@ -753,9 +753,9 @@ def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonRes
         context = check_event_context(request, event_slug, perm)
 
         # Get characters already assigned to the specific entity
-        if eid:
+        if edit_uuid:
             model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
-            taken_characters = model_class.objects.get(pk=int(eid)).characters.values_list("id", flat=True)
+            taken_characters = model_class.objects.get(uuid=edit_uuid).characters.values_list("id", flat=True)
 
     # Get all characters for the event, ordered by number
     context["list"] = context["event"].get_elements(Character).order_by("number")
@@ -801,11 +801,11 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
         context["list"] = context["list"].filter(selectable=True)
 
     # Exclude factions already assigned to character if eid provided
-    eid = int(request.POST.get("eid", "0"))
-    if eid:
-        # Get character by ID and validate existence
+    edit_uuid = request.POST.get("edit_uuid", "")
+    if edit_uuid:
+        # Get character by UUID and validate existence
         try:
-            character = context["event"].get_elements(Character).prefetch_related("factions_list").get(pk=int(eid))
+            character = context["event"].get_elements(Character).prefetch_related("factions_list").get(uuid=edit_uuid)
             # Get list of faction IDs already assigned to this character
             taken_factions = character.factions_list.values_list("id", flat=True)
             context["list"] = context["list"].exclude(pk__in=taken_factions)

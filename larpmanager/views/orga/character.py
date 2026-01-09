@@ -1187,8 +1187,8 @@ def orga_writing_excel_submit(request: HttpRequest, event_slug: str, writing_typ
         obj = context["form"].save()
         response = {
             "k": 1,
-            "qid": context["question"].uuid,
-            "eid": context["element"].uuid,
+            "question_uuid": context["question"].uuid,
+            "edit_uuid": context["element"].uuid,
             "update": _get_question_update(context, obj),
         }
         return JsonResponse(response)
@@ -1229,8 +1229,8 @@ def _get_excel_form(
 
     # Validate writing form type and extract request parameters
     check_writing_form_type(context, element_type)
-    question_uuid = str(request.POST.get("qid"))
-    element_uuid = str(request.POST.get("eid"))
+    question_uuid = str(request.POST.get("question_uuid"))
+    edit_uuid = str(request.POST.get("edit_uuid"))
 
     # Fetch the writing question with proper filtering
     question = (
@@ -1243,7 +1243,7 @@ def _get_excel_form(
 
     # Setup applicable type context and fetch target element
     context["applicable"] = QuestionApplicable.get_applicable_inverse(context["writing_typ"])
-    element = context["event"].get_elements(context["applicable"]).select_related("event").get(uuid=element_uuid)
+    element = context["event"].get_elements(context["applicable"]).select_related("event").get(uuid=edit_uuid)
     context["elementTyp"] = context["applicable"]
 
     # Map element types to their corresponding form classes
