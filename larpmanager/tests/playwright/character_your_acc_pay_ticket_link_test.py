@@ -198,8 +198,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#select2-id_parent-container").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="Test Larp").click()
-    submit_confirm(page)
-    submit_confirm(page)
+
     page.locator("#id_start").fill("2045-06-11")
     just_wait(page)
     page.locator("#id_start").click()

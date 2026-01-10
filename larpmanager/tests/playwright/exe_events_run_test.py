@@ -50,10 +50,6 @@ def test_exe_events_run(pw_page: Any) -> None:
     frame.locator("body").fill("sadsadasdsaas")
     page.locator("#id_max_pg").click()
     page.locator("#id_max_pg").fill("10")
-    submit_confirm(page)
-
-    # confirm quick setup
-    submit_confirm(page)
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2055-06-11")

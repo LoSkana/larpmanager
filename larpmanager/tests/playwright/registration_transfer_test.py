@@ -76,10 +76,6 @@ def create_event_a(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
     page.locator("#id_name").fill("Event A")
-    submit_confirm(page)
-
-    # Quick config
-    submit_confirm(page)
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2055-06-11")
@@ -176,10 +172,6 @@ def create_event_b(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
     page.locator("#id_name").fill("Event B")
-    submit_confirm(page)
-
-    # Quick config
-    submit_confirm(page)
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2055-07-11")

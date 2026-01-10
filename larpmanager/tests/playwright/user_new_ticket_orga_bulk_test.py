@@ -347,6 +347,14 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.locator("#id_name").click()
     page.locator("#id_name").fill("newevent")
     # don't set slug, let it be auto filled
+
+    page.locator("#id_development").select_option("1")
+    page.locator("#id_start").fill("2045-06-11")
+    just_wait(page)
+    page.locator("#id_start").click()
+    page.locator("#id_end").fill("2045-06-13")
+    just_wait(page)
+    page.locator("#id_end").click()
     submit_confirm(page)
 
     # add feature also to this
@@ -359,17 +367,6 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.locator("#id_tier").select_option("y")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("new")
-    submit_confirm(page)
-
-    # set end date
-    go_to(page, live_server, "newevent/manage/")
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2045-06-11")
-    just_wait(page)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2045-06-13")
-    just_wait(page)
-    page.locator("#id_end").click()
     submit_confirm(page)
 
     # check new ticket is not available

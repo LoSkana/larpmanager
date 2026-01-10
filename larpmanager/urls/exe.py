@@ -510,6 +510,11 @@ urlpatterns = [
         name="exe_close_suggestion",
     ),
     path(
+        "sticky-message/dismiss/<uuid:message_uuid>/",
+        views_mg.dismiss_sticky_message,
+        name="dismiss_sticky_message",
+    ),
+    path(
         "manage/preferences/",
         views_eas.exe_preferences,
         name="exe_preferences",

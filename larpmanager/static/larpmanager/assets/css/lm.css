@@ -2535,3 +2535,15 @@ input[type="number"] {
 #welcome_message {
   font-size: 130%;
 }
+
+.sticky-message {
+  background-color: rgba(var(--pri-rgb), 0.085);
+  border: solid 1px rgba(var(--pri-rgb), 0.5);
+  margin: 0.5em;
+  border-radius: 1em;
+  padding: 0.5em;
+}
+
+.sticky-message .close {
+  float: right;
+}

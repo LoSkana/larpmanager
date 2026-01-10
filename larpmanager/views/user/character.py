@@ -862,7 +862,7 @@ def get_undo_abilities(context: dict, char: Any, new_ability: Any = None) -> Any
     """
     undo_window_hours = int(get_event_config(context["event"].id, "px_undo", default_value=0, context=context))
     config_key = f"added_px_{char.uuid}"
-    stored_config_value = char.get_config(config_key, default_value="{}")
+    stored_config_value = char.get_config(config_key, default_value={})
     ability_timestamp_map = ast.literal_eval(stored_config_value)
     current_timestamp = int(time.time())
     # clean from abilities out of the undo time windows

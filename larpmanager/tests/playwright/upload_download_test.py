@@ -117,9 +117,6 @@ def abilities(page: Any) -> None:
 def full(page: Any) -> None:
     page.get_by_role("link", name="Dashboard").click()
 
-    # there will be quick setup just confirm
-    submit_confirm(page)
-
     check_download(page, "Full backup")
 
 

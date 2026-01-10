@@ -1,3 +1,23 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 from typing import Any
@@ -6,7 +26,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.forms import ChoiceField, Form
-from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -40,6 +60,7 @@ from larpmanager.models.registration import RegistrationInstallment, Registratio
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
+from larpmanager.utils.core.sticky import get_sticky_messages
 from larpmanager.utils.services.edit import set_suggestion
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.users.registration import registration_available
@@ -193,17 +214,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     if context.get("onboarding") and "exe_events" in features:
         return redirect("exe_events_edit", event_uuid="0")
 
-    # Redirect to quick setup if not completed
-    if not get_association_config(
-        context["association_id"], "exe_quick_suggestion", default_value=False, context=context
-    ):
-        setup_message = _(
-            "Before accessing the organization dashboard, please complete the quick setup by selecting "
-            "the features most useful for your organization",
-        )
-        messages.success(request, setup_message)
-        return redirect("exe_quick")
-
     # Get ongoing runs (events in START or SHOW development status)
     ongoing_runs_queryset = Run.objects.filter(
         event__association_id=context["association_id"],
@@ -232,6 +242,9 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     _exe_actions(request, context, features)
     _exe_suggestions(context)
 
+    # Add sticky messages for the current user
+    context["sticky_messages"] = get_sticky_messages(context["member"])
+
     # Compile final context and check for intro driver
     _compile(request, context)
     _check_intro_driver(context)
@@ -246,7 +259,9 @@ def _exe_suggestions(context: dict) -> None:
         context: Context dictionary containing association ID and other data
 
     """
+
     suggestions = {
+        "exe_quick": _("Quickly configure your organization's most important settings"),
         "exe_methods": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
@@ -462,15 +477,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
         messages.success(request, message)
         return redirect("orga_run", event_slug=event_slug)
 
-    # Ensure quick setup is complete
-    if not get_event_config(context["event"].id, "orga_quick_suggestion", default_value=False, context=context):
-        message = _(
-            "Before accessing the event dashboard, please complete the quick setup by selecting "
-            "the features most useful for your event",
-        )
-        messages.success(request, message)
-        return redirect("orga_quick", event_slug=event_slug)
-
     # Load permissions and navigation
     get_index_event_permissions(request, context, event_slug)
     if get_association_config(context["association_id"], "interface_admin_links", default_value=False, context=context):
@@ -500,6 +506,9 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     _orga_actions_priorities(request, context)
     _orga_suggestions(context)
     _compile(request, context)
+
+    # Add sticky messages for the current user (filtered by event UUID)
+    context["sticky_messages"] = get_sticky_messages(context["member"], element_uuid=str(context["event"].uuid))
 
     # Mobile shortcuts handling
     if get_event_config(context["event"].id, "show_shortcuts_mobile", default_value=False, context=context):
@@ -920,15 +929,15 @@ def _orga_suggestions(context: dict) -> None:
         context: Context dictionary to add suggestions to
 
     """
-    priorities = {
+    actions = {
         "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
     }
 
-    for permission_slug, suggestion_text in priorities.items():
+    for permission_slug, suggestion_text in actions.items():
         if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
             continue
-        _add_priority(context, suggestion_text, permission_slug)
+        _add_action(context, suggestion_text, permission_slug)
 
     suggestions = {
         "orga_registration_form": _(
@@ -1115,6 +1124,17 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> H
     set_suggestion(context, perm)
 
     return redirect("manage", event_slug=event_slug)
+
+
+@login_required
+def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonResponse:
+    """Dismiss a sticky message via AJAX."""
+
+    success = dismiss_sticky(request.user.member, message_uuid)
+
+    if success:
+        return JsonResponse({"status": "ok"})
+    return JsonResponse({"status": "error", "message": "Message not found"}, status=404)
 
 
 def _check_intro_driver(context: dict) -> None:

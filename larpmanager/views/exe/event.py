@@ -22,10 +22,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
+from larpmanager.utils.core.sticky import add_sticky_message
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -35,7 +37,6 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.registration import get_reg_counts
 from larpmanager.forms.event import (
-    ExeEventForm,
     ExeTemplateForm,
     ExeTemplateRolesForm,
     OrgaConfigForm,
@@ -48,7 +49,7 @@ from larpmanager.models.event import (
 )
 from larpmanager.utils.core.base import check_association_context, get_context
 from larpmanager.utils.core.common import get_event_template
-from larpmanager.utils.services.edit import backend_edit, backend_get, exe_edit
+from larpmanager.utils.services.edit import backend_get, exe_edit
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -77,11 +78,7 @@ def exe_events(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
-    """Handle editing of existing events or creation of new executive events.
-
-    This function manages both the creation of new events and the editing of existing events/runs.
-    For new events (num=0), it creates the event and automatically adds the requesting user as an organizer.
-    For existing events (num>0), it delegates to the full event edit functionality.
+    """Handle editing of existing events or creation of new events.
 
     Args:
         request: HTTP request object containing user session and form data
@@ -99,51 +96,66 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
     # Check user has executive events permission for the association
     context = check_association_context(request, "exe_events")
 
-    # Handle editing of existing event or run
+    # Determine if this is creation or editing
     if event_uuid != "0":
-        # Retrieve the run object and set it in context
+        # Retrieve the run object for editing
         backend_get(context, Run, event_uuid, "event")
-        # Delegate to full event edit with executive flag enabled
-        return full_event_edit(context, request, context["el"].event, context["el"], is_executive=True)
+        event = context["el"].event
+        run = context["el"]
+        on_created = None
+    else:
+        # Prepare for creation
+        event = None
+        run = None
+        context["exe"] = True
 
-    # Handle creation of new event
-    # Set executive context flag for form rendering
-    context["exe"] = True
+        if context.get("onboarding"):
+            context["welcome_message"] = True
 
-    # Process form submission and handle creation logic
-    if backend_edit(request, context, ExeEventForm, event_uuid, quiet=True):
-        # Check if event was successfully created (saved context and new event)
-        if "saved" in context and event_uuid == "0":
+        # Define callback for post-creation operations
+        def on_created(created_event: Event, created_run: Run) -> None:
+            """Post-creation callback for setting up organizer role and sticky message."""
             # Automatically add requesting user as event organizer
-            # Get or create organizer role (number=1 is standard organizer role)
-            (er, _created) = EventRole.objects.get_or_create(event=context["saved"], number=1)
+            (er, _created) = EventRole.objects.get_or_create(event=created_event, number=1)
             if not er.name:
                 er.name = "Organizer"
-            # Add current user's member profile to organizer role
             er.members.add(context["member"])
             er.save()
 
             # Refresh cached event links for user navigation
             reset_event_links(context["member"].id, context["association_id"])
 
-            # Prepare success message encouraging quick setup completion
-            msg = (
-                _("Your event has been created")
-                + "! "
-                + _("Now please complete the quick setup by selecting the features most useful for this event")
+            # Add sticky message linked to the created event
+            sticky_message_lines = [
+                _("Your event '%(event_name)s' has been successfully created") + "!",
+                _("This page is the event's dashboard, where you can fully manage all it's settings") + ".",
+                _("Users can sign up to the event accessing <a href='%(signup_url)s'>this address</a>") + ".",
+                _("You can now setup the tickets, the signup form, the registration options") + ".",
+                _("In this page you'll find a list of actions and suggestions on the next steps") + "!",
+            ]
+
+            sticky_message_text = "".join([f"<p>{line}</p>" for line in sticky_message_lines]) % {
+                "event_name": created_event.name,
+                "signup_url": reverse("register", args=[created_run.get_slug()]),
+            }
+
+            add_sticky_message(
+                member=context["member"],
+                message=sticky_message_text,
+                expires_days=7,
+                element_uuid=str(created_event.uuid),
             )
-            messages.success(request, msg)
-            # Redirect to quick setup page for new event
-            return redirect("orga_quick", event_slug=context["saved"].slug)
-        # Redirect back to events list after successful edit
-        return redirect("exe_events")
 
-    if "onboarding" in context:
-        context["welcome_message"] = True
-
-    # Configure form context and render edit template
+    # Use unified full_event_edit for both creation and editing
     context["add_another"] = False
-    return render(request, "larpmanager/exe/edit.html", context)
+    return full_event_edit(
+        context,
+        request,
+        event,
+        run,
+        is_executive=True,
+        on_created_callback=on_created,
+    )
 
 
 @login_required

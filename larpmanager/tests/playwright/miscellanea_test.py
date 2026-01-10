@@ -103,10 +103,6 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New event").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Test Access")
-    submit_confirm(page)
-
-    # submit for quick
-    submit_confirm(page)
 
     page.locator("#id_development").select_option("1")
     page.locator("#id_start").fill("2055-06-11")
@@ -273,15 +269,12 @@ def reset_caches(live_server, page):
 
     # Test event-level reset
     go_to(page, live_server, "/test/manage/")
-    # confirm quick config
-    submit_confirm(page)
 
     page.get_by_role("link", name="Reset Cache").click()
     expect_normalized(page, page.locator("#banner"), "Dashboard")
 
     # Test association-level cache reset
     go_to(page, live_server, "/manage/")
-    # confirm quick config
-    submit_confirm(page)
+
     page.get_by_role("link", name="Reset Cache").click()
     expect_normalized(page, page.locator("#banner"), "Dashboard")
