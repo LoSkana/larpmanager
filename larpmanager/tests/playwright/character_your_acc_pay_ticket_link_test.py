@@ -35,7 +35,7 @@ from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_o
 pytestmark = pytest.mark.e2e
 
 
-def test_character_your_acc_pay_ticket_link(pw_page: Any) -> None:
+def test_character_your_accounting_pay_ticket_link(pw_page: Any) -> None:
     page, live_server, _ = pw_page
 
     login_orga(page, live_server)
@@ -44,11 +44,11 @@ def test_character_your_acc_pay_ticket_link(pw_page: Any) -> None:
 
     check_character_your_link(page, live_server)
 
-    check_acc_pay_link(page, live_server)
+    check_accounting_pay_link(page, live_server)
 
     check_factions_indep_campaign(page, live_server)
 
-    acc_refund(page, live_server)
+    accounting_refund(page, live_server)
 
 
 def check_direct_ticket_link(page: Any, live_server: Any) -> None:
@@ -108,7 +108,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation Test Teaser Text Test Text")
 
 
-def check_acc_pay_link(page: Any, live_server: Any) -> None:
+def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     # Test acc pay link
     go_to(page, live_server, "/test/manage")
 
@@ -256,7 +256,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "#1 Test Character Test Teaser Test Text primaaa tranver")
 
 
-def acc_refund(page: Any, live_server: Any) -> None:
+def accounting_refund(page: Any, live_server: Any) -> None:
     # activate features
     go_to(page, live_server, "/manage")
     page.get_by_role("link", name="Features").click()

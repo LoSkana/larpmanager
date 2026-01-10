@@ -647,7 +647,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
     # Delegate to sub-functions for additional action checks
     _orga_user_actions(context, enabled_features, request)
 
-    _orga_reg_acc_actions(context, enabled_features)
+    _orga_reg_accounting_actions(context, enabled_features)
 
     _orga_reg_actions(context, enabled_features)
 
@@ -786,7 +786,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
 
-def _orga_reg_acc_actions(context: dict, enabled_features: dict[str, int]) -> None:
+def _orga_reg_accounting_actions(context: dict, enabled_features: dict[str, int]) -> None:
     """Add priority actions related to registration and accounting setup.
 
     Checks for required configurations when certain features are enabled,

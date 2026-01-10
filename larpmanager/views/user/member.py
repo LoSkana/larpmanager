@@ -810,7 +810,7 @@ def vote(request: HttpRequest) -> HttpResponse:
         que = AccountingItemMembership.objects.filter(association_id=context["association_id"], year=context["year"])
         if not que.filter(member_id=context["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
-            return redirect("acc_membership")
+            return redirect("accounting_membership")
 
     # Check if user has already voted this year
     que = Vote.objects.filter(member=context["member"], association_id=context["association_id"], year=context["year"])

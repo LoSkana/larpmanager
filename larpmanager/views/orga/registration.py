@@ -1025,14 +1025,14 @@ def orga_cancellations(request: HttpRequest, event_slug: str) -> Any:
 
     # Check if payed, check if already approved reimburse
     for r in context["list"]:
-        acc_payments = None
+        accounting_payments = None
         if r.id in payments:
-            acc_payments = payments[r.id]
-        get_reg_payments(r, acc_payments)
+            accounting_payments = payments[r.id]
+        get_reg_payments(r, accounting_payments)
 
-        r.acc_refunds = None
+        r.accounting_refunds = None
         if r.id in refunds:
-            r.acc_refunds = refunds[r.id]
+            r.accounting_refunds = refunds[r.id]
         get_accounting_refund(r)
 
         r.days = get_time_diff(context["run"].end, r.cancellation_date.date())

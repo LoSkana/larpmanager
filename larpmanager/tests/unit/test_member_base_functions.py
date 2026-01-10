@@ -96,8 +96,8 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_tokens"], 0)
-        self.assertEqual(context["acc_credits"], 0)
+        self.assertEqual(context["accounting_tokens"], 0)
+        self.assertEqual(context["accounting_credits"], 0)
 
     def test_info_token_credit_with_tokens(self) -> None:
         """Test _info_token_credit with tokens"""
@@ -112,7 +112,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_tokens"], 1)
+        self.assertEqual(context["accounting_tokens"], 1)
 
     def test_info_token_credit_with_credits(self) -> None:
         """Test _info_token_credit with credits"""
@@ -131,7 +131,7 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_credits"], 2)
+        self.assertEqual(context["accounting_credits"], 2)
 
     def test_info_token_credit_with_both(self) -> None:
         """Test _info_token_credit with both tokens and credits"""
@@ -150,8 +150,8 @@ class TestMemberAccountingFunctions(BaseTestCase):
 
         _info_token_credit(context, member)
 
-        self.assertEqual(context["acc_tokens"], 1)
-        self.assertEqual(context["acc_credits"], 1)
+        self.assertEqual(context["accounting_tokens"], 1)
+        self.assertEqual(context["accounting_credits"], 1)
 
 
 class TestBaseUtilityFunctions(BaseTestCase):

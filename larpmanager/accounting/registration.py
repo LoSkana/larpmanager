@@ -31,7 +31,6 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
-from larpmanager.accounting.base import is_reg_provisional
 from larpmanager.accounting.token_credit import handle_tokes_credits
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
@@ -70,7 +69,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def get_reg_iscr(registration: Registration) -> int:
+def get_registration_iscr(registration: Registration) -> int:
     """Calculate total registration signup fee including discounts.
 
     Computes the total registration fee by summing base ticket price, additional
@@ -122,7 +121,7 @@ def get_reg_iscr(registration: Registration) -> int:
     return max(0, total_registration_fee)
 
 
-def get_reg_payments(
+def get_registration_payments(
     registration: Registration, accounting_payments: QuerySet[AccountingItemPayment] | None = None
 ) -> int:
     """Calculate total payments made for a registration.
@@ -155,7 +154,7 @@ def get_reg_payments(
     return total_paid
 
 
-def get_reg_transactions(registration: Registration) -> int:
+def get_registration_transactions(registration: Registration) -> int:
     """Calculate total transaction fees for a registration.
 
     Args:
@@ -187,17 +186,17 @@ def get_accounting_refund(registration: Registration) -> None:
     """
     registration.refunds = {}
 
-    if not hasattr(registration, "acc_refunds"):
-        registration.acc_refunds = AccountingItemOther.objects.filter(
+    if not hasattr(registration, "accounting_refunds"):
+        registration.accounting_refunds = AccountingItemOther.objects.filter(
             run_id=registration.run_id,
             member_id=registration.member_id,
             cancellation=True,
         )
 
-    if not registration.acc_refunds:
+    if not registration.accounting_refunds:
         return
 
-    for accounting_item_other in registration.acc_refunds:
+    for accounting_item_other in registration.accounting_refunds:
         if accounting_item_other.oth not in registration.refunds:
             registration.refunds[accounting_item_other.oth] = 0
         registration.refunds[accounting_item_other.oth] += accounting_item_other.value
@@ -344,19 +343,19 @@ def _quota_fallback(accumulated_overdue_ratio: Decimal, reg: Registration, *, ha
         reg.deadline = 0
 
 
-def _is_installment_applicable(installment_tickets: list, reg_ticket_id: int) -> bool:
+def _is_installment_applicable(installment_tickets: list, registration_ticket_id: int) -> bool:
     """Check if an installment applies to the registration's ticket type.
 
     Args:
         installment_tickets: List of ticket IDs the installment applies to
-        reg_ticket_id: Registration's ticket ID
+        registration_ticket_id: Registration's ticket ID
 
     Returns:
         True if installment applies to this ticket type
 
     """
     applicable_ticket_ids = [ticket_id for ticket_id in installment_tickets if ticket_id is not None]
-    return not applicable_ticket_ids or reg_ticket_id in applicable_ticket_ids
+    return not applicable_ticket_ids or registration_ticket_id in applicable_ticket_ids
 
 
 def _calculate_installment_cumulative(installment_amount: float, current_cumulative: float, total: float) -> float:
