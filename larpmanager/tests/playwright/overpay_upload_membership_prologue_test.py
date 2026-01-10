@@ -59,7 +59,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
 
     # Set ticket price
     go_to(page, live_server, "/test/manage")
-    page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
+    page.get_by_role("link", name="Tickets").first.click()
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("100.00")
@@ -112,7 +112,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
 
     # Change ticket price
     go_to(page, live_server, "/test/manage")
-    page.get_by_role("link", name="Tickets").click()
+    page.get_by_role("link", name="Tickets").first.click()
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("80.00")

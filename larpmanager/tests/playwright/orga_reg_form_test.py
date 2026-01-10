@@ -88,7 +88,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator('[id="u2"]'), "Reserve additional tickets beyond your own2")
 
     # change ticket price
-    page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
+    page.get_by_role("link", name="Tickets").first.click()
     page.get_by_role("link", name="").click()
     page.locator("#id_price").click()
     page.locator("#id_price").fill("5")

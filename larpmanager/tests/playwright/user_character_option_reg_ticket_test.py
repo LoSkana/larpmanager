@@ -69,7 +69,7 @@ def prepare(page: Any) -> None:
     submit_confirm(page)
 
     # create ticket
-    page.locator("#orga_registration_tickets").get_by_role("link", name="Tickets").click()
+    page.get_by_role("link", name="Tickets").first.click()
     page.get_by_role("link", name="New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bambi")

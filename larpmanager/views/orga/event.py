@@ -143,7 +143,7 @@ def full_event_edit(
 
             # Show success message and redirect based on access level
             messages.success(request, _("Operation completed") + "!")
-            if not context.get("is_creation"):
+            if is_executive and not context.get("is_creation"):
                 return redirect("manage")
 
             return redirect("manage", event_slug=saved_run.get_slug())
