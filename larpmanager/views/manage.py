@@ -18,7 +18,7 @@ from larpmanager.accounting.balance import association_accounting, get_run_accou
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.utils.auth.permission import has_association_permission, get_index_association_permissions, \
     has_event_permission, get_index_event_permissions
 from larpmanager.cache.wwyltd import get_features_cache, get_guides_cache, get_tutorials_cache
@@ -214,7 +214,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Add registration status and counts for each ongoing run
     for run in context["ongoing_runs"]:
         run.registration_status = _get_registration_status(run)
-        run.counts = get_reg_counts(run)
+        run.counts = get_registration_counts(run)
 
     # Add accounting information if user has permission
     if has_association_permission(request, context, "exe_accounting"):
@@ -481,12 +481,12 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
 
     # Load registration counts if permitted
     if has_event_permission(request, context, event_slug, "orga_registrations"):
-        context["counts"] = get_reg_counts(context["run"])
-        context["reg_counts"] = {}
+        context["counts"] = get_registration_counts(context["run"])
+        context["registration_counts"] = {}
         for tier in ["player", "staff", "wait", "fill", "seller", "npc", "collaborator"]:
             count_key = f"count_{tier}"
             if count_key in context["counts"]:
-                context["reg_counts"][_(tier.capitalize())] = context["counts"][count_key]
+                context["registration_counts"][_(tier.capitalize())] = context["counts"][count_key]
 
     # Load accounting if permitted
     if has_event_permission(request, context, event_slug, "orga_accounting"):
@@ -647,9 +647,9 @@ def _orga_actions_priorities(request: HttpRequest, context: dict) -> None:  # no
     # Delegate to sub-functions for additional action checks
     _orga_user_actions(context, enabled_features, request)
 
-    _orga_reg_accounting_actions(context, enabled_features)
+    _orga_registration_accounting_actions(context, enabled_features)
 
-    _orga_reg_actions(context, enabled_features)
+    _orga_registration_actions(context, enabled_features)
 
     _orga_px_actions(context, enabled_features)
 
@@ -786,7 +786,7 @@ def _orga_px_actions(context: dict, enabled_features: dict) -> None:
         )
 
 
-def _orga_reg_accounting_actions(context: dict, enabled_features: dict[str, int]) -> None:
+def _orga_registration_accounting_actions(context: dict, enabled_features: dict[str, int]) -> None:
     """Add priority actions related to registration and accounting setup.
 
     Checks for required configurations when certain features are enabled,
@@ -869,7 +869,7 @@ def _orga_reg_accounting_actions(context: dict, enabled_features: dict[str, int]
         )
 
 
-def _orga_reg_actions(context: dict, enabled_features: dict[str, Any]) -> None:
+def _orga_registration_actions(context: dict, enabled_features: dict[str, Any]) -> None:
     """Add priority actions for registration management setup.
 
     Checks registration status, required tickets, and registration features

@@ -4,11 +4,11 @@
     {% trans "Registrations" %}
 {% endblock title %}
 {% block content %}
-    {% for reg in registration_list %}
-        <h2>{{ reg.run.search }}</h2>
+    {% for registration in registration_list %}
+        <h2>{{ registration.run.search }}</h2>
         <p>
-            {{ reg.run.status.text | safe }} -
-            {% if reg.run.status.details %}{{ reg.run.status.details | safe }}{% endif %}
+            {{ registration.run.status.text | safe }} -
+            {% if registration.run.status.details %}{{ registration.run.status.details | safe }}{% endif %}
         </p>
     {% endfor %}
 {% endblock content %}

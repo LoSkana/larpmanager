@@ -181,7 +181,7 @@ def registration_tokens_credits_use(
 
 
 def registration_tokens_credits_overpay(
-    reg: Registration, overpay: Decimal, association_id: int, features: dict
+    registration: Registration, overpay: Decimal, association_id: int, features: dict
 ) -> None:
     """Offsets an overpayment by reducing or deleting AccountingItemPayment rows.
 
@@ -190,7 +190,7 @@ def registration_tokens_credits_overpay(
     payment types for features that are currently enabled.
 
     Args:
-        reg: Registration instance to adjust payments for.
+        registration: Registration instance to adjust payments for.
         overpay: Positive decimal amount representing the overpayment to reverse.
         association_id: Association ID used to filter relevant payment records.
         features: Dict of enabled features
@@ -233,7 +233,7 @@ def registration_tokens_credits_overpay(
         # Build queryset with payment priority annotation and locking
         payment_items_queryset = (
             AccountingItemPayment.objects.select_for_update()
-            .filter(registration=reg, association_id=association_id, pay__in=payment_types)
+            .filter(registration=registration, association_id=association_id, pay__in=payment_types)
             .annotate(
                 pay_priority=Case(
                     *priority_cases,

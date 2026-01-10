@@ -295,7 +295,7 @@ def _update_cache_text_fields_answer(
 # Registration
 
 
-def init_cache_reg_field(run: Run) -> dict:
+def init_cache_registration_field(run: Run) -> dict:
     """Initialize registration field cache for all registrations in a run.
 
     Args:
@@ -308,11 +308,11 @@ def init_cache_reg_field(run: Run) -> dict:
     cache_data = {}
     # Iterate through all registrations for this run and populate cache
     for registration in Registration.objects.filter(run=run):
-        _init_element_cache_reg_field(registration, cache_data)
+        _init_element_cache_registration_field(registration, cache_data)
     return cache_data
 
 
-def _init_element_cache_reg_field(registration: Registration, cache_result: dict[int, dict[str, Any]]) -> None:
+def _init_element_cache_registration_field(registration: Registration, cache_result: dict[int, dict[str, Any]]) -> None:
     """Initialize cache for registration element fields.
 
     Args:
@@ -342,7 +342,7 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
             pass
 
 
-def get_cache_reg_field(run: Run) -> dict:
+def get_cache_registration_field(run: Run) -> dict:
     """Get cached registration field data for a run.
 
     Args:
@@ -360,27 +360,27 @@ def get_cache_reg_field(run: Run) -> dict:
 
     # If not cached, initialize and cache the result
     if cached_result is None:
-        cached_result = init_cache_reg_field(run)
+        cached_result = init_cache_registration_field(run)
         cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_result
 
 
-def update_cache_reg_fields(registration: Registration) -> None:
+def update_cache_registration_fields(registration: Registration) -> None:
     """Update cached registration fields for the given element's run."""
     # Get the run associated with the registration element
     run = registration.run
 
     # Generate cache key and retrieve current cached registration fields
     cache_key = cache_text_field_key(Registration, run)
-    cached_registration_fields = get_cache_reg_field(run)
+    cached_registration_fields = get_cache_registration_field(run)
 
     # Initialize element cache and update cache with new data
-    _init_element_cache_reg_field(registration, cached_registration_fields)
+    _init_element_cache_registration_field(registration, cached_registration_fields)
     cache.set(cache_key, cached_registration_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def update_cache_reg_fields_answer(instance: BaseModel) -> None:
+def update_cache_registration_fields_answer(instance: BaseModel) -> None:
     """Update cached registration field answers for editor-type questions.
 
     This function updates the cache with new text field answers when a registration
@@ -404,7 +404,7 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
 
     # Generate cache key and retrieve current cached field data
     cache_key = cache_text_field_key(Registration, run)
-    cached_registration_fields = get_cache_reg_field(run)
+    cached_registration_fields = get_cache_registration_field(run)
 
     # Update the specific field for this registration with new text content
     question_field = str(instance.question_id)
@@ -443,11 +443,11 @@ def update_text_fields_cache(model_instance: object) -> None:
 
     # Update cache for Registration model instances
     if issubclass(model_instance.__class__, Registration):
-        update_cache_reg_fields(model_instance)
+        update_cache_registration_fields(model_instance)
 
     # Update cache for RegistrationAnswer model instances
     if issubclass(model_instance.__class__, RegistrationAnswer):
-        update_cache_reg_fields_answer(model_instance)
+        update_cache_registration_fields_answer(model_instance)
 
 
 def reset_text_fields_cache(run: Run) -> None:

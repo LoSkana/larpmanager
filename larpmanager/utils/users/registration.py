@@ -30,7 +30,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.event import Event, PreRegistration, Run
 from larpmanager.models.form import (
@@ -73,9 +73,9 @@ def registration_available(run: Run, features: dict, run_status: dict, context: 
         return
 
     # Get registration counts if not provided
-    registration_counts = context.get("reg_counts")
+    registration_counts = context.get("registration_counts")
     if registration_counts is None:
-        registration_counts = get_reg_counts(run)
+        registration_counts = get_registration_counts(run)
 
     # Calculate remaining primary tickets
     remaining_primary_tickets = run.event.max_pg - registration_counts.get("count_player", 0)
@@ -409,7 +409,7 @@ def registration_status(  # noqa: C901
         context: Dict context dictionary, optionally containing cached data for efficiency:
             - my_regs: Pre-filtered user registrations
             - features_map: Cached features mapping
-            - reg_counts: Pre-calculated registration counts dictionary
+            - registration_counts: Pre-calculated registration counts dictionary
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects

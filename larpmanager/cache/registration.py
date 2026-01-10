@@ -42,7 +42,7 @@ def cache_registration_counts_key(run_id: int) -> str:
     return f"registration_counts_{run_id}"
 
 
-def get_reg_counts(run: Run, *, reset_cache: bool = False) -> dict:
+def get_registration_counts(run: Run, *, reset_cache: bool = False) -> dict:
     """Get registration counts for a run, with caching support.
 
     Args:
@@ -61,7 +61,7 @@ def get_reg_counts(run: Run, *, reset_cache: bool = False) -> dict:
 
     # Update and cache if not found
     if cached_counts is None:
-        cached_counts = update_reg_counts(run)
+        cached_counts = update_registration_counts(run)
         cache.set(cache_key, cached_counts, timeout=60 * 5)
 
     return cached_counts
@@ -85,7 +85,7 @@ def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1)
     counter_dict[parameter_name] += increment_value
 
 
-def update_reg_counts(run: Run) -> dict[str, int]:
+def update_registration_counts(run: Run) -> dict[str, int]:
     """Update registration counts cache for the given run.
 
     Calculates and returns registration statistics including counts by ticket tier,

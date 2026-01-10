@@ -134,7 +134,7 @@ def get_accounting_detail(
     return result
 
 
-def get_accounting_reg_type(registration: Registration) -> tuple[str, str]:
+def get_accounting_registration_type(registration: Registration) -> tuple[str, str]:
     """Determine registration type for accounting categorization.
 
     Analyzes a registration instance to categorize it for accounting purposes.
@@ -166,7 +166,9 @@ def get_accounting_reg_type(registration: Registration) -> tuple[str, str]:
     )
 
 
-def get_accounting_reg_detail(nm: str, run: Run, descr: str) -> dict[str, int | str | dict[str, dict[str, int | str]]]:
+def get_accounting_registration_detail(
+    nm: str, run: Run, descr: str
+) -> dict[str, int | str | dict[str, dict[str, int | str]]]:
     """Get detailed registration accounting breakdown by ticket tier.
 
     Analyzes all non-cancelled registrations for a given run and provides
@@ -195,7 +197,7 @@ def get_accounting_reg_detail(nm: str, run: Run, descr: str) -> dict[str, int | 
     # Process each registration to build breakdown by ticket type
     for registration in registrations:
         # Get ticket type and description for this registration
-        (ticket_type, ticket_description) = get_accounting_reg_type(registration)
+        (ticket_type, ticket_description) = get_accounting_registration_type(registration)
 
         # Initialize ticket type entry if not exists
         if ticket_type not in accounting_data["detail"]:
@@ -421,7 +423,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
         )
 
     # Process registrations: get theoretical total based on selected ticket tiers
-    details_by_category["registration"] = get_accounting_reg_detail(
+    details_by_category["registration"] = get_accounting_registration_detail(
         _("Registrations"),
         run,
         _("Theoretical total of income due to participation fees selected by the participants"),

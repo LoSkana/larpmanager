@@ -341,7 +341,7 @@ def accounting_payment(request: HttpRequest, event_slug: str, method: str | None
             _("We cannot find your registration for this event. Are you logged in as the correct user") + "?",
         )
         return redirect("accounting")
-    reg = context["registration"]
+    registration = context["registration"]
 
     # Validate fiscal code if feature is enabled for this association
     if "fiscal_code_check" in context["features"]:
@@ -357,8 +357,8 @@ def accounting_payment(request: HttpRequest, event_slug: str, method: str | None
 
     # Redirect to payment processing with or without specific method
     if method:
-        return redirect("accounting_registration", registration_uuid=reg.uuid, method=method)
-    return redirect("accounting_registration", registration_uuid=reg.uuid)
+        return redirect("accounting_registration", registration_uuid=registration.uuid, method=method)
+    return redirect("accounting_registration", registration_uuid=registration.uuid)
 
 
 @login_required
@@ -1077,8 +1077,8 @@ def accounting_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
 
     # For registration payments, check event permissions
     if not found and inv.typ == PaymentType.REGISTRATION:
-        reg = Registration.objects.get(pk=inv.idx)
-        check_event_context(request, reg.run.get_slug())
+        registration = Registration.objects.get(pk=inv.idx)
+        check_event_context(request, registration.run.get_slug())
 
     # Atomically update invoice status to confirmed
     with transaction.atomic():

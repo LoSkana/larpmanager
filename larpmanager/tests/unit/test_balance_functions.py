@@ -28,8 +28,8 @@ from larpmanager.accounting.balance import (
     association_accounting,
     association_accounting_data,
     get_accounting_detail,
-    get_accounting_reg_detail,
-    get_accounting_reg_type,
+    get_accounting_registration_detail,
+    get_accounting_registration_type,
     get_run_accounting,
 )
 from larpmanager.models.accounting import (
@@ -169,7 +169,7 @@ class TestAccDetailFunctions(BaseTestCase):
 class TestRegDetailFunctions(BaseTestCase):
     """Test cases for registration detail functions"""
 
-    def test_get_accounting_reg_type_cancelled(self) -> None:
+    def test_get_accounting_registration_type_cancelled(self) -> None:
         """Test registration type for cancelled registration"""
         member = self.get_member()
         run = self.get_run()
@@ -180,35 +180,35 @@ class TestRegDetailFunctions(BaseTestCase):
         registration.cancellation_date = datetime.now()
         registration.save()
 
-        typ, descr = get_accounting_reg_type(registration)
+        typ, descr = get_accounting_registration_type(registration)
 
         self.assertEqual(typ, "can")
         self.assertEqual(descr, "Disdetta")
 
-    def test_get_accounting_reg_type_with_ticket(self) -> None:
+    def test_get_accounting_registration_type_with_ticket(self) -> None:
         """Test registration type with ticket tier"""
         member = self.get_member()
         run = self.get_run()
         ticket = self.ticket(event=run.event, tier=TicketTier.PATRON)
         registration = self.create_registration(member=member, run=run, ticket=ticket)
 
-        typ, descr = get_accounting_reg_type(registration)
+        typ, descr = get_accounting_registration_type(registration)
 
         self.assertEqual(typ, TicketTier.PATRON)
         self.assertIsNotNone(descr)
 
-    def test_get_accounting_reg_type_no_ticket(self) -> None:
+    def test_get_accounting_registration_type_no_ticket(self) -> None:
         """Test registration type without ticket"""
         member = self.get_member()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run, ticket=None)
 
-        typ, descr = get_accounting_reg_type(registration)
+        typ, descr = get_accounting_registration_type(registration)
 
         self.assertEqual(typ, "")
         self.assertEqual(descr, "")
 
-    def test_get_accounting_reg_detail(self) -> None:
+    def test_get_accounting_registration_detail(self) -> None:
         """Test getting registration detail breakdown"""
         run = self.get_run()
         member1 = self.get_member()
@@ -220,7 +220,7 @@ class TestRegDetailFunctions(BaseTestCase):
         reg1 = self.create_registration(member=member1, run=run, ticket=ticket1, tot_iscr=Decimal("100.00"))
         reg2 = self.create_registration(member=member2, run=run, ticket=ticket2, tot_iscr=Decimal("50.00"))
 
-        result = get_accounting_reg_detail("Registrations", run, "Total registrations")
+        result = get_accounting_registration_detail("Registrations", run, "Total registrations")
 
         self.assertEqual(result["name"], "Registrations")
         self.assertEqual(result["num"], 2)

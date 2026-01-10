@@ -268,7 +268,7 @@ class BaseWritingForm(BaseRegistrationForm):
             orga = True
             if hasattr(self, "orga"):
                 orga = self.orga
-            self.save_reg_questions(instance, is_organizer=orga)
+            self.save_registration_questions(instance, is_organizer=orga)
 
         return instance
 

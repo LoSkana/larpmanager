@@ -1011,7 +1011,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
 
     # Get user's registrations filtered by association for caching optimization
     my_regs = Registration.objects.filter(member=context["member"], run__event_id=context["association_id"])
-    my_regs_dict = {reg.run_id: reg for reg in my_regs}
+    my_regs_dict = {registration.run_id: registration for registration in my_regs}
 
     # Prepare context data
     context.update(
@@ -1023,10 +1023,10 @@ def registrations(request: HttpRequest) -> HttpResponse:
     )
 
     # Process each registration to calculate status and append to results
-    for reg in my_regs:
+    for registration in my_regs:
         # Calculate registration status
-        reg.run.status = registration_status(reg.run, context["member"], context)
-        nt.append(reg)
+        registration.run.status = registration_status(registration.run, context["member"], context)
+        nt.append(registration)
 
     # Render template with processed registration list
     context["registration_list"] = nt

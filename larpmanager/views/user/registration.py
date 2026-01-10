@@ -244,7 +244,7 @@ def save_registration(
     form: object,  # Registration form instance
     run: Run,
     event: Event,
-    reg: Registration | None,
+    registration: Registration | None,
     *,
     gifted: bool = False,
 ) -> Registration:
@@ -258,7 +258,7 @@ def save_registration(
         form: Registration form instance with cleaned data
         run: Run instance being registered for
         event: Event instance associated with the run
-        reg: Existing registration instance to update, or None to create new
+        registration: Existing registration instance to update, or None to create new
         gifted: Whether this is a gifted registration requiring redeem code
 
     Returns:
@@ -272,26 +272,26 @@ def save_registration(
     # Create or update registration within atomic transaction
     with transaction.atomic():
         # Initialize new registration if none provided
-        if not reg:
-            reg = Registration()
-            reg.run = run
-            reg.member = context["member"]
+        if not registration:
+            registration = Registration()
+            registration.run = run
+            registration.member = context["member"]
             # Generate redeem code for gifted registrations
             if gifted:
-                reg.redeem_code = my_uuid(16)
-            reg.save()
+                registration.redeem_code = my_uuid(16)
+            registration.save()
 
         # Determine if registration should be provisional
-        provisional = is_registration_provisional(reg)
+        provisional = is_registration_provisional(registration)
 
         # Save standard registration fields and data
-        save_registration_standard(context, event, form, reg, gifted=gifted, provisional=provisional)
+        save_registration_standard(context, event, form, registration, gifted=gifted, provisional=provisional)
 
         # Process and save registration-specific questions
-        form.save_reg_questions(reg, is_organizer=False)
+        form.save_registration_questions(registration, is_organizer=False)
 
         # Confirm and finalize any pending discounts for this member/run
-        que = AccountingItemDiscount.objects.filter(member=context["member"], run=reg.run)
+        que = AccountingItemDiscount.objects.filter(member=context["member"], run=registration.run)
         for el in que:
             # Remove expiration date to confirm discount usage
             if el.expires is not None:
@@ -299,25 +299,25 @@ def save_registration(
                 el.save()
 
         # Save the updated registration instance
-        reg.save()
+        registration.save()
 
         # Handle special feature processing based on context flags
         if "user_character" in context["features"]:
             check_assign_character(context)
         if "bring_friend" in context["features"]:
-            save_registration_bring_friend(context, form, reg)
+            save_registration_bring_friend(context, form, registration)
 
     # Send background notification email for registration update
-    update_registration_status_bkg(reg.id)
+    update_registration_status_bkg(registration.id)
 
-    return reg
+    return registration
 
 
 def save_registration_standard(
     context: dict,
     event: Event,
     form: RegistrationForm,
-    reg: Registration,
+    registration: Registration,
     *,
     gifted: bool,
     provisional: bool,
@@ -334,7 +334,7 @@ def save_registration_standard(
         form: Registration form instance with cleaned_data
         gifted: Whether this is a gifted registration (skips modification counter)
         provisional: Whether registration is provisional (skips modification counter)
-        reg: Registration instance to update with form data
+        registration: Registration instance to update with form data
 
     Raises:
         Http404: When ticket doesn't exist, belongs to wrong event, or has lower price
@@ -348,17 +348,17 @@ def save_registration_standard(
     """
     # Increment modification counter for standard registrations
     if not gifted and not provisional:
-        reg.modified = reg.modified + 1
+        registration.modified = registration.modified + 1
 
     # Process additional participants count
     if "additionals" in form.cleaned_data:
         additionals_value = form.cleaned_data["additionals"]
-        reg.additionals = int(additionals_value) if additionals_value else 0
+        registration.additionals = int(additionals_value) if additionals_value else 0
 
     # Handle quota assignments if present
     if form.cleaned_data.get("quotas"):
         quotas_value = form.cleaned_data["quotas"]
-        reg.quotas = int(quotas_value) if quotas_value else 0
+        registration.quotas = int(quotas_value) if quotas_value else 0
 
     # Process ticket selection and validation
     if "ticket" in form.cleaned_data:
@@ -374,14 +374,19 @@ def save_registration_standard(
             raise Http404(msg)
 
         # Prevent downgrading ticket price for paid registrations
-        if context["tot_payed"] and reg.ticket and reg.ticket.price > 0 and sel.price < reg.ticket.price:
+        if (
+            context["tot_payed"]
+            and registration.ticket
+            and registration.ticket.price > 0
+            and sel.price < registration.ticket.price
+        ):
             msg = "lower price"
             raise Http404(msg)
-        reg.ticket = sel
+        registration.ticket = sel
 
     # Set custom payment amount if specified
     if form.cleaned_data.get("pay_what"):
-        reg.pay_what = int(form.cleaned_data["pay_what"])
+        registration.pay_what = int(form.cleaned_data["pay_what"])
 
 
 def registration_redirect(
@@ -455,7 +460,7 @@ def registration_redirect(
     return redirect("gallery", event_slug=registration.run.get_slug())
 
 
-def save_registration_bring_friend(context: dict, form: object, reg: Registration) -> None:
+def save_registration_bring_friend(context: dict, form: object, registration: Registration) -> None:
     """Process bring-a-friend discount codes for registration.
 
     This function handles the bring-a-friend functionality by:
@@ -471,14 +476,14 @@ def save_registration_bring_friend(context: dict, form: object, reg: Registratio
             - run: Event run instance
             - a_id: Association ID
         form: Registration form with bring_friend field containing the friend code
-        reg: Registration instance for the current registrant
+        registration: Registration instance for the current registrant
 
     Raises:
         Http404: When the provided friend code is not found in the database
 
     """
     # Send bring-a-friend instructions email to the new registrant
-    bring_friend_instructions(reg, context)
+    bring_friend_instructions(registration, context)
 
     # Early return if no bring_friend field in form data
     if "bring_friend" not in form.cleaned_data:
@@ -504,7 +509,7 @@ def save_registration_bring_friend(context: dict, form: object, reg: Registratio
             oth=OtherChoices.TOKEN,
             descr=_("You have use a friend code") + f" - {friend.member.display_member()} - {cod}",
             association_id=context["association_id"],
-            ref_addit=reg.id,
+            ref_addit=registration.id,
         )
 
         # Create discount token for the friend whose code was used

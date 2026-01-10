@@ -47,14 +47,14 @@
             <table class="go_datatable" no_header_cols="all">
                 <thead>
                     <tr>
-                        {% for key, count in reg_counts.items %}
+                        {% for key, count in registration_counts.items %}
                             {% if count %}<th>{{ key }}</th>{% endif %}
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        {% for key, count in reg_counts.items %}
+                        {% for key, count in registration_counts.items %}
                             {% if count %}<td>{{ count }}</td>{% endif %}
                         {% endfor %}
                     </tr>

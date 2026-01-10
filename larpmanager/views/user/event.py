@@ -42,7 +42,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -533,7 +533,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
         ).select_related("ticket", "run")
 
         # Create dictionary mapping run_id to registration for quick lookup
-        my_regs_dict = {reg.run_id: reg for reg in my_regs}
+        my_regs_dict = {registration.run_id: registration for registration in my_regs}
 
         # Build related data dictionaries for character, payment, and pre-registration info
         character_rels_dict = get_character_rels_dict(my_regs_dict, member)
@@ -668,9 +668,11 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
         que_reg = que_reg.exclude(pk__in=assigned).exclude(ticket_id__in=excluded_ticket_ids)
 
         # Add non-provisional registered members to the display list
-        for reg in que_reg.select_related("member"):
-            if not is_registration_provisional(reg, event=context["event"], features=features, context=context):
-                context["registration_list"].append(reg.member)
+        for registration in que_reg.select_related("member"):
+            if not is_registration_provisional(
+                registration, event=context["event"], features=features, context=context
+            ):
+                context["registration_list"].append(registration.member)
 
     return render(request, "larpmanager/event/gallery.html", context)
 
@@ -713,7 +715,9 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
-    context.update({"my_regs": {reg.run_id: reg for reg in my_regs}, "features_map": features_map})
+    context.update(
+        {"my_regs": {registration.run_id: registration for registration in my_regs}, "features_map": features_map}
+    )
 
     # Process each run to determine registration status and categorize by timing
     for run in runs:
@@ -1031,7 +1035,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
-    counts = get_reg_counts(context["run"])
+    counts = get_registration_counts(context["run"])
 
     # Build discounts list with visibility filtering
     context["disc"] = []

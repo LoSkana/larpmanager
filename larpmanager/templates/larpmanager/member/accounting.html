@@ -16,9 +16,9 @@
             {% trans "These are the event signup for which you submitted a payment, and it's being reviewed by the staff. You don't have to do anything at this time" %}!
         </p>
         <p>
-            {% for reg in payments_pending %}
+            {% for registration in payments_pending %}
                 {% include "elements/comma.html" %}
-                <b><a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run }}</a></b>
+                <b><a href="#" class="my_toggle" tog='reg_{{ registration.uuid }}'>{{ registration.run }}</a></b>
             {% endfor %}
         </p>
         <hr />
@@ -27,18 +27,18 @@
         <h2>{% trans "Pending payments" %}</h2>
         <p>{% trans "These are the event registrations for which you have to make a payment" %}.</p>
         <p>
-            {% for reg in payments_todo %}
+            {% for registration in payments_todo %}
                 {% include "elements/comma.html" %}
-                <b>{{ reg.run }}</b> -
-                <a href="{% url 'accounting_registration' reg.uuid %}">
-                    {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
-                    {% if reg.deadline > 0 %}
-                        {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}
+                <b>{{ registration.run }}</b> -
+                <a href="{% url 'accounting_registration' registration.uuid %}">
+                    {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
+                    {% if registration.deadline > 0 %}
+                        {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
                     {% else %}
                         {% trans "immediately" %}
                     {% endif %}
                 </a>
-                {% if reg.deadline <= 0 %}
+                {% if registration.deadline <= 0 %}
                     <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                 {% endif %}
             {% endfor %}
@@ -50,10 +50,10 @@
         <p>{% trans "These are delegated account registrations for which you have to make a payment" %}.</p>
         <p>
             {% for del in delegated %}
-                {% for reg in del.context.payments_todo %}
+                {% for registration in del.context.payments_todo %}
                     {% include "elements/comma.html" %}
-                    <b>{{ reg.run }}</b> ({{ del }}) - {{ reg.quota|format_decimal }}{{ currency_symbol }}
-                    {% trans "by" %} {{ reg.deadline }} {% trans "days" %}
+                    <b>{{ registration.run }}</b> ({{ del }}) - {{ registration.quota|format_decimal }}{{ currency_symbol }}
+                    {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
                 {% endfor %}
             {% endfor %}
         </p>
@@ -214,58 +214,59 @@
     {% if registration_list %}
         <h2>{% trans "Registration history" %}</h2>
         <p>
-            {% for reg in registration_list %}
+            {% for registration in registration_list %}
                 {% include "elements/comma.html" %}
-                <a href="#" class="my_toggle" tog='reg_{{ reg.uuid }}'>{{ reg.run.search }}
-                    {% if reg.cancellation_date %}
+                <a href="#" class="my_toggle" tog='reg_{{ registration.uuid }}'>{{ registration.run.search }}
+                    {% if registration.cancellation_date %}
                         - {% trans "Cancellation" %}
                     {% endif %}
                 </a>
             {% endfor %}
         </p>
-        {% for reg in registration_list %}
-            <div id="reg_{{ reg.uuid }}" class="hide reg_{{ reg.uuid }}">
-                <h3>{{ reg.run.search }}</h3>
-                {% if reg.pending %}
+        {% for registration in registration_list %}
+            <div id="reg_{{ registration.uuid }}"
+                 class="hide reg_{{ registration.uuid }}">
+                <h3>{{ registration.run.search }}</h3>
+                {% if registration.pending %}
                     <p>
                         <i>{% trans "You have submitted a deposit, and it is being reviewed by the staff. You don't have to do anything for the time being, as soon as it is confirmed the accounting of the event will be updated" %}.</i>
                     </p>
-                {% elif reg.quota > 0 %}
+                {% elif registration.quota > 0 %}
                     <p>
-                        <a href="{% url 'accounting_registration' reg.uuid %}">
-                            {% trans "You must pay" %} {{ reg.quota|format_decimal }}{{ currency_symbol }}
-                            {% if reg.deadline > 0 %}
-                                {% trans "by the deadline of" %} {{ reg.deadline }} {% trans "days" %}
+                        <a href="{% url 'accounting_registration' registration.uuid %}">
+                            {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
+                            {% if registration.deadline > 0 %}
+                                {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
                             {% else %}
                                 {% trans "immediately" %}
                             {% endif %}
                         </a>
-                        {% if reg.deadline <= 0 %}
+                        {% if registration.deadline <= 0 %}
                             <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                         {% endif %}
                     </p>
                 {% endif %}
                 <table class="mob">
-                    {% if reg.ticket %}
+                    {% if registration.ticket %}
                         <tr>
                             <th>{% trans "Ticket chosen" %}</th>
                             <td>
-                                <b>{{ reg.ticket.name }}</b>
-                                {% if reg.ticket.price %}<i><u> ({{ reg.ticket.price }}{{ currency_symbol }})</u></i>{% endif %}
+                                <b>{{ registration.ticket.name }}</b>
+                                {% if registration.ticket.price %}<i><u> ({{ registration.ticket.price }}{{ currency_symbol }})</u></i>{% endif %}
                             </td>
                         </tr>
                     {% endif %}
-                    {% if reg.pay_what %}
+                    {% if registration.pay_what %}
                         <tr>
                             <th>{% trans "Donation" %}</th>
-                            <td>{{ reg.pay_what }}{{ currency_symbol }}</td>
+                            <td>{{ registration.pay_what }}{{ currency_symbol }}</td>
                         </tr>
                     {% endif %}
-                    {% if reg.opts %}
+                    {% if registration.opts %}
                         <tr>
                             <th>{% trans "Selected options" %}</th>
                             <td>
-                                {% for k, el in reg.opts.items %}
+                                {% for k, el in registration.opts.items %}
                                     {% include "elements/comma.html" %}
                                     <b>{{ el.q.name }}</b> -
                                     {% for opt in el.l %}
@@ -276,22 +277,22 @@
                             </td>
                         </tr>
                     {% endif %}
-                    {% if reg.discounts %}
+                    {% if registration.discounts %}
                         <tr>
                             <th>{% trans "Discounts" %}</th>
                             <td>
-                                {% for el in reg.discounts %}
+                                {% for el in registration.discounts %}
                                     {% include "elements/comma.html" %}
                                     {{ el.disc.name }} ({{ el.value }})
                                 {% endfor %}
                             </td>
                         </tr>
                     {% endif %}
-                    {% if reg.accounting_payments %}
+                    {% if registration.accounting_payments %}
                         <tr>
                             <th>{% trans "Payments" %}</th>
                             <td>
-                                {% for el in reg.accounting_payments %}
+                                {% for el in registration.accounting_payments %}
                                     {% include "elements/comma.html" %}
                                     <i><u>{{ el.value }}</u></i> ({{ el.get_pay_display }} - {{ el.created | date:"d/m/y" }})
                                 {% endfor %}

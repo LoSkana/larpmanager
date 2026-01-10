@@ -365,7 +365,7 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
 
 
 def _calculate_registration_accounting(
-    reg: Registration,
+    registration: Registration,
     reg_tickets: dict[int, RegistrationTicket],
     cache_aip: dict[int, dict[str, Decimal]],
     features: dict[str, Any],
@@ -376,7 +376,7 @@ def _calculate_registration_accounting(
     for a registration based on tickets, payments, and enabled features.
 
     Args:
-        reg: Registration instance containing financial data
+        registration: Registration instance containing financial data
         reg_tickets: Dictionary mapping ticket ID to RegistrationTicket objects
         cache_aip: Cached accounting payment data by member ID
         features: Dictionary of enabled features for the event
@@ -393,12 +393,12 @@ def _calculate_registration_accounting(
 
     # Extract and round basic registration financial fields
     for field_name in ["tot_payed", "tot_iscr", "quota", "deadline", "pay_what", "surcharge"]:
-        accounting_data[field_name] = round_to_nearest_cent(getattr(reg, field_name, 0))
+        accounting_data[field_name] = round_to_nearest_cent(getattr(registration, field_name, 0))
 
     # Calculate payment breakdown by type (cash, tokens, credits)
     payment_breakdown = calculate_payment_breakdown(
         features,
-        reg.member_id,
+        registration.member_id,
         accounting_data["tot_payed"],
         cache_aip,
     )
@@ -410,13 +410,13 @@ def _calculate_registration_accounting(
         accounting_data["remaining"] = 0
 
     # Add ticket pricing breakdown if ticket exists
-    if reg.ticket_id in reg_tickets:
-        ticket = reg_tickets[reg.ticket_id]
+    if registration.ticket_id in reg_tickets:
+        ticket = reg_tickets[registration.ticket_id]
         accounting_data["ticket_price"] = ticket.price
         # Add custom payment amount to base ticket price
-        if reg.pay_what:
-            accounting_data["ticket_price"] += reg.pay_what
+        if registration.pay_what:
+            accounting_data["ticket_price"] += registration.pay_what
         # Calculate additional options cost
-        accounting_data["options_price"] = reg.tot_iscr - accounting_data["ticket_price"]
+        accounting_data["options_price"] = registration.tot_iscr - accounting_data["ticket_price"]
 
     return accounting_data

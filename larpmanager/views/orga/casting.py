@@ -552,7 +552,9 @@ def _get_player_info(players: dict, registration: Registration) -> None:
     )
 
 
-def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, nopes: dict, reg: Registration) -> list:
+def _get_player_preferences(
+    allowed: set | None, castings: dict, chosen: dict, nopes: dict, registration: Registration
+) -> list:
     """Get player preferences from casting data.
 
     Processes casting choices for a registration, filtering by allowed elements
@@ -563,7 +565,7 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
         castings: Dictionary mapping member IDs to their casting choices
         chosen: Dictionary to track chosen elements (modified in-place)
         nopes: Dictionary to track rejected elements by member (modified in-place)
-        reg: Registration object containing member information
+        registration: Registration object containing member information
 
     Returns:
         List of preference elements for the player
@@ -573,9 +575,9 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
     preferences = []
 
     # Check if this member has any casting choices
-    if reg.member.uuid in castings:
+    if registration.member.uuid in castings:
         # Process each casting choice for this member
-        for casting_choice in castings[reg.member.uuid]:
+        for casting_choice in castings[registration.member.uuid]:
             # Skip elements not in allowed set (if filtering is enabled)
             if allowed and casting_choice.element not in allowed:
                 continue
@@ -587,9 +589,9 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
 
             # Track rejected preferences ("nopes") for this member
             if casting_choice.nope:
-                if reg.member.uuid not in nopes:
-                    nopes[reg.member.uuid] = []
-                nopes[reg.member.uuid].append(element)
+                if registration.member.uuid not in nopes:
+                    nopes[registration.member.uuid] = []
+                nopes[registration.member.uuid].append(element)
 
     return preferences
 
