@@ -84,7 +84,7 @@ def get_accounting_detail(
         type_field: Field name to group items by (e.g., 'pay', 'exp'). If None,
              no detailed breakdown is generated
         filters: Optional additional filters to apply to the queryset
-        filter_by_registration: If True, filter by reg__run instead of run directly
+        filter_by_registration: If True, filter by registration__run instead of run directly
 
     Returns:
         dict: Accounting breakdown containing:
@@ -100,7 +100,7 @@ def get_accounting_detail(
 
     # Filter accounting items by run or registration run
     if filter_by_registration:
-        queryset = model_class.objects.filter(reg__run=run)
+        queryset = model_class.objects.filter(registration__run=run)
     else:
         queryset = model_class.objects.filter(run=run)
 
@@ -421,7 +421,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
         )
 
     # Process registrations: get theoretical total based on selected ticket tiers
-    details_by_category["reg"] = get_accounting_reg_detail(
+    details_by_category["registration"] = get_accounting_reg_detail(
         _("Registrations"),
         run,
         _("Theoretical total of income due to participation fees selected by the participants"),

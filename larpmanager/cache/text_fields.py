@@ -331,7 +331,7 @@ def _init_element_cache_reg_field(registration: Registration, cache_result: dict
     # Process each editor question and cache the answer text
     for question_id in questions.filter(typ=BaseQuestionType.EDITOR).values_list("pk", flat=True):
         try:
-            answer_text = RegistrationAnswer.objects.get(question_id=question_id, reg_id=registration.id).text
+            answer_text = RegistrationAnswer.objects.get(question_id=question_id, registration_id=registration.id).text
             field_key = str(question_id)
             cache_result[registration.id][field_key] = get_single_cache_text_field(
                 registration.id,
@@ -400,7 +400,7 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
         return
 
     # Get the run context from the registration
-    run = instance.reg.run
+    run = instance.registration.run
 
     # Generate cache key and retrieve current cached field data
     cache_key = cache_text_field_key(Registration, run)
@@ -408,8 +408,8 @@ def update_cache_reg_fields_answer(instance: BaseModel) -> None:
 
     # Update the specific field for this registration with new text content
     question_field = str(instance.question_id)
-    cached_registration_fields[instance.reg_id][question_field] = get_single_cache_text_field(
-        instance.reg_id,
+    cached_registration_fields[instance.registration_id][question_field] = get_single_cache_text_field(
+        instance.registration_id,
         question_field,
         instance.text,
     )

@@ -60,10 +60,10 @@ class TestAccDetailFunctions(BaseTestCase):
 
         # Create payments
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
         )
 
         result = get_accounting_detail(
@@ -247,7 +247,7 @@ class TestRunAccountingFunctions(BaseTestCase):
 
         # Create payment
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("100.00")
         )
 
         result = get_run_accounting(run, {})
@@ -375,7 +375,7 @@ class TestRunAccountingFunctions(BaseTestCase):
 
         # Create payment and expense
         AccountingItemPayment.objects.create(
-            member=member, association=association, reg=registration, pay=PaymentChoices.MONEY, value=Decimal("200.00")
+            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("200.00")
         )
         AccountingItemExpense.objects.create(
             member=member,

@@ -35,7 +35,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
 from larpmanager.cache.association_text import get_association_text
@@ -282,7 +282,7 @@ def save_registration(
             reg.save()
 
         # Determine if registration should be provisional
-        provisional = is_reg_provisional(reg)
+        provisional = is_registration_provisional(reg)
 
         # Save standard registration fields and data
         save_registration_standard(context, event, form, reg, gifted=gifted, provisional=provisional)
@@ -552,7 +552,7 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
     init_form_submitted(context, form, request, registration)
 
     if registration:
-        registration.provisional = is_reg_provisional(registration)
+        registration.provisional = is_registration_provisional(registration)
 
     if context["run"].start and "membership" in context["features"]:
         membership_query = AccountingItemMembership.objects.filter(

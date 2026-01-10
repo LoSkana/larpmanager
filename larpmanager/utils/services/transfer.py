@@ -179,7 +179,7 @@ def _find_matching_ticket(
 
 def _transfer_choices(source_reg: Registration, target_reg: Registration) -> list[RegistrationChoice]:
     """Transfer multiple choice selections from source registration to destination."""
-    source_choices = RegistrationChoice.objects.filter(reg=source_reg)
+    source_choices = RegistrationChoice.objects.filter(registration=source_reg)
     transferred_choices = []
 
     for choice in source_choices:
@@ -194,7 +194,9 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
             continue
 
         # Create the new choice
-        new_choice = RegistrationChoice.objects.create(question=target_question, option=target_option, reg=target_reg)
+        new_choice = RegistrationChoice.objects.create(
+            question=target_question, option=target_option, registration=target_reg
+        )
         transferred_choices.append(new_choice)
 
     return transferred_choices
@@ -202,7 +204,7 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
 
 def _transfer_answers(source_reg: Registration, target_reg: Registration) -> list[RegistrationAnswer]:
     """Transfer text answers from source registration to destination."""
-    source_answers = RegistrationAnswer.objects.filter(reg=source_reg)
+    source_answers = RegistrationAnswer.objects.filter(registration=source_reg)
     transferred_answers = []
 
     for answer in source_answers:
@@ -212,7 +214,9 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
             continue
 
         # Create the new answer
-        new_answer = RegistrationAnswer.objects.create(question=target_question, text=answer.text, reg=target_reg)
+        new_answer = RegistrationAnswer.objects.create(
+            question=target_question, text=answer.text, registration=target_reg
+        )
         transferred_answers.append(new_answer)
 
     return transferred_answers
@@ -269,7 +273,7 @@ def _find_matching_option(
 
 def _transfer_character_relations(source_reg: Registration, target_reg: Registration) -> None:
     """Transfer character relationships from source registration to destination."""
-    source_relations = RegistrationCharacterRel.objects.filter(reg=source_reg)
+    source_relations = RegistrationCharacterRel.objects.filter(registration=source_reg)
 
     for relation in source_relations:
         # Check that the character is available in the destination event
@@ -278,7 +282,7 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
 
         if relation.character.event == character_event:
             RegistrationCharacterRel.objects.create(
-                reg=target_reg,
+                registration=target_reg,
                 character=relation.character,
                 custom_name=relation.custom_name,
                 custom_pronoun=relation.custom_pronoun,
@@ -296,7 +300,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
     to avoid double-counting payments. The actual financial reconciliation should be handled separately.
     """
     # Transfer PaymentInvoice records linked to the registration
-    payment_invoices = PaymentInvoice.objects.filter(reg=source_reg)
+    payment_invoices = PaymentInvoice.objects.filter(registration=source_reg)
 
     for invoice in payment_invoices:
         # Create new invoice record but reset financial amounts
@@ -313,14 +317,14 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             txn_id=None,  # Reset transaction ID to avoid conflicts
             causal=f"Transfer: {invoice.causal}",
             assoc=target_reg.run.event.assoc,
-            reg=target_reg,
+            registration=target_reg,
             verified=False,  # Reset verification status
             hide=invoice.hide,
             key=None,  # Reset key to avoid conflicts
         )
 
     # Transfer AccountingItemPayment records
-    payment_items = AccountingItemPayment.objects.filter(reg=source_reg)
+    payment_items = AccountingItemPayment.objects.filter(registration=source_reg)
 
     for payment_item in payment_items:
         AccountingItemPayment.objects.create(
@@ -328,7 +332,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             value=0,  # Reset payment amount - actual payments should be handled separately
             assoc=target_reg.run.event.assoc,
             pay=payment_item.pay,
-            reg=target_reg,
+            registration=target_reg,
             info=f"Transferred from {source_reg.run}: {payment_item.info or ''}".strip(),
             vat=payment_item.vat,
             hide=payment_item.hide,
@@ -368,19 +372,19 @@ def _delete_original_registration_data(registration: Registration) -> None:
     Note: This is called within a transaction so it will be rolled back if any part fails.
     """
     # Delete payment invoices linked to this registration
-    PaymentInvoice.objects.filter(reg=registration).delete()
+    PaymentInvoice.objects.filter(registration=registration).delete()
 
     # Delete registration choices
-    RegistrationChoice.objects.filter(reg=registration).delete()
+    RegistrationChoice.objects.filter(registration=registration).delete()
 
     # Delete registration answers
-    RegistrationAnswer.objects.filter(reg=registration).delete()
+    RegistrationAnswer.objects.filter(registration=registration).delete()
 
     # Delete character relations
-    RegistrationCharacterRel.objects.filter(reg=registration).delete()
+    RegistrationCharacterRel.objects.filter(registration=registration).delete()
 
     # Delete accounting items linked to this registration
-    AccountingItemPayment.objects.filter(reg=registration).delete()
+    AccountingItemPayment.objects.filter(registration=registration).delete()
 
     # Delete accounting items linked to this member and run
     AccountingItemOther.objects.filter(member=registration.member, run=registration.run).delete()
@@ -458,8 +462,8 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     _validate_character(registration, result, target_run)
 
     # Check accounting items
-    payment_invoices_count = PaymentInvoice.objects.filter(reg=registration).count()
-    payment_items_count = AccountingItemPayment.objects.filter(reg=registration).count()
+    payment_invoices_count = PaymentInvoice.objects.filter(registration=registration).count()
+    payment_items_count = AccountingItemPayment.objects.filter(registration=registration).count()
     other_items_count = AccountingItemOther.objects.filter(member=registration.member, run=registration.run).count()
 
     if payment_invoices_count > 0:

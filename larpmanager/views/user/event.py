@@ -31,7 +31,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import (
     get_event_cache_all,
@@ -206,7 +206,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
         # Fetch all RegistrationCharacterRel objects for user's registrations in one optimized query
         # Include character data and order by character number for consistent results
         character_relations = (
-            RegistrationCharacterRel.objects.filter(reg_id__in=registration_ids, reg__member=member)
+            RegistrationCharacterRel.objects.filter(registration_id__in=registration_ids, registration__member=member)
             .select_related("character")
             .order_by("character__number")
         )
@@ -214,10 +214,10 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
         # Group character relations by registration ID for efficient lookup
         for character_relation in character_relations:
             # Initialize list for new registration IDs
-            if character_relation.reg_id not in character_relations_by_registration_dict:
-                character_relations_by_registration_dict[character_relation.reg_id] = []
+            if character_relation.registration_id not in character_relations_by_registration_dict:
+                character_relations_by_registration_dict[character_relation.registration_id] = []
             # Add character relation to the appropriate registration group
-            character_relations_by_registration_dict[character_relation.reg_id].append(character_relation)
+            character_relations_by_registration_dict[character_relation.registration_id].append(character_relation)
 
     return character_relations_by_registration_dict
 
@@ -247,7 +247,7 @@ def get_payment_invoices_dict(registrations_by_id: dict, member: Any) -> dict:
         # Fetch all payment invoices for user's registrations in single optimized query
         # Include method relation when accessing invoice.method
         payment_invoices = PaymentInvoice.objects.filter(
-            reg_id__in=registration_ids,
+            registration_id__in=registration_ids,
             member=member,
             typ=PaymentType.REGISTRATION,
         ).select_related("method")
@@ -644,12 +644,12 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
     if not hide_uncasted_players:
         # Get registrations that have assigned characters
-        que = RegistrationCharacterRel.objects.filter(reg__run_id=context["run"].id)
+        que = RegistrationCharacterRel.objects.filter(registration__run_id=context["run"].id)
 
         # Filter by character approval status if required
         if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
             que = que.filter(character__status__in=[CharacterStatus.APPROVED])
-        assigned = que.values_list("reg_id", flat=True)
+        assigned = que.values_list("registration_id", flat=True)
 
         # Pre-filter ticket IDs to exclude from registration without character assigned
         excluded_ticket_ids = RegistrationTicket.objects.filter(
@@ -669,7 +669,7 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
 
         # Add non-provisional registered members to the display list
         for reg in que_reg.select_related("member"):
-            if not is_reg_provisional(reg, event=context["event"], features=features, context=context):
+            if not is_registration_provisional(reg, event=context["event"], features=features, context=context):
                 context["registration_list"].append(reg.member)
 
     return render(request, "larpmanager/event/gallery.html", context)

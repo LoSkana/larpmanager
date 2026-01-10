@@ -143,8 +143,8 @@ def _get_elements_query(
         field_names = [f.name for f in model_type._meta.get_fields()]  # noqa: SLF001  # Django model metadata
         if "run" in field_names:
             query_elements = query_elements.filter(run=context["run"])
-        elif "reg" in field_names:
-            query_elements = query_elements.filter(reg__run=context["run"])
+        elif "registration" in field_names:
+            query_elements = query_elements.filter(registration__run=context["run"])
         elif "event" in field_names:
             query_elements = query_elements.filter(event=context["event"])
 

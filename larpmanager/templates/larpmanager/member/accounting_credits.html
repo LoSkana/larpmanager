@@ -63,7 +63,7 @@
                 </thead>
                 {% for el in used %}
                     <tr>
-                        <td data-title="{% trans "Event" %}">{{ el.reg.run }}</td>
+                        <td data-title="{% trans "Event" %}">{{ el.registration.run }}</td>
                         <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
                         <td data-title="{% trans "Amount" %}">{{ el.value }}</td>
                     </tr>

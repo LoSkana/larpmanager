@@ -87,7 +87,7 @@ class TestBasicSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
 
@@ -107,7 +107,7 @@ class TestBasicSignals(BaseTestCase):
             member=member,
             value=Decimal("50.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment_id = payment.id
@@ -195,7 +195,7 @@ class TestBasicSignals(BaseTestCase):
             member=member,
             value=Decimal("100.00"),
             association=self.get_association(),
-            reg=registration,
+            registration=registration,
             pay=PaymentChoices.MONEY,
         )
         payment.save()
@@ -208,7 +208,7 @@ class TestBasicSignals(BaseTestCase):
 
         # Relationships should be preserved
         self.assertEqual(payment.member, member)
-        self.assertEqual(payment.reg, registration)
+        self.assertEqual(payment.registration, registration)
 
     def test_cache_operations_dont_break(self) -> None:
         """Test that cache operations triggered by signals don't break"""
