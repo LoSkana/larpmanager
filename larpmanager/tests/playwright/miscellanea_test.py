@@ -101,16 +101,16 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     # create event
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Test Access")
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("Test Access")
 
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2055-06-11")
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-start").fill("2055-06-11")
     just_wait(page)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2055-06-13")
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2055-06-13")
     just_wait(page)
-    page.locator("#id_end").click()
+    page.locator("#id_form2-end").click()
     submit_confirm(page)
 
     # Verify we're on the new event

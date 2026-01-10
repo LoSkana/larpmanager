@@ -344,17 +344,17 @@ def new_ticket(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "manage/")
     page.get_by_role("link", name="Events").click()
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("newevent")
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("newevent")
     # don't set slug, let it be auto filled
 
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2045-06-11")
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-start").fill("2045-06-11")
     just_wait(page)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2045-06-13")
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2045-06-13")
     just_wait(page)
-    page.locator("#id_end").click()
+    page.locator("#id_form2-end").click()
     submit_confirm(page)
 
     # add feature also to this

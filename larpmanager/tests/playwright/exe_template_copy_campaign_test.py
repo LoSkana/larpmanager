@@ -75,9 +75,9 @@ def template(live_server: Any, page: Any) -> None:
     # create new event from template
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("from template")
-    page.locator("#id_name").press("Tab")
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("from template")
+    page.locator("#id_form1-name").press("Tab")
     page.locator("#slug").fill("fromtemplate")
     # the template should be auto-selected
     submit_confirm(page)
@@ -163,9 +163,9 @@ def copy(live_server: Any, page: Any) -> None:
     # copy event
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("copy")
-    page.locator("#id_name").press("Tab")
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("copy")
+    page.locator("#id_form1-name").press("Tab")
     page.locator("#slug").fill("copy")
     submit_confirm(page)
 
@@ -203,9 +203,9 @@ def campaign(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/features/campaign/on")
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("campaign")
-    page.locator("#id_name").press("Tab")
+    page.locator("#id_form1-name").click()
+    page.locator("#id_form1-name").fill("campaign")
+    page.locator("#id_form1-name").press("Tab")
     page.locator("#slug").fill("campaign")
     just_wait(page)
     page.locator("#select2-id_parent-container").click()

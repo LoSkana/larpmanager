@@ -75,14 +75,14 @@ def create_event_a(page: Any, live_server: Any) -> None:
     """Create Event A with ticket and registration questions."""
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").fill("Event A")
+    page.locator("#id_form1-name").fill("Event A")
 
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2055-06-11")
-    page.locator("#id_start").click()
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-start").fill("2055-06-11")
+    page.locator("#id_form2-start").click()
     just_wait(page)
-    page.locator("#id_end").fill("2055-06-13")
-    page.locator("#id_end").click()
+    page.locator("#id_form2-end").fill("2055-06-13")
+    page.locator("#id_form2-end").click()
     just_wait(page)
     submit_confirm(page)
 
@@ -171,15 +171,15 @@ def create_event_b(page: Any, live_server: Any) -> None:
     """Create Event B."""
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_name").fill("Event B")
+    page.locator("#id_form1-name").fill("Event B")
 
-    page.locator("#id_development").select_option("1")
-    page.locator("#id_start").fill("2055-07-11")
+    page.locator("#id_form2-development").select_option("1")
+    page.locator("#id_form2-start").fill("2055-07-11")
     just_wait(page)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2055-07-13")
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2055-07-13")
     just_wait(page)
-    page.locator("#id_end").click()
+    page.locator("#id_form2-end").click()
     submit_confirm(page)
 
 
