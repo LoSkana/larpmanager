@@ -24,8 +24,6 @@ from typing import TYPE_CHECKING
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 
 from larpmanager.utils.core.sticky import add_sticky_message
 
@@ -113,7 +111,7 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
             context["welcome_message"] = True
 
         # Define callback for post-creation operations
-        def on_created(created_event: Event, created_run: Run) -> None:
+        def on_created(created_event: Event) -> None:
             """Post-creation callback for setting up organizer role and sticky message."""
             # Automatically add requesting user as event organizer
             (er, _created) = EventRole.objects.get_or_create(event=created_event, number=1)
@@ -125,23 +123,9 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
             # Refresh cached event links for user navigation
             reset_event_links(context["member"].id, context["association_id"])
 
-            # Add sticky message linked to the created event
-            sticky_message_lines = [
-                _("Your event '%(event_name)s' has been successfully created") + "!",
-                _("This page is the event's dashboard, where you can fully manage all it's settings") + ".",
-                _("Users can sign up to the event accessing <a href='%(signup_url)s'>this address</a>") + ".",
-                _("You can now setup the tickets, the signup form, the registration options") + ".",
-                _("In this page you'll find a list of actions and suggestions on the next steps") + "!",
-            ]
-
-            sticky_message_text = "".join([f"<p>{line}</p>" for line in sticky_message_lines]) % {
-                "event_name": created_event.name,
-                "signup_url": reverse("register", args=[created_run.get_slug()]),
-            }
-
             add_sticky_message(
                 member=context["member"],
-                message=sticky_message_text,
+                message="new_event",
                 expires_days=7,
                 element_uuid=str(created_event.uuid),
             )

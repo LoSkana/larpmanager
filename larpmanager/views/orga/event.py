@@ -136,7 +136,7 @@ def full_event_edit(
                     setattr(saved_run, field, run_form.cleaned_data[field])
                 saved_run.save()
                 if on_created_callback:
-                    on_created_callback(saved_event, saved_run)
+                    on_created_callback(saved_event)
             else:
                 # For editing, just save the run form normally
                 saved_run = run_form.save()

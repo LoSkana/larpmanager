@@ -8966,6 +8966,29 @@ msgid "Welcome"
 msgstr ""
 
 #, python-format
+msgid "Your event '%(event_name)s' has been successfully created"
+msgstr ""
+
+msgid ""
+"This page is the event's dashboard, where you can fully manage all it's "
+"settings"
+msgstr ""
+
+#, python-format
+msgid ""
+"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
+"address</a>"
+msgstr ""
+
+msgid ""
+"You can now setup the tickets, the signup form, the registration options"
+msgstr ""
+
+msgid ""
+"In this page you'll find a list of actions and suggestions on the next steps"
+msgstr ""
+
+#, python-format
 msgid ""
 "File type '%(detected_type)s' is not allowed.Allowed types are: "
 "'%(allowed_types)s'."
@@ -9332,29 +9355,6 @@ msgid "Feature %(name)s deactivated"
 msgstr ""
 
 msgid "Cache reset!"
-msgstr ""
-
-#, python-format
-msgid "Your event '%(event_name)s' has been successfully created"
-msgstr ""
-
-msgid ""
-"This page is the event's dashboard, where you can fully manage all it's "
-"settings"
-msgstr ""
-
-#, python-format
-msgid ""
-"Users can sign up to the event accessing <a href='%(signup_url)s'>this "
-"address</a>"
-msgstr ""
-
-msgid ""
-"You can now setup the tickets, the signup form, the registration options"
-msgstr ""
-
-msgid ""
-"In this page you'll find a list of actions and suggestions on the next steps"
 msgstr ""
 
 msgid "Member approved!"

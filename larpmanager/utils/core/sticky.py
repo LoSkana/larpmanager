@@ -23,13 +23,15 @@
 from __future__ import annotations
 
 import ast
-import uuid
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
+from larpmanager.models.utils import my_uuid_short
 
 if TYPE_CHECKING:
     from larpmanager.models.member import Member
@@ -65,7 +67,7 @@ def add_sticky_message(
         sticky_messages = {}
 
     # Generate unique ID for this message
-    message_id = str(uuid.uuid4())
+    message_id = str(my_uuid_short())
 
     # Calculate expiration time
     expires_at = timezone.now() + timedelta(days=expires_days)
@@ -85,13 +87,14 @@ def add_sticky_message(
     return message_id
 
 
-def get_sticky_messages(member: Member, element_uuid: str | None = None) -> list[dict]:
+def get_sticky_messages(context: dict, member: Member, element_uuid: str | None = None) -> list[dict]:
     """Get all active sticky messages for a member.
 
     Filters out dismissed and expired messages. Optionally filters by element_uuid.
     Also performs automatic cleanup of old dismissed or expired messages.
 
     Args:
+        context: Dictionary context
         member: Member instance to get messages for
         element_uuid: Optional UUID to filter messages for specific element (e.g., event)
 
@@ -112,7 +115,9 @@ def get_sticky_messages(member: Member, element_uuid: str | None = None) -> list
     messages_to_remove = []
 
     for message_id, message_data in sticky_messages.items():
-        _process_sticky(active_messages, current_time, element_uuid, message_data, message_id, messages_to_remove)
+        _process_sticky(
+            context, active_messages, current_time, element_uuid, message_data, message_id, messages_to_remove
+        )
 
     # Cleanup old messages if any found
     if messages_to_remove:
@@ -126,7 +131,26 @@ def get_sticky_messages(member: Member, element_uuid: str | None = None) -> list
     return active_messages
 
 
+def _get_text_message(context: dict, message: str) -> str:
+    """Get message to show."""
+    sticky_message_lines = []
+    if message == "new_event":
+        sticky_message_lines = [
+            _("Your event '%(event_name)s' has been successfully created") + "!",
+            _("This page is the event's dashboard, where you can fully manage all it's settings") + ".",
+            _("Users can sign up to the event accessing <a href='%(signup_url)s'>this address</a>") + ".",
+            _("You can now setup the tickets, the signup form, the registration options") + ".",
+            _("In this page you'll find a list of actions and suggestions on the next steps") + "!",
+        ]
+
+    return "".join([f"<p>{line}</p>" for line in sticky_message_lines]) % {
+        "event_name": context["event"].name,
+        "signup_url": reverse("register", args=[context["run"].get_slug()]),
+    }
+
+
 def _process_sticky(
+    context: dict,
     active_messages: list,
     current_time: datetime,
     element_uuid: str,
@@ -162,6 +186,7 @@ def _process_sticky(
     # Add message with ID
     message_with_id = message_data.copy()
     message_with_id["id"] = message_id
+    message_with_id["text"] = _get_text_message(context, message_data["message"])
     active_messages.append(message_with_id)
 
 

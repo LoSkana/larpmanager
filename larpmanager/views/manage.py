@@ -52,7 +52,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
@@ -243,7 +243,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     _exe_suggestions(context)
 
     # Add sticky messages for the current user
-    context["sticky_messages"] = get_sticky_messages(context["member"])
+    context["sticky_messages"] = get_sticky_messages(context, context["member"])
 
     # Compile final context and check for intro driver
     _compile(request, context)
@@ -379,7 +379,6 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: di
 
     Args:
         request: HTTP request object
-        association: Association instance
         context: Context dictionary to populate with actions
         enabled_features: Set of enabled features
 
@@ -508,7 +507,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     _compile(request, context)
 
     # Add sticky messages for the current user (filtered by event UUID)
-    context["sticky_messages"] = get_sticky_messages(context["member"], element_uuid=str(context["event"].uuid))
+    context["sticky_messages"] = get_sticky_messages(context, context["member"], element_uuid=str(context["event"].uuid))
 
     # Mobile shortcuts handling
     if get_event_config(context["event"].id, "show_shortcuts_mobile", default_value=False, context=context):
@@ -1130,7 +1129,7 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> H
 def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonResponse:
     """Dismiss a sticky message via AJAX."""
 
-    success = dismiss_sticky(request.user.member, message_uuid)
+    success = dismiss_sticky_message(request.user.member, message_uuid)
 
     if success:
         return JsonResponse({"status": "ok"})

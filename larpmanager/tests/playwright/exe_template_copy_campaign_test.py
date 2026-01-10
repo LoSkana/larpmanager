@@ -80,6 +80,13 @@ def template(live_server: Any, page: Any) -> None:
     page.locator("#id_form1-name").press("Tab")
     page.locator("#slug").fill("fromtemplate")
     # the template should be auto-selected
+
+    page.locator("#id_form2-start").fill("2050-01-01")
+    just_wait(page)
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2050-01-03")
+    just_wait(page)
+    page.locator("#id_form2-end").click()
     submit_confirm(page)
 
     # check roles
@@ -167,6 +174,14 @@ def copy(live_server: Any, page: Any) -> None:
     page.locator("#id_form1-name").fill("copy")
     page.locator("#id_form1-name").press("Tab")
     page.locator("#slug").fill("copy")
+
+    page.locator("#id_form2-start").fill("2050-01-01")
+    just_wait(page)
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2050-01-03")
+    just_wait(page)
+    page.locator("#id_form2-end").click()
+
     submit_confirm(page)
 
     go_to(page, live_server, "/copy/manage/features/copy/on")
@@ -208,10 +223,19 @@ def campaign(live_server: Any, page: Any) -> None:
     page.locator("#id_form1-name").press("Tab")
     page.locator("#slug").fill("campaign")
     just_wait(page)
-    page.locator("#select2-id_parent-container").click()
+    page.locator("#select2-id_form1-parent-container").click()
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp", exact=True).click()
+
+    page.locator("#id_form2-start").fill("2050-01-01")
+    just_wait(page)
+    page.locator("#id_form2-start").click()
+    page.locator("#id_form2-end").fill("2050-01-03")
+    just_wait(page)
+    page.locator("#id_form2-end").click()
+
     submit_confirm(page)
+
     go_to(page, live_server, "/campaign/manage/characters/")
     page.get_by_role("link", name="XP").click()
     char_row = page.locator('tr:has-text("Test Character")').first
