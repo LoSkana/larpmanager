@@ -6099,116 +6099,6 @@ msgstr ""
 msgid "Organization tax"
 msgstr ""
 
-msgid "Donation"
-msgstr ""
-
-msgid "You are about to perform a donation of"
-msgstr ""
-
-msgid ""
-"Indicate the name of the member for whom you want to activate a new "
-"collection"
-msgstr ""
-
-msgid "Collection for"
-msgstr ""
-
-msgid "The collection was delivered to the user"
-msgstr ""
-
-msgid ""
-"The collection is ready to be delivered, give this link to the recipient"
-msgstr ""
-
-msgid "Collection links"
-msgstr ""
-
-msgid ""
-"The collection is active! To participate click on the following link, or "
-"copy it to whoever you want to get involved"
-msgstr ""
-
-msgid "Link to participate in"
-msgstr ""
-
-msgid ""
-"When you want to close the collection, follow the link below. A special "
-"redemption code will be generated"
-msgstr ""
-
-msgid "Link to close the collection"
-msgstr ""
-
-msgid "Number of partecipants"
-msgstr ""
-
-msgid "Total collection"
-msgstr ""
-
-msgid "Participants included"
-msgstr ""
-
-msgid "Join the collection for"
-msgstr ""
-
-msgid "The amount of your contribution is"
-msgstr ""
-
-msgid "Redeem collection"
-msgstr ""
-
-msgid ""
-"Your friends wanted to give you a special gift: they gave you the chance to "
-"participate in one of our experiences"
-msgstr ""
-
-msgid ""
-"By pressing confirm, the collection total will be credited to your account, "
-"and will be used automatically when you register for one of our events"
-msgstr ""
-
-msgid "Do you wish to be reimbursed? Open a new one"
-msgstr ""
-
-msgid "refund request"
-msgstr ""
-
-msgid "Access the history"
-msgstr ""
-
-msgid "Refunded"
-msgstr ""
-
-msgid "Consumed"
-msgstr ""
-
-msgid "Returned"
-msgstr ""
-
-msgid "Run"
-msgstr ""
-
-msgid "Indicate the amount of your donation"
-msgstr ""
-
-msgid "Payment membership fee"
-msgstr ""
-
-msgid "Indicates the details of the request"
-msgstr ""
-
-msgid "Go to the tokens history"
-msgstr ""
-
-msgid "Payment processing"
-msgstr ""
-
-msgid "We are processing your payment"
-msgstr ""
-
-msgid "Please wait a moment"
-msgstr ""
-
 msgid "here the conditions of registration"
 msgstr ""
 
@@ -6243,6 +6133,12 @@ msgstr ""
 msgid "by"
 msgstr ""
 
+msgid "Do you wish to be reimbursed? Open a new one"
+msgstr ""
+
+msgid "refund request"
+msgstr ""
+
 msgid "Requests open"
 msgstr ""
 
@@ -6258,6 +6154,9 @@ msgstr ""
 msgid ""
 "You have submitted your dues payment, and it is now being approved by the "
 "staff. You don't have to do anything for the time being"
+msgstr ""
+
+msgid "Payment membership fee"
 msgstr ""
 
 msgid ""
@@ -6339,6 +6238,9 @@ msgstr ""
 msgid "Collection participated"
 msgstr ""
 
+msgid "Donation"
+msgstr ""
+
 msgid "If you would like to make a donation to the Organization"
 msgstr ""
 
@@ -6375,6 +6277,92 @@ msgstr ""
 msgid "click here"
 msgstr ""
 
+msgid "You are about to perform a donation of"
+msgstr ""
+
+msgid ""
+"Indicate the name of the member for whom you want to activate a new "
+"collection"
+msgstr ""
+
+msgid "Collection for"
+msgstr ""
+
+msgid "The collection was delivered to the user"
+msgstr ""
+
+msgid ""
+"The collection is ready to be delivered, give this link to the recipient"
+msgstr ""
+
+msgid "Collection links"
+msgstr ""
+
+msgid ""
+"The collection is active! To participate click on the following link, or "
+"copy it to whoever you want to get involved"
+msgstr ""
+
+msgid "Link to participate in"
+msgstr ""
+
+msgid ""
+"When you want to close the collection, follow the link below. A special "
+"redemption code will be generated"
+msgstr ""
+
+msgid "Link to close the collection"
+msgstr ""
+
+msgid "Number of partecipants"
+msgstr ""
+
+msgid "Total collection"
+msgstr ""
+
+msgid "Participants included"
+msgstr ""
+
+msgid "Join the collection for"
+msgstr ""
+
+msgid "The amount of your contribution is"
+msgstr ""
+
+msgid "Redeem collection"
+msgstr ""
+
+msgid ""
+"Your friends wanted to give you a special gift: they gave you the chance to "
+"participate in one of our experiences"
+msgstr ""
+
+msgid ""
+"By pressing confirm, the collection total will be credited to your account, "
+"and will be used automatically when you register for one of our events"
+msgstr ""
+
+msgid "Access the history"
+msgstr ""
+
+msgid "Refunded"
+msgstr ""
+
+msgid "Consumed"
+msgstr ""
+
+msgid "Returned"
+msgstr ""
+
+msgid "Run"
+msgstr ""
+
+msgid "Indicate the amount of your donation"
+msgstr ""
+
+msgid "Indicates the details of the request"
+msgstr ""
+
 msgid "The total registration fee is"
 msgstr ""
 
@@ -6388,6 +6376,18 @@ msgid "We ask you to pay the remaining amount"
 msgstr ""
 
 msgid "Would you like to pay a different amount"
+msgstr ""
+
+msgid "Go to the tokens history"
+msgstr ""
+
+msgid "Payment processing"
+msgstr ""
+
+msgid "We are processing your payment"
+msgstr ""
+
+msgid "Please wait a moment"
 msgstr ""
 
 msgid "User"

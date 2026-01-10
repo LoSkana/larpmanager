@@ -59,7 +59,7 @@ from larpmanager.models.utils import get_sum
 logger = logging.getLogger(__name__)
 
 
-def get_acc_detail(
+def get_accounting_detail(
     name: str,
     run: Run,
     description: str,
@@ -84,7 +84,7 @@ def get_acc_detail(
         type_field: Field name to group items by (e.g., 'pay', 'exp'). If None,
              no detailed breakdown is generated
         filters: Optional additional filters to apply to the queryset
-        filter_by_registration: If True, filter by reg__run instead of run directly
+        filter_by_registration: If True, filter by registration__run instead of run directly
 
     Returns:
         dict: Accounting breakdown containing:
@@ -100,7 +100,7 @@ def get_acc_detail(
 
     # Filter accounting items by run or registration run
     if filter_by_registration:
-        queryset = model_class.objects.filter(reg__run=run)
+        queryset = model_class.objects.filter(registration__run=run)
     else:
         queryset = model_class.objects.filter(run=run)
 
@@ -134,7 +134,7 @@ def get_acc_detail(
     return result
 
 
-def get_acc_reg_type(registration: Registration) -> tuple[str, str]:
+def get_accounting_registration_type(registration: Registration) -> tuple[str, str]:
     """Determine registration type for accounting categorization.
 
     Analyzes a registration instance to categorize it for accounting purposes.
@@ -166,7 +166,9 @@ def get_acc_reg_type(registration: Registration) -> tuple[str, str]:
     )
 
 
-def get_acc_reg_detail(nm: str, run: Run, descr: str) -> dict[str, int | str | dict[str, dict[str, int | str]]]:
+def get_accounting_registration_detail(
+    nm: str, run: Run, descr: str
+) -> dict[str, int | str | dict[str, dict[str, int | str]]]:
     """Get detailed registration accounting breakdown by ticket tier.
 
     Analyzes all non-cancelled registrations for a given run and provides
@@ -195,7 +197,7 @@ def get_acc_reg_detail(nm: str, run: Run, descr: str) -> dict[str, int | str | d
     # Process each registration to build breakdown by ticket type
     for registration in registrations:
         # Get ticket type and description for this registration
-        (ticket_type, ticket_description) = get_acc_reg_type(registration)
+        (ticket_type, ticket_description) = get_accounting_registration_type(registration)
 
         # Initialize ticket type entry if not exists
         if ticket_type not in accounting_data["detail"]:
@@ -265,7 +267,7 @@ def _process_tokens_credits(
     sum_credits = 0
 
     if "tokens" in features:
-        details_by_category["tok"] = get_acc_detail(
+        details_by_category["tok"] = get_accounting_detail(
             context.get("tokens_name", _("Tokens")),
             run,
             _("Total issued"),
@@ -277,7 +279,7 @@ def _process_tokens_credits(
         sum_tokens = details_by_category["tok"]["tot"]
 
     if "credits" in features:
-        details_by_category["cre"] = get_acc_detail(
+        details_by_category["cre"] = get_accounting_detail(
             context.get("credits_name", _("Credits")),
             run,
             _("Total issued"),
@@ -330,7 +332,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
     # Process expenses: accumulate all approved expenses submitted by collaborators
     sum_expenses = 0
     if "expense" in features:
-        details_by_category["exp"] = get_acc_detail(
+        details_by_category["exp"] = get_accounting_detail(
             _("Expenses"),
             run,
             _("Total of expenses submitted by collaborators and approved"),
@@ -343,7 +345,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
     # Process outflows: accumulate all recorded money outflows
     sum_outflows = 0
     if "outflow" in features:
-        details_by_category["out"] = get_acc_detail(
+        details_by_category["out"] = get_accounting_detail(
             _("Outflows"),
             run,
             _("Total of recorded money outflows"),
@@ -356,7 +358,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
     # Process inflows: accumulate all recorded money inflows
     sum_inflows = 0
     if "inflow" in features:
-        details_by_category["in"] = get_acc_detail(
+        details_by_category["in"] = get_accounting_detail(
             _("Inflows"),
             run,
             _("Total of recorded money inflows"),
@@ -369,7 +371,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
     # Process payments: accumulate all participation fees received from registrations
     sum_payments = 0
     if "payment" in features:
-        details_by_category["pay"] = get_acc_detail(
+        details_by_category["pay"] = get_accounting_detail(
             _("Income"),
             run,
             _("Total participation fees received"),
@@ -381,7 +383,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
         sum_payments = details_by_category["pay"]["tot"]
 
     # Process transaction fees: accumulate all transfer commissions withheld
-    details_by_category["trs"] = get_acc_detail(
+    details_by_category["trs"] = get_accounting_detail(
         _("Transactions"),
         run,
         _("Total amount withheld for transfer commissions"),
@@ -395,7 +397,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
     # Process refunds: accumulate all amounts refunded to participants for cancellations
     sum_refund = 0
     if "refund" in features:
-        details_by_category["ref"] = get_acc_detail(
+        details_by_category["ref"] = get_accounting_detail(
             _("Refunds"),
             run,
             _("Total amount refunded to participants"),
@@ -411,7 +413,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
 
     # Process discounts: accumulate all participation fee reductions
     if "discount" in features:
-        details_by_category["dis"] = get_acc_detail(
+        details_by_category["dis"] = get_accounting_detail(
             _("Discount"),
             run,
             _("Total participation fees reduced through discounts"),
@@ -421,7 +423,7 @@ def get_run_accounting(run: Run, context: dict, *, perform_update: bool = True) 
         )
 
     # Process registrations: get theoretical total based on selected ticket tiers
-    details_by_category["reg"] = get_acc_reg_detail(
+    details_by_category["registration"] = get_accounting_registration_detail(
         _("Registrations"),
         run,
         _("Theoretical total of income due to participation fees selected by the participants"),

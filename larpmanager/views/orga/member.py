@@ -275,23 +275,23 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
     pre_regs = set(PreRegistration.objects.filter(event=context["event"]).values_list("member_id", flat=True))
 
     # Calculate registration counts for each member
-    reg_counts = {}
+    registration_counts = {}
     for el in (
         Registration.objects.filter(member_id__in=members, cancellation_date__isnull=True)
         .exclude(member_id__in=already)
         .values("member_id")
         .annotate(Count("member_id"))
     ):
-        reg_counts[el["member_id"]] = el["member_id__count"]
+        registration_counts[el["member_id"]] = el["member_id__count"]
 
     # Build final member list with pre-registration and count data
     context["lst"] = []
     for m in que.values_list("id", "name", "surname", "nickname"):
         pre_reg = m[0] in pre_regs
-        reg_count = 0
-        if m[0] in reg_counts:
-            reg_count = reg_counts[m[0]]
-        context["lst"].append((m[0], m[1], m[2], m[3], pre_reg, reg_count))
+        registration_count = 0
+        if m[0] in registration_counts:
+            registration_count = registration_counts[m[0]]
+        context["lst"].append((m[0], m[1], m[2], m[3], pre_reg, registration_count))
 
     return render(request, "larpmanager/orga/users/persuade.html", context)
 

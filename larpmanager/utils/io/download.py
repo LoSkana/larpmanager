@@ -258,7 +258,7 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
         question_class = RegistrationQuestion if is_registration_model else WritingQuestion
         choices_class = RegistrationChoice if is_registration_model else WritingChoice
         answers_class = RegistrationAnswer if is_registration_model else WritingAnswer
-        reference_field_name = "reg_id" if is_registration_model else "element_id"
+        reference_field_name = "registration_id" if is_registration_model else "element_id"
 
         # Extract element IDs from query for filtering related objects
         element_ids = {element.id for element in query}
@@ -296,9 +296,9 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
     if model == "character":
         context["assignments"] = {}
         for relation in RegistrationCharacterRel.objects.filter(
-            reg__run=context["run"],
-        ).select_related("reg", "reg__member"):
-            context["assignments"][relation.character_id] = relation.reg.member
+            registration__run=context["run"],
+        ).select_related("registration", "registration__member"):
+            context["assignments"][relation.character_id] = relation.registration.member
 
     # Update context with all prepared export data
     context["applicable"] = applicable_questions

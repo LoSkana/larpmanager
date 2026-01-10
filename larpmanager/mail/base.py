@@ -288,7 +288,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 my_send_mail(subj, body, m, instance.event)
 
 
-def bring_friend_instructions(reg: Registration, context: dict) -> None:
+def bring_friend_instructions(registration: Registration, context: dict) -> None:
     """Send friend invitation instructions to registered user.
 
     This function generates and sends an email to a registered user containing
@@ -296,7 +296,7 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     to receive mutual discounts on event registration.
 
     Args:
-        reg: Registration instance containing member and event information
+        registration: Registration instance containing member and event information
         context: Context dictionary containing discount amounts and event details.
              Expected keys: 'bring_friend_discount_to', 'bring_friend_discount_from'
 
@@ -309,13 +309,13 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
 
     """
     # Activate user's language for proper email localization
-    activate(reg.member.language)
+    activate(registration.member.language)
 
     # Build email subject with event header and localized message
-    email_subject = hdr(reg.run.event) + _("Bring a friend to %(event)s") % {"event": reg.run} + "!"
+    email_subject = hdr(registration.run.event) + _("Bring a friend to %(event)s") % {"event": registration.run} + "!"
 
     # Start email body with the user's personal discount code
-    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": reg.uuid}
+    email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": registration.uuid}
 
     # Add instructions for sharing the code and friend's discount amount
     email_body += (
@@ -328,14 +328,14 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
         )
         % {
             "amount_to": context["bring_friend_discount_to"],
-            "currency": reg.run.event.association.get_currency_symbol(),
+            "currency": registration.run.event.association.get_currency_symbol(),
         }
         + ". "
         # Add information about the user's own discount benefit
         + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
         % {
             "amount_from": context["bring_friend_discount_from"],
-            "currency": reg.run.event.association.get_currency_symbol(),
+            "currency": registration.run.event.association.get_currency_symbol(),
         }
         + "."
     )
@@ -344,13 +344,13 @@ def bring_friend_instructions(reg: Registration, context: dict) -> None:
     email_body += (
         "<br /><br />"
         + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
-        % {"url": f"{reg.run.get_slug()}/limitations/"}
+        % {"url": f"{registration.run.get_slug()}/limitations/"}
         + "."
     )
 
     # Add closing message and send the email
     email_body += "<br /><br />" + _("See you soon") + "!"
-    my_send_mail(email_subject, email_body, reg.member, reg.run)
+    my_send_mail(email_subject, email_body, registration.member, registration.run)
 
 
 def send_trait_assignment_email(instance: AssignmentTrait) -> None:

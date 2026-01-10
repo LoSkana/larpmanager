@@ -67,10 +67,10 @@ class AccountingItemAdmin(DefModelAdmin):
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
     search_fields: ClassVar[tuple] = ("id", "search")
 
-    @admin.display(ordering="reg__run", description="Run")
+    @admin.display(ordering="registration__run", description="Run")
     def get_run(self, instance: AccountingItem) -> Run:
         """Get run from instance for admin display."""
-        return instance.reg.run
+        return instance.registration.run
 
 
 @admin.register(AccountingItemTransaction)
@@ -78,7 +78,7 @@ class AccountingItemTransactionAdmin(AccountingItemAdmin):
     """Admin interface for payment transaction accounting items."""
 
     list_display = ("id", "inv", "member", "value")
-    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "registration"]
     list_filter = (MemberFilter, AssociationFilter, RegistrationFilter)
 
 
@@ -143,8 +143,8 @@ class AccountingItemInflowAdmin(AccountingItemAdmin):
 class AccountingItemPaymentAdmin(AccountingItemAdmin):
     """Admin interface for payment accounting items linked to registrations."""
 
-    list_display = ("id", "reg", "member", "value")
-    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "reg"]
+    list_display = ("id", "registration", "member", "value")
+    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "registration"]
     list_filter = (MemberFilter, AssociationFilter, RegistrationFilter, "pay")
 
 
@@ -173,7 +173,7 @@ class PaymentInvoiceAdmin(DefModelAdmin):
     exclude = ("search",)
     search_fields: ClassVar[tuple] = ("id", "search", "cod", "causal", "uuid")
     list_display = ("id", "key", "causal", "typ", "method", "status", "mc_gross", "mc_fee", "uuid")
-    autocomplete_fields = ("member", "method", "association", "reg")
+    autocomplete_fields = ("member", "method", "association", "registration")
     list_filter = ("status", "method", "typ", AssociationFilter, MemberFilter)
 
 

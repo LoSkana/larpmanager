@@ -222,7 +222,7 @@ class BaseTestCase(TestCase):
             "member": self.get_member(),
             "value": Decimal("100.00"),
             "association": self.get_association(),
-            "reg": self.get_registration(),
+            "registration": self.get_registration(),
             "pay": PaymentChoices.MONEY,
             "created": datetime.now(),
         }

@@ -173,7 +173,7 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Pre-fetch all workshop completions
     registrations = list(Registration.objects.filter(run=context["run"], cancellation_date__isnull=True))
-    member_ids = [reg.member_id for reg in registrations]
+    member_ids = [registration.member_id for registration in registrations]
     workshop_ids = [w.id for w in workshops]
 
     # Create set of (member_id, workshop_id) pairs for completed workshops
@@ -184,16 +184,16 @@ def orga_workshops(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Process each active registration for the event run
-    for reg in registrations:
+    for registration in registrations:
         # Count completed workshops for this member using pre-fetched set
-        reg.num = sum(1 for w in workshops if (reg.member_id, w.id) in workshop_completions)
+        registration.num = sum(1 for w in workshops if (registration.member_id, w.id) in workshop_completions)
 
         # Add member to pinocchio list if they haven't completed all workshops
-        if reg.num != len(workshops):
-            context["pinocchio"].append(reg.member)
+        if registration.num != len(workshops):
+            context["pinocchio"].append(registration.member)
 
         # Add registration to main list with completion count
-        context["list"].append(reg)
+        context["list"].append(registration)
 
     return render(request, "larpmanager/orga/workshop/workshops.html", context)
 

@@ -101,7 +101,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="invoices",
@@ -119,7 +119,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
         indexes: ClassVar[list] = [
             models.Index(fields=["key", "status"]),
             models.Index(fields=["association", "cod"]),
-            models.Index(fields=["reg", "status", "-created"]),
+            models.Index(fields=["registration", "status", "-created"]),
             models.Index(fields=["status", "-created"]),
         ]
 
@@ -327,7 +327,7 @@ class AccountingItem(UuidMixin, BaseModel):
 class AccountingItemTransaction(AccountingItem):
     """Represents AccountingItemTransaction model."""
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="accounting_items_t",
@@ -411,7 +411,7 @@ class AccountingItemPayment(AccountingItem):
 
     pay = models.CharField(max_length=1, choices=PaymentChoices.choices, default=PaymentChoices.MONEY)
 
-    reg = models.ForeignKey(
+    registration = models.ForeignKey(
         Registration,
         on_delete=models.CASCADE,
         related_name="accounting_items_p",
@@ -426,7 +426,7 @@ class AccountingItemPayment(AccountingItem):
     vat_options = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
-        indexes: ClassVar[list] = [models.Index(fields=["pay", "reg"])]
+        indexes: ClassVar[list] = [models.Index(fields=["pay", "registration"])]
 
 
 class AccountingItemExpense(AccountingItem):

@@ -159,7 +159,7 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
                     entity_id = character.mirror_id
 
                 # Create character assignment relationship
-                RegistrationCharacterRel.objects.create(character_id=entity_id, reg=registration)
+                RegistrationCharacterRel.objects.create(character_id=entity_id, registration=registration)
             else:
                 trait = get_element_event(context, entity_uuid, Trait)
                 # Create trait assignment for non-character types
@@ -223,7 +223,7 @@ def get_casting_choices_characters(
 
     # Get characters that are already registered for this run
     registered_character_ids = set(
-        RegistrationCharacterRel.objects.filter(reg__run=context["run"]).values_list("character_id", flat=True)
+        RegistrationCharacterRel.objects.filter(registration__run=context["run"]).values_list("character_id", flat=True)
     )
 
     # Process all characters for the event (excluding hidden ones)
@@ -297,7 +297,7 @@ def check_player_skip_characters(relation: RegistrationCharacterRel, context: di
     )
 
     # Check if current character count meets or exceeds limit
-    return RegistrationCharacterRel.objects.filter(reg=relation).count() >= max_characters_allowed
+    return RegistrationCharacterRel.objects.filter(registration=relation).count() >= max_characters_allowed
 
 
 def check_player_skip_quests(registration: Registration, quest_type: QuestType) -> bool:
@@ -552,7 +552,9 @@ def _get_player_info(players: dict, registration: Registration) -> None:
     )
 
 
-def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, nopes: dict, reg: Registration) -> list:
+def _get_player_preferences(
+    allowed: set | None, castings: dict, chosen: dict, nopes: dict, registration: Registration
+) -> list:
     """Get player preferences from casting data.
 
     Processes casting choices for a registration, filtering by allowed elements
@@ -563,7 +565,7 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
         castings: Dictionary mapping member IDs to their casting choices
         chosen: Dictionary to track chosen elements (modified in-place)
         nopes: Dictionary to track rejected elements by member (modified in-place)
-        reg: Registration object containing member information
+        registration: Registration object containing member information
 
     Returns:
         List of preference elements for the player
@@ -573,9 +575,9 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
     preferences = []
 
     # Check if this member has any casting choices
-    if reg.member.uuid in castings:
+    if registration.member.uuid in castings:
         # Process each casting choice for this member
-        for casting_choice in castings[reg.member.uuid]:
+        for casting_choice in castings[registration.member.uuid]:
             # Skip elements not in allowed set (if filtering is enabled)
             if allowed and casting_choice.element not in allowed:
                 continue
@@ -587,9 +589,9 @@ def _get_player_preferences(allowed: set | None, castings: dict, chosen: dict, n
 
             # Track rejected preferences ("nopes") for this member
             if casting_choice.nope:
-                if reg.member.uuid not in nopes:
-                    nopes[reg.member.uuid] = []
-                nopes[reg.member.uuid].append(element)
+                if registration.member.uuid not in nopes:
+                    nopes[registration.member.uuid] = []
+                nopes[registration.member.uuid].append(element)
 
     return preferences
 

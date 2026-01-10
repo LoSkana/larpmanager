@@ -646,18 +646,18 @@ def lookup(obj: Any, prop: str) -> Any:
 
 
 @register.simple_tag
-def get_registration_option(reg: Any, number: Any) -> Any:
+def get_registration_option(registration: Any, number: Any) -> Any:
     """Template tag to get registration option form text.
 
     Args:
-        reg: Registration instance
+        registration: Registration instance
         number (int): Option number
 
     Returns:
         str: Option form text or empty string
 
     """
-    v = getattr(reg, f"option_{number}")
+    v = getattr(registration, f"option_{number}")
     if v:
         return v.get_form_text()
     return ""

@@ -27,10 +27,10 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_reg_provisional
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_reg_counts
+from larpmanager.cache.registration import get_registration_counts
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.event import Event, PreRegistration, Run
 from larpmanager.models.form import (
@@ -73,9 +73,9 @@ def registration_available(run: Run, features: dict, run_status: dict, context: 
         return
 
     # Get registration counts if not provided
-    registration_counts = context.get("reg_counts")
+    registration_counts = context.get("registration_counts")
     if registration_counts is None:
-        registration_counts = get_reg_counts(run)
+        registration_counts = get_registration_counts(run)
 
     # Calculate remaining primary tickets
     remaining_primary_tickets = run.event.max_pg - registration_counts.get("count_player", 0)
@@ -241,7 +241,7 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
 
     # Build base registration message with ticket info if available
     registration_message = _("Registration confirmed")
-    is_provisional = is_reg_provisional(registration, features=features, event=run.event, context=context)
+    is_provisional = is_registration_provisional(registration, features=features, event=run.event, context=context)
 
     # Update message for provisional registrations
     if is_provisional:
@@ -409,7 +409,7 @@ def registration_status(  # noqa: C901
         context: Dict context dictionary, optionally containing cached data for efficiency:
             - my_regs: Pre-filtered user registrations
             - features_map: Cached features mapping
-            - reg_counts: Pre-calculated registration counts dictionary
+            - registration_counts: Pre-calculated registration counts dictionary
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
             - pre_registrations_dict: Dictionary mapping event IDs to PreRegistration objects
@@ -655,7 +655,7 @@ def registration_status_characters(
     if character_rels_dict is not None:
         registration_character_rels = character_rels_dict.get(registration.id, [])
     else:
-        query = RegistrationCharacterRel.objects.filter(reg_id=registration.id)
+        query = RegistrationCharacterRel.objects.filter(registration_id=registration.id)
         registration_character_rels = query.order_by("character__number").select_related("character")
 
     # Check if character approval is required for this event
@@ -769,12 +769,14 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
     # Fetch text answers for all relevant questions
     text_answers_by_question = {}
-    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids_cache, reg=instance):
+    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids_cache, registration=instance):
         text_answers_by_question[answer.question_id] = answer.text
 
     # Fetch choice answers and group by question
     choice_options_by_question = {}
-    for choice in RegistrationChoice.objects.filter(question_id__in=question_ids_cache, reg=instance).select_related(
+    for choice in RegistrationChoice.objects.filter(
+        question_id__in=question_ids_cache, registration=instance
+    ).select_related(
         "option",
     ):
         if choice.question_id not in choice_options_by_question:
@@ -883,7 +885,7 @@ def check_assign_character(context: dict) -> None:
         return
 
     # Auto-assign the first active character to the registration
-    RegistrationCharacterRel.objects.create(character_id=active_characters[0].id, reg=registration)
+    RegistrationCharacterRel.objects.create(character_id=active_characters[0].id, registration=registration)
 
 
 def get_reduced_available_count(run: Any) -> int:
@@ -961,7 +963,7 @@ def process_registration_event_change(registration: Registration) -> None:
 
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event
-    for registration_choice in RegistrationChoice.objects.filter(reg=registration):
+    for registration_choice in RegistrationChoice.objects.filter(registration=registration):
         question_name = registration_choice.question.name
         option_name = registration_choice.option.name
 
@@ -982,7 +984,7 @@ def process_registration_event_change(registration: Registration) -> None:
 
     # Process all registration answers (free-form question responses)
     # Attempt to preserve answers by finding matching questions
-    for registration_answer in RegistrationAnswer.objects.filter(reg=registration):
+    for registration_answer in RegistrationAnswer.objects.filter(registration=registration):
         question_name = registration_answer.question.name
 
         try:

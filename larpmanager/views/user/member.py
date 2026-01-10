@@ -810,7 +810,7 @@ def vote(request: HttpRequest) -> HttpResponse:
         que = AccountingItemMembership.objects.filter(association_id=context["association_id"], year=context["year"])
         if not que.filter(member_id=context["member"].id).exists():
             messages.error(request, _("You must complete payment of membership dues in order to vote!"))
-            return redirect("acc_membership")
+            return redirect("accounting_membership")
 
     # Check if user has already voted this year
     que = Vote.objects.filter(member=context["member"], association_id=context["association_id"], year=context["year"])
@@ -1011,7 +1011,7 @@ def registrations(request: HttpRequest) -> HttpResponse:
 
     # Get user's registrations filtered by association for caching optimization
     my_regs = Registration.objects.filter(member=context["member"], run__event_id=context["association_id"])
-    my_regs_dict = {reg.run_id: reg for reg in my_regs}
+    my_regs_dict = {registration.run_id: registration for registration in my_regs}
 
     # Prepare context data
     context.update(
@@ -1023,10 +1023,10 @@ def registrations(request: HttpRequest) -> HttpResponse:
     )
 
     # Process each registration to calculate status and append to results
-    for reg in my_regs:
+    for registration in my_regs:
         # Calculate registration status
-        reg.run.status = registration_status(reg.run, context["member"], context)
-        nt.append(reg)
+        registration.run.status = registration_status(registration.run, context["member"], context)
+        nt.append(registration)
 
     # Render template with processed registration list
     context["registration_list"] = nt
