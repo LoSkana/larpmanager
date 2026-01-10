@@ -56,7 +56,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Ticket Your registration ticket Ticket")
 
     # Add features
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Additional tickets").check()
     page.get_by_role("checkbox", name="Dynamic rates").check()
     page.get_by_role("checkbox", name="Surcharge").check()
@@ -154,7 +154,7 @@ def signup(page: Any, live_server: Any) -> None:
 def check_filler(page: Any, live_server: Any) -> None:
     # set up filler
     go_to(page, live_server, "test/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Filler").check()
     submit_confirm(page)
     page.get_by_role("link", name="Event").click()
@@ -172,7 +172,7 @@ def check_filler(page: Any, live_server: Any) -> None:
 
     # enable config
     go_to(page, live_server, "test/manage")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Ticket Filler ").click()
     page.locator("#id_filler_always").check()
     submit_confirm(page)

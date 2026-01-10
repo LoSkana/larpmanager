@@ -52,7 +52,7 @@ def test_upload_download(pw_page: Any) -> None:
 
     # prepare
     go_to(page, live_server, "/test/manage/")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     check_feature(page, "Factions")
     check_feature(page, "Plots")
@@ -89,7 +89,7 @@ def abilities(page: Any) -> None:
     page.locator("#id_name").fill("test")
     submit_confirm(page)
 
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Experience points ").click()
     page.locator("#id_px_user").check()
     submit_confirm(page)
@@ -121,7 +121,7 @@ def full(page: Any) -> None:
 
 
 def relationships(page: Any) -> None:
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Relationships")
     submit_confirm(page)
     page.get_by_role("link", name="Upload").click()

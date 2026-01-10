@@ -117,7 +117,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testaccess/manage/")
 
     # Enable Characters feature
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     submit_confirm(page)
 
@@ -136,7 +136,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     # Test 2: Enable gallery_hide_login and verify non-authenticated users cannot access
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     submit_confirm(page)
@@ -158,7 +158,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").uncheck()
     page.locator("#id_gallery_hide_signup").check()
@@ -206,7 +206,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").check()
     page.locator("#id_gallery_hide_signup").check()
@@ -240,7 +240,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Verify both configs are still enabled
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
     expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
@@ -257,7 +257,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Cleanup: Disable both configs
     go_to(page, live_server, "/testaccess/manage/")
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Gallery ").click()
     page.locator("#id_gallery_hide_login").uncheck()
     page.locator("#id_gallery_hide_signup").uncheck()

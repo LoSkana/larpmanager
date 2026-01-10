@@ -54,7 +54,7 @@ def test_character_your_acc_pay_ticket_link(pw_page: Any) -> None:
 def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage")
     # Setup NPC ticket
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Tickets ").click()
     page.locator("#id_ticket_npc").check()
     submit_confirm(page)
@@ -90,7 +90,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
 def check_character_your_link(page: Any, live_server: Any) -> None:
     # Test character your link
     go_to(page, live_server, "/test/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registrations").click()
@@ -130,7 +130,7 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
 
     # set up payments
     go_to(page, live_server, "/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
@@ -163,7 +163,7 @@ def check_acc_pay_link(page: Any, live_server: Any) -> None:
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # Add first event factions
     go_to(page, live_server, "/test/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)
     page.get_by_role("link", name="New").click()
@@ -188,7 +188,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # add second event in campaing
     go_to(page, live_server, "/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Campaign").check()
     submit_confirm(page)
     page.get_by_role("link", name="Events").click()
@@ -208,12 +208,12 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check we have for now the same factions
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("link", name="Factions").click()
     expect_normalized(page, page.locator("#one"), "primaaa Primary tranver Transversal")
 
     # set independ factions, check
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Campaign ").click()
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
@@ -258,7 +258,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 def acc_refund(page: Any, live_server: Any) -> None:
     # activate features
     go_to(page, live_server, "/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Tokens").check()
     page.get_by_role("checkbox", name="Credits").check()
     page.get_by_role("checkbox", name="Refunds").check()

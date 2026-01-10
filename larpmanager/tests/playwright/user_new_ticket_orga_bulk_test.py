@@ -58,7 +58,7 @@ def test_user_new_ticket_orga_bulk(pw_page: Any) -> None:
 def bulk_writing(live_server: Any, page: Any) -> None:
     # set feature
     go_to(page, live_server, "test/manage/")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
@@ -318,7 +318,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
 
 def new_ticket(live_server: Any, page: Any) -> None:
     # add feature for ticket for new players
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
 
@@ -358,7 +358,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # add feature also to this
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
 

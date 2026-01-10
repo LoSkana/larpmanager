@@ -55,12 +55,12 @@ def test_user_character_option_reg_ticket(pw_page: Any) -> None:
 
 def prepare(page: Any) -> None:
     # configure event
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
 
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Player editor ").click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")

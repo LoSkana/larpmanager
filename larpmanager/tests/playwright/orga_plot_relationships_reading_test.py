@@ -50,7 +50,7 @@ def test_plot_relationship_reading(pw_page: Any) -> None:
     # prepare
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     check_feature(page, "Plots")
     check_feature(page, "Relationships")
@@ -87,7 +87,7 @@ def reading(live_server: Any, page: Any) -> None:
     )
 
     # test reading with factions
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Factions")
     submit_confirm(page)
 

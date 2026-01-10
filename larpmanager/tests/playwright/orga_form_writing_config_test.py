@@ -51,7 +51,7 @@ def test_orga_form_writing_config(pw_page: Any) -> None:
 
 def feature_fields(page: Any) -> None:
     # set feature
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
 
@@ -62,7 +62,7 @@ def feature_fields(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_title").check()
     submit_confirm(page)
@@ -72,7 +72,7 @@ def feature_fields(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
 
     # add config fields - cover, assigned
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_title").uncheck()
     page.locator("#id_writing_cover").check()
@@ -89,7 +89,7 @@ def feature_fields(page: Any) -> None:
 
 def feature_fields2(page: Any, live_server: Any) -> None:
     # add config hide, assigned
-    page.get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Writing ").click()
     page.locator("#id_writing_assigned").uncheck()
     page.locator("#id_writing_cover").uncheck()
@@ -104,7 +104,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     )
 
     # set experience point
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Experience points").check()
     submit_confirm(page)
 
@@ -133,7 +133,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     )
 
     # remove px
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Experience points").uncheck()
     submit_confirm(page)
 
@@ -146,7 +146,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
 
 def form_other_writing(page: Any) -> None:
     # add other writing elements
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
     page.get_by_role("checkbox", name="Quests and Traits").check()
