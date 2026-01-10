@@ -510,7 +510,7 @@ urlpatterns = [
         name="exe_close_suggestion",
     ),
     path(
-        "sticky-message/dismiss/<uuid:message_uuid>/",
+        "sticky-message/dismiss/<slug:message_uuid>/",
         views_mg.dismiss_sticky_message,
         name="dismiss_sticky_message",
     ),

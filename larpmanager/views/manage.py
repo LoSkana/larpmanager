@@ -60,7 +60,7 @@ from larpmanager.models.registration import RegistrationInstallment, Registratio
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
-from larpmanager.utils.core.sticky import get_sticky_messages
+from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
 from larpmanager.utils.services.edit import set_suggestion
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.users.registration import registration_available
@@ -1129,7 +1129,7 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> H
 def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonResponse:
     """Dismiss a sticky message via AJAX."""
 
-    success = dismiss_sticky_message(request.user.member, message_uuid)
+    success = dismiss_sticky(request.user.member, message_uuid)
 
     if success:
         return JsonResponse({"status": "ok"})

@@ -190,7 +190,7 @@ def _process_sticky(
     active_messages.append(message_with_id)
 
 
-def dismiss_sticky_message(member: Member, message_id: str) -> bool:
+def dismiss_sticky(member: Member, message_id: str) -> bool:
     """Dismiss a sticky message for a member.
 
     Args:
