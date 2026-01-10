@@ -87,7 +87,7 @@ def reading(live_server: Any, page: Any) -> None:
     )
 
     # test reading with factions
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     check_feature(page, "Factions")
     submit_confirm(page)
 

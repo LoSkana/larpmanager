@@ -86,7 +86,7 @@ def check_orga_preferences(page: Any) -> None:
     expect(page.locator("#id_open_registration_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_registration_1_2")).to_be_checked()
     expect(page.locator("#id_open_registration_1_3")).not_to_be_checked()
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     check_feature(page, "Characters")
     submit_confirm(page)
     page.get_by_role("link", name="Preferences", exact=True).click()
@@ -101,7 +101,7 @@ def check_orga_preferences(page: Any) -> None:
 
 
 def check_orga_features(page: Any) -> None:
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     checked = ["Participant cancellation", "Character customization", "Secret link", "Sections"]
     for s in checked:
         check_feature(page, s)
@@ -111,7 +111,7 @@ def check_orga_features(page: Any) -> None:
     expect_normalized(page,
         page.locator("#one"), "You have activated the following features, for each here's the links to follow"
     )
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     _check_checkboxes(checked, page)
 
 
@@ -181,7 +181,7 @@ def check_exe_config(page: Any) -> None:
 
 
 def check_exe_features(page: Any) -> None:
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
 
     checked = ["Template", "Treasurer", "Membership", "Badge"]
     for s in checked:
@@ -189,7 +189,7 @@ def check_exe_features(page: Any) -> None:
 
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Now you can create event templates")
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     _check_checkboxes(checked, page, True)
 
 

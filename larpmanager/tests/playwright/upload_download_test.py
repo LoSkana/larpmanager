@@ -121,7 +121,7 @@ def full(page: Any) -> None:
 
 
 def relationships(page: Any) -> None:
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     check_feature(page, "Relationships")
     submit_confirm(page)
     page.get_by_role("link", name="Upload").click()

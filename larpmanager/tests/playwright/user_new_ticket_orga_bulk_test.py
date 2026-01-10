@@ -358,7 +358,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # add feature also to this
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
 

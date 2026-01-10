@@ -162,7 +162,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
 
 def prologues(page: Any) -> None:
     # activate prologues
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Prologues").check()
     submit_confirm(page)
 

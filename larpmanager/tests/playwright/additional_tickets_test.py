@@ -70,7 +70,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
 
     # Enable additional tickets feature
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Additional tickets").check()
     submit_confirm(page)
 
@@ -183,7 +183,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Enable multiple features
     go_to(page, live_server, "test/manage")
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
     page.get_by_role("checkbox", name="Additional tickets").check()
     page.get_by_role("checkbox", name="Pay what you want").check()
     submit_confirm(page)
@@ -226,7 +226,7 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
 
     # Make sure additional tickets feature is disabled
     go_to(page, live_server, "test/manage")
-    page.get_by_role("link", name="Features").click()
+    page.locator("#orga_features").get_by_role("link", name="Features").click()
 
     # Uncheck additional tickets if it's checked
     if page.get_by_role("checkbox", name="Additional tickets").is_checked():
