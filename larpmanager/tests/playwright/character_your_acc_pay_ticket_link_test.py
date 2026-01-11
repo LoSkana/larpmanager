@@ -195,7 +195,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New event").click()
     page.locator("#id_form1-name").click()
     page.locator("#id_form1-name").fill("second")
-    page.locator("#select2-id_parent-container").click()
+    page.locator("#select2-id_form1-parent-container").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="Test Larp").click()
 
