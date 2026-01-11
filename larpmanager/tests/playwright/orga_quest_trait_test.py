@@ -74,7 +74,7 @@ def quests(page: Any, live_server: Any) -> None:
     # Activate features
     page.get_by_role("link", name="").click()
     page.get_by_role("link", name=" Test Larp").click()
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     check_feature(page, "Characters")
     check_feature(page, "Casting algorithm")
     check_feature(page, "Quests and Traits")
@@ -194,7 +194,7 @@ def signups(page: Any, live_server: Any) -> None:
 
 def casting(page: Any, live_server: Any) -> None:
     # config casting
-    page.locator("#orga_config").get_by_role("link", name="Configuration").click()
+    page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name="Casting ").click()
     page.get_by_text("Maximum number of preferences").click()
     page.locator("#id_casting_max").click()

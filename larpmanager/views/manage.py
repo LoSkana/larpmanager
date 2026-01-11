@@ -1,3 +1,23 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 from typing import Any
@@ -6,7 +26,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.forms import ChoiceField, Form
-from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -32,7 +52,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.experience import AbilityTypePx, DeliveryPx
 from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
 from larpmanager.models.member import Membership, MembershipStatus
@@ -40,6 +60,7 @@ from larpmanager.models.registration import RegistrationInstallment, Registratio
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.base import check_association_context, check_event_context, get_context, get_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_datetime
+from larpmanager.utils.core.sticky import get_sticky_messages, dismiss_sticky
 from larpmanager.utils.services.edit import set_suggestion
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.users.registration import registration_available
@@ -193,17 +214,6 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     if context.get("onboarding") and "exe_events" in features:
         return redirect("exe_events_edit", event_uuid="0")
 
-    # Redirect to quick setup if not completed
-    if not get_association_config(
-        context["association_id"], "exe_quick_suggestion", default_value=False, context=context
-    ):
-        setup_message = _(
-            "Before accessing the organization dashboard, please complete the quick setup by selecting "
-            "the features most useful for your organization",
-        )
-        messages.success(request, setup_message)
-        return redirect("exe_quick")
-
     # Get ongoing runs (events in START or SHOW development status)
     ongoing_runs_queryset = Run.objects.filter(
         event__association_id=context["association_id"],
@@ -232,6 +242,9 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     _exe_actions(request, context, features)
     _exe_suggestions(context)
 
+    # Add sticky messages for the current user
+    context["sticky_messages"] = get_sticky_messages(context, context["member"])
+
     # Compile final context and check for intro driver
     _compile(request, context)
     _check_intro_driver(context)
@@ -246,7 +259,9 @@ def _exe_suggestions(context: dict) -> None:
         context: Context dictionary containing association ID and other data
 
     """
+
     suggestions = {
+        "exe_quick": _("Quickly configure your organization's most important settings"),
         "exe_methods": _("Set up the payment methods available to participants"),
         "exe_profile": _("Define which data will be asked in the profile form to the users once they sign up"),
         "exe_roles": _(
@@ -364,7 +379,6 @@ def _exe_users_actions(request: HttpRequest, context: dict, enabled_features: di
 
     Args:
         request: HTTP request object
-        association: Association instance
         context: Context dictionary to populate with actions
         enabled_features: Set of enabled features
 
@@ -462,15 +476,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
         messages.success(request, message)
         return redirect("orga_run", event_slug=event_slug)
 
-    # Ensure quick setup is complete
-    if not get_event_config(context["event"].id, "orga_quick_suggestion", default_value=False, context=context):
-        message = _(
-            "Before accessing the event dashboard, please complete the quick setup by selecting "
-            "the features most useful for your event",
-        )
-        messages.success(request, message)
-        return redirect("orga_quick", event_slug=event_slug)
-
     # Load permissions and navigation
     get_index_event_permissions(request, context, event_slug)
     if get_association_config(context["association_id"], "interface_admin_links", default_value=False, context=context):
@@ -500,6 +505,9 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     _orga_actions_priorities(request, context)
     _orga_suggestions(context)
     _compile(request, context)
+
+    # Add sticky messages for the current user (filtered by event UUID)
+    context["sticky_messages"] = get_sticky_messages(context, context["member"], element_uuid=str(context["event"].uuid))
 
     # Mobile shortcuts handling
     if get_event_config(context["event"].id, "show_shortcuts_mobile", default_value=False, context=context):
@@ -920,15 +928,15 @@ def _orga_suggestions(context: dict) -> None:
         context: Context dictionary to add suggestions to
 
     """
-    priorities = {
+    actions = {
         "orga_quick": _("Quickly configure your events's most important settings"),
         "orga_registration_tickets": _("Set up the tickets that users can select during registration"),
     }
 
-    for permission_slug, suggestion_text in priorities.items():
+    for permission_slug, suggestion_text in actions.items():
         if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
             continue
-        _add_priority(context, suggestion_text, permission_slug)
+        _add_action(context, suggestion_text, permission_slug)
 
     suggestions = {
         "orga_registration_form": _(
@@ -1117,6 +1125,17 @@ def orga_close_suggestion(request: HttpRequest, event_slug: str, perm: str) -> H
     return redirect("manage", event_slug=event_slug)
 
 
+@login_required
+def dismiss_sticky_message(request: HttpRequest, message_uuid: str) -> JsonResponse:
+    """Dismiss a sticky message via AJAX."""
+
+    success = dismiss_sticky(request.user.member, message_uuid)
+
+    if success:
+        return JsonResponse({"status": "ok"})
+    return JsonResponse({"status": "error", "message": "Message not found"}, status=404)
+
+
 def _check_intro_driver(context: dict) -> None:
     """Check if intro driver should be shown and update context."""
     member = context["member"]
@@ -1204,7 +1223,11 @@ class WhatWouldYouLikeForm(Form):
         self._add_guides_tutorials(choices)
 
         # Create the choice field with populated options and Select2 widget
-        self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
+        self.fields["wwyltd"] = ChoiceField(
+            choices=[("", _("What would you like to do?"))] + choices,
+            required=False,
+            widget=Select2Widget(attrs={"data-placeholder": _("What would you like to do?")}),
+        )
 
     @staticmethod
     def _add_guides_tutorials(content_choices: list[tuple[str, str]]) -> None:
@@ -1276,6 +1299,9 @@ class WhatWouldYouLikeForm(Form):
         as choice tuples to the choices list. Event-related permissions are
         prioritized and added first.
 
+        In orga context (event-specific), only event_pms are added.
+        In exe context (organization-wide), only association_pms are added.
+
         Args:
             choices: List of choice tuples to extend with function choices.
                     Each tuple contains (value, display_name).
@@ -1284,8 +1310,16 @@ class WhatWouldYouLikeForm(Form):
         event_priority_choices = []
         regular_choices = []
 
+        # Determine which permission types to include based on context
+        if self.context.get("orga_page"):
+            permission_types = ["event_pms"]
+        elif self.context.get("exe_page"):
+            permission_types = ["association_pms"]
+        else:
+            permission_types = []
+
         # Add to choices all links in the current interface
-        for permission_type in ["event_pms", "association_pms"]:
+        for permission_type in permission_types:
             all_permissions = self.context.get(permission_type, {})
 
             # Iterate through modules and their permission lists
@@ -1309,41 +1343,68 @@ class WhatWouldYouLikeForm(Form):
 
 
 def what_would_you_like(context: dict, request: HttpRequest) -> None:
-    """Handle "What would you like to do?" form submission and display.
+    """Handle "What would you like to do?" form display.
 
-    Processes POST requests to redirect users based on their selected choice,
-    or displays the form for GET requests. Uses RedirectError for navigation.
+    Displays the form for GET requests. POST handling is done via AJAX.
 
     Args:
         context: Template context dictionary to store form data
         request: HTTP request object containing POST data or GET request
 
-    Raises:
-        RedirectError: Always raised for navigation (success or error cases)
-
     """
-    if request.POST:
-        # Process form submission with POST data
-        form = WhatWouldYouLikeForm(request.POST, context=context)
-
-        if form.is_valid():
-            # Extract user's choice from validated form
-            user_choice = form.cleaned_data["wwyltd"]
-
-            try:
-                # Get redirect URL based on user's choice
-                redirect_url = _get_choice_redirect_url(user_choice, context)
-                raise RedirectError(redirect_url)
-            except ValueError as error:
-                # Handle invalid choice with error message
-                messages.error(request, str(error))
-                raise RedirectError(request.path) from error
-    else:
-        # Display empty form for GET requests
-        form = WhatWouldYouLikeForm(context=context)
+    # Display form
+    form = WhatWouldYouLikeForm(context=context)
 
     # Add form to template context
     context["form"] = form
+
+
+@login_required
+def wwyltd_ajax(request: HttpRequest) -> JsonResponse:
+    """AJAX endpoint for "What would you like to do?" form submission.
+
+    Processes POST requests and returns JSON with redirect URL to open in new tab.
+
+    Args:
+        request: HTTP request object containing POST data
+
+    Returns:
+        JsonResponse: {"success": True, "url": "..."} or {"success": False, "error": "..."}
+
+    """
+    if request.method != "POST":
+        return JsonResponse({"success": False, "error": _("Invalid request method")}, status=405)
+
+    # Get context based on request path
+    context = get_context(request)
+
+    # Check if this is an event-specific or organization-wide request
+    event_slug = request.POST.get("event_slug")
+    if event_slug:
+        context = get_event_context(request, event_slug)
+        get_index_event_permissions(context, request, context["run"].id)
+        context["orga_page"] = 1
+    else:
+        get_index_association_permissions(context, request, context["association_id"])
+        context["exe_page"] = 1
+
+    # Process form submission
+    form = WhatWouldYouLikeForm(request.POST, context=context)
+
+    if form.is_valid():
+        # Extract user's choice from validated form
+        user_choice = form.cleaned_data["wwyltd"]
+
+        try:
+            # Get redirect URL based on user's choice
+            redirect_url = _get_choice_redirect_url(user_choice, context)
+            return JsonResponse({"success": True, "url": redirect_url})
+        except ValueError as error:
+            return JsonResponse({"success": False, "error": str(error)}, status=400)
+
+    # Form validation failed
+    errors = form.errors.as_json()
+    return JsonResponse({"success": False, "error": errors}, status=400)
 
 
 def _get_choice_redirect_url(choice: str, context: dict) -> str:

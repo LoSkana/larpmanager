@@ -129,7 +129,7 @@ def prepare(page: Any, live_server: Any) -> None:
     # prepare
     login_orga(page, live_server)
     go_to(page, live_server, "/test/manage")
-    page.locator("#orga_features").get_by_role("link", name="Features").click()
+    page.get_by_role("link", name="Features").first.click()
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)
