@@ -6,15 +6,12 @@
 {% block content %}
     <div id="manage">
         {% include "larpmanager/manage/sticky_messages.html" %}
-        <p>
-            <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
-        </p>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.wwyltd }}
-            <button type="submit">{% trans "Go" %}</button>
-        </form>
-        <hr />
+        <div id="wwyltd">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.wwyltd }}
+            </form>
+        </div>
         {% with list=priorities typ="priorities" %}
             {% include "larpmanager/manage/helpers.html" %}
         {% endwith %}
@@ -115,6 +112,9 @@
                 </a>
             </div>
         </div>
+        <p>
+            <a href="#" id="intro_driver">{% trans "Launch guided interface tour" %}</a>
+        </p>
     </div>
 {% endblock content %}
 {% block css %}
@@ -124,6 +124,7 @@
 {% block js %}
     {% include "elements/tutorial_query.js" %}
     {% include "elements/manage_driver.js.html" %}
+    {% include "elements/wwyltd.js.html" %}
     <script>
     window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {

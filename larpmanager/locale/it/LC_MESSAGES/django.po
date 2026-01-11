@@ -8,9 +8,6 @@ msgstr "e"
 msgid "By"
 msgstr "Da"
 
-msgid "Go"
-msgstr "Vai"
-
 msgid "Hi"
 msgstr "Ciao"
 
@@ -2978,6 +2975,9 @@ msgstr "Campi aggiuntivi"
 msgid "All comunications"
 msgstr "Tutte le comunicazioni"
 
+msgid "An error occurred"
+msgstr "Si è verificato un errore"
+
 msgid "Answer submitted!"
 msgstr "Risposta sottomessa!"
 
@@ -3815,6 +3815,9 @@ msgstr "Segui i seguenti passaggi"
 msgid "How can we contact you"
 msgstr "Come possiamo contattarti"
 
+msgid "Invalid request method"
+msgstr "Metodo di richiesta non valido"
+
 msgid "Join the waiting list!"
 msgstr "Iscriviti in lista d'attesa!"
 
@@ -4334,6 +4337,9 @@ msgstr "Visualizza le foto dell'evento"
 
 msgid "Waiting list registrations"
 msgstr "Iscrizioni in lista d'attesa"
+
+msgid "What would you like to do?"
+msgstr "Cosa ti piacerebbe fare?"
 
 msgid "Wrong number of characters"
 msgstr "Numero di personaggi errato"
@@ -6772,6 +6778,9 @@ msgstr "Vuoi accettare pagamenti elaborati attraverso il sistema"
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Se checkato, rende disponibile la pre-iscrizione per questo evento"
 
+msgid "Manage the event settings: name, description, dates, status"
+msgstr "Gestisci le impostazioni dell'evento: nome, descrizione, date, stato"
+
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr "Nome: %(name)s, slug: %(slug)s, creatore: %(user)s %(email)s"
@@ -7210,6 +7219,9 @@ msgstr ""
 "Copiate e incollate esattamente tutto il testo colorato qui sotto negli "
 "appunti"
 
+msgid "Create and manage events and their setting - names, dates, status"
+msgstr "Crea e gestisci gli eventi e la loro impostazioni: nomi, date, stato"
+
 msgid "Current status of the membership application and approval process"
 msgstr ""
 "Stato attuale della richiesta di adesione e del processo di approvazione"
@@ -7361,10 +7373,6 @@ msgid "Indicate an organization contact address for sending communications"
 msgstr ""
 "Indica un indirizzo di contatto dell'organizzazione per l'invio di "
 "comunicazioni"
-
-msgid "Manage the event settings: name, description, dates, and other data"
-msgstr ""
-"Gestisci le impostazioni dell'evento: nome, descrizione, date e altri dati"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr "Importo minimo dell'utile netto da lasciare come tassa organizzativa"
@@ -8481,13 +8489,6 @@ msgid ""
 msgstr ""
 "Per partecipare a questo evento, dovrai versare in futuro la quota sociale "
 "annuale di"
-
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-"Crea e gestisci eventi, impostando nomi, date, stato e dettagli di "
-"registrazione"
 
 msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "

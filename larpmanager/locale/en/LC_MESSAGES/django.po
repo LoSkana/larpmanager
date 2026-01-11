@@ -4723,6 +4723,9 @@ msgstr ""
 msgid "Hi"
 msgstr ""
 
+msgid "An error occurred"
+msgstr ""
+
 msgid "No organization found"
 msgstr ""
 
@@ -5970,12 +5973,6 @@ msgid ""
 "and events"
 msgstr ""
 
-msgid "Launch guided interface tour"
-msgstr ""
-
-msgid "Go"
-msgstr ""
-
 msgid "Dates"
 msgstr ""
 
@@ -5983,6 +5980,9 @@ msgid "Counts"
 msgstr ""
 
 msgid "registrations"
+msgstr ""
+
+msgid "Launch guided interface tour"
 msgstr ""
 
 msgid "Feature activated"
@@ -8590,9 +8590,7 @@ msgstr ""
 msgid "Containers"
 msgstr ""
 
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
+msgid "Create and manage events and their setting - names, dates, status"
 msgstr ""
 
 msgid "Pre-Registrations"
@@ -8685,7 +8683,7 @@ msgid ""
 "Customize translations of words and phrases in the organization interface"
 msgstr ""
 
-msgid "Manage the event settings: name, description, dates, and other data"
+msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
 
 msgid "Assign crew roles and grant specific access to event functions"
@@ -9620,7 +9618,13 @@ msgstr ""
 msgid "Set specific values for configuration of features of the event"
 msgstr ""
 
+msgid "What would you like to do?"
+msgstr ""
+
 msgid "Dashboard"
+msgstr ""
+
+msgid "Invalid request method"
 msgstr ""
 
 msgid "Invalid choice format"

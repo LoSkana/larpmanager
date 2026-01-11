@@ -524,4 +524,9 @@ urlpatterns = [
         views_ed.working_ticket,
         name="working_ticket",
     ),
+    path(
+        "manage/wwyltd/ajax/",
+        views_mg.wwyltd_ajax,
+        name="wwyltd_ajax",
+    ),
 ]

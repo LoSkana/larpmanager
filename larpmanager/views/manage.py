@@ -1223,7 +1223,11 @@ class WhatWouldYouLikeForm(Form):
         self._add_guides_tutorials(choices)
 
         # Create the choice field with populated options and Select2 widget
-        self.fields["wwyltd"] = ChoiceField(choices=choices, widget=Select2Widget)
+        self.fields["wwyltd"] = ChoiceField(
+            choices=[("", _("What would you like to do?"))] + choices,
+            required=False,
+            widget=Select2Widget(attrs={"data-placeholder": _("What would you like to do?")}),
+        )
 
     @staticmethod
     def _add_guides_tutorials(content_choices: list[tuple[str, str]]) -> None:
@@ -1295,6 +1299,9 @@ class WhatWouldYouLikeForm(Form):
         as choice tuples to the choices list. Event-related permissions are
         prioritized and added first.
 
+        In orga context (event-specific), only event_pms are added.
+        In exe context (organization-wide), only association_pms are added.
+
         Args:
             choices: List of choice tuples to extend with function choices.
                     Each tuple contains (value, display_name).
@@ -1303,8 +1310,16 @@ class WhatWouldYouLikeForm(Form):
         event_priority_choices = []
         regular_choices = []
 
+        # Determine which permission types to include based on context
+        if self.context.get("orga_page"):
+            permission_types = ["event_pms"]
+        elif self.context.get("exe_page"):
+            permission_types = ["association_pms"]
+        else:
+            permission_types = []
+
         # Add to choices all links in the current interface
-        for permission_type in ["event_pms", "association_pms"]:
+        for permission_type in permission_types:
             all_permissions = self.context.get(permission_type, {})
 
             # Iterate through modules and their permission lists
@@ -1328,41 +1343,68 @@ class WhatWouldYouLikeForm(Form):
 
 
 def what_would_you_like(context: dict, request: HttpRequest) -> None:
-    """Handle "What would you like to do?" form submission and display.
+    """Handle "What would you like to do?" form display.
 
-    Processes POST requests to redirect users based on their selected choice,
-    or displays the form for GET requests. Uses RedirectError for navigation.
+    Displays the form for GET requests. POST handling is done via AJAX.
 
     Args:
         context: Template context dictionary to store form data
         request: HTTP request object containing POST data or GET request
 
-    Raises:
-        RedirectError: Always raised for navigation (success or error cases)
-
     """
-    if request.POST:
-        # Process form submission with POST data
-        form = WhatWouldYouLikeForm(request.POST, context=context)
-
-        if form.is_valid():
-            # Extract user's choice from validated form
-            user_choice = form.cleaned_data["wwyltd"]
-
-            try:
-                # Get redirect URL based on user's choice
-                redirect_url = _get_choice_redirect_url(user_choice, context)
-                raise RedirectError(redirect_url)
-            except ValueError as error:
-                # Handle invalid choice with error message
-                messages.error(request, str(error))
-                raise RedirectError(request.path) from error
-    else:
-        # Display empty form for GET requests
-        form = WhatWouldYouLikeForm(context=context)
+    # Display form
+    form = WhatWouldYouLikeForm(context=context)
 
     # Add form to template context
     context["form"] = form
+
+
+@login_required
+def wwyltd_ajax(request: HttpRequest) -> JsonResponse:
+    """AJAX endpoint for "What would you like to do?" form submission.
+
+    Processes POST requests and returns JSON with redirect URL to open in new tab.
+
+    Args:
+        request: HTTP request object containing POST data
+
+    Returns:
+        JsonResponse: {"success": True, "url": "..."} or {"success": False, "error": "..."}
+
+    """
+    if request.method != "POST":
+        return JsonResponse({"success": False, "error": _("Invalid request method")}, status=405)
+
+    # Get context based on request path
+    context = get_context(request)
+
+    # Check if this is an event-specific or organization-wide request
+    event_slug = request.POST.get("event_slug")
+    if event_slug:
+        context = get_event_context(request, event_slug)
+        get_index_event_permissions(context, request, context["run"].id)
+        context["orga_page"] = 1
+    else:
+        get_index_association_permissions(context, request, context["association_id"])
+        context["exe_page"] = 1
+
+    # Process form submission
+    form = WhatWouldYouLikeForm(request.POST, context=context)
+
+    if form.is_valid():
+        # Extract user's choice from validated form
+        user_choice = form.cleaned_data["wwyltd"]
+
+        try:
+            # Get redirect URL based on user's choice
+            redirect_url = _get_choice_redirect_url(user_choice, context)
+            return JsonResponse({"success": True, "url": redirect_url})
+        except ValueError as error:
+            return JsonResponse({"success": False, "error": str(error)}, status=400)
+
+    # Form validation failed
+    errors = form.errors.as_json()
+    return JsonResponse({"success": False, "error": errors}, status=400)
 
 
 def _get_choice_redirect_url(choice: str, context: dict) -> str:

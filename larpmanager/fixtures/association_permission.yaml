@@ -201,8 +201,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Events
-    descr: Create and manage events, setting names, dates, status, and registration
-      details
+    descr: Create and manage events and their setting - names, dates, status
     slug: exe_events
     number: 11
     config: null

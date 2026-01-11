@@ -8,9 +8,6 @@ msgstr "e"
 msgid "By"
 msgstr "Av"
 
-msgid "Go"
-msgstr "Gå"
-
 msgid "Hi"
 msgstr "Hei"
 
@@ -2978,6 +2975,9 @@ msgstr "Ytterligere felt"
 msgid "All comunications"
 msgstr "All kommunikasjon"
 
+msgid "An error occurred"
+msgstr "Det oppsto en feil"
+
 msgid "Answer submitted!"
 msgstr "Underdanig svar!"
 
@@ -3815,6 +3815,9 @@ msgstr "Følg trinnene nedenfor"
 msgid "How can we contact you"
 msgstr "Hvordan kan vi kontakte deg"
 
+msgid "Invalid request method"
+msgstr "Ugyldig forespørselsmetode"
+
 msgid "Join the waiting list!"
 msgstr "Sett deg på venteliste!"
 
@@ -4334,6 +4337,9 @@ msgstr "Se bilder fra arrangementet"
 
 msgid "Waiting list registrations"
 msgstr "Registreringer på venteliste"
+
+msgid "What would you like to do?"
+msgstr "Hva har du lyst til å gjøre?"
 
 msgid "Wrong number of characters"
 msgstr "Feil antall tegn"
@@ -6759,6 +6765,10 @@ msgstr ""
 "Hvis avkrysset, gjør forhåndsregistrering for dette arrangementet "
 "tilgjengelig"
 
+msgid "Manage the event settings: name, description, dates, status"
+msgstr ""
+"Administrer hendelsesinnstillingene: navn, beskrivelse, datoer, status"
+
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr "Navn: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -7155,6 +7165,11 @@ msgstr ""
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopier og lim inn nøyaktig all farget tekst nedenfor i notatene"
 
+msgid "Create and manage events and their setting - names, dates, status"
+msgstr ""
+"Opprett og administrer hendelser og deres innstillinger - navn, datoer, "
+"status"
+
 msgid "Current status of the membership application and approval process"
 msgstr "Status for søknads- og godkjenningsprosessen for medlemskap"
 
@@ -7290,10 +7305,6 @@ msgstr ""
 msgid "Indicate an organization contact address for sending communications"
 msgstr ""
 "Oppgi en kontaktadresse for organisasjonen for sending av kommunikasjon"
-
-msgid "Manage the event settings: name, description, dates, and other data"
-msgstr ""
-"Administrer hendelsesinnstillingene: navn, beskrivelse, datoer og andre data"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -8313,13 +8324,6 @@ msgid ""
 " of"
 msgstr ""
 "For å delta i dette arrangementet må du betale den årlige medlemsavgiften på"
-
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-"Opprett og administrer arrangementer, angi navn, datoer, status og "
-"påmeldingsdetaljer"
 
 msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "

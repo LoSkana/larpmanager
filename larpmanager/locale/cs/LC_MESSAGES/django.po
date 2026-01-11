@@ -8,9 +8,6 @@ msgstr "e"
 msgid "By"
 msgstr "Podle"
 
-msgid "Go"
-msgstr "Přejít na"
-
 msgid "Hi"
 msgstr "Ahoj"
 
@@ -2978,6 +2975,9 @@ msgstr "Další pole"
 msgid "All comunications"
 msgstr "Veškerá komunikace"
 
+msgid "An error occurred"
+msgstr "Došlo k chybě"
+
 msgid "Answer submitted!"
 msgstr "Submisivní odpověď!"
 
@@ -3815,6 +3815,9 @@ msgstr "Postupujte podle následujících kroků"
 msgid "How can we contact you"
 msgstr "Jak vás můžeme kontaktovat"
 
+msgid "Invalid request method"
+msgstr "Neplatná metoda požadavku"
+
 msgid "Join the waiting list!"
 msgstr "Připojte se k čekací listině!"
 
@@ -4334,6 +4337,9 @@ msgstr "Prohlédněte si fotografie z akce"
 
 msgid "Waiting list registrations"
 msgstr "Registrace na čekací listině"
+
+msgid "What would you like to do?"
+msgstr "Co byste chtěli dělat?"
 
 msgid "Wrong number of characters"
 msgstr "Špatný počet znaků"
@@ -6755,6 +6761,9 @@ msgstr "Chcete přijímat platby zpracované prostřednictvím systému"
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Pokud je zaškrtnuto, zpřístupní předběžnou registraci na tuto událost"
 
+msgid "Manage the event settings: name, description, dates, status"
+msgstr "Správa nastavení události: název, popis, data, stav"
+
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr "Jméno: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -7126,6 +7135,9 @@ msgstr "Umožňuje účastníkům kdykoli zrušit vlastní registraci"
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Zkopírujte a vložte do poznámek přesně celý níže uvedený barevný text"
 
+msgid "Create and manage events and their setting - names, dates, status"
+msgstr "Vytváření a správa událostí a jejich nastavení - názvy, data, stavy"
+
 msgid "Current status of the membership application and approval process"
 msgstr "Aktuální stav žádosti o členství a schvalovacího procesu"
 
@@ -7245,9 +7257,6 @@ msgstr "Pokud stránku po přístupu zavřete, ztratíte k ní navždy přístup
 
 msgid "Indicate an organization contact address for sending communications"
 msgstr "Uveďte kontaktní adresu organizace pro zasílání sdělení"
-
-msgid "Manage the event settings: name, description, dates, and other data"
-msgstr "Správa nastavení události: název, popis, data a další údaje"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -8238,13 +8247,6 @@ msgid ""
 msgstr ""
 "Abyste se mohli této akce zúčastnit, musíte zaplatit roční členský poplatek "
 "ve výši"
-
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-"Vytvářet a spravovat události, nastavovat názvy, data, stav a podrobnosti o "
-"registraci"
 
 msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "

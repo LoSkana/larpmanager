@@ -8,9 +8,6 @@ msgstr "e"
 msgid "By"
 msgstr "Av"
 
-msgid "Go"
-msgstr "Gå"
-
 msgid "Hi"
 msgstr "Hej"
 
@@ -2978,6 +2975,9 @@ msgstr "Ytterligare fält"
 msgid "All comunications"
 msgstr "Alla meddelanden"
 
+msgid "An error occurred"
+msgstr "Ett fel inträffade"
+
 msgid "Answer submitted!"
 msgstr "Underkastande svar!"
 
@@ -3815,6 +3815,9 @@ msgstr "Följ stegen nedan"
 msgid "How can we contact you"
 msgstr "Hur kan vi kontakta dig"
 
+msgid "Invalid request method"
+msgstr "Ogiltig metod för begäran"
+
 msgid "Join the waiting list!"
 msgstr "Skriv upp dig på väntelistan!"
 
@@ -4334,6 +4337,9 @@ msgstr "Se bilder från evenemanget"
 
 msgid "Waiting list registrations"
 msgstr "Registreringar på väntelista"
+
+msgid "What would you like to do?"
+msgstr "Vad skulle du vilja göra?"
 
 msgid "Wrong number of characters"
 msgstr "Fel antal tecken"
@@ -6751,6 +6757,10 @@ msgstr "Vill du acceptera betalningar som behandlas via systemet"
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Om markerad, gör förregistrering för detta evenemang tillgängligt"
 
+msgid "Manage the event settings: name, description, dates, status"
+msgstr ""
+"Hantera inställningarna för evenemanget: namn, beskrivning, datum, status"
+
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr "Namn: %(name)s, slug: %(slug)s, skapare: %(user)s %(email)s"
@@ -7147,6 +7157,10 @@ msgstr ""
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopiera och klistra in exakt all färgad text nedan i anteckningarna"
 
+msgid "Create and manage events and their setting - names, dates, status"
+msgstr ""
+"Skapa och hantera händelser och deras inställningar - namn, datum, status"
+
 msgid "Current status of the membership application and approval process"
 msgstr ""
 "Aktuell status för processen för ansökan och godkännande av medlemskap"
@@ -7282,11 +7296,6 @@ msgstr ""
 
 msgid "Indicate an organization contact address for sending communications"
 msgstr "Ange en kontaktadress för organisationen för att skicka meddelanden"
-
-msgid "Manage the event settings: name, description, dates, and other data"
-msgstr ""
-"Hantera inställningarna för evenemanget: namn, beskrivning, datum och andra "
-"uppgifter"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr "Minsta belopp av nettovinsten som ska behållas för föreningsskatten"
@@ -8308,13 +8317,6 @@ msgid ""
 msgstr ""
 "För att delta i detta evenemang måste du betala den årliga medlemsavgiften "
 "på"
-
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-"Skapa och hantera evenemang genom att ange namn, datum, status och "
-"registreringsinformation"
 
 msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "

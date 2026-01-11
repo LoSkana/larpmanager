@@ -8,9 +8,6 @@ msgstr "e"
 msgid "By"
 msgstr "Door"
 
-msgid "Go"
-msgstr "Ga naar"
-
 msgid "Hi"
 msgstr "Hoi"
 
@@ -2978,6 +2975,9 @@ msgstr "Extra velden"
 msgid "All comunications"
 msgstr "Alle communicatie"
 
+msgid "An error occurred"
+msgstr "Er is een fout opgetreden"
+
 msgid "Answer submitted!"
 msgstr "Onderdanig antwoord!"
 
@@ -3815,6 +3815,9 @@ msgstr "Volg de onderstaande stappen"
 msgid "How can we contact you"
 msgstr "Hoe kunnen we contact met u opnemen"
 
+msgid "Invalid request method"
+msgstr "Ongeldige aanvraagmethode"
+
 msgid "Join the waiting list!"
 msgstr "Meld je aan voor de wachtlijst!"
 
@@ -4334,6 +4337,9 @@ msgstr "Bekijk foto's van het evenement"
 
 msgid "Waiting list registrations"
 msgstr "Registraties op wachtlijst"
+
+msgid "What would you like to do?"
+msgstr "Wat zou je willen doen?"
 
 msgid "Wrong number of characters"
 msgstr "Verkeerd aantal tekens"
@@ -6779,6 +6785,10 @@ msgstr "Wil je via het systeem verwerkte betalingen accepteren"
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Indien aangevinkt, is voorregistratie voor dit evenement beschikbaar"
 
+msgid "Manage the event settings: name, description, dates, status"
+msgstr ""
+"Beheer de instellingen van het evenement: naam, beschrijving, data, status"
+
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr "Naam: %(name)s, slug: %(slug)s, maker: %(user)s %(email)s"
@@ -7210,6 +7220,10 @@ msgstr "Deelnemers kunnen hun eigen registratie op elk moment annuleren"
 msgid "Copy and paste exactly all the coloured text below into the notes"
 msgstr "Kopieer en plak precies alle gekleurde tekst hieronder in de notities"
 
+msgid "Create and manage events and their setting - names, dates, status"
+msgstr ""
+"Gebeurtenissen en hun instellingen aanmaken en beheren - namen, data, status"
+
 msgid "Current status of the membership application and approval process"
 msgstr "Huidige status van de lidmaatschapsaanvraag en goedkeuringsprocedure"
 
@@ -7356,11 +7370,6 @@ msgid "Indicate an organization contact address for sending communications"
 msgstr ""
 "Geef een contactadres van de organisatie op voor het verzenden van "
 "communicatie"
-
-msgid "Manage the event settings: name, description, dates, and other data"
-msgstr ""
-"De instellingen van het evenement beheren: naam, beschrijving, datums en "
-"andere gegevens"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -8465,13 +8474,6 @@ msgid ""
 msgstr ""
 "Om deel te nemen aan dit evenement moet je de jaarlijkse "
 "lidmaatschapsbijdrage van"
-
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-"Evenementen maken en beheren door namen, data, status en registratiedetails "
-"in te stellen"
 
 msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "

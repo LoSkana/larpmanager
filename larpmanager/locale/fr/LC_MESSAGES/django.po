@@ -8,9 +8,6 @@ msgstr "e"
 msgid "By"
 msgstr "Par"
 
-msgid "Go"
-msgstr "Aller"
-
 msgid "Hi"
 msgstr "Bonjour"
 
@@ -2978,6 +2975,9 @@ msgstr "Champs supplémentaires"
 msgid "All comunications"
 msgstr "Toutes les communications"
 
+msgid "An error occurred"
+msgstr "Une erreur s'est produite"
+
 msgid "Answer submitted!"
 msgstr "Réponse soumise !"
 
@@ -3815,6 +3815,9 @@ msgstr "Suivez les étapes ci-dessous "
 msgid "How can we contact you"
 msgstr "Comment pouvons-nous vous contacter "
 
+msgid "Invalid request method"
+msgstr "Méthode de requête non valide"
+
 msgid "Join the waiting list!"
 msgstr "Rejoignez la liste d'attente !"
 
@@ -4334,6 +4337,9 @@ msgstr "Voir les photos de l'événement"
 
 msgid "Waiting list registrations"
 msgstr "Inscriptions sur liste d'attente"
+
+msgid "What would you like to do?"
+msgstr "Qu'aimeriez-vous faire ?"
 
 msgid "Wrong number of characters"
 msgstr "Nombre de caractères incorrect"
@@ -6824,6 +6830,9 @@ msgstr "Souhaitez-vous accepter les paiements traités par le biais du système"
 msgid "If checked, makes pre-registration for this event available"
 msgstr "Si coché, permet de s'inscrire à l'avance à cet événement"
 
+msgid "Manage the event settings: name, description, dates, status"
+msgstr "Gérer les paramètres de l'événement : nom, description, dates, statut"
+
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr "Nom : %(name)s, mot-clé : %(slug)s, créateur : %(user)s %(email)s"
@@ -7282,6 +7291,10 @@ msgstr ""
 "Copiez et collez exactement tout le texte en couleur ci-dessous dans les "
 "notes"
 
+msgid "Create and manage events and their setting - names, dates, status"
+msgstr ""
+"Créer et gérer des événements et leurs paramètres - noms, dates, statut"
+
 msgid "Current status of the membership application and approval process"
 msgstr "État actuel du processus de demande d'adhésion et d'approbation"
 
@@ -7437,11 +7450,6 @@ msgid "Indicate an organization contact address for sending communications"
 msgstr ""
 "Indiquer une adresse de contact de l'organisation pour l'envoi de "
 "communications"
-
-msgid "Manage the event settings: name, description, dates, and other data"
-msgstr ""
-"Gérer les paramètres de l'événement : nom, description, dates et autres "
-"données"
 
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
@@ -8582,13 +8590,6 @@ msgid ""
 msgstr ""
 "Pour participer à cet événement, vous devrez vous acquitter de la cotisation"
 " annuelle d'un montant de 1 000 euros "
-
-msgid ""
-"Create and manage events, setting names, dates, status, and registration "
-"details"
-msgstr ""
-"Créer et gérer des événements, en définissant les noms, les dates, le statut"
-" et les détails de l'inscription"
 
 msgid ""
 "Customize the appearance of all event pages, including colors, fonts, and "

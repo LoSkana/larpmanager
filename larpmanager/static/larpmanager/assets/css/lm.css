@@ -2547,3 +2547,14 @@ input[type="number"] {
 .sticky-message .close {
   float: right;
 }
+
+#wwyltd {
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 0.5em;
+}
+@media (max-width: 768px) {
+  #wwyltd {
+    width: 100%;
+  }
+}
