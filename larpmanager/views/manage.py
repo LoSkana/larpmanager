@@ -200,7 +200,7 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     """
     # Initialize context and permissions for the current user and association
     context = get_context(request)
-    get_index_association_permissions(context, request, context["association_id"])
+    get_index_association_permissions(request, context, context["association_id"])
     context["exe_page"] = 1
     context["manage"] = 1
 
@@ -479,7 +479,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:  # noqa
     # Load permissions and navigation
     get_index_event_permissions(request, context, event_slug)
     if get_association_config(context["association_id"], "interface_admin_links", default_value=False, context=context):
-        get_index_association_permissions(context, request, context["association_id"], enforce_check=False)
+        get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
     # Load registration status
     context["registration_status"] = _get_registration_status(context["run"])
@@ -1360,13 +1360,14 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
 
 
 @login_required
-def wwyltd_ajax(request: HttpRequest) -> JsonResponse:
+def wwyltd_ajax(request: HttpRequest, event_slug: str = None) -> JsonResponse:
     """AJAX endpoint for "What would you like to do?" form submission.
 
     Processes POST requests and returns JSON with redirect URL to open in new tab.
 
     Args:
         request: HTTP request object containing POST data
+        event_slug: Optional event slug from URL pattern (for event-specific requests)
 
     Returns:
         JsonResponse: {"success": True, "url": "..."} or {"success": False, "error": "..."}
@@ -1379,13 +1380,12 @@ def wwyltd_ajax(request: HttpRequest) -> JsonResponse:
     context = get_context(request)
 
     # Check if this is an event-specific or organization-wide request
-    event_slug = request.POST.get("event_slug")
     if event_slug:
         context = get_event_context(request, event_slug)
-        get_index_event_permissions(context, request, context["run"].id)
+        get_index_event_permissions(request, context, event_slug)
         context["orga_page"] = 1
     else:
-        get_index_association_permissions(context, request, context["association_id"])
+        get_index_association_permissions(request, context, context["association_id"])
         context["exe_page"] = 1
 
     # Process form submission

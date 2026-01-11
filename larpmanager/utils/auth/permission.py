@@ -137,8 +137,8 @@ def has_association_permission(request: HttpRequest, context: dict, permission: 
 
 
 def get_index_association_permissions(
-    context: dict,
     request: HttpRequest,
+    context: dict,
     association_id: int,
     *,
     enforce_check: bool = True,
