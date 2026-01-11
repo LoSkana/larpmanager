@@ -109,6 +109,8 @@ def exe_events_edit(request: HttpRequest, event_uuid: str) -> HttpResponse:
 
         if context.get("onboarding"):
             context["welcome_message"] = True
+            context["tutorial"] = None
+            context["config"] = None
 
         # Define callback for post-creation operations
         def on_created(created_event: Event) -> None:
