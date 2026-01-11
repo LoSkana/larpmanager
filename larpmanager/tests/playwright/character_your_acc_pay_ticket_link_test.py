@@ -287,7 +287,7 @@ def acc_refund(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
 
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Refunds").click()
+    page.locator("#exe_refunds").get_by_role("link", name="Refunds").click()
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
     page.get_by_role("link", name="Done").click()
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 180 delivered")
